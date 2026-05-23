@@ -243,16 +243,6 @@ const ReellyProjectCard = ({
           {/* Premium gold divider between location/header and developer */}
           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent my-2" />
 
-          {/* Developer - Clickable */}
-          {project.developer_name && (
-            <DeveloperLink
-              name={project.developer_name}
-              slug={(project as any).developer?.slug || null}
-              className="text-sm mb-2 block"
-              showPrefix={true}
-            />
-          )}
-
            {/* Payment Plan removed from cards — shown only on details page */}
            
            {/* Size info - hidden in compact mode */}
@@ -280,11 +270,21 @@ const ReellyProjectCard = ({
              </p>
            )}
 
-           {/* Spacer pushes handover row to the very bottom */}
-           <div className="flex-1" />
+           {/* Developer - Clickable */}
+           {project.developer_name && (
+             <DeveloperLink
+               name={project.developer_name}
+               slug={(project as any).developer?.slug || null}
+               className="text-sm mb-3 block"
+               showPrefix={true}
+             />
+           )}
 
-           {/* Premium gold divider — separates content above from handover */}
-           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+            {/* Premium full-width divider — directly after developer name, before handover */}
+            <div className="w-full border-t border-[#B89555]/45" />
+
+            {/* Spacer pushes handover row to the very bottom */}
+            <div className="flex-1" />
 
            {/* Handover date / Ready — right-aligned, bottom of card */}
            <div className="flex justify-end pt-2">

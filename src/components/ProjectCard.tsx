@@ -299,17 +299,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Premium gold divider — between header and developer/meta */}
           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
 
-          {/* Meta block — developer first, then handover + unit types */}
+          {/* Detail metadata above developer name */}
           <div className="flex flex-col gap-2">
-            {project.developer && (
-              <DeveloperLink
-                name={project.developer.name}
-                slug={project.developer.slug}
-                className="text-sm block"
-                showPrefix={true}
-              />
-            )}
-
             {/* Payment Plan removed from cards — shown only on details page */}
 
             {(getUnitTypesText() || getSizeText()) && (
@@ -325,9 +316,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             )}
           </div>
 
-          {/* Premium gold divider — between developer/meta and description */}
-          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
-
           {/* Description */}
           <p className="text-[#1A1A1A] text-sm leading-relaxed line-clamp-3 overflow-hidden">
 
@@ -337,11 +325,20 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </span>
           </p>
 
+          {project.developer && (
+            <DeveloperLink
+              name={project.developer.name}
+              slug={project.developer.slug}
+              className="text-sm block"
+              showPrefix={true}
+            />
+          )}
+
+          {/* Premium full-width divider — directly after developer name, before handover */}
+          <div className="w-full border-t border-[#B89555]/45" />
+
           {/* Spacer pushes handover row to the very bottom */}
           <div className="flex-1" />
-
-          {/* Premium gold divider — separates content above from handover */}
-          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
 
           {/* Handover date / Ready — right-aligned, bottom of card */}
           <div className="flex justify-end">
