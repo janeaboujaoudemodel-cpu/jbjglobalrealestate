@@ -137,7 +137,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
         <>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] bg-black/55 backdrop-blur-sm"
+            className="fixed inset-x-0 bottom-0 top-[88px] z-[9000] bg-primary/55 backdrop-blur-sm"
             onClick={onClose}
           />
           <motion.aside
@@ -146,14 +146,14 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             exit={{ x: "100%", opacity: 0 }}
             transition={{ type: "spring", damping: 28, stiffness: 260 }}
             data-no-contrast-guard
-            className="fixed z-[201] flex flex-col
-              inset-x-0 bottom-0 h-[88vh] rounded-t-3xl
-              sm:inset-y-0 sm:right-0 sm:left-auto sm:h-full sm:w-[440px] sm:rounded-none sm:rounded-l-3xl
-              bg-[#FDFBF7] border-l border-t sm:border-t-0 border-[#B89555]/55"
-            style={{ boxShadow: "0 -20px 60px rgba(0,0,0,0.25), -20px 0 60px rgba(0,0,0,0.25)" }}
+            className="fixed z-[9001] flex min-h-0 flex-col
+              inset-x-0 top-[88px] bottom-0 rounded-none
+              sm:inset-x-auto sm:left-auto sm:right-0 sm:top-[88px] sm:bottom-0 sm:w-[440px] sm:rounded-none sm:rounded-l-3xl
+              bg-background border border-gold/55 sm:border-r-0"
+            style={{ boxShadow: "0 -20px 60px hsl(var(--foreground) / 0.25), -20px 0 60px hsl(var(--foreground) / 0.25)" }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#B89555]/30 bg-[#F7F2EA]">
+            <div className="shrink-0 flex items-center justify-between px-5 py-4 border-b border-gold/30 bg-secondary">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#B89555]/55 bg-[#FDFBF7]">
                   <Sparkles className="h-5 w-5 text-[#B89555]" strokeWidth={2} />
@@ -174,7 +174,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-6 space-y-4 bg-[#FDFBF7]">
+            <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-5 py-5 space-y-4 bg-background">
               {!isVerified && (
                 <ConciergeGate onVerified={() => { /* state auto-updates via hook */ }} />
               )}
@@ -332,7 +332,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             </div>
 
             {/* Footer escalation + input */}
-            <div className="border-t border-[#B89555]/30 px-5 py-3 space-y-3 bg-[#F7F2EA]">
+            <div className="shrink-0 border-t border-gold/30 px-5 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-3 bg-secondary">
               {messages.length > 0 && (
                 <div className="flex items-center justify-between gap-2">
                   <span className="inline-flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.16em] font-semibold text-[#1A1A1A]/70">
@@ -388,7 +388,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                 </div>
               )}
 
-              <form onSubmit={onSubmit} className="relative">
+              {isVerified && <form onSubmit={onSubmit} className="relative">
                 <input
                   ref={inputRef}
                   value={draft}
@@ -396,21 +396,22 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                   placeholder="Ask the concierge…"
                   disabled={streaming}
                   data-no-contrast-guard
-                  className="w-full h-12 pl-4 pr-12 rounded-xl text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45
-                    bg-[#FDFBF7] border border-[#B89555]/45 focus:border-[#B89555] outline-none transition"
+                  className="w-full h-14 pl-4 pr-14 rounded-xl text-[14px] text-foreground placeholder:text-foreground/45
+                    bg-background border border-gold/45 focus:border-gold outline-none transition"
                 />
                 <button
                   type="submit"
                   disabled={streaming || !draft.trim()}
                   aria-label="Send"
                   data-no-contrast-guard
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center
-                    rounded-lg text-[#FDFBF7] bg-[#1A1A1A] hover:bg-[#2a2a2a] disabled:opacity-40
+                  className="absolute right-2 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center
+                    rounded-lg text-primary-foreground bg-primary hover:bg-primary disabled:opacity-40
+                    hover:shadow-[0_0_18px_hsl(var(--gold)/0.30)] hover:-translate-y-1/2
                     disabled:cursor-not-allowed transition"
                 >
                   <Send className="h-4 w-4" />
                 </button>
-              </form>
+              </form>}
             </div>
 
           </motion.aside>

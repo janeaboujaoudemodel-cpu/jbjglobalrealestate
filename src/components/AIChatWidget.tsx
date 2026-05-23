@@ -45,6 +45,12 @@ interface AIChatWidgetProps {
 const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapsed, onToggleCollapse, onMinimize, showAttentionPulse = false }, _ref) => {
   const { isRTL } = useLanguage();
   const { user } = useAuth();
+
+  useEffect(() => {
+    if (!isCollapsed) document.body.setAttribute('data-jbj-chat-open', 'true');
+    else document.body.removeAttribute('data-jbj-chat-open');
+    return () => document.body.removeAttribute('data-jbj-chat-open');
+  }, [isCollapsed]);
   
   // Get a consistent agent for this session
   const currentAgent = useMemo(() => getRandomAgent(), []);
@@ -829,6 +835,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: isRTL ? -380 : 380, opacity: 0 }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        data-jbj-chat-open="true"
         className={`fixed ${isRTL ? 'left-0' : 'right-0'} top-[88px] z-[9000] w-full sm:w-[420px] h-[calc(100dvh-88px)] bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-l-2 border-[#B89555] shadow-2xl shadow-gold/20 flex flex-col overflow-hidden`}
       >
         <ChatHeader

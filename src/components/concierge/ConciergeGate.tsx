@@ -127,7 +127,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
   };
 
   const inputBase =
-    "h-11 w-full px-3 rounded-lg text-[13.5px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 " +
+    "h-12 w-full min-w-0 px-3 rounded-lg text-[13.5px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 " +
     "bg-[#FDFBF7] border border-[#B89555]/45 focus:border-[#B89555] focus:bg-[#FDFBF7] outline-none transition";
 
   return (
@@ -202,12 +202,12 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             />
           </div>
 
-          <div className="flex gap-2">
+          <div className="grid grid-cols-[128px_minmax(0,1fr)] gap-2 overflow-hidden">
             <select
               data-no-contrast-guard
               value={countryCode}
               onChange={(e) => setCountryCode(e.target.value)}
-              className={inputBase + " w-[120px] cursor-pointer"}
+              className={inputBase + " cursor-pointer"}
             >
               {COUNTRY_CODES.map((c) => (
                 <option key={c.code} value={c.code} className="bg-[#FDFBF7] text-[#1A1A1A]">
@@ -215,7 +215,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
                 </option>
               ))}
             </select>
-            <div className="relative flex-1">
+            <div className="relative min-w-0">
               <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#B89555]" />
               <input
                 data-no-contrast-guard
@@ -234,7 +234,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             type="submit"
             disabled={submitting}
             data-no-contrast-guard
-            className="w-full h-11 rounded-lg text-[13.5px] font-semibold text-[#FDFBF7]
+            className="w-full h-12 rounded-lg text-[13.5px] font-semibold text-[#FDFBF7]
               bg-[#1A1A1A] hover:bg-[#2a2a2a] disabled:opacity-50 disabled:cursor-not-allowed transition
               inline-flex items-center justify-center gap-2"
           >
@@ -262,7 +262,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             onClick={verifyOtp}
             disabled={submitting || otp.length !== 6}
             data-no-contrast-guard
-            className="w-full h-11 rounded-lg text-[13.5px] font-semibold text-[#FDFBF7]
+            className="w-full h-12 rounded-lg text-[13.5px] font-semibold text-[#FDFBF7]
               bg-[#1A1A1A] hover:bg-[#2a2a2a] disabled:opacity-50 disabled:cursor-not-allowed transition
               inline-flex items-center justify-center gap-2"
           >
