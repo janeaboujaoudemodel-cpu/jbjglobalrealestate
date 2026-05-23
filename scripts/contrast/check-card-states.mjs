@@ -80,6 +80,12 @@ async function run() {
 
     try {
       await page.goto(targetUrl, { waitUntil: 'networkidle', timeout: 45000 });
+      // Scroll once + dwell to trigger lazy-mounted card grids
+      // (Intersection-observed / below-the-fold sections).
+      await page.evaluate(() => window.scrollTo(0, 800));
+      await page.waitForTimeout(2000);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(500);
       await page.addScriptTag({ content: axeSource });
 
       // Sample up to MAX_CARDS_PER_ROUTE cards.
