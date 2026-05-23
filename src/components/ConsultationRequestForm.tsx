@@ -457,12 +457,12 @@ export const ConsultationRequestForm = ({
             className="w-full h-14 text-base font-bold relative overflow-hidden group bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]"
           >
             {isSubmitting ? (
-              <span className="flex items-center gap-2 text-white">
+              <span className="flex items-center gap-2 text-[#1A1A1A]">
                 <Loader2 className="w-5 h-5 animate-spin" />
                 Submitting...
               </span>
             ) : (
-              <span className="flex items-center gap-2 text-white">
+              <span className="flex items-center gap-2 text-[#1A1A1A]">
                 <span>Request Consultation</span>
                 <Send className="w-4 h-4" />
               </span>

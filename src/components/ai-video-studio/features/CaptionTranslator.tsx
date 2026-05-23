@@ -1170,7 +1170,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                       {burnVideoFile ? (
                         <div className="flex items-center gap-2">
                           <Film className="w-4 h-4 text-[#1A1A1A]" />
-                          <span className="text-xs text-white truncate">{burnVideoFile.name}</span>
+                          <span className="text-xs text-[#1A1A1A] truncate">{burnVideoFile.name}</span>
                           <button onClick={e => { e.stopPropagation(); setBurnVideoFile(null); }} className="ml-auto text-[#1A1A1A]/70 hover:text-red-400"><X className="w-3 h-3" /></button>
                         </div>
                       ) : (

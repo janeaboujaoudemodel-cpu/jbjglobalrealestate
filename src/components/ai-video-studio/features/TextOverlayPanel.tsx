@@ -645,7 +645,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                 className={`px-3 py-1 text-xs rounded-md border capitalize transition-all ${
                   position === p
                     ? 'border-amber-500 bg-amber-500/20 text-amber-300'
-                    : 'border-[#B89555]/30 bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-white hover:border-[#B89555]/30'
+                    : 'border-[#B89555]/30 bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:border-[#B89555]/30'
                 }`}
               >
                 {p}
