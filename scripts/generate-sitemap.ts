@@ -44,7 +44,7 @@ const today = new Date().toISOString().slice(0, 10);
 const staticEntries: SitemapEntry[] = [
   { path: "/", changefreq: "daily", priority: "1.0", imageLoc: `${BASE_URL}/og-image.jpg`, imageTitle: "JBJ Global Real Estate" },
   { path: "/properties", changefreq: "daily", priority: "0.95" },
-  { path: "/sell", changefreq: "weekly", priority: "0.92" },
+  { path: "/list-property", changefreq: "weekly", priority: "0.95" },
   { path: "/rent", changefreq: "weekly", priority: "0.92" },
   { path: "/areas", changefreq: "weekly", priority: "0.90" },
   { path: "/communities", changefreq: "weekly", priority: "0.88" },
