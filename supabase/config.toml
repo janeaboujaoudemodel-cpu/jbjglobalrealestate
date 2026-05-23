@@ -1,5 +1,9 @@
 project_id = "mdafrewypkkrildjgtey"
 
+[functions._apply-book-content-once]
+verify_jwt = false
+
+
 [functions.breakfast-booking-lookup]
 verify_jwt = false
 
