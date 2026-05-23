@@ -343,7 +343,7 @@ export default function InvestorDashboard() {
                       { label: "Business Card", icon: CreditCard },
                     ].map((asset) => (
                       <div key={asset.label} className="text-center p-4 rounded-lg border border-border/30 bg-background/50">
-                        <asset.icon className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+                        <asset.icon className="w-8 h-8 text-muted-foreground/60 mx-auto mb-2" aria-hidden="true" data-decorative="true" />
                         <p className="text-xs text-muted-foreground">{asset.label}</p>
                         <p className="text-[10px] text-muted-foreground/60 mt-1">Not uploaded</p>
                       </div>
