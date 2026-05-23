@@ -223,24 +223,25 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               )}
             </div>
 
-            <h3 className="text-[#1A1A1A] font-semibold text-sm mb-2 line-clamp-2 group-hover:text-[#1A1A1A] transition-colors min-h-[40px]">
+            <h3 className="text-[#1A1A1A] font-semibold text-sm mb-1 line-clamp-2 group-hover:text-[#1A1A1A] transition-colors min-h-[40px]">
               {project.name}
             </h3>
+
+            {project.developer_name && (
+              <DeveloperLink
+                name={project.developer_name}
+                slug={project.developer?.slug || null}
+                className="text-xs block mb-2"
+                showPrefix={true}
+              />
+            )}
+
             {(project as any).description && (() => {
               const cleanDesc = sanitizeForDisplay((project as any).description);
               return cleanDesc ? (
                 <p className="text-[#1A1A1A]/70 text-xs line-clamp-2 mb-2">{cleanDesc}</p>
               ) : null;
             })()}
-
-            {project.developer_name && (
-              <DeveloperLink
-                name={project.developer_name}
-                slug={project.developer?.slug || null}
-                className="text-xs block"
-                showPrefix={true}
-              />
-            )}
 
             {/* Premium full-width divider — directly after developer name, before handover */}
             <div className="w-full border-t border-[#B89555]/45 mt-3" />
