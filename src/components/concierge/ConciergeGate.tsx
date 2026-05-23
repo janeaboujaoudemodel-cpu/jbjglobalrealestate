@@ -5,24 +5,26 @@
  * On success, persists a verified-support token via useConciergeVerification.
  */
 import { useEffect, useState } from "react";
-import { Loader2, Mail, Phone, User, ShieldCheck, ArrowRight } from "lucide-react";
+import { Check, ChevronDown, Loader2, Mail, Phone, User, ShieldCheck, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useConciergeVerification } from "@/hooks/useConciergeVerification";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const COUNTRY_CODES = [
-  { code: "+971", label: "🇦🇪 +971" },
-  { code: "+966", label: "🇸🇦 +966" },
-  { code: "+44", label: "🇬🇧 +44" },
-  { code: "+1", label: "🇺🇸 +1" },
-  { code: "+91", label: "🇮🇳 +91" },
-  { code: "+86", label: "🇨🇳 +86" },
-  { code: "+49", label: "🇩🇪 +49" },
-  { code: "+33", label: "🇫🇷 +33" },
-  { code: "+7", label: "🇷🇺 +7" },
-  { code: "+20", label: "🇪🇬 +20" },
+  { id: "AE", code: "+971" }, { id: "SA", code: "+966" }, { id: "QA", code: "+974" }, { id: "KW", code: "+965" }, { id: "BH", code: "+973" }, { id: "OM", code: "+968" },
+  { id: "GB", code: "+44" }, { id: "US", code: "+1" }, { id: "CA", code: "+1" }, { id: "AU", code: "+61" }, { id: "NZ", code: "+64" },
+  { id: "IN", code: "+91" }, { id: "PK", code: "+92" }, { id: "BD", code: "+880" }, { id: "LK", code: "+94" }, { id: "NP", code: "+977" },
+  { id: "CN", code: "+86" }, { id: "HK", code: "+852" }, { id: "SG", code: "+65" }, { id: "MY", code: "+60" }, { id: "TH", code: "+66" }, { id: "PH", code: "+63" }, { id: "ID", code: "+62" }, { id: "VN", code: "+84" }, { id: "JP", code: "+81" }, { id: "KR", code: "+82" },
+  { id: "DE", code: "+49" }, { id: "FR", code: "+33" }, { id: "IT", code: "+39" }, { id: "ES", code: "+34" }, { id: "PT", code: "+351" }, { id: "NL", code: "+31" }, { id: "BE", code: "+32" }, { id: "CH", code: "+41" }, { id: "AT", code: "+43" }, { id: "SE", code: "+46" }, { id: "NO", code: "+47" }, { id: "DK", code: "+45" }, { id: "FI", code: "+358" }, { id: "IE", code: "+353" }, { id: "GR", code: "+30" }, { id: "CY", code: "+357" }, { id: "MT", code: "+356" },
+  { id: "RU", code: "+7" }, { id: "TR", code: "+90" }, { id: "EG", code: "+20" }, { id: "JO", code: "+962" }, { id: "LB", code: "+961" }, { id: "IL", code: "+972" }, { id: "IQ", code: "+964" }, { id: "IR", code: "+98" },
+  { id: "ZA", code: "+27" }, { id: "NG", code: "+234" }, { id: "KE", code: "+254" }, { id: "MA", code: "+212" }, { id: "TN", code: "+216" }, { id: "DZ", code: "+213" }, { id: "GH", code: "+233" }, { id: "ET", code: "+251" },
+  { id: "BR", code: "+55" }, { id: "MX", code: "+52" }, { id: "AR", code: "+54" }, { id: "CL", code: "+56" }, { id: "CO", code: "+57" }, { id: "PE", code: "+51" },
 ];
+
+const flagEmoji = (countryId: string) =>
+  countryId.replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
 
 const detailsSchema = z.object({
   firstName: z.string().trim().min(1, "First name required").max(80),
