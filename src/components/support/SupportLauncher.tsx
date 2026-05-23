@@ -127,10 +127,11 @@ export default function SupportLauncher() {
                   </button>
                 </div>
                 {channels.map((c) => (
-                  <div key={c.id} className="bg-[#1A1A1A]/85 backdrop-blur rounded-xl">
+                  <div key={c.id} className="bg-[#FDFBF7] border border-[#B89555]/45 rounded-xl">
                     <ChannelCard channel={c} compact onActivate={close} />
                   </div>
                 ))}
+
               </motion.div>
             </>
           )}
@@ -187,21 +188,22 @@ export default function SupportLauncher() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                data-no-contrast-guard
                 className="absolute right-full top-1/2 -translate-y-1/2 mr-2 w-[300px]
-                  rounded-2xl border border-[#D4B896]/45 bg-[#1A1A1A]/95 backdrop-blur-xl
-                  shadow-[0_30px_60px_rgba(0,0,0,0.45)] p-3 space-y-2"
+                  rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7]
+                  shadow-[0_30px_60px_rgba(0,0,0,0.25)] p-3 space-y-2"
               >
                 <div className="flex items-center justify-between px-1 pb-1">
                   <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
-                    border border-[#D4B896]/45 bg-white/[0.06] text-[#FDFBF7]">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    border border-[#B89555]/45 bg-[#F7F2EA] text-[#1A1A1A]">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     24/7 Support · Always Free
                   </span>
                   <button
                     onClick={close}
                     aria-label="Close"
                     className="h-7 w-7 inline-flex items-center justify-center rounded-full
-                      border border-[#D4B896]/35 text-[#E2C9A0] hover:bg-white/[0.06]"
+                      border border-[#B89555]/45 text-[#1A1A1A] hover:bg-[#EFE6D6]"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
@@ -209,6 +211,7 @@ export default function SupportLauncher() {
                 {channels.map((c) => (
                   <ChannelCard key={c.id} channel={c} onActivate={close} />
                 ))}
+
               </motion.div>
             </>
           )}
