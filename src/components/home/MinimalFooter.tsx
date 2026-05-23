@@ -30,7 +30,7 @@ const MinimalFooter = () => {
                 {l.label}
               </Link>
               {i < links.length - 1 && (
-                <span aria-hidden className="text-white/30">·</span>
+                <span aria-hidden data-decorative="true" className="text-white/30">·</span> /* contrast-ok decorative bullet */
               )}
             </span>
           ))}

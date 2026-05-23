@@ -24,6 +24,10 @@
     {
       "pair": "surface-fg-muted/surface-bg",
       "reason": "[data-surface=\"gold\"] muted text (95% white on gold → 3.86:1). Used only for tertiary microcopy on gold accent tiles — never primary body text. Light/champagne/ink surfaces all clear AA comfortably."
+    },
+    {
+      "pair": "gold-foreground/gold-dark",
+      "reason": "Ink-on-gold-dark (#1A1A1A on #A68444 → 3.7:1). gold-foreground was flipped from white→ink (May 2026) to satisfy the white-on-bright contrast rule on the dominant gold surface; ink-on-gold-dark only appears on hover/active states of large CTA labels (≥18pt or 14pt bold), which fall under WCAG AA's 3:1 UI-component threshold. Body text on gold-dark is forbidden by the button system."
     }
   ],
   "axeViolationIds": [],
@@ -36,42 +40,8 @@
   "lowOpacityTextBaseline": {
     "$reason": "Pre-existing near-transparent body text (alpha<40) captured the day check-low-opacity-text.mjs landed. New regressions are blocked; historical entries remain until each is fixed (raise alpha to /60+, switch to text-muted-foreground, or mark decorative with // contrast-ok). Refresh with: `node scripts/contrast/check-low-opacity-text.mjs --print-baseline`. Stale entries trigger a warning and should be pruned.",
     "entries": [
-      "src/components/admin/VisitorInsightsDashboard.tsx:381:text-*/30",
       "src/components/broker/ProtectedContent.tsx:134:opacity-[0.08]",
-      "src/components/email/EmailAssistantPanel.tsx:94:text-*/30",
-      "src/components/email/EmailAutomationPanel.tsx:153:text-*/30",
-      "src/components/employee-chat/EmployeeChatHub.tsx:391:text-*/30",
-      "src/components/employee-chat/EmployeeChatHub.tsx:478:text-*/30",
-      "src/components/filters/AdvancedFilterPanel.tsx:222:text-*/30",
-      "src/components/filters/AdvancedFilterPanel.tsx:318:text-*/30",
-      "src/components/marketing-hub/CampaignEditor.tsx:501:text-*/30",
-      "src/components/shared/CrossChannelToggle.tsx:46:text-*/30",
-      "src/components/shared/DocumentAttachmentPicker.tsx:176:text-*/30",
-      "src/components/shared/DocumentAttachmentPicker.tsx:202:text-*/30",
-      "src/components/stamp-generator/StampLeftPanel.tsx:938:opacity-0",
-      "src/components/ui/PremiumHorizontalScrollHint.tsx:100:text-*/20",
-      "src/components/ui/PremiumHorizontalScrollHint.tsx:132:text-*/20",
-      "src/pages/AdminLeads.tsx:951:text-*/20",
-      "src/pages/AdminLeads.tsx:963:text-*/20",
-      "src/pages/AdminLeads.tsx:975:text-*/20",
-      "src/pages/AdminLeads.tsx:1059:text-*/20",
-      "src/pages/AdminLeads.tsx:1071:text-*/20",
-      "src/pages/AdminLeads.tsx:1151:text-*/30",
-      "src/pages/AdminLeads.tsx:1156:text-*/30",
-      "src/pages/AdminLeads.tsx:1161:text-*/30",
-      "src/pages/BrokerPortal.tsx:423:text-*/30",
-      "src/pages/Favorites.tsx:369:text-*/30",
-      "src/pages/Favorites.tsx:492:text-*/30",
-      "src/pages/Favorites.tsx:631:text-*/30",
-      "src/pages/Favorites.tsx:657:text-*/30",
-      "src/pages/InvestorDashboard.tsx:366:text-*/30",
-      "src/pages/TeamChat.tsx:571:text-*/35",
-      "src/pages/TeamChat.tsx:590:text-*/30",
-      "src/pages/TeamChat.tsx:596:text-*/30",
-      "src/pages/TeamChat.tsx:648:text-*/25",
-      "src/pages/TeamChat.tsx:763:text-*/30",
-      "src/pages/toolkit/VoiceStudioPro.tsx:463:text-*/30",
-      "src/pages/toolkit/VoiceStudioPro.tsx:695:text-*/30"
+      "src/components/stamp-generator/StampLeftPanel.tsx:938:opacity-0"
     ]
   }
 }

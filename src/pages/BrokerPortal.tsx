@@ -398,7 +398,7 @@ export default function BrokerPortal() {
                     <div className="grid grid-cols-3 gap-4">
                       {[{ label: "Stamp", icon: Stamp }, { label: "Logo", icon: ImageIcon }, { label: "Business Card", icon: CreditCard }].map((asset) => (
                         <div key={asset.label} className="text-center p-4 rounded-lg border border-border/30 bg-background/50">
-                          <asset.icon className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+                          <asset.icon className="w-8 h-8 text-muted-foreground/60 mx-auto mb-2" aria-hidden="true" data-decorative="true" />
                           <p className="text-xs text-muted-foreground">{asset.label}</p>
                         </div>
                       ))}
