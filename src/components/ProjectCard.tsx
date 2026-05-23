@@ -342,8 +342,18 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Spacer pushes handover row to the very bottom */}
           <div className="flex-1" />
 
-          {/* Handover date / Ready — right-aligned, bottom of card */}
-          <div className="flex justify-end">
+          {/* Bottom row — Price (left) parallel to Handover/Ready (right). Price hidden here on homepage (lives on the image). */}
+          <div className="flex items-center justify-between gap-2">
+            {!isHomepage && project.price_from ? (
+              <div className="price-pill-premium" data-price-badge>
+                <span className="price-pill-eyebrow">From</span>
+                <span className="price-pill-value">
+                  {formatPriceWithCurrency(project.price_from, currency)}
+                </span>
+              </div>
+            ) : (
+              <span aria-hidden="true" />
+            )}
             <span
               data-no-contrast-guard
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FDFBF7] border border-[#B89555]/40 shadow-sm text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange"
