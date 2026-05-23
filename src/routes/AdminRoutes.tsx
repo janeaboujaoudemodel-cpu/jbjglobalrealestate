@@ -80,6 +80,10 @@ const DeveloperProfileSlugRedirect = () => {
   const { slug } = useParams();
   return <Navigate to={`/developer-hub-admin/profile/${slug}`} replace />;
 };
+const DeveloperProfileSlugPortalRedirect = () => {
+  const { slug } = useParams();
+  return <Navigate to={`/developers-portal/developers/${slug}`} replace />;
+};
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
