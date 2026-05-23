@@ -172,11 +172,19 @@ function BrokerAccessList() {
 
   const decide = useMutation({
     mutationFn: async ({ id, action }: { id: string; action: "approve" | "deny" | "revoke" }) => {
-      const { data, error } = await supabase.functions.invoke("portal-decide-access-request", {
-        body: { request_id: id, action },
-      });
+      const { data: auth } = await supabase.auth.getUser();
+      const uid = auth?.user?.id ?? null;
+      const nextStatus = action === "approve" ? "approved" : action === "deny" ? "denied" : "revoked";
+      const patch: any = { status: nextStatus, decided_by: uid, decided_at: new Date().toISOString() };
+      if (action === "approve") {
+        // 14-day default access window
+        patch.expires_at = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
+      }
+      const { error } = await supabase
+        .from("developer_rep_access_requests")
+        .update(patch)
+        .eq("id", id);
       if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
     },
     onSuccess: () => {
       toast.success("Updated");
