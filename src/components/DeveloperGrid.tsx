@@ -6,6 +6,7 @@ import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import { Skeleton } from "@/components/ui/skeleton";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import { PricePill } from "@/components/ui/price-pill";
 
 const formatPortfolioWorth = (value: number | null) => {
   if (!value) return null;
