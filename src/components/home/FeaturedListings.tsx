@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Home, MapPin, ArrowRight, Building2, ArrowUpRight, Heart, Star, Calendar } from "lucide-react";
+import { Home, MapPin, ArrowRight, Building2, ArrowUpRight, Heart, Star } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -251,11 +251,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
 
             {/* Handover date / Ready — right-aligned, bottom of card */}
             <div className="flex justify-end pt-3">
-              <span
-                data-no-contrast-guard
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FDFBF7] border border-[#B89555]/40 shadow-sm text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange"
-              >
-                <Calendar className="w-3 h-3 text-[#B89555]" aria-hidden="true" />
+              <span className="text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange">
                 {deriveHandover(project) || HANDOVER_FALLBACK}
               </span>
             </div>

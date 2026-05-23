@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { ChevronLeft, ChevronRight, MapPin, Mail, Phone, MessageCircle, Calendar } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
@@ -354,11 +354,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             ) : (
               <span aria-hidden="true" />
             )}
-            <span
-              data-no-contrast-guard
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FDFBF7] border border-[#B89555]/40 shadow-sm text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange"
-            >
-              <Calendar className="w-3 h-3 text-[#B89555]" aria-hidden="true" />
+            <span className="text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange">
               {deriveHandover(project) || HANDOVER_FALLBACK}
             </span>
           </div>
