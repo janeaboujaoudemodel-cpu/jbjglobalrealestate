@@ -1276,7 +1276,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
     <>
       {/* Desktop sidebar — slides in after reveal */}
       <div
-        className={`h-full transition-all duration-500 ease-out ${navRevealed ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}
+        className={`h-full transition-[transform,opacity] duration-100 ease-out ${navRevealed ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
@@ -1381,7 +1381,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               data-no-contrast-guard
               data-sidebar-collapse-control
               onClick={toggleCollapse}
-              className="jbj-sidebar-collapse-control group flex items-center justify-center transition-all duration-200 mt-1 mb-1 p-1 bg-transparent"
+              className="jbj-sidebar-collapse-control group flex items-center justify-center transition-transform duration-100 mt-1 mb-1 p-1 bg-transparent"
               style={{ color: '#B89555', background: 'transparent', border: 'none', boxShadow: 'none' }}
               aria-label="Expand navigation"
               title="Expand navigation"

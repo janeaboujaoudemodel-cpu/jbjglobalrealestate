@@ -3,7 +3,7 @@ import { ImageOff } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { SafeImage } from "@/components/SafeImage";
-import { getHighResImageUrl } from "@/lib/imageUtils";
+import { getHighResImageUrl, isValidImageUrl } from "@/lib/imageUtils";
 
 type VerifiedMediaProps = {
   src?: string | null;
@@ -31,13 +31,21 @@ export function VerifiedMedia({
   placeholderLabel = "Media pending",
   onError,
 }: VerifiedMediaProps) {
-  if (!src) {
+  const [failed, setFailed] = React.useState(false);
+  React.useEffect(() => {
+    setFailed(false);
+  }, [src]);
+  const rawSrc: string = typeof src === "string" ? src.trim() : "";
+  const isLocalAsset = rawSrc.indexOf("/src/assets/") === 0 || rawSrc.indexOf("src/assets/") === 0;
+  const safeSrc = rawSrc && (isValidImageUrl(rawSrc) || isLocalAsset) ? rawSrc : null;
+
+  if (!safeSrc || failed) {
     return (
       <div
         role="img"
         aria-label={alt}
         className={cn(
-          "w-full h-full flex flex-col items-center justify-center gap-2",
+          "w-full h-full flex flex-col items-center justify-center gap-2 bg-[linear-gradient(135deg,#FDFBF7,#F7F2EA,#EFE6D6)]",
           decorated
             ? "rounded-md border border-[#B89555]/20 bg-champagne-light/40"
             : "bg-gradient-to-b from-premium-card to-premium-bg",
@@ -54,12 +62,13 @@ export function VerifiedMedia({
 
   return (
     <SafeImage
-      src={getHighResImageUrl(src, "1200x800")}
+      src={getHighResImageUrl(safeSrc, "464x312")}
       alt={alt}
       className={cn("w-full h-full", className)}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
       onError={onError}
+      onErrorCapture={() => setFailed(true)}
     />
   );
 }

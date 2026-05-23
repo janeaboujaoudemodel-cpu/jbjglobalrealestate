@@ -71,6 +71,8 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
           const img = e.currentTarget;
           if (img.naturalWidth === 0 && resolvedFallback && img.src !== resolvedFallback) {
             img.src = resolvedFallback;
+          } else if (img.naturalWidth === 0) {
+            onError?.(e as unknown as React.SyntheticEvent<HTMLImageElement, Event>);
           }
         }}
         onError={(e) => {

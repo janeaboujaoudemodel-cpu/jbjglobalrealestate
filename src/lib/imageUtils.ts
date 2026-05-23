@@ -94,6 +94,8 @@ const TRUSTED_IMAGE_DOMAINS = [
 
 const SAFE_IMAGE_SIZE = "464x312";
 const HIGH_RES_IMAGE_SIZE = "1920x1080";
+const CLOUDFRONT_SIZE_SEGMENT = /\/x\/\d+x(?:\d+)?\//;
+const NESTED_SIZE_SEGMENT = /\/\d+x(?:\d+)?\//;
 
 /**
  * Check if URL is from a trusted image source
@@ -161,7 +163,7 @@ export function normalizeProvidentImageUrl(url: string, size?: string): string {
   
   // Check for Provident CDN pattern and normalize size
   if (url.includes("/x/") && url.includes("cloudfront.net")) {
-    return url.replace(/\/x\/\d+x\d+\//, `/x/${size || SAFE_IMAGE_SIZE}/`);
+    return url.replace(CLOUDFRONT_SIZE_SEGMENT, `/x/${size || SAFE_IMAGE_SIZE}/`);
   }
   
   return url;
@@ -176,12 +178,12 @@ export function getHighResImageUrl(url: string, size: string = HIGH_RES_IMAGE_SI
   
   // CloudFront CDN pattern: /x/{w}x{h}/
   if (url.includes("/x/") && url.includes("cloudfront.net")) {
-    return url.replace(/\/x\/\d+x\d+\//, `/x/${size}/`);
+    return url.replace(CLOUDFRONT_SIZE_SEGMENT, `/x/${size}/`);
   }
   
   // Off-plan nested path with embedded size: .../340x252/...
-  if (url.includes("cloudfront") && /\/\d+x\d+\//.test(url)) {
-    return url.replace(/\/\d+x\d+\//, `/${size}/`);
+  if (url.includes("cloudfront") && NESTED_SIZE_SEGMENT.test(url)) {
+    return url.replace(NESTED_SIZE_SEGMENT, `/${size}/`);
   }
   
   return url;

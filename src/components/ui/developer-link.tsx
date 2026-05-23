@@ -60,8 +60,9 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
         to={href}
         onClick={handleClick}
         data-no-contrast-guard
-        style={{ color: '#B89555' }}
-        className="font-bold !text-[#B89555] underline underline-offset-4 decoration-[#B89555]/60 cursor-pointer transition-colors duration-150 hover:!text-[#8E6E36] hover:decoration-[#B89555] focus-visible:!text-[#8E6E36] focus-visible:decoration-[#B89555] focus-visible:outline-none"
+        data-developer-gold
+        style={{ color: '#B89555', WebkitTextFillColor: '#B89555' }}
+        className="developer-name-gold font-bold !text-[#B89555] underline underline-offset-4 decoration-[#B89555]/60 cursor-pointer transition-colors duration-150 hover:!text-[#8E6E36] hover:decoration-[#B89555] focus-visible:!text-[#8E6E36] focus-visible:decoration-[#B89555] focus-visible:outline-none"
       >
         {name}
       </Link>
