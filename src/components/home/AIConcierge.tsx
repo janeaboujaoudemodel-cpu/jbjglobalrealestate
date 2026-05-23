@@ -363,88 +363,98 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
               </div>}
             </div>
 
-            {/* Footer escalation + input */}
-            <div className="shrink-0 border-t border-gold/30 px-5 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-3 bg-secondary">
-              {messages.length > 0 && (
-                <div className="flex items-center justify-between gap-2">
-                  <span className="inline-flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.16em] font-semibold text-[#1A1A1A]/70">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    24/7 Support · Free
-                  </span>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
+            {/* Footer escalation + input — only when verified */}
+            {isVerified && (
+              <div className="shrink-0 border-t border-[#B89555]/40 px-5 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-3 bg-[#F7F2EA]">
+                {messages.length > 0 && (
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.16em] font-semibold text-[#1A1A1A]/70">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Call our agent now · Free
+                    </span>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          data-no-contrast-guard
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11.5px] font-semibold
+                            text-[#1A1A1A] border border-[#B89555]/55 bg-[#FDFBF7] hover:bg-[#EFE6D6] hover:border-[#B89555] transition"
+                        >
+                          Switch channel
+                          <ChevronDown className="h-3 w-3 text-[#B89555]" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        align="end"
+                        sideOffset={8}
                         data-no-contrast-guard
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11.5px] font-semibold
-                          text-[#1A1A1A] border border-[#B89555]/55 bg-[#FDFBF7] hover:bg-[#EFE6D6] hover:border-[#B89555] transition"
+                        className="w-[300px] p-2 space-y-1.5 !bg-[#FDFBF7] !text-[#1A1A1A] border border-[#B89555]/55 rounded-xl"
+                        style={{ boxShadow: "0 20px 50px rgba(0,0,0,0.25)" }}
                       >
-                        Switch channel
-                        <ChevronDown className="h-3 w-3 text-[#B89555]" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      align="end"
-                      sideOffset={8}
-                      data-no-contrast-guard
-                      className="w-[300px] p-2 space-y-1.5 !bg-[#FDFBF7] !text-[#1A1A1A] border border-[#B89555]/55 rounded-xl"
-                      style={{ boxShadow: "0 20px 50px rgba(0,0,0,0.25)" }}
-                    >
-                      <ChannelCard channel={{
-                        id: "chat-support",
-                        label: "Chat Support",
-                        description: "Talk to a JBJ agent",
-                        responseTime: "Replies in ~2 min",
-                        Icon: MessageSquare,
-                        action: () => { onClose(); setTimeout(() => window.dispatchEvent(new CustomEvent('jbj:open-chat-support')), 250); },
-                      }} />
-                      <ChannelCard channel={{
-                        id: "whatsapp",
-                        label: "WhatsApp",
-                        description: "Reply in minutes",
-                        responseTime: "24/7",
-                        Icon: MessageCircle,
-                        href: getWhatsAppUrl(),
-                        external: true,
-                      }} />
-                      <ChannelCard channel={{
-                        id: "call",
-                        label: "Call an Agent",
-                        description: CONTACT_INFO.phone,
-                        responseTime: "Avg 30s pickup",
-                        Icon: Phone,
-                        href: getCallUrl(),
-                      }} />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              )}
+                        <ChannelCard channel={{
+                          id: "chat-support",
+                          label: "Chat Support",
+                          description: "Talk to a JBJ agent",
+                          responseTime: "Replies in ~2 min",
+                          Icon: MessageSquare,
+                          action: () => { onClose(); setTimeout(() => window.dispatchEvent(new CustomEvent('jbj:open-chat-support')), 250); },
+                        }} />
+                        <ChannelCard channel={{
+                          id: "whatsapp",
+                          label: "WhatsApp",
+                          description: "Reply in minutes",
+                          responseTime: "24/7",
+                          Icon: MessageCircle,
+                          href: getWhatsAppUrl(),
+                          external: true,
+                        }} />
+                        <ChannelCard channel={{
+                          id: "call",
+                          label: "Call an Agent",
+                          description: CONTACT_INFO.phone,
+                          responseTime: "Avg 30s pickup",
+                          Icon: Phone,
+                          href: getCallUrl(),
+                        }} />
+                        <ChannelCard channel={{
+                          id: "voice-ai",
+                          label: "Voice AI Call · Free",
+                          description: "Speak with our AI agent now",
+                          responseTime: "Live",
+                          Icon: PhoneCall,
+                          action: () => { onClose(); setTimeout(() => window.dispatchEvent(new CustomEvent('jbj:open-voice-concierge')), 250); },
+                        }} />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                )}
 
-              {isVerified && <form onSubmit={onSubmit} className="relative">
-                <input
-                  ref={inputRef}
-                  value={draft}
-                  onChange={(e) => setDraft(e.target.value)}
-                  placeholder="Ask the concierge…"
-                  disabled={streaming}
-                  data-no-contrast-guard
-                  className="w-full h-14 pl-4 pr-14 rounded-xl text-[14px] text-foreground placeholder:text-foreground/45
-                    bg-background border border-gold/45 focus:border-gold outline-none transition"
-                />
-                <button
-                  type="submit"
-                  disabled={streaming || !draft.trim()}
-                  aria-label="Send"
-                  data-no-contrast-guard
-                  className="absolute right-2 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center
-                    rounded-lg text-primary-foreground bg-primary hover:bg-primary disabled:opacity-40
-                    hover:shadow-[0_0_18px_hsl(var(--gold)/0.30)] hover:-translate-y-1/2
-                    disabled:cursor-not-allowed transition"
-                >
-                  <Send className="h-4 w-4" />
-                </button>
-              </form>}
-            </div>
+                <form onSubmit={onSubmit} className="relative">
+                  <input
+                    ref={inputRef}
+                    value={draft}
+                    onChange={(e) => setDraft(e.target.value)}
+                    placeholder="Ask the concierge…"
+                    disabled={streaming}
+                    data-no-contrast-guard
+                    className="w-full h-12 pl-4 pr-14 rounded-xl text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45
+                      bg-[#FDFBF7] border border-[#B89555]/55 focus:border-[#B89555] outline-none transition"
+                  />
+                  <button
+                    type="submit"
+                    disabled={streaming || !draft.trim()}
+                    aria-label="Send"
+                    data-no-contrast-guard
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center
+                      rounded-lg bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#2A2A2A] disabled:opacity-40
+                      hover:shadow-[0_0_18px_rgba(184,149,85,0.40)]
+                      disabled:cursor-not-allowed transition"
+                  >
+                    <Send className="h-4 w-4" />
+                  </button>
+                </form>
+              </div>
+            )}
 
           </motion.aside>
         </>
