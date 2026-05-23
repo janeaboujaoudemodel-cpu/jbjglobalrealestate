@@ -172,7 +172,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
                 alt={project.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 loading={isAboveFold ? "eager" : "lazy"}
-                fetchPriority={isAboveFold ? "high" : undefined}
+                {...(isAboveFold ? ({ fetchpriority: "high" } as any) : {})}
                 onError={() => {
                   // Try gallery fallback first; otherwise show champagne placeholder.
                   const fallback = project.images?.find(i => i.image_url && i.image_url !== imgUrl)?.image_url;
