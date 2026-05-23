@@ -82,10 +82,8 @@ const getSaleStatusLabel = resolveSaleStatusLabel;
 
 const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [brokenImage, setBrokenImage] = useState(false);
   const images = project.images || [];
   const primaryImageUrl = images[currentImageIndex]?.image_url || images[0]?.image_url || project.cover_image_url || null;
-  if (!primaryImageUrl || brokenImage) return null;
 
   const handlePrevImage = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -221,7 +219,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             alt={images[currentImageIndex]?.alt_text || project.name}
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             placeholderLabel=""
-            onError={() => setBrokenImage(true)}
           />
 
           {/* Navigation Arrows */}

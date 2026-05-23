@@ -370,7 +370,6 @@ export function useProjects() {
  *            the full dataset shortly after.
  */
 export function useProjectsListing() {
-  const queryClient = useQueryClient();
   return useQuery({
     queryKey: ["projects-listing"],
     staleTime: 10 * 60 * 1000,
@@ -392,76 +391,19 @@ export function useProjectsListing() {
         community:communities(id, name, slug)
       `;
 
-      const FAST_PAGE = 200;
-      const BG_PAGE = 1000;
-
-      // Stage 1 — fast initial slice
-      // NOTE: We additionally require a cover image at the query level so
-      // listings whose media is still pending verification never surface on
-      // public pages, even if a row sneaks past the publish-gate trigger.
-      const { data: fastData, error: fastError } = await supabase
+      // Single lean query — first 500 published projects with covers.
+      // Avoids the heavy multi-page background backfill that froze the UI.
+      const { data, error } = await supabase
         .from("projects")
         .select(LISTING_COLUMNS)
         .eq("is_published", true)
         .not("cover_image_url", "is", null)
         .neq("cover_image_url", "")
         .order("created_at", { ascending: false })
-        .range(0, FAST_PAGE - 1);
+        .range(0, 499);
 
-      if (fastError) throw fastError;
-      const firstSlice = dedupePublicProjects((fastData ?? []) as unknown as UnifiedProject[]);
-
-      // Stage 2 — background backfill (don't block first paint)
-      void (async () => {
-        try {
-          const { count, error: countError } = await supabase
-            .from("projects")
-            .select("id", { count: "exact", head: true })
-            .eq("is_published", true)
-            .not("cover_image_url", "is", null)
-            .neq("cover_image_url", "");
-          if (countError) throw countError;
-          const total = count ?? 0;
-          if (total <= FAST_PAGE) return;
-
-          const offsets: number[] = [];
-          for (let off = FAST_PAGE; off < total; off += BG_PAGE) offsets.push(off);
-
-          const pages = await Promise.all(
-            offsets.map(async (offset) => {
-              const { data, error } = await supabase
-                .from("projects")
-                .select(LISTING_COLUMNS)
-                .eq("is_published", true)
-                .not("cover_image_url", "is", null)
-                .neq("cover_image_url", "")
-                .order("created_at", { ascending: false })
-                .range(offset, offset + BG_PAGE - 1);
-              if (error) throw error;
-              return data ?? [];
-            })
-          );
-
-          const rest = dedupePublicProjects(pages.flat() as unknown as UnifiedProject[]);
-          // Merge into cache, deduping by id
-          queryClient.setQueryData<UnifiedProject[]>(["projects-listing"], (prev) => {
-            const base = prev ?? firstSlice;
-            const seen = new Set(base.map((p) => p.id));
-            const merged = [...base];
-            for (const r of rest) {
-              if (!seen.has(r.id)) {
-                merged.push(r);
-                seen.add(r.id);
-              }
-            }
-            return merged;
-          });
-        } catch {
-          // Silent — first slice is already on screen
-        }
-      })();
-
-      return firstSlice;
+      if (error) throw error;
+      return dedupePublicProjects((data ?? []) as unknown as UnifiedProject[]);
     },
   });
 }

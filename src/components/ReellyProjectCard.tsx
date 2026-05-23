@@ -75,10 +75,8 @@ const ReellyProjectCard = ({
   compact = false,
 }: ReellyProjectCardProps) => {
    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-   const [brokenImage, setBrokenImage] = useState(false);
    const images = project.images || [];
    const primaryImageUrl = images[currentImageIndex]?.image_url || project.thumbnail || project.gallery?.[0] || null;
-   if (!primaryImageUrl || brokenImage) return null;
  
    const handlePrevImage = (e: React.MouseEvent) => {
      e.preventDefault();
@@ -180,7 +178,6 @@ const ReellyProjectCard = ({
                alt={images[currentImageIndex]?.alt_text || project.name}
                className="object-cover group-hover:scale-105 transition-transform duration-300"
                placeholderLabel=""
-               onError={() => setBrokenImage(true)}
              />
            
            {/* Navigation Arrows */}
