@@ -20,6 +20,7 @@ import {
   Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PearlButton } from "@/components/ui/pearl-button";
 
 // Service background images served from public/ to avoid bundle bloat
 const buyPropertyBg = "/services/buy-property-bg.jpg";
