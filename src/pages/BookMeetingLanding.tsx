@@ -77,6 +77,7 @@ function visibleSlots(durationMin: number) {
 export default function BookMeetingLanding() {
   const [params] = useSearchParams();
   const token = params.get("t") || "";
+  const { user, loading: authLoading } = useAuth();
 
   const dayPanel = useMemo(() => buildDayPanel(30), []);
   const countries = useMemo(() => getCountryList(), []);
