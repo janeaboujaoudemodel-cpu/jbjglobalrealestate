@@ -130,11 +130,16 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       // NOTE: Documents are optional (Reelly imports don't have them) - removed from requirements
       const needsWorkOr = [
         "review_notes.ilike.%PENDING_SCRAPE%",
+        "review_notes.ilike.%PENDING_VERIFICATION%",
         "review_notes.eq.INCOMPLETE",
         "review_notes.ilike.ERROR:%",
         "images.eq.[]",
         "images.is.null",
+        "documents.eq.[]",
+        "documents.is.null",
         "description.is.null",
+        "price_from.is.null",
+        "location.is.null",
         "developer_name.is.null",
         "developer_name.ilike.unknown",
         "developer_name.eq.Unknown",
@@ -219,23 +224,31 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           .is("review_notes", null)
           .not("description", "is", null)
           .neq("description", "")
+          .not("price_from", "is", null)
+          .not("location", "is", null)
           .not("developer_name", "is", null)
           .neq("developer_name", "")
           .not("developer_name", "ilike", "unknown")
           .not("images", "is", null)
-          .not("images", "eq", "[]");
-        // NOTE: documents requirement removed - Reelly imports don't have documents
+          .not("images", "eq", "[]")
+          .not("documents", "is", null)
+          .not("documents", "eq", "[]");
       } else if (statusFilter === "needs_work") {
         // Needs work = flagged OR missing CORE fields (images, description, developer)
         // Documents are optional and excluded from this check
         query = query.or(
           [
             "review_notes.ilike.%PENDING_SCRAPE%",
+            "review_notes.ilike.%PENDING_VERIFICATION%",
             "review_notes.eq.INCOMPLETE",
             "review_notes.ilike.ERROR:%",
             "images.eq.[]",
             "images.is.null",
+            "documents.eq.[]",
+            "documents.is.null",
             "description.is.null",
+            "price_from.is.null",
+            "location.is.null",
             "developer_name.is.null",
             "developer_name.ilike.unknown",
             "developer_name.eq.Unknown",
