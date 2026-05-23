@@ -4,24 +4,25 @@
  * `capture-lead` to push the contact into CRM.
  * On success, persists a verified-support token via useConciergeVerification.
  */
-import { useEffect, useState } from "react";
-import { Check, ChevronDown, Loader2, Mail, Phone, User, ShieldCheck, ArrowRight } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Check, ChevronDown, Loader2, Mail, Phone, Search, User, ShieldCheck, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { getCountries, getCountryCallingCode } from "react-phone-number-input";
+import countryLabels from "react-phone-number-input/locale/en.json";
 import { supabase } from "@/integrations/supabase/client";
 import { useConciergeVerification } from "@/hooks/useConciergeVerification";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-const COUNTRY_CODES = [
-  { id: "AE", code: "+971" }, { id: "SA", code: "+966" }, { id: "QA", code: "+974" }, { id: "KW", code: "+965" }, { id: "BH", code: "+973" }, { id: "OM", code: "+968" },
-  { id: "GB", code: "+44" }, { id: "US", code: "+1" }, { id: "CA", code: "+1" }, { id: "AU", code: "+61" }, { id: "NZ", code: "+64" },
-  { id: "IN", code: "+91" }, { id: "PK", code: "+92" }, { id: "BD", code: "+880" }, { id: "LK", code: "+94" }, { id: "NP", code: "+977" },
-  { id: "CN", code: "+86" }, { id: "HK", code: "+852" }, { id: "SG", code: "+65" }, { id: "MY", code: "+60" }, { id: "TH", code: "+66" }, { id: "PH", code: "+63" }, { id: "ID", code: "+62" }, { id: "VN", code: "+84" }, { id: "JP", code: "+81" }, { id: "KR", code: "+82" },
-  { id: "DE", code: "+49" }, { id: "FR", code: "+33" }, { id: "IT", code: "+39" }, { id: "ES", code: "+34" }, { id: "PT", code: "+351" }, { id: "NL", code: "+31" }, { id: "BE", code: "+32" }, { id: "CH", code: "+41" }, { id: "AT", code: "+43" }, { id: "SE", code: "+46" }, { id: "NO", code: "+47" }, { id: "DK", code: "+45" }, { id: "FI", code: "+358" }, { id: "IE", code: "+353" }, { id: "GR", code: "+30" }, { id: "CY", code: "+357" }, { id: "MT", code: "+356" },
-  { id: "RU", code: "+7" }, { id: "TR", code: "+90" }, { id: "EG", code: "+20" }, { id: "JO", code: "+962" }, { id: "LB", code: "+961" }, { id: "IL", code: "+972" }, { id: "IQ", code: "+964" }, { id: "IR", code: "+98" },
-  { id: "ZA", code: "+27" }, { id: "NG", code: "+234" }, { id: "KE", code: "+254" }, { id: "MA", code: "+212" }, { id: "TN", code: "+216" }, { id: "DZ", code: "+213" }, { id: "GH", code: "+233" }, { id: "ET", code: "+251" },
-  { id: "BR", code: "+55" }, { id: "MX", code: "+52" }, { id: "AR", code: "+54" }, { id: "CL", code: "+56" }, { id: "CO", code: "+57" }, { id: "PE", code: "+51" },
-];
+const PRIORITY_COUNTRIES = ["AE", "SA", "QA", "KW", "BH", "OM", "GB", "US", "IN", "CN", "SG", "RU", "DE", "FR"];
+const COUNTRY_CODES = getCountries()
+  .map((id) => ({ id, code: `+${getCountryCallingCode(id)}`, name: (countryLabels as Record<string, string>)[id] ?? id }))
+  .sort((a, b) => {
+    const ai = PRIORITY_COUNTRIES.indexOf(a.id);
+    const bi = PRIORITY_COUNTRIES.indexOf(b.id);
+    if (ai !== -1 || bi !== -1) return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+    return a.name.localeCompare(b.name);
+  });
 
 const flagEmoji = (countryId: string) =>
   countryId.replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
@@ -49,9 +50,17 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
   const [countryCode, setCountryCode] = useState("+971");
   const [phone, setPhone] = useState("");
   const [countryOpen, setCountryOpen] = useState(false);
+  const [countryQuery, setCountryQuery] = useState("");
 
   const [otp, setOtp] = useState("");
   const selectedCountry = COUNTRY_CODES.find((country) => country.id === countryId) ?? COUNTRY_CODES[0];
+  const filteredCountries = useMemo(() => {
+    const query = countryQuery.trim().toLowerCase();
+    if (!query) return COUNTRY_CODES;
+    return COUNTRY_CODES.filter((country) =>
+      country.name.toLowerCase().includes(query) || country.id.toLowerCase().includes(query) || country.code.includes(query),
+    );
+  }, [countryQuery]);
 
   useEffect(() => {
     if (resendCooldown <= 0) return;
@@ -227,10 +236,20 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
                 align="start"
                 sideOffset={8}
                 data-no-contrast-guard
-                className="z-[11000] w-[176px] rounded-xl border border-[#B89555]/50 bg-[#FDFBF7] p-1.5 text-[#1A1A1A] shadow-[0_18px_44px_rgba(26,26,26,0.18)]"
+                className="z-[11000] w-[316px] rounded-xl border border-[#B89555]/50 bg-[#FDFBF7] p-2 text-[#1A1A1A] shadow-[0_18px_44px_rgba(26,26,26,0.18)]"
               >
+                <div className="relative mb-2">
+                  <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#B89555]" />
+                  <input
+                    value={countryQuery}
+                    onChange={(e) => setCountryQuery(e.target.value)}
+                    placeholder="Search country or code"
+                    data-no-contrast-guard
+                    className="h-10 w-full rounded-lg border border-[#B89555]/40 bg-[#FDFBF7] pl-9 pr-3 text-[13px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 outline-none focus:border-[#B89555]"
+                  />
+                </div>
                 <div className="max-h-[260px] overflow-y-auto pr-1">
-                  {COUNTRY_CODES.map((country) => (
+                  {filteredCountries.map((country) => (
                     <button
                       key={`${country.id}-${country.code}`}
                       type="button"
@@ -243,13 +262,15 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
                       className="flex h-10 w-full items-center justify-between rounded-lg px-3 text-left text-[13px] text-[#1A1A1A]
                         transition hover:bg-[#F7F2EA] hover:text-[#1A1A1A] focus:bg-[#F7F2EA] focus:text-[#1A1A1A] focus:outline-none"
                     >
-                      <span className="flex items-center gap-3">
+                      <span className="flex min-w-0 items-center gap-3">
                         <span className="text-[17px] leading-none">{flagEmoji(country.id)}</span>
-                        <span className="font-medium tabular-nums">{country.code}</span>
+                        <span className="truncate text-[#1A1A1A]/75">{country.name}</span>
+                        <span className="ml-auto font-medium tabular-nums">{country.code}</span>
                       </span>
                       {country.id === countryId && <Check className="h-3.5 w-3.5 text-[#B89555]" />}
                     </button>
                   ))}
+                  {filteredCountries.length === 0 && <div className="px-3 py-4 text-center text-[12px] text-[#1A1A1A]/60">No matching country</div>}
                 </div>
               </PopoverContent>
             </Popover>

@@ -129,6 +129,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       setShowAttentionPulse(false);
     };
     const handleOpenChatSupport = () => {
+      setPopupsReady(true);
       markDailyShown();
       setShowAttentionPulse(false);
       setIsChatCollapsed(false);
