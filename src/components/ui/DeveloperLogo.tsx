@@ -126,10 +126,9 @@ export function DeveloperLogo({
     return (
       <div
         className={cn(
-          // Clean public overlay: no visible plate or padding gap. The logo itself
-          // fills the available box and relies on shadow/contrast instead of a frame.
-          "h-12 w-20 inline-flex items-center justify-center overflow-hidden",
-          "bg-transparent p-0 drop-shadow-[0_2px_8px_rgba(0,0,0,0.32)]",
+          // Approved framed plate: champagne surface with gold hairline border
+          "h-12 w-20 inline-flex items-center justify-center overflow-hidden rounded-md",
+          "bg-[#FDFBF7] border border-[#B89555]/40 p-1.5 shadow-[0_2px_8px_rgba(0,0,0,0.18)]",
           className,
         )}
       >
@@ -146,6 +145,7 @@ export function DeveloperLogo({
       </div>
     );
   }
+
 
   // ── Card variant — Reelly-style hero plate (developer directory) ──
   if (variant === "card") {
