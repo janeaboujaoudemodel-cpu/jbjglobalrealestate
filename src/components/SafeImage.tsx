@@ -1,5 +1,6 @@
 import * as React from "react";
 import { logImageFailure } from "@/utils/imageLoadLogger";
+import { buildChampagneInitialsDataUri } from "@/utils/champagneInitialsFallback";
 
 type SafeImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   fallbackSrc?: string;
@@ -58,10 +59,15 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
     const component = loggerComponent || "SafeImage";
     const baseContext = { ...loggerContext, alt: props.alt };
 
-    // If loading is explicitly set to "eager", respect it (for hero/first gallery images)
     const loadingAttr = props.loading ?? "lazy";
-    // Add fetchpriority="high" for eager-loaded images
     const fetchPriority = loadingAttr === "eager" ? "high" : undefined;
+
+    const champagneFor = (img: HTMLImageElement) =>
+      buildChampagneInitialsDataUri({
+        alt: typeof props.alt === "string" ? props.alt : "",
+        width: img.clientWidth || img.naturalWidth || 400,
+        height: img.clientHeight || img.naturalHeight || 300,
+      });
 
     return (
       <img
@@ -74,36 +80,26 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
         fetchpriority={fetchPriority}
         referrerPolicy="strict-origin-when-cross-origin"
         onLoad={(e) => {
-          // Detect broken images that load as 0x0
           const img = e.currentTarget;
-          if (img.naturalWidth === 0 && resolvedFallback && img.src !== resolvedFallback) {
-            logImageFailure({
-              src: img.src,
-              component,
-              reason: "zero-dimensions",
-              context: baseContext,
-            });
-            img.src = resolvedFallback;
-          } else if (img.naturalWidth === 0) {
-            logImageFailure({
-              src: img.src,
-              component,
-              reason: "zero-dimensions",
-              context: baseContext,
-            });
-            onError?.(e as unknown as React.SyntheticEvent<HTMLImageElement, Event>);
+          if (img.naturalWidth === 0) {
+            logImageFailure({ src: img.src, component, reason: "zero-dimensions", context: baseContext });
+            if (resolvedFallback && img.src !== resolvedFallback) {
+              img.src = resolvedFallback;
+            } else if (img.getAttribute("data-img-recovered") !== "initials" && !img.hasAttribute("data-no-fallback")) {
+              img.setAttribute("data-img-recovered", "initials");
+              img.src = champagneFor(img);
+            }
           }
         }}
         onError={(e) => {
           const failedSrc = e.currentTarget.src;
-          logImageFailure({
-            src: failedSrc,
-            component,
-            reason: "onerror",
-            context: baseContext,
-          });
-          if (resolvedFallback && e.currentTarget.src !== resolvedFallback) {
-            e.currentTarget.src = resolvedFallback;
+          logImageFailure({ src: failedSrc, component, reason: "onerror", context: baseContext });
+          const img = e.currentTarget;
+          if (resolvedFallback && img.src !== resolvedFallback) {
+            img.src = resolvedFallback;
+          } else if (img.getAttribute("data-img-recovered") !== "initials" && !img.hasAttribute("data-no-fallback")) {
+            img.setAttribute("data-img-recovered", "initials");
+            img.src = champagneFor(img);
           }
           onError?.(e);
         }}
