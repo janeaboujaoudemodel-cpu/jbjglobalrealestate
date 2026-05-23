@@ -99,13 +99,14 @@ export default function RecommendedDevelopers({
                   to={`/developer/${dev.slug}`}
                   className="group block rounded-xl border-2 border-[#B89555]/20 hover:border-[#B89555]/60 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)]"
                 >
-                  {/* Logo — real logo only; show name fallback when missing */}
-                  <div className="h-28 flex items-center justify-center p-4">
+                  {/* Logo — full-fit, real logo only; name fallback when missing */}
+                  <div className="h-28 flex items-center justify-center p-4 bg-white">
                     {dev.logo_url ? (
-                      <DeveloperLogo
+                      <img
                         src={dev.logo_url}
-                        alt={dev.name}
-                        className="w-20 h-20"
+                        alt={`${dev.name} logo`}
+                        loading="lazy"
+                        className="block max-h-full max-w-full w-auto h-auto object-contain"
                       />
                     ) : (
                       <span className="text-[#1A1A1A] font-bold text-base text-center px-2">
