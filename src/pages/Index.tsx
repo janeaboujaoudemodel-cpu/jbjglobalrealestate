@@ -251,16 +251,7 @@ const Index = () => {
           variants={staggerContainer}
         >
           <div className="w-full max-w-5xl mx-auto text-center pt-[max(3vh,40px)] sm:pt-[5vh] md:pt-[8vh] pb-[max(2vh,16px)] space-y-3 sm:space-y-4 md:space-y-5">
-            {/* Eyebrow — small uppercase tagline above headline (matches founder reference photo) */}
-            <motion.p
-              variants={fadeInUp}
-              className="text-[10px] sm:text-[11px] md:text-xs font-semibold uppercase tracking-[0.32em] text-white/85"
-              style={{
-                textShadow: "0 1px 4px rgba(0,0,0,0.95), 0 2px 12px rgba(0,0,0,0.6)",
-              }}
-            >
-              Dubai's Trusted Real Estate Ecosystem
-            </motion.p>
+            {/* Eyebrow tagline removed per owner directive — keep hero copy minimal */}
 
             {/* Headline — exact copy from reference photo */}
             <motion.h1
@@ -279,54 +270,37 @@ const Index = () => {
               Your Gateway to Dubai's Finest Real Estate
             </motion.h1>
 
+            {/* Hero action pills row (Browse Properties → Careers) removed per owner directive —
+                those shortcuts live inside the role-specific portal CTA below. */}
 
-            {/* "I'm a..." mode pill row removed — CategorySelectorSection below ("Tell us who you are — Get started in 30s") is the single funnel for category selection. No duplication. */}
-
-
-            {/* Quick-action CTA pills — premium single-row on mobile (scroll-snap), single line on desktop */}
-            <motion.div
-              variants={fadeInUp}
-              className="w-full max-w-7xl mx-auto"
-            >
-              <div
-                className="
-                  flex items-center gap-1.5 sm:gap-2 md:gap-1.5 lg:gap-2
-                  flex-nowrap
-                  justify-start md:justify-center
-                  overflow-x-auto md:overflow-visible
-                  px-3 sm:px-0 -mx-3 sm:mx-0
-                  snap-x snap-mandatory md:snap-none
-                  [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
-                "
-              >
-                {heroActions.map((action) => (
-                  <Link
-                    key={action.label}
-                    to={action.href}
-                    data-no-contrast-guard
-                    className="jj-hero-action-card group inline-flex items-center justify-center gap-2 sm:gap-2.5 md:gap-1.5 px-4 sm:px-5 md:px-3 lg:px-3.5 py-2 sm:py-2.5 md:py-2 text-[10px] sm:text-[11px] md:text-[10.5px] lg:text-[11px] flex-shrink-0 md:flex-shrink md:min-w-0 snap-start"
-                  >
-                    <action.icon
-                      aria-hidden="true"
-                      className="jj-hero-action-icon w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-3.5 md:h-3.5 flex-shrink-0"
-                      strokeWidth={1.5}
-                    />
-                    <span className="jj-hero-action-label whitespace-nowrap">
-                      {action.label}
+            {/* Three pillars — desktop = 3-column cards (untouched), mobile = single clean inline row */}
+            <motion.div variants={fadeInUp} className="w-full max-w-3xl mx-auto">
+              {/* Mobile: ultra-compact inline row */}
+              <div className="md:hidden flex items-stretch justify-between gap-2 rounded-2xl border border-[hsl(var(--gold)/0.35)] bg-black/40 backdrop-blur-md px-2 py-2.5">
+                {pillars.map((pillar) => (
+                  <div key={pillar.title} className="flex-1 min-w-0 flex flex-col items-center text-center px-1">
+                    <pillar.icon className="w-4 h-4 text-[#E2C9A0] mb-1" strokeWidth={1.8} />
+                    <span className="text-[10px] leading-tight font-semibold text-white whitespace-nowrap">
+                      {pillar.title}
                     </span>
-                  </Link>
+                  </div>
                 ))}
-
+              </div>
+              {/* Desktop: original three-card grid (untouched aesthetic) */}
+              <div className="hidden md:grid grid-cols-3 gap-px border border-[hsl(var(--gold)/0.25)] overflow-hidden rounded-lg">
+                {pillars.map((pillar) => (
+                  <div
+                    key={pillar.title}
+                    className="bg-black/50 backdrop-blur-sm p-4 text-center border-r last:border-r-0 border-[hsl(var(--gold)/0.18)]"
+                  >
+                    <pillar.icon className="w-5 h-5 text-[#E2C9A0] mx-auto mb-1.5" strokeWidth={1.8} />
+                    <h3 className="text-xs font-semibold text-white mb-0.5">{pillar.title}</h3>
+                    <p className="text-[10px] text-white/70 leading-tight">{pillar.desc}</p>
+                  </div>
+                ))}
               </div>
             </motion.div>
 
-
-
-
-            {/* Premium property search bar — replaces former three pillar cards */}
-            <motion.div variants={fadeInUp} className="w-full">
-              <HeroPropertySearch />
-            </motion.div>
 
 
             {/* Book a Free Consultation CTA — replaces the old Explore arrow */}
