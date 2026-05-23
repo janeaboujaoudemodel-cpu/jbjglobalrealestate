@@ -272,15 +272,33 @@ const ReellyProjectCard = ({
            
            {/* Description - hidden in compact mode */}
            {!compact && (
-             <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1">
+             <p className="text-muted-foreground text-sm leading-relaxed mb-3">
                 {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
                  <span className="text-[#1A1A1A] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
                    ...more
                  </span>
              </p>
            )}
+
+           {/* Spacer pushes handover row to the very bottom */}
+           <div className="flex-1" />
+
+           {/* Premium gold divider — separates content above from handover */}
+           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+
+           {/* Handover date / Ready — right-aligned, bottom of card */}
+           <div className="flex justify-end pt-2">
+             <span
+               data-no-contrast-guard
+               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FDFBF7] border border-[#B89555]/40 shadow-sm text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange"
+             >
+               <Calendar className="w-3 h-3 text-[#B89555]" aria-hidden="true" />
+               {deriveHandover(project) || HANDOVER_FALLBACK}
+             </span>
+           </div>
          </div>
        </Link>
+
  
        {/* CTA Buttons - hidden in compact mode */}
        {!compact && (
