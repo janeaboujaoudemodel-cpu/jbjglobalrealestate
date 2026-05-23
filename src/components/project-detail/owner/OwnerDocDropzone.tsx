@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { Upload, Loader2, Eye, EyeOff, FileText, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 
 interface DocRow {
@@ -15,8 +15,6 @@ interface DocRow {
 
 interface OwnerDocDropzoneProps {
   projectId: string;
-  projectSlug?: string | null;
-  existing: DocRow[];
 }
 
 const BUCKET = "project-documents";
