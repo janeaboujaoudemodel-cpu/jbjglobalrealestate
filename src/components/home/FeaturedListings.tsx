@@ -321,16 +321,17 @@ const FeaturedListings = () => {
           )}
         </div>
 
-        {/* View All CTA */}
+        {/* View All CTA — premium pearl */}
         <div className="text-center mt-10 mb-6">
-          <Link
+          <PearlButton
             to="/properties"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-[#1A1A1A] text-white border border-[#1A1A1A] hover:bg-[#1A1A1A] hover:scale-[1.02] transform active:scale-95 group"
+            size="lg"
+            trailingIcon={<ArrowRight strokeWidth={2.5} />}
           >
-            <span>{t('featured.viewAll', 'View All Projects')}</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
+            {t('featured.viewAll', 'View All Projects')}
+          </PearlButton>
         </div>
+
       </div>
     </section>
   );
