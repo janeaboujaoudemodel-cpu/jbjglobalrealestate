@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Globe, Shield, TrendingUp, BadgeCheck, ArrowRight, Building2, Users, Sparkles, ShieldCheck, Globe2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PearlButton } from "@/components/ui/pearl-button";
 
 const dubaiStats = [
   { value: "0%",   label: "Income Tax",    icon: Sparkles },
@@ -93,19 +94,22 @@ const OverseasInvestorsBanner = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-12 md:mb-16">
-          <Link to="/guides/golden-visa-uae">
-            <Button className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white font-bold px-8 md:px-10 py-4 md:py-5 rounded-xl text-base md:text-lg border border-[#1A1A1A]">
-              <Shield className="w-5 h-5 mr-2" />
-              Golden Visa for Investors
-            </Button>
-          </Link>
-          <Link to="/investor-hub">
-            <Button variant="outline" className="font-bold px-8 md:px-10 py-4 md:py-5 rounded-xl text-base md:text-lg border-2 border-[#B89555]/30 hover:border-[#B89555]/30 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA]">
-              <TrendingUp className="w-5 h-5 mr-2" />
-              Explore Investment Options
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </Link>
+          <PearlButton
+            to="/guides/golden-visa-uae"
+            size="lg"
+            leadingIcon={<Shield strokeWidth={2.2} />}
+          >
+            Golden Visa for Investors
+          </PearlButton>
+          <PearlButton
+            to="/investor-hub"
+            size="lg"
+            leadingIcon={<TrendingUp strokeWidth={2.2} />}
+            trailingIcon={<ArrowRight strokeWidth={2.2} />}
+          >
+            Explore Investment Options
+          </PearlButton>
+
         </div>
       </div>
     </section>

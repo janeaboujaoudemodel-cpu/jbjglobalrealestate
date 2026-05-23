@@ -5,6 +5,7 @@ import {
   PlusCircle, Key,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PearlButton } from "@/components/ui/pearl-button";
 import { useToolVisibility } from "@/hooks/useToolVisibility";
 import { isApprovedPublicToolId } from "@/config/publicToolAccess";
 
@@ -113,19 +114,18 @@ export function ToolkitShowcaseCard() {
               })}
             </div>
 
-            {/* Explore All Tools CTA — premium champagne */}
+            {/* Explore JBJ Tools — premium pearl CTA */}
             <div className="mt-8 text-center">
-              <Link to="/ai-hub">
-                <Button
-                  size="lg"
-                  className="gap-3 px-10 py-6 text-base font-bold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#EFE6D6] !text-[#1A1A1A] [&]:text-[#1A1A1A] rounded-xl border border-[#B89555]/70 hover:border-[#B89555] shadow-[0_10px_32px_-12px_rgba(184,149,85,0.4)] hover:shadow-[0_14px_44px_-10px_rgba(184,149,85,0.55)] hover:scale-[1.02] transition-all duration-300"
-                >
-                  <Crown className="w-5 h-5 text-[#B89555]" />
-                  <span className="text-[#1A1A1A]">Explore All Our Tools Now</span>
-                  <ArrowRight className="w-5 h-5 text-[#B89555]" strokeWidth={2.5} />
-                </Button>
-              </Link>
+              <PearlButton
+                to="/ai-hub"
+                size="lg"
+                leadingIcon={<Crown strokeWidth={2.2} />}
+                trailingIcon={<ArrowRight strokeWidth={2.5} />}
+              >
+                Explore JBJ Tools
+              </PearlButton>
             </div>
+
           </div>
         </div>
       </div>

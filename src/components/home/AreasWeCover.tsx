@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { MapPin, ArrowRight, TrendingUp, Flame, BookOpen, Compass } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAreas } from "@/hooks/useAreas";
+import { PearlButton } from "@/components/ui/pearl-button";
 
 const AreasWeCover = () => {
   const { t } = useLanguage();
@@ -122,25 +123,25 @@ const AreasWeCover = () => {
           ))}
         </div>
 
-        {/* Dual CTA */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10 md:mt-12">
-          <Link
+          <PearlButton
             to="/area-guides"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A1A1A] text-white rounded-xl font-semibold text-sm hover:bg-[#1A1A1A]/90 transition-colors border border-[#1A1A1A]"
+            size="md"
+            leadingIcon={<BookOpen strokeWidth={2.2} />}
+            trailingIcon={<ArrowRight strokeWidth={2.2} />}
           >
-            <BookOpen className="w-4 h-4" />
-            <span>{t("areas.readGuides", "Read Area Guides")}</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link
+            {t("areas.readGuides", "Read Area Guides")}
+          </PearlButton>
+          <PearlButton
             to="/areas"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40 rounded-xl font-semibold text-sm hover:bg-[#F7F2EA] transition-colors"
+            size="md"
+            leadingIcon={<Compass strokeWidth={2.2} />}
+            trailingIcon={<ArrowRight strokeWidth={2.2} />}
           >
-            <Compass className="w-4 h-4" />
-            <span>{t("areas.exploreAll", "Explore All Areas")}</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+            {t("areas.exploreAll", "Explore All Areas")}
+          </PearlButton>
         </div>
+
       </div>
     </section>
   );

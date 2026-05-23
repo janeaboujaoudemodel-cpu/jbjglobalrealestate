@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Building2, ExternalLink, Award, ChevronDown, ChevronUp, Calendar, Briefcase, Sparkles, User, Layers, Star, Instagram, Linkedin, MapPin, Phone, MessageCircle, Globe, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PearlButton } from "@/components/ui/pearl-button";
 import { useState } from "react";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
@@ -211,13 +212,15 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
 
               {/* View Developer Button */}
               {developer.slug && (
-                <Link to={`/developer/${developer.slug}`}>
-                  <Button variant="primary" size="default" className="group">
-                    <span>View All Projects by {developer.name}</span>
-                    <ExternalLink className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
+                <PearlButton
+                  to={`/developer/${developer.slug}`}
+                  size="md"
+                  trailingIcon={<ExternalLink strokeWidth={2.2} />}
+                >
+                  View All Projects by {developer.name}
+                </PearlButton>
               )}
+
             </div>
           </div>
         </div>

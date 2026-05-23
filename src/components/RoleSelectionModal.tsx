@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
+import { PearlButton } from "@/components/ui/pearl-button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { 
   Briefcase, 
@@ -548,14 +549,16 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   <span>Made a mistake? Change your role anytime from the <strong>Menu → Settings</strong></span>
                 </div>
 
-                <Button
+                <PearlButton
                   onClick={handleCloseWelcome}
-                  className="w-full py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold text-base shadow-xl rounded-xl group border border-[#B89555]/20"
+                  size="lg"
+                  className="w-full"
+                  leadingIcon={<Home strokeWidth={2.2} />}
+                  trailingIcon={<ArrowRight strokeWidth={2.2} />}
                 >
-                  <Home className="w-5 h-5 mr-2" />
                   Start Exploring
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                </PearlButton>
+
               </motion.div>
             )}
 
