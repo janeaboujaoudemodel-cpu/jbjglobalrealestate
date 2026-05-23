@@ -19,9 +19,18 @@ interface ProjectRow {
   is_published: boolean | null;
   cover_image_url: string | null;
   card_image_url: string | null;
+  description: string | null;
+  price_from: number | null;
+  location: string | null;
+  area_name: string | null;
+  bedrooms_min: number | null;
+  bedrooms_max: number | null;
+  property_type_label: string | null;
+  payment_plan: string | null;
   updated_at: string | null;
   created_at: string | null;
   gallery_count?: number;
+  documents_count?: number;
 }
 
 type MediaStatus = "complete" | "gallery-only" | "missing";
@@ -32,6 +41,18 @@ const getMediaStatus = (p: ProjectRow): MediaStatus => {
   if (hasCover || hasCard) return "complete";
   if ((p.gallery_count ?? 0) > 0) return "gallery-only";
   return "missing";
+};
+
+const getReadinessBlockers = (p: ProjectRow) => {
+  const blockers: string[] = [];
+  if (getMediaStatus(p) === "missing") blockers.push("photo");
+  if (!p.developer_name || p.developer_name.trim().toLowerCase() === "unknown") blockers.push("developer");
+  if (!p.description || p.description.trim().length < 50) blockers.push("description");
+  if (!p.price_from || p.price_from <= 0) blockers.push("price");
+  if (!p.location?.trim() && !p.area_name?.trim() && !p.community?.trim()) blockers.push("location");
+  if (!p.bedrooms_min && !p.bedrooms_max && !p.property_type_label?.trim()) blockers.push("unit details");
+  if ((p.documents_count ?? 0) === 0 && !p.payment_plan?.trim()) blockers.push("brochure/floor plan");
+  return blockers;
 };
 
 const MediaStatusBadge = ({ status }: { status: MediaStatus }) => {
