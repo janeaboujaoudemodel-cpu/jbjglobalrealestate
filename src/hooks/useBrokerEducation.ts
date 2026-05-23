@@ -12,6 +12,9 @@ export interface EducationBook {
   learning_objective: string | null;
   is_restricted: boolean;
   sort_order: number;
+  voice_enabled?: boolean;
+  voice_id?: string | null;
+  voice_provider?: string | null;
 }
 
 export interface EducationModule {
