@@ -367,14 +367,15 @@ export default function PaymentPlanVisualization({
                 Register your interest to learn more about {projectName}. Our team will provide you with the latest details.
               </p>
               {onRegisterInterest && (
-                <button
+                <PearlButton
                   onClick={onRegisterInterest}
-                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-[#1A1A1A] text-white font-semibold text-sm shadow-lg hover:bg-[#1A1A1A] hover:-translate-y-0.5 transition-all"
+                  size="md"
+                  leadingIcon={<CreditCard strokeWidth={2.2} />}
                 >
-                  <CreditCard className="w-4 h-4" />
                   Register Your Interest
-                </button>
+                </PearlButton>
               )}
+
             </div>
           )}
 
