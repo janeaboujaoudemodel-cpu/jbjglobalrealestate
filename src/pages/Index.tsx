@@ -67,7 +67,6 @@ const CategorySelectorSection = lazy(() => import("@/components/home/CategorySel
 
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
-const VoiceConciergeWidget = lazy(() => import("@/components/VoiceConciergeWidget"));
 
 const VerificationBanner = lazy(() => import("@/components/verification/VerificationBanner"));
 const PartnerVerifyHeroCTA = lazy(() => import("@/components/home/PartnerVerifyHeroCTA"));
@@ -593,11 +592,6 @@ const Index = () => {
           isOpen={isInquiryOpen} 
           onClose={() => setIsInquiryOpen(false)} 
         />
-      </Suspense>
-
-      {/* ElevenLabs voice concierge — floating bottom-right */}
-      <Suspense fallback={null}>
-        <VoiceConciergeWidget />
       </Suspense>
     </section>
   );
