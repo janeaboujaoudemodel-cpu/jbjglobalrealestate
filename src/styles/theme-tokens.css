@@ -1,0 +1,97 @@
+/* ============================================================
+ * THEME TOKENS — single source of truth for champagne/gold
+ * ============================================================
+ * Canonical aliases (use these, not raw hex literals):
+ *   --t-page         page background          (#FDFBF7)
+ *   --t-surface      raised surface           (#F7F2EA)
+ *   --t-raised       elevated surface         (#EFE6D6)
+ *   --t-ink          primary text             (#1A1A1A)
+ *   --t-ink-soft     secondary text @ 70%     (rgba ink/0.7)
+ *   --t-gold         gold accent              (#B89555)
+ *   --t-gold-soft    gold hairline @ 0.40
+ *   --t-gold-faint   gold hairline @ 0.25
+ *
+ * ALL champagne/gold styling should reference these vars.
+ * Components may still use raw hex (back-compat); both resolve
+ * to the same colour, but new code must use vars.
+ *
+ * ESCAPE HATCH: any element (or ancestor) marked
+ *   <div data-premium> ... </div>
+ * is excluded from every global contrast guard / colour remap
+ * defined elsewhere in index.css. Use sparingly — only when a
+ * deliberate premium treatment must survive site-wide guards.
+ * ============================================================ */
+
+@layer base {
+  :root {
+    --t-page:       #FDFBF7;
+    --t-surface:    #F7F2EA;
+    --t-raised:     #EFE6D6;
+    --t-ink:        #1A1A1A;
+    --t-ink-soft:   rgba(26, 26, 26, 0.70);
+    --t-gold:       #B89555;
+    --t-gold-soft:  rgba(184, 149, 85, 0.40);
+    --t-gold-faint: rgba(184, 149, 85, 0.25);
+    --t-gold-ring:  rgba(184, 149, 85, 0.55);
+  }
+}
+
+@layer utilities {
+  /* Canonical semantic utilities. !important so they survive any
+     downstream global remap rule. Mirror Tailwind naming so they
+     feel native: bg-page / bg-surface / bg-raised / text-ink /
+     text-gold / border-gold / ring-gold. */
+  .bg-page       { background-color: var(--t-page)    !important; }
+  .bg-surface    { background-color: var(--t-surface) !important; }
+  .bg-raised     { background-color: var(--t-raised)  !important; }
+
+  .text-ink      { color: var(--t-ink)      !important; }
+  .text-ink-soft { color: var(--t-ink-soft) !important; }
+  .text-gold     { color: var(--t-gold)     !important; }
+
+  .border-gold       { border-color: var(--t-gold-soft)  !important; }
+  .border-gold-faint { border-color: var(--t-gold-faint) !important; }
+  .ring-gold         { --tw-ring-color: var(--t-gold-ring) !important; }
+
+  /* Hairline divider primitive */
+  .hairline-gold {
+    border: 0 !important;
+    border-top: 1px solid var(--t-gold-soft) !important;
+  }
+}
+
+/* ============================================================
+ * PREMIUM ESCAPE HATCH
+ * Re-asserts champagne/gold treatment on any element inside a
+ * [data-premium] scope, beating @layer base remaps and the
+ * global contrast / surface guards in index.css.
+ * ============================================================ */
+[data-premium],
+[data-premium] * {
+  /* Block colour overrides from contrast guards. Only properties
+     listed here are protected — layout utilities still work. */
+}
+
+/* Gold text inside premium scopes must never be flipped to ink */
+[data-premium] .text-gold,
+[data-premium] [class*="text-[#B89555]"] {
+  color: var(--t-gold) !important;
+}
+
+/* Ink text inside premium scopes must never be flipped to white */
+[data-premium] .text-ink,
+[data-premium] [class*="text-[#1A1A1A]"] {
+  color: var(--t-ink) !important;
+}
+
+/* Gold hairlines inside premium scopes are locked */
+[data-premium] .border-gold,
+[data-premium] [class*="border-[#B89555]"] {
+  border-color: var(--t-gold-soft) !important;
+}
+
+/* Surfaces inside premium scopes stay champagne — block any
+   ancestor [data-surface=ink|gold] from re-skinning them. */
+[data-premium] .bg-page    { background-color: var(--t-page)    !important; }
+[data-premium] .bg-surface { background-color: var(--t-surface) !important; }
+[data-premium] .bg-raised  { background-color: var(--t-raised)  !important; }
