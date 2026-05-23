@@ -4,18 +4,16 @@ import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle, Building2, ArrowUpRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
-import { SafeImage } from "@/components/SafeImage";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
-import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerLogo";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
-import { PaymentPlanLine } from "@/components/ui/payment-plan-line";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
@@ -318,8 +316,17 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Divider */}
           <div className="h-px bg-[#B89555]/40" />
 
-          {/* Meta block — handover (orange, matches price pill) + developer + unit types */}
+          {/* Meta block — developer first, then handover + unit types */}
           <div className="flex flex-col gap-2">
+            {project.developer && (
+              <DeveloperLink
+                name={project.developer.name}
+                slug={project.developer.slug}
+                className="text-sm block"
+                showPrefix={true}
+              />
+            )}
+
             {(() => {
               const derived = deriveHandover(project);
               return (
@@ -331,16 +338,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             })()}
 
             {/* Payment Plan removed from cards — shown only on details page */}
-
-            {project.developer && (
-              <DeveloperLink
-                name={project.developer.name}
-                slug={project.developer.slug}
-                logoUrl={devLogoUrl}
-                className="text-sm block"
-                showPrefix={true}
-              />
-            )}
 
             {(getUnitTypesText() || getSizeText()) && (
               <div className="flex items-center gap-2 text-[#1A1A1A] text-xs flex-wrap font-medium">
