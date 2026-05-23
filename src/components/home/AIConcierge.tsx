@@ -147,7 +147,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             transition={{ type: "spring", damping: 28, stiffness: 260 }}
             data-no-contrast-guard
             className="fixed z-[9001] flex min-h-0 flex-col
-              inset-x-3 top-[96px] bottom-[max(12px,env(safe-area-inset-bottom))] rounded-2xl
+              inset-x-0 top-[88px] bottom-0 rounded-none
               sm:inset-x-auto sm:left-auto sm:right-0 sm:top-[88px] sm:bottom-0 sm:w-[440px] sm:rounded-none sm:rounded-l-3xl
               bg-background border border-gold/55 sm:border-r-0"
             style={{ boxShadow: "0 -20px 60px hsl(var(--foreground) / 0.25), -20px 0 60px hsl(var(--foreground) / 0.25)" }}
