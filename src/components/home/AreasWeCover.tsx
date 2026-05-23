@@ -103,7 +103,16 @@ const AreasWeCover = () => {
                       {(area.propertyCount ?? 0).toLocaleString()} {(area.propertyCount ?? 0) === 1 ? "project" : "projects"} available
                     </p>
                   </div>
-                  <span className="shrink-0 inline-flex items-center gap-1.5 text-[12px] font-bold text-[#B89555] group-hover:gap-2 transition-all">
+                  <span
+                    data-no-contrast-guard
+                    className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#1A1A1A] transition-all group-hover:translate-y-[-1px]"
+                    style={{
+                      background: 'linear-gradient(145deg, #F7F1E6 0%, #E8D6AE 50%, #C8A766 100%)',
+                      border: '1px solid #B89555',
+                      boxShadow:
+                        'inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(120,90,30,0.35), 0 4px 10px rgba(120,90,30,0.45), 0 0 0 1px rgba(184,149,85,0.35)',
+                    }}
+                  >
                     Explore
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                   </span>
