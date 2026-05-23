@@ -279,18 +279,20 @@ const ExploreServicesCard = () => {
           <div className="flex items-center justify-between gap-2">
             {currentService.available ? (
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                <Link to={currentService.href}>
-                  <Button variant="default" size="default" className="gap-2 px-4 sm:px-8 py-3 sm:py-4 rounded-lg group text-sm sm:text-base bg-[#FDFBF7] text-[#1A1A1A] font-bold hover:bg-[#F7F2EA] border border-[#B89555]/30 shadow-lg">
-                    <span className="tracking-wide">{CTA_LABELS[currentService.id] ?? "Explore Now"}</span>
-                    <ArrowRight className="w-4 h-4 text-[#1A1A1A] group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
+                <PearlButton
+                  to={currentService.href}
+                  size="md"
+                  trailingIcon={<ArrowRight strokeWidth={2.2} />}
+                >
+                  <span className="tracking-wide">{CTA_LABELS[currentService.id] ?? "Explore Now"}</span>
+                </PearlButton>
                 {currentService.id === "golden-visa" && (
-                  <Link to="/guides/golden-visa-uae">
-                    <Button variant="outline" size="default" className="gap-2 px-4 sm:px-8 py-3 sm:py-4 rounded-lg border-white/40 bg-[#FDFBF7]/10 backdrop-blur-sm text-white hover:bg-[#FDFBF7]/20 hover:border-white/60 text-sm sm:text-base font-medium tracking-wide">
-                      Read Guide
-                    </Button>
-                  </Link>
+                  <PearlButton
+                    to="/guides/golden-visa-uae"
+                    size="md"
+                  >
+                    Read Guide
+                  </PearlButton>
                 )}
               </div>
             ) : (
@@ -298,6 +300,7 @@ const ExploreServicesCard = () => {
                 {CTA_LABELS[currentService.id] ?? "Coming Soon"}
               </Button>
             )}
+
 
             {/* Navigation Arrows */}
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
