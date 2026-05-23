@@ -16,7 +16,8 @@ import { useHandpickedProjects } from "@/hooks/useHandpickedProjects";
 const FeaturedListings = () => {
   const { t } = useLanguage();
   const { data, isLoading } = useHandpickedProjects();
-  const projects = data?.projects ?? [];
+  // Detect phone portrait via media query (no JS state for SSR safety — Tailwind hides extras).
+  const allProjects = data?.projects ?? [];
 
   return (
     <section className="bg-[#FDFBF7]">
@@ -32,10 +33,11 @@ const FeaturedListings = () => {
           </h2>
         </div>
 
-        {/* Listings Grid — canonical ProjectCard, no duplicates */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        {/* Listings Grid — 3 per row on desktop horizontal, 2 rows = 6 total.
+            Phone portrait: first 3 only (premium > dense) via hide-on-small classes. */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {isLoading
-            ? [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+            ? [1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
                   className="bg-[#FDFBF7] rounded-2xl overflow-hidden border border-[#B89555]/30"
@@ -48,10 +50,16 @@ const FeaturedListings = () => {
                   </div>
                 </div>
               ))
-            : projects.map((project) => (
-                <ProjectCard key={project.id} project={project as any} />
+            : allProjects.slice(0, 6).map((project, idx) => (
+                <div
+                  key={project.id}
+                  // On phone portrait, render only first 3 cards (idx 0..2); hidden on >=sm.
+                  className={idx >= 3 ? 'hidden sm:block' : ''}
+                >
+                  <ProjectCard project={project as any} />
+                </div>
               ))}
-          {!isLoading && projects.length === 0 && (
+          {!isLoading && allProjects.length === 0 && (
             <div className="col-span-full text-center py-12">
               <Building2 className="w-10 h-10 text-[#1A1A1A]/70 mx-auto mb-3" />
               <p className="text-[#1A1A1A]/70 text-sm">Featured projects coming soon</p>

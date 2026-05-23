@@ -26359,6 +26359,7 @@ export type Database = {
           sector: string | null
           service_charge: string | null
           short_description: string | null
+          show_sale_status: boolean
           size_max: number | null
           size_min: number | null
           slug: string
@@ -26454,6 +26455,7 @@ export type Database = {
           sector?: string | null
           service_charge?: string | null
           short_description?: string | null
+          show_sale_status?: boolean
           size_max?: number | null
           size_min?: number | null
           slug: string
@@ -26549,6 +26551,7 @@ export type Database = {
           sector?: string | null
           service_charge?: string | null
           short_description?: string | null
+          show_sale_status?: boolean
           size_max?: number | null
           size_min?: number | null
           slug?: string

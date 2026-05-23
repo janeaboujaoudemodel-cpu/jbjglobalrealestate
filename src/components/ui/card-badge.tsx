@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils';
  *  Inter 800 / 10.5px / uppercase / 0.14em tracking — DO NOT override per-site.
  */
 
-type CardBadgeVariant = 'status' | 'sold';
+type CardBadgeVariant = 'status' | 'sold' | 'status-frame';
 
 export interface CardBadgeProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -41,6 +41,29 @@ export const CardBadge = React.forwardRef<HTMLDivElement, CardBadgeProps>(
             'text-[10.5px] tracking-[0.14em]',
             'bg-[#DC2626] text-white border border-[#FCA5A5]',
             'shadow-[0_4px_14px_rgba(0,0,0,0.18)]',
+            className,
+          )}
+          {...props}
+        >
+          {children}
+        </div>
+      );
+    }
+
+    if (variant === 'status-frame') {
+      // Rectangular gold-bordered frame — matches price-pill geometry.
+      // Used for the owner-opt-in sale-status badge on cards.
+      return (
+        <div
+          ref={ref}
+          data-no-contrast-guard
+          className={cn(
+            'inline-flex items-center justify-center whitespace-nowrap',
+            'px-2.5 py-1 rounded-sm',
+            "font-['Inter'] font-bold uppercase leading-none",
+            'text-[10.5px] tracking-[0.14em]',
+            'bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]',
+            'shadow-[0_2px_8px_rgba(0,0,0,0.10)]',
             className,
           )}
           {...props}
