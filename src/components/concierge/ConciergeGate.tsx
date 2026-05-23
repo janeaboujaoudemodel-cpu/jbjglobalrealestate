@@ -262,9 +262,9 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             onClick={verifyOtp}
             disabled={submitting || otp.length !== 6}
             data-no-contrast-guard
-            className="w-full h-12 rounded-lg text-[13.5px] font-semibold text-[#FDFBF7]
-              bg-[#1A1A1A] hover:bg-[#2a2a2a] disabled:opacity-50 disabled:cursor-not-allowed transition
-              inline-flex items-center justify-center gap-2"
+            className="mt-auto w-full h-12 rounded-lg text-[13.5px] font-semibold text-primary-foreground
+              bg-primary hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed transition
+              inline-flex items-center justify-center gap-2 hover:shadow-[0_0_24px_hsl(var(--gold)/0.26)]"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
             {submitting ? "Verifying…" : "Verify & start chat"}
