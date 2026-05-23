@@ -642,11 +642,13 @@ export default function ProjectDetailLayout({
               </div>
             )}
             {(() => {
-              const derivedHero = deriveHandover(project);
-              return derivedHero ? (
+              const synced = getProjectStatus(project);
+              return synced.label !== "TBA" ? (
                 <div className="flex items-center gap-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.85)' }}>
                   <Calendar className="w-5 h-5" style={{ color: '#FCD34D' }} />
-                  <span className="text-sm md:text-base">{project.handover_date ? formatDisplayDate(project.handover_date) : derivedHero}</span>
+                  <InlineEditable projectId={project.id} field="handover_date" value={project.handover_date} type="date" surface="dark" scope="quick_facts" label="Edit handover date">
+                    <span className="text-sm md:text-base">{synced.label}</span>
+                  </InlineEditable>
                 </div>
               ) : null;
             })()}
