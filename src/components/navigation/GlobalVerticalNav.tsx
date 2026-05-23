@@ -1332,6 +1332,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <TooltipTrigger asChild>
                   <Link
                     to="/contact"
+                    onClick={collapseAfterNavigation}
                     className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
                   >
                     <Headphones className="w-3.5 h-3.5 text-[hsl(var(--gold))]" strokeWidth={2} />
@@ -1343,6 +1344,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <TooltipTrigger asChild>
                   <Link
                     to="/ticket-hub"
+                    onClick={collapseAfterNavigation}
                     className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
                   >
                     <Ticket className="w-3.5 h-3.5 text-[hsl(var(--gold))]" strokeWidth={2} />
