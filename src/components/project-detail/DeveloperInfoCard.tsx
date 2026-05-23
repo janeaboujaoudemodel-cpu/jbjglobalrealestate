@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
-import { Building2, ExternalLink, Award, ChevronDown, ChevronUp, Calendar, Briefcase, Sparkles, User, Layers, Star } from "lucide-react";
+import { Building2, ExternalLink, Award, ChevronDown, ChevronUp, Calendar, Briefcase, Sparkles, User, Layers, Star, Instagram, Linkedin, MapPin, Phone, MessageCircle, Globe, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+
+type PublicFieldKey =
+  | "instagram_url" | "linkedin_url" | "office_address" | "google_maps_url"
+  | "office_phone" | "whatsapp" | "website_url" | "admin_email";
 
 interface DeveloperInfoCardProps {
   developer: {
@@ -23,6 +27,14 @@ interface DeveloperInfoCardProps {
     notable_projects?: string | null;
     parent_company?: string | null;
     specialization?: string | null;
+    instagram_url?: string | null;
+    linkedin_url?: string | null;
+    office_address?: string | null;
+    google_maps_url?: string | null;
+    office_phone?: string | null;
+    whatsapp?: string | null;
+    admin_email?: string | null;
+    public_fields?: Partial<Record<PublicFieldKey, boolean>> | null;
   } | null;
   projectName: string;
   projectCount?: number;
@@ -107,7 +119,9 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 {developer.parent_company && (
                   <span className="text-[#1A1A1A]/70">Part of {developer.parent_company}</span>
                 )}
-                {/* Developer website intentionally hidden from public — JBJ closes all deals. */}
+                {/* Owner-controlled public contact chips: render only fields with public_fields[key] === true */}
+                <PublicContactChips developer={developer} />
+                {/* Developer website intentionally hidden from public unless explicitly enabled by owner. */}
               </div>
 
               {/* Developer Stats */}
