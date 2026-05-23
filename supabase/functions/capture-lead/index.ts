@@ -292,6 +292,8 @@ serve(async (req: Request): Promise<Response> => {
       .eq('email_lower', normalizedEmail)
       .maybeSingle();
 
+    let resolvedLeadId: string | null = existingLead?.id ?? null;
+
     if (existingLead) {
       const { error: updateError } = await supabase
         .from('crm_leads')
@@ -342,14 +344,16 @@ serve(async (req: Request): Promise<Response> => {
         );
       }
 
+      resolvedLeadId = newLead?.id ?? null;
       console.log('Created new CRM lead:', newLead?.id);
     }
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         message: "Lead captured successfully",
         email: normalizedEmail,
+        leadId: resolvedLeadId,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
