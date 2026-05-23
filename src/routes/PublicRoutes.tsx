@@ -240,7 +240,7 @@ export const PublicRoutes = () => (
     {/* ── Guides & Education ── */}
     <Route path="/buyer-guide" element={<BuyerGuide />} />
     <Route path="/seller-guide" element={<SellerGuide />} />
-    <Route path="/seller-listing" element={<SellerListing />} />
+    <Route path="/seller-listing" element={<Navigate to="/list-property?mode=manual" replace />} />
     <Route path="/guides" element={<Guides />} />
     <Route path="/guides/golden-visa-uae" element={<GoldenVisaGuide />} />
     <Route path="/golden-visa" element={<Navigate to="/guides/golden-visa-uae" replace />} />
@@ -248,11 +248,11 @@ export const PublicRoutes = () => (
     <Route path="/rent-guide" element={<RentGuide />} />
     <Route path="/tenant-guide" element={<TenantGuide />} />
     <Route path="/landlord-guide" element={<LandlordGuide />} />
-    <Route path="/landlord-portal" element={<LandlordRentalPortal />} />
+    <Route path="/landlord-portal" element={<Navigate to="/dashboard/my-listings" replace />} />
     <Route path="/investor-education" element={<InvestorEducation />} />
     <Route path="/broker-education" element={<BrokerEducation />} />
     <Route path="/faq" element={<FAQ />} />
-    <Route path="/investor-faq" element={<InvestorFAQ />} />
+    <Route path="/investor-faq" element={<Navigate to="/faq" replace />} />
     <Route path="/buyer-faq" element={<BuyerFAQ />} />
     <Route path="/seller-faq" element={<SellerFAQ />} />
     <Route path="/landlord-faq" element={<LandlordFAQ />} />
