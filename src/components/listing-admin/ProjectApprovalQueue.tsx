@@ -1040,12 +1040,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   }
 
   // Calculate extraction status
-  const completeCount = imports.filter(p => 
-    p.description && 
-    p.images.length > 0 && 
-    p.documents.length > 0 &&
-    p.developer_name?.toLowerCase() !== 'unknown'
-  ).length;
+  const completeCount = imports.filter(isReadyToPublish).length;
   const needsWorkCount = imports.length - completeCount;
 
   return (
