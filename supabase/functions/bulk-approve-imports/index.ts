@@ -116,10 +116,10 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    // publish: when true, sets is_published=true on approved projects. Default false.
+    // publish: when true, complete listings go live. Incomplete listings always stay hidden.
     // merge_mode: when true, matches existing projects by name and enriches (never overwrites non-null fields)
     // updateExisting: when true with slug match, fully overwrites (Reelly parity mode)
-    const { limit = 200, dryRun = false, minImages = 0, updateExisting = true, merge_mode = true, publish = true } = await req.json().catch(() => ({}));
+    const { limit = 200, dryRun = false, minImages = 1, updateExisting = true, merge_mode = true, publish = true } = await req.json().catch(() => ({}));
 
     console.log(`[BulkApprove] Starting (limit=${limit}, dryRun=${dryRun}, minImages=${minImages}, updateExisting=${updateExisting}, publish=${publish})...`);
 
@@ -173,16 +173,25 @@ serve(async (req) => {
 
     for (const item of pendingImports) {
       try {
-        // Parse images
-        const images: ImageData[] = Array.isArray(item.images) 
-          ? item.images 
-          : (typeof item.images === 'string' ? JSON.parse(item.images) : []);
+        // Parse images/documents early so readiness is evaluated before any publish attempt.
+        const images: ImageData[] = jsonArray(item.images) as ImageData[];
+        const documents: DocumentData[] = jsonArray(item.documents) as DocumentData[];
+        const blockers = getImportBlockers(item, images, documents);
 
-        // Validate images if minimum required
-        if (minImages > 0 && (!images || images.length < minImages)) {
-          console.log(`[BulkApprove] Skipping ${item.name} - insufficient images (${images?.length || 0})`);
+        // Validate readiness. We still import/update records, but never publish incomplete listings.
+        if (minImages > 0 && images.length < minImages) {
+          if (!blockers.includes("missing_media")) blockers.push("missing_media");
+        }
+        const readyToPublish = blockers.length === 0;
+
+        if (!readyToPublish && !updateExisting) {
+          console.log(`[BulkApprove] Skipping ${item.name} - incomplete (${blockers.join(", ")})`);
           stats.noImages++;
           stats.skipped++;
+          await supabase
+            .from("pending_project_imports")
+            .update({ review_notes: `PENDING_VERIFICATION:${blockers.join(",")}` })
+            .eq("id", item.id);
           continue;
         }
 
