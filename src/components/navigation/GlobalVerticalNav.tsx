@@ -765,8 +765,8 @@ export default function GlobalVerticalNav() {
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
-    // Unified highlighted hubs (AI Home Finder, List Your Property, Careers, Resale Properties)
-    // — all on the champagne+gold palette. No per-item color tint; no border framing on rest.
+    // Top highlighted hubs (AI Home Finder, List Your Property, Careers, Resale Properties)
+    // — premium GOLD label to match the main section headers.
     if (
       item.href === '/join' ||
       item.href === '/quiz' ||
@@ -774,8 +774,8 @@ export default function GlobalVerticalNav() {
       item.href === '/resale-properties'
     ) {
       return shouldHighlight
-        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-        : "text-[#1A1A1A] font-semibold hover:bg-[#EFE6D6]/10";
+        ? "bg-[#EFE6D6]/[0.35] font-bold"
+        : "font-semibold hover:bg-[#EFE6D6]/[0.15]";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
