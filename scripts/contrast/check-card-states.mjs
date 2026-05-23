@@ -62,7 +62,10 @@ async function run() {
   const allowlist = JSON.parse(fs.readFileSync(allowlistPath, 'utf8'));
   const allowedSelectors = new Set(allowlist.axeNodeSelectors.map((a) => a.selector));
 
-  const browser = await chromium.launch();
+  const executablePath =
+    process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ||
+    '/nix/store/nw961dvpvik5m19kbay4cg27wxgl3sdv-playwright-chromium-headless-shell/chrome-linux/headless_shell';
+  const browser = await chromium.launch({ executablePath });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const aggregate = [];
 
