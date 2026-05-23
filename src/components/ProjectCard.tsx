@@ -213,9 +213,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                 data-no-contrast-guard
                 className={
                   "absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full z-10 flex items-center justify-center transition-all " +
-                  "bg-[#FDFBF7] border border-[#B89555] text-[#1A1A1A] " +
+                  "bg-[#FDFBF7] border border-[#B89555] !text-[#1A1A1A] " +
                   "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
-                  "hover:bg-[#B89555] hover:text-[#FFFFFF]"
+                  "hover:bg-[#B89555] hover:!text-[#FFFFFF]"
                 }
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -226,9 +226,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                 data-no-contrast-guard
                 className={
                   "absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full z-10 flex items-center justify-center transition-all " +
-                  "bg-[#FDFBF7] border border-[#B89555] text-[#1A1A1A] " +
+                  "bg-[#FDFBF7] border border-[#B89555] !text-[#1A1A1A] " +
                   "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
-                  "hover:bg-[#B89555] hover:text-[#FFFFFF]"
+                  "hover:bg-[#B89555] hover:!text-[#FFFFFF]"
                 }
               >
                 <ChevronRight className="w-4 h-4" />
