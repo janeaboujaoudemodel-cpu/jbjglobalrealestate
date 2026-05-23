@@ -325,15 +325,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             )}
           </div>
 
-          {/* Spacer pushes handover row to the very bottom */}
-          <div className="flex-1" />
-
-          {/* Premium gold divider — separates content above from handover */}
-          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+          {/* Premium gold divider — between developer/meta and description */}
           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
 
           {/* Description */}
-          <p className="text-[#1A1A1A] text-sm leading-relaxed flex-1 line-clamp-3 overflow-hidden">
+          <p className="text-[#1A1A1A] text-sm leading-relaxed line-clamp-3 overflow-hidden">
 
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
             <span className="text-[#B89555] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
@@ -341,8 +337,22 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </span>
           </p>
 
-          {/* Handover removed from content body — now shown as a top-right badge on the image. */}
+          {/* Spacer pushes handover row to the very bottom */}
+          <div className="flex-1" />
 
+          {/* Premium gold divider — separates content above from handover */}
+          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+
+          {/* Handover date / Ready — right-aligned, bottom of card */}
+          <div className="flex justify-end">
+            <span
+              data-no-contrast-guard
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FDFBF7] border border-[#B89555]/40 shadow-sm text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange"
+            >
+              <Calendar className="w-3 h-3 text-[#B89555]" aria-hidden="true" />
+              {deriveHandover(project) || HANDOVER_FALLBACK}
+            </span>
+          </div>
 
           {/* Owner-only diagnostic — Updated date hidden from public */}
           {isOwner && (project as any).updated_at && (
