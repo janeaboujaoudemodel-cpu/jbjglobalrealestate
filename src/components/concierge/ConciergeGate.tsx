@@ -5,24 +5,26 @@
  * On success, persists a verified-support token via useConciergeVerification.
  */
 import { useEffect, useState } from "react";
-import { Loader2, Mail, Phone, User, ShieldCheck, ArrowRight } from "lucide-react";
+import { Check, ChevronDown, Loader2, Mail, Phone, User, ShieldCheck, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useConciergeVerification } from "@/hooks/useConciergeVerification";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const COUNTRY_CODES = [
-  { code: "+971", label: "🇦🇪 +971" },
-  { code: "+966", label: "🇸🇦 +966" },
-  { code: "+44", label: "🇬🇧 +44" },
-  { code: "+1", label: "🇺🇸 +1" },
-  { code: "+91", label: "🇮🇳 +91" },
-  { code: "+86", label: "🇨🇳 +86" },
-  { code: "+49", label: "🇩🇪 +49" },
-  { code: "+33", label: "🇫🇷 +33" },
-  { code: "+7", label: "🇷🇺 +7" },
-  { code: "+20", label: "🇪🇬 +20" },
+  { id: "AE", code: "+971" }, { id: "SA", code: "+966" }, { id: "QA", code: "+974" }, { id: "KW", code: "+965" }, { id: "BH", code: "+973" }, { id: "OM", code: "+968" },
+  { id: "GB", code: "+44" }, { id: "US", code: "+1" }, { id: "CA", code: "+1" }, { id: "AU", code: "+61" }, { id: "NZ", code: "+64" },
+  { id: "IN", code: "+91" }, { id: "PK", code: "+92" }, { id: "BD", code: "+880" }, { id: "LK", code: "+94" }, { id: "NP", code: "+977" },
+  { id: "CN", code: "+86" }, { id: "HK", code: "+852" }, { id: "SG", code: "+65" }, { id: "MY", code: "+60" }, { id: "TH", code: "+66" }, { id: "PH", code: "+63" }, { id: "ID", code: "+62" }, { id: "VN", code: "+84" }, { id: "JP", code: "+81" }, { id: "KR", code: "+82" },
+  { id: "DE", code: "+49" }, { id: "FR", code: "+33" }, { id: "IT", code: "+39" }, { id: "ES", code: "+34" }, { id: "PT", code: "+351" }, { id: "NL", code: "+31" }, { id: "BE", code: "+32" }, { id: "CH", code: "+41" }, { id: "AT", code: "+43" }, { id: "SE", code: "+46" }, { id: "NO", code: "+47" }, { id: "DK", code: "+45" }, { id: "FI", code: "+358" }, { id: "IE", code: "+353" }, { id: "GR", code: "+30" }, { id: "CY", code: "+357" }, { id: "MT", code: "+356" },
+  { id: "RU", code: "+7" }, { id: "TR", code: "+90" }, { id: "EG", code: "+20" }, { id: "JO", code: "+962" }, { id: "LB", code: "+961" }, { id: "IL", code: "+972" }, { id: "IQ", code: "+964" }, { id: "IR", code: "+98" },
+  { id: "ZA", code: "+27" }, { id: "NG", code: "+234" }, { id: "KE", code: "+254" }, { id: "MA", code: "+212" }, { id: "TN", code: "+216" }, { id: "DZ", code: "+213" }, { id: "GH", code: "+233" }, { id: "ET", code: "+251" },
+  { id: "BR", code: "+55" }, { id: "MX", code: "+52" }, { id: "AR", code: "+54" }, { id: "CL", code: "+56" }, { id: "CO", code: "+57" }, { id: "PE", code: "+51" },
 ];
+
+const flagEmoji = (countryId: string) =>
+  countryId.replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
 
 const detailsSchema = z.object({
   firstName: z.string().trim().min(1, "First name required").max(80),
@@ -43,10 +45,13 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [countryId, setCountryId] = useState("AE");
   const [countryCode, setCountryCode] = useState("+971");
   const [phone, setPhone] = useState("");
+  const [countryOpen, setCountryOpen] = useState(false);
 
   const [otp, setOtp] = useState("");
+  const selectedCountry = COUNTRY_CODES.find((country) => country.id === countryId) ?? COUNTRY_CODES[0];
 
   useEffect(() => {
     if (resendCooldown <= 0) return;
@@ -202,19 +207,52 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             />
           </div>
 
-          <div className="grid grid-cols-[128px_minmax(0,1fr)] gap-2 overflow-hidden">
-            <select
-              data-no-contrast-guard
-              value={countryCode}
-              onChange={(e) => setCountryCode(e.target.value)}
-              className={inputBase + " cursor-pointer"}
-            >
-              {COUNTRY_CODES.map((c) => (
-                <option key={c.code} value={c.code} className="bg-[#FDFBF7] text-[#1A1A1A]">
-                  {c.label}
-                </option>
-              ))}
-            </select>
+          <div className="grid grid-cols-[138px_minmax(0,1fr)] gap-2 overflow-visible">
+            <Popover open={countryOpen} onOpenChange={setCountryOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  data-no-contrast-guard
+                  className="flex h-12 w-full items-center justify-between rounded-lg border border-[#B89555]/45 bg-[#FDFBF7] px-3 text-[13.5px] text-[#1A1A1A]
+                    outline-none transition hover:border-[#B89555] hover:bg-[#F7F2EA] focus:border-[#B89555] focus:bg-[#FDFBF7]"
+                >
+                  <span className="flex items-center gap-3">
+                    <span className="text-[18px] leading-none">{flagEmoji(selectedCountry.id)}</span>
+                    <span className="font-medium tabular-nums">{selectedCountry.code}</span>
+                  </span>
+                  <ChevronDown className="h-3.5 w-3.5 text-[#B89555]" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent
+                align="start"
+                sideOffset={8}
+                data-no-contrast-guard
+                className="z-[11000] w-[176px] rounded-xl border border-[#B89555]/50 bg-[#FDFBF7] p-1.5 text-[#1A1A1A] shadow-[0_18px_44px_rgba(26,26,26,0.18)]"
+              >
+                <div className="max-h-[260px] overflow-y-auto pr-1">
+                  {COUNTRY_CODES.map((country) => (
+                    <button
+                      key={`${country.id}-${country.code}`}
+                      type="button"
+                      data-no-contrast-guard
+                      onClick={() => {
+                        setCountryId(country.id);
+                        setCountryCode(country.code);
+                        setCountryOpen(false);
+                      }}
+                      className="flex h-10 w-full items-center justify-between rounded-lg px-3 text-left text-[13px] text-[#1A1A1A]
+                        transition hover:bg-[#F7F2EA] hover:text-[#1A1A1A] focus:bg-[#F7F2EA] focus:text-[#1A1A1A] focus:outline-none"
+                    >
+                      <span className="flex items-center gap-3">
+                        <span className="text-[17px] leading-none">{flagEmoji(country.id)}</span>
+                        <span className="font-medium tabular-nums">{country.code}</span>
+                      </span>
+                      {country.id === countryId && <Check className="h-3.5 w-3.5 text-[#B89555]" />}
+                    </button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
             <div className="relative min-w-0">
               <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#B89555]" />
               <input
@@ -234,9 +272,9 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             type="submit"
             disabled={submitting}
             data-no-contrast-guard
-            className="mt-auto w-full h-12 rounded-lg text-[13.5px] font-semibold text-primary-foreground
-              bg-primary hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed transition
-              inline-flex items-center justify-center gap-2 hover:shadow-[0_0_24px_hsl(var(--gold)/0.26)]"
+            className="mt-auto w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A]
+              disabled:opacity-50 disabled:cursor-not-allowed transition inline-flex items-center justify-center gap-2
+              hover:bg-[#F7F2EA] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_0_24px_hsl(var(--gold)/0.22)]"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
             {submitting ? "Sending code…" : "Send verification code"}
@@ -262,9 +300,9 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             onClick={verifyOtp}
             disabled={submitting || otp.length !== 6}
             data-no-contrast-guard
-            className="mt-auto w-full h-12 rounded-lg text-[13.5px] font-semibold text-primary-foreground
-              bg-primary hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed transition
-              inline-flex items-center justify-center gap-2 hover:shadow-[0_0_24px_hsl(var(--gold)/0.26)]"
+            className="mt-auto w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A]
+              disabled:opacity-50 disabled:cursor-not-allowed transition inline-flex items-center justify-center gap-2
+              hover:bg-[#F7F2EA] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_0_24px_hsl(var(--gold)/0.22)]"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
             {submitting ? "Verifying…" : "Verify & start chat"}
