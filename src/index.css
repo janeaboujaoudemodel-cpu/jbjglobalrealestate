@@ -1102,7 +1102,7 @@ All colors MUST be HSL.
 
   /* LAYER 2: Active section layer (grayscale) */
   .jj-layer-active {
-    @apply rounded-2xl border border-gray-200;
+    @apply rounded-2xl border border-[#B89555]/40;
     background: linear-gradient(
       to bottom right,
       hsl(0 0% 98%),
@@ -1124,7 +1124,7 @@ All colors MUST be HSL.
 .jj-section-champagne > .container,
 .jj-section-champagne > .max-w-5xl,
 .jj-section-champagne > .max-w-4xl {
-  @apply mx-3 md:mx-4 lg:mx-6 rounded-2xl border border-gray-200 p-4 md:p-6 lg:p-8;
+  @apply mx-3 md:mx-4 lg:mx-6 rounded-2xl border border-[#B89555]/40 p-4 md:p-6 lg:p-8;
   background: #FFFFFF;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
@@ -1194,7 +1194,7 @@ All colors MUST be HSL.
 
 /* Icon box - grayscale */
   .jj-icon-box-active {
-    @apply rounded-lg flex items-center justify-center border border-gray-200;
+    @apply rounded-lg flex items-center justify-center border border-[#B89555]/40;
     background: #F5F5F5;
   }
 
@@ -1203,7 +1203,7 @@ All colors MUST be HSL.
   }
 
   .jj-icon-box {
-    @apply flex items-center justify-center flex-shrink-0 rounded-xl border border-gray-200;
+    @apply flex items-center justify-center flex-shrink-0 rounded-xl border border-[#B89555]/40;
     background: #F5F5F5;
     box-shadow: 0 1px 3px hsl(0 0% 0% / 0.05);
   }
@@ -1657,7 +1657,7 @@ All colors MUST be HSL.
   }
 
   .jj-card-champagne {
-    @apply bg-gradient-to-br border border-gray-200 shadow-sm;
+    @apply bg-gradient-to-br border border-[#B89555]/40 shadow-sm;
     --tw-gradient-from: #FFFFFF;
     --tw-gradient-via: #FAFAFA;
     --tw-gradient-to: #F5F5F5;
@@ -3996,13 +3996,19 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
   --tw-text-opacity: 1 !important;
 }
 
-/* 4. Neutral borders on light surfaces → champagne gold hairline */
-:root:not(.dark) :is(
-  .border-\[\#B89555\]\/30, .border-\[\#B89555\]\/30, .border-\[\#B89555\]\/30,
-  .border-gray-100, .border-gray-200, .border-gray-300,
-  .border-\[\#B89555\]\/30, .border-\[\#B89555\]\/30, .border-\[\#B89555\]\/30,
-  .border-\[\#B89555\]\/30, .border-\[\#B89555\]\/30
-) {
+/* 4. Neutral borders on light surfaces → champagne gold hairline.
+ *    Covers every gray family (gray/slate/zinc/neutral/stone) at shades
+ *    100–700 + the common `border-border`/`divide-*` tokens. Light surfaces
+ *    only — dark sections opt out via [data-surface="dark"]. */
+:root:not(.dark) :where(
+  .border-gray-100, .border-gray-200, .border-gray-300, .border-gray-400, .border-gray-500, .border-gray-600, .border-gray-700,
+  .border-slate-100, .border-slate-200, .border-slate-300, .border-slate-400, .border-slate-500, .border-slate-600, .border-slate-700,
+  .border-zinc-100, .border-zinc-200, .border-zinc-300, .border-zinc-400, .border-zinc-500, .border-zinc-600, .border-zinc-700,
+  .border-neutral-100, .border-neutral-200, .border-neutral-300, .border-neutral-400, .border-neutral-500, .border-neutral-600, .border-neutral-700,
+  .border-stone-100, .border-stone-200, .border-stone-300, .border-stone-400, .border-stone-500, .border-stone-600, .border-stone-700,
+  .divide-gray-100 > *, .divide-gray-200 > *, .divide-gray-300 > *,
+  .divide-slate-100 > *, .divide-slate-200 > *, .divide-slate-300 > *
+):not([data-surface="dark"]):not([data-no-contrast-guard]) {
   border-color: rgba(184, 149, 85, 0.40) !important;
 }
 
@@ -5005,13 +5011,16 @@ hr[data-gold-hairline],
 }
 
 /* 4. Gray surface backgrounds → champagne (light-mode only).
- *    Dark sections opt out via [data-surface="dark"]. */
+ *    Covers every gray family at shades 50–300 so muted card/section bg's
+ *    inherit the champagne palette. Dark sections opt out via
+ *    [data-surface="dark"]; one-offs opt out via [data-no-contrast-guard]. */
 :where(
-  .bg-gray-50, .bg-gray-100,
-  .bg-neutral-50, .bg-neutral-100,
-  .bg-slate-50, .bg-slate-100,
-  .bg-zinc-50, .bg-zinc-100,
-  .bg-stone-50, .bg-stone-100
+  .bg-gray-50, .bg-gray-100, .bg-gray-200, .bg-gray-300,
+  .bg-neutral-50, .bg-neutral-100, .bg-neutral-200, .bg-neutral-300,
+  .bg-slate-50, .bg-slate-100, .bg-slate-200, .bg-slate-300,
+  .bg-zinc-50, .bg-zinc-100, .bg-zinc-200, .bg-zinc-300,
+  .bg-stone-50, .bg-stone-100, .bg-stone-200, .bg-stone-300,
+  .bg-muted, .bg-muted\/50, .bg-muted\/30, .bg-muted\/20
 ):not([data-surface="dark"]):not([data-no-contrast-guard]) {
   background-color: #F7F2EA !important;
 }

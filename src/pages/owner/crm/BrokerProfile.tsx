@@ -57,9 +57,9 @@ const ACTION_LABELS: Record<string, { label: string; tone: string }> = {
   call:           { label: "Call",           tone: "bg-cyan-100 text-cyan-800" },
   whatsapp:       { label: "WhatsApp",       tone: "bg-emerald-100 text-emerald-800" },
   email:          { label: "Email",          tone: "bg-violet-100 text-violet-800" },
-  file_open:      { label: "Opened file",    tone: "bg-slate-100 text-slate-800" },
+  file_open:      { label: "Opened file",    tone: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40" },
   export:         { label: "Export",         tone: "bg-rose-100 text-rose-800" },
-  login:          { label: "Login",          tone: "bg-stone-100 text-stone-800" },
+  login:          { label: "Login",          tone: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40" },
 };
 
 export default function BrokerProfile() {
@@ -260,7 +260,7 @@ export default function BrokerProfile() {
             <div className="rounded-xl border border-[#B89555]/30 bg-white">
               <ul className="divide-y divide-[#B89555]/15">
                 {activity.map((a) => {
-                  const meta = ACTION_LABELS[a.action] || { label: a.action, tone: "bg-stone-100 text-stone-800" };
+                  const meta = ACTION_LABELS[a.action] || { label: a.action, tone: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40" };
                   return (
                     <li key={a.id} className="px-4 py-3 flex items-start gap-3 hover:bg-[#FDFBF7]">
                       <span className={`text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-full shrink-0 ${meta.tone}`}>
