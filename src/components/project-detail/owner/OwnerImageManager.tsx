@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Upload, Loader2, Eye, EyeOff, Trash2, Star, StarOff } from "lucide-react";
+import { Upload, Loader2, Trash2, Star, StarOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
@@ -8,8 +8,6 @@ import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 interface ImageRow {
   id: string;
   image_url: string;
-  is_cover?: boolean | null;
-  is_visible?: boolean | null;
   display_order?: number | null;
   alt_text?: string | null;
 }
@@ -33,7 +31,7 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
     queryFn: async (): Promise<ImageRow[]> => {
       const { data, error } = await supabase
         .from("project_images")
-        .select("id, image_url, is_cover, is_visible, display_order, alt_text")
+        .select("id, image_url, display_order, alt_text")
         .eq("project_id", projectId)
         .order("display_order", { ascending: true });
       if (error) throw error;
@@ -64,9 +62,7 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
         const { error: insErr } = await supabase.from("project_images").insert({
           project_id: projectId,
           image_url: pub.publicUrl,
-          storage_path: path,
           display_order: nextOrder + i,
-          is_visible: true,
           alt_text: file.name,
         } as any);
         if (insErr) throw insErr;
@@ -82,14 +78,6 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
     setBusy(false);
     refresh();
   }, [projectId, images?.length]);
-
-  const toggleVisibility = async (img: ImageRow) => {
-    const next = !(img.is_visible ?? true);
-    const { error } = await supabase.from("project_images").update({ is_visible: next }).eq("id", img.id);
-    if (error) return toast.error(error.message);
-    toast.success(next ? "Visible" : "Hidden");
-    refresh();
-  };
 
   const remove = async (img: ImageRow) => {
     if (!confirm("Delete this photo?")) return;
