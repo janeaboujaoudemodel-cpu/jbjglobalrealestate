@@ -9143,6 +9143,7 @@ export type Database = {
       }
       crm_leads: {
         Row: {
+          account_status: string
           age_range: string | null
           ai_score: number | null
           ai_score_updated_at: string | null
@@ -9244,6 +9245,7 @@ export type Database = {
           whatsapp_e164: string | null
         }
         Insert: {
+          account_status?: string
           age_range?: string | null
           ai_score?: number | null
           ai_score_updated_at?: string | null
@@ -9345,6 +9347,7 @@ export type Database = {
           whatsapp_e164?: string | null
         }
         Update: {
+          account_status?: string
           age_range?: string | null
           ai_score?: number | null
           ai_score_updated_at?: string | null
@@ -22477,13 +22480,19 @@ export type Database = {
         Row: {
           attachment_name: string | null
           attachment_url: string | null
+          auth_user_id: string | null
           booked_for_at: string
           calendar_event_id: string | null
+          cancel_deadline_at: string | null
+          cancel_token: string | null
+          cancelled_at: string | null
           created_at: string
           duration_min: number
           id: string
           language: string | null
           lead_id: string | null
+          location_label: string | null
+          location_link: string | null
           location_type: string
           meeting_request_id: string | null
           meeting_topic: string | null
@@ -22518,13 +22527,19 @@ export type Database = {
         Insert: {
           attachment_name?: string | null
           attachment_url?: string | null
+          auth_user_id?: string | null
           booked_for_at: string
           calendar_event_id?: string | null
+          cancel_deadline_at?: string | null
+          cancel_token?: string | null
+          cancelled_at?: string | null
           created_at?: string
           duration_min?: number
           id?: string
           language?: string | null
           lead_id?: string | null
+          location_label?: string | null
+          location_link?: string | null
           location_type?: string
           meeting_request_id?: string | null
           meeting_topic?: string | null
@@ -22559,13 +22574,19 @@ export type Database = {
         Update: {
           attachment_name?: string | null
           attachment_url?: string | null
+          auth_user_id?: string | null
           booked_for_at?: string
           calendar_event_id?: string | null
+          cancel_deadline_at?: string | null
+          cancel_token?: string | null
+          cancelled_at?: string | null
           created_at?: string
           duration_min?: number
           id?: string
           language?: string | null
           lead_id?: string | null
+          location_label?: string | null
+          location_link?: string | null
           location_type?: string
           meeting_request_id?: string | null
           meeting_topic?: string | null
@@ -36761,6 +36782,7 @@ export type Database = {
       crm_update_lead_as_shared: {
         Args: { p_id: string; p_patch: Json }
         Returns: {
+          account_status: string
           age_range: string | null
           ai_score: number | null
           ai_score_updated_at: string | null
