@@ -30,10 +30,10 @@ const fadeInUp = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "@id": "https://jbjglobalrealestate.lovable.app/#organization",
+  "@id": "https://www.jbj.ae/#organization",
   name: "JBJ GLOBAL REAL ESTATE",
-  url: "https://jbjglobalrealestate.lovable.app",
-  logo: "https://jbjglobalrealestate.lovable.app/lovable-uploads/c6c68c7f-b5b7-4e7a-9f66-3ff7e08fd37f.png",
+  url: "https://www.jbj.ae",
+  logo: "https://www.jbj.ae/lovable-uploads/c6c68c7f-b5b7-4e7a-9f66-3ff7e08fd37f.png",
   founder: {
     "@type": "Person",
     name: "Jane Bou Jaoude"
@@ -53,13 +53,13 @@ const breadcrumbSchema = {
       "@type": "ListItem",
       position: 1,
       name: "Home",
-      item: "https://jbjglobalrealestate.lovable.app"
+      item: "https://www.jbj.ae"
     },
     {
       "@type": "ListItem",
       position: 2,
       name: "Market Intelligence",
-      item: "https://jbjglobalrealestate.lovable.app/market-intelligence"
+      item: "https://www.jbj.ae/market-intelligence"
     }
   ]
 };
@@ -69,11 +69,11 @@ const webPageSchema = {
   "@type": "WebPage",
   name: "Dubai Real Estate Market Intelligence | BUY · SELL · RENT Insights",
   description: "Data-driven Dubai real estate insights powered by official government Open Data. Explore market trends, area analysis, and AI-generated reports for BUY · SELL · RENT decisions.",
-  url: "https://jbjglobalrealestate.lovable.app/market-intelligence",
+  url: "https://www.jbj.ae/market-intelligence",
   isPartOf: {
     "@type": "WebSite",
     name: "JBJ GLOBAL REAL ESTATE",
-    url: "https://jbjglobalrealestate.lovable.app"
+    url: "https://www.jbj.ae"
   },
   publisher: organizationSchema,
   about: {

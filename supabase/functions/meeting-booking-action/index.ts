@@ -24,7 +24,7 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") || "";
 const FROM_ADDRESS = "JBJ GLOBAL REAL ESTATE <bookings@jbj.ae>";
-const REPLY_TO = "janeaboujaoudenails@gmail.com";
+const REPLY_TO = "contact@jbj.ae";
 
 type Action = "approve" | "decline" | "rescheduled";
 
@@ -39,18 +39,42 @@ function fmtDubai(iso: string): string {
   }).format(new Date(iso));
 }
 
-async function sendEmail(to: string, subject: string, html: string) {
+async function sendEmail(to: string, subject: string, html: string, icsContent?: string) {
   if (!RESEND_API_KEY) { console.warn("RESEND_API_KEY missing — skipping email"); return false; }
+  const body: Record<string, unknown> = { from: FROM_ADDRESS, to: [to], reply_to: REPLY_TO, subject, html };
+  if (icsContent) {
+    body.attachments = [{ filename: "meeting.ics", content: btoa(unescape(encodeURIComponent(icsContent))) }];
+  }
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: FROM_ADDRESS, to: [to], reply_to: REPLY_TO, subject, html }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) { console.error("Resend failed", res.status, await res.text()); return false; }
   return true;
 }
 
-function visitorEmailFor(action: Action, booking: any, customMessage: string | null): string {
+function buildIcs(b: any, summary: string): string {
+  const start = new Date(b.booked_for_at);
+  const end = new Date(start.getTime() + (b.duration_min || 60) * 60 * 1000);
+  const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const loc = b.location_link || b.location_label ||
+    (b.location_type === "online" ? `Online · ${b.online_platform === "zoom" ? "Zoom" : "Google Meet"}` : "JBJ — Dubai office");
+  return [
+    "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//JBJ//Booking//EN","METHOD:REQUEST","BEGIN:VEVENT",
+    `UID:${start.getTime()}-${b.visitor_email}@jbj.ae`,
+    `DTSTAMP:${fmt(new Date())}`,
+    `DTSTART:${fmt(start)}`,
+    `DTEND:${fmt(end)}`,
+    `SUMMARY:${summary}`,
+    `LOCATION:${loc}`,
+    "ORGANIZER;CN=Jane Bou Jaoude:mailto:contact@jbj.ae",
+    `ATTENDEE;CN=${b.visitor_name};RSVP=TRUE:mailto:${b.visitor_email}`,
+    "END:VEVENT","END:VCALENDAR",
+  ].join("\r\n");
+}
+
+function visitorEmailFor(action: Action, booking: any, customMessage: string | null, cancelUrl: string | null): string {
   const status = action === "approve" ? "APPROVED" : action === "decline" ? "DECLINED" : "RESCHEDULED";
   const dubai = fmtDubai(action === "rescheduled" && booking.reschedule_proposed_for
     ? booking.reschedule_proposed_for
@@ -63,10 +87,16 @@ function visitorEmailFor(action: Action, booking: any, customMessage: string | n
 
   const intro =
     action === "approve"
-      ? `Jane is delighted to confirm your meeting on ${dubai} (Dubai time). The details below are now final — calendar invitations follow shortly.`
+      ? `Jane is delighted to confirm your meeting on ${dubai} (Dubai time). The details below are now final — calendar invitation is attached.`
       : action === "decline"
       ? `Thank you for your interest. Unfortunately Jane is unable to meet on ${dubai}. Please reply to this email if you would like to suggest another time and our team will assist.`
       : `Jane would like to propose a new time: ${dubai} (Dubai time). If this works, simply reply to this email to confirm.`;
+
+  const locationValue = booking.location_link
+    ? `${booking.location_label || "Meeting link"} — ${booking.location_link}`
+    : booking.location_type === "online"
+      ? `Online · ${booking.online_platform === "zoom" ? "Zoom" : "Google Meet"}`
+      : "Dubai office";
 
   return renderBrandedEmail({
     title,
@@ -81,12 +111,15 @@ function visitorEmailFor(action: Action, booking: any, customMessage: string | n
       { label: "Topic", value: booking.meeting_topic ?? "—" },
       { label: "When", value: dubai + " (Dubai time)" },
       { label: "Duration", value: `${booking.duration_min} min` },
-      { label: "Location", value: booking.location_type === "online"
-        ? `Online · ${booking.online_platform === "zoom" ? "Zoom" : "Google Meet"}` : "Dubai office" },
+      { label: "Location", value: locationValue },
     ],
+    ctaText: action === "approve" && booking.location_link ? (booking.location_label || "Open meeting / get directions") : undefined,
+    ctaUrl:  action === "approve" ? booking.location_link ?? undefined : undefined,
+    altCtaText: action === "approve" && cancelUrl ? "Cancel meeting" : undefined,
+    altCtaUrl:  action === "approve" ? cancelUrl ?? undefined : undefined,
     closing:
       action === "approve"
-        ? "You'll receive a reminder 24 hours before, and again 30 minutes before the meeting."
+        ? "You'll receive reminders 24 hours and 30 minutes before the meeting. Cancellations are accepted up to 24 hours before morning meetings or 6 hours before afternoon meetings — please write to contact@jbj.ae if you need anything sooner."
         : action === "rescheduled"
         ? "If the proposed time doesn't work, just reply and we'll find another."
         : "We hope to welcome you soon.",
@@ -118,6 +151,9 @@ serve(async (req) => {
   let rescheduleNewIso: string | null = null;
   const wantsHtml = req.method === "GET";
 
+  let locationLink: string | null = null;
+  let locationLabel: string | null = null;
+
   if (req.method === "GET") {
     token = url.searchParams.get("token");
     action = url.searchParams.get("action") as Action | null;
@@ -129,6 +165,8 @@ serve(async (req) => {
       action = body.action ?? null;
       ownerResponseMessage = body.ownerResponseMessage?.trim() || null;
       rescheduleNewIso = body.rescheduleNewIso ?? null;
+      locationLink = body.locationLink?.trim() || null;
+      locationLabel = body.locationLabel?.trim() || null;
     } catch { /* ignore */ }
   }
 
@@ -138,7 +176,6 @@ serve(async (req) => {
       : new Response(JSON.stringify({ error: "Missing token or action" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 
-  // Lookup booking
   const { data: booking, error: fetchErr } = await admin
     .from("meeting_bookings")
     .select("*")
@@ -164,6 +201,13 @@ serve(async (req) => {
     update.reschedule_proposed_at = new Date().toISOString();
     if (rescheduleNewIso) update.reschedule_proposed_for = rescheduleNewIso;
   }
+  // On Approve, persist the location link / label the owner pasted in the dialog.
+  if (newStatus === "approved") {
+    if (locationLink)  update.location_link  = locationLink;
+    if (locationLabel) update.location_label = locationLabel;
+    // Ensure cancel_token exists for the upcoming confirmation email
+    if (!booking.cancel_token) update.cancel_token = newToken();
+  }
 
   const { error: upErr } = await admin
     .from("meeting_bookings")
@@ -177,16 +221,30 @@ serve(async (req) => {
     });
   }
 
-  // Notify visitor
+  const merged = {
+    ...booking,
+    ...update,
+    location_link: locationLink ?? booking.location_link,
+    location_label: locationLabel ?? booking.location_label,
+    cancel_token:  booking.cancel_token ?? (update.cancel_token as string | undefined) ?? null,
+  };
+
+  const cancelUrl = merged.cancel_token
+    ? `${SUPABASE_URL}/functions/v1/cancel-meeting?token=${merged.cancel_token}`
+    : null;
+
+  // Notify visitor (with .ics on approve)
   const subject =
     newStatus === "approved" ? "Your meeting is confirmed — JBJ GLOBAL REAL ESTATE"
     : newStatus === "declined" ? "Update on your meeting request — JBJ GLOBAL REAL ESTATE"
     : "New time proposal for your meeting — JBJ GLOBAL REAL ESTATE";
 
+  const ics = newStatus === "approved" ? buildIcs(merged, "JBJ — Meeting with Jane Bou Jaoude") : undefined;
   const emailSent = await sendEmail(
     booking.visitor_email,
     subject,
-    visitorEmailFor(action!, { ...booking, status: newStatus }, ownerResponseMessage),
+    visitorEmailFor(action!, merged, ownerResponseMessage, cancelUrl),
+    ics,
   );
 
   return wantsHtml

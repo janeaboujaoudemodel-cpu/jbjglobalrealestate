@@ -27,7 +27,8 @@ const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") || "";
 const OWNER_USER_ID = "72ca2405-b4ca-48df-9b47-623ee260a3cc";
 const OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
 const FROM_ADDRESS = "JBJ GLOBAL REAL ESTATE <bookings@jbj.ae>";
-const REPLY_TO = OWNER_EMAIL;
+// Reply-To on every visitor email = contact@jbj.ae per policy.
+const REPLY_TO = "contact@jbj.ae";
 
 const SocialLinkSchema = z.object({
   platform: z.enum(["linkedin","instagram","facebook","youtube","x","tiktok","other"]),
@@ -57,6 +58,8 @@ const BookingSchema = z.object({
   attachmentName: z.string().trim().max(255).optional().nullable(),
   refToken:     z.string().trim().max(120).optional().nullable(),
   source:       z.enum(["public_landing", "branded_email"]).optional(),
+  authUserId:   z.string().uuid().optional().nullable(),
+  agreedToCancellationTerms: z.boolean().optional(),
 });
 type Booking = z.infer<typeof BookingSchema>;
 
@@ -176,8 +179,10 @@ serve(async (req) => {
       ref_token:       b.refToken ?? null,
       status:          "received",
       owner_action_token: token,
+      cancel_token:    newToken(),
+      auth_user_id:    b.authUserId ?? null,
     })
-    .select("id, booked_for_at, duration_min")
+    .select("id, booked_for_at, duration_min, cancel_token")
     .single();
 
   if (bookErr || !bookingRow) {
@@ -216,14 +221,15 @@ serve(async (req) => {
     })
     .select("id").single();
 
-  // 3. CRM lead
+  // 3. CRM lead — source = "calendar_meeting", account_status reflects whether
+  //    the visitor came with an authenticated platform account.
   let leadId: string | null = null;
   try {
     const { data: leadResp } = await admin.functions.invoke("capture-lead", {
       body: {
         email: b.email.toLowerCase(), fullName: b.fullName, phone: b.phone,
         nationality: b.nationality, language: b.language,
-        source: "meeting-booking", pageSource: "/book", contactType: "client", role: "buyer",
+        source: "calendar_meeting", pageSource: "/book", contactType: "client", role: "buyer",
         message: `${serviceLabel(b.serviceType)} — ${b.meetingTopic}\nRequested ${whenLocal} (${b.durationMin} min ${b.locationType})${b.notes ? `\nNotes: ${b.notes}` : ""}`,
       },
     });
@@ -233,6 +239,11 @@ serve(async (req) => {
     if (!leadId) {
       const { data: lookup } = await admin.from("crm_leads").select("id").eq("email_lower", b.email.toLowerCase()).maybeSingle();
       leadId = lookup?.id ?? null;
+    }
+    if (leadId) {
+      await admin.from("crm_leads")
+        .update({ account_status: b.authUserId ? "registered" : "form_only" })
+        .eq("id", leadId);
     }
   } catch (e) { console.error("capture-lead failed:", e); }
 

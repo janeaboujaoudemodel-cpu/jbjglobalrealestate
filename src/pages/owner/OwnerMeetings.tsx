@@ -78,6 +78,8 @@ export default function OwnerMeetings() {
   const [actionKind, setActionKind] = useState<"approve" | "decline" | "rescheduled">("approve");
   const [reply, setReply] = useState("");
   const [rescheduleNew, setRescheduleNew] = useState("");
+  const [locationLink, setLocationLink] = useState("");
+  const [locationLabel, setLocationLabel] = useState("");
   const [suggesting, setSuggesting] = useState(false);
   const [sending, setSending] = useState(false);
 
@@ -109,6 +111,9 @@ export default function OwnerMeetings() {
     setActionKind(kind);
     setReply("");
     setRescheduleNew("");
+    // Default Dubai office Maps link for convenience
+    setLocationLink(b.location_type === "office" ? "https://maps.app.goo.gl/" : "");
+    setLocationLabel(b.location_type === "office" ? "JBJ Office — Dubai" : (b.online_platform === "zoom" ? "Zoom meeting" : "Google Meet"));
     void requestSuggestion(b.id, kind);
   }
 
@@ -140,6 +145,10 @@ export default function OwnerMeetings() {
         ownerResponseMessage: reply.trim() || null,
       };
       if (actionKind === "rescheduled" && rescheduleNew) body.rescheduleNewIso = rescheduleNew;
+      if (actionKind === "approve") {
+        if (locationLink.trim())  body.locationLink  = locationLink.trim();
+        if (locationLabel.trim()) body.locationLabel = locationLabel.trim();
+      }
       const { data, error } = await supabase.functions.invoke("meeting-booking-action", { body });
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
@@ -210,13 +219,32 @@ export default function OwnerMeetings() {
 
               {actionKind === "rescheduled" && (
                 <div>
-                  <Label className="text-xs">Propose new date & time (Dubai, ISO with +04:00)</Label>
+                  <Label className="text-xs">Propose new date &amp; time (Dubai, ISO with +04:00)</Label>
                   <Input
                     type="datetime-local"
                     value={rescheduleNew}
                     onChange={(e) => setRescheduleNew(e.target.value ? `${e.target.value}:00+04:00` : "")}
                     className="bg-white border-[#B89555]/30"
                   />
+                </div>
+              )}
+
+              {actionKind === "approve" && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl p-3">
+                  <div className="sm:col-span-2">
+                    <Label className="text-xs">Meeting location link *</Label>
+                    <Input value={locationLink} onChange={(e) => setLocationLink(e.target.value)}
+                      placeholder="https://maps.app.goo.gl/… or https://zoom.us/…"
+                      className="bg-white border-[#B89555]/30" />
+                    <p className="text-[11px] text-[#1A1A1A]/55 mt-1">
+                      Paste the Maps URL (for office) or the Zoom / Meet URL. It will appear as a "Get directions / Open meeting link" button in the visitor's confirmation and reminder emails.
+                    </p>
+                  </div>
+                  <div>
+                    <Label className="text-xs">Button label</Label>
+                    <Input value={locationLabel} onChange={(e) => setLocationLabel(e.target.value)}
+                      className="bg-white border-[#B89555]/30" />
+                  </div>
                 </div>
               )}
 
