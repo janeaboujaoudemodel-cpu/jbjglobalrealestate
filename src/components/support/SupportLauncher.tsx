@@ -216,7 +216,7 @@ export default function SupportLauncher() {
                   <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
                     border border-gold/45 bg-secondary text-foreground">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    24/7 Support · Always Free
+                    Call our agent now · Free
                   </span>
                   <button
                     onClick={close}
