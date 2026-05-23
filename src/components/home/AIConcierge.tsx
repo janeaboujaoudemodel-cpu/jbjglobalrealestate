@@ -278,40 +278,52 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
               )}
 
 
-              {messages.map((m, i) => (
-                <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div
-                    data-no-contrast-guard
-                    className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-[13.5px] leading-relaxed
-                      ${m.role === "user"
-                        ? "bg-[#E2C9A0] text-[#1A1A1A] rounded-br-md"
-                        : "bg-white/[0.07] text-[#FDFBF7] border border-[#D4B896]/25 rounded-bl-md"}`}
-                  >
-                    {m.role === "assistant" ? (
-                      <div className="prose prose-sm prose-invert max-w-none
-                        prose-p:my-1.5 prose-p:text-[#FDFBF7]
-                        prose-a:text-[#E2C9A0] prose-a:no-underline hover:prose-a:underline
-                        prose-strong:text-[#FDFBF7] prose-ul:my-1.5 prose-li:my-0.5
-                        prose-code:text-[#E2C9A0] prose-code:bg-white/5 prose-code:px-1 prose-code:rounded">
-                        <ReactMarkdown
-                          components={{
-                            a: ({ href, children }) => {
-                              if (href && href.startsWith("/")) {
-                                return <Link to={href} onClick={onClose}>{children}</Link>;
-                              }
-                              return <a href={href} target="_blank" rel="noreferrer">{children}</a>;
-                            },
-                          }}
-                        >
-                          {m.content || "…"}
-                        </ReactMarkdown>
-                      </div>
-                    ) : (
-                      m.content
-                    )}
+              {messages.map((m, i) => {
+                const { action, cleaned } = m.role === "assistant"
+                  ? parseAction(m.content)
+                  : { action: null as ReturnType<typeof parseAction>["action"], cleaned: m.content };
+                return (
+                  <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div
+                      data-no-contrast-guard
+                      className={`max-w-[90%] px-4 py-2.5 rounded-2xl text-[13.5px] leading-relaxed
+                        ${m.role === "user"
+                          ? "bg-[#E2C9A0] text-[#1A1A1A] rounded-br-md"
+                          : "bg-white/[0.07] text-[#FDFBF7] border border-[#D4B896]/25 rounded-bl-md"}`}
+                    >
+                      {m.role === "assistant" ? (
+                        <>
+                          {cleaned && (
+                            <div className="prose prose-sm prose-invert max-w-none
+                              prose-p:my-1.5 prose-p:text-[#FDFBF7]
+                              prose-a:text-[#E2C9A0] prose-a:no-underline hover:prose-a:underline
+                              prose-strong:text-[#FDFBF7] prose-ul:my-1.5 prose-li:my-0.5
+                              prose-code:text-[#E2C9A0] prose-code:bg-white/5 prose-code:px-1 prose-code:rounded">
+                              <ReactMarkdown
+                                components={{
+                                  a: ({ href, children }) => {
+                                    if (href && href.startsWith("/")) {
+                                      return <Link to={href} onClick={onClose}>{children}</Link>;
+                                    }
+                                    return <a href={href} target="_blank" rel="noreferrer">{children}</a>;
+                                  },
+                                }}
+                              >
+                                {cleaned || "…"}
+                              </ReactMarkdown>
+                            </div>
+                          )}
+                          {action && (
+                            <ConciergeActionCard action={action} onNavigate={onClose} />
+                          )}
+                        </>
+                      ) : (
+                        m.content
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {streaming && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex justify-start">
