@@ -74,28 +74,49 @@ export default function ProjectNearbyPropertiesMap({
   const tiles = getMapTiles(language);
 
   const { data: nearbyProjects } = useQuery({
-    queryKey: ["nearby-projects-map", currentProjectId, areaName],
+    queryKey: ["nearby-projects-map", currentProjectId, areaName, latitude, longitude],
     queryFn: async () => {
-      let query = supabase
+      // 1) Try matching by area name
+      if (areaName) {
+        const { data } = await supabase
+          .from("projects")
+          .select("id, name, slug, latitude, longitude, price_from, cover_image_url")
+          .neq("id", currentProjectId)
+          .ilike("location", `%${areaName}%`)
+          .not("latitude", "is", null)
+          .not("longitude", "is", null)
+          .limit(40);
+        const valid = (data || []).filter(
+          (p) =>
+            typeof p.latitude === "number" &&
+            typeof p.longitude === "number" &&
+            !isNaN(p.latitude) &&
+            !isNaN(p.longitude) &&
+            !(p.latitude === 0 && p.longitude === 0),
+        );
+        if (valid.length > 0) return valid;
+      }
+
+      // 2) Fallback: lat/lng bounding box (~10km radius) so the map is never empty
+      const delta = 0.1; // ~11km
+      const { data } = await supabase
         .from("projects")
         .select("id, name, slug, latitude, longitude, price_from, cover_image_url")
         .neq("id", currentProjectId)
+        .gte("latitude", latitude - delta)
+        .lte("latitude", latitude + delta)
+        .gte("longitude", longitude - delta)
+        .lte("longitude", longitude + delta)
         .not("latitude", "is", null)
         .not("longitude", "is", null)
-        .limit(20);
-
-      if (areaName) {
-        query = query.ilike("location", `%${areaName}%`);
-      }
-
-      const { data } = await query;
+        .limit(40);
       return (data || []).filter(
         (p) =>
           typeof p.latitude === "number" &&
           typeof p.longitude === "number" &&
           !isNaN(p.latitude) &&
           !isNaN(p.longitude) &&
-          !(p.latitude === 0 && p.longitude === 0)
+          !(p.latitude === 0 && p.longitude === 0),
       );
     },
     staleTime: 5 * 60 * 1000,

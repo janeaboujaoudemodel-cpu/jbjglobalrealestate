@@ -72,8 +72,8 @@ export default function MortgageAIAssistant({ context }: MortgageAIAssistantProp
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-[#1A1A1A]" />
-            <h4 className="text-sm font-semibold text-foreground">AI Mortgage Assistant</h4>
+            <Sparkles className="h-4 w-4 text-[#B89555]" />
+            <h4 className="text-sm font-semibold text-foreground">JBJ Mortgage Assistant</h4>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
             Ask about the estimate, eligibility, and next steps (information only).
@@ -96,7 +96,7 @@ export default function MortgageAIAssistant({ context }: MortgageAIAssistantProp
           />
           <Button
             type="button"
-            variant="primary"
+            variant="gold"
             className="shrink-0 h-11 px-6"
             disabled={isLoading || !question.trim()}
             onClick={() => void submit()}

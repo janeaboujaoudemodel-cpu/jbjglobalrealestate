@@ -63,6 +63,7 @@ import PointsOfInterest from "@/components/project-detail/PointsOfInterest";
 import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
 import ProjectLocationFlyover from "@/components/project-detail/ProjectLocationFlyover";
 import ProjectNearbyPropertiesMap from "@/components/project-detail/ProjectNearbyPropertiesMap";
+import MoreFromDeveloperStrip from "@/components/project-detail/MoreFromDeveloperStrip";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { SectionDivider } from "@/components/ui/section-divider";
 // Footer is now rendered globally in MainLayout - do not import here
@@ -90,6 +91,7 @@ export type ProjectDetailData = {
   description?: string | null;
   location?: string | null;
   developer?: { 
+    id?: string | null;
     name: string; 
     slug?: string | null;
     logo_url?: string | null;
@@ -752,9 +754,8 @@ export default function ProjectDetailLayout({
                   : "Price TBA"}
               </p>
             </div>
-            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
-              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Handover</p>
-              <p className="mt-2 text-xl font-bold handover-orange">{(project.handover_date && formatDisplayDate(project.handover_date)) || deriveHandover(project) || HANDOVER_FALLBACK}</p>
+            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all flex items-center justify-center">
+              <p className="text-xl font-bold handover-orange">{(project.handover_date && formatDisplayDate(project.handover_date)) || deriveHandover(project) || HANDOVER_FALLBACK}</p>
             </div>
             <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>
@@ -1073,10 +1074,10 @@ export default function ProjectDetailLayout({
                 longitude={project.longitude ?? null}
                />
 
-              {/* Nearby Properties Map */}
+              {/* Nearby Properties Map (other developers in this area) */}
               {typeof project.latitude === 'number' && typeof project.longitude === 'number' && (
                 <div className="mt-6">
-                  <h3 className="text-lg font-semibold text-foreground mb-3">Nearby Projects</h3>
+                  <h3 className="text-lg font-semibold text-foreground mb-3">Other projects in this area</h3>
                   <ProjectNearbyPropertiesMap
                     currentProjectId={project.id}
                     currentProjectName={project.name}
@@ -1086,6 +1087,14 @@ export default function ProjectDetailLayout({
                   />
                 </div>
               )}
+
+              {/* More from the same developer */}
+              <MoreFromDeveloperStrip
+                currentProjectId={project.id}
+                developerId={project.developer?.id ?? null}
+                developerName={project.developer?.name ?? null}
+              />
+
 
               {/* Nearby Points of Interest - Below Map */}
               {project.location_distances && project.location_distances.length > 0 && (
