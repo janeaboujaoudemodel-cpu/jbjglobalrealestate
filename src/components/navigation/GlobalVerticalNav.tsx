@@ -765,8 +765,8 @@ export default function GlobalVerticalNav() {
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
-    // Unified highlighted hubs (AI Home Finder, List Your Property, Careers, Resale Properties)
-    // — all on the champagne+gold palette. No per-item color tint; no border framing on rest.
+    // Top highlighted hubs (AI Home Finder, List Your Property, Careers, Resale Properties)
+    // — premium GOLD label to match the main section headers.
     if (
       item.href === '/join' ||
       item.href === '/quiz' ||
@@ -774,8 +774,8 @@ export default function GlobalVerticalNav() {
       item.href === '/resale-properties'
     ) {
       return shouldHighlight
-        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-        : "text-[#1A1A1A] font-semibold hover:bg-[#EFE6D6]/10";
+        ? "bg-[#EFE6D6]/[0.35] font-bold"
+        : "font-semibold hover:bg-[#EFE6D6]/[0.15]";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
@@ -1014,41 +1014,42 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
 
 
-        {/* ── Highlighted Hubs — color-coded pills ── */}
-        <div className="px-2.5 pt-1.5 pb-1 space-y-1">
-          {highlightItems.map((item, i) => {
-            const hasMega = !!item.megaMenu;
-            const isMenuOpen = activeMegaMenu === item.megaMenu;
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href + item.label + i}
-                to={item.href}
-                onMouseEnter={() => prefetchAITool(item.href)}
-                onFocus={() => prefetchAITool(item.href)}
-                onClick={(e) => {
-                  if (hasMega) handleNavClick(item.megaMenu, e);
-                  else handleNavClick(undefined);
-                }}
-                data-no-contrast-guard
-                style={{ color: '#B89555' }}
-                className={`group flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[12px] font-semibold transition-all duration-200 ${getItemStyle(item)}`}
-              >
-                <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 border ${getIconTileClass(item)} bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65`}>
-                  <Icon className="w-3 h-3" style={{ color: '#B89555' }} />
-                </span>
-                <span data-no-contrast-guard style={{ color: '#B89555' }} className="flex-1 text-left relative inline-block after:content-[''] after:absolute after:bottom-[-3px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full">{item.label}</span>
-                {hasMega && (
-                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-[#1A1A1A]" : "text-[#1A1A1A]/25"}`} />
-                )}
-                {/* Sparkles highlight indicator removed per request */}
-              </Link>
-            );
-          })}
-        </div>
+        {/* ── Unified Nav Card — Highlight Hubs + Section Accordion as ONE container ── */}
+        <div className="px-2.5 pt-1.5 pb-3 flex-1 flex flex-col">
+          {/* Highlight hubs (gold labels) */}
+          <div className="space-y-1">
+            {highlightItems.map((item, i) => {
+              const hasMega = !!item.megaMenu;
+              const isMenuOpen = activeMegaMenu === item.megaMenu;
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href + item.label + i}
+                  to={item.href}
+                  onMouseEnter={() => prefetchAITool(item.href)}
+                  onFocus={() => prefetchAITool(item.href)}
+                  onClick={(e) => {
+                    if (hasMega) handleNavClick(item.megaMenu, e);
+                    else handleNavClick(undefined);
+                  }}
+                  data-no-contrast-guard
+                  style={{ color: '#B89555' }}
+                  className={`group flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[12px] font-semibold transition-all duration-200 ${getItemStyle(item)}`}
+                >
+                  <span className="w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65">
+                    <Icon className="w-3 h-3" style={{ color: '#B89555' }} />
+                  </span>
+                  <span data-no-contrast-guard style={{ color: '#B89555' }} className="flex-1 text-left relative inline-block after:content-[''] after:absolute after:bottom-[-3px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full">{item.label}</span>
+                  {hasMega && (
+                    <ChevronRight data-no-contrast-guard style={{ color: '#B89555' }} className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90" : "opacity-60"}`} />
+                  )}
+                </Link>
+              );
+            })}
+          </div>
 
-        {/* ── Section Nav — refined accordion with editorial headers ── */}
-        <div className="pt-1 px-2.5 pb-3 space-y-1 flex-1">
+          {/* Section accordion — fills remaining space, distributes equally so MY ACCOUNT sits at the bottom */}
+          <div className="mt-1 flex-1 flex flex-col justify-between gap-1">
           {SECTION_KEYS.map((sectionKey, sectionIdx) => {
             if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
             if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
@@ -1125,6 +1126,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               </React.Fragment>
             );
           })}
+          </div>
         </div>
       </nav>
 
