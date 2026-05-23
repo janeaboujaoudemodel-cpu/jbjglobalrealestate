@@ -116,6 +116,20 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
   const PAGE_SIZE = 60;
 
+  const getImportBlockers = (item: PendingImport) => {
+    const blockers: string[] = [];
+    if (item.images.length === 0) blockers.push("missing media");
+    if (item.documents.length === 0) blockers.push("missing documents");
+    if (!item.description || item.description.trim().length < 50) blockers.push("missing description");
+    if (!item.developer_name || item.developer_name.trim().toLowerCase() === "unknown") blockers.push("missing developer");
+    if (!item.location || item.location.trim().length === 0) blockers.push("missing location");
+    if (!item.price_from || item.price_from <= 0) blockers.push("missing price");
+    if (!item.bedrooms_min && !item.bedrooms_max && !item.property_type_label) blockers.push("missing unit details");
+    return blockers;
+  };
+
+  const isReadyToPublish = (item: PendingImport) => getImportBlockers(item).length === 0;
+
   useEffect(() => {
     // Even when routed from a job preview page, default to showing ALL pending imports.
     // (User can still toggle to "this sync only" if needed.)
