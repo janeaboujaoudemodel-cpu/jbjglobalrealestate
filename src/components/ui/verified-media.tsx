@@ -15,6 +15,10 @@ type VerifiedMediaProps = {
   decorated?: boolean;
   placeholderLabel?: string;
   onError?: React.ReactEventHandler<HTMLImageElement>;
+  /** Name of the parent component (for image failure logging). */
+  loggerComponent?: string;
+  /** Extra context attached to image failure logs. */
+  loggerContext?: Record<string, unknown>;
 };
 
 /**
@@ -30,6 +34,8 @@ export function VerifiedMedia({
   decorated = true,
   placeholderLabel = "Media pending",
   onError,
+  loggerComponent,
+  loggerContext,
 }: VerifiedMediaProps) {
   const [failed, setFailed] = React.useState(false);
   React.useEffect(() => {
@@ -69,6 +75,8 @@ export function VerifiedMedia({
       decoding="async"
       onError={onError}
       onErrorCapture={() => setFailed(true)}
+      loggerComponent={loggerComponent || "VerifiedMedia"}
+      loggerContext={{ ...loggerContext, originalSrc: safeSrc }}
     />
   );
 }

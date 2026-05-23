@@ -193,6 +193,13 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             alt={images[currentImageIndex]?.alt_text || project.name}
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             placeholderLabel=""
+            loggerComponent="ProjectCard"
+            loggerContext={{
+              projectId: project.id,
+              slug: project.slug,
+              name: project.name,
+              imageIndex: currentImageIndex,
+            }}
           />
 
           {/* Navigation Arrows */}
