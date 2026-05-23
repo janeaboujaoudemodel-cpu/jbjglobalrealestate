@@ -119,7 +119,7 @@ export default function RecommendedDevelopers({
                     <h3 className="text-[#1A1A1A] font-bold text-sm leading-tight group-hover:text-[#1A1A1A] transition-colors line-clamp-1">
                       {dev.name}
                     </h3>
-                    <div className="flex items-center gap-2 mt-1.5 text-xs text-[#1A1A1A]/75">
+                    <div className="flex items-center gap-2 mt-1.5 text-xs text-[#1A1A1A]">
                       {dev.completed_projects != null && dev.completed_projects > 0 && (
                         <span>{dev.completed_projects} Completed</span>
                       )}
