@@ -3957,11 +3957,42 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
   stroke: #FFFFFF !important;
 }
 
-/* Gold surfaces — children inherit white text by default */
+/* Gold surfaces — children inherit ink text by default; gold is a bright brand
+   accent, so white text/icons on it are prohibited. */
 .bg-\[\#B89555\],
 .bg-\[\#A68444\],
 [class~="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]):not([data-no-contrast-guard]) {
-  color: #FDFBF7;
+  color: #1A1A1A;
+}
+
+/* FINAL WHITE-ON-BRIGHT LOCK: white/faded-white text or SVG icons on any
+   champagne, white, cream, or gold surface flips to ink unless a nested dark
+   surface explicitly owns the contrast. This applies to deep descendants so
+   new sections cannot accidentally create white-on-bright regressions. */
+:root:not(.dark) :is(
+  .bg-white, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
+  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#F7F1E6\], .bg-\[\#EFE6D6\], .bg-\[\#ECE2D2\], .bg-\[\#D8C7A6\],
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#D8C7A6]"],
+  [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [class~="bg-[#C8A766]"], [class~="bg-[#D4AF37]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"], [class*="from-[#EFE6D6]"], [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"]
+):not([data-surface="dark"]):not([data-no-contrast-guard])
+:is(.text-white, [class*="text-white/"], svg.text-white, svg[class*="text-white/"]):not(.allow-white):not([data-no-contrast-guard]):not([data-surface="dark"] *):not(.bg-black *):not([class~="bg-[#1A1A1A]"] *):not([class*="bg-gray-9"] *) {
+  color: #1A1A1A !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
+:root:not(.dark) :is(
+  .bg-white, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
+  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#F7F1E6\], .bg-\[\#EFE6D6\], .bg-\[\#ECE2D2\], .bg-\[\#D8C7A6\],
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#D8C7A6]"],
+  [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [class~="bg-[#C8A766]"], [class~="bg-[#D4AF37]"]
+):not([data-surface="dark"]):not([data-no-contrast-guard])
+:is(.text-white\/40, .text-white\/50, .text-white\/60, .text-white\/70, .text-white\/75, .text-white\/80, .text-white\/85, .text-white\/90):not(.allow-white):not([data-surface="dark"] *) {
+  color: #1A1A1A !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
 }
 
 /* Runtime guard signal class */
