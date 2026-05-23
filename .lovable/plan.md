@@ -1,51 +1,75 @@
-# Retroactive Verification Audit
 
-Go back through every change I claimed as "done" in this session and verify each one the same way I verified the gold icons (read the actual file + visually confirm in the browser at the affected route/viewport). Anything that doesn't match what I claimed gets fixed in the same pass.
+# Project Page Overhaul Plan
 
-## Scope — items to re-verify
+Scope: `/project/:slug` page + Dubai Market Intelligence widget + Mortgage Calculator. No removal of existing features.
 
-1. **Security scan fixes**
-   - `supabase/migrations/20260523152327_*.sql` — confirm migration applied and findings are actually resolved (re-run security scan).
-   - `src/components/employee-management/ITProvisioningPanel.tsx` — confirm the security edit is present.
-   - `src/lib/markdownUtils.ts` — confirm sanitization change is present.
-   - `src/pages/broker/BrokerAgreementSign.tsx` — confirm fix is present.
-   - `supabase/functions/resend-inbound-email-webhook/index.ts` — confirm auth/validation fix is present and function deployed.
+---
 
-2. **Header height when sidebar collapses**
-   - `src/components/MainLayout.tsx` + `src/components/navigation/HorizontalUtilityBar.tsx` — confirm header height shrinks to match the 88px collapsed sidebar width, edge-to-edge. Verify in browser at both expanded and collapsed states.
+## 1. Handover card (hero section)
+- Remove the small "Handover" / "Ready" eyebrow label inside the card.
+- Keep only the date value (or "Ready") sitting directly inside the card with no preceding text label.
+- File: `src/components/project-detail/QuickFactsBar.tsx` (and the hero handover pill component if separate — will locate during build).
 
-3. **Sidebar/header visual alignment + champagne color match**
-   - `src/components/navigation/GlobalVerticalNav.tsx` — confirm vertical sidebar background matches the horizontal header champagne (no white).
-   - Verify visually: the two surfaces should look like one continuous L-frame, aligned at the seam.
+## 2. Location section — dual map exploration
+Under the existing "Project Location" block add two compact horizontal strips (one line each):
+- **Line A — "Other projects in this area"**: developer-agnostic, filtered by area name (excludes current project + current developer).
+- **Line B — "More from {DeveloperName}"**: same developer, other projects (excludes current project).
+Each strip = horizontally scrollable row of mini project cards (image, name, PricePill, handover pill) → click navigates to that project.
+- Reuses existing `ProjectNearbyPropertiesMap` data pattern.
+- New component: `src/components/project-detail/RelatedProjectsStrips.tsx`.
 
-4. **Search bar restoration + no logo overlap**
-   - `HorizontalUtilityBar.tsx` — confirm the search bar is back to the previous bordered style and does not cross over the monogram in the vertical sidebar at any viewport.
+## 3. Restore competitor pins on the project map
+- The project map previously rendered other developers' projects in the same area; this regressed.
+- Fix `ProjectNearbyPropertiesMap` query: re-enable area-radius pull, ensure no filter by current developer, ensure pins render. Keep current project as red pin, others as gold (already implemented — debug why empty).
 
-5. **Gold search + filter icons, no circle border (final fix)**
-   - Confirm both `<Search>` and `<SlidersHorizontal>` render in gold `hsl(var(--gold))` with no border ring, and `data-no-contrast-guard` is in place so the global contrast guard doesn't re-flip them to ink.
+## 4. Owner inline editing (live on the project page)
+For users with owner role (`requireOwnerAuth` / existing `OwnerGuard` pattern):
+- Wrap editable fields with an `<InlineEditable>` primitive (click pencil → input/textarea → autosave to `projects` table).
+- Editable fields: title, description, starting price, founded/launch date, handover date, location text, property type, total units, floors.
+- Save via direct supabase update (RLS already restricts to owner).
+- Component: `src/components/project-detail/owner/InlineEditable.tsx` + `useOwnerInlineSave` hook.
 
-## How each item is verified
+## 5. Owner drag-and-drop document & brochure ingestion
+Next to "Project Documents" section, add an always-visible **owner-only** drop zone:
+- Drag any file (PDF brochure, floor plans, payment plan, etc.) → uploads to existing storage bucket.
+- Per-file **Visibility toggle** (Hidden / Visible) — stored on the document row; only "Visible" shows publicly.
+- After upload, file is sent to existing **Universal Link Extractor / enrichment edge function** (per `mem://architecture/ai-tools/universal-link-extractor-standard`) to auto-enrich the listing (description, amenities, prices, payment plan, handover date).
+- **No duplication**: reuse the existing `media-ingestion-hub` backend + `enrich-project` edge function (per `mem://features/listing-admin/media-ingestion-hub-standard`); do not create a parallel pipeline.
+- Component: `src/components/project-detail/owner/OwnerDocDropzone.tsx`.
 
-For each item:
-- `code--view` the file at the relevant lines to confirm the claimed code is actually there.
-- `browser--navigate_to_sandbox` to the affected route (`/` for layout/header/sidebar, `/admin` security pages where relevant) at the user's current viewport (975×891) and also 1920×1080.
-- `browser--screenshot` and, where needed, `image_tools--zoom_image` on the exact region (header seam, sidebar logo, icons) to visually confirm.
-- For the security migration: `security--run_security_scan` and read results.
-- For the edge function: check it appears deployed (file present + no syntax errors).
+## 6. Mortgage calculator slider bug (carry-over fix)
+- Root-cause the slider value not propagating in `src/components/MortgageCalculator.tsx` (the embedded one on the project page).
+- Likely cause: controlled `Slider` `value` prop tied to a stale `propertyPrice` from props, with `onValueChange` mutating local state that is overwritten on re-render.
+- Fix: single source of truth (lift state OR uncontrolled with `defaultValue` + `onValueCommit`), verify with browser interaction + screenshot at min/mid/max.
 
-## Fix policy
+## 7. CTA rename + color
+- Rename **"AI Mortgage Assistant"** → **"JBJ Mortgage Assistant"** everywhere it appears (mortgage section header, button label, modal title).
+- "Ask" CTA: keep current shape; restyle to premium gold-champagne (`variant="gold"` per `mem://ui-ux/visual-standards/cta-system-standard`). Compare against the current gold spec — if existing gold is already richer (e.g., gradient hairline), keep that.
 
-- If a claim matches reality → mark verified, no edit.
-- If a claim is wrong or partially applied → fix it in this same pass using the smallest possible edit, then re-screenshot / re-scan to confirm.
-- No scope expansion. No restyling beyond what each original task asked for. Respect the "No Removal" policy and all locked standards (champagne theme, no gold fills, no gray surfaces, contrast guard, etc.).
+## 8. Dubai Market Intelligence — daily freshness
+- Verify the `pg_cron` job `sync-dld-market-data` is actually scheduled and running daily (query `cron.job` + `cron.job_run_details`).
+- If not firing: re-schedule with correct URL + anon key headers; add fallback so `applyLiveTicks` in `useDLDMarketData.ts` always shows today's "as of" date.
+- Add a visible "Updated: {today}" stamp on the widget.
 
-## Deliverable
+## 9. DLD widget — premium recoloring
+Replace current orange-heavy semantics with the requested premium palette in `src/lib/dataColors.ts` (single source of truth so every chart updates):
+- **Off-plan** → emerald green (premium growth)
+- **Secondary** → deep red (`#B91C1C`-ish, not bright)
+- **Cash** → soft sky blue
+- **Mortgage** → champagne gold `#B89555`
+Keep "Gifts" row and "Notice something incorrect" untouched.
 
-A single audit report at the end listing, per item:
-- Claim
-- Verification method used
-- Actual state found
-- Action taken (none / fix applied — with file + summary)
-- Final confirmed state (with screenshot reference where visual)
+---
 
-No code is written until you approve this plan.
+## Out of scope (will NOT touch)
+- Gifts row, "Notice something incorrect" section.
+- Any other site-wide CTA sweep beyond the JBJ Mortgage Assistant button.
+- Header/sidebar, footer, navigation.
+
+## Verification (mandatory before marking done)
+For each section above:
+1. Browser navigate to `/project/pinewood-village-wasl-properties-jumeirah-golf-estates`.
+2. Screenshot the changed area at 975px viewport.
+3. For owner editing + dropzone: log in as owner, perform the action end-to-end, screenshot result.
+4. For mortgage slider: drag to 3 positions, confirm derived monthly payment updates each time, screenshot all three.
+5. For DLD cron: run `SELECT * FROM cron.job_run_details ORDER BY start_time DESC LIMIT 5` and confirm last run < 24h ago.
