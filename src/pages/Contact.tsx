@@ -324,7 +324,7 @@ END:VCARD`;
                   key={card.title}
                   onClick={() => {
                     if (card.action === "phone-actions") setPhoneActionsOpen(true);
-                    else if (card.action === "meeting") setMeetingModalOpen(true);
+                    else if (card.action === "meeting") window.location.assign("/book");
                     else if (card.action && card.clickable) window.location.href = card.action;
                   }}
                   className={`group bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-xl p-5 transition-all duration-300 hover:border-[#1A1A1A] hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 hover:scale-[1.02] ${card.clickable ? "cursor-pointer" : ""}`}
