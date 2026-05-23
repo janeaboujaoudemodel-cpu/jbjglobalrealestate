@@ -251,8 +251,9 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             {/* Payment Plan — always rendered (N/A fallback) to keep cards aligned */}
             <PaymentPlanLine project={project as any} className="mt-1" />
 
-
+          </div>
         </div>
+
       </Link>
     </div>
   );
