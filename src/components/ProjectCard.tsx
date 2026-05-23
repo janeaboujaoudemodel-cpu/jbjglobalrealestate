@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
@@ -82,6 +82,8 @@ const getSaleStatusLabel = resolveSaleStatusLabel;
 const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { isOwner } = useUserRole();
+  const { pathname } = useLocation();
+  const isHomepage = pathname === "/";
   const images = project.images || [];
   const primaryImageUrl = images[currentImageIndex]?.image_url || images[0]?.image_url || project.cover_image_url || null;
 
@@ -262,8 +264,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </CardBadge>
           )}
 
-          {/* Bottom-Right: Price label — premium square, transparent core, orange border + ink */}
-          {project.price_from ? (
+          {/* Bottom-Right: Price label — shown over image ONLY on homepage; on other pages it moves next to the Ready/handover row */}
+          {project.price_from && isHomepage ? (
             <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
               <span className="price-pill-eyebrow">From</span>
               <span className="price-pill-value">
@@ -340,8 +342,18 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Spacer pushes handover row to the very bottom */}
           <div className="flex-1" />
 
-          {/* Handover date / Ready — right-aligned, bottom of card */}
-          <div className="flex justify-end">
+          {/* Bottom row — Price (left) parallel to Handover/Ready (right). Price hidden here on homepage (lives on the image). */}
+          <div className="flex items-center justify-between gap-2">
+            {!isHomepage && project.price_from ? (
+              <div className="price-pill-premium" data-price-badge>
+                <span className="price-pill-eyebrow">From</span>
+                <span className="price-pill-value">
+                  {formatPriceWithCurrency(project.price_from, currency)}
+                </span>
+              </div>
+            ) : (
+              <span aria-hidden="true" />
+            )}
             <span
               data-no-contrast-guard
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FDFBF7] border border-[#B89555]/40 shadow-sm text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange"
