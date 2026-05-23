@@ -115,6 +115,16 @@ const modeHeroActions: Record<'investor' | 'broker' | 'developer', { label: stri
   ],
 };
 
+// Three pillars (re-introduced per owner directive — hero displays three brand pillars on every device)
+const pillars = [
+  { icon: Building2, title: "Premium Marketplace", desc: "2,400+ Off-Plan & Resale Properties" },
+  { icon: Brain, title: "AI-Powered Tools", desc: "Smart Search & Investment Intelligence" },
+  { icon: Briefcase, title: "Brokerage Services", desc: "Licensed Advisors & Expert Guides" },
+];
+
+
+
+
 
 
 
