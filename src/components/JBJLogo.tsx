@@ -38,7 +38,7 @@ export const JBJLogo = ({
   
   return (
     <div className={`flex flex-col items-center ${className}`}>
-      <img 
+      <img data-no-fallback 
         src={logoSrc} 
         alt="JBJ Global Real Estate" 
         width={config.width}
@@ -61,7 +61,7 @@ export const JBJLogoHeader = ({ className = '' }: { className?: string }) => (
     className={`flex items-center gap-3 ${className}`}
   >
     {/* Logo image - dark version for header */}
-    <img 
+    <img data-no-fallback 
       src={jbjMonogramDark} 
       alt="JBJ Global Real Estate" 
       width={44}
@@ -91,7 +91,7 @@ export const JBJLogoFooter = ({
   variant?: 'dark' | 'light';
 }) => (
   <div className={`flex flex-col items-center ${className}`}>
-    <img 
+    <img data-no-fallback 
       src={variant === 'light' ? jbjFullLogoLight : jbjFullLogoDark} 
       alt="JBJ Global Real Estate" 
       className="h-32 md:h-40 w-auto object-contain"

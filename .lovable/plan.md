@@ -1,102 +1,65 @@
+# Fix all broken photos site-wide
+
 ## Goal
+Whenever any `<img>` on the site fails to load (404, CORS, expired CDN URL, zero-dimensions), it is automatically replaced with a branded **champagne placeholder showing the project/brand initials** derived from `alt` text. No layout breakage, no broken icons, no missing thumbnails — anywhere.
 
-Turn the project page into a fully owner-editable surface (every label, photo, fact, developer info, document, etc.), add an email-based delegate access manager so you can grant Saleem (or anyone) granular per-section access, fix the "pending" badge, and make project status sync from a single source of truth.
+## Why a global guard (not a 245-file rewrite)
+There are ~245 raw `<img>` tags across the codebase plus a partial `SafeImage` wrapper. Migrating every tag is risky and slow. Instead we install a **global, capture-phase image error listener** that catches every failed `<img>` on the page — including ones inside third-party components, dangerouslySetInnerHTML, lightboxes, PDFs preview thumbs, etc. — and rewrites the `src` to a generated champagne-initials data URI.
 
----
+`SafeImage` is upgraded in lockstep so explicit usages get the same fallback without double-handling.
 
-## 1. Fix the "pending" badge under the hero
+## What gets built
 
-**Root cause:** `QuickFactsBar` renders `statusLabel || availabilityStatus` as a Badge. `project.availability_status` is set to `"pending"` (internal admin state) and is leaking into the public UI.
+### 1. `src/utils/champagneInitialsFallback.ts` (new)
+- `getInitialsFromAlt(alt: string): string` — strip emojis, take first letters of up to 2 meaningful words, uppercase, max 3 chars. Empty → `"JBJ"`.
+- `buildChampagneInitialsDataUri({ initials, w, h }): string` — inline SVG data URI:
+  - Background `#F7F2EA` (champagne surface)
+  - 1px inset hairline `#B89555` at 40% opacity (gold)
+  - Centered initials in `#1A1A1A`, Inter, weight 600, size scaled to the smaller dimension
+  - Aspect-aware viewBox so it never distorts inside any container
+- Memoize results in a `Map` keyed by `initials|w|h` so repeated tiles share the same data URI.
 
-**Fix:**
-- In `QuickFactsBar.tsx`, only render the status badge when the value is a public-friendly term (whitelist: `available`, `selling`, `limited`, `few left`, `sold out`, `launching`, `coming soon`, `new`, `ready`, `under construction`, `off-plan`). Hide internal states (`pending`, `draft`, `unverified`, etc.).
-- Add a small util `publicStatusLabel(status)` so we don't leak again.
+### 2. `src/utils/imageRecoveryGuard.ts` (new)
+- `installImageRecoveryGuard()` mounted once at app entry.
+- Attaches a **capture-phase** `error` listener on `window` filtered to `HTMLImageElement`.
+- On error, if the element does **not** carry `data-no-fallback`:
+  1. **First recovery**: if src looks like a known CDN thumb pattern (e.g. `_thumb`, low-res `bayut`/`propertyfinder` size suffix), retry once with `getHighResImageUrl(src)` (already exists in `src/architecture/assets`).
+  2. **Second recovery**: swap to champagne-initials data URI sized from `clientWidth`/`clientHeight` (fallback to `naturalWidth || 400`).
+  3. Mark element with `data-img-recovered="initials"` so the swap never re-fires.
+- Also covers the zero-dimensions case via a `load` listener (same logic).
+- Mounted from `src/main.tsx` (or `src/App.tsx`, whichever owns app boot).
 
-## 2. Unified status (single source of truth = `handover_date`)
+### 3. `src/components/SafeImage.tsx` (updated)
+- Replace today's null-fallback behaviour with the same champagne-initials helper so explicit `<SafeImage>` consumers get the branded tile instead of a broken icon when no `fallbackSrc` is passed.
+- Keep existing `logImageFailure` instrumentation.
+- Add `data-no-fallback` opt-out passthrough for callers that explicitly want raw browser behaviour (e.g. canvas screenshot tools, OG image generators).
 
-- New util `src/utils/projectStatus.ts` → `getProjectStatus(project)`:
-  - If `handover_date` exists and is in the past → `{ label: 'Ready', date: null }`
-  - Else if `handover_date` future → `{ label: formatDisplayDate(handover_date), date: handover_date }`
-  - Else fall back to `status_label` or derived (existing `deriveHandover`).
-- Replace every place that renders handover/ready independently (hero pill line 642–650, Quick Stats card line 767, QuickFactsBar handover fact, project cards strip) to read from this util.
-- Editing `handover_date` in **any** card writes to `projects.handover_date` → all labels resync automatically (React Query invalidation already in place).
-- Above the second Quick Stats card, add the eyebrow label "Handover" (matching siblings: Starting Price / Handover / Bedrooms / Size). Remove the inner border/pill around the word "Ready" — just plain text styled like the other values.
+### 4. Opt-outs
+- `data-no-fallback` attribute → skip guard entirely (logos already using transparent PNGs, PDF/canvas captures, signature builder previews).
+- Apply this attribute to:
+  - `src/components/JBJLogo.tsx`, `src/components/JJLogoImage.tsx` (logos shouldn't show "JJ" initials over themselves)
+  - canvas-capture sources inside `e-signature`, `stamp-generator`, `corporate-suite/CompanyProfilePreview.tsx`
+  - `imagegen`/PDF preview tools where a missing image must stay missing
 
-## 3. Universal inline editing on the project page
+### 5. No DB / no backend changes
+Pure frontend. Respects existing "No Removal" policy, no-gray rule, champagne theme, and existing `getHighResImageUrl` standard.
 
-Wrap every editable field in `<InlineEditable>` (owner-only via `useIsAppOwner`). Add a tiny pencil affordance next to each. Scope on this page:
-
-**Hero section**
-- Project name, starting price, location, bedrooms, size, handover (already partly wired — finish the rest).
-
-**Quick Stats grid (4 cards)**
-- Each card gets its own pencil → opens the right field editor (price_from / handover_date / bedrooms / size).
-
-**Quick Facts bar**
-- Property type, total units, floors, status, handover, last updated note.
-
-**Developer card (`DeveloperInfoCard.tsx`)**
-- Logo (upload/replace via `OwnerImageManager`-style dropzone targeting `developers.logo_url`).
-- Name (already), description (already), **founded year**, headquarters, projects-delivered count, website, every visible stat. Add pencil next to each.
-
-**Anywhere else a label/feed/place text renders** (overview tab, amenities list items, payment plan rows, location/neighborhood blurb, FAQ items). One pass to wrap them all.
-
-## 4. Photo gallery management
-
-Extend `OwnerImageManager.tsx`:
-- **Drag-to-reorder** with `@dnd-kit/sortable` (already in deps). Writes new `display_order` to `project_images`.
-- **Set as Cover** button on each tile (already started — verify).
-- **Delete** with confirm.
-- **Upload** multi-file (already wired).
-- Tiles show role badges (Cover / Card / Gallery) per the existing 3-slot Media Management standard.
-
-## 5. "View as visitor" / Public preview toggle
-
-- New header chip on owner-viewed project page: `Owner` ⇄ `Visitor` toggle (sticky top-right of the page).
-- Stored in `sessionStorage` (`jbj_preview_as_visitor=1`).
-- A new hook `useEffectiveOwner()` returns `isOwner && !previewAsVisitor`. All `<InlineEditable>`, owner dropzones, edit pencils, admin bars read from this — so flipping the toggle hides every edit affordance and the page renders exactly as a public visitor sees it.
-
-## 6. Owner-only delegate access manager (per-section)
-
-**DB (new migration):**
-```sql
-create table public.owner_delegates (
-  id uuid pk default gen_random_uuid(),
-  owner_user_id uuid not null,        -- always the app owner
-  delegate_email text not null,
-  delegate_user_id uuid,              -- filled on first login match
-  scopes jsonb not null default '{}', -- e.g. {"project_photos":true,"project_text":true,"developer_info":false,"documents":true,"market_intel":false}
-  is_active boolean not null default true,
-  created_at, updated_at
-);
--- RLS: only owner role can select/insert/update/delete.
--- Add helper: public.has_delegate_scope(_user_id uuid, _scope text) returns boolean (security definer).
+## Files touched
+```
+src/utils/champagneInitialsFallback.ts        (new)
+src/utils/imageRecoveryGuard.ts               (new)
+src/components/SafeImage.tsx                  (update)
+src/main.tsx                                  (1-line: install guard)
+src/components/JBJLogo.tsx                    (add data-no-fallback)
+src/components/JJLogoImage.tsx                (add data-no-fallback)
+~3-4 canvas/PDF preview components            (add data-no-fallback)
 ```
 
-**UI: new page `/owner/access` (linked from Executive Command Center → "Access & Delegates")**
-- List of delegate emails with status (Pending login / Active).
-- "Add delegate" → email + tick boxes per scope:
-  - Project text (titles, descriptions, prices)
-  - Project photos & gallery
-  - Project documents/brochures
-  - Developer info
-  - Quick facts / handover / availability
-  - Market Intelligence
-  - CRM
-  - Marketing Hub
-- Revoke / pause / edit scope per row.
+## Memory to save after build
+- `mem://features/media/global-broken-image-fallback-standard` — guard + champagne-initials standard, opt-out via `data-no-fallback`.
 
-**Hook:** `useCanEdit(scope)` → `isAppOwner || has_delegate_scope(user.id, scope)`. Every `<InlineEditable>` and owner dropzone takes a `scope` prop and uses this hook instead of `useIsAppOwner` directly. Result: a delegate only sees pencils for the sections you ticked.
-
-## 7. Files touched
-
-- **New:** `src/utils/projectStatus.ts`, `src/hooks/useEffectiveOwner.ts`, `src/hooks/useCanEdit.ts`, `src/components/project-detail/OwnerVisitorToggle.tsx`, `src/pages/owner/AccessDelegates.tsx`, `src/components/owner/DelegateRow.tsx`, migration for `owner_delegates`.
-- **Edited:** `QuickFactsBar.tsx` (pending fix + handover label), `ProjectDetailLayout.tsx` (status sync, eyebrow on card #2, more pencils), `DeveloperInfoCard.tsx` (logo upload + all-field pencils), `OwnerImageManager.tsx` (dnd reorder + cover/delete polish), `InlineEditable.tsx` (accept `scope` prop), all owner-only components rerouted through `useEffectiveOwner` + `useCanEdit`.
-
-## 8. Out of scope (kept untouched)
-
-- Gift Transactions widget, "Notice something incorrect" section, mortgage tools, market intel content (only access toggle added).
-
----
-
-Ready to switch to build mode?
+## Verification
+1. Load `/project/...` → temporarily blackhole a few gallery URLs via DevTools network blocking → confirm tiles become champagne initials, layout preserved.
+2. Visit homepage Featured Listings, Recommended Projects, News, Developer pages → confirm no broken-icon glyphs visible anywhere.
+3. Confirm logos still render correctly (opt-out works).
+4. Confirm console shows `logImageFailure` entries (instrumentation preserved).

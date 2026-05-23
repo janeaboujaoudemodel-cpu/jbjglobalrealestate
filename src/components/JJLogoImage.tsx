@@ -36,7 +36,7 @@ export const JJLogoImage = ({
   
   return (
     <div className={`flex flex-col items-center ${className}`}>
-      <img 
+      <img data-no-fallback 
         src={logoSrc} 
         alt="JBJ Global Real Estate"
         width={config.width}
@@ -79,7 +79,7 @@ export const JJLogoTransparent = ({ size = 'md', className = '' }: JJLogoTranspa
   
   return (
     <div className={`flex items-center justify-center ${className}`}>
-      <img 
+      <img data-no-fallback 
         src={jbjMonogramNobuffer}
         alt="JBJ Global Real Estate"
         width={config.imgSize}
@@ -97,7 +97,7 @@ export const JJLogoHeaderImage = ({ className = '' }: { className?: string }) =>
     className={`flex items-center gap-3 ${className}`}
   >
     {/* JBJ Logo image - dark bg version for header (white J's visible on dark header) */}
-    <img 
+    <img data-no-fallback 
       src={jbjMonogramLightTransparent} 
       alt="JBJ Global Real Estate"
       width={44}
