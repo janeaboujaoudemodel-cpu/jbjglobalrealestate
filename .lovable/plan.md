@@ -1,65 +1,59 @@
-# Fix all broken photos site-wide
+## 1. Guides page — remove the homepage-style book strip
 
-## Goal
-Whenever any `<img>` on the site fails to load (404, CORS, expired CDN URL, zero-dimensions), it is automatically replaced with a branded **champagne placeholder showing the project/brand initials** derived from `alt` text. No layout breakage, no broken icons, no missing thumbnails — anywhere.
+In `src/pages/Guides.tsx`:
+- Delete the `BookMarquee` component and its usage inside the Explore Guides section. The auto-scrolling strip was a homepage promo for this page — it doesn't belong here.
+- Keep the book **grid** (and the Company Profile row) exactly as it is. No removal of guides.
+- Tighten the `Explore Guides` header copy (champagne ink on champagne) so it reads cleanly without the strip above it.
 
-## Why a global guard (not a 245-file rewrite)
-There are ~245 raw `<img>` tags across the codebase plus a partial `SafeImage` wrapper. Migrating every tag is risky and slow. Instead we install a **global, capture-phase image error listener** that catches every failed `<img>` on the page — including ones inside third-party components, dangerouslySetInnerHTML, lightboxes, PDFs preview thumbs, etc. — and rewrites the `src` to a generated champagne-initials data URI.
+## 2. Guides hero — fix contrast + shrink height (page-level)
 
-`SafeImage` is upgraded in lockstep so explicit usages get the same fallback without double-handling.
+Same file, hero section (lines ~126–172):
+- **Eyebrow chip**: `text-[#1A1A1A]` on a dark video overlay is invisible. Switch the chip text + icon to champagne `#F7F2EA` on an ink/60 backdrop with a gold hairline ring; mark it `data-no-contrast-guard` + `allow-white` so the global guards don't flip it back to ink.
+- **H1**: keep white, add a real text-shadow for readability over the moving video.
+- **Description**: bump from `text-white/70` to `text-[#F7F2EA]/95` with text-shadow.
+- **CTAs**: replace the two `PremiumHeroButton`s with the standard high-contrast hero button pair (primary = champagne fill + ink label + gold ring; secondary = transparent + champagne label + gold ring). Both `data-no-contrast-guard` so the runtime guard leaves them alone on dark video.
+- **Scroll cue** ("Explore"): swap `text-[#1A1A1A]/70` → `text-[#F7F2EA]/80`.
 
-## What gets built
+## 3. Global hero standard — every hero EXCEPT the homepage
 
-### 1. `src/utils/champagneInitialsFallback.ts` (new)
-- `getInitialsFromAlt(alt: string): string` — strip emojis, take first letters of up to 2 meaningful words, uppercase, max 3 chars. Empty → `"JBJ"`.
-- `buildChampagneInitialsDataUri({ initials, w, h }): string` — inline SVG data URI:
-  - Background `#F7F2EA` (champagne surface)
-  - 1px inset hairline `#B89555` at 40% opacity (gold)
-  - Centered initials in `#1A1A1A`, Inter, weight 600, size scaled to the smaller dimension
-  - Aspect-aware viewBox so it never distorts inside any container
-- Memoize results in a `Map` keyed by `initials|w|h` so repeated tiles share the same data URI.
+Add a new opt-out class `jj-hero-compact` and apply it to every `.jj-hero-fullscreen` **except** `src/pages/Index.tsx`. In `src/index.css`:
 
-### 2. `src/utils/imageRecoveryGuard.ts` (new)
-- `installImageRecoveryGuard()` mounted once at app entry.
-- Attaches a **capture-phase** `error` listener on `window` filtered to `HTMLImageElement`.
-- On error, if the element does **not** carry `data-no-fallback`:
-  1. **First recovery**: if src looks like a known CDN thumb pattern (e.g. `_thumb`, low-res `bayut`/`propertyfinder` size suffix), retry once with `getHighResImageUrl(src)` (already exists in `src/architecture/assets`).
-  2. **Second recovery**: swap to champagne-initials data URI sized from `clientWidth`/`clientHeight` (fallback to `naturalWidth || 400`).
-  3. Mark element with `data-img-recovered="initials"` so the swap never re-fires.
-- Also covers the zero-dimensions case via a `load` listener (same logic).
-- Mounted from `src/main.tsx` (or `src/App.tsx`, whichever owns app boot).
+- New rule scoped to `.jj-hero-fullscreen.jj-hero-compact` overriding the height:
+  - mobile: `min-height: 70vh; height: auto;`
+  - ≥640px: `min-height: 72vh;`
+  - ≥1024px: `min-height: 78vh; max-height: 820px;`
+- Keep the existing 100dvh rule for the homepage hero only (no `.jj-hero-compact`).
+- Strengthen the existing hero contrast override block so it covers `.jj-hero-fullscreen` chips, eyebrows and CTA labels (not just `.text-white/*`): add rules forcing `text-[#1A1A1A]` inside hero overlays to champagne `#F7F2EA` with text-shadow, so any page that still ships ink-on-dark stays readable until each page is migrated. Homepage `.jj-hero-fullscreen` (no `.jj-hero-compact`) keeps its current behaviour.
 
-### 3. `src/components/SafeImage.tsx` (updated)
-- Replace today's null-fallback behaviour with the same champagne-initials helper so explicit `<SafeImage>` consumers get the branded tile instead of a broken icon when no `fallbackSrc` is passed.
-- Keep existing `logImageFailure` instrumentation.
-- Add `data-no-fallback` opt-out passthrough for callers that explicitly want raw browser behaviour (e.g. canvas screenshot tools, OG image generators).
+Pages to receive the `jj-hero-compact` class on the hero `<section>` (all of these already use `.jj-hero-fullscreen`):
 
-### 4. Opt-outs
-- `data-no-fallback` attribute → skip guard entirely (logos already using transparent PNGs, PDF/canvas captures, signature builder previews).
-- Apply this attribute to:
-  - `src/components/JBJLogo.tsx`, `src/components/JJLogoImage.tsx` (logos shouldn't show "JJ" initials over themselves)
-  - canvas-capture sources inside `e-signature`, `stamp-generator`, `corporate-suite/CompanyProfilePreview.tsx`
-  - `imagegen`/PDF preview tools where a missing image must stay missing
+- `src/pages/Guides.tsx`
+- `src/pages/About.tsx`, `MeetTheTeam.tsx`, `Philanthropy.tsx`
+- `src/pages/Services.tsx` + every page under `src/pages/services/*`
+- `src/pages/Developers.tsx`, `CompanyProfile.tsx`, `MarketIntelligence.tsx`, `MarketReport.tsx`, `Sitemap.tsx`
+- `src/pages/BrokerEducation.tsx`, `BrokerResources.tsx`
+- `src/pages/investor/ReportAccess.tsx`, `investor/PortfolioViews.tsx`
+- `src/pages/market-intelligence/AreaDetail.tsx`
+- Shared hero wrappers: `src/components/PropertiesHeroVideo.tsx`, `src/components/market-intelligence/MarketIntelligenceHero.tsx`, `src/components/faq/FAQHero.tsx`, `src/components/guides/GuideHero.tsx`
 
-### 5. No DB / no backend changes
-Pure frontend. Respects existing "No Removal" policy, no-gray rule, champagne theme, and existing `getHighResImageUrl` standard.
+`src/pages/Index.tsx` and `src/components/MainLayout.tsx` (homepage usage) are **not** touched.
 
-## Files touched
-```
-src/utils/champagneInitialsFallback.ts        (new)
-src/utils/imageRecoveryGuard.ts               (new)
-src/components/SafeImage.tsx                  (update)
-src/main.tsx                                  (1-line: install guard)
-src/components/JBJLogo.tsx                    (add data-no-fallback)
-src/components/JJLogoImage.tsx                (add data-no-fallback)
-~3-4 canvas/PDF preview components            (add data-no-fallback)
-```
+## 4. SEO
 
-## Memory to save after build
-- `mem://features/media/global-broken-image-fallback-standard` — guard + champagne-initials standard, opt-out via `data-no-fallback`.
+Only finding open today is:
 
-## Verification
-1. Load `/project/...` → temporarily blackhole a few gallery URLs via DevTools network blocking → confirm tiles become champagne initials, layout preserved.
-2. Visit homepage Featured Listings, Recommended Projects, News, Developer pages → confirm no broken-icon glyphs visible anywhere.
-3. Confirm logos still render correctly (opt-out works).
-4. Confirm console shows `logImageFailure` entries (instrumentation preserved).
+- **Google Search Console isn't fully set up** — requires user action: connect the `google_search_console` connector, verify ownership of `https://jbjglobalrealestate.lovable.app/`, and submit the sitemap. I'll surface this in chat after the build. Nothing in code to change for it.
+
+A fresh SEO scan will run once the visible changes ship.
+
+## Out of scope (per your instruction)
+
+- Homepage hero in `Index.tsx` — untouched.
+- Any guide content, route, or book removed — strictly visual + height + the book-strip removal you asked for.
+
+## Technical notes
+
+- New CSS class lives next to the existing `.jj-hero-fullscreen` block in `src/index.css`.
+- Hero CTA contrast pattern reuses the existing champagne/gold tokens; no new design tokens.
+- `data-no-contrast-guard` + `.allow-white` are the documented escape hatches for the runtime contrast guard on dark surfaces — already standard in the project.
+- The `jj-hero-compact` opt-in keeps the homepage's full-bleed 100dvh hero intact while every other hero collapses to a calmer 70–78vh frame.
