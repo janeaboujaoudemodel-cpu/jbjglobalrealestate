@@ -45,7 +45,7 @@ export default function PortalSidebarNav({ onNavigate }: { onNavigate?: () => vo
             )
           }
         >
-          <IconTile icon={item.icon} tone="gold" size="sm" />
+          <item.icon className="h-4 w-4 flex-shrink-0" strokeWidth={1.75} />
           <span className="truncate">{item.label}</span>
         </NavLink>
       ))}
