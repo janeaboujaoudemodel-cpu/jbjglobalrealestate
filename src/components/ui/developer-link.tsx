@@ -2,19 +2,20 @@
  * DeveloperLink Component - Clickable Developer Name
  * LOCKED: Developer names must ALWAYS be clickable and link to /developer/:slug
  *
- * This is a global rule - use this component everywhere developer names appear.
- * Optional `logoUrl` renders a tiny inline logo next to the name so the
- * developer is always identifiable wherever the name appears.
+ * LOCKED RULE: Never render an inline mini-logo next to the name. The card
+ * already displays the developer logo top-left — a second tiny logo between
+ * "by" and the name is a visual violation. `logoUrl` is accepted for API
+ * compatibility but intentionally ignored.
  */
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 
 interface DeveloperLinkProps {
   name: string;
   slug?: string | null;
+  /** @deprecated Inline logo is banned. Kept only for backwards-compatible call sites. */
   logoUrl?: string | null;
   className?: string;
   showPrefix?: boolean;
@@ -24,15 +25,12 @@ interface DeveloperLinkProps {
 export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProps>(({
   name,
   slug,
-  logoUrl,
   className = "",
   showPrefix = true,
-  onClick
+  onClick,
 }, ref) => {
   const navigate = useNavigate();
-  // Fallback: even when slug is missing, name must remain GOLD + clickable
   const href = slug ? `/developer/${slug}` : `/developers?search=${encodeURIComponent(name)}`;
-  const showLogo = isValidDeveloperLogoUrl(logoUrl);
 
   const go = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
@@ -42,22 +40,8 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
   };
 
   return (
-    <span ref={ref} className={cn("inline-flex items-center gap-1.5 text-[#1A1A1A]", className)}>
+    <span ref={ref} className={cn("inline-flex items-center gap-1 text-[#1A1A1A]", className)}>
       {showPrefix && <span className="text-[#1A1A1A]">by </span>}
-      {showLogo && (
-        <span
-          aria-hidden
-          className="inline-flex items-center justify-center h-5 w-5 rounded-sm bg-[#FDFBF7] border border-[#B89555]/40 overflow-hidden shrink-0"
-        >
-          <img
-            src={logoUrl as string}
-            alt=""
-            loading="lazy"
-            className="block max-h-full max-w-full object-contain"
-          />
-        </span>
-      )}
-      {/* Rendered as role="link" span (not <a>) so it stays valid HTML when nested inside another <a> card link. */}
       <span
         role="link"
         tabIndex={0}
