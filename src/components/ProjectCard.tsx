@@ -299,17 +299,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Premium gold divider — between header and developer/meta */}
           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
 
-          {/* Meta block — developer first, then handover + unit types */}
+          {/* Detail metadata above developer name */}
           <div className="flex flex-col gap-2">
-            {project.developer && (
-              <DeveloperLink
-                name={project.developer.name}
-                slug={project.developer.slug}
-                className="text-sm block"
-                showPrefix={true}
-              />
-            )}
-
             {/* Payment Plan removed from cards — shown only on details page */}
 
             {(getUnitTypesText() || getSizeText()) && (
@@ -334,7 +325,16 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </span>
           </p>
 
-          {/* Premium full-width divider — directly after developer name/content, before handover */}
+          {project.developer && (
+            <DeveloperLink
+              name={project.developer.name}
+              slug={project.developer.slug}
+              className="text-sm block"
+              showPrefix={true}
+            />
+          )}
+
+          {/* Premium full-width divider — directly after developer name, before handover */}
           <div className="w-full h-px bg-[#B89555]/45" />
 
           {/* Spacer pushes handover row to the very bottom */}
