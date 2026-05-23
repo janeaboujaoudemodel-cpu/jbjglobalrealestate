@@ -104,10 +104,10 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <button
                 onClick={() => setSearchOpen(true)}
-                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors group focus:outline-none"
+                className="h-9 w-9 flex items-center justify-center rounded-full border border-[#B89555]/40 hover:border-[#B89555]/70 hover:bg-[#B89555]/[0.06] transition-colors group focus:outline-none"
                 aria-label="Search"
               >
-                <Search className="w-[18px] h-[18px] text-[#1A1A1A]/75 group-hover:text-[#1A1A1A] transition-colors" />
+                <Search className="w-[18px] h-[18px] text-[#B89555] transition-colors" />
               </button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-xs">Search anything</TooltipContent>
@@ -121,10 +121,10 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <button
                 onClick={() => setFilterOpen(true)}
-                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors focus:outline-none"
+                className="h-9 w-9 flex items-center justify-center rounded-full border border-[#B89555]/40 hover:border-[#B89555]/70 hover:bg-[#B89555]/[0.06] transition-colors focus:outline-none"
                 aria-label="Filter"
               >
-                <SlidersHorizontal className="w-[18px] h-[18px] text-[#1A1A1A]/75" />
+                <SlidersHorizontal className="w-[18px] h-[18px] text-[#B89555]" />
               </button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-xs">Advanced filters</TooltipContent>
@@ -134,14 +134,14 @@ export default function HorizontalUtilityBar() {
           <div
             data-no-contrast-guard
             data-surface="light"
-            className="hidden sm:inline-flex items-center h-7 rounded-full border border-[#1A1A1A]/15 overflow-hidden bg-white/60"
+            className="hidden sm:inline-flex items-center h-7 rounded-full border border-[#B89555]/50 overflow-hidden bg-transparent"
           >
             <button
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqft') toggleAreaUnit(); }}
               style={{
-                backgroundColor: areaUnit === 'sqft' ? '#1A1A1A' : 'transparent',
-                color: areaUnit === 'sqft' ? '#FFFFFF' : '#1A1A1A',
+                backgroundColor: areaUnit === 'sqft' ? '#EFE6D6' : 'transparent',
+                color: areaUnit === 'sqft' ? '#1A1A1A' : '#B89555',
               }}
               className="px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors"
               aria-label="Square feet"
@@ -150,13 +150,14 @@ export default function HorizontalUtilityBar() {
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqm') toggleAreaUnit(); }}
               style={{
-                backgroundColor: areaUnit === 'sqm' ? '#1A1A1A' : 'transparent',
-                color: areaUnit === 'sqm' ? '#FFFFFF' : '#1A1A1A',
+                backgroundColor: areaUnit === 'sqm' ? '#EFE6D6' : 'transparent',
+                color: areaUnit === 'sqm' ? '#1A1A1A' : '#B89555',
               }}
-              className="px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors"
+              className="px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors border-l border-[#B89555]/40"
               aria-label="Square meters"
             >sq m</button>
           </div>
+
 
           {/* Currency — flag + AED */}
           <CurrencySwitcher variant="flag" />
