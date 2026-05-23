@@ -170,7 +170,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       }
     >
       {/* Top-Right: Favorite + Shortlist Buttons (stacked) — Always visible */}
-      <div className="absolute top-3 right-3 z-20 flex flex-col gap-1.5" data-no-contrast-guard>
+      <div className="absolute top-3 right-3 z-20 flex flex-col gap-1.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200" data-no-contrast-guard>
         {showFavorite && (
           <div>
             <FavoriteButton projectId={project.id} size="sm" />

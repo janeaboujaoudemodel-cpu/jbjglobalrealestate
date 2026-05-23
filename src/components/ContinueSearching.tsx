@@ -482,7 +482,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
 
         {/* Favorite button */}
         {item.type === "property" && (
-          <div className="absolute top-2 right-2 z-20" style={{ transform: "translateZ(30px)" }}>
+          <div className="absolute top-2 right-2 z-20 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200" style={{ transform: "translateZ(30px)" }}>
             <FavoriteButton projectId={item.id} showShortlist={false} size="sm" />
           </div>
         )}
