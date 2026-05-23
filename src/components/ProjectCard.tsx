@@ -255,16 +255,16 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </CardBadge>
           )}
 
-          {/* Sale Status Badge — Bottom Left */}
+          {/* Sale Status Badge — Top Right */}
           {saleStatusLabel && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
-            <CardBadge variant="status" className="absolute bottom-3 left-3 z-10">
+            <CardBadge variant="status" className="absolute top-3 right-3 z-10">
               {saleStatusLabel}
             </CardBadge>
           )}
 
-          {/* Bottom-Right: Price label — premium square, transparent core, orange border + ink */}
+          {/* Bottom-Left: Price label — premium square, transparent core, orange border + ink */}
           {project.price_from ? (
-            <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
+            <div className="absolute bottom-3 left-3 z-10 price-pill-premium" data-price-badge>
               <span className="price-pill-eyebrow">From</span>
               <span className="price-pill-value">
                 {formatPriceWithCurrency(project.price_from, currency)}
@@ -272,12 +272,12 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           ) : null}
 
-          {/* Handover date / Ready — top right corner */}
+          {/* Handover date / Ready — Bottom Right corner */}
           {(() => {
             const derived = deriveHandover(project) || HANDOVER_FALLBACK;
             return derived ? (
               <div
-                className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-md bg-[#FDFBF7]/95 border border-[#B89555]/50 shadow-sm handover-orange"
+                className="absolute bottom-3 right-3 z-10 px-2.5 py-1 rounded-md bg-[#FDFBF7]/95 border border-[#B89555]/50 shadow-sm handover-orange"
                 data-no-contrast-guard
               >
                 <span className="font-semibold text-xs tabular-nums">{derived}</span>
