@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import "./styles/theme-tokens.css";
 import { installWhatsAppGuard } from "@/utils/whatsappGuard";
 
 // Site-wide guard: every WhatsApp link is normalized to wa.me with sanitized
