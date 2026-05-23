@@ -29,11 +29,19 @@ const SUGGESTIONS = [
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-concierge`;
 
 export default function AIConcierge({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { isVerified, verified } = useConciergeVerification();
   const [messages, setMessages] = useState<Msg[]>([]);
   const [draft, setDraft] = useState("");
   const [streaming, setStreaming] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Toggle body attribute so SupportLauncher hides while concierge is open.
+  useEffect(() => {
+    if (open) document.body.setAttribute("data-jbj-concierge-open", "true");
+    else document.body.removeAttribute("data-jbj-concierge-open");
+    return () => document.body.removeAttribute("data-jbj-concierge-open");
+  }, [open]);
 
   useEffect(() => {
     if (open) setTimeout(() => inputRef.current?.focus(), 300);
