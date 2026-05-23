@@ -198,6 +198,18 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               </div>
             )}
 
+            {/* Handover date / Ready status — top right corner */}
+            {(deriveHandover(project) || HANDOVER_FALLBACK) && (
+              <div
+                className="absolute top-3 right-3 z-20 px-2.5 py-1 rounded-md bg-[#FDFBF7]/95 border border-[#B89555]/40 shadow-sm handover-orange"
+                data-no-contrast-guard
+              >
+                <span className="font-semibold text-xs tabular-nums">
+                  {deriveHandover(project) || HANDOVER_FALLBACK}
+                </span>
+              </div>
+            )}
+
             {/* Premium price label — square, transparent core, orange border + ink */}
             {typeof project.price_from === 'number' && project.price_from > 0 && (
               <div className="absolute bottom-3 right-3 z-20 price-pill-premium" data-price-badge data-no-contrast-guard>
@@ -208,6 +220,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               </div>
             )}
           </div>
+
 
           {/* Content */}
           <div className="p-4 flex flex-col flex-grow min-h-[140px]">
@@ -240,21 +253,18 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
                 showPrefix={true}
               />
             )}
-            <div className="flex-grow" />
-
-            {/* Premium gold divider between description block and handover */}
+            {/* Premium gold divider between description block and developer name */}
             <hr className="border-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent my-2" />
 
-            {/* Handover date/status only — label removed per design */}
-            <div className="mt-1 min-h-[22px]">
-              <div className="flex items-baseline gap-1.5 handover-orange" data-no-contrast-guard>
-                <span className="font-semibold text-sm md:text-[15px] tabular-nums">
-                  {deriveHandover(project) || HANDOVER_FALLBACK}
-                </span>
-              </div>
-            </div>
-
-
+            {project.developer_name && (
+              <DeveloperLink
+                name={project.developer_name}
+                slug={project.developer?.slug || null}
+                className="text-xs block"
+                showPrefix={true}
+              />
+            )}
+            <div className="flex-grow" />
 
             {/* Payment Plan removed from cards — shown only on details page */}
 
@@ -265,6 +275,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
     </div>
   );
 };
+
 
 const FeaturedListings = () => {
   const { t } = useLanguage();
