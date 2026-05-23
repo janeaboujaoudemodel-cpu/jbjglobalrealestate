@@ -1,9 +1,9 @@
-import { useCallback, useState } from "react";
-import { Upload, Loader2, Trash2, Star, StarOff } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { Upload, Loader2, Trash2, Star, StarOff, GripVertical } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
-import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+import { useCanEdit } from "@/hooks/useEffectiveOwner";
 
 interface ImageRow {
   id: string;
@@ -20,14 +20,16 @@ interface Props {
 const BUCKET = "project-images";
 
 export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
-  const { isOwner } = useIsAppOwner();
+  const canEdit = useCanEdit("project_photos");
   const qc = useQueryClient();
   const [busy, setBusy] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [order, setOrder] = useState<ImageRow[]>([]);
+  const [dragId, setDragId] = useState<string | null>(null);
 
   const { data: images = [] } = useQuery({
     queryKey: ["owner-project-images", projectId],
-    enabled: !!projectId && isOwner,
+    enabled: !!projectId && canEdit,
     queryFn: async (): Promise<ImageRow[]> => {
       const { data, error } = await supabase
         .from("project_images")
@@ -38,6 +40,8 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
       return (data as any) ?? [];
     },
   });
+
+  useEffect(() => { setOrder(images); }, [images]);
 
   const refresh = () => {
     qc.invalidateQueries({ queryKey: ["owner-project-images", projectId] });
@@ -94,7 +98,32 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
     refresh();
   };
 
-  if (!isOwner) return null;
+  const persistOrder = async (rows: ImageRow[]) => {
+    setOrder(rows);
+    // Update display_order in DB (one row at a time to keep it simple)
+    const updates = rows.map((r, idx) =>
+      supabase.from("project_images").update({ display_order: idx } as any).eq("id", r.id)
+    );
+    const results = await Promise.all(updates);
+    const firstErr = results.find((r: any) => r.error);
+    if (firstErr?.error) toast.error("Order save failed");
+    else toast.success("Order saved");
+    refresh();
+  };
+
+  const onDrop = (targetId: string) => {
+    if (!dragId || dragId === targetId) return;
+    const from = order.findIndex((x) => x.id === dragId);
+    const to = order.findIndex((x) => x.id === targetId);
+    if (from < 0 || to < 0) return;
+    const next = order.slice();
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    setDragId(null);
+    persistOrder(next);
+  };
+
+  if (!canEdit) return null;
 
   return (
     <div className="mt-4 rounded-xl border border-[#B89555]/40 bg-[#F7F2EA] p-4">
@@ -102,7 +131,7 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
         <p className="text-xs uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]/70">
           Owner · Photos
         </p>
-        <span className="text-[11px] text-[#1A1A1A]/55">Drag, drop, hide or delete photos</span>
+        <span className="text-[11px] text-[#1A1A1A]/55">Drag to reorder · click ⭐ to set cover · 🗑 to delete</span>
       </div>
 
       <label
@@ -135,13 +164,25 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
         <div className="text-xs text-[#1A1A1A]/60 mt-0.5">JPG / PNG / WEBP — adds to gallery instantly</div>
       </label>
 
-      {images.length > 0 && (
+      {order.length > 0 && (
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 mt-3">
-          {images.map((img) => {
+          {order.map((img) => {
             const isCover = coverImageUrl === img.image_url;
+            const isDragging = dragId === img.id;
             return (
-              <div key={img.id} className="relative group rounded-lg overflow-hidden border border-[#B89555]/30 bg-[#FDFBF7] aspect-square">
+              <div
+                key={img.id}
+                draggable
+                onDragStart={(e) => { setDragId(img.id); e.dataTransfer.effectAllowed = "move"; }}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={() => onDrop(img.id)}
+                onDragEnd={() => setDragId(null)}
+                className={`relative group rounded-lg overflow-hidden border border-[#B89555]/30 bg-[#FDFBF7] aspect-square cursor-move ${isDragging ? "opacity-40 ring-2 ring-[#B89555]" : ""}`}
+              >
                 <img src={img.image_url} alt={img.alt_text ?? ""} className="w-full h-full object-cover" loading="lazy" />
+                <span className="absolute top-1 right-1 text-[10px] font-bold px-1 py-0.5 rounded bg-black/50 text-white inline-flex items-center" data-no-contrast-guard>
+                  <GripVertical className="w-3 h-3" />
+                </span>
                 {isCover && (
                   <span className="absolute top-1 left-1 text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#B89555] text-[#1A1A1A]">COVER</span>
                 )}
@@ -164,7 +205,6 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
                   </button>
                 </div>
               </div>
-
             );
           })}
         </div>
