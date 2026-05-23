@@ -20,6 +20,7 @@ import {
   Calendar,
   CreditCard,
   Star,
+  Check,
   Clock,
   HelpCircle,
   ChevronDown,
