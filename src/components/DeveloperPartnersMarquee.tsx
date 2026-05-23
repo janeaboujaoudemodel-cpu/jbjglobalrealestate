@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback, useContext } from "react";
 import { Link } from "react-router-dom";
 import { LanguageContext } from "@/contexts/LanguageContext";
+import { ImageWithSkeleton } from "@/components/ui/image-skeleton";
 
 // LOCKED: Featured developer partners
 const FEATURED_DEVELOPERS: {
@@ -90,10 +91,10 @@ const DeveloperPartnersMarquee = () => {
           className="h-[36px] md:h-[42px] lg:h-[48px] flex items-center justify-center overflow-hidden"
           style={{ width: `${(developer as any).width ?? 140}px` }}
         >
-          <img
+          <ImageWithSkeleton
             src={developer.logo}
             alt={developer.name}
-            className={`w-full h-full ${developer.fit === "cover" ? "object-cover" : "object-contain"}`}
+            className={`${developer.fit === "cover" ? "object-cover" : "object-contain"}`}
             style={{
               ...(developer.scale !== 1 || developer.offsetX || developer.offsetY
                 ? { transform: `translate(${developer.offsetX ?? 0}px, ${developer.offsetY ?? 0}px) scale(${developer.scale})` }

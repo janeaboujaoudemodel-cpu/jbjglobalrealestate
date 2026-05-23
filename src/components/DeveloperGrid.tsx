@@ -35,13 +35,17 @@ const DeveloperGrid = () => {
   if (loadingDevelopers || loadingProjects) {
     return (
       <div className="space-y-16">
-        <Skeleton className="h-14 w-full mb-4 bg-[#1a1a1a] rounded-xl" />
+        <Skeleton className="h-14 w-full mb-4 rounded-xl" />
         {[...Array(3)].map((_, i) => (
           <div key={i}>
-            <Skeleton className="h-14 w-48 mb-8 bg-[#1a1a1a]" />
+            <Skeleton className="h-10 w-56 mb-8 rounded-md" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[...Array(4)].map((_, j) => (
-                <Skeleton key={j} className="aspect-[4/3] rounded-lg bg-[#1a1a1a]" />
+                <div key={j} className="space-y-3">
+                  <Skeleton className="aspect-[4/3] rounded-lg" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-3 w-1/2" />
+                </div>
               ))}
             </div>
           </div>
