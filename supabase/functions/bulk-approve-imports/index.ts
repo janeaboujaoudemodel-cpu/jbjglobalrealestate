@@ -43,6 +43,41 @@ interface UnitTypeData {
   available?: number;
 }
 
+function hasText(value: unknown, minLength = 1): boolean {
+  return typeof value === "string" && value.trim().length >= minLength;
+}
+
+function jsonArray(value: unknown): unknown[] {
+  if (Array.isArray(value)) return value;
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+function getImportBlockers(item: Record<string, unknown>, images: ImageData[], documents: DocumentData[]): string[] {
+  const blockers: string[] = [];
+  const floorPlans = jsonArray(item.floor_plan_types);
+  const unitTypes = jsonArray(item.unit_types);
+  const bedroomTypes = jsonArray(item.bedroom_types);
+  const paymentBreakdown = item.payment_breakdown && typeof item.payment_breakdown === "object" && Object.keys(item.payment_breakdown as Record<string, unknown>).length > 0;
+
+  if (images.length === 0) blockers.push("missing_media");
+  if (!hasText(item.developer_name) || String(item.developer_name).trim().toLowerCase() === "unknown") blockers.push("missing_developer");
+  if (!hasText(item.description, 50) && !hasText(item.short_description, 50)) blockers.push("missing_description");
+  if (typeof item.price_from !== "number" || item.price_from <= 0) blockers.push("missing_price");
+  if (!hasText(item.location) && !hasText(item.area_name) && !item.area_id) blockers.push("missing_location");
+  if (!item.bedrooms_min && !item.bedrooms_max && unitTypes.length === 0 && bedroomTypes.length === 0 && !hasText(item.property_type_label)) blockers.push("missing_unit_details");
+  if (documents.length === 0 && floorPlans.length === 0 && !hasText(item.payment_plan) && !paymentBreakdown) blockers.push("missing_documents_or_plan");
+
+  return blockers;
+}
+
 /**
  * Bulk Approve Pending Imports v3 - ALWAYS OVERWRITE MODE
  * 
