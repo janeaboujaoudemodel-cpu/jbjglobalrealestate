@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2, Star, Pin } from "lucide-react";
+import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2, Star, Pin, MessageCircle, Mail, LifeBuoy, Compass, TrendingUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { searchItems, nearestSearchItems } from "@/config/globalSearchIndex";
@@ -18,15 +19,43 @@ interface GlobalSearchModalProps {
   embedded?: boolean;
 }
 
-// Quick access shortcuts - always visible
+// Universal quick shortcuts — always visible (kept lean, role extras added below)
 const QUICK_SHORTCUTS = [
-  { label: "Properties", route: "/properties", icon: Building2, color: "bg-blue-500" },
-  { label: "Developers", route: "/developers", icon: Users, color: "bg-emerald-500" },
-  { label: "Areas", route: "/areas", icon: Map, color: "bg-purple-500" },
-  { label: "Market Report", route: "/market-report", icon: FileText, color: "bg-amber-500" },
-  { label: "Mortgage", route: "/mortgage-calculator", icon: Calculator, color: "bg-pink-500" },
-  { label: "AI Tools", route: "/ai-hub", icon: Sparkles, color: "bg-indigo-500" },
+  { label: "Properties", route: "/properties", icon: Building2 },
+  { label: "Developers", route: "/developers", icon: Users },
+  { label: "Areas", route: "/areas", icon: Map },
+  { label: "Market Report", route: "/market-report", icon: FileText },
+  { label: "Mortgage", route: "/mortgage-calculator", icon: Calculator },
+  { label: "AI Tools", route: "/ai-hub", icon: Sparkles },
 ];
+
+// Role-aware shortcuts surfaced when no query is typed
+const MODE_SHORTCUTS: Record<'investor' | 'broker' | 'developer', { label: string; route: string; icon: any }[]> = {
+  investor: [
+    { label: "AI Home Finder", route: "/quiz", icon: Sparkles },
+    { label: "Off-Plan", route: "/properties?status=off-plan", icon: Building2 },
+    { label: "Golden Visa", route: "/guides/golden-visa-uae", icon: Award },
+    { label: "Concierge", route: "/concierge", icon: Sparkles },
+    { label: "Favorites", route: "/favorites", icon: Heart },
+    { label: "Buyer Guide", route: "/buyer-guide", icon: BookOpen },
+  ],
+  broker: [
+    { label: "Broker Portal", route: "/broker-dashboard", icon: LayoutDashboard },
+    { label: "Broker Toolkit", route: "/broker-toolkit", icon: Briefcase },
+    { label: "Resources", route: "/broker-resources", icon: BookOpen },
+    { label: "Academy", route: "/broker-education", icon: GraduationCap },
+    { label: "All Projects", route: "/properties", icon: Building2 },
+    { label: "Market Intel", route: "/market-intelligence", icon: TrendingUp },
+  ],
+  developer: [
+    { label: "Developer Portal", route: "/developers-portal", icon: LayoutDashboard },
+    { label: "Submit Project", route: "/developers-portal/projects/new", icon: Building2 },
+    { label: "Insights", route: "/market-intelligence", icon: TrendingUp },
+    { label: "Reports", route: "/market-report", icon: FileText },
+    { label: "Areas", route: "/areas", icon: Map },
+    { label: "Contact", route: "/contact", icon: Phone },
+  ],
+};
 
 // Popular pages - 9 items (3 columns × 3 rows)
 const POPULAR_PAGES = [
