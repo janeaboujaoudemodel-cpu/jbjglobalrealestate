@@ -1343,6 +1343,9 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
       />
 
       {/* Footer is now rendered globally in MainLayout - removed duplicate */}
+
+      {/* Owner ⇄ Visitor preview toggle (owner-only) */}
+      <OwnerVisitorToggle />
     </>
   );
 }
