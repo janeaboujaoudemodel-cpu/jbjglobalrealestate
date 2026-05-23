@@ -14,45 +14,17 @@ interface Book3DCardProps {
   isLocked?: boolean;
 }
 
-const LEARNING_PATH_COLORS: Record<string, { bg: string; text: string; border: string; glow: string }> = {
-  'Foundations': { 
-    bg: 'from-blue-900 via-blue-800 to-blue-950', 
-    text: 'text-blue-200', 
-    border: 'border-blue-400/40',
-    glow: 'rgba(59, 130, 246, 0.3)'
-  },
-  'Buyer & Investor Advisory': { 
-    bg: 'from-emerald-900 via-emerald-800 to-emerald-950', 
-    text: 'text-emerald-200', 
-    border: 'border-emerald-400/40',
-    glow: 'rgba(16, 185, 129, 0.3)'
-  },
-  'Seller & Landlord Advisory': { 
-    bg: 'from-amber-900 via-amber-800 to-amber-950', 
-    text: 'text-amber-200', 
-    border: 'border-amber-400/40',
-    glow: 'rgba(245, 158, 11, 0.3)'
-  },
-  'Market Intelligence': { 
-    bg: 'from-purple-900 via-purple-800 to-purple-950', 
-    text: 'text-purple-200', 
-    border: 'border-purple-400/40',
-    glow: 'rgba(168, 85, 247, 0.3)'
-  },
-  'Advanced (Restricted)': { 
-    bg: 'from-red-900 via-red-800 to-red-950', 
-    text: 'text-red-200', 
-    border: 'border-red-400/40',
-    glow: 'rgba(239, 68, 68, 0.3)'
-  },
+// Unified champagne/obsidian theme. No per-path color fills.
+// Gold survives only as 1px hairline borders.
+const CHAMPAGNE_STYLE = {
+  bg: 'from-[#1c1812] via-[#2a2118] to-[#15110b]',
+  text: 'text-[#EFE6D6]',
+  border: 'border-[#B89555]/40',
+  glow: 'rgba(184,149,85,0.18)',
 };
 
-const DEFAULT_PATH_COLOR = { 
-  bg: 'from-zinc-900 via-zinc-800 to-zinc-950', 
-  text: 'text-gray-200', 
-  border: 'border-[#B89555]/40',
-  glow: 'rgba(161, 161, 170, 0.3)'
-};
+const LEARNING_PATH_COLORS: Record<string, typeof CHAMPAGNE_STYLE> = {};
+const DEFAULT_PATH_COLOR = CHAMPAGNE_STYLE;
 
 export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: Book3DCardProps) {
   const pathStyle = LEARNING_PATH_COLORS[book.learning_path] || DEFAULT_PATH_COLOR;
