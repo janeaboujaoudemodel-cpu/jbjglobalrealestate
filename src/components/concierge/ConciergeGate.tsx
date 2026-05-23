@@ -272,9 +272,9 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             type="submit"
             disabled={submitting}
             data-no-contrast-guard
-            className="mt-auto w-full h-12 rounded-lg text-[13.5px] font-semibold text-primary-foreground
-              bg-primary hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed transition
-              inline-flex items-center justify-center gap-2 hover:shadow-[0_0_24px_hsl(var(--gold)/0.26)]"
+            className="mt-auto w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A]
+              disabled:opacity-50 disabled:cursor-not-allowed transition inline-flex items-center justify-center gap-2
+              hover:bg-[#F7F2EA] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_0_24px_hsl(var(--gold)/0.22)]"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
             {submitting ? "Sending code…" : "Send verification code"}
@@ -300,9 +300,9 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             onClick={verifyOtp}
             disabled={submitting || otp.length !== 6}
             data-no-contrast-guard
-            className="mt-auto w-full h-12 rounded-lg text-[13.5px] font-semibold text-primary-foreground
-              bg-primary hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed transition
-              inline-flex items-center justify-center gap-2 hover:shadow-[0_0_24px_hsl(var(--gold)/0.26)]"
+            className="mt-auto w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A]
+              disabled:opacity-50 disabled:cursor-not-allowed transition inline-flex items-center justify-center gap-2
+              hover:bg-[#F7F2EA] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_0_24px_hsl(var(--gold)/0.22)]"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
             {submitting ? "Verifying…" : "Verify & start chat"}
