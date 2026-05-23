@@ -10,11 +10,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   ArrowLeft, Building2, Globe, MapPin, Phone, Mail, Upload,
   Image as ImageIcon, FileText, Video, Map as MapIcon, Trash2,
   CheckCircle2, AlertTriangle, Pencil, Plus, ExternalLink, Languages,
-  ShieldCheck, History
+  ShieldCheck, History, Sparkles
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
