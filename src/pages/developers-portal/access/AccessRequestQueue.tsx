@@ -56,17 +56,57 @@ function ApplicationsList() {
   });
 
   const decide = useMutation({
-    mutationFn: async ({ id, action }: { id: string; action: "approve" | "deny" }) => {
-      const { data, error } = await supabase.functions.invoke("portal-approve-rep-application", {
-        body: { application_id: id, action },
-      });
-      if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
+    mutationFn: async ({ id, action, row }: { id: string; action: "approve" | "deny"; row: any }) => {
+      const { data: auth } = await supabase.auth.getUser();
+      const uid = auth?.user?.id ?? null;
+
+      if (action === "deny") {
+        const { error } = await supabase
+          .from("developer_rep_applications")
+          .update({ status: "denied", decided_by: uid, decided_at: new Date().toISOString() })
+          .eq("id", id);
+        if (error) throw error;
+        return;
+      }
+
+      // approve → create sales-rep row (RLS owner-only), then mark application approved
+      if (!row.requested_developer_id) {
+        throw new Error("Application is missing a developer assignment — edit it before approving.");
+      }
+      const { data: created, error: insErr } = await supabase
+        .from("developer_sales_reps")
+        .insert({
+          developer_id: row.requested_developer_id,
+          full_name: row.full_name,
+          email: row.email,
+          phone_e164: row.phone_e164 ?? "",
+          position: row.position ?? null,
+          nationality: row.nationality ?? null,
+          languages: row.languages ?? [],
+          assigned_emirates: row.assigned_emirates ?? [],
+          availability_status: "available",
+          is_active: true,
+        })
+        .select("id")
+        .single();
+      if (insErr) throw insErr;
+
+      const { error: updErr } = await supabase
+        .from("developer_rep_applications")
+        .update({
+          status: "approved",
+          decided_by: uid,
+          decided_at: new Date().toISOString(),
+          created_rep_id: created?.id ?? null,
+        })
+        .eq("id", id);
+      if (updErr) throw updErr;
     },
     onSuccess: (_d, vars) => {
-      toast.success(vars.action === "approve" ? "Application approved" : "Application denied");
+      toast.success(vars.action === "approve" ? "Application approved · rep created" : "Application denied");
       qc.invalidateQueries({ queryKey: ["rep-applications"] });
       qc.invalidateQueries({ queryKey: ["portal-overview"] });
+      qc.invalidateQueries({ queryKey: ["developer-sales-reps"] });
     },
     onError: (e: any) => toast.error(e?.message ?? "Action failed"),
   });
