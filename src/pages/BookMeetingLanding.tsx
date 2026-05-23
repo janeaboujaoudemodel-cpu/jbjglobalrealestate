@@ -1,16 +1,9 @@
 /**
- * Public /book landing page — visitors request a meeting slot with Jane.
+ * Public /book landing page — Phase 2.
  *
- * Slot rules (enforced by `validate_meeting_booking_slot()`):
- *   • Tuesday → Friday, 11:00–17:00 Dubai time
- *   • ≥ 1 day in advance
- *   • Meeting must end by 17:00 Dubai time
- *
- * Submit pipeline: posts to the `submit-meeting-booking` edge function, which
- *   1) inserts into meeting_bookings
- *   2) mirrors to owner_calendar_events (drives reminders 24h / 1h / 15m)
- *   3) captures a CRM lead via `capture-lead`
- *   4) emails visitor + owner (with .ics)
+ * Adds: service type, mandatory meeting topic, proposal (typed or attached),
+ * country-flag phone picker, structured social links, premium file drop,
+ * and a "Booked" preview of all unavailable days until first availability.
  */
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -19,12 +12,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
-  Calendar, Clock, MapPin, Video, CheckCircle2, Loader2, UploadCloud, Globe, X,
+  Calendar, Clock, MapPin, Video, CheckCircle2, Loader2, Globe, Lock,
+  Briefcase, MessageSquare, Sparkles, FileText,
 } from "lucide-react";
 import { toast } from "sonner";
 import { SearchableSelect } from "@/components/ui/searchable-select";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
+import { PhoneInput } from "@/components/booking/PhoneInput";
+import { SocialLinksField, type SocialLink } from "@/components/booking/SocialLinksField";
+import { PremiumFileDrop } from "@/components/booking/PremiumFileDrop";
 
 const TIME_SLOTS = ["11:00", "12:00", "13:00", "14:00", "15:00", "16:00"];
 const DURATIONS = [
@@ -33,29 +31,39 @@ const DURATIONS = [
   { v: 60, label: "60 min" },
   { v: 90, label: "90 min" },
 ];
-const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024;
-const ALLOWED_MIME = [
-  "application/pdf",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  "image/png",
-  "image/jpeg",
+
+const SERVICE_TYPES = [
+  { v: "general_inquiry",     label: "General inquiry",     icon: MessageSquare },
+  { v: "general_meeting",     label: "General meeting",     icon: Briefcase },
+  { v: "partnership",         label: "Partnership",         icon: Sparkles },
+  { v: "investment_briefing", label: "Investment briefing", icon: FileText },
+  { v: "off_market_access",   label: "Off-market access",   icon: Lock },
+  { v: "other",               label: "Other",               icon: Globe },
 ];
 
-/** Next N business days, Tue–Fri only, starting tomorrow (Dubai-local heuristic). */
-function nextBookableDays(count: number) {
-  const out: Date[] = [];
-  const d = new Date();
-  d.setDate(d.getDate() + 1); // ≥1 day in advance
-  while (out.length < count) {
-    const day = d.getDay(); // 0=Sun..6=Sat
-    if (day >= 2 && day <= 5) out.push(new Date(d)); // Tue(2)..Fri(5)
-    d.setDate(d.getDate() + 1);
+/** Returns booked-preview + bookable days starting today.
+ *  Days from today until the first Tue–Fri slot (≥ 1 day in advance) are returned as `{date, bookable:false}`.
+ *  Then bookable Tue–Fri days follow.
+ */
+function buildDayPanel(count: number) {
+  const out: { date: Date; bookable: boolean }[] = [];
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const earliest = new Date(today); earliest.setDate(earliest.getDate() + 1);
+  let cursor = new Date(today);
+  let bookableAdded = 0;
+  while (bookableAdded < count) {
+    const day = cursor.getDay();
+    const isBookableDow = day >= 2 && day <= 5;
+    const isLeadOk = cursor >= earliest;
+    const bookable = isBookableDow && isLeadOk;
+    if (bookable) bookableAdded++;
+    out.push({ date: new Date(cursor), bookable });
+    cursor.setDate(cursor.getDate() + 1);
+    if (out.length > 60) break; // safety
   }
   return out;
 }
 
-/** Filter slots so meeting end ≤ 17:00 given duration. */
 function visibleSlots(durationMin: number) {
   return TIME_SLOTS.filter((t) => {
     const [hh, mm] = t.split(":").map(Number);
@@ -66,40 +74,46 @@ function visibleSlots(durationMin: number) {
 export default function BookMeetingLanding() {
   const [params] = useSearchParams();
   const token = params.get("t") || "";
-  const days = useMemo(() => nextBookableDays(20), []);
 
+  const dayPanel = useMemo(() => buildDayPanel(14), []);
   const countries = useMemo(() => getCountryList(), []);
   const languages = useMemo(() => getLanguageList(), []);
 
-  const [selectedDate, setSelectedDate] = useState<Date>(days[0]);
+  const firstBookable = useMemo(() => dayPanel.find(d => d.bookable)?.date ?? new Date(), [dayPanel]);
+  const [selectedDate, setSelectedDate] = useState<Date>(firstBookable);
   const [duration, setDuration] = useState<number>(60);
   const [selectedTime, setSelectedTime] = useState<string>("11:00");
+  const slots = useMemo(() => visibleSlots(duration), [duration]);
+  useEffect(() => {
+    if (!slots.includes(selectedTime) && slots.length) setSelectedTime(slots[0]);
+  }, [duration]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Required identity
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [nationality, setNationality] = useState("");
+  const [nationality, setNationality] = useState("AE");
   const [language, setLanguage] = useState("en");
   const [company, setCompany] = useState("");
 
+  // Required workflow
+  const [serviceType, setServiceType] = useState<string>("general_meeting");
+  const [meetingTopic, setMeetingTopic] = useState("");
+
+  // Optional / partnership
   const [website, setWebsite] = useState("");
-  const [socials, setSocials] = useState<string[]>([""]);
+  const [socials, setSocials] = useState<SocialLink[]>([{ platform: "linkedin", url: "" }]);
+  const [proposalMode, setProposalMode] = useState<"attach" | "type">("attach");
+  const [proposalText, setProposalText] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
 
   const [locationType, setLocationType] = useState<"office" | "online">("online");
   const [platform, setPlatform] = useState<"zoom" | "google_meet">("google_meet");
   const [notes, setNotes] = useState("");
 
   const [busy, setBusy] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [done, setDone] = useState<null | { when: string }>(null);
-
-  const slots = useMemo(() => visibleSlots(duration), [duration]);
-
-  useEffect(() => {
-    // If duration change pushes current slot out of range, snap back to first valid.
-    if (!slots.includes(selectedTime) && slots.length) setSelectedTime(slots[0]);
-  }, [duration]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     document.title = "Book a Meeting with Jane Bou Jaoude · JBJ GLOBAL REAL ESTATE";
@@ -109,15 +123,13 @@ export default function BookMeetingLanding() {
     return () => { if (meta && prev !== undefined) meta.content = prev; };
   }, []);
 
-  // Token prefill
   useEffect(() => {
     if (!token) return;
     (async () => {
       const { data } = await (supabase as any)
         .from("meeting_booking_tokens")
         .select("contact_name, contact_email, contact_company, default_language, default_location_type")
-        .eq("token", token)
-        .maybeSingle();
+        .eq("token", token).maybeSingle();
       if (data) {
         if (data.contact_name) setFullName(data.contact_name);
         if (data.contact_email) setEmail(data.contact_email);
@@ -127,19 +139,6 @@ export default function BookMeetingLanding() {
       }
     })();
   }, [token]);
-
-  async function handleFile(f: File | null) {
-    if (!f) { setFile(null); return; }
-    if (f.size > MAX_ATTACHMENT_BYTES) {
-      toast.error("File too large (max 10 MB).");
-      return;
-    }
-    if (!ALLOWED_MIME.includes(f.type)) {
-      toast.error("Only PDF, DOC, DOCX, JPG, PNG accepted.");
-      return;
-    }
-    setFile(f);
-  }
 
   async function uploadAttachment(): Promise<{ url: string; name: string } | null> {
     if (!file) return null;
@@ -153,7 +152,7 @@ export default function BookMeetingLanding() {
       if (upErr) throw upErr;
       const { data: signed } = await supabase.storage
         .from("meeting-booking-attachments")
-        .createSignedUrl(path, 60 * 60 * 24 * 30); // 30 days
+        .createSignedUrl(path, 60 * 60 * 24 * 30);
       return { url: signed?.signedUrl ?? "", name: file.name };
     } catch (e: any) {
       toast.error("Attachment upload failed: " + (e?.message ?? "unknown"));
@@ -166,13 +165,20 @@ export default function BookMeetingLanding() {
   function validate(): string | null {
     if (fullName.trim().length < 2) return "Please enter your full name.";
     if (!/^\S+@\S+\.\S+$/.test(email)) return "Please enter a valid email.";
-    if (phone.trim().length < 6) return "Please enter your phone number.";
+    if (phone.trim().length < 6) return "Please enter your phone number with country code.";
     if (!nationality) return "Please select your nationality.";
     if (!language) return "Please select your preferred language.";
     if (company.trim().length < 1) return "Please enter your company name.";
+    if (!serviceType) return "Please choose the type of meeting.";
+    if (meetingTopic.trim().length < 3) return "Please describe what you would like to discuss.";
     if (website && !/^https?:\/\//i.test(website)) return "Website must start with http(s)://";
     for (const s of socials) {
-      if (s && !/^https?:\/\//i.test(s)) return "Social links must start with http(s)://";
+      if (s.url && !/^https?:\/\//i.test(s.url)) return "Social links must start with http(s)://";
+    }
+    if (serviceType === "partnership") {
+      const hasFile = !!file;
+      const hasText = proposalText.trim().length >= 10;
+      if (!hasFile && !hasText) return "For partnerships, please attach a proposal or describe it in writing.";
     }
     return null;
   }
@@ -180,32 +186,30 @@ export default function BookMeetingLanding() {
   const submit = async () => {
     const err = validate();
     if (err) { toast.error(err); return; }
-
     setBusy(true);
     try {
-      // Optional file upload first
       const att = file ? await uploadAttachment() : null;
-
       const y = selectedDate.getFullYear();
       const m = String(selectedDate.getMonth() + 1).padStart(2, "0");
       const d = String(selectedDate.getDate()).padStart(2, "0");
       const bookedForAt = `${y}-${m}-${d}T${selectedTime}:00+04:00`;
-
-      const cleanSocials = socials.map((s) => s.trim()).filter(Boolean);
+      const cleanSocials = socials.filter((s) => s.url.trim()).map((s) => ({ platform: s.platform, url: s.url.trim() }));
 
       const { data, error } = await supabase.functions.invoke("submit-meeting-booking", {
         body: {
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
           phone: phone.trim(),
-          nationality,
-          language,
+          nationality, language,
           company: company.trim(),
+          serviceType,
+          meetingTopic: meetingTopic.trim(),
           bookedForAt,
           durationMin: duration,
           locationType,
           onlinePlatform: locationType === "online" ? platform : null,
           notes: notes.trim() || null,
+          proposalText: proposalText.trim() || null,
           websiteUrl: website.trim() || null,
           socialLinks: cleanSocials,
           attachmentUrl: att?.url ?? null,
@@ -218,9 +222,7 @@ export default function BookMeetingLanding() {
       if (data && (data as any).error) throw new Error((data as any).error);
 
       setDone({
-        when: selectedDate.toLocaleDateString("en-GB", {
-          weekday: "long", day: "numeric", month: "long", year: "numeric",
-        }) + ` at ${selectedTime} (Dubai)`,
+        when: selectedDate.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) + ` at ${selectedTime} (Dubai)`,
       });
     } catch (e: any) {
       toast.error(e?.message ?? "Booking failed");
@@ -234,11 +236,12 @@ export default function BookMeetingLanding() {
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center px-4">
         <div className="max-w-xl w-full bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-10 text-center">
           <CheckCircle2 className="w-14 h-14 text-[#B89555] mx-auto mb-4" />
-          <h1 className="text-2xl font-semibold text-[#1A1A1A] mb-2">Your request is in.</h1>
-          <p className="text-[#1A1A1A]/80 mb-1">{done.when}</p>
+          <p className="text-[11px] uppercase tracking-[0.3em] text-[#B89555] mb-2">Status · Received</p>
+          <h1 className="text-2xl font-semibold text-[#1A1A1A] mb-2">Greetings from JBJ Global Real Estate.</h1>
+          <p className="text-[#1A1A1A]/80 mb-1">We have received your request. {done.when}</p>
           <p className="text-sm text-[#1A1A1A]/70 mt-4">
-            A confirmation has been emailed to you and to Jane personally.
-            You'll receive reminders 24 hours, 1 hour, and 15 minutes before the meeting.
+            Our team is reviewing your details now. A confirmation will arrive in your inbox shortly,
+            and you'll receive reminders 24 hours and 30 minutes before the meeting once it's approved.
           </p>
           <a href="/" className="inline-block mt-6 text-sm text-[#1A1A1A] underline underline-offset-4 decoration-[#B89555]">
             Return to JBJ GLOBAL REAL ESTATE
@@ -261,35 +264,42 @@ export default function BookMeetingLanding() {
         <p className="text-xs uppercase tracking-[0.2em] text-[#B89555] mb-3">Founder Calendar</p>
         <h1 className="text-3xl md:text-4xl font-semibold mb-4">Book a meeting with Jane Bou Jaoude</h1>
         <p className="text-[#1A1A1A]/75 max-w-2xl mx-auto">
-          A private consultation — investment briefing, off-market access, or a working session.
-          Tuesday to Friday, 11:00–17:00 Dubai time. Office in Dubai or online (Zoom / Google Meet).
+          A private consultation — investment briefing, off-market access, partnership, or a working session.
+          Tuesday to Friday, 11:00–17:00 Dubai time.
         </p>
       </section>
 
       <main className="max-w-5xl mx-auto px-6 pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Date + Duration + Time */}
+          {/* Date / duration / time */}
           <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-4">
               <Calendar className="w-4 h-4 text-[#B89555]" />
-              <h2 className="font-semibold">Choose a date (Tue–Fri)</h2>
+              <h2 className="font-semibold">Choose a date</h2>
+              <span className="ml-auto text-[11px] text-[#1A1A1A]/60">Tue–Fri · Dubai</span>
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-6">
-              {days.map((d) => {
-                const sel = d.toDateString() === selectedDate.toDateString();
+              {dayPanel.slice(0, 12).map(({ date, bookable }) => {
+                const sel = bookable && date.toDateString() === selectedDate.toDateString();
                 return (
                   <button
-                    key={d.toISOString()}
-                    onClick={() => setSelectedDate(d)}
-                    className={`px-2 py-3 rounded-lg text-xs border transition ${
-                      sel
-                        ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
-                        : "bg-white border-[#B89555]/20 text-[#1A1A1A]/80 hover:border-[#B89555]/60"
+                    key={date.toISOString()}
+                    onClick={() => bookable && setSelectedDate(date)}
+                    disabled={!bookable}
+                    className={`px-2 py-3 rounded-lg text-xs border transition relative ${
+                      !bookable
+                        ? "bg-[#FDFBF7] border-[#B89555]/15 text-[#1A1A1A]/30 cursor-not-allowed"
+                        : sel
+                          ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+                          : "bg-white border-[#B89555]/20 text-[#1A1A1A]/80 hover:border-[#B89555]/60"
                     }`}
                   >
-                    <div className="font-medium">{d.toLocaleDateString("en-GB", { weekday: "short" })}</div>
-                    <div className="text-base">{d.getDate()}</div>
-                    <div className="opacity-70">{d.toLocaleDateString("en-GB", { month: "short" })}</div>
+                    <div className="font-medium">{date.toLocaleDateString("en-GB", { weekday: "short" })}</div>
+                    <div className="text-base">{date.getDate()}</div>
+                    <div className="opacity-70">{date.toLocaleDateString("en-GB", { month: "short" })}</div>
+                    {!bookable && (
+                      <div className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[#B89555]/70">Booked</div>
+                    )}
                   </button>
                 );
               })}
@@ -301,17 +311,11 @@ export default function BookMeetingLanding() {
             </div>
             <div className="grid grid-cols-4 gap-2 mb-6">
               {DURATIONS.map((opt) => (
-                <button
-                  key={opt.v}
-                  onClick={() => setDuration(opt.v)}
+                <button key={opt.v} onClick={() => setDuration(opt.v)}
                   className={`py-2 rounded-lg text-sm border transition ${
-                    duration === opt.v
-                      ? "bg-[#EFE6D6] border-[#B89555]"
-                      : "bg-white border-[#B89555]/20 hover:border-[#B89555]/60"
+                    duration === opt.v ? "bg-[#EFE6D6] border-[#B89555]" : "bg-white border-[#B89555]/20 hover:border-[#B89555]/60"
                   }`}
-                >
-                  {opt.label}
-                </button>
+                >{opt.label}</button>
               ))}
             </div>
 
@@ -324,160 +328,147 @@ export default function BookMeetingLanding() {
                 <p className="col-span-4 text-xs text-[#1A1A1A]/70">No slots fit this duration. Try a shorter meeting.</p>
               )}
               {slots.map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setSelectedTime(t)}
+                <button key={t} onClick={() => setSelectedTime(t)}
                   className={`py-2 rounded-lg text-sm border transition ${
-                    selectedTime === t
-                      ? "bg-[#EFE6D6] border-[#B89555]"
-                      : "bg-white border-[#B89555]/20 hover:border-[#B89555]/60"
+                    selectedTime === t ? "bg-[#EFE6D6] border-[#B89555]" : "bg-white border-[#B89555]/20 hover:border-[#B89555]/60"
                   }`}
-                >
-                  {t}
-                </button>
+                >{t}</button>
               ))}
             </div>
           </div>
 
           {/* Visitor details */}
-          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-6 space-y-3">
+          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-6 space-y-4">
             <h2 className="font-semibold mb-1">Your details</h2>
 
             <div>
               <Label className="text-xs">Full name *</Label>
-              <Input value={fullName} onChange={(e) => setFullName(e.target.value)} className="bg-white" />
+              <Input value={fullName} onChange={(e) => setFullName(e.target.value)} className="bg-white border-[#B89555]/30" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs">Email *</Label>
-                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-white" />
+                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-white border-[#B89555]/30" />
               </div>
               <div>
                 <Label className="text-xs">Phone *</Label>
-                <Input value={phone} onChange={(e) => setPhone(e.target.value)} className="bg-white" placeholder="+971…" />
+                <PhoneInput value={phone} onChange={(v) => setPhone(v)} />
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs">Nationality *</Label>
-                <SearchableSelect
-                  value={nationality}
-                  onChange={setNationality}
-                  options={countries}
-                  placeholder="Select country"
-                  searchPlaceholder="Search country…"
-                />
+                <SearchableSelect value={nationality} onChange={setNationality} options={countries}
+                  placeholder="Select country" searchPlaceholder="Search country…" />
               </div>
               <div>
                 <Label className="text-xs">Preferred language *</Label>
-                <SearchableSelect
-                  value={language}
-                  onChange={setLanguage}
-                  options={languages}
-                  placeholder="Select language"
-                  searchPlaceholder="Search language…"
-                />
+                <SearchableSelect value={language} onChange={setLanguage} options={languages}
+                  placeholder="Select language" searchPlaceholder="Search language…" />
               </div>
-
             </div>
             <div>
               <Label className="text-xs">Company name *</Label>
-              <Input value={company} onChange={(e) => setCompany(e.target.value)} className="bg-white" />
+              <Input value={company} onChange={(e) => setCompany(e.target.value)} className="bg-white border-[#B89555]/30" />
             </div>
 
+            {/* Service type */}
             <div className="pt-2 border-t border-[#B89555]/15">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-[#B89555] mb-2">Optional</p>
+              <Label className="text-xs block mb-2">Type of meeting *</Label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {SERVICE_TYPES.map((s) => (
+                  <button key={s.v} type="button" onClick={() => setServiceType(s.v)}
+                    className={`px-3 py-2.5 rounded-lg text-xs border flex items-center gap-2 transition ${
+                      serviceType === s.v ? "bg-[#EFE6D6] border-[#B89555]" : "bg-white border-[#B89555]/20 hover:border-[#B89555]/60"
+                    }`}
+                  ><s.icon className="w-3.5 h-3.5 text-[#B89555]" /> {s.label}</button>
+                ))}
+              </div>
+            </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Meeting topic — mandatory */}
+            <div>
+              <Label className="text-xs">Meeting topic <span className="text-red-600">*</span></Label>
+              <Textarea
+                value={meetingTopic}
+                onChange={(e) => setMeetingTopic(e.target.value)}
+                className="bg-white border-[#B89555]/30 min-h-[80px]"
+                placeholder="What would you like to discuss? Be as specific as possible."
+              />
+            </div>
+
+            {/* Proposal (typed or attached) */}
+            <div className="pt-2 border-t border-[#B89555]/15">
+              <Label className="text-xs block mb-2">
+                Proposal {serviceType === "partnership" ? <span className="text-red-600">*</span> : <span className="text-[#1A1A1A]/50">(optional)</span>}
+              </Label>
+              <Tabs value={proposalMode} onValueChange={(v) => setProposalMode(v as any)}>
+                <TabsList className="bg-white border border-[#B89555]/20">
+                  <TabsTrigger value="attach">Attach proposal</TabsTrigger>
+                  <TabsTrigger value="type">Type proposal</TabsTrigger>
+                </TabsList>
+                <TabsContent value="attach" className="mt-3">
+                  <PremiumFileDrop file={file} onChange={setFile} />
+                </TabsContent>
+                <TabsContent value="type" className="mt-3">
+                  <Textarea
+                    value={proposalText}
+                    onChange={(e) => setProposalText(e.target.value)}
+                    placeholder="Outline the partnership opportunity, scope, and what you propose…"
+                    className="bg-white border-[#B89555]/30 min-h-[140px]"
+                  />
+                </TabsContent>
+              </Tabs>
+            </div>
+
+            {/* Website + socials */}
+            <div className="pt-2 border-t border-[#B89555]/15">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-[#B89555] mb-2">Company links (optional)</p>
+              <div className="grid grid-cols-1 gap-3">
                 <div>
                   <Label className="text-xs flex items-center gap-1"><Globe className="w-3 h-3" /> Company website</Label>
-                  <Input value={website} onChange={(e) => setWebsite(e.target.value)} className="bg-white" placeholder="https://" />
+                  <Input value={website} onChange={(e) => setWebsite(e.target.value)}
+                    className="bg-white border-[#B89555]/30" placeholder="https://…" />
                 </div>
                 <div>
-                  <Label className="text-xs">Social link</Label>
-                  <Input
-                    value={socials[0] ?? ""}
-                    onChange={(e) => { const next = [...socials]; next[0] = e.target.value; setSocials(next); }}
-                    className="bg-white"
-                    placeholder="https://linkedin.com/in/…"
-                  />
+                  <Label className="text-xs">Social links</Label>
+                  <SocialLinksField value={socials} onChange={setSocials} />
                 </div>
-              </div>
-
-              <div className="mt-3">
-                <Label className="text-xs flex items-center gap-1"><UploadCloud className="w-3 h-3" /> Company profile (PDF/DOC/JPG, ≤ 10 MB)</Label>
-                {file ? (
-                  <div className="flex items-center gap-2 mt-1 px-3 py-2 rounded-md bg-white border border-[#B89555]/30 text-xs">
-                    <span className="truncate flex-1">{file.name}</span>
-                    <button onClick={() => setFile(null)} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]">
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ) : (
-                  <Input
-                    type="file"
-                    accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
-                    onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
-                    className="bg-white"
-                  />
-                )}
               </div>
             </div>
 
-            <div className="pt-2">
+            {/* Location */}
+            <div className="pt-2 border-t border-[#B89555]/15">
               <Label className="text-xs mb-1 block">Where would you like to meet?</Label>
               <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setLocationType("office")}
+                <button type="button" onClick={() => setLocationType("office")}
                   className={`px-3 py-3 rounded-lg text-sm border flex items-center gap-2 justify-center ${
-                    locationType === "office"
-                      ? "bg-[#EFE6D6] border-[#B89555]"
-                      : "bg-white border-[#B89555]/20 hover:border-[#B89555]/60"
+                    locationType === "office" ? "bg-[#EFE6D6] border-[#B89555]" : "bg-white border-[#B89555]/20 hover:border-[#B89555]/60"
                   }`}
-                >
-                  <MapPin className="w-4 h-4" /> Dubai office
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLocationType("online")}
+                ><MapPin className="w-4 h-4" /> Dubai office</button>
+                <button type="button" onClick={() => setLocationType("online")}
                   className={`px-3 py-3 rounded-lg text-sm border flex items-center gap-2 justify-center ${
-                    locationType === "online"
-                      ? "bg-[#EFE6D6] border-[#B89555]"
-                      : "bg-white border-[#B89555]/20 hover:border-[#B89555]/60"
+                    locationType === "online" ? "bg-[#EFE6D6] border-[#B89555]" : "bg-white border-[#B89555]/20 hover:border-[#B89555]/60"
                   }`}
-                >
-                  <Video className="w-4 h-4" /> Online
-                </button>
+                ><Video className="w-4 h-4" /> Online</button>
               </div>
               {locationType === "online" && (
                 <div className="grid grid-cols-2 gap-2 mt-2">
-                  <button
-                    type="button"
-                    onClick={() => setPlatform("google_meet")}
-                    className={`px-3 py-2 rounded-lg text-xs border ${
-                      platform === "google_meet" ? "bg-[#EFE6D6] border-[#B89555]" : "bg-white border-[#B89555]/20"
-                    }`}
+                  <button type="button" onClick={() => setPlatform("google_meet")}
+                    className={`px-3 py-2 rounded-lg text-xs border ${platform === "google_meet" ? "bg-[#EFE6D6] border-[#B89555]" : "bg-white border-[#B89555]/20"}`}
                   >Google Meet</button>
-                  <button
-                    type="button"
-                    onClick={() => setPlatform("zoom")}
-                    className={`px-3 py-2 rounded-lg text-xs border ${
-                      platform === "zoom" ? "bg-[#EFE6D6] border-[#B89555]" : "bg-white border-[#B89555]/20"
-                    }`}
+                  <button type="button" onClick={() => setPlatform("zoom")}
+                    className={`px-3 py-2 rounded-lg text-xs border ${platform === "zoom" ? "bg-[#EFE6D6] border-[#B89555]" : "bg-white border-[#B89555]/20"}`}
                   >Zoom</button>
                 </div>
               )}
             </div>
 
             <div>
-              <Label className="text-xs">What would you like to discuss? (optional)</Label>
-              <Textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                className="bg-white min-h-[80px]"
-                placeholder="e.g. Branded residences under 15M AED, Golden Visa, off-market opportunities…"
-              />
+              <Label className="text-xs">Additional notes (optional)</Label>
+              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)}
+                className="bg-white border-[#B89555]/30 min-h-[60px]"
+                placeholder="Anything else Jane should know before the meeting?" />
             </div>
 
             <Button variant="gold" onClick={submit} disabled={busy || uploading} className="w-full mt-2">
