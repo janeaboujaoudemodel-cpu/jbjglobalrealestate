@@ -237,7 +237,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
                 <button
                   key={i}
                   onClick={() => setInput(q)}
-                  className="text-xs bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white/85 px-2.5 py-1 rounded-full transition-colors"
+                  className="text-xs bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A]/85 px-2.5 py-1 rounded-full transition-colors"
                 >
                   {q}
                 </button>

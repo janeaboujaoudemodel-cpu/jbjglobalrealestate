@@ -630,7 +630,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                   className={`rounded transition-all text-xs ${
                     position === mainPos && pos === mainPos
                       ? 'bg-amber-500 text-[#1A1A1A]'
-                      : 'bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-white'
+                      : 'bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A]/70 hover:text-[#1A1A1A]'
                   }`}
                   title={pos}
                 />

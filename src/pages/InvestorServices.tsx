@@ -160,7 +160,7 @@ const InvestorServices = () => {
         </button>
         <Link
           to="/contact"
-          className="flex-1 h-11 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 rounded-lg flex items-center justify-center gap-2 text-white font-medium text-sm"
+          className="flex-1 h-11 bg-[#EFE6D6] hover:bg-[#F7F2EA]/90 rounded-lg flex items-center justify-center gap-2 text-[#1A1A1A] font-medium text-sm"
         >
           Contact
           <ArrowRight className="w-4 h-4" />

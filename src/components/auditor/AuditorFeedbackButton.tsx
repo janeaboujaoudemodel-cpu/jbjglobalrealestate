@@ -13,7 +13,7 @@ const AuditorFeedbackButton = () => {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-[9999] w-14 h-14 rounded-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white shadow-2xl flex items-center justify-center transition-all hover:scale-110"
+        className="fixed bottom-6 right-6 z-[9999] w-14 h-14 rounded-full bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] shadow-2xl flex items-center justify-center transition-all hover:scale-110"
         title="Send feedback to Jane"
       >
         <MessageSquare className="w-6 h-6" />

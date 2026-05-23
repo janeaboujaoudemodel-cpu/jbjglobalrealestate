@@ -566,7 +566,7 @@ export default function DeveloperProfilePage() {
                   </div>
                 </div>
                 <div className="px-8 py-4 bg-[#FDFBF7] border-t border-[#B89555]/20 flex justify-end">
-                  <Button onClick={() => setThanksOpen(false)} className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white">Close</Button>
+                  <Button onClick={() => setThanksOpen(false)} className="bg-[#EFE6D6] hover:bg-[#F7F2EA]/90 text-[#1A1A1A]">Close</Button>
                 </div>
               </DialogContent>
             </Dialog>

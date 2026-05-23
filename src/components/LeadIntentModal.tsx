@@ -173,7 +173,7 @@ export default function LeadIntentModal() {
             {/* Close button */}
             <button
               onClick={handleSkip}
-              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white/70 hover:text-white transition-colors"
+              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
               aria-label="Close"
             >
               <X className="w-4 h-4" />

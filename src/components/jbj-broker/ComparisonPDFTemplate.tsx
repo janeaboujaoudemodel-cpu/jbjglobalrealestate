@@ -220,7 +220,7 @@ export function ComparisonPDFTemplate({
             <Button
               onClick={generatePDF}
               disabled={selectedProperties.length < 2 || generating}
-              className="flex-1 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white"
+              className="flex-1 bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A]"
             >
               <Download className="h-4 w-4 mr-2" />
               {generating ? "Generating..." : "Download PDF"}

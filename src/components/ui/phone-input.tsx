@@ -517,7 +517,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     const isLight = variant === 'light';
     const buttonStyles = isLight 
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555] focus:border-[#B89555]"
-      : "bg-[#1A1A1A] border-2 border-[#B89555]/50 text-white hover:bg-[#1A1A1A] hover:text-white hover:border-[#B89555] focus:border-[#B89555]";
+      : "bg-[#1A1A1A] border border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-[#1A1A1A] hover:border-[#B89555] focus:border-[#B89555]";
     const inputStyles = isLight
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] hover:border-[#B89555]"
       : "bg-[#1A1A1A] border-2 border-[#B89555]/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] hover:border-[#B89555]";

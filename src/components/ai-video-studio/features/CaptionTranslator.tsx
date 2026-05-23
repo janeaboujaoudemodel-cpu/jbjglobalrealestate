@@ -1133,8 +1133,8 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                   <div className="bg-[#1A1A1A]/50 rounded-lg p-3 border border-[#1A1A1A]">
                     <p className="text-xs text-[#1A1A1A]/70 font-medium mb-2">Original ({subtitles.length} segments)</p>
                     <div className="flex gap-2">
-                      <Button size="sm" onClick={() => exportSRT()} className="flex-1 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white h-8 text-xs"><Download className="w-3 h-3 mr-1" />SRT</Button>
-                      <Button size="sm" onClick={() => exportVTT()} className="flex-1 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white h-8 text-xs"><Download className="w-3 h-3 mr-1" />VTT</Button>
+                      <Button size="sm" onClick={() => exportSRT()} className="flex-1 bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] h-8 text-xs"><Download className="w-3 h-3 mr-1" />SRT</Button>
+                      <Button size="sm" onClick={() => exportVTT()} className="flex-1 bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] h-8 text-xs"><Download className="w-3 h-3 mr-1" />VTT</Button>
                     </div>
                   </div>
 
@@ -1149,8 +1149,8 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                             <div key={lc} className="flex items-center gap-2">
                               <span className="text-sm">{FLAG_EMOJIS[lc] || '🌐'}</span>
                               <span className="text-xs text-[#1A1A1A]/70 flex-1">{li?.name}</span>
-                              <Button size="sm" onClick={() => exportSRT(lc)} className="h-6 text-xs bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white px-2">SRT</Button>
-                              <Button size="sm" onClick={() => exportVTT(lc)} className="h-6 text-xs bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white px-2">VTT</Button>
+                              <Button size="sm" onClick={() => exportSRT(lc)} className="h-6 text-xs bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] px-2">SRT</Button>
+                              <Button size="sm" onClick={() => exportVTT(lc)} className="h-6 text-xs bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] px-2">VTT</Button>
                             </div>
                           );
                         })}

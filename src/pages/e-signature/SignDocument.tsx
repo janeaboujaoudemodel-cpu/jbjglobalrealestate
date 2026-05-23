@@ -263,7 +263,7 @@ export default function SignDocument() {
             {/* Primary: open DocuSign web (account.docusign.com loads instantly
                 and universal-links into the installed mobile app). */}
             <a href={DOCUSIGN_WEB} target="_blank" rel="noopener noreferrer">
-              <Button className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white border border-[#B89555]/40">
+              <Button className="w-full bg-[#EFE6D6] hover:bg-[#F7F2EA]/90 text-[#1A1A1A] border border-[#B89555]/40">
                 <FileSignature className="w-4 h-4 mr-2" /> Sign with DocuSign
                 <ExternalLink className="w-3.5 h-3.5 ml-2 opacity-70" />
               </Button>

@@ -566,7 +566,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
 
               {(onAddToTimeline || onAIVoiceGenerated) && (
                 <Button onClick={handleAddToTimeline} size="sm"
-                  className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white gap-1.5 text-xs">
+                  className="w-full bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] gap-1.5 text-xs">
                   <Plus className="w-3.5 h-3.5" />
                   Add Narration to Timeline
                 </Button>

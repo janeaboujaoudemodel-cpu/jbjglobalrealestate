@@ -302,7 +302,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                   className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all border ${
                     comparisonMode
                       ? 'bg-violet-500/25 text-violet-300 border-violet-500/50 shadow-sm'
-                      : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A] hover:text-white border-transparent'
+                      : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A] hover:text-[#1A1A1A] border-transparent'
                   }`}
                 >
                   <SplitSquareHorizontal className="w-3 h-3" />
@@ -310,7 +310,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                 </button>
                 <button
                   onClick={handleClearFilter}
-                  className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A] hover:text-white transition-colors border border-transparent"
+                  className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A] hover:text-[#1A1A1A] transition-colors border border-transparent"
                 >
                   <X className="w-2.5 h-2.5" />
                   Clear
