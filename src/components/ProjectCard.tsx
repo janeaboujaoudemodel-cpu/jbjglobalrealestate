@@ -272,6 +272,19 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           ) : null}
 
+          {/* Handover date / Ready — top right corner */}
+          {(() => {
+            const derived = deriveHandover(project) || HANDOVER_FALLBACK;
+            return derived ? (
+              <div
+                className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-md bg-[#FDFBF7]/95 border border-[#B89555]/50 shadow-sm handover-orange"
+                data-no-contrast-guard
+              >
+                <span className="font-semibold text-xs tabular-nums">{derived}</span>
+              </div>
+            ) : null;
+          })()}
+
           {/* Sold Out Badge */}
           {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
             <CardBadge variant="sold" className={`absolute ${badgePosition} z-10`}>
@@ -279,6 +292,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </CardBadge>
           )}
         </div>
+
 
         {/* Content — consistent 4px-grid spacing */}
         <div className="p-4 flex-1 flex flex-col gap-3">
@@ -332,19 +346,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </span>
           </p>
 
-          {/* Premium gold divider before handover */}
-          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+          {/* Handover removed from content body — now shown as a top-right badge on the image. */}
 
-          {/* Handover — moved down, sits between description and CTA */}
-          {(() => {
-            const derived = deriveHandover(project);
-            return (
-              <p className="text-sm handover-orange" data-no-contrast-guard>
-                <span className="handover-label">Handover </span>
-                <span>{derived || HANDOVER_FALLBACK}</span>
-              </p>
-            );
-          })()}
 
           {/* Owner-only diagnostic — Updated date hidden from public */}
           {isOwner && (project as any).updated_at && (
