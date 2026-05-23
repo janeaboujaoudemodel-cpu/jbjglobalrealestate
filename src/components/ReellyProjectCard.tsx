@@ -65,20 +65,17 @@ interface ReellyProjectCardProps {
  // Get sale status badge styling
  const getSaleStatusBadge = (status?: string | null) => {
    if (!status) return null;
-   
    const normalizedStatus = status.toLowerCase();
-   
+   const unified = 'card-status-badge';
    if (normalizedStatus.includes('on sale') || normalizedStatus.includes('start')) {
-     return { label: 'On Sale', className: 'bg-emerald-500 text-white' };
+     return { label: 'On Sale', className: unified };
    }
-    // "sold" / "out of stock" handled by dedicated red Sold Out badge, not here
    if (normalizedStatus.includes('announced')) {
-     return { label: 'Announced', className: 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#C8A766]/40' };
+     return { label: 'Announced', className: unified };
    }
    if (normalizedStatus.includes('presale') || normalizedStatus.includes('eoi')) {
-     return { label: 'Presale', className: 'bg-amber-500 text-[#1A1A1A]' };
+     return { label: 'Presale', className: unified };
    }
-   
    return null;
  };
  
