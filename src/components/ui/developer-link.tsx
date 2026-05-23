@@ -8,7 +8,7 @@
  */
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 
@@ -29,16 +29,17 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
   showPrefix = true,
   onClick
 }, ref) => {
-  const handleClick = (e: React.MouseEvent) => {
-    // Stop propagation to prevent card clicks
-    e.stopPropagation();
-    onClick?.(e);
-  };
-
+  const navigate = useNavigate();
   // Fallback: even when slug is missing, name must remain GOLD + clickable
-  // (links to /developers search). Hover behaviour is identical to slug branch.
   const href = slug ? `/developer/${slug}` : `/developers?search=${encodeURIComponent(name)}`;
   const showLogo = isValidDeveloperLogoUrl(logoUrl);
+
+  const go = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onClick?.(e as React.MouseEvent);
+    navigate(href);
+  };
 
   return (
     <span ref={ref} className={cn("inline-flex items-center gap-1.5 text-[#1A1A1A]", className)}>
@@ -56,16 +57,20 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
           />
         </span>
       )}
-      <Link
-        to={href}
-        onClick={handleClick}
+      {/* Rendered as role="link" span (not <a>) so it stays valid HTML when nested inside another <a> card link. */}
+      <span
+        role="link"
+        tabIndex={0}
+        data-href={href}
+        onClick={go}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') go(e); }}
         data-no-contrast-guard
         data-developer-gold
         style={{ color: '#B89555', WebkitTextFillColor: '#B89555' }}
         className="developer-name-gold font-bold !text-[#B89555] underline underline-offset-4 decoration-[#B89555]/60 cursor-pointer transition-colors duration-150 hover:!text-[#8E6E36] hover:decoration-[#B89555] focus-visible:!text-[#8E6E36] focus-visible:decoration-[#B89555] focus-visible:outline-none"
       >
         {name}
-      </Link>
+      </span>
     </span>
   );
 });
