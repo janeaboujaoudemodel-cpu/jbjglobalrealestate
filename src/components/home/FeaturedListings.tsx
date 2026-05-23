@@ -247,27 +247,6 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               </div>
             </div>
 
-            <div className="flex items-end justify-between mt-2 min-h-[28px]">
-              {(() => {
-                const breakdown = project.payment_breakdown;
-                const percentages = Array.isArray(breakdown)
-                  ? breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number')
-                  : [];
-                const hasPlan = percentages.length > 0;
-                return (
-                  <span
-                    data-no-contrast-guard
-                    className="payment-plan-square allow-white"
-                    aria-label={hasPlan ? `Payment plan ${percentages.join('/')}` : 'Payment plan not applicable'}
-                  >
-                    <CreditCard className="w-3 h-3" aria-hidden="true" />
-                    <span className="payment-plan-eyebrow">Plan</span>
-                    <span className="payment-plan-value">{hasPlan ? percentages.join('/') : 'N/A'}</span>
-                  </span>
-                );
-              })()}
-              <span className="text-transparent text-xs" aria-hidden="true">—</span>
-            </div>
 
           </div>
         </div>
