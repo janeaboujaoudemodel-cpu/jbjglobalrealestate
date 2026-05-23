@@ -1,91 +1,92 @@
 ## Goal
 
-Make the homepage read as a sequence of **self-contained premium cards** separated by real gold dividers, fix two interaction/visual bugs (Explore Services eyebrow + tab sync), and restyle Royal Tools Hub to match the Explore Services card pattern.
+Turn the AI Concierge from a vague chat into a guided action engine: it answers with **clickable step-by-step shortcut cards** (e.g. "Marina apartments under 2M" → numbered steps with a "Open this filter now" button that deep-links to `/properties?...`). Add an always-visible launcher (mobile star / desktop edge tag), a lead-capture + 6-digit email OTP gate, a 24/7 free-support badge, and a clickable "Switch channel" popover.
 
----
+## 1. Smart action-card shortcuts (the Sergino problem)
 
-## 1. Full-bleed gold dividers between major sections
+**Edge function `ai-concierge` upgrade**
+- Extend `SYSTEM_PROMPT` with a strict **structured-output contract**: in addition to prose, the model must append a JSON block:
+  ````
+  ```jbj-actions
+  { "steps": ["Open Properties", "Set Beds = 2", "Drag price slider to 2M"], "cta": { "label": "Open this filter", "href": "/properties?area=marina&priceMax=2000000&beds=2" } }
+  ```
+  ````
+- Provide an authoritative **Filter URL Cheat Sheet** in the prompt (uses the existing global filter system: `area`, `priceMin`, `priceMax`, `beds`, `developer`, `handoverFrom`, `propertyType`, `status`).
+- Tell the model: when the user asks "how do I find / where can I see / filter for / show me X", ALWAYS emit a `jbj-actions` block with the deep link instead of telling them where to click.
 
-Currently `<SectionDivider fullWidth />` is rendered between sections but is a **permanent no-op** per the No-Gray standard, so nothing visible separates Featured Properties → Invest in Dubai → Explore Our Guides.
+**Frontend `AIConcierge.tsx`**
+- New parser extracts the ```jbj-actions``` fence from each streamed assistant message, strips it from the prose, and renders a **`ConciergeActionCard`** under the message:
+  - Numbered step list (gold checkmark bullets)
+  - Primary CTA button that uses React Router `Link` (gold border, ink text — matches our CTA system) and closes the drawer on click.
+- Add 4 new gold-bordered "smart prompt" suggestion chips that reliably trigger action cards (Marina <2M, Beachfront with handover 2026, Studios for short-let, 4BR villas in Emirates Hills).
 
-Introduce a new full-bleed primitive `SectionDividerGoldFullBleed` (thin variant of `SectionDividerGold`) that escapes container padding (`w-screen relative left-1/2 -ml-[50vw]`) and renders the existing gold gradient. Use it in `src/pages/Index.tsx` at these joints only:
+## 2. Always-visible launcher — Star (mobile) + Edge Tag (desktop)
 
-- After Featured Properties / Resale block → before **Invest in Dubai** (OverseasInvestorsBanner)
-- After **Invest in Dubai** → before **Explore Our Guides** (HomepageBookMarquee)
-- After **Explore Our Guides** → before **Explore Our Services**
-- After **Explore Our Services** → before **JBJ Royal Tools Hub**
-- After **JBJ Royal Tools Hub** → before AI Comparison / Mortgage
+New component `src/components/support/SupportLauncher.tsx`, mounted once in `MainLayout`:
+- **Mobile (`md:hidden`)**: bottom-right 56×56 gold-ringed star button (Sparkles icon). Tap → fans out a quarter-arc of 4 orbs (Concierge, Chat Support, WhatsApp, Call) with tooltips. Tap-away or second tap collapses.
+- **Desktop (`hidden md:flex`)**: thin vertical tag pinned to right edge (`fixed right-0 top-1/2 -translate-y-1/2`), gold hairline border, vertical text "Talk to us". Hover/click slides out a 280px panel with the 4 channel cards (same content as concierge welcome).
+- Both surfaces dispatch the same events used today (`jbj:open-chat-support`, opens `AIConcierge`, opens external `tel:` / `wa.me`).
+- Hidden automatically when `AIConcierge`, `AIChatWidget`, or any modal is open (listen for those flags via a small Zustand store or a `body[data-modal-open]` attr).
 
-Existing `<SectionDivider />` calls stay (still no-op) so nothing else changes.
+## 3. Concierge gate: lead capture + email OTP
 
----
+The concierge welcome panel becomes a **2-step pre-chat gate** whenever the user is not already verified for support:
 
-## 2. Wrap homepage sections in the gold-bordered "premium card" style
+**Step A — Details form** (re-uses the existing `AIChatWidget` form styling):
+- Full name, family name
+- Phone with country-code picker (default +971)
+- Working email
+- Inline zod validation; 24/7 free-support badge + disclaimer ("We'll text/email you only about your enquiry — JBJ Privacy Policy applies.")
+- On submit: insert/update a row in `crm_leads` via the existing `register-mode-lead` edge function (extended to accept `source: 'concierge' | 'chat-support'` and the extra fields), with `account_status='email_pending'`.
 
-The Mortgage Calculator and Explore Our Services already use the canonical premium card shell:
+**Step B — 6-digit OTP**:
+- Call a new edge function `send-concierge-otp` → generates a 6-digit code, stores it hashed in a new table `concierge_otp_codes (email, code_hash, expires_at, attempts)`, and sends it through the existing transactional email pipeline (`send-transactional-email` with a new template `concierge-verification.tsx`).
+- UI shows 6 OTP input boxes, 5-min countdown, Resend button (60s cooldown).
+- New edge function `verify-concierge-otp` validates the code, marks the lead `account_status='verified'`, and returns a short-lived signed token stored in `localStorage` (`jbj.concierge_verified`).
+- Once verified, the gate disappears for that browser; the same token unlocks `AIChatWidget` (mirror the gate there to keep both channels consistent).
 
-```text
-rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA]/[#FDFBF7]
-shadow-[0_8px_28px_rgba(184,149,85,0.10)]
-```
+If the user is already logged into Lovable Cloud with a verified email, skip the gate entirely.
 
-Create a shared primitive `PremiumSectionCard` (small wrapper at `src/components/ui/premium-section-card.tsx`) that renders that shell with consistent padding, then refactor these sections to mount inside it (content unchanged):
+**No new email domain work is needed** — the project already runs transactional emails through the existing infrastructure; we only add one new template and two thin edge functions.
 
-- **FeaturedListings** (Handpicked For You + View All CTA together)
-- **ResalePropertiesSection**
-- **OverseasInvestorsBanner** (Invest in Dubai)
-- **HomepageBookMarquee** (Explore Our Guides)
-- **AreasWeCover** (Top Areas in Dubai)
-- **JBJPodcastSection**
+## 4. Clickable "Switch channel" footer
 
-Only the outer wrapper changes; internal layouts, copy, images, and CTAs are preserved. ExploreServicesExpander, ToolkitShowcaseCard, and MortgageCalculator already use the shell — they stay as-is.
+Replace the static chip row with a single gold-outlined `Switch channel ▾` button. Click opens a Radix `Popover` above the footer with 3 channel cards:
+- **Chat Support** (closes concierge, dispatches `jbj:open-chat-support`)
+- **WhatsApp** (`tel:` deep link)
+- **Call an Agent** (phone + 24/7 badge)
 
----
+Each card has the channel icon, one-line description, and response-time pill ("Replies in ~2 min", "24/7", "Avg 30s").
 
-## 3. Fix `ExploreServicesExpander`
+## 5. 24/7 Free Support badge
 
-File: `src/components/home/ExploreServicesExpander.tsx`
+Add a permanent pill in the concierge header and on every channel card:
+`● 24/7 Support · Free` — emerald dot, ink text on champagne pill, gold hairline border. Wording is hard-coded; not a runtime feature flag.
 
-- **Remove the eyebrow** "JBJ Service" with the small icon (lines 136–139) that sits above the active service title — the tab strip already identifies the active service.
-- **Verify tab → hero sync**: the code already sets `active` from `activeId` and the `Explore Now` link already uses `active.href`. If a stale-state issue is observed in preview after the eyebrow removal, force a remount of the hero panel via `key={active.id}` on the wrapper (already present on the bg div — extend to the whole panel so title/description/CTA refresh together).
+## Files
 
----
+**New**
+- `src/components/support/SupportLauncher.tsx` (star + edge tag)
+- `src/components/support/SupportLauncherStar.tsx`, `SupportLauncherEdgeTag.tsx` (split)
+- `src/components/support/ChannelCard.tsx` (shared card primitive)
+- `src/components/concierge/ConciergeActionCard.tsx` (step list + CTA)
+- `src/components/concierge/ConciergeGate.tsx` (details + OTP)
+- `src/hooks/useConciergeVerification.ts` (localStorage token check)
+- `supabase/functions/send-concierge-otp/index.ts`
+- `supabase/functions/verify-concierge-otp/index.ts`
+- `supabase/functions/_shared/transactional-email-templates/concierge-verification.tsx`
+- DB migration: `concierge_otp_codes` table + RLS + cleanup trigger; extend `crm_leads` to allow `source = 'concierge'`.
 
-## 4. Restyle JBJ Royal Tools Hub as a scrollable card (Explore Services pattern)
+**Edited**
+- `supabase/functions/ai-concierge/index.ts` — new prompt + filter cheat sheet
+- `src/components/home/AIConcierge.tsx` — gate, action-card renderer, Switch-channel popover, 24/7 badge
+- `src/components/MainLayout.tsx` — mount `SupportLauncher`
+- `src/components/AIChatWidget.tsx` — read the same verified-token; skip its own form if already verified
+- `supabase/functions/register-mode-lead/index.ts` — accept concierge/chat source + name/phone/email payload
+- `supabase/functions/_shared/transactional-email-templates/registry.ts` — register new template
 
-File: `src/components/home/ToolkitShowcaseCard.tsx`
+## Unchanged / out of scope
 
-Convert the current 8-tile grid into the same layout idiom as `ExploreServicesExpander`:
-
-- Keep the existing premium card shell (already gold-bordered).
-- Replace the grid with:
-  1. **Header** — title + sub (kept).
-  2. **Horizontally scrollable tabs row** (one tab per tool, icon + name) using the same scroller pattern as ExploreServicesExpander (`overflow-x-auto no-scrollbar`, border-b active underline in `#1A1A1A`).
-  3. **Active tool hero panel** below the tabs — large card showing the active tool's icon tile, name, description, and a primary CTA button that links to `tool.href`. Same 280–340px height.
-  4. **Footer "Explore JBJ Tools" PearlButton** kept as a secondary "view all" affordance.
-- Render **all** approved public tools (drop the `.slice(0, 8)` cap) so users can scroll through every tool inline.
-
-This gives Royal Tools Hub the same "premium card with scrollable inner content" feel the user asked for.
-
----
-
-## 5. Files touched
-
-**New:**
-- `src/components/ui/premium-section-card.tsx`
-- `src/components/ui/section-divider-gold-fullbleed.tsx`
-
-**Edited:**
-- `src/pages/Index.tsx` — swap no-op dividers between Featured / Invest / Guides / Services / Tools for the new full-bleed gold divider; wrap target sections in `PremiumSectionCard`.
-- `src/components/home/ExploreServicesExpander.tsx` — remove eyebrow, ensure key-based remount.
-- `src/components/home/ToolkitShowcaseCard.tsx` — convert grid → tabs + hero panel; render all tools.
-
-**Unchanged:** hero, header, footer, ProjectCard, MortgageCalculator inner UI, all other features (No-Removal policy honored).
-
----
-
-## Out of scope
-
-- No backend / data / RLS changes.
-- No edits to header, sidebar, ProjectCard, or any other component beyond the 3 files above.
-- No font, palette, or icon-system changes — strict reuse of the existing champagne / `#B89555` tokens.
+- No changes to hero search, listings, header, footer, mode picker, or any other page.
+- WhatsApp/phone numbers continue to come from `CONTACT_INFO`.
+- The existing `AIChatWidget` lead form stays as a fallback — only its gate logic shares the verified token.
