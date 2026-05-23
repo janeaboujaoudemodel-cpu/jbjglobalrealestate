@@ -4,11 +4,15 @@ import App from "./App";
 import "./index.css";
 import "./styles/theme-tokens.css";
 import { installWhatsAppGuard } from "@/utils/whatsappGuard";
+import { installImageRecoveryGuard } from "@/utils/imageRecoveryGuard";
 
 // Site-wide guard: every WhatsApp link is normalized to wa.me with sanitized
-// digits. Prevents api.whatsapp.com / web.whatsapp.com (often blocked) and
-// guarantees no callsite can ship an unnormalized phone number.
+// digits.
 installWhatsAppGuard();
+
+// Site-wide guard: every broken <img> is recovered with a high-res retry then
+// a branded champagne-initials fallback. Opt out per-image via `data-no-fallback`.
+installImageRecoveryGuard();
 
 // ---------------------------------------------------------------------------
 // Global diagnostics + chunk-error auto-recovery (added with user approval).
