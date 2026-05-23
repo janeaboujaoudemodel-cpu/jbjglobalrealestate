@@ -12,6 +12,7 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
+import { useUserRole } from "@/hooks/useUserRole";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
