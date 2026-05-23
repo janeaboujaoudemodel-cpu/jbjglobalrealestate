@@ -1,150 +1,138 @@
 
-## What already exists (the tool I'll upgrade — no new tools)
+# Meeting Booking — Phase 2 Upgrade
 
-- **Public landing page**: `src/pages/BookMeetingLanding.tsx` mounted at `/book` (see `src/routes/StandaloneRoutes.tsx`). This is the canonical public booking surface.
-- **Database**:
-  - `public.meeting_bookings` (visitor name/email/phone/company, language, location, duration, etc.)
-  - `public.meeting_booking_tokens` (prefill tokens for branded outreach)
-  - `public.owner_calendar_events` (drives the founder calendar + the reminder engine)
-- **Server validation**: trigger `validate_meeting_booking_slot()` enforces hours/day rules in Dubai time.
-- **Reminder engine**: `supabase/functions/process-meeting-reminders` (cron) reads `owner_calendar_events.metadata.reminders` and emails attendees 24h / 30m / 15m before start.
-- **Owner agenda email**: `supabase/functions/send-meeting-agenda` (manual trigger).
-- **Lead capture**: `supabase/functions/capture-lead` + `src/hooks/useLeadCapture.ts`.
-- **Owner inbound notification**: `supabase/functions/send-inquiry-email` (already used in old MeetingBookingModal).
-
-**Duplicate to retire (no new tools rule):** `src/components/MeetingBookingModal.tsx` is a *second* booking surface used only on `/contact`. It posts to `send-inquiry-email` but never writes a row to `meeting_bookings`, so bookings made through it are invisible to the calendar and reminders. I'll repoint `Contact.tsx` to open `/book` and stop rendering the modal. The file itself stays for now (no removals), just unwired.
+Building on top of the existing `/book` page + `submit-meeting-booking` edge function. **No duplicate tools.** Everything below extends what already exists.
 
 ---
 
-## Where to find it (so you can locate everything later)
+## 1. Database (single migration)
 
-| Surface | Path / file |
-|---|---|
-| Public landing | `/book` → `src/pages/BookMeetingLanding.tsx` |
-| Route mount | `src/routes/StandaloneRoutes.tsx` (line 76) |
-| Booking table | `public.meeting_bookings` |
-| Token prefill | `public.meeting_booking_tokens` |
-| Slot rules | DB function `public.validate_meeting_booking_slot()` |
-| Calendar feed | `public.owner_calendar_events` |
-| Reminder cron | `supabase/functions/process-meeting-reminders` |
-| Lead capture | `supabase/functions/capture-lead` |
+`public.meeting_bookings` additions:
+- `status text` — `received → pending → approved | declined | rescheduled`, default `received`. Trigger auto-flips `received → pending` 30 s after insert (mimics the "received then pending" status update you described).
+- `service_type text` — `general_inquiry | general_meeting | partnership | investment_briefing | off_market_access | other`. **Required.**
+- `meeting_topic text NOT NULL` — what they want to discuss. **Required.**
+- `proposal_text text` — optional typed proposal (alternative to / alongside attachment).
+- `social_links jsonb` — restructured to `[{platform: 'instagram', url: '…'}]`.
+- `phone_country_code text`, `phone_national text` — captured from the new phone picker.
+- `owner_action_token text unique` — signs Approve / Decline / Reschedule deep-links in the owner email.
+- `owner_response_message text`, `owner_responded_at timestamptz`, `reschedule_proposed_at timestamptz`.
 
----
-
-## What's changing on `/book`
-
-### Form fields (required vs optional)
-
-Required:
-- Full name
-- Email
-- Phone (international, validated)
-- Nationality (searchable country list — already used elsewhere)
-- Preferred language
-- Company name
-- Date + time slot
-- **Meeting duration** (30 / 45 / 60 / 90 min — new selector; backed by existing `duration_min` column)
-- Location (office / online) + online platform if online
-
-Optional:
-- Company website URL
-- Social media link(s) (LinkedIn / Instagram / X — free text, validated as URLs)
-- Company profile upload (PDF / DOCX / image, up to 10 MB) → uploaded to a new public Storage bucket `meeting-booking-attachments`, signed URL stored on the booking row
-- Notes / discussion topic
-
-### Visual
-
-Champagne palette, ink text, 1px gold hairlines, cream `#EFE6D6` highlights for selected day/slot pills. Two-column on desktop (calendar+slots | details), single column on mobile. No gold fills.
+No existing columns dropped.
 
 ---
 
-## Availability change
+## 2. Frontend — `/book` rewrites
 
-Today's trigger allows **Mon–Fri 10:00–17:00 Dubai**. You said "first availability Tuesday 11:00 AM–5:00 PM". I'll interpret this as:
-
-- **Weekly window: Tuesday → Friday, 11:00–17:00 Dubai time** (Tuesday is the first day of the week; Saturday/Sunday/Monday closed).
-- Minimum lead time stays ≥ 1 day in advance.
-
-If you actually meant something different (e.g. *only* Tuesday, or Tue–Sat, or different end time per day), tell me before I push the migration and I'll adjust the trigger.
-
-The change is a single migration that updates `validate_meeting_booking_slot()`:
-- replace the `dow BETWEEN 1 AND 5` check with `dow BETWEEN 2 AND 5`
-- replace `hr < 10 OR hr >= 17` with `hr < 11 OR hr >= 17`
-- enforce that `booked_for_at + duration_min` does not exceed 17:00 Dubai
-
-The frontend's day picker + time slots will reflect the same rules (`["11:00","12:00","13:00","14:00","15:00","16:00"]`, skipping Sun/Mon/Sat).
+- **Phone**: `react-phone-number-input` with country flag + dial-code picker (default flag = 🇦🇪). Replaces the plain input.
+- **Country / language pickers**: every option renders with a flag (UAE flag default for nationality). Globe icon banned.
+- **Service type**: required pills — General inquiry · General meeting · Partnership · Investment briefing · Off-market access · Other.
+- **Meeting topic**: required textarea, label "What would you like to discuss?" with red asterisk.
+- **Proposal**: tabbed control — *Attach proposal* (file) **or** *Type proposal* (textarea). Either accepted, both optional unless `service_type = partnership` where one of them is required.
+- **Company website / social links**: every link gets `platform` dropdown (LinkedIn, Instagram, X, TikTok, Facebook, YouTube, Other) + URL input. Rendered/clickable in owner email.
+- **File upload UI**: premium document-style card (icon + dashed gold border + "Drop your company profile or click to browse · PDF/DOC/JPG up to 10 MB").
+- **Date grid**: every day between today and the first bookable Tuesday is rendered with a **"Booked"** chip (disabled, faded gold). First bookable day onward is selectable.
+- **Header**: `Jane Bou Jaoude` everywhere — purge `Abou Jaoude`. Remove the old photo (it was being pulled from an old avatar field; will be replaced with the JBJ monogram only).
 
 ---
 
-## Schema additions (single migration)
+## 3. Edge functions
+
+### `submit-meeting-booking` (existing — extended)
+- Accepts the new fields above.
+- Generates `owner_action_token` (32-byte URL-safe).
+- Sends two **premium** HTML emails (see §5).
+
+### `meeting-booking-action` (NEW)
+Public endpoint, no JWT, validated by `owner_action_token`:
+- `?action=approve` → status `approved`, sends visitor "✅ Confirmed" email with `.ics`.
+- `?action=decline` → status `declined`, sends visitor "Unable to meet at this time" email.
+- `?action=reschedule&new=<ISO>` → status `rescheduled`, sends visitor "Reschedule proposal" email.
+Each accepts an optional `owner_response_message` so you can type a custom note, otherwise the template auto-fills from `meeting_topic` + `service_type`.
+
+### `suggest-meeting-reply` (NEW)
+POST `{bookingId, action}`. Calls Lovable AI (`google/gemini-2.5-flash`) with system prompt seeded by booking details to produce a tone-matched suggested message for the owner to edit before send. Returns `{subject, body}`.
+
+### `process-meeting-reminders` (existing — patched)
+- Sends reminders to **both** visitor and owner.
+- Cadence updated to **24 h before** and **30 min before** (per your spec). The previous 1 h slot is removed.
+
+---
+
+## 4. Owner backend — new page `/owner/meetings`
+
+Route added to `OwnerRoutes`. Tabs:
+1. **Received** (just submitted, awaiting auto-flip)
+2. **Pending** ← default, awaiting your action
+3. **Approved**
+4. **Declined**
+5. **Rescheduled**
+
+Each row card shows: visitor name + flag, company, when (Dubai), duration, location, service type, **meeting topic**, proposal preview / attachment link, website + socials (all clickable), phone with country code, notes.
+
+Three buttons per pending row: **Approve** · **Decline** · **Reschedule**. Each opens a dialog with the AI-suggested email pre-filled (editable) → "Send" calls `meeting-booking-action` with the final body.
+
+Side panel: alerts list (today + next 7 days), notes field per booking (persisted to `owner_calendar_events.metadata.notes`).
+
+---
+
+## 5. Premium email templates
+
+All booking emails replaced with a branded template containing:
+- **Header**: champagne band with the JBJ monogram (already uploaded to storage) + "JBJ GLOBAL REAL ESTATE" wordmark.
+- **Status ticket block**: pill showing current status (`RECEIVED`, then `PENDING`, then `APPROVED` etc.) — uses gold/ink colours per spec, never grey.
+- **Body**: ink on champagne, mirrors site palette.
+- **Footer**: gold rule + "Warm regards, **JBJ Global Real Estate Team**" in gold (`#B89555`), then NAP block (address, phone, www.jbj.ae).
+- All inbound links point to `https://www.jbj.ae/...` — no `lovable.app` URLs anywhere.
+
+Visitor sequence:
+1. **Received** (instant): "Greetings from JBJ Global Real Estate — we have received your request. Our team is reviewing it. Status: RECEIVED."
+2. **Pending** (30 s later, auto): "Your request is now with Jane. Status: PENDING."
+3. **Approved / Declined / Rescheduled** (on owner action): full ticket with new status.
+
+Owner email: full booking dossier + three big Approve / Decline / Reschedule buttons (signed with `owner_action_token`).
+
+---
+
+## 6. Identity & link hygiene
+
+- Replace every `lovable.app` / `lovable.dev` link in user-facing files (`Contact.tsx`, footer, emails) with `https://www.jbj.ae`.
+- `OWNER_EMAIL` constant and any `aboujaoude*` string is normalised to `Jane Bou Jaoude` (display) and the canonical Gmail address kept only as the inbox target — never displayed publicly.
+- Old avatar reference on `/book` removed; only the JBJ monogram appears.
+
+---
+
+## 7. Files touched (no duplicates created)
 
 ```text
-ALTER TABLE public.meeting_bookings
-  ADD COLUMN nationality        text,
-  ADD COLUMN website_url        text,
-  ADD COLUMN social_links       jsonb DEFAULT '[]'::jsonb,
-  ADD COLUMN attachment_url     text,
-  ADD COLUMN attachment_name    text,
-  ADD COLUMN lead_id            uuid,            -- back-link to crm lead
-  ADD COLUMN calendar_event_id  uuid;            -- back-link to owner_calendar_events
+src/pages/BookMeetingLanding.tsx       # rewritten
+src/pages/Contact.tsx                  # any remaining lovable.app links → jbj.ae
+src/pages/owner/OwnerMeetings.tsx      # NEW page
+src/routes/OwnerRoutes.tsx             # +1 route
+src/components/booking/PhoneInput.tsx  # NEW (wraps react-phone-number-input)
+src/components/booking/SocialLinksField.tsx  # NEW
+src/components/booking/PremiumFileDrop.tsx   # NEW
+supabase/functions/submit-meeting-booking/index.ts        # extended
+supabase/functions/meeting-booking-action/index.ts        # NEW
+supabase/functions/suggest-meeting-reply/index.ts         # NEW
+supabase/functions/process-meeting-reminders/index.ts     # cadence patched + owner recipient
+supabase/migrations/<ts>_meetings_phase2.sql              # NEW
 ```
 
-Storage bucket `meeting-booking-attachments` (public read of signed URLs only; anon insert allowed, owner full access) + matching RLS policies on `storage.objects`.
+---
 
-No existing columns dropped. Existing rows stay valid.
+## 8. Out of scope (won't touch this pass)
+
+- Google Calendar sync (separate request).
+- Auth-walling `/book` (must stay public).
+- Replacing the reminder cron itself.
 
 ---
 
-## New edge function: `submit-meeting-booking` (single entry point)
+## Open questions before I push
 
-CORS-enabled, `verify_jwt = false`, runs as service role. Replaces the direct `supabase.from('meeting_bookings').insert(...)` call in `BookMeetingLanding`. Steps:
+1. **`react-phone-number-input`** is the lightest flag+code picker — OK to add it as a dep?
+2. **Auto-flip Received → Pending after 30 s**: matches your spec. Confirm 30 s is right (vs e.g. 1 min)?
+3. **For Partnership service type**: is the proposal (typed *or* attached) **required**, or always optional?
+4. **Decline / Reschedule emails**: should they auto-send when you click the button, or always open a dialog with AI-suggested copy that you review first? (I'm planning the latter — confirm.)
 
-1. **Validate** payload with Zod (name, email, phone, nationality, language, company required; date+time+duration; optional URLs/attachment metadata).
-2. **Insert booking** into `meeting_bookings` (uses the trigger for slot rules → returns a clean 400 if outside window).
-3. **Create matching `owner_calendar_events` row** with:
-   - `title = "Meeting · {visitor_name} ({visitor_company})"`
-   - `start_at`, `end_at` derived from booking + duration
-   - `metadata = { attendee_name, attendee_email, attendee_phone, agenda: notes, reminders: [1440, 60, 15] }` so the existing `process-meeting-reminders` cron picks it up automatically.
-4. **Capture CRM lead** via the existing `capture-lead` function with `source: "meeting-booking"`, role `client`, and the full visitor payload (name, email, phone, nationality, company, website, language, notes). Store returned `lead_id` on the booking.
-5. **Send two emails** via `Resend` (the function already used elsewhere — `RESEND_API_KEY` is configured):
-   - **Visitor confirmation** → "Your meeting is requested" with date/time, duration, location, what-to-expect, and a calendar `.ics` attachment.
-   - **Owner notification** → to your inbox with all submitted details + the attachment link + a one-click "Confirm" link that flips `owner_confirmed_at` and emails the visitor the final confirmation.
-   Both writes stamp `visitor_confirmation_sent_at` / `owner_confirmation_sent_at` on the booking row (columns already exist).
-6. Return `{ ok: true, bookingId, calendarEventId }`.
-
-Idempotency: use `crypto.randomUUID()` keyed off `email + booked_for_at` to avoid double-submit duplicates.
-
----
-
-## Reminder schedule (auto, no extra work)
-
-Because step 3 writes `metadata.reminders: [1440, 60, 15]`, the existing `process-meeting-reminders` cron will send attendee reminders **24 h, 1 h, and 15 min** before the meeting. No new cron, no duplicate engine.
-
----
-
-## Files touched
-
-- **Edit** `src/pages/BookMeetingLanding.tsx` — new required fields, duration picker, optional attachments / website / socials, Tue–Fri 11–17 day picker, switch submit to `supabase.functions.invoke('submit-meeting-booking', …)`.
-- **Edit** `src/pages/Contact.tsx` — remove `MeetingBookingModal` usage, link the "Book Meeting" CTA to `/book` instead.
-- **New** `supabase/functions/submit-meeting-booking/index.ts` (+ shared zod schema, .ics builder).
-- **New** migration: schema additions + Tue–Fri 11–17 validation + storage bucket & RLS.
-- **No changes** to: `process-meeting-reminders`, `send-meeting-agenda`, `capture-lead`, `MeetingBookingModal.tsx` (left in place but unused).
-
----
-
-## Out of scope (won't be touched in this pass)
-
-- Building a new owner-side booking dashboard (you already have one elsewhere if you need it).
-- Replacing the reminder engine.
-- Google Calendar / iCloud sync.
-- The internal `/meeting-center` page (that's the *summaries* hub, a different tool).
-
----
-
-## Open question I need confirmed before the migration runs
-
-1. **Availability days** — Tue–Fri 11:00–17:00 Dubai? Or Tue–Sat? Or *only* Tuesday for now?
-2. **Reminder cadence** — OK with 24 h + 1 h + 15 min, or do you want a different set?
-3. **Attachment max size** — 10 MB OK?
-
-If you say "go" without answering, I'll proceed with the defaults above (Tue–Fri 11–17 · 24h/1h/15m · 10 MB).
+If you reply "go" I'll proceed with the defaults above (yes / 30 s / required for partnership / always open dialog).
