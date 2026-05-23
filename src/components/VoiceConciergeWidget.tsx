@@ -334,54 +334,8 @@ const VoiceConciergeWidget = () => {
         </div>
       )}
 
-      {/* Choice popover: voice or WhatsApp */}
-      {choiceOpen && !isConnected && (
-        <div
-          className="w-64 rounded-2xl border border-[#B89555]/45 overflow-hidden text-[#1A1A1A]"
-          style={{ background: pearlBg, boxShadow: pearlShadow }}
-        >
-          <div className="px-3 py-2 border-b border-[#B89555]/20 flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65">Concierge · Complimentary</span>
-            <button onClick={() => setChoiceOpen(false)} aria-label="Close" className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
-          <button
-            onClick={handleStartVoice}
-            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-white/40 transition-colors text-left"
-          >
-            <span
-              className="flex items-center justify-center w-9 h-9 rounded-full border border-[#B89555]/55 text-[#1A1A1A]"
-              style={{ background: pearlBg, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(184,149,85,0.18)" }}
-            >
-              <Phone className="w-4 h-4" strokeWidth={2} />
-            </span>
-            <span className="flex flex-col">
-              <span className="text-sm font-semibold">Live agent call</span>
-              <span className="text-[11px] text-[#1A1A1A]/65">Voice line, instant pickup</span>
-            </span>
-          </button>
-          <div className="h-px bg-[#B89555]/15" />
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={handleOpenWhatsApp}
-            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-white/40 transition-colors text-left"
-          >
-            <span
-              className="flex items-center justify-center w-9 h-9 rounded-full border border-[#B89555]/55 text-[#1A1A1A]"
-              style={{ background: pearlBg, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(184,149,85,0.18)" }}
-            >
-              <MessageCircle className="w-4 h-4" strokeWidth={2} />
-            </span>
-            <span className="flex flex-col">
-              <span className="text-sm font-semibold">WhatsApp us</span>
-              <span className="text-[11px] text-[#1A1A1A]/65">{COMPANY_NAP.phoneDisplay}</span>
-            </span>
-          </a>
-        </div>
-      )}
+      {/* Choice popover moved to top-level fragment so it shows for both mobile + desktop launchers */}
+
 
       <div className="relative">
 
