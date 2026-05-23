@@ -309,8 +309,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             )}
           </div>
 
-          {/* Divider */}
-          <div className="h-px bg-[#B89555]/40" />
+          {/* Premium gold divider — between header and developer/meta */}
+          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
 
           {/* Meta block — developer first, then handover + unit types */}
           <div className="flex flex-col gap-2">
@@ -338,8 +338,12 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             )}
           </div>
 
+          {/* Premium gold divider — between developer/meta and description */}
+          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+
           {/* Description */}
           <p className="text-[#1A1A1A] text-sm leading-relaxed flex-1 line-clamp-3 overflow-hidden">
+
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
             <span className="text-[#B89555] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
               ...more
