@@ -255,35 +255,22 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </CardBadge>
           )}
 
-          {/* Sale Status Badge — Top Right */}
+          {/* Sale Status Badge — Bottom Left */}
           {saleStatusLabel && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
-            <CardBadge variant="status" className="absolute top-3 right-3 z-10">
+            <CardBadge variant="status" className="absolute bottom-3 left-3 z-10">
               {saleStatusLabel}
             </CardBadge>
           )}
 
-          {/* Bottom-Left: Price label — premium square, transparent core, orange border + ink */}
+          {/* Bottom-Right: Price label — premium square, transparent core, orange border + ink */}
           {project.price_from ? (
-            <div className="absolute bottom-3 left-3 z-10 price-pill-premium" data-price-badge>
+            <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
               <span className="price-pill-eyebrow">From</span>
               <span className="price-pill-value">
                 {formatPriceWithCurrency(project.price_from, currency)}
               </span>
             </div>
           ) : null}
-
-          {/* Handover date / Ready — Bottom Right corner */}
-          {(() => {
-            const derived = deriveHandover(project) || HANDOVER_FALLBACK;
-            return derived ? (
-              <div
-                className="absolute bottom-3 right-3 z-10 px-2.5 py-1 rounded-md bg-[#FDFBF7]/95 border border-[#B89555]/50 shadow-sm handover-orange"
-                data-no-contrast-guard
-              >
-                <span className="font-semibold text-xs tabular-nums">{derived}</span>
-              </div>
-            ) : null;
-          })()}
 
           {/* Sold Out Badge */}
           {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
