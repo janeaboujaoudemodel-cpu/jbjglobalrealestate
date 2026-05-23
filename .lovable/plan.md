@@ -1,60 +1,48 @@
 ## Goal
+Close the "published with broken image" gap by hardening the publish trigger to reject obviously invalid image URLs, and backfilling existing rows so anything currently published with a bad URL gets unpublished and surfaced in /admin → Needs Photo.
 
-Fix card layout per your exact spec across all three card components (`FeaturedListings`, `ProjectCard`, `ReellyProjectCard`):
+## Scope
+- DB-only change (migration). No frontend code changes.
+- Respects existing `trg_enforce_no_publish_without_photo` rule and "No Photo → No Publish" memory.
+- Affects `projects` table (cover/card image columns) and `project_images` gallery rows used by the existing trigger.
 
-1. **Price pill** → back to bottom-RIGHT of the card image (where it originally lived).
-2. **Handover badge on the image** → REMOVED entirely.
-3. **Handover date** → moves into the card content area, sitting at the very bottom of the card, right-aligned, styled as a premium pill (champagne bg, gold 1px hairline, ink text, tabular-nums).
-4. **Gold premium divider** → sits directly above the handover date row, separating it from the developer name / content above.
-5. Developer name stays as the single `<DeveloperLink />` already in place (no duplication).
+## Changes
 
-## Resulting vertical order inside content area
+### 1. New SQL helper: `public.is_valid_image_url(text)`
+Returns `false` when the URL is:
+- NULL, empty, or whitespace-only
+- Not starting with `http://` or `https://`
+- Pointing to `localhost`, `127.0.0.1`, `0.0.0.0`, `::1`, or `.local`
+- A known-dead/placeholder pattern: `example.com`, `placeholder`, `undefined`, `null`, `data:`, `blob:`, ends in `/`, or contains `via.placeholder`, `lorempixel`, `dummyimage` (kept conservative)
+- Marked `STABLE` so it can be used in triggers safely.
 
-```
-location
-title
-description
-by Developer            ← single DeveloperLink (gold)
-─── gold gradient divider ───
-[flex spacer pushes handover to bottom]
-─── gold gradient divider ───        (separator above handover)
-                       Handover: 2027-12-31   ← right-aligned premium pill
-```
+### 2. Update `trg_enforce_no_publish_without_photo`
+Replace the "string exists" check with `is_valid_image_url(...)` for:
+- `cover_image_url`
+- card image column
+- any row in `project_images` for the project
 
-Note: only ONE divider is needed if the handover row sits immediately under developer (no other content between). I'll use a single gold divider directly above the handover row, with `mt-auto` on the handover wrapper to push it to the card bottom. This matches "above the handover you put a divider to separate from above content".
+Behavior unchanged otherwise: blocks `UPDATE`/`INSERT` that sets `is_published=true` without at least one valid image. Auto-unpublish on last-image delete continues to work (now keyed on valid URLs).
 
-## Files to edit
+### 3. One-shot backfill (same migration)
+- For every `projects` row where `is_published = true` AND no valid image exists across cover/card/gallery → set `is_published = false`.
+- Log affected IDs into existing `audit_logs` (or equivalent) with action `auto_unpublish_invalid_image` so the change is traceable.
+- These rows will then naturally appear in `/admin → Listings Approval → "Needs Photo"` tab (already wired to the same predicate).
 
-- `src/components/home/FeaturedListings.tsx`
-  - Image overlay: remove handover badge, restore price pill to `bottom-3 right-3`.
-  - Content: keep single DeveloperLink, remove the existing divider directly under it, then at the very end of the content flex column add: `<div className="mt-auto"><hr gold gradient /><div className="flex justify-end pt-2"><span premium pill>{deriveHandover(...) || HANDOVER_FALLBACK}</span></div></div>`.
+### 4. No schema removals, no RLS changes, no edits to reserved schemas.
 
-- `src/components/ProjectCard.tsx`
-  - Image overlay: remove the top/bottom-right handover badge, restore price pill to `bottom-3 right-3`, move sale-status badge back to `bottom-3 left-3`.
-  - Content: remove the existing "between developer/meta and description" divider duplication if it conflicts; append at the bottom of the content column the same `mt-auto` block with gold divider + right-aligned handover pill.
+## Out of scope (explicitly)
+- No live HTTP 404 probing in this migration (that's option b — separate job).
+- No changes to ProjectCard / VerifiedMedia UI.
+- No new admin tab — existing "Needs Photo" tab already covers it.
 
-- `src/components/ReellyProjectCard.tsx`
-  - Image overlay: remove handover badge, restore price pill to `bottom-3 right-3`.
-  - Content: append the same `mt-auto` block with gold divider + right-aligned handover pill at the bottom.
+## Verification after apply
+1. `SELECT count(*) FROM projects WHERE is_published AND NOT is_valid_image_url(cover_image_url) AND ...` → expect 0.
+2. Try `UPDATE projects SET is_published=true WHERE id=<row with bad url>` → expect trigger error.
+3. Open `/admin → Listings Approval → Needs Photo` → previously-broken listings now appear there.
 
-## Handover pill styling (consistent across all three)
+## Risk / rollback
+- Backfill is reversible by re-publishing once a valid image is attached (normal flow).
+- Helper function is additive; trigger change is a single `CREATE OR REPLACE`, easy to revert via follow-up migration.
 
-```tsx
-<span
-  data-no-contrast-guard
-  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md
-             bg-[#FDFBF7] border border-[#B89555]/40 shadow-sm
-             text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange"
->
-  <CalendarDays className="w-3 h-3 text-[#B89555]" aria-hidden />
-  {deriveHandover(project) || HANDOVER_FALLBACK}
-</span>
-```
-
-(Calendar icon already used elsewhere; falls back to "Coming soon" via `HANDOVER_FALLBACK`.)
-
-## What I will NOT touch
-
-- DeveloperLink component, deriveHandover util, price formatting logic, data fetching.
-- No removal of any other feature, badge, or content per the No-Removal policy.
-- No changes outside these three card components.
+Confirm and I'll ship the migration.
