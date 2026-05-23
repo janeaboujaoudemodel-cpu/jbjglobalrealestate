@@ -12,6 +12,7 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
+import { useUserRole } from "@/hooks/useUserRole";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
@@ -80,6 +81,7 @@ const getSaleStatusLabel = resolveSaleStatusLabel;
 
 const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { isOwner } = useUserRole();
   const images = project.images || [];
   const primaryImageUrl = images[currentImageIndex]?.image_url || images[0]?.image_url || project.cover_image_url || null;
 
@@ -300,16 +302,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               />
             )}
 
-            {(() => {
-              const derived = deriveHandover(project);
-              return (
-                <p className="text-sm handover-orange">
-                  <span className="handover-label">Handover </span>
-                  <span>{derived || HANDOVER_FALLBACK}</span>
-                </p>
-              );
-            })()}
-
             {/* Payment Plan removed from cards — shown only on details page */}
 
             {(getUnitTypesText() || getSizeText()) && (
@@ -326,15 +318,29 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           </div>
 
           {/* Description */}
-          <p className="text-[#1A1A1A] text-sm leading-relaxed flex-1 line-clamp-2 overflow-hidden">
+          <p className="text-[#1A1A1A] text-sm leading-relaxed flex-1 line-clamp-3 overflow-hidden">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
             <span className="text-[#B89555] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
               ...more
             </span>
           </p>
 
-          {/* Footer meta — updated date only */}
-          {(project as any).updated_at && (
+          {/* Premium gold divider before handover */}
+          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+
+          {/* Handover — moved down, sits between description and CTA */}
+          {(() => {
+            const derived = deriveHandover(project);
+            return (
+              <p className="text-sm handover-orange" data-no-contrast-guard>
+                <span className="handover-label">Handover </span>
+                <span>{derived || HANDOVER_FALLBACK}</span>
+              </p>
+            );
+          })()}
+
+          {/* Owner-only diagnostic — Updated date hidden from public */}
+          {isOwner && (project as any).updated_at && (
             <div className="flex items-center justify-between gap-2 min-h-[24px]">
               <p className="text-[10px] text-[#1A1A1A]/70 font-medium">
                 Updated {formatDistanceToNow(new Date((project as any).updated_at), { addSuffix: true })}
