@@ -183,8 +183,6 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                 </div>
               )}
               {isVerified && <div className="space-y-4">
-              {/* spacer so following blocks keep their spacing */}
-              </div>}
               {isVerified && messages.length === 0 && (
                 <div className="space-y-6">
                   <div className="text-center space-y-2 py-2">
