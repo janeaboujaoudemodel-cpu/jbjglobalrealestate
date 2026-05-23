@@ -269,14 +269,15 @@ const DeveloperPortalCTA = () => {
                 <p className="text-[#1A1A1A]/70 text-sm mb-6">
                   You now have full access to submit projects, manage events, and connect with our broker network.
                 </p>
-                <Button
+                <PearlButton
                   onClick={handleStartNow}
-                  className="bg-[#1A1A1A] text-white font-bold px-8 py-3 text-sm hover:bg-[#1A1A1A] transition-all"
+                  size="md"
+                  leadingIcon={<Rocket strokeWidth={2.2} />}
+                  trailingIcon={<ArrowRight strokeWidth={2.2} />}
                 >
-                  <Rocket className="w-4 h-4 mr-2" />
                   Start Now
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+                </PearlButton>
+
               </div>
             </div>
           )}
