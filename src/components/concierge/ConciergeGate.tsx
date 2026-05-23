@@ -127,28 +127,28 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
   };
 
   const inputBase =
-    "h-11 w-full px-3 rounded-lg text-[13.5px] text-[#FDFBF7] placeholder:text-[#FDFBF7]/40 " +
-    "bg-white/[0.06] border border-[#D4B896]/35 focus:border-[#E2C9A0] focus:bg-white/[0.10] outline-none transition";
+    "h-11 w-full px-3 rounded-lg text-[13.5px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 " +
+    "bg-[#FDFBF7] border border-[#B89555]/45 focus:border-[#B89555] focus:bg-[#FDFBF7] outline-none transition";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* 24/7 Free Support badge */}
       <div className="flex items-center justify-center">
         <span
           data-no-contrast-guard
           className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold
-            border border-[#D4B896]/45 bg-[#FDFBF7]/[0.06] text-[#FDFBF7]"
+            border border-[#B89555]/55 bg-[#F7F2EA] text-[#1A1A1A]"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
           24/7 Support · Always Free
         </span>
       </div>
 
-      <div className="text-center space-y-1.5">
-        <h3 className="text-[15px] font-semibold text-[#FDFBF7]">
+      <div className="text-center space-y-1">
+        <h3 className="text-[15px] font-semibold text-[#1A1A1A]">
           {step === "details" ? "Let's get you set up" : "Verify your email"}
         </h3>
-        <p className="text-[12px] text-[#FDFBF7]/65 leading-snug px-2">
+        <p className="text-[12px] text-[#1A1A1A]/70 leading-snug px-2">
           {step === "details"
             ? "Quick details so our team can follow up if your chat needs a human."
             : `We sent a 6-digit code to ${email}. Enter it below.`}
@@ -165,7 +165,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
         >
           <div className="grid grid-cols-2 gap-2">
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#E2C9A0]" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#B89555]" />
               <input
                 data-no-contrast-guard
                 placeholder="First name"
@@ -188,7 +188,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
           </div>
 
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#E2C9A0]" />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#B89555]" />
             <input
               data-no-contrast-guard
               type="email"
@@ -210,13 +210,13 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
               className={inputBase + " w-[120px] cursor-pointer"}
             >
               {COUNTRY_CODES.map((c) => (
-                <option key={c.code} value={c.code} className="bg-[#1A1A1A] text-[#FDFBF7]">
+                <option key={c.code} value={c.code} className="bg-[#FDFBF7] text-[#1A1A1A]">
                   {c.label}
                 </option>
               ))}
             </select>
             <div className="relative flex-1">
-              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#E2C9A0]" />
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#B89555]" />
               <input
                 data-no-contrast-guard
                 placeholder="Working phone"
@@ -234,15 +234,15 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             type="submit"
             disabled={submitting}
             data-no-contrast-guard
-            className="w-full h-11 rounded-lg text-[13.5px] font-semibold text-[#1A1A1A]
-              bg-[#E2C9A0] hover:bg-[#EBD3AA] disabled:opacity-50 disabled:cursor-not-allowed transition
+            className="w-full h-11 rounded-lg text-[13.5px] font-semibold text-[#FDFBF7]
+              bg-[#1A1A1A] hover:bg-[#2a2a2a] disabled:opacity-50 disabled:cursor-not-allowed transition
               inline-flex items-center justify-center gap-2"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
             {submitting ? "Sending code…" : "Send verification code"}
           </button>
 
-          <p className="text-[10.5px] text-[#FDFBF7]/50 text-center leading-snug px-2">
+          <p className="text-[10.5px] text-[#1A1A1A]/60 text-center leading-snug px-2">
             We'll only contact you about your enquiry. By continuing you accept our Privacy Policy.
           </p>
         </form>
@@ -262,8 +262,8 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             onClick={verifyOtp}
             disabled={submitting || otp.length !== 6}
             data-no-contrast-guard
-            className="w-full h-11 rounded-lg text-[13.5px] font-semibold text-[#1A1A1A]
-              bg-[#E2C9A0] hover:bg-[#EBD3AA] disabled:opacity-50 disabled:cursor-not-allowed transition
+            className="w-full h-11 rounded-lg text-[13.5px] font-semibold text-[#FDFBF7]
+              bg-[#1A1A1A] hover:bg-[#2a2a2a] disabled:opacity-50 disabled:cursor-not-allowed transition
               inline-flex items-center justify-center gap-2"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
@@ -273,7 +273,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             <button
               onClick={() => setStep("details")}
               data-no-contrast-guard
-              className="text-[#FDFBF7]/65 hover:text-[#FDFBF7] underline-offset-4 hover:underline"
+              className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] underline-offset-4 hover:underline"
             >
               ← Change details
             </button>
@@ -281,7 +281,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
               onClick={() => resendCooldown === 0 && sendOtp(true)}
               disabled={resendCooldown > 0}
               data-no-contrast-guard
-              className="text-[#E2C9A0] hover:text-[#FDFBF7] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="text-[#B89555] hover:text-[#1A1A1A] disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
             >
               {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend code"}
             </button>
@@ -291,3 +291,4 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
     </div>
   );
 }
+
