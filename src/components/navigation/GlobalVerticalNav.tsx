@@ -31,6 +31,7 @@ import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
+import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
@@ -372,7 +373,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Market Report', icon: FileText, href: '/market-report' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
-    { label: 'Broker Education', icon: BookOpen, href: '/broker-education' },
+    { label: 'Broker Learning', icon: BookOpen, href: '/broker/learning' },
   ],
   guides: [
     { label: 'Buyer Guide', icon: FileText, href: '/buyer-guide' },
@@ -381,7 +382,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Tenant Guide", icon: FileText, href: '/tenant-guide' },
     { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
-    { label: 'Broker Education', icon: BookOpen, href: '/broker-education' },
+    { label: 'Broker Learning', icon: BookOpen, href: '/broker/learning' },
     { label: 'Golden Visa Guide', icon: Award, href: '/guides/golden-visa-uae' },
     { label: 'Books Library', icon: BookMarked, href: '/education-hub' },
   ],
@@ -529,7 +530,6 @@ const SECTION_KEYS = [
   "PROPERTIES",
   "INSIGHTS & GUIDES",
   "SERVICES",
-  "PARTNERS",
   "BROKER & ACADEMY",
   "INVESTOR",
   "COMPANY & LEGAL",
@@ -547,7 +547,6 @@ const SECTION_ALIAS: Record<string, SectionKey> = {
   "INSIGHTS": "INSIGHTS & GUIDES",
   "GUIDES": "INSIGHTS & GUIDES",
   "SERVICES": "SERVICES",
-  "PARTNERS": "PARTNERS",
   "BROKER & ACADEMY": "BROKER & ACADEMY",
   "INVESTOR": "INVESTOR",
   "COMPANY": "COMPANY & LEGAL",
@@ -562,7 +561,6 @@ const SECTION_ICONS: Record<SectionKey, any> = {
   "PROPERTIES": Building2,
   "INSIGHTS & GUIDES": Lightbulb,
   "SERVICES": Briefcase,
-  "PARTNERS": Handshake,
   "BROKER & ACADEMY": GraduationCap,
   "INVESTOR": TrendingUp,
   "COMPANY & LEGAL": Users,
