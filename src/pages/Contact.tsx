@@ -195,7 +195,7 @@ const Contact = () => {
   };
 
   const [phoneActionsOpen, setPhoneActionsOpen] = useState(false);
-  const [meetingModalOpen, setMeetingModalOpen] = useState(false);
+  
 
   const handlePhoneAction = (action: string) => {
     const phoneNumber = CONTACT_INFO.phone.replace(/\s/g, '');
@@ -926,12 +926,6 @@ END:VCARD`;
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Meeting Booking Modal */}
-      <MeetingBookingModal 
-        open={meetingModalOpen} 
-        onOpenChange={setMeetingModalOpen} 
-      />
 
       </div>
     </>
