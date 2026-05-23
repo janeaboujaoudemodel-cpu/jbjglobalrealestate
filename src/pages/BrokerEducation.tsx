@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
 import { Book3DCard, BookDetailModal, BookLanguageFilter } from "@/components/broker-education";
+import { cn } from "@/lib/utils";
 import { CertificationSection } from "@/components/certification";
 import { useAccessControl } from "@/hooks/useAccessControl";
 import { useAuth } from "@/contexts/AuthContext";
