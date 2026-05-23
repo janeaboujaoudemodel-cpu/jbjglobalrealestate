@@ -175,7 +175,9 @@ Deno.serve(async (req) => {
     const projectPatch: Record<string, unknown> = {
       ...payload.patch,
       developer_id: payload.developer_id,
-      is_published: true,
+      // Insert/update hidden first; images and documents are attached before the
+      // strict database readiness gate decides whether it can go live.
+      is_published: false,
       updated_at: new Date().toISOString(),
       source_updated_at: new Date().toISOString(),
       deleted_at: null,
@@ -242,17 +244,28 @@ Deno.serve(async (req) => {
       .update({ last_auto_publish_at: new Date().toISOString() })
       .eq("id", payload.developer_id);
 
+    let published = false;
+    if (projectId) {
+      const { error: publishErr } = await admin
+        .from("projects")
+        .update({ is_published: true, updated_at: new Date().toISOString() })
+        .eq("id", projectId);
+      if (!publishErr) {
+        published = true;
+      }
+    }
+
     await admin.from("developer_activity_log").insert({
       user_id: userId,
       activity_type: payload.project_id ? "edit" : "upload",
       entity_type: "project",
       entity_id: projectId,
       entity_name: payload.patch.name ?? null,
-      details: { route: "auto_publish", trust_level: trustLevel, patch: payload.patch },
+      details: { route: published ? "auto_publish" : "queued_for_review", trust_level: trustLevel, patch: payload.patch },
     });
 
     return new Response(
-      JSON.stringify({ status: "published", project_id: projectId }),
+      JSON.stringify({ status: published ? "published" : "queued_for_review", project_id: projectId }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (e) {
