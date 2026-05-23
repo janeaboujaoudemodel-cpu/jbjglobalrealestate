@@ -1189,9 +1189,9 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
             </div>
           </div>
 
-          {/* BOOK-STYLE ALL DOCUMENTS STRIP */}
-          {project.documents.length > 0 && (
-           <div className="mb-14">
+          {/* BOOK-STYLE ALL DOCUMENTS STRIP + OWNER DROPZONE */}
+          <div className="mb-14">
+            {project.documents.length > 0 && (
               <BookStyleDocuments
                 documents={project.documents.map(d => ({
                   id: d.id,
@@ -1203,8 +1203,9 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
                 projectImageUrl={project.images?.[0]?.url || undefined}
                 onDownload={(url, filename) => handleDocumentDownload("brochure", url, filename)}
               />
-            </div>
-          )}
+            )}
+            <OwnerDocDropzone projectId={project.id} />
+          </div>
 
            {/* MORTGAGE CALCULATOR (Order B: after brochure) */}
            <div ref={mortgageRef} className="mb-14 scroll-mt-32">
