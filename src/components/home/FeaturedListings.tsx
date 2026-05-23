@@ -242,14 +242,14 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               />
             )}
 
+            {/* Premium full-width divider — directly after developer name, before handover */}
+            <div className="w-full h-px bg-[#B89555]/45 mt-3" />
+
             {/* Spacer pushes handover row to the very bottom of the card */}
             <div className="flex-grow" />
 
-            {/* Premium gold divider — separates content above from handover row */}
-            <hr className="border-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent mt-3" />
-
             {/* Handover date / Ready — right-aligned, bottom of card */}
-            <div className="flex justify-end pt-2">
+            <div className="flex justify-end pt-3">
               <span
                 data-no-contrast-guard
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FDFBF7] border border-[#B89555]/40 shadow-sm text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange"
