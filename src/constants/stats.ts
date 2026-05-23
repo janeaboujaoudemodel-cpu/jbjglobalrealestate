@@ -56,7 +56,7 @@ export const CONTACT_INFO = {
   securityEmail: 'SECURITY@JBJ.AE',
   happinessEmail: 'HAPPINESS@JBJ.AE',
   whatsappNumber: '971547167107',
-  whatsappMessage: "Hi, I'm interested in learning more about property brokerage services with JBJ Global Real Estate.",
+  whatsappMessage: "Hi JBJ Global Real Estate, I am contacting you from the JBJ Global Digital Platform and would like support with my property enquiry.",
   address: 'Downtown Dubai, UAE',
   inquiryFormUrl: 'https://jbj.ae/property-inquiry-form/',
   companyDescriptor: 'JBJ Global Real Estate',
@@ -70,7 +70,7 @@ export const CONTACT_INFO = {
 // Generate WhatsApp URL
 export const getWhatsAppUrl = (customMessage?: string) => {
   const message = encodeURIComponent(customMessage || CONTACT_INFO.whatsappMessage);
-  return `https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${message}`;
+  return `https://api.whatsapp.com/send?phone=${CONTACT_INFO.whatsappNumber}&text=${message}`;
 };
 
 // Generate call URL
