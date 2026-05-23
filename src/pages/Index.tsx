@@ -13,6 +13,7 @@ import { useUserModeContext } from "@/contexts/UserModeContext";
 import { Button } from "@/components/ui/button";
 import { PearlButton } from "@/components/ui/pearl-button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
+import HeroPropertySearch from "@/components/home/HeroPropertySearch";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
 import { CONTACT_INFO } from "@/constants/stats";
@@ -114,12 +115,8 @@ const modeHeroActions: Record<'investor' | 'broker' | 'developer', { label: stri
   ],
 };
 
-// Three pillars
-const pillars = [
-  { icon: Building2, title: "Premium Marketplace", desc: "2,400+ Off-Plan & Resale Properties" },
-  { icon: Brain, title: "AI-Powered Tools", desc: "Smart Search & Investment Intelligence" },
-  { icon: Briefcase, title: "Brokerage Services", desc: "Licensed Advisors & Expert Guides" },
-];
+
+
 
 const Index = () => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
@@ -326,53 +323,9 @@ const Index = () => {
 
 
 
-            {/* Three pillar badges — crystal glass + premium gold hairline (no solid black) */}
-            <motion.div
-              variants={fadeInUp}
-              className="hidden sm:grid grid-cols-3 max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto overflow-hidden rounded-2xl"
-              style={{
-                background: 'rgba(253, 251, 247, 0.10)',
-                WebkitBackdropFilter: 'blur(18px) saturate(160%)',
-                backdropFilter: 'blur(18px) saturate(160%)',
-                border: '1px solid rgba(212, 184, 150, 0.55)',
-                boxShadow:
-                  'inset 0 1px 0 rgba(255,255,255,0.18), 0 14px 36px rgba(0,0,0,0.42), 0 0 0 1px rgba(226,201,160,0.18)',
-              }}
-            >
-              {pillars.map((pillar, idx) => (
-                <div
-                  key={pillar.title}
-                  className="relative p-2.5 sm:p-3 md:p-4 lg:p-5 text-center"
-                >
-                  {/* Gold hairline divider between pillars */}
-                  {idx > 0 && (
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute left-0 top-3 bottom-3 w-px"
-                      style={{
-                        background:
-                          'linear-gradient(to bottom, transparent 0%, rgba(212,184,150,0.15) 15%, rgba(226,201,160,0.85) 50%, rgba(212,184,150,0.15) 85%, transparent 100%)',
-                      }}
-                    />
-                  )}
-                  <pillar.icon
-                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 mx-auto mb-1.5 md:mb-2"
-                    style={{ color: '#E2C9A0', filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.6))' }}
-                  />
-                  <h3
-                    className="text-[11px] sm:text-[12px] md:text-[13px] lg:text-sm font-bold mb-0.5 md:mb-1 leading-tight"
-                    style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: '0 1px 3px rgba(0,0,0,0.85)' }}
-                  >
-                    {pillar.title}
-                  </h3>
-                  <p
-                    className="text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs leading-tight"
-                    style={{ color: 'rgba(255,255,255,0.92)', WebkitTextFillColor: 'rgba(255,255,255,0.92)', textShadow: '0 1px 3px rgba(0,0,0,0.85)' }}
-                  >
-                    {pillar.desc}
-                  </p>
-                </div>
-              ))}
+            {/* Premium property search bar — replaces former three pillar cards */}
+            <motion.div variants={fadeInUp} className="w-full">
+              <HeroPropertySearch />
             </motion.div>
 
 
