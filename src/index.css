@@ -182,7 +182,7 @@ All colors MUST be HSL.
     --gold-light: 40 38% 62%;
     --gold-dark: 36 40% 40%;         /* #A68444 */
     --gold-muted: 33 30% 55%;
-    --gold-foreground: 0 0% 100%;
+    --gold-foreground: 0 0% 10%;
 
     /* Premium Orange — property prices (unchanged) */
     --price-orange: 24 95% 53%;
@@ -2693,12 +2693,12 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   color: #FFFFFF;
 }
 
-/* 2. Icons on SOLID-gold tiles → white. Same exact-token logic as above so
+/* 2. Icons on SOLID-gold tiles → ink. Same exact-token logic as above so
    translucent gold tiles (bg-[#B89555]/10, /15…) keep their authored gold icon. */
 [class~="bg-[#B89555]"] > svg,
 [class~="bg-[#A68444]"] > svg,
 [class~="bg-[#C8A766]"] > svg {
-  color: #FFFFFF;
+  color: #1A1A1A;
 }
 
 /* 3. Faded gold text on default (champagne) surface → solid ink.
