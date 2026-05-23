@@ -1158,36 +1158,39 @@ All colors MUST be HSL.
 
 /* Layer 2 wrapper with proper gutters */
   .jj-layer-2 {
-    @apply jj-section-gutter rounded-2xl border border-gray-200 p-2 sm:p-3 md:p-4 lg:p-6;
-    background: #FFFFFF;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    @apply jj-section-gutter rounded-2xl p-2 sm:p-3 md:p-4 lg:p-6;
+    background: #F7F2EA;
+    border: 1px solid rgba(184, 149, 85, 0.30); /* champagne-gold hairline */
+    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.04);
   }
 
 /* Layer 3 - Inner content cards */
   .jj-card-inner {
-    @apply rounded-xl border border-gray-200 p-6;
-    background: #FFFFFF;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    @apply rounded-xl p-6;
+    background: #FDFBF7;
+    border: 1px solid rgba(184, 149, 85, 0.30);
+    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.04);
     transition: all 0.3s ease;
   }
 
   .jj-card-inner:hover {
-    @apply border-gray-300;
+    border-color: rgba(184, 149, 85, 0.60);
     transform: translateY(-3px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 32px rgba(26, 26, 26, 0.08);
   }
 
   .jj-box-active {
-    @apply rounded-xl border border-gray-200 p-6;
-    background: #FFFFFF;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    @apply rounded-xl p-6;
+    background: #FDFBF7;
+    border: 1px solid rgba(184, 149, 85, 0.30);
+    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.04);
     transition: all 0.3s ease;
   }
 
   .jj-box-active:hover {
-    @apply border-gray-300;
+    border-color: rgba(184, 149, 85, 0.60);
     transform: translateY(-3px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 32px rgba(26, 26, 26, 0.08);
   }
 
 /* Icon box - grayscale */
