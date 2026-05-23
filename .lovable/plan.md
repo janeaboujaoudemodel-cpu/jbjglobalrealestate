@@ -1,146 +1,64 @@
-## Goal
-One unified "List Your Property" page (manual + AI), a clean approval pipeline visible to the user in their dashboard, and cleaned-up Guides/FAQ sections. Remove duplicates, fix routing, fix SEO.
 
-## Current state (audit)
+## 1. Remove "Partners" section from vertical sidebar
 
-**Sell / List pages — 5 overlapping routes today**
-| Route | File | Role |
-|---|---|---|
-| `/sell` | `SellWithUs.tsx` | Marketing: "who we support", "selling process" + quick valuation + quick lead form |
-| `/listing-portal` | `ListingPortal.tsx` | Browse approved listings + picker (Manual vs AI) → forks to one of the two below |
-| `/seller-listing` | `SellerListing.tsx` | Manual 7-step wizard |
-| `/listing-portal/submit` | `ListingPortalSubmit.tsx` | AI upload + extract + edit + submit |
-| `/listing-portal/my-listings` | `ListingPortalMyListings.tsx` | User's submitted listings + approval status |
-| `/property-management/list` | `LandlordListForm.tsx` | Yet another landlord-only list form |
-| `/list-property` | (linked from `PropertiesVerticalNav` but no route exists — dead link) |
+In `src/components/navigation/GlobalVerticalNav.tsx`:
 
-**Tools that wrongly live in sell area** (should already be in the vertical tools sidebar):
-`/property-evaluator`, `/rental-index`, `/property-valuation` (via `/sell/valuation`), `/property-measurement`.
+- Delete the `PARTNERS` section entries (lines ~195-200): Partners Hub, Mortgage Partner, Legal Partner, Company Setup Partner, Visa Services.
+- Add `Visa Services` (`/partners/visa-services`) into the `SERVICES` block alongside the existing Company Setup, Law Firm, etc. (Keep the underlying `/partners/*` routes alive so nothing 404s; only the sidebar entry moves.)
+- Remove `'partners'` from the `MegaMenuKey` union, from `MEGA_MENU_GROUPS.partners`, and from `MEGA_MENU_TITLES.partners`.
+- Audit and remove any "Partners" group label / divider rendering tied to the deleted section.
 
-**Guides duplication**
-- `Seller's Guide` AND `Seller Listing Guide` — second is a misclassified form.
-- `Landlord Guide` AND `Landlord Portal` — portal duplicates the dashboard for owners.
+No changes to `MegaMenuPartners` component or `/partners/*` pages themselves — they remain reachable via the header mega menu and direct URLs.
 
-**FAQ duplication**
-Today: FAQ Hub + Investor FAQ + Buyer FAQ + Seller FAQ + Landlord FAQ + Tenant FAQ + Broker FAQ — all 7 listed individually in nav and footer.
+## 2. Post-registration Partner CTA on hero
 
-## Target structure
+Only for users who have registered as a partner (any row in the partner-registration tables), render a slim CTA band directly under the hero on the home page:
 
-### 1. Single listing page — `/list-property` (canonical)
-Merges SellWithUs + ListingPortal + SellerListing + ListingPortalSubmit + LandlordListForm into ONE page with three tabs:
+> "Get verified — open your Partner Portal" → links to `/partners` (or the specific partner type dashboard if known).
 
-```text
-┌──────────────────────────────────────────────────────────────┐
-│  List Your Property                                           │
-│  One line of trust: "Priority listing with JBJ — 0 fees,      │
-│  premium reach, AI assistance."                               │
-├──────────────────────────────────────────────────────────────┤
-│  Purpose toggle:   [ For Sale ]  [ For Rent ]                 │
-├──────────────────────────────────────────────────────────────┤
-│  Tabs:  ① List Manually   ② List with AI   ③ Browse Listings  │
-├──────────────────────────────────────────────────────────────┤
-│  Tab content (renders the existing wizard / AI flow / grid)   │
-└──────────────────────────────────────────────────────────────┘
-```
+- Add a small `PartnerVerifyHeroCTA` component, gated by a `usePartnerRegistration()` hook that checks the current user against existing partner tables (mortgage / legal / company-setup / visa). If none → render nothing.
+- Mount it under the existing Hero in `src/pages/Index.tsx` (or wherever the home hero lives), above the next section.
 
-- Tab 1 ("List Manually") embeds the `SellerListing` 7-step wizard as a component.
-- Tab 2 ("List with AI") embeds the `ListingPortalSubmit` AI extract flow as a component.
-- Tab 3 ("Browse Listings") embeds the existing approved-listings grid from `ListingPortal`.
-- `purpose=sale|rent` is held in URL params (`?purpose=sale&mode=manual|ai|browse`) so existing deep links keep working.
-- The "Who we support / Selling process built for clarity" sections from `SellWithUs` are removed (single trust line instead, as requested).
+## 3. Merge Broker Education + Broker Training into one page
 
-### 2. Upgrade the seller workflow (manual + AI)
-Add the fields/steps the workflow currently lacks so a property is genuinely submittable end-to-end:
+Keep `JBJ Academy` as its own page (untouched). Merge only `BrokerEducation` (`/broker-education`, 530 lines, public) and `BrokerTraining` (`/broker/training`, 370 lines, auth+broker-gated).
 
-- **Seller details:** full name, phone, email, role (owner / broker / investor / POA), preferred contact, Emirates ID number (optional, for owner verification), POA upload if representative.
-- **Property core:** type, purpose, community/building, unit number, bedrooms, bathrooms, BUA + plot size, view, floor, parking, age, furnishing, availability date, status (vacant/tenanted), current rent if tenanted.
-- **Pricing:** asking price, minimum acceptable price (private), purchase price (private), service charge, mortgaged flag + bank, urgency.
-- **Documents:** title deed (required), passport copy, Emirates ID, mortgage NOC if applicable, floor plan, brochure, OQOOD/Oqood for off-plan.
-- **Media:** drag-and-drop gallery (min 6 photos validated), cover photo selector, optional video / 360 link.
-- **Marketing:** description, key features, amenities checklist, listing fee mode (commission-only vs direct contact AED 199).
-- **Compliance:** RERA permit number (optional), DLD form-A consent checkbox, T&C consent.
-- **AI mode:** upload PDFs/links/screenshots → extract → user reviews/edits the same fields above → submits.
+- New canonical page: `src/pages/broker/BrokerLearning.tsx` at route `/broker/learning`.
+- Layout: premium champagne-gold tabbed page following design system (Inter, IconTile, no gold fills, ink #1A1A1A on champagne):
+  - Hero header with page title + brief intro.
+  - Segmented tab control: **Library** (everything currently in `BrokerEducation` — books, collections, modals) and **Training** (everything in `BrokerTraining` — courses, certification, progress).
+  - The `Training` tab is rendered behind an in-page `AuthRequiredRoute` + `broker` mode check so the public can still browse Library without login; clicking Training prompts login via ActionGate when needed (keeps existing gate behavior, just inlined).
+- Move all sub-components in `src/components/broker-education/*` as-is; no UI/feature removal (per the No-Removal policy).
+- Routing:
+  - Add `/broker/learning` route in `src/routes/PublicRoutes.tsx`.
+  - 301-style redirects: `/broker-education` → `/broker/learning?tab=library`, `/broker/training` → `/broker/learning?tab=training`.
+- Update every internal link to the new URL:
+  - `src/config/mainLayoutRoutes.ts`, `src/config/globalSearchIndex.ts`
+  - `src/components/Footer.tsx`, `src/components/GlobalHeader.tsx`, `src/components/header/MegaMenuBrokerHub.tsx`, `src/components/header/MegaMenuMore.tsx`, `src/components/header/MegaMenuInsights.tsx`
+  - `src/components/navigation/GlobalVerticalNav.tsx`
+  - `src/components/dashboard/QuickActions.tsx`, `src/components/guides/GuideNavigation.tsx`, `src/components/home/DeveloperPortalCTA.tsx`
+  - `src/pages/BrokerHub.tsx`, `src/pages/BrokerPortal.tsx`, `src/pages/BrokerDashboard.tsx`, `src/pages/BrokerPartnerDashboard.tsx`, `src/pages/BrokerFAQ.tsx`, `src/pages/EducationHub.tsx`, `src/pages/AcademyGraduates.tsx`, `src/pages/JBJAcademy.tsx`, `src/pages/owner/OwnerAuditPage.tsx`, `src/pages/Sitemap.tsx`, `src/pages/VerifyCertificate.tsx`
+  - `src/hooks/useBrokerEducation.ts` (any hard-coded paths)
+- SEO:
+  - One `<title>` ≤60 chars, meta description ≤160 chars, single H1, canonical `/broker/learning`, JSON-LD `Course`/`EducationalOrganization`.
+  - Update `public/sitemap.xml` + `scripts/generate-sitemap.ts`: remove `/broker-education` and `/broker/training`, add `/broker/learning`.
+  - Mark related SEO findings fixed after change.
+- Delete (or stub-redirect) the two old page files once all imports point to the new module.
 
-Approval pipeline (already partly in DB via `portal_listings.approval_status`): explicit states `draft → submitted → in_review → needs_info → approved → published → rejected` with admin notes surfaced to the user.
+## 4. Mirror header Account shortcuts under sidebar "My Account"
 
-### 3. My Listings → user dashboard (not in main nav)
-- Move `/listing-portal/my-listings` into the user dashboard as a section: `/dashboard/my-listings` (and keep the old route as a 301 redirect).
-- Card per listing showing: thumbnail, title, current `approval_status` chip, last update, admin notes, `Edit / Withdraw / View public` actions.
-- Visible status timeline: Submitted → In Review → Approved → Published, plus messages from admin.
-- Remove "My Listings" from `GlobalVerticalNav` (it does NOT belong in global nav).
-- Remove "Landlord Portal" route — landlord features available inside the same dashboard for any user who has a rental listing.
+Source of truth: `src/components/header/MegaMenuAccount.tsx` (rendered when user opens the profile dropdown in the horizontal header).
 
-### 4. Tools — move into the tools vertical sidebar only
-Remove from sell area; keep only inside `AI Tools` / toolkit vertical sidebar:
-- Property Evaluator
-- Rental Index
-- Property Valuation (currently `/sell/valuation` → keep route but link only from tools)
-- Property Measurement
+- Extract the canonical account-shortcut list from `MegaMenuAccount.tsx` into a single shared module: `src/config/accountShortcuts.ts` (label, icon, href, optional role gate).
+- Refactor both `MegaMenuAccount.tsx` and the `account` mega-menu group in `GlobalVerticalNav.tsx` (lines ~503-511) to render from this shared config so they stay in lockstep — header dropdown and sidebar "My Account" expose the exact same shortcuts in the same order.
+- "My Dashboard" stays the primary entry and continues to deep-link into the main dashboard (already wired).
 
-### 5. Guides — dedupe
-- Remove "Seller Listing Guide" (it was a form, not a guide — redirect `/seller-listing` to `/list-property?mode=manual`).
-- Remove "Landlord Portal" link from Guides nav.
-- Keep: Buyer's Guide, Seller's Guide, Tenant's Guide, Landlord Guide, Rental Guide, Golden Visa Guide.
+## Technical details
 
-### 6. FAQs — collapse to a single hub entry
-- Nav (both global + footer) shows ONLY: **FAQ Hub** (`/faq`).
-- `/faq` hub page lists categories: Buyer FAQ, Seller FAQ, Landlord FAQ, Tenant FAQ, Broker FAQ (kept). Clicking each opens its existing page.
-- **Remove Investor FAQ entirely** (delete route + page + nav/footer links).
-- Update `Footer.tsx` and `GlobalVerticalNav.tsx` accordingly.
-
-### 7. Routing + redirects + SEO
-Old → New 301 redirects (so existing inbound links + search index don't break):
-
-| Old | New |
-|---|---|
-| `/sell` | `/list-property?purpose=sale` |
-| `/listing-portal` | `/list-property?mode=browse` |
-| `/listing-portal/submit` | `/list-property?mode=ai` |
-| `/listing-portal/my-listings` | `/dashboard/my-listings` |
-| `/seller-listing` | `/list-property?mode=manual` |
-| `/property-management/list` | `/list-property?purpose=rent&mode=manual` |
-| `/landlord-portal` | `/dashboard/my-listings` |
-| `/investor-faq` | `/faq` |
-
-SEO:
-- Single canonical for `/list-property` with proper `<title>`, `<meta description>`, OG tags, and `RealEstateAgent` + `WebPage` JSON-LD.
-- Update `public/sitemap.xml` and `scripts/generate-sitemap.ts` to add `/list-property`, remove the merged duplicates.
-- Rescan via SEO tool after merge.
-
-### 8. Nav cleanup (`GlobalVerticalNav.tsx`, `PropertiesVerticalNav.tsx`, `Footer.tsx`)
-- Replace every link to `/sell`, `/listing-portal`, `/listing-portal/submit`, `/seller-listing`, `/property-management/list`, `/landlord-portal`, `/list-property` (dead) with single canonical `/list-property`.
-- Drop "Submit Listing" + "My Listings" + "Sell With Us" + "Property Valuation/Selling Advisory" from generic nav (advisory keeps a `/services/selling-advisory` link only inside Services).
-- Replace 7 FAQ links with 1 "FAQ Hub" link.
-
-## Files to add / change
-
-**Add**
-- `src/pages/ListProperty.tsx` — new unified page (purpose + mode tabs).
-- `src/components/list-property/ManualWizard.tsx` — `SellerListing` content extracted as embeddable component, with the new/enhanced fields.
-- `src/components/list-property/AIWizard.tsx` — `ListingPortalSubmit` content as embeddable component, same expanded field set.
-- `src/components/list-property/BrowseListings.tsx` — `ListingPortal` grid as embeddable component.
-- `src/components/dashboard/MyListingsPanel.tsx` — dashboard widget with status timeline.
-
-**Edit**
-- `src/routes/PublicRoutes.tsx` — add `/list-property`, add all 301 `<Navigate>` redirects, remove `LandlordRentalPortal`, `InvestorFAQ` routes.
-- `src/components/navigation/GlobalVerticalNav.tsx` — collapse sell/list/FAQ items.
-- `src/components/navigation/PropertiesVerticalNav.tsx` — same.
-- `src/components/Footer.tsx` — same.
-- `src/pages/Dashboard.tsx` (or `MyDashboard.tsx`) — mount `MyListingsPanel`.
-- `public/sitemap.xml` + `scripts/generate-sitemap.ts`.
-
-**Schema (one small migration)**
-Add the few missing columns to `portal_listings` that the upgraded form captures but the table lacks: `unit_number text`, `plot_size_sqft numeric`, `view text`, `floor text`, `parking integer`, `property_age integer`, `availability_date date`, `current_rent numeric`, `min_acceptable_price numeric`, `purchase_price numeric`, `service_charge numeric`, `is_mortgaged boolean`, `mortgage_bank text`, `rera_permit text`, `cover_image_url text`, `video_url text`, `tour_url text`, `dld_consent_at timestamptz`, `tnc_consent_at timestamptz`. (RLS already in place — no policy changes needed.)
-
-**Delete / deprecate** (kept on disk as thin redirects only)
-- Logic-wise: `SellWithUs.tsx`, `ListingPortal.tsx`, `ListingPortalSubmit.tsx`, `SellerListing.tsx`, `LandlordListForm.tsx`, `LandlordRentalPortal.tsx`, `InvestorFAQ.tsx` no longer reachable from nav. We keep the underlying wizard/AI logic by extracting into the new components above; the page files themselves can be deleted in a follow-up after we confirm nothing else imports them.
-
-## Acceptance checklist
-- One canonical `/list-property` page with purpose toggle + 3 tabs that work.
-- Manual + AI flows submit into `portal_listings` with all upgraded fields.
-- A submitted listing immediately shows in the user's dashboard with live status (Submitted → Review → Approved → Published).
-- Admin approval page (`/admin/listings-approval`) sees the new fields and approves to publish.
-- All redirects in section 7 land on the right place.
-- Nav (global + properties + footer) has no duplicates; FAQ collapsed to single hub link.
-- Investor FAQ + Landlord Portal removed everywhere.
-- Sitemap + SEO scan clean.
+- Files created: `src/pages/broker/BrokerLearning.tsx`, `src/components/home/PartnerVerifyHeroCTA.tsx`, `src/hooks/usePartnerRegistration.ts`, `src/config/accountShortcuts.ts`.
+- Files edited (high level): `GlobalVerticalNav.tsx`, `MegaMenuAccount.tsx`, `PublicRoutes.tsx`, `Footer.tsx`, `GlobalHeader.tsx`, broker mega-menu + dashboard links listed above, `sitemap.xml`, `generate-sitemap.ts`, `Index.tsx`.
+- Files removed (after link sweep): `src/pages/BrokerEducation.tsx`, `src/pages/broker/BrokerTraining.tsx` — replaced by redirects to `/broker/learning`.
+- DB: none. No schema changes.
+- Strictly UI/navigation/routing changes; no business-logic edits.
+- Follows the No-Removal Policy: every existing feature from both pages is preserved inside the new tabbed page; old URLs redirect, never 404.
+- Verification: `npm run build` (auto), spot-check the four flows — sidebar has no Partners, Services lists Visa Services, `/broker-education` and `/broker/training` redirect to the merged page with the right tab pre-selected, header dropdown + sidebar My Account render the same list.
