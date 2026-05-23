@@ -316,22 +316,27 @@ const Index = () => {
                   textShadow: '0 1px 4px rgba(0,0,0,0.55)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(253, 251, 247, 0.22)';
-                  e.currentTarget.style.borderColor = '#E2C9A0';
-                  e.currentTarget.style.boxShadow =
-                    'inset 0 1px 0 rgba(255,255,255,0.30), 0 0 0 1px rgba(226,201,160,0.65), 0 18px 40px rgba(0,0,0,0.45), 0 0 28px rgba(226,201,160,0.28)';
+                  const t = e.currentTarget;
+                  t.style.background = '#EFE6D6';
+                  t.style.color = '#1A1A1A';
+                  t.style.borderColor = '#B89555';
+                  t.style.boxShadow =
+                    'inset 1px 1px 0 rgba(255,255,255,0.55), 1px 0 0 1px rgba(184,149,85,0.55), 0 18px 44px rgba(0,1,0,0.28), 0 0 32px rgba(184,149,85,0.25)';
+                  t.style.textShadow = 'none';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(253, 251, 247, 0.12)';
-                  e.currentTarget.style.borderColor = '#D4B896';
-                  e.currentTarget.style.boxShadow =
+                  const t = e.currentTarget;
+                  t.style.background = 'rgba(253, 251, 247, 0.12)';
+                  t.style.color = '#FDFBF7';
+                  t.style.borderColor = '#D4B896';
+                  t.style.boxShadow =
                     'inset 0 1px 0 rgba(255,255,255,0.22), 0 0 0 1px rgba(212,184,150,0.35), 0 14px 34px rgba(0,0,0,0.40), 0 0 22px rgba(226,201,160,0.18)';
+                  t.style.textShadow = '0 1px 4px rgba(0,0,0,0.55)';
                 }}
               >
                 <span>Book a Free Consultation</span>
                 <ArrowUpRight
-                  className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  style={{ color: '#E2C9A0' }}
+                  className="h-4 w-4 text-[#E2C9A0] transition-all duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#B89555]"
                   strokeWidth={2.25}
                 />
               </button>
