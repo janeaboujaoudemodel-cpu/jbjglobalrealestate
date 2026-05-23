@@ -1009,7 +1009,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <Link
                     key={link.href + link.label}
                     to={link.href}
-                    onClick={closeMegaMenu}
+                    onClick={collapseAfterNavigation}
                     className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all break-inside-avoid border mb-1 ${
                       linkActive
                         ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-[#B89555] shadow-sm"
@@ -1141,7 +1141,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             onClick={(e) => {
                               // Never open the full-screen mega drop-down overlay from inside
                               // an expanded section — just navigate.
-                              handleNavClick(undefined);
+                              collapseAfterNavigation();
                               if (sectionKey === 'MY ACCOUNT') {
                                 setOpenSection(null);
                               }
