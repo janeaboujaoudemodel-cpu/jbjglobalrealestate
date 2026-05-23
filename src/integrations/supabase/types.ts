@@ -37206,6 +37206,7 @@ export type Database = {
         Args: { _team_id: string; _user_id: string }
         Returns: boolean
       }
+      is_valid_image_url: { Args: { u: string }; Returns: boolean }
       link_broker_entity_by_email: { Args: never; Returns: string }
       log_chat_message: {
         Args: {
