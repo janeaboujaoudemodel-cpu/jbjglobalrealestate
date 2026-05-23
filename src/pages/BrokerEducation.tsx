@@ -143,9 +143,8 @@ const BrokerEducation = () => {
               }}
               variants={fadeInUp}
             >
-              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-pulse" />
-              <GraduationCap className="w-4 h-4 text-[#1A1A1A]" />
-              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-widest">Broker Education</span>
+              <GraduationCap className="w-4 h-4 text-[#B89555]" />
+              <span className="text-[#B89555] font-semibold text-xs uppercase tracking-widest">Broker Education</span>
             </motion.div>
             
             <motion.h1 

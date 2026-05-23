@@ -173,8 +173,7 @@ const BrokerResources = () => {
               }}
               variants={fadeInUp}
             >
-              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-pulse" />
-              <span className="text-[#1A1A1A] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Broker Resources</span>
+              <span className="text-[#B89555] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Broker Resources</span>
             </motion.div>
             
             <motion.h1 

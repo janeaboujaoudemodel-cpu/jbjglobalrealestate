@@ -120,8 +120,7 @@ const DesignBuild = () => {
                 boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
               }}
             >
-              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-pulse" />
-              <span className="text-[#1A1A1A] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Through Our Licensed Partners</span>
+              <span className="text-[#B89555] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Through Our Licensed Partners</span>
             </button>
           </motion.div>
 

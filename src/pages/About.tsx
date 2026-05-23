@@ -149,8 +149,7 @@ const About = () => {
               }}
               variants={fadeInUp}
             >
-              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-pulse" />
-              <span className="text-[#1A1A1A] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">About JBJ Global Real Estate</span>
+              <span className="text-[#B89555] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">About JBJ Global Real Estate</span>
             </motion.button>
             <motion.h1 
               className="text-white text-[36px] md:text-[48px] lg:text-[58px] font-semibold mb-6 leading-tight"
