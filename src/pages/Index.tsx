@@ -70,6 +70,7 @@ import { SectionDivider } from "@/components/ui/section-divider";
 const VoiceConciergeWidget = lazy(() => import("@/components/VoiceConciergeWidget"));
 
 const VerificationBanner = lazy(() => import("@/components/verification/VerificationBanner"));
+const PartnerVerifyHeroCTA = lazy(() => import("@/components/home/PartnerVerifyHeroCTA"));
 
 const SectionLoader = forwardRef<HTMLDivElement>((_, ref) => (
   <div ref={ref} className="py-12 flex items-center justify-center">
@@ -445,6 +446,12 @@ const Index = () => {
       <Suspense fallback={null}>
         <VerificationBanner />
       </Suspense>
+
+      {/* PARTNER VERIFY CTA — only shown to registered partners */}
+      <Suspense fallback={null}>
+        <PartnerVerifyHeroCTA />
+      </Suspense>
+
 
       {/* DEVELOPER PORTAL CTA */}
       <div className="cv-auto">

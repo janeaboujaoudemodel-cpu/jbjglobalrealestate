@@ -31,6 +31,7 @@ import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
+import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
@@ -51,7 +52,7 @@ type MegaMenuKey =
   | 'buy' | 'sell' | 'rent' | 'developers' | 'areas'
   | 'insights' | 'ai-tools' | 'creative' | 'shortcuts'
   | 'services' | 'company' | 'legal' | 'guides'
-  | 'partners' | 'broker' | 'investor' | 'productivity' | 'account' | 'suites';
+  | 'broker' | 'investor' | 'productivity' | 'account' | 'suites';
 
 interface NavItem {
   label: string;
@@ -159,7 +160,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Tenant Guide", href: "/tenant-guide", icon: FileText },
   { label: "Landlord Guide", href: "/landlord-guide", icon: FileText },
   { label: "Investor Education", href: "/investor-education", icon: GraduationCap },
-  { label: "Broker Education", href: "/broker-education", icon: GraduationCap },
+  { label: "Broker Learning", href: "/broker/learning", icon: GraduationCap },
   { label: "Golden Visa Guide", href: "/guides/golden-visa-uae", icon: Award },
   { label: "Books Library", href: "/education-hub", icon: BookMarked },
   { label: "FAQ Hub", href: "/faq", icon: HelpCircle },
@@ -169,11 +170,13 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Property Management", href: "/services/property-management", icon: Key },
   { label: "Golden Visa", href: "/guides/golden-visa-uae", icon: Award },
   { label: "Mortgage Advisory", href: "/partners/mortgage", icon: Landmark },
+  { label: "Legal Services", href: "/partners/legal", icon: Gavel },
+  { label: "Visa Services", href: "/partners/visa-services", icon: Globe },
+  { label: "Company Setup", href: "/partners/company-setup", icon: Building },
   { label: "Valuation", href: "/sell/valuation", icon: DollarSign },
   { label: "Selling Advisory", href: "/services/selling-advisory", icon: TrendingUp },
   { label: "Short-term Rentals", href: "/services/short-term-rentals", icon: CalendarClock },
   { label: "Concierge", href: "/services/concierge", icon: Handshake },
-  { label: "Company Setup", href: "/services/company-setup", icon: Building },
   { label: "Architecture", href: "/services/architecture", icon: HardHat },
   { label: "Interior Design", href: "/services/interior-design", icon: PaintBucket },
   { label: "Fit-Out", href: "/services/fit-out", icon: Hammer },
@@ -192,24 +195,16 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Testimonials", href: "/services/testimonials", icon: Heart },
   { label: "Referral Partner", href: "/referral-partner", icon: Handshake },
 
-  // ── Partners ──
-  { label: "Partners Hub", href: "/partners", icon: Handshake, section: "PARTNERS", megaMenu: 'partners' },
-  { label: "Mortgage Partner", href: "/partners/mortgage", icon: Landmark },
-  { label: "Legal Partner", href: "/partners/legal", icon: Gavel },
-  { label: "Company Setup Partner", href: "/partners/company-setup", icon: Building },
-  { label: "Visa Services", href: "/partners/visa-services", icon: Globe },
-
   // ── Broker & Academy ──
   { label: "Broker Portal", href: "/broker-portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY", megaMenu: 'broker' },
   { label: "Broker Toolkit", href: "/broker-toolkit", icon: Wrench },
   { label: "Broker Resources", href: "/broker-resources", icon: FolderOpen },
-  { label: "Broker Training", href: "/broker/training", icon: GraduationCap },
+  { label: "Broker Learning", href: "/broker/learning", icon: GraduationCap },
   { label: "Broker Hub", href: "/broker-hub", icon: Compass },
   // Note: "Broker Dashboard" removed from this section — it's the user's personal dashboard, not a broker-only tool.
   { label: "JBJ Academy", href: "/jbj-academy", icon: GraduationCap },
   { label: "Academy Graduates", href: "/academy/graduates", icon: Award },
   { label: "AI Broker Workspace", href: "/ai-broker-workspace", icon: Bot },
-  { label: "Broker Education", href: "/broker-education", icon: BookOpen },
 
   // ── Investor ──
   { label: "Investor Hub", href: "/investor-hub", icon: TrendingUp, section: "INVESTOR", megaMenu: 'investor' },
@@ -378,7 +373,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Market Report', icon: FileText, href: '/market-report' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
-    { label: 'Broker Education', icon: BookOpen, href: '/broker-education' },
+    { label: 'Broker Learning', icon: BookOpen, href: '/broker/learning' },
   ],
   guides: [
     { label: 'Buyer Guide', icon: FileText, href: '/buyer-guide' },
@@ -387,7 +382,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Tenant Guide", icon: FileText, href: '/tenant-guide' },
     { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
-    { label: 'Broker Education', icon: BookOpen, href: '/broker-education' },
+    { label: 'Broker Learning', icon: BookOpen, href: '/broker/learning' },
     { label: 'Golden Visa Guide', icon: Award, href: '/guides/golden-visa-uae' },
     { label: 'Books Library', icon: BookMarked, href: '/education-hub' },
   ],
@@ -465,23 +460,15 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Favorites', icon: Heart, href: '/favorites' },
     { label: 'AI History', icon: Bot, href: '/my-ai-history' },
   ],
-  partners: [
-    { label: 'Partners Hub', icon: Handshake, href: '/partners' },
-    { label: 'Mortgage Partner', icon: Landmark, href: '/partners/mortgage' },
-    { label: 'Legal Partner', icon: Gavel, href: '/partners/legal' },
-    { label: 'Company Setup', icon: Building, href: '/partners/company-setup' },
-    { label: 'Visa Services', icon: Globe, href: '/partners/visa-services' },
-  ],
   broker: [
     { label: 'Broker Portal', icon: BriefcaseIcon, href: '/broker-portal' },
     { label: 'Broker Toolkit', icon: Wrench, href: '/broker-toolkit' },
-    { label: 'Broker Training', icon: GraduationCap, href: '/broker/training' },
+    { label: 'Broker Learning', icon: GraduationCap, href: '/broker/learning' },
     { label: 'JBJ Academy', icon: GraduationCap, href: '/jbj-academy' },
     { label: 'Academy Graduates', icon: Award, href: '/academy/graduates' },
     { label: 'Broker Dashboard', icon: LayoutDashboard, href: '/broker-dashboard' },
     { label: 'Broker Resources', icon: FolderOpen, href: '/broker-resources' },
     { label: 'AI Broker Workspace', icon: Bot, href: '/ai-broker-workspace' },
-    { label: 'Broker Education', icon: BookOpen, href: '/broker-education' },
   ],
   investor: [
     { label: 'Investor Hub', icon: TrendingUp, href: '/investor-hub' },
@@ -500,15 +487,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Meeting Center', icon: Users, href: '/meeting-center' },
     { label: 'Client Portal', icon: Users, href: '/client-portal' },
   ],
-  account: [
-    { label: 'My Dashboard', icon: LayoutDashboard, href: '/my-dashboard' },
-    { label: 'My Profile', icon: User, href: '/profile' },
-    { label: 'Favorites', icon: Heart, href: '/favorites' },
-    { label: 'Compare', icon: GitCompare, href: '/compare' },
-    { label: 'My Tickets', icon: Ticket, href: '/my-tickets' },
-    { label: 'Ticket Hub', icon: Ticket, href: '/ticket-hub' },
-    { label: 'Settings', icon: Settings, href: '/profile?tab=settings' },
-  ],
+  account: ACCOUNT_SHORTCUTS_SIDEBAR.map(s => ({ label: s.label, icon: s.icon, href: s.href })),
   suites: [
     { label: 'Suites Hub', icon: Boxes, href: '/suites' },
     { label: 'All Tools Suite', icon: Package, href: '/business-suite/all' },
@@ -533,7 +512,6 @@ const MEGA_MENU_TITLES: Record<MegaMenuKey, string> = {
   company: 'Company',
   legal: 'Legal & Compliance',
   guides: 'Guides & Education',
-  partners: 'Partners',
   broker: 'Broker & Academy',
   investor: 'Investor Hub',
   productivity: 'Productivity',
@@ -552,7 +530,6 @@ const SECTION_KEYS = [
   "PROPERTIES",
   "INSIGHTS & GUIDES",
   "SERVICES",
-  "PARTNERS",
   "BROKER & ACADEMY",
   "INVESTOR",
   "COMPANY & LEGAL",
@@ -570,7 +547,6 @@ const SECTION_ALIAS: Record<string, SectionKey> = {
   "INSIGHTS": "INSIGHTS & GUIDES",
   "GUIDES": "INSIGHTS & GUIDES",
   "SERVICES": "SERVICES",
-  "PARTNERS": "PARTNERS",
   "BROKER & ACADEMY": "BROKER & ACADEMY",
   "INVESTOR": "INVESTOR",
   "COMPANY": "COMPANY & LEGAL",
@@ -585,7 +561,6 @@ const SECTION_ICONS: Record<SectionKey, any> = {
   "PROPERTIES": Building2,
   "INSIGHTS & GUIDES": Lightbulb,
   "SERVICES": Briefcase,
-  "PARTNERS": Handshake,
   "BROKER & ACADEMY": GraduationCap,
   "INVESTOR": TrendingUp,
   "COMPANY & LEGAL": Users,
