@@ -11,6 +11,7 @@ import { useUserModeContext } from "@/contexts/UserModeContext";
 
 
 import { Button } from "@/components/ui/button";
+import { PearlButton } from "@/components/ui/pearl-button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
