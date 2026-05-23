@@ -13,7 +13,7 @@ type MegaMenuKey = 'buy' | 'sell' | 'rent' | 'projects' | 'developers' | 'areas'
 const NAV_ITEMS = [
   { label: "Off-plan", href: "/properties", icon: Building2 },
   { label: "Buy", href: "/buy", icon: Home, megaMenu: 'buy' as MegaMenuKey },
-  { label: "Sell", href: "/sell", icon: Tag, megaMenu: 'sell' as MegaMenuKey },
+  { label: "Sell or Rent", href: "/list-property", icon: Tag },
   { label: "Rent", href: "/rent", icon: Key, megaMenu: 'rent' as MegaMenuKey },
   { label: "List Property", href: "/list-property", icon: PlusCircle },
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' as MegaMenuKey },

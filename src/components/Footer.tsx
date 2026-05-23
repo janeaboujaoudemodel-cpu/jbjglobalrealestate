@@ -182,7 +182,7 @@ const Footer = () => {
     { label: t("footer.rentProperties") || "Rent Properties", href: "/properties?transaction=rent" },
     { label: "Projects", href: "/properties" },
     { label: "Developers", href: "/developers" },
-    { label: t("footer.listYourProperty") || "List Your Property", href: "/listing-portal" },
+    { label: t("footer.listYourProperty") || "List Your Property", href: "/list-property" },
     { label: "Communities", href: "/communities" },
     { label: "Resale Properties", href: "/properties?transaction=resale" },
     { label: "Property Map", href: "/map" },
@@ -192,7 +192,7 @@ const Footer = () => {
   ];
 
   const sellLinks = [
-    { label: "Sell Your Property", href: "/listing-portal" },
+    { label: "Sell Your Property", href: "/list-property" },
     { label: t("footer.sellerGuide") || "Seller's Guide", href: "/seller-guide" },
     { label: "Property Valuation", href: "/sell/valuation" },
     { label: "Selling Advisory", href: "/services/selling-advisory" },
@@ -286,7 +286,7 @@ const Footer = () => {
     { href: "/academy/graduates", label: "Academy Graduates" },
     { href: "/broker-education", label: "Broker Education" },
     { href: "/broker-resources", label: "Broker Resources" },
-    { href: "/listing-portal", label: "Listing Portal" },
+    { href: "/list-property", label: "Listing Portal" },
     { href: "/broker/training", label: "Broker Training" },
     { href: "/broker-hub", label: "Broker Hub" },
     { href: "/broker-dashboard", label: "Broker Dashboard" },
@@ -409,7 +409,7 @@ const Footer = () => {
     { label: "Developers", href: "/developers" },
     { label: "Communities", href: "/communities" },
     { label: "Property Map", href: "/map" },
-    { label: "List Your Property", href: "/listing-portal" },
+    { label: "List Your Property", href: "/list-property" },
   ];
 
   const colServices = [
