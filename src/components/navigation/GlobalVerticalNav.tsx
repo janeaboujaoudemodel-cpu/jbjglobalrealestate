@@ -67,25 +67,20 @@ const NAV_ITEMS: NavItem[] = [
   // ── Highlighted Hubs ──
   
   { label: "AI Home Finder", href: "/quiz", icon: Home, highlight: true },
-  { label: "List Your Property", href: "/listing-portal", icon: ClipboardCheck, highlight: true },
+  { label: "List Your Property", href: "/list-property", icon: ClipboardCheck, highlight: true },
   { label: "Careers", href: "/join", icon: GraduationCap, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
 
   // ── Properties ──
   { label: "Buy / Off-Plan", href: "/properties", icon: Building2, section: "PROPERTIES", megaMenu: 'buy' },
   { label: "All Projects", href: "/properties", icon: Building },
-  { label: "Sell", href: "/sell", icon: Tag, megaMenu: 'sell' },
-  { label: "Rent", href: "/rent", icon: Key, megaMenu: 'rent' },
-  { label: "List for Sale / Rent", href: "/listing-portal", icon: PlusCircle },
+  { label: "List for Sale / Rent", href: "/list-property", icon: PlusCircle },
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' },
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' },
   { label: "Communities", href: "/communities", icon: Users },
   { label: "Map", href: "/map", icon: MapPin },
-  { label: "Submit Listing", href: "/listing-portal/submit", icon: FilePlus },
-  { label: "My Listings", href: "/listing-portal/my-listings", icon: FolderOpen },
   { label: "Property Evaluator", href: "/property-evaluator", icon: BarChart3 },
   { label: "Rental Index", href: "/rental-index", icon: TrendingUp },
-  { label: "Sell With Us", href: "/sell", icon: Tag },
   { label: "Property Valuation", href: "/sell/valuation", icon: DollarSign },
   { label: "Property Measurement", href: "/property-measurement", icon: Ruler },
 
