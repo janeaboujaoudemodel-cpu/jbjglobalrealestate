@@ -330,8 +330,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               );
             })()}
 
-            {/* Payment Plan — always rendered (N/A fallback) to keep cards aligned */}
-            <PaymentPlanLine project={project as any} />
+            {/* Payment Plan removed from cards — shown only on details page */}
 
             {project.developer && (
               <DeveloperLink
