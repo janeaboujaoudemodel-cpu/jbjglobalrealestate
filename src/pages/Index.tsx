@@ -274,12 +274,12 @@ const Index = () => {
             >
               <div
                 className="
-                  hidden md:flex items-center gap-1.5 sm:gap-2
-                  flex-nowrap sm:flex-wrap
-                  justify-start sm:justify-center
-                  overflow-x-auto sm:overflow-visible
+                  flex items-center gap-1.5 sm:gap-2
+                  flex-nowrap
+                  justify-start md:justify-center
+                  overflow-x-auto
                   px-3 sm:px-0 -mx-3 sm:mx-0
-                  snap-x snap-mandatory sm:snap-none
+                  snap-x snap-mandatory md:snap-none
                   [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
                 "
               >
