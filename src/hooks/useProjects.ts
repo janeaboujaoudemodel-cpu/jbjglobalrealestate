@@ -480,6 +480,9 @@ export function useProjectsByCommunity(communitySlug: string) {
           documents:project_documents(id, document_type, file_url, file_name, display_order)
         `)
         .eq("community.slug", communitySlug)
+        .eq("is_published", true)
+        .not("cover_image_url", "is", null)
+        .neq("cover_image_url", "")
         .order("created_at", { ascending: false });
       
       if (error) throw error;
@@ -503,6 +506,9 @@ export function useProjectsByDeveloper(developerSlug: string) {
           documents:project_documents(id, document_type, file_url, file_name, display_order)
         `)
         .eq("developer.slug", developerSlug)
+        .eq("is_published", true)
+        .not("cover_image_url", "is", null)
+        .neq("cover_image_url", "")
         .order("created_at", { ascending: false });
       
       if (error) throw error;
