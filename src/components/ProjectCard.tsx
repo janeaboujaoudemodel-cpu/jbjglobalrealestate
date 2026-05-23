@@ -316,15 +316,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             )}
           </div>
 
-          {/* Description */}
-          <p className="text-[#1A1A1A] text-sm leading-relaxed line-clamp-3 overflow-hidden">
-
-            {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-            <span className="text-[#B89555] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
-              ...more
-            </span>
-          </p>
-
           {project.developer && (
             <DeveloperLink
               name={project.developer.name}
@@ -333,6 +324,15 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               showPrefix={true}
             />
           )}
+
+          {/* Description */}
+          <p className="text-[#1A1A1A] text-sm leading-relaxed line-clamp-3 overflow-hidden">
+
+            {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
+            <span className="text-[#B89555] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
+              ...more
+            </span>
+          </p>
 
           {/* Premium full-width divider — directly after developer name, before handover */}
           <div className="w-full border-t border-[#B89555]/45" />
