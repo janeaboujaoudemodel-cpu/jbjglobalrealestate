@@ -1354,7 +1354,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                         ...item,
                         slug: item.slug,
                         developer_slug: item.developer_id ? developerSlugs[item.developer_id] || null : null,
-                        review_notes: !item.description || item.images.length === 0 || item.developer_name?.toLowerCase() === 'unknown' ? 'INCOMPLETE' : null
+                        review_notes: isReadyToPublish(item) ? null : `PENDING_VERIFICATION:${getImportBlockers(item).join(",")}`
                       }}
                       formatPrice={formatPrice}
                       onReview={() => {
