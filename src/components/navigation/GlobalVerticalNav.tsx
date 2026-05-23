@@ -1126,6 +1126,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               </React.Fragment>
             );
           })}
+          </div>
         </div>
       </nav>
 
