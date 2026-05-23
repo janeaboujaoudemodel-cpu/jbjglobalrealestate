@@ -1192,10 +1192,10 @@ All colors MUST be HSL.
     box-shadow: 0 8px 32px rgba(26, 26, 26, 0.08);
   }
 
-/* Icon box - grayscale */
+/* Icon box - champagne (was #F5F5F5 gray) */
   .jj-icon-box-active {
     @apply rounded-lg flex items-center justify-center border border-[#B89555]/40;
-    background: #F5F5F5;
+    background: #EFE6D6;
   }
 
   .jj-icon-box-active svg {
@@ -1204,7 +1204,7 @@ All colors MUST be HSL.
 
   .jj-icon-box {
     @apply flex items-center justify-center flex-shrink-0 rounded-xl border border-[#B89555]/40;
-    background: #F5F5F5;
+    background: #EFE6D6;
     box-shadow: 0 1px 3px hsl(0 0% 0% / 0.05);
   }
 
@@ -5082,4 +5082,109 @@ hr[data-gold-hairline],
   color: #6B4F1F !important;
   text-decoration-color: #6B4F1F !important;
 }
+
+/* ============================================================
+ * GLOBAL GRAY NEUTRALIZER (FINAL) — light-mode only
+ * Catches every remaining gray utility/literal across the site
+ * and flips it to the champagne/gold palette. Components do not
+ * need to change. Dark surfaces opt out via [data-surface="dark"];
+ * one-offs opt out via [data-no-contrast-guard].
+ * ============================================================ */
+
+/* 1a. EXTENDED background remap — covers shades 400→900 in addition
+ *     to the 50→300 block already declared above. */
+:where(
+  .bg-gray-400, .bg-gray-500, .bg-gray-600, .bg-gray-700, .bg-gray-800,
+  .bg-neutral-400, .bg-neutral-500, .bg-neutral-600, .bg-neutral-700, .bg-neutral-800,
+  .bg-slate-400, .bg-slate-500, .bg-slate-600, .bg-slate-700, .bg-slate-800,
+  .bg-zinc-400, .bg-zinc-500, .bg-zinc-600, .bg-zinc-700, .bg-zinc-800,
+  .bg-stone-400, .bg-stone-500, .bg-stone-600, .bg-stone-700, .bg-stone-800
+):not([data-surface="dark"]):not([data-no-contrast-guard]):not([class*="bg-gradient"]) {
+  background-color: #EFE6D6 !important;
+}
+
+/* 1b. Background opacity variants (e.g. bg-gray-200/50, bg-muted/40) */
+:where([class*="bg-gray-"], [class*="bg-neutral-"], [class*="bg-slate-"], [class*="bg-zinc-"], [class*="bg-stone-"], [class*="bg-muted/"])
+:not([data-surface="dark"]):not([data-no-contrast-guard]):not([class*="bg-gray-9"]):not([class*="bg-neutral-9"]):not([class*="bg-slate-9"]):not([class*="bg-zinc-9"]):not([class*="bg-stone-9"]):not([class*="bg-gradient"]) {
+  background-color: #F7F2EA !important;
+}
+
+/* 2. EXTENDED border remap — shades 800/900 + opacity variants +
+ *    `border-muted`, `border-input`, default `border` already point
+ *    to --border (gold), so this targets explicit gray utilities. */
+:root:not(.dark) :where(
+  .border-gray-800, .border-gray-900,
+  .border-slate-800, .border-slate-900,
+  .border-zinc-800, .border-zinc-900,
+  .border-neutral-800, .border-neutral-900,
+  .border-stone-800, .border-stone-900,
+  [class*="border-gray-"], [class*="border-slate-"], [class*="border-zinc-"],
+  [class*="border-neutral-"], [class*="border-stone-"],
+  .border-muted, [class*="border-muted/"]
+):not([data-surface="dark"]):not([data-no-contrast-guard]) {
+  border-color: rgba(184, 149, 85, 0.40) !important;
+}
+
+/* 3. Divide colour neutralizer — all gray families, all shades */
+:root:not(.dark) :where(
+  [class*="divide-gray-"], [class*="divide-slate-"],
+  [class*="divide-zinc-"], [class*="divide-neutral-"], [class*="divide-stone-"]
+):not([data-surface="dark"]):not([data-no-contrast-guard]) > * + * {
+  border-color: rgba(184, 149, 85, 0.30) !important;
+}
+
+/* 4. Common raw hex gray literals used via arbitrary-value classes
+ *    (bg-[#e5e7eb], border-[#d1d5db], etc.). Backgrounds → champagne,
+ *    borders → faded gold. Light-mode only. */
+:root:not(.dark) :where(
+  .bg-\[\#e5e7eb\], .bg-\[\#E5E7EB\],
+  .bg-\[\#d1d5db\], .bg-\[\#D1D5DB\],
+  .bg-\[\#f3f4f6\], .bg-\[\#F3F4F6\],
+  .bg-\[\#f9fafb\], .bg-\[\#F9FAFB\],
+  .bg-\[\#e2e8f0\], .bg-\[\#E2E8F0\],
+  .bg-\[\#cbd5e1\], .bg-\[\#CBD5E1\],
+  .bg-\[\#f5f5f5\], .bg-\[\#F5F5F5\]
+):not([data-surface="dark"]):not([data-no-contrast-guard]) {
+  background-color: #F7F2EA !important;
+}
+:root:not(.dark) :where(
+  .border-\[\#e5e7eb\], .border-\[\#E5E7EB\],
+  .border-\[\#d1d5db\], .border-\[\#D1D5DB\],
+  .border-\[\#9ca3af\], .border-\[\#9CA3AF\],
+  .border-\[\#e2e8f0\], .border-\[\#E2E8F0\],
+  .border-\[\#cbd5e1\], .border-\[\#CBD5E1\]
+):not([data-surface="dark"]):not([data-no-contrast-guard]) {
+  border-color: rgba(184, 149, 85, 0.40) !important;
+}
+
+/* 5. Default Tailwind `border` (1px solid currentColor fallback) on
+ *    elements with no explicit border-color and on a light surface →
+ *    faded gold. Avoids the gray hairline you get from `border` alone. */
+:root:not(.dark)
+  :where(div, section, article, aside, header, footer, nav, main, ul, ol, li, button, a, span, label)
+  .border:not([class*="border-"]):not([data-no-contrast-guard]) {
+  border-color: rgba(184, 149, 85, 0.40) !important;
+}
+
+/* 6. Faint gray text on light surfaces — lift to readable ink. */
+:root:not(.dark) :where(
+  .text-gray-300, .text-gray-400,
+  .text-slate-300, .text-slate-400,
+  .text-zinc-300, .text-zinc-400,
+  .text-neutral-300, .text-neutral-400,
+  .text-stone-300, .text-stone-400
+):not([data-surface="dark"]):not([data-no-contrast-guard]) {
+  color: rgba(26, 26, 26, 0.70) !important;
+}
+
+/* 7. Outline / ring gray utilities → gold */
+:root:not(.dark) :where(
+  [class*="ring-gray-"], [class*="ring-slate-"], [class*="ring-zinc-"],
+  [class*="ring-neutral-"], [class*="ring-stone-"],
+  [class*="outline-gray-"], [class*="outline-slate-"]
+):not([data-surface="dark"]):not([data-no-contrast-guard]) {
+  --tw-ring-color: rgba(184, 149, 85, 0.55) !important;
+  outline-color: rgba(184, 149, 85, 0.55) !important;
+}
+
 
