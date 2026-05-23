@@ -4,7 +4,6 @@ import {
   LayoutDashboard, Building2, Users, MapPin, FolderKanban,
   Inbox, Briefcase, Calendar, ShieldCheck, Sparkles, ImageOff, Settings, UserPlus,
 } from "lucide-react";
-import { IconTile } from "@/components/ui/icon-tile";
 import { usePortalRole } from "@/hooks/usePortalRole";
 
 type Item = { to: string; label: string; icon: any; end?: boolean; roles: Array<"owner" | "portal_developer" | "portal_rep"> };
@@ -46,7 +45,7 @@ export default function PortalSidebarNav({ onNavigate }: { onNavigate?: () => vo
             )
           }
         >
-          <IconTile icon={item.icon} tone="gold" size="sm" />
+          <item.icon className="h-4 w-4 flex-shrink-0" strokeWidth={1.75} />
           <span className="truncate">{item.label}</span>
         </NavLink>
       ))}
