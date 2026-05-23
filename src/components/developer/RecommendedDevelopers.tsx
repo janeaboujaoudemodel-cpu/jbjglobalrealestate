@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Building, ArrowRight, Sparkles } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
-import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 
 interface RecommendedDevelopersProps {
@@ -100,7 +99,7 @@ export default function RecommendedDevelopers({
                   className="group block rounded-xl border-2 border-[#B89555]/20 hover:border-[#B89555]/60 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)]"
                 >
                   {/* Logo — full-fit, real logo only; name fallback when missing */}
-                  <div className="h-28 flex items-center justify-center p-4 bg-white">
+                  <div className="h-28 flex items-center justify-center p-4 bg-white text-[#1A1A1A]">
                     {dev.logo_url ? (
                       <img
                         src={dev.logo_url}
@@ -120,7 +119,7 @@ export default function RecommendedDevelopers({
                     <h3 className="text-[#1A1A1A] font-bold text-sm leading-tight group-hover:text-[#1A1A1A] transition-colors line-clamp-1">
                       {dev.name}
                     </h3>
-                    <div className="flex items-center gap-2 mt-1.5 text-xs text-[#1A1A1A]/50">
+                    <div className="flex items-center gap-2 mt-1.5 text-xs text-[#1A1A1A]">
                       {dev.completed_projects != null && dev.completed_projects > 0 && (
                         <span>{dev.completed_projects} Completed</span>
                       )}

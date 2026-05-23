@@ -182,7 +182,7 @@ All colors MUST be HSL.
     --gold-light: 40 38% 62%;
     --gold-dark: 36 40% 40%;         /* #A68444 */
     --gold-muted: 33 30% 55%;
-    --gold-foreground: 0 0% 100%;
+    --gold-foreground: 0 0% 10%;
 
     /* Premium Orange — property prices (unchanged) */
     --price-orange: 24 95% 53%;
@@ -2693,12 +2693,12 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   color: #FFFFFF;
 }
 
-/* 2. Icons on SOLID-gold tiles → white. Same exact-token logic as above so
+/* 2. Icons on SOLID-gold tiles → ink. Same exact-token logic as above so
    translucent gold tiles (bg-[#B89555]/10, /15…) keep their authored gold icon. */
 [class~="bg-[#B89555]"] > svg,
 [class~="bg-[#A68444]"] > svg,
 [class~="bg-[#C8A766]"] > svg {
-  color: #FFFFFF;
+  color: #1A1A1A;
 }
 
 /* 3. Faded gold text on default (champagne) surface → solid ink.
@@ -3843,7 +3843,7 @@ button:disabled:has(.lucide),
   color: #FFFFFF !important;
 }
 
-/* Brand GOLD tiles — text + descendants → white */
+/* Brand GOLD tiles — text + descendants → ink */
 [class~="bg-[#B89555]"],
 [class~="bg-[#A68444]"],
 [class~="bg-[#C8A766]"],
@@ -3852,16 +3852,16 @@ button:disabled:has(.lucide),
 [class~="bg-[#A68444]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
 [class~="bg-[#C8A766]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
 [class~="bg-[#D4AF37]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li) {
-  color: #FFFFFF !important;
+  color: #1A1A1A !important;
   --tw-text-opacity: 1 !important;
 }
 
-/* Brand GOLD tiles — SVG icons → white */
+/* Brand GOLD tiles — SVG icons → ink */
 [class~="bg-[#B89555]"] svg,
 [class~="bg-[#A68444]"] svg,
 [class~="bg-[#C8A766]"] svg,
 [class~="bg-[#D4AF37]"] svg {
-  color: #FFFFFF !important;
+  color: #1A1A1A !important;
 }
 
 /* Buttons explicitly opted into hover→light surface keep dark text on hover.
@@ -3957,11 +3957,54 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
   stroke: #FFFFFF !important;
 }
 
-/* Gold surfaces — children inherit white text by default */
+/* Gold surfaces — children inherit ink text by default; gold is a bright brand
+   accent, so white text/icons on it are prohibited. */
 .bg-\[\#B89555\],
 .bg-\[\#A68444\],
 [class~="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]):not([data-no-contrast-guard]) {
-  color: #FDFBF7;
+  color: hsl(var(--foreground));
+}
+
+/* FINAL WHITE-ON-BRIGHT LOCK: white/faded-white text or SVG icons on any
+   champagne, white, cream, or gold surface flips to ink unless a nested dark
+   surface explicitly owns the contrast. This applies to deep descendants so
+   new sections cannot accidentally create white-on-bright regressions. */
+:root:not(.dark) :is(
+  .bg-white, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
+  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#F7F1E6\], .bg-\[\#EFE6D6\], .bg-\[\#ECE2D2\], .bg-\[\#D8C7A6\],
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#D8C7A6]"],
+  [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [class~="bg-[#C8A766]"], [class~="bg-[#D4AF37]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"], [class*="from-[#EFE6D6]"], [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"]
+):not([data-surface="dark"]):not([data-no-contrast-guard])
+:is(.text-white, [class*="text-white/"], svg.text-white, svg[class*="text-white/"]):not(.allow-white):not([data-no-contrast-guard]):not([data-surface="dark"] *):not(.bg-black *):not([class~="bg-[#1A1A1A]"] *):not([class*="bg-gray-9"] *) {
+  color: hsl(var(--foreground)) !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
+:root:not(.dark) :is(
+  .bg-white, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
+  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#F7F1E6\], .bg-\[\#EFE6D6\], .bg-\[\#ECE2D2\], .bg-\[\#D8C7A6\],
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#D8C7A6]"],
+  [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [class~="bg-[#C8A766]"], [class~="bg-[#D4AF37]"]
+):is(.text-white, [class*="text-white/"]):not(.allow-white):not([data-surface="dark"]):not([data-no-contrast-guard]):not([class*="hover:bg-[#1A1A1A]"]:hover):not([class*="hover:bg-black"]:hover) {
+  color: hsl(var(--foreground)) !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
+:root:not(.dark) :is(
+  .bg-white, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
+  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#F7F1E6\], .bg-\[\#EFE6D6\], .bg-\[\#ECE2D2\], .bg-\[\#D8C7A6\],
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#D8C7A6]"],
+  [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [class~="bg-[#C8A766]"], [class~="bg-[#D4AF37]"]
+):not([data-surface="dark"]):not([data-no-contrast-guard])
+:is(.text-white\/40, .text-white\/50, .text-white\/60, .text-white\/70, .text-white\/75, .text-white\/80, .text-white\/85, .text-white\/90):not(.allow-white):not([data-surface="dark"] *) {
+  color: hsl(var(--foreground)) !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
 }
 
 /* Runtime guard signal class */
