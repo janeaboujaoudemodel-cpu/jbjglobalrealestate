@@ -92,8 +92,6 @@ async function run() {
       const handles = await page.$$(route.cardSelector);
       const sample = handles.slice(0, MAX_CARDS_PER_ROUTE);
       routeResult.cards = sample.length;
-      const totalLinks = await page.evaluate(() => document.querySelectorAll('a[href]').length);
-      console.log(`    [debug] total <a>=${totalLinks}, matched cardSelector=${handles.length}`);
 
       if (sample.length === 0) {
         console.log(`  · ${route.path} — no cards matched, skipping`);
