@@ -69,6 +69,8 @@ const CategorySelectorSection = lazy(() => import("@/components/home/CategorySel
 
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
+import { SectionDividerGoldFullBleed } from "@/components/ui/section-divider-gold-fullbleed";
+import { PremiumSectionCard } from "@/components/ui/premium-section-card";
 
 const VerificationBanner = lazy(() => import("@/components/verification/VerificationBanner"));
 const PartnerVerifyHeroCTA = lazy(() => import("@/components/home/PartnerVerifyHeroCTA"));
