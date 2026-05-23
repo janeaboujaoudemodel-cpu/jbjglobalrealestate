@@ -24433,6 +24433,42 @@ export type Database = {
           },
         ]
       }
+      owner_delegates: {
+        Row: {
+          created_at: string
+          delegate_email: string
+          delegate_user_id: string | null
+          id: string
+          is_active: boolean
+          note: string | null
+          owner_user_id: string
+          scopes: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          delegate_email: string
+          delegate_user_id?: string | null
+          id?: string
+          is_active?: boolean
+          note?: string | null
+          owner_user_id: string
+          scopes?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          delegate_email?: string
+          delegate_user_id?: string | null
+          id?: string
+          is_active?: boolean
+          note?: string | null
+          owner_user_id?: string
+          scopes?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       owner_signature_assets: {
         Row: {
           created_at: string
@@ -37139,6 +37175,10 @@ export type Database = {
       }
       has_database_grant: {
         Args: { _database_id: string; _min_level?: string; _user_id: string }
+        Returns: boolean
+      }
+      has_delegate_scope: {
+        Args: { _scope: string; _user_id: string }
         Returns: boolean
       }
       has_developer_edit_access: {

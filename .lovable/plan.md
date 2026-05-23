@@ -1,75 +1,102 @@
+## Goal
 
-# Project Page Overhaul Plan
-
-Scope: `/project/:slug` page + Dubai Market Intelligence widget + Mortgage Calculator. No removal of existing features.
-
----
-
-## 1. Handover card (hero section)
-- Remove the small "Handover" / "Ready" eyebrow label inside the card.
-- Keep only the date value (or "Ready") sitting directly inside the card with no preceding text label.
-- File: `src/components/project-detail/QuickFactsBar.tsx` (and the hero handover pill component if separate — will locate during build).
-
-## 2. Location section — dual map exploration
-Under the existing "Project Location" block add two compact horizontal strips (one line each):
-- **Line A — "Other projects in this area"**: developer-agnostic, filtered by area name (excludes current project + current developer).
-- **Line B — "More from {DeveloperName}"**: same developer, other projects (excludes current project).
-Each strip = horizontally scrollable row of mini project cards (image, name, PricePill, handover pill) → click navigates to that project.
-- Reuses existing `ProjectNearbyPropertiesMap` data pattern.
-- New component: `src/components/project-detail/RelatedProjectsStrips.tsx`.
-
-## 3. Restore competitor pins on the project map
-- The project map previously rendered other developers' projects in the same area; this regressed.
-- Fix `ProjectNearbyPropertiesMap` query: re-enable area-radius pull, ensure no filter by current developer, ensure pins render. Keep current project as red pin, others as gold (already implemented — debug why empty).
-
-## 4. Owner inline editing (live on the project page)
-For users with owner role (`requireOwnerAuth` / existing `OwnerGuard` pattern):
-- Wrap editable fields with an `<InlineEditable>` primitive (click pencil → input/textarea → autosave to `projects` table).
-- Editable fields: title, description, starting price, founded/launch date, handover date, location text, property type, total units, floors.
-- Save via direct supabase update (RLS already restricts to owner).
-- Component: `src/components/project-detail/owner/InlineEditable.tsx` + `useOwnerInlineSave` hook.
-
-## 5. Owner drag-and-drop document & brochure ingestion
-Next to "Project Documents" section, add an always-visible **owner-only** drop zone:
-- Drag any file (PDF brochure, floor plans, payment plan, etc.) → uploads to existing storage bucket.
-- Per-file **Visibility toggle** (Hidden / Visible) — stored on the document row; only "Visible" shows publicly.
-- After upload, file is sent to existing **Universal Link Extractor / enrichment edge function** (per `mem://architecture/ai-tools/universal-link-extractor-standard`) to auto-enrich the listing (description, amenities, prices, payment plan, handover date).
-- **No duplication**: reuse the existing `media-ingestion-hub` backend + `enrich-project` edge function (per `mem://features/listing-admin/media-ingestion-hub-standard`); do not create a parallel pipeline.
-- Component: `src/components/project-detail/owner/OwnerDocDropzone.tsx`.
-
-## 6. Mortgage calculator slider bug (carry-over fix)
-- Root-cause the slider value not propagating in `src/components/MortgageCalculator.tsx` (the embedded one on the project page).
-- Likely cause: controlled `Slider` `value` prop tied to a stale `propertyPrice` from props, with `onValueChange` mutating local state that is overwritten on re-render.
-- Fix: single source of truth (lift state OR uncontrolled with `defaultValue` + `onValueCommit`), verify with browser interaction + screenshot at min/mid/max.
-
-## 7. CTA rename + color
-- Rename **"AI Mortgage Assistant"** → **"JBJ Mortgage Assistant"** everywhere it appears (mortgage section header, button label, modal title).
-- "Ask" CTA: keep current shape; restyle to premium gold-champagne (`variant="gold"` per `mem://ui-ux/visual-standards/cta-system-standard`). Compare against the current gold spec — if existing gold is already richer (e.g., gradient hairline), keep that.
-
-## 8. Dubai Market Intelligence — daily freshness
-- Verify the `pg_cron` job `sync-dld-market-data` is actually scheduled and running daily (query `cron.job` + `cron.job_run_details`).
-- If not firing: re-schedule with correct URL + anon key headers; add fallback so `applyLiveTicks` in `useDLDMarketData.ts` always shows today's "as of" date.
-- Add a visible "Updated: {today}" stamp on the widget.
-
-## 9. DLD widget — premium recoloring
-Replace current orange-heavy semantics with the requested premium palette in `src/lib/dataColors.ts` (single source of truth so every chart updates):
-- **Off-plan** → emerald green (premium growth)
-- **Secondary** → deep red (`#B91C1C`-ish, not bright)
-- **Cash** → soft sky blue
-- **Mortgage** → champagne gold `#B89555`
-Keep "Gifts" row and "Notice something incorrect" untouched.
+Turn the project page into a fully owner-editable surface (every label, photo, fact, developer info, document, etc.), add an email-based delegate access manager so you can grant Saleem (or anyone) granular per-section access, fix the "pending" badge, and make project status sync from a single source of truth.
 
 ---
 
-## Out of scope (will NOT touch)
-- Gifts row, "Notice something incorrect" section.
-- Any other site-wide CTA sweep beyond the JBJ Mortgage Assistant button.
-- Header/sidebar, footer, navigation.
+## 1. Fix the "pending" badge under the hero
 
-## Verification (mandatory before marking done)
-For each section above:
-1. Browser navigate to `/project/pinewood-village-wasl-properties-jumeirah-golf-estates`.
-2. Screenshot the changed area at 975px viewport.
-3. For owner editing + dropzone: log in as owner, perform the action end-to-end, screenshot result.
-4. For mortgage slider: drag to 3 positions, confirm derived monthly payment updates each time, screenshot all three.
-5. For DLD cron: run `SELECT * FROM cron.job_run_details ORDER BY start_time DESC LIMIT 5` and confirm last run < 24h ago.
+**Root cause:** `QuickFactsBar` renders `statusLabel || availabilityStatus` as a Badge. `project.availability_status` is set to `"pending"` (internal admin state) and is leaking into the public UI.
+
+**Fix:**
+- In `QuickFactsBar.tsx`, only render the status badge when the value is a public-friendly term (whitelist: `available`, `selling`, `limited`, `few left`, `sold out`, `launching`, `coming soon`, `new`, `ready`, `under construction`, `off-plan`). Hide internal states (`pending`, `draft`, `unverified`, etc.).
+- Add a small util `publicStatusLabel(status)` so we don't leak again.
+
+## 2. Unified status (single source of truth = `handover_date`)
+
+- New util `src/utils/projectStatus.ts` → `getProjectStatus(project)`:
+  - If `handover_date` exists and is in the past → `{ label: 'Ready', date: null }`
+  - Else if `handover_date` future → `{ label: formatDisplayDate(handover_date), date: handover_date }`
+  - Else fall back to `status_label` or derived (existing `deriveHandover`).
+- Replace every place that renders handover/ready independently (hero pill line 642–650, Quick Stats card line 767, QuickFactsBar handover fact, project cards strip) to read from this util.
+- Editing `handover_date` in **any** card writes to `projects.handover_date` → all labels resync automatically (React Query invalidation already in place).
+- Above the second Quick Stats card, add the eyebrow label "Handover" (matching siblings: Starting Price / Handover / Bedrooms / Size). Remove the inner border/pill around the word "Ready" — just plain text styled like the other values.
+
+## 3. Universal inline editing on the project page
+
+Wrap every editable field in `<InlineEditable>` (owner-only via `useIsAppOwner`). Add a tiny pencil affordance next to each. Scope on this page:
+
+**Hero section**
+- Project name, starting price, location, bedrooms, size, handover (already partly wired — finish the rest).
+
+**Quick Stats grid (4 cards)**
+- Each card gets its own pencil → opens the right field editor (price_from / handover_date / bedrooms / size).
+
+**Quick Facts bar**
+- Property type, total units, floors, status, handover, last updated note.
+
+**Developer card (`DeveloperInfoCard.tsx`)**
+- Logo (upload/replace via `OwnerImageManager`-style dropzone targeting `developers.logo_url`).
+- Name (already), description (already), **founded year**, headquarters, projects-delivered count, website, every visible stat. Add pencil next to each.
+
+**Anywhere else a label/feed/place text renders** (overview tab, amenities list items, payment plan rows, location/neighborhood blurb, FAQ items). One pass to wrap them all.
+
+## 4. Photo gallery management
+
+Extend `OwnerImageManager.tsx`:
+- **Drag-to-reorder** with `@dnd-kit/sortable` (already in deps). Writes new `display_order` to `project_images`.
+- **Set as Cover** button on each tile (already started — verify).
+- **Delete** with confirm.
+- **Upload** multi-file (already wired).
+- Tiles show role badges (Cover / Card / Gallery) per the existing 3-slot Media Management standard.
+
+## 5. "View as visitor" / Public preview toggle
+
+- New header chip on owner-viewed project page: `Owner` ⇄ `Visitor` toggle (sticky top-right of the page).
+- Stored in `sessionStorage` (`jbj_preview_as_visitor=1`).
+- A new hook `useEffectiveOwner()` returns `isOwner && !previewAsVisitor`. All `<InlineEditable>`, owner dropzones, edit pencils, admin bars read from this — so flipping the toggle hides every edit affordance and the page renders exactly as a public visitor sees it.
+
+## 6. Owner-only delegate access manager (per-section)
+
+**DB (new migration):**
+```sql
+create table public.owner_delegates (
+  id uuid pk default gen_random_uuid(),
+  owner_user_id uuid not null,        -- always the app owner
+  delegate_email text not null,
+  delegate_user_id uuid,              -- filled on first login match
+  scopes jsonb not null default '{}', -- e.g. {"project_photos":true,"project_text":true,"developer_info":false,"documents":true,"market_intel":false}
+  is_active boolean not null default true,
+  created_at, updated_at
+);
+-- RLS: only owner role can select/insert/update/delete.
+-- Add helper: public.has_delegate_scope(_user_id uuid, _scope text) returns boolean (security definer).
+```
+
+**UI: new page `/owner/access` (linked from Executive Command Center → "Access & Delegates")**
+- List of delegate emails with status (Pending login / Active).
+- "Add delegate" → email + tick boxes per scope:
+  - Project text (titles, descriptions, prices)
+  - Project photos & gallery
+  - Project documents/brochures
+  - Developer info
+  - Quick facts / handover / availability
+  - Market Intelligence
+  - CRM
+  - Marketing Hub
+- Revoke / pause / edit scope per row.
+
+**Hook:** `useCanEdit(scope)` → `isAppOwner || has_delegate_scope(user.id, scope)`. Every `<InlineEditable>` and owner dropzone takes a `scope` prop and uses this hook instead of `useIsAppOwner` directly. Result: a delegate only sees pencils for the sections you ticked.
+
+## 7. Files touched
+
+- **New:** `src/utils/projectStatus.ts`, `src/hooks/useEffectiveOwner.ts`, `src/hooks/useCanEdit.ts`, `src/components/project-detail/OwnerVisitorToggle.tsx`, `src/pages/owner/AccessDelegates.tsx`, `src/components/owner/DelegateRow.tsx`, migration for `owner_delegates`.
+- **Edited:** `QuickFactsBar.tsx` (pending fix + handover label), `ProjectDetailLayout.tsx` (status sync, eyebrow on card #2, more pencils), `DeveloperInfoCard.tsx` (logo upload + all-field pencils), `OwnerImageManager.tsx` (dnd reorder + cover/delete polish), `InlineEditable.tsx` (accept `scope` prop), all owner-only components rerouted through `useEffectiveOwner` + `useCanEdit`.
+
+## 8. Out of scope (kept untouched)
+
+- Gift Transactions widget, "Notice something incorrect" section, mortgage tools, market intel content (only access toggle added).
+
+---
+
+Ready to switch to build mode?
