@@ -255,6 +255,32 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                       </div>
                       <span className="text-[11px] text-[#1A1A1A]/70 leading-snug">{CONTACT_INFO.phone}</span>
                     </a>
+                    {/* Voice AI Call (ElevenLabs) — spans full width */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        setTimeout(() => window.dispatchEvent(new CustomEvent('jbj:open-voice-concierge')), 250);
+                      }}
+                      data-no-contrast-guard
+                      className="col-span-2 group flex items-center justify-between gap-2 px-3.5 py-3 rounded-xl text-left
+                        border border-[#B89555]/70 bg-[#1A1A1A] text-[#FDFBF7]
+                        hover:bg-[#2A2A2A] hover:shadow-[0_0_24px_rgba(184,149,85,0.35)] transition-all"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#B89555] text-[#1A1A1A]">
+                          <PhoneCall className="h-4 w-4" />
+                        </span>
+                        <div className="flex flex-col">
+                          <span className="text-[12.5px] font-semibold">Voice AI Call · Free</span>
+                          <span className="text-[11px] text-[#FDFBF7]/70 leading-snug">Speak with our AI agent now</span>
+                        </div>
+                      </div>
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#B89555]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        Live
+                      </span>
+                    </button>
                   </div>
 
                   <div className="space-y-2">
