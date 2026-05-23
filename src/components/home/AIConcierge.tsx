@@ -176,8 +176,8 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             {/* Messages */}
             <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-5 py-5 bg-background">
               {!isVerified && (
-                <div className="min-h-full flex items-stretch">
-                  <div className="w-full flex min-h-full">
+                <div className="flex min-h-full items-stretch">
+                  <div className="flex min-h-full w-full flex-1">
                     <ConciergeGate onVerified={() => { /* state auto-updates via hook */ }} />
                   </div>
                 </div>
