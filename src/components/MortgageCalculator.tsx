@@ -136,7 +136,7 @@ const MortgageCalculator = ({
             </div>
             <Slider
               value={[propertyPrice]}
-              onValueChange={([value]) => setPropertyPrice(value)}
+              onValueChange={([value]) => handlePriceChange(value)}
               min={500000}
               max={50000000}
               step={100000}
@@ -298,13 +298,13 @@ const MortgageCalculator = ({
               <Input
                 type="text"
                 value={formatNumberWithCommas(propertyPrice)}
-                onChange={(e) => setPropertyPrice(parseFormattedNumber(e.target.value))}
+                onChange={(e) => handlePriceChange(parseFormattedNumber(e.target.value))}
                 className="bg-background border-border text-foreground focus:border-[#B89555]"
               />
               <div className="py-4">
                 <Slider
                   value={[propertyPrice]}
-                  onValueChange={([value]) => setPropertyPrice(value)}
+                  onValueChange={([value]) => handlePriceChange(value)}
                   min={500000}
                   max={50000000}
                   step={100000}
