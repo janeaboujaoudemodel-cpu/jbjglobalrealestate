@@ -20,6 +20,7 @@ import {
   Calendar,
   CreditCard,
   Star,
+  Check,
   Clock,
   HelpCircle,
   ChevronDown,
@@ -1208,25 +1209,35 @@ export default function ProjectDetailLayout({
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div>
                   <div className="flex items-center gap-2 mb-4">
-                    <h3 className="text-h3-sm font-medium text-foreground">Project Brochure</h3>
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold">The Document</p>
                     <span className="ml-auto"><OwnerSectionEditor projectId={project.id} section="brochure" initial={project as any} label="Manage brochure" /></span>
                   </div>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
-                    {brochurePrimary 
+                  <h3 className="text-3xl md:text-4xl font-semibold text-[#1A1A1A] mb-4 leading-tight tracking-tight">
+                    Project Brochure
+                  </h3>
+                  <div className="w-16 h-px bg-[#B89555] mb-5" />
+                  <p className="text-[#1A1A1A]/85 mb-6 leading-relaxed text-[15px]">
+                    {brochurePrimary
                       ? `Download the complete brochure for ${project.name} to explore detailed floor plans, pricing, payment options, and lifestyle amenities. Perfect for offline viewing and sharing.`
                       : `Request the exclusive brochure for ${project.name} with detailed floor plans, pricing, and lifestyle amenities. Our team will share it with you directly.`
                     }
                   </p>
-                  <ul className="space-y-2 text-sm text-muted-foreground mb-6">
-                    <li className="flex items-center gap-2">
-                      <Star className="w-4 h-4 text-[#1A1A1A]" /> Full floor plan layouts
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Star className="w-4 h-4 text-[#1A1A1A]" /> Detailed specifications
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Star className="w-4 h-4 text-[#1A1A1A]" /> Payment plan breakdown
-                    </li>
+                  <ul className="space-y-3 text-[15px] text-[#1A1A1A] mb-6">
+                    {[
+                      "Full floor plan layouts",
+                      "Detailed specifications",
+                      "Payment plan breakdown",
+                    ].map((item) => (
+                      <li key={item} className="flex items-center gap-3">
+                        <span
+                          className="inline-flex w-6 h-6 rounded-full items-center justify-center bg-[#F7F2EA] ring-1 ring-[#B89555]/60 shadow-[0_1px_2px_rgba(0,0,0,0.06)] shrink-0"
+                          aria-hidden="true"
+                        >
+                          <Check className="w-3.5 h-3.5 text-[#1A1A1A]" strokeWidth={2.5} />
+                        </span>
+                        <span className="text-[#1A1A1A]/90">{item}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
                 <div className="flex justify-center">

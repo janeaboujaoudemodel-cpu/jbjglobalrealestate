@@ -148,47 +148,52 @@ const PremiumBrochureCard = ({
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
             {/* Top: Brand mark with real monogram */}
             <div className="absolute top-4 left-10 flex items-center gap-3">
-              <div className="w-14 h-14 rounded-full border-2 border-[#B89555]/70 flex items-center justify-center bg-[#1A1A1A] backdrop-blur-sm overflow-hidden">
-                <img 
-                  src={jbjFullLogoDarkBg} 
-                  alt="JBJ" 
+              <div className="w-14 h-14 rounded-full border-2 border-[#B89555]/70 flex items-center justify-center bg-[#1A1A1A] backdrop-blur-sm overflow-hidden shadow-lg">
+                <img
+                  src={jbjFullLogoDarkBg}
+                  alt="JBJ"
                   className="w-full h-full object-cover"
                   style={{ transform: "scale(1.2)" }}
                 />
               </div>
-              <p 
-                className="text-white text-[10px] font-semibold uppercase tracking-[0.18em] leading-relaxed drop-shadow-lg"
-                style={{ 
-                  textShadow: "0 2px 4px rgba(0,0,0,0.8)"
-                }}
+              <p
+                className="text-[#F7F2EA] text-[10px] font-semibold uppercase tracking-[0.18em] leading-relaxed"
+                style={{ textShadow: "0 2px 6px rgba(0,0,0,0.9)" }}
               >
-                <span className="text-[#1A1A1A] font-bold">JBJ</span> Global<br/>Real Estate
+                <span className="text-[#B89555] font-bold">JBJ</span> Global<br/>Real Estate
               </p>
             </div>
 
             {/* Bottom: Brochure info */}
             <div className="mt-auto">
-              <p className="text-[#1A1A1A] text-xs uppercase tracking-[0.25em] font-bold mb-2 drop-shadow-lg">
+              <p
+                className="text-[#B89555] text-[10px] uppercase tracking-[0.32em] font-bold mb-2"
+                style={{ textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
+              >
                 Project Brochure
               </p>
-              
+
               <h3
-                className="text-white text-2xl font-bold mb-3 line-clamp-2 leading-tight drop-shadow-lg"
+                className="text-white text-2xl font-semibold mb-3 line-clamp-2 leading-tight"
+                style={{ textShadow: "0 2px 8px rgba(0,0,0,0.85)" }}
               >
                 {projectName}
               </h3>
 
-              <div className="w-20 h-[2px] bg-gradient-to-r from-gold to-gold/30 mb-3" />
-              
-              <p className="text-white/70 text-[11px] uppercase tracking-[0.2em] drop-shadow">
+              <div className="w-20 h-[2px] bg-gradient-to-r from-[#B89555] to-[#B89555]/20 mb-3" />
+
+              <p
+                className="text-[#F7F2EA]/90 text-[11px] uppercase tracking-[0.2em] font-medium"
+                style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}
+              >
                 {location || 'Dubai • UAE'}
               </p>
             </div>
 
             {/* Lock indicator for locked state */}
             {isLocked && (
-              <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#1A1A1A]/50 border-2 border-[#B89555]/60 flex items-center justify-center backdrop-blur-sm">
-                <Lock className="w-5 h-5 text-[#1A1A1A]" />
+              <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#1A1A1A]/70 border-2 border-[#B89555]/70 flex items-center justify-center backdrop-blur-sm">
+                <Lock className="w-5 h-5 text-[#B89555]" />
               </div>
             )}
           </div>
