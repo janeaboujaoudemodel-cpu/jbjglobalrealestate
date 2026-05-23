@@ -213,16 +213,30 @@ const ReellyProjectCard = ({
                 );
               })()}
            
-           {/* Bottom-Right: Premium price label — square, transparent core, orange border */}
-           {project.price_from ? (
-             <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
-               <span className="price-pill-eyebrow">From</span>
-               <span className="price-pill-value">
-                 {formatPriceWithCurrency(project.price_from, currency)}
-               </span>
-             </div>
-           ) : null}
-         </div>
+          {/* Top-Right: Handover date / Ready badge (offset to clear favorite/badge buttons) */}
+          {(() => {
+            const derived = deriveHandover(project) || HANDOVER_FALLBACK;
+            return derived ? (
+              <div
+                className={`absolute ${showFavorite || showBadgeButton ? 'top-3 right-14' : 'top-3 right-3'} z-10 px-2.5 py-1 rounded-md bg-[#FDFBF7]/95 border border-[#B89555]/50 shadow-sm handover-orange`}
+                data-no-contrast-guard
+              >
+                <span className="font-semibold text-xs tabular-nums">{derived}</span>
+              </div>
+            ) : null;
+          })()}
+
+          {/* Bottom-Right: Premium price label — square, transparent core, orange border */}
+          {project.price_from ? (
+            <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
+              <span className="price-pill-eyebrow">From</span>
+              <span className="price-pill-value">
+                {formatPriceWithCurrency(project.price_from, currency)}
+              </span>
+            </div>
+          ) : null}
+        </div>
+
          
          {/* Content */}
          <div className="p-4 flex-1 flex flex-col">
@@ -239,31 +253,24 @@ const ReellyProjectCard = ({
              </div>
            )}
            
-          {/* Divider */}
-          <div className="h-px bg-[#B89555]/35 my-2" />
-          
-            {/* Developer - Clickable */}
-             {project.developer_name && (
-               <DeveloperLink
-                 name={project.developer_name}
-                 slug={(project as any).developer?.slug || null}
-                 className="text-sm mb-2 block"
-                 showPrefix={true}
-               />
-             )}
+          {/* Premium gold divider between location/header and developer */}
+          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent my-2" />
 
-           {/* Handover line — gold champagne */}
-          {(() => {
-            const derived = deriveHandover(project);
-            return (
-              <div className="flex items-center gap-2 mb-2">
-                <p className="text-sm handover-orange">
-                  <span className="handover-label">Handover </span>
-                  <span>{derived || HANDOVER_FALLBACK}</span>
-                </p>
-              </div>
-            );
-          })()}
+          {/* Developer - Clickable */}
+          {project.developer_name && (
+            <DeveloperLink
+              name={project.developer_name}
+              slug={(project as any).developer?.slug || null}
+              className="text-sm mb-2 block"
+              showPrefix={true}
+            />
+          )}
+
+          {/* Premium gold divider between developer and description/details */}
+          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent my-2" />
+
+          {/* Handover moved to top-right badge on image. */}
+
 
            {/* Payment Plan removed from cards — shown only on details page */}
            
