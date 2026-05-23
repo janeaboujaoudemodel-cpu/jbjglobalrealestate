@@ -226,7 +226,6 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               ) : null;
             })()}
 
-            <hr className="border-[#B89555]/30 my-2" />
             {project.developer_name && (
               <DeveloperLink
                 name={project.developer_name}
@@ -237,8 +236,11 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             )}
             <div className="flex-grow" />
 
+            {/* Premium gold divider between description block and handover */}
+            <hr className="border-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent my-2" />
+
             {/* Handover line — orange, matches the price label identity */}
-            <div className="mt-2 min-h-[22px]">
+            <div className="mt-1 min-h-[22px]">
               <div className="flex items-baseline gap-1.5 handover-orange" data-no-contrast-guard>
                 <span className="handover-label text-[10px] uppercase tracking-[0.14em] font-medium">
                   Handover
@@ -248,6 +250,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
                 </span>
               </div>
             </div>
+
 
             {/* Payment Plan removed from cards — shown only on details page */}
 
