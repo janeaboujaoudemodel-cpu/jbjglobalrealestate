@@ -50,18 +50,19 @@ export function VerifiedMedia({
       <div
         role="img"
         aria-label={alt}
+        data-surface="champagne"
         className={cn(
-          "w-full h-full flex flex-col items-center justify-center gap-2 bg-[linear-gradient(135deg,#FDFBF7,#F7F2EA,#EFE6D6)]",
-          decorated
-            ? "rounded-md border border-[#B89555]/20 bg-champagne-light/40"
-            : "bg-gradient-to-b from-premium-card to-premium-bg",
+          "w-full h-full flex flex-col items-center justify-center gap-2 bg-[linear-gradient(135deg,#FDFBF7,#F7F2EA,#EFE6D6)] text-[#1A1A1A]",
+          decorated ? "rounded-md border border-[#B89555]/20" : "",
           className,
         )}
       >
         <ImageOff className="h-5 w-5 text-[#1A1A1A]" aria-hidden="true" />
-        <span className="text-xs font-medium tracking-wide text-foreground/70">
-          {placeholderLabel}
-        </span>
+        {placeholderLabel ? (
+          <span className="text-xs font-medium tracking-wide text-[#1A1A1A]/70">
+            {placeholderLabel}
+          </span>
+        ) : null}
       </div>
     );
   }
