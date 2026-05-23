@@ -14,7 +14,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useUserMode } from "@/contexts/UserModeContext";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 import type { UnifiedProject } from "@/types/unifiedProject";
 
 const TARGET = 8;
