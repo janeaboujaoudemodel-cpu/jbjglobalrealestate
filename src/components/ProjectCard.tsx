@@ -9,6 +9,8 @@ import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
@@ -250,12 +252,30 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </>
           )}
 
-          {/* Top-Left: Property Type Label */}
-          {project.property_type_label && (
-            <CardBadge variant="status" className="absolute top-3 left-3 z-10">
-              {project.property_type_label}
-            </CardBadge>
-          )}
+          {/* Top-Left: Developer Logo (preferred) — falls back to property-type label only when no logo exists */}
+          {(() => {
+            const logoUrl = getDeveloperLogoUrl(project.developer as any);
+            if (logoUrl) {
+              return (
+                <div className="absolute top-3 left-3 z-20">
+                  <DeveloperLogo
+                    src={logoUrl}
+                    alt={project.developer?.name || project.developer_name || ''}
+                    variant="bare"
+                    loading="lazy"
+                  />
+                </div>
+              );
+            }
+            if (project.property_type_label) {
+              return (
+                <CardBadge variant="status" className="absolute top-3 left-3 z-10">
+                  {project.property_type_label}
+                </CardBadge>
+              );
+            }
+            return null;
+          })()}
 
           {/* Sale Status Badge — Bottom Left */}
           {saleStatusLabel && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
