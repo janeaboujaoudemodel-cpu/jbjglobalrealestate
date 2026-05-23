@@ -334,6 +334,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                   </div>
                 </div>
               )}
+              </div>}
             </div>
 
             {/* Footer escalation + input */}
