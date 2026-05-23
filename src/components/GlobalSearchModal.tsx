@@ -592,10 +592,6 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 ) : (
                   /* Show shortcuts and suggestions when NOT typing */
                   <div className="space-y-6">
-                    {/* Quick Access Shortcuts */}
-                    <div>
-                      <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider">
-                        Quick Access
                     {/* Role-aware shortcuts */}
                     <div>
                       <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
