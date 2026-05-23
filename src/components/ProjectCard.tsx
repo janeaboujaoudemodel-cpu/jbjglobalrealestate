@@ -176,12 +176,23 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         )}
       </div>
 
+      {/* Owner edit affordance — top-right, below favorite stack. Owners only. */}
+      <div className="absolute top-3 right-3 z-30" data-no-contrast-guard>
+        <OwnerCardEditMenu
+          projectId={project.id}
+          slug={project.slug}
+          saleStatus={project.status_label}
+          showSaleStatus={(project as any).show_sale_status}
+          className="mt-12"
+        />
+      </div>
+
       <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
-        {/* Image with Carousel — 16:10 landscape */}
+        {/* Image — static cover, NO carousel arrows on cards (gallery only). */}
         <div className="aspect-[16/10] overflow-hidden relative" data-surface="ink">
           <VerifiedMedia
             src={primaryImageUrl}
-            alt={images[currentImageIndex]?.alt_text || project.name}
+            alt={images[0]?.alt_text || project.name}
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             placeholderLabel=""
             loggerComponent="ProjectCard"
@@ -189,97 +200,47 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               projectId: project.id,
               slug: project.slug,
               name: project.name,
-              imageIndex: currentImageIndex,
             }}
           />
 
-          {/* Navigation Arrows */}
-          {images.length > 1 && (
-            <>
-              <button
-                onClick={handlePrevImage}
-                aria-label="Previous image"
-                data-no-contrast-guard
-                className={
-                  "absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full z-10 flex items-center justify-center transition-all " +
-                  "bg-[#FDFBF7] border border-[#B89555] !text-[#1A1A1A] " +
-                  "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
-                  "hover:bg-[#B89555] hover:!text-[#FFFFFF]"
-                }
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={handleNextImage}
-                aria-label="Next image"
-                data-no-contrast-guard
-                className={
-                  "absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full z-10 flex items-center justify-center transition-all " +
-                  "bg-[#FDFBF7] border border-[#B89555] !text-[#1A1A1A] " +
-                  "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
-                  "hover:bg-[#B89555] hover:!text-[#FFFFFF]"
-                }
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-
-              {/* Image Dots Indicator */}
-              <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex gap-1 z-10">
-                {images.slice(0, 5).map((_, idx) => (
-                  <span
-                    key={idx}
-                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                      idx === currentImageIndex
-                        ? 'bg-[#B89555] shadow-[0_0_10px_hsl(var(--gold)/0.55)]'
-                        : 'bg-[#FDFBF7]/70'
-                    }`}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-
-          {/* Top-Left: Developer Logo (preferred) — falls back to property-type label only when no logo exists */}
+          {/* Top-Left: Developer Logo — falls back to a developer NAMEPLATE (never property-type only).
+              Locked rule: cards must always identify the developer. */}
           {(() => {
             const logoUrl = getDeveloperLogoUrl(project.developer as any);
+            const devName = project.developer?.name || project.developer_name || null;
             if (logoUrl) {
               return (
                 <div className="absolute top-3 left-3 z-20">
                   <DeveloperLogo
                     src={logoUrl}
-                    alt={project.developer?.name || project.developer_name || ''}
+                    alt={devName || ''}
                     variant="bare"
                     loading="lazy"
                   />
                 </div>
               );
             }
-            if (project.property_type_label) {
+            if (devName) {
               return (
-                <CardBadge variant="status" className="absolute top-3 left-3 z-10">
-                  {project.property_type_label}
-                </CardBadge>
+                <div className="absolute top-3 left-3 z-20">
+                  <DeveloperLogo
+                    variant="nameplate"
+                    name={devName}
+                    alt={devName}
+                  />
+                </div>
               );
             }
             return null;
           })()}
 
-          {/* Sale Status Badge — Bottom Left */}
-          {saleStatusLabel && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
-            <CardBadge variant="status" className="absolute bottom-3 left-3 z-10">
+          {/* Sale Status Badge — opt-in (owner toggles `show_sale_status`).
+              Rectangular gold-frame style to match the price pill. */}
+          {(project as any).show_sale_status && saleStatusLabel && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
+            <CardBadge variant="status-frame" className="absolute bottom-3 left-3 z-10">
               {saleStatusLabel}
             </CardBadge>
           )}
-
-          {/* Bottom-Right: Price label — shown over image ONLY on homepage; on other pages it moves next to the Ready/handover row */}
-          {project.price_from && isHomepage ? (
-            <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
-              <span className="price-pill-eyebrow">From</span>
-              <span className="price-pill-value">
-                {formatPriceWithCurrency(project.price_from, currency)}
-              </span>
-            </div>
-          ) : null}
 
           {/* Sold Out Badge */}
           {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
@@ -310,8 +271,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
           {/* Detail metadata above developer name */}
           <div className="flex flex-col gap-2">
-            {/* Payment Plan removed from cards — shown only on details page */}
-
             {(getUnitTypesText() || getSizeText()) && (
               <div className="flex items-center gap-2 text-[#1A1A1A] text-xs flex-wrap font-medium">
                 {getUnitTypesText() && (
@@ -325,10 +284,12 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             )}
           </div>
 
-          {project.developer && (
+          {/* Developer link — always rendered when a name exists, even without slug */}
+          {(project.developer?.name || project.developer_name) && (
             <DeveloperLink
-              name={project.developer.name}
-              slug={project.developer.slug}
+              name={project.developer?.name || project.developer_name || ''}
+              slug={project.developer?.slug}
+              logoUrl={getDeveloperLogoUrl(project.developer as any)}
               className="text-sm block"
               showPrefix={true}
             />
@@ -336,22 +297,18 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
           {/* Description */}
           <p className="text-[#1A1A1A] text-sm leading-relaxed line-clamp-3 overflow-hidden">
-
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
             <span className="text-[#B89555] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
               ...more
             </span>
           </p>
 
-          {/* Premium full-width divider — directly after developer name, before handover */}
+          {/* Thin gold hairline — separates description from bottom row (no spacer rectangle). */}
           <div className="w-full border-t border-[#B89555]/45" />
 
-          {/* Spacer pushes handover row to the very bottom */}
-          <div className="flex-1" />
-
-          {/* Bottom row — Price (left) parallel to Handover/Ready (right). Price hidden here on homepage (lives on the image). */}
+          {/* Bottom row — Price (left) parallel to Handover/Ready (right). Same on every page. */}
           <div className="flex items-center justify-between gap-2">
-            {!isHomepage && project.price_from ? (
+            {project.price_from ? (
               <div className="price-pill-premium" data-price-badge>
                 <span className="price-pill-eyebrow">From</span>
                 <span className="price-pill-value">
