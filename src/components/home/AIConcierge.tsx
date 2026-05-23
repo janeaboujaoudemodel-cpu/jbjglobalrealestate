@@ -4,11 +4,13 @@
  * Calls supabase/functions/ai-concierge (Lovable AI Gateway, streaming SSE).
  */
 import { useState, useRef, useEffect, useCallback } from "react";
-import { X, Send, Sparkles, MessageCircle, Loader2 } from "lucide-react";
+import { X, Send, Sparkles, MessageCircle, Loader2, MessageSquare, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
+import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
+
 
 type Msg = { role: "user" | "assistant"; content: string };
 
