@@ -121,7 +121,7 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <button
                 onClick={() => setFilterOpen(true)}
-                className="h-9 w-9 flex items-center justify-center rounded-full border border-[#B89555]/40 hover:border-[#B89555]/70 hover:bg-[#B89555]/[0.06] transition-colors focus:outline-none"
+                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[#B89555]/[0.08] transition-colors focus:outline-none"
                 aria-label="Filter"
               >
                 <SlidersHorizontal className="w-[18px] h-[18px] text-[#B89555]" />
