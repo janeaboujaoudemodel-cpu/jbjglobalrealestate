@@ -60,6 +60,34 @@ export function stripAttribution(text: string): string {
  * Full sanitization for plain-text display contexts (cards, snippets, truncated previews).
  * Strips HTML, competitor refs, attribution, and cleans whitespace.
  */
+/**
+ * Strip boilerplate section headers that brochures dump at the start of the
+ * description ("Project general facts", "Finishing and materials", etc.) so
+ * the card opens with the actual narrative sentence.
+ */
+const BOILERPLATE_HEADERS_REGEX = new RegExp(
+  '(?:^|\\.\\s+|\\n+)\\s*(?:' + [
+    'Project\\s+general\\s+facts',
+    'General\\s+facts',
+    'Project\\s+overview',
+    'Overview',
+    'Finishing\\s+and\\s+materials',
+    'Kitchen\\s+and\\s+appliances',
+    'Furnishing',
+    'Location\\s+description\\s+and\\s+benefits',
+    'Location\\s+description',
+    'Amenities',
+    'Payment\\s+plan',
+    'Handover',
+  ].join('|') + ')\\s*[:\\.\\-–—]?\\s*',
+  'gi'
+);
+
+export function stripBoilerplateHeaders(text: string): string {
+  // Replace each header with a sentence break so surrounding prose still flows.
+  return text.replace(BOILERPLATE_HEADERS_REGEX, ' ').replace(/^\s*[\.\-–—:]\s*/, '');
+}
+
 export function sanitizeForDisplay(text: string | null | undefined): string {
   if (!text) return '';
   let clean = text;
@@ -71,15 +99,19 @@ export function sanitizeForDisplay(text: string | null | undefined): string {
   clean = stripCompetitorNames(clean);
   // Remove attribution patterns
   clean = stripAttribution(clean);
+  // Drop brochure section headers so the description starts with real prose
+  clean = stripBoilerplateHeaders(clean);
   // Clean up leftover artifacts
   clean = clean
     .replace(/\(\s*\)/g, '')        // empty parens
     .replace(/\[\s*\]/g, '')        // empty brackets
     .replace(/\s{2,}/g, ' ')        // multiple spaces
     .replace(/\n{3,}/g, '\n\n')     // excessive newlines
+    .replace(/^\s*[\.\-–—:]\s*/, '') // leading punctuation left behind
     .trim();
   return clean;
 }
+
 
 /**
  * Sanitize HTML content for rich display (detail pages).
