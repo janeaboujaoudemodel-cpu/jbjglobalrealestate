@@ -218,14 +218,17 @@ export const PublicRoutes = () => (
     <Route path="/areas/:slug" element={<RedirectWithParams to="/area" />} />
     <Route path="/resale-properties" element={<ResaleProperties />} />
     <Route path="/map" element={<PropertyMap />} />
-    <Route path="/listing-portal" element={<AuthRequiredRoute><ListingPortal /></AuthRequiredRoute>} />
-    <Route path="/listing-portal/submit" element={<AuthRequiredRoute><ListingPortalSubmit /></AuthRequiredRoute>} />
-    <Route path="/listing-portal/my-listings" element={<AuthRequiredRoute><ListingPortalMyListings /></AuthRequiredRoute>} />
+    {/* Unified List Your Property page (manual + AI + browse). Old routes 301 here. */}
+    <Route path="/list-property" element={<ListProperty />} />
+    <Route path="/dashboard/my-listings" element={<AuthRequiredRoute><ListingPortalMyListings /></AuthRequiredRoute>} />
+    <Route path="/listing-portal" element={<Navigate to="/list-property?mode=browse" replace />} />
+    <Route path="/listing-portal/submit" element={<Navigate to="/list-property?mode=ai" replace />} />
+    <Route path="/listing-portal/my-listings" element={<Navigate to="/dashboard/my-listings" replace />} />
+    <Route path="/sell" element={<Navigate to="/list-property?purpose=sale&mode=manual" replace />} />
     <Route path="/property-evaluator" element={<PropertyEvaluator />} />
     <Route path="/rental-index" element={<RentalIndex />} />
-    <Route path="/sell" element={<SellWithUs />} />
     <Route path="/sell/valuation" element={<RequestValuation />} />
-    <Route path="/property-management/list" element={<LandlordListForm />} />
+    <Route path="/property-management/list" element={<Navigate to="/list-property?purpose=rent&mode=manual" replace />} />
     <Route path="/property-measurement" element={<PropertyMeasurement />} />
     <Route path="/buy" element={<Navigate to="/properties?transactionType=buy" replace />} />
     <Route path="/rent" element={<Navigate to="/properties?transactionType=rent" replace />} />
