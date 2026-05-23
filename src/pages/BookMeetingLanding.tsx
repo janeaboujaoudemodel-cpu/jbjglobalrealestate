@@ -118,6 +118,14 @@ export default function BookMeetingLanding() {
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [done, setDone] = useState<null | { when: string }>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  // Pre-fill email from authenticated account (once)
+  useEffect(() => {
+    if (user?.email && !email) setEmail(user.email);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.email]);
+
 
   useEffect(() => {
     document.title = "Book a Meeting with Jane Bou Jaoude · JBJ GLOBAL REAL ESTATE";
