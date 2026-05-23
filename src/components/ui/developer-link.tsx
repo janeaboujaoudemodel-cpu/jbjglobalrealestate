@@ -35,12 +35,14 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
   const href = slug ? `/developer/${slug}` : `/developers?search=${encodeURIComponent(name)}`;
 
   return (
-    <span ref={ref} className={cn("text-muted-foreground", className)}>
+    <span ref={ref} className={cn("text-[#1A1A1A]", className)}>
       {showPrefix && <span className="text-[#1A1A1A]">by </span>}
       <Link
         to={href}
         onClick={handleClick}
-        className="font-semibold text-[#B89555] underline underline-offset-4 decoration-[#B89555]/50 cursor-pointer transition-colors duration-150 hover:text-[#8E6E36] hover:decoration-[#B89555] focus-visible:text-[#8E6E36] focus-visible:decoration-[#B89555] focus-visible:outline-none"
+        data-no-contrast-guard
+        style={{ color: '#B89555' }}
+        className="font-bold !text-[#B89555] underline underline-offset-4 decoration-[#B89555]/60 cursor-pointer transition-colors duration-150 hover:!text-[#8E6E36] hover:decoration-[#B89555] focus-visible:!text-[#8E6E36] focus-visible:decoration-[#B89555] focus-visible:outline-none"
       >
         {name}
       </Link>

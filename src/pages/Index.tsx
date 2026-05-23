@@ -519,8 +519,8 @@ const Index = () => {
 
               <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
                 <Link to="/mortgage-calculator">
-                  <Button size="default" className="gap-2 px-6 py-4 text-sm bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
-                    <Sparkles className="w-4 h-4" />
+                  <Button data-surface="dark" size="default" className="gap-2 px-6 py-4 text-sm bg-[#1A1A1A] !text-white hover:bg-[#0E0E0E] hover:!text-white border border-[#B89555]/40 shadow-[0_6px_18px_rgba(26,26,26,0.25)]">
+                    <Sparkles className="w-4 h-4 text-[#E8C77A]" />
                     <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
                     <ArrowUpRight className="w-4 h-4" />
                   </Button>
