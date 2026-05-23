@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { ChevronLeft, ChevronRight, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Mail, Phone, MessageCircle, Calendar } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
@@ -255,35 +255,22 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </CardBadge>
           )}
 
-          {/* Sale Status Badge — Top Right */}
+          {/* Sale Status Badge — Bottom Left */}
           {saleStatusLabel && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
-            <CardBadge variant="status" className="absolute top-3 right-3 z-10">
+            <CardBadge variant="status" className="absolute bottom-3 left-3 z-10">
               {saleStatusLabel}
             </CardBadge>
           )}
 
-          {/* Bottom-Left: Price label — premium square, transparent core, orange border + ink */}
+          {/* Bottom-Right: Price label — premium square, transparent core, orange border + ink */}
           {project.price_from ? (
-            <div className="absolute bottom-3 left-3 z-10 price-pill-premium" data-price-badge>
+            <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
               <span className="price-pill-eyebrow">From</span>
               <span className="price-pill-value">
                 {formatPriceWithCurrency(project.price_from, currency)}
               </span>
             </div>
           ) : null}
-
-          {/* Handover date / Ready — Bottom Right corner */}
-          {(() => {
-            const derived = deriveHandover(project) || HANDOVER_FALLBACK;
-            return derived ? (
-              <div
-                className="absolute bottom-3 right-3 z-10 px-2.5 py-1 rounded-md bg-[#FDFBF7]/95 border border-[#B89555]/50 shadow-sm handover-orange"
-                data-no-contrast-guard
-              >
-                <span className="font-semibold text-xs tabular-nums">{derived}</span>
-              </div>
-            ) : null;
-          })()}
 
           {/* Sold Out Badge */}
           {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
@@ -342,7 +329,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
 
           {/* Description */}
-          <p className="text-[#1A1A1A] text-sm leading-relaxed flex-1 line-clamp-3 overflow-hidden">
+          <p className="text-[#1A1A1A] text-sm leading-relaxed line-clamp-3 overflow-hidden">
 
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
             <span className="text-[#B89555] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
@@ -350,8 +337,22 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </span>
           </p>
 
-          {/* Handover removed from content body — now shown as a top-right badge on the image. */}
+          {/* Spacer pushes handover row to the very bottom */}
+          <div className="flex-1" />
 
+          {/* Premium gold divider — separates content above from handover */}
+          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+
+          {/* Handover date / Ready — right-aligned, bottom of card */}
+          <div className="flex justify-end">
+            <span
+              data-no-contrast-guard
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FDFBF7] border border-[#B89555]/40 shadow-sm text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange"
+            >
+              <Calendar className="w-3 h-3 text-[#B89555]" aria-hidden="true" />
+              {deriveHandover(project) || HANDOVER_FALLBACK}
+            </span>
+          </div>
 
           {/* Owner-only diagnostic — Updated date hidden from public */}
           {isOwner && (project as any).updated_at && (

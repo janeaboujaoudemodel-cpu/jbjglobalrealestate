@@ -198,24 +198,12 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               </div>
             )}
 
-            {/* Premium price label — bottom LEFT */}
+            {/* Premium price label — bottom RIGHT corner of image */}
             {typeof project.price_from === 'number' && project.price_from > 0 && (
-              <div className="absolute bottom-3 left-3 z-20 price-pill-premium" data-price-badge data-no-contrast-guard>
+              <div className="absolute bottom-3 right-3 z-20 price-pill-premium" data-price-badge data-no-contrast-guard>
                 <span className="price-pill-eyebrow">From</span>
                 <span className="price-pill-value">
                   {formatPrice(project.price_from)}
-                </span>
-              </div>
-            )}
-
-            {/* Handover date / Ready status — bottom RIGHT corner */}
-            {(deriveHandover(project) || HANDOVER_FALLBACK) && (
-              <div
-                className="absolute bottom-3 right-3 z-20 px-2.5 py-1 rounded-md bg-[#FDFBF7]/95 border border-[#B89555]/40 shadow-sm handover-orange"
-                data-no-contrast-guard
-              >
-                <span className="font-semibold text-xs tabular-nums">
-                  {deriveHandover(project) || HANDOVER_FALLBACK}
                 </span>
               </div>
             )}
@@ -246,20 +234,31 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             })()}
 
             {project.developer_name && (
-              <>
-                <DeveloperLink
-                  name={project.developer_name}
-                  slug={project.developer?.slug || null}
-                  className="text-xs block"
-                  showPrefix={true}
-                />
-                {/* Premium gold divider after developer name */}
-                <hr className="border-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent my-2" />
-              </>
+              <DeveloperLink
+                name={project.developer_name}
+                slug={project.developer?.slug || null}
+                className="text-xs block"
+                showPrefix={true}
+              />
             )}
+
+            {/* Spacer pushes handover row to the very bottom of the card */}
             <div className="flex-grow" />
 
-            {/* Payment Plan removed from cards — shown only on details page */}
+            {/* Premium gold divider — separates content above from handover row */}
+            <hr className="border-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent mt-3" />
+
+            {/* Handover date / Ready — right-aligned, bottom of card */}
+            <div className="flex justify-end pt-2">
+              <span
+                data-no-contrast-guard
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FDFBF7] border border-[#B89555]/40 shadow-sm text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange"
+              >
+                <Calendar className="w-3 h-3 text-[#B89555]" aria-hidden="true" />
+                {deriveHandover(project) || HANDOVER_FALLBACK}
+              </span>
+            </div>
+
 
           </div>
         </div>

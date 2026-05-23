@@ -3,7 +3,7 @@
  import type { ReellyProject } from "@/hooks/useReellyProjects";
  import FavoriteButton from "./FavoriteButton";
  import ShortlistBadgeButton from "./ShortlistBadgeButton";
- import { ChevronLeft, ChevronRight, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
+ import { ChevronLeft, ChevronRight, MapPin, Mail, Phone, MessageCircle, Calendar } from "lucide-react";
  import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
@@ -213,28 +213,15 @@ const ReellyProjectCard = ({
                 );
               })()}
            
-          {/* Bottom-Left: Premium price label */}
+          {/* Bottom-Right: Premium price label */}
           {project.price_from ? (
-            <div className="absolute bottom-3 left-3 z-10 price-pill-premium" data-price-badge>
+            <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
               <span className="price-pill-eyebrow">From</span>
               <span className="price-pill-value">
                 {formatPriceWithCurrency(project.price_from, currency)}
               </span>
             </div>
           ) : null}
-
-          {/* Bottom-Right: Handover date / Ready badge */}
-          {(() => {
-            const derived = deriveHandover(project) || HANDOVER_FALLBACK;
-            return derived ? (
-              <div
-                className="absolute bottom-3 right-3 z-10 px-2.5 py-1 rounded-md bg-[#FDFBF7]/95 border border-[#B89555]/50 shadow-sm handover-orange"
-                data-no-contrast-guard
-              >
-                <span className="font-semibold text-xs tabular-nums">{derived}</span>
-              </div>
-            ) : null;
-          })()}
         </div>
 
          
@@ -266,12 +253,6 @@ const ReellyProjectCard = ({
             />
           )}
 
-          {/* Premium gold divider between developer and description/details */}
-          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent my-2" />
-
-          {/* Handover moved to top-right badge on image. */}
-
-
            {/* Payment Plan removed from cards — shown only on details page */}
            
            {/* Size info - hidden in compact mode */}
@@ -291,15 +272,33 @@ const ReellyProjectCard = ({
            
            {/* Description - hidden in compact mode */}
            {!compact && (
-             <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1">
+             <p className="text-muted-foreground text-sm leading-relaxed mb-3">
                 {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
                  <span className="text-[#1A1A1A] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
                    ...more
                  </span>
              </p>
            )}
+
+           {/* Spacer pushes handover row to the very bottom */}
+           <div className="flex-1" />
+
+           {/* Premium gold divider — separates content above from handover */}
+           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+
+           {/* Handover date / Ready — right-aligned, bottom of card */}
+           <div className="flex justify-end pt-2">
+             <span
+               data-no-contrast-guard
+               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FDFBF7] border border-[#B89555]/40 shadow-sm text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange"
+             >
+               <Calendar className="w-3 h-3 text-[#B89555]" aria-hidden="true" />
+               {deriveHandover(project) || HANDOVER_FALLBACK}
+             </span>
+           </div>
          </div>
        </Link>
+
  
        {/* CTA Buttons - hidden in compact mode */}
        {!compact && (
