@@ -315,9 +315,8 @@ serve(async (req) => {
         }
 
         // Parse all JSONB arrays with proper typing
-        const documents: DocumentData[] = Array.isArray(item.documents) ? item.documents : [];
-        const floorPlanTypes: FloorPlanData[] = Array.isArray(item.floor_plan_types) ? item.floor_plan_types : [];
-        const unitTypes: UnitTypeData[] = Array.isArray(item.unit_types) ? item.unit_types : [];
+        const floorPlanTypes: FloorPlanData[] = jsonArray(item.floor_plan_types) as FloorPlanData[];
+        const unitTypes: UnitTypeData[] = jsonArray(item.unit_types) as UnitTypeData[];
         const amenitiesList: string[] = Array.isArray(item.amenities) 
           ? item.amenities.map((a: unknown) => String(a))
           : (Array.isArray(item.amenities_list) ? item.amenities_list.map((a: unknown) => String(a)) : []);
@@ -405,7 +404,7 @@ serve(async (req) => {
           is_developer_direct: true,
           is_featured: false,
           is_premium: false,
-          is_published: publish,
+          is_published: publish && readyToPublish,
           is_sold_out: item.sale_status?.toLowerCase().includes('sold') || item.status_label?.toLowerCase().includes('sold') || false,
         };
 
@@ -498,7 +497,9 @@ serve(async (req) => {
             status: "approved", 
             matched_project_id: projectId,
             reviewed_at: new Date().toISOString(),
-            review_notes: "Auto-approved via bulk-approve-imports v2"
+            review_notes: readyToPublish
+              ? "Auto-approved via strict publish readiness"
+              : `PENDING_VERIFICATION:${blockers.join(",")}`
           })
           .eq("id", item.id);
 
