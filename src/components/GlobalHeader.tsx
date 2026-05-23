@@ -123,7 +123,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       const portalStillOpen = document.querySelector('[data-radix-portal]');
       if (portalStillOpen) return;
       setActiveMegaMenu(null);
-    }, 200); // Stabilized close delay to prevent hover flicker
+    }, 60); // Snappy close — perceived as instant while still preventing flicker
   };
 
   // Clear any pending close timeout when entering mega menu panels
