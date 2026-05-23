@@ -1,12 +1,17 @@
 import { useState, type ImgHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { logImageFailure } from "@/utils/imageLoadLogger";
 
 interface ImageWithSkeletonProps extends ImgHTMLAttributes<HTMLImageElement> {
   /** Optional className applied to the wrapping container. */
   wrapperClassName?: string;
   /** Rounded preset for both skeleton + image. */
   rounded?: "none" | "md" | "lg" | "xl" | "full";
+  /** Name of the rendering component, used for failure logs. */
+  loggerComponent?: string;
+  /** Free-form context attached to failure logs. */
+  loggerContext?: Record<string, unknown>;
 }
 
 const roundedMap = {
@@ -28,6 +33,8 @@ export function ImageWithSkeleton({
   className,
   onLoad,
   onError,
+  loggerComponent,
+  loggerContext,
   ...imgProps
 }: ImageWithSkeletonProps) {
   const [loaded, setLoaded] = useState(false);
@@ -53,6 +60,12 @@ export function ImageWithSkeleton({
         }}
         onError={(e) => {
           setErrored(true);
+          logImageFailure({
+            src: e.currentTarget.src || (imgProps.src as string),
+            component: loggerComponent || "ImageWithSkeleton",
+            reason: "onerror",
+            context: { ...loggerContext, alt: imgProps.alt },
+          });
           onError?.(e);
         }}
       />

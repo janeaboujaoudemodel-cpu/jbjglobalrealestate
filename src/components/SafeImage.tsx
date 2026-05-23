@@ -1,7 +1,12 @@
 import * as React from "react";
+import { logImageFailure } from "@/utils/imageLoadLogger";
 
 type SafeImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   fallbackSrc?: string;
+  /** Name of the rendering component, used for failure logs. */
+  loggerComponent?: string;
+  /** Free-form context attached to failure logs (slug, projectId…). */
+  loggerContext?: Record<string, unknown>;
 };
 
 const APP_ASSET_URLS = import.meta.glob(
@@ -47,9 +52,11 @@ function resolveAppAssetUrl(src?: string): string | undefined {
 }
 
 export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
-  ({ fallbackSrc, onError, ...props }, ref) => {
+  ({ fallbackSrc, onError, loggerComponent, loggerContext, ...props }, ref) => {
     const resolvedSrc = typeof props.src === "string" ? resolveAppAssetUrl(props.src) : props.src;
     const resolvedFallback = resolveAppAssetUrl(fallbackSrc);
+    const component = loggerComponent || "SafeImage";
+    const baseContext = { ...loggerContext, alt: props.alt };
 
     // If loading is explicitly set to "eager", respect it (for hero/first gallery images)
     const loadingAttr = props.loading ?? "lazy";
@@ -70,12 +77,31 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
           // Detect broken images that load as 0x0
           const img = e.currentTarget;
           if (img.naturalWidth === 0 && resolvedFallback && img.src !== resolvedFallback) {
+            logImageFailure({
+              src: img.src,
+              component,
+              reason: "zero-dimensions",
+              context: baseContext,
+            });
             img.src = resolvedFallback;
           } else if (img.naturalWidth === 0) {
+            logImageFailure({
+              src: img.src,
+              component,
+              reason: "zero-dimensions",
+              context: baseContext,
+            });
             onError?.(e as unknown as React.SyntheticEvent<HTMLImageElement, Event>);
           }
         }}
         onError={(e) => {
+          const failedSrc = e.currentTarget.src;
+          logImageFailure({
+            src: failedSrc,
+            component,
+            reason: "onerror",
+            context: baseContext,
+          });
           if (resolvedFallback && e.currentTarget.src !== resolvedFallback) {
             e.currentTarget.src = resolvedFallback;
           }
