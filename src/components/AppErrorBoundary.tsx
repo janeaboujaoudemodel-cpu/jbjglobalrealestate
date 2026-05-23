@@ -93,104 +93,22 @@ class AppErrorBoundary extends React.Component<
 
   render() {
     if (this.state.hasError) {
-      // While retries remain, render nothing instead of the visible card so
-      // users never see the fallback flash for transient errors.
-      if (this.state.retryCount < 6) {
-        return null;
+      // Never show a user-facing "Connection issue" card. Always render
+      // nothing while we silently retry. If retries are exhausted, schedule
+      // a one-shot hard reload (rate-limited) instead of surfacing a modal.
+      if (this.state.retryCount >= 6) {
+        try {
+          const k = "jbj_boundary_hard_reload_at";
+          const last = Number(sessionStorage.getItem(k) || 0);
+          if (Date.now() - last > 60_000) {
+            sessionStorage.setItem(k, String(Date.now()));
+            setTimeout(() => window.location.reload(), 400);
+          }
+        } catch {
+          setTimeout(() => window.location.reload(), 400);
+        }
       }
-      return (
-        <div
-          style={{
-            minHeight: "100vh",
-            background: "#FDFBF7",
-            color: "#1A1A1A",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "2rem",
-          }}
-        >
-          <div
-            style={{
-              maxWidth: "500px",
-              width: "100%",
-              background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)",
-              borderRadius: "16px",
-              padding: "2rem",
-              border: "2px solid rgba(200,167,102,0.5)",
-              boxShadow: "0 12px 40px rgba(200,167,102,0.25)",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1rem" }}>
-              <div
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "12px",
-                  background: "linear-gradient(135deg, #C8A766, #ECE2D2)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <RefreshCcw size={20} color="#1a1a1a" />
-              </div>
-              <h1 style={{ fontSize: "1.25rem", fontWeight: 600, margin: 0, color: "#1a1a1a" }}>
-                Connection issue
-              </h1>
-            </div>
-
-            <p style={{ color: "#555", fontSize: "0.875rem", marginBottom: "1.5rem", lineHeight: 1.6 }}>
-              We couldn't reach a resource. Please check your connection and refresh.
-            </p>
-
-            <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-              <button
-                onClick={this.handleReload}
-                disabled={this.state.isReloading}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  padding: "0.625rem 1.25rem",
-                  background: "linear-gradient(135deg, #C8A766, #ECE2D2)",
-                  color: "#1a1a1a",
-                  border: "none",
-                  borderRadius: "8px",
-                  fontWeight: 600,
-                  cursor: this.state.isReloading ? "wait" : "pointer",
-                  fontSize: "0.875rem",
-                  boxShadow: "0 4px 12px rgba(200,167,102,0.3)",
-                  opacity: this.state.isReloading ? 0.75 : 1,
-                }}
-              >
-                <RefreshCcw size={16} />
-                {this.state.isReloading ? "Refreshing..." : "Refresh Page"}
-              </button>
-              <button
-                onClick={this.handleGoHome}
-                data-no-contrast-guard
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  padding: "0.625rem 1.25rem",
-                  background: "#1A1A1A",
-                  color: "#FDFBF7",
-                  border: "2px solid rgba(200,167,102,0.6)",
-                  borderRadius: "8px",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <Home size={16} />
-                Go to Homepage
-              </button>
-            </div>
-          </div>
-        </div>
-      );
+      return null;
     }
 
     return this.props.children;
