@@ -278,40 +278,52 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
               )}
 
 
-              {messages.map((m, i) => (
-                <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div
-                    data-no-contrast-guard
-                    className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-[13.5px] leading-relaxed
-                      ${m.role === "user"
-                        ? "bg-[#E2C9A0] text-[#1A1A1A] rounded-br-md"
-                        : "bg-white/[0.07] text-[#FDFBF7] border border-[#D4B896]/25 rounded-bl-md"}`}
-                  >
-                    {m.role === "assistant" ? (
-                      <div className="prose prose-sm prose-invert max-w-none
-                        prose-p:my-1.5 prose-p:text-[#FDFBF7]
-                        prose-a:text-[#E2C9A0] prose-a:no-underline hover:prose-a:underline
-                        prose-strong:text-[#FDFBF7] prose-ul:my-1.5 prose-li:my-0.5
-                        prose-code:text-[#E2C9A0] prose-code:bg-white/5 prose-code:px-1 prose-code:rounded">
-                        <ReactMarkdown
-                          components={{
-                            a: ({ href, children }) => {
-                              if (href && href.startsWith("/")) {
-                                return <Link to={href} onClick={onClose}>{children}</Link>;
-                              }
-                              return <a href={href} target="_blank" rel="noreferrer">{children}</a>;
-                            },
-                          }}
-                        >
-                          {m.content || "…"}
-                        </ReactMarkdown>
-                      </div>
-                    ) : (
-                      m.content
-                    )}
+              {messages.map((m, i) => {
+                const { action, cleaned } = m.role === "assistant"
+                  ? parseAction(m.content)
+                  : { action: null as ReturnType<typeof parseAction>["action"], cleaned: m.content };
+                return (
+                  <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div
+                      data-no-contrast-guard
+                      className={`max-w-[90%] px-4 py-2.5 rounded-2xl text-[13.5px] leading-relaxed
+                        ${m.role === "user"
+                          ? "bg-[#E2C9A0] text-[#1A1A1A] rounded-br-md"
+                          : "bg-white/[0.07] text-[#FDFBF7] border border-[#D4B896]/25 rounded-bl-md"}`}
+                    >
+                      {m.role === "assistant" ? (
+                        <>
+                          {cleaned && (
+                            <div className="prose prose-sm prose-invert max-w-none
+                              prose-p:my-1.5 prose-p:text-[#FDFBF7]
+                              prose-a:text-[#E2C9A0] prose-a:no-underline hover:prose-a:underline
+                              prose-strong:text-[#FDFBF7] prose-ul:my-1.5 prose-li:my-0.5
+                              prose-code:text-[#E2C9A0] prose-code:bg-white/5 prose-code:px-1 prose-code:rounded">
+                              <ReactMarkdown
+                                components={{
+                                  a: ({ href, children }) => {
+                                    if (href && href.startsWith("/")) {
+                                      return <Link to={href} onClick={onClose}>{children}</Link>;
+                                    }
+                                    return <a href={href} target="_blank" rel="noreferrer">{children}</a>;
+                                  },
+                                }}
+                              >
+                                {cleaned || "…"}
+                              </ReactMarkdown>
+                            </div>
+                          )}
+                          {action && (
+                            <ConciergeActionCard action={action} onNavigate={onClose} />
+                          )}
+                        </>
+                      ) : (
+                        m.content
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {streaming && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex justify-start">
@@ -325,40 +337,57 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             {/* Footer escalation + input */}
             <div className="border-t border-[#D4B896]/20 px-5 py-3 space-y-3">
               {messages.length > 0 && (
-                <div className="flex items-center justify-between gap-2 text-[11px] text-[#FDFBF7]/55">
-                  <span className="shrink-0">Switch channel</span>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onClose();
-                        setTimeout(() => window.dispatchEvent(new CustomEvent('jbj:open-chat-support')), 250);
-                      }}
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.16em] font-semibold text-[#FDFBF7]/65">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    24/7 Support · Free
+                  </span>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button
+                        type="button"
+                        data-no-contrast-guard
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11.5px] font-semibold
+                          text-[#FDFBF7] border border-[#D4B896]/45 bg-white/[0.05] hover:bg-white/[0.10] hover:border-[#E2C9A0]/70 transition"
+                      >
+                        Switch channel
+                        <ChevronDown className="h-3 w-3 text-[#E2C9A0]" />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      align="end"
+                      sideOffset={8}
                       data-no-contrast-guard
-                      title="Chat Support"
-                      className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[#D4B896]/30 text-[#E2C9A0] hover:text-[#FDFBF7] hover:border-[#E2C9A0]/60 transition"
+                      className="w-[280px] p-2 space-y-1.5 bg-[#1A1A1A]/95 backdrop-blur-xl border-[#D4B896]/45 text-[#FDFBF7]"
+                      style={{ boxShadow: "0 20px 50px rgba(0,0,0,0.55)" }}
                     >
-                      <MessageSquare className="h-3 w-3" /> Chat
-                    </button>
-                    <a
-                      href={getWhatsAppUrl()}
-                      target="_blank"
-                      rel="noreferrer"
-                      data-no-contrast-guard
-                      title="WhatsApp"
-                      className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[#D4B896]/30 text-[#E2C9A0] hover:text-[#FDFBF7] hover:border-[#E2C9A0]/60 transition"
-                    >
-                      <MessageCircle className="h-3 w-3" /> WhatsApp
-                    </a>
-                    <a
-                      href={getCallUrl()}
-                      data-no-contrast-guard
-                      title="Call an agent"
-                      className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[#D4B896]/30 text-[#E2C9A0] hover:text-[#FDFBF7] hover:border-[#E2C9A0]/60 transition"
-                    >
-                      <Phone className="h-3 w-3" /> Call
-                    </a>
-                  </div>
+                      <ChannelCard channel={{
+                        id: "chat-support",
+                        label: "Chat Support",
+                        description: "Talk to a JBJ agent",
+                        responseTime: "Replies in ~2 min",
+                        Icon: MessageSquare,
+                        action: () => { onClose(); setTimeout(() => window.dispatchEvent(new CustomEvent('jbj:open-chat-support')), 250); },
+                      }} />
+                      <ChannelCard channel={{
+                        id: "whatsapp",
+                        label: "WhatsApp",
+                        description: "Reply in minutes",
+                        responseTime: "24/7",
+                        Icon: MessageCircle,
+                        href: getWhatsAppUrl(),
+                        external: true,
+                      }} />
+                      <ChannelCard channel={{
+                        id: "call",
+                        label: "Call an Agent",
+                        description: CONTACT_INFO.phone,
+                        responseTime: "Avg 30s pickup",
+                        Icon: Phone,
+                        href: getCallUrl(),
+                      }} />
+                    </PopoverContent>
+                  </Popover>
                 </div>
               )}
 
