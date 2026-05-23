@@ -88,8 +88,24 @@ serve(async (req: Request): Promise<Response> => {
   const svixSignature = req.headers.get("svix-signature");
   const webhookSecret = Deno.env.get("RESEND_WEBHOOK_SECRET");
 
-  // If webhook secret is configured, enforce signature validation
-  if (webhookSecret) {
+  // Mandatory: webhook secret MUST be configured. Reject otherwise.
+  if (!webhookSecret) {
+    console.error("RESEND_WEBHOOK_SECRET not configured");
+    await logSecurityEvent(supabaseClient, {
+      event_type: 'webhook_misconfigured',
+      function_name: 'resend-inbound-email-webhook',
+      client_ip: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown",
+      severity: 'critical',
+      details: { reason: 'missing_webhook_secret' },
+    });
+    return new Response(JSON.stringify({ error: "Server misconfigured" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // Enforce signature validation
+  {
     if (!svixId || !svixTimestamp || !svixSignature) {
       await logSecurityEvent(supabaseClient, {
         event_type: 'webhook_invalid',
