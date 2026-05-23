@@ -96,6 +96,9 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { user, isOwner } = useAuth();
+  const { mode } = useUserModeContext();
+  const roleShortcuts = MODE_SHORTCUTS[mode] ?? MODE_SHORTCUTS.investor;
+  const roleLabel = mode === 'broker' ? 'Broker' : mode === 'developer' ? 'Developer' : 'Investor';
 
   const debouncedQuery = useDebouncedValue(query.trim(), 300);
 
@@ -404,16 +407,16 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               <div>
                 <p className="text-xs font-semibold text-[#1A1A1A] mb-2 uppercase tracking-wider">Quick Access</p>
                 <div className="grid grid-cols-3 gap-2">
-                  {QUICK_SHORTCUTS.map((s) => (
+                  {[...roleShortcuts.slice(0, 3), ...QUICK_SHORTCUTS.slice(0, 3)].map((s) => (
                     <button
-                      key={s.route}
+                      key={s.route + s.label}
                       onClick={() => handleSelect(s.route)}
-                      className="flex flex-col items-center gap-1.5 p-2.5 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all group"
+                      className="flex flex-col items-center gap-1.5 p-2.5 rounded-lg bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-sm transition-all group"
                     >
-                      <div className={`w-9 h-9 rounded-lg ${s.color} flex items-center justify-center`}>
-                        <s.icon className="w-4 h-4 text-white" />
+                      <div className="w-9 h-9 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
+                        <s.icon className="w-4 h-4 text-[#1A1A1A]" />
                       </div>
-                      <span className="text-xs text-[#1A1A1A] font-medium">{s.label}</span>
+                      <span className="text-[11px] text-[#1A1A1A] font-medium text-center leading-tight">{s.label}</span>
                     </button>
                   ))}
                 </div>
@@ -593,6 +596,31 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     <div>
                       <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider">
                         Quick Access
+                    {/* Role-aware shortcuts */}
+                    <div>
+                      <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
+                        <Compass className="w-3.5 h-3.5 text-[#B89555]" /> For {roleLabel}s
+                      </p>
+                      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                        {roleShortcuts.map((shortcut) => (
+                          <button
+                            key={shortcut.route + shortcut.label}
+                            onClick={() => handleSelect(shortcut.route)}
+                            className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-md transition-all group"
+                          >
+                            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center group-hover:scale-105 transition-transform">
+                              <shortcut.icon className="w-5 h-5 text-[#1A1A1A]" />
+                            </div>
+                            <span className="text-xs font-medium text-[#1A1A1A] text-center leading-tight">{shortcut.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Quick Access */}
+                    <div>
+                      <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider">
+                        Quick Access
                       </p>
                       <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                         {QUICK_SHORTCUTS.map((shortcut) => (
@@ -601,8 +629,8 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                             onClick={() => handleSelect(shortcut.route)}
                             className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/20 hover:border-[#B89555]/50 hover:shadow-md transition-all group"
                           >
-                            <div className={`w-10 h-10 rounded-lg ${shortcut.color} flex items-center justify-center text-white group-hover:scale-110 transition-transform`}>
-                              <shortcut.icon className="w-5 h-5" />
+                            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6] border border-[#B89555]/35 flex items-center justify-center group-hover:scale-105 transition-transform">
+                              <shortcut.icon className="w-5 h-5 text-[#1A1A1A]" />
                             </div>
                             <span className="text-xs font-medium text-[#1A1A1A] text-center">{shortcut.label}</span>
                           </button>
