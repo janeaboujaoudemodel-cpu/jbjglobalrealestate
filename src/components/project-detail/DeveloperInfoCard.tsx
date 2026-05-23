@@ -6,6 +6,7 @@ import { useState } from "react";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import InlineEditable from "@/components/project-detail/owner/InlineEditable";
+import DeveloperLogoUploader from "@/components/project-detail/owner/DeveloperLogoUploader";
 
 type PublicFieldKey =
   | "instagram_url" | "linkedin_url" | "office_address" | "google_maps_url"
@@ -77,27 +78,35 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
           }}
         >
           <div className="flex flex-col lg:flex-row gap-8 items-start">
-            {/* Developer Logo */}
-            <div 
-              className="w-36 h-36 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
-              style={{
-                background: '#FFFFFF',
-                border: '3px solid hsl(42 45% 59%)',
-                boxShadow: '0 4px 16px rgba(200,167,102,0.3)'
-              }}
-            >
-              {isValidDeveloperLogoUrl(developer.logo_url) ? (
-                <img 
-                  src={developer.logo_url as string} 
-                  alt={`${developer.name} logo`}
-                  className="w-full h-full object-contain p-2"
-                />
-              ) : (
-                <span className="text-[#1A1A1A] font-bold text-base text-center px-2">
-                  {developer.name}
-                </span>
-              )}
-            </div>
+            {/* Developer Logo (owner-editable) */}
+            {editable && developer.id ? (
+              <DeveloperLogoUploader
+                developerId={developer.id}
+                developerName={developer.name}
+                logoUrl={developer.logo_url}
+              />
+            ) : (
+              <div
+                className="w-36 h-36 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
+                style={{
+                  background: '#FFFFFF',
+                  border: '3px solid hsl(42 45% 59%)',
+                  boxShadow: '0 4px 16px rgba(200,167,102,0.3)'
+                }}
+              >
+                {isValidDeveloperLogoUrl(developer.logo_url) ? (
+                  <img
+                    src={developer.logo_url as string}
+                    alt={`${developer.name} logo`}
+                    className="w-full h-full object-contain p-2"
+                  />
+                ) : (
+                  <span className="text-[#1A1A1A] font-bold text-base text-center px-2">
+                    {developer.name}
+                  </span>
+                )}
+              </div>
+            )}
 
             {/* Developer Info */}
             <div className="flex-1">
