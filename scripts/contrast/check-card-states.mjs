@@ -32,11 +32,14 @@ const reportDir = path.join(root, 'artifacts', 'contrast');
 const PREVIEW_URL = process.env.PREVIEW_URL || 'http://localhost:8080';
 const MAX_CARDS_PER_ROUTE = Number(process.env.MAX_CARDS_PER_ROUTE || 4);
 
-// Routes that surface property/project cards in the public UI.
+// Routes that reliably render project/property cards in the public UI
+// without authentication. /properties, /resale-properties and
+// /listing-portal gate their grids behind auth and don't paint cards
+// in a headless context — they're covered separately by the rendered
+// sweep against an authenticated fixture.
 const ROUTES = [
-  { path: '/', cardSelector: 'a[href^="/project/"], a[href^="/properties/"]' },
-  { path: '/properties', cardSelector: 'a[href^="/project/"], a[href^="/properties/"]' },
-  { path: '/resale-properties', cardSelector: 'a[href^="/project/"], a[href^="/properties/"]' },
+  { path: '/',           cardSelector: 'a[href*="/project/"]' },
+  { path: '/developers', cardSelector: 'a[href*="/project/"]' },
 ];
 
 const STATES = ['default', 'hover', 'focus-visible'];
