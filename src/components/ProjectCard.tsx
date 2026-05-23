@@ -14,6 +14,7 @@ import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
+import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
@@ -77,23 +78,8 @@ const shouldShowNewStatus = (projectName: string): boolean => {
   return PROJECTS_WITH_NEW_STATUS.some(p => normalized.includes(p) || p.includes(normalized));
 };
 
-// Get sale status badge styling
-const getSaleStatusBadge = (status?: string | null) => {
-  if (!status) return null;
-  const normalizedStatus = status.toLowerCase();
-  // Unified crystal-glass + gold-hairline + ink badge across all cards
-  const unified = 'card-status-badge';
-  if (normalizedStatus.includes('on sale') || normalizedStatus.includes('start')) {
-    return { label: 'On Sale', className: unified };
-  }
-  if (normalizedStatus.includes('announced')) {
-    return { label: 'Announced', className: unified };
-  }
-  if (normalizedStatus.includes('presale') || normalizedStatus.includes('eoi')) {
-    return { label: 'Presale', className: unified };
-  }
-  return null;
-};
+// Sale status label resolver — visual style is owned by <CardBadge variant="status" />.
+const getSaleStatusLabel = resolveSaleStatusLabel;
 
 const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -172,7 +158,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   };
 
   const statusLabel = getStatusLabel();
-  const saleStatusBadge = getSaleStatusBadge(project.status_label);
+  const saleStatusLabel = getSaleStatusLabel(project.status_label);
   const devLogoUrl = getDeveloperLogoUrl(project.developer);
   const devName = (project.developer as any)?.name as string | undefined;
   // ALWAYS show a developer mark when we have either a logo OR a name,
@@ -281,18 +267,18 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </>
           )}
 
-          {/* Top-Left: Property Type Label (if no developer mark) — solid ink badge */}
+          {/* Top-Left: Property Type Label (if no developer mark) */}
           {project.property_type_label && !hasDevMark && (
-            <div className="absolute top-3 left-3 z-10 card-status-badge" data-no-contrast-guard>
+            <CardBadge variant="status" className="absolute top-3 left-3 z-10">
               {project.property_type_label}
-            </div>
+            </CardBadge>
           )}
 
           {/* Sale Status Badge — Bottom Left */}
-          {saleStatusBadge && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
-            <div className={`absolute bottom-3 left-3 z-10 ${saleStatusBadge.className}`} data-no-contrast-guard>
-              {saleStatusBadge.label}
-            </div>
+          {saleStatusLabel && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
+            <CardBadge variant="status" className="absolute bottom-3 left-3 z-10">
+              {saleStatusLabel}
+            </CardBadge>
           )}
 
           {/* Bottom-Right: Price label — premium square, transparent core, orange border + ink */}
@@ -307,11 +293,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
           {/* Sold Out Badge */}
           {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
-            <div className={`absolute ${badgePosition} z-10`}>
-              <div className="bg-[#DC2626] text-[#FFFFFF] px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-lg border border-[#FCA5A5]">
-                Sold Out
-              </div>
-            </div>
+            <CardBadge variant="sold" className={`absolute ${badgePosition} z-10`}>
+              Sold Out
+            </CardBadge>
           )}
         </div>
 
