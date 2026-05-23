@@ -290,28 +290,15 @@ const ReellyProjectCard = ({
            {/* Divider */}
            <div className="h-px bg-[#EFE6D6]/20 my-2" />
            
-          {/* Handover line — black label, orange date */}
+          {/* Handover line — gold champagne */}
           {(() => {
             const derived = deriveHandover(project);
-            const breakdown = (project as any).payment_breakdown;
-            const percentages = Array.isArray(breakdown)
-              ? breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number')
-              : [];
             return (
-              <div className="flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-2 mb-2">
                 <p className="text-sm handover-orange">
                   <span className="handover-label">Handover </span>
                   <span>{derived || HANDOVER_FALLBACK}</span>
                 </p>
-                <span
-                  data-no-contrast-guard
-                  className="payment-plan-square allow-white"
-                  aria-label={percentages.length > 0 ? `Payment plan ${percentages.join('/')}` : 'Payment plan not applicable'}
-                >
-                  <CreditCard className="w-3 h-3" aria-hidden="true" />
-                  <span className="payment-plan-eyebrow">Plan</span>
-                  <span className="payment-plan-value">{percentages.length > 0 ? percentages.join('/') : 'N/A'}</span>
-                </span>
               </div>
             );
           })()}
