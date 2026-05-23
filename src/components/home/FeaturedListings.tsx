@@ -290,24 +290,10 @@ const FeaturedListings = () => {
             {t('featured.heading', 'Handpicked For You')}
           </h2>
 
-          {/* My Favorites & My Shortlist Tabs */}
-          <div className="flex items-center justify-center gap-3 mt-4">
-            <Link
-              to="/favorites"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]/30 hover:bg-[#EFE6D6] transition-all text-sm font-medium"
-            >
-              <Heart className="w-4 h-4" />
-              {t('featured.myFavorites', 'My Favorites')}
-            </Link>
-            <Link
-              to="/compare"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]/30 hover:bg-[#EFE6D6] transition-all text-sm font-medium"
-            >
-              <Star className="w-4 h-4" />
-              {t('featured.myShortlist', 'My Shortlist')}
-            </Link>
-          </div>
+          {/* My Favorites & My Shortlist tabs removed per owner directive —
+              these now live in the account dropdown on the horizontal header. */}
         </div>
+
 
         {/* Listings Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">

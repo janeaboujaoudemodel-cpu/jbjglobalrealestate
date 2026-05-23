@@ -209,29 +209,30 @@ const DeveloperPortalCTA = () => {
   // ─────────────────────────────────────────────────────────────────────
   if (isModeLoading) return null;
 
-  // INVESTOR — single message card pointing to the investor portal
+  // INVESTOR — single message card pointing to YOUR investor portal
   if (isInvestorMode) {
     return (
       <PortalVisitCard
-        title="Investor Portal"
-        description="Visit the Investor Portal to access property search, ROI tools, market intelligence and your portfolio — everything tailored for investors lives there."
-        cta="Visit Investor Portal"
+        title="Your Investor Portal"
+        description="Visit your Investor Portal to access property search, ROI tools, market intelligence and your portfolio — everything tailored for investors lives there."
+        cta="Visit Your Investor Portal"
         href="/investor-dashboard"
       />
     );
   }
 
-  // BROKER — single message card pointing to the broker portal
+  // BROKER — single message card pointing to YOUR broker portal
   if (isBrokerMode) {
     return (
       <PortalVisitCard
-        title="Broker Portal"
-        description="Visit the Broker Portal to access your dashboard, CRM, listings, academy and AI sales tools — everything for brokers lives inside the portal."
-        cta="Visit Broker Portal"
+        title="Your Broker Portal"
+        description="Visit your Broker Portal to access your dashboard, CRM, listings, academy and AI sales tools — everything for brokers lives inside the portal."
+        cta="Visit Your Broker Portal"
         href="/broker/crm"
       />
     );
   }
+
 
 
   // DEVELOPER — must be in developer mode AND have a registration row
