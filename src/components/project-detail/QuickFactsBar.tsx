@@ -42,7 +42,7 @@ export default function QuickFactsBar({
     },
     { 
       icon: CalendarCheck, 
-      label: "Handover", 
+      label: "", 
       value: formatDisplayDate(handoverDate),
       show: !!handoverDate 
     },
