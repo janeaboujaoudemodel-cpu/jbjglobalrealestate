@@ -207,19 +207,52 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             />
           </div>
 
-          <div className="grid grid-cols-[128px_minmax(0,1fr)] gap-2 overflow-hidden">
-            <select
-              data-no-contrast-guard
-              value={countryCode}
-              onChange={(e) => setCountryCode(e.target.value)}
-              className={inputBase + " cursor-pointer"}
-            >
-              {COUNTRY_CODES.map((c) => (
-                <option key={c.code} value={c.code} className="bg-[#FDFBF7] text-[#1A1A1A]">
-                  {c.label}
-                </option>
-              ))}
-            </select>
+          <div className="grid grid-cols-[138px_minmax(0,1fr)] gap-2 overflow-visible">
+            <Popover open={countryOpen} onOpenChange={setCountryOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  data-no-contrast-guard
+                  className="flex h-12 w-full items-center justify-between rounded-lg border border-[#B89555]/45 bg-[#FDFBF7] px-3 text-[13.5px] text-[#1A1A1A]
+                    outline-none transition hover:border-[#B89555] hover:bg-[#F7F2EA] focus:border-[#B89555] focus:bg-[#FDFBF7]"
+                >
+                  <span className="flex items-center gap-3">
+                    <span className="text-[18px] leading-none">{flagEmoji(selectedCountry.id)}</span>
+                    <span className="font-medium tabular-nums">{selectedCountry.code}</span>
+                  </span>
+                  <ChevronDown className="h-3.5 w-3.5 text-[#B89555]" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent
+                align="start"
+                sideOffset={8}
+                data-no-contrast-guard
+                className="z-[11000] w-[176px] rounded-xl border border-[#B89555]/50 bg-[#FDFBF7] p-1.5 text-[#1A1A1A] shadow-[0_18px_44px_rgba(26,26,26,0.18)]"
+              >
+                <div className="max-h-[260px] overflow-y-auto pr-1">
+                  {COUNTRY_CODES.map((country) => (
+                    <button
+                      key={`${country.id}-${country.code}`}
+                      type="button"
+                      data-no-contrast-guard
+                      onClick={() => {
+                        setCountryId(country.id);
+                        setCountryCode(country.code);
+                        setCountryOpen(false);
+                      }}
+                      className="flex h-10 w-full items-center justify-between rounded-lg px-3 text-left text-[13px] text-[#1A1A1A]
+                        transition hover:bg-[#F7F2EA] hover:text-[#1A1A1A] focus:bg-[#F7F2EA] focus:text-[#1A1A1A] focus:outline-none"
+                    >
+                      <span className="flex items-center gap-3">
+                        <span className="text-[17px] leading-none">{flagEmoji(country.id)}</span>
+                        <span className="font-medium tabular-nums">{country.code}</span>
+                      </span>
+                      {country.id === countryId && <Check className="h-3.5 w-3.5 text-[#B89555]" />}
+                    </button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
             <div className="relative min-w-0">
               <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#B89555]" />
               <input
