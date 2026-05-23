@@ -1,48 +1,51 @@
-## Goal
-Close the "published with broken image" gap by hardening the publish trigger to reject obviously invalid image URLs, and backfilling existing rows so anything currently published with a bad URL gets unpublished and surfaced in /admin → Needs Photo.
+# Retroactive Verification Audit
 
-## Scope
-- DB-only change (migration). No frontend code changes.
-- Respects existing `trg_enforce_no_publish_without_photo` rule and "No Photo → No Publish" memory.
-- Affects `projects` table (cover/card image columns) and `project_images` gallery rows used by the existing trigger.
+Go back through every change I claimed as "done" in this session and verify each one the same way I verified the gold icons (read the actual file + visually confirm in the browser at the affected route/viewport). Anything that doesn't match what I claimed gets fixed in the same pass.
 
-## Changes
+## Scope — items to re-verify
 
-### 1. New SQL helper: `public.is_valid_image_url(text)`
-Returns `false` when the URL is:
-- NULL, empty, or whitespace-only
-- Not starting with `http://` or `https://`
-- Pointing to `localhost`, `127.0.0.1`, `0.0.0.0`, `::1`, or `.local`
-- A known-dead/placeholder pattern: `example.com`, `placeholder`, `undefined`, `null`, `data:`, `blob:`, ends in `/`, or contains `via.placeholder`, `lorempixel`, `dummyimage` (kept conservative)
-- Marked `STABLE` so it can be used in triggers safely.
+1. **Security scan fixes**
+   - `supabase/migrations/20260523152327_*.sql` — confirm migration applied and findings are actually resolved (re-run security scan).
+   - `src/components/employee-management/ITProvisioningPanel.tsx` — confirm the security edit is present.
+   - `src/lib/markdownUtils.ts` — confirm sanitization change is present.
+   - `src/pages/broker/BrokerAgreementSign.tsx` — confirm fix is present.
+   - `supabase/functions/resend-inbound-email-webhook/index.ts` — confirm auth/validation fix is present and function deployed.
 
-### 2. Update `trg_enforce_no_publish_without_photo`
-Replace the "string exists" check with `is_valid_image_url(...)` for:
-- `cover_image_url`
-- card image column
-- any row in `project_images` for the project
+2. **Header height when sidebar collapses**
+   - `src/components/MainLayout.tsx` + `src/components/navigation/HorizontalUtilityBar.tsx` — confirm header height shrinks to match the 88px collapsed sidebar width, edge-to-edge. Verify in browser at both expanded and collapsed states.
 
-Behavior unchanged otherwise: blocks `UPDATE`/`INSERT` that sets `is_published=true` without at least one valid image. Auto-unpublish on last-image delete continues to work (now keyed on valid URLs).
+3. **Sidebar/header visual alignment + champagne color match**
+   - `src/components/navigation/GlobalVerticalNav.tsx` — confirm vertical sidebar background matches the horizontal header champagne (no white).
+   - Verify visually: the two surfaces should look like one continuous L-frame, aligned at the seam.
 
-### 3. One-shot backfill (same migration)
-- For every `projects` row where `is_published = true` AND no valid image exists across cover/card/gallery → set `is_published = false`.
-- Log affected IDs into existing `audit_logs` (or equivalent) with action `auto_unpublish_invalid_image` so the change is traceable.
-- These rows will then naturally appear in `/admin → Listings Approval → "Needs Photo"` tab (already wired to the same predicate).
+4. **Search bar restoration + no logo overlap**
+   - `HorizontalUtilityBar.tsx` — confirm the search bar is back to the previous bordered style and does not cross over the monogram in the vertical sidebar at any viewport.
 
-### 4. No schema removals, no RLS changes, no edits to reserved schemas.
+5. **Gold search + filter icons, no circle border (final fix)**
+   - Confirm both `<Search>` and `<SlidersHorizontal>` render in gold `hsl(var(--gold))` with no border ring, and `data-no-contrast-guard` is in place so the global contrast guard doesn't re-flip them to ink.
 
-## Out of scope (explicitly)
-- No live HTTP 404 probing in this migration (that's option b — separate job).
-- No changes to ProjectCard / VerifiedMedia UI.
-- No new admin tab — existing "Needs Photo" tab already covers it.
+## How each item is verified
 
-## Verification after apply
-1. `SELECT count(*) FROM projects WHERE is_published AND NOT is_valid_image_url(cover_image_url) AND ...` → expect 0.
-2. Try `UPDATE projects SET is_published=true WHERE id=<row with bad url>` → expect trigger error.
-3. Open `/admin → Listings Approval → Needs Photo` → previously-broken listings now appear there.
+For each item:
+- `code--view` the file at the relevant lines to confirm the claimed code is actually there.
+- `browser--navigate_to_sandbox` to the affected route (`/` for layout/header/sidebar, `/admin` security pages where relevant) at the user's current viewport (975×891) and also 1920×1080.
+- `browser--screenshot` and, where needed, `image_tools--zoom_image` on the exact region (header seam, sidebar logo, icons) to visually confirm.
+- For the security migration: `security--run_security_scan` and read results.
+- For the edge function: check it appears deployed (file present + no syntax errors).
 
-## Risk / rollback
-- Backfill is reversible by re-publishing once a valid image is attached (normal flow).
-- Helper function is additive; trigger change is a single `CREATE OR REPLACE`, easy to revert via follow-up migration.
+## Fix policy
 
-Confirm and I'll ship the migration.
+- If a claim matches reality → mark verified, no edit.
+- If a claim is wrong or partially applied → fix it in this same pass using the smallest possible edit, then re-screenshot / re-scan to confirm.
+- No scope expansion. No restyling beyond what each original task asked for. Respect the "No Removal" policy and all locked standards (champagne theme, no gold fills, no gray surfaces, contrast guard, etc.).
+
+## Deliverable
+
+A single audit report at the end listing, per item:
+- Claim
+- Verification method used
+- Actual state found
+- Action taken (none / fix applied — with file + summary)
+- Final confirmed state (with screenshot reference where visual)
+
+No code is written until you approve this plan.
