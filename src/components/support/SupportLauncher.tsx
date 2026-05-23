@@ -127,10 +127,11 @@ export default function SupportLauncher() {
                   </button>
                 </div>
                 {channels.map((c) => (
-                  <div key={c.id} className="bg-[#1A1A1A]/85 backdrop-blur rounded-xl">
+                  <div key={c.id} className="bg-[#FDFBF7] border border-[#B89555]/45 rounded-xl">
                     <ChannelCard channel={c} compact onActivate={close} />
                   </div>
                 ))}
+
               </motion.div>
             </>
           )}
