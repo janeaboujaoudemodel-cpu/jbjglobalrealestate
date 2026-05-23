@@ -5,7 +5,7 @@
  * On success, persists a verified-support token via useConciergeVerification.
  */
 import { useEffect, useMemo, useState } from "react";
-import { Check, ChevronDown, Loader2, Mail, Phone, User, ShieldCheck, ArrowRight } from "lucide-react";
+import { Check, ChevronDown, Loader2, Mail, Phone, Search, User, ShieldCheck, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { getCountries, getCountryCallingCode } from "react-phone-number-input";
@@ -50,9 +50,17 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
   const [countryCode, setCountryCode] = useState("+971");
   const [phone, setPhone] = useState("");
   const [countryOpen, setCountryOpen] = useState(false);
+  const [countryQuery, setCountryQuery] = useState("");
 
   const [otp, setOtp] = useState("");
   const selectedCountry = COUNTRY_CODES.find((country) => country.id === countryId) ?? COUNTRY_CODES[0];
+  const filteredCountries = useMemo(() => {
+    const query = countryQuery.trim().toLowerCase();
+    if (!query) return COUNTRY_CODES;
+    return COUNTRY_CODES.filter((country) =>
+      country.name.toLowerCase().includes(query) || country.id.toLowerCase().includes(query) || country.code.includes(query),
+    );
+  }, [countryQuery]);
 
   useEffect(() => {
     if (resendCooldown <= 0) return;
