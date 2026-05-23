@@ -212,7 +212,7 @@ const faqData = [
 
 const BrokerCertification = () => {
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Broker Certification — Internal Program | JBJ Global Real Estate"
         description="A structured internal standards program created by JBJ Global Real Estate for our broker partner network. Built for consistency, quality, and client experience alignment."
@@ -656,7 +656,7 @@ const BrokerCertification = () => {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

@@ -69,7 +69,7 @@ const Guides = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Guides Library | JBJ Global Real Estate"
         description="Structured guides built to answer real questions—fees, steps, timelines, and best-practice workflows across buying, selling, renting, and investing."
@@ -153,152 +153,160 @@ const Guides = () => {
       </section>
 
 
-      {/* How This Library Works */}
-      <section className="bg-[#1A1A1A] py-10 md:py-12">
-        <div className="jj-layer-2">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto text-center">
-            <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
-              How This Library Works
-            </motion.h2>
-            <motion.div variants={fadeInUp} className="jj-card-inner max-w-3xl mx-auto">
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center shrink-0">
-                  <BookOpen className="w-7 h-7 text-[#1A1A1A]" />
-                </div>
-                <div className="text-left">
-                  <p className="text-[#1A1A1A]/70 leading-relaxed">
-                    Choose a guide like a book. Each guide follows the same structure so you can scan quickly and act confidently.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
+      {/* How This Library Works — surface band */}
+      <section className="jj-band jj-band--surface">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto text-center">
+          <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-semibold text-[#1A1A1A] mb-4 tracking-[-0.02em]">
+            How This Library Works
+          </motion.h2>
+          <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 leading-relaxed max-w-2xl mx-auto">
+            Choose a guide like a book. Each guide follows the same structure so you can scan quickly and act confidently.
+          </motion.p>
+        </motion.div>
       </section>
 
-      <SectionDivider />
+      {/* Explore Guides — raised champagne band (one notch warmer = the divider) */}
+      <section id="guides-library" className="jj-band jj-band--raised">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
+          <motion.div className="text-center mb-10" variants={fadeInUp}>
+            <span className="inline-block text-[11px] font-semibold tracking-[0.24em] uppercase text-[#1A1A1A]/70 mb-3">The Library</span>
+            <h2 className="text-3xl md:text-4xl font-semibold mb-3 text-[#1A1A1A] tracking-[-0.02em]">
+              Explore Guides
+            </h2>
+            <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto text-sm md:text-base">
+              Select a guide to view the table of contents and open the full page.
+            </p>
+          </motion.div>
 
-      {/* Explore Guides — Premium gold/champagne background + auto-scrolling marquee */}
-      <section id="guides-library" className="py-10 md:py-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_center,_var(--tw-gradient-stops))] from-gold/15 via-transparent to-transparent" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
-            <motion.div className="text-center mb-6" variants={fadeInUp}>
-              <h2 className="text-3xl md:text-4xl font-bold mb-3 text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, serif" }}>
-                Explore Guides
-              </h2>
-              <p className="text-[#1A1A1A]/60 max-w-2xl mx-auto text-sm">
-                Select a guide to view the table of contents and open the full page.
-              </p>
-            </motion.div>
-
-            {/* Book strip removed — that auto-scrolling marquee lives on the homepage to promote this page. Here we show the books directly. */}
-
-
-            {/* Books Grid */}
-            <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-6xl mx-auto mt-6">
-              {allGuideBooks.filter(b => b.title !== 'Company Profile').map((book) => (
-                <motion.button
-                  key={book.title}
-                  variants={fadeInUp}
-                  onClick={() => setSelectedBook(book)}
-                  className="group flex flex-col items-center gap-3 w-28 md:w-36"
-                  whileHover={{ y: -8 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                >
-                  <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-[#B89555]/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
-                    <BookCoverFace book={book} bare />
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                  <p className="text-xs text-[#1A1A1A]/70 text-center font-medium group-hover:text-[#1A1A1A] transition-colors leading-tight">
-                    {book.title}
-                  </p>
-                </motion.button>
-              ))}
-            </div>
-
-            {/* Company Profile - Separate row */}
-            {allGuideBooks.filter(b => b.title === 'Company Profile').map((book) => (
-              <motion.div key={book.title} variants={fadeInUp} className="flex justify-center mt-8 pt-6 border-t border-[#B89555]/20">
-                <motion.button
-                  onClick={() => setSelectedBook(book)}
-                  className="group flex flex-col items-center gap-3 w-28 md:w-36"
-                  whileHover={{ y: -8 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                >
-                  <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-[#B89555]/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
-                    <BookCoverFace book={book} bare />
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                  <p className="text-xs text-[#1A1A1A]/70 text-center font-medium group-hover:text-[#1A1A1A] transition-colors leading-tight">
-                    {book.title}
-                  </p>
-                </motion.button>
-              </motion.div>
+          {/* Books Grid */}
+          <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-6xl mx-auto">
+            {allGuideBooks.filter(b => b.title !== 'Company Profile').map((book) => (
+              <motion.button
+                key={book.title}
+                variants={fadeInUp}
+                onClick={() => setSelectedBook(book)}
+                className="group flex flex-col items-center gap-3 w-28 md:w-36"
+                whileHover={{ y: -8 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-[#B89555]/40 shadow-[4px_4px_20px_rgba(0,0,0,0.18)] group-hover:shadow-[6px_6px_30px_rgba(184,149,85,0.35)] transition-shadow">
+                  <BookCoverFace book={book} bare />
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/15 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <p className="text-xs text-[#1A1A1A]/80 text-center font-medium group-hover:text-[#1A1A1A] transition-colors leading-tight">
+                  {book.title}
+                </p>
+              </motion.button>
             ))}
-          </motion.div>
-        </div>
+          </div>
+
+          {/* Company Profile — separate row, faded gold hairline */}
+          {allGuideBooks.filter(b => b.title === 'Company Profile').map((book) => (
+            <motion.div key={book.title} variants={fadeInUp} className="flex justify-center mt-10 pt-8" style={{ borderTop: "1px solid rgba(184,149,85,0.20)" }}>
+              <motion.button
+                onClick={() => setSelectedBook(book)}
+                className="group flex flex-col items-center gap-3 w-28 md:w-36"
+                whileHover={{ y: -8 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-[#B89555]/40 shadow-[4px_4px_20px_rgba(0,0,0,0.18)] group-hover:shadow-[6px_6px_30px_rgba(184,149,85,0.35)] transition-shadow">
+                  <BookCoverFace book={book} bare />
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/15 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <p className="text-xs text-[#1A1A1A]/80 text-center font-medium group-hover:text-[#1A1A1A] transition-colors leading-tight">
+                  {book.title}
+                </p>
+              </motion.button>
+            </motion.div>
+          ))}
+        </motion.div>
       </section>
 
-      <SectionDivider />
-
-      {/* What You'll Learn */}
-      <section className="bg-[#1A1A1A] py-10 md:py-16 pb-14 md:pb-20">
-        <div className="jj-layer-2">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
-            <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-10" style={{ fontFamily: "Playfair Display, serif" }}>
+      {/* What You'll Learn — premium 3-col IconTile grid on page tone */}
+      <section className="jj-band jj-band--page">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
+          <motion.div className="text-center mb-12" variants={fadeInUp}>
+            <span className="inline-block text-[11px] font-semibold tracking-[0.24em] uppercase text-[#1A1A1A]/70 mb-3">Curriculum</span>
+            <h2 className="text-3xl md:text-4xl font-semibold text-[#1A1A1A] tracking-[-0.02em] mb-3">
               What You'll Learn
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
-              {learningTopics.map((topic, index) => {
-                const Icon = topic.icon;
-                return (
-                  <motion.div key={index} variants={fadeInUp}>
-                    <Card className="jj-card-inner h-full">
-                      <CardContent className="p-6">
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center shrink-0">
-                            <Icon className="w-6 h-6 text-[#1A1A1A]" />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-[#1A1A1A] mb-1">{topic.title}</h3>
-                            <p className="text-sm text-[#1A1A1A]/60">{topic.description}</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                );
-              })}
-            </div>
+            </h2>
+            <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto text-sm md:text-base">
+              Six pillars covered consistently across every guide — from process to paperwork to risk.
+            </p>
           </motion.div>
-        </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-6xl mx-auto">
+            {learningTopics.map((topic, index) => {
+              const Icon = topic.icon;
+              return (
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  className="group rounded-2xl p-7 transition-all duration-300"
+                  style={{
+                    background: "#FDFBF7",
+                    border: "1px solid rgba(184,149,85,0.30)",
+                  }}
+                  whileHover={{ y: -2 }}
+                >
+                  <div className="flex items-start gap-4">
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                      style={{ background: "#F7F2EA", border: "1px solid rgba(184,149,85,0.45)" }}
+                    >
+                      <Icon className="w-5 h-5" style={{ color: "#1A1A1A" }} />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-[#1A1A1A] mb-1.5 text-base leading-snug">{topic.title}</h3>
+                      <p className="text-sm text-[#1A1A1A]/70 leading-relaxed">{topic.description}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
       </section>
 
-      <SectionDivider />
-
-      {/* CTA Block */}
-      <section className="py-10 md:py-12 bg-[#1A1A1A]">
-        <div className="jj-layer-2">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="text-center">
-            <div className="max-w-5xl mx-auto jj-card-inner border-2 border-[#B89555]/30">
-              <HelpCircle className="w-12 h-12 text-[#1A1A1A] mx-auto mb-6" />
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, serif" }}>
-                Not sure where to start?
-              </h2>
-              <p className="text-[#1A1A1A]/60 mb-8 max-w-xl mx-auto">
-                Tell us your goal (buy, sell, rent, invest) and we'll route you to the right guide.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <PremiumHeroButton href="/contact" variant="light-bg">Ask a Question</PremiumHeroButton>
-                <PremiumHeroButton href="/contact?type=support" variant="light-bg">Contact Support</PremiumHeroButton>
-              </div>
+      {/* CTA Block — surface band */}
+      <section className="jj-band jj-band--surface">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="text-center">
+          <div
+            className="max-w-4xl mx-auto rounded-2xl px-6 py-12 md:px-12 md:py-14"
+            style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.35)" }}
+          >
+            <div
+              className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6"
+              style={{ background: "#F7F2EA", border: "1px solid rgba(184,149,85,0.45)" }}
+            >
+              <HelpCircle className="w-6 h-6" style={{ color: "#1A1A1A" }} />
             </div>
-          </motion.div>
-        </div>
+            <h2 className="text-3xl md:text-4xl font-semibold mb-3 text-[#1A1A1A] tracking-[-0.02em]">
+              Not sure where to start?
+            </h2>
+            <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
+              Tell us your goal — buy, sell, rent, or invest — and we'll route you to the right guide.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center px-7 py-3 rounded-full font-semibold text-sm tracking-wide transition-all"
+                style={{ background: "#1A1A1A", color: "#F7F2EA", boxShadow: "0 0 0 1px #B89555 inset" }}
+              >
+                Ask a Question
+              </Link>
+              <Link
+                to="/contact?type=support"
+                className="inline-flex items-center justify-center px-7 py-3 rounded-full font-semibold text-sm tracking-wide transition-all"
+                style={{ background: "transparent", color: "#1A1A1A", boxShadow: "0 0 0 1px #B89555 inset" }}
+              >
+                Contact Support
+              </Link>
+            </div>
+          </div>
+        </motion.div>
       </section>
+
 
       {/* TOC Modal */}
       {selectedBook && (

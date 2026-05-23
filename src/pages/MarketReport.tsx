@@ -24,7 +24,7 @@ const MarketReport = () => {
   } = useMarketReport();
 
   return (
-    <div className="min-h-screen bg-[#1A1A1A] text-white">
+    <div data-marketing-page className="min-h-screen bg-[#1A1A1A] text-white">
       {/* Thank You Modal */}
       {showThankYou && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1A1A1A]/80 backdrop-blur-sm">

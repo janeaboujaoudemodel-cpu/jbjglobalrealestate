@@ -98,7 +98,7 @@ const faqData = [
 
 const Concierge = () => {
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Concierge Convenience Services | JBJ Global Real Estate"
         description="Time-saving operational support around your property journey—appointments, coordination, and structured follow-through."
@@ -392,7 +392,7 @@ const Concierge = () => {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

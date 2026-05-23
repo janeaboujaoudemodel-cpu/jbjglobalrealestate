@@ -96,7 +96,7 @@ const faqData = [
 
 const CompanySetup = () => {
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Company Setup Support | JBJ Global Real Estate"
         description="Structured coordination for company setup through licensed specialists—clear steps, document readiness, and progress tracking."
@@ -373,7 +373,7 @@ const CompanySetup = () => {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

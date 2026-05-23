@@ -121,7 +121,7 @@ const whyJBJ = [
 
 const RentalAdvisory = () => {
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Rental Advisory Services | JBJ Global Real Estate"
         description="Professional rental advisory for landlords and property investors in Dubai. Expert guidance from pricing strategy to tenant placement."
@@ -440,7 +440,7 @@ const RentalAdvisory = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

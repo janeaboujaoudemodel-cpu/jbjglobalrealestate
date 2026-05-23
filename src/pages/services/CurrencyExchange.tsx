@@ -98,7 +98,7 @@ const faqData = [
 
 const CurrencyExchange = () => {
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Currency Exchange Support | JBJ Global Real Estate"
         description="Coordination support for cross-border buyers transferring funds—structured documentation, clean routing, and partner introductions when needed."
@@ -427,7 +427,7 @@ const CurrencyExchange = () => {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

@@ -133,7 +133,7 @@ const SignatureCollection = () => {
   };
 
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Signature Collection | JBJ Global Real Estate"
         description="A controlled internal signature request workflow—tracked, timestamped, and audit-ready."
@@ -535,7 +535,7 @@ const SignatureCollection = () => {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

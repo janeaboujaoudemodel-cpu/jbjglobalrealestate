@@ -121,7 +121,7 @@ const faqData = [
 
 const AITools = () => {
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="AI Tools & Calculators | JBJ Global Real Estate"
         description="Clarity-first tools that support decision-making through structured inputs, transparent outputs, and consistent formatting."
@@ -383,7 +383,7 @@ const AITools = () => {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

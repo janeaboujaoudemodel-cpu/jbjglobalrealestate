@@ -135,7 +135,7 @@ const faqData = [
 
 const ComplaintProcedures = () => {
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Complaint Procedures | JBJ Global Real Estate"
         description="A structured pathway to raise concerns, track outcomes, and escalate responsibly—without noise or confusion."
@@ -420,7 +420,7 @@ const ComplaintProcedures = () => {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 
