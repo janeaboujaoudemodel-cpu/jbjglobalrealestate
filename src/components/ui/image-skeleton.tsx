@@ -60,6 +60,12 @@ export function ImageWithSkeleton({
         }}
         onError={(e) => {
           setErrored(true);
+          logImageFailure({
+            src: e.currentTarget.src || (imgProps.src as string),
+            component: loggerComponent || "ImageWithSkeleton",
+            reason: "onerror",
+            context: { ...loggerContext, alt: imgProps.alt },
+          });
           onError?.(e);
         }}
       />
