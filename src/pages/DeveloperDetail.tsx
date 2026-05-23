@@ -22,6 +22,7 @@ import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } f
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { Input } from "@/components/ui/input";
 import { SEOHead } from "@/components/SEOHead";
+import BrokerRequestAccessButton from "@/components/developers-portal/BrokerRequestAccessButton";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -334,8 +335,22 @@ const DeveloperDetail = () => {
                 </div>
               ))}
             </div>
+
+            {/* Identity actions — View all projects + (broker-only) request rep access */}
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <Link to={`/properties?developer=${encodeURIComponent(developer.slug || developer.id)}`}>
+                <Button variant="primary" size="sm">
+                  View all projects by {developer.name}
+                </Button>
+              </Link>
+              <BrokerRequestAccessButton
+                developerId={developer.id}
+                developerName={developer.name}
+              />
+            </div>
           </div>
         </div>
+
 
         {/* Developer Projects Map - Wrapped in error boundary */}
         {projects && projects.length > 0 && (
