@@ -1,6 +1,7 @@
 // Broker-facing page to review and sign a JBJ commission agreement.
 // Routed at /broker/agreement/:id (BrokerGuard-protected).
 import React, { useEffect, useState } from "react";
+import DOMPurify from "dompurify";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -117,7 +118,11 @@ export default function BrokerAgreementSign() {
 
         <div
           className="bg-white border border-[#EFE6D6] shadow-sm overflow-hidden"
-          dangerouslySetInnerHTML={{ __html: agreement.agreement_html ?? "" }}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(agreement.agreement_html ?? "", {
+              USE_PROFILES: { html: true },
+            }),
+          }}
         />
 
         {!signed && (

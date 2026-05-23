@@ -214,7 +214,7 @@ export function renderMarkdownToHtml(markdown: string | null): string {
 
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'a', 'div', 'span', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'blockquote'],
-    ALLOWED_ATTR: ['href', 'class', 'target', 'rel', 'style'],
+    ALLOWED_ATTR: ['href', 'class', 'target', 'rel'],
   });
 }
 

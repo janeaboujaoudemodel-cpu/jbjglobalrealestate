@@ -76,11 +76,9 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
 
   const generatePassword = () => {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$%';
-    let password = '';
-    for (let i = 0; i < 12; i++) {
-      password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return password;
+    const arr = new Uint32Array(12);
+    crypto.getRandomValues(arr);
+    return Array.from(arr).map((n) => chars[n % chars.length]).join('');
   };
 
   const generateSignature = (name: string, title: string, department: string) => {
