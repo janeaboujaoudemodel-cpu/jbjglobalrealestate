@@ -236,10 +236,20 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
                 align="start"
                 sideOffset={8}
                 data-no-contrast-guard
-                className="z-[11000] w-[176px] rounded-xl border border-[#B89555]/50 bg-[#FDFBF7] p-1.5 text-[#1A1A1A] shadow-[0_18px_44px_rgba(26,26,26,0.18)]"
+                className="z-[11000] w-[316px] rounded-xl border border-[#B89555]/50 bg-[#FDFBF7] p-2 text-[#1A1A1A] shadow-[0_18px_44px_rgba(26,26,26,0.18)]"
               >
+                <div className="relative mb-2">
+                  <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#B89555]" />
+                  <input
+                    value={countryQuery}
+                    onChange={(e) => setCountryQuery(e.target.value)}
+                    placeholder="Search country or code"
+                    data-no-contrast-guard
+                    className="h-10 w-full rounded-lg border border-[#B89555]/40 bg-[#FDFBF7] pl-9 pr-3 text-[13px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 outline-none focus:border-[#B89555]"
+                  />
+                </div>
                 <div className="max-h-[260px] overflow-y-auto pr-1">
-                  {COUNTRY_CODES.map((country) => (
+                  {filteredCountries.map((country) => (
                     <button
                       key={`${country.id}-${country.code}`}
                       type="button"
@@ -252,13 +262,15 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
                       className="flex h-10 w-full items-center justify-between rounded-lg px-3 text-left text-[13px] text-[#1A1A1A]
                         transition hover:bg-[#F7F2EA] hover:text-[#1A1A1A] focus:bg-[#F7F2EA] focus:text-[#1A1A1A] focus:outline-none"
                     >
-                      <span className="flex items-center gap-3">
+                      <span className="flex min-w-0 items-center gap-3">
                         <span className="text-[17px] leading-none">{flagEmoji(country.id)}</span>
-                        <span className="font-medium tabular-nums">{country.code}</span>
+                        <span className="truncate text-[#1A1A1A]/75">{country.name}</span>
+                        <span className="ml-auto font-medium tabular-nums">{country.code}</span>
                       </span>
                       {country.id === countryId && <Check className="h-3.5 w-3.5 text-[#B89555]" />}
                     </button>
                   ))}
+                  {filteredCountries.length === 0 && <div className="px-3 py-4 text-center text-[12px] text-[#1A1A1A]/60">No matching country</div>}
                 </div>
               </PopoverContent>
             </Popover>
