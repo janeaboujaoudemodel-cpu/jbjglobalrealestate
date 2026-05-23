@@ -245,17 +245,15 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             {/* Premium gold divider between description block and handover */}
             <hr className="border-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent my-2" />
 
-            {/* Handover line — orange, matches the price label identity */}
+            {/* Handover date/status only — label removed per design */}
             <div className="mt-1 min-h-[22px]">
               <div className="flex items-baseline gap-1.5 handover-orange" data-no-contrast-guard>
-                <span className="handover-label text-[10px] uppercase tracking-[0.14em] font-medium">
-                  Handover
-                </span>
                 <span className="font-semibold text-sm md:text-[15px] tabular-nums">
                   {deriveHandover(project) || HANDOVER_FALLBACK}
                 </span>
               </div>
             </div>
+
 
 
             {/* Payment Plan removed from cards — shown only on details page */}
