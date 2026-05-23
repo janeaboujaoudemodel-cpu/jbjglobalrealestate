@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
-import { Building2, ExternalLink, Award, ChevronDown, ChevronUp, Calendar, Briefcase, Sparkles, User, Layers, Star } from "lucide-react";
+import { Building2, ExternalLink, Award, ChevronDown, ChevronUp, Calendar, Briefcase, Sparkles, User, Layers, Star, Instagram, Linkedin, MapPin, Phone, MessageCircle, Globe, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+
+type PublicFieldKey =
+  | "instagram_url" | "linkedin_url" | "office_address" | "google_maps_url"
+  | "office_phone" | "whatsapp" | "website_url" | "admin_email";
 
 interface DeveloperInfoCardProps {
   developer: {
@@ -23,6 +27,14 @@ interface DeveloperInfoCardProps {
     notable_projects?: string | null;
     parent_company?: string | null;
     specialization?: string | null;
+    instagram_url?: string | null;
+    linkedin_url?: string | null;
+    office_address?: string | null;
+    google_maps_url?: string | null;
+    office_phone?: string | null;
+    whatsapp?: string | null;
+    admin_email?: string | null;
+    public_fields?: Partial<Record<PublicFieldKey, boolean>> | null;
   } | null;
   projectName: string;
   projectCount?: number;
@@ -107,7 +119,9 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 {developer.parent_company && (
                   <span className="text-[#1A1A1A]/70">Part of {developer.parent_company}</span>
                 )}
-                {/* Developer website intentionally hidden from public — JBJ closes all deals. */}
+                {/* Owner-controlled public contact chips: render only fields with public_fields[key] === true */}
+                <PublicContactChips developer={developer} />
+                {/* Developer website intentionally hidden from public unless explicitly enabled by owner. */}
               </div>
 
               {/* Developer Stats */}
@@ -209,5 +223,41 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
         </div>
       </div>
     </div>
+  );
+}
+
+function PublicContactChips({ developer }: { developer: NonNullable<DeveloperInfoCardProps["developer"]> }) {
+  const pf = developer.public_fields ?? {};
+  const chips: { key: PublicFieldKey; icon: typeof Globe; label: string; href: string }[] = [];
+  const push = (key: PublicFieldKey, icon: typeof Globe, label: string, href: string | null | undefined) => {
+    if (pf[key] && href) chips.push({ key, icon, label, href });
+  };
+  push("office_address", MapPin, developer.office_address ?? "", developer.google_maps_url ?? developer.office_address ?? null);
+  if (pf.google_maps_url && developer.google_maps_url && !chips.find((c) => c.key === "office_address")) {
+    chips.push({ key: "google_maps_url", icon: MapPin, label: "Map", href: developer.google_maps_url });
+  }
+  push("office_phone", Phone, developer.office_phone ?? "", developer.office_phone ? `tel:${developer.office_phone.replace(/\s+/g, "")}` : null);
+  push("whatsapp", MessageCircle, "WhatsApp", developer.whatsapp ? `https://wa.me/${developer.whatsapp.replace(/[^\d+]/g, "").replace(/^\+/, "")}` : null);
+  push("instagram_url", Instagram, "Instagram", developer.instagram_url ?? null);
+  push("linkedin_url", Linkedin, "LinkedIn", developer.linkedin_url ?? null);
+  push("website_url", Globe, "Website", developer.website_url ?? null);
+  push("admin_email", Mail, developer.admin_email ?? "", developer.admin_email ? `mailto:${developer.admin_email}` : null);
+
+  if (!chips.length) return null;
+  return (
+    <>
+      {chips.map((c) => (
+        <a
+          key={c.key}
+          href={c.href}
+          target={c.href.startsWith("http") ? "_blank" : undefined}
+          rel="noreferrer"
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/40 text-xs font-medium text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+        >
+          <c.icon className="w-3.5 h-3.5" />
+          <span className="truncate max-w-[180px]">{c.label}</span>
+        </a>
+      ))}
+    </>
   );
 }

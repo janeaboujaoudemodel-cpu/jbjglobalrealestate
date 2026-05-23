@@ -12967,6 +12967,7 @@ export type Database = {
           offplan_projects: number | null
           parent_company: string | null
           portfolio_worth: number | null
+          public_fields: Json
           rank: number | null
           registration_status: string | null
           slug: string
@@ -13026,6 +13027,7 @@ export type Database = {
           offplan_projects?: number | null
           parent_company?: string | null
           portfolio_worth?: number | null
+          public_fields?: Json
           rank?: number | null
           registration_status?: string | null
           slug: string
@@ -13085,6 +13087,7 @@ export type Database = {
           offplan_projects?: number | null
           parent_company?: string | null
           portfolio_worth?: number | null
+          public_fields?: Json
           rank?: number | null
           registration_status?: string | null
           slug?: string

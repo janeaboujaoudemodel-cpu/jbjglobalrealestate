@@ -62,8 +62,16 @@ serve(async (req) => {
 
   // Respect logo lock
   const { data: dev } = await supa.from("developers").select("logo_locked").eq("id", log.developer_id).maybeSingle();
-  const after = { ...(log.after_jsonb as Record<string, unknown>) };
-  if (dev?.logo_locked) delete after.logo_url;
+  const raw = { ...(log.after_jsonb as Record<string, unknown>) };
+  if (dev?.logo_locked) delete raw.logo_url;
+
+  // COALESCE merge: never overwrite existing values with null/empty.
+  const after: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(raw)) {
+    if (v === null || v === undefined) continue;
+    if (typeof v === "string" && !v.trim()) continue;
+    after[k] = v;
+  }
 
   const { error: upErr } = await supa.from("developers").update(after).eq("id", log.developer_id);
   if (upErr) {
