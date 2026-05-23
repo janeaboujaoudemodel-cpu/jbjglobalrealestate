@@ -1074,10 +1074,10 @@ export default function ProjectDetailLayout({
                 longitude={project.longitude ?? null}
                />
 
-              {/* Nearby Properties Map */}
+              {/* Nearby Properties Map (other developers in this area) */}
               {typeof project.latitude === 'number' && typeof project.longitude === 'number' && (
                 <div className="mt-6">
-                  <h3 className="text-lg font-semibold text-foreground mb-3">Nearby Projects</h3>
+                  <h3 className="text-lg font-semibold text-foreground mb-3">Other projects in this area</h3>
                   <ProjectNearbyPropertiesMap
                     currentProjectId={project.id}
                     currentProjectName={project.name}
@@ -1087,6 +1087,14 @@ export default function ProjectDetailLayout({
                   />
                 </div>
               )}
+
+              {/* More from the same developer */}
+              <MoreFromDeveloperStrip
+                currentProjectId={project.id}
+                developerId={project.developer?.id ?? null}
+                developerName={project.developer?.name ?? null}
+              />
+
 
               {/* Nearby Points of Interest - Below Map */}
               {project.location_distances && project.location_distances.length > 0 && (
