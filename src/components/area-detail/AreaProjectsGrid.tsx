@@ -8,6 +8,7 @@ import { type ShortcutFilterState } from "@/components/filters/FilterShortcutBar
 import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
 import { Button } from "@/components/ui/button";
+import { PearlButton } from "@/components/ui/pearl-button";
 import type { Project } from "@/hooks/useProjects";
 import { useCurrency } from "@/hooks/useCurrency";
 
