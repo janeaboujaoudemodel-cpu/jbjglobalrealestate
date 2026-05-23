@@ -4,12 +4,17 @@
  * Calls supabase/functions/ai-concierge (Lovable AI Gateway, streaming SSE).
  */
 import { useState, useRef, useEffect, useCallback } from "react";
-import { X, Send, Sparkles, MessageCircle, Loader2, MessageSquare, Phone } from "lucide-react";
+import { X, Send, Sparkles, MessageCircle, Loader2, MessageSquare, Phone, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import ConciergeGate from "@/components/concierge/ConciergeGate";
+import ConciergeActionCard, { parseAction } from "@/components/concierge/ConciergeActionCard";
+import ChannelCard from "@/components/support/ChannelCard";
+import { useConciergeVerification } from "@/hooks/useConciergeVerification";
 
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -24,11 +29,19 @@ const SUGGESTIONS = [
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-concierge`;
 
 export default function AIConcierge({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { isVerified, verified } = useConciergeVerification();
   const [messages, setMessages] = useState<Msg[]>([]);
   const [draft, setDraft] = useState("");
   const [streaming, setStreaming] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Toggle body attribute so SupportLauncher hides while concierge is open.
+  useEffect(() => {
+    if (open) document.body.setAttribute("data-jbj-concierge-open", "true");
+    else document.body.removeAttribute("data-jbj-concierge-open");
+    return () => document.body.removeAttribute("data-jbj-concierge-open");
+  }, [open]);
 
   useEffect(() => {
     if (open) setTimeout(() => inputRef.current?.focus(), 300);
@@ -166,16 +179,19 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
 
             {/* Messages */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-6 space-y-4">
-              {messages.length === 0 && (
+              {!isVerified && (
+                <ConciergeGate onVerified={() => { /* state auto-updates via hook */ }} />
+              )}
+              {isVerified && messages.length === 0 && (
                 <div className="space-y-6">
                   <div className="text-center space-y-2 py-2">
                     <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#D4B896]/40"
                       style={{ background: "rgba(253,251,247,0.08)" }}>
                       <Sparkles className="h-6 w-6 text-[#E2C9A0]" />
                     </div>
-                    <h3 className="text-[18px] font-semibold text-[#FDFBF7]">How can we help?</h3>
+                    <h3 className="text-[18px] font-semibold text-[#FDFBF7]">Welcome back{verified?.firstName ? `, ${verified.firstName}` : ""}</h3>
                     <p className="text-[13px] text-[#FDFBF7]/65 max-w-[300px] mx-auto leading-relaxed">
-                      Continue with our AI Concierge below, or switch to a human channel anytime.
+                      Ask anything — I'll guide you with one-tap shortcuts.
                     </p>
                   </div>
 
