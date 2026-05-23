@@ -169,6 +169,19 @@ const VoiceConciergeWidget = () => {
     }
   };
 
+  // Any "close" action on the popover (X, outside click, toggle-off) collapses
+  // the widget to the small phone icon and arms the 24h restore timer.
+  const closeAndMinimize = useCallback(() => {
+    setChoiceOpen(false);
+    setIsMinimized(true);
+    try {
+      localStorage.setItem(STORAGE_KEY, String(Date.now()));
+    } catch {
+      // Silent fail
+    }
+  }, []);
+
+
   const openIntake = () => setIntakeOpen(true);
 
   const startConversation = useCallback(async (leadId: string) => {
@@ -218,8 +231,36 @@ const VoiceConciergeWidget = () => {
   }, [conversation, logCallStart]);
 
   const handleLauncherClick = useCallback(() => {
-    setChoiceOpen((v) => !v);
+    setChoiceOpen((v) => {
+      // Toggling open → just open. Toggling closed → minimize to phone icon.
+      if (v) {
+        setIsMinimized(true);
+        try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch { /* noop */ }
+        return false;
+      }
+      return true;
+    });
   }, []);
+
+  // Outside-click: collapse popover AND minimize to phone icon (24h).
+  useEffect(() => {
+    if (!choiceOpen) return;
+    const onDown = (e: MouseEvent | TouchEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (!t) return;
+      if (t.closest('[data-voice-popover="1"]')) return;
+      if (t.closest('[data-floating-launcher="voice-concierge"]')) return;
+      if (t.closest('[data-floating-launcher="voice-concierge-mobile"]')) return;
+      closeAndMinimize();
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('touchstart', onDown, { passive: true });
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('touchstart', onDown);
+    };
+  }, [choiceOpen, closeAndMinimize]);
+
 
   const handleStartVoice = useCallback(() => {
     setChoiceOpen(false);
@@ -320,15 +361,17 @@ const VoiceConciergeWidget = () => {
       {/* Shared Choice popover: voice or WhatsApp — anchored above launcher for mobile & desktop */}
       {choiceOpen && !isConnected && (
         <div
+          data-voice-popover="1"
           className="fixed bottom-[84px] right-6 z-[10061] w-64 rounded-2xl border border-[#B89555]/45 overflow-hidden text-[#1A1A1A]"
           style={{ background: pearlBg, boxShadow: pearlShadow }}
         >
           <div className="px-3 py-2 border-b border-[#B89555]/20 flex items-center justify-between">
             <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65">Concierge · Complimentary</span>
-            <button onClick={() => setChoiceOpen(false)} aria-label="Close" className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
+            <button onClick={closeAndMinimize} aria-label="Close" className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
               <X className="w-3.5 h-3.5" />
             </button>
           </div>
+
           <button
             onClick={handleStartVoice}
             className="w-full flex items-center gap-3 px-3 py-3 hover:bg-white/40 transition-colors text-left"
@@ -397,7 +440,7 @@ const VoiceConciergeWidget = () => {
 
       {/* Close/minimize button - clicking X turns it into phone icon */}
       <button
-        onClick={handleMinimize}
+        onClick={closeAndMinimize}
         className="absolute -top-2 -right-2 w-6 h-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white/70 hover:text-white rounded-full shadow-md flex items-center justify-center transition-colors z-10"
         aria-label="Minimize voice concierge"
       >
