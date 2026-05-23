@@ -399,6 +399,8 @@ export const PublicRoutes = () => (
     <Route path="/broker-resources" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerResources /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/broker/training" element={<Navigate to="/broker/learning?tab=training" replace />} />
     <Route path="/broker/learning" element={<BrokerLearning />} />
+    <Route path="/broker/learning/book/:bookId" element={<AuthRequiredRoute><BookReader /></AuthRequiredRoute>} />
+    <Route path="/owner/broker-learning/voice" element={<OwnerGuard><BrokerLearningVoiceAdmin /></OwnerGuard>} />
     <Route path="/ai-broker-workspace" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><AIBrokerWorkspace /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/ai-hub" element={<AuthRequiredRoute><AIHub /></AuthRequiredRoute>} />
     <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
