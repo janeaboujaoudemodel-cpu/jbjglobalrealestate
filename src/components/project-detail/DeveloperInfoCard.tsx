@@ -233,12 +233,26 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                   <div className="flex items-center gap-2 mb-3">
                     <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
                     <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">About the Developer</span>
+                    {editable && developer.id && (
+                      <InlineEditable
+                        table="developers"
+                        recordId={developer.id}
+                        field="description"
+                        type="textarea"
+                        value=""
+                        invalidateKeys={["project", "projects", "developer", "developers"]}
+                        label="Add developer description"
+                      >
+                        <span className="sr-only">Add description</span>
+                      </InlineEditable>
+                    )}
                   </div>
                   <p className="text-[#1A1A1A]/70 text-sm">
                     {projectName} is developed by {developer.name}, a trusted name in UAE real estate development.
                   </p>
                 </div>
               )}
+
 
               {/* View Developer Button */}
               {developer.slug && (
