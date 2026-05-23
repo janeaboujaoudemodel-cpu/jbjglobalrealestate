@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle, Building2, ArrowUpRight, CreditCard } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle, Building2, ArrowUpRight } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { SafeImage } from "@/components/SafeImage";
 import { VerifiedMedia } from "@/components/ui/verified-media";
@@ -377,36 +377,12 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </span>
           </p>
 
-          {/* Footer meta — updated date + payment-plan badge, single row */}
-          {(((project as any).updated_at) || (() => {
-            const breakdown = (project as any).payment_breakdown;
-            return Array.isArray(breakdown) && breakdown.some((b: any) => typeof b?.percentage === 'number');
-          })()) && (
+          {/* Footer meta — updated date only */}
+          {(project as any).updated_at && (
             <div className="flex items-center justify-between gap-2 min-h-[24px]">
-              {(project as any).updated_at ? (
-                <p className="text-[10px] text-[#1A1A1A]/70 font-medium">
-                  Updated {formatDistanceToNow(new Date((project as any).updated_at), { addSuffix: true })}
-                </p>
-              ) : <span aria-hidden="true" />}
-
-              {(() => {
-                const breakdown = (project as any).payment_breakdown;
-                const percentages = Array.isArray(breakdown)
-                  ? breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number')
-                  : [];
-                const hasPlan = percentages.length > 0;
-                return (
-                  <span
-                    data-no-contrast-guard
-                    className="payment-plan-square allow-white"
-                    aria-label={hasPlan ? `Payment plan ${percentages.join('/')}` : 'Payment plan not applicable'}
-                  >
-                    <CreditCard className="w-3 h-3" aria-hidden="true" />
-                    <span className="payment-plan-eyebrow">Plan</span>
-                    <span className="payment-plan-value">{hasPlan ? percentages.join('/') : 'N/A'}</span>
-                  </span>
-                );
-              })()}
+              <p className="text-[10px] text-[#1A1A1A]/70 font-medium">
+                Updated {formatDistanceToNow(new Date((project as any).updated_at), { addSuffix: true })}
+              </p>
             </div>
           )}
         </div>
