@@ -486,7 +486,7 @@ const MortgageCalculator = ({
             <div className="mt-6 pt-4 border-t border-[#B89555]/20">
               <p className="text-center text-muted-foreground text-sm mb-3">Prefer a Mortgage Advisor Through Our Licensed Partners?</p>
               <Button 
-                variant="primary" 
+                variant="gold" 
                 size="lg" 
                 className="w-full"
                 asChild
