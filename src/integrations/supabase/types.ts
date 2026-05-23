@@ -37130,6 +37130,14 @@ export type Database = {
         Returns: boolean
       }
       project_has_photo: { Args: { _project_id: string }; Returns: boolean }
+      project_is_ready_to_publish: {
+        Args: { _project_id: string }
+        Returns: boolean
+      }
+      project_publish_blockers: {
+        Args: { _project_id: string }
+        Returns: string[]
+      }
       purge_deleted_esign_envelopes: { Args: never; Returns: Json }
       redact_expired_vapi_recordings: { Args: never; Returns: number }
       redact_sensitive_transcript: {

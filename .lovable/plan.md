@@ -1,33 +1,59 @@
-## What's broken on /properties
+## Diagnosis
 
-After auditing `src/pages/Properties.tsx`, `src/components/ProjectCard.tsx`, `src/components/ReellyProjectCard.tsx` and `src/hooks/useProjects.ts`, three real issues stack up into the blank/laggy page you're seeing:
+The system was not fully reversed, but the gate is too weak and one approval path is unsafe:
 
-1. **Cards silently disappear** — `ProjectCard` and `ReellyProjectCard` return `null` whenever the `<img>` `onError` fires or the cover URL is briefly empty. Many DB cover URLs are slow CDN images; the first failed load wipes the card from the DOM, so the grid renders empty even though 1,373 published projects exist with covers.
-2. **Fragment + key bug in the grid loop** — `Properties.tsx` lines ~1318–1338 wrap each card in a `<>` fragment but put `key` on `<ProjectCard>` (and on the inline ad). React can't reconcile a keyless fragment list cleanly, which causes flicker and occasional blank renders on filter changes.
-3. **Listing query is heavy and double-paginated** — `useProjectsListing` requests 200 rows, then opens a count query and N×1,000-row backfills via `Promise.all`. Combined with the artificial 250 ms `isFiltering` skeleton on every filter/sort change, the page feels frozen.
+- Current live-site protection only blocks listings with no photo. Listings with a photo but missing description, location, documents, floor plans, or other details can still be published.
+- The bulk approval function currently defaults to publishing and allows `minImages = 0`, so incomplete imports can become live too early.
+- The admin queue labels many records as pending/needs work because they are genuinely incomplete: current backend counts show pending imports still missing images, documents, descriptions, developer names, or locations.
+- The single approval path inserts the project as published before attaching gallery images, which can fail or behave inconsistently unless a cover image is already set.
 
-## Fix plan (frontend only — no schema/data changes)
+## Implementation plan
 
-### A. Stop hiding cards on image errors
-- `src/components/ProjectCard.tsx`
-  - Remove `brokenImage` state + `return null` guard (line 85, 88, 224).
-  - Replace the `<img>` `onError` with a graceful fallback: swap `src` to the next available `images[]` URL, then to `project.cover_image_url`, then to a champagne placeholder div (no image element). Card always renders.
-- `src/components/ReellyProjectCard.tsx` — same change (lines 78, 81, 183).
+1. **Create one strict “ready to publish” rule**
+   - Require every listing to pass before publishing:
+     - valid cover or gallery image
+     - developer name
+     - description
+     - price
+     - location or area
+     - core unit data where available: bedrooms, size, property type/unit types
+     - brochure/document or floor plan when source provides it
+   - Store the failure reasons so admin UI can show exactly why a listing is blocked.
 
-### B. Fix the grid loop
-- `src/pages/Properties.tsx` (~1313–1339): replace the `return (<>…</>)` pattern with a flat array — push `<ProjectCard key={project.id} … />` and conditionally push `<FeaturedProjectAd key={…} />` into the same `.map`/`.flatMap`. Removes the keyless-fragment warning and the resulting reconciliation flicker.
+2. **Fix auto-publish and approval behavior**
+   - Change bulk approval so it no longer publishes incomplete imports.
+   - It will enrich/import records, mark incomplete ones as pending verification, and only set `is_published=true` after the strict rule passes.
+   - Fix the single approval path to set `cover_image_url` from the first valid image before publishing.
+   - Add a final publish check after image/document insertion, not before.
 
-### C. Make the listing query lighter and snappier
-- `src/hooks/useProjects.ts` `useProjectsListing`:
-  - Drop the background backfill loop. Return the first 500 published+covered rows in one query (still ordered by `created_at desc`).
-  - If we later need "load more", add an explicit paginated hook — not a silent background flood.
-- `src/pages/Properties.tsx` line 408: shorten the artificial filtering skeleton from 250 ms to 0 (let React render synchronously). Keep `isLoading` for the initial fetch only.
+3. **Repair existing live broken listings**
+   - Audit currently published projects for missing description, location, documents, floor plans, developer details, and invalid/empty media.
+   - Temporarily unpublish any live listing that fails the strict rule.
+   - Send those listings through the repair/enrichment pipeline.
+   - Republish automatically only when the listing passes the full checklist.
 
-### D. Sanity verification after the edits
-- Reload `/properties`, confirm cards render immediately and the count matches the DB (1,373 published with covers).
-- Toggle a filter (e.g. Off-Plan, Emirate=Dubai) — grid should refresh without the blank flash.
-- Check console: the `validateDOMNesting <a> inside <a>` warning from `FeaturedListings` is a separate cosmetic issue and is **not** in scope for this fix.
+4. **Improve scraping/enrichment pipeline**
+   - Strengthen the existing enrichment functions to fill:
+     - photos/gallery
+     - brochures and documents
+     - floor plans
+     - unit types / bedroom types / sizes
+     - location and coordinates where available
+     - developer attribution
+     - payment plan and handover details
+   - Route source-specific records correctly:
+     - Reelly records through Reelly enrichment/asset recovery
+     - Provident records through Provident page-data + scrape extraction
+     - manual/broken records through the generic repair path
 
-### Out of scope (call out, don't touch this turn)
-- Vertical-nav auto-collapse, developer logo wiring, sq ft toggle styling, and the Speak-to-Concierge widget — all unchanged.
-- No DB migrations, no RLS changes, no edge functions.
+5. **Fix the admin approval UX**
+   - Replace vague “Pending” labels with explicit states: Needs Photos, Needs Documents, Needs Location, Needs Details, Ready to Publish, Published.
+   - Hide or disable “Approve All” unless it means “Approve all ready listings only.”
+   - Add a “Fix broken listings” action that runs enrichment first, then publishes only passing records.
+
+6. **Validate end-to-end**
+   - Run backend audit counts before and after.
+   - Test the enrichment functions on a small batch first.
+   - Verify no published listing fails the strict checklist.
+   - Verify `/properties` only loads published, complete listings and broken cards no longer appear.
+   - Test admin queue counts so Pending/Needs Work/Published match the real data.
