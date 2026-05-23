@@ -44,12 +44,13 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
       return (data as any) ?? [];
     },
   });
-  const { isOwner } = useIsAppOwner();
+  const isOwner = ownerCheck;
   const qc = useQueryClient();
   const [busy, setBusy] = useState(false);
   const [dragOver, setDragOver] = useState(false);
 
   const refresh = () => {
+    qc.invalidateQueries({ queryKey: ["owner-project-documents", projectId] });
     qc.invalidateQueries({ queryKey: ["project"] });
     qc.invalidateQueries({ queryKey: ["projects"] });
   };
