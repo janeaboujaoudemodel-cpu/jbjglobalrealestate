@@ -22475,20 +22475,26 @@ export type Database = {
       }
       meeting_bookings: {
         Row: {
+          attachment_name: string | null
+          attachment_url: string | null
           booked_for_at: string
+          calendar_event_id: string | null
           created_at: string
           duration_min: number
           id: string
           language: string | null
+          lead_id: string | null
           location_type: string
           meeting_request_id: string | null
           meeting_url: string | null
+          nationality: string | null
           notes: string | null
           office_address: string | null
           online_platform: string | null
           owner_confirmation_sent_at: string | null
           owner_confirmed_at: string | null
           ref_token: string | null
+          social_links: Json
           source: string
           status: string
           updated_at: string
@@ -22497,22 +22503,29 @@ export type Database = {
           visitor_email: string
           visitor_name: string
           visitor_phone: string | null
+          website_url: string | null
         }
         Insert: {
+          attachment_name?: string | null
+          attachment_url?: string | null
           booked_for_at: string
+          calendar_event_id?: string | null
           created_at?: string
           duration_min?: number
           id?: string
           language?: string | null
+          lead_id?: string | null
           location_type?: string
           meeting_request_id?: string | null
           meeting_url?: string | null
+          nationality?: string | null
           notes?: string | null
           office_address?: string | null
           online_platform?: string | null
           owner_confirmation_sent_at?: string | null
           owner_confirmed_at?: string | null
           ref_token?: string | null
+          social_links?: Json
           source?: string
           status?: string
           updated_at?: string
@@ -22521,22 +22534,29 @@ export type Database = {
           visitor_email: string
           visitor_name: string
           visitor_phone?: string | null
+          website_url?: string | null
         }
         Update: {
+          attachment_name?: string | null
+          attachment_url?: string | null
           booked_for_at?: string
+          calendar_event_id?: string | null
           created_at?: string
           duration_min?: number
           id?: string
           language?: string | null
+          lead_id?: string | null
           location_type?: string
           meeting_request_id?: string | null
           meeting_url?: string | null
+          nationality?: string | null
           notes?: string | null
           office_address?: string | null
           online_platform?: string | null
           owner_confirmation_sent_at?: string | null
           owner_confirmed_at?: string | null
           ref_token?: string | null
+          social_links?: Json
           source?: string
           status?: string
           updated_at?: string
@@ -22545,6 +22565,7 @@ export type Database = {
           visitor_email?: string
           visitor_name?: string
           visitor_phone?: string | null
+          website_url?: string | null
         }
         Relationships: [
           {

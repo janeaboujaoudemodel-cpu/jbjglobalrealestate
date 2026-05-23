@@ -3,6 +3,11 @@ project_id = "mdafrewypkkrildjgtey"
 [functions.apply-book-content-once]
 verify_jwt = false
 
+[functions.submit-meeting-booking]
+verify_jwt = false
+
+
+
 
 [functions.breakfast-booking-lookup]
 verify_jwt = false
