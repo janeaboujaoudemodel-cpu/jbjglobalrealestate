@@ -10,13 +10,13 @@ import { Search, ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 const GlobalSearchModal = lazy(() => import("@/components/GlobalSearchModal"));
-const AIConcierge = lazy(() => import("@/components/home/AIConcierge"));
+
+const openConcierge = () => window.dispatchEvent(new CustomEvent("jbj:open-concierge"));
 
 const QUICK_QUERIES = ["Marina apartments", "Off-plan villas", "Emaar", "Golden Visa", "Palm Jumeirah"];
 
 export default function HomeHeroSearch() {
   const [searchOpen, setSearchOpen] = useState(false);
-  const [conciergeOpen, setConciergeOpen] = useState(false);
   const [initialQuery, setInitialQuery] = useState("");
   const [draft, setDraft] = useState("");
 
@@ -99,7 +99,7 @@ export default function HomeHeroSearch() {
           {/* RIGHT: Ask our AI Concierge */}
           <button
             type="button"
-            onClick={() => setConciergeOpen(true)}
+            onClick={openConcierge}
             data-no-contrast-guard
             aria-label="Ask our AI Concierge"
             className="flex items-center gap-2 px-3 sm:px-5 flex-shrink-0
@@ -139,7 +139,7 @@ export default function HomeHeroSearch() {
           ))}
           <button
             type="button"
-            onClick={() => setConciergeOpen(true)}
+            onClick={openConcierge}
             data-no-contrast-guard
             className="group/chip inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium
               text-[#FDFBF7]/85 hover:text-[#FDFBF7]
@@ -157,12 +157,6 @@ export default function HomeHeroSearch() {
       {searchOpen && (
         <Suspense fallback={null}>
           <GlobalSearchModal isOpen={searchOpen} initialQuery={initialQuery} onClose={() => setSearchOpen(false)} />
-        </Suspense>
-      )}
-
-      {conciergeOpen && (
-        <Suspense fallback={null}>
-          <AIConcierge open={conciergeOpen} onClose={() => setConciergeOpen(false)} />
         </Suspense>
       )}
     </>
