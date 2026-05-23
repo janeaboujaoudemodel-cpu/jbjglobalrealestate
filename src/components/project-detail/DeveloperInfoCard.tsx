@@ -5,6 +5,7 @@ import { PearlButton } from "@/components/ui/pearl-button";
 import { useState } from "react";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import InlineEditable from "@/components/project-detail/owner/InlineEditable";
 
 type PublicFieldKey =
   | "instagram_url" | "linkedin_url" | "office_address" | "google_maps_url"
@@ -12,6 +13,7 @@ type PublicFieldKey =
 
 interface DeveloperInfoCardProps {
   developer: {
+    id?: string | null;
     name: string;
     slug?: string | null;
     logo_url?: string | null;
@@ -39,11 +41,12 @@ interface DeveloperInfoCardProps {
   } | null;
   projectName: string;
   projectCount?: number;
+  editable?: boolean;
 }
 
 const DESCRIPTION_PREVIEW_LENGTH = 500;
 
-export default function DeveloperInfoCard({ developer, projectName, projectCount }: DeveloperInfoCardProps) {
+export default function DeveloperInfoCard({ developer, projectName, projectCount, editable }: DeveloperInfoCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   
   if (!developer) return null;
@@ -100,9 +103,22 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
             <div className="flex-1">
               {/* Header */}
               <div className="flex items-center gap-3 mb-3">
-                <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{developer.name}</h3>
+                {editable && developer.id ? (
+                  <InlineEditable
+                    table="developers"
+                    recordId={developer.id}
+                    field="name"
+                    value={developer.name}
+                    invalidateKeys={["project", "projects", "developer", "developers"]}
+                  >
+                    <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{developer.name}</h3>
+                  </InlineEditable>
+                ) : (
+                  <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{developer.name}</h3>
+                )}
                 <Award className="w-6 h-6 text-[#1A1A1A]" />
               </div>
+
 
               {/* Quick meta line */}
               <div className="flex flex-wrap items-center gap-3 mb-5 text-sm text-[#1A1A1A]/70">
@@ -163,6 +179,19 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                   <div className="flex items-center gap-2 mb-3">
                     <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
                     <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">About the Developer</span>
+                    {editable && developer.id && (
+                      <InlineEditable
+                        table="developers"
+                        recordId={developer.id}
+                        field="description"
+                        type="textarea"
+                        value={developer.description ?? ""}
+                        invalidateKeys={["project", "projects", "developer", "developers"]}
+                        label="Edit developer description"
+                      >
+                        <span className="sr-only">Edit developer description</span>
+                      </InlineEditable>
+                    )}
                   </div>
                   <div 
                     className="rounded-xl p-4 border border-[#B89555]/20"
@@ -177,6 +206,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                       }}
                     />
                   </div>
+
                   {hasLongDescription && (
                     <button
                       onClick={() => setIsExpanded(!isExpanded)}
@@ -203,12 +233,26 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                   <div className="flex items-center gap-2 mb-3">
                     <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
                     <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">About the Developer</span>
+                    {editable && developer.id && (
+                      <InlineEditable
+                        table="developers"
+                        recordId={developer.id}
+                        field="description"
+                        type="textarea"
+                        value=""
+                        invalidateKeys={["project", "projects", "developer", "developers"]}
+                        label="Add developer description"
+                      >
+                        <span className="sr-only">Add description</span>
+                      </InlineEditable>
+                    )}
                   </div>
                   <p className="text-[#1A1A1A]/70 text-sm">
                     {projectName} is developed by {developer.name}, a trusted name in UAE real estate development.
                   </p>
                 </div>
               )}
+
 
               {/* View Developer Button */}
               {developer.slug && (
