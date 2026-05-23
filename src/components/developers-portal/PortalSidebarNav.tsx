@@ -4,7 +4,6 @@ import {
   LayoutDashboard, Building2, Users, MapPin, FolderKanban,
   Inbox, Briefcase, Calendar, ShieldCheck, Sparkles, ImageOff, Settings, UserPlus,
 } from "lucide-react";
-import { IconTile } from "@/components/ui/icon-tile";
 import { usePortalRole } from "@/hooks/usePortalRole";
 
 type Item = { to: string; label: string; icon: any; end?: boolean; roles: Array<"owner" | "portal_developer" | "portal_rep"> };
