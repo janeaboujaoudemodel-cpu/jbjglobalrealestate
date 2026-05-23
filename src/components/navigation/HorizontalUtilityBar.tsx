@@ -104,10 +104,10 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <button
                 onClick={() => setSearchOpen(true)}
-                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[#B89555]/[0.08] transition-colors focus:outline-none"
+                className="h-9 w-9 flex items-center justify-center rounded-full text-[#B89555] hover:bg-[#B89555]/[0.08] transition-colors focus:outline-none"
                 aria-label="Search"
               >
-                <Search className="w-[18px] h-[18px] text-[#B89555]" />
+                <Search className="w-[18px] h-[18px]" />
               </button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-xs">Search anything</TooltipContent>
