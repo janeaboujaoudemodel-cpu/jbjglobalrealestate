@@ -220,7 +220,7 @@ const BrokerCertification = () => {
       />
 
       {/* HERO SECTION */}
-      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[#1A1A1A]">
           {/* Video placeholder */}
           <div className="absolute inset-0 flex items-center justify-center">

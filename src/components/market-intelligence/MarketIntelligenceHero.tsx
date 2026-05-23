@@ -37,7 +37,7 @@ export const MarketIntelligenceHero = ({
   actions 
 }: MarketIntelligenceHeroProps) => {
   return (
-    <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
+    <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
       {/* Video or Image Background */}
       <div className="absolute inset-0 z-0">
         {videoSrc ? (

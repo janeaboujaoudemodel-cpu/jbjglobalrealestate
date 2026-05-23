@@ -97,7 +97,7 @@ const LawFirm = () => {
       />
 
       {/* Hero Section */}
-      <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
+      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80" 

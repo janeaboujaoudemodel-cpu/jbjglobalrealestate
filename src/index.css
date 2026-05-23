@@ -896,6 +896,56 @@ All colors MUST be HSL.
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.65) !important;
 }
 
+/* ============================================================
+ * GLOBAL HERO CONTRAST RESCUE (non-homepage)
+ * Any hero that opted into `.jj-hero-compact` lives over dark
+ * video/imagery. Ink (#1A1A1A) text inside such hero overlays
+ * is invisible — flip to champagne #F7F2EA with text-shadow so
+ * legacy pages stay readable without per-page migration.
+ * Homepage hero (no .jj-hero-compact) is untouched.
+ * ============================================================ */
+.jj-hero-fullscreen.jj-hero-compact :is(h1, h2, h3, p, span, a, button, label)[class*="text-[#1A1A1A]"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+  color: #F7F2EA !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6) !important;
+}
+.jj-hero-fullscreen.jj-hero-compact :is(h1, h2, h3, p, span, a, button, label)[class*="text-black"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+  color: #F7F2EA !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6) !important;
+}
+.jj-hero-fullscreen.jj-hero-compact svg[class*="text-[#1A1A1A]"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+  color: #F7F2EA !important;
+}
+
+/* Compact hero height: 70-78vh capped at 820px (non-homepage only) */
+.jj-hero-fullscreen.jj-hero-compact {
+  height: auto !important;
+  min-height: 70vh !important;
+  max-height: none !important;
+}
+@media (min-width: 640px) {
+  .jj-hero-fullscreen.jj-hero-compact {
+    min-height: 72vh !important;
+  }
+}
+@media (min-width: 1024px) {
+  .jj-hero-fullscreen.jj-hero-compact {
+    min-height: 78vh !important;
+    max-height: 820px !important;
+  }
+}
+@supports (height: 100dvh) {
+  .jj-hero-fullscreen.jj-hero-compact {
+    min-height: 70dvh !important;
+  }
+  @media (min-width: 640px) {
+    .jj-hero-fullscreen.jj-hero-compact { min-height: 72dvh !important; }
+  }
+  @media (min-width: 1024px) {
+    .jj-hero-fullscreen.jj-hero-compact { min-height: 78dvh !important; max-height: 820px !important; }
+  }
+}
+
+
 /* Premium sparkle animation */
 @keyframes sparkle {
   0%, 100% { opacity: 0.3; transform: scale(1); }

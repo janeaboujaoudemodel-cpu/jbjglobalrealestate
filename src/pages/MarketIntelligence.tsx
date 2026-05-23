@@ -116,7 +116,7 @@ const MarketIntelligence = () => {
       />
 
       {/* Hero Section */}
-      <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
+      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
         {/* Video background with poster fallback */}
         <VideoBackground
           src="https://videos.pexels.com/video-files/3629519/3629519-uhd_2560_1440_25fps.mp4"

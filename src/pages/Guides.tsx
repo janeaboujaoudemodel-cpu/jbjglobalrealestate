@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import VideoBackground from "@/components/VideoBackground";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { 
   BookOpen, ArrowRight, HelpCircle, FileText, DollarSign, Shield, BarChart3, CheckCircle, Clock, ChevronRight, X
@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { INVESTOR_BOOKS } from "@/data/bookCollections";
 import { BookCoverFace } from "@/components/books/BookCoverFace";
-import type { BookData } from "@/types/books";
+import type { BookData } from "@/types/books"; // used for selectedBook state typing
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -39,53 +39,8 @@ const learningTopics = [
   { icon: CheckCircle, title: "Payment plan structures and milestones", description: "How installment schedules work in off-plan purchases" }
 ];
 
-// ─── Auto-scrolling Book Marquee ───
-function BookMarquee({ books }: { books: BookData[] }) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const duplicated = [...books, ...books, ...books];
+// BookMarquee removed — the auto-scrolling strip lives on the homepage to promote this page.
 
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    let animId: number;
-    let pos = 0;
-    const speed = 0.5;
-    const singleSetWidth = books.length * 152;
-
-    const tick = () => {
-      pos += speed;
-      if (pos >= singleSetWidth) pos -= singleSetWidth;
-      el.style.transform = `translateX(-${pos}px)`;
-      animId = requestAnimationFrame(tick);
-    };
-    animId = requestAnimationFrame(tick);
-
-    const pause = () => cancelAnimationFrame(animId);
-    const resume = () => { animId = requestAnimationFrame(tick); };
-    el.addEventListener('mouseenter', pause);
-    el.addEventListener('mouseleave', resume);
-
-    return () => {
-      cancelAnimationFrame(animId);
-      el.removeEventListener('mouseenter', pause);
-      el.removeEventListener('mouseleave', resume);
-    };
-  }, [books.length]);
-
-  return (
-    <div className="overflow-hidden w-full py-6 mb-4 border-b border-[#B89555]/20 pb-8">
-      <div ref={scrollRef} className="flex gap-6 will-change-transform" style={{ width: 'max-content' }}>
-        {duplicated.map((book, i) => (
-          <div key={`${book.title}-${i}`} className="flex-shrink-0 w-28 md:w-36">
-            <div className="relative w-24 h-36 md:w-32 md:h-44 mx-auto rounded-md overflow-hidden border border-[#B89555]/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)]">
-              <BookCoverFace book={book} bare />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 const Guides = () => {
   const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
@@ -123,7 +78,7 @@ const Guides = () => {
       />
 
       {/* Hero */}
-      <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
+      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-[#1A1A1A]">
           {/* Drone zoom effect on poster image while video loads */}
           <div className="absolute inset-0 overflow-hidden">
@@ -141,35 +96,62 @@ const Guides = () => {
             src="https://videos.pexels.com/video-files/3629519/3629519-uhd_2560_1440_25fps.mp4"
             poster="https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1920&q=80"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
 
         <motion.div 
-          className="relative z-10 container mx-auto px-4 py-32 text-center max-w-4xl"
+          className="relative z-10 container mx-auto px-4 py-16 md:py-20 text-center max-w-4xl"
           initial="hidden" animate="visible" variants={staggerContainer}
         >
-          <motion.div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md" variants={fadeInUp}>
-            <BookOpen className="w-4 h-4 text-[#1A1A1A]" />
-            <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">Guides</span>
+          <motion.div
+            data-no-contrast-guard
+            className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/60 bg-[#1A1A1A]/60 backdrop-blur-md"
+            variants={fadeInUp}
+          >
+            <BookOpen className="w-4 h-4" style={{ color: "#F7F2EA" }} />
+            <span className="font-semibold text-xs uppercase tracking-[0.2em]" style={{ color: "#F7F2EA" }}>Guides</span>
           </motion.div>
-          <motion.h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-[-0.02em]" variants={fadeInUp}>
+          <motion.h1
+            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-[-0.02em]"
+            style={{ textShadow: "0 2px 14px rgba(0,0,0,0.7)" }}
+            variants={fadeInUp}
+          >
             Guides Library
           </motion.h1>
-          <motion.p className="text-white/70 text-base md:text-lg max-w-3xl mx-auto mb-10 leading-relaxed" variants={fadeInUp}>
+          <motion.p
+            className="text-base md:text-lg max-w-3xl mx-auto mb-10 leading-relaxed"
+            style={{ color: "#F7F2EA", textShadow: "0 1px 8px rgba(0,0,0,0.6)" }}
+            variants={fadeInUp}
+          >
             Structured guides built to answer real questions—fees, steps, timelines, and best-practice workflows across buying, selling, renting, and investing.
           </motion.p>
           <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-            <PremiumHeroButton href="#guides-library">Browse Guides</PremiumHeroButton>
-            <PremiumHeroButton href="/contact">Ask a Question</PremiumHeroButton>
+            <a
+              href="#guides-library"
+              data-no-contrast-guard
+              className="allow-white inline-flex items-center justify-center px-7 py-3 rounded-full font-semibold text-sm tracking-wide transition-all"
+              style={{ background: "#F7F2EA", color: "#1A1A1A", boxShadow: "0 0 0 1px #B89555 inset, 0 8px 24px rgba(0,0,0,0.35)" }}
+            >
+              Browse Guides
+            </a>
+            <Link
+              to="/contact"
+              data-no-contrast-guard
+              className="allow-white inline-flex items-center justify-center px-7 py-3 rounded-full font-semibold text-sm tracking-wide transition-all"
+              style={{ background: "transparent", color: "#F7F2EA", boxShadow: "0 0 0 1px #B89555 inset" }}
+            >
+              Ask a Question
+            </Link>
           </motion.div>
         </motion.div>
-        
+
         <motion.div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1, duration: 0.6 }}>
-          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-xs tracking-widest uppercase" style={{ color: "rgba(247,242,234,0.8)" }}>Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
+
 
       {/* How This Library Works */}
       <section className="bg-[#1A1A1A] py-10 md:py-12">
@@ -212,10 +194,8 @@ const Guides = () => {
               </p>
             </motion.div>
 
-            {/* Auto-scrolling book marquee */}
-            <motion.div variants={fadeInUp}>
-              <BookMarquee books={allGuideBooks} />
-            </motion.div>
+            {/* Book strip removed — that auto-scrolling marquee lives on the homepage to promote this page. Here we show the books directly. */}
+
 
             {/* Books Grid */}
             <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-6xl mx-auto mt-6">

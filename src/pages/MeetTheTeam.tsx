@@ -324,7 +324,7 @@ const MeetTheTeam: React.FC = () => {
           )}
 
           {/* Hero Section with Premium Animated Team Collage */}
-          <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+          <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
           {/* Background Video */}
           <div className="absolute inset-0 z-0">
             <VideoBackground 

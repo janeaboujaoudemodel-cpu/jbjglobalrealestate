@@ -209,7 +209,7 @@ const Services = () => {
       />
 
       {/* Hero Section with Video */}
-      <section className="jj-hero-fullscreen relative flex items-center overflow-hidden" data-surface="dark">
+      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden" data-surface="dark">
         {/* Background Video */}
         <video
           autoPlay

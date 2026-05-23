@@ -119,7 +119,7 @@ const About = () => {
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         
         {/* SECTION 1: HERO */}
-        <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden" data-surface="dark">
+        <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden" data-surface="dark">
           <div className="absolute inset-0">
             <img 
               src={luxuryVillaHero} 
