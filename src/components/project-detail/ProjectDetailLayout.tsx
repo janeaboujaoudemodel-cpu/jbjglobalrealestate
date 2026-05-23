@@ -823,6 +823,7 @@ export default function ProjectDetailLayout({
                 <InlineEditable projectId={project.id} field="description" value={project.description ?? ""} type="textarea" placeholder="Describe this project (markdown supported)…">
                   <span className="sr-only">Edit description</span>
                 </InlineEditable>
+                <div className="ml-auto"><OwnerSectionEditor projectId={project.id} section="details" initial={project as any} /></div>
               </div>
               {project.description ? (
                 <>
@@ -864,14 +865,17 @@ export default function ProjectDetailLayout({
                <div className="jj-card-inner">
                  <div className="flex items-center justify-between mb-4">
                    <h3 className="text-h3-sm font-medium text-foreground">Project Gallery</h3>
-                   <Button
-                     variant="primary"
-                     size="sm"
-                     onClick={() => handleDocumentDownload("images", images[0]?.url)}
-                   >
-                     <Download className="w-4 h-4" />
-                     Download Images
-                   </Button>
+                   <div className="flex items-center gap-2">
+                     <OwnerSectionEditor projectId={project.id} coverImageUrl={project.cover_image_url} section="gallery" initial={project as any} label="Manage photos" />
+                     <Button
+                       variant="primary"
+                       size="sm"
+                       onClick={() => handleDocumentDownload("images", images[0]?.url)}
+                     >
+                       <Download className="w-4 h-4" />
+                       Download Images
+                     </Button>
+                   </div>
                  </div>
                   <ImageCarousel
                     images={images.map((img) => ({
@@ -889,7 +893,8 @@ export default function ProjectDetailLayout({
 
            {/* UNIT TYPES & INVENTORY SECTION (Reelly-style) */}
            {(project.unit_types?.length ?? 0) > 0 && (
-              <div ref={unitsRef} id="units" className="mb-14 scroll-mt-40">
+              <div ref={unitsRef} id="units" className="mb-14 scroll-mt-40 relative">
+                <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="units" initial={project as any} /></div>
                 <UnitInventorySection
                   unitTypes={project.unit_types || []}
                   totalUnits={project.availability_visible ? project.total_units : null}
@@ -902,7 +907,8 @@ export default function ProjectDetailLayout({
 
            {/* CONSTRUCTION TIMELINE SECTION (Reelly-style) */}
            {(project.construction_progress !== null && project.construction_progress !== undefined) && (
-             <div ref={constructionRef} id="construction" className="mb-14 scroll-mt-40">
+             <div ref={constructionRef} id="construction" className="mb-14 scroll-mt-40 relative">
+               <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="construction" initial={project as any} /></div>
                <ConstructionTimelineSection
                  constructionProgress={project.construction_progress}
                  constructionStartDate={project.construction_start_date}
@@ -915,7 +921,28 @@ export default function ProjectDetailLayout({
 
            {/* DEVELOPER INFO SECTION (Reelly-style) */}
            {project.developer && (
-             <div ref={developerRef} id="developer" className="mb-14 scroll-mt-40">
+             <div ref={developerRef} id="developer" className="mb-14 scroll-mt-40 relative">
+               <div className="absolute right-0 -top-2 z-10">
+                 <OwnerSectionEditor
+                   projectId={project.id}
+                   developerId={project.developer.id ?? null}
+                   section="developer"
+                   initial={{
+                     dev_name: project.developer.name,
+                     dev_logo_url: project.developer.logo_url,
+                     dev_headquarters: project.developer.headquarters,
+                     dev_founded_year: project.developer.founded_year,
+                     dev_completed_projects: project.developer.completed_projects,
+                     dev_offplan_projects: project.developer.offplan_projects,
+                     dev_total_units_delivered: project.developer.total_units_delivered,
+                     dev_specialization: project.developer.specialization,
+                     dev_ceo_name: project.developer.ceo_name,
+                     dev_website_url: project.developer.website_url,
+                     dev_description: project.developer.description,
+                     dev_notable_projects: project.developer.notable_projects,
+                   }}
+                 />
+               </div>
                <DeveloperInfoCard
                  developer={project.developer}
                  projectName={project.name}
@@ -932,6 +959,7 @@ export default function ProjectDetailLayout({
                   <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
                     <Star className="w-5 h-5 text-[#1A1A1A]" />
                     Unique Selling Points
+                    <span className="ml-auto"><OwnerSectionEditor projectId={project.id} section="usp" initial={project as any} /></span>
                   </h3>
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -977,7 +1005,8 @@ export default function ProjectDetailLayout({
 
            {/* HOUSE DETAILS SECTION (Reelly-style) */}
            {(project.floors || project.total_units || project.service_charge || project.finishing_standard) && (
-             <div ref={houseDetailsRef} id="house-details" className="mb-14 scroll-mt-40">
+             <div ref={houseDetailsRef} id="house-details" className="mb-14 scroll-mt-40 relative">
+                <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="house-details" initial={project as any} /></div>
                 <HouseDetailsSection
                   floors={project.floors}
                   totalUnits={project.availability_visible ? project.total_units : null}
@@ -994,7 +1023,10 @@ export default function ProjectDetailLayout({
            {(floorPlanDocs.length > 0 || (project.floor_plan_types?.length ?? 0) > 0) && (
              <div ref={floorPlansRef} id="floor-plans" className="mb-14 scroll-mt-40">
                <div className="jj-card-inner">
-                 <h3 className="text-h3-sm font-medium text-foreground">Floor Plans</h3>
+                 <div className="flex items-center gap-2 mb-2">
+                   <h3 className="text-h3-sm font-medium text-foreground">Floor Plans</h3>
+                   <span className="ml-auto"><OwnerSectionEditor projectId={project.id} section="floor-plans" initial={project as any} label="Upload floor plans" /></span>
+                 </div>
                  <div className="mt-6">
                    <FloorPlanGallery
                      floorPlanTypes={project.floor_plan_types ?? null}
@@ -1016,6 +1048,7 @@ export default function ProjectDetailLayout({
                    <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
                      <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                      Amenities & Features
+                     <span className="ml-auto"><OwnerSectionEditor projectId={project.id} section="amenities" initial={project as any} /></span>
                    </h3>
                    <AmenitiesWithPhotos amenities={project.amenities!} amenityImages={project.amenity_images} />
                  </div>
@@ -1024,7 +1057,8 @@ export default function ProjectDetailLayout({
 
            {/* PROJECT MEDIA SECTION (Reelly-style) */}
            {(project.video_url || project.virtual_tour_url) && (
-             <div ref={mediaRef} id="media" className="mb-14 scroll-mt-40">
+             <div ref={mediaRef} id="media" className="mb-14 scroll-mt-40 relative">
+               <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="media" initial={project as any} /></div>
                <ProjectMediaSection
                  videoUrl={project.video_url}
                  virtualTourUrl={project.virtual_tour_url}
@@ -1040,6 +1074,7 @@ export default function ProjectDetailLayout({
                 <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2">
                   <MapIcon className="w-5 h-5 text-[#1A1A1A]" />
                   Project Location
+                  <span className="ml-2"><OwnerSectionEditor projectId={project.id} section="location" initial={project as any} /></span>
                 </h3>
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`}
@@ -1138,7 +1173,8 @@ export default function ProjectDetailLayout({
 
           {/* MASTER PLAN SECTION (Reelly-style) */}
           {(project.master_plan_image_url || (project.community_highlights?.length ?? 0) > 0) && (
-            <div ref={masterPlanRef} id="master-plan" className="mb-14 scroll-mt-40">
+            <div ref={masterPlanRef} id="master-plan" className="mb-14 scroll-mt-40 relative">
+              <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="master-plan" initial={project as any} /></div>
               <MasterPlanSection
                 masterPlanImageUrl={project.master_plan_image_url}
                 communityHighlights={project.community_highlights}
@@ -1149,7 +1185,8 @@ export default function ProjectDetailLayout({
 
            {/* PAYMENT PLAN VISUALIZATION (Order B: Payment first) */}
            {(true) && (
-           <div ref={paymentRef} id="payment" className="mb-14 scroll-mt-40">
+           <div ref={paymentRef} id="payment" className="mb-14 scroll-mt-40 relative">
+              <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="payment" initial={project as any} /></div>
               <PaymentPlanVisualization
                 paymentPlan={project.payment_plan}
                 paymentBreakdown={project.payment_breakdown}
@@ -1170,7 +1207,10 @@ export default function ProjectDetailLayout({
             <div className="jj-card-inner">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div>
-                  <h3 className="text-h3-sm font-medium text-foreground mb-4">Project Brochure</h3>
+                  <div className="flex items-center gap-2 mb-4">
+                    <h3 className="text-h3-sm font-medium text-foreground">Project Brochure</h3>
+                    <span className="ml-auto"><OwnerSectionEditor projectId={project.id} section="brochure" initial={project as any} label="Manage brochure" /></span>
+                  </div>
                   <p className="text-muted-foreground mb-4 leading-relaxed">
                     {brochurePrimary 
                       ? `Download the complete brochure for ${project.name} to explore detailed floor plans, pricing, payment options, and lifestyle amenities. Perfect for offline viewing and sharing.`
@@ -1264,7 +1304,8 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
 
            {/* INVESTMENT METRICS SECTION */}
            {(project.roi_estimate || project.rental_yield_estimate) && (
-             <div ref={investmentRef} id="investment" className="mb-14 scroll-mt-40">
+             <div ref={investmentRef} id="investment" className="mb-14 scroll-mt-40 relative">
+               <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="investment" initial={project as any} /></div>
                <InvestmentMetricsSection
                  roiEstimate={project.roi_estimate}
                  rentalYieldEstimate={project.rental_yield_estimate}
@@ -1282,6 +1323,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
                  <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
                    <HelpCircle className="w-5 h-5 text-[#1A1A1A]" />
                    Useful information about {project.name}
+                   <span className="ml-auto"><OwnerSectionEditor projectId={project.id} section="faq" initial={project as any} /></span>
                  </h3>
                  <Accordion type="single" collapsible className="w-full">
                    {project.faqs!.map((faq, idx) => (
