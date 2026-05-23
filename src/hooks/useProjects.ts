@@ -6,6 +6,20 @@ import type { Json } from "@/integrations/supabase/types";
 export type { UnifiedProject as Project } from "@/types/unifiedProject";
 import type { UnifiedProject } from "@/types/unifiedProject";
 
+const hasPublicPhoto = (p: UnifiedProject) =>
+  !!(p.cover_image_url || p.images?.some((img) => !!img.image_url));
+
+const dedupePublicProjects = (projects: UnifiedProject[]) => {
+  const seen = new Set<string>();
+  return projects.filter((project) => {
+    if (!hasPublicPhoto(project)) return false;
+    const key = `${project.slug || project.name}`.trim().toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
 // Legacy Project interface - keeping for backwards compatibility during transition
 export interface LegacyProject {
   id: string;
@@ -395,7 +409,7 @@ export function useProjectsListing() {
         .range(0, FAST_PAGE - 1);
 
       if (fastError) throw fastError;
-      const firstSlice = (fastData ?? []) as unknown as UnifiedProject[];
+      const firstSlice = dedupePublicProjects((fastData ?? []) as unknown as UnifiedProject[]);
 
       // Stage 2 — background backfill (don't block first paint)
       void (async () => {
@@ -428,7 +442,7 @@ export function useProjectsListing() {
             })
           );
 
-          const rest = pages.flat() as unknown as UnifiedProject[];
+          const rest = dedupePublicProjects(pages.flat() as unknown as UnifiedProject[]);
           // Merge into cache, deduping by id
           queryClient.setQueryData<UnifiedProject[]>(["projects-listing"], (prev) => {
             const base = prev ?? firstSlice;
@@ -466,10 +480,13 @@ export function useProjectsByCommunity(communitySlug: string) {
           documents:project_documents(id, document_type, file_url, file_name, display_order)
         `)
         .eq("community.slug", communitySlug)
+        .eq("is_published", true)
+        .not("cover_image_url", "is", null)
+        .neq("cover_image_url", "")
         .order("created_at", { ascending: false });
       
       if (error) throw error;
-      return data as UnifiedProject[];
+          return dedupePublicProjects(data as UnifiedProject[]);
     },
     enabled: !!communitySlug,
   });
@@ -489,10 +506,13 @@ export function useProjectsByDeveloper(developerSlug: string) {
           documents:project_documents(id, document_type, file_url, file_name, display_order)
         `)
         .eq("developer.slug", developerSlug)
+        .eq("is_published", true)
+        .not("cover_image_url", "is", null)
+        .neq("cover_image_url", "")
         .order("created_at", { ascending: false });
       
       if (error) throw error;
-      return data as UnifiedProject[];
+          return dedupePublicProjects(data as UnifiedProject[]);
     },
     enabled: !!developerSlug,
   });

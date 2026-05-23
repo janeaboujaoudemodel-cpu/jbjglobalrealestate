@@ -16,7 +16,6 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
-import { PaymentPlanLine } from "@/components/ui/payment-plan-line";
 import { PearlButton } from "@/components/ui/pearl-button";
 
 const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC', 'Meraas'];
@@ -51,7 +50,9 @@ function useFeaturedProjects() {
             .from("projects")
             .select(SELECT)
             .eq("developer_name", dev)
-            .eq("is_published", true)
+          .eq("is_published", true)
+          .not("cover_image_url", "is", null)
+          .neq("cover_image_url", "")
             .order("price_from", { ascending: false, nullsFirst: false })
             .limit(8)
             .then((r) => (r.error ? [] : (r.data || []))),
@@ -218,15 +219,6 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             <h3 className="text-[#1A1A1A] font-semibold text-sm mb-2 line-clamp-2 group-hover:text-[#1A1A1A] transition-colors min-h-[40px]">
               {project.name}
             </h3>
-            {project.developer_name && (
-              <DeveloperLink
-                name={project.developer_name}
-                slug={project.developer?.slug || null}
-                className="text-xs mb-1 block"
-                showPrefix={true}
-              />
-            )}
-
             {(project as any).description && (() => {
               const cleanDesc = sanitizeForDisplay((project as any).description);
               return cleanDesc ? (
@@ -235,6 +227,14 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             })()}
 
             <hr className="border-[#B89555]/30 my-2" />
+            {project.developer_name && (
+              <DeveloperLink
+                name={project.developer_name}
+                slug={project.developer?.slug || null}
+                className="text-xs mb-1 block"
+                showPrefix={true}
+              />
+            )}
             <div className="flex-grow" />
 
             {/* Handover line — orange, matches the price label identity */}

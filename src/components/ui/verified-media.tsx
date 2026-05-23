@@ -14,6 +14,7 @@ type VerifiedMediaProps = {
   /** If false, renders a minimal placeholder (no border / no card styling). */
   decorated?: boolean;
   placeholderLabel?: string;
+  onError?: React.ReactEventHandler<HTMLImageElement>;
 };
 
 /**
@@ -28,6 +29,7 @@ export function VerifiedMedia({
   priority,
   decorated = true,
   placeholderLabel = "Media pending",
+  onError,
 }: VerifiedMediaProps) {
   if (!src) {
     return (
@@ -57,6 +59,7 @@ export function VerifiedMedia({
       className={cn("w-full h-full", className)}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
+      onError={onError}
     />
   );
 }

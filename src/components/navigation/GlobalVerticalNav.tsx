@@ -672,6 +672,13 @@ export default function GlobalVerticalNav() {
     setActiveMegaMenu(null);
   }, []);
 
+  const collapseAfterNavigation = useCallback(() => {
+    setCollapsed(true);
+    try { localStorage.setItem('jj_nav_collapsed', '1'); } catch {}
+    setActiveMegaMenu(null);
+    setMobileOpen(false);
+  }, []);
+
   useEffect(() => {
     if (!navRevealed) {
       document.body.classList.remove("jj-vertical-nav-active");
@@ -711,8 +718,8 @@ export default function GlobalVerticalNav() {
       setActiveMegaMenu((prev) => (prev === megaMenu ? null : megaMenu));
       return;
     }
-    setActiveMegaMenu(null);
-  }, []);
+    collapseAfterNavigation();
+  }, [collapseAfterNavigation]);
 
   const [shortcutsExpanded, setShortcutsExpanded] = useState(false);
 
@@ -917,7 +924,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     <Link
                       key={entry.slug}
                       to={entryHref}
-                      onClick={closeMegaMenu}
+                      onClick={collapseAfterNavigation}
                       className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
                         linkActive
                           ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-[#B89555] shadow-sm"
@@ -935,7 +942,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <hr className="border-[#B89555]/30 my-2" />
                 <Link
                   to={viewAllHref}
-                  onClick={closeMegaMenu}
+                  onClick={collapseAfterNavigation}
                   className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-bold text-[#1A1A1A] bg-gradient-to-r from-gold to-gold-dark hover:opacity-95 transition-all border border-[#B89555] shadow-sm"
                 >
                   <Eye className="w-4 h-4 text-white flex-shrink-0" />
@@ -945,7 +952,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 {!isDev && (
                   <Link
                     to="/guides"
-                    onClick={closeMegaMenu}
+                    onClick={collapseAfterNavigation}
                     className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold border bg-[#FDFBF7]/70 border-[#B89555]/25 text-[#1A1A1A]/85 hover:bg-[#EFE6D6]/15 hover:border-[#B89555]/60 transition-all"
                   >
                     <BookOpen className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
@@ -1002,7 +1009,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <Link
                     key={link.href + link.label}
                     to={link.href}
-                    onClick={closeMegaMenu}
+                    onClick={collapseAfterNavigation}
                     className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all break-inside-avoid border mb-1 ${
                       linkActive
                         ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-[#B89555] shadow-sm"
@@ -1134,7 +1141,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             onClick={(e) => {
                               // Never open the full-screen mega drop-down overlay from inside
                               // an expanded section — just navigate.
-                              handleNavClick(undefined);
+                              collapseAfterNavigation();
                               if (sectionKey === 'MY ACCOUNT') {
                                 setOpenSection(null);
                               }
@@ -1325,6 +1332,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <TooltipTrigger asChild>
                   <Link
                     to="/contact"
+                    onClick={collapseAfterNavigation}
                     className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
                   >
                     <Headphones className="w-3.5 h-3.5 text-[hsl(var(--gold))]" strokeWidth={2} />
@@ -1336,6 +1344,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <TooltipTrigger asChild>
                   <Link
                     to="/ticket-hub"
+                    onClick={collapseAfterNavigation}
                     className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
                   >
                     <Ticket className="w-3.5 h-3.5 text-[hsl(var(--gold))]" strokeWidth={2} />

@@ -126,12 +126,10 @@ export function DeveloperLogo({
     return (
       <div
         className={cn(
-          // Premium champagne plate with rounded corners + 1px gold hairline.
-          // Wide 4:3 inner box so wordmark logos (Emaar, Aldar, Meraas) read fully.
-          "h-12 w-16 inline-flex items-center justify-center overflow-hidden",
-          "rounded-xl bg-[#FDFBF7]/95 backdrop-blur-sm",
-          "border border-[#B89555]/45 px-1.5 py-1",
-          "shadow-[0_2px_10px_rgba(0,0,0,0.18)]",
+          // Clean public overlay: no visible plate or padding gap. The logo itself
+          // fills the available box and relies on shadow/contrast instead of a frame.
+          "h-12 w-20 inline-flex items-center justify-center overflow-hidden",
+          "bg-transparent p-0 drop-shadow-[0_2px_8px_rgba(0,0,0,0.32)]",
           className,
         )}
       >
@@ -143,7 +141,7 @@ export function DeveloperLogo({
             setError(true);
             onError?.();
           }}
-          className="block max-h-full max-w-full w-auto h-auto object-contain"
+          className="block w-full h-full object-contain"
         />
       </div>
     );
