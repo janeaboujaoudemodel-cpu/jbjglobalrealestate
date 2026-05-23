@@ -7,13 +7,13 @@ import OwnerGuard from "@/components/OwnerGuard";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import PageLoader from "@/components/PageLoader";
 
-// Hot owner pages — eager-loaded so navigation between them is instant (no Suspense flash).
-import OwnerDashboardShell from "@/pages/OwnerDashboardShell";
-import OwnerDashboardOverview from "@/pages/OwnerDashboardOverview";
-import OwnerInbox from "@/pages/OwnerInbox";
-import CRMRelationships from "@/pages/CRMRelationships";
-import SecondaryMarketHub from "@/pages/SecondaryMarketHub";
-import UnifiedCRM from "@/pages/owner/crm/UnifiedCRM";
+// All owner pages lazy-loaded — owner area is heavy and must NOT bloat the public/home initial chunk.
+const OwnerDashboardShell = lazy(() => import("@/pages/OwnerDashboardShell"));
+const OwnerDashboardOverview = lazy(() => import("@/pages/OwnerDashboardOverview"));
+const OwnerInbox = lazy(() => import("@/pages/OwnerInbox"));
+const CRMRelationships = lazy(() => import("@/pages/CRMRelationships"));
+const SecondaryMarketHub = lazy(() => import("@/pages/SecondaryMarketHub"));
+const UnifiedCRM = lazy(() => import("@/pages/owner/crm/UnifiedCRM"));
 
 const OwnerTemplates = lazy(() => import("@/pages/OwnerTemplates"));
 const OwnerCommSettings = lazy(() => import("@/pages/OwnerCommSettings"));
