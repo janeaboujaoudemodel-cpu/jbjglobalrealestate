@@ -2966,6 +2966,9 @@ export type Database = {
           title: string
           unlock_requirements: Json | null
           updated_at: string | null
+          voice_enabled: boolean
+          voice_id: string | null
+          voice_provider: string
         }
         Insert: {
           book_number: number
@@ -2981,6 +2984,9 @@ export type Database = {
           title: string
           unlock_requirements?: Json | null
           updated_at?: string | null
+          voice_enabled?: boolean
+          voice_id?: string | null
+          voice_provider?: string
         }
         Update: {
           book_number?: number
@@ -2996,6 +3002,9 @@ export type Database = {
           title?: string
           unlock_requirements?: Json | null
           updated_at?: string | null
+          voice_enabled?: boolean
+          voice_id?: string | null
+          voice_provider?: string
         }
         Relationships: []
       }
@@ -3212,6 +3221,30 @@ export type Database = {
           template_type?: string
           updated_at?: string | null
           variables?: string[] | null
+        }
+        Relationships: []
+      }
+      broker_learning_settings: {
+        Row: {
+          id: string
+          listen_enabled: boolean
+          singleton: boolean
+          updated_at: string
+          voice_provider: string
+        }
+        Insert: {
+          id?: string
+          listen_enabled?: boolean
+          singleton?: boolean
+          updated_at?: string
+          voice_provider?: string
+        }
+        Update: {
+          id?: string
+          listen_enabled?: boolean
+          singleton?: boolean
+          updated_at?: string
+          voice_provider?: string
         }
         Relationships: []
       }

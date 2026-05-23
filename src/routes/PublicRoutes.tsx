@@ -8,6 +8,7 @@ import { RedirectWithParams } from "@/components/RedirectWithParams";
 import { RedirectWithSearch } from "@/routes/RedirectWithSearch";
 import AuthRequiredRoute from "@/components/AuthRequiredRoute";
 import ModeRequiredRoute from "@/components/ModeRequiredRoute";
+import OwnerGuard from "@/components/OwnerGuard";
 
 // ── Property & Listing Pages ──
 const Index = lazy(() => import("@/pages/Index"));
@@ -169,6 +170,8 @@ const BrokerDashboard = lazy(() => import("@/pages/BrokerDashboard"));
 const BrokerResources = lazy(() => import("@/pages/BrokerResources"));
 const BrokerTraining = lazy(() => import("@/pages/broker/BrokerTraining"));
 const BrokerLearning = lazy(() => import("@/pages/broker/BrokerLearning"));
+const BookReader = lazy(() => import("@/pages/broker/BookReader"));
+const BrokerLearningVoiceAdmin = lazy(() => import("@/pages/owner/BrokerLearningVoiceAdmin"));
 const AIBrokerWorkspace = lazy(() => import("@/pages/AIBrokerWorkspace"));
 const AIHub = lazy(() => import("@/pages/AIHub"));
 const InteriorDesignAI = lazy(() => import("@/pages/InteriorDesignAI"));
@@ -397,6 +400,8 @@ export const PublicRoutes = () => (
     <Route path="/broker-resources" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerResources /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/broker/training" element={<Navigate to="/broker/learning?tab=training" replace />} />
     <Route path="/broker/learning" element={<BrokerLearning />} />
+    <Route path="/broker/learning/book/:bookId" element={<AuthRequiredRoute><BookReader /></AuthRequiredRoute>} />
+    <Route path="/owner/broker-learning/voice" element={<OwnerGuard><BrokerLearningVoiceAdmin /></OwnerGuard>} />
     <Route path="/ai-broker-workspace" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><AIBrokerWorkspace /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/ai-hub" element={<AuthRequiredRoute><AIHub /></AuthRequiredRoute>} />
     <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />

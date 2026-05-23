@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Lock, CheckCircle, Clock, ArrowRight, Sparkles } from "lucide-react";
@@ -152,18 +153,33 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
             {/* Visible Spine on Cover */}
             <div className="absolute left-0 top-0 bottom-0 w-5 bg-gradient-to-r from-gold/30 via-gold/15 to-transparent" />
 
-            {/* Top Section with Icon */}
-            <div className="relative h-28 flex items-center justify-center bg-[#1A1A1A]/20 flex-shrink-0">
-              <div className="w-14 h-14 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
-                <span className="text-[#1A1A1A] text-xl font-bold">{book.book_number}</span>
-              </div>
-              
+            {/* Top Section with Cover Image or Icon */}
+            <div className="relative h-40 flex items-center justify-center bg-[#1A1A1A]/20 flex-shrink-0 overflow-hidden">
+              {book.cover_image_url ? (
+                <img
+                  src={book.cover_image_url}
+                  alt={`${book.title} cover`}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-14 h-14 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
+                  <span className="text-white text-xl font-bold">{book.book_number}</span>
+                </div>
+              )}
+
+              {/* Subtle dark gradient for legibility when image present */}
+              {book.cover_image_url && (
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+              )}
+
               {/* Locked Overlay (restricted or access-locked) */}
               {effectivelyLocked && (
                 <div className="absolute inset-0 bg-[#1A1A1A]/70 flex flex-col items-center justify-center backdrop-blur-sm gap-2">
-                  <Lock className="w-10 h-10 text-[#1A1A1A]" />
+                  <Lock className="w-10 h-10 text-white" />
                   {isLocked && !book.is_restricted && (
-                    <span className="text-[#1A1A1A]/70 text-[10px] uppercase tracking-widest">Join to Unlock</span>
+                    <span className="text-white/80 text-[10px] uppercase tracking-widest">Join to Unlock</span>
                   )}
                 </div>
               )}

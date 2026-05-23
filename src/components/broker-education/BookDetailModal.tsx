@@ -225,10 +225,23 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
             </Button>
           </div>
         ) : (
-          <div className="mt-6 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/30 rounded-lg p-4">
-            <p className="text-muted-foreground text-xs text-center">
-              This content is proprietary to JBJ Global Real Estate. Internal recognition only — not for external certification.
-            </p>
+          <div className="mt-6 space-y-3">
+            <Button
+              asChild
+              size="lg"
+              className="w-full bg-[#1A1A1A] hover:bg-black text-white border border-[#B89555]/50"
+            >
+              <Link to={`/broker/learning/book/${book.id}`} onClick={onClose}>
+                <BookOpen className="w-4 h-4 mr-2" />
+                Open Reader
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
+            </Button>
+            <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/30 rounded-lg p-4">
+              <p className="text-muted-foreground text-xs text-center">
+                This content is proprietary to JBJ Global Real Estate. Internal recognition only — not for external certification.
+              </p>
+            </div>
           </div>
         )}
       </DialogContent>

@@ -1,64 +1,83 @@
+## Goal
 
-## 1. Remove "Partners" section from vertical sidebar
+Bring all 15 books in Broker Learning → Library to premium standard:
+- Unique premium cover per book, locked to its exact title.
+- Rich, government-aligned UAE market knowledge inside each book (DLD, RERA, DET, ADGM/DIFC, Bayanat, statistics centres).
+- Proper table of contents, readable reader UI, and audio-ready structure (ElevenLabs toggle, no voice yet).
 
-In `src/components/navigation/GlobalVerticalNav.tsx`:
+Scope is Broker Learning Library only. No other features removed or changed.
 
-- Delete the `PARTNERS` section entries (lines ~195-200): Partners Hub, Mortgage Partner, Legal Partner, Company Setup Partner, Visa Services.
-- Add `Visa Services` (`/partners/visa-services`) into the `SERVICES` block alongside the existing Company Setup, Law Firm, etc. (Keep the underlying `/partners/*` routes alive so nothing 404s; only the sidebar entry moves.)
-- Remove `'partners'` from the `MegaMenuKey` union, from `MEGA_MENU_GROUPS.partners`, and from `MEGA_MENU_TITLES.partners`.
-- Audit and remove any "Partners" group label / divider rendering tied to the deleted section.
+---
 
-No changes to `MegaMenuPartners` component or `/partners/*` pages themselves — they remain reachable via the header mega menu and direct URLs.
+## 1. Premium covers (locked to title)
 
-## 2. Post-registration Partner CTA on hero
+For each of the 15 books generate a premium cover image and persist the URL in `broker_education_books.cover_image_url`.
 
-Only for users who have registered as a partner (any row in the partner-registration tables), render a slim CTA band directly under the hero on the home page:
+- Style: dark navy/obsidian leather with champagne `#B89555` foil, gold serif title, JBJ monogram, subtle UAE skyline motif relevant to the title topic. Matches existing book hero style (`src/assets/books/broker-education-cover.jpg`).
+- One generation per title using Lovable AI image model; saved to Supabase Storage bucket `broker-education-covers/{book_number}-{slug}.jpg`.
+- "Locked" = cover URL is written once into the DB and the card/modal always renders that exact URL. Cards no longer fall back to placeholder when a real cover exists.
+- Script `scripts/generate-broker-book-covers.ts` runs the generation per title so we can re-run on demand.
 
-> "Get verified — open your Partner Portal" → links to `/partners` (or the specific partner type dashboard if known).
+## 2. Premium content per book (government + market data)
 
-- Add a small `PartnerVerifyHeroCTA` component, gated by a `usePartnerRegistration()` hook that checks the current user against existing partner tables (mortgage / legal / company-setup / visa). If none → render nothing.
-- Mount it under the existing Hero in `src/pages/Index.tsx` (or wherever the home hero lives), above the next section.
+For each book, generate authoritative content using Lovable AI grounded on a curated source list (per-book prompt):
+- DLD (dubai land department), RERA regulations, Trakheesi, Ejari, Oqood, DET tourism rules, ADGM/DIFC commercial law, Dubai Statistics Center, Bayanat AE, MoEC, Central Bank UAE mortgage caps, Dubai 2040 Urban Master Plan, DLD transaction indices.
+- Cross-checked with current 2025/2026 market intelligence already in `market_*` tables when available.
 
-## 3. Merge Broker Education + Broker Training into one page
+Each book gets:
+- Refined description (institutional tone, 1–2 sentences).
+- Learning objective.
+- 5–8 modules. Each module has: title, 600–1200-word body in clean HTML (h2/h3/p/ul/blockquote/table), key takeaways, citations footer (DLD/RERA links), estimated_minutes.
+- Auto-generated table of contents derived from modules + h2/h3 anchors.
 
-Keep `JBJ Academy` as its own page (untouched). Merge only `BrokerEducation` (`/broker-education`, 530 lines, public) and `BrokerTraining` (`/broker/training`, 370 lines, auth+broker-gated).
+Data is written via a one-time content-population script (`scripts/populate-broker-book-content.ts`) into existing `broker_education_books` and `broker_education_modules` tables. No destructive deletes — upsert by `(book_id, module_number)`.
 
-- New canonical page: `src/pages/broker/BrokerLearning.tsx` at route `/broker/learning`.
-- Layout: premium champagne-gold tabbed page following design system (Inter, IconTile, no gold fills, ink #1A1A1A on champagne):
-  - Hero header with page title + brief intro.
-  - Segmented tab control: **Library** (everything currently in `BrokerEducation` — books, collections, modals) and **Training** (everything in `BrokerTraining` — courses, certification, progress).
-  - The `Training` tab is rendered behind an in-page `AuthRequiredRoute` + `broker` mode check so the public can still browse Library without login; clicking Training prompts login via ActionGate when needed (keeps existing gate behavior, just inlined).
-- Move all sub-components in `src/components/broker-education/*` as-is; no UI/feature removal (per the No-Removal policy).
-- Routing:
-  - Add `/broker/learning` route in `src/routes/PublicRoutes.tsx`.
-  - 301-style redirects: `/broker-education` → `/broker/learning?tab=library`, `/broker/training` → `/broker/learning?tab=training`.
-- Update every internal link to the new URL:
-  - `src/config/mainLayoutRoutes.ts`, `src/config/globalSearchIndex.ts`
-  - `src/components/Footer.tsx`, `src/components/GlobalHeader.tsx`, `src/components/header/MegaMenuBrokerHub.tsx`, `src/components/header/MegaMenuMore.tsx`, `src/components/header/MegaMenuInsights.tsx`
-  - `src/components/navigation/GlobalVerticalNav.tsx`
-  - `src/components/dashboard/QuickActions.tsx`, `src/components/guides/GuideNavigation.tsx`, `src/components/home/DeveloperPortalCTA.tsx`
-  - `src/pages/BrokerHub.tsx`, `src/pages/BrokerPortal.tsx`, `src/pages/BrokerDashboard.tsx`, `src/pages/BrokerPartnerDashboard.tsx`, `src/pages/BrokerFAQ.tsx`, `src/pages/EducationHub.tsx`, `src/pages/AcademyGraduates.tsx`, `src/pages/JBJAcademy.tsx`, `src/pages/owner/OwnerAuditPage.tsx`, `src/pages/Sitemap.tsx`, `src/pages/VerifyCertificate.tsx`
-  - `src/hooks/useBrokerEducation.ts` (any hard-coded paths)
-- SEO:
-  - One `<title>` ≤60 chars, meta description ≤160 chars, single H1, canonical `/broker/learning`, JSON-LD `Course`/`EducationalOrganization`.
-  - Update `public/sitemap.xml` + `scripts/generate-sitemap.ts`: remove `/broker-education` and `/broker/training`, add `/broker/learning`.
-  - Mark related SEO findings fixed after change.
-- Delete (or stub-redirect) the two old page files once all imports point to the new module.
+## 3. Reader experience (readable + audio-ready)
 
-## 4. Mirror header Account shortcuts under sidebar "My Account"
+Upgrade `BookDetailModal` into a full premium reader route `/broker/learning/book/:bookId`:
+- Left rail: sticky TOC (auto-built from modules + headings), progress dots.
+- Center: champagne paper background, ink type (Inter), generous measure, sanitized HTML via existing `contentSanitizer.ts`.
+- Top bar: title, learning path chip, est. reading time, progress bar, "Mark complete" per module.
+- Audio toggle in header ("Listen") — visible to all users but disabled with tooltip "Voice narration coming soon" unless `voice_enabled = true` on the book AND a `LISTEN_ENABLED` global flag is on. Wires through a stub `useBookAudio(bookId)` hook ready for ElevenLabs.
+- Existing modal stays as the quick-preview; "Open Book" CTA navigates to the reader route.
 
-Source of truth: `src/components/header/MegaMenuAccount.tsx` (rendered when user opens the profile dropdown in the horizontal header).
+## 4. Owner-only ElevenLabs toggle (no voice yet)
 
-- Extract the canonical account-shortcut list from `MegaMenuAccount.tsx` into a single shared module: `src/config/accountShortcuts.ts` (label, icon, href, optional role gate).
-- Refactor both `MegaMenuAccount.tsx` and the `account` mega-menu group in `GlobalVerticalNav.tsx` (lines ~503-511) to render from this shared config so they stay in lockstep — header dropdown and sidebar "My Account" expose the exact same shortcuts in the same order.
-- "My Dashboard" stays the primary entry and continues to deep-link into the main dashboard (already wired).
+- Migration: add `voice_enabled boolean default false`, `voice_id text`, `voice_provider text default 'elevenlabs'` to `broker_education_books`; add settings row `listen_enabled boolean default false` in existing `app_settings` (or create if missing) gated to owner.
+- New owner page `/owner/broker-learning/voice` (under existing OwnerGuard) listing 15 books with:
+  - Master "Enable Listen feature" switch (writes `listen_enabled`).
+  - Per-book voice toggle + voice picker (read-only list of ElevenLabs voice IDs; persists `voice_id`).
+  - Helper text: "Voice generation is not yet active. Toggling prepares the book for future ElevenLabs narration."
+- No edge function calling ElevenLabs is added now. The UI + schema are the forward seam.
 
-## Technical details
+## 5. Card/modal lock-in
 
-- Files created: `src/pages/broker/BrokerLearning.tsx`, `src/components/home/PartnerVerifyHeroCTA.tsx`, `src/hooks/usePartnerRegistration.ts`, `src/config/accountShortcuts.ts`.
-- Files edited (high level): `GlobalVerticalNav.tsx`, `MegaMenuAccount.tsx`, `PublicRoutes.tsx`, `Footer.tsx`, `GlobalHeader.tsx`, broker mega-menu + dashboard links listed above, `sitemap.xml`, `generate-sitemap.ts`, `Index.tsx`.
-- Files removed (after link sweep): `src/pages/BrokerEducation.tsx`, `src/pages/broker/BrokerTraining.tsx` — replaced by redirects to `/broker/learning`.
-- DB: none. No schema changes.
-- Strictly UI/navigation/routing changes; no business-logic edits.
-- Follows the No-Removal Policy: every existing feature from both pages is preserved inside the new tabbed page; old URLs redirect, never 404.
-- Verification: `npm run build` (auto), spot-check the four flows — sidebar has no Partners, Services lists Visa Services, `/broker-education` and `/broker/training` redirect to the merged page with the right tab pre-selected, header dropdown + sidebar My Account render the same list.
+- `Book3DCard` + `BookCard`: always render `cover_image_url` when present; placeholder only when DB cover is genuinely null. Add `loading="lazy"` and width/height to prevent layout shift.
+- Title and description shown on cards come from DB (already true) so the regenerated content flows everywhere automatically.
+
+---
+
+## Technical summary
+
+Files to add:
+- `scripts/generate-broker-book-covers.ts` — calls Lovable AI image, uploads to storage, updates `cover_image_url`.
+- `scripts/populate-broker-book-content.ts` — per-book prompt → modules upsert.
+- `src/pages/broker/BookReader.tsx` — full reader route.
+- `src/hooks/useBookAudio.ts` — stub; returns `{ available:false, reason:'coming_soon' }`.
+- `src/pages/owner/BrokerLearningVoiceAdmin.tsx` — owner toggle UI.
+
+Files to edit:
+- `src/components/broker-education/BookDetailModal.tsx` — TOC preview, "Open Book" → reader route, listen-toggle stub.
+- `src/components/broker-education/Book3DCard.tsx`, `BookCard.tsx` — strict cover binding.
+- `src/hooks/useBrokerEducation.ts` — expose `voice_enabled`, `voice_id` fields.
+- `src/routes/PublicRoutes.tsx` — register `/broker/learning/book/:bookId` (auth+broker gate) and owner admin route.
+
+DB migration:
+- Storage bucket `broker-education-covers` (public read).
+- `broker_education_books`: add `voice_enabled`, `voice_id`, `voice_provider`.
+- `app_settings`: add `listen_enabled` (owner-only RLS).
+- No table drops, no schema renames — additive only.
+
+Out of scope:
+- Real ElevenLabs API calls / audio generation.
+- Any change outside Broker Learning Library.
