@@ -404,7 +404,9 @@ serve(async (req) => {
           is_developer_direct: true,
           is_featured: false,
           is_premium: false,
-          is_published: publish && readyToPublish,
+          // Always import hidden first. Media/documents are attached below, then a final
+          // database readiness gate decides whether it can go live.
+          is_published: false,
           is_sold_out: item.sale_status?.toLowerCase().includes('sold') || item.status_label?.toLowerCase().includes('sold') || false,
         };
 
@@ -490,14 +492,28 @@ serve(async (req) => {
           }
         }
 
+        let actuallyPublished = false;
+        if (publish && readyToPublish) {
+          const { error: publishError } = await supabase
+            .from("projects")
+            .update({ is_published: true, updated_at: new Date().toISOString() })
+            .eq("id", projectId);
+
+          if (publishError) {
+            console.warn(`[BulkApprove] Publish blocked for ${item.name}:`, publishError.message);
+          } else {
+            actuallyPublished = true;
+          }
+        }
+
         // Mark as approved in pending_project_imports
         await supabase
           .from("pending_project_imports")
           .update({ 
-            status: "approved", 
+            status: actuallyPublished ? "approved" : "pending",
             matched_project_id: projectId,
             reviewed_at: new Date().toISOString(),
-            review_notes: readyToPublish
+            review_notes: actuallyPublished
               ? "Auto-approved via strict publish readiness"
               : `PENDING_VERIFICATION:${blockers.join(",")}`
           })
