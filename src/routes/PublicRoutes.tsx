@@ -168,6 +168,7 @@ const BrokerToolkit = lazy(() => import("@/pages/BrokerToolkit"));
 const BrokerDashboard = lazy(() => import("@/pages/BrokerDashboard"));
 const BrokerResources = lazy(() => import("@/pages/BrokerResources"));
 const BrokerTraining = lazy(() => import("@/pages/broker/BrokerTraining"));
+const BrokerLearning = lazy(() => import("@/pages/broker/BrokerLearning"));
 const AIBrokerWorkspace = lazy(() => import("@/pages/AIBrokerWorkspace"));
 const AIHub = lazy(() => import("@/pages/AIHub"));
 const InteriorDesignAI = lazy(() => import("@/pages/InteriorDesignAI"));
@@ -250,7 +251,7 @@ export const PublicRoutes = () => (
     <Route path="/landlord-guide" element={<LandlordGuide />} />
     <Route path="/landlord-portal" element={<Navigate to="/dashboard/my-listings" replace />} />
     <Route path="/investor-education" element={<InvestorEducation />} />
-    <Route path="/broker-education" element={<BrokerEducation />} />
+    <Route path="/broker-education" element={<Navigate to="/broker/learning?tab=library" replace />} />
     <Route path="/faq" element={<FAQ />} />
     <Route path="/investor-faq" element={<Navigate to="/faq" replace />} />
     <Route path="/buyer-faq" element={<BuyerFAQ />} />
@@ -394,7 +395,8 @@ export const PublicRoutes = () => (
     <Route path="/broker-toolkit/dashboard" element={<Navigate to="/broker-dashboard" replace />} />
     <Route path="/broker-dashboard" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerDashboard /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/broker-resources" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerResources /></ModeRequiredRoute></AuthRequiredRoute>} />
-    <Route path="/broker/training" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerTraining /></ModeRequiredRoute></AuthRequiredRoute>} />
+    <Route path="/broker/training" element={<Navigate to="/broker/learning?tab=training" replace />} />
+    <Route path="/broker/learning" element={<BrokerLearning />} />
     <Route path="/ai-broker-workspace" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><AIBrokerWorkspace /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/ai-hub" element={<AuthRequiredRoute><AIHub /></AuthRequiredRoute>} />
     <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
