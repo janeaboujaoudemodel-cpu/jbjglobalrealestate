@@ -283,14 +283,14 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
           {/* Top-Left: Property Type Label (if no developer mark) — solid ink badge */}
           {project.property_type_label && !hasDevMark && (
-            <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#1A1A1A] text-[#FDFBF7] border border-[#B89555] shadow-md">
+            <div className="absolute top-3 left-3 z-10 card-status-badge" data-no-contrast-guard>
               {project.property_type_label}
             </div>
           )}
 
           {/* Sale Status Badge — Bottom Left */}
           {saleStatusBadge && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
-            <div className={`absolute bottom-3 left-3 z-10 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-md ${saleStatusBadge.className}`}>
+            <div className={`absolute bottom-3 left-3 z-10 ${saleStatusBadge.className}`} data-no-contrast-guard>
               {saleStatusBadge.label}
             </div>
           )}
