@@ -1126,25 +1126,9 @@ const Properties = () => {
             </button>
           </div>
 
-          <div className="flex items-center justify-center gap-2 mt-5 flex-wrap">
-            {[
-              { value: "newest", label: "Newest" },
-              { value: "oldest", label: "Oldest" },
-              { value: "price-low", label: "Low → High" },
-              { value: "price-high", label: "High → Low" },
-            ].map((option) => (
-              <button
-                key={option.value}
-                onClick={() => setSortBy(option.value)}
-                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all border-2 ${
-                  sortBy === option.value
-                    ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-[#B89555] shadow-[0_0_18px_rgba(200,167,102,0.25)]"
-                    : "bg-transparent text-[#1A1A1A] border-[#B89555]/30 hover:border-[#B89555]"
-                }`}
-              >
-                {option.label}
-              </button>
-            ))}
+          {/* Sort By — unified premium dropdown */}
+          <div className="flex items-center justify-end gap-3 mt-5">
+            <SortBySelect value={sortBy} onChange={setSortBy} />
           </div>
           </div>
         </div>
@@ -1152,8 +1136,8 @@ const Properties = () => {
 
       {/* Fixed filter bar removed — handled globally by GlobalFilterBar in MainLayout */}
 
-      {/* Divider between Search and Results */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+      {/* Premium gold divider between Filters and Results — section-level (lg) */}
+      <SectionDividerGold size="lg" className="my-2" />
 
       {/* Results Section - Split-screen map mode or standard grid */}
       {isMapMode ? (
