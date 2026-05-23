@@ -94,7 +94,7 @@ function fixIfLowContrast(el: HTMLElement, minRatio: number) {
   }
 }
 
-function fixWhiteOnBright(el: HTMLElement) {
+function fixWhiteOnBright(el: Element) {
   if (el.closest("[data-no-contrast-guard], [data-surface='dark'], .allow-white")) return;
   if (el.closest(".bg-black, [class~='bg-[#1A1A1A]'], [class*='bg-gray-9'], [class*='bg-neutral-9'], [class*='bg-zinc-9']")) return;
   const cs = window.getComputedStyle(el);
@@ -108,8 +108,8 @@ function fixWhiteOnBright(el: HTMLElement) {
   const isBrightSurface = relLuminance(bg) > 0.52;
   if (isWhiteForeground && isBrightSurface) {
     el.classList.add(CONTRAST_FIX_CLASS);
-    el.style.setProperty("color", "#1A1A1A", "important");
-    if (el instanceof SVGElement) {
+    if (el instanceof HTMLElement || el instanceof SVGElement) {
+      el.style.setProperty("color", "#1A1A1A", "important");
       el.style.setProperty("stroke", "currentColor", "important");
     }
   }
