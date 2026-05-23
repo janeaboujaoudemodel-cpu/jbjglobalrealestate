@@ -503,16 +503,50 @@ export default function BookMeetingLanding() {
                 placeholder="Anything else Jane should know before the meeting?" />
             </div>
 
-            <Button variant="gold" onClick={submit} disabled={busy || uploading} className="w-full mt-2">
+            <Button
+              variant="gold"
+              onClick={() => {
+                const err = validate();
+                if (err) { toast.error(err); return; }
+                setConfirmOpen(true);
+              }}
+              disabled={busy || uploading}
+              className="w-full mt-2"
+            >
               {(busy || uploading) ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              Request {selectedTime} on {selectedDate.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
+              Review &amp; request {selectedTime} on {selectedDate.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
             </Button>
             <p className="text-[11px] text-[#1A1A1A]/55 text-center">
               All meetings are subject to confirmation. Cancellations: 24 h before morning meetings, 6 h before afternoon meetings. Write to contact@jbj.ae for assistance.
             </p>
           </div>
         </div>
+        )}
       </main>
+
+      <ConfirmTicketDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        submitting={busy || uploading}
+        onConfirm={submit}
+        summary={user ? {
+          fullName: fullName.trim(),
+          email: email.trim().toLowerCase(),
+          phone: phone.trim(),
+          company: company.trim(),
+          serviceTypeLabel: (SERVICE_TYPES.find(s => s.v === serviceType)?.label) ?? serviceType,
+          meetingTopic: meetingTopic.trim(),
+          proposalPreview: proposalText.trim() || null,
+          attachmentName: file?.name ?? null,
+          date: selectedDate,
+          time: selectedTime,
+          durationMin: duration,
+          locationLabel: locationType === "online"
+            ? `Online · ${platform === "zoom" ? "Zoom" : "Google Meet"}`
+            : "Dubai office",
+        } : null}
+      />
     </div>
   );
 }
+
