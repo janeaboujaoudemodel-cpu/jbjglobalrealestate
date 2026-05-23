@@ -195,7 +195,7 @@ export default function DeveloperEnrichmentQueue() {
               {rebuildAllBroken.isPending ? "Running…" : "Rebuild 25 broken"}
             </Button>
             <Button asChild variant="outline" size="sm">
-              <a href="/developer-hub-admin/directory">Pick from directory →</a>
+              <a href="/developers-portal/directory">Pick from directory →</a>
             </Button>
           </div>
         </div>
@@ -238,7 +238,7 @@ export default function DeveloperEnrichmentQueue() {
 
       {rows.length === 0 && !isLoading && (
         <Card className="p-8 text-center bg-[#F7F2EA] border border-[#B89555]/30">
-          <p className="text-[#1A1A1A]/70">No enrichment runs yet. Go to <a href="/developer-hub-admin/directory" className="underline">Directory</a> and click "Rebuild from site" on any developer.</p>
+          <p className="text-[#1A1A1A]/70">No enrichment runs yet. Go to <a href="/developers-portal/directory" className="underline">Directory</a> and click "Rebuild from site" on any developer.</p>
         </Card>
       )}
 
@@ -269,7 +269,7 @@ export default function DeveloperEnrichmentQueue() {
                         <> · source: <a href={log.source_url} target="_blank" rel="noreferrer" className="underline">{(() => { try { return new URL(log.source_url!).hostname; } catch { return log.source_url; } })()}</a></>
                       )}
                       {log.developers?.slug && (
-                        <> · <a href={`/developer-hub-admin/profile/${log.developers.slug}`} className="underline">Open full profile</a></>
+                        <> · <a href={`/developers-portal/developers/${log.developers.slug}`} className="underline">Open full profile</a></>
                       )}
                     </p>
                     {log.error && <p className="text-xs text-red-600 mt-1">{log.error}</p>}
