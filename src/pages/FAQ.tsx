@@ -178,6 +178,37 @@ const FAQ = () => {
         }
       />
 
+      {/* FAQ category hub — links out to specialised FAQ pages */}
+      <section className="bg-[#FDFBF7] py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] text-center mb-2">
+            Browse by Audience
+          </h2>
+          <p className="text-center text-[#1A1A1A]/70 mb-8">
+            Pick the FAQ that matches your role for tailored answers.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {[
+              { label: "Buyer FAQ", href: "/buyer-faq", icon: Home },
+              { label: "Seller FAQ", href: "/seller-faq", icon: Banknote },
+              { label: "Landlord FAQ", href: "/landlord-faq", icon: Key },
+              { label: "Tenant FAQ", href: "/tenant-faq", icon: Users },
+              { label: "Broker FAQ", href: "/broker-faq", icon: Building2 },
+            ].map((c) => (
+              <Link
+                key={c.href}
+                to={c.href}
+                className="group flex flex-col items-center gap-2 p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 hover:border-[#B89555]/70 hover:shadow-md transition-all"
+              >
+                <c.icon className="w-6 h-6 text-[#1A1A1A]" />
+                <span className="text-sm font-medium text-[#1A1A1A]">{c.label}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
       {/* Floating Sidebar Navigation - Like Buyer Guide (Right Side) - Positioned above chat widget */}
       <div className="hidden lg:block fixed right-8 top-1/4 z-[55] max-w-xs" style={{ marginBottom: '180px' }}>
         <FAQFloatingSidebar 

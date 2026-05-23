@@ -13,7 +13,7 @@ type MegaMenuKey = 'buy' | 'sell' | 'rent' | 'projects' | 'developers' | 'areas'
 const NAV_ITEMS = [
   { label: "Off-plan", href: "/properties", icon: Building2 },
   { label: "Buy", href: "/buy", icon: Home, megaMenu: 'buy' as MegaMenuKey },
-  { label: "Sell", href: "/sell", icon: Tag, megaMenu: 'sell' as MegaMenuKey },
+  { label: "Sell or Rent", href: "/list-property", icon: Tag },
   { label: "Rent", href: "/rent", icon: Key, megaMenu: 'rent' as MegaMenuKey },
   { label: "List Property", href: "/list-property", icon: PlusCircle },
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' as MegaMenuKey },
@@ -70,7 +70,7 @@ export default function PropertiesVerticalNav() {
       { label: "Seller's Guide", icon: FileText, href: '/seller-guide' },
       { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
       { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
-      { label: 'Listing Portal', icon: ClipboardCheck, href: '/listing-portal' },
+      { label: 'Listing Portal', icon: ClipboardCheck, href: '/list-property' },
     ],
     rent: [
       { label: 'Apartments', icon: Building2, href: '/properties?type=apartment&transaction=rent' },

@@ -182,7 +182,7 @@ const Footer = () => {
     { label: t("footer.rentProperties") || "Rent Properties", href: "/properties?transaction=rent" },
     { label: "Projects", href: "/properties" },
     { label: "Developers", href: "/developers" },
-    { label: t("footer.listYourProperty") || "List Your Property", href: "/listing-portal" },
+    { label: t("footer.listYourProperty") || "List Your Property", href: "/list-property" },
     { label: "Communities", href: "/communities" },
     { label: "Resale Properties", href: "/properties?transaction=resale" },
     { label: "Property Map", href: "/map" },
@@ -192,7 +192,7 @@ const Footer = () => {
   ];
 
   const sellLinks = [
-    { label: "Sell Your Property", href: "/listing-portal" },
+    { label: "Sell Your Property", href: "/list-property" },
     { label: t("footer.sellerGuide") || "Seller's Guide", href: "/seller-guide" },
     { label: "Property Valuation", href: "/sell/valuation" },
     { label: "Selling Advisory", href: "/services/selling-advisory" },
@@ -229,7 +229,6 @@ const Footer = () => {
     { label: "Investor Services", href: "/services/investment-advisory" },
     { label: "Join Investor List", href: "/investors/join" },
     { label: t("footer.investorEducation") || "Investor Education", href: "/investor-education" },
-    { label: t("footer.investorFaqs") || "Investor FAQs", href: "/investor-faq" },
     { label: t("footer.investorTools") || "Investor Tools", href: "/ai-hub" },
     { label: "Investor Dashboard", href: "/investor-dashboard" },
     { label: "Portfolio Views", href: "/investor-dashboard/portfolio" },
@@ -242,13 +241,7 @@ const Footer = () => {
     { label: t("footer.tenantGuide") || "Tenant Guide", href: "/tenant-guide" },
     { label: t("footer.areaGuides") || "Area Guides", href: "/areas" },
     { label: "Golden Visa Guide", href: "/guides/golden-visa-uae" },
-    { label: "Buyer FAQs", href: "/buyer-faq" },
-    { label: "Seller FAQs", href: "/seller-faq" },
-    { label: "Landlord FAQs", href: "/landlord-faq" },
-    { label: "Tenant FAQs", href: "/tenant-faq" },
-    { label: t("footer.generalFaqs") || "General FAQs", href: "/faq" },
-    { label: "Broker FAQs", href: "/broker-faq" },
-    { label: "Investor FAQs", href: "/investor-faq" },
+    { label: "FAQ Hub", href: "/faq" },
     { label: "Broker Education", href: "/broker-education" },
     { label: "Books Library", href: "/education-hub" },
   ];
@@ -286,7 +279,7 @@ const Footer = () => {
     { href: "/academy/graduates", label: "Academy Graduates" },
     { href: "/broker-education", label: "Broker Education" },
     { href: "/broker-resources", label: "Broker Resources" },
-    { href: "/listing-portal", label: "Listing Portal" },
+    { href: "/list-property", label: "Listing Portal" },
     { href: "/broker/training", label: "Broker Training" },
     { href: "/broker-hub", label: "Broker Hub" },
     { href: "/broker-dashboard", label: "Broker Dashboard" },
@@ -409,7 +402,7 @@ const Footer = () => {
     { label: "Developers", href: "/developers" },
     { label: "Communities", href: "/communities" },
     { label: "Property Map", href: "/map" },
-    { label: "List Your Property", href: "/listing-portal" },
+    { label: "List Your Property", href: "/list-property" },
   ];
 
   const colServices = [

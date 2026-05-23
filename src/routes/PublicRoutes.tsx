@@ -30,6 +30,7 @@ const RentalIndex = lazy(() => import("@/pages/RentalIndex"));
 const SellWithUs = lazy(() => import("@/pages/SellWithUs"));
 const RequestValuation = lazy(() => import("@/pages/RequestValuation"));
 const LandlordListForm = lazy(() => import("@/pages/LandlordListForm"));
+const ListProperty = lazy(() => import("@/pages/ListProperty"));
 
 // ── Guides & Education ──
 const BuyerGuide = lazy(() => import("@/pages/BuyerGuide"));
@@ -218,14 +219,17 @@ export const PublicRoutes = () => (
     <Route path="/areas/:slug" element={<RedirectWithParams to="/area" />} />
     <Route path="/resale-properties" element={<ResaleProperties />} />
     <Route path="/map" element={<PropertyMap />} />
-    <Route path="/listing-portal" element={<AuthRequiredRoute><ListingPortal /></AuthRequiredRoute>} />
-    <Route path="/listing-portal/submit" element={<AuthRequiredRoute><ListingPortalSubmit /></AuthRequiredRoute>} />
-    <Route path="/listing-portal/my-listings" element={<AuthRequiredRoute><ListingPortalMyListings /></AuthRequiredRoute>} />
+    {/* Unified List Your Property page (manual + AI + browse). Old routes 301 here. */}
+    <Route path="/list-property" element={<ListProperty />} />
+    <Route path="/dashboard/my-listings" element={<AuthRequiredRoute><ListingPortalMyListings /></AuthRequiredRoute>} />
+    <Route path="/listing-portal" element={<Navigate to="/list-property?mode=browse" replace />} />
+    <Route path="/listing-portal/submit" element={<Navigate to="/list-property?mode=ai" replace />} />
+    <Route path="/listing-portal/my-listings" element={<Navigate to="/dashboard/my-listings" replace />} />
+    <Route path="/sell" element={<Navigate to="/list-property?purpose=sale&mode=manual" replace />} />
     <Route path="/property-evaluator" element={<PropertyEvaluator />} />
     <Route path="/rental-index" element={<RentalIndex />} />
-    <Route path="/sell" element={<SellWithUs />} />
     <Route path="/sell/valuation" element={<RequestValuation />} />
-    <Route path="/property-management/list" element={<LandlordListForm />} />
+    <Route path="/property-management/list" element={<Navigate to="/list-property?purpose=rent&mode=manual" replace />} />
     <Route path="/property-measurement" element={<PropertyMeasurement />} />
     <Route path="/buy" element={<Navigate to="/properties?transactionType=buy" replace />} />
     <Route path="/rent" element={<Navigate to="/properties?transactionType=rent" replace />} />
@@ -236,7 +240,7 @@ export const PublicRoutes = () => (
     {/* ── Guides & Education ── */}
     <Route path="/buyer-guide" element={<BuyerGuide />} />
     <Route path="/seller-guide" element={<SellerGuide />} />
-    <Route path="/seller-listing" element={<SellerListing />} />
+    <Route path="/seller-listing" element={<Navigate to="/list-property?mode=manual" replace />} />
     <Route path="/guides" element={<Guides />} />
     <Route path="/guides/golden-visa-uae" element={<GoldenVisaGuide />} />
     <Route path="/golden-visa" element={<Navigate to="/guides/golden-visa-uae" replace />} />
@@ -244,11 +248,11 @@ export const PublicRoutes = () => (
     <Route path="/rent-guide" element={<RentGuide />} />
     <Route path="/tenant-guide" element={<TenantGuide />} />
     <Route path="/landlord-guide" element={<LandlordGuide />} />
-    <Route path="/landlord-portal" element={<LandlordRentalPortal />} />
+    <Route path="/landlord-portal" element={<Navigate to="/dashboard/my-listings" replace />} />
     <Route path="/investor-education" element={<InvestorEducation />} />
     <Route path="/broker-education" element={<BrokerEducation />} />
     <Route path="/faq" element={<FAQ />} />
-    <Route path="/investor-faq" element={<InvestorFAQ />} />
+    <Route path="/investor-faq" element={<Navigate to="/faq" replace />} />
     <Route path="/buyer-faq" element={<BuyerFAQ />} />
     <Route path="/seller-faq" element={<SellerFAQ />} />
     <Route path="/landlord-faq" element={<LandlordFAQ />} />

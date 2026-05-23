@@ -67,25 +67,20 @@ const NAV_ITEMS: NavItem[] = [
   // ── Highlighted Hubs ──
   
   { label: "AI Home Finder", href: "/quiz", icon: Home, highlight: true },
-  { label: "List Your Property", href: "/listing-portal", icon: ClipboardCheck, highlight: true },
+  { label: "List Your Property", href: "/list-property", icon: ClipboardCheck, highlight: true },
   { label: "Careers", href: "/join", icon: GraduationCap, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
 
   // ── Properties ──
   { label: "Buy / Off-Plan", href: "/properties", icon: Building2, section: "PROPERTIES", megaMenu: 'buy' },
   { label: "All Projects", href: "/properties", icon: Building },
-  { label: "Sell", href: "/sell", icon: Tag, megaMenu: 'sell' },
-  { label: "Rent", href: "/rent", icon: Key, megaMenu: 'rent' },
-  { label: "List for Sale / Rent", href: "/listing-portal", icon: PlusCircle },
+  { label: "List for Sale / Rent", href: "/list-property", icon: PlusCircle },
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' },
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' },
   { label: "Communities", href: "/communities", icon: Users },
   { label: "Map", href: "/map", icon: MapPin },
-  { label: "Submit Listing", href: "/listing-portal/submit", icon: FilePlus },
-  { label: "My Listings", href: "/listing-portal/my-listings", icon: FolderOpen },
   { label: "Property Evaluator", href: "/property-evaluator", icon: BarChart3 },
   { label: "Rental Index", href: "/rental-index", icon: TrendingUp },
-  { label: "Sell With Us", href: "/sell", icon: Tag },
   { label: "Property Valuation", href: "/sell/valuation", icon: DollarSign },
   { label: "Property Measurement", href: "/property-measurement", icon: Ruler },
 
@@ -160,22 +155,14 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Guides Library", href: "/guides", icon: BookOpen, megaMenu: 'guides', section: "GUIDES" },
   { label: "Buyer's Guide", href: "/buyer-guide", icon: FileText },
   { label: "Seller's Guide", href: "/seller-guide", icon: FileText },
-  { label: "Seller Listing Guide", href: "/seller-listing", icon: FileText },
   { label: "Rental Guide", href: "/rent-guide", icon: FileText },
   { label: "Tenant Guide", href: "/tenant-guide", icon: FileText },
   { label: "Landlord Guide", href: "/landlord-guide", icon: FileText },
-  { label: "Landlord Portal", href: "/landlord-portal", icon: Key },
   { label: "Investor Education", href: "/investor-education", icon: GraduationCap },
   { label: "Broker Education", href: "/broker-education", icon: GraduationCap },
   { label: "Golden Visa Guide", href: "/guides/golden-visa-uae", icon: Award },
   { label: "Books Library", href: "/education-hub", icon: BookMarked },
   { label: "FAQ Hub", href: "/faq", icon: HelpCircle },
-  { label: "Investor FAQ", href: "/investor-faq", icon: HelpCircle },
-  { label: "Buyer FAQ", href: "/buyer-faq", icon: HelpCircle },
-  { label: "Seller FAQ", href: "/seller-faq", icon: HelpCircle },
-  { label: "Landlord FAQ", href: "/landlord-faq", icon: HelpCircle },
-  { label: "Tenant FAQ", href: "/tenant-faq", icon: HelpCircle },
-  { label: "Broker FAQ", href: "/broker-faq", icon: HelpCircle },
 
   // ── Services ──
   { label: "All Services", href: "/services", icon: Briefcase, megaMenu: 'services', section: "SERVICES" },
@@ -350,8 +337,8 @@ const PUBLIC_TOOLS_WORKSPACE_ITEMS: NavItem[] = [
   { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
   { label: "Rental Index", href: "/rental-index", icon: TrendingUp },
   { label: "Property Evaluator", href: "/property-evaluator", icon: BarChart3 },
-  { label: "List Property for Sale", href: "/listing-portal?type=sale", icon: ClipboardCheck },
-  { label: "List Property for Rent", href: "/listing-portal?type=rent", icon: Key },
+  { label: "List Property for Sale", href: "/list-property?purpose=sale&mode=manual", icon: ClipboardCheck },
+  { label: "List Property for Rent", href: "/list-property?purpose=rent&mode=manual", icon: Key },
 ];
 
 /* ─── MEGA MENU LINK SETS ─── */
@@ -368,7 +355,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Seller's Guide", icon: FileText, href: '/seller-guide' },
     { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
     { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
-    { label: 'List Your Property for Sale', icon: ClipboardCheck, href: '/listing-portal?type=sale' },
+    { label: 'List Your Property for Sale', icon: ClipboardCheck, href: '/list-property?purpose=sale&mode=manual' },
   ],
   rent: [
     { label: 'Apartments for Rent', icon: Building2, href: '/properties?type=apartment&transaction=rent' },
@@ -377,7 +364,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Property Management', icon: Shield, href: '/services/property-management' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
-    { label: 'List Your Property for Rent', icon: ClipboardCheck, href: '/listing-portal?type=rent' },
+    { label: 'List Your Property for Rent', icon: ClipboardCheck, href: '/list-property?purpose=rent&mode=manual' },
   ],
   developers: [
     { label: 'All Developers', icon: Building, href: '/developers' },
@@ -445,8 +432,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Mortgage Calculator', icon: Calculator, href: '/mortgage-calculator' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
     { label: 'Property Evaluator', icon: BarChart3, href: '/property-evaluator' },
-    { label: 'List Property for Sale', icon: ClipboardCheck, href: '/listing-portal?type=sale' },
-    { label: 'List Property for Rent', icon: Key, href: '/listing-portal?type=rent' },
+    { label: 'List Property for Sale', icon: ClipboardCheck, href: '/list-property?purpose=sale&mode=manual' },
+    { label: 'List Property for Rent', icon: Key, href: '/list-property?purpose=rent&mode=manual' },
   ],
   creative: [
     { label: 'AI Home Finder', icon: Home, href: '/quiz' },
@@ -454,8 +441,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Mortgage Calculator', icon: Calculator, href: '/mortgage-calculator' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
     { label: 'Property Evaluator', icon: BarChart3, href: '/property-evaluator' },
-    { label: 'List Property for Sale', icon: ClipboardCheck, href: '/listing-portal?type=sale' },
-    { label: 'List Property for Rent', icon: Key, href: '/listing-portal?type=rent' },
+    { label: 'List Property for Sale', icon: ClipboardCheck, href: '/list-property?purpose=sale&mode=manual' },
+    { label: 'List Property for Rent', icon: Key, href: '/list-property?purpose=rent&mode=manual' },
   ],
   shortcuts: [
     { label: 'My Dashboard', icon: LayoutDashboard, href: '/my-dashboard' },
@@ -808,7 +795,7 @@ export default function GlobalVerticalNav() {
     if (
       item.href === '/join' ||
       item.href === '/quiz' ||
-      (item.href === '/listing-portal' && item.highlight) ||
+      (item.href === '/list-property' && item.highlight) ||
       item.href === '/resale-properties'
     ) {
       return shouldHighlight
@@ -835,7 +822,7 @@ export default function GlobalVerticalNav() {
   const isSaturatedColorRow = (item: NavItem) =>
     item.href === '/join' ||
     item.href === '/quiz' ||
-    (item.href === '/listing-portal' && (item as any).highlight) ||
+    (item.href === '/list-property' && (item as any).highlight) ||
     item.href === '/resale-properties';
 
   const getIconStyle = (item: NavItem, sectionKey?: string) => {
