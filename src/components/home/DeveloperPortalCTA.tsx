@@ -137,7 +137,8 @@ const DeveloperPortalCTA = () => {
   const showCongrats = isApproved && !hasSeenApproval;
   const showShortcuts = isApproved && hasSeenApproval;
 
-  // Single-line premium shortcut row — used for every portal category
+  // Single-line premium shortcut row — champagne pill + gold-hairline icon tile.
+  // NO black-filled circles (banned), NO white-on-light icons.
   const ShortcutRow = ({ items }: { items: { label: string; desc: string; icon: any; href: string }[] }) => (
     <div className="relative -mx-4 px-4">
       <div
@@ -151,8 +152,8 @@ const DeveloperPortalCTA = () => {
             className="group snap-start shrink-0 inline-flex items-center gap-2.5 pl-2.5 pr-4 py-2 rounded-full border border-[#B89555]/35 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/60 transition-all shadow-[0_1px_0_rgba(184,149,85,0.08)] hover:shadow-[0_4px_14px_-6px_rgba(184,149,85,0.35)]"
             title={action.desc}
           >
-            <span className="jj-icon-keep w-8 h-8 rounded-full bg-[#1A1A1A] flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-              <action.icon className="w-4 h-4 text-white" style={{ color: '#fff' }} />
+            <span className="w-8 h-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 flex items-center justify-center group-hover:bg-[#F7F2EA] transition-colors shrink-0">
+              <action.icon className="w-4 h-4 text-[#1A1A1A]" strokeWidth={1.9} />
             </span>
             <span className="text-[#1A1A1A] text-[13px] font-semibold whitespace-nowrap leading-tight">
               {action.label}
@@ -163,66 +164,74 @@ const DeveloperPortalCTA = () => {
     </div>
   );
 
-  // ─────────────────────────────────────────────────────────────────────
-  // STRICT GATING — render nothing until we know exactly what to show.
-  // The section is empty until:
-  //   • the user is signed in
-  //   • mode is loaded
-  //   • the per-category registration probe for the active mode resolved
-  //   • the user has actually registered for that category
-  // No "Developer Center" leaks when the user is browsing in broker mode.
-  // ─────────────────────────────────────────────────────────────────────
-  if (!user || isModeLoading) return null;
+  // Single "Visit Portal" CTA card used for investor + broker — replaces the
+  // shortcut grid per owner directive (no Broker Dashboard / CRM / Listing Portal
+  // tile spam on the homepage; tools live inside the portal itself).
+  const PortalVisitCard = ({
+    title,
+    description,
+    cta,
+    href,
+  }: {
+    title: string;
+    description: string;
+    cta: string;
+    href: string;
+  }) => (
+    <section className="py-8 md:py-10 bg-[#FDFBF7]">
+      <div className="container mx-auto px-4">
+        <div className="max-w-3xl mx-auto rounded-2xl border border-[#B89555]/40 bg-[#F7F2EA] p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+          <div className="min-w-0">
+            <h2 className="text-lg md:text-xl font-bold text-[#1A1A1A] leading-tight">
+              {title}
+            </h2>
+            <p className="text-[#1A1A1A]/75 text-sm mt-1.5 leading-snug">
+              {description}
+            </p>
+          </div>
+          <Link
+            to={href}
+            className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#EFE6D6] border border-[#B89555] text-[#1A1A1A] text-sm font-semibold hover:bg-[#FDFBF7] transition-colors"
+          >
+            {cta}
+            <ArrowRight className="w-4 h-4" strokeWidth={2} />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
 
-  // INVESTOR
+  // ─────────────────────────────────────────────────────────────────────
+  // STRICT MODE GATING — the active mode (not registration) drives which
+  // portal CTA appears. Investor mode → Investor Portal card.
+  // Broker mode → Broker Portal card. Developer mode → developer flow below.
+  // ─────────────────────────────────────────────────────────────────────
+  if (isModeLoading) return null;
+
+  // INVESTOR — single message card pointing to the investor portal
   if (isInvestorMode) {
-    if (investorReg.isLoading) return null;
-    if (!investorReg.data) return null;
     return (
-      <section className="py-8 md:py-10 bg-[#FDFBF7]">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex items-end justify-between mb-3">
-              <div>
-                <h2 className="text-lg md:text-xl font-bold text-[#1A1A1A] leading-tight">
-                  Investor Portal
-                </h2>
-                <p className="text-[#1A1A1A]/70 text-xs mt-0.5">
-                  Tools, insights & exclusive access for smart investors.
-                </p>
-              </div>
-            </div>
-            <ShortcutRow items={investorShortcuts} />
-          </div>
-        </div>
-      </section>
+      <PortalVisitCard
+        title="Investor Portal"
+        description="Visit the Investor Portal to access property search, ROI tools, market intelligence and your portfolio — everything tailored for investors lives there."
+        cta="Visit Investor Portal"
+        href="/investor-dashboard"
+      />
     );
   }
 
-  // BROKER
+  // BROKER — single message card pointing to the broker portal
   if (isBrokerMode) {
-    if (brokerReg.isLoading) return null;
-    if (!brokerReg.data) return null;
     return (
-      <section className="py-8 md:py-10 bg-[#FDFBF7]">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex items-end justify-between mb-3">
-              <div>
-                <h2 className="text-lg md:text-xl font-bold text-[#1A1A1A] leading-tight">
-                  Broker Portal
-                </h2>
-                <p className="text-[#1A1A1A]/70 text-xs mt-0.5">
-                  Your dashboard, CRM, academy and AI sales tools.
-                </p>
-              </div>
-            </div>
-            <ShortcutRow items={brokerShortcuts} />
-          </div>
-        </div>
-      </section>
+      <PortalVisitCard
+        title="Broker Portal"
+        description="Visit the Broker Portal to access your dashboard, CRM, listings, academy and AI sales tools — everything for brokers lives inside the portal."
+        cta="Visit Broker Portal"
+        href="/broker/crm"
+      />
     );
   }
+
 
   // DEVELOPER — must be in developer mode AND have a registration row
   if (!isDeveloperMode) return null;
