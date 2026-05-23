@@ -78,6 +78,8 @@ import { useCurrency } from "@/hooks/useCurrency";
 import { useAreaUnit } from "@/hooks/useAreaUnit";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { formatDisplayDate } from "@/utils/formatDate";
+import { getProjectStatus } from "@/utils/projectStatus";
+import OwnerVisitorToggle from "@/components/project-detail/OwnerVisitorToggle";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import {
