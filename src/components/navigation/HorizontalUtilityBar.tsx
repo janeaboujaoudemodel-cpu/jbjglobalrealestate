@@ -103,11 +103,17 @@ export default function HorizontalUtilityBar() {
           <Tooltip>
             <TooltipTrigger asChild>
               <button
+                data-no-contrast-guard
                 onClick={() => setSearchOpen(true)}
-                className="h-9 w-9 flex items-center justify-center rounded-full text-[#B89555] hover:bg-[#B89555]/[0.08] transition-colors focus:outline-none"
+                style={{ color: "hsl(var(--gold))" }}
+                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors focus:outline-none"
                 aria-label="Search"
               >
-                <Search className="w-[18px] h-[18px]" />
+                <Search
+                  data-no-contrast-guard
+                  className="w-[18px] h-[18px]"
+                  style={{ color: "hsl(var(--gold))", stroke: "hsl(var(--gold))" }}
+                />
               </button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-xs">Search anything</TooltipContent>
@@ -120,11 +126,17 @@ export default function HorizontalUtilityBar() {
           <Tooltip>
             <TooltipTrigger asChild>
               <button
+                data-no-contrast-guard
                 onClick={() => setFilterOpen(true)}
-                className="h-9 w-9 flex items-center justify-center rounded-full text-[#B89555] hover:bg-[#B89555]/[0.08] transition-colors focus:outline-none"
+                style={{ color: "hsl(var(--gold))" }}
+                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors focus:outline-none"
                 aria-label="Filter"
               >
-                <SlidersHorizontal className="w-[18px] h-[18px]" />
+                <SlidersHorizontal
+                  data-no-contrast-guard
+                  className="w-[18px] h-[18px]"
+                  style={{ color: "hsl(var(--gold))", stroke: "hsl(var(--gold))" }}
+                />
               </button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-xs">Advanced filters</TooltipContent>
