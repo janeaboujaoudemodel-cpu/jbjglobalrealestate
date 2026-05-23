@@ -231,8 +231,36 @@ const VoiceConciergeWidget = () => {
   }, [conversation, logCallStart]);
 
   const handleLauncherClick = useCallback(() => {
-    setChoiceOpen((v) => !v);
+    setChoiceOpen((v) => {
+      // Toggling open → just open. Toggling closed → minimize to phone icon.
+      if (v) {
+        setIsMinimized(true);
+        try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch { /* noop */ }
+        return false;
+      }
+      return true;
+    });
   }, []);
+
+  // Outside-click: collapse popover AND minimize to phone icon (24h).
+  useEffect(() => {
+    if (!choiceOpen) return;
+    const onDown = (e: MouseEvent | TouchEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (!t) return;
+      if (t.closest('[data-voice-popover="1"]')) return;
+      if (t.closest('[data-floating-launcher="voice-concierge"]')) return;
+      if (t.closest('[data-floating-launcher="voice-concierge-mobile"]')) return;
+      closeAndMinimize();
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('touchstart', onDown, { passive: true });
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('touchstart', onDown);
+    };
+  }, [choiceOpen, closeAndMinimize]);
+
 
   const handleStartVoice = useCallback(() => {
     setChoiceOpen(false);
