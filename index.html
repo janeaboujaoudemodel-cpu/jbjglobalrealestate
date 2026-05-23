@@ -29,8 +29,8 @@
     />
     <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=optional" rel="stylesheet" /></noscript>
 
-    <!-- Preload hero image for instant LCP -->
-    <link rel="preload" as="image" href="/src/assets/luxury-villa-hero.jpeg" fetchpriority="high" />
+    <!-- Hero image is route-specific (/properties only); no global preload to avoid wasting 770KB on every page. -->
+
     <!-- Preconnect for YouTube thumbnails (project detail pages) -->
     <link rel="preconnect" href="https://img.youtube.com" crossorigin />
 
