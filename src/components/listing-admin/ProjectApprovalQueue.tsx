@@ -550,6 +550,19 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
     if (approveErr) throw approveErr;
 
+    const { error: publishError } = await supabase
+      .from("projects")
+      .update({ is_published: true, updated_at: new Date().toISOString() })
+      .eq("id", newProject.id);
+
+    if (publishError) {
+      await supabase
+        .from("pending_project_imports")
+        .update({ status: "pending", review_notes: `PENDING_VERIFICATION:${publishError.message}` })
+        .eq("id", importData.id);
+      throw publishError;
+    }
+
     return newProject;
   };
 
