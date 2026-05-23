@@ -655,7 +655,7 @@ const IssueReportForm = () => {
             onChange={(e) => setFormData({ ...formData, pageUrl: e.target.value })}
             required
             className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
-            placeholder="https://jbjglobalrealestate.lovable.app/..."
+            placeholder="https://www.jbj.ae/..."
           />
         </div>
       </div>

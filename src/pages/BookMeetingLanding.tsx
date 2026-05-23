@@ -75,7 +75,7 @@ export default function BookMeetingLanding() {
   const [params] = useSearchParams();
   const token = params.get("t") || "";
 
-  const dayPanel = useMemo(() => buildDayPanel(14), []);
+  const dayPanel = useMemo(() => buildDayPanel(30), []);
   const countries = useMemo(() => getCountryList(), []);
   const languages = useMemo(() => getLanguageList(), []);
 
@@ -278,25 +278,33 @@ export default function BookMeetingLanding() {
               <h2 className="font-semibold">Choose a date</h2>
               <span className="ml-auto text-[11px] text-[#1A1A1A]/60">Tue–Fri · Dubai</span>
             </div>
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-6">
-              {dayPanel.slice(0, 12).map(({ date, bookable }) => {
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-6 max-h-[320px] overflow-y-auto pr-1">
+              {dayPanel.map(({ date, bookable }) => {
                 const sel = bookable && date.toDateString() === selectedDate.toDateString();
+                const label = date.toLocaleDateString("en-GB", { weekday: "short" });
+                const aria = bookable
+                  ? `Select ${date.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}`
+                  : `${date.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })} — booked`;
                 return (
                   <button
                     key={date.toISOString()}
-                    onClick={() => bookable && setSelectedDate(date)}
+                    type="button"
+                    aria-label={aria}
+                    aria-pressed={sel}
+                    title={bookable ? "" : "Booked — first availability shown below"}
+                    onClick={() => bookable && setSelectedDate(new Date(date))}
                     disabled={!bookable}
                     className={`px-2 py-3 rounded-lg text-xs border transition relative ${
                       !bookable
-                        ? "bg-[#FDFBF7] border-[#B89555]/15 text-[#1A1A1A]/30 cursor-not-allowed"
+                        ? "bg-[#FDFBF7] border-[#B89555]/15 text-[#1A1A1A]/30 cursor-not-allowed line-through decoration-[#B89555]/40"
                         : sel
-                          ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+                          ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A] ring-1 ring-[#B89555]"
                           : "bg-white border-[#B89555]/20 text-[#1A1A1A]/80 hover:border-[#B89555]/60"
                     }`}
                   >
-                    <div className="font-medium">{date.toLocaleDateString("en-GB", { weekday: "short" })}</div>
+                    <div className="font-medium">{label}</div>
                     <div className="text-base">{date.getDate()}</div>
-                    <div className="opacity-70">{date.toLocaleDateString("en-GB", { month: "short" })}</div>
+                    <div className="opacity-70">{date.toLocaleDateString("en-GB", { month: "short" })} {date.getFullYear()}</div>
                     {!bookable && (
                       <div className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[#B89555]/70">Booked</div>
                     )}
@@ -473,10 +481,10 @@ export default function BookMeetingLanding() {
 
             <Button variant="gold" onClick={submit} disabled={busy || uploading} className="w-full mt-2">
               {(busy || uploading) ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              Request {selectedTime} on {selectedDate.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+              Request {selectedTime} on {selectedDate.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
             </Button>
             <p className="text-[11px] text-[#1A1A1A]/55 text-center">
-              All meetings are subject to confirmation. Bookings require at least 24 hours notice.
+              All meetings are subject to confirmation. Cancellations: 24 h before morning meetings, 6 h before afternoon meetings. Write to contact@jbj.ae for assistance.
             </p>
           </div>
         </div>
