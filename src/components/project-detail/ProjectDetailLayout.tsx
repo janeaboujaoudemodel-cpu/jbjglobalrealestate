@@ -906,9 +906,11 @@ export default function ProjectDetailLayout({
                <DeveloperInfoCard
                  developer={project.developer}
                  projectName={project.name}
+                 editable
                />
              </div>
            )}
+
 
            {/* UNIQUE SELLING POINTS (USP/Highlights) SECTION */}
            {(project.usp_bullets?.length ?? 0) > 0 && (
@@ -1107,7 +1109,9 @@ export default function ProjectDetailLayout({
                 currentProjectId={project.id}
                 developerId={project.developer?.id ?? null}
                 developerName={project.developer?.name ?? null}
+                developerSlug={project.developer?.slug ?? null}
               />
+
 
 
               {/* Nearby Points of Interest - Below Map */}
