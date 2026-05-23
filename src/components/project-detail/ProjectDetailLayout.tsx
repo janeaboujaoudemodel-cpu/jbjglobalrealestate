@@ -621,7 +621,9 @@ export default function ProjectDetailLayout({
             {project.location && (
               <div className="flex items-center gap-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.85)' }}>
                 <MapPin className="w-5 h-5" style={{ color: '#FCD34D' }} />
-                <span className="text-sm md:text-base">{project.location}</span>
+                <InlineEditable projectId={project.id} field="location" value={project.location} surface="dark">
+                  <span className="text-sm md:text-base">{project.location}</span>
+                </InlineEditable>
               </div>
             )}
             {bedroomsText && (
