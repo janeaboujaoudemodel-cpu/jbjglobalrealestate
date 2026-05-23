@@ -17,6 +17,7 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { PaymentPlanLine } from "@/components/ui/payment-plan-line";
+import { PearlButton } from "@/components/ui/pearl-button";
 
 const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC', 'Meraas'];
 
