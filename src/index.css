@@ -3843,7 +3843,7 @@ button:disabled:has(.lucide),
   color: #FFFFFF !important;
 }
 
-/* Brand GOLD tiles — text + descendants → white */
+/* Brand GOLD tiles — text + descendants → ink */
 [class~="bg-[#B89555]"],
 [class~="bg-[#A68444]"],
 [class~="bg-[#C8A766]"],
@@ -3852,16 +3852,16 @@ button:disabled:has(.lucide),
 [class~="bg-[#A68444]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
 [class~="bg-[#C8A766]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
 [class~="bg-[#D4AF37]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li) {
-  color: #FFFFFF !important;
+  color: #1A1A1A !important;
   --tw-text-opacity: 1 !important;
 }
 
-/* Brand GOLD tiles — SVG icons → white */
+/* Brand GOLD tiles — SVG icons → ink */
 [class~="bg-[#B89555]"] svg,
 [class~="bg-[#A68444]"] svg,
 [class~="bg-[#C8A766]"] svg,
 [class~="bg-[#D4AF37]"] svg {
-  color: #FFFFFF !important;
+  color: #1A1A1A !important;
 }
 
 /* Buttons explicitly opted into hover→light surface keep dark text on hover.
