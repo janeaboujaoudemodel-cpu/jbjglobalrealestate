@@ -551,7 +551,7 @@ export const DeveloperAIAnalyzer = ({
                   {/* Premium Gradient Header Bar */}
                   <div className="bg-gradient-to-r from-black via-[#1a1a1a] to-black px-6 py-4 flex items-center gap-4">
                     <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-[#1A1A1A]" />
+                      <Building2 className="w-6 h-6 text-white allow-white" data-no-contrast-guard />
                     </div>
                     <div>
                       <h3 className="font-bold text-[#1A1A1A] text-lg">Developer Overview</h3>
