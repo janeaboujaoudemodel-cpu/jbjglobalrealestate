@@ -88,7 +88,7 @@ const ListingsApproval = () => {
     try {
       const { data, error } = await supabase
         .from("projects")
-        .select("id,name,slug,developer_name,city,community,is_published,cover_image_url,card_image_url,updated_at,created_at")
+        .select("id,name,slug,developer_name,city,community,is_published,cover_image_url,card_image_url,description,price_from,location,area_name,bedrooms_min,bedrooms_max,property_type_label,payment_plan,updated_at,created_at")
         .order("updated_at", { ascending: false })
         .limit(500);
       if (error) throw error;
@@ -96,15 +96,18 @@ const ListingsApproval = () => {
       const ids = (data || []).map((p: any) => p.id);
       let counts: Record<string, number> = {};
       if (ids.length > 0) {
-        const { data: imgs } = await supabase
-          .from("project_images")
-          .select("project_id")
-          .in("project_id", ids);
+        const [{ data: imgs }, { data: docs }] = await Promise.all([
+          supabase.from("project_images").select("project_id").in("project_id", ids),
+          supabase.from("project_documents").select("project_id").in("project_id", ids),
+        ]);
         (imgs || []).forEach((row: any) => {
           counts[row.project_id] = (counts[row.project_id] || 0) + 1;
         });
+        (docs || []).forEach((row: any) => {
+          counts[`doc:${row.project_id}`] = (counts[`doc:${row.project_id}`] || 0) + 1;
+        });
       }
-      setProjects((data || []).map((p: any) => ({ ...p, gallery_count: counts[p.id] || 0 })));
+      setProjects((data || []).map((p: any) => ({ ...p, gallery_count: counts[p.id] || 0, documents_count: counts[`doc:${p.id}`] || 0 })));
     } catch (e: any) {
       toast.error(e.message || "Failed to load listings");
     } finally {
@@ -131,9 +134,9 @@ const ListingsApproval = () => {
   const pending = filtered.filter((p) => !p.is_published && getMediaStatus(p) !== "missing");
 
   const approve = async (p: ProjectRow) => {
-    const status = getMediaStatus(p);
-    if (status === "missing") {
-      toast.error("Cannot approve: at least one image is required");
+    const blockers = getReadinessBlockers(p);
+    if (blockers.length > 0) {
+      toast.error(`Cannot approve: missing ${blockers.join(", ")}`);
       return;
     }
     const { error } = await supabase
