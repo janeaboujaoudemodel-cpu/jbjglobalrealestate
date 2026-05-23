@@ -41,6 +41,8 @@ import { ProjectAIAnalyzer } from "@/components/project-detail/ProjectAIAnalyzer
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import PremiumBrochureCard from "@/components/project-detail/PremiumBrochureCard";
 import BookStyleDocuments from "@/components/project-detail/BookStyleDocuments";
+import InlineEditable from "@/components/project-detail/owner/InlineEditable";
+import OwnerDocDropzone from "@/components/project-detail/owner/OwnerDocDropzone";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import ProjectBreadcrumb from "@/components/project-detail/ProjectBreadcrumb";
 import CallToActionSection from "@/components/project-detail/CallToActionSection";
