@@ -317,6 +317,56 @@ const VoiceConciergeWidget = () => {
         <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white" />
       </button>
 
+      {/* Shared Choice popover: voice or WhatsApp — anchored above launcher for mobile & desktop */}
+      {choiceOpen && !isConnected && (
+        <div
+          className="fixed bottom-[84px] right-6 z-[10061] w-64 rounded-2xl border border-[#B89555]/45 overflow-hidden text-[#1A1A1A]"
+          style={{ background: pearlBg, boxShadow: pearlShadow }}
+        >
+          <div className="px-3 py-2 border-b border-[#B89555]/20 flex items-center justify-between">
+            <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65">Concierge · Complimentary</span>
+            <button onClick={() => setChoiceOpen(false)} aria-label="Close" className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          <button
+            onClick={handleStartVoice}
+            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-white/40 transition-colors text-left"
+          >
+            <span
+              className="flex items-center justify-center w-9 h-9 rounded-full border border-[#B89555]/55 text-[#1A1A1A]"
+              style={{ background: pearlBg, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(184,149,85,0.18)" }}
+            >
+              <Phone className="w-4 h-4" strokeWidth={2} />
+            </span>
+            <span className="flex flex-col">
+              <span className="text-sm font-semibold">Live agent call</span>
+              <span className="text-[11px] text-[#1A1A1A]/65">Voice line, instant pickup</span>
+            </span>
+          </button>
+          <div className="h-px bg-[#B89555]/15" />
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleOpenWhatsApp}
+            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-white/40 transition-colors text-left"
+          >
+            <span
+              className="flex items-center justify-center w-9 h-9 rounded-full border border-[#B89555]/55 text-[#1A1A1A]"
+              style={{ background: pearlBg, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(184,149,85,0.18)" }}
+            >
+              <MessageCircle className="w-4 h-4" strokeWidth={2} />
+            </span>
+            <span className="flex flex-col">
+              <span className="text-sm font-semibold">WhatsApp us</span>
+              <span className="text-[11px] text-[#1A1A1A]/65">{COMPANY_NAP.phoneDisplay}</span>
+            </span>
+          </a>
+        </div>
+      )}
+
+
       {/* TABLET / DESKTOP: full pill with label + X-to-minimize */}
       <div data-floating-launcher="voice-concierge" className="hidden sm:flex fixed bottom-6 right-6 z-[10060] flex-col items-end gap-2">
 
