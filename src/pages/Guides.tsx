@@ -239,10 +239,8 @@ const Guides = () => {
               </p>
             </motion.div>
 
-            {/* Auto-scrolling book marquee */}
-            <motion.div variants={fadeInUp}>
-              <BookMarquee books={allGuideBooks} />
-            </motion.div>
+            {/* Book strip removed — that auto-scrolling marquee lives on the homepage to promote this page. Here we show the books directly. */}
+
 
             {/* Books Grid */}
             <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-6xl mx-auto mt-6">
