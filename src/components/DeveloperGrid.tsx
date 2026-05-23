@@ -195,13 +195,9 @@ const DeveloperGrid = () => {
                       </div>
                     )}
 
-                    {/* Handover Badge */}
+                    {/* Handover Badge — uses site-wide .handover-orange pill */}
                     {project.handover_date && (
-                      <span className={`absolute top-3 left-3 px-2 py-1 rounded text-xs font-medium ${
-                        project.handover_date.toLowerCase().includes("ready")
-                          ? "bg-green-500/90 text-white"
-                          : "bg-[#EFE6D6] text-[#1A1A1A]"
-                      }`}>
+                      <span className="absolute top-3 left-3 handover-orange">
                         {project.handover_date.toLowerCase().includes("ready") ? "Ready" : project.handover_date}
                       </span>
                     )}
