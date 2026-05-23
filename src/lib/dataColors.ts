@@ -9,11 +9,12 @@
  */
 
 export const DATA_COLORS = Object.freeze({
-  // Transaction types
-  offPlan:    { text: 'text-emerald-600', bg: 'bg-emerald-500', gradient: 'from-emerald-500 to-emerald-400', light: 'bg-emerald-50', border: 'border-emerald-200', dot: 'bg-emerald-500' },
-  secondary:  { text: 'text-red-600',     bg: 'bg-red-500',     gradient: 'from-red-400 to-red-500',       light: 'bg-red-50',     border: 'border-red-200',     dot: 'bg-red-500' },
-  cash:       { text: 'text-blue-600',    bg: 'bg-blue-500',    gradient: 'from-blue-500 to-blue-400',     light: 'bg-blue-50',    border: 'border-blue-200',    dot: 'bg-blue-500' },
-  mortgage:   { text: 'text-amber-600',   bg: 'bg-amber-500',   gradient: 'from-amber-400 to-amber-500',   light: 'bg-amber-50',   border: 'border-amber-200',   dot: 'bg-amber-500' },
+  // Transaction types — premium semantic palette
+  // Off-plan = emerald growth, Secondary = deep red, Cash = sky blue, Mortgage = champagne gold
+  offPlan:    { text: 'text-emerald-700', bg: 'bg-emerald-600', gradient: 'from-emerald-600 to-emerald-500', light: 'bg-emerald-50', border: 'border-emerald-300', dot: 'bg-emerald-600' },
+  secondary:  { text: 'text-red-700',     bg: 'bg-red-700',     gradient: 'from-red-700 to-red-600',         light: 'bg-red-50',     border: 'border-red-300',     dot: 'bg-red-700' },
+  cash:       { text: 'text-sky-700',     bg: 'bg-sky-500',     gradient: 'from-sky-500 to-sky-400',         light: 'bg-sky-50',     border: 'border-sky-300',     dot: 'bg-sky-500' },
+  mortgage:   { text: 'text-[#8a6a2a]',   bg: 'bg-[#B89555]',   gradient: 'from-[#D8C28F] to-[#B89555]',     light: 'bg-[#F7F2EA]',  border: 'border-[#B89555]',   dot: 'bg-[#B89555]' },
 
   // Metrics
   growth:     { text: 'text-emerald-600', bg: 'bg-emerald-500' },
