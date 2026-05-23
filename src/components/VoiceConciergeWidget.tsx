@@ -169,6 +169,19 @@ const VoiceConciergeWidget = () => {
     }
   };
 
+  // Any "close" action on the popover (X, outside click, toggle-off) collapses
+  // the widget to the small phone icon and arms the 24h restore timer.
+  const closeAndMinimize = useCallback(() => {
+    setChoiceOpen(false);
+    setIsMinimized(true);
+    try {
+      localStorage.setItem(STORAGE_KEY, String(Date.now()));
+    } catch {
+      // Silent fail
+    }
+  }, []);
+
+
   const openIntake = () => setIntakeOpen(true);
 
   const startConversation = useCallback(async (leadId: string) => {
