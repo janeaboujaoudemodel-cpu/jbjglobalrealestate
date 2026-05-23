@@ -8,6 +8,7 @@ import { RedirectWithParams } from "@/components/RedirectWithParams";
 import { RedirectWithSearch } from "@/routes/RedirectWithSearch";
 import AuthRequiredRoute from "@/components/AuthRequiredRoute";
 import ModeRequiredRoute from "@/components/ModeRequiredRoute";
+import OwnerGuard from "@/components/OwnerGuard";
 
 // ── Property & Listing Pages ──
 const Index = lazy(() => import("@/pages/Index"));
