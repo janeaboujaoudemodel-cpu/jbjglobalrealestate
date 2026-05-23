@@ -285,17 +285,17 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                       data-no-contrast-guard
                       className={`max-w-[90%] px-4 py-2.5 rounded-2xl text-[13.5px] leading-relaxed
                         ${m.role === "user"
-                          ? "bg-[#E2C9A0] text-[#1A1A1A] rounded-br-md"
-                          : "bg-white/[0.07] text-[#FDFBF7] border border-[#D4B896]/25 rounded-bl-md"}`}
+                          ? "bg-[#1A1A1A] text-[#FDFBF7] rounded-br-md"
+                          : "bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/40 rounded-bl-md"}`}
                     >
                       {m.role === "assistant" ? (
                         <>
                           {cleaned && (
-                            <div className="prose prose-sm prose-invert max-w-none
-                              prose-p:my-1.5 prose-p:text-[#FDFBF7]
-                              prose-a:text-[#E2C9A0] prose-a:no-underline hover:prose-a:underline
-                              prose-strong:text-[#FDFBF7] prose-ul:my-1.5 prose-li:my-0.5
-                              prose-code:text-[#E2C9A0] prose-code:bg-white/5 prose-code:px-1 prose-code:rounded">
+                            <div className="prose prose-sm max-w-none
+                              prose-p:my-1.5 prose-p:text-[#1A1A1A]
+                              prose-a:text-[#B89555] prose-a:no-underline hover:prose-a:underline
+                              prose-strong:text-[#1A1A1A] prose-ul:my-1.5 prose-li:my-0.5 prose-li:text-[#1A1A1A]
+                              prose-code:text-[#1A1A1A] prose-code:bg-[#EFE6D6] prose-code:px-1 prose-code:rounded">
                               <ReactMarkdown
                                 components={{
                                   a: ({ href, children }) => {
@@ -324,19 +324,19 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
 
               {streaming && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex justify-start">
-                  <div className="px-4 py-3 rounded-2xl rounded-bl-md bg-white/[0.07] border border-[#D4B896]/25">
-                    <Loader2 className="h-4 w-4 animate-spin text-[#E2C9A0]" />
+                  <div className="px-4 py-3 rounded-2xl rounded-bl-md bg-[#F7F2EA] border border-[#B89555]/40">
+                    <Loader2 className="h-4 w-4 animate-spin text-[#B89555]" />
                   </div>
                 </div>
               )}
             </div>
 
             {/* Footer escalation + input */}
-            <div className="border-t border-[#D4B896]/20 px-5 py-3 space-y-3">
+            <div className="border-t border-[#B89555]/30 px-5 py-3 space-y-3 bg-[#F7F2EA]">
               {messages.length > 0 && (
                 <div className="flex items-center justify-between gap-2">
-                  <span className="inline-flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.16em] font-semibold text-[#FDFBF7]/65">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="inline-flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.16em] font-semibold text-[#1A1A1A]/70">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     24/7 Support · Free
                   </span>
                   <Popover>
@@ -345,18 +345,18 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         type="button"
                         data-no-contrast-guard
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11.5px] font-semibold
-                          text-[#FDFBF7] border border-[#D4B896]/45 bg-white/[0.05] hover:bg-white/[0.10] hover:border-[#E2C9A0]/70 transition"
+                          text-[#1A1A1A] border border-[#B89555]/55 bg-[#FDFBF7] hover:bg-[#EFE6D6] hover:border-[#B89555] transition"
                       >
                         Switch channel
-                        <ChevronDown className="h-3 w-3 text-[#E2C9A0]" />
+                        <ChevronDown className="h-3 w-3 text-[#B89555]" />
                       </button>
                     </PopoverTrigger>
                     <PopoverContent
                       align="end"
                       sideOffset={8}
                       data-no-contrast-guard
-                      className="w-[280px] p-2 space-y-1.5 bg-[#1A1A1A]/95 backdrop-blur-xl border-[#D4B896]/45 text-[#FDFBF7]"
-                      style={{ boxShadow: "0 20px 50px rgba(0,0,0,0.55)" }}
+                      className="w-[300px] p-2 space-y-1.5 !bg-[#FDFBF7] !text-[#1A1A1A] border border-[#B89555]/55 rounded-xl"
+                      style={{ boxShadow: "0 20px 50px rgba(0,0,0,0.25)" }}
                     >
                       <ChannelCard channel={{
                         id: "chat-support",
@@ -396,8 +396,8 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                   placeholder="Ask the concierge…"
                   disabled={streaming}
                   data-no-contrast-guard
-                  className="w-full h-12 pl-4 pr-12 rounded-xl text-[14px] text-[#FDFBF7] placeholder:text-[#FDFBF7]/45
-                    bg-white/[0.06] border border-[#D4B896]/35 focus:border-[#E2C9A0] outline-none transition"
+                  className="w-full h-12 pl-4 pr-12 rounded-xl text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45
+                    bg-[#FDFBF7] border border-[#B89555]/45 focus:border-[#B89555] outline-none transition"
                 />
                 <button
                   type="submit"
@@ -405,13 +405,14 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                   aria-label="Send"
                   data-no-contrast-guard
                   className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center
-                    rounded-lg text-[#1A1A1A] bg-[#E2C9A0] hover:bg-[#EBD3AA] disabled:opacity-40
+                    rounded-lg text-[#FDFBF7] bg-[#1A1A1A] hover:bg-[#2a2a2a] disabled:opacity-40
                     disabled:cursor-not-allowed transition"
                 >
                   <Send className="h-4 w-4" />
                 </button>
               </form>
             </div>
+
           </motion.aside>
         </>
       )}
