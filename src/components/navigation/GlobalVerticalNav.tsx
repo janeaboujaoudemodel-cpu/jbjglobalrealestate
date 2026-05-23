@@ -1015,7 +1015,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
 
         {/* ── Highlighted Hubs — color-coded pills ── */}
-        <div className="px-2.5 pb-1 space-y-1">
+        <div className="px-2.5 pt-1.5 pb-1 space-y-1">
           {highlightItems.map((item, i) => {
             const hasMega = !!item.megaMenu;
             const isMenuOpen = activeMegaMenu === item.megaMenu;
@@ -1030,12 +1030,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   if (hasMega) handleNavClick(item.megaMenu, e);
                   else handleNavClick(undefined);
                 }}
+                data-no-contrast-guard
+                style={{ color: '#B89555' }}
                 className={`group flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[12px] font-semibold transition-all duration-200 ${getItemStyle(item)}`}
               >
-                <span className={`w-6 h-6 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
-                  <Icon className={`w-3.5 h-3.5 ${getIconStyle(item)}`} />
+                <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 border ${getIconTileClass(item)} bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65`}>
+                  <Icon className="w-3 h-3" style={{ color: '#B89555' }} />
                 </span>
-                <span className="flex-1 relative after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-5">{item.label}</span>
+                <span data-no-contrast-guard style={{ color: '#B89555' }} className="flex-1 text-left relative inline-block after:content-[''] after:absolute after:bottom-[-3px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full">{item.label}</span>
                 {hasMega && (
                   <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-[#1A1A1A]" : "text-[#1A1A1A]/25"}`} />
                 )}
@@ -1046,7 +1048,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         </div>
 
         {/* ── Section Nav — refined accordion with editorial headers ── */}
-        <div className="py-1.5 px-2.5 flex-1 flex flex-col justify-between gap-1 pb-3">
+        <div className="pt-1 px-2.5 pb-3 space-y-1 flex-1">
           {SECTION_KEYS.map((sectionKey, sectionIdx) => {
             if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
             if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
@@ -1113,7 +1115,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
                               <Icon className={`w-3 h-3 ${getIconStyle(item, sectionKey)}`} />
                             </span>
-                            <span className="flex-1 relative after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-5">{item.label}</span>
+                            <span className="flex-1 relative after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-10">{item.label}</span>
                           </Link>
                         );
                       })}
