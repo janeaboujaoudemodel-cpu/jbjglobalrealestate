@@ -198,24 +198,24 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               </div>
             )}
 
-            {/* Handover date / Ready status — top right corner */}
-            {(deriveHandover(project) || HANDOVER_FALLBACK) && (
-              <div
-                className="absolute top-3 right-3 z-20 px-2.5 py-1 rounded-md bg-[#FDFBF7]/95 border border-[#B89555]/40 shadow-sm handover-orange"
-                data-no-contrast-guard
-              >
-                <span className="font-semibold text-xs tabular-nums">
-                  {deriveHandover(project) || HANDOVER_FALLBACK}
+            {/* Premium price label — bottom LEFT */}
+            {typeof project.price_from === 'number' && project.price_from > 0 && (
+              <div className="absolute bottom-3 left-3 z-20 price-pill-premium" data-price-badge data-no-contrast-guard>
+                <span className="price-pill-eyebrow">From</span>
+                <span className="price-pill-value">
+                  {formatPrice(project.price_from)}
                 </span>
               </div>
             )}
 
-            {/* Premium price label — square, transparent core, orange border + ink */}
-            {typeof project.price_from === 'number' && project.price_from > 0 && (
-              <div className="absolute bottom-3 right-3 z-20 price-pill-premium" data-price-badge data-no-contrast-guard>
-                <span className="price-pill-eyebrow">From</span>
-                <span className="price-pill-value">
-                  {formatPrice(project.price_from)}
+            {/* Handover date / Ready status — bottom RIGHT corner */}
+            {(deriveHandover(project) || HANDOVER_FALLBACK) && (
+              <div
+                className="absolute bottom-3 right-3 z-20 px-2.5 py-1 rounded-md bg-[#FDFBF7]/95 border border-[#B89555]/40 shadow-sm handover-orange"
+                data-no-contrast-guard
+              >
+                <span className="font-semibold text-xs tabular-nums">
+                  {deriveHandover(project) || HANDOVER_FALLBACK}
                 </span>
               </div>
             )}
@@ -246,23 +246,16 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             })()}
 
             {project.developer_name && (
-              <DeveloperLink
-                name={project.developer_name}
-                slug={project.developer?.slug || null}
-                className="text-xs mb-1 block"
-                showPrefix={true}
-              />
-            )}
-            {/* Premium gold divider between description block and developer name */}
-            <hr className="border-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent my-2" />
-
-            {project.developer_name && (
-              <DeveloperLink
-                name={project.developer_name}
-                slug={project.developer?.slug || null}
-                className="text-xs block"
-                showPrefix={true}
-              />
+              <>
+                <DeveloperLink
+                  name={project.developer_name}
+                  slug={project.developer?.slug || null}
+                  className="text-xs block"
+                  showPrefix={true}
+                />
+                {/* Premium gold divider after developer name */}
+                <hr className="border-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent my-2" />
+              </>
             )}
             <div className="flex-grow" />
 
