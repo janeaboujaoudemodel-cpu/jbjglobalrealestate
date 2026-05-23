@@ -1,16 +1,22 @@
 /**
  * Shared premium branded email template for meeting bookings.
- * Used by submit-meeting-booking, meeting-booking-action, and process-meeting-reminders.
+ * Used by submit-meeting-booking, meeting-booking-action, process-meeting-reminders, cancel-meeting.
  *
  * Design constraints:
- *  - Champagne header band + JBJ wordmark
- *  - Status ticket pill (gold/ink — never grey)
- *  - Gold footer rule + "Warm regards, JBJ Global Real Estate Team" in gold
- *  - All links point to https://www.jbj.ae — never lovable.app / lovable.dev
+ *  - Champagne header band with JBJ monogram + tagline
+ *  - Status pill (gold ring + ink on cream — never grey)
+ *  - Gold "Get directions" / CTA button when a location link is present
+ *  - Premium footer: gold rule, signature in gold ("JBJ Executive Office"),
+ *    site nav (Home · Properties · Insights · Contact), legal links
+ *    (Cookies · Privacy · Terms), NAP block, © 2026 copyright,
+ *    "Reply to contact@jbj.ae for assistance" line.
+ *  - All links point to https://www.jbj.ae.
+ *  - Reply-To on every meeting email = contact@jbj.ae.
  */
 
 const SITE = "https://www.jbj.ae";
 const BRAND = "JBJ GLOBAL REAL ESTATE";
+const SUPPORT_EMAIL = "contact@jbj.ae";
 const GOLD = "#B89555";
 const INK = "#1A1A1A";
 const CHAMPAGNE = "#F7F2EA";
@@ -26,36 +32,47 @@ export function htmlEscape(s: string): string {
 export interface BrandedEmailOptions {
   preheader?: string;
   title: string;
-  status: "RECEIVED" | "PENDING" | "APPROVED" | "DECLINED" | "RESCHEDULED" | "REMINDER";
+  status: "RECEIVED" | "PENDING" | "APPROVED" | "DECLINED" | "RESCHEDULED" | "REMINDER" | "CANCELLED";
   greeting: string;
   intro: string;
   detailRows?: Array<{ label: string; value: string }>;
+  /** Primary CTA (e.g. "Get directions" → maps link) */
   ctaText?: string;
   ctaUrl?: string;
+  /** Optional secondary CTA (e.g. "Cancel meeting") */
+  altCtaText?: string;
+  altCtaUrl?: string;
   closing?: string;
-  ownerControls?: { approveUrl: string; declineUrl: string; rescheduleUrl: string }; // owner email only
-  ownerNotes?: string; // raw HTML allowed (escaped at call site if user-supplied)
+  /** Owner-email-only: 3 action buttons. */
+  ownerControls?: { approveUrl: string; declineUrl: string; rescheduleUrl: string };
+  /** Raw HTML (already-escaped) — used for proposal / notes / socials. */
+  ownerNotes?: string;
 }
 
 function statusPill(status: string): string {
-  // gold ring + ink text on cream; never grey
   return `<span style="display:inline-block;padding:5px 12px;border-radius:999px;background:${CREAM};border:1px solid ${GOLD};color:${INK};font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;">${status}</span>`;
+}
+
+function ctaButton(text: string, url: string, primary = true): string {
+  const bg = primary ? INK : "#ffffff";
+  const fg = primary ? "#ffffff" : INK;
+  return `<a href="${url}" style="display:inline-block;padding:13px 28px;background:${bg};color:${fg};text-decoration:none;border-radius:8px;font-size:13px;letter-spacing:.04em;border:1px solid ${GOLD};margin:0 6px 8px;">${htmlEscape(text)}</a>`;
 }
 
 export function renderBrandedEmail(o: BrandedEmailOptions): string {
   const detail = (o.detailRows ?? [])
     .map(
       (r) =>
-        `<tr><td style="padding:6px 0;color:${INK};font-size:13px;width:38%;"><strong>${htmlEscape(r.label)}</strong></td><td style="padding:6px 0;color:${INK};font-size:13px;">${htmlEscape(r.value)}</td></tr>`,
+        `<tr><td style="padding:6px 0;color:${INK};font-size:13px;width:38%;vertical-align:top;"><strong>${htmlEscape(r.label)}</strong></td><td style="padding:6px 0;color:${INK};font-size:13px;">${htmlEscape(r.value)}</td></tr>`,
     )
     .join("");
 
-  const cta =
-    o.ctaText && o.ctaUrl
-      ? `<div style="text-align:center;margin:28px 0 8px;">
-           <a href="${o.ctaUrl}" style="display:inline-block;padding:13px 28px;background:${INK};color:#ffffff;text-decoration:none;border-radius:8px;font-size:13px;letter-spacing:.04em;border:1px solid ${GOLD};">${htmlEscape(o.ctaText)}</a>
-         </div>`
-      : "";
+  const cta = (o.ctaText && o.ctaUrl) || (o.altCtaText && o.altCtaUrl)
+    ? `<div style="text-align:center;margin:28px 0 8px;">
+         ${o.ctaText && o.ctaUrl ? ctaButton(o.ctaText, o.ctaUrl, true) : ""}
+         ${o.altCtaText && o.altCtaUrl ? ctaButton(o.altCtaText, o.altCtaUrl, false) : ""}
+       </div>`
+    : "";
 
   const ownerCtl = o.ownerControls
     ? `<div style="margin:24px 0;padding:16px;background:${PAGE};border:1px solid ${GOLD}33;border-radius:12px;">
@@ -84,15 +101,15 @@ export function renderBrandedEmail(o: BrandedEmailOptions): string {
 ${o.preheader ? `<div style="display:none;opacity:0;max-height:0;overflow:hidden;">${htmlEscape(o.preheader)}</div>` : ""}
 <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:${PAGE};">
   <tr><td align="center" style="padding:32px 16px;">
-    <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;background:#ffffff;border:1px solid ${GOLD}33;border-radius:16px;overflow:hidden;">
+    <table role="presentation" cellpadding="0" cellspacing="0" width="640" style="max-width:640px;background:#ffffff;border:1px solid ${GOLD}33;border-radius:16px;overflow:hidden;">
 
       <!-- HEADER -->
       <tr><td style="background:${CHAMPAGNE};padding:22px 28px;border-bottom:1px solid ${GOLD}55;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
           <tr>
             <td style="vertical-align:middle;">
-              <div style="font-family:'Times New Roman',Georgia,serif;font-size:18px;letter-spacing:.18em;color:${INK};font-weight:600;">JBJ</div>
-              <div style="font-size:10px;letter-spacing:.32em;color:${GOLD};margin-top:2px;">GLOBAL REAL ESTATE</div>
+              <div style="font-family:'Times New Roman',Georgia,serif;font-size:22px;letter-spacing:.22em;color:${INK};font-weight:600;">JBJ</div>
+              <div style="font-size:10px;letter-spacing:.28em;color:${GOLD};margin-top:3px;">EXECUTIVE OFFICE · MEETINGS</div>
             </td>
             <td align="right" style="vertical-align:middle;">${statusPill(o.status)}</td>
           </tr>
@@ -119,18 +136,41 @@ ${o.preheader ? `<div style="display:none;opacity:0;max-height:0;overflow:hidden
         ${ownerCtl}
 
         ${o.closing ? `<p style="margin:22px 0 0;font-size:14px;line-height:1.6;color:${INK};">${htmlEscape(o.closing)}</p>` : ""}
+
+        <p style="margin:24px 0 0;font-size:12px;color:${INK}99;line-height:1.6;">
+          Questions about the location, reschedule or assistance? Reply to this email or write to
+          <a href="mailto:${SUPPORT_EMAIL}" style="color:${INK};text-decoration:underline;text-decoration-color:${GOLD};">${SUPPORT_EMAIL}</a>.
+        </p>
       </td></tr>
 
       <!-- FOOTER -->
       <tr><td style="padding:8px 28px 28px;">
-        <div style="height:1px;background:${GOLD};opacity:.5;margin:18px 0;"></div>
+        <div style="height:1px;background:${GOLD};opacity:.55;margin:18px 0;"></div>
+
         <p style="margin:0;font-size:14px;color:${GOLD};font-weight:600;">Warm regards,</p>
-        <p style="margin:2px 0 14px;font-size:14px;color:${GOLD};font-weight:600;">The ${BRAND} Team</p>
-        <p style="margin:0;font-size:11px;color:${INK}99;line-height:1.6;">
-          ${BRAND}<br>
-          Dubai, United Arab Emirates · <a href="${SITE}" style="color:${INK};text-decoration:underline;text-decoration-color:${GOLD};">www.jbj.ae</a>
+        <p style="margin:2px 0 14px;font-size:14px;color:${GOLD};font-weight:600;">JBJ Executive Office</p>
+
+        <p style="margin:0 0 12px;font-size:12px;color:${INK};line-height:1.7;">
+          <a href="${SITE}" style="color:${INK};text-decoration:none;margin-right:10px;">Home</a>·
+          <a href="${SITE}/properties" style="color:${INK};text-decoration:none;margin:0 10px;">Properties</a>·
+          <a href="${SITE}/market-intelligence" style="color:${INK};text-decoration:none;margin:0 10px;">Insights</a>·
+          <a href="${SITE}/contact" style="color:${INK};text-decoration:none;margin-left:10px;">Contact</a>
         </p>
-        <p style="margin:10px 0 0;font-size:10px;color:${INK}66;">This message was sent because you submitted a meeting request at ${SITE}/book.</p>
+
+        <p style="margin:0 0 14px;font-size:11px;color:${INK}99;line-height:1.7;">
+          <a href="${SITE}/legal/cookies" style="color:${INK}99;text-decoration:none;margin-right:10px;">Cookies Policy</a>·
+          <a href="${SITE}/legal/privacy" style="color:${INK}99;text-decoration:none;margin:0 10px;">Privacy</a>·
+          <a href="${SITE}/legal/terms" style="color:${INK}99;text-decoration:none;margin-left:10px;">Terms</a>
+        </p>
+
+        <p style="margin:0;font-size:11px;color:${INK}99;line-height:1.7;">
+          ${BRAND}<br>
+          Dubai, United Arab Emirates ·
+          <a href="${SITE}" style="color:${INK};text-decoration:underline;text-decoration-color:${GOLD};">www.jbj.ae</a> ·
+          <a href="mailto:${SUPPORT_EMAIL}" style="color:${INK};text-decoration:underline;text-decoration-color:${GOLD};">${SUPPORT_EMAIL}</a>
+        </p>
+
+        <p style="margin:14px 0 0;font-size:10px;color:${INK}66;">© 2026 ${BRAND}. All rights reserved.</p>
       </td></tr>
 
     </table>
@@ -146,8 +186,10 @@ export function statusLabel(s: string): string {
     approved: "APPROVED",
     declined: "DECLINED",
     rescheduled: "RESCHEDULED",
+    cancelled: "CANCELLED",
   } as Record<string, BrandedEmailOptions["status"]>)[s] ?? "PENDING";
 }
 
 export const BRAND_NAME = BRAND;
 export const SITE_URL = SITE;
+export const SUPPORT_EMAIL_ADDR = SUPPORT_EMAIL;
