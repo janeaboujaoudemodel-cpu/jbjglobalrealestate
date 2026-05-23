@@ -1,10 +1,9 @@
-import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { Link, useLocation } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { ChevronLeft, ChevronRight, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
+import { MapPin, Mail, Phone, MessageCircle } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
@@ -15,9 +14,10 @@ import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
 import { useUserRole } from "@/hooks/useUserRole";
+import OwnerCardEditMenu from "@/components/cards/OwnerCardEditMenu";
 
 interface ProjectCardProps {
-  project: Project & { is_sold_out?: boolean | null };
+  project: Project & { is_sold_out?: boolean | null; show_sale_status?: boolean | null };
   showFavorite?: boolean;
   showBadgeButton?: boolean;
   currency?: 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 'RUB' | 'CAD' | 'AUD';
@@ -82,24 +82,11 @@ const shouldShowNewStatus = (projectName: string): boolean => {
 const getSaleStatusLabel = resolveSaleStatusLabel;
 
 const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { isOwner } = useUserRole();
   const { pathname } = useLocation();
-  const isHomepage = pathname === "/";
+  // Single static cover — carousel arrows are banned on cards (gallery only).
   const images = project.images || [];
-  const primaryImageUrl = images[currentImageIndex]?.image_url || images[0]?.image_url || project.cover_image_url || null;
-
-  const handlePrevImage = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setCurrentImageIndex(prev => prev === 0 ? images.length - 1 : prev - 1);
-  };
-
-  const handleNextImage = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setCurrentImageIndex(prev => prev === images.length - 1 ? 0 : prev + 1);
-  };
+  const primaryImageUrl = images[0]?.image_url || project.cover_image_url || null;
 
   const whatsappMessage = `Hello JBJ Global Real Estate,\n\nI am interested in ${project.name} located in ${project.location || 'UAE'}.\n\nPlease provide more details about this property.\n\nThank you.`;
   const whatsappHref = getWhatsAppUrl(whatsappMessage);
