@@ -140,10 +140,10 @@ function ApplicationsList() {
             </div>
             {row.status === "pending" && (
               <div className="flex gap-2 flex-shrink-0">
-                <Button size="sm" onClick={() => decide.mutate({ id: row.id, action: "approve" })} disabled={decide.isPending}>
+                <Button size="sm" onClick={() => decide.mutate({ id: row.id, action: "approve", row })} disabled={decide.isPending}>
                   Approve
                 </Button>
-                <Button size="sm" variant="outline" onClick={() => decide.mutate({ id: row.id, action: "deny" })} disabled={decide.isPending}>
+                <Button size="sm" variant="outline" onClick={() => decide.mutate({ id: row.id, action: "deny", row })} disabled={decide.isPending}>
                   Deny
                 </Button>
               </div>
