@@ -9,11 +9,10 @@ import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
-import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerLogo";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
-import { PaymentPlanLine } from "@/components/ui/payment-plan-line";
  
 interface ReellyProjectCardProps {
   project: ReellyProject;
@@ -271,10 +270,20 @@ const ReellyProjectCard = ({
              </div>
            )}
            
-           {/* Divider */}
-           <div className="h-px bg-[#EFE6D6]/20 my-2" />
-           
-          {/* Handover line — gold champagne */}
+          {/* Divider */}
+          <div className="h-px bg-[#B89555]/35 my-2" />
+          
+            {/* Developer - Clickable */}
+             {project.developer_name && (
+               <DeveloperLink
+                 name={project.developer_name}
+                 slug={(project as any).developer?.slug || null}
+                 className="text-sm mb-2 block"
+                 showPrefix={true}
+               />
+             )}
+
+           {/* Handover line — gold champagne */}
           {(() => {
             const derived = deriveHandover(project);
             return (
@@ -288,16 +297,6 @@ const ReellyProjectCard = ({
           })()}
 
            {/* Payment Plan removed from cards — shown only on details page */}
-           
-           {/* Developer - Clickable */}
-            {project.developer_name && (
-              <DeveloperLink
-                name={project.developer_name}
-                slug={(project as any).developer?.slug || null}
-                className="text-sm mb-3 block"
-                showPrefix={true}
-              />
-            )}
            
            {/* Size info - hidden in compact mode */}
            {!compact && (
