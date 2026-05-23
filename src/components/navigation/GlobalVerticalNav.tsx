@@ -1167,39 +1167,43 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <Link
               to="/contact"
               data-no-contrast-guard
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1.5 rounded-lg border-2 will-change-transform"
-              style={{ color: '#1A1A1A', borderColor: '#B89555', backgroundColor: '#EFE6D6' }}
+              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1.5 rounded-lg border will-change-transform"
+              style={{ color: '#1A1A1A', borderColor: '#D4B896', backgroundColor: '#F7F2EA' }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#F7F2EA';
-                e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(184,149,85,0.65), 0 0 0 1px rgba(184,149,85,0.55)';
+                e.currentTarget.style.backgroundColor = '#FDFBF7';
+                e.currentTarget.style.borderColor = '#E2C9A0';
+                e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(212,184,150,0.55), 0 0 0 1px rgba(226,201,160,0.50)';
                 e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#EFE6D6';
+                e.currentTarget.style.backgroundColor = '#F7F2EA';
+                e.currentTarget.style.borderColor = '#D4B896';
                 e.currentTarget.style.boxShadow = 'none';
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B89555' }} />
+              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#C9A86A' }} />
               <span style={{ color: 'inherit' }}>Contact</span>
             </Link>
             <Link
               to="/ticket-hub"
               data-no-contrast-guard
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1.5 rounded-lg border-2 will-change-transform"
-              style={{ color: '#1A1A1A', borderColor: '#B89555', backgroundColor: '#EFE6D6' }}
+              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1.5 rounded-lg border will-change-transform"
+              style={{ color: '#1A1A1A', borderColor: '#D4B896', backgroundColor: '#F7F2EA' }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#F7F2EA';
-                e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(184,149,85,0.65), 0 0 0 1px rgba(184,149,85,0.55)';
+                e.currentTarget.style.backgroundColor = '#FDFBF7';
+                e.currentTarget.style.borderColor = '#E2C9A0';
+                e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(212,184,150,0.55), 0 0 0 1px rgba(226,201,160,0.50)';
                 e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#EFE6D6';
+                e.currentTarget.style.backgroundColor = '#F7F2EA';
+                e.currentTarget.style.borderColor = '#D4B896';
                 e.currentTarget.style.boxShadow = 'none';
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B89555' }} />
+              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#C9A86A' }} />
               <span style={{ color: 'inherit' }}>Support</span>
             </Link>
           </div>
