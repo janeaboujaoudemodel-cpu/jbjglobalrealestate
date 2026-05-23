@@ -337,6 +337,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               <DeveloperLink
                 name={project.developer.name}
                 slug={project.developer.slug}
+                logoUrl={devLogoUrl}
                 className="text-sm block"
                 showPrefix={true}
               />

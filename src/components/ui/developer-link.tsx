@@ -1,28 +1,33 @@
 /**
  * DeveloperLink Component - Clickable Developer Name
  * LOCKED: Developer names must ALWAYS be clickable and link to /developer/:slug
- * 
+ *
  * This is a global rule - use this component everywhere developer names appear.
+ * Optional `logoUrl` renders a tiny inline logo next to the name so the
+ * developer is always identifiable wherever the name appears.
  */
 
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 
 interface DeveloperLinkProps {
   name: string;
   slug?: string | null;
+  logoUrl?: string | null;
   className?: string;
   showPrefix?: boolean;
   onClick?: (e: React.MouseEvent) => void;
 }
 
-export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProps>(({ 
-  name, 
-  slug, 
-  className = "", 
+export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProps>(({
+  name,
+  slug,
+  logoUrl,
+  className = "",
   showPrefix = true,
-  onClick 
+  onClick
 }, ref) => {
   const handleClick = (e: React.MouseEvent) => {
     // Stop propagation to prevent card clicks
@@ -33,10 +38,24 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
   // Fallback: even when slug is missing, name must remain GOLD + clickable
   // (links to /developers search). Hover behaviour is identical to slug branch.
   const href = slug ? `/developer/${slug}` : `/developers?search=${encodeURIComponent(name)}`;
+  const showLogo = isValidDeveloperLogoUrl(logoUrl);
 
   return (
-    <span ref={ref} className={cn("text-[#1A1A1A]", className)}>
+    <span ref={ref} className={cn("inline-flex items-center gap-1.5 text-[#1A1A1A]", className)}>
       {showPrefix && <span className="text-[#1A1A1A]">by </span>}
+      {showLogo && (
+        <span
+          aria-hidden
+          className="inline-flex items-center justify-center h-5 w-5 rounded-sm bg-[#FDFBF7] border border-[#B89555]/40 overflow-hidden shrink-0"
+        >
+          <img
+            src={logoUrl as string}
+            alt=""
+            loading="lazy"
+            className="block max-h-full max-w-full object-contain"
+          />
+        </span>
+      )}
       <Link
         to={href}
         onClick={handleClick}
