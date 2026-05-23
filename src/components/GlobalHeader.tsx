@@ -1302,54 +1302,46 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           )}
 
           {!shouldUseMobileHeader && (
-            <div 
-              className={`flex items-center gap-0.5 px-3 py-2 rounded-full shrink-0 transition-all duration-300 ${
-                isFullyTransparent 
-                  ? 'bg-transparent border-transparent' 
-                  : 'border border-[#B89555]/30'
-              }`}
-              style={!isFullyTransparent ? {
-                background: 'rgba(255,255,255,0.95)',
-                boxShadow: '0 2px 8px -2px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.06)'
-              } : {}}
+            <div
+              className="flex items-center gap-1 shrink-0"
             >
               {/* Search Icon - triggers mega menu on hover (same as language dropdown) */}
               <button
                 onPointerEnter={() => handleMegaMenuEnter('search')}
                 onClick={() => handleMegaMenuClick('search')}
-                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-[#FDFBF7]/10"
+                className="w-9 h-9 flex items-center justify-center group"
                 aria-label="Search"
                 data-tour-target="search"
               >
-                <Search 
-                  className={`w-5 h-5 transition-colors duration-300 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] ${activeMegaMenu === 'search' ? '!text-[#1A1A1A]' : ''}`}
-                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }} 
+                <Search
+                  className={`w-5 h-5 transition-colors duration-100 text-[#B89555] group-hover:text-[#8E6E36] ${activeMegaMenu === 'search' ? '!text-[#8E6E36]' : ''}`}
+                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }}
                 />
               </button>
 
 
               {/* Divider */}
-              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gray-300'} to-transparent`} />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-[#B89555]/30'} to-transparent`} />
 
               {/* Language Icon - triggers mega menu on hover (desktop only) */}
               <button
                 onPointerEnter={() => handleMegaMenuEnter('language')}
                 onClick={() => handleMegaMenuClick('language')}
-                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-[#FDFBF7]/10"
+                className="w-9 h-9 flex items-center justify-center group"
                 aria-label="Language"
                 data-tour-target="language"
               >
-                <Globe 
-                  className={`w-5 h-5 transition-colors duration-300 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] ${activeMegaMenu === 'language' ? '!text-[#1A1A1A]' : ''}`}
-                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }} 
+                <Globe
+                  className={`w-5 h-5 transition-colors duration-100 text-[#B89555] group-hover:text-[#8E6E36] ${activeMegaMenu === 'language' ? '!text-[#8E6E36]' : ''}`}
+                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }}
                 />
               </button>
 
               {/* Divider */}
-              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gray-300'} to-transparent`} />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-[#B89555]/30'} to-transparent`} />
 
               {/* Notification Bell Icon - triggers mega menu */}
-              <ListingNotificationBell 
+              <ListingNotificationBell
                 onOpen={() => handleMegaMenuClick('notifications')}
                 onHoverEnter={() => handleMegaMenuEnter('notifications')}
                 onHoverLeave={() => handleMegaMenuLeave()}
@@ -1358,18 +1350,18 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               />
 
               {/* Divider */}
-              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gray-300'} to-transparent`} />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-[#B89555]/30'} to-transparent`} />
 
               {/* Account Icon - triggers mega menu on hover (desktop only) */}
               <button
                 onPointerEnter={() => handleMegaMenuEnter('account')}
                 onClick={() => handleMegaMenuClick('account')}
-                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-[#FDFBF7]/10 relative"
+                className="w-9 h-9 flex items-center justify-center group relative"
                 aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
                 data-tour-target="account"
               >
-                <User 
-                  className={`w-5 h-5 transition-colors duration-300 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] ${activeMegaMenu === 'account' ? '!text-[#1A1A1A]' : ''}`}
+                <User
+                  className={`w-5 h-5 transition-colors duration-100 text-[#B89555] group-hover:text-[#8E6E36] ${activeMegaMenu === 'account' ? '!text-[#8E6E36]' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }}
                 />
                 {totalUserAlerts > 0 && (
