@@ -3,7 +3,7 @@ import { ImageOff } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { SafeImage } from "@/components/SafeImage";
-import { getHighResImageUrl } from "@/lib/imageUtils";
+import { getHighResImageUrl, isValidImageUrl } from "@/lib/imageUtils";
 
 type VerifiedMediaProps = {
   src?: string | null;
@@ -35,8 +35,9 @@ export function VerifiedMedia({
   React.useEffect(() => {
     setFailed(false);
   }, [src]);
+  const safeSrc = src && (isValidImageUrl(src) || src.startsWith("/src/assets/") || src.startsWith("src/assets/")) ? src : null;
 
-  if (!src || failed) {
+  if (!safeSrc || failed) {
     return (
       <div
         role="img"
@@ -59,7 +60,7 @@ export function VerifiedMedia({
 
   return (
     <SafeImage
-      src={getHighResImageUrl(src, "464x312")}
+      src={getHighResImageUrl(safeSrc, "464x312")}
       alt={alt}
       className={cn("w-full h-full", className)}
       loading={priority ? "eager" : "lazy"}
