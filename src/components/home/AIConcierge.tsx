@@ -149,66 +149,61 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             className="fixed z-[201] flex flex-col
               inset-x-0 bottom-0 h-[88vh] rounded-t-3xl
               sm:inset-y-0 sm:right-0 sm:left-auto sm:h-full sm:w-[440px] sm:rounded-none sm:rounded-l-3xl
-              bg-gradient-to-br from-[hsl(32,28%,11%)] via-[hsl(33,27%,13%)] to-[hsl(33,28%,9%)]
-              border-l border-t sm:border-t-0 border-[#D4B896]/35"
-            style={{ boxShadow: "0 -20px 60px rgba(0,0,0,0.55), -20px 0 60px rgba(0,0,0,0.55)" }}
+              bg-[#FDFBF7] border-l border-t sm:border-t-0 border-[#B89555]/55"
+            style={{ boxShadow: "0 -20px 60px rgba(0,0,0,0.25), -20px 0 60px rgba(0,0,0,0.25)" }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#D4B896]/20">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#B89555]/30 bg-[#F7F2EA]">
               <div className="flex items-center gap-3">
-                <div
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#D4B896]/40"
-                  style={{ background: "rgba(253,251,247,0.08)" }}
-                >
-                  <Sparkles className="h-5 w-5 text-[#E2C9A0]" strokeWidth={2} />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#B89555]/55 bg-[#FDFBF7]">
+                  <Sparkles className="h-5 w-5 text-[#B89555]" strokeWidth={2} />
                 </div>
                 <div>
-                  <div className="text-[15px] font-semibold text-[#FDFBF7] leading-tight">AI Concierge</div>
-                  <div className="text-[11px] text-[#FDFBF7]/60 leading-tight">JBJ Global Real Estate</div>
+                  <div className="text-[15px] font-semibold text-[#1A1A1A] leading-tight">AI Concierge</div>
+                  <div className="text-[11px] text-[#1A1A1A]/65 leading-tight">JBJ Global Real Estate</div>
                 </div>
               </div>
               <button
                 onClick={onClose}
                 aria-label="Close concierge"
                 data-no-contrast-guard
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-[#FDFBF7]/70 hover:text-[#FDFBF7] hover:bg-white/10 transition"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6] transition"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-6 space-y-4">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-6 space-y-4 bg-[#FDFBF7]">
               {!isVerified && (
                 <ConciergeGate onVerified={() => { /* state auto-updates via hook */ }} />
               )}
               {isVerified && messages.length === 0 && (
                 <div className="space-y-6">
                   <div className="text-center space-y-2 py-2">
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#D4B896]/40"
-                      style={{ background: "rgba(253,251,247,0.08)" }}>
-                      <Sparkles className="h-6 w-6 text-[#E2C9A0]" />
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#B89555]/55 bg-[#F7F2EA]">
+                      <Sparkles className="h-6 w-6 text-[#B89555]" />
                     </div>
-                    <h3 className="text-[18px] font-semibold text-[#FDFBF7]">Welcome back{verified?.firstName ? `, ${verified.firstName}` : ""}</h3>
-                    <p className="text-[13px] text-[#FDFBF7]/65 max-w-[300px] mx-auto leading-relaxed">
+                    <h3 className="text-[18px] font-semibold text-[#1A1A1A]">Welcome back{verified?.firstName ? `, ${verified.firstName}` : ""}</h3>
+                    <p className="text-[13px] text-[#1A1A1A]/70 max-w-[300px] mx-auto leading-relaxed">
                       Ask anything — I'll guide you with one-tap shortcuts.
                     </p>
                   </div>
 
-                  {/* Premium channel switcher — Concierge / Chat Support / WhatsApp / Call */}
+                  {/* Premium channel switcher */}
                   <div className="grid grid-cols-2 gap-2.5">
                     {/* Concierge (active) */}
                     <div
                       data-no-contrast-guard
                       className="relative flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl
-                        border border-[#E2C9A0]/70 bg-[rgba(226,201,160,0.10)]"
+                        border border-[#B89555]/70 bg-[#EFE6D6]"
                     >
-                      <div className="flex items-center gap-2 text-[#E2C9A0]">
-                        <Sparkles className="h-4 w-4" />
-                        <span className="text-[12.5px] font-semibold text-[#FDFBF7]">AI Concierge</span>
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-[#B89555]" />
+                        <span className="text-[12.5px] font-semibold text-[#1A1A1A]">AI Concierge</span>
                       </div>
-                      <span className="text-[11px] text-[#FDFBF7]/60 leading-snug">Instant answers · 24/7</span>
-                      <span className="absolute top-2 right-2 text-[9.5px] tracking-[0.14em] uppercase font-semibold text-[#E2C9A0]">Active</span>
+                      <span className="text-[11px] text-[#1A1A1A]/70 leading-snug">Instant answers · 24/7</span>
+                      <span className="absolute top-2 right-2 text-[9.5px] tracking-[0.14em] uppercase font-semibold text-[#B89555]">Active</span>
                     </div>
                     {/* Chat Support */}
                     <button
@@ -219,13 +214,13 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                       }}
                       data-no-contrast-guard
                       className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl text-left
-                        border border-[#D4B896]/35 bg-white/[0.04] hover:bg-white/[0.10] hover:border-[#E2C9A0]/60 transition-all"
+                        border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
                     >
-                      <div className="flex items-center gap-2 text-[#E2C9A0]">
-                        <MessageSquare className="h-4 w-4" />
-                        <span className="text-[12.5px] font-semibold text-[#FDFBF7]">Chat Support</span>
+                      <div className="flex items-center gap-2">
+                        <MessageSquare className="h-4 w-4 text-[#1A1A1A]" />
+                        <span className="text-[12.5px] font-semibold text-[#1A1A1A]">Chat Support</span>
                       </div>
-                      <span className="text-[11px] text-[#FDFBF7]/60 leading-snug">Talk to a JBJ agent</span>
+                      <span className="text-[11px] text-[#1A1A1A]/70 leading-snug">Talk to a JBJ agent</span>
                     </button>
                     {/* WhatsApp */}
                     <a
@@ -234,31 +229,31 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                       rel="noreferrer"
                       data-no-contrast-guard
                       className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl
-                        border border-[#D4B896]/35 bg-white/[0.04] hover:bg-white/[0.10] hover:border-[#E2C9A0]/60 transition-all"
+                        border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
                     >
-                      <div className="flex items-center gap-2 text-[#E2C9A0]">
-                        <MessageCircle className="h-4 w-4" />
-                        <span className="text-[12.5px] font-semibold text-[#FDFBF7]">WhatsApp</span>
+                      <div className="flex items-center gap-2">
+                        <MessageCircle className="h-4 w-4 text-[#1A1A1A]" />
+                        <span className="text-[12.5px] font-semibold text-[#1A1A1A]">WhatsApp</span>
                       </div>
-                      <span className="text-[11px] text-[#FDFBF7]/60 leading-snug">Reply in minutes</span>
+                      <span className="text-[11px] text-[#1A1A1A]/70 leading-snug">Reply in minutes</span>
                     </a>
                     {/* Call */}
                     <a
                       href={getCallUrl()}
                       data-no-contrast-guard
                       className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl
-                        border border-[#D4B896]/35 bg-white/[0.04] hover:bg-white/[0.10] hover:border-[#E2C9A0]/60 transition-all"
+                        border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
                     >
-                      <div className="flex items-center gap-2 text-[#E2C9A0]">
-                        <Phone className="h-4 w-4" />
-                        <span className="text-[12.5px] font-semibold text-[#FDFBF7]">Call an Agent</span>
+                      <div className="flex items-center gap-2">
+                        <Phone className="h-4 w-4 text-[#1A1A1A]" />
+                        <span className="text-[12.5px] font-semibold text-[#1A1A1A]">Call an Agent</span>
                       </div>
-                      <span className="text-[11px] text-[#FDFBF7]/60 leading-snug">{CONTACT_INFO.phone}</span>
+                      <span className="text-[11px] text-[#1A1A1A]/70 leading-snug">{CONTACT_INFO.phone}</span>
                     </a>
                   </div>
 
                   <div className="space-y-2">
-                    <div className="text-[10.5px] uppercase tracking-[0.18em] font-semibold text-[#FDFBF7]/50 px-1">
+                    <div className="text-[10.5px] uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]/55 px-1">
                       Try asking
                     </div>
                     {SUGGESTIONS.map((s) => (
@@ -266,8 +261,8 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         key={s}
                         onClick={() => send(s)}
                         data-no-contrast-guard
-                        className="w-full text-left px-4 py-3 rounded-xl text-[13px] text-[#FDFBF7]/90
-                          border border-[#D4B896]/30 bg-white/[0.04] hover:bg-white/[0.10] hover:border-[#E2C9A0]/60
+                        className="w-full text-left px-4 py-3 rounded-xl text-[13px] text-[#1A1A1A]
+                          border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70
                           transition-all"
                       >
                         {s}
@@ -276,6 +271,8 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                   </div>
                 </div>
               )}
+
+
 
 
               {messages.map((m, i) => {
