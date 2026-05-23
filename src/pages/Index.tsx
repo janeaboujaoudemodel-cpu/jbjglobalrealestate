@@ -306,44 +306,48 @@ const Index = () => {
 
 
 
-            {/* Three pillar badges — HIDDEN on mobile (<640px), compact on tablet, full size on desktop */}
+            {/* Three pillar badges — crystal glass + premium gold hairline (no solid black) */}
             <motion.div
               variants={fadeInUp}
-              className="hidden sm:grid grid-cols-3 max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto border border-[#B89555]/40 overflow-hidden rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0A0A0A]"
+              className="hidden sm:grid grid-cols-3 max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto overflow-hidden rounded-2xl"
+              style={{
+                background: 'rgba(253, 251, 247, 0.10)',
+                WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+                backdropFilter: 'blur(18px) saturate(160%)',
+                border: '1px solid rgba(212, 184, 150, 0.55)',
+                boxShadow:
+                  'inset 0 1px 0 rgba(255,255,255,0.18), 0 14px 36px rgba(0,0,0,0.42), 0 0 0 1px rgba(226,201,160,0.18)',
+              }}
             >
               {pillars.map((pillar, idx) => (
                 <div
                   key={pillar.title}
-                  className="relative bg-[#0A0A0A] p-2.5 sm:p-3 md:p-4 lg:p-5 text-center"
+                  className="relative p-2.5 sm:p-3 md:p-4 lg:p-5 text-center"
                 >
-                  {/* Premium divider — gold gradient hairline + center diamond, between cards only */}
+                  {/* Gold hairline divider between pillars */}
                   {idx > 0 && (
                     <div
                       aria-hidden="true"
                       className="pointer-events-none absolute left-0 top-3 bottom-3 w-px"
                       style={{
                         background:
-                          "linear-gradient(to bottom, transparent 0%, rgba(184,149,85,0.15) 15%, rgba(184,149,85,0.85) 50%, rgba(184,149,85,0.15) 85%, transparent 100%)",
+                          'linear-gradient(to bottom, transparent 0%, rgba(212,184,150,0.15) 15%, rgba(226,201,160,0.85) 50%, rgba(212,184,150,0.15) 85%, transparent 100%)',
                       }}
-                    >
-                      <span
-                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 block w-1.5 h-1.5 rotate-45 bg-[#EFE6D6] shadow-[0_0_6px_rgba(184,149,85,0.8)]"
-                      />
-                    </div>
+                    />
                   )}
                   <pillar.icon
-                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 text-[#1A1A1A] mx-auto mb-1.5 md:mb-2"
-                    style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.9))" }}
+                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 mx-auto mb-1.5 md:mb-2"
+                    style={{ color: '#E2C9A0', filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.6))' }}
                   />
                   <h3
                     className="text-[11px] sm:text-[12px] md:text-[13px] lg:text-sm font-bold mb-0.5 md:mb-1 leading-tight"
-                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
+                    style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: '0 1px 3px rgba(0,0,0,0.85)' }}
                   >
                     {pillar.title}
                   </h3>
                   <p
                     className="text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs leading-tight"
-                    style={{ color: "rgba(255,255,255,0.92)", WebkitTextFillColor: "rgba(255,255,255,0.92)", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
+                    style={{ color: 'rgba(255,255,255,0.92)', WebkitTextFillColor: 'rgba(255,255,255,0.92)', textShadow: '0 1px 3px rgba(0,0,0,0.85)' }}
                   >
                     {pillar.desc}
                   </p>
