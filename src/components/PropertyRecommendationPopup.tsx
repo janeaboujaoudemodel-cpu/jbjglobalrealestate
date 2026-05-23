@@ -228,7 +228,12 @@ const PropertyRecommendationPopup = () => {
                         {project.area_name}
                       </p>
                     )}
-                    <p className="text-price-orange text-xs font-semibold mt-0.5">{formatPrice(project.price_from)}</p>
+                    {project.price_from ? (
+                      <p className="text-xs font-semibold mt-0.5">
+                        <span className="text-[#1A1A1A]">From </span>
+                        <span style={{ color: "var(--price-orange)" }}>{formatPrice(project.price_from)}</span>
+                      </p>
+                    ) : null}
                   </div>
                   <ArrowRight className="w-4 h-4 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors flex-shrink-0" />
                 </button>
