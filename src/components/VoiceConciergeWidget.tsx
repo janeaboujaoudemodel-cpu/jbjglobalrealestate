@@ -277,6 +277,7 @@ const VoiceConciergeWidget = () => {
     "0 4px 10px -2px rgba(26,26,26,0.25)";
 
   // Minimized state - small phone icon button (mother-of-pearl, lowered to corner)
+  // Also used as the permanent mobile launcher (mobile = always icon-only).
   if (isMinimized) {
     return (
       <button
@@ -298,7 +299,27 @@ const VoiceConciergeWidget = () => {
   const pillTone = "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40";
 
   return (
-    <div data-floating-launcher="voice-concierge" className="fixed bottom-6 right-6 z-[10060] flex flex-col items-end gap-2">
+    <>
+      {/* MOBILE: always icon-only launcher (no "Speak to concierge" label, no X) */}
+      <button
+        onClick={handleLauncherClick}
+        data-floating-launcher="voice-concierge-mobile"
+        className="sm:hidden fixed bottom-6 right-6 z-[10060] w-12 h-12 rounded-full flex items-center justify-center border border-[#B89555]/60 text-[#1A1A1A] transition-all duration-300 hover:scale-[1.06]"
+        style={{ background: pearlBg, boxShadow: pearlShadow }}
+        aria-label="Speak to concierge"
+        aria-expanded={choiceOpen}
+      >
+        {isConnecting ? (
+          <span className="w-4 h-4 border-2 border-[#1A1A1A]/20 border-t-[#1A1A1A] rounded-full animate-spin" />
+        ) : (
+          <Phone className="w-[18px] h-[18px] text-[#1A1A1A]" strokeWidth={2} />
+        )}
+        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white" />
+      </button>
+
+      {/* TABLET / DESKTOP: full pill with label + X-to-minimize */}
+      <div data-floating-launcher="voice-concierge" className="hidden sm:flex fixed bottom-6 right-6 z-[10060] flex-col items-end gap-2">
+
       {/* Visible status pill */}
       {showStatusPill && (
         <div
