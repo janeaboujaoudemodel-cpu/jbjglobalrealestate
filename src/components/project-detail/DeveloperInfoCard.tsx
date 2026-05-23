@@ -179,6 +179,19 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                   <div className="flex items-center gap-2 mb-3">
                     <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
                     <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">About the Developer</span>
+                    {editable && developer.id && (
+                      <InlineEditable
+                        table="developers"
+                        recordId={developer.id}
+                        field="description"
+                        type="textarea"
+                        value={developer.description ?? ""}
+                        invalidateKeys={["project", "projects", "developer", "developers"]}
+                        label="Edit developer description"
+                      >
+                        <span className="sr-only">Edit developer description</span>
+                      </InlineEditable>
+                    )}
                   </div>
                   <div 
                     className="rounded-xl p-4 border border-[#B89555]/20"
@@ -193,6 +206,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                       }}
                     />
                   </div>
+
                   {hasLongDescription && (
                     <button
                       onClick={() => setIsExpanded(!isExpanded)}
