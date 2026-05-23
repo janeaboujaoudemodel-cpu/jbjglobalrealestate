@@ -225,9 +225,7 @@ const DeveloperGrid = () => {
                       </p>
                     )}
                     {project.price_from && (
-                      <p className="text-[#1A1A1A] font-semibold text-lg">
-                        From AED {(project.price_from / 1000000).toFixed(1)}M
-                      </p>
+                      <PricePill price={project.price_from} />
                     )}
                   </div>
                 </Link>
