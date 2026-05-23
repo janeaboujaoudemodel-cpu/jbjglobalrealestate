@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2, Star, Pin } from "lucide-react";
+import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2, Star, Pin, MessageCircle, Mail, LifeBuoy, Compass, TrendingUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { searchItems, nearestSearchItems } from "@/config/globalSearchIndex";
@@ -18,15 +19,43 @@ interface GlobalSearchModalProps {
   embedded?: boolean;
 }
 
-// Quick access shortcuts - always visible
+// Universal quick shortcuts — always visible (kept lean, role extras added below)
 const QUICK_SHORTCUTS = [
-  { label: "Properties", route: "/properties", icon: Building2, color: "bg-blue-500" },
-  { label: "Developers", route: "/developers", icon: Users, color: "bg-emerald-500" },
-  { label: "Areas", route: "/areas", icon: Map, color: "bg-purple-500" },
-  { label: "Market Report", route: "/market-report", icon: FileText, color: "bg-amber-500" },
-  { label: "Mortgage", route: "/mortgage-calculator", icon: Calculator, color: "bg-pink-500" },
-  { label: "AI Tools", route: "/ai-hub", icon: Sparkles, color: "bg-indigo-500" },
+  { label: "Properties", route: "/properties", icon: Building2 },
+  { label: "Developers", route: "/developers", icon: Users },
+  { label: "Areas", route: "/areas", icon: Map },
+  { label: "Market Report", route: "/market-report", icon: FileText },
+  { label: "Mortgage", route: "/mortgage-calculator", icon: Calculator },
+  { label: "AI Tools", route: "/ai-hub", icon: Sparkles },
 ];
+
+// Role-aware shortcuts surfaced when no query is typed
+const MODE_SHORTCUTS: Record<'investor' | 'broker' | 'developer', { label: string; route: string; icon: any }[]> = {
+  investor: [
+    { label: "AI Home Finder", route: "/quiz", icon: Sparkles },
+    { label: "Off-Plan", route: "/properties?status=off-plan", icon: Building2 },
+    { label: "Golden Visa", route: "/guides/golden-visa-uae", icon: Award },
+    { label: "Concierge", route: "/concierge", icon: Sparkles },
+    { label: "Favorites", route: "/favorites", icon: Heart },
+    { label: "Buyer Guide", route: "/buyer-guide", icon: BookOpen },
+  ],
+  broker: [
+    { label: "Broker Portal", route: "/broker-dashboard", icon: LayoutDashboard },
+    { label: "Broker Toolkit", route: "/broker-toolkit", icon: Briefcase },
+    { label: "Resources", route: "/broker-resources", icon: BookOpen },
+    { label: "Academy", route: "/broker-education", icon: GraduationCap },
+    { label: "All Projects", route: "/properties", icon: Building2 },
+    { label: "Market Intel", route: "/market-intelligence", icon: TrendingUp },
+  ],
+  developer: [
+    { label: "Developer Portal", route: "/developers-portal", icon: LayoutDashboard },
+    { label: "Submit Project", route: "/developers-portal/projects/new", icon: Building2 },
+    { label: "Insights", route: "/market-intelligence", icon: TrendingUp },
+    { label: "Reports", route: "/market-report", icon: FileText },
+    { label: "Areas", route: "/areas", icon: Map },
+    { label: "Contact", route: "/contact", icon: Phone },
+  ],
+};
 
 // Popular pages - 9 items (3 columns × 3 rows)
 const POPULAR_PAGES = [
@@ -67,6 +96,9 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { user, isOwner } = useAuth();
+  const { mode } = useUserModeContext();
+  const roleShortcuts = MODE_SHORTCUTS[mode] ?? MODE_SHORTCUTS.investor;
+  const roleLabel = mode === 'broker' ? 'Broker' : mode === 'developer' ? 'Developer' : 'Investor';
 
   const debouncedQuery = useDebouncedValue(query.trim(), 300);
 
@@ -375,16 +407,16 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               <div>
                 <p className="text-xs font-semibold text-[#1A1A1A] mb-2 uppercase tracking-wider">Quick Access</p>
                 <div className="grid grid-cols-3 gap-2">
-                  {QUICK_SHORTCUTS.map((s) => (
+                  {[...roleShortcuts.slice(0, 3), ...QUICK_SHORTCUTS.slice(0, 3)].map((s) => (
                     <button
-                      key={s.route}
+                      key={s.route + s.label}
                       onClick={() => handleSelect(s.route)}
-                      className="flex flex-col items-center gap-1.5 p-2.5 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all group"
+                      className="flex flex-col items-center gap-1.5 p-2.5 rounded-lg bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-sm transition-all group"
                     >
-                      <div className={`w-9 h-9 rounded-lg ${s.color} flex items-center justify-center`}>
-                        <s.icon className="w-4 h-4 text-white" />
+                      <div className="w-9 h-9 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
+                        <s.icon className="w-4 h-4 text-[#1A1A1A]" />
                       </div>
-                      <span className="text-xs text-[#1A1A1A] font-medium">{s.label}</span>
+                      <span className="text-[11px] text-[#1A1A1A] font-medium text-center leading-tight">{s.label}</span>
                     </button>
                   ))}
                 </div>
@@ -560,7 +592,28 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 ) : (
                   /* Show shortcuts and suggestions when NOT typing */
                   <div className="space-y-6">
-                    {/* Quick Access Shortcuts */}
+                    {/* Role-aware shortcuts */}
+                    <div>
+                      <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
+                        <Compass className="w-3.5 h-3.5 text-[#B89555]" /> For {roleLabel}s
+                      </p>
+                      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                        {roleShortcuts.map((shortcut) => (
+                          <button
+                            key={shortcut.route + shortcut.label}
+                            onClick={() => handleSelect(shortcut.route)}
+                            className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-md transition-all group"
+                          >
+                            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center group-hover:scale-105 transition-transform">
+                              <shortcut.icon className="w-5 h-5 text-[#1A1A1A]" />
+                            </div>
+                            <span className="text-xs font-medium text-[#1A1A1A] text-center leading-tight">{shortcut.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Quick Access */}
                     <div>
                       <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider">
                         Quick Access
@@ -572,8 +625,8 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                             onClick={() => handleSelect(shortcut.route)}
                             className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/20 hover:border-[#B89555]/50 hover:shadow-md transition-all group"
                           >
-                            <div className={`w-10 h-10 rounded-lg ${shortcut.color} flex items-center justify-center text-white group-hover:scale-110 transition-transform`}>
-                              <shortcut.icon className="w-5 h-5" />
+                            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6] border border-[#B89555]/35 flex items-center justify-center group-hover:scale-105 transition-transform">
+                              <shortcut.icon className="w-5 h-5 text-[#1A1A1A]" />
                             </div>
                             <span className="text-xs font-medium text-[#1A1A1A] text-center">{shortcut.label}</span>
                           </button>
@@ -726,10 +779,37 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       </div>
                     )}
 
+                    {/* Always-on: Need help? — premium contact panel */}
+                    <div className="rounded-2xl border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 sm:p-5">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-[#EFE6D6] border border-[#B89555]/45 flex items-center justify-center flex-shrink-0">
+                          <LifeBuoy className="w-5 h-5 text-[#1A1A1A]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-[#1A1A1A]">Can't find what you're looking for?</p>
+                          <p className="text-xs text-[#1A1A1A]/70 mt-0.5">Our JBJ team is one click away — we'll guide you personally.</p>
+                          <div className="flex flex-wrap gap-2 mt-3">
+                            <button onClick={() => handleSelect('/contact')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90 transition" data-no-contrast-guard>
+                              <Phone className="w-3.5 h-3.5" /> Contact JBJ Team
+                            </button>
+                            <button onClick={() => handleSelect('/book')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 hover:border-[#B89555] transition">
+                              <MessageCircle className="w-3.5 h-3.5" /> Book a Call
+                            </button>
+                            <button onClick={() => handleSelect('/support')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 hover:border-[#B89555] transition">
+                              <HelpCircle className="w-3.5 h-3.5" /> Support
+                            </button>
+                            <button onClick={() => handleSelect('/faq')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 hover:border-[#B89555] transition">
+                              <BookOpen className="w-3.5 h-3.5" /> FAQ
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Search Hint */}
-                    <div className="text-center pt-2">
-                      <p className="text-sm text-[#1A1A1A]">
-                        Start typing to search projects, developers, tools, pages, and more...
+                    <div className="text-center pt-1">
+                      <p className="text-xs text-[#1A1A1A]/70">
+                        Start typing to search projects, developers, tools, pages, and more…
                       </p>
                     </div>
                   </div>

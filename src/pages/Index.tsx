@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { PearlButton } from "@/components/ui/pearl-button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import HeroPropertySearch from "@/components/home/HeroPropertySearch";
+import HomeHeroSearch from "@/components/home/HomeHeroSearch";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
 import { CONTACT_INFO } from "@/constants/stats";
@@ -279,6 +280,11 @@ const Index = () => {
             >
               Your Gateway to Dubai's Finest Real Estate
             </motion.h1>
+
+            {/* Hero global search — long-stretch bar wired to the same engine as the header icon */}
+            <motion.div variants={fadeInUp} className="w-full">
+              <HomeHeroSearch />
+            </motion.div>
 
             {/* Hero action pills row (Browse Properties → Careers) removed per owner directive —
                 those shortcuts live inside the role-specific portal CTA below. */}
