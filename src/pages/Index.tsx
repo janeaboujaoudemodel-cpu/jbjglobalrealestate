@@ -91,12 +91,12 @@ const staggerContainer = {
   }
 };
 
-// Hero action pills — base set (mode-specific actions are merged in component)
+// Hero action pills — News sits in the visual center; mode-specific extras append on the right
 const baseHeroActions = [
   { label: "Browse Properties", icon: Search, href: "/properties" },
   { label: "AI Home Finder", icon: Home, href: "/quiz" },
-  { label: "Market Intelligence", icon: BarChart3, href: "/market-intelligence" },
   { label: "News", icon: Newspaper, href: "/news" },
+  { label: "Market Intelligence", icon: BarChart3, href: "/market-intelligence" },
 ];
 
 const modeHeroActions: Record<'investor' | 'broker' | 'developer', { label: string; icon: typeof Search; href: string }[]> = {
