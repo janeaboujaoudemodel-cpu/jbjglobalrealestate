@@ -1,97 +1,91 @@
-# Project / Listing Card Overhaul + Locked Developer Rule
+## Goal
 
-Scope: `ProjectCard` (used on Home + /properties + everywhere), `FeaturedListings` grid, sale-status badge behavior, owner edit affordance, and a global "no card without developer logo" rule.
+Make the homepage read as a sequence of **self-contained premium cards** separated by real gold dividers, fix two interaction/visual bugs (Explore Services eyebrow + tab sync), and restyle Royal Tools Hub to match the Explore Services card pattern.
 
-## 1. Remove carousel arrows from cards (global)
+---
 
-In `src/components/ProjectCard.tsx`:
-- Delete the entire `{images.length > 1 && (...)}` block that renders the `ChevronLeft` / `ChevronRight` prev/next buttons and the dots indicator (lines ~209–253).
-- Remove the `ChevronLeft, ChevronRight` imports, `currentImageIndex` state, and `handlePrevImage` / `handleNextImage` handlers. Card image becomes a single static cover (`primaryImageUrl`).
-- Carousel arrows remain ONLY inside the project detail gallery (`/project/:slug`), untouched.
-- Add a project-wide rule (memory entry + brief comment): card-level image navigation arrows are banned. If any arrow is ever needed on a card, it must be solid black `#1A1A1A` or gold `#B89555` in BOTH idle and hover states — never white-on-image or faded.
+## 1. Full-bleed gold dividers between major sections
 
-## 2. Bottom row: price LEFT, handover RIGHT (everywhere, including homepage)
+Currently `<SectionDivider fullWidth />` is rendered between sections but is a **permanent no-op** per the No-Gray standard, so nothing visible separates Featured Properties → Invest in Dubai → Explore Our Guides.
 
-In `ProjectCard.tsx`:
-- Remove the homepage-only "price over image" branch (lines ~287–295).
-- Remove the `isHomepage` ternary on the bottom row (lines ~366–376) so the price pill always renders on the left of the handover line, on every page.
-- Remove the `flex-1` spacer `<div>` (line 363) AND remove the "Premium full-width divider" line above it (line 360)? Keep ONE divider (the existing gold gradient divider already sits above the meta block); the bottom row sits directly after the description, no large empty rectangle.
-  - Net result: description → thin gold hairline → `price (left) ⋯ Ready (right)` row, with normal `gap-3` only.
+Introduce a new full-bleed primitive `SectionDividerGoldFullBleed` (thin variant of `SectionDividerGold`) that escapes container padding (`w-screen relative left-1/2 -ml-[50vw]`) and renders the existing gold gradient. Use it in `src/pages/Index.tsx` at these joints only:
 
-## 3. Sale-status badge ("On Sale" / "Announced" / "Presale")
+- After Featured Properties / Resale block → before **Invest in Dubai** (OverseasInvestorsBanner)
+- After **Invest in Dubai** → before **Explore Our Guides** (HomepageBookMarquee)
+- After **Explore Our Guides** → before **Explore Our Services**
+- After **Explore Our Services** → before **JBJ Royal Tools Hub**
+- After **JBJ Royal Tools Hub** → before AI Comparison / Mortgage
 
-- Default behavior: do NOT render `saleStatusLabel` on cards. Hide automatically unless the owner has explicitly enabled it for that project.
-- New owner-only toggle stored on the project: reuse existing `project.show_sale_status` flag (add it if missing via migration: boolean default false on `projects`).
-- When the flag is true AND a sale status exists, render a NEW badge variant `status-frame`:
-  - Square-cornered (or `rounded-sm` 2px) rectangle, NOT a pill.
-  - Champagne surface `#F7F2EA`, 1px gold border `#B89555`, ink-black text `#1A1A1A`.
-  - Matches the visual frame of the price pill so they read as a pair.
-  - Added to `src/components/ui/card-badge.tsx` as a third variant; existing `card-status-badge` rounded style stays available but is no longer used on cards.
+Existing `<SectionDivider />` calls stay (still no-op) so nothing else changes.
 
-## 4. Owner edit affordance on every card
+---
 
-- New tiny `<OwnerCardEditMenu projectId saleStatus showSaleStatus />` rendered top-right of the card (only when `useEffectiveOwner().effectiveOwner === true`).
-- Pencil icon button → popover with:
-  - Toggle "Show sale-status badge"
-  - Select for sale status (`On Sale` / `Announced` / `Presale` / `Sold Out` / none)
-  - "Edit full listing" link to existing admin editor
-- Writes to `projects.show_sale_status` and `projects.status_label` via existing owner-scoped mutation hook.
-- Mirror it on the developer directory card and project detail header so owners can edit from any surface (single shared component).
+## 2. Wrap homepage sections in the gold-bordered "premium card" style
 
-## 5. Grid: 3 per row × 2 rows = 6 listings (desktop horizontal)
-
-In `src/components/home/FeaturedListings.tsx`:
-- Change grid to `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3` (drop the 4-col breakpoint).
-- Mobile: 1 column visually but cap the list to 3 cards (premium > dense). Tablet portrait (`sm`, up to ~1024 vertical): 2 cols.
-- Desktop landscape (`lg` and up): 3 cols × 2 rows.
-- Reduce skeleton + slice to 6.
-- In `src/hooks/useHandpickedProjects.ts` lower `TARGET` from 8 to 6 so all fallback branches respect the new count.
-
-Responsive intent summary:
+The Mortgage Calculator and Explore Our Services already use the canonical premium card shell:
 
 ```text
-phone portrait     → 1 col, 3 cards total
-tablet portrait    → 2 cols, up to 6
-tablet landscape   → 3 cols × 2 = 6
-desktop            → 3 cols × 2 = 6
+rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA]/[#FDFBF7]
+shadow-[0_8px_28px_rgba(184,149,85,0.10)]
 ```
 
-## 6. LOCKED RULE: no listing card / project page without developer logo
+Create a shared primitive `PremiumSectionCard` (small wrapper at `src/components/ui/premium-section-card.tsx`) that renders that shell with consistent padding, then refactor these sections to mount inside it (content unchanged):
 
-Root cause for Four Seasons DIFC, Avalon Boulevard, Vivante (Meteora), Aisha Residence 1/2: their `developers.logo_url` is NULL.
+- **FeaturedListings** (Handpicked For You + View All CTA together)
+- **ResalePropertiesSection**
+- **OverseasInvestorsBanner** (Invest in Dubai)
+- **HomepageBookMarquee** (Explore Our Guides)
+- **AreasWeCover** (Top Areas in Dubai)
+- **JBJPodcastSection**
 
-Two-layer enforcement:
+Only the outer wrapper changes; internal layouts, copy, images, and CTAs are preserved. ExploreServicesExpander, ToolkitShowcaseCard, and MortgageCalculator already use the shell — they stay as-is.
 
-**A. Display fallback (immediate, no blank cards)**
-- `ProjectCard.tsx` top-left badge: when `getDeveloperLogoUrl()` returns null, render `<DeveloperLogo variant="nameplate" name={project.developer?.name} />` instead of the `property_type_label` pill. This guarantees the developer is ALWAYS identifiable on the card (champagne plate with the developer wordmark — primitive already exists in `src/components/ui/DeveloperLogo.tsx`).
-- Project detail page: require the existing Developer section to render the same nameplate fallback when logo is missing — never hide the section.
+---
 
-**B. Publication gate (locked, schema-level)**
-- New migration: extend `trg_enforce_no_publish_without_photo` (or add sibling `trg_enforce_no_publish_without_developer`) so a project cannot be `is_published=true` unless its developer exists AND `developers.logo_url IS NOT NULL` AND passes the same allow-list as `isValidDeveloperLogoUrl` (basic regex check in SQL).
-- Photoless / logoless projects show up in `/admin Listings Approval` → new "Needs Developer Logo" tab beside "Needs Photo".
-- Memory: add `mem://constraints/no-developer-logo-no-publish-rule` and update `mem://index.md` Core to include: "A project without a developer logo can NEVER be published. Cards must always show the developer (logo or nameplate fallback)."
+## 3. Fix `ExploreServicesExpander`
 
-## 7. Memory updates
+File: `src/components/home/ExploreServicesExpander.tsx`
 
-- Update `mem://ui-ux/visual-standards/listing-card-layout-standard` with: no carousel arrows on cards; price LEFT / handover RIGHT on every page; no spacer rectangle; sale-status badge hidden by default; rectangular gold-bordered frame style.
-- Add `mem://constraints/card-arrow-prohibition` (no faded white-on-white arrows anywhere; if used, solid black or gold only).
-- Add `mem://constraints/no-developer-logo-no-publish-rule`.
-- Update Core line: "Listing Cards: ... no carousel arrows; price-left / handover-right bottom row; sale-status badge owner-opt-in, rectangular gold-frame style."
+- **Remove the eyebrow** "JBJ Service" with the small icon (lines 136–139) that sits above the active service title — the tab strip already identifies the active service.
+- **Verify tab → hero sync**: the code already sets `active` from `activeId` and the `Explore Now` link already uses `active.href`. If a stale-state issue is observed in preview after the eyebrow removal, force a remount of the hero panel via `key={active.id}` on the wrapper (already present on the bg div — extend to the whole panel so title/description/CTA refresh together).
 
-## Technical notes
+---
 
-- DB migration adds `projects.show_sale_status boolean not null default false` and extends the publish trigger.
-- `CardBadge` gets a `status-frame` variant (square corners, champagne fill, gold border, ink text).
-- `OwnerCardEditMenu` is a new file under `src/components/cards/`. Reuses `useEffectiveOwner` + existing project-update mutation. RLS already restricts writes to owner.
-- No changes to header, sidebar, footer, AI Concierge, hero search, or any non-card surface.
-- `useHandpickedProjects` TARGET → 6; mobile slice handled in `FeaturedListings` (`projects.slice(0, isMobile ? 3 : 6)`).
+## 4. Restyle JBJ Royal Tools Hub as a scrollable card (Explore Services pattern)
 
-## Files touched
+File: `src/components/home/ToolkitShowcaseCard.tsx`
 
-- `src/components/ProjectCard.tsx` (arrows out, bottom-row restructure, owner menu, nameplate fallback)
-- `src/components/home/FeaturedListings.tsx` (grid 3-col, slice to 6, skeleton count)
-- `src/hooks/useHandpickedProjects.ts` (TARGET = 6)
-- `src/components/ui/card-badge.tsx` (new `status-frame` variant)
-- `src/components/cards/OwnerCardEditMenu.tsx` (new)
-- `supabase/migrations/*` (add `show_sale_status` column + extend publish trigger)
-- Memory files under `mem://` (new + index)
+Convert the current 8-tile grid into the same layout idiom as `ExploreServicesExpander`:
+
+- Keep the existing premium card shell (already gold-bordered).
+- Replace the grid with:
+  1. **Header** — title + sub (kept).
+  2. **Horizontally scrollable tabs row** (one tab per tool, icon + name) using the same scroller pattern as ExploreServicesExpander (`overflow-x-auto no-scrollbar`, border-b active underline in `#1A1A1A`).
+  3. **Active tool hero panel** below the tabs — large card showing the active tool's icon tile, name, description, and a primary CTA button that links to `tool.href`. Same 280–340px height.
+  4. **Footer "Explore JBJ Tools" PearlButton** kept as a secondary "view all" affordance.
+- Render **all** approved public tools (drop the `.slice(0, 8)` cap) so users can scroll through every tool inline.
+
+This gives Royal Tools Hub the same "premium card with scrollable inner content" feel the user asked for.
+
+---
+
+## 5. Files touched
+
+**New:**
+- `src/components/ui/premium-section-card.tsx`
+- `src/components/ui/section-divider-gold-fullbleed.tsx`
+
+**Edited:**
+- `src/pages/Index.tsx` — swap no-op dividers between Featured / Invest / Guides / Services / Tools for the new full-bleed gold divider; wrap target sections in `PremiumSectionCard`.
+- `src/components/home/ExploreServicesExpander.tsx` — remove eyebrow, ensure key-based remount.
+- `src/components/home/ToolkitShowcaseCard.tsx` — convert grid → tabs + hero panel; render all tools.
+
+**Unchanged:** hero, header, footer, ProjectCard, MortgageCalculator inner UI, all other features (No-Removal policy honored).
+
+---
+
+## Out of scope
+
+- No backend / data / RLS changes.
+- No edits to header, sidebar, ProjectCard, or any other component beyond the 3 files above.
+- No font, palette, or icon-system changes — strict reuse of the existing champagne / `#B89555` tokens.
