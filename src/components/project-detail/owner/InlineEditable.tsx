@@ -3,8 +3,9 @@ import { Pencil, Check, X, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+import { useCanEdit } from "@/hooks/useEffectiveOwner";
 import { cn } from "@/lib/utils";
+
 
 type FieldType = "text" | "textarea" | "number" | "date";
 
@@ -26,6 +27,13 @@ interface InlineEditableProps {
   label?: string;
   /** Invalidation keys to refresh after save */
   invalidateKeys?: string[];
+  /**
+   * Permission scope. Owners always pass; delegates only see the pencil if their
+   * scopes[scope] is true. Defaults to "project_text".
+   * Known scopes: project_text, project_photos, project_documents,
+   * developer_info, quick_facts, market_intel, crm, marketing.
+   */
+  scope?: string;
 }
 
 /** Strip HTML tags + decode entities → plain text with line breaks preserved. */
@@ -62,9 +70,9 @@ function htmlToPlain(raw: string): string {
 export default function InlineEditable({
   projectId, recordId, table = "projects",
   field, value, type = "text", className, children, placeholder,
-  surface = "light", label, invalidateKeys,
+  surface = "light", label, invalidateKeys, scope = "project_text",
 }: InlineEditableProps) {
-  const { isOwner } = useIsAppOwner();
+  const canEdit = useCanEdit(scope);
   const qc = useQueryClient();
   const [editing, setEditing] = useState(false);
   const id = recordId ?? projectId;
@@ -80,7 +88,7 @@ export default function InlineEditable({
     }
   }, [editing, value, type]);
 
-  if (!isOwner || !id) return <>{children}</>;
+  if (!canEdit || !id) return <>{children}</>;
 
   const save = async () => {
     setSaving(true);

@@ -63,6 +63,7 @@ const ZeroTrustAuditPanel = lazy(() => import("@/pages/owner/ZeroTrustAuditPanel
 const EventManagementHub = lazy(() => import("@/pages/owner/EventManagementHub"));
 const VerificationRequests = lazy(() => import("@/pages/owner/VerificationRequests"));
 const ExternalAccessManagement = lazy(() => import("@/pages/owner/ExternalAccessManagement"));
+const AccessDelegates = lazy(() => import("@/pages/owner/AccessDelegates"));
 const SeoReview = lazy(() => import("@/pages/owner/SeoReview"));
 const PrintCheck = lazy(() => import("@/pages/owner/PrintCheck"));
 const BaselinePdfDashboard = lazy(() => import("@/pages/owner/BaselinePdfDashboard"));
@@ -192,6 +193,8 @@ export const OwnerRoutes = () => (
     <Route path="event-management" element={<EventManagementHub />} />
     <Route path="verification-requests" element={<VerificationRequests />} />
     <Route path="external-access" element={<ExternalAccessManagement />} />
+    <Route path="access" element={<AccessDelegates />} />
+    <Route path="delegates" element={<AccessDelegates />} />
     <Route path="seo-review" element={<SeoReview />} />
     <Route path="print-check" element={<PrintCheck />} />
     <Route path="baseline-pdf" element={<BaselinePdfDashboard />} />

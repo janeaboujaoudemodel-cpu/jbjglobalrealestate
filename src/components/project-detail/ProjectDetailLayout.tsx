@@ -78,6 +78,8 @@ import { useCurrency } from "@/hooks/useCurrency";
 import { useAreaUnit } from "@/hooks/useAreaUnit";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { formatDisplayDate } from "@/utils/formatDate";
+import { getProjectStatus } from "@/utils/projectStatus";
+import OwnerVisitorToggle from "@/components/project-detail/OwnerVisitorToggle";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import {
@@ -640,11 +642,13 @@ export default function ProjectDetailLayout({
               </div>
             )}
             {(() => {
-              const derivedHero = deriveHandover(project);
-              return derivedHero ? (
+              const synced = getProjectStatus(project);
+              return synced.label !== "TBA" ? (
                 <div className="flex items-center gap-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.85)' }}>
                   <Calendar className="w-5 h-5" style={{ color: '#FCD34D' }} />
-                  <span className="text-sm md:text-base">{project.handover_date ? formatDisplayDate(project.handover_date) : derivedHero}</span>
+                  <InlineEditable projectId={project.id} field="handover_date" value={project.handover_date} type="date" surface="dark" scope="quick_facts" label="Edit handover date">
+                    <span className="text-sm md:text-base">{synced.label}</span>
+                  </InlineEditable>
                 </div>
               ) : null;
             })()}
@@ -758,14 +762,19 @@ export default function ProjectDetailLayout({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Starting Price</p>
-              <p className="mt-2 text-xl font-bold text-price-orange">
-                {typeof project.price_from === "number" && project.price_from > 0 
-                  ? formatPriceUtil(project.price_from) 
-                  : "Price TBA"}
-              </p>
+              <InlineEditable projectId={project.id} field="price_from" value={project.price_from} type="number" scope="quick_facts" label="Edit starting price">
+                <p className="mt-2 text-xl font-bold text-price-orange">
+                  {typeof project.price_from === "number" && project.price_from > 0
+                    ? formatPriceUtil(project.price_from)
+                    : "Price TBA"}
+                </p>
+              </InlineEditable>
             </div>
-            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all flex items-center justify-center">
-              <p className="text-xl font-bold handover-orange">{(project.handover_date && formatDisplayDate(project.handover_date)) || deriveHandover(project) || HANDOVER_FALLBACK}</p>
+            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Handover</p>
+              <InlineEditable projectId={project.id} field="handover_date" value={project.handover_date} type="date" scope="quick_facts" label="Edit handover date">
+                <p className="mt-2 text-xl font-bold handover-orange">{getProjectStatus(project).label}</p>
+              </InlineEditable>
             </div>
             <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>
@@ -1336,6 +1345,9 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
       />
 
       {/* Footer is now rendered globally in MainLayout - removed duplicate */}
+
+      {/* Owner ⇄ Visitor preview toggle (owner-only) */}
+      <OwnerVisitorToggle />
     </>
   );
 }

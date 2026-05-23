@@ -1,6 +1,7 @@
 import { Building2, Layers, Home, CalendarCheck, CheckCircle, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatDisplayDate } from "@/utils/formatDate";
+import { isPublicStatus, getProjectStatus } from "@/utils/projectStatus";
 
 interface QuickFactsBarProps {
   propertyType?: string | null;
@@ -21,32 +22,43 @@ export default function QuickFactsBar({
   handoverDate,
   updatedAt,
 }: QuickFactsBarProps) {
+  // Synced status (single source of truth = handover_date)
+  const synced = getProjectStatus({
+    handover_date: handoverDate,
+    status_label: statusLabel,
+    availability_status: availabilityStatus,
+  });
+  // Only show a status pill when the raw value is a public-friendly label
+  // (hides internal admin states like "pending", "draft", etc.)
+  const rawStatus = statusLabel || availabilityStatus;
+  const publicPillLabel = isPublicStatus(rawStatus) ? rawStatus : (synced.isReady ? "Ready" : null);
+
   const facts = [
-    { 
-      icon: Home, 
-      label: "Property Type", 
+    {
+      icon: Home,
+      label: "Property Type",
       value: propertyType || "Mixed Use",
-      show: true 
+      show: true
     },
-    { 
-      icon: Building2, 
-      label: "Total Units", 
+    {
+      icon: Building2,
+      label: "Total Units",
       value: totalUnits ? `${totalUnits} Units` : null,
       show: !!totalUnits && totalUnits > 4
     },
-    { 
-      icon: Layers, 
-      label: "Floors", 
+    {
+      icon: Layers,
+      label: "Floors",
       value: floors ? `${floors} Floors` : null,
-      show: !!floors 
+      show: !!floors
     },
-    { 
-      icon: CalendarCheck, 
-      label: "", 
-      value: formatDisplayDate(handoverDate),
-      show: !!handoverDate 
+    {
+      icon: CalendarCheck,
+      label: "Handover",
+      value: synced.label !== "TBA" ? synced.label : formatDisplayDate(handoverDate),
+      show: !!handoverDate || synced.isReady
     },
-  ].filter(f => f.show);
+  ].filter(f => f.show && f.value);
 
   const getStatusColor = (status?: string | null) => {
     if (!status) return "bg-red-50 text-red-600 border-red-200";
@@ -74,18 +86,18 @@ export default function QuickFactsBar({
   return (
     <div className="w-full overflow-x-auto pb-2">
       <div className="flex items-center gap-3 min-w-max">
-        {/* Status Badge */}
-        {(statusLabel || availabilityStatus) && (
-          <Badge 
-            className={`px-3 py-1.5 text-sm font-medium border ${getStatusColor(statusLabel || availabilityStatus)}`}
+        {/* Status Badge - only render public-friendly labels (no leaking "pending" etc.) */}
+        {publicPillLabel && (
+          <Badge
+            className={`px-3 py-1.5 text-sm font-medium border ${getStatusColor(publicPillLabel)}`}
           >
             <CheckCircle className="w-3.5 h-3.5 mr-1.5" />
-            {statusLabel || availabilityStatus}
+            {publicPillLabel}
           </Badge>
         )}
 
         {/* Divider */}
-        {(statusLabel || availabilityStatus) && facts.length > 0 && (
+        {publicPillLabel && facts.length > 0 && (
           <div className="w-px h-6 bg-border" />
         )}
 
