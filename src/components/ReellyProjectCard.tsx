@@ -115,7 +115,7 @@ const ReellyProjectCard = ({
        return clean.substring(0, maxLength).trim();
      };
  
-   const saleStatusBadge = getSaleStatusBadge(project.sale_status);
+   const saleStatusLabel = getSaleStatusLabel(project.sale_status);
  
    return (
       <div
@@ -227,19 +227,18 @@ const ReellyProjectCard = ({
               {(() => {
                 const hasMark = !!getDeveloperLogoUrl((project as any).developer) || !!((project as any).developer?.name || project.developer_name);
                 const offset = hasMark ? 'top-[60px]' : 'top-3';
+                const isSold = project.sale_status?.toLowerCase().includes('sold') || project.status_label?.toLowerCase().includes('sold');
                 return (
                   <>
-                    {saleStatusBadge && !project.sale_status?.toLowerCase().includes('sold') && !project.status_label?.toLowerCase().includes('sold') && (
-                      <div className={`absolute ${offset} left-3 z-10 ${saleStatusBadge.className}`} data-no-contrast-guard>
-                        {saleStatusBadge.label}
-                      </div>
+                    {saleStatusLabel && !isSold && (
+                      <CardBadge variant="status" className={`absolute ${offset} left-3 z-10`}>
+                        {saleStatusLabel}
+                      </CardBadge>
                     )}
-                    {(project.sale_status?.toLowerCase().includes('sold') || project.status_label?.toLowerCase().includes('sold')) && (
-                      <div className={`absolute ${offset} left-3 z-10`}>
-                        <div className="bg-red-600 text-white px-2.5 py-1 rounded-full text-xs font-bold uppercase shadow-lg border border-red-400">
-                          Sold Out
-                        </div>
-                      </div>
+                    {isSold && (
+                      <CardBadge variant="sold" className={`absolute ${offset} left-3 z-10`}>
+                        Sold Out
+                      </CardBadge>
                     )}
                   </>
                 );
