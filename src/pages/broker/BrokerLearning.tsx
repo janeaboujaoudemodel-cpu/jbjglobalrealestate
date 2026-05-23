@@ -49,7 +49,7 @@ export default function BrokerLearning() {
       <SEOHead
         title="Broker Learning | Library & Training | JBJ GLOBAL REAL ESTATE"
         description="JBJ Broker Learning hub — internal book library, certification, and Market Intelligence training modules in one place."
-        canonicalUrl="/broker/learning"
+        canonicalPath="/broker/learning"
       />
 
       {/* Page header */}
