@@ -388,7 +388,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                 </div>
               )}
 
-              <form onSubmit={onSubmit} className="relative">
+              {isVerified && <form onSubmit={onSubmit} className="relative">
                 <input
                   ref={inputRef}
                   value={draft}
@@ -411,7 +411,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                 >
                   <Send className="h-4 w-4" />
                 </button>
-              </form>
+              </form>}
             </div>
 
           </motion.aside>
