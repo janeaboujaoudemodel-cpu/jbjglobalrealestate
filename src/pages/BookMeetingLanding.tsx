@@ -363,7 +363,7 @@ export default function BookMeetingLanding() {
                 <SearchableSelect
                   value={nationality}
                   onValueChange={setNationality}
-                  options={countries.map((c) => ({ value: c.code, label: c.name }))}
+                  options={countries}
                   placeholder="Select country"
                   searchPlaceholder="Search country…"
                 />
@@ -373,11 +373,12 @@ export default function BookMeetingLanding() {
                 <SearchableSelect
                   value={language}
                   onValueChange={setLanguage}
-                  options={languages.map((l) => ({ value: l.code, label: l.name }))}
+                  options={languages}
                   placeholder="Select language"
                   searchPlaceholder="Search language…"
                 />
               </div>
+
             </div>
             <div>
               <Label className="text-xs">Company name *</Label>
