@@ -5,6 +5,7 @@ import {
   PlusCircle, Key,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PearlButton } from "@/components/ui/pearl-button";
 import { useToolVisibility } from "@/hooks/useToolVisibility";
 import { isApprovedPublicToolId } from "@/config/publicToolAccess";
 
