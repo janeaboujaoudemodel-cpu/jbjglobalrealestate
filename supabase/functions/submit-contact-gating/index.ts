@@ -150,9 +150,10 @@ Deno.serve(async (req) => {
     }
 
     // Encrypt all PII
-    const encryptedName = encryptPII(body.full_name, encryptionKey);
-    const encryptedEmail = encryptPII(body.email, encryptionKey);
-    const encryptedPhone = encryptPII(body.phone, encryptionKey);
+    const aesKey = await deriveAesKey(encryptionKey);
+    const encryptedName = await encryptPII(body.full_name, aesKey);
+    const encryptedEmail = await encryptPII(body.email, aesKey);
+    const encryptedPhone = await encryptPII(body.phone, aesKey);
 
     // Store with ONLY encrypted values - no plaintext PII
     const { error: insertError } = await supabase
