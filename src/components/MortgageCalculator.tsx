@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Wallet } from "lucide-react";
 import { Calculator, TrendingUp, Calendar, Percent, DollarSign, ArrowRight, Info, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
