@@ -1,83 +1,53 @@
-## Goal
 
-Bring all 15 books in Broker Learning → Library to premium standard:
-- Unique premium cover per book, locked to its exact title.
-- Rich, government-aligned UAE market knowledge inside each book (DLD, RERA, DET, ADGM/DIFC, Bayanat, statistics centres).
-- Proper table of contents, readable reader UI, and audio-ready structure (ElevenLabs toggle, no voice yet).
+## 1. "What JBJ Brokers Receive" — premium card grid
 
-Scope is Broker Learning Library only. No other features removed or changed.
+File: `src/pages/BrokerEducation.tsx` (lines ~450–473)
 
----
+- Tighten the 8 cards: 2-line clamped descriptions, consistent height, premium feel — champagne surface, 1px gold hairline border (no fills, per memory), soft inner shadow, gold-on-ink IconTile.
+- Add subtle motion: gentle lift + gold hairline glow on hover, staggered fade-in.
+- Promote **one** card (AI Tools Access) to a "featured" tile: spans 2 cols on lg, animated — a slow continuous shimmer sweep across the gold hairline + a softly pulsing IconTile. Pure CSS/framer-motion, no heavy libs.
+- Keep all 8 benefits (no removal), Inter only, all text ink `#1A1A1A` (no faded gold).
 
-## 1. Premium covers (locked to title)
+## 2. Certification "Congratulations" header
 
-For each of the 15 books generate a premium cover image and persist the URL in `broker_education_books.cover_image_url`.
+File: `src/components/certification/CertificatePreview.tsx`
 
-- Style: dark navy/obsidian leather with champagne `#B89555` foil, gold serif title, JBJ monogram, subtle UAE skyline motif relevant to the title topic. Matches existing book hero style (`src/assets/books/broker-education-cover.jpg`).
-- One generation per title using Lovable AI image model; saved to Supabase Storage bucket `broker-education-covers/{book_number}-{slug}.jpg`.
-- "Locked" = cover URL is written once into the DB and the card/modal always renders that exact URL. Cards no longer fall back to placeholder when a real cover exists.
-- Script `scripts/generate-broker-book-covers.ts` runs the generation per title so we can re-run on demand.
+- Replace the plain `<Award />` with a richer **certificate medallion icon** (ribbon + seal composition built from lucide `Award` + `Medal` layered with a gold gradient ring + subtle rotating shimmer).
+- Color: champagne→gold metallic gradient fill (allowed inside the certificate component as a decorative seal, not as a page surface).
+- Text "Congratulations!" stays ink; subtitle ink/70.
 
-## 2. Premium content per book (government + market data)
+## 3. Certificate body — readability fix + metallic mirror
 
-For each book, generate authoritative content using Lovable AI grounded on a curated source list (per-book prompt):
-- DLD (dubai land department), RERA regulations, Trakheesi, Ejari, Oqood, DET tourism rules, ADGM/DIFC commercial law, Dubai Statistics Center, Bayanat AE, MoEC, Central Bank UAE mortgage caps, Dubai 2040 Urban Master Plan, DLD transaction indices.
-- Cross-checked with current 2025/2026 market intelligence already in `market_*` tables when available.
+Same file. Current problems: white text on dark + gold gradient text on dark = unreadable, low contrast, breaks champagne palette.
 
-Each book gets:
-- Refined description (institutional tone, 1–2 sentences).
-- Learning objective.
-- 5–8 modules. Each module has: title, 600–1200-word body in clean HTML (h2/h3/p/ul/blockquote/table), key takeaways, citations footer (DLD/RERA links), estimated_minutes.
-- Auto-generated table of contents derived from modules + h2/h3 anchors.
+Rebuild the certificate plate without breaking the surrounding card:
+- **Surface**: deep obsidian `#0E0B07` → `#1A1410` with a subtle diagonal **metallic mirror sweep** (animated linear-gradient that drifts slowly, ~8s loop, paused on `prefers-reduced-motion`). Hairline gold border + inner gold double-rule frame.
+- **Typography hierarchy (all legible on dark)**:
+  - Brand wordmark: champagne `#EFE6D6`, tracked, medium weight (no gradient text).
+  - "Certificate of Achievement" eyebrow: gold `#B89555`, 0.3em tracking.
+  - "This is to certify that": champagne `#EFE6D6`.
+  - Recipient name: large serif-display, solid champagne with a single thin gold underline (no gradient fills on text → fixes the unreadable shimmer).
+  - Body line + "Certified JBJ Broker" title: champagne, gold accent rule above/below the title.
+  - Date / Certificate ID: champagne/80, gold hairlines.
+- Corner flourishes: keep, thicken to 1.5px gold.
+- Background pattern: keep the subtle gold fleck SVG at lower opacity so it doesn't fight text.
 
-Data is written via a one-time content-population script (`scripts/populate-broker-book-content.ts`) into existing `broker_education_books` and `broker_education_modules` tables. No destructive deletes — upsert by `(book_id, module_number)`.
+## 4. Stamp + signature on the certificate
 
-## 3. Reader experience (readable + audio-ready)
+- Add a signature block bottom-left: handwritten signature image + printed name "Jeyhun Babayev" + title "Founder & CEO, JBJ Global Real Estate", separated by a gold hairline.
+- Add a circular company stamp bottom-right using `<StampOverlay />` (already standardized, uses `mix-blend-mode: multiply` for realistic ink).
+- Hide both on the locked preview (or show ghosted at 25% opacity with a "Preview" watermark) so unearned certificates don't look issued.
 
-Upgrade `BookDetailModal` into a full premium reader route `/broker/learning/book/:bookId`:
-- Left rail: sticky TOC (auto-built from modules + headings), progress dots.
-- Center: champagne paper background, ink type (Inter), generous measure, sanitized HTML via existing `contentSanitizer.ts`.
-- Top bar: title, learning path chip, est. reading time, progress bar, "Mark complete" per module.
-- Audio toggle in header ("Listen") — visible to all users but disabled with tooltip "Voice narration coming soon" unless `voice_enabled = true` on the book AND a `LISTEN_ENABLED` global flag is on. Wires through a stub `useBookAudio(bookId)` hook ready for ElevenLabs.
-- Existing modal stays as the quick-preview; "Open Book" CTA navigates to the reader route.
+**Blocker — need the actual asset files.** I couldn't find any stamp/signature in `public/`, `src/assets/`, or in the `owner_signature_assets` table. Before I build this step I need you to either:
+  - re-upload the stamp PNG and signature PNG in this chat, or
+  - tell me the exact filename/path if they're already in the repo.
 
-## 4. Owner-only ElevenLabs toggle (no voice yet)
+## 5. Out of scope
+- No DB or edge-function changes.
+- No changes to phase cards, hooks, or certification logic.
+- No removals — purely visual upgrades.
 
-- Migration: add `voice_enabled boolean default false`, `voice_id text`, `voice_provider text default 'elevenlabs'` to `broker_education_books`; add settings row `listen_enabled boolean default false` in existing `app_settings` (or create if missing) gated to owner.
-- New owner page `/owner/broker-learning/voice` (under existing OwnerGuard) listing 15 books with:
-  - Master "Enable Listen feature" switch (writes `listen_enabled`).
-  - Per-book voice toggle + voice picker (read-only list of ElevenLabs voice IDs; persists `voice_id`).
-  - Helper text: "Voice generation is not yet active. Toggling prepares the book for future ElevenLabs narration."
-- No edge function calling ElevenLabs is added now. The UI + schema are the forward seam.
-
-## 5. Card/modal lock-in
-
-- `Book3DCard` + `BookCard`: always render `cover_image_url` when present; placeholder only when DB cover is genuinely null. Add `loading="lazy"` and width/height to prevent layout shift.
-- Title and description shown on cards come from DB (already true) so the regenerated content flows everywhere automatically.
-
----
-
-## Technical summary
-
-Files to add:
-- `scripts/generate-broker-book-covers.ts` — calls Lovable AI image, uploads to storage, updates `cover_image_url`.
-- `scripts/populate-broker-book-content.ts` — per-book prompt → modules upsert.
-- `src/pages/broker/BookReader.tsx` — full reader route.
-- `src/hooks/useBookAudio.ts` — stub; returns `{ available:false, reason:'coming_soon' }`.
-- `src/pages/owner/BrokerLearningVoiceAdmin.tsx` — owner toggle UI.
-
-Files to edit:
-- `src/components/broker-education/BookDetailModal.tsx` — TOC preview, "Open Book" → reader route, listen-toggle stub.
-- `src/components/broker-education/Book3DCard.tsx`, `BookCard.tsx` — strict cover binding.
-- `src/hooks/useBrokerEducation.ts` — expose `voice_enabled`, `voice_id` fields.
-- `src/routes/PublicRoutes.tsx` — register `/broker/learning/book/:bookId` (auth+broker gate) and owner admin route.
-
-DB migration:
-- Storage bucket `broker-education-covers` (public read).
-- `broker_education_books`: add `voice_enabled`, `voice_id`, `voice_provider`.
-- `app_settings`: add `listen_enabled` (owner-only RLS).
-- No table drops, no schema renames — additive only.
-
-Out of scope:
-- Real ElevenLabs API calls / audio generation.
-- Any change outside Broker Learning Library.
+## Technical notes
+- All animations via `framer-motion` + CSS keyframes already in the design system; respect `prefers-reduced-motion`.
+- Gold used only as 1px hairline / thin underline / decorative seal — never as a fill surface (per `no-gold-fills` memory). The metallic mirror sweep lives on the dark certificate plate, not on champagne UI.
+- Featured "AI Tools" card uses cream `#EFE6D6` highlight + gold hairline, never a solid gold fill.
