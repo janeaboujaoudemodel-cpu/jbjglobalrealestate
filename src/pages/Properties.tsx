@@ -1191,11 +1191,13 @@ const Properties = () => {
 
             {/* Left: Scrollable card list */}
             <div ref={cardListRef} className="w-[55%] flex-shrink-0 overflow-y-auto bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-              {/* Results Count */}
-              <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-                <p className="text-[#1A1A1A]/70 text-sm">
-                  Showing <span className="text-[#1A1A1A] font-medium">{finalProjects.length}</span> properties
-                </p>
+              {/* Results Count (hidden while initial fetch in flight) */}
+              <div className="px-4 pt-4 pb-2 flex items-center justify-between min-h-[24px]">
+                {!showSkeletons && (
+                  <p className="text-[#1A1A1A]/70 text-sm">
+                    Showing <span className="text-[#1A1A1A] font-medium">{finalProjects.length}</span> properties
+                  </p>
+                )}
               </div>
 
               {/* Cards Grid - 2 columns */}
@@ -1272,14 +1274,16 @@ const Properties = () => {
                 </div>
               )}
               
-              {/* Results Count - Inside active layer */}
-              <div className="mb-6 flex items-center justify-between px-4 pt-4">
-                <p className="text-[#1A1A1A]/70">
-                  Showing <span className="text-[#1A1A1A] font-medium">{finalProjects.length}</span> properties
-                  {appliedFilters.transactionType === 'rent' && ' for rent'}
-                  {appliedFilters.transactionType === 'buy' && ' for sale'}
-                </p>
-                {activeFilterCount > 0 && (
+              {/* Results Count - Inside active layer (hidden while initial fetch in flight) */}
+              <div className="mb-6 flex items-center justify-between px-4 pt-4 min-h-[28px]">
+                {!showSkeletons && (
+                  <p className="text-[#1A1A1A]/70">
+                    Showing <span className="text-[#1A1A1A] font-medium">{finalProjects.length}</span> properties
+                    {appliedFilters.transactionType === 'rent' && ' for rent'}
+                    {appliedFilters.transactionType === 'buy' && ' for sale'}
+                  </p>
+                )}
+                {!showSkeletons && activeFilterCount > 0 && (
                   <Button
                     variant="ghost"
                     onClick={clearFilters}
