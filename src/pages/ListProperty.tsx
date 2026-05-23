@@ -59,7 +59,7 @@ const ListProperty = () => {
       <SEOHead
         title="List Your Property — JBJ Global Real Estate"
         description="List your property for sale or rent with JBJ Global Real Estate. Use AI to auto-generate your listing, or fill in manually. Track approval status from your dashboard."
-        canonicalUrl="/list-property"
+        canonicalPath="/list-property"
       />
 
       {/* Hero band */}
