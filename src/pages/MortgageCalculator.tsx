@@ -80,8 +80,8 @@ const MortgageCalculatorPage = () => {
               className="block w-full max-w-md"
             >
               <Button 
-                variant="primary" 
-                className="w-full h-14 text-base font-semibold group shadow-lg hover:shadow-[0_14px_45px_rgba(200,167,102,0.4)] hover:-translate-y-1 transition-all duration-300"
+                variant="gold" 
+                className="w-full h-14 text-base font-semibold group shadow-lg hover:shadow-[0_14px_45px_rgba(184,149,85,0.4)] hover:-translate-y-1 transition-all duration-300"
               >
                 Request Mortgage Partner Introduction
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
