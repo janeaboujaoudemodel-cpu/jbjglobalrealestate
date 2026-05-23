@@ -174,10 +174,17 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-5 py-5 space-y-4 bg-background">
+            <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-5 py-5 bg-[#FDFBF7]">
               {!isVerified && (
-                <ConciergeGate onVerified={() => { /* state auto-updates via hook */ }} />
+                <div className="min-h-full flex items-stretch">
+                  <div className="w-full">
+                    <ConciergeGate onVerified={() => { /* state auto-updates via hook */ }} />
+                  </div>
+                </div>
               )}
+              {isVerified && <div className="space-y-4">
+              {/* spacer so following blocks keep their spacing */}
+              </div>}
               {isVerified && messages.length === 0 && (
                 <div className="space-y-6">
                   <div className="text-center space-y-2 py-2">
