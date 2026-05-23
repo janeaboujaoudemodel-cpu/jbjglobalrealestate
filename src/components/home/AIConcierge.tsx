@@ -167,18 +167,84 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             {/* Messages */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-6 space-y-4">
               {messages.length === 0 && (
-                <div className="space-y-5">
-                  <div className="text-center space-y-2 py-4">
+                <div className="space-y-6">
+                  <div className="text-center space-y-2 py-2">
                     <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#D4B896]/40"
                       style={{ background: "rgba(253,251,247,0.08)" }}>
                       <Sparkles className="h-6 w-6 text-[#E2C9A0]" />
                     </div>
-                    <h3 className="text-[18px] font-semibold text-[#FDFBF7]">How can I help?</h3>
-                    <p className="text-[13px] text-[#FDFBF7]/65 max-w-[280px] mx-auto leading-relaxed">
-                      Ask me about properties, developers, the Golden Visa, our tools — or anything about the JBJ platform.
+                    <h3 className="text-[18px] font-semibold text-[#FDFBF7]">How can we help?</h3>
+                    <p className="text-[13px] text-[#FDFBF7]/65 max-w-[300px] mx-auto leading-relaxed">
+                      Continue with our AI Concierge below, or switch to a human channel anytime.
                     </p>
                   </div>
+
+                  {/* Premium channel switcher — Concierge / Chat Support / WhatsApp / Call */}
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {/* Concierge (active) */}
+                    <div
+                      data-no-contrast-guard
+                      className="relative flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl
+                        border border-[#E2C9A0]/70 bg-[rgba(226,201,160,0.10)]"
+                    >
+                      <div className="flex items-center gap-2 text-[#E2C9A0]">
+                        <Sparkles className="h-4 w-4" />
+                        <span className="text-[12.5px] font-semibold text-[#FDFBF7]">AI Concierge</span>
+                      </div>
+                      <span className="text-[11px] text-[#FDFBF7]/60 leading-snug">Instant answers · 24/7</span>
+                      <span className="absolute top-2 right-2 text-[9.5px] tracking-[0.14em] uppercase font-semibold text-[#E2C9A0]">Active</span>
+                    </div>
+                    {/* Chat Support */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        setTimeout(() => window.dispatchEvent(new CustomEvent('jbj:open-chat-support')), 250);
+                      }}
+                      data-no-contrast-guard
+                      className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl text-left
+                        border border-[#D4B896]/35 bg-white/[0.04] hover:bg-white/[0.10] hover:border-[#E2C9A0]/60 transition-all"
+                    >
+                      <div className="flex items-center gap-2 text-[#E2C9A0]">
+                        <MessageSquare className="h-4 w-4" />
+                        <span className="text-[12.5px] font-semibold text-[#FDFBF7]">Chat Support</span>
+                      </div>
+                      <span className="text-[11px] text-[#FDFBF7]/60 leading-snug">Talk to a JBJ agent</span>
+                    </button>
+                    {/* WhatsApp */}
+                    <a
+                      href={getWhatsAppUrl()}
+                      target="_blank"
+                      rel="noreferrer"
+                      data-no-contrast-guard
+                      className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl
+                        border border-[#D4B896]/35 bg-white/[0.04] hover:bg-white/[0.10] hover:border-[#E2C9A0]/60 transition-all"
+                    >
+                      <div className="flex items-center gap-2 text-[#E2C9A0]">
+                        <MessageCircle className="h-4 w-4" />
+                        <span className="text-[12.5px] font-semibold text-[#FDFBF7]">WhatsApp</span>
+                      </div>
+                      <span className="text-[11px] text-[#FDFBF7]/60 leading-snug">Reply in minutes</span>
+                    </a>
+                    {/* Call */}
+                    <a
+                      href={getCallUrl()}
+                      data-no-contrast-guard
+                      className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl
+                        border border-[#D4B896]/35 bg-white/[0.04] hover:bg-white/[0.10] hover:border-[#E2C9A0]/60 transition-all"
+                    >
+                      <div className="flex items-center gap-2 text-[#E2C9A0]">
+                        <Phone className="h-4 w-4" />
+                        <span className="text-[12.5px] font-semibold text-[#FDFBF7]">Call an Agent</span>
+                      </div>
+                      <span className="text-[11px] text-[#FDFBF7]/60 leading-snug">{CONTACT_INFO.phone}</span>
+                    </a>
+                  </div>
+
                   <div className="space-y-2">
+                    <div className="text-[10.5px] uppercase tracking-[0.18em] font-semibold text-[#FDFBF7]/50 px-1">
+                      Try asking
+                    </div>
                     {SUGGESTIONS.map((s) => (
                       <button
                         key={s}
@@ -194,6 +260,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                   </div>
                 </div>
               )}
+
 
               {messages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
