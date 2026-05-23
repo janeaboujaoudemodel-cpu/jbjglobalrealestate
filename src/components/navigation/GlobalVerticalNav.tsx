@@ -1354,7 +1354,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-r border-[#B89555]/40 h-full relative overscroll-contain">
+        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F1E6] to-[#EFE6D6] border-r border-[#B89555]/40 h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}
