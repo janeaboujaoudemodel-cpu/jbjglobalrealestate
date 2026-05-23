@@ -272,7 +272,7 @@ const ListingsApproval = () => {
               <ImageOff className="h-4 w-4" /> Needs Photo ({needsPhoto.length})
             </TabsTrigger>
             <TabsTrigger value="pending" className="gap-2">
-              <Clock className="h-4 w-4" /> Pending Approval ({pending.length})
+              <Clock className="h-4 w-4" /> Pending / Ready ({ready.length}/{pending.length})
             </TabsTrigger>
             <TabsTrigger value="approved" className="gap-2">
               <CheckCircle2 className="h-4 w-4" /> Approved ({approved.length})
