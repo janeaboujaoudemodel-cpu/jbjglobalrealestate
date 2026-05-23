@@ -260,6 +260,16 @@ const ReellyProjectCard = ({
              </div>
            )}
            
+           {/* Developer - Clickable, directly after title/header area, above description */}
+           {project.developer_name && (
+             <DeveloperLink
+               name={project.developer_name}
+               slug={(project as any).developer?.slug || null}
+               className="text-sm mb-3 block"
+               showPrefix={true}
+             />
+           )}
+
            {/* Description - hidden in compact mode */}
            {!compact && (
              <p className="text-muted-foreground text-sm leading-relaxed mb-3">
@@ -268,16 +278,6 @@ const ReellyProjectCard = ({
                    ...more
                  </span>
              </p>
-           )}
-
-           {/* Developer - Clickable */}
-           {project.developer_name && (
-             <DeveloperLink
-               name={project.developer_name}
-               slug={(project as any).developer?.slug || null}
-               className="text-sm mb-3 block"
-               showPrefix={true}
-             />
            )}
 
             {/* Premium full-width divider — directly after developer name, before handover */}
