@@ -314,11 +314,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       setHasMore(count != null ? next.length < count : parsed.length === PAGE_SIZE);
 
       // Count incomplete (for loaded set)
-      const incomplete = next.filter(p => 
-        p.images.length === 0 || 
-        !p.description || 
-        p.developer_name?.toLowerCase() === 'unknown'
-      ).length;
+      const incomplete = next.filter(p => !isReadyToPublish(p)).length;
       setIncompleteCount(incomplete);
 
       setImports(next);
@@ -465,6 +461,15 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     }
 
     // Create the project
+    const blockers = getImportBlockers(importData);
+    if (blockers.length > 0) {
+      await supabase
+        .from("pending_project_imports")
+        .update({ review_notes: `PENDING_VERIFICATION:${blockers.join(",")}` })
+        .eq("id", importData.id);
+      throw new Error(`Listing is not ready to publish: ${blockers.join(", ")}`);
+    }
+
     const projectData = {
       name: importData.name,
       slug: importData.slug || importData.name.toLowerCase().replace(/\s+/g, '-'),
@@ -485,7 +490,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       status_label: importData.status_label,
       source_url: importData.source_url,
       is_offplan: true,
-      is_published: true,
+      is_published: false,
+      cover_image_url: importData.images[0]?.url || null,
       status: 'active'
     };
 
