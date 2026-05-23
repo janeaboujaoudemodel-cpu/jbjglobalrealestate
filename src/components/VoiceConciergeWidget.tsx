@@ -174,11 +174,12 @@ const VoiceConciergeWidget = () => {
     const checkSuppression = () => {
       const conciergeOpen = document.body.getAttribute("data-jbj-concierge-open") === "true";
       const chatOpen = document.body.getAttribute("data-jbj-chat-open") === "true";
-      setSupportSuppressed(conciergeOpen || chatOpen);
+      const supportOpen = document.body.getAttribute("data-jbj-support-open") === "true";
+      setSupportSuppressed(conciergeOpen || chatOpen || supportOpen);
     };
     checkSuppression();
     const obs = new MutationObserver(checkSuppression);
-    obs.observe(document.body, { attributes: true, attributeFilter: ["data-jbj-concierge-open", "data-jbj-chat-open"] });
+    obs.observe(document.body, { attributes: true, attributeFilter: ["data-jbj-concierge-open", "data-jbj-chat-open", "data-jbj-support-open"] });
     return () => obs.disconnect();
   }, []);
 
