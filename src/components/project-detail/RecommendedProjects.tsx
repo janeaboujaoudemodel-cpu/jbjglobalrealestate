@@ -4,11 +4,12 @@ import { useProjectsListing } from "@/hooks/useProjects";
 import { SafeImage } from "@/components/SafeImage";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { useMemo } from "react";
-import { formatDisplayDate } from "@/utils/formatDate";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { HandoverPill } from "@/components/ui/HandoverPill";
+import { stripHtmlTags } from "@/utils/contentSanitizer";
 
 interface RecommendedProjectsProps {
   currentProjectId: string;
@@ -149,11 +150,12 @@ export default function RecommendedProjects({
               (project as any).emirate ||
               null;
 
-            // Truncate description to ~120 chars
-            const shortDescription = description
-              ? description.length > 120
-                ? description.substring(0, 120).replace(/\s+\S*$/, "") + "…"
-                : description
+            // Strip HTML/markdown then truncate to ~140 chars
+            const cleanDescription = description ? stripHtmlTags(String(description)).replace(/\s+/g, " ").trim() : "";
+            const shortDescription = cleanDescription
+              ? cleanDescription.length > 140
+                ? cleanDescription.substring(0, 140).replace(/\s+\S*$/, "") + "…"
+                : cleanDescription
               : null;
 
             return (
@@ -171,41 +173,34 @@ export default function RecommendedProjects({
                     loading="eager"
                   />
 
-                  {/* Top Badges Row */}
-                  <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${
-                        saleStatus.toLowerCase().includes("sold")
-                          ? "bg-red-500 text-white"
-                          : "bg-emerald-500 text-white"
-                      }`}>
-                        {saleStatus}
-                      </span>
-                    </div>
-                    <span className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#C8A766]/60 px-2 py-0.5 rounded text-[11px] font-bold">
-                      Recommended
-                    </span>
-                  </div>
-
-                  {/* Developer Logo — Bottom Left — eager loaded, rounded with no white frame */}
-                  {devLogo && (
-                    <div className="absolute bottom-3 left-3 z-20">
+                  {/* Developer Logo — TOP-LEFT (moved up from where "On Sale" used to be) */}
+                  <div className="absolute top-3 left-3 z-20">
+                    {devLogo ? (
                       <DeveloperLogo
                         src={devLogo}
                         alt={project.developer?.name || "Developer"}
                         loading="eager"
                       />
-                    </div>
-                  )}
-
-                  {/* Handover Date — Bottom Right — Orange label style */}
-                  {project.handover_date && (
-                    <div className="absolute bottom-3 right-3">
-                      <span className="bg-orange-500 text-white px-2.5 py-1 rounded-md text-[11px] font-bold shadow-md">
-                        {formatDisplayDate(project.handover_date)}
+                    ) : project.developer?.name ? (
+                      <span className="inline-flex items-center rounded-md bg-[#F7F2EA] border border-[#B89555]/60 px-2 py-1 text-[11px] font-semibold text-[#1A1A1A] shadow-sm">
+                        {project.developer.name}
                       </span>
-                    </div>
-                  )}
+                    ) : null}
+                  </div>
+
+                  {/* Sale Status — BOTTOM-RIGHT (moved down from where Handover used to be) */}
+                  <div className="absolute bottom-3 right-3 z-20">
+                    <span
+                      data-no-contrast-guard
+                      className={`inline-flex items-center rounded-md px-2 py-1 text-[11px] font-bold shadow-sm allow-white ${
+                        saleStatus.toLowerCase().includes("sold")
+                          ? "bg-red-500 text-white"
+                          : "bg-emerald-500 text-white"
+                      }`}
+                    >
+                      {saleStatus}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Content — flex-col flex-1 so it fills remaining card height */}
@@ -224,24 +219,23 @@ export default function RecommendedProjects({
 
                   {/* Location */}
                   {displayLocation && (
-                    <p className="text-muted-foreground text-sm truncate mt-0.5">
+                    <p className="text-[#1A1A1A]/70 text-sm truncate mt-0.5">
                       {displayLocation}
                     </p>
                   )}
 
-                  {/* Description */}
+                  {/* Description — HTML stripped */}
                   {shortDescription && (
                     <p className="text-[#1A1A1A]/70 text-xs leading-relaxed mt-2 line-clamp-2">
                       {shortDescription}
                     </p>
                   )}
 
-                  {/* Spacer to push price to bottom */}
+                  {/* Spacer to push price row to bottom */}
                   <div className="flex-1 min-h-[8px]" />
 
-                  {/* Divider + Price + Handover — always pinned to bottom */}
+                  {/* Divider + Price (LEFT) + Handover (RIGHT) — pinned to bottom, same line */}
                   <div className="border-t border-[#B89555]/20 pt-3 mt-3 flex items-center justify-between gap-2">
-                    {/* Price — premium pill (matches FeaturedListings / ProjectCard / ReellyProjectCard) */}
                     {project.price_from ? (
                       <div className="price-pill-premium" data-price-badge data-no-contrast-guard>
                         <span className="price-pill-eyebrow">From</span>
@@ -253,13 +247,15 @@ export default function RecommendedProjects({
                       </div>
                     )}
 
-                    {/* Payment Plan Badge */}
-                    {paymentLabel && (
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#1A1A1A] bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full px-2.5 py-1">
-                        <CreditCard className="w-3 h-3" />
-                        {paymentLabel}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {paymentLabel && (
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#1A1A1A] bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full px-2.5 py-1">
+                          <CreditCard className="w-3 h-3" />
+                          {paymentLabel}
+                        </span>
+                      )}
+                      <HandoverPill value={project.handover_date} />
+                    </div>
                   </div>
                 </div>
               </Link>
