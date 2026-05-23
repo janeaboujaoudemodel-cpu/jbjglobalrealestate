@@ -13,6 +13,9 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 const renderWithRouter = (ui: React.ReactElement) =>
   render(<MemoryRouter>{ui}</MemoryRouter>);
 
+// #B89555 in the rgb form jsdom emits
+const GOLD_RGB = "rgb(184, 149, 85)";
+
 describe("DeveloperLink regression", () => {
   it("renders the 'by ' prefix in ink and the developer name in gold", () => {
     renderWithRouter(<DeveloperLink name="Emaar Properties" slug="emaar" />);
@@ -20,12 +23,9 @@ describe("DeveloperLink regression", () => {
     expect(screen.getByText("by")).toBeInTheDocument();
 
     const nameNode = screen.getByText("Emaar Properties");
-    // Inline style guarantees the gold token survives even if Tailwind classes are purged
-    expect(nameNode.style.color.toLowerCase()).toBe("#b89555".toLowerCase().replace("#", "")
-      ? "rgb(184, 149, 85)"
-      : nameNode.style.color);
-    // Robust check: jsdom returns the original "#B89555" string
-    expect(nameNode.getAttribute("style") || "").toMatch(/#B89555/i);
+    expect(nameNode.style.color).toBe(GOLD_RGB);
+    expect(nameNode.style.webkitTextFillColor || nameNode.style.getPropertyValue("-webkit-text-fill-color"))
+      .toBe(GOLD_RGB);
     expect(nameNode).toHaveAttribute("data-developer-gold");
     expect(nameNode).toHaveAttribute("data-no-contrast-guard");
     expect(nameNode.className).toMatch(/developer-name-gold/);
@@ -43,7 +43,7 @@ describe("DeveloperLink regression", () => {
     expect(nameNode.getAttribute("data-href")).toBe(
       "/developers?search=Unknown%20Dev"
     );
-    expect(nameNode.getAttribute("style") || "").toMatch(/#B89555/i);
+    expect(nameNode.style.color).toBe(GOLD_RGB);
   });
 
   it("can hide the 'by' prefix when embedded in custom copy", () => {
