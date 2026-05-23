@@ -1244,13 +1244,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       {collapsed ? (
       <div className="hidden sm:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative">
           {/* Logo header (88px) — collapsed: just icon */}
-          <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2] border-b border-[#B89555]/40">
+          <div className="h-[48px] w-full shrink-0 flex items-center justify-center bg-gradient-to-r from-[#FDFBF7] via-[#F7F1E6] to-[#EFE6D6] border-b border-[#B89555]/40">
             <Link to="/">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain" />
+              <img src={jbjMonogramLightBg} alt="JBJ" className="w-7 h-7 object-contain" />
             </Link>
           </div>
           {/* Section icons — solid champagne body, no silver cast */}
-          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-gradient-to-b from-[#ECE2D2] to-[#D8C7A6] w-full border-r border-[#B89555]/40">
+          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-gradient-to-b from-[#FDFBF7] via-[#F7F1E6] to-[#EFE6D6] w-full border-r border-[#B89555]/40">
             {SECTION_KEYS.map((sectionKey) => {
               if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
               if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
