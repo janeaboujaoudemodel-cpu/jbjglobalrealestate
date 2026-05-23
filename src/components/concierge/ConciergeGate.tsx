@@ -45,10 +45,13 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [countryId, setCountryId] = useState("AE");
   const [countryCode, setCountryCode] = useState("+971");
   const [phone, setPhone] = useState("");
+  const [countryOpen, setCountryOpen] = useState(false);
 
   const [otp, setOtp] = useState("");
+  const selectedCountry = COUNTRY_CODES.find((country) => country.id === countryId) ?? COUNTRY_CODES[0];
 
   useEffect(() => {
     if (resendCooldown <= 0) return;
