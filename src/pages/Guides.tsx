@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import VideoBackground from "@/components/VideoBackground";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { 
   BookOpen, ArrowRight, HelpCircle, FileText, DollarSign, Shield, BarChart3, CheckCircle, Clock, ChevronRight, X
