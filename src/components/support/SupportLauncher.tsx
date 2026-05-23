@@ -7,7 +7,7 @@
  * listen for. Hides itself when those drawers are open.
  */
 import { useEffect, useState, useCallback } from "react";
-import { Sparkles, MessageSquare, MessageCircle, Phone, X } from "lucide-react";
+import { Sparkles, MessageSquare, MessageCircle, Phone, PhoneCall, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import ChannelCard, { ChannelDef } from "./ChannelCard";
@@ -52,6 +52,17 @@ function useChannels(closeAfter: () => void): ChannelDef[] {
       responseTime: "Avg 30s pickup",
       Icon: Phone,
       href: getCallUrl(),
+    },
+    {
+      id: "voice-ai",
+      label: "Voice AI Call · Free",
+      description: "Speak with our AI agent now",
+      responseTime: "Live",
+      Icon: PhoneCall,
+      action: () => {
+        closeAfter();
+        window.dispatchEvent(new CustomEvent("jbj:open-voice-concierge"));
+      },
     },
   ];
 }
@@ -121,7 +132,7 @@ export default function SupportLauncher() {
                   <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
                     border border-[#D4B896]/45 bg-[#1A1A1A]/70 text-[#FDFBF7]">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    24/7 · Free
+                    Free agent call
                   </span>
                   <button
                     onClick={close}
@@ -169,14 +180,14 @@ export default function SupportLauncher() {
           onClick={() => setOpen((v) => !v)}
           aria-label="Talk to JBJ support"
           className="group relative flex items-center gap-2 px-2 py-4 rounded-l-xl
-            border border-r-0 border-gold/55 bg-primary text-primary-foreground
-            shadow-[-8px_0_24px_hsl(var(--foreground)/0.25)] transform-gpu transition-[box-shadow,transform]
-            hover:bg-primary hover:text-primary-foreground
-            hover:shadow-[-12px_0_30px_hsl(var(--foreground)/0.30),0_0_28px_hsl(var(--gold)/0.34)]"
+            border border-r-0 border-[#B89555]/70 bg-[#1A1A1A] text-[#FDFBF7]
+            shadow-[-8px_0_24px_rgba(0,0,0,0.30)] transform-gpu transition-all duration-200
+            hover:bg-[#1A1A1A] hover:text-[#FDFBF7] hover:border-[#B89555]
+            hover:-translate-x-0.5 hover:shadow-[-14px_0_36px_rgba(0,0,0,0.40),0_0_30px_rgba(184,149,85,0.55)]"
           style={{ writingMode: "vertical-rl", transform: "translateY(-50%)" }}
         >
-          <Sparkles className="h-3.5 w-3.5 text-gold-light rotate-90" />
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em]">Talk to us</span>
+          <Sparkles className="h-3.5 w-3.5 text-[#E2C9A0] rotate-90" />
+          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#FDFBF7]">Talk to us</span>
           <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
         </button>
 
@@ -205,7 +216,7 @@ export default function SupportLauncher() {
                   <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
                     border border-gold/45 bg-secondary text-foreground">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    24/7 Support · Always Free
+                    Call our agent now · Free
                   </span>
                   <button
                     onClick={close}

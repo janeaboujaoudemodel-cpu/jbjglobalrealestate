@@ -183,6 +183,17 @@ const VoiceConciergeWidget = () => {
     return () => obs.disconnect();
   }, []);
 
+  // Listen for global open events from the support hub & concierge ("Voice AI Call").
+  useEffect(() => {
+    const onOpen = () => {
+      setIsMinimized(false);
+      try { localStorage.removeItem(STORAGE_KEY); } catch { /* noop */ }
+      setChoiceOpen(true);
+    };
+    window.addEventListener("jbj:open-voice-concierge", onOpen);
+    return () => window.removeEventListener("jbj:open-voice-concierge", onOpen);
+  }, []);
+
   // Any "close" action on the popover (X, outside click, toggle-off) collapses
   // the widget to the small phone icon and arms the 24h restore timer.
   const closeAndMinimize = useCallback(() => {

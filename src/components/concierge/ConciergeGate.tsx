@@ -140,7 +140,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             border border-[#B89555]/55 bg-[#F7F2EA] text-[#1A1A1A]"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          24/7 Support · Always Free
+          Call our agent now · Free
         </span>
       </div>
 
