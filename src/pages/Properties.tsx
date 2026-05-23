@@ -35,6 +35,8 @@ import { ActiveFilterIndicator } from "@/components/properties/ActiveFilterIndic
 
 import { DisplayModeToggle } from "@/components/filters/DisplayModeToggle";
 import { SettingsDropdown } from "@/components/filters/SettingsDropdown";
+import { SortBySelect } from "@/components/filters/SortBySelect";
+import { SectionDividerGold } from "@/components/ui/section-divider-gold";
 import { getSaleStatusConfig, type DisplayMode, type CurrencyCode, type AreaUnit } from "@/constants/filterConfig";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
