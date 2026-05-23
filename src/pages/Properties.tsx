@@ -393,19 +393,8 @@ const Properties = () => {
 
   // Brief "filtering" skeleton state — keeps the UI responsive on slow devices
   // when users change filters/sort so results never feel frozen.
-  const [isFiltering, setIsFiltering] = useState(false);
-  const isFirstFilterRun = useRef(true);
-  useEffect(() => {
-    if (isFirstFilterRun.current) {
-      isFirstFilterRun.current = false;
-      return;
-    }
-    setIsFiltering(true);
-    const t = setTimeout(() => setIsFiltering(false), 250);
-    return () => clearTimeout(t);
-  }, [shortcutFilters, appliedFilters, sortBy]);
-
-  const showSkeletons = isLoading || isFiltering;
+  // Skeletons only on initial fetch; filter/sort changes apply synchronously.
+  const showSkeletons = isLoading;
 
   const updateFilter = <K extends keyof ExtendedFilterState>(key: K, value: ExtendedFilterState[K]) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -1310,32 +1299,33 @@ const Properties = () => {
                 </div>
               ) : finalProjects.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-2 sm:p-4">
-                  {finalProjects.map((project, index) => {
+                  {finalProjects.flatMap((project, index) => {
                     const adAfterIndex = [5, 11, 17];
                     const adIndex = adAfterIndex.indexOf(index);
                     const featuredAd = adIndex !== -1 && FEATURED_ADS[adIndex] ? FEATURED_ADS[adIndex] : null;
-                    
-                    return (
-                      <>
-                        <ProjectCard 
-                          key={project.id} 
-                          project={project} 
-                          currency={filters.currency}
-                          sizeUnit={filters.sizeUnit}
+
+                    const nodes: React.ReactNode[] = [
+                      <ProjectCard
+                        key={project.id}
+                        project={project}
+                        currency={filters.currency}
+                        sizeUnit={filters.sizeUnit}
+                      />,
+                    ];
+                    if (featuredAd) {
+                      nodes.push(
+                        <FeaturedProjectAd
+                          key={`ad-${featuredAd.id}`}
+                          title={featuredAd.title}
+                          subtitle={featuredAd.subtitle}
+                          description={featuredAd.description}
+                          imageUrl={featuredAd.imageUrl}
+                          projectSlug={featuredAd.projectSlug}
+                          ctaText={featuredAd.ctaText}
                         />
-                        {featuredAd && (
-                          <FeaturedProjectAd
-                            key={`ad-${featuredAd.id}`}
-                            title={featuredAd.title}
-                            subtitle={featuredAd.subtitle}
-                            description={featuredAd.description}
-                            imageUrl={featuredAd.imageUrl}
-                            projectSlug={featuredAd.projectSlug}
-                            ctaText={featuredAd.ctaText}
-                          />
-                        )}
-                      </>
-                    );
+                      );
+                    }
+                    return nodes;
                   })}
                 </div>
               ) : (
