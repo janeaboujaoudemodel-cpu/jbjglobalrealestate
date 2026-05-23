@@ -70,39 +70,55 @@ export function useBrokerSessionTracking(enabled: boolean) {
     let cancelled = false;
 
     const callTrack = async (existing?: string | null) => {
-      const fp = await getDeviceFingerprint();
-      const { data, error } = await supabase.functions.invoke("crm-broker-session-track", {
-        body: {
-          device_fingerprint: fp,
-          device_label: getDeviceLabel(),
-          existing_session_token: existing ?? null,
-          heartbeat: !!existing,
-        },
-      });
-      if (cancelled) return;
-      // 403 → blocked / revoked → sign out immediately
-      const errMsg = (error as any)?.message || (data as any)?.error;
-      const status = (error as any)?.context?.status;
-      if (status === 403 || data?.force_signout || /blocked|revoked|not a broker/i.test(String(errMsg ?? ""))) {
-        localStorage.removeItem(LS_TOKEN_KEY);
-        await supabase.auth.signOut();
-        window.location.href = "/auth";
-        return;
-      }
-      if (data?.session_token && data.session_token !== existing) {
-        localStorage.setItem(LS_TOKEN_KEY, data.session_token);
+      try {
+        const fp = await getDeviceFingerprint();
+        const { data, error } = await supabase.functions.invoke("crm-broker-session-track", {
+          body: {
+            device_fingerprint: fp,
+            device_label: getDeviceLabel(),
+            existing_session_token: existing ?? null,
+            heartbeat: !!existing,
+          },
+        });
+        if (cancelled) return;
+
+        // Graceful degradation: if the edge function 500s or the network is
+        // unreachable, silently skip this tick. Tracking is best-effort; we
+        // must NEVER blank-screen the app on a heartbeat failure.
+        const status = (error as any)?.context?.status;
+        const errMsg = (error as any)?.message || (data as any)?.error;
+        if (error && status !== 403) {
+          console.warn("[broker-session-track] non-fatal:", errMsg ?? error);
+          return;
+        }
+
+        // 403 → blocked / revoked / not a broker → sign out immediately
+        if (status === 403 || data?.force_signout || /blocked|revoked|not a broker/i.test(String(errMsg ?? ""))) {
+          localStorage.removeItem(LS_TOKEN_KEY);
+          await supabase.auth.signOut().catch(() => {});
+          window.location.href = "/auth";
+          return;
+        }
+
+        if (data?.session_token && data.session_token !== existing) {
+          localStorage.setItem(LS_TOKEN_KEY, data.session_token);
+        }
+      } catch (e) {
+        // Swallow ALL errors — fingerprint hashing, network failures, JSON
+        // parsing, etc. must never bubble up to React and blank the screen.
+        console.warn("[broker-session-track] swallowed:", e);
       }
     };
 
     if (!startedRef.current) {
       startedRef.current = true;
       const existing = localStorage.getItem(LS_TOKEN_KEY);
-      callTrack(existing);
+      void callTrack(existing);
     }
 
     heartbeatRef.current = setInterval(() => {
       const tok = localStorage.getItem(LS_TOKEN_KEY);
-      callTrack(tok);
+      void callTrack(tok);
     }, HEARTBEAT_MS);
 
     return () => {
