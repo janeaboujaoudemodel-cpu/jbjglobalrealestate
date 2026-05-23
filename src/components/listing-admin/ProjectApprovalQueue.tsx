@@ -116,6 +116,20 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
   const PAGE_SIZE = 60;
 
+  const getImportBlockers = (item: PendingImport) => {
+    const blockers: string[] = [];
+    if (item.images.length === 0) blockers.push("missing media");
+    if (item.documents.length === 0) blockers.push("missing documents");
+    if (!item.description || item.description.trim().length < 50) blockers.push("missing description");
+    if (!item.developer_name || item.developer_name.trim().toLowerCase() === "unknown") blockers.push("missing developer");
+    if (!item.location || item.location.trim().length === 0) blockers.push("missing location");
+    if (!item.price_from || item.price_from <= 0) blockers.push("missing price");
+    if (!item.bedrooms_min && !item.bedrooms_max && !item.property_type_label) blockers.push("missing unit details");
+    return blockers;
+  };
+
+  const isReadyToPublish = (item: PendingImport) => getImportBlockers(item).length === 0;
+
   useEffect(() => {
     // Even when routed from a job preview page, default to showing ALL pending imports.
     // (User can still toggle to "this sync only" if needed.)
@@ -130,11 +144,16 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       // NOTE: Documents are optional (Reelly imports don't have them) - removed from requirements
       const needsWorkOr = [
         "review_notes.ilike.%PENDING_SCRAPE%",
+        "review_notes.ilike.%PENDING_VERIFICATION%",
         "review_notes.eq.INCOMPLETE",
         "review_notes.ilike.ERROR:%",
         "images.eq.[]",
         "images.is.null",
+        "documents.eq.[]",
+        "documents.is.null",
         "description.is.null",
+        "price_from.is.null",
+        "location.is.null",
         "developer_name.is.null",
         "developer_name.ilike.unknown",
         "developer_name.eq.Unknown",
@@ -219,23 +238,31 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           .is("review_notes", null)
           .not("description", "is", null)
           .neq("description", "")
+          .not("price_from", "is", null)
+          .not("location", "is", null)
           .not("developer_name", "is", null)
           .neq("developer_name", "")
           .not("developer_name", "ilike", "unknown")
           .not("images", "is", null)
-          .not("images", "eq", "[]");
-        // NOTE: documents requirement removed - Reelly imports don't have documents
+          .not("images", "eq", "[]")
+          .not("documents", "is", null)
+          .not("documents", "eq", "[]");
       } else if (statusFilter === "needs_work") {
         // Needs work = flagged OR missing CORE fields (images, description, developer)
         // Documents are optional and excluded from this check
         query = query.or(
           [
             "review_notes.ilike.%PENDING_SCRAPE%",
+            "review_notes.ilike.%PENDING_VERIFICATION%",
             "review_notes.eq.INCOMPLETE",
             "review_notes.ilike.ERROR:%",
             "images.eq.[]",
             "images.is.null",
+            "documents.eq.[]",
+            "documents.is.null",
             "description.is.null",
+            "price_from.is.null",
+            "location.is.null",
             "developer_name.is.null",
             "developer_name.ilike.unknown",
             "developer_name.eq.Unknown",
@@ -287,11 +314,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       setHasMore(count != null ? next.length < count : parsed.length === PAGE_SIZE);
 
       // Count incomplete (for loaded set)
-      const incomplete = next.filter(p => 
-        p.images.length === 0 || 
-        !p.description || 
-        p.developer_name?.toLowerCase() === 'unknown'
-      ).length;
+      const incomplete = next.filter(p => !isReadyToPublish(p)).length;
       setIncompleteCount(incomplete);
 
       setImports(next);
@@ -438,6 +461,15 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     }
 
     // Create the project
+    const blockers = getImportBlockers(importData);
+    if (blockers.length > 0) {
+      await supabase
+        .from("pending_project_imports")
+        .update({ review_notes: `PENDING_VERIFICATION:${blockers.join(",")}` })
+        .eq("id", importData.id);
+      throw new Error(`Listing is not ready to publish: ${blockers.join(", ")}`);
+    }
+
     const projectData = {
       name: importData.name,
       slug: importData.slug || importData.name.toLowerCase().replace(/\s+/g, '-'),
@@ -458,7 +490,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       status_label: importData.status_label,
       source_url: importData.source_url,
       is_offplan: true,
-      is_published: true,
+      is_published: false,
+      cover_image_url: importData.images[0]?.url || null,
       status: 'active'
     };
 
@@ -516,6 +549,19 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       .eq("id", importData.id);
 
     if (approveErr) throw approveErr;
+
+    const { error: publishError } = await supabase
+      .from("projects")
+      .update({ is_published: true, updated_at: new Date().toISOString() })
+      .eq("id", newProject.id);
+
+    if (publishError) {
+      await supabase
+        .from("pending_project_imports")
+        .update({ status: "pending", review_notes: `PENDING_VERIFICATION:${publishError.message}` })
+        .eq("id", importData.id);
+      throw publishError;
+    }
 
     return newProject;
   };
@@ -994,12 +1040,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   }
 
   // Calculate extraction status
-  const completeCount = imports.filter(p => 
-    p.description && 
-    p.images.length > 0 && 
-    p.documents.length > 0 &&
-    p.developer_name?.toLowerCase() !== 'unknown'
-  ).length;
+  const completeCount = imports.filter(isReadyToPublish).length;
   const needsWorkCount = imports.length - completeCount;
 
   return (
@@ -1313,7 +1354,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                         ...item,
                         slug: item.slug,
                         developer_slug: item.developer_id ? developerSlugs[item.developer_id] || null : null,
-                        review_notes: !item.description || item.images.length === 0 || item.developer_name?.toLowerCase() === 'unknown' ? 'INCOMPLETE' : null
+                        review_notes: isReadyToPublish(item) ? null : `PENDING_VERIFICATION:${getImportBlockers(item).join(",")}`
                       }}
                       formatPrice={formatPrice}
                       onReview={() => {

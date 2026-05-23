@@ -158,7 +158,9 @@ Deno.serve(async (req) => {
               longitude: marker.location?.longitude || null,
               emirate: marker.location?.region ? getEmirateFromRegion(marker.location.region) : null,
               area_name: marker.location?.district || null,
-              is_published: true,
+              // Marker sync creates discovery stubs only. Full enrichment must pass
+              // the publish-readiness gate before a listing becomes public.
+              is_published: false,
               source: "reelly",
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),

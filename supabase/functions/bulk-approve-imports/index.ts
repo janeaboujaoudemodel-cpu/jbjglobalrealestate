@@ -43,6 +43,41 @@ interface UnitTypeData {
   available?: number;
 }
 
+function hasText(value: unknown, minLength = 1): boolean {
+  return typeof value === "string" && value.trim().length >= minLength;
+}
+
+function jsonArray(value: unknown): unknown[] {
+  if (Array.isArray(value)) return value;
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+function getImportBlockers(item: Record<string, unknown>, images: ImageData[], documents: DocumentData[]): string[] {
+  const blockers: string[] = [];
+  const floorPlans = jsonArray(item.floor_plan_types);
+  const unitTypes = jsonArray(item.unit_types);
+  const bedroomTypes = jsonArray(item.bedroom_types);
+  const paymentBreakdown = item.payment_breakdown && typeof item.payment_breakdown === "object" && Object.keys(item.payment_breakdown as Record<string, unknown>).length > 0;
+
+  if (images.length === 0) blockers.push("missing_media");
+  if (!hasText(item.developer_name) || String(item.developer_name).trim().toLowerCase() === "unknown") blockers.push("missing_developer");
+  if (!hasText(item.description, 50) && !hasText(item.short_description, 50)) blockers.push("missing_description");
+  if (typeof item.price_from !== "number" || item.price_from <= 0) blockers.push("missing_price");
+  if (!hasText(item.location) && !hasText(item.area_name) && !item.area_id) blockers.push("missing_location");
+  if (!item.bedrooms_min && !item.bedrooms_max && unitTypes.length === 0 && bedroomTypes.length === 0 && !hasText(item.property_type_label)) blockers.push("missing_unit_details");
+  if (documents.length === 0 && floorPlans.length === 0 && !hasText(item.payment_plan) && !paymentBreakdown) blockers.push("missing_documents_or_plan");
+
+  return blockers;
+}
+
 /**
  * Bulk Approve Pending Imports v3 - ALWAYS OVERWRITE MODE
  * 
@@ -81,10 +116,10 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    // publish: when true, sets is_published=true on approved projects. Default false.
+    // publish: when true, complete listings go live. Incomplete listings always stay hidden.
     // merge_mode: when true, matches existing projects by name and enriches (never overwrites non-null fields)
     // updateExisting: when true with slug match, fully overwrites (Reelly parity mode)
-    const { limit = 200, dryRun = false, minImages = 0, updateExisting = true, merge_mode = true, publish = true } = await req.json().catch(() => ({}));
+    const { limit = 200, dryRun = false, minImages = 1, updateExisting = true, merge_mode = true, publish = true } = await req.json().catch(() => ({}));
 
     console.log(`[BulkApprove] Starting (limit=${limit}, dryRun=${dryRun}, minImages=${minImages}, updateExisting=${updateExisting}, publish=${publish})...`);
 
@@ -138,16 +173,25 @@ serve(async (req) => {
 
     for (const item of pendingImports) {
       try {
-        // Parse images
-        const images: ImageData[] = Array.isArray(item.images) 
-          ? item.images 
-          : (typeof item.images === 'string' ? JSON.parse(item.images) : []);
+        // Parse images/documents early so readiness is evaluated before any publish attempt.
+        const images: ImageData[] = jsonArray(item.images) as ImageData[];
+        const documents: DocumentData[] = jsonArray(item.documents) as DocumentData[];
+        const blockers = getImportBlockers(item, images, documents);
 
-        // Validate images if minimum required
-        if (minImages > 0 && (!images || images.length < minImages)) {
-          console.log(`[BulkApprove] Skipping ${item.name} - insufficient images (${images?.length || 0})`);
+        // Validate readiness. We still import/update records, but never publish incomplete listings.
+        if (minImages > 0 && images.length < minImages) {
+          if (!blockers.includes("missing_media")) blockers.push("missing_media");
+        }
+        const readyToPublish = blockers.length === 0;
+
+        if (!readyToPublish && !updateExisting) {
+          console.log(`[BulkApprove] Skipping ${item.name} - incomplete (${blockers.join(", ")})`);
           stats.noImages++;
           stats.skipped++;
+          await supabase
+            .from("pending_project_imports")
+            .update({ review_notes: `PENDING_VERIFICATION:${blockers.join(",")}` })
+            .eq("id", item.id);
           continue;
         }
 
@@ -271,9 +315,8 @@ serve(async (req) => {
         }
 
         // Parse all JSONB arrays with proper typing
-        const documents: DocumentData[] = Array.isArray(item.documents) ? item.documents : [];
-        const floorPlanTypes: FloorPlanData[] = Array.isArray(item.floor_plan_types) ? item.floor_plan_types : [];
-        const unitTypes: UnitTypeData[] = Array.isArray(item.unit_types) ? item.unit_types : [];
+        const floorPlanTypes: FloorPlanData[] = jsonArray(item.floor_plan_types) as FloorPlanData[];
+        const unitTypes: UnitTypeData[] = jsonArray(item.unit_types) as UnitTypeData[];
         const amenitiesList: string[] = Array.isArray(item.amenities) 
           ? item.amenities.map((a: unknown) => String(a))
           : (Array.isArray(item.amenities_list) ? item.amenities_list.map((a: unknown) => String(a)) : []);
@@ -361,7 +404,9 @@ serve(async (req) => {
           is_developer_direct: true,
           is_featured: false,
           is_premium: false,
-          is_published: publish,
+          // Always import hidden first. Media/documents are attached below, then a final
+          // database readiness gate decides whether it can go live.
+          is_published: false,
           is_sold_out: item.sale_status?.toLowerCase().includes('sold') || item.status_label?.toLowerCase().includes('sold') || false,
         };
 
@@ -447,14 +492,30 @@ serve(async (req) => {
           }
         }
 
+        let actuallyPublished = false;
+        if (publish && readyToPublish) {
+          const { error: publishError } = await supabase
+            .from("projects")
+            .update({ is_published: true, updated_at: new Date().toISOString() })
+            .eq("id", projectId);
+
+          if (publishError) {
+            console.warn(`[BulkApprove] Publish blocked for ${item.name}:`, publishError.message);
+          } else {
+            actuallyPublished = true;
+          }
+        }
+
         // Mark as approved in pending_project_imports
         await supabase
           .from("pending_project_imports")
           .update({ 
-            status: "approved", 
+            status: actuallyPublished ? "approved" : "pending",
             matched_project_id: projectId,
             reviewed_at: new Date().toISOString(),
-            review_notes: "Auto-approved via bulk-approve-imports v2"
+            review_notes: actuallyPublished
+              ? "Auto-approved via strict publish readiness"
+              : `PENDING_VERIFICATION:${blockers.join(",")}`
           })
           .eq("id", item.id);
 

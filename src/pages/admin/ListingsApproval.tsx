@@ -19,9 +19,18 @@ interface ProjectRow {
   is_published: boolean | null;
   cover_image_url: string | null;
   card_image_url: string | null;
+  description: string | null;
+  price_from: number | null;
+  location: string | null;
+  area_name: string | null;
+  bedrooms_min: number | null;
+  bedrooms_max: number | null;
+  property_type_label: string | null;
+  payment_plan: string | null;
   updated_at: string | null;
   created_at: string | null;
   gallery_count?: number;
+  documents_count?: number;
 }
 
 type MediaStatus = "complete" | "gallery-only" | "missing";
@@ -32,6 +41,18 @@ const getMediaStatus = (p: ProjectRow): MediaStatus => {
   if (hasCover || hasCard) return "complete";
   if ((p.gallery_count ?? 0) > 0) return "gallery-only";
   return "missing";
+};
+
+const getReadinessBlockers = (p: ProjectRow) => {
+  const blockers: string[] = [];
+  if (getMediaStatus(p) === "missing") blockers.push("photo");
+  if (!p.developer_name || p.developer_name.trim().toLowerCase() === "unknown") blockers.push("developer");
+  if (!p.description || p.description.trim().length < 50) blockers.push("description");
+  if (!p.price_from || p.price_from <= 0) blockers.push("price");
+  if (!p.location?.trim() && !p.area_name?.trim() && !p.community?.trim()) blockers.push("location");
+  if (!p.bedrooms_min && !p.bedrooms_max && !p.property_type_label?.trim()) blockers.push("unit details");
+  if ((p.documents_count ?? 0) === 0 && !p.payment_plan?.trim()) blockers.push("brochure/floor plan");
+  return blockers;
 };
 
 const MediaStatusBadge = ({ status }: { status: MediaStatus }) => {
@@ -67,7 +88,7 @@ const ListingsApproval = () => {
     try {
       const { data, error } = await supabase
         .from("projects")
-        .select("id,name,slug,developer_name,city,community,is_published,cover_image_url,card_image_url,updated_at,created_at")
+        .select("id,name,slug,developer_name,city,community,is_published,cover_image_url,card_image_url,description,price_from,location,area_name,bedrooms_min,bedrooms_max,property_type_label,payment_plan,updated_at,created_at")
         .order("updated_at", { ascending: false })
         .limit(500);
       if (error) throw error;
@@ -75,15 +96,18 @@ const ListingsApproval = () => {
       const ids = (data || []).map((p: any) => p.id);
       let counts: Record<string, number> = {};
       if (ids.length > 0) {
-        const { data: imgs } = await supabase
-          .from("project_images")
-          .select("project_id")
-          .in("project_id", ids);
+        const [{ data: imgs }, { data: docs }] = await Promise.all([
+          supabase.from("project_images").select("project_id").in("project_id", ids),
+          supabase.from("project_documents").select("project_id").in("project_id", ids),
+        ]);
         (imgs || []).forEach((row: any) => {
           counts[row.project_id] = (counts[row.project_id] || 0) + 1;
         });
+        (docs || []).forEach((row: any) => {
+          counts[`doc:${row.project_id}`] = (counts[`doc:${row.project_id}`] || 0) + 1;
+        });
       }
-      setProjects((data || []).map((p: any) => ({ ...p, gallery_count: counts[p.id] || 0 })));
+      setProjects((data || []).map((p: any) => ({ ...p, gallery_count: counts[p.id] || 0, documents_count: counts[`doc:${p.id}`] || 0 })));
     } catch (e: any) {
       toast.error(e.message || "Failed to load listings");
     } finally {
@@ -108,11 +132,12 @@ const ListingsApproval = () => {
   const needsPhoto = filtered.filter((p) => getMediaStatus(p) === "missing");
   const approved = filtered.filter((p) => p.is_published);
   const pending = filtered.filter((p) => !p.is_published && getMediaStatus(p) !== "missing");
+  const ready = pending.filter((p) => getReadinessBlockers(p).length === 0);
 
   const approve = async (p: ProjectRow) => {
-    const status = getMediaStatus(p);
-    if (status === "missing") {
-      toast.error("Cannot approve: at least one image is required");
+    const blockers = getReadinessBlockers(p);
+    if (blockers.length > 0) {
+      toast.error(`Cannot approve: missing ${blockers.join(", ")}`);
       return;
     }
     const { error } = await supabase
@@ -141,6 +166,7 @@ const ListingsApproval = () => {
   const renderRow = (p: ProjectRow) => {
     const status = getMediaStatus(p);
     const thumb = p.cover_image_url || p.card_image_url;
+    const blockers = getReadinessBlockers(p);
     return (
       <Card
         key={p.id}
@@ -172,7 +198,8 @@ const ListingsApproval = () => {
             {[p.developer_name, p.community, p.city].filter(Boolean).join(" • ")}
           </div>
           <div className="text-xs text-[#1A1A1A]/60 mt-1">
-            Gallery: {p.gallery_count ?? 0} image{(p.gallery_count ?? 0) === 1 ? "" : "s"}
+            Gallery: {p.gallery_count ?? 0} image{(p.gallery_count ?? 0) === 1 ? "" : "s"} · Docs: {p.documents_count ?? 0}
+            {blockers.length > 0 && <span> · Missing: {blockers.join(", ")}</span>}
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
@@ -191,7 +218,7 @@ const ListingsApproval = () => {
             <Button
               size="sm"
               variant="gold"
-              disabled={status === "missing"}
+              disabled={blockers.length > 0}
               onClick={() => approve(p)}
             >
               Approve
@@ -245,7 +272,7 @@ const ListingsApproval = () => {
               <ImageOff className="h-4 w-4" /> Needs Photo ({needsPhoto.length})
             </TabsTrigger>
             <TabsTrigger value="pending" className="gap-2">
-              <Clock className="h-4 w-4" /> Pending Approval ({pending.length})
+              <Clock className="h-4 w-4" /> Pending / Ready ({ready.length}/{pending.length})
             </TabsTrigger>
             <TabsTrigger value="approved" className="gap-2">
               <CheckCircle2 className="h-4 w-4" /> Approved ({approved.length})
