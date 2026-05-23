@@ -264,8 +264,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </CardBadge>
           )}
 
-          {/* Bottom-Right: Price label — premium square, transparent core, orange border + ink */}
-          {project.price_from ? (
+          {/* Bottom-Right: Price label — shown over image ONLY on homepage; on other pages it moves next to the Ready/handover row */}
+          {project.price_from && isHomepage ? (
             <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
               <span className="price-pill-eyebrow">From</span>
               <span className="price-pill-value">
