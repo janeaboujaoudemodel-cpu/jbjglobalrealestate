@@ -239,8 +239,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </>
           )}
 
-          {/* Top-Left: Property Type Label (if no developer mark) */}
-          {project.property_type_label && !hasDevMark && (
+          {/* Top-Left: Property Type Label */}
+          {project.property_type_label && (
             <CardBadge variant="status" className="absolute top-3 left-3 z-10">
               {project.property_type_label}
             </CardBadge>
