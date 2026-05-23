@@ -25265,6 +25265,7 @@ export type Database = {
           approved_by: string | null
           area: string | null
           area_sqft: number | null
+          availability_date: string | null
           bathrooms: number | null
           bedrooms: number | null
           cheques: number | null
@@ -25272,15 +25273,19 @@ export type Database = {
           contact_mode: string | null
           contact_name: string | null
           contact_phone: string | null
+          cover_image_url: string | null
           created_at: string
           currency: string | null
+          current_rent: number | null
           deleted_at: string | null
           description: string | null
           developer_name: string | null
+          dld_consent_at: string | null
           edit_count: number | null
           emirate: string | null
           expires_at: string | null
           featured_until: string | null
+          floor: string | null
           floor_plan_images: Json | null
           furnishing: string | null
           gallery_images: Json | null
@@ -25289,26 +25294,40 @@ export type Database = {
           images: Json | null
           inquiry_count: number | null
           is_featured: boolean | null
+          is_mortgaged: boolean | null
           key_features: Json | null
           listing_category: string | null
           listing_fee: number | null
           listing_type: string
           location: string | null
+          min_acceptable_price: number | null
+          mortgage_bank: string | null
+          parking: number | null
           passport_copy_url: string | null
           payment_plan: string | null
+          plot_size_sqft: number | null
           price: number | null
           project_name: string | null
+          property_age: number | null
           property_type: string | null
+          purchase_price: number | null
           rejection_reason: string | null
           rent_frequency: string | null
+          rera_permit: string | null
           seller_role: string | null
+          service_charge: number | null
           source_documents: Json | null
           status: string | null
           title: string
           title_deed_url: string | null
+          tnc_consent_at: string | null
+          tour_url: string | null
+          unit_number: string | null
           updated_at: string
           use_company_contact: boolean | null
           user_id: string
+          video_url: string | null
+          view: string | null
           view_count: number | null
         }
         Insert: {
@@ -25321,6 +25340,7 @@ export type Database = {
           approved_by?: string | null
           area?: string | null
           area_sqft?: number | null
+          availability_date?: string | null
           bathrooms?: number | null
           bedrooms?: number | null
           cheques?: number | null
@@ -25328,15 +25348,19 @@ export type Database = {
           contact_mode?: string | null
           contact_name?: string | null
           contact_phone?: string | null
+          cover_image_url?: string | null
           created_at?: string
           currency?: string | null
+          current_rent?: number | null
           deleted_at?: string | null
           description?: string | null
           developer_name?: string | null
+          dld_consent_at?: string | null
           edit_count?: number | null
           emirate?: string | null
           expires_at?: string | null
           featured_until?: string | null
+          floor?: string | null
           floor_plan_images?: Json | null
           furnishing?: string | null
           gallery_images?: Json | null
@@ -25345,26 +25369,40 @@ export type Database = {
           images?: Json | null
           inquiry_count?: number | null
           is_featured?: boolean | null
+          is_mortgaged?: boolean | null
           key_features?: Json | null
           listing_category?: string | null
           listing_fee?: number | null
           listing_type?: string
           location?: string | null
+          min_acceptable_price?: number | null
+          mortgage_bank?: string | null
+          parking?: number | null
           passport_copy_url?: string | null
           payment_plan?: string | null
+          plot_size_sqft?: number | null
           price?: number | null
           project_name?: string | null
+          property_age?: number | null
           property_type?: string | null
+          purchase_price?: number | null
           rejection_reason?: string | null
           rent_frequency?: string | null
+          rera_permit?: string | null
           seller_role?: string | null
+          service_charge?: number | null
           source_documents?: Json | null
           status?: string | null
           title: string
           title_deed_url?: string | null
+          tnc_consent_at?: string | null
+          tour_url?: string | null
+          unit_number?: string | null
           updated_at?: string
           use_company_contact?: boolean | null
           user_id: string
+          video_url?: string | null
+          view?: string | null
           view_count?: number | null
         }
         Update: {
@@ -25377,6 +25415,7 @@ export type Database = {
           approved_by?: string | null
           area?: string | null
           area_sqft?: number | null
+          availability_date?: string | null
           bathrooms?: number | null
           bedrooms?: number | null
           cheques?: number | null
@@ -25384,15 +25423,19 @@ export type Database = {
           contact_mode?: string | null
           contact_name?: string | null
           contact_phone?: string | null
+          cover_image_url?: string | null
           created_at?: string
           currency?: string | null
+          current_rent?: number | null
           deleted_at?: string | null
           description?: string | null
           developer_name?: string | null
+          dld_consent_at?: string | null
           edit_count?: number | null
           emirate?: string | null
           expires_at?: string | null
           featured_until?: string | null
+          floor?: string | null
           floor_plan_images?: Json | null
           furnishing?: string | null
           gallery_images?: Json | null
@@ -25401,26 +25444,40 @@ export type Database = {
           images?: Json | null
           inquiry_count?: number | null
           is_featured?: boolean | null
+          is_mortgaged?: boolean | null
           key_features?: Json | null
           listing_category?: string | null
           listing_fee?: number | null
           listing_type?: string
           location?: string | null
+          min_acceptable_price?: number | null
+          mortgage_bank?: string | null
+          parking?: number | null
           passport_copy_url?: string | null
           payment_plan?: string | null
+          plot_size_sqft?: number | null
           price?: number | null
           project_name?: string | null
+          property_age?: number | null
           property_type?: string | null
+          purchase_price?: number | null
           rejection_reason?: string | null
           rent_frequency?: string | null
+          rera_permit?: string | null
           seller_role?: string | null
+          service_charge?: number | null
           source_documents?: Json | null
           status?: string | null
           title?: string
           title_deed_url?: string | null
+          tnc_consent_at?: string | null
+          tour_url?: string | null
+          unit_number?: string | null
           updated_at?: string
           use_company_contact?: boolean | null
           user_id?: string
+          video_url?: string | null
+          view?: string | null
           view_count?: number | null
         }
         Relationships: []
