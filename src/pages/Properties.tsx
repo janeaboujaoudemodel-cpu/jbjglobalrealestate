@@ -390,6 +390,7 @@ const Properties = () => {
 
   // Apply shortcut filters (price, bedrooms, status, construction, handover, etc.) reactively
   const finalProjects = useMemo(() => applyShortcutFilters(sortedProjects, shortcutFilters), [sortedProjects, shortcutFilters]);
+  const visibleProjects = useMemo(() => finalProjects.slice(0, 60), [finalProjects]);
 
   // Brief "filtering" skeleton state — keeps the UI responsive on slow devices
   // when users change filters/sort so results never feel frozen.
@@ -1299,7 +1300,7 @@ const Properties = () => {
                 </div>
               ) : finalProjects.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-2 sm:p-4">
-                  {finalProjects.flatMap((project, index) => {
+                  {visibleProjects.flatMap((project, index) => {
                     const adAfterIndex = [5, 11, 17];
                     const adIndex = adAfterIndex.indexOf(index);
                     const featuredAd = adIndex !== -1 && FEATURED_ADS[adIndex] ? FEATURED_ADS[adIndex] : null;

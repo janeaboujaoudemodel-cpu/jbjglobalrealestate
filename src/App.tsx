@@ -66,26 +66,8 @@ const App = () => {
     // Install runtime same-tone contrast guard (companion to PASS 5 CSS guard)
     import("@/utils/contrastGuard").then((m) => m.installContrastGuard()).catch(() => {});
 
-    // Idle-time prefetch — warm route chunks after first paint so subsequent
-    // navigations don't show the Suspense progress bar.
-    const w = window as any;
-    const idle = w.requestIdleCallback || ((cb: any) => setTimeout(cb, 1500));
-    const handle = idle(() => {
-      const prefetch = [
-        
-        () => import("@/pages/owner/crm/UnifiedCRM"),
-        () => import("@/pages/CRMRelationships"),
-        () => import("@/pages/OwnerInbox"),
-        () => import("@/pages/OwnerAgenda"),
-        () => import("@/pages/Admin"),
-        () => import("@/pages/AdminLeads"),
-        () => import("@/pages/admin/MarketingHub"),
-      ];
-      prefetch.forEach((p) => p().catch(() => {}));
-    });
     return () => {
       window.removeEventListener("unhandledrejection", handleUnhandledRejection);
-      if (w.cancelIdleCallback && handle) w.cancelIdleCallback(handle);
     };
   }, []);
 
