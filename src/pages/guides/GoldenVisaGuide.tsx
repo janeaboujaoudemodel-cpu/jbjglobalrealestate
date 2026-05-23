@@ -161,22 +161,31 @@ const GoldenVisaGuide = () => {
               We operate as licensed facilitators in coordination with authorized government channels. We are not a government authority.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap justify-center gap-4">
+            {/* CTA Buttons — two champagne edges, gold-accent center */}
+            <div className="flex flex-wrap justify-center items-stretch gap-4">
+              {/* LEFT (champagne, same as right) */}
               <Button
                 onClick={() => scrollTo("assessment")}
-                className="bg-[#C8A766] hover:bg-[#B89650] text-white font-medium px-8 py-3 rounded-xl shadow-lg shadow-[#C8A766]/20"
+                className="bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] font-semibold px-8 py-3 rounded-xl border border-[#B89555]/40 shadow-sm"
               >
                 <BadgeCheck className="w-4 h-4 mr-2" />
                 Check My Eligibility
               </Button>
-              <Button variant="outline" className="border-[#C8A766]/40 text-[#8B7340] hover:bg-[#C8A766]/10 px-8 py-3 rounded-xl" asChild>
+              {/* CENTER (gold accent — 1px hairline ring, ink text on cream) */}
+              <Button
+                asChild
+                className="bg-[#F7F2EA] hover:bg-[#EFE6D6] text-[#1A1A1A] font-semibold px-8 py-3 rounded-xl border-2 border-[#B89555] shadow-[0_0_0_3px_rgba(184,149,85,0.08)]"
+              >
                 <Link to="/contact?type=golden-visa-consultation">
-                  <Phone className="w-4 h-4 mr-2" />
+                  <Phone className="w-4 h-4 mr-2 text-[#B89555]" />
                   Book Consultation
                 </Link>
               </Button>
-              <Button variant="outline" className="border-[#C8A766]/40 text-[#8B7340] hover:bg-[#C8A766]/10 px-8 py-3 rounded-xl" asChild>
+              {/* RIGHT (champagne, mirrors left) */}
+              <Button
+                asChild
+                className="bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] font-semibold px-8 py-3 rounded-xl border border-[#B89555]/40 shadow-sm"
+              >
                 <Link to="/contact?type=golden-visa">
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Speak to Advisor
@@ -187,8 +196,8 @@ const GoldenVisaGuide = () => {
         </div>
       </div>
 
-      {/* Gold divider */}
-      <div className="h-px bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
+      {/* Champagne hairline divider */}
+      <div className="h-px bg-[#B89555]/25" data-gold-hairline />
 
       {/* ═══════════════════════════════════════════ */}
       {/* 2. TABLE OF CONTENTS */}
