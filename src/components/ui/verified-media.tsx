@@ -35,8 +35,9 @@ export function VerifiedMedia({
   React.useEffect(() => {
     setFailed(false);
   }, [src]);
-  const rawSrc = typeof src === "string" ? src.trim() : "";
-  const safeSrc = rawSrc && (isValidImageUrl(rawSrc) || rawSrc.startsWith("/src/assets/") || rawSrc.startsWith("src/assets/")) ? rawSrc : null;
+  const rawSrc: string = typeof src === "string" ? src.trim() : "";
+  const isLocalAsset = rawSrc.indexOf("/src/assets/") === 0 || rawSrc.indexOf("src/assets/") === 0;
+  const safeSrc = rawSrc && (isValidImageUrl(rawSrc) || isLocalAsset) ? rawSrc : null;
 
   if (!safeSrc || failed) {
     return (
