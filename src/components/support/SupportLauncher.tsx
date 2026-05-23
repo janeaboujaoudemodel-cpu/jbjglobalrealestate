@@ -163,11 +163,13 @@ export default function SupportLauncher() {
           onClick={() => setOpen((v) => !v)}
           aria-label="Talk to JBJ support"
           className="group relative flex items-center gap-2 px-2 py-4 rounded-l-xl
-            border border-r-0 border-[#D4B896]/55 bg-[#1A1A1A] text-[#FDFBF7]
-            shadow-[-8px_0_24px_rgba(0,0,0,0.25)] hover:bg-[#222] transition-colors"
+            border border-r-0 border-gold/55 bg-primary text-primary-foreground
+            shadow-[-8px_0_24px_hsl(var(--foreground)/0.25)] transform-gpu transition-[box-shadow,transform]
+            hover:bg-primary hover:text-primary-foreground hover:-translate-x-1
+            hover:shadow-[-12px_0_30px_hsl(var(--foreground)/0.30),0_0_28px_hsl(var(--gold)/0.34)]"
           style={{ writingMode: "vertical-rl" }}
         >
-          <Sparkles className="h-3.5 w-3.5 text-[#E2C9A0] rotate-90" />
+          <Sparkles className="h-3.5 w-3.5 text-gold-light rotate-90" />
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em]">Talk to us</span>
           <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
         </button>
@@ -189,13 +191,13 @@ export default function SupportLauncher() {
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ type: "spring", stiffness: 320, damping: 30 }}
                 data-no-contrast-guard
-                className="absolute right-full top-1/2 -translate-y-1/2 mr-2 w-[300px]
-                  rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7]
-                  shadow-[0_30px_60px_rgba(0,0,0,0.25)] p-3 space-y-2"
+                className="fixed right-14 top-1/2 -translate-y-1/2 w-[300px] max-h-[calc(100dvh-128px)] overflow-y-auto
+                  rounded-2xl border border-gold/55 bg-background text-foreground
+                  shadow-[0_30px_60px_hsl(var(--foreground)/0.25)] p-3 space-y-2"
               >
                 <div className="flex items-center justify-between px-1 pb-1">
                   <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
-                    border border-[#B89555]/45 bg-[#F7F2EA] text-[#1A1A1A]">
+                    border border-gold/45 bg-secondary text-foreground">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     24/7 Support · Always Free
                   </span>
@@ -203,7 +205,7 @@ export default function SupportLauncher() {
                     onClick={close}
                     aria-label="Close"
                     className="h-7 w-7 inline-flex items-center justify-center rounded-full
-                      border border-[#B89555]/45 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                      border border-gold/45 text-foreground hover:bg-accent"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
