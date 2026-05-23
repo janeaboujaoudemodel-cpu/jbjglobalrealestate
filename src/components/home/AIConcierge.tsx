@@ -179,16 +179,19 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
 
             {/* Messages */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-6 space-y-4">
-              {messages.length === 0 && (
+              {!isVerified && (
+                <ConciergeGate onVerified={() => { /* state auto-updates via hook */ }} />
+              )}
+              {isVerified && messages.length === 0 && (
                 <div className="space-y-6">
                   <div className="text-center space-y-2 py-2">
                     <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#D4B896]/40"
                       style={{ background: "rgba(253,251,247,0.08)" }}>
                       <Sparkles className="h-6 w-6 text-[#E2C9A0]" />
                     </div>
-                    <h3 className="text-[18px] font-semibold text-[#FDFBF7]">How can we help?</h3>
+                    <h3 className="text-[18px] font-semibold text-[#FDFBF7]">Welcome back{verified?.firstName ? `, ${verified.firstName}` : ""}</h3>
                     <p className="text-[13px] text-[#FDFBF7]/65 max-w-[300px] mx-auto leading-relaxed">
-                      Continue with our AI Concierge below, or switch to a human channel anytime.
+                      Ask anything — I'll guide you with one-tap shortcuts.
                     </p>
                   </div>
 
