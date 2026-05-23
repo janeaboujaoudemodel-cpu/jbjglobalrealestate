@@ -126,14 +126,16 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
 
           {filteredProjects.length > 0 && (
             <div className="text-center mt-8">
-              <Link to={`/properties?area=${areaSlug}`}>
-                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] font-bold border-2 border-[#B89555] hover:from-gold hover:to-amber-500 hover:text-[#1A1A1A] transition-all">
-                  View All Projects in {areaName}
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
+              <PearlButton
+                to={`/properties?area=${areaSlug}`}
+                size="lg"
+                trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
+              >
+                View All Projects in {areaName}
+              </PearlButton>
             </div>
           )}
+
         </div>
       </div>
     </section>
