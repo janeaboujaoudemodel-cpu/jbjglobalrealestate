@@ -39,6 +39,22 @@ const MortgageCalculator = ({
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [interestRate, setInterestRate] = useState(4.5);
   const [loanTermYears, setLoanTermYears] = useState(25);
+  const [userTouchedPrice, setUserTouchedPrice] = useState(false);
+
+  // Sync propertyPrice when defaultPrice becomes available from async prop
+  // (e.g., project.price_from loads after the first render). Stops syncing
+  // once the user has touched the slider so we never overwrite their input.
+  useEffect(() => {
+    if (!userTouchedPrice && defaultPrice && defaultPrice !== propertyPrice) {
+      setPropertyPrice(defaultPrice);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultPrice]);
+
+  const handlePriceChange = (value: number) => {
+    setUserTouchedPrice(true);
+    setPropertyPrice(value);
+  };
 
   const calculations = useMemo(() => {
     const downPayment = (propertyPrice * downPaymentPercent) / 100;
