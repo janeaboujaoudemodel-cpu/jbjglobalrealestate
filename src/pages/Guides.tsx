@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { INVESTOR_BOOKS } from "@/data/bookCollections";
 import { BookCoverFace } from "@/components/books/BookCoverFace";
-import type { BookData } from "@/types/books";
+import type { BookData } from "@/types/books"; // used for selectedBook state typing
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
