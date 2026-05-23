@@ -30,6 +30,7 @@ const RentalIndex = lazy(() => import("@/pages/RentalIndex"));
 const SellWithUs = lazy(() => import("@/pages/SellWithUs"));
 const RequestValuation = lazy(() => import("@/pages/RequestValuation"));
 const LandlordListForm = lazy(() => import("@/pages/LandlordListForm"));
+const ListProperty = lazy(() => import("@/pages/ListProperty"));
 
 // ── Guides & Education ──
 const BuyerGuide = lazy(() => import("@/pages/BuyerGuide"));
