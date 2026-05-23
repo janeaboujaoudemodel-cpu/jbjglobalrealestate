@@ -1,25 +1,72 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef, useLayoutEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, BookOpen, Clock, Headphones, Sparkles, Target, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowLeft, ArrowRight, BookOpen, Clock, Headphones, Target, List, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { SEOHead } from "@/components/SEOHead";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitizeHtml } from "@/utils/contentSanitizer";
 import { useBookAudio } from "@/hooks/useBookAudio";
 import type { EducationBook, EducationModule } from "@/hooks/useBrokerEducation";
 
-const PATH_BADGE: Record<string, string> = {
-  Foundations: "bg-blue-500/10 text-blue-700 border-blue-500/30",
-  "Buyer & Investor Advisory": "bg-emerald-500/10 text-emerald-700 border-emerald-500/30",
-  "Seller & Landlord Advisory": "bg-amber-500/10 text-amber-700 border-amber-500/30",
-  "Market Intelligence": "bg-purple-500/10 text-purple-700 border-purple-500/30",
-  "Advanced (Restricted)": "bg-red-500/10 text-red-700 border-red-500/30",
-  "Professional Development": "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40",
-};
+type Page =
+  | { kind: "cover"; book: EducationBook }
+  | { kind: "toc"; modules: EducationModule[] }
+  | { kind: "chapter-open"; module: EducationModule; moduleIndex: number }
+  | { kind: "chapter-body"; module: EducationModule; html: string; partIndex: number; partCount: number; moduleIndex: number }
+  | { kind: "back"; book: EducationBook };
+
+// Split a chapter's HTML into page-sized chunks by measuring against an offscreen sizer.
+function usePaginatedChapters(modules: EducationModule[]) {
+  const [parts, setParts] = useState<Record<string, string[]>>({});
+  const sizerRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    if (!modules.length) return;
+    const sizer = sizerRef.current;
+    if (!sizer) return;
+
+    const result: Record<string, string[]> = {};
+    for (const m of modules) {
+      if (!m.content) {
+        result[m.id] = [];
+        continue;
+      }
+      const safe = sanitizeHtml(m.content);
+      // Split on block-level boundaries (paragraphs, headings, lists, blockquotes, tables)
+      const blocks = safe
+        .split(/(?=<(?:h[1-6]|p|ul|ol|blockquote|table|pre|hr)[\s>])/i)
+        .map((b) => b.trim())
+        .filter(Boolean);
+
+      const pages: string[] = [];
+      let current = "";
+      sizer.innerHTML = "";
+      for (const block of blocks) {
+        const test = current + block;
+        sizer.innerHTML = test;
+        if (sizer.scrollHeight > sizer.clientHeight && current) {
+          pages.push(current);
+          current = block;
+          sizer.innerHTML = current;
+          // If a single block overflows, still keep it on its own page
+          if (sizer.scrollHeight > sizer.clientHeight) {
+            pages.push(current);
+            current = "";
+          }
+        } else {
+          current = test;
+        }
+      }
+      if (current.trim()) pages.push(current);
+      result[m.id] = pages.length ? pages : [safe];
+    }
+    setParts(result);
+  }, [modules]);
+
+  return { parts, sizerRef };
+}
 
 export default function BookReader() {
   const { bookId } = useParams<{ bookId: string }>();
@@ -27,9 +74,12 @@ export default function BookReader() {
   const [book, setBook] = useState<EducationBook | null>(null);
   const [modules, setModules] = useState<EducationModule[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [tocOpen, setTocOpen] = useState(false);
 
   const audio = useBookAudio(bookId ?? null, book?.voice_enabled);
+  const { parts, sizerRef } = usePaginatedChapters(modules);
 
   useEffect(() => {
     if (!bookId) return;
@@ -48,6 +98,7 @@ export default function BookReader() {
       setBook((b.data as EducationBook | null) ?? null);
       setModules((m.data as EducationModule[] | null) ?? []);
       setLoading(false);
+      setPageIndex(0);
     })();
     return () => {
       cancelled = true;
@@ -59,22 +110,49 @@ export default function BookReader() {
     [modules]
   );
 
-  useEffect(() => {
-    const ids = modules.map((m) => `module-${m.id}`);
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) setActiveId(e.target.id);
-        }
-      },
-      { rootMargin: "-30% 0px -60% 0px", threshold: 0 }
-    );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
+  // Build the linear list of pages: cover → TOC → (chapter title page + N body pages)* → back
+  const pages: Page[] = useMemo(() => {
+    if (!book) return [];
+    const list: Page[] = [{ kind: "cover", book }];
+    if (modules.length) list.push({ kind: "toc", modules });
+    modules.forEach((m, i) => {
+      list.push({ kind: "chapter-open", module: m, moduleIndex: i });
+      const chunks = parts[m.id] ?? [];
+      chunks.forEach((html, p) =>
+        list.push({
+          kind: "chapter-body",
+          module: m,
+          html,
+          partIndex: p,
+          partCount: chunks.length,
+          moduleIndex: i,
+        })
+      );
     });
-    return () => observer.disconnect();
-  }, [modules]);
+    list.push({ kind: "back", book });
+    return list;
+  }, [book, modules, parts]);
+
+  const totalPages = pages.length;
+  const safeIndex = Math.min(pageIndex, Math.max(0, totalPages - 1));
+  const current = pages[safeIndex];
+
+  const goTo = (i: number) => {
+    setDirection(i > safeIndex ? 1 : -1);
+    setPageIndex(Math.max(0, Math.min(totalPages - 1, i)));
+  };
+  const next = () => goTo(safeIndex + 1);
+  const prev = () => goTo(safeIndex - 1);
+
+  // Keyboard nav
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") prev();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [safeIndex, totalPages]);
 
   if (loading) {
     return (
@@ -95,7 +173,21 @@ export default function BookReader() {
     );
   }
 
-  const badgeClass = PATH_BADGE[book.learning_path] || "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40";
+  // Numbered "physical" pages start counting at the first chapter-open page
+  const firstNumberedIdx = pages.findIndex(
+    (p) => p.kind === "chapter-open" || p.kind === "chapter-body"
+  );
+  const physicalPageNumber =
+    current && (current.kind === "chapter-open" || current.kind === "chapter-body")
+      ? safeIndex - firstNumberedIdx + 1
+      : null;
+  const totalPhysicalPages = pages.filter(
+    (p) => p.kind === "chapter-open" || p.kind === "chapter-body"
+  ).length;
+
+  // Index of a chapter's first page (the chapter-open card), used by the TOC jump
+  const chapterStartIndex = (moduleId: string) =>
+    pages.findIndex((p) => (p.kind === "chapter-open" || p.kind === "chapter-body") && p.module.id === moduleId);
 
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
@@ -105,17 +197,39 @@ export default function BookReader() {
         canonicalPath={`/broker/learning/book/${book.id}`}
       />
 
+      {/* Offscreen sizer used to measure chunk fit (same width/height as the page body area) */}
+      <div
+        ref={sizerRef}
+        aria-hidden="true"
+        className="prose prose-neutral max-w-none invisible pointer-events-none absolute -left-[9999px] top-0 px-10 py-8"
+        style={{ width: "min(620px, 90vw)", height: "min(780px, 78vh)", overflow: "hidden" }}
+      />
+
       {/* Top bar */}
       <div className="sticky top-[88px] z-30 bg-[#FDFBF7]/95 backdrop-blur border-b border-[#B89555]/20" data-gold-hairline>
         <div className="container mx-auto px-4 max-w-6xl py-3 flex items-center gap-3">
-          <Button variant="ghost" size="sm" onClick={() => navigate("/broker/learning?tab=library")}
-            className="text-[#1A1A1A]/80 hover:text-[#1A1A1A]">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/broker/learning?tab=library")}
+            className="text-[#1A1A1A]/80 hover:text-[#1A1A1A]"
+          >
             <ArrowLeft className="w-4 h-4 mr-1.5" /> Library
           </Button>
           <div className="flex-1 min-w-0">
-            <div className="text-xs text-[#1A1A1A]/60 truncate">Book {book.book_number} · {book.learning_path}</div>
+            <div className="text-xs text-[#1A1A1A]/60 truncate">
+              Book {book.book_number} · {book.learning_path}
+            </div>
             <div className="text-sm font-semibold text-[#1A1A1A] truncate">{book.title}</div>
           </div>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => setTocOpen((o) => !o)}
+            className="text-[#1A1A1A]/80 hover:text-[#1A1A1A]"
+          >
+            <List className="w-4 h-4 mr-1.5" /> Contents
+          </Button>
           <TooltipProvider delayDuration={200}>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -126,129 +240,392 @@ export default function BookReader() {
                     disabled={!audio.available}
                     className="bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/40 disabled:opacity-60"
                   >
-                    <Headphones className="w-4 h-4 mr-1.5" />
-                    {audio.available ? "Listen" : "Listen"}
+                    <Headphones className="w-4 h-4 mr-1.5" /> Listen
                   </Button>
                 </span>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                {audio.available
-                  ? "Play narration"
-                  : "Voice narration coming soon"}
+                {audio.available ? "Play narration" : "Voice narration coming soon"}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 max-w-6xl py-8 grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8">
-        {/* Sticky TOC */}
-        <aside className="hidden lg:block">
-          <div className="sticky top-[160px]">
-            <div className="text-[11px] uppercase tracking-widest text-[#1A1A1A]/60 mb-3">Table of Contents</div>
-            <nav className="space-y-1">
-              {modules.map((m) => {
-                const id = `module-${m.id}`;
-                const isActive = activeId === id;
-                return (
-                  <a
-                    key={m.id}
-                    href={`#${id}`}
-                    className={[
-                      "block text-sm px-3 py-2 rounded-lg border transition-colors",
-                      isActive
-                        ? "bg-[#EFE6D6] border-[#B89555]/50 text-[#1A1A1A]"
-                        : "border-transparent text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#F7F2EA]",
-                    ].join(" ")}
-                  >
-                    <span className="text-[10px] text-[#1A1A1A]/50 mr-2">{String(m.module_number).padStart(2, "0")}</span>
-                    {m.title}
-                  </a>
-                );
-              })}
-            </nav>
-          </div>
-        </aside>
+      {/* Book stage */}
+      <div className="relative container mx-auto px-4 max-w-5xl py-10 lg:py-14">
+        {/* Floor shadow under the book */}
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-6 w-[70%] max-w-[700px] h-10 bg-black/25 blur-2xl rounded-full pointer-events-none" />
 
-        {/* Reader column */}
-        <article className="min-w-0">
-          <motion.header
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="mb-8"
+        <div className="relative mx-auto" style={{ perspective: "2200px" }}>
+          {/* Outer hardcover frame */}
+          <div
+            className="relative mx-auto rounded-r-md rounded-l-sm bg-gradient-to-br from-[#1c1812] via-[#2a2118] to-[#15110b] border border-[#B89555]/30"
+            style={{
+              width: "min(720px, 96vw)",
+              padding: "14px 14px 14px 28px",
+              boxShadow:
+                "0 30px 60px -20px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(184,149,85,0.15)",
+            }}
           >
-            <Badge className={`${badgeClass} mb-3`}>
-              <Sparkles className="w-3 h-3 mr-1" /> {book.learning_path}
-            </Badge>
-            <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] leading-tight mb-3">
-              {book.title}
-            </h1>
-            {book.description && (
-              <p className="text-[#1A1A1A]/70 text-base leading-relaxed mb-5">{book.description}</p>
-            )}
-            <div className="flex flex-wrap items-center gap-5 text-sm text-[#1A1A1A]/70">
-              <span className="inline-flex items-center gap-1.5"><BookOpen className="w-4 h-4" />{modules.length} modules</span>
-              <span className="inline-flex items-center gap-1.5"><Clock className="w-4 h-4" />~{totalMinutes} min</span>
-            </div>
-            {book.learning_objective && (
-              <div className="mt-6 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-4">
-                <div className="flex items-center gap-2 text-[#1A1A1A] font-semibold text-sm mb-1">
-                  <Target className="w-4 h-4" /> Learning Objective
-                </div>
-                <p className="text-[#1A1A1A]/80 text-sm leading-relaxed">{book.learning_objective}</p>
-              </div>
-            )}
-            <Progress value={0} className="mt-6 h-1.5" />
-          </motion.header>
+            {/* Hardcover spine notch */}
+            <div className="absolute left-[18px] top-3 bottom-3 w-[2px] bg-[#B89555]/30 rounded" />
+            <div className="absolute left-3 top-3 bottom-3 w-[2px] bg-black/40 rounded" />
 
-          <div className="space-y-12">
-            {modules.length === 0 && (
-              <div className="rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-8 text-center text-[#1A1A1A]/70">
-                Content for this book is being curated.
+            {/* Page paper area */}
+            <div
+              className="relative bg-[#FBF6EC] rounded-r-sm rounded-l-[2px] overflow-hidden"
+              style={{
+                aspectRatio: "5 / 7",
+                boxShadow:
+                  "inset 0 0 0 1px rgba(184,149,85,0.18), inset 0 0 60px rgba(184,149,85,0.06)",
+              }}
+            >
+              {/* Page edges (right side fanning effect) */}
+              <div className="absolute right-0 top-0 bottom-0 w-3 pointer-events-none">
+                <div className="absolute inset-0 bg-gradient-to-l from-[#e6d8bd]/70 to-transparent" />
+                <div className="absolute right-[1px] top-[2%] bottom-[2%] w-[1px] bg-[#c9b58a]/40" />
+                <div className="absolute right-[3px] top-[3%] bottom-[3%] w-[1px] bg-[#c9b58a]/30" />
               </div>
-            )}
-            {modules.map((m, i) => (
-              <section
-                key={m.id}
-                id={`module-${m.id}`}
-                className="scroll-mt-[180px]"
-                aria-labelledby={`heading-${m.id}`}
-              >
-                <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-[#1A1A1A]/60 mb-2">
-                  <ChevronRight className="w-3 h-3" />
-                  Chapter {String(m.module_number).padStart(2, "0")} · {m.estimated_minutes} min read
+
+              <AnimatePresence mode="wait" custom={direction}>
+                <motion.div
+                  key={safeIndex}
+                  custom={direction}
+                  initial={{ opacity: 0, rotateY: direction > 0 ? 18 : -18, x: direction > 0 ? 40 : -40 }}
+                  animate={{ opacity: 1, rotateY: 0, x: 0 }}
+                  exit={{ opacity: 0, rotateY: direction > 0 ? -18 : 18, x: direction > 0 ? -40 : 40 }}
+                  transition={{ duration: 0.45, ease: [0.22, 0.61, 0.36, 1] }}
+                  className="absolute inset-0"
+                  style={{ transformOrigin: direction > 0 ? "left center" : "right center" }}
+                >
+                  {current?.kind === "cover" && (
+                    <CoverFace
+                      book={book}
+                      totalChapters={modules.length}
+                      totalMinutes={totalMinutes}
+                      onOpen={next}
+                    />
+                  )}
+
+                  {current?.kind === "toc" && (
+                    <TocPage
+                      modules={modules}
+                      onJump={(idx) => goTo(idx)}
+                      chapterStartIndex={chapterStartIndex}
+                    />
+                  )}
+
+                  {current?.kind === "chapter-open" && (
+                    <ChapterOpenPage module={current.module} moduleIndex={current.moduleIndex} />
+                  )}
+
+                  {current?.kind === "chapter-body" && (
+                    <ChapterBodyPage
+                      module={current.module}
+                      html={current.html}
+                      partIndex={current.partIndex}
+                      partCount={current.partCount}
+                    />
+                  )}
+
+                  {current?.kind === "back" && <BackCoverFace book={book} onRestart={() => goTo(0)} />}
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Page number footer */}
+              {physicalPageNumber !== null && (
+                <div className="absolute bottom-3 left-0 right-0 flex justify-center pointer-events-none">
+                  <span className="text-[11px] tracking-widest text-[#1A1A1A]/55 font-medium">
+                    {physicalPageNumber} / {totalPhysicalPages}
+                  </span>
                 </div>
-                <h2 id={`heading-${m.id}`} className="text-2xl md:text-3xl font-bold text-[#1A1A1A] leading-tight mb-2">
-                  {m.title}
-                </h2>
-                {m.description && (
-                  <p className="text-[#1A1A1A]/70 text-base mb-5">{m.description}</p>
-                )}
-                {m.content ? (
-                  <div
-                    className="prose prose-neutral max-w-none prose-headings:text-[#1A1A1A] prose-p:text-[#1A1A1A]/85 prose-strong:text-[#1A1A1A] prose-a:text-[#1A1A1A] prose-a:underline prose-li:text-[#1A1A1A]/85 prose-blockquote:border-l-[#B89555] prose-blockquote:bg-[#F7F2EA] prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic prose-table:text-sm prose-th:bg-[#F7F2EA] prose-th:text-[#1A1A1A]"
-                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(m.content) }}
-                  />
-                ) : (
-                  <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-4 text-sm text-[#1A1A1A]/70">
-                    Module content is being curated.
-                  </div>
-                )}
-                {i < modules.length - 1 && (
-                  <div className="mt-10 border-t border-[#B89555]/25" data-gold-hairline />
-                )}
-              </section>
-            ))}
+              )}
+            </div>
           </div>
 
-          <footer className="mt-16 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-5 text-center">
-            <p className="text-[#1A1A1A]/70 text-xs">
-              Proprietary to JBJ GLOBAL REAL ESTATE — internal recognition only, not for external certification.
-            </p>
-          </footer>
-        </article>
+          {/* Side nav buttons */}
+          <button
+            onClick={prev}
+            disabled={safeIndex === 0}
+            aria-label="Previous page"
+            className="hidden md:flex absolute left-[-56px] top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 items-center justify-center text-[#1A1A1A] hover:bg-[#E5D8BD] disabled:opacity-40 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={next}
+            disabled={safeIndex >= totalPages - 1}
+            aria-label="Next page"
+            className="hidden md:flex absolute right-[-56px] top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 items-center justify-center text-[#1A1A1A] hover:bg-[#E5D8BD] disabled:opacity-40 transition-colors"
+          >
+            <ArrowRight className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Mobile nav */}
+        <div className="md:hidden flex justify-between items-center mt-5 max-w-[720px] mx-auto">
+          <Button variant="secondary" size="sm" onClick={prev} disabled={safeIndex === 0}>
+            <ArrowLeft className="w-4 h-4 mr-1.5" /> Prev
+          </Button>
+          <span className="text-xs text-[#1A1A1A]/60">
+            {safeIndex + 1} / {totalPages}
+          </span>
+          <Button variant="secondary" size="sm" onClick={next} disabled={safeIndex >= totalPages - 1}>
+            Next <ArrowRight className="w-4 h-4 ml-1.5" />
+          </Button>
+        </div>
       </div>
+
+      {/* TOC drawer */}
+      <AnimatePresence>
+        {tocOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40 bg-black/40"
+              onClick={() => setTocOpen(false)}
+            />
+            <motion.aside
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.3 }}
+              className="fixed right-0 top-0 bottom-0 z-50 w-[min(380px,90vw)] bg-[#FDFBF7] border-l border-[#B89555]/30 shadow-2xl flex flex-col"
+            >
+              <div className="flex items-center justify-between p-4 border-b border-[#B89555]/20" data-gold-hairline>
+                <div className="text-sm font-semibold text-[#1A1A1A]">Table of Contents</div>
+                <Button variant="ghost" size="icon" onClick={() => setTocOpen(false)}>
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+              <div className="flex-1 overflow-auto p-3">
+                <button
+                  onClick={() => {
+                    goTo(0);
+                    setTocOpen(false);
+                  }}
+                  className="w-full text-left text-sm px-3 py-2 rounded-lg hover:bg-[#F7F2EA] text-[#1A1A1A]/80"
+                >
+                  Cover
+                </button>
+                {modules.map((m) => {
+                  const idx = chapterStartIndex(m.id);
+                  return (
+                    <button
+                      key={m.id}
+                      onClick={() => {
+                        if (idx >= 0) goTo(idx);
+                        setTocOpen(false);
+                      }}
+                      className="w-full text-left text-sm px-3 py-2 rounded-lg hover:bg-[#F7F2EA] text-[#1A1A1A]/85 flex items-start gap-3"
+                    >
+                      <span className="text-[10px] text-[#1A1A1A]/50 mt-1 w-6">
+                        {String(m.module_number).padStart(2, "0")}
+                      </span>
+                      <span className="flex-1">{m.title}</span>
+                    </button>
+                  );
+                })}
+                <button
+                  onClick={() => {
+                    goTo(totalPages - 1);
+                    setTocOpen(false);
+                  }}
+                  className="w-full text-left text-sm px-3 py-2 rounded-lg hover:bg-[#F7F2EA] text-[#1A1A1A]/80 mt-1"
+                >
+                  Back Cover
+                </button>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ------- Page faces ------- */
+
+function CoverFace({
+  book,
+  totalChapters,
+  totalMinutes,
+  onOpen,
+}: {
+  book: EducationBook;
+  totalChapters: number;
+  totalMinutes: number;
+  onOpen: () => void;
+}) {
+  return (
+    <div className="absolute inset-0">
+      {book.cover_image_url ? (
+        <img
+          src={book.cover_image_url}
+          alt={`${book.title} cover`}
+          className="absolute inset-0 w-full h-full object-cover"
+          loading="eager"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A1A] via-[#2a2118] to-[#15110b]" />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/30" />
+      <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-9">
+        <div className="text-[10px] tracking-[0.3em] text-[#EFE6D6]/85 mb-3 uppercase">
+          JBJ Global Real Estate · Book {book.book_number}
+        </div>
+        <h1 className="allow-white text-white text-2xl md:text-3xl font-bold leading-tight mb-2 drop-shadow">
+          {book.title}
+        </h1>
+        {book.description && (
+          <p className="allow-white text-white/85 text-sm leading-relaxed line-clamp-3 mb-4 drop-shadow">
+            {book.description}
+          </p>
+        )}
+        <div className="flex items-center gap-4 text-[11px] text-[#EFE6D6]/90 mb-5">
+          <span className="inline-flex items-center gap-1.5">
+            <BookOpen className="w-3.5 h-3.5" /> {totalChapters} chapters
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5" /> ~{totalMinutes} min
+          </span>
+        </div>
+        <div>
+          <button
+            onClick={onOpen}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/50 hover:bg-[#E5D8BD] transition-colors"
+          >
+            Open Book <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BackCoverFace({ book, onRestart }: { book: EducationBook; onRestart: () => void }) {
+  return (
+    <div className="absolute inset-0 bg-gradient-to-br from-[#1c1812] via-[#2a2118] to-[#15110b] p-9 flex flex-col">
+      <div className="text-[10px] tracking-[0.3em] text-[#EFE6D6]/80 uppercase mb-4">End of Book</div>
+      <h2 className="allow-white text-white text-2xl font-bold leading-tight mb-3">{book.title}</h2>
+      {book.learning_objective && (
+        <p className="allow-white text-white/80 text-sm leading-relaxed mb-5">{book.learning_objective}</p>
+      )}
+      <div className="flex-1" />
+      <div className="rounded-md border border-[#B89555]/40 bg-black/30 p-4 mb-5">
+        <p className="allow-white text-white/85 text-xs leading-relaxed">
+          Proprietary to JBJ GLOBAL REAL ESTATE — internal recognition only, not for external certification.
+        </p>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={onRestart}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/50 hover:bg-[#E5D8BD] transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" /> Back to Cover
+        </button>
+      </div>
+      <div className="mt-5 text-[10px] tracking-[0.3em] text-[#EFE6D6]/60 uppercase">
+        Book {book.book_number} · {book.learning_path}
+      </div>
+    </div>
+  );
+}
+
+function TocPage({
+  modules,
+  onJump,
+  chapterStartIndex,
+}: {
+  modules: EducationModule[];
+  onJump: (i: number) => void;
+  chapterStartIndex: (id: string) => number;
+}) {
+  return (
+    <div className="absolute inset-0 px-10 py-10 overflow-auto">
+      <div className="text-[10px] tracking-[0.3em] text-[#1A1A1A]/55 uppercase mb-2">Contents</div>
+      <h2 className="text-[#1A1A1A] text-2xl font-bold mb-6">Table of Contents</h2>
+      <ol className="space-y-2">
+        {modules.map((m) => {
+          const idx = chapterStartIndex(m.id);
+          return (
+            <li key={m.id}>
+              <button
+                onClick={() => idx >= 0 && onJump(idx)}
+                className="w-full text-left flex items-baseline gap-3 px-2 py-2 rounded-md hover:bg-[#F2EADB] transition-colors"
+              >
+                <span className="text-[11px] text-[#1A1A1A]/55 w-7">
+                  {String(m.module_number).padStart(2, "0")}
+                </span>
+                <span className="text-[#1A1A1A] text-sm font-medium flex-1">{m.title}</span>
+                <span className="text-[11px] text-[#1A1A1A]/55">{m.estimated_minutes} min</span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
+
+function ChapterOpenPage({
+  module,
+  moduleIndex,
+}: {
+  module: EducationModule;
+  moduleIndex: number;
+}) {
+  return (
+    <div className="absolute inset-0 px-10 py-12 flex flex-col">
+      <div className="text-[10px] tracking-[0.4em] text-[#B89555] uppercase mb-3">
+        Chapter {String(moduleIndex + 1).padStart(2, "0")}
+      </div>
+      <div
+        className="h-px w-16 bg-[#B89555]/60 mb-5"
+        data-gold-hairline
+      />
+      <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold leading-tight mb-4">
+        {module.title}
+      </h2>
+      {module.description && (
+        <p className="text-[#1A1A1A]/75 text-base leading-relaxed mb-6">{module.description}</p>
+      )}
+      <div className="flex items-center gap-2 text-[11px] text-[#1A1A1A]/60">
+        <Target className="w-3.5 h-3.5" />
+        <span className="uppercase tracking-widest">{module.estimated_minutes} min read</span>
+      </div>
+    </div>
+  );
+}
+
+function ChapterBodyPage({
+  module,
+  html,
+  partIndex,
+  partCount,
+}: {
+  module: EducationModule;
+  html: string;
+  partIndex: number;
+  partCount: number;
+}) {
+  return (
+    <div className="absolute inset-0 px-10 py-8 overflow-hidden">
+      <div className="flex items-center justify-between text-[10px] tracking-[0.3em] text-[#1A1A1A]/55 uppercase mb-4">
+        <span className="truncate">{module.title}</span>
+        {partCount > 1 && (
+          <span className="ml-3 shrink-0">
+            {partIndex + 1} / {partCount}
+          </span>
+        )}
+      </div>
+      <div
+        className="prose prose-neutral max-w-none prose-headings:text-[#1A1A1A] prose-headings:font-bold prose-p:text-[#1A1A1A]/85 prose-strong:text-[#1A1A1A] prose-a:text-[#1A1A1A] prose-a:underline prose-li:text-[#1A1A1A]/85 prose-blockquote:border-l-[#B89555] prose-blockquote:bg-[#F2EADB] prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic prose-table:text-sm prose-th:bg-[#F2EADB] prose-th:text-[#1A1A1A] text-[15px] leading-relaxed"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
     </div>
   );
 }
