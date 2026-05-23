@@ -1218,18 +1218,72 @@ All colors MUST be HSL.
   }
 }
 
-/* Global section gutter — consistent black side margins across all pages */
+/* Global section gutter — flattened to no-op so sections run edge-to-edge */
 .jj-section-gutter {
-  @apply mx-1 sm:mx-2 md:mx-3 lg:mx-4;
+  margin: 0 !important;
 }
 
-/* Layer 2 wrapper with proper gutters */
-  .jj-layer-2 {
-    @apply jj-section-gutter rounded-2xl p-2 sm:p-3 md:p-4 lg:p-6;
-    background: #F7F2EA;
-    border: 1px solid rgba(184, 149, 85, 0.30); /* champagne-gold hairline */
-    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.04);
-  }
+/* ============================================================
+ * FULL-BLEED BAND SYSTEM
+ * Sections span side-to-side; content inside is centred and
+ * capped at 1280px so reading width stays comfortable.
+ * `.jj-layer-2` is the legacy alias and now behaves as a band
+ * with the champagne surface tone.
+ * ============================================================ */
+.jj-layer-2 {
+  width: 100%;
+  background: #F7F2EA;       /* champagne surface */
+  padding-block: clamp(2.5rem, 5vw, 4.5rem);
+  padding-inline: clamp(1rem, 4vw, 2rem);
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+.jj-layer-2 > * {
+  max-width: 1280px;
+  margin-inline: auto;
+}
+
+/* New, explicit band primitives with tone alternation.
+   The tone step between adjacent bands IS the divider — no lines, no gray. */
+.jj-band {
+  width: 100%;
+  padding-block: clamp(2.5rem, 5vw, 4.5rem);
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+.jj-band > * {
+  max-width: 1280px;
+  margin-inline: auto;
+}
+.jj-band--page    { background: #FDFBF7; }
+.jj-band--surface { background: #F7F2EA; }
+.jj-band--raised  { background: #EFE6D6; }
+
+/* Opt-in 1px champagne-gold hairline seam between two same-tone bands */
+[data-band-divider]::before {
+  content: "";
+  display: block;
+  height: 1px;
+  width: 100%;
+  background: rgba(184, 149, 85, 0.18);
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+/* Marketing pages: any rogue dark `bg-[#1A1A1A]` section wrapper is
+   re-mapped to champagne so the canvas stays continuous. Owner/admin/
+   portal pages are NOT marked `data-marketing-page` and keep their
+   dark surfaces. */
+[data-marketing-page] section[class*="bg-[#1A1A1A]"] {
+  background: #F7F2EA !important;
+}
+[data-marketing-page] section[class*="bg-[#1A1A1A]"] [class*="text-[#1A1A1A]"] {
+  color: #1A1A1A !important;
+}
+[data-marketing-page] section[class*="bg-[#1A1A1A]"] [class*="text-white"] {
+  color: #1A1A1A !important;
+}
+
 
 /* Layer 3 - Inner content cards */
   .jj-card-inner {
