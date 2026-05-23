@@ -34,13 +34,13 @@ export default function HomeHeroSearch() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.6 }}
-        className="w-full max-w-3xl mx-auto"
+        className="w-full max-w-4xl mx-auto"
       >
         <form
           onSubmit={onSubmit}
           role="search"
           data-no-contrast-guard
-          className="group relative flex items-center gap-2 h-14 sm:h-16 pl-5 pr-2 rounded-2xl border border-[#D4B896]/65 bg-[rgba(253,251,247,0.10)] backdrop-blur-[18px] saturate-[160%] transition-all duration-300 hover:border-[#E2C9A0] focus-within:border-[#E2C9A0]"
+          className="group relative flex items-center gap-2 h-14 sm:h-16 lg:h-[68px] pl-5 pr-2 rounded-2xl border border-[#D4B896]/65 bg-[rgba(253,251,247,0.10)] backdrop-blur-[18px] saturate-[160%] transition-all duration-300 hover:border-[#E2C9A0] focus-within:border-[#E2C9A0]"
           style={{
             boxShadow:
               "inset 0 1px 0 rgba(255,255,255,0.22), 0 0 0 1px rgba(212,184,150,0.30), 0 14px 34px rgba(0,0,0,0.40), 0 0 22px rgba(226,201,160,0.16)",
