@@ -12,6 +12,7 @@ import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
+import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
  
 interface ReellyProjectCardProps {
   project: ReellyProject;
@@ -62,22 +63,8 @@ interface ReellyProjectCardProps {
    return `${symbol} ${converted.toLocaleString('en-US')}`;
  };
  
- // Get sale status badge styling
- const getSaleStatusBadge = (status?: string | null) => {
-   if (!status) return null;
-   const normalizedStatus = status.toLowerCase();
-   const unified = 'card-status-badge';
-   if (normalizedStatus.includes('on sale') || normalizedStatus.includes('start')) {
-     return { label: 'On Sale', className: unified };
-   }
-   if (normalizedStatus.includes('announced')) {
-     return { label: 'Announced', className: unified };
-   }
-   if (normalizedStatus.includes('presale') || normalizedStatus.includes('eoi')) {
-     return { label: 'Presale', className: unified };
-   }
-   return null;
- };
+// Sale status label resolver — visual style owned by <CardBadge variant="status" />.
+const getSaleStatusLabel = resolveSaleStatusLabel;
  
 const ReellyProjectCard = ({ 
   project, 
