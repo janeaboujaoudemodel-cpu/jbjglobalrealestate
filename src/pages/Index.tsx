@@ -13,6 +13,7 @@ import { useUserModeContext } from "@/contexts/UserModeContext";
 import { Button } from "@/components/ui/button";
 import { PearlButton } from "@/components/ui/pearl-button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
+import HeroPropertySearch from "@/components/home/HeroPropertySearch";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
 import { CONTACT_INFO } from "@/constants/stats";
