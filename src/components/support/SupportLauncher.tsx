@@ -185,7 +185,7 @@ export default function SupportLauncher() {
             hover:-translate-x-1 hover:border-gold
             hover:shadow-[-14px_0_36px_hsl(var(--foreground)/0.42),0_0_30px_hsl(var(--gold)/0.55)]
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          style={{ writingMode: "vertical-rl", color: "hsl(var(--primary-foreground))" }}
+          style={{ writingMode: "vertical-rl", color: "hsl(var(--primary-foreground))", WebkitTextFillColor: "hsl(var(--primary-foreground))" }}
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "hsl(var(--primary-foreground))";
             e.currentTarget.style.backgroundColor = "hsl(var(--primary))";
@@ -195,8 +195,8 @@ export default function SupportLauncher() {
             e.currentTarget.style.backgroundColor = "hsl(var(--primary))";
           }}
         >
-          <Sparkles className="h-3.5 w-3.5 text-gold-light rotate-90" />
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary-foreground">Talk to us</span>
+          <Sparkles className="h-3.5 w-3.5 rotate-90" style={{ color: "hsl(var(--gold-light))", stroke: "hsl(var(--gold-light))" }} />
+          <span className="text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: "hsl(var(--primary-foreground))", WebkitTextFillColor: "hsl(var(--primary-foreground))" }}>Talk to us</span>
           <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
         </button>
 
