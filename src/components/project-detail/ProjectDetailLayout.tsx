@@ -762,11 +762,13 @@ export default function ProjectDetailLayout({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Starting Price</p>
-              <p className="mt-2 text-xl font-bold text-price-orange">
-                {typeof project.price_from === "number" && project.price_from > 0 
-                  ? formatPriceUtil(project.price_from) 
-                  : "Price TBA"}
-              </p>
+              <InlineEditable projectId={project.id} field="price_from" value={project.price_from} type="number" scope="quick_facts" label="Edit starting price">
+                <p className="mt-2 text-xl font-bold text-price-orange">
+                  {typeof project.price_from === "number" && project.price_from > 0
+                    ? formatPriceUtil(project.price_from)
+                    : "Price TBA"}
+                </p>
+              </InlineEditable>
             </div>
             <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Handover</p>
