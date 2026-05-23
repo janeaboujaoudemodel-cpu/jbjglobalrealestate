@@ -35,7 +35,8 @@ export function VerifiedMedia({
   React.useEffect(() => {
     setFailed(false);
   }, [src]);
-  const safeSrc = src && (isValidImageUrl(src) || src.startsWith("/src/assets/") || src.startsWith("src/assets/")) ? src : null;
+  const rawSrc = typeof src === "string" ? src.trim() : "";
+  const safeSrc = rawSrc && (isValidImageUrl(rawSrc) || rawSrc.startsWith("/src/assets/") || rawSrc.startsWith("src/assets/")) ? rawSrc : null;
 
   if (!safeSrc || failed) {
     return (
