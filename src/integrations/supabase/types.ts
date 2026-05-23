@@ -11877,6 +11877,39 @@ export type Database = {
         }
         Relationships: []
       }
+      developer_portal_audit: {
+        Row: {
+          action: string
+          actor_id: string | null
+          after: Json | null
+          before: Json | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          after?: Json | null
+          before?: Json | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          after?: Json | null
+          before?: Json | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+        }
+        Relationships: []
+      }
       developer_project_submissions: {
         Row: {
           admin_notes: string | null
@@ -12147,6 +12180,280 @@ export type Database = {
           year_established?: number | null
         }
         Relationships: []
+      }
+      developer_rep_access_requests: {
+        Row: {
+          broker_id: string
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          developer_id: string | null
+          developer_name: string | null
+          expires_at: string | null
+          id: string
+          reason: string | null
+          rep_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          broker_id: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          developer_id?: string | null
+          developer_name?: string | null
+          expires_at?: string | null
+          id?: string
+          reason?: string | null
+          rep_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          broker_id?: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          developer_id?: string | null
+          developer_name?: string | null
+          expires_at?: string | null
+          id?: string
+          reason?: string | null
+          rep_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_rep_access_requests_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_rep_access_requests_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_rep_access_requests_rep_id_fkey"
+            columns: ["rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_rep_access_requests_rep_id_fkey"
+            columns: ["rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      developer_rep_applications: {
+        Row: {
+          applied_at: string
+          assigned_emirates: string[]
+          created_at: string
+          created_rep_id: string | null
+          decided_at: string | null
+          decided_by: string | null
+          email: string
+          full_name: string
+          id: string
+          languages: string[]
+          message: string | null
+          nationality: string | null
+          phone_e164: string | null
+          position: string | null
+          requested_developer_id: string | null
+          requested_developer_name: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          applied_at?: string
+          assigned_emirates?: string[]
+          created_at?: string
+          created_rep_id?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          email: string
+          full_name: string
+          id?: string
+          languages?: string[]
+          message?: string | null
+          nationality?: string | null
+          phone_e164?: string | null
+          position?: string | null
+          requested_developer_id?: string | null
+          requested_developer_name?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          applied_at?: string
+          assigned_emirates?: string[]
+          created_at?: string
+          created_rep_id?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          languages?: string[]
+          message?: string | null
+          nationality?: string | null
+          phone_e164?: string | null
+          position?: string | null
+          requested_developer_id?: string | null
+          requested_developer_name?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_rep_applications_created_rep_id_fkey"
+            columns: ["created_rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_rep_applications_created_rep_id_fkey"
+            columns: ["created_rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_rep_applications_requested_developer_id_fkey"
+            columns: ["requested_developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_rep_applications_requested_developer_id_fkey"
+            columns: ["requested_developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      developer_rep_availability: {
+        Row: {
+          created_at: string
+          ends_at: string
+          id: string
+          is_blocked: boolean
+          note: string | null
+          recurrence_rule: string | null
+          rep_id: string
+          starts_at: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at: string
+          id?: string
+          is_blocked?: boolean
+          note?: string | null
+          recurrence_rule?: string | null
+          rep_id: string
+          starts_at: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string
+          id?: string
+          is_blocked?: boolean
+          note?: string | null
+          recurrence_rule?: string | null
+          rep_id?: string
+          starts_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_rep_availability_rep_id_fkey"
+            columns: ["rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_rep_availability_rep_id_fkey"
+            columns: ["rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      developer_rep_bookings: {
+        Row: {
+          created_at: string
+          ends_at: string
+          id: string
+          notes: string | null
+          rep_id: string
+          requester_id: string
+          requester_role: string
+          source: string | null
+          starts_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at: string
+          id?: string
+          notes?: string | null
+          rep_id: string
+          requester_id: string
+          requester_role: string
+          source?: string | null
+          starts_at: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string
+          id?: string
+          notes?: string | null
+          rep_id?: string
+          requester_id?: string
+          requester_role?: string
+          source?: string | null
+          starts_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_rep_bookings_rep_id_fkey"
+            columns: ["rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_rep_bookings_rep_id_fkey"
+            columns: ["rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps_public"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       developer_rep_company_history: {
         Row: {
@@ -12492,6 +12799,9 @@ export type Database = {
       }
       developer_sales_reps: {
         Row: {
+          assigned_emirates: string[]
+          auth_user_id: string | null
+          availability_status: string
           created_at: string
           date_of_birth: string | null
           developer_id: string
@@ -12508,6 +12818,7 @@ export type Database = {
           nationality: string | null
           notes: string | null
           phone_e164: string
+          position: string | null
           specialty: string[]
           title: string | null
           updated_at: string
@@ -12516,6 +12827,9 @@ export type Database = {
           years_in_real_estate: number | null
         }
         Insert: {
+          assigned_emirates?: string[]
+          auth_user_id?: string | null
+          availability_status?: string
           created_at?: string
           date_of_birth?: string | null
           developer_id: string
@@ -12532,6 +12846,7 @@ export type Database = {
           nationality?: string | null
           notes?: string | null
           phone_e164: string
+          position?: string | null
           specialty?: string[]
           title?: string | null
           updated_at?: string
@@ -12540,6 +12855,9 @@ export type Database = {
           years_in_real_estate?: number | null
         }
         Update: {
+          assigned_emirates?: string[]
+          auth_user_id?: string | null
+          availability_status?: string
           created_at?: string
           date_of_birth?: string | null
           developer_id?: string
@@ -12556,6 +12874,7 @@ export type Database = {
           nationality?: string | null
           notes?: string | null
           phone_e164?: string
+          position?: string | null
           specialty?: string[]
           title?: string | null
           updated_at?: string
@@ -36714,6 +37033,7 @@ export type Database = {
       is_owner_or_admin: { Args: { _user_id: string }; Returns: boolean }
       is_owner_user: { Args: never; Returns: boolean }
       is_partner_owner: { Args: { _partner_id: string }; Returns: boolean }
+      is_portal_owner: { Args: { _uid: string }; Returns: boolean }
       is_sales_director: { Args: { _user_id: string }; Returns: boolean }
       is_team_admin: {
         Args: { _team_id: string; _user_id: string }
@@ -36805,6 +37125,10 @@ export type Database = {
       mask_iban: { Args: { iban: string }; Returns: string }
       mask_phone: { Args: { phone: string }; Returns: string }
       next_doc_number: { Args: { _template_key: string }; Returns: string }
+      portal_rep_owns: {
+        Args: { _rep_id: string; _uid: string }
+        Returns: boolean
+      }
       project_has_photo: { Args: { _project_id: string }; Returns: boolean }
       purge_deleted_esign_envelopes: { Args: never; Returns: Json }
       redact_expired_vapi_recordings: { Args: never; Returns: number }
@@ -36893,6 +37217,8 @@ export type Database = {
         | "client"
         | "support_ops"
         | "auditor"
+        | "portal_developer"
+        | "portal_rep"
       approval_stage_status: "pending" | "approved" | "rejected" | "skipped"
       approval_type:
         | "leave_request"
@@ -37508,6 +37834,8 @@ export const Constants = {
         "client",
         "support_ops",
         "auditor",
+        "portal_developer",
+        "portal_rep",
       ],
       approval_stage_status: ["pending", "approved", "rejected", "skipped"],
       approval_type: [
