@@ -200,6 +200,7 @@ const ProjectDetail = () => {
       description: project.description,
       location: project.location,
       developer: project.developer ? { 
+        id: (project.developer as any).id ?? (project as any).developer_id ?? null,
         name: project.developer.name, 
         slug: project.developer.slug,
         logo_url: (project.developer as any).logo_url ?? null,
@@ -209,6 +210,7 @@ const ProjectDetail = () => {
         description: (project.developer as any).description ?? null,
         headquarters: (project.developer as any).headquarters ?? null,
       } : (project as any).developer_name ? {
+        id: (project as any).developer_id ?? null,
         name: (project as any).developer_name,
         slug: (project as any).developer_name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
         logo_url: null,
