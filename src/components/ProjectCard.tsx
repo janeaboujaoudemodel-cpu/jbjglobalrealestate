@@ -325,9 +325,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             )}
           </div>
 
-          {/* Premium gold divider — between developer/meta and description */}
-          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
-
           {/* Description */}
           <p className="text-[#1A1A1A] text-sm leading-relaxed line-clamp-3 overflow-hidden">
 
@@ -337,11 +334,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </span>
           </p>
 
+          {/* Premium full-width divider — directly after developer name/content, before handover */}
+          <div className="w-full h-px bg-[#B89555]/45" />
+
           {/* Spacer pushes handover row to the very bottom */}
           <div className="flex-1" />
-
-          {/* Premium gold divider — separates content above from handover */}
-          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
 
           {/* Handover date / Ready — right-aligned, bottom of card */}
           <div className="flex justify-end">
