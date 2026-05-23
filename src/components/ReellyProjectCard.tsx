@@ -243,7 +243,7 @@ const ReellyProjectCard = ({
                 return (
                   <>
                     {saleStatusBadge && !project.sale_status?.toLowerCase().includes('sold') && !project.status_label?.toLowerCase().includes('sold') && (
-                      <div className={`absolute ${offset} left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
+                      <div className={`absolute ${offset} left-3 z-10 ${saleStatusBadge.className}`} data-no-contrast-guard>
                         {saleStatusBadge.label}
                       </div>
                     )}
