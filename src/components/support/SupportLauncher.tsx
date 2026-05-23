@@ -7,7 +7,7 @@
  * listen for. Hides itself when those drawers are open.
  */
 import { useEffect, useState, useCallback } from "react";
-import { Sparkles, MessageSquare, MessageCircle, Phone, X } from "lucide-react";
+import { Sparkles, MessageSquare, MessageCircle, Phone, PhoneCall, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import ChannelCard, { ChannelDef } from "./ChannelCard";
