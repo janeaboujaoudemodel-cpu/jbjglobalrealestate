@@ -286,6 +286,14 @@ export default function BookMeetingLanding() {
       </section>
 
       <main className="max-w-5xl mx-auto px-6 pb-20">
+        {authLoading ? (
+          <div className="text-center py-20 text-[#1A1A1A]/60">
+            <Loader2 className="w-6 h-6 animate-spin mx-auto mb-3 text-[#B89555]" />
+            Preparing your private booking…
+          </div>
+        ) : !user ? (
+          <BookingAuthGate />
+        ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Date / duration / time */}
           <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-6">
