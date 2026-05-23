@@ -280,11 +280,11 @@ const ReellyProjectCard = ({
              </p>
            )}
 
-           {/* Spacer pushes handover row to the very bottom */}
-           <div className="flex-1" />
+            {/* Premium full-width divider — directly after developer/content, before handover */}
+            <div className="w-full h-px bg-[#B89555]/45" />
 
-           {/* Premium gold divider — separates content above from handover */}
-           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+            {/* Spacer pushes handover row to the very bottom */}
+            <div className="flex-1" />
 
            {/* Handover date / Ready — right-aligned, bottom of card */}
            <div className="flex justify-end pt-2">
