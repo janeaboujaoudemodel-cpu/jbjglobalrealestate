@@ -75,7 +75,6 @@ const ExploreServicesExpander = () => {
   }, [activeId]);
 
   const active = services.find((s) => s.id === activeId) ?? services[0];
-  const ActiveIcon = active.icon;
 
 
   return (
@@ -120,10 +119,9 @@ const ExploreServicesExpander = () => {
         })}
       </div>
 
-      {/* Hero panel */}
-      <div className="relative h-[280px] md:h-[340px] overflow-hidden">
+      {/* Hero panel — keyed on active.id so title/description/CTA always re-mount in sync with the tab */}
+      <div key={active.id} className="relative h-[280px] md:h-[340px] overflow-hidden">
         <div
-          key={active.id}
           className="absolute inset-0 bg-cover bg-center animate-fade-in"
           style={{ backgroundImage: `url(${active.image})` }}
         />
@@ -133,10 +131,7 @@ const ExploreServicesExpander = () => {
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent" />
 
         <div className="relative h-full flex flex-col justify-end p-5 md:p-8 max-w-xl">
-          <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] font-bold text-white mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
-            <ActiveIcon className="w-3.5 h-3.5" />
-            <span>JBJ Service</span>
-          </div>
+          {/* Eyebrow "JBJ Service" removed per owner directive — the tab strip already identifies the active service. */}
           <h3
             className="text-white text-2xl md:text-3xl font-extrabold leading-tight"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 14px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9)" }}
