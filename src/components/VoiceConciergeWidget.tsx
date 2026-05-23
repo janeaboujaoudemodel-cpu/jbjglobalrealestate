@@ -57,6 +57,7 @@ const VoiceConciergeWidget = () => {
   const [intakeOpen, setIntakeOpen] = useState(false);
   const [choiceOpen, setChoiceOpen] = useState(false);
   const [showJoined, setShowJoined] = useState(false);
+  const [supportSuppressed, setSupportSuppressed] = useState(false);
   const leadIdRef = useRef<string | null>(getStoredLeadId());
   const hasShownUnavailableToastRef = useRef(false);
   const callStartTimeRef = useRef<Date | null>(null);
@@ -168,6 +169,18 @@ const VoiceConciergeWidget = () => {
       // Silent fail
     }
   };
+
+  useEffect(() => {
+    const checkSuppression = () => {
+      const conciergeOpen = document.body.getAttribute("data-jbj-concierge-open") === "true";
+      const chatOpen = document.body.getAttribute("data-jbj-chat-open") === "true";
+      setSupportSuppressed(conciergeOpen || chatOpen);
+    };
+    checkSuppression();
+    const obs = new MutationObserver(checkSuppression);
+    obs.observe(document.body, { attributes: true, attributeFilter: ["data-jbj-concierge-open", "data-jbj-chat-open"] });
+    return () => obs.disconnect();
+  }, []);
 
   // Any "close" action on the popover (X, outside click, toggle-off) collapses
   // the widget to the small phone icon and arms the 24h restore timer.
@@ -295,6 +308,8 @@ const VoiceConciergeWidget = () => {
   }, [conversation, currentCallLogId, logCallEnd]);
 
   const isConnected = conversation.status === "connected";
+
+  if (supportSuppressed && !isConnected && !intakeOpen) return null;
 
   // Render immediately — don't wait for auth check (prevents blank/invisible widget).
   // The button itself swaps to "Login to speak" once we know the user isn't authenticated.
