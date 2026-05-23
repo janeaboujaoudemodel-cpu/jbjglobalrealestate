@@ -4303,10 +4303,8 @@ a[class*="bg-red-"]:hover {
 .crm-embed .pt-\[104px\] { padding-top: 0 !important; }
 
 /* ============================================================
-   PREMIUM PRICE PILL — square, transparent core, orange border.
-   Used on property cards (ProjectCard / ReellyProjectCard /
-   FeaturedListings) to render the "From AED 2.4M" label as a
-   premium element rather than a candy pill. Orange ink only.
+   PREMIUM PRICE PILL — crystal glass core, gold hairline border,
+   ink typography. No orange. Used on every property card.
    ============================================================ */
 .price-pill-premium {
   display: inline-flex !important;
@@ -4321,14 +4319,15 @@ a[class*="bg-red-"]:hover {
   min-height: 0 !important;
   border-radius: 8px !important;
   padding: 6px 12px !important;
-  /* Clear glass core — readable over any photo, never muddy/dark */
-  background: rgba(253, 251, 247, 0.92) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(160%);
-  backdrop-filter: blur(10px) saturate(160%);
-  border: 1.5px solid hsl(var(--price-orange)) !important;
+  /* Crystal glass core — fully transparent, blurred backdrop */
+  background: rgba(253, 251, 247, 0.55) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border: 1.5px solid #B89555 !important;
   box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+    0 6px 18px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 0 0 1px rgba(184, 149, 85, 0.25) !important;
   color: #1A1A1A !important;
   white-space: nowrap !important;
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
@@ -4341,8 +4340,8 @@ a[class*="bg-red-"]:hover {
   text-transform: uppercase !important;
   letter-spacing: 0.16em !important;
   line-height: 1 !important;
-  color: hsl(var(--price-orange)) !important;
-  opacity: 1 !important;
+  color: #1A1A1A !important;
+  opacity: 0.7 !important;
   margin: 0 !important;
 }
 .price-pill-premium .price-pill-value {
@@ -4359,11 +4358,11 @@ a[class*="bg-red-"]:hover {
 }
 
 
-/* Handover — premium orange pill, label ink, date in price-orange so it
-   matches the price pill identity. Pill chrome, not raw text. */
+/* Handover — premium champagne-gold pill. Label in ink,
+   date in gold. Replaces previous orange identity. */
 .handover-orange,
 .handover-orange * {
-  color: hsl(var(--price-orange)) !important;
+  color: #8A6A2A !important;
 }
 .handover-orange {
   display: inline-flex !important;
@@ -4371,8 +4370,8 @@ a[class*="bg-red-"]:hover {
   gap: 6px !important;
   padding: 4px 10px !important;
   border-radius: 6px !important;
-  background: hsl(var(--price-orange) / 0.10) !important;
-  border: 1px solid hsl(var(--price-orange) / 0.45) !important;
+  background: rgba(184, 149, 85, 0.08) !important;
+  border: 1px solid rgba(184, 149, 85, 0.45) !important;
   font-weight: 700 !important;
   letter-spacing: -0.005em !important;
   font-size: 12px !important;
