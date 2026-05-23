@@ -234,7 +234,7 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="w-full max-w-5xl mx-auto text-center pt-[max(6vh,72px)] sm:pt-[10vh] md:pt-[16vh] pb-[max(2vh,16px)] space-y-3 sm:space-y-5 md:space-y-7">
+          <div className="w-full max-w-5xl mx-auto text-center pt-[max(3vh,40px)] sm:pt-[5vh] md:pt-[8vh] pb-[max(2vh,16px)] space-y-3 sm:space-y-4 md:space-y-5">
             {/* Eyebrow — small uppercase tagline above headline (matches founder reference photo) */}
             <motion.p
               variants={fadeInUp}
