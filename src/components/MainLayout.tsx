@@ -127,9 +127,19 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       setIsChatCollapsed(true);
       setShowAttentionPulse(false);
     };
+    const handleOpenChatSupport = () => {
+      markDailyShown();
+      setShowAttentionPulse(false);
+      setIsChatCollapsed(false);
+    };
     window.addEventListener('recommendation-popup-opened', handleRecPopup);
-    return () => window.removeEventListener('recommendation-popup-opened', handleRecPopup);
+    window.addEventListener('jbj:open-chat-support', handleOpenChatSupport);
+    return () => {
+      window.removeEventListener('recommendation-popup-opened', handleRecPopup);
+      window.removeEventListener('jbj:open-chat-support', handleOpenChatSupport);
+    };
   }, []);
+
 
   const [showAttentionPulse, setShowAttentionPulse] = useState(false);
   const [popupsReady, setPopupsReady] = useState(!isHomePage);
