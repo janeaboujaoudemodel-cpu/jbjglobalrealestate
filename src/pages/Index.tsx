@@ -289,33 +289,8 @@ const Index = () => {
             {/* Hero action pills row (Browse Properties → Careers) removed per owner directive —
                 those shortcuts live inside the role-specific portal CTA below. */}
 
-            {/* Three pillars — desktop = 3-column cards (untouched), mobile = single clean inline row */}
-            <motion.div variants={fadeInUp} className="w-full max-w-3xl mx-auto">
-              {/* Mobile: ultra-compact inline row */}
-              <div className="md:hidden flex items-stretch justify-between gap-2 rounded-2xl border border-[hsl(var(--gold)/0.35)] bg-black/40 backdrop-blur-md px-2 py-2.5">
-                {pillars.map((pillar) => (
-                  <div key={pillar.title} className="flex-1 min-w-0 flex flex-col items-center text-center px-1">
-                    <pillar.icon className="w-4 h-4 text-[#E2C9A0] mb-1" strokeWidth={1.8} />
-                    <span className="text-[10px] leading-tight font-semibold text-white whitespace-nowrap">
-                      {pillar.title}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              {/* Desktop: original three-card grid (untouched aesthetic) */}
-              <div className="hidden md:grid grid-cols-3 gap-px border border-[hsl(var(--gold)/0.25)] overflow-hidden rounded-lg">
-                {pillars.map((pillar) => (
-                  <div
-                    key={pillar.title}
-                    className="bg-black/50 backdrop-blur-sm p-4 text-center border-r last:border-r-0 border-[hsl(var(--gold)/0.18)]"
-                  >
-                    <pillar.icon className="w-5 h-5 text-[#E2C9A0] mx-auto mb-1.5" strokeWidth={1.8} />
-                    <h3 className="text-xs font-semibold text-white mb-0.5">{pillar.title}</h3>
-                    <p className="text-[10px] text-white/70 leading-tight">{pillar.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+            {/* Pillars block removed per owner directive — the hero now uses a single
+                always-visible premium search bar (HomeHeroSearch above) on all devices. */}
 
 
 
