@@ -9,6 +9,8 @@ import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
