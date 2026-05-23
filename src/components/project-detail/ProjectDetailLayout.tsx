@@ -752,9 +752,8 @@ export default function ProjectDetailLayout({
                   : "Price TBA"}
               </p>
             </div>
-            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
-              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Handover</p>
-              <p className="mt-2 text-xl font-bold handover-orange">{(project.handover_date && formatDisplayDate(project.handover_date)) || deriveHandover(project) || HANDOVER_FALLBACK}</p>
+            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all flex items-center justify-center">
+              <p className="text-xl font-bold handover-orange">{(project.handover_date && formatDisplayDate(project.handover_date)) || deriveHandover(project) || HANDOVER_FALLBACK}</p>
             </div>
             <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>
