@@ -10,8 +10,6 @@ import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
-import { getDeveloperLogoUrl } from "@/utils/developerLogo";
-import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
 
@@ -159,13 +157,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
   const statusLabel = getStatusLabel();
   const saleStatusLabel = getSaleStatusLabel(project.status_label);
-  const devLogoUrl = getDeveloperLogoUrl(project.developer);
-  const devName = (project.developer as any)?.name as string | undefined;
-  // ALWAYS show a developer mark when we have either a logo OR a name,
-  // so the client can identify who built the project on every card.
-  const hasDevMark = !!devLogoUrl || !!devName;
-  const hasDevLogo = !!devLogoUrl;
-  const badgePosition = hasDevMark ? 'top-14 left-3' : 'top-3 left-3';
+  const badgePosition = 'top-3 left-3';
 
   return (
     <div
@@ -194,26 +186,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
         {/* Image with Carousel — 16:10 landscape */}
         <div className="aspect-[16/10] overflow-hidden relative" data-surface="ink">
-          {/* Developer Logo Overlay - Top Left */}
-          {/* Developer mark overlay (logo if available, else name plate) */}
-          {hasDevMark && (
-            <div className="absolute top-3 left-3 z-20">
-              {hasDevLogo ? (
-                <DeveloperLogo
-                  src={devLogoUrl}
-                  alt={devName || "Developer"}
-                  variant="bare"
-                />
-              ) : (
-                <DeveloperLogo
-                  variant="nameplate"
-                  name={devName}
-                  alt={devName || "Developer"}
-                />
-              )}
-            </div>
-          )}
-
           <VerifiedMedia
             src={primaryImageUrl}
             alt={images[currentImageIndex]?.alt_text || project.name}
