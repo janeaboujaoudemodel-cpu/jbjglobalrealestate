@@ -1,0 +1,274 @@
+/**
+ * useHandpickedProjects
+ * ---------------------
+ * Personalized recommender for the homepage "Handpicked For You" section.
+ *
+ * Signal tiers (highest priority first, then stack to fill 8 slots):
+ *   1. crm_leads interest form (budget / property_type / preferred_location / bedroom_requirement)
+ *   2. favorites (same developer + area as recently favorited projects)
+ *   3. browsing history (localStorage — JBJ_BROWSING_HISTORY)
+ *   4. mode-aware fallback (investor / broker / developer) using elite developer rotation
+ *
+ * Output shape is compatible with the canonical <ProjectCard /> (UnifiedProject).
+ */
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useUserMode } from "@/contexts/UserModeContext";
+import type { UnifiedProject } from "@/types/unifiedProject";
+
+const TARGET = 8;
+
+const SELECT = `
+  id, name, slug, description, location, price_from, price_to,
+  bedrooms_min, bedrooms_max, size_min, size_max,
+  handover_date, payment_plan, amenities, status,
+  is_featured, is_premium, is_sold_out,
+  property_type_label, status_label, emirate,
+  created_at, updated_at,
+  reelly_id, construction_status, sale_status,
+  area_name, cover_image_url, is_published,
+  developer_name, latitude, longitude,
+  developer:developers(id, name, slug, logo_url),
+  community:communities(id, name, slug),
+  images:project_images(id, image_url, alt_text, display_order)
+`;
+
+const ELITE_DEVELOPERS = [
+  "Emaar",
+  "Omniyat",
+  "Sobha",
+  "ALDAR",
+  "Binghatti",
+  "Nakheel",
+  "Dubai Properties",
+  "DAMAC",
+  "Meraas",
+];
+
+const HISTORY_KEY = "JBJ_BROWSING_HISTORY";
+
+type Project = UnifiedProject;
+
+function readBrowsingHistory(): Array<{ slug?: string; id?: string; developer_name?: string; area_name?: string }> {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function dedupePush(out: Project[], seen: Set<string>, candidates: Project[]) {
+  for (const p of candidates) {
+    if (out.length >= TARGET) return;
+    if (!p?.id || seen.has(p.id)) continue;
+    // Require an image to keep the grid visually uniform
+    if (!p.cover_image_url && !(p.images && p.images.length > 0)) continue;
+    seen.add(p.id);
+    out.push(p);
+  }
+}
+
+async function tierInterestForm(userId: string | undefined, email: string | undefined): Promise<Project[]> {
+  if (!email && !userId) return [];
+  let q = supabase.from("crm_leads").select("budget_min, budget_max, preferred_location, property_type, bedroom_requirement").limit(1);
+  if (email) q = q.eq("email_lower", email.toLowerCase());
+  else if (userId) q = q.eq("created_by_user_id", userId);
+  const { data: leads } = await q;
+  const lead = leads?.[0] as any;
+  if (!lead) return [];
+
+  let query = supabase
+    .from("projects")
+    .select(SELECT)
+    .eq("is_published", true)
+    .not("cover_image_url", "is", null)
+    .neq("cover_image_url", "");
+
+  if (lead.preferred_location) {
+    query = query.or(
+      `location.ilike.%${lead.preferred_location}%,area_name.ilike.%${lead.preferred_location}%,emirate.ilike.%${lead.preferred_location}%`,
+    );
+  }
+  if (lead.property_type) {
+    query = query.ilike("property_type_label", `%${lead.property_type}%`);
+  }
+  if (lead.budget_min) query = query.gte("price_from", Number(lead.budget_min) * 0.7);
+  if (lead.budget_max) query = query.lte("price_from", Number(lead.budget_max) * 1.3);
+
+  const { data } = await query.limit(TARGET);
+  return (data || []) as unknown as Project[];
+}
+
+async function tierFavorites(userId: string | undefined): Promise<Project[]> {
+  if (!userId) return [];
+  const { data: favs } = await supabase
+    .from("favorites")
+    .select("project_id")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(20);
+  const favIds = (favs || []).map((f: any) => f.project_id).filter(Boolean);
+  if (favIds.length === 0) return [];
+
+  // Pull seed projects to extract developer + area signals
+  const { data: seeds } = await supabase
+    .from("projects")
+    .select("developer_name, area_name")
+    .in("id", favIds);
+  const devNames = Array.from(new Set((seeds || []).map((s: any) => s.developer_name).filter(Boolean)));
+  const areas = Array.from(new Set((seeds || []).map((s: any) => s.area_name).filter(Boolean)));
+
+  if (devNames.length === 0 && areas.length === 0) return [];
+
+  let query = supabase
+    .from("projects")
+    .select(SELECT)
+    .eq("is_published", true)
+    .not("cover_image_url", "is", null)
+    .neq("cover_image_url", "")
+    .not("id", "in", `(${favIds.join(",")})`);
+
+  if (devNames.length > 0 && areas.length > 0) {
+    query = query.or(`developer_name.in.(${devNames.map((d) => `"${d}"`).join(",")}),area_name.in.(${areas.map((a) => `"${a}"`).join(",")})`);
+  } else if (devNames.length > 0) {
+    query = query.in("developer_name", devNames);
+  } else {
+    query = query.in("area_name", areas);
+  }
+
+  const { data } = await query.limit(TARGET);
+  return (data || []) as unknown as Project[];
+}
+
+async function tierBrowsingHistory(): Promise<Project[]> {
+  const history = readBrowsingHistory().slice(0, 10);
+  if (history.length === 0) return [];
+  const devNames = Array.from(new Set(history.map((h) => h.developer_name).filter(Boolean))) as string[];
+  const areas = Array.from(new Set(history.map((h) => h.area_name).filter(Boolean))) as string[];
+  const viewedSlugs = history.map((h) => h.slug).filter(Boolean) as string[];
+
+  if (devNames.length === 0 && areas.length === 0) return [];
+
+  let query = supabase
+    .from("projects")
+    .select(SELECT)
+    .eq("is_published", true)
+    .not("cover_image_url", "is", null)
+    .neq("cover_image_url", "");
+
+  if (viewedSlugs.length > 0) {
+    query = query.not("slug", "in", `(${viewedSlugs.map((s) => `"${s}"`).join(",")})`);
+  }
+  if (devNames.length > 0 && areas.length > 0) {
+    query = query.or(`developer_name.in.(${devNames.map((d) => `"${d}"`).join(",")}),area_name.in.(${areas.map((a) => `"${a}"`).join(",")})`);
+  } else if (devNames.length > 0) {
+    query = query.in("developer_name", devNames);
+  } else {
+    query = query.in("area_name", areas);
+  }
+
+  const { data } = await query.limit(TARGET);
+  return (data || []) as unknown as Project[];
+}
+
+async function tierEliteFallback(mode: string | null): Promise<Project[]> {
+  // Investor: favour ready + premium areas; Developer: broad; Broker: broad.
+  const perDev = await Promise.all(
+    ELITE_DEVELOPERS.map(async (dev) => {
+      let q = supabase
+        .from("projects")
+        .select(SELECT)
+        .eq("developer_name", dev)
+        .eq("is_published", true)
+        .not("cover_image_url", "is", null)
+        .neq("cover_image_url", "")
+        .order("price_from", { ascending: false, nullsFirst: false })
+        .limit(4);
+      if (mode === "investor") {
+        q = q.or(
+          "location.ilike.%Business Bay%,location.ilike.%Marina%,location.ilike.%Downtown%,area_name.ilike.%Business Bay%,area_name.ilike.%Marina%,area_name.ilike.%Downtown%",
+        );
+      }
+      const { data } = await q;
+      return (data || []) as unknown as Project[];
+    }),
+  );
+
+  const result: Project[] = [];
+  const usedDevs = new Set<string>();
+  // One per developer for diversity
+  for (const arr of perDev) {
+    const pick = arr.find((p) => p.developer_name && !usedDevs.has(p.developer_name));
+    if (pick) {
+      usedDevs.add(pick.developer_name as string);
+      result.push(pick);
+    }
+    if (result.length >= TARGET) break;
+  }
+  // Fill remaining from leftovers (still unique developers)
+  if (result.length < TARGET) {
+    for (const arr of perDev) {
+      for (const p of arr) {
+        if (result.length >= TARGET) break;
+        if (!p.developer_name || usedDevs.has(p.developer_name)) continue;
+        if (result.find((r) => r.id === p.id)) continue;
+        usedDevs.add(p.developer_name as string);
+        result.push(p);
+      }
+    }
+  }
+  return result;
+}
+
+export function useHandpickedProjects() {
+  const { user } = useAuth();
+  const { mode } = useUserMode() as any;
+
+  return useQuery({
+    queryKey: ["handpicked-projects-v1", user?.id ?? "anon", mode ?? "none"],
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const out: Project[] = [];
+      const seen = new Set<string>();
+      let source: "interest" | "favorites" | "history" | "elite" | "mixed" = "elite";
+
+      try {
+        const interest = await tierInterestForm(user?.id, user?.email ?? undefined);
+        if (interest.length > 0) source = "interest";
+        dedupePush(out, seen, interest);
+      } catch {}
+
+      if (out.length < TARGET && user?.id) {
+        try {
+          const favs = await tierFavorites(user.id);
+          if (favs.length > 0 && source === "elite") source = "favorites";
+          else if (favs.length > 0) source = "mixed";
+          dedupePush(out, seen, favs);
+        } catch {}
+      }
+
+      if (out.length < TARGET) {
+        try {
+          const history = await tierBrowsingHistory();
+          if (history.length > 0 && source === "elite") source = "history";
+          else if (history.length > 0) source = "mixed";
+          dedupePush(out, seen, history);
+        } catch {}
+      }
+
+      if (out.length < TARGET) {
+        try {
+          const elite = await tierEliteFallback(mode ?? null);
+          dedupePush(out, seen, elite);
+        } catch {}
+      }
+
+      return { projects: out.slice(0, TARGET), source };
+    },
+  });
+}
