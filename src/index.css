@@ -4319,16 +4319,17 @@ a[class*="bg-red-"]:hover {
   max-width: none !important;
   min-width: 0 !important;
   min-height: 0 !important;
-  border-radius: 6px !important;
-  padding: 5px 10px !important;
-  background: rgba(0, 0, 0, 0.68);
-  -webkit-backdrop-filter: blur(8px) saturate(140%);
-  backdrop-filter: blur(8px) saturate(140%);
-  border: 1px solid hsl(var(--price-orange) / 0.9);
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  /* Clear glass core — readable over any photo, never muddy/dark */
+  background: rgba(253, 251, 247, 0.92) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
+  border: 1.5px solid hsl(var(--price-orange)) !important;
   box-shadow:
-    0 6px 16px hsl(0 0% 0% / 0.38),
-    inset 0 0 0 1px hsl(var(--price-orange) / 0.18);
-  color: #FFFFFF;
+    0 6px 18px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  color: #1A1A1A !important;
   white-space: nowrap !important;
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
   overflow: visible !important;
@@ -4336,40 +4337,54 @@ a[class*="bg-red-"]:hover {
 .price-pill-premium .price-pill-eyebrow {
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
   font-size: 9px !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.14em !important;
+  letter-spacing: 0.16em !important;
   line-height: 1 !important;
-  color: #FFFFFF !important;
-  opacity: 0.85 !important;
+  color: hsl(var(--price-orange)) !important;
+  opacity: 1 !important;
   margin: 0 !important;
 }
 .price-pill-premium .price-pill-value {
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-  font-weight: 800 !important;
-  font-size: 13px !important;
+  font-weight: 900 !important;
+  font-size: 14px !important;
   line-height: 1 !important;
   font-variant-numeric: tabular-nums !important;
-  letter-spacing: -0.005em !important;
-  color: #FFFFFF !important;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  letter-spacing: -0.01em !important;
+  color: #1A1A1A !important;
+  text-shadow: none !important;
   margin: 0 !important;
   white-space: nowrap !important;
 }
 
 
-/* Handover line — label is solid ink black; date renders in premium brand gold across ALL cards. */
+/* Handover — premium orange pill, label ink, date in price-orange so it
+   matches the price pill identity. Pill chrome, not raw text. */
 .handover-orange,
 .handover-orange * {
-  color: #B89555 !important;
+  color: hsl(var(--price-orange)) !important;
 }
 .handover-orange {
-  font-weight: 600;
-  letter-spacing: -0.005em;
+  display: inline-flex !important;
+  align-items: baseline !important;
+  gap: 6px !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  background: hsl(var(--price-orange) / 0.10) !important;
+  border: 1px solid hsl(var(--price-orange) / 0.45) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.005em !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+  width: fit-content;
 }
 .handover-orange .handover-label {
   color: #1A1A1A !important;
-  font-weight: 700;
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.12em;
 }
 
 
