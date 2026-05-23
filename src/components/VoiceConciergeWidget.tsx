@@ -466,13 +466,15 @@ const VoiceConciergeWidget = () => {
         </div>
       )}
 
+      </div>
 
+      {/* Shared intake modal (works for both mobile icon launcher and desktop pill) */}
       <VoiceConciergeIntakeModal
         open={intakeOpen}
         onOpenChange={setIntakeOpen}
         onSuccess={handleIntakeSuccess}
       />
-    </div>
+    </>
   );
 };
 
