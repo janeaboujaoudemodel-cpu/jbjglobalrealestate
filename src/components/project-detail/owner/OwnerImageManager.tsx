@@ -139,10 +139,9 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 mt-3">
           {images.map((img) => {
             const isCover = coverImageUrl === img.image_url;
-            const visible = img.is_visible ?? true;
             return (
               <div key={img.id} className="relative group rounded-lg overflow-hidden border border-[#B89555]/30 bg-[#FDFBF7] aspect-square">
-                <img src={img.image_url} alt={img.alt_text ?? ""} className={`w-full h-full object-cover ${visible ? "" : "opacity-40"}`} loading="lazy" />
+                <img src={img.image_url} alt={img.alt_text ?? ""} className="w-full h-full object-cover" loading="lazy" />
                 {isCover && (
                   <span className="absolute top-1 left-1 text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#B89555] text-[#1A1A1A]">COVER</span>
                 )}
@@ -156,14 +155,6 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
                     {isCover ? <Star className="w-3.5 h-3.5 fill-current" /> : <StarOff className="w-3.5 h-3.5" />}
                   </button>
                   <button
-                    onClick={() => toggleVisibility(img)}
-                    className="w-7 h-7 rounded bg-[#FDFBF7] text-[#1A1A1A] inline-flex items-center justify-center hover:bg-[#EFE6D6]"
-                    title={visible ? "Hide" : "Show"}
-                    data-no-contrast-guard
-                  >
-                    {visible ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
-                  </button>
-                  <button
                     onClick={() => remove(img)}
                     className="w-7 h-7 rounded bg-[#FDFBF7] text-[#B91C1C] inline-flex items-center justify-center hover:bg-[#FCE8E8]"
                     title="Delete"
@@ -173,6 +164,7 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
                   </button>
                 </div>
               </div>
+
             );
           })}
         </div>
