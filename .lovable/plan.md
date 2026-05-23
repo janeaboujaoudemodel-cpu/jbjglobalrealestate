@@ -1,111 +1,112 @@
-## Diagnosis
+## Goal
 
-Two structural issues are responsible for the "boxed / disconnected / unorganized" look across the site, and one specific one on Guides:
+1. Replace the homepage **"Handpicked For You"** mini-card with the canonical `<ProjectCard />` used on `/properties` — pixel-for-pixel the same component, no duplication.
+2. On that canonical card, **replace the top-left "Apartment" property-type label with the approved developer logo** (same `<DeveloperLogo variant="bare" />` already used on Featured Listings). This change applies globally wherever `<ProjectCard />` is rendered.
+3. Make Handpicked **personalized** — drive its results from each user's actual signals (interest form, search filters, favorites, browsing history, selected mode), with a deterministic public-visitor fallback so the section never looks empty.
+4. QA in the live preview before marking done.
 
-1. **`.jj-layer-2` is a boxed container, not a band.** It ships with side margins (`mx-1 sm:mx-2 md:mx-3 lg:mx-4`), `rounded-2xl`, a champagne fill, a gold hairline border, and a shadow. Every section that uses it floats on the page like an island — that's the gap on the sides you're seeing. 186 usages across 58 files.
+---
 
-2. **Dark `bg-[#1A1A1A]` section wrappers** are bolted onto a champagne site. Guides has 2 of them (the "How This Library Works" section and the "What You'll Learn" section), the services pages have 5–10 each. They break the champagne canvas, force the runtime contrast guard to flip text, and create the "silver/black divider" effect you don't want.
+## Files touched
 
-3. **Guides "What You'll Learn"** uses a generic 3-column grid of `Card` + `CardContent` with no rhythm, no IconTile, no premium hierarchy, sitting on top of the dark band — so it reads as crowded and unorganized.
+| File | Change |
+|---|---|
+| `src/components/ProjectCard.tsx` | Top-left badge: swap `property_type_label` (text "Apartment") for `<DeveloperLogo />` overlay. One-line conditional fallback to the old text badge only if no `developer.logo_url` exists. |
+| `src/hooks/useHandpickedProjects.ts` *(new)* | Personalized recommender. Reads signals → builds a ranked project list. Returns `{ projects, isLoading, source }`. |
+| `src/components/home/FeaturedListings.tsx` | Delete the inline mini-`ProjectCard` (lines 155–266). Import the canonical `ProjectCard` from `@/components/ProjectCard`. Swap data source from `useFeaturedProjects` → `useHandpickedProjects`. Keep header, grid, View All CTA, layer-2 band, skeletons. |
 
-## Global structural fix
+No other files are modified. The `ELITE_DEVELOPERS` fallback logic is preserved inside `useHandpickedProjects` as the anonymous-visitor branch — no removal of existing behavior.
 
-### a) Convert `.jj-layer-2` from "boxed island" to "full-bleed band" — `src/index.css`
+---
 
-Replace the current definition with:
+## ProjectCard.tsx — the only visual change
 
-```css
-.jj-layer-2 {
-  /* full-bleed band: edge-to-edge, no rounding, no border, no shadow */
-  width: 100%;
-  background: #F7F2EA;       /* champagne surface — same token as today */
-  padding-block: clamp(2.5rem, 5vw, 4.5rem);
-  padding-inline: clamp(1rem, 4vw, 2rem);
-}
+Current block (lines 253–258):
 
-/* Inner content stays comfortably wide but readable */
-.jj-layer-2 > * {
-  max-width: 1280px;
-  margin-inline: auto;
-}
+```tsx
+{project.property_type_label && (
+  <CardBadge variant="status" className="absolute top-3 left-3 z-10">
+    {project.property_type_label}
+  </CardBadge>
+)}
 ```
 
-No rounded corners, no side gutters, no shadow, no border — sections now run side-to-side on every viewport. Inner content still respects a 1280px reading width via the universal child selector so we don't have to rewrite 186 call sites.
+Becomes:
 
-The `.jj-section-gutter` class (only used by `.jj-layer-2` today, per grep) is also flattened to a no-op so any stragglers don't reintroduce side margins.
-
-### b) Add a `.jj-band` system for alternating champagne tones — `src/index.css`
-
-Three siblings, all full-bleed, share inner-max-width behaviour:
-
-```css
-.jj-band { width:100%; padding-block: clamp(2.5rem,5vw,4.5rem); padding-inline: clamp(1rem,4vw,2rem); }
-.jj-band > * { max-width:1280px; margin-inline:auto; }
-.jj-band--page    { background:#FDFBF7; }   /* default page tone */
-.jj-band--surface { background:#F7F2EA; }   /* one notch warmer */
-.jj-band--raised  { background:#EFE6D6; }   /* two notches warmer */
+```tsx
+{logoUrl ? (
+  <div className="absolute top-3 left-3 z-20">
+    <DeveloperLogo src={logoUrl} alt={project.developer?.name || ''} variant="bare" loading="lazy" />
+  </div>
+) : project.property_type_label ? (
+  <CardBadge variant="status" className="absolute top-3 left-3 z-10">
+    {project.property_type_label}
+  </CardBadge>
+) : null}
 ```
 
-The tone difference between adjacent bands IS the divider — no line, no ornament, no gray, no black. Just champagne stepping by 4–6 luminance points. That's the "premium classy way" you described.
+Everything else — image carousel, dots, sale-status badge, price pill, title/location order, DeveloperLink, description, hairline divider, handover-orange pill, Email/Call/Chat row — stays byte-identical so Properties, Resale, Map, and the new Handpicked all render the same card.
 
-### c) Optional 1-px gold hairline divider — opt-in only
+---
 
-For pages that want an explicit seam between two same-tone bands, add `data-band-divider` to the lower band. CSS:
+## Personalization hook — `useHandpickedProjects`
 
-```css
-[data-band-divider]::before {
-  content:""; display:block; height:1px; width:100%;
-  background:rgba(184,149,85,0.18);    /* faded champagne-gold, never gray */
-  margin-bottom: clamp(2rem,4vw,3.5rem);
-}
+Tiered signal pipeline (first match wins, all stack):
+
+1. **Logged-in + interest form filled** → query `crm_leads` for the current user's `email_lower` and pull `property_type`, `bedroom_requirement`, `budget_min/max`, `preferred_location`. Build `projects` SELECT with matching filters, ordered by closeness to budget midpoint.
+2. **Favorites** → if the user has rows in `favorites`, fetch the developers/areas of those projects and recommend more from the same developer + area.
+3. **Recent browsing** → read existing localStorage browsing history (already maintained per Memory: Browsing History Deduplication). Boost projects matching last viewed developers/areas.
+4. **Mode-aware fallback** *(anonymous or zero signal)* → use current `ELITE_DEVELOPERS` rotation logic, but bias by `useUserModeContext`:
+   - investor → ready + high-yield areas (Business Bay, Marina, Downtown)
+   - broker → broad mix across all elite developers (current behavior)
+   - developer → projects from their own developer first, then peers
+
+Each tier returns up to 8 results, dedup by `id`, fill remaining slots from the next tier so the grid is always 8 cards. Same `SELECT` shape as the existing query so the canonical `ProjectCard` consumes it without prop changes (it already accepts the `Project` type — we'll map the FeaturedProject fields to `Project` via a small adapter, or query directly with the full `Project` SELECT used by `useProjects`).
+
+No new tables. No migration. Pure read-side composition over `projects`, `favorites`, `crm_leads`, and localStorage.
+
+---
+
+## FeaturedListings.tsx — slimmer
+
+```tsx
+import ProjectCard from "@/components/ProjectCard";
+import { useHandpickedProjects } from "@/hooks/useHandpickedProjects";
+// ...
+const { projects, isLoading } = useHandpickedProjects();
+// grid maps projects → <ProjectCard project={p} currency="AED" sizeUnit="sqft" />
 ```
 
-Matches the existing `[data-gold-hairline]` opt-in rule from the No-Gray standard.
+Inline mini-card and `useFeaturedProjects` are removed. Heading stays "Handpicked For You", chips and View All CTA untouched.
 
-### d) Kill the dark `bg-[#1A1A1A]` band wrappers on public marketing pages
+---
 
-Add a scoped CSS override that maps any `<section class="bg-[#1A1A1A] py-*">` inside marketing routes back to champagne `#F7F2EA`. Implemented as a `[data-marketing-page]` attribute on the page root + a CSS rule:
+## Memory updates
 
-```css
-[data-marketing-page] section[class*="bg-[#1A1A1A]"] {
-  background: #F7F2EA !important;
-}
-[data-marketing-page] section[class*="bg-[#1A1A1A]"] [class*="text-[#1A1A1A]/"] { color: #1A1A1A !important; }
-```
+Append a one-line memory:
 
-Apply `data-marketing-page` on the root `<div>` of:
+> **Handpicked = Canonical ProjectCard** — `/` Handpicked For You section MUST render `<ProjectCard />` from `src/components/ProjectCard.tsx`. No private mini-card duplicates. Top-left badge across all ProjectCard consumers is the developer logo; only falls back to property-type text when `developer.logo_url` is missing.
 
-- `src/pages/Guides.tsx`
-- `src/pages/Services.tsx` + every `src/pages/services/*.tsx`
-- `src/pages/About.tsx`, `MeetTheTeam.tsx`, `Philanthropy.tsx`, `CompanyProfile.tsx`
-- `src/pages/Developers.tsx`, `MarketIntelligence.tsx`, `MarketReport.tsx`
-- `src/pages/BrokerEducation.tsx`, `BrokerResources.tsx`
+---
 
-Owner / admin / portal pages are NOT touched — they keep their dark surfaces. Homepage already champagne, untouched.
+## QA (before marking done)
 
-## Guides "What You'll Learn" — premium rebuild
+After build:
 
-`src/pages/Guides.tsx` lines ~267–298:
+1. `browser--navigate_to_sandbox` → `/` → screenshot the Handpicked section. Confirm: same card chrome as `/properties` cards, developer logos visible top-left (no "Apartment" text), price pill bottom-right, Email/Call/Chat row present, identical hover lift.
+2. Navigate to `/properties` → confirm logo replaces the "Apartment" badge there too.
+3. Confirm 8 cards render, no duplicate developers, no empty state for anonymous user.
+4. Open console — no React key warnings or 404 image fetches from the swap.
+5. Resize to 414px — confirm grid collapses to 1 col and card still legible.
 
-- Remove the `bg-[#1A1A1A]` section wrapper; use `<section className="jj-band jj-band--page">`.
-- Replace the generic `Card` / `CardContent` grid with a premium 3-column (md) / 2-column (sm) / 1-column (mobile) layout built on the project's own `<IconTile />` primitive (`tone="gold"`).
-- Each card: ink title (`text-[#1A1A1A] font-semibold`), ink/70 description, gold IconTile top-left, 1px `rgba(184,149,85,0.30)` hairline border, `bg-[#FDFBF7]`, generous padding (`p-7`), subtle hover lift (-translate-y-0.5, border opacity to 0.55). No shadows.
-- Section header: gold eyebrow chip ("Curriculum"), serif-free ink h2 (Inter 600, tracking -0.02em, 36/44 desktop), short ink/70 lede, all centered, breathing room (`mb-12`).
-- Same tone for "How This Library Works" section above — also converted from dark to `jj-band jj-band--surface` for the tone alternation.
+If any of the QA checks fail, fix in the same loop before reporting.
 
-This gives the section room to breathe, organises the 6 topics into a clear premium grid, and matches the rest of the champagne canvas.
+---
 
-## Out of scope (per your "no removal" rule)
+## What is intentionally NOT done
 
-- The 6 learning topics themselves stay verbatim.
-- No content, route, or guide removed anywhere.
-- Homepage and owner dashboards are untouched.
-- Hero sections are untouched (they were the previous turn's work).
-
-## Technical notes
-
-- `.jj-layer-2` change is global (186 call sites). The flattening is intentional — that's the user's request — and the inner `> *` max-width keeps content readable everywhere without per-page edits.
-- The dark-section override is **opt-in via `data-marketing-page`** so it cannot leak into owner/admin/portal surfaces.
-- New CSS lives next to the existing `.jj-layer-2` block in `src/index.css`.
-- `<SectionDivider />` stays a no-op — the band-tone rhythm replaces it.
-- All colours use the existing champagne tokens (#FDFBF7 / #F7F2EA / #EFE6D6 / #B89555). No new design tokens, no gray, no black-section bands.
+- No DB migration. All personalization is read-side.
+- No new tracking events. We reuse signals already captured.
+- No change to card vertical order, dividers, colors, or any other card region.
+- No change to Featured Listings header copy, badge, or "View All Projects" CTA.
+- Resale and Map pages get the logo upgrade for free via the shared card — no per-page work.
