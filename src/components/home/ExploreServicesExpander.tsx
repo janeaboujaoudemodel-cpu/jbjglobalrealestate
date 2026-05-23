@@ -75,7 +75,6 @@ const ExploreServicesExpander = () => {
   }, [activeId]);
 
   const active = services.find((s) => s.id === activeId) ?? services[0];
-  const ActiveIcon = active.icon;
 
 
   return (
