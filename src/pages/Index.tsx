@@ -538,22 +538,25 @@ const Index = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
-                <Link to="/mortgage-calculator">
-                  <Button data-surface="dark" size="default" className="gap-2 px-6 py-4 text-sm bg-[#1A1A1A] !text-white hover:bg-[#2A2A2A] hover:!text-white focus-visible:bg-[#2A2A2A] border border-[#B89555]/40 shadow-[0_6px_18px_rgba(26,26,26,0.25)]">
-                    <Sparkles className="w-4 h-4 text-[#E8C77A]" />
-                    <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
-                    <ArrowUpRight className="w-4 h-4" />
-                  </Button>
-                </Link>
+                <PearlButton
+                  to="/mortgage-calculator"
+                  size="md"
+                  leadingIcon={<Sparkles strokeWidth={2.2} />}
+                  trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
+                >
+                  <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
+                </PearlButton>
 
-                <Link to="/partners/mortgage">
-                  <Button variant="outline" size="default" className="gap-2 px-6 py-4 text-sm border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA]">
-                    <Users className="w-4 h-4 text-[#1A1A1A]/70" />
-                    <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
-                    <ArrowUpRight className="w-4 h-4" />
-                  </Button>
-                </Link>
+                <PearlButton
+                  to="/partners/mortgage"
+                  size="md"
+                  leadingIcon={<Users strokeWidth={2.2} />}
+                  trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
+                >
+                  <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
+                </PearlButton>
               </div>
+
             </div>
           </div>
         </div>
