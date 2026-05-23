@@ -17,7 +17,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import type { UnifiedProject } from "@/types/unifiedProject";
 
-const TARGET = 8;
+const TARGET = 6;
 
 const SELECT = `
   id, name, slug, description, location, price_from, price_to,
