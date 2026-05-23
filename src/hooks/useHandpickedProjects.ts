@@ -227,7 +227,7 @@ async function tierEliteFallback(mode: string | null): Promise<Project[]> {
 
 export function useHandpickedProjects() {
   const { user } = useAuth();
-  const { mode } = useUserMode() as any;
+  const { mode } = useUserModeContext() as any;
 
   return useQuery({
     queryKey: ["handpicked-projects-v1", user?.id ?? "anon", mode ?? "none"],
