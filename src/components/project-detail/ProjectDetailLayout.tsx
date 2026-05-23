@@ -43,6 +43,7 @@ import PremiumBrochureCard from "@/components/project-detail/PremiumBrochureCard
 import BookStyleDocuments from "@/components/project-detail/BookStyleDocuments";
 import InlineEditable from "@/components/project-detail/owner/InlineEditable";
 import OwnerDocDropzone from "@/components/project-detail/owner/OwnerDocDropzone";
+import OwnerImageManager from "@/components/project-detail/owner/OwnerImageManager";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import ProjectBreadcrumb from "@/components/project-detail/ProjectBreadcrumb";
 import CallToActionSection from "@/components/project-detail/CallToActionSection";
@@ -862,14 +863,16 @@ export default function ProjectDetailLayout({
                      Download Images
                    </Button>
                  </div>
-                 <ImageCarousel
-                   images={images.map((img) => ({
-                     id: img.id,
-                     image_url: img.url,
-                     alt_text: img.alt ?? null,
-                   }))}
-                   projectName={project.name}
-                 />
+                  <ImageCarousel
+                    images={images.map((img) => ({
+                      id: img.id,
+                      image_url: img.url,
+                      alt_text: img.alt ?? null,
+                    }))}
+                    projectName={project.name}
+                  />
+                  <OwnerImageManager projectId={project.id} coverImageUrl={project.cover_image_url} />
+
                </div>
              </div>
            )}
