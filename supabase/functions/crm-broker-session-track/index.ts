@@ -171,7 +171,9 @@ Deno.serve(async (req) => {
     return json({ ok: true, session_token: sessionToken, session_id: ins.id, expires_at: expiresAt, suspicious });
   } catch (e) {
     console.error("crm-broker-session-track unexpected error", e);
-    return json({ error: "Session check failed. Please try again." }, 500);
+    // Return 200 with a fallback signal — the client treats this as "skip
+    // this heartbeat" rather than crashing the React tree.
+    return json({ ok: false, fallback: true, error: "SERVICE_FAILED" }, 200);
   }
 });
 
