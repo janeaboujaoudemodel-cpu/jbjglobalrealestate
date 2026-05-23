@@ -103,9 +103,22 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
             <div className="flex-1">
               {/* Header */}
               <div className="flex items-center gap-3 mb-3">
-                <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{developer.name}</h3>
+                {editable && developer.id ? (
+                  <InlineEditable
+                    table="developers"
+                    recordId={developer.id}
+                    field="name"
+                    value={developer.name}
+                    invalidateKeys={["project", "projects", "developer", "developers"]}
+                  >
+                    <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{developer.name}</h3>
+                  </InlineEditable>
+                ) : (
+                  <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{developer.name}</h3>
+                )}
                 <Award className="w-6 h-6 text-[#1A1A1A]" />
               </div>
+
 
               {/* Quick meta line */}
               <div className="flex flex-wrap items-center gap-3 mb-5 text-sm text-[#1A1A1A]/70">
