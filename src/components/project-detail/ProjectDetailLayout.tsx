@@ -588,13 +588,18 @@ export default function ProjectDetailLayout({
           {/* Starting Price - Above title */}
           {typeof project.price_from === "number" && (
             <p className="text-lg md:text-xl mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.85)' }}>
-              Starting from <span className="font-bold text-2xl md:text-3xl drop-shadow-[0_0_12px_rgba(234,88,12,0.4)]" style={{ color: '#FB923C' }}>{formatPriceUtil(project.price_from)}</span>
+              Starting from{" "}
+              <InlineEditable projectId={project.id} field="price_from" value={project.price_from} type="number" surface="dark">
+                <span className="font-bold text-2xl md:text-3xl drop-shadow-[0_0_12px_rgba(234,88,12,0.4)]" style={{ color: '#FB923C' }}>{formatPriceUtil(project.price_from)}</span>
+              </InlineEditable>
             </p>
           )}
 
           {/* Project Title - BIGGER */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold !text-white leading-[1.05] mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]" style={{ color: '#ffffff' }}>
-            {project.name}
+            <InlineEditable projectId={project.id} field="name" value={project.name} surface="dark">
+              <span>{project.name}</span>
+            </InlineEditable>
           </h1>
 
           {/* Developer */}
