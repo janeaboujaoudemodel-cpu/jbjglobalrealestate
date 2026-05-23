@@ -23,6 +23,9 @@ import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { PhoneInput } from "@/components/booking/PhoneInput";
 import { SocialLinksField, type SocialLink } from "@/components/booking/SocialLinksField";
 import { PremiumFileDrop } from "@/components/booking/PremiumFileDrop";
+import { BookingAuthGate } from "@/components/booking/BookingAuthGate";
+import { ConfirmTicketDialog, type ConfirmTicketSummary } from "@/components/booking/ConfirmTicketDialog";
+import { useAuth } from "@/contexts/AuthContext";
 
 const TIME_SLOTS = ["11:00", "12:00", "13:00", "14:00", "15:00", "16:00"];
 const DURATIONS = [
