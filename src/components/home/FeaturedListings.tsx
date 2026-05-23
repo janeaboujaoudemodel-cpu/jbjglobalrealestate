@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Home, MapPin, ArrowRight, Building2, ArrowUpRight, CreditCard, Heart, Star, Calendar } from "lucide-react";
+import { Home, MapPin, ArrowRight, Building2, ArrowUpRight, Heart, Star, Calendar } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
