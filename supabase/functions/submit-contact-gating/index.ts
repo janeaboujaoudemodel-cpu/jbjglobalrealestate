@@ -24,18 +24,30 @@ interface ContactSubmission {
   honeypot?: string; // Should be empty - bots fill this
 }
 
-// Simple XOR-based encryption (production should use proper crypto)
-function encryptPII(value: string, key: string): Uint8Array {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(value);
-  const keyBytes = encoder.encode(key);
-  const encrypted = new Uint8Array(data.length);
-  
-  for (let i = 0; i < data.length; i++) {
-    encrypted[i] = data[i] ^ keyBytes[i % keyBytes.length];
+// AES-256-GCM PII encryption using Web Crypto API.
+// Output bytea layout: [version=1][iv (12 bytes)][ciphertext+gcm tag]
+async function deriveAesKey(rawKey: string): Promise<CryptoKey> {
+  // Accept a 64-char hex (32-byte) key, otherwise derive 32 bytes via SHA-256.
+  let keyBytes: Uint8Array;
+  if (/^[0-9a-fA-F]{64}$/.test(rawKey)) {
+    keyBytes = new Uint8Array(rawKey.match(/.{1,2}/g)!.map((b) => parseInt(b, 16)));
+  } else {
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(rawKey));
+    keyBytes = new Uint8Array(digest);
   }
-  
-  return encrypted;
+  return crypto.subtle.importKey('raw', keyBytes, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
+}
+
+async function encryptPII(value: string, key: CryptoKey): Promise<Uint8Array> {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ciphertext = new Uint8Array(
+    await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(value)),
+  );
+  const out = new Uint8Array(1 + iv.length + ciphertext.length);
+  out[0] = 1;
+  out.set(iv, 1);
+  out.set(ciphertext, 1 + iv.length);
+  return out;
 }
 
 // Hash for de-duplication without exposing actual values
