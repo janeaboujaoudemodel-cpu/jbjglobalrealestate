@@ -1,26 +1,13 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Calculator, Layers, Home, TrendingUp, Palette,
-  CreditCard, Wand2, ArrowRight, Sparkles, Crown,
+  CreditCard, Wand2, ArrowRight, Crown, Sparkles,
   PlusCircle, Key,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { PearlButton } from "@/components/ui/pearl-button";
 import { useToolVisibility } from "@/hooks/useToolVisibility";
 import { isApprovedPublicToolId } from "@/config/publicToolAccess";
-
-type ToolTone = "blue" | "emerald" | "gold" | "purple" | "darkGreen" | "pink" | "ink" | "amber";
-
-const TONE_STYLES: Record<ToolTone, { bg: string; icon: string; ring: string }> = {
-  blue:      { bg: "bg-blue-500/15",       icon: "text-blue-700",      ring: "group-hover:ring-blue-500/40" },
-  emerald:   { bg: "bg-emerald-500/15",    icon: "text-emerald-700",   ring: "group-hover:ring-emerald-500/40" },
-  gold:      { bg: "bg-[#B89555]/20",      icon: "text-[#8A6F2E]",     ring: "group-hover:ring-[#B89555]/50" },
-  purple:    { bg: "bg-purple-500/15",     icon: "text-purple-700",    ring: "group-hover:ring-purple-500/40" },
-  darkGreen: { bg: "bg-green-800/15",      icon: "text-green-800",     ring: "group-hover:ring-green-700/40" },
-  pink:      { bg: "bg-pink-400/15",       icon: "text-pink-600",      ring: "group-hover:ring-pink-400/40" },
-  ink:       { bg: "bg-[#1A1A1A]/10",      icon: "text-[#1A1A1A]",     ring: "group-hover:ring-[#1A1A1A]/30" },
-  amber:     { bg: "bg-amber-500/20",      icon: "text-amber-700",     ring: "group-hover:ring-amber-500/50" },
-};
 
 interface RoyalTool {
   id: string;
@@ -29,103 +16,146 @@ interface RoyalTool {
   icon: typeof Calculator;
   href: string;
   cta: string;
-  tone: ToolTone;
+  image: string;
 }
 
+// Background imagery reuses the existing /services/ premium owned assets so the
+// hub feels consistent with Explore Our Services.
 const royalTools: RoyalTool[] = [
-  { id: "property-evaluator",  name: "Property Evaluator",   description: "AI-powered property valuation",     icon: Calculator, href: "/property-evaluator",                       cta: "Get Evaluation",  tone: "blue"      },
-  { id: "property-comparison", name: "Property Comparison",  description: "Compare properties side-by-side",  icon: Layers,     href: "/compare",                                  cta: "Start Comparing", tone: "emerald"   },
-  { id: "ai-home-finder",      name: "AI Home Finder",       description: "Find your perfect home with AI",   icon: Home,       href: "/quiz",                                     cta: "Find My Home",    tone: "purple"    },
-  { id: "mortgage-calculator", name: "Mortgage Calculator",  description: "Calculate your monthly payments",  icon: Calculator, href: "/mortgage-calculator",                      cta: "Calculate Now",   tone: "gold"      },
-  { id: "rental-index",        name: "Rental Index",         description: "Check current rental rates",       icon: TrendingUp, href: "/rental-index",                             cta: "Check Rates",     tone: "darkGreen" },
-  { id: "list-property-sale",  name: "List for Sale",        description: "Submit a property for sale",       icon: PlusCircle, href: "/listing-portal?type=sale",                 cta: "List for Sale",   tone: "amber"     },
-  { id: "list-property-rent",  name: "List for Rent",        description: "Submit a property for rent",       icon: Key,        href: "/listing-portal?type=rent",                 cta: "List for Rent",   tone: "ink"       },
-  { id: "interior-design",     name: "AI Interior Design",   description: "Visualize your dream space",       icon: Palette,    href: "/interior-design-ai",                       cta: "Design Space",    tone: "pink"      },
-  { id: "business-card",       name: "Business Card Maker",  description: "Design premium business cards",    icon: CreditCard, href: "/toolkit/corporate-suite/business-card",    cta: "Design Card",     tone: "ink"       },
-  { id: "logo-creator",        name: "AI Logo Maker",        description: "Generate company logos with AI",   icon: Wand2,      href: "/toolkit/corporate-suite/logo-creator",     cta: "Create Logo",     tone: "amber"     },
+  { id: "property-evaluator",  name: "Property Evaluator",   description: "AI-powered property valuation across Dubai's market.",   icon: Calculator, href: "/property-evaluator",                    cta: "Get Evaluation",  image: "/services/property-evaluation-bg.jpg" },
+  { id: "property-comparison", name: "Property Comparison",  description: "Compare projects side-by-side with ROI and yield insights.", icon: Layers,  href: "/compare",                               cta: "Start Comparing", image: "/services/compare-properties-bg.jpg" },
+  { id: "ai-home-finder",      name: "AI Home Finder",       description: "Answer a short quiz and let AI match you to a home.",   icon: Home,       href: "/quiz",                                  cta: "Find My Home",    image: "/services/buy-property-bg.jpg" },
+  { id: "mortgage-calculator", name: "Mortgage Calculator",  description: "Calculate monthly payments and total cost instantly.",  icon: Calculator, href: "/mortgage-calculator",                   cta: "Calculate Now",   image: "/services/mortgage-bg.jpg" },
+  { id: "rental-index",        name: "Rental Index",         description: "Live rental benchmarks for every major neighbourhood.", icon: TrendingUp, href: "/rental-index",                          cta: "Check Rates",     image: "/services/rent-property-bg.jpg" },
+  { id: "list-property-sale",  name: "List for Sale",        description: "Submit your property to our institutional sales desk.", icon: PlusCircle, href: "/listing-portal?type=sale",              cta: "List for Sale",   image: "/services/sell-property-bg.jpg" },
+  { id: "list-property-rent",  name: "List for Rent",        description: "Reach pre-qualified tenants through our network.",      icon: Key,        href: "/listing-portal?type=rent",              cta: "List for Rent",   image: "/services/list-rental-bg.jpg" },
+  { id: "interior-design",     name: "AI Interior Design",   description: "Visualize your dream interior in seconds with AI.",     icon: Palette,    href: "/interior-design-ai",                    cta: "Design Space",    image: "/services/property-management-bg.jpg" },
+  { id: "business-card",       name: "Business Card Maker",  description: "Design premium broker business cards on demand.",       icon: CreditCard, href: "/toolkit/corporate-suite/business-card", cta: "Design Card",     image: "/services/partner-introduction-bg.jpg" },
+  { id: "logo-creator",        name: "AI Logo Maker",        description: "Generate a polished brand logo with AI assistance.",    icon: Wand2,      href: "/toolkit/corporate-suite/logo-creator",  cta: "Create Logo",     image: "/services/general-inquiries-bg.jpg" },
 ];
 
 export function ToolkitShowcaseCard() {
   const visibility = useToolVisibility();
   const tools = royalTools.filter(t => isApprovedPublicToolId(t.id) && visibility.isPublic(t.id));
 
+  const [activeId, setActiveId] = useState<string>(tools[0]?.id ?? royalTools[0].id);
+  const tabsRef = useRef<HTMLDivElement>(null);
+
+  // Preload background images so swaps are instant.
+  useEffect(() => {
+    tools.forEach((t) => {
+      const img = new Image();
+      img.src = t.image;
+    });
+  }, [tools]);
+
+  // Keep active tab visible in the horizontal scroller — only adjust the
+  // tabs container scrollLeft (never scrollIntoView, which would jump the page).
+  useEffect(() => {
+    const container = tabsRef.current;
+    if (!container) return;
+    const el = container.querySelector<HTMLElement>(`[data-tab-id="${activeId}"]`);
+    if (!el) return;
+    const target = el.offsetLeft - container.clientWidth / 2 + el.clientWidth / 2;
+    container.scrollTo({ left: Math.max(0, target), behavior: "smooth" });
+  }, [activeId]);
+
+  if (tools.length === 0) return null;
+
+  const active = tools.find((t) => t.id === activeId) ?? tools[0];
+
   return (
     <section className="bg-[#FDFBF7] py-10 md:py-14">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="rounded-2xl overflow-hidden border border-[#B89555]/30 bg-[#F7F2EA]">
-          {/* Header - Premium Banner */}
-          <div className="bg-[#EFE6D6] px-6 md:px-8 pt-8 md:pt-10 pb-8 md:pb-10 border-b border-[#B89555]/30">
-            <div className="flex flex-col items-center text-center gap-4 max-w-2xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-xs font-semibold uppercase tracking-[0.2em]">
-                <Sparkles className="w-3 h-3 text-[#B89555]" />
-                Free Professional Tools
-              </div>
+        <div className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)]">
+          {/* Header */}
+          <div className="px-5 md:px-7 pt-5 md:pt-6 pb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] text-[10px] font-semibold uppercase tracking-[0.2em] mb-3">
+              <Sparkles className="w-3 h-3 text-[#B89555]" />
+              Free Professional Tools
+            </div>
+            <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] tracking-tight">
+              JBJ Royal Tools Hub
+            </h2>
+            <p className="mt-1 text-sm text-[#1A1A1A]/70">
+              Powerful real estate tools — valuation, comparison, mortgage and AI utilities, all free.
+            </p>
+          </div>
 
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1A1A1A] tracking-tight">
-                JBJ Royal Tools Hub
-              </h2>
+          {/* Tabs row — horizontally scrollable, mirrors ExploreServicesExpander */}
+          <div
+            ref={tabsRef}
+            className="flex items-stretch gap-1 px-3 md:px-4 overflow-x-auto no-scrollbar border-b border-[#B89555]/25"
+            role="tablist"
+            aria-label="Royal tools"
+          >
+            {tools.map((t) => {
+              const Icon = t.icon;
+              const isActive = t.id === activeId;
+              return (
+                <button
+                  key={t.id}
+                  data-tab-id={t.id}
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setActiveId(t.id)}
+                  className={`shrink-0 inline-flex items-center gap-2 px-3.5 md:px-4 py-3 text-[13px] font-semibold whitespace-nowrap transition-colors border-b-2 -mb-px text-[#1A1A1A] ${
+                    isActive
+                      ? "border-[#1A1A1A]"
+                      : "border-transparent hover:border-[#B89555]"
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{t.name}</span>
+                </button>
+              );
+            })}
+          </div>
 
-              <p className="text-sm md:text-base text-[#1A1A1A]/75 leading-relaxed">
-                Powerful real estate tools for property valuation, comparison, mortgage calculation, and AI-powered enhancements — all completely free to use.
+          {/* Active tool hero panel — keyed on active.id so it remounts cleanly */}
+          <div key={active.id} className="relative h-[280px] md:h-[340px] overflow-hidden">
+            <div
+              className="absolute inset-0 bg-cover bg-center animate-fade-in"
+              style={{ backgroundImage: `url(${active.image})` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent" />
+
+            <div className="relative h-full flex flex-col justify-end p-5 md:p-8 max-w-xl">
+              <h3
+                className="text-white text-2xl md:text-3xl font-extrabold leading-tight"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 14px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9)" }}
+              >
+                {active.name}
+              </h3>
+              <p
+                className="mt-2 text-sm md:text-base leading-relaxed max-w-md font-medium"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 10px rgba(0,0,0,0.95)" }}
+              >
+                {active.description}
               </p>
+              <div className="mt-4">
+                <Link
+                  to={active.href}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-[#1A1A1A] font-semibold text-sm hover:bg-[#F7F2EA] transition-colors shadow-[0_6px_18px_rgba(0,0,0,0.25)]"
+                >
+                  {active.cta}
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
           </div>
 
-          {/* Tools Grid */}
-          <div className="p-6 md:p-8">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {tools.slice(0, 8).map((tool, index) => {
-                const Icon = tool.icon;
-                return (
-                  <div
-                    key={tool.id}
-                    className="animate-fade-in-up"
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    <Link to={tool.href} className="group block h-full">
-                      <div className="h-full flex flex-col bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 hover:border-[#B89555]/70 p-5 transition-all duration-300 hover:shadow-[0_12px_36px_-12px_rgba(184,149,85,0.35)] hover:-translate-y-1">
-                        {/* Icon — unified champagne/gold */}
-                        <div className="w-12 h-12 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                          <Icon className="w-6 h-6 text-[#B89555]" strokeWidth={2.25} />
-                        </div>
-
-                        {/* Title */}
-                        <h4 className="text-base font-bold text-[#1A1A1A] mb-2 transition-colors">
-                          {tool.name}
-                        </h4>
-
-                        {/* Description */}
-                        <p className="text-sm text-[#1A1A1A]/75 mb-4 leading-relaxed flex-grow">
-                          {tool.description}
-                        </p>
-
-                        {/* CTA — premium champagne */}
-                        <Button
-                          size="sm"
-                          className="mt-auto w-full justify-center bg-[#FDFBF7] hover:bg-[#EFE6D6] text-[#1A1A1A] font-bold border border-[#B89555]/60 hover:border-[#B89555] text-[10px] sm:text-sm px-1.5 sm:px-3 whitespace-nowrap overflow-hidden shadow-none hover:shadow-[0_6px_20px_-8px_rgba(184,149,85,0.45)] transition-all"
-                        >
-                          <span className="truncate">{tool.cta}</span>
-                          <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2 flex-shrink-0 text-[#B89555]" strokeWidth={2.5} />
-                        </Button>
-                      </div>
-                    </Link>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Explore JBJ Tools — premium pearl CTA */}
-            <div className="mt-8 text-center">
-              <PearlButton
-                to="/ai-hub"
-                size="lg"
-                leadingIcon={<Crown strokeWidth={2.2} />}
-                trailingIcon={<ArrowRight strokeWidth={2.5} />}
-              >
-                Explore JBJ Tools
-              </PearlButton>
-            </div>
-
+          {/* Footer — Explore JBJ Tools secondary CTA */}
+          <div className="px-5 md:px-7 py-6 text-center bg-[#FDFBF7]">
+            <PearlButton
+              to="/ai-hub"
+              size="lg"
+              leadingIcon={<Crown strokeWidth={2.2} />}
+              trailingIcon={<ArrowRight strokeWidth={2.5} />}
+            >
+              Explore JBJ Tools
+            </PearlButton>
           </div>
         </div>
       </div>
