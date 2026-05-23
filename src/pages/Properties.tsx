@@ -35,6 +35,8 @@ import { ActiveFilterIndicator } from "@/components/properties/ActiveFilterIndic
 
 import { DisplayModeToggle } from "@/components/filters/DisplayModeToggle";
 import { SettingsDropdown } from "@/components/filters/SettingsDropdown";
+import { SortBySelect } from "@/components/filters/SortBySelect";
+import { SectionDividerGold } from "@/components/ui/section-divider-gold";
 import { getSaleStatusConfig, type DisplayMode, type CurrencyCode, type AreaUnit } from "@/constants/filterConfig";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -551,94 +553,65 @@ const Properties = () => {
               }));
             }}
           />
-          {/* Transaction Type Tabs - Buy / Rent */}
-          <div className="flex items-center gap-1.5 sm:gap-2 mb-3 md:mb-4 flex-wrap">
-            <span className="text-[#1A1A1A]/70 text-sm mr-2 font-medium">I want to:</span>
-            {[
-              { value: 'buy', label: 'Buy' },
-              { value: 'rent', label: 'Rent' },
-            ].map((option) => (
-              <Button
-                key={option.value}
-                variant={filters.transactionType === option.value ? "primary" : "secondary"}
-                size="sm"
-                onClick={() => {
-                  updateFilter("transactionType", option.value as 'buy' | 'rent');
-                  updateFilter("completionStatus", null);
-                  setAppliedFilters((prev) => ({
-                    ...prev,
-                    transactionType: option.value as 'buy' | 'rent',
-                    completionStatus: null,
-                  }));
-                }}
-                className="h-9 px-4 rounded-full"
-              >
-                {option.label}
-              </Button>
-            ))}
+          {/* Intent dropdown — replaces the noisy Buy/Rent/Ready/Off-Plan tab row */}
+          <div className="flex items-center gap-2 sm:gap-3 mb-3 md:mb-4 flex-wrap">
+            <span className="text-[#1A1A1A]/70 text-sm font-medium">I want to:</span>
+            {(() => {
+              const tx = appliedFilters.transactionType;
+              const cs = appliedFilters.completionStatus;
+              const intentValue =
+                tx === 'rent'
+                  ? 'rent'
+                  : cs === 'ready'
+                  ? 'buy-ready'
+                  : cs === 'off-plan'
+                  ? 'buy-offplan'
+                  : 'buy';
+              const setIntent = (val: string) => {
+                if (val === 'rent') {
+                  updateFilter('transactionType', 'rent');
+                  updateFilter('completionStatus', null);
+                  setAppliedFilters((p) => ({ ...p, transactionType: 'rent', completionStatus: null }));
+                } else if (val === 'buy-ready') {
+                  updateFilter('transactionType', 'buy');
+                  updateFilter('completionStatus', 'ready');
+                  setAppliedFilters((p) => ({ ...p, transactionType: 'buy', completionStatus: 'ready' }));
+                } else if (val === 'buy-offplan') {
+                  updateFilter('transactionType', 'buy');
+                  updateFilter('completionStatus', 'off-plan');
+                  setAppliedFilters((p) => ({ ...p, transactionType: 'buy', completionStatus: 'off-plan' }));
+                } else {
+                  updateFilter('transactionType', 'buy');
+                  updateFilter('completionStatus', null);
+                  setAppliedFilters((p) => ({ ...p, transactionType: 'buy', completionStatus: null }));
+                }
+              };
+              return (
+                <Select value={intentValue} onValueChange={setIntent}>
+                  <SelectTrigger className="w-[220px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm hover:border-[#B89555]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="buy">Buy — All</SelectItem>
+                    <SelectItem value="buy-ready">Buy — Ready</SelectItem>
+                    <SelectItem value="buy-offplan">Buy — Off-Plan</SelectItem>
+                    <SelectItem value="rent">Rent</SelectItem>
+                  </SelectContent>
+                </Select>
+              );
+            })()}
 
-            {/* Resale Properties Link */}
-            <div className="w-px h-6 bg-[#EFE6D6]/30 mx-1" />
+            {/* Resale shortcut (kept) */}
             <Link to="/resale-properties">
               <Button
                 variant="secondary"
                 size="sm"
-                className="h-9 px-4 rounded-full flex items-center gap-1.5 border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/10"
+                className="h-11 px-4 rounded-xl flex items-center gap-1.5 border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/40"
               >
                 <ArrowUpRight className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 Resale
               </Button>
             </Link>
-
-            {/* Buy-only Status Shortcuts */}
-            {appliedFilters.transactionType === 'buy' && (
-              <>
-                <div className="w-px h-6 bg-[#EFE6D6]/30 mx-2" />
-
-                {/* All status */}
-                <Button
-                  variant={appliedFilters.completionStatus === null ? "primary" : "secondary"}
-                  size="sm"
-                  onClick={() => {
-                    updateFilter("completionStatus", null);
-                    setAppliedFilters((prev) => ({ ...prev, completionStatus: null, transactionType: 'buy' }));
-                  }}
-                  className="h-9 px-4 rounded-full"
-                >
-                  All
-                </Button>
-
-                {/* Ready */}
-                <Button
-                  variant={appliedFilters.completionStatus === 'ready' ? "primary" : "secondary"}
-                  size="sm"
-                  onClick={() => {
-                    const newStatus = appliedFilters.completionStatus === 'ready' ? null : 'ready';
-                    updateFilter("completionStatus", newStatus);
-                    setAppliedFilters((prev) => ({ ...prev, completionStatus: newStatus, transactionType: 'buy' }));
-                  }}
-                  className="h-9 px-4 rounded-full flex items-center gap-1.5"
-                >
-                  <CheckCircle className="w-3.5 h-3.5" />
-                  Ready
-                </Button>
-
-                {/* Off-Plan */}
-                <Button
-                  variant={appliedFilters.completionStatus === 'off-plan' ? "primary" : "secondary"}
-                  size="sm"
-                  onClick={() => {
-                    const newStatus = appliedFilters.completionStatus === 'off-plan' ? null : 'off-plan';
-                    updateFilter("completionStatus", newStatus);
-                    setAppliedFilters((prev) => ({ ...prev, completionStatus: newStatus, transactionType: 'buy' }));
-                  }}
-                  className="h-9 px-4 rounded-full flex items-center gap-1.5"
-                >
-                  <Calendar className="w-3.5 h-3.5" />
-                  Off-Plan
-                </Button>
-              </>
-            )}
           </div>
           
           {/* Keyword Search - Full Width */}
@@ -1153,25 +1126,9 @@ const Properties = () => {
             </button>
           </div>
 
-          <div className="flex items-center justify-center gap-2 mt-5 flex-wrap">
-            {[
-              { value: "newest", label: "Newest" },
-              { value: "oldest", label: "Oldest" },
-              { value: "price-low", label: "Low → High" },
-              { value: "price-high", label: "High → Low" },
-            ].map((option) => (
-              <button
-                key={option.value}
-                onClick={() => setSortBy(option.value)}
-                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all border-2 ${
-                  sortBy === option.value
-                    ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-[#B89555] shadow-[0_0_18px_rgba(200,167,102,0.25)]"
-                    : "bg-transparent text-[#1A1A1A] border-[#B89555]/30 hover:border-[#B89555]"
-                }`}
-              >
-                {option.label}
-              </button>
-            ))}
+          {/* Sort By — unified premium dropdown */}
+          <div className="flex items-center justify-end gap-3 mt-5">
+            <SortBySelect value={sortBy} onChange={setSortBy} />
           </div>
           </div>
         </div>
@@ -1179,8 +1136,8 @@ const Properties = () => {
 
       {/* Fixed filter bar removed — handled globally by GlobalFilterBar in MainLayout */}
 
-      {/* Divider between Search and Results */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+      {/* Premium gold divider between Filters and Results — section-level (lg) */}
+      <SectionDividerGold size="lg" className="my-2" />
 
       {/* Results Section - Split-screen map mode or standard grid */}
       {isMapMode ? (
