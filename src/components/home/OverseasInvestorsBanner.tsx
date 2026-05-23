@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Globe, Shield, TrendingUp, BadgeCheck, ArrowRight, Building2, Users, Sparkles, ShieldCheck, Globe2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PearlButton } from "@/components/ui/pearl-button";
 
 const dubaiStats = [
   { value: "0%",   label: "Income Tax",    icon: Sparkles },
