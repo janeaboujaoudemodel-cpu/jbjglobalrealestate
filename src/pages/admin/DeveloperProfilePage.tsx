@@ -61,7 +61,7 @@ const MEDIA_KINDS = [
 export default function DeveloperProfilePage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isOwner } = useAuth();
   const qc = useQueryClient();
 
   /* ---------- Load developer ---------- */
