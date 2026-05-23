@@ -228,10 +228,14 @@ export default function BookMeetingLanding() {
           attachmentName: att?.name ?? null,
           refToken: token || null,
           source: token ? "branded_email" : "public_landing",
+          authUserId: user?.id ?? null,
+          agreedToCancellationTerms: true,
         },
       });
       if (error) throw error;
       if (data && (data as any).error) throw new Error((data as any).error);
+
+      setConfirmOpen(false);
 
       setDone({
         when: selectedDate.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) + ` at ${selectedTime} (Dubai)`,
