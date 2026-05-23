@@ -10,11 +10,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   ArrowLeft, Building2, Globe, MapPin, Phone, Mail, Upload,
   Image as ImageIcon, FileText, Video, Map as MapIcon, Trash2,
   CheckCircle2, AlertTriangle, Pencil, Plus, ExternalLink, Languages,
-  ShieldCheck, History
+  ShieldCheck, History, Sparkles
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -59,7 +61,7 @@ const MEDIA_KINDS = [
 export default function DeveloperProfilePage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isOwner } = useAuth();
   const qc = useQueryClient();
 
   /* ---------- Load developer ---------- */
@@ -257,11 +259,10 @@ export default function DeveloperProfilePage() {
 
   /* ---------- Confirmation ---------- */
   const [confirmChecked, setConfirmChecked] = useState(false);
+  const [thanksOpen, setThanksOpen] = useState(false);
   const confirmMutation = useMutation({
     mutationFn: async () => {
       if (!developer || !user) return;
-      // Detect if owner via RPC fallback: assume canEdit and write a source label
-      const isOwner = (user.email || "").length > 0 && (user as any).user_metadata?.role === "owner";
       const source = isOwner ? "owner" : "sales_rep";
       const { error } = await supabase
         .from("developers")
@@ -280,12 +281,31 @@ export default function DeveloperProfilePage() {
       });
     },
     onSuccess: () => {
-      toast.success("Information confirmed");
       setConfirmChecked(false);
+      setThanksOpen(true);
       qc.invalidateQueries({ queryKey: ["dev-profile", slug] });
       qc.invalidateQueries({ queryKey: ["dev-audit", developer?.id] });
     },
+    onError: (e: any) => toast.error(e.message || "Confirmation failed"),
   });
+
+  /* ---------- Auto-resolve logo from Clearbit when missing ---------- */
+  useEffect(() => {
+    if (!developer || developer.logo_url) return;
+    if (!canEdit) return;
+    const site = developer.website_url;
+    if (!site) return;
+    let host: string | null = null;
+    try { host = new URL(site.startsWith("http") ? site : `https://${site}`).hostname.replace(/^www\./, ""); } catch { host = null; }
+    if (!host) return;
+    const candidate = `https://logo.clearbit.com/${host}`;
+    const img = new Image();
+    img.onload = async () => {
+      await supabase.from("developers").update({ logo_url: candidate }).eq("id", developer.id);
+      qc.invalidateQueries({ queryKey: ["dev-profile", slug] });
+    };
+    img.src = candidate;
+  }, [developer, canEdit, qc, slug]);
 
   if (isLoading) {
     return <div className="p-12 text-center">Loading…</div>;
@@ -476,47 +496,82 @@ export default function DeveloperProfilePage() {
               </CardContent>
             </Card>
 
-            {/* Confirmation block */}
-            <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2 text-[#1A1A1A]">
-                  <ShieldCheck className="w-4 h-4" /> Confirmation
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {confirmed ? (
-                  <p className="text-sm text-[#1A1A1A]/80">
-                    Last confirmed by <strong>{developer.last_confirmed_by ?? "—"}</strong> ({developer.confirmation_source ?? "—"}) on{" "}
-                    {format(new Date(developer.last_confirmed_at!), "PPpp")}.
-                  </p>
-                ) : (
-                  <p className="text-sm text-amber-800">This profile has unconfirmed edits. Please verify with the developer and sign below.</p>
-                )}
-                {canEdit && (
-                  <div className="flex items-start gap-3 pt-1">
-                    <input
-                      id="confirm-check"
-                      type="checkbox"
-                      checked={confirmChecked}
-                      onChange={(e) => setConfirmChecked(e.target.checked)}
-                      className="mt-1"
-                    />
-                    <label htmlFor="confirm-check" className="text-sm text-[#1A1A1A] flex-1">
-                      I confirm that the description, website, logo and headquarters above match the developer's official website,
-                      and I have verified this information directly with the developer.
-                    </label>
-                    <Button
-                      disabled={!confirmChecked || confirmMutation.isPending}
-                      onClick={() => confirmMutation.mutate()}
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                    >
-                      I agree & confirm
-                    </Button>
+            {/* Confirmation block — hidden entirely for owner (the source of truth) */}
+            {!isOwner && (
+              <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2 text-[#1A1A1A]">
+                    <ShieldCheck className="w-4 h-4" /> Confirmation
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {confirmed ? (
+                    <p className="text-sm text-[#1A1A1A]/80">
+                      Last confirmed by <strong>{developer.last_confirmed_by ?? "—"}</strong> ({developer.confirmation_source ?? "—"}) on{" "}
+                      {format(new Date(developer.last_confirmed_at!), "PPpp")}.
+                    </p>
+                  ) : (
+                    <p className="text-sm text-amber-800">This profile has unconfirmed edits. Please verify with the developer and sign below.</p>
+                  )}
+                  {canEdit && (
+                    <>
+                      <label
+                        htmlFor="confirm-check"
+                        className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                          confirmChecked
+                            ? "border-emerald-500 bg-emerald-50/60"
+                            : "border-[#B89555]/40 bg-[#FDFBF7] hover:border-[#B89555]/70"
+                        }`}
+                      >
+                        <Checkbox
+                          id="confirm-check"
+                          checked={confirmChecked}
+                          onCheckedChange={(v) => setConfirmChecked(v === true)}
+                          className="mt-0.5 h-5 w-5 border-[#1A1A1A]/40 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 data-[state=checked]:text-white"
+                        />
+                        <span className="text-sm text-[#1A1A1A] flex-1 leading-relaxed">
+                          I confirm that the description, website, logo and headquarters above match the developer's official website,
+                          and I have verified this information directly with the developer.
+                        </span>
+                      </label>
+                      <div className="flex justify-end">
+                        <Button
+                          disabled={!confirmChecked || confirmMutation.isPending}
+                          onClick={() => confirmMutation.mutate()}
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-40"
+                        >
+                          {confirmMutation.isPending ? "Submitting…" : "I agree & confirm"}
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Premium thank-you screen */}
+            <Dialog open={thanksOpen} onOpenChange={setThanksOpen}>
+              <DialogContent className="max-w-md bg-[#FDFBF7] border-2 border-[#B89555]/40 p-0 overflow-hidden">
+                <div className="bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] px-8 pt-10 pb-8 text-center">
+                  <div className="w-16 h-16 mx-auto rounded-full bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-600/20 mb-5">
+                    <CheckCircle2 className="w-9 h-9 text-white" strokeWidth={2.5} />
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                  <h2 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">Thank you</h2>
+                  <p className="text-sm text-[#1A1A1A]/70 mt-2 leading-relaxed">
+                    Your confirmation has been recorded and signed against <strong className="text-[#1A1A1A]">{developer.name}</strong>.
+                    Our team will review and reflect any pending updates shortly.
+                  </p>
+                  <div className="mt-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/40 text-xs text-[#1A1A1A]">
+                    <Sparkles className="w-3 h-3" /> Signed {format(new Date(), "PPp")}
+                  </div>
+                </div>
+                <div className="px-8 py-4 bg-[#FDFBF7] border-t border-[#B89555]/20 flex justify-end">
+                  <Button onClick={() => setThanksOpen(false)} className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white">Close</Button>
+                </div>
+              </DialogContent>
+            </Dialog>
           </TabsContent>
+
 
           {/* PROJECTS */}
           <TabsContent value="projects" className="space-y-3">
