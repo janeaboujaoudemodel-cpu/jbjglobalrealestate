@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { MapPin, ArrowRight, TrendingUp, Flame, BookOpen, Compass } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAreas } from "@/hooks/useAreas";
+import { PearlButton } from "@/components/ui/pearl-button";
 
 const AreasWeCover = () => {
   const { t } = useLanguage();
