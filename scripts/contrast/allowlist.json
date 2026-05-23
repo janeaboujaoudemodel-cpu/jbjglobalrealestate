@@ -24,6 +24,10 @@
     {
       "pair": "surface-fg-muted/surface-bg",
       "reason": "[data-surface=\"gold\"] muted text (95% white on gold → 3.86:1). Used only for tertiary microcopy on gold accent tiles — never primary body text. Light/champagne/ink surfaces all clear AA comfortably."
+    },
+    {
+      "pair": "gold-foreground/gold-dark",
+      "reason": "Ink-on-gold-dark (#1A1A1A on #A68444 → 3.7:1). gold-foreground was flipped from white→ink (May 2026) to satisfy the white-on-bright contrast rule on the dominant gold surface; ink-on-gold-dark only appears on hover/active states of large CTA labels (≥18pt or 14pt bold), which fall under WCAG AA's 3:1 UI-component threshold. Body text on gold-dark is forbidden by the button system."
     }
   ],
   "axeViolationIds": [],
