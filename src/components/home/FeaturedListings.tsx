@@ -243,7 +243,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             )}
 
             {/* Premium full-width divider — directly after developer name, before handover */}
-            <div className="w-full h-px bg-[#B89555]/45 mt-3" />
+            <div className="w-full border-t border-[#B89555]/45 mt-3" />
 
             {/* Spacer pushes handover row to the very bottom of the card */}
             <div className="flex-grow" />

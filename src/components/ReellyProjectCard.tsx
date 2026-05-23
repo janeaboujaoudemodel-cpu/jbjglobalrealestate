@@ -281,7 +281,7 @@ const ReellyProjectCard = ({
            )}
 
             {/* Premium full-width divider — directly after developer name, before handover */}
-            <div className="w-full h-px bg-[#B89555]/45" />
+            <div className="w-full border-t border-[#B89555]/45" />
 
             {/* Spacer pushes handover row to the very bottom */}
             <div className="flex-1" />
