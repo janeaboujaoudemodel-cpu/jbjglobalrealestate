@@ -243,16 +243,6 @@ const ReellyProjectCard = ({
           {/* Premium gold divider between location/header and developer */}
           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent my-2" />
 
-          {/* Developer - Clickable */}
-          {project.developer_name && (
-            <DeveloperLink
-              name={project.developer_name}
-              slug={(project as any).developer?.slug || null}
-              className="text-sm mb-2 block"
-              showPrefix={true}
-            />
-          )}
-
            {/* Payment Plan removed from cards — shown only on details page */}
            
            {/* Size info - hidden in compact mode */}
@@ -280,7 +270,17 @@ const ReellyProjectCard = ({
              </p>
            )}
 
-            {/* Premium full-width divider — directly after developer/content, before handover */}
+           {/* Developer - Clickable */}
+           {project.developer_name && (
+             <DeveloperLink
+               name={project.developer_name}
+               slug={(project as any).developer?.slug || null}
+               className="text-sm mb-3 block"
+               showPrefix={true}
+             />
+           )}
+
+            {/* Premium full-width divider — directly after developer name, before handover */}
             <div className="w-full h-px bg-[#B89555]/45" />
 
             {/* Spacer pushes handover row to the very bottom */}
