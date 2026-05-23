@@ -1192,10 +1192,10 @@ All colors MUST be HSL.
     box-shadow: 0 8px 32px rgba(26, 26, 26, 0.08);
   }
 
-/* Icon box - grayscale */
+/* Icon box - champagne (was #F5F5F5 gray) */
   .jj-icon-box-active {
     @apply rounded-lg flex items-center justify-center border border-[#B89555]/40;
-    background: #F5F5F5;
+    background: #EFE6D6;
   }
 
   .jj-icon-box-active svg {
@@ -1204,7 +1204,7 @@ All colors MUST be HSL.
 
   .jj-icon-box {
     @apply flex items-center justify-center flex-shrink-0 rounded-xl border border-[#B89555]/40;
-    background: #F5F5F5;
+    background: #EFE6D6;
     box-shadow: 0 1px 3px hsl(0 0% 0% / 0.05);
   }
 
