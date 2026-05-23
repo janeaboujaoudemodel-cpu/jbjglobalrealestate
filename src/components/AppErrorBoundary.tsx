@@ -38,11 +38,15 @@ class AppErrorBoundary extends React.Component<
       msg.includes("dynamically imported") ||
       msg.includes("Importing a module");
 
-    // Non-chunk render errors: silently remount forever. Never show the
-    // visible fallback card for transient render hiccups (Suspense throws,
-    // hydration mismatches, race conditions on route transitions).
+    // Non-chunk render errors: silently remount, but cap retries to avoid
+    // an infinite setState loop (React error #185) when the child throws
+    // synchronously on every remount. Defer setState out of the commit phase.
     if (!looksLikeChunk) {
-      this.setState((prev) => ({ hasError: false, retryCount: prev.retryCount + 1 }));
+      if (this.state.retryCount < 3) {
+        setTimeout(() => {
+          this.setState((prev) => ({ hasError: false, retryCount: prev.retryCount + 1 }));
+        }, 0);
+      }
       return;
     }
 
@@ -50,7 +54,9 @@ class AppErrorBoundary extends React.Component<
     // stale bundle (deploy mid-session), do a one-shot hard reload after
     // the first failure so the user picks up the new chunk hashes.
     if (this.state.retryCount < 6) {
-      this.setState((prev) => ({ hasError: false, retryCount: prev.retryCount + 1 }));
+      setTimeout(() => {
+        this.setState((prev) => ({ hasError: false, retryCount: prev.retryCount + 1 }));
+      }, 0);
       if (this.state.retryCount === 0) {
         try {
           const k = "jbj_chunk_reload_at";
