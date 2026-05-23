@@ -39,53 +39,8 @@ const learningTopics = [
   { icon: CheckCircle, title: "Payment plan structures and milestones", description: "How installment schedules work in off-plan purchases" }
 ];
 
-// ─── Auto-scrolling Book Marquee ───
-function BookMarquee({ books }: { books: BookData[] }) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const duplicated = [...books, ...books, ...books];
+// BookMarquee removed — the auto-scrolling strip lives on the homepage to promote this page.
 
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    let animId: number;
-    let pos = 0;
-    const speed = 0.5;
-    const singleSetWidth = books.length * 152;
-
-    const tick = () => {
-      pos += speed;
-      if (pos >= singleSetWidth) pos -= singleSetWidth;
-      el.style.transform = `translateX(-${pos}px)`;
-      animId = requestAnimationFrame(tick);
-    };
-    animId = requestAnimationFrame(tick);
-
-    const pause = () => cancelAnimationFrame(animId);
-    const resume = () => { animId = requestAnimationFrame(tick); };
-    el.addEventListener('mouseenter', pause);
-    el.addEventListener('mouseleave', resume);
-
-    return () => {
-      cancelAnimationFrame(animId);
-      el.removeEventListener('mouseenter', pause);
-      el.removeEventListener('mouseleave', resume);
-    };
-  }, [books.length]);
-
-  return (
-    <div className="overflow-hidden w-full py-6 mb-4 border-b border-[#B89555]/20 pb-8">
-      <div ref={scrollRef} className="flex gap-6 will-change-transform" style={{ width: 'max-content' }}>
-        {duplicated.map((book, i) => (
-          <div key={`${book.title}-${i}`} className="flex-shrink-0 w-28 md:w-36">
-            <div className="relative w-24 h-36 md:w-32 md:h-44 mx-auto rounded-md overflow-hidden border border-[#B89555]/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)]">
-              <BookCoverFace book={book} bare />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 const Guides = () => {
   const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
