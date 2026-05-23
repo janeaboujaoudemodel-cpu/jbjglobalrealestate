@@ -672,6 +672,13 @@ export default function GlobalVerticalNav() {
     setActiveMegaMenu(null);
   }, []);
 
+  const collapseAfterNavigation = useCallback(() => {
+    setCollapsed(true);
+    try { localStorage.setItem('jj_nav_collapsed', '1'); } catch {}
+    setActiveMegaMenu(null);
+    setMobileOpen(false);
+  }, []);
+
   useEffect(() => {
     if (!navRevealed) {
       document.body.classList.remove("jj-vertical-nav-active");
@@ -711,8 +718,8 @@ export default function GlobalVerticalNav() {
       setActiveMegaMenu((prev) => (prev === megaMenu ? null : megaMenu));
       return;
     }
-    setActiveMegaMenu(null);
-  }, []);
+    collapseAfterNavigation();
+  }, [collapseAfterNavigation]);
 
   const [shortcutsExpanded, setShortcutsExpanded] = useState(false);
 
