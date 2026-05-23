@@ -61,7 +61,7 @@ export const CompanyProfileDownload = () => {
       </CardHeader>
       <CardContent className="space-y-2">
         <Button
-          className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white"
+          className="w-full bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A]"
           onClick={handleDownload}
           disabled={isGenerating}
         >

@@ -219,7 +219,7 @@ const LeadCapturePopup = () => {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white font-bold h-12 rounded-xl text-sm"
+                className="w-full bg-[#EFE6D6] hover:bg-[#F7F2EA]/90 text-[#1A1A1A] font-bold h-12 rounded-xl text-sm"
               >
                 {isSubmitting ? "Submitting..." : "Get Full Access"}
               </Button>

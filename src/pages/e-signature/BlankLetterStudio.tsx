@@ -420,7 +420,7 @@ export default function BlankLetterStudio() {
               {saving ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1.5" />}
               Save
             </Button>
-            <Button size="sm" onClick={handleDownload} disabled={downloading} className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white">
+            <Button size="sm" onClick={handleDownload} disabled={downloading} className="bg-[#EFE6D6] hover:bg-[#F7F2EA]/90 text-[#1A1A1A]">
               {downloading ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Download className="w-3.5 h-3.5 mr-1.5" />}
               Download PDF
             </Button>

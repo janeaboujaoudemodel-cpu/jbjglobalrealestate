@@ -768,7 +768,7 @@ export default function DocumentFieldPlacer({
                                   e.stopPropagation();
                                   handleSignatureFieldClick(field.id);
                                 }}
-                                className="w-6 h-6 bg-[#1A1A1A] hover:bg-[#1A1A1A]/85 text-white rounded-full flex items-center justify-center shadow-md ring-2 ring-white"
+                                className="w-6 h-6 bg-[#EFE6D6] hover:bg-[#F7F2EA]/85 text-[#1A1A1A] rounded-full flex items-center justify-center shadow-md ring-2 ring-white"
                                 title="Draw / edit signature"
                               >
                                 <Pencil className="w-3 h-3" />

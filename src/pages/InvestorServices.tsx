@@ -160,7 +160,7 @@ const InvestorServices = () => {
         </button>
         <Link
           to="/contact"
-          className="flex-1 h-11 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 rounded-lg flex items-center justify-center gap-2 text-white font-medium text-sm"
+          className="flex-1 h-11 bg-[#EFE6D6] hover:bg-[#F7F2EA]/90 rounded-lg flex items-center justify-center gap-2 text-[#1A1A1A] font-medium text-sm"
         >
           Contact
           <ArrowRight className="w-4 h-4" />
@@ -190,7 +190,7 @@ const InvestorServices = () => {
               
               <motion.h1
                 variants={fadeInUp}
-                className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-3 leading-tight"
+                className="text-3xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] mb-3 leading-tight"
               >
                 Investor Advisory &{" "}
                 <span className="text-[#1A1A1A]">Market Intelligence</span>
@@ -198,7 +198,7 @@ const InvestorServices = () => {
               
               <motion.p
                 variants={fadeInUp}
-                className="text-base md:text-lg text-white/70 max-w-2xl mx-auto mb-8"
+                className="text-base md:text-lg text-[#1A1A1A]/70 max-w-2xl mx-auto mb-8"
               >
                 Structured investment guidance for individuals and institutions seeking exposure to Dubai's real estate market.
               </motion.p>
