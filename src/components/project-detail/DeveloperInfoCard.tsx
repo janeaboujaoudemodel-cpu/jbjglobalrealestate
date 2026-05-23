@@ -5,6 +5,7 @@ import { PearlButton } from "@/components/ui/pearl-button";
 import { useState } from "react";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import InlineEditable from "@/components/project-detail/owner/InlineEditable";
 
 type PublicFieldKey =
   | "instagram_url" | "linkedin_url" | "office_address" | "google_maps_url"
@@ -12,6 +13,7 @@ type PublicFieldKey =
 
 interface DeveloperInfoCardProps {
   developer: {
+    id?: string | null;
     name: string;
     slug?: string | null;
     logo_url?: string | null;
@@ -39,11 +41,12 @@ interface DeveloperInfoCardProps {
   } | null;
   projectName: string;
   projectCount?: number;
+  editable?: boolean;
 }
 
 const DESCRIPTION_PREVIEW_LENGTH = 500;
 
-export default function DeveloperInfoCard({ developer, projectName, projectCount }: DeveloperInfoCardProps) {
+export default function DeveloperInfoCard({ developer, projectName, projectCount, editable }: DeveloperInfoCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   
   if (!developer) return null;
