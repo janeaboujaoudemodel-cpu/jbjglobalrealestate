@@ -938,6 +938,24 @@ All colors MUST be HSL.
   50% { filter: drop-shadow(0 0 20px hsl(var(--gold) / 0.7)); }
 }
 
+@keyframes shimmerSweep {
+  0% { background-position: 200% 0; opacity: 0; }
+  20%, 80% { opacity: 1; }
+  100% { background-position: -200% 0; opacity: 0; }
+}
+
+@keyframes pulseSlow {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+@keyframes metallicSweep {
+  0% { transform: translateX(-120%) skewX(-18deg); }
+  100% { transform: translateX(220%) skewX(-18deg); }
+}
+
+
+
 .animate-sparkle {
   animation: sparkle 3s ease-in-out infinite;
 }
