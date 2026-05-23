@@ -29,7 +29,21 @@ const inferType = (name: string): string => {
   return "brochure";
 };
 
-export default function OwnerDocDropzone({ projectId, existing }: OwnerDocDropzoneProps) {
+export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
+  const { isOwner: ownerCheck } = useIsAppOwner();
+  const { data: existing = [] } = useQuery({
+    queryKey: ["owner-project-documents", projectId],
+    enabled: !!projectId && ownerCheck,
+    queryFn: async (): Promise<DocRow[]> => {
+      const { data, error } = await supabase
+        .from("project_documents")
+        .select("id, file_name, file_url, document_type, is_visible")
+        .eq("project_id", projectId)
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return (data as any) ?? [];
+    },
+  });
   const { isOwner } = useIsAppOwner();
   const qc = useQueryClient();
   const [busy, setBusy] = useState(false);
