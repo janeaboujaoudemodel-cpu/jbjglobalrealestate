@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
 import { Book3DCard, BookDetailModal, BookLanguageFilter } from "@/components/broker-education";
+import { cn } from "@/lib/utils";
 import { CertificationSection } from "@/components/certification";
 import { useAccessControl } from "@/hooks/useAccessControl";
 import { useAuth } from "@/contexts/AuthContext";
@@ -447,25 +448,99 @@ const BrokerEducation = () => {
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {[
-                { icon: Shield, title: "24/7 Support", desc: "Dedicated support for all registered brokers. Get help anytime via chat, call, or email." },
-                { icon: BookOpen, title: "Continuous Education", desc: "Regular book updates, new learning paths, and advanced content added monthly." },
-                { icon: GraduationCap, title: "Events & Networking", desc: "Exclusive JBJ broker events, workshops, and professional networking opportunities." },
-                { icon: Briefcase, title: "AI Tools Access", desc: "Full access to all AI-powered broker tools — lead scoring, market reports, and more." },
-                { icon: Shield, title: "Admin Support", desc: "Personal assistant for each broker to handle administrative tasks and coordination." },
-                { icon: Briefcase, title: "Operations Support", desc: "CRM support and listing management to keep your pipeline organized and efficient." },
-                { icon: GraduationCap, title: "Marketing Team", desc: "Dedicated marketing support for property listings, social media, and campaigns." },
-                { icon: BookOpen, title: "Personal Admin", desc: "Manage your listings, operations, and client communications with dedicated admin support." },
+                { icon: Briefcase, title: "AI Tools Access", desc: "Full access to every AI broker tool — lead scoring, market reports, neighborhood intel, and more.", featured: true },
+                { icon: Shield, title: "24/7 Support", desc: "Dedicated help via chat, call, or email — anytime." },
+                { icon: BookOpen, title: "Continuous Education", desc: "New books and learning paths added every month." },
+                { icon: GraduationCap, title: "Events & Networking", desc: "Exclusive broker events, workshops, and circles." },
+                { icon: Shield, title: "Admin Support", desc: "A personal assistant to handle your coordination." },
+                { icon: Briefcase, title: "Operations Support", desc: "CRM and listing management to keep your pipeline clean." },
+                { icon: GraduationCap, title: "Marketing Team", desc: "Dedicated marketing for listings, social, and campaigns." },
+                { icon: BookOpen, title: "Personal Admin", desc: "Listings, operations, and client comms — handled." },
               ].map((benefit, i) => (
-                <motion.div key={i} variants={fadeInUp}>
-                  <Card className="jj-card-inner h-full">
-                    <CardContent className="p-6">
-                      <div className="jj-icon-box-active w-12 h-12 rounded-xl mb-4">
-                        <benefit.icon className="w-6 h-6" />
+                <motion.div
+                  key={i}
+                  variants={fadeInUp}
+                  whileHover={{ y: -4 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                  className={cn(
+                    "group",
+                    benefit.featured && "sm:col-span-2 lg:col-span-2 lg:row-span-1",
+                  )}
+                >
+                  <Card
+                    className={cn(
+                      "relative h-full overflow-hidden border bg-[#F7F2EA] transition-shadow duration-300",
+                      "border-[#B89555]/30 shadow-[0_1px_0_0_rgba(184,149,85,0.10)_inset]",
+                      "hover:shadow-[0_18px_40px_-22px_rgba(26,26,26,0.18),0_0_0_1px_rgba(184,149,85,0.55)_inset]",
+                    )}
+                  >
+                    {benefit.featured && (
+                      <>
+                        {/* Animated gold shimmer sweep — featured tile only */}
+                        <span
+                          aria-hidden
+                          className="pointer-events-none absolute inset-0 motion-safe:animate-[shimmerSweep_6s_ease-in-out_infinite]"
+                          style={{
+                            background:
+                              "linear-gradient(115deg, transparent 38%, rgba(184,149,85,0.22) 50%, transparent 62%)",
+                            backgroundSize: "220% 100%",
+                          }}
+                        />
+                        {/* Soft gold orb */}
+                        <span
+                          aria-hidden
+                          className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full motion-safe:animate-[pulseSlow_5s_ease-in-out_infinite]"
+                          style={{
+                            background:
+                              "radial-gradient(circle, rgba(184,149,85,0.18) 0%, rgba(184,149,85,0) 70%)",
+                          }}
+                        />
+                      </>
+                    )}
+                    <CardContent className={cn("relative p-6", benefit.featured && "lg:p-7")}>
+                      <div
+                        className={cn(
+                          "mb-4 flex items-center justify-center rounded-xl border border-[#B89555]/35 bg-[#EFE6D6]",
+                          benefit.featured
+                            ? "h-14 w-14 motion-safe:animate-[pulseSlow_3.5s_ease-in-out_infinite]"
+                            : "h-12 w-12",
+                        )}
+                        data-no-contrast-guard
+                      >
+                        <benefit.icon
+                          className={cn("text-[#1A1A1A]", benefit.featured ? "h-7 w-7" : "h-6 w-6")}
+                        />
                       </div>
-                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">{benefit.title}</h3>
-                      <p className="text-[#1A1A1A]/60 text-sm">{benefit.desc}</p>
+                      <div className="flex items-baseline gap-2 mb-2">
+                        <h3
+                          className={cn(
+                            "text-[#1A1A1A] font-semibold tracking-tight",
+                            benefit.featured ? "text-xl" : "text-lg",
+                          )}
+                        >
+                          {benefit.title}
+                        </h3>
+                        {benefit.featured && (
+                          <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/70 border border-[#B89555]/45 rounded-full px-2 py-0.5">
+                            Featured
+                          </span>
+                        )}
+                      </div>
+                      <p
+                        className={cn(
+                          "text-sm leading-relaxed text-[#1A1A1A]/70",
+                          !benefit.featured && "line-clamp-2",
+                        )}
+                      >
+                        {benefit.desc}
+                      </p>
+                      {/* Gold hairline accent at the bottom */}
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/55 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      />
                     </CardContent>
                   </Card>
                 </motion.div>
