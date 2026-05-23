@@ -55,9 +55,9 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
   const computedOffplanProjects = developer.offplan_projects ?? projectCount ?? null;
 
   const stats = [
-    { label: "Founded", value: developer.founded_year ? `${developer.founded_year}` : null, icon: Calendar },
-    { label: "Completed", value: developer.completed_projects ? `${developer.completed_projects}+` : null, icon: Building2 },
-    { label: "Off-plan", value: computedOffplanProjects ? `${computedOffplanProjects}+` : null, icon: Briefcase },
+    { label: "Founded", value: developer.founded_year ? `${developer.founded_year.toLocaleString()}` : null, icon: Calendar },
+    { label: "Completed", value: developer.completed_projects ? `${developer.completed_projects.toLocaleString()}+` : null, icon: Building2 },
+    { label: "Off-plan", value: computedOffplanProjects ? `${computedOffplanProjects.toLocaleString()}+` : null, icon: Briefcase },
     { label: "Units Delivered", value: developer.total_units_delivered ? `${developer.total_units_delivered.toLocaleString()}+` : null, icon: Layers },
     { label: "Upcoming", value: developer.upcoming_units ? `${developer.upcoming_units.toLocaleString()}` : null, icon: Star },
   ].filter(s => s.value);
