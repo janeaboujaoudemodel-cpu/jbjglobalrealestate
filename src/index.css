@@ -5017,3 +5017,60 @@ hr[data-gold-hairline],
 }
 
 
+/* ============================================================
+   CARD INTERACTION CONTRAST BOOST
+   When a card (.group) is hovered or focused, strengthen the
+   contrast of prices, developer names, and status badges so
+   readability stays strong during interaction.
+   ============================================================ */
+
+/* Price pill — denser glass, darker gold ring, deeper shadow */
+.group:hover .price-pill-premium,
+.group:focus-within .price-pill-premium,
+.price-pill-premium:hover,
+.price-pill-premium:focus-visible {
+  background: rgba(253, 251, 247, 0.88) !important;
+  border-color: #8E6E36 !important;
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1px rgba(142, 110, 54, 0.45) !important;
+}
+.group:hover .price-pill-premium .price-pill-eyebrow,
+.group:focus-within .price-pill-premium .price-pill-eyebrow {
+  opacity: 1 !important;
+}
+.group:hover .price-pill-premium .price-pill-value,
+.group:focus-within .price-pill-premium .price-pill-value {
+  color: #0F0F0F !important;
+}
+
+/* Status badge (crystal + gold hairline) — same treatment */
+.group:hover .card-status-badge,
+.group:focus-within .card-status-badge,
+.card-status-badge:hover,
+.card-status-badge:focus-visible {
+  background: rgba(253, 251, 247, 0.92) !important;
+  border-color: #8E6E36 !important;
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1px rgba(142, 110, 54, 0.40) !important;
+}
+.group:hover .card-status-badge,
+.group:focus-within .card-status-badge,
+.group:hover .card-status-badge *,
+.group:focus-within .card-status-badge * {
+  color: #0F0F0F !important;
+}
+
+/* Developer name link — on card hover, deepen to bronze-ink so the
+   gold underline stays visible but the text contrast climbs. */
+.group:hover a[href^="/developer/"],
+.group:hover a[href^="/developers?"],
+.group:focus-within a[href^="/developer/"],
+.group:focus-within a[href^="/developers?"] {
+  color: #6B4F1F !important;
+  text-decoration-color: #6B4F1F !important;
+}
+
