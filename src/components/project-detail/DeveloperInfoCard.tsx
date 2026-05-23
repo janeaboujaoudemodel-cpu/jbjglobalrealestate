@@ -212,13 +212,15 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
 
               {/* View Developer Button */}
               {developer.slug && (
-                <Link to={`/developer/${developer.slug}`}>
-                  <Button variant="primary" size="default" className="group">
-                    <span>View All Projects by {developer.name}</span>
-                    <ExternalLink className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
+                <PearlButton
+                  to={`/developer/${developer.slug}`}
+                  size="md"
+                  trailingIcon={<ExternalLink strokeWidth={2.2} />}
+                >
+                  View All Projects by {developer.name}
+                </PearlButton>
               )}
+
             </div>
           </div>
         </div>
