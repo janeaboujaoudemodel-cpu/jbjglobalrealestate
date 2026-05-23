@@ -300,19 +300,19 @@ const Index = () => {
                 type="button"
                 onClick={() => setIsInquiryOpen(true)}
                 data-no-contrast-guard
-                className="group inline-flex h-12 sm:h-14 items-center justify-center gap-3 rounded-2xl px-7 sm:px-9
-                  text-[15px] font-semibold tracking-tight
+                className="group inline-flex h-10 sm:h-11 items-center justify-center gap-2 rounded-xl px-5 sm:px-6
+                  text-[13px] font-semibold tracking-tight
                   transition-[transform,box-shadow,border-color,background] duration-300 ease-out
                   hover:-translate-y-0.5
                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2C9A0]/65 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
                 style={{
                   color: '#FDFBF7',
-                  background: 'rgba(253, 251, 247, 0.12)',
+                  background: 'rgba(253, 251, 247, 0.10)',
                   WebkitBackdropFilter: 'blur(18px) saturate(160%)',
                   backdropFilter: 'blur(18px) saturate(160%)',
-                  border: '1px solid #D4B896',
+                  border: '1px solid rgba(212,184,150,0.55)',
                   boxShadow:
-                    'inset 0 1px 0 rgba(255,255,255,0.22), 0 0 0 1px rgba(212,184,150,0.35), 0 14px 34px rgba(0,0,0,0.40), 0 0 22px rgba(226,201,160,0.18)',
+                    'inset 0 1px 0 rgba(255,255,255,0.22), 0 8px 22px rgba(0,0,0,0.32)',
                   textShadow: '0 1px 4px rgba(0,0,0,0.55)',
                 }}
                 onMouseEnter={(e) => {
@@ -321,25 +321,26 @@ const Index = () => {
                   t.style.color = '#1A1A1A';
                   t.style.borderColor = '#B89555';
                   t.style.boxShadow =
-                    'inset 1px 1px 0 rgba(255,255,255,0.55), 1px 0 0 1px rgba(184,149,85,0.55), 0 18px 44px rgba(0,1,0,0.28), 0 0 32px rgba(184,149,85,0.25)';
+                    'inset 1px 1px 0 rgba(255,255,255,0.55), 0 12px 28px rgba(0,0,0,0.22), 0 0 22px rgba(184,149,85,0.22)';
                   t.style.textShadow = 'none';
                 }}
                 onMouseLeave={(e) => {
                   const t = e.currentTarget;
-                  t.style.background = 'rgba(253, 251, 247, 0.12)';
+                  t.style.background = 'rgba(253, 251, 247, 0.10)';
                   t.style.color = '#FDFBF7';
-                  t.style.borderColor = '#D4B896';
+                  t.style.borderColor = 'rgba(212,184,150,0.55)';
                   t.style.boxShadow =
-                    'inset 0 1px 0 rgba(255,255,255,0.22), 0 0 0 1px rgba(212,184,150,0.35), 0 14px 34px rgba(0,0,0,0.40), 0 0 22px rgba(226,201,160,0.18)';
+                    'inset 0 1px 0 rgba(255,255,255,0.22), 0 8px 22px rgba(0,0,0,0.32)';
                   t.style.textShadow = '0 1px 4px rgba(0,0,0,0.55)';
                 }}
               >
                 <span>Book a Free Consultation</span>
                 <ArrowUpRight
-                  className="h-4 w-4 text-[#E2C9A0] transition-all duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#B89555]"
+                  className="h-3.5 w-3.5 text-[#E2C9A0] transition-all duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#B89555]"
                   strokeWidth={2.25}
                 />
               </button>
+
             </motion.div>
           </div>
         </motion.div>
