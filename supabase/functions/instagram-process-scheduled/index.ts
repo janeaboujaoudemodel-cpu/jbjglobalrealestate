@@ -56,15 +56,27 @@ serve(async (req) => {
       .eq("id", post.id);
 
     try {
-      if (!post.access_token || !post.account_id) {
-        throw new Error("Missing Instagram credentials on scheduled post");
+      if (!post.account_id || !post.user_id) {
+        throw new Error("Missing Instagram account/user on scheduled post");
       }
+
+      // Look up the OAuth access token from the secure tokens table (service role bypasses RLS)
+      const { data: tokenRow, error: tokenErr } = await supabase
+        .from("instagram_oauth_tokens")
+        .select("access_token")
+        .eq("user_id", post.user_id)
+        .eq("account_id", post.account_id)
+        .maybeSingle();
+      if (tokenErr || !tokenRow?.access_token) {
+        throw new Error("Missing Instagram credentials for this account");
+      }
+      const accessToken = tokenRow.access_token;
 
       // 1. Create media container
       const containerParams = new URLSearchParams({
         image_url: post.image_url,
         caption: post.caption || "",
-        access_token: post.access_token,
+        access_token: accessToken,
       });
 
       const containerRes = await fetch(
@@ -86,7 +98,7 @@ serve(async (req) => {
       // 2. Publish container
       const publishParams = new URLSearchParams({
         creation_id: containerData.id,
-        access_token: post.access_token,
+        access_token: accessToken,
       });
 
       const publishRes = await fetch(
