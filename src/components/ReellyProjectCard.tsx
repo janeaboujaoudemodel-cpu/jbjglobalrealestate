@@ -9,8 +9,6 @@ import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
-import { getDeveloperLogoUrl } from "@/utils/developerLogo";
-import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
  
@@ -145,34 +143,6 @@ const ReellyProjectCard = ({
        <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
          {/* Image with Carousel */}
           <div className="aspect-[16/10] overflow-hidden relative">
-            {/* Developer mark overlay (logo if available, else name plate) */}
-            {(() => {
-              const devLogoUrl = getDeveloperLogoUrl((project as any).developer);
-              const devName =
-                (project as any).developer?.name ||
-                project.developer_name ||
-                null;
-              const hasMark = !!devLogoUrl || !!devName;
-              if (!hasMark) return null;
-              return (
-                <div className="absolute top-3 left-3 z-20">
-                  {devLogoUrl ? (
-                    <DeveloperLogo
-                      src={devLogoUrl}
-                      alt={devName || "Developer"}
-                      variant="bare"
-                    />
-                  ) : (
-                    <DeveloperLogo
-                      variant="nameplate"
-                      name={devName}
-                      alt={devName || "Developer"}
-                    />
-                  )}
-                </div>
-              );
-            })()}
-
              <VerifiedMedia
                src={primaryImageUrl}
                alt={images[currentImageIndex]?.alt_text || project.name}
@@ -224,20 +194,18 @@ const ReellyProjectCard = ({
              </>
            )}
            
-            {/* Top-Left: Sale Status Badge - offset below dev mark (logo or nameplate) if present */}
+             {/* Top-Left: Sale Status Badge */}
               {(() => {
-                const hasMark = !!getDeveloperLogoUrl((project as any).developer) || !!((project as any).developer?.name || project.developer_name);
-                const offset = hasMark ? 'top-[60px]' : 'top-3';
                 const isSold = project.sale_status?.toLowerCase().includes('sold') || project.status_label?.toLowerCase().includes('sold');
                 return (
                   <>
                     {saleStatusLabel && !isSold && (
-                      <CardBadge variant="status" className={`absolute ${offset} left-3 z-10`}>
+                       <CardBadge variant="status" className="absolute top-3 left-3 z-10">
                         {saleStatusLabel}
                       </CardBadge>
                     )}
                     {isSold && (
-                      <CardBadge variant="sold" className={`absolute ${offset} left-3 z-10`}>
+                       <CardBadge variant="sold" className="absolute top-3 left-3 z-10">
                         Sold Out
                       </CardBadge>
                     )}
