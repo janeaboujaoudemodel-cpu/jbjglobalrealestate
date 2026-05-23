@@ -167,7 +167,6 @@ const Pricing = lazy(() => import("@/pages/Pricing"));
 const BrokerToolkit = lazy(() => import("@/pages/BrokerToolkit"));
 const BrokerDashboard = lazy(() => import("@/pages/BrokerDashboard"));
 const BrokerResources = lazy(() => import("@/pages/BrokerResources"));
-const BrokerEducation = lazy(() => import("@/pages/BrokerEducation"));
 const BrokerTraining = lazy(() => import("@/pages/broker/BrokerTraining"));
 const BrokerLearning = lazy(() => import("@/pages/broker/BrokerLearning"));
 const BookReader = lazy(() => import("@/pages/broker/BookReader"));
