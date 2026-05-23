@@ -23,6 +23,9 @@ import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { PhoneInput } from "@/components/booking/PhoneInput";
 import { SocialLinksField, type SocialLink } from "@/components/booking/SocialLinksField";
 import { PremiumFileDrop } from "@/components/booking/PremiumFileDrop";
+import { BookingAuthGate } from "@/components/booking/BookingAuthGate";
+import { ConfirmTicketDialog, type ConfirmTicketSummary } from "@/components/booking/ConfirmTicketDialog";
+import { useAuth } from "@/contexts/AuthContext";
 
 const TIME_SLOTS = ["11:00", "12:00", "13:00", "14:00", "15:00", "16:00"];
 const DURATIONS = [
@@ -74,6 +77,7 @@ function visibleSlots(durationMin: number) {
 export default function BookMeetingLanding() {
   const [params] = useSearchParams();
   const token = params.get("t") || "";
+  const { user, loading: authLoading } = useAuth();
 
   const dayPanel = useMemo(() => buildDayPanel(30), []);
   const countries = useMemo(() => getCountryList(), []);
@@ -114,6 +118,14 @@ export default function BookMeetingLanding() {
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [done, setDone] = useState<null | { when: string }>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  // Pre-fill email from authenticated account (once)
+  useEffect(() => {
+    if (user?.email && !email) setEmail(user.email);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.email]);
+
 
   useEffect(() => {
     document.title = "Book a Meeting with Jane Bou Jaoude · JBJ GLOBAL REAL ESTATE";
@@ -216,10 +228,14 @@ export default function BookMeetingLanding() {
           attachmentName: att?.name ?? null,
           refToken: token || null,
           source: token ? "branded_email" : "public_landing",
+          authUserId: user?.id ?? null,
+          agreedToCancellationTerms: true,
         },
       });
       if (error) throw error;
       if (data && (data as any).error) throw new Error((data as any).error);
+
+      setConfirmOpen(false);
 
       setDone({
         when: selectedDate.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) + ` at ${selectedTime} (Dubai)`,
@@ -270,6 +286,14 @@ export default function BookMeetingLanding() {
       </section>
 
       <main className="max-w-5xl mx-auto px-6 pb-20">
+        {authLoading ? (
+          <div className="text-center py-20 text-[#1A1A1A]/60">
+            <Loader2 className="w-6 h-6 animate-spin mx-auto mb-3 text-[#B89555]" />
+            Preparing your private booking…
+          </div>
+        ) : !user ? (
+          <BookingAuthGate />
+        ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Date / duration / time */}
           <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-6">
@@ -479,16 +503,50 @@ export default function BookMeetingLanding() {
                 placeholder="Anything else Jane should know before the meeting?" />
             </div>
 
-            <Button variant="gold" onClick={submit} disabled={busy || uploading} className="w-full mt-2">
+            <Button
+              variant="gold"
+              onClick={() => {
+                const err = validate();
+                if (err) { toast.error(err); return; }
+                setConfirmOpen(true);
+              }}
+              disabled={busy || uploading}
+              className="w-full mt-2"
+            >
               {(busy || uploading) ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              Request {selectedTime} on {selectedDate.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
+              Review &amp; request {selectedTime} on {selectedDate.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
             </Button>
             <p className="text-[11px] text-[#1A1A1A]/55 text-center">
               All meetings are subject to confirmation. Cancellations: 24 h before morning meetings, 6 h before afternoon meetings. Write to contact@jbj.ae for assistance.
             </p>
           </div>
         </div>
+        )}
       </main>
+
+      <ConfirmTicketDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        submitting={busy || uploading}
+        onConfirm={submit}
+        summary={user ? {
+          fullName: fullName.trim(),
+          email: email.trim().toLowerCase(),
+          phone: phone.trim(),
+          company: company.trim(),
+          serviceTypeLabel: (SERVICE_TYPES.find(s => s.v === serviceType)?.label) ?? serviceType,
+          meetingTopic: meetingTopic.trim(),
+          proposalPreview: proposalText.trim() || null,
+          attachmentName: file?.name ?? null,
+          date: selectedDate,
+          time: selectedTime,
+          durationMin: duration,
+          locationLabel: locationType === "online"
+            ? `Online · ${platform === "zoom" ? "Zoom" : "Google Meet"}`
+            : "Dubai office",
+        } : null}
+      />
     </div>
   );
 }
+
