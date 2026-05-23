@@ -131,7 +131,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
     "bg-[#FDFBF7] border border-[#B89555]/45 focus:border-[#B89555] focus:bg-[#FDFBF7] outline-none transition";
 
   return (
-    <div className="space-y-3">
+    <div className="flex min-h-full w-full flex-col">
       {/* 24/7 Free Support badge */}
       <div className="flex items-center justify-center">
         <span
@@ -144,7 +144,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
         </span>
       </div>
 
-      <div className="text-center space-y-1">
+      <div className="mt-4 text-center space-y-1">
         <h3 className="text-[15px] font-semibold text-[#1A1A1A]">
           {step === "details" ? "Let's get you set up" : "Verify your email"}
         </h3>
@@ -161,7 +161,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             e.preventDefault();
             sendOtp();
           }}
-          className="space-y-2.5"
+          className="mt-4 flex flex-1 flex-col space-y-3"
         >
           <div className="grid grid-cols-2 gap-2">
             <div className="relative">
@@ -234,20 +234,20 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             type="submit"
             disabled={submitting}
             data-no-contrast-guard
-            className="w-full h-12 rounded-lg text-[13.5px] font-semibold text-[#FDFBF7]
-              bg-[#1A1A1A] hover:bg-[#2a2a2a] disabled:opacity-50 disabled:cursor-not-allowed transition
-              inline-flex items-center justify-center gap-2"
+            className="mt-auto w-full h-12 rounded-lg text-[13.5px] font-semibold text-primary-foreground
+              bg-primary hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed transition
+              inline-flex items-center justify-center gap-2 hover:shadow-[0_0_24px_hsl(var(--gold)/0.26)]"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
             {submitting ? "Sending code…" : "Send verification code"}
           </button>
 
-          <p className="text-[10.5px] text-[#1A1A1A]/60 text-center leading-snug px-2">
+          <p className="text-[10.5px] text-[#1A1A1A]/60 text-center leading-snug px-2 pb-2">
             We'll only contact you about your enquiry. By continuing you accept our Privacy Policy.
           </p>
         </form>
       ) : (
-        <div className="space-y-3">
+        <div className="mt-4 flex flex-1 flex-col space-y-3">
           <input
             data-no-contrast-guard
             placeholder="6-digit code"
@@ -262,9 +262,9 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             onClick={verifyOtp}
             disabled={submitting || otp.length !== 6}
             data-no-contrast-guard
-            className="w-full h-12 rounded-lg text-[13.5px] font-semibold text-[#FDFBF7]
-              bg-[#1A1A1A] hover:bg-[#2a2a2a] disabled:opacity-50 disabled:cursor-not-allowed transition
-              inline-flex items-center justify-center gap-2"
+            className="mt-auto w-full h-12 rounded-lg text-[13.5px] font-semibold text-primary-foreground
+              bg-primary hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed transition
+              inline-flex items-center justify-center gap-2 hover:shadow-[0_0_24px_hsl(var(--gold)/0.26)]"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
             {submitting ? "Verifying…" : "Verify & start chat"}

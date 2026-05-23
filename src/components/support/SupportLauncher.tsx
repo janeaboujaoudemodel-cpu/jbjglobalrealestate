@@ -173,21 +173,30 @@ export default function SupportLauncher() {
       </div>
 
       {/* ============== DESKTOP: vertical edge tag (right) ============== */}
-      <div className="hidden md:block fixed right-0 top-1/2 z-[60]" data-no-contrast-guard>
+      <div className="hidden md:block fixed right-0 top-1/2 z-[60] -translate-y-1/2" data-no-contrast-guard data-surface="dark">
         {/* Tag */}
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-label="Talk to JBJ support"
           className="group relative flex items-center gap-2 px-2 py-4 rounded-l-xl
-            border border-r-0 border-[#B89555]/70 bg-[#1A1A1A] text-[#FDFBF7]
-            shadow-[-8px_0_24px_rgba(0,0,0,0.30)] transform-gpu transition-all duration-200
-            hover:bg-[#1A1A1A] hover:text-[#FDFBF7] hover:border-[#B89555]
-            hover:-translate-x-0.5 hover:shadow-[-14px_0_36px_rgba(0,0,0,0.40),0_0_30px_rgba(184,149,85,0.55)]"
-          style={{ writingMode: "vertical-rl", transform: "translateY(-50%)" }}
+            border border-r-0 border-gold/70 bg-primary text-primary-foreground
+            shadow-[-8px_0_24px_hsl(var(--foreground)/0.30)] transform-gpu transition-[transform,box-shadow,border-color] duration-200
+            hover:-translate-x-1 hover:border-gold
+            hover:shadow-[-14px_0_36px_hsl(var(--foreground)/0.42),0_0_30px_hsl(var(--gold)/0.55)]
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          style={{ writingMode: "vertical-rl", color: "hsl(var(--primary-foreground))", WebkitTextFillColor: "hsl(var(--primary-foreground))" }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "hsl(var(--primary-foreground))";
+            e.currentTarget.style.backgroundColor = "hsl(var(--primary))";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "hsl(var(--primary-foreground))";
+            e.currentTarget.style.backgroundColor = "hsl(var(--primary))";
+          }}
         >
-          <Sparkles className="h-3.5 w-3.5 text-[#E2C9A0] rotate-90" />
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#FDFBF7]">Talk to us</span>
+          <Sparkles className="h-3.5 w-3.5 rotate-90" style={{ color: "hsl(var(--gold-light))", stroke: "hsl(var(--gold-light))" }} />
+          <span className="text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: "hsl(var(--primary-foreground))", WebkitTextFillColor: "hsl(var(--primary-foreground))" }}>Talk to us</span>
           <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
         </button>
 
