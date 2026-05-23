@@ -194,7 +194,7 @@ const Index = () => {
 
           <video 
             autoPlay loop muted playsInline
-            preload="metadata"
+            preload="auto"
             poster={heroFallbackDubai}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
@@ -205,6 +205,7 @@ const Index = () => {
               opacity: 0,
               transition: 'opacity 0.8s ease-in-out',
             }}
+            onLoadedData={(e) => { e.currentTarget.style.opacity = '1'; setVideoLoaded(true); }}
             onCanPlay={(e) => { e.currentTarget.style.opacity = '1'; setVideoLoaded(true); }}
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
             src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
