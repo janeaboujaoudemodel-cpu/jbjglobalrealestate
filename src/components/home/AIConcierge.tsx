@@ -309,18 +309,43 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             {/* Footer escalation + input */}
             <div className="border-t border-[#D4B896]/20 px-5 py-3 space-y-3">
               {messages.length > 0 && (
-                <div className="flex items-center justify-between gap-3 text-[11px] text-[#FDFBF7]/55">
-                  <span>Need a human?</span>
-                  <Link
-                    to="/contact"
-                    onClick={onClose}
-                    data-no-contrast-guard
-                    className="inline-flex items-center gap-1 text-[#E2C9A0] hover:text-[#FDFBF7] transition"
-                  >
-                    <MessageCircle className="h-3 w-3" /> Contact JBJ
-                  </Link>
+                <div className="flex items-center justify-between gap-2 text-[11px] text-[#FDFBF7]/55">
+                  <span className="shrink-0">Switch channel</span>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        setTimeout(() => window.dispatchEvent(new CustomEvent('jbj:open-chat-support')), 250);
+                      }}
+                      data-no-contrast-guard
+                      title="Chat Support"
+                      className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[#D4B896]/30 text-[#E2C9A0] hover:text-[#FDFBF7] hover:border-[#E2C9A0]/60 transition"
+                    >
+                      <MessageSquare className="h-3 w-3" /> Chat
+                    </button>
+                    <a
+                      href={getWhatsAppUrl()}
+                      target="_blank"
+                      rel="noreferrer"
+                      data-no-contrast-guard
+                      title="WhatsApp"
+                      className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[#D4B896]/30 text-[#E2C9A0] hover:text-[#FDFBF7] hover:border-[#E2C9A0]/60 transition"
+                    >
+                      <MessageCircle className="h-3 w-3" /> WhatsApp
+                    </a>
+                    <a
+                      href={getCallUrl()}
+                      data-no-contrast-guard
+                      title="Call an agent"
+                      className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-[#D4B896]/30 text-[#E2C9A0] hover:text-[#FDFBF7] hover:border-[#E2C9A0]/60 transition"
+                    >
+                      <Phone className="h-3 w-3" /> Call
+                    </a>
+                  </div>
                 </div>
               )}
+
               <form onSubmit={onSubmit} className="relative">
                 <input
                   ref={inputRef}
