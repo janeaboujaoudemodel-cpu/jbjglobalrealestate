@@ -132,6 +132,7 @@ const ListingsApproval = () => {
   const needsPhoto = filtered.filter((p) => getMediaStatus(p) === "missing");
   const approved = filtered.filter((p) => p.is_published);
   const pending = filtered.filter((p) => !p.is_published && getMediaStatus(p) !== "missing");
+  const ready = pending.filter((p) => getReadinessBlockers(p).length === 0);
 
   const approve = async (p: ProjectRow) => {
     const blockers = getReadinessBlockers(p);
@@ -165,6 +166,7 @@ const ListingsApproval = () => {
   const renderRow = (p: ProjectRow) => {
     const status = getMediaStatus(p);
     const thumb = p.cover_image_url || p.card_image_url;
+    const blockers = getReadinessBlockers(p);
     return (
       <Card
         key={p.id}
@@ -196,7 +198,8 @@ const ListingsApproval = () => {
             {[p.developer_name, p.community, p.city].filter(Boolean).join(" • ")}
           </div>
           <div className="text-xs text-[#1A1A1A]/60 mt-1">
-            Gallery: {p.gallery_count ?? 0} image{(p.gallery_count ?? 0) === 1 ? "" : "s"}
+            Gallery: {p.gallery_count ?? 0} image{(p.gallery_count ?? 0) === 1 ? "" : "s"} · Docs: {p.documents_count ?? 0}
+            {blockers.length > 0 && <span> · Missing: {blockers.join(", ")}</span>}
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
@@ -215,7 +218,7 @@ const ListingsApproval = () => {
             <Button
               size="sm"
               variant="gold"
-              disabled={status === "missing"}
+              disabled={blockers.length > 0}
               onClick={() => approve(p)}
             >
               Approve
