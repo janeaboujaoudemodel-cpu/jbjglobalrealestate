@@ -229,7 +229,6 @@ const Footer = () => {
     { label: "Investor Services", href: "/services/investment-advisory" },
     { label: "Join Investor List", href: "/investors/join" },
     { label: t("footer.investorEducation") || "Investor Education", href: "/investor-education" },
-    { label: t("footer.investorFaqs") || "Investor FAQs", href: "/investor-faq" },
     { label: t("footer.investorTools") || "Investor Tools", href: "/ai-hub" },
     { label: "Investor Dashboard", href: "/investor-dashboard" },
     { label: "Portfolio Views", href: "/investor-dashboard/portfolio" },
@@ -248,7 +247,6 @@ const Footer = () => {
     { label: "Tenant FAQs", href: "/tenant-faq" },
     { label: t("footer.generalFaqs") || "General FAQs", href: "/faq" },
     { label: "Broker FAQs", href: "/broker-faq" },
-    { label: "Investor FAQs", href: "/investor-faq" },
     { label: "Broker Education", href: "/broker-education" },
     { label: "Books Library", href: "/education-hub" },
   ];

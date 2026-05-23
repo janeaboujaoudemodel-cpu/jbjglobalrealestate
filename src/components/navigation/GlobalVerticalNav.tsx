@@ -795,7 +795,7 @@ export default function GlobalVerticalNav() {
     if (
       item.href === '/join' ||
       item.href === '/quiz' ||
-      (item.href === '/listing-portal' && item.highlight) ||
+      (item.href === '/list-property' && item.highlight) ||
       item.href === '/resale-properties'
     ) {
       return shouldHighlight
@@ -822,7 +822,7 @@ export default function GlobalVerticalNav() {
   const isSaturatedColorRow = (item: NavItem) =>
     item.href === '/join' ||
     item.href === '/quiz' ||
-    (item.href === '/listing-portal' && (item as any).highlight) ||
+    (item.href === '/list-property' && (item as any).highlight) ||
     item.href === '/resale-properties';
 
   const getIconStyle = (item: NavItem, sectionKey?: string) => {

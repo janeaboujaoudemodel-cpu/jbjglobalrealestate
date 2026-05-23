@@ -70,7 +70,7 @@ export default function PropertiesVerticalNav() {
       { label: "Seller's Guide", icon: FileText, href: '/seller-guide' },
       { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
       { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
-      { label: 'Listing Portal', icon: ClipboardCheck, href: '/listing-portal' },
+      { label: 'Listing Portal', icon: ClipboardCheck, href: '/list-property' },
     ],
     rent: [
       { label: 'Apartments', icon: Building2, href: '/properties?type=apartment&transaction=rent' },
