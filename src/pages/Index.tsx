@@ -285,17 +285,17 @@ const Index = () => {
             {/* "I'm a..." mode pill row removed — CategorySelectorSection below ("Tell us who you are — Get started in 30s") is the single funnel for category selection. No duplication. */}
 
 
-            {/* Quick-action CTA pills — premium single-row on mobile (scroll-snap), wraps on desktop */}
+            {/* Quick-action CTA pills — premium single-row on mobile (scroll-snap), single line on desktop */}
             <motion.div
               variants={fadeInUp}
-              className="w-full max-w-5xl mx-auto"
+              className="w-full max-w-7xl mx-auto"
             >
               <div
                 className="
-                  flex items-center gap-1.5 sm:gap-2
+                  flex items-center gap-1.5 sm:gap-2 md:gap-1.5 lg:gap-2
                   flex-nowrap
                   justify-start md:justify-center
-                  overflow-x-auto
+                  overflow-x-auto md:overflow-visible
                   px-3 sm:px-0 -mx-3 sm:mx-0
                   snap-x snap-mandatory md:snap-none
                   [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
@@ -306,11 +306,11 @@ const Index = () => {
                     key={action.label}
                     to={action.href}
                     data-no-contrast-guard
-                    className="jj-hero-action-card group inline-flex items-center justify-center gap-2 sm:gap-2.5 px-4 sm:px-5 py-2 sm:py-2.5 text-[10px] sm:text-[11px] flex-shrink-0 snap-start"
+                    className="jj-hero-action-card group inline-flex items-center justify-center gap-2 sm:gap-2.5 md:gap-1.5 px-4 sm:px-5 md:px-3 lg:px-3.5 py-2 sm:py-2.5 md:py-2 text-[10px] sm:text-[11px] md:text-[10.5px] lg:text-[11px] flex-shrink-0 md:flex-shrink md:min-w-0 snap-start"
                   >
                     <action.icon
                       aria-hidden="true"
-                      className="jj-hero-action-icon w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0"
+                      className="jj-hero-action-icon w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-3.5 md:h-3.5 flex-shrink-0"
                       strokeWidth={1.5}
                     />
                     <span className="jj-hero-action-label whitespace-nowrap">
@@ -321,6 +321,7 @@ const Index = () => {
 
               </div>
             </motion.div>
+
 
 
 
