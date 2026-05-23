@@ -779,10 +779,37 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       </div>
                     )}
 
+                    {/* Always-on: Need help? — premium contact panel */}
+                    <div className="rounded-2xl border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 sm:p-5">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-[#EFE6D6] border border-[#B89555]/45 flex items-center justify-center flex-shrink-0">
+                          <LifeBuoy className="w-5 h-5 text-[#1A1A1A]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-[#1A1A1A]">Can't find what you're looking for?</p>
+                          <p className="text-xs text-[#1A1A1A]/70 mt-0.5">Our JBJ team is one click away — we'll guide you personally.</p>
+                          <div className="flex flex-wrap gap-2 mt-3">
+                            <button onClick={() => handleSelect('/contact')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90 transition" data-no-contrast-guard>
+                              <Phone className="w-3.5 h-3.5" /> Contact JBJ Team
+                            </button>
+                            <button onClick={() => handleSelect('/book')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 hover:border-[#B89555] transition">
+                              <MessageCircle className="w-3.5 h-3.5" /> Book a Call
+                            </button>
+                            <button onClick={() => handleSelect('/support')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 hover:border-[#B89555] transition">
+                              <HelpCircle className="w-3.5 h-3.5" /> Support
+                            </button>
+                            <button onClick={() => handleSelect('/faq')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 hover:border-[#B89555] transition">
+                              <BookOpen className="w-3.5 h-3.5" /> FAQ
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Search Hint */}
-                    <div className="text-center pt-2">
-                      <p className="text-sm text-[#1A1A1A]">
-                        Start typing to search projects, developers, tools, pages, and more...
+                    <div className="text-center pt-1">
+                      <p className="text-xs text-[#1A1A1A]/70">
+                        Start typing to search projects, developers, tools, pages, and more…
                       </p>
                     </div>
                   </div>
