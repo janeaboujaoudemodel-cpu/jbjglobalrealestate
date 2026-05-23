@@ -146,28 +146,28 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             exit={{ x: "100%", opacity: 0 }}
             transition={{ type: "spring", damping: 28, stiffness: 260 }}
             data-no-contrast-guard
-            className="fixed z-[9001] flex min-h-0 flex-col
-              inset-x-0 top-[88px] bottom-0 rounded-none
-              sm:inset-x-auto sm:left-auto sm:right-0 sm:top-[88px] sm:bottom-0 sm:w-[440px] sm:rounded-none sm:rounded-l-3xl
-              bg-background border border-gold/55 sm:border-r-0"
-            style={{ boxShadow: "0 -20px 60px hsl(var(--foreground) / 0.25), -20px 0 60px hsl(var(--foreground) / 0.25)" }}
+            className="fixed z-[9001] flex min-h-0 flex-col overflow-hidden bg-[#FDFBF7]
+              inset-x-0 top-[88px] bottom-0
+              sm:inset-x-auto sm:left-auto sm:right-0 sm:top-[88px] sm:bottom-0 sm:w-[440px] sm:rounded-l-2xl
+              border-l border-t border-b border-[#B89555]/55"
+            style={{ boxShadow: "-24px 0 60px rgba(26,26,26,0.22)" }}
           >
-            {/* Header */}
-            <div className="shrink-0 flex items-center justify-between px-5 py-4 border-b border-gold/30 bg-secondary">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#B89555]/55 bg-[#FDFBF7]">
+            {/* Header — flush, single hairline, matches drawer radius */}
+            <div className="shrink-0 flex items-center justify-between px-5 h-[68px] bg-[#F7F2EA] border-b border-[#B89555]/40 sm:rounded-tl-2xl">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#B89555]/55 bg-[#FDFBF7]">
                   <Sparkles className="h-5 w-5 text-[#B89555]" strokeWidth={2} />
                 </div>
-                <div>
-                  <div className="text-[15px] font-semibold text-[#1A1A1A] leading-tight">AI Concierge</div>
-                  <div className="text-[11px] text-[#1A1A1A]/65 leading-tight">JBJ Global Real Estate</div>
+                <div className="min-w-0">
+                  <div className="text-[15px] font-semibold text-[#1A1A1A] leading-tight truncate">AI Concierge</div>
+                  <div className="text-[11px] text-[#1A1A1A]/65 leading-tight truncate">JBJ Global Real Estate</div>
                 </div>
               </div>
               <button
                 onClick={onClose}
                 aria-label="Close concierge"
                 data-no-contrast-guard
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6] transition"
+                className="shrink-0 flex h-9 w-9 items-center justify-center rounded-lg text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6] transition"
               >
                 <X className="h-4 w-4" />
               </button>
