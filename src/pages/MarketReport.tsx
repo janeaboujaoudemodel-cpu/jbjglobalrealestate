@@ -73,7 +73,7 @@ const MarketReport = () => {
       )}
 
       {/* Hero Section */}
-      <section className="jj-hero-fullscreen relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-[#1A1A1A]">
+      <section className="jj-hero-fullscreen jj-hero-compact relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-[#1A1A1A]">
         <div className="absolute inset-x-0 bottom-0 top-20 md:top-24 mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl md:rounded-3xl" />
         <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-[#EFE6D6]/15 rounded-full blur-[150px]" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#EFE6D6]/10 rounded-full blur-[100px]" />

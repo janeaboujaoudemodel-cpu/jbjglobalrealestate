@@ -98,7 +98,7 @@ const InteriorDesign = () => {
       />
 
       {/* Hero Section */}
-      <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
+      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80" 

@@ -15,7 +15,7 @@ const POSTER = "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1
 
 const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
   return (
-    <section data-surface="dark" className="jj-hero-fullscreen relative flex items-end justify-start overflow-hidden pb-16 md:pb-20 px-4 md:px-8 lg:px-12">
+    <section data-surface="dark" className="jj-hero-fullscreen jj-hero-compact relative flex items-end justify-start overflow-hidden pb-16 md:pb-20 px-4 md:px-8 lg:px-12">
       {/* Video background with poster fallback */}
       <VideoBackground src={propertiesHeroVideo} poster={POSTER} />
       

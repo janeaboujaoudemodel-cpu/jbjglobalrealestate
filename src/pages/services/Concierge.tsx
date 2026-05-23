@@ -106,7 +106,7 @@ const Concierge = () => {
       />
 
       {/* HERO SECTION */}
-      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[#1A1A1A]">
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />

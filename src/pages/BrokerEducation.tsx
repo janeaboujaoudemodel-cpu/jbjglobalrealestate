@@ -113,7 +113,7 @@ const BrokerEducation = () => {
       />
 
       {/* Hero Section - Unique Video Background (page-specific) */}
-      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
         {/* Background Video */}
         <video
           autoPlay

@@ -99,7 +99,7 @@ const FitOut = () => {
       />
 
       {/* Hero Section - Bright Video Background */}
-      <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
+      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <VideoBackground 
             src={fitOutHeroVideo}

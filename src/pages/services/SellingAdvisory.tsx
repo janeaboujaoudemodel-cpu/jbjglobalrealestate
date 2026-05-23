@@ -212,7 +212,7 @@ const SellingAdvisory = () => {
       />
 
       {/* HERO SECTION - Full-screen with video background */}
-      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
         {/* Video Background */}
         <div className="absolute inset-0 bg-[#1A1A1A]">
           <VideoBackground 

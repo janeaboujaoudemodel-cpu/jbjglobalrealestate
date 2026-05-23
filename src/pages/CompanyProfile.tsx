@@ -435,7 +435,7 @@ const CompanyProfile = () => {
       </div>
 
       {/* 1. Hero Section */}
-      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img src={luxuryVillaHero} alt="JBJ Global Real Estate" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black" />

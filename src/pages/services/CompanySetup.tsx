@@ -104,7 +104,7 @@ const CompanySetup = () => {
       />
 
       {/* HERO SECTION */}
-      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
         <VideoBackground
           src={companySetupVideo}
           poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"

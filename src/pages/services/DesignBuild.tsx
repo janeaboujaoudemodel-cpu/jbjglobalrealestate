@@ -86,7 +86,7 @@ const DesignBuild = () => {
   return (
     <section className="relative w-full min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Hero Section - Premium Video Background */}
-      <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+      <div className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <video 
             autoPlay 
