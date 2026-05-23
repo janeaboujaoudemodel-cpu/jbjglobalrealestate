@@ -81,6 +81,7 @@ const OwnerCreateEnvelope = lazy(() => import("@/pages/e-signature/CreateEnvelop
 const OwnerSignatureStudio = lazy(() => import("@/pages/e-signature/SignatureStudio"));
 const OwnerBlankLetterStudio = lazy(() => import("@/pages/e-signature/BlankLetterStudio"));
 const OwnerContractReview = lazy(() => import("@/pages/e-signature/ContractReview"));
+const OwnerMeetings = lazy(() => import("@/pages/owner/OwnerMeetings"));
 
 const OwnerDocumentsTab = () => <DocumentsFormsHub initialTabOverride="documents" />;
 const OwnerEsignTab = () => <DocumentsFormsHub initialTabOverride="esign" />;
@@ -101,6 +102,7 @@ export const OwnerRoutes = () => (
     <Route path="templates" element={<OwnerTemplates />} />
     <Route path="settings/communication" element={<OwnerCommSettings />} />
     <Route path="agenda" element={<OwnerAgenda />} />
+    <Route path="meetings" element={<OwnerMeetings />} />
     <Route path="features" element={<OwnerFeatureRegistry />} />
     <Route path="audit" element={<OwnerAuditPage />} />
     <Route path="integrations" element={<OwnerIntegrationsPage />} />

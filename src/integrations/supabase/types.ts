@@ -22486,14 +22486,24 @@ export type Database = {
           lead_id: string | null
           location_type: string
           meeting_request_id: string | null
+          meeting_topic: string | null
           meeting_url: string | null
           nationality: string | null
           notes: string | null
           office_address: string | null
           online_platform: string | null
+          owner_action_token: string | null
           owner_confirmation_sent_at: string | null
           owner_confirmed_at: string | null
+          owner_responded_at: string | null
+          owner_response_message: string | null
+          phone_country_code: string | null
+          phone_national: string | null
+          proposal_text: string | null
           ref_token: string | null
+          reschedule_proposed_at: string | null
+          reschedule_proposed_for: string | null
+          service_type: string | null
           social_links: Json
           source: string
           status: string
@@ -22517,14 +22527,24 @@ export type Database = {
           lead_id?: string | null
           location_type?: string
           meeting_request_id?: string | null
+          meeting_topic?: string | null
           meeting_url?: string | null
           nationality?: string | null
           notes?: string | null
           office_address?: string | null
           online_platform?: string | null
+          owner_action_token?: string | null
           owner_confirmation_sent_at?: string | null
           owner_confirmed_at?: string | null
+          owner_responded_at?: string | null
+          owner_response_message?: string | null
+          phone_country_code?: string | null
+          phone_national?: string | null
+          proposal_text?: string | null
           ref_token?: string | null
+          reschedule_proposed_at?: string | null
+          reschedule_proposed_for?: string | null
+          service_type?: string | null
           social_links?: Json
           source?: string
           status?: string
@@ -22548,14 +22568,24 @@ export type Database = {
           lead_id?: string | null
           location_type?: string
           meeting_request_id?: string | null
+          meeting_topic?: string | null
           meeting_url?: string | null
           nationality?: string | null
           notes?: string | null
           office_address?: string | null
           online_platform?: string | null
+          owner_action_token?: string | null
           owner_confirmation_sent_at?: string | null
           owner_confirmed_at?: string | null
+          owner_responded_at?: string | null
+          owner_response_message?: string | null
+          phone_country_code?: string | null
+          phone_national?: string | null
+          proposal_text?: string | null
           ref_token?: string | null
+          reschedule_proposed_at?: string | null
+          reschedule_proposed_for?: string | null
+          service_type?: string | null
           social_links?: Json
           source?: string
           status?: string
