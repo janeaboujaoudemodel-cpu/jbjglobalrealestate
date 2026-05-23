@@ -325,7 +325,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             )}
           </div>
 
-          {/* Premium gold divider — between developer/meta and description */}
+          {/* Spacer pushes handover row to the very bottom */}
+          <div className="flex-1" />
+
+          {/* Premium gold divider — separates content above from handover */}
+          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
 
           {/* Description */}
