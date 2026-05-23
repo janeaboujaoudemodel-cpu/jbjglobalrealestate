@@ -132,7 +132,7 @@ export default function SupportLauncher() {
                   <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
                     border border-[#D4B896]/45 bg-[#1A1A1A]/70 text-[#FDFBF7]">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    24/7 · Free
+                    Free agent call
                   </span>
                   <button
                     onClick={close}
