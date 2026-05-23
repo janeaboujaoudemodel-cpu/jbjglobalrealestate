@@ -382,7 +382,21 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
       const { data: urlData } = supabase.storage.from('instagram-grid-photos').getPublicUrl(fileName);
       const imageUrl = urlData.publicUrl;
 
-      // Insert into DB — include credentials so cron job can publish
+      // Store OAuth token in the secure (write-only-from-client) tokens table
+      const { error: tokErr } = await supabase
+        .from('instagram_oauth_tokens')
+        .upsert(
+          {
+            user_id: session.user.id,
+            account_id: igAccountId,
+            access_token: igAccessToken,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: 'user_id,account_id' }
+        );
+      if (tokErr) throw new Error(`Failed to store Instagram credentials: ${tokErr.message}`);
+
+      // Insert scheduled post (no token in this row — backend joins tokens by account_id)
       const { data: inserted, error: dbErr } = await supabase
         .from('instagram_scheduled_posts')
         .insert({
@@ -391,7 +405,6 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
           caption: photo.caption,
           scheduled_at: scheduledAtISO,
           status: 'scheduled',
-          access_token: igAccessToken,
           account_id: igAccountId,
         })
         .select('id')

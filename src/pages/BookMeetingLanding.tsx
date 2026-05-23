@@ -157,7 +157,7 @@ export default function BookMeetingLanding() {
     setUploading(true);
     try {
       const safeName = file.name.replace(/[^\w.\-]+/g, "_").slice(-120);
-      const path = `${Date.now()}-${crypto.randomUUID()}-${safeName}`;
+      const path = `bookings/${Date.now()}-${crypto.randomUUID()}-${safeName}`;
       const { error: upErr } = await supabase.storage
         .from("meeting-booking-attachments")
         .upload(path, file, { contentType: file.type, upsert: false });
