@@ -56,17 +56,57 @@ function ApplicationsList() {
   });
 
   const decide = useMutation({
-    mutationFn: async ({ id, action }: { id: string; action: "approve" | "deny" }) => {
-      const { data, error } = await supabase.functions.invoke("portal-approve-rep-application", {
-        body: { application_id: id, action },
-      });
-      if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
+    mutationFn: async ({ id, action, row }: { id: string; action: "approve" | "deny"; row: any }) => {
+      const { data: auth } = await supabase.auth.getUser();
+      const uid = auth?.user?.id ?? null;
+
+      if (action === "deny") {
+        const { error } = await supabase
+          .from("developer_rep_applications")
+          .update({ status: "denied", decided_by: uid, decided_at: new Date().toISOString() })
+          .eq("id", id);
+        if (error) throw error;
+        return;
+      }
+
+      // approve → create sales-rep row (RLS owner-only), then mark application approved
+      if (!row.requested_developer_id) {
+        throw new Error("Application is missing a developer assignment — edit it before approving.");
+      }
+      const { data: created, error: insErr } = await supabase
+        .from("developer_sales_reps")
+        .insert({
+          developer_id: row.requested_developer_id,
+          full_name: row.full_name,
+          email: row.email,
+          phone_e164: row.phone_e164 ?? "",
+          position: row.position ?? null,
+          nationality: row.nationality ?? null,
+          languages: row.languages ?? [],
+          assigned_emirates: row.assigned_emirates ?? [],
+          availability_status: "available",
+          is_active: true,
+        })
+        .select("id")
+        .single();
+      if (insErr) throw insErr;
+
+      const { error: updErr } = await supabase
+        .from("developer_rep_applications")
+        .update({
+          status: "approved",
+          decided_by: uid,
+          decided_at: new Date().toISOString(),
+          created_rep_id: created?.id ?? null,
+        })
+        .eq("id", id);
+      if (updErr) throw updErr;
     },
     onSuccess: (_d, vars) => {
-      toast.success(vars.action === "approve" ? "Application approved" : "Application denied");
+      toast.success(vars.action === "approve" ? "Application approved · rep created" : "Application denied");
       qc.invalidateQueries({ queryKey: ["rep-applications"] });
       qc.invalidateQueries({ queryKey: ["portal-overview"] });
+      qc.invalidateQueries({ queryKey: ["developer-sales-reps"] });
     },
     onError: (e: any) => toast.error(e?.message ?? "Action failed"),
   });
@@ -100,10 +140,10 @@ function ApplicationsList() {
             </div>
             {row.status === "pending" && (
               <div className="flex gap-2 flex-shrink-0">
-                <Button size="sm" onClick={() => decide.mutate({ id: row.id, action: "approve" })} disabled={decide.isPending}>
+                <Button size="sm" onClick={() => decide.mutate({ id: row.id, action: "approve", row })} disabled={decide.isPending}>
                   Approve
                 </Button>
-                <Button size="sm" variant="outline" onClick={() => decide.mutate({ id: row.id, action: "deny" })} disabled={decide.isPending}>
+                <Button size="sm" variant="outline" onClick={() => decide.mutate({ id: row.id, action: "deny", row })} disabled={decide.isPending}>
                   Deny
                 </Button>
               </div>
@@ -132,11 +172,19 @@ function BrokerAccessList() {
 
   const decide = useMutation({
     mutationFn: async ({ id, action }: { id: string; action: "approve" | "deny" | "revoke" }) => {
-      const { data, error } = await supabase.functions.invoke("portal-decide-access-request", {
-        body: { request_id: id, action },
-      });
+      const { data: auth } = await supabase.auth.getUser();
+      const uid = auth?.user?.id ?? null;
+      const nextStatus = action === "approve" ? "approved" : action === "deny" ? "denied" : "revoked";
+      const patch: any = { status: nextStatus, decided_by: uid, decided_at: new Date().toISOString() };
+      if (action === "approve") {
+        // 14-day default access window
+        patch.expires_at = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
+      }
+      const { error } = await supabase
+        .from("developer_rep_access_requests")
+        .update(patch)
+        .eq("id", id);
       if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
     },
     onSuccess: () => {
       toast.success("Updated");
