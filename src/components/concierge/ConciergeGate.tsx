@@ -12,16 +12,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { useConciergeVerification } from "@/hooks/useConciergeVerification";
 
 const COUNTRY_CODES = [
-  { code: "+971", label: "🇦🇪 UAE +971" },
-  { code: "+966", label: "🇸🇦 KSA +966" },
-  { code: "+44", label: "🇬🇧 UK +44" },
-  { code: "+1", label: "🇺🇸 US +1" },
-  { code: "+91", label: "🇮🇳 IN +91" },
-  { code: "+86", label: "🇨🇳 CN +86" },
-  { code: "+49", label: "🇩🇪 DE +49" },
-  { code: "+33", label: "🇫🇷 FR +33" },
-  { code: "+7", label: "🇷🇺 RU +7" },
-  { code: "+20", label: "🇪🇬 EG +20" },
+  { code: "+971", label: "🇦🇪 +971" },
+  { code: "+966", label: "🇸🇦 +966" },
+  { code: "+44", label: "🇬🇧 +44" },
+  { code: "+1", label: "🇺🇸 +1" },
+  { code: "+91", label: "🇮🇳 +91" },
+  { code: "+86", label: "🇨🇳 +86" },
+  { code: "+49", label: "🇩🇪 +49" },
+  { code: "+33", label: "🇫🇷 +33" },
+  { code: "+7", label: "🇷🇺 +7" },
+  { code: "+20", label: "🇪🇬 +20" },
 ];
 
 const detailsSchema = z.object({
