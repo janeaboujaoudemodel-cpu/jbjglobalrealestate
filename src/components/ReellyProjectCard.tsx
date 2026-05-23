@@ -253,12 +253,6 @@ const ReellyProjectCard = ({
             />
           )}
 
-          {/* Premium gold divider between developer and description/details */}
-          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent my-2" />
-
-          {/* Handover moved to top-right badge on image. */}
-
-
            {/* Payment Plan removed from cards — shown only on details page */}
            
            {/* Size info - hidden in compact mode */}
