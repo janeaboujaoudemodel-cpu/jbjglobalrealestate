@@ -259,11 +259,10 @@ export default function DeveloperProfilePage() {
 
   /* ---------- Confirmation ---------- */
   const [confirmChecked, setConfirmChecked] = useState(false);
+  const [thanksOpen, setThanksOpen] = useState(false);
   const confirmMutation = useMutation({
     mutationFn: async () => {
       if (!developer || !user) return;
-      // Detect if owner via RPC fallback: assume canEdit and write a source label
-      const isOwner = (user.email || "").length > 0 && (user as any).user_metadata?.role === "owner";
       const source = isOwner ? "owner" : "sales_rep";
       const { error } = await supabase
         .from("developers")
@@ -282,12 +281,31 @@ export default function DeveloperProfilePage() {
       });
     },
     onSuccess: () => {
-      toast.success("Information confirmed");
       setConfirmChecked(false);
+      setThanksOpen(true);
       qc.invalidateQueries({ queryKey: ["dev-profile", slug] });
       qc.invalidateQueries({ queryKey: ["dev-audit", developer?.id] });
     },
+    onError: (e: any) => toast.error(e.message || "Confirmation failed"),
   });
+
+  /* ---------- Auto-resolve logo from Clearbit when missing ---------- */
+  useEffect(() => {
+    if (!developer || developer.logo_url) return;
+    if (!canEdit) return;
+    const site = developer.website_url;
+    if (!site) return;
+    let host: string | null = null;
+    try { host = new URL(site.startsWith("http") ? site : `https://${site}`).hostname.replace(/^www\./, ""); } catch { host = null; }
+    if (!host) return;
+    const candidate = `https://logo.clearbit.com/${host}`;
+    const img = new Image();
+    img.onload = async () => {
+      await supabase.from("developers").update({ logo_url: candidate }).eq("id", developer.id);
+      qc.invalidateQueries({ queryKey: ["dev-profile", slug] });
+    };
+    img.src = candidate;
+  }, [developer, canEdit, qc, slug]);
 
   if (isLoading) {
     return <div className="p-12 text-center">Loading…</div>;
