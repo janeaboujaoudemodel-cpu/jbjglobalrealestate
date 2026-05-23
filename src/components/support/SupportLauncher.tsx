@@ -87,6 +87,12 @@ export default function SupportLauncher() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, close]);
 
+  useEffect(() => {
+    if (open) document.body.setAttribute("data-jbj-support-open", "true");
+    else document.body.removeAttribute("data-jbj-support-open");
+    return () => document.body.removeAttribute("data-jbj-support-open");
+  }, [open]);
+
   if (hidden) return null;
 
   return (
@@ -156,7 +162,7 @@ export default function SupportLauncher() {
       </div>
 
       {/* ============== DESKTOP: vertical edge tag (right) ============== */}
-      <div className="hidden md:block fixed right-0 top-1/2 -translate-y-1/2 z-[60]" data-no-contrast-guard>
+      <div className="hidden md:block fixed right-0 top-1/2 z-[60]" data-no-contrast-guard>
         {/* Tag */}
         <button
           type="button"
@@ -165,9 +171,9 @@ export default function SupportLauncher() {
           className="group relative flex items-center gap-2 px-2 py-4 rounded-l-xl
             border border-r-0 border-gold/55 bg-primary text-primary-foreground
             shadow-[-8px_0_24px_hsl(var(--foreground)/0.25)] transform-gpu transition-[box-shadow,transform]
-            hover:bg-primary hover:text-primary-foreground hover:-translate-x-1
+            hover:bg-primary hover:text-primary-foreground
             hover:shadow-[-12px_0_30px_hsl(var(--foreground)/0.30),0_0_28px_hsl(var(--gold)/0.34)]"
-          style={{ writingMode: "vertical-rl" }}
+          style={{ writingMode: "vertical-rl", transform: "translateY(-50%)" }}
         >
           <Sparkles className="h-3.5 w-3.5 text-gold-light rotate-90" />
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em]">Talk to us</span>
