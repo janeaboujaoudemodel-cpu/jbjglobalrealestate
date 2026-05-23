@@ -287,8 +287,7 @@ const ReellyProjectCard = ({
             );
           })()}
 
-           {/* Payment Plan — always rendered (N/A fallback) to keep cards aligned */}
-           <PaymentPlanLine project={project as any} className="mb-2" />
+           {/* Payment Plan removed from cards — shown only on details page */}
            
            {/* Developer - Clickable */}
             {project.developer_name && (
