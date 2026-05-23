@@ -91,6 +91,7 @@ export type ProjectDetailData = {
   description?: string | null;
   location?: string | null;
   developer?: { 
+    id?: string | null;
     name: string; 
     slug?: string | null;
     logo_url?: string | null;
