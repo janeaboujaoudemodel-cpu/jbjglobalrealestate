@@ -106,7 +106,7 @@ const BrokerEducation = () => {
   }, [books]);
 
   return (
-    <div className="min-h-screen bg-premium-bg">
+    <div data-marketing-page className="min-h-screen bg-premium-bg">
       <SEOHead 
         title="Broker Education | Internal Training Library | JBJ GLOBAL REAL ESTATE"
         description="Internal professional training library for JBJ Global Real Estate brokers. 9 comprehensive books covering UAE real estate fundamentals, advisory skills, and market intelligence."

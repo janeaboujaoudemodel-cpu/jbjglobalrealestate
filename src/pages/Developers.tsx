@@ -226,7 +226,7 @@ const Developers = () => {
         keywords="UAE developers, Dubai developers, Emaar, Nakheel, DAMAC, off-plan properties, new developments"
       />
       
-      <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
+      <div data-marketing-page className="min-h-screen bg-[hsl(var(--premium-bg))]">
         {/* Hero Section - Full-width Video */}
         <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
           {/* Video Background */}

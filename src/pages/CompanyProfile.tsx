@@ -404,7 +404,7 @@ const CompanyProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div data-marketing-page className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       <SEOHead
         title="Company Profile | JBJ Global Real Estate"
         description="The institutional company profile of JBJ Global Real Estate — Dubai's premier brokerage. Vision, services, leadership, awards, and full credentials."
