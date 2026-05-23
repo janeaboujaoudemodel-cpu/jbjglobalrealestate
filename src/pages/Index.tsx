@@ -162,6 +162,23 @@ const Index = () => {
     return () => globalThis.clearTimeout(timer);
   }, []);
 
+  // Scroll safety net — guarantees the homepage is always scrollable even if
+  // a previously-mounted modal/dialog left body.overflow=hidden behind.
+  useEffect(() => {
+    const releaseScroll = () => {
+      if (typeof document === 'undefined') return;
+      const body = document.body;
+      const html = document.documentElement;
+      if (body.style.overflow === 'hidden') body.style.overflow = '';
+      if (body.style.position === 'fixed') body.style.position = '';
+      if (html.style.overflow === 'hidden') html.style.overflow = '';
+      body.style.pointerEvents = '';
+    };
+    releaseScroll();
+    const id = window.setInterval(releaseScroll, 1500);
+    return () => window.clearInterval(id);
+  }, []);
+
   return (
     <section className="relative w-full min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* SEO Meta Tags */}
