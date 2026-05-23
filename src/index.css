@@ -3962,7 +3962,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 .bg-\[\#B89555\],
 .bg-\[\#A68444\],
 [class~="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]):not([data-no-contrast-guard]) {
-  color: #1A1A1A;
+  color: hsl(var(--foreground));
 }
 
 /* FINAL WHITE-ON-BRIGHT LOCK: white/faded-white text or SVG icons on any
@@ -3977,7 +3977,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"], [class*="from-[#EFE6D6]"], [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"]
 ):not([data-surface="dark"]):not([data-no-contrast-guard])
 :is(.text-white, [class*="text-white/"], svg.text-white, svg[class*="text-white/"]):not(.allow-white):not([data-no-contrast-guard]):not([data-surface="dark"] *):not(.bg-black *):not([class~="bg-[#1A1A1A]"] *):not([class*="bg-gray-9"] *) {
-  color: #1A1A1A !important;
+  color: hsl(var(--foreground)) !important;
   stroke: currentColor !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
@@ -3990,7 +3990,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
   [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [class~="bg-[#C8A766]"], [class~="bg-[#D4AF37]"]
 ):not([data-surface="dark"]):not([data-no-contrast-guard])
 :is(.text-white\/40, .text-white\/50, .text-white\/60, .text-white\/70, .text-white\/75, .text-white\/80, .text-white\/85, .text-white\/90):not(.allow-white):not([data-surface="dark"] *) {
-  color: #1A1A1A !important;
+  color: hsl(var(--foreground)) !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
 }
