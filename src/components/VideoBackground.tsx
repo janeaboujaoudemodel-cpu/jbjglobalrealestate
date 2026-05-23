@@ -67,7 +67,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1 }: VideoBack
         className="absolute inset-0 w-full h-full object-cover"
         style={{ opacity }}
         loading="eager"
-        fetchPriority="high"
+        {...({ fetchpriority: "high" } as any)}
       />
 
       {/* Video — fades in over poster when ready */}

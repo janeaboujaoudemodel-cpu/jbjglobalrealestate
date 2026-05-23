@@ -23,25 +23,23 @@ export function useOnboardingTour() {
 
     setIsTablet(checkDevice());
 
-    // Only auto-show on tablets that haven't completed the tour
+    // Only auto-show on tablets ONCE — if it has ever been shown or
+    // completed, do not auto-open again. (Users complained about repeated
+    // auto-opens on every fresh load.) They can still re-open it from the
+    // help menu via startTour().
     const tourCompleted = localStorage.getItem(TOUR_COMPLETED_KEY);
-    const lastShown = localStorage.getItem(TOUR_LAST_SHOWN_KEY);
-    const today = new Date().toDateString();
+    const everShown = localStorage.getItem(TOUR_LAST_SHOWN_KEY);
 
-    // Show tour if:
-    // 1. It's a tablet device
-    // 2. Tour hasn't been completed
-    // 3. Tour wasn't already shown today (prevents repeated triggers on same session)
-    if (checkDevice() && !tourCompleted && lastShown !== today) {
-      // Delay to let page load and render fully
+    if (checkDevice() && !tourCompleted && !everShown) {
       const timer = setTimeout(() => {
         setTourRequested(true);
         requestToShow();
-        localStorage.setItem(TOUR_LAST_SHOWN_KEY, today);
+        localStorage.setItem(TOUR_LAST_SHOWN_KEY, new Date().toISOString());
       }, 2500);
 
       return () => clearTimeout(timer);
     }
+
 
     // Also listen for resize events
     const handleResize = () => {
