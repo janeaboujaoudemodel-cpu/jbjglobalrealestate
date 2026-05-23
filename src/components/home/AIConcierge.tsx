@@ -146,14 +146,14 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             exit={{ x: "100%", opacity: 0 }}
             transition={{ type: "spring", damping: 28, stiffness: 260 }}
             data-no-contrast-guard
-            className="fixed z-[9001] flex min-h-0 flex-col overflow-hidden bg-[#FDFBF7]
+            className="fixed z-[9001] flex min-h-0 flex-col overflow-hidden bg-background
               inset-x-0 top-[88px] bottom-0
-              sm:inset-x-auto sm:left-auto sm:right-0 sm:top-[88px] sm:bottom-0 sm:w-[440px] sm:rounded-l-2xl
-              border-l border-t border-b border-[#B89555]/55"
-            style={{ boxShadow: "-24px 0 60px rgba(26,26,26,0.22)" }}
+              sm:inset-x-auto sm:left-auto sm:right-0 sm:top-[88px] sm:bottom-0 sm:w-[440px]
+              border-l border-gold/55"
+            style={{ boxShadow: "-24px 0 60px hsl(var(--foreground) / 0.22)" }}
           >
             {/* Header — flush, single hairline, matches drawer radius */}
-            <div className="shrink-0 flex items-center justify-between px-5 h-[68px] bg-[#F7F2EA] border-b border-[#B89555]/40 sm:rounded-tl-2xl">
+            <div className="shrink-0 flex items-center justify-between px-5 h-[68px] bg-secondary border-b border-gold/40">
               <div className="flex items-center gap-3 min-w-0">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#B89555]/55 bg-[#FDFBF7]">
                   <Sparkles className="h-5 w-5 text-[#B89555]" strokeWidth={2} />
@@ -174,10 +174,10 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-5 py-5 bg-[#FDFBF7]">
+            <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-5 py-5 bg-background">
               {!isVerified && (
                 <div className="min-h-full flex items-stretch">
-                  <div className="w-full">
+                  <div className="w-full flex min-h-full">
                     <ConciergeGate onVerified={() => { /* state auto-updates via hook */ }} />
                   </div>
                 </div>
