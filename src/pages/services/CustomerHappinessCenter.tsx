@@ -87,7 +87,7 @@ const CustomerHappinessCenter = () => {
   const whatsappUrl = getWhatsAppUrl("Hi, I need support from the Happiness Center.");
 
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Customer Happiness Center | JBJ Global Real Estate"
         description="Fast routing, clear answers, and structured support—built around ticket tracking and professional resolution."
@@ -354,7 +354,7 @@ const CustomerHappinessCenter = () => {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

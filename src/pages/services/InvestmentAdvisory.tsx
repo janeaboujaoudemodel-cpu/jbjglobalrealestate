@@ -138,7 +138,7 @@ const whyJBJ = [
 
 const InvestmentAdvisory = () => {
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Investment Advisory Services | JBJ Global Real Estate"
         description="Strategic real estate investment advisory in the UAE. Data-driven guidance for individuals, family offices, and institutional investors."
@@ -482,7 +482,7 @@ const InvestmentAdvisory = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

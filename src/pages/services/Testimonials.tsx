@@ -237,7 +237,7 @@ const Testimonials = () => {
   );
 
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Testimonials | JBJ Global Real Estate"
         description="Real feedback, presented with premium formatting and privacy respect—because trust is built with receipts, not hype."
@@ -669,7 +669,7 @@ const Testimonials = () => {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

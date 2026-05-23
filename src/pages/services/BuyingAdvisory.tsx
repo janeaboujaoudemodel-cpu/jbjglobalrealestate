@@ -200,7 +200,7 @@ const faqData = [
 
 const BuyingAdvisory = () => {
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Buying Advisory Services | JBJ Global Real Estate"
         description="Professional buying advisory and representation for property purchases in Dubai. Expert guidance from market analysis to transaction completion."
@@ -723,7 +723,7 @@ const BuyingAdvisory = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

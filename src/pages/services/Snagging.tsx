@@ -295,7 +295,7 @@ const Snagging = () => {
     setFormData((prev) => ({ ...prev, [field]: value }));
 
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Snagging & Property Inspection Services | JBJ Global Real Estate"
         description="Protect your investment before handover with professional property snagging and inspection services. Structured defect documentation, severity grading, and developer follow-up support."
@@ -826,7 +826,7 @@ const Snagging = () => {
           Inspection services are advisory in nature and conducted within permitted professional real estate consultancy activities. This service does not include repair works, structural engineering assessments, or certified technical testing.
         </p>
       </div>
-    </>
+    </div>
   );
 };
 

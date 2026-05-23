@@ -155,7 +155,7 @@ const PropertyManagement = () => {
   });
 
   return (
-    <>
+    <div data-marketing-page>
       <SEOHead
         title="Property Management & Asset Stewardship | JBJ Global Real Estate"
         description="Comprehensive property management for residential, commercial and investment properties in the UAE. Structured oversight, financial accountability, and regulatory compliance."
@@ -742,7 +742,7 @@ const PropertyManagement = () => {
           </div>{/* close rounded card */}
         </div>{/* close max-w container */}
       </div>{/* close bg-background */}
-    </>
+    </div>
   );
 };
 
