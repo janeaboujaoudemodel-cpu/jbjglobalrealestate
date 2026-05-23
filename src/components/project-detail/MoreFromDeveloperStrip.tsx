@@ -1,15 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/lib/formatPrice";
 
 interface Props {
   developerId?: string | null;
   developerName?: string | null;
+  developerSlug?: string | null;
   currentProjectId: string;
 }
 
-export default function MoreFromDeveloperStrip({ developerId, developerName, currentProjectId }: Props) {
+export default function MoreFromDeveloperStrip({ developerId, developerName, developerSlug, currentProjectId }: Props) {
   const { data } = useQuery({
     enabled: !!developerId,
     queryKey: ["more-from-developer", developerId, currentProjectId],
@@ -20,7 +22,7 @@ export default function MoreFromDeveloperStrip({ developerId, developerName, cur
         .eq("developer_id", developerId!)
         .neq("id", currentProjectId)
         .eq("is_published", true)
-        .limit(12);
+        .limit(60);
       return data ?? [];
     },
     staleTime: 5 * 60 * 1000,
@@ -29,16 +31,28 @@ export default function MoreFromDeveloperStrip({ developerId, developerName, cur
   if (!developerId || !data || data.length === 0) return null;
 
   return (
-    <div className="mt-8">
-      <h3 className="text-lg font-semibold text-foreground mb-3">
-        More from {developerName || "this developer"}
-      </h3>
-      <div className="flex gap-4 overflow-x-auto pb-3 -mx-1 px-1 snap-x snap-mandatory">
+    <div className="mt-10">
+      <div className="flex items-end justify-between mb-4">
+        <h3 className="text-lg md:text-xl font-semibold text-foreground">
+          More from <span className="text-[#B89555]">{developerName || "this developer"}</span>
+        </h3>
+        {developerSlug && (
+          <Link
+            to={`/developer/${developerSlug}`}
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#1A1A1A] border border-[#B89555]/50 bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-full px-4 py-2 transition-colors"
+          >
+            View all projects
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.map((p) => (
           <Link
             key={p.id}
             to={`/project/${p.slug}`}
-            className="snap-start shrink-0 w-[240px] rounded-xl overflow-hidden border border-[#B89555]/30 bg-card hover:shadow-lg hover:shadow-gold/20 transition-all"
+            className="rounded-xl overflow-hidden border border-[#B89555]/30 bg-card hover:shadow-lg hover:shadow-gold/20 hover:border-[#B89555]/60 transition-all"
           >
             <div className="aspect-[4/3] bg-[#EFE6D6] overflow-hidden">
               {p.cover_image_url ? (
