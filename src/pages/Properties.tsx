@@ -1304,7 +1304,7 @@ const Properties = () => {
                     const adIndex = adAfterIndex.indexOf(index);
                     const featuredAd = adIndex !== -1 && FEATURED_ADS[adIndex] ? FEATURED_ADS[adIndex] : null;
 
-                    const nodes: React.ReactNode[] = [
+                    const nodes: JSX.Element[] = [
                       <ProjectCard
                         key={project.id}
                         project={project}
