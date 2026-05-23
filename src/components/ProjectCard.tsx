@@ -81,6 +81,7 @@ const getSaleStatusLabel = resolveSaleStatusLabel;
 
 const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { isOwner } = useUserRole();
   const images = project.images || [];
   const primaryImageUrl = images[currentImageIndex]?.image_url || images[0]?.image_url || project.cover_image_url || null;
 
