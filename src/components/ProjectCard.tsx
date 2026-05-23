@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle, Building2, ArrowUpRight, CreditCard } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle, Building2, ArrowUpRight } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { SafeImage } from "@/components/SafeImage";
 import { VerifiedMedia } from "@/components/ui/verified-media";
