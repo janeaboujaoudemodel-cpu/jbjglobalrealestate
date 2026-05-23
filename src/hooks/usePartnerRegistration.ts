@@ -47,7 +47,7 @@ export function usePartnerRegistration() {
       const app = apps.data ?? null;
       const ref = refs.data ?? null;
       const registered = !!(app || ref);
-      const appApproved = app?.stage === "approved" || app?.stage === "ceo_approved" || app?.stage === "active";
+      const appApproved = app?.stage === "ceo_approval";
       const refApproved = ref?.status === "approved";
       const verified = appApproved || refApproved;
 
