@@ -69,7 +69,7 @@ const Guides = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Guides Library | JBJ Global Real Estate"
         description="Structured guides built to answer real questions—fees, steps, timelines, and best-practice workflows across buying, selling, renting, and investing."
