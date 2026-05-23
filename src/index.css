@@ -3988,6 +3988,18 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
   .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#F7F1E6\], .bg-\[\#EFE6D6\], .bg-\[\#ECE2D2\], .bg-\[\#D8C7A6\],
   [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#D8C7A6]"],
   [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [class~="bg-[#C8A766]"], [class~="bg-[#D4AF37]"]
+):is(.text-white, [class*="text-white/"]):not(.allow-white):not([data-surface="dark"]):not([data-no-contrast-guard]):not([class*="hover:bg-[#1A1A1A]"]:hover):not([class*="hover:bg-black"]:hover) {
+  color: hsl(var(--foreground)) !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
+:root:not(.dark) :is(
+  .bg-white, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
+  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#F7F1E6\], .bg-\[\#EFE6D6\], .bg-\[\#ECE2D2\], .bg-\[\#D8C7A6\],
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#D8C7A6]"],
+  [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [class~="bg-[#C8A766]"], [class~="bg-[#D4AF37]"]
 ):not([data-surface="dark"]):not([data-no-contrast-guard])
 :is(.text-white\/40, .text-white\/50, .text-white\/60, .text-white\/70, .text-white\/75, .text-white\/80, .text-white\/85, .text-white\/90):not(.allow-white):not([data-surface="dark"] *) {
   color: hsl(var(--foreground)) !important;
