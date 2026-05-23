@@ -15,6 +15,7 @@ import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerL
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
+import { PaymentPlanLine } from "@/components/ui/payment-plan-line";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
@@ -328,6 +329,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                 </p>
               );
             })()}
+
+            {/* Payment Plan — always rendered (N/A fallback) to keep cards aligned */}
+            <PaymentPlanLine project={project as any} />
 
             {project.developer && (
               <DeveloperLink

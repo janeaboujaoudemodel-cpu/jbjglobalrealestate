@@ -16,6 +16,7 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
+import { PaymentPlanLine } from "@/components/ui/payment-plan-line";
 
 const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC', 'Meraas'];
 
