@@ -13,6 +13,7 @@ import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerL
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
+import { PaymentPlanLine } from "@/components/ui/payment-plan-line";
  
 interface ReellyProjectCardProps {
   project: ReellyProject;
@@ -285,6 +286,9 @@ const ReellyProjectCard = ({
               </div>
             );
           })()}
+
+           {/* Payment Plan — always rendered (N/A fallback) to keep cards aligned */}
+           <PaymentPlanLine project={project as any} className="mb-2" />
            
            {/* Developer - Clickable */}
             {project.developer_name && (

@@ -16,6 +16,7 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
+import { PaymentPlanLine } from "@/components/ui/payment-plan-line";
 
 const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC', 'Meraas'];
 
@@ -247,9 +248,12 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               </div>
             </div>
 
+            {/* Payment Plan — always rendered (N/A fallback) to keep cards aligned */}
+            <PaymentPlanLine project={project as any} className="mt-1" />
 
           </div>
         </div>
+
       </Link>
     </div>
   );
