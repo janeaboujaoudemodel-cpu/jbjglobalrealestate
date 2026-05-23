@@ -96,7 +96,7 @@ export default function HorizontalUtilityBar() {
   return (
     <>
       <div
-        className={`fixed top-0 right-0 h-[88px] z-[9998] flex items-center border-b border-[hsl(var(--gold)/0.18)] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] bg-gradient-to-r from-[#FDFBF7] via-[#F7F1E6] to-[#EFE6D6] transition-all duration-300 [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7`}
+        className={`fixed top-0 right-0 h-[88px] z-[9998] flex items-center border-b border-[hsl(var(--gold)/0.18)] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] bg-gradient-to-r from-[#FDFBF7] via-[#F7F1E6] to-[#EFE6D6] transition-[left] duration-100 ease-out [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7`}
       >
         {/* ── LEFT: Search only ── */}
         <div className="flex items-center gap-3 shrink-0">
