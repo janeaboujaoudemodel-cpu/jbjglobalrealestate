@@ -318,6 +318,15 @@ serve(async (req) => {
     if (leadResp && typeof leadResp === "object" && "leadId" in leadResp) {
       leadId = (leadResp as { leadId?: string }).leadId ?? null;
     }
+    // Fallback: look up by email if capture-lead didn't return the id
+    if (!leadId) {
+      const { data: lookup } = await admin
+        .from("crm_leads")
+        .select("id")
+        .eq("email_lower", b.email.toLowerCase())
+        .maybeSingle();
+      leadId = lookup?.id ?? null;
+    }
   } catch (e) {
     console.error("capture-lead failed:", e);
   }
