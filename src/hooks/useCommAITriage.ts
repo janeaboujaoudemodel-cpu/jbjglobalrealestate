@@ -27,7 +27,7 @@ export const CATEGORY_META: Record<string, { label: string; color: string }> = {
   business_linkedin:   { label: "Business / LinkedIn", color: "bg-sky-500/10 text-sky-700 border-sky-500/30" },
   finance:             { label: "Finance / Banking",   color: "bg-amber-500/10 text-amber-700 border-amber-500/30" },
   developer_documents: { label: "Developer / Docs",    color: "bg-indigo-500/10 text-indigo-700 border-indigo-500/30" },
-  system:              { label: "System / Website",    color: "bg-slate-500/10 text-slate-700 border-slate-500/30" },
+  system:              { label: "System / Website",    color: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40" },
   personal:            { label: "Personal",            color: "bg-rose-500/10 text-rose-700 border-rose-500/30" },
   spam:                { label: "Spam",                color: "bg-red-500/10 text-red-700 border-red-500/30" },
   other:               { label: "Other",               color: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30" },
