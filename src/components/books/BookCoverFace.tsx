@@ -34,7 +34,7 @@ export function BookCoverFace({ book, size = "thumb", className, bare = false }:
         className={cn("w-full h-full object-cover", bare ? "" : "block", "[image-rendering:auto]")}
         loading="eager"
         decoding="async"
-        fetchPriority={imageFetchPriority}
+        {...({ fetchpriority: imageFetchPriority } as Record<string, string>)}
       />
 
       {!skipOverlays && (
