@@ -361,15 +361,17 @@ const VoiceConciergeWidget = () => {
       {/* Shared Choice popover: voice or WhatsApp — anchored above launcher for mobile & desktop */}
       {choiceOpen && !isConnected && (
         <div
+          data-voice-popover="1"
           className="fixed bottom-[84px] right-6 z-[10061] w-64 rounded-2xl border border-[#B89555]/45 overflow-hidden text-[#1A1A1A]"
           style={{ background: pearlBg, boxShadow: pearlShadow }}
         >
           <div className="px-3 py-2 border-b border-[#B89555]/20 flex items-center justify-between">
             <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65">Concierge · Complimentary</span>
-            <button onClick={() => setChoiceOpen(false)} aria-label="Close" className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
+            <button onClick={closeAndMinimize} aria-label="Close" className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
               <X className="w-3.5 h-3.5" />
             </button>
           </div>
+
           <button
             onClick={handleStartVoice}
             className="w-full flex items-center gap-3 px-3 py-3 hover:bg-white/40 transition-colors text-left"
