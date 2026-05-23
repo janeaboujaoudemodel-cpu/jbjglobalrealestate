@@ -807,7 +807,12 @@ export default function ProjectDetailLayout({
           {/* DETAILS SECTION */}
           <div ref={detailsRef} id="details" className="mb-14 scroll-mt-40">
             <div className="jj-card-inner">
-              <h2 className="text-h3 font-medium text-foreground">About {project.name}</h2>
+              <div className="flex items-start gap-2">
+                <h2 className="text-h3 font-medium text-foreground">About {project.name}</h2>
+                <InlineEditable projectId={project.id} field="description" value={project.description ?? ""} type="textarea" placeholder="Describe this project (markdown supported)…">
+                  <span className="sr-only">Edit description</span>
+                </InlineEditable>
+              </div>
               {project.description ? (
                 <>
                   <div className={`mt-4 relative ${!isDescriptionExpanded && (project.description?.length ?? 0) > 500 ? 'max-h-48 overflow-hidden' : ''}`}>
