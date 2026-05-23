@@ -505,11 +505,14 @@ const Index = () => {
         </div>
       </PodcastVisibilityGate>
 
-      <div className="cv-auto">
+      <SectionDividerGoldFullBleed size="md" spacing="md" />
+
+      {/* TOP AREAS IN DUBAI — wrapped in gold-bordered premium card */}
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
         <Suspense fallback={<SectionLoader />}>
           <AreasWeCover />
         </Suspense>
-      </div>
+      </PremiumSectionCard>
 
 
 
