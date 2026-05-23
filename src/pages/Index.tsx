@@ -366,42 +366,39 @@ const Index = () => {
               <button
                 type="button"
                 onClick={() => setIsInquiryOpen(true)}
-                className="group inline-flex h-12 sm:h-14 items-center justify-center gap-3 rounded-2xl
-                  border border-[#B89555]/55 px-7 sm:px-9
-                  text-[15px] font-semibold tracking-tight text-[#1A1A1A]
-                  transition-[transform,box-shadow,border-color] duration-300 ease-out
-                  hover:-translate-y-0.5 hover:border-[#B89555]/80
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
+                data-no-contrast-guard
+                className="group inline-flex h-12 sm:h-14 items-center justify-center gap-3 rounded-2xl px-7 sm:px-9
+                  text-[15px] font-semibold tracking-tight
+                  transition-[transform,box-shadow,border-color,background] duration-300 ease-out
+                  hover:-translate-y-0.5
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2C9A0]/65 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
                 style={{
-                  background:
-                    "radial-gradient(ellipse at 28% 18%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 55%)," +
-                    "radial-gradient(ellipse at 78% 82%, rgba(184,149,85,0.22) 0%, rgba(184,149,85,0) 60%)," +
-                    "linear-gradient(135deg, #FDFBF7 0%, #F5EBD9 38%, #E8D9BC 68%, #F2E6CE 100%)",
+                  color: '#FDFBF7',
+                  background: 'rgba(253, 251, 247, 0.12)',
+                  WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+                  backdropFilter: 'blur(18px) saturate(160%)',
+                  border: '1px solid #D4B896',
                   boxShadow:
-                    "inset 0 1px 0 rgba(255,255,255,0.95)," +
-                    "inset 0 -1px 0 rgba(184,149,85,0.20)," +
-                    "0 10px 28px -12px rgba(26,26,26,0.32)," +
-                    "0 2px 6px -2px rgba(184,149,85,0.22)",
+                    'inset 0 1px 0 rgba(255,255,255,0.22), 0 0 0 1px rgba(212,184,150,0.35), 0 14px 34px rgba(0,0,0,0.40), 0 0 22px rgba(226,201,160,0.18)',
+                  textShadow: '0 1px 4px rgba(0,0,0,0.55)',
                 }}
                 onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(253, 251, 247, 0.22)';
+                  e.currentTarget.style.borderColor = '#E2C9A0';
                   e.currentTarget.style.boxShadow =
-                    "inset 0 1px 0 rgba(255,255,255,0.98)," +
-                    "inset 0 -1px 0 rgba(184,149,85,0.28)," +
-                    "0 0 0 1px rgba(184,149,85,0.55)," +
-                    "0 16px 40px -10px rgba(184,149,85,0.45)," +
-                    "0 4px 10px -2px rgba(26,26,26,0.25)";
+                    'inset 0 1px 0 rgba(255,255,255,0.30), 0 0 0 1px rgba(226,201,160,0.65), 0 18px 40px rgba(0,0,0,0.45), 0 0 28px rgba(226,201,160,0.28)';
                 }}
                 onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(253, 251, 247, 0.12)';
+                  e.currentTarget.style.borderColor = '#D4B896';
                   e.currentTarget.style.boxShadow =
-                    "inset 0 1px 0 rgba(255,255,255,0.95)," +
-                    "inset 0 -1px 0 rgba(184,149,85,0.20)," +
-                    "0 10px 28px -12px rgba(26,26,26,0.32)," +
-                    "0 2px 6px -2px rgba(184,149,85,0.22)";
+                    'inset 0 1px 0 rgba(255,255,255,0.22), 0 0 0 1px rgba(212,184,150,0.35), 0 14px 34px rgba(0,0,0,0.40), 0 0 22px rgba(226,201,160,0.18)';
                 }}
               >
                 <span>Book a Free Consultation</span>
                 <ArrowUpRight
-                  className="h-4 w-4 text-[#1A1A1A] transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  style={{ color: '#E2C9A0' }}
                   strokeWidth={2.25}
                 />
               </button>
