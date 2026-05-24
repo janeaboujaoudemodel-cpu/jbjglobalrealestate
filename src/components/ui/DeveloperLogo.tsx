@@ -19,10 +19,14 @@ interface DeveloperLogoProps {
 // so every project card has an identical badge footprint. Padding is
 // kept minimal so wide wordmarks AND square marks both render at their
 // maximum size without ever being cropped (object-contain enforced).
+// Square-ish, ~35% smaller than the previous h-14 w-24 plate so cards feel
+// closer to the Reelly reference. Padding stays minimal + object-contain
+// is enforced on the <img/> so wide wordmarks AND square marks render at
+// their largest fitting size and are NEVER cropped.
 const UNIFIED_PLATE =
-  "h-14 w-24 inline-flex items-center justify-center overflow-hidden " +
-  "rounded-xl bg-[#FDFBF7] border border-[#B89555]/45 " +
-  "shadow-[0_4px_14px_rgba(0,0,0,0.18)] p-1";
+  "h-10 w-14 sm:h-11 sm:w-16 inline-flex items-center justify-center overflow-hidden " +
+  "rounded-lg bg-[#FDFBF7] border border-[#B89555]/45 " +
+  "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-[3px]";
 
 
 export function DeveloperLogo({
@@ -45,16 +49,15 @@ export function DeveloperLogo({
     const label = (name || alt || "Developer").trim();
     // Auto-shrink so long names ("Expo City Development") fit fully on
     // two lines without ANY truncation/"…". Plate is h-14 → two lines OK.
+    // Auto-shrink so long names fit the smaller plate without truncation.
     const sizeClass =
-      label.length <= 8
-        ? "text-[12px]"
-        : label.length <= 12
-        ? "text-[11px]"
-        : label.length <= 16
+      label.length <= 6
         ? "text-[10px]"
-        : label.length <= 20
+        : label.length <= 10
         ? "text-[9px]"
-        : "text-[8px]";
+        : label.length <= 14
+        ? "text-[8px]"
+        : "text-[7px]";
     return (
       <div
         className={cn(UNIFIED_PLATE, className)}
@@ -82,7 +85,7 @@ export function DeveloperLogo({
           className={cn(UNIFIED_PLATE, className)}
           aria-label={`${alt} (logo unavailable)`}
         >
-          <Building2 className="w-6 h-6 text-[#1A1A1A]/70" />
+          <Building2 className="w-4 h-4 text-[#1A1A1A]/70" />
         </div>
       );
     }

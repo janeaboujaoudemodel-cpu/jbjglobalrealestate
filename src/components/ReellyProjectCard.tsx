@@ -11,6 +11,7 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
+import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
  
 interface ReellyProjectCardProps {
   project: ReellyProject;
@@ -213,15 +214,7 @@ const ReellyProjectCard = ({
                 );
               })()}
            
-          {/* Bottom-Right: Premium price label */}
-          {project.price_from ? (
-            <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
-              <span className="price-pill-eyebrow">From</span>
-              <span className="price-pill-value">
-                {formatPriceWithCurrency(project.price_from, currency)}
-              </span>
-            </div>
-          ) : null}
+          {/* Price moved out of image overlay into the Reelly-style bottom row below. */}
         </div>
 
          
@@ -280,15 +273,24 @@ const ReellyProjectCard = ({
              </p>
            )}
 
-            {/* Premium full-width divider — directly after developer name, before handover */}
+            {/* Premium full-width divider — before bottom row */}
             <div className="w-full border-t border-[#B89555]/45" />
 
-            {/* Spacer pushes handover row to the very bottom */}
+            {/* Spacer pushes bottom row to the very bottom */}
             <div className="flex-1" />
 
-            {/* Handover date / Ready — right-aligned, bottom of card */}
-            <div className="flex justify-end pt-2">
-              <span className="text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange">
+            {/* Reelly-style bottom row: Price from (left) + Payment plan (right) */}
+            <div className="pt-2">
+              <CardPricePaymentRow
+                price={project.price_from}
+                currency={currency}
+                project={project as any}
+              />
+            </div>
+
+            {/* Handover / Ready — thin meta line beneath, right-aligned */}
+            <div className="flex justify-end mt-1">
+              <span className="text-[#1A1A1A]/75 text-[11px] font-semibold tabular-nums handover-orange">
                 {deriveHandover(project) || HANDOVER_FALLBACK}
               </span>
             </div>
