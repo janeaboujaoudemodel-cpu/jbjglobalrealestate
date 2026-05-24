@@ -47,17 +47,23 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
       width === "contained"
         ? "w-full px-2 md:px-3"
         : "w-full";
-    const radius = width === "contained" ? "rounded-2xl" : "rounded-none";
-    const border = width === "contained" ? "border border-[#B89555]/30" : "border-0";
+    // Global fix: removed the wrapper gold border + rounded shell so sections
+    // that already render their OWN bordered card (Explore Our Services,
+    // Royal Tools Hub, AI Comparison, Mortgage block, etc.) don't show as a
+    // double-bordered card. PremiumSectionCard is now a transparent layout
+    // wrapper — only padding/tone classes are applied when explicitly set.
+    const radius = "";
+    const border = "";
+
     return (
       <section
         ref={ref}
-        className={`w-full empty:hidden has-[>div>div:empty]:hidden ${wrapperClassName}`}
+        className={`w-full ${wrapperClassName}`}
         {...rest}
       >
-        <div className={`${inner} empty:hidden`}>
+        <div className={inner}>
           <div
-            className={`${radius} ${border} ${TONE[tone]} overflow-hidden shadow-none ${PADDING[padding]} ${className} empty:hidden`}
+            className={`${radius} ${border} ${TONE[tone]} overflow-hidden shadow-none ${PADDING[padding]} ${className}`}
           >
             {children}
           </div>
