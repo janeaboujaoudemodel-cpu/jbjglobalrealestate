@@ -2,11 +2,10 @@
  * MinimalFooter — single-line public footer per founder directive.
  * Links: Privacy · Cookies · Sitemap · Contact. Copyright underneath.
  *
- * Responsive theme:
- *  - Phone + iPad portrait (< lg / 1024px): dark espresso (kept as-is).
- *  - Desktop + iPad landscape (>= lg): champagne to match the fixed header,
- *    and offset by the 200px sidebar so it aligns with the sidebar footer row
- *    (Contact / Support / Sign Out / Collapse).
+ * Unified champagne theme across all devices, matching the vertical sidebar
+ * header gradient (left → right) so they read as one continuous frame.
+ * Offset by the 200px sidebar on desktop so it aligns with the sidebar footer row
+ * (Contact / Support / Sign Out / Collapse).
  *
  * The full corporate footer (Footer.tsx) remains available for back-office /
  * marketing surfaces.
