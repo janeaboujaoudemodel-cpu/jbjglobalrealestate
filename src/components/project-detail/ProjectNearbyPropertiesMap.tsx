@@ -34,22 +34,23 @@ const RedIcon = L.divIcon({
   popupAnchor: [0, -46],
 });
 
-// Blue pin — other developers in this area
-const BLUE_PIN_SVG = `
+// Champagne/gold pin — other developers in this area
+const CHAMPAGNE_PIN_SVG = `
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" viewBox="0 0 32 42" fill="none">
   <defs>
-    <linearGradient id="bpin" x1="16" y1="0" x2="16" y2="38" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#1D4ED8"/>
-      <stop offset="100%" stop-color="#1E3A8A"/>
+    <linearGradient id="champagnePin" x1="16" y1="0" x2="16" y2="38" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDFBF7"/>
+      <stop offset="58%" stop-color="#F7F2EA"/>
+      <stop offset="100%" stop-color="#EFE6D6"/>
     </linearGradient>
   </defs>
-  <path d="M16 0C7 0 0 7 0 16c0 12 16 26 16 26s16-14 16-26C32 7 25 0 16 0z" fill="url(#bpin)"/>
-  <circle cx="16" cy="14" r="6" fill="white" opacity="0.95"/>
-  <circle cx="16" cy="14" r="3" fill="#1D4ED8"/>
+  <path d="M16 0C7 0 0 7 0 16c0 12 16 26 16 26s16-14 16-26C32 7 25 0 16 0z" fill="url(#champagnePin)" stroke="#B89555" stroke-width="1.5"/>
+  <circle cx="16" cy="14" r="6" fill="#FDFBF7" stroke="#B89555" stroke-width="1"/>
+  <circle cx="16" cy="14" r="3" fill="#1A1A1A"/>
 </svg>`;
 
-const BlueIcon = L.divIcon({
-  html: BLUE_PIN_SVG,
+const ChampagneIcon = L.divIcon({
+  html: CHAMPAGNE_PIN_SVG,
   className: "jj-map-pin",
   iconSize: [32, 42],
   iconAnchor: [16, 42],
@@ -202,9 +203,9 @@ export default function ProjectNearbyPropertiesMap({
           </Popup>
         </Marker>
 
-        {/* Nearby projects (blue) */}
+        {/* Nearby projects (champagne/gold) */}
         {markers.map((p) => (
-          <Marker key={p.id} position={[p.latitude!, p.longitude!]} icon={BlueIcon}>
+          <Marker key={p.id} position={[p.latitude!, p.longitude!]} icon={ChampagneIcon}>
             <Popup>
               <div className="min-w-[220px] max-w-[280px]">
                 {p.cover_image_url && (
