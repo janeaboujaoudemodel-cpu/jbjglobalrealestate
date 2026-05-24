@@ -8,7 +8,11 @@ on:
 
 jobs:
   contrast:
-    name: Icon / text contrast (WCAG AA)
+    # This job is the merge gate. Mark it as a Required Status Check in
+    # GitHub branch protection so any new contrast regression — tokens,
+    # faded-gold, low-opacity text, white-on-light, black-on-dark, or
+    # same-tone (vs the committed baseline) — blocks the merge button.
+    name: Contrast PR Gate (blocks merges)
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -26,9 +30,12 @@ jobs:
         run: npm ci
 
       # ---------- PR Gate: blocking static guards (fast, run first) ----------
-      # Any failure here blocks the merge. Captures stdout/stderr so we can
-      # post a focused PR comment listing exactly which files regressed.
-      - name: PR Gate — block on faded-gold / low-opacity-white / white-on-light / black-on-dark
+      # Any failure here blocks the merge. Covers all six static contrast
+      # layers. Same-tone is compared against
+      # scripts/contrast/same-tone-baseline.json so only NEW files /
+      # higher counts fail. Captures stdout/stderr so we can post a
+      # focused PR comment listing exactly which files regressed.
+      - name: PR Gate — tokens + faded-gold + low-opacity + white-on-light + black-on-dark + same-tone
         id: pr_gate
         run: |
           mkdir -p artifacts/contrast
@@ -38,10 +45,6 @@ jobs:
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit $status
 
-      # ---------- Layer 1: design tokens (fast, deterministic) ----------
-      - name: Check design-token contrast (WCAG AA)
-        if: success() || steps.pr_gate.outcome == 'success'
-        run: npm run check:contrast:tokens
 
       # ---------- Layer 2: rendered pages (Playwright + axe) ----------
       - name: Install Playwright Chromium
@@ -86,21 +89,24 @@ jobs:
 
             // PR Gate block — most prominent, mergers see this first.
             if (gateOutcome === 'failure') {
-              body += '### ❌ PR Gate: BLOCKED\n\n';
-              body += 'New faded-gold or low-opacity-white usage was introduced. ';
-              body += 'Merge is blocked until these are resolved or allowlisted.\n\n';
+              body += '### ❌ PR Gate: BLOCKED — merge disabled\n\n';
+              body += 'A new contrast regression was introduced. The gate covers: design tokens (WCAG AA), faded-gold, low-opacity text, white-on-light, black-on-dark, and same-tone (vs committed baseline).\n\n';
               if (fs.existsSync(gateLog)) {
                 const log = fs.readFileSync(gateLog, 'utf8').trim();
                 const trimmed = log.length > 6000 ? log.slice(-6000) : log;
-                body += '<details><summary>Gate output</summary>\n\n```\n' + trimmed + '\n```\n\n</details>\n\n';
+                body += '<details open><summary>Gate output</summary>\n\n```\n' + trimmed + '\n```\n\n</details>\n\n';
               }
               body += '**How to fix:**\n';
-              body += '- Replace `text-gold/XX` (XX < 80) with solid `text-gold` or `text-gray-400…900`.\n';
-              body += '- Replace `text-white/XX` (XX < 90) on light surfaces with `text-foreground` / `text-zinc-900`.\n';
-              body += '- For legitimate branded watermarks, owners can allowlist files via `/admin/faded-gold-allowlist` and commit the updated `scripts/contrast/faded-gold-allowlist.json`.\n\n';
+              body += '- **Tokens:** adjust the offending HSL pair in `src/index.css` or allowlist it in `scripts/contrast/allowlist.json` with a documented reason.\n';
+              body += '- **Faded-gold:** replace `text-gold/XX` (XX < 80) with solid `text-gold` or `text-[#1A1A1A]/70`.\n';
+              body += '- **Low-opacity:** raise `text-*/NN` to `/60`+ or use `text-muted-foreground`. Decorative? Add `// contrast-ok` on the line.\n';
+              body += '- **White-on-light / black-on-dark:** flip the text colour to match the wrapper surface.\n';
+              body += '- **Same-tone:** fix the new file (swap `text-[#1A1A1A]` to `text-white` on dark wrappers). If intentional, refresh the baseline with `node scripts/contrast/check-same-tone.mjs --print-baseline > scripts/contrast/same-tone-baseline.json` and commit it — note that loosening the baseline is a reviewable change.\n';
+              body += '- Branded watermarks may be allowlisted via `/admin/faded-gold-allowlist` (commit the updated `scripts/contrast/faded-gold-allowlist.json`).\n\n';
             } else if (gateOutcome === 'success') {
-              body += '### ✅ PR Gate: passed (no faded-gold or low-opacity-white regressions)\n\n';
+              body += '### ✅ PR Gate: passed (no new contrast regressions)\n\n';
             }
+
 
             if (fs.existsSync(tokens)) {
               const t = JSON.parse(fs.readFileSync(tokens, 'utf8'));
