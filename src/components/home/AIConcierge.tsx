@@ -38,13 +38,39 @@ const QUICK_PROMPTS: { label: string; prompt: string }[] = [
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-concierge`;
 
+const HISTORY_KEY = "jbj:concierge:history:v1";
+
 export default function AIConcierge({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { isVerified, verified } = useConciergeVerification();
-  const [messages, setMessages] = useState<Msg[]>([]);
+  const [messages, setMessages] = useState<Msg[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const raw = sessionStorage.getItem(HISTORY_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.filter((m) => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string") : [];
+    } catch { return []; }
+  });
   const [draft, setDraft] = useState("");
   const [streaming, setStreaming] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Persist conversation for this browser session.
+  useEffect(() => {
+    try {
+      if (messages.length === 0) sessionStorage.removeItem(HISTORY_KEY);
+      else sessionStorage.setItem(HISTORY_KEY, JSON.stringify(messages.slice(-50)));
+    } catch { /* quota / privacy mode — ignore */ }
+  }, [messages]);
+
+  // Allow other parts of the app to clear history (e.g., logout).
+  useEffect(() => {
+    const clear = () => setMessages([]);
+    window.addEventListener("jbj:concierge-clear-history", clear);
+    return () => window.removeEventListener("jbj:concierge-clear-history", clear);
+  }, []);
+
 
   // Toggle body attribute so SupportLauncher hides while concierge is open.
   useEffect(() => {
