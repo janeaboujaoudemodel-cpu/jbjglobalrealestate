@@ -167,8 +167,22 @@ const ExploreServicesExpander = () => {
         </div>
       </div>
 
+      {/* Footer CTA — sits inside the card, mirrors JBJ Royal Tools Hub */}
+      <div className="px-5 md:px-7 py-6 text-center bg-[#FDFBF7]">
+        <PearlButton
+          to="/services"
+          size="lg"
+          leadingIcon={<Crown strokeWidth={2.2} />}
+          trailingIcon={<ArrowRight strokeWidth={2.5} />}
+        >
+          Explore Our Services
+        </PearlButton>
+      </div>
+
     </div>
   );
 };
+
+export default ExploreServicesExpander;
 
 export default ExploreServicesExpander;
