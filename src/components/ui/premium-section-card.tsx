@@ -21,6 +21,11 @@ interface Props extends HTMLAttributes<HTMLElement> {
   tone?: "page" | "surface" | "raised";
   /** Outer wrapper extra classes (controls container width / vertical spacing). */
   wrapperClassName?: string;
+  /**
+   * Width mode. Default "full" = card spans edge-to-edge with minimal gutter.
+   * "contained" = legacy centered max-w-7xl container.
+   */
+  width?: "full" | "contained";
 }
 
 const PADDING: Record<NonNullable<Props["padding"]>, string> = {
@@ -37,14 +42,18 @@ const TONE: Record<NonNullable<Props["tone"]>, string> = {
 };
 
 export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
-  ({ padding = "md", tone = "page", wrapperClassName = "", className = "", children, ...rest }, ref) => {
+  ({ padding = "md", tone = "page", wrapperClassName = "", className = "", width = "full", children, ...rest }, ref) => {
+    const inner =
+      width === "contained"
+        ? "container mx-auto px-4 max-w-7xl"
+        : "w-full px-3 md:px-5";
     return (
       <section
         ref={ref}
         className={`w-full ${wrapperClassName}`}
         {...rest}
       >
-        <div className="container mx-auto px-4 max-w-7xl">
+        <div className={inner}>
           <div
             className={`rounded-2xl border border-[#B89555]/30 ${TONE[tone]} overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)] ${PADDING[padding]} ${className}`}
           >
@@ -58,3 +67,4 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
 PremiumSectionCard.displayName = "PremiumSectionCard";
 
 export default PremiumSectionCard;
+
