@@ -620,6 +620,21 @@ All colors MUST be HSL.
     opacity: 1 !important;
   }
 
+  /* ----------------------------------------------------------
+   * FADED-INK ICON GUARD
+   * Icons (Lucide SVGs) must never render at reduced ink opacity.
+   * Catches text-[#1A1A1A]/50, /60, /70 on svgs and forces full
+   * ink. Text fades on <p>/<span> remain unaffected.
+   * Opt-out: add .allow-faded-icon on the svg or wrapper.
+   * ---------------------------------------------------------- */
+  svg.lucide[class*="text-[#1A1A1A]/5"]:not(.allow-faded-icon),
+  svg.lucide[class*="text-[#1A1A1A]/6"]:not(.allow-faded-icon),
+  svg.lucide[class*="text-[#1A1A1A]/7"]:not(.allow-faded-icon),
+  :where(.allow-faded-icon-off) svg.lucide {
+    color: #1A1A1A !important;
+    opacity: 1 !important;
+  }
+
   /* Icons sitting directly on white/very-light cards must never be white */
   :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\])
     > svg.lucide.text-white,
