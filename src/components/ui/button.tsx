@@ -13,9 +13,10 @@ import { cn } from "@/lib/utils";
  * ============================================================
  */
 
-// PRIMARY: solid ink (still highest-contrast CTA on champagne)
+// PRIMARY: champagne mother-of-pearl with gold hairline — premium default CTA
+// Replaces the legacy black/white look site-wide per brand standard.
 const BRAND_PRIMARY =
-  "bg-[#1A1A1A] text-white border-2 border-[#1A1A1A] hover:bg-[#2A2A2A] hover:border-[#B89555] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0";
+  "bg-[linear-gradient(135deg,#FDFBF7_0%,#F7F1E6_50%,#ECE2D2_100%)] text-[#1A1A1A] border border-[#B89555] hover:bg-[linear-gradient(135deg,#FFFFFF_0%,#FAF4E8_50%,#EFE2C9_100%)] hover:border-[#A68444] shadow-[0_4px_14px_-4px_rgba(184,149,85,0.35),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_10px_28px_-8px_rgba(184,149,85,0.5),inset_0_1px_0_rgba(255,255,255,0.95)] hover:-translate-y-0.5 active:translate-y-0 font-semibold";
 
 // SECONDARY: champagne surface, gold border
 const BRAND_SECONDARY =
