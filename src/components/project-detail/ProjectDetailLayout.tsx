@@ -811,16 +811,22 @@ export default function ProjectDetailLayout({
              />
           </div>
 
-          {/* DATA FRESHNESS INDICATOR */}
-          {(project.updated_at || project.import_source) && (
+          {/* OWNER PROVENANCE CARD — owner/admin only, replaces the old public "Updated X ago" chip */}
+          {isOwner && (
             <div className="mb-8 flex justify-end">
-              <DataFreshnessIndicator
-                updatedAt={project.updated_at}
-                importSource={project.import_source}
-                externalId={project.external_id}
-              />
+              <div className="w-full max-w-md">
+                <OwnerProvenanceCard
+                  projectId={project.id}
+                  projectName={project.name}
+                  createdAt={(project as any).created_at}
+                  updatedAt={project.updated_at}
+                  importSource={project.import_source}
+                  createdSource={(project as any).created_source}
+                />
+              </div>
             </div>
           )}
+
 
           {/* DETAILS SECTION */}
           <div ref={detailsRef} id="details" className="mb-14 scroll-mt-40">
