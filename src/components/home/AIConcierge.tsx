@@ -137,7 +137,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
         <>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-x-0 bottom-0 top-[88px] z-[9000] bg-[#1A1A1A]/35 backdrop-blur-xl backdrop-saturate-150"
+            className="fixed inset-x-0 bottom-0 top-[88px] z-[9000] bg-[#1A1A1A]/30 backdrop-blur-2xl backdrop-saturate-150"
             onClick={onClose}
           />
           <motion.aside
@@ -146,20 +146,37 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             exit={{ x: "100%", opacity: 0 }}
             transition={{ type: "spring", damping: 28, stiffness: 260 }}
             data-no-contrast-guard
-            className="fixed z-[9001] flex min-h-0 flex-col overflow-hidden bg-background
+            role="dialog"
+            aria-label="JBJ Concierge"
+            className="fixed z-[9001] flex min-h-0 flex-col overflow-hidden
               inset-x-0 top-[88px] bottom-0
-              sm:inset-x-auto sm:left-auto sm:right-0 sm:top-[88px] sm:bottom-0 sm:w-[440px]
-              border-l border-gold/55"
-            style={{ boxShadow: "-24px 0 60px hsl(var(--foreground) / 0.22)" }}
+              sm:inset-x-auto sm:left-auto sm:right-4 sm:top-[104px] sm:bottom-4 sm:w-[440px] sm:rounded-3xl
+              border border-[#B89555]/55"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,242,234,0.90) 45%, rgba(239,230,214,0.92) 100%)",
+              backdropFilter: "blur(22px) saturate(160%)",
+              WebkitBackdropFilter: "blur(22px) saturate(160%)",
+              boxShadow:
+                "-32px 0 80px rgba(26,26,26,0.28), 0 0 0 1px rgba(184,149,85,0.18) inset, 0 1px 0 rgba(255,255,255,0.65) inset",
+            }}
           >
-            {/* Header — flush, single hairline, matches drawer radius */}
-            <div className="shrink-0 flex items-center justify-between px-5 h-[68px] bg-secondary border-b border-gold/40">
+            {/* Header — crystal glass, single hairline */}
+            <div
+              className="shrink-0 flex items-center justify-between px-5 h-[68px] border-b border-[#B89555]/30"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(255,255,255,0.70) 0%, rgba(247,242,234,0.45) 100%)",
+                backdropFilter: "blur(14px) saturate(140%)",
+                WebkitBackdropFilter: "blur(14px) saturate(140%)",
+              }}
+            >
               <div className="flex items-center gap-3 min-w-0">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#B89555]/55 bg-[#FDFBF7]">
+                <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#B89555]/55 bg-[linear-gradient(180deg,#FFFFFF_0%,#F7F2EA_100%)] shadow-[0_1px_0_rgba(255,255,255,0.8)_inset,0_4px_12px_rgba(184,149,85,0.18)]">
                   <Sparkles className="h-5 w-5 text-[#B89555]" strokeWidth={2} />
                 </div>
                 <div className="min-w-0">
-                  <div className="text-[15px] font-semibold text-[#B89555] leading-tight truncate">JBJ Concierge</div>
+                  <div className="text-[15px] font-semibold text-[#B89555] leading-tight truncate tracking-[0.005em]">JBJ Concierge</div>
                   <div className="text-[11px] text-[#1A1A1A]/65 leading-tight truncate">JBJ Global Real Estate</div>
                 </div>
               </div>
@@ -167,14 +184,15 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                 onClick={onClose}
                 aria-label="Close concierge"
                 data-no-contrast-guard
-                className="shrink-0 flex h-9 w-9 items-center justify-center rounded-lg text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6] transition"
+                className="shrink-0 flex h-9 w-9 items-center justify-center rounded-lg text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#FDFBF7]/70 border border-transparent hover:border-[#B89555]/40 transition"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pt-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] bg-background">
+            <div ref={scrollRef} className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pt-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+
               {!isVerified && (
                 <div className="flex h-full flex-1 items-stretch">
                   <div className="flex h-full w-full flex-1">
