@@ -58,7 +58,20 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
       
       const { data, error } = await supabase.functions.invoke(functionName, { body });
 
-      if (error) throw error;
+      if (error) {
+        let serverMessage = '';
+        try {
+          const ctx: any = (error as any).context;
+          if (ctx && typeof ctx.json === 'function') {
+            serverMessage = (await ctx.json())?.error || '';
+          } else if (ctx && typeof ctx.text === 'function') {
+            const txt = await ctx.text();
+            try { serverMessage = JSON.parse(txt)?.error || txt; } catch { serverMessage = txt; }
+          }
+        } catch { /* ignore */ }
+        setError(serverMessage || "We couldn't send the code. Please try again in a moment.");
+        return;
+      }
 
       if (data?.error) {
         setError(data.error);
