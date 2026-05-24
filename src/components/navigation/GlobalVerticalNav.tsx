@@ -1350,18 +1350,36 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               )}
             </div>
 
-            {/* Expand button — bare gold icon, no box/border */}
-            <button
-              data-no-contrast-guard
-              data-sidebar-collapse-control
-              onClick={toggleCollapse}
-              className="jbj-sidebar-collapse-control group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70 mt-1 mb-1"
-              style={{ color: '#B89555' }}
-              aria-label="Expand navigation"
-              title="Expand navigation"
-            >
-              <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5 text-[hsl(var(--gold))]" strokeWidth={2} />
-            </button>
+            {/* Expand button — instant tooltip, gold pulse until onboarding tour completed */}
+            <TooltipProvider delayDuration={0} skipDelayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    data-no-contrast-guard
+                    data-sidebar-collapse-control
+                    data-tour-target="sidebar-expand"
+                    onClick={toggleCollapse}
+                    className="jbj-sidebar-collapse-control group relative w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70 mt-1 mb-1"
+                    style={{ color: '#B89555' }}
+                    aria-label="Expand navigation"
+                  >
+                    {/* Pulse ring — only while collapsed AND tour not yet completed */}
+                    {collapsed && (() => {
+                      try { return localStorage.getItem('jj_tour_completed') !== '1'; } catch { return true; }
+                    })() && (
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 rounded-lg ring-2 ring-[#B89555]/70 animate-ping opacity-60"
+                      />
+                    )}
+                    <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5 text-[hsl(var(--gold))]" strokeWidth={2} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right" sideOffset={10} className="text-xs z-[10100]">
+                  Expand navigation
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
           </div>
         </div>
