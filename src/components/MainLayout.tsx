@@ -289,11 +289,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           />
         </Suspense>
       )}
-      {!isBackOfficeRoute && (
-        <Suspense fallback={null}>
-          <VoiceConciergeWidget />
-        </Suspense>
-      )}
+      {/* VoiceConciergeWidget removed — voice access lives inside the Talk-to-us panel */}
+
       {showLayoutDebug && layoutDebugSnapshot && (
         <div
           data-testid="layout-debug-overlay"
