@@ -74,6 +74,9 @@ import ProjectNearbyPropertiesMap from "@/components/project-detail/ProjectNearb
 import MoreFromDeveloperStrip from "@/components/project-detail/MoreFromDeveloperStrip";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { SectionDivider } from "@/components/ui/section-divider";
+import { recordProjectView, peekBackStack, popBackStack, type BackStackEntry } from "@/lib/browsingHistory";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 // Footer is now rendered globally in MainLayout - do not import here
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
