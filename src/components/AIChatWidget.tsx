@@ -830,12 +830,24 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
   return (
     <AnimatePresence>
+      {/* Click-outside backdrop — tapping anywhere outside the panel minimizes the chat */}
+      <motion.div
+        key="chat-outside-scrim"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
+        className="fixed inset-0 z-[8999] bg-transparent"
+        onClick={() => { onMinimize ? onMinimize() : onToggleCollapse(); }}
+        aria-hidden="true"
+      />
       <motion.div
         initial={{ x: isRTL ? -380 : 380, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: isRTL ? -380 : 380, opacity: 0 }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         data-jbj-chat-open="true"
+        onClick={(e) => e.stopPropagation()}
         className={`fixed ${isRTL ? 'left-0' : 'right-0'} top-[88px] z-[9000] w-full sm:w-[420px] h-[calc(100dvh-88px)] bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-l-2 border-[#B89555] shadow-2xl shadow-gold/20 flex flex-col overflow-hidden`}
       >
         <ChatHeader
