@@ -544,23 +544,7 @@ const Properties = () => {
               }));
             }}
           />
-          {/* Top utility row — Resale shortcut (left) · Sort (right) */}
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <Link to="/resale-properties">
-              <button
-                type="button"
-                data-no-contrast-guard
-                className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg text-[12.5px] font-semibold text-[#1A1A1A] border border-[#B89555]/55 bg-[#FDFBF7] hover:bg-[#EFE6D6] transition-colors"
-              >
-                <ArrowUpRight className="w-3.5 h-3.5 text-[#B89555]" strokeWidth={2.2} />
-                Resale
-              </button>
-            </Link>
-            <SortBySelect value={sortBy} onChange={setSortBy} hideLabel size="compact" />
-          </div>
-
-
-          {/* Compact action row: [Search icon] + [Filters] — intent + search input live inside the Filters modal */}
+          {/* Compact action row: [Intent | Sort By] unified pill + [Search icon] + [Filters] */}
           {(() => {
             const tx = appliedFilters.transactionType;
             const cs = appliedFilters.completionStatus;
@@ -572,14 +556,6 @@ const Properties = () => {
                 : cs === 'off-plan'
                 ? 'buy-offplan'
                 : 'buy';
-            const intentLabel =
-              intentValue === 'rent'
-                ? 'Rent'
-                : intentValue === 'buy-ready'
-                ? 'Buy Ready'
-                : intentValue === 'buy-offplan'
-                ? 'Buy Off-Plan'
-                : 'Buy';
             const setIntent = (val: string) => {
               if (val === 'rent') {
                 updateFilter('transactionType', 'rent');
@@ -601,16 +577,40 @@ const Properties = () => {
             };
             return (
               <div data-no-contrast-guard className="flex items-center gap-2">
-                {/* Current intent chip — visual indicator, clicking opens Filters where it can be changed */}
-                <button
-                  type="button"
-                  onClick={() => setIsAdvancedOpen(true)}
+                {/* Unified pill: Intent (left half) | Sort By (right half) */}
+                <div
+                  className="flex items-stretch h-11 rounded-xl border border-[#B89555]/55 bg-[#F7F2EA] overflow-hidden flex-shrink-0"
                   data-no-contrast-guard
-                  className="inline-flex items-center gap-1.5 h-11 px-3.5 rounded-xl text-[13px] font-semibold text-[#1A1A1A] border border-[#B89555]/55 bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors flex-shrink-0"
-                  aria-label={`Current intent: ${intentLabel}. Click to change.`}
                 >
-                  {intentLabel}
-                </button>
+                  <div className="flex-1 min-w-[110px]">
+                    <Select value={intentValue} onValueChange={setIntent}>
+                      <SelectTrigger
+                        className="h-full w-full px-3 bg-transparent border-0 rounded-none shadow-none text-[13px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6]/50"
+                        aria-label="Transaction intent"
+                      >
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="buy">Buy</SelectItem>
+                        <SelectItem value="buy-ready">Buy Ready</SelectItem>
+                        <SelectItem value="buy-offplan">Buy Off-Plan</SelectItem>
+                        <SelectItem value="rent">Rent</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="w-px bg-[#B89555]/40 flex-shrink-0" />
+                  <div className="flex-1 min-w-[110px]">
+                    <SortBySelect
+                      value={sortBy}
+                      onChange={setSortBy}
+                      iconOnly
+                      borderless
+                      size="default"
+                      className="h-full w-full rounded-none"
+                    />
+                  </div>
+                </div>
+
 
                 {/* Search — icon only; opens a popover with the search input */}
                 <Popover>
