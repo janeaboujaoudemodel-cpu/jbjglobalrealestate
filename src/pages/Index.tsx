@@ -144,7 +144,6 @@ const Index = () => {
   useEffect(() => {
     const preloadNearFold = () => {
       [
-        chunkImports.DeveloperPartnersMarquee,
         chunkImports.TrustBar,
         chunkImports.FeaturedListings,
       ].forEach((importFn) => {
