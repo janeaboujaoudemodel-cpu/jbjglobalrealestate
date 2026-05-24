@@ -74,8 +74,8 @@ const AreasWeCover = () => {
                 </div>
               )}
 
-              {/* Soft top gradient so badges read clearly */}
-              <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/55 to-transparent pointer-events-none" />
+              {/* Subtle top gradient so badges read clearly without darkening the image */}
+              <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/30 to-transparent pointer-events-none" />
 
               {/* Badges — cream + ink + thin gold border (No-Gold-Fills rule) */}
               <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
@@ -93,33 +93,27 @@ const AreasWeCover = () => {
                 )}
               </div>
 
-              {/* Solid ink caption bar — maximum legibility for area name + count */}
-              <div className="absolute bottom-0 left-0 right-0 bg-[#1A1A1A] backdrop-blur-md border-t border-[#B89555]/50 px-4 py-3 shadow-[0_-12px_24px_-12px_rgba(0,0,0,0.55)]">
+              {/* Champagne caption bar — ink text, gold hairline (no dark fills) */}
+              <div className="absolute bottom-0 left-0 right-0 bg-[#FDFBF7]/95 backdrop-blur-md border-t border-[#B89555]/40 px-4 py-3">
                 <div className="flex items-end justify-between gap-3">
                   <div className="min-w-0">
-                    <h3 className="text-[#FDFBF7] font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
+                    <h3 className="text-[#1A1A1A] font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
                       {area.name}
                     </h3>
-                    <p className="mt-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[#E8C77A] [text-shadow:0_1px_2px_rgba(0,0,0,0.6)]">
+                    <p className="mt-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1A1A1A]/70">
                       {(area.propertyCount ?? 0).toLocaleString()} {(area.propertyCount ?? 0) === 1 ? "project" : "projects"} available
                     </p>
                   </div>
 
                   <span
-                    data-no-contrast-guard
-                    className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#1A1A1A] transition-all group-hover:translate-y-[-1px]"
-                    style={{
-                      background: 'linear-gradient(145deg, #F7F1E6 0%, #E8D6AE 50%, #B89555 100%)',
-                      border: '1px solid #B89555',
-                      boxShadow:
-                        'inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(120,90,30,0.35), 0 4px 10px rgba(120,90,30,0.45), 0 0 0 1px rgba(184,149,85,0.35)',
-                    }}
+                    className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#1A1A1A] bg-[#EFE6D6] border border-[#B89555]/60 transition-all group-hover:translate-y-[-1px] group-hover:bg-[#F7F2EA]"
                   >
                     Explore
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </div>
               </div>
+
             </Link>
           ))}
         </div>
