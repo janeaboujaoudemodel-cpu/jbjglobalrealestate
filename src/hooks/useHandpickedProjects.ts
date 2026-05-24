@@ -29,10 +29,21 @@ const SELECT = `
   reelly_id, construction_status, sale_status,
   area_name, cover_image_url, is_published,
   developer_name, latitude, longitude,
-  developer:developers(id, name, slug, logo_url),
+  developer:developers(id, name, slug, logo_url, has_active_rep),
   community:communities(id, name, slug),
   images:project_images(id, image_url, alt_text, display_order)
 `;
+
+// Promote off-plan; suppress "ready/completed" listings UNLESS the project's
+// developer is direct-with-JBJ (has an active sales rep on our portal → full
+// commission). Owner directive: never show generic ready stock on the homepage.
+const isCompletedReady = (p: any) => {
+  const cs = String(p?.construction_status || "").toLowerCase().trim();
+  return cs === "completed" || cs === "ready" || cs === "complete";
+};
+const isDirectWithDeveloper = (p: any) => p?.developer?.has_active_rep === true;
+const isHomepagePromotable = (p: any) => !isCompletedReady(p) || isDirectWithDeveloper(p);
+
 
 const ELITE_DEVELOPERS = [
   "Emaar",
@@ -63,7 +74,16 @@ function readBrowsingHistory(): Array<{ slug?: string; id?: string; developer_na
 }
 
 function dedupePush(out: Project[], seen: Set<string>, candidates: Project[]) {
-  for (const p of candidates) {
+  // Owner rule: promote off-plan first; direct-with-developer ready can stay
+  // (top priority); generic completed/ready stock is dropped.
+  const filtered = candidates.filter((p) => p && isHomepagePromotable(p));
+  // Direct-with-developer ready units rank first.
+  const sorted = [...filtered].sort((a, b) => {
+    const aDirectReady = isDirectWithDeveloper(a) && isCompletedReady(a) ? 1 : 0;
+    const bDirectReady = isDirectWithDeveloper(b) && isCompletedReady(b) ? 1 : 0;
+    return bDirectReady - aDirectReady;
+  });
+  for (const p of sorted) {
     if (out.length >= TARGET) return;
     if (!p?.id || seen.has(p.id)) continue;
     // Require an image to keep the grid visually uniform
@@ -72,6 +92,7 @@ function dedupePush(out: Project[], seen: Set<string>, candidates: Project[]) {
     out.push(p);
   }
 }
+
 
 async function tierInterestForm(userId: string | undefined, email: string | undefined): Promise<Project[]> {
   if (!email && !userId) return [];
@@ -230,7 +251,7 @@ export function useHandpickedProjects() {
   const { mode } = useUserModeContext() as any;
 
   return useQuery({
-    queryKey: ["handpicked-projects-v1", user?.id ?? "anon", mode ?? "none"],
+    queryKey: ["handpicked-projects-v2-offplan-first", user?.id ?? "anon", mode ?? "none"],
     staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const out: Project[] = [];
