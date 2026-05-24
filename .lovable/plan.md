@@ -1,39 +1,35 @@
-## Goal
+## Plan
 
-Eliminate every visible silver/champagne hairline or gradient strip between the fixed header and the hero, and between every consecutive section across all pages. Sections should flow on padding/band-tone alternation only — no visible rule, no hairline, no gradient seam.
+### 1. Marquee title — stop the shimmer, use solid dark gold
 
-## What's causing the "silver" line today
+In `src/components/DeveloperPartnersMarquee.tsx`:
+- Remove the `.jbj-shimmer-text` animation from the title "Partners with Dubai's leading developers".
+- Render the title in solid dark gold `#B89555` (no gradient, no animation).
+- Keep the shimmering champagne **background band** behind the title and the gold hairline divider below it — only the text stops animating.
 
-1. **Header bottom borders (visible on every page)** — `src/components/GlobalHeader.tsx` lines 631–638 render two thin champagne gradient strips at the header's bottom edge:
-   - A 2px `via-[#B89555]/60` + 1px `via-[#B89555]/40` pair shown when the header is solid.
-   - A 1px `via-[#B89555]/40` gold divider shown when the header is transparent (the one explicitly labeled "separates header from hero").
-2. **Header solid background** — `linear-gradient(90deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)` at line 619 reads as a silver/champagne band where the header meets the dark hero on home and other transparent-hero routes.
-3. **Residual section hairlines** — a handful of components still draw `border-y border-[#B89555]/XX` around full-width section wrappers, perceived as silver seams between sections:
-   - `src/components/home/HeroSearchBar.tsx` line 1187 (suggestions group label band)
-   - any other `border-y border-[#B89555]/…` regressions found via repo scan
-4. **Header gradient overlay between menus** — line 564: `bg-gradient-to-r from-transparent via-gray-200 to-transparent` inside the account dropdown (raw gray — violates No-Gray rule).
+### 2. Make every homepage section match the width of Explore Our Services
 
-## Changes
+Root cause: `Explore Our Services` is wrapped in `<PremiumSectionCard padding="none">`, so its inner card spans the full wrapper width. Other sections on `Index.tsx` use `padding="md"` (`p-5 md:p-8`), which insets the inner card and makes it visually narrower.
 
-### 1. `src/components/GlobalHeader.tsx`
-- Delete the bottom-border block (lines 631–635) and the transparent-state gold divider (line 638). Header gets zero visible bottom edge in either state.
-- Replace the solid-state champagne gradient (line 619) with a flat `#FDFBF7` page tone so the solid header reads as page-continuous, not as a band. Keep opacity transition.
-- Remove the `via-gray-200` dropdown top-fade line (line 564) — replace with nothing (no divider).
+Fix on `src/pages/Index.tsx` — change all 7 occurrences of `padding="md"` to `padding="none"` on these wrappers so every section's inner card spans the same edge-to-edge width as Explore Our Services:
 
-### 2. Section hairline sweep
-- Run `rg "border-(y|t|b) border-\[#B89555\]/" src` and remove the `border-y …` / `border-t …` / `border-b …` classes from every full-width section wrapper (not from chips, pills, tabs, or icon tiles — only structural section seams). Confirmed targets so far:
-  - `src/components/home/HeroSearchBar.tsx` line 1187 (suggestions group header) — drop `border-y border-[#B89555]/10`.
-  - Any further hits the scan returns get the same treatment.
+- Verification Banner
+- Developer Portal CTA
+- Featured Listings
+- Continue Searching
+- Resale Properties
+- Overseas Investors
+- (any remaining `padding="md"`)
 
-### 3. Verification
-- After edits, re-run the same `rg` to confirm zero `border-y border-[#B89555]` occurrences on section/wrapper elements remain.
-- Visually confirm in preview at `/` that:
-  - The hero meets the header with no visible line, gradient, or champagne strip.
-  - Scrolling past 80px keeps the header readable (now flat `#FDFBF7`) without re-introducing a seam.
-  - Every other section transitions on padding/tone alone.
+For sections whose inner component relied on the wrapper's horizontal padding, add equivalent horizontal padding (`px-5 md:px-8`) inside the component itself so the **content** still breathes, but the **card frame** reaches the same width as Explore Our Services.
 
-## Out of scope
+### 3. Verify globally
 
-- The `<SectionDivider*>` / `<AdaptiveHairline>` primitives are already permanent no-ops (per `mem://constraints/no-section-dividers-global`) — no change needed.
-- Gold hairlines that are intentional ornament inside cards/pills (`<PremiumSectionCard>`, badges, price pill) stay — only structural section seams are removed.
-- No layout, spacing, copy, or behavior changes. Pure visual seam removal.
+`PremiumSectionCard` is only used in `Index.tsx` (the toolkit hub doesn't use it). So once Index sections are aligned, all marketing sections that share this wrapper will be at the same Explore-Our-Services width. No other pages need editing.
+
+### Out of scope
+- I will not touch the marquee logo strip itself (locked component) — only the title row above it.
+- I will not change the visual style of any individual section card (gold border, shadows, etc.) — only the outer wrapper width/padding.
+
+### Clarifying point
+Other pages (e.g. property pages, toolkit pages) do **not** use `PremiumSectionCard`, so this width rule only applies to the homepage marketing stack. If you want the same width rule enforced on other specific pages, tell me which ones and I will extend the fix.
