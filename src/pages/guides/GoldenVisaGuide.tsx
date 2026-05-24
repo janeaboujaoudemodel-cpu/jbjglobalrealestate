@@ -228,6 +228,18 @@ const GoldenVisaGuide = () => {
               );
             })}
           </div>
+
+          {/* Quick shortcut to Eligibility Assessment */}
+          <div className="mt-10 flex justify-center">
+            <Button
+              onClick={() => scrollTo("assessment")}
+              className="bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] font-semibold px-8 py-4 rounded-xl border border-[#B89555]/50 shadow-[0_4px_18px_rgba(184,149,85,0.18)] hover:shadow-[0_8px_28px_rgba(184,149,85,0.28)] transition-all"
+            >
+              <BadgeCheck className="w-5 h-5 mr-2 text-[#B89555]" />
+              Check Your Eligibility Now
+              <ChevronRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
         </div>
       </section>
       <div className="h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/40 to-transparent" />
