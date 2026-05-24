@@ -94,7 +94,8 @@ const ChatMessages = React.memo(({
 
   return (
     <>
-      <ScrollArea className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]" ref={scrollRef}>
+      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+
         <div className="space-y-4">
           {messages.map((message) => (
             <div
