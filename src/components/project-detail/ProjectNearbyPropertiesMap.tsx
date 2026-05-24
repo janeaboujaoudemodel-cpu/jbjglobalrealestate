@@ -200,7 +200,7 @@ export default function ProjectNearbyPropertiesMap({
         .leaflet-popup-content { margin: 0; }
       `}</style>
       <MapContainer
-        center={[latitude, longitude]}
+        center={center}
         zoom={13}
         scrollWheelZoom={false}
         touchZoom={true}
@@ -210,19 +210,22 @@ export default function ProjectNearbyPropertiesMap({
         attributionControl={false}
       >
         <TileLayer url={tiles.satellite.url} attribution={tiles.satellite.attribution} maxZoom={19} />
-        <MapNavigationControls latitude={latitude} longitude={longitude} />
+        <MapNavigationControls latitude={center[0]} longitude={center[1]} />
 
-        {/* Current project marker (red) */}
-        <Marker position={[latitude, longitude]} icon={RedIcon}>
-          <Popup>
-            <div className="min-w-[200px] max-w-[260px] p-3">
-              <div className="text-sm font-bold text-[#1A1A1A]">{currentProjectName}</div>
-              <div className="text-xs text-[#1A1A1A]/70 mt-1">
-                {t("map.thisProject") || "This project"}
+        {/* Current project marker (red) — only when we have real coords */}
+        {hasOwnCoords && (
+          <Marker position={[latitude as number, longitude as number]} icon={RedIcon}>
+            <Popup>
+              <div className="min-w-[200px] max-w-[260px] p-3">
+                <div className="text-sm font-bold text-[#1A1A1A]">{currentProjectName}</div>
+                <div className="text-xs text-[#1A1A1A]/70 mt-1">
+                  {t("map.thisProject") || "This project"}
+                </div>
               </div>
-            </div>
-          </Popup>
-        </Marker>
+            </Popup>
+          </Marker>
+        )}
+
 
         {/* Nearby projects (champagne/gold) */}
         {markers.map((p) => (
