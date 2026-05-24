@@ -23,7 +23,7 @@ const CEOLeadershipShowcase = () => {
   const metrics = useTeamMetrics();
 
   return (
-    <section id="ceo-showcase" className="py-20 border-t border-[#B89555]/30 relative overflow-hidden bg-[#1A1A1A]">
+    <section id="ceo-showcase" className="py-20 relative overflow-hidden bg-[#1A1A1A]">
       {/* Background effects */}
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/4 w-[600px] h-[600px] bg-[#EFE6D6]/10 rounded-full blur-[150px]" />

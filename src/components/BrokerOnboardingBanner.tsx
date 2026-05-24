@@ -133,7 +133,7 @@ const BrokerOnboardingBanner = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
-        className="bg-gradient-to-r from-zinc-900 via-black to-zinc-900 border-b border-[#B89555]/30"
+        className="bg-gradient-to-r from-zinc-900 via-black to-zinc-900"
       >
         <div className="container mx-auto px-4 py-4">
           {/* Header Row */}
