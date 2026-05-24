@@ -187,7 +187,13 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-[rgba(253,251,247,0.18)]
               border-l border-[#B89555]/55 flex-shrink-0
               transition-colors duration-200 hover:bg-[rgba(253,251,247,0.28)]"
-            style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+            style={{
+              color: "#1A1A1A",
+              WebkitTextFillColor: "#1A1A1A",
+              backgroundColor: "rgba(253,251,247,0.64)",
+              WebkitBackdropFilter: "blur(22px) saturate(170%)",
+              backdropFilter: "blur(22px) saturate(170%)",
+            }}
           >
             <CalendarCheck className="w-4 h-4 text-[#B89555] transition-transform duration-200 group-hover/book:scale-110" strokeWidth={2.2} />
             <span
@@ -208,6 +214,11 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             className="group/conc hidden sm:flex items-center justify-center self-stretch h-full px-4 lg:px-5 bg-[rgba(253,251,247,0.18)]
               border-l border-[#B89555]/55 rounded-r-2xl flex-shrink-0
               transition-colors duration-200 hover:bg-[rgba(253,251,247,0.28)]"
+            style={{
+              backgroundColor: "rgba(253,251,247,0.64)",
+              WebkitBackdropFilter: "blur(22px) saturate(170%)",
+              backdropFilter: "blur(22px) saturate(170%)",
+            }}
           >
             <Sparkles
               className="w-[18px] h-[18px] text-[#B89555] transition-transform duration-200 group-hover/conc:scale-110 group-hover/conc:rotate-12"
