@@ -16,6 +16,16 @@ Multi-layer automated WCAG AA contrast gate that blocks PRs introducing low-cont
 
 **Hard-fail on any AA violation** (4.5:1 for text, 3:1 for UI). The build fails and the PR comment shows exactly which pair / DOM node / class string failed.
 
+The GitHub Actions workflow `.github/workflows/contrast-check.yml` runs `npm run check:contrast:pr-gate` on every PR and push to `main`. Mark the **Contrast PR Gate (blocks merges)** check as a Required Status Check in branch protection so any new regression — tokens, faded-gold, low-opacity text, white-on-light, black-on-dark, or same-tone — disables the merge button.
+
+### Same-tone baseline
+
+`check-same-tone.mjs` compares current offenders against `scripts/contrast/same-tone-baseline.json`. Pre-existing files are tolerated; **new files or higher hit counts fail the gate**. Refresh the baseline only when an intentional change is reviewed:
+
+```bash
+node scripts/contrast/check-same-tone.mjs --print-baseline > scripts/contrast/same-tone-baseline.json
+```
+
 ## Allowlist
 
 Documented exceptions live in `scripts/contrast/allowlist.json`. Every entry **must** include a `reason`. Sections:
