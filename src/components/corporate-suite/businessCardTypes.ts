@@ -115,7 +115,7 @@ export const TEMPLATES: { id: Template; label: string; desc: string; badge?: str
 ];
 
 export const COLOR_PRESETS: { primary: string; secondary: string; label: string; accent: string }[] = [
-  { primary: "#C8A766", secondary: "#ffffff", label: "JBJ Gold",   accent: "#1a1a1a" },
+  { primary: "#B89555", secondary: "#ffffff", label: "JBJ Gold",   accent: "#1a1a1a" },
   { primary: "#1e3a8a", secondary: "#ffffff", label: "Navy Blue",  accent: "#93c5fd" },
   { primary: "#0f766e", secondary: "#ffffff", label: "Teal",       accent: "#99f6e4" },
   { primary: "#7c3aed", secondary: "#ffffff", label: "Violet",     accent: "#ddd6fe" },
@@ -123,7 +123,7 @@ export const COLOR_PRESETS: { primary: string; secondary: string; label: string;
   { primary: "#334155", secondary: "#ffffff", label: "Slate",      accent: "#cbd5e1" },
   { primary: "#111827", secondary: "#ffffff", label: "Onyx",       accent: "#d1d5db" },
   { primary: "#065f46", secondary: "#ffffff", label: "Forest",     accent: "#6ee7b7" },
-  { primary: "#000000", secondary: "#C8A766", label: "Pure Black", accent: "#C8A766" },
+  { primary: "#000000", secondary: "#B89555", label: "Pure Black", accent: "#B89555" },
 ];
 
 export const CARD_SHAPES: { id: CardShape; label: string; icon: React.ReactNode; ratio: string }[] = [

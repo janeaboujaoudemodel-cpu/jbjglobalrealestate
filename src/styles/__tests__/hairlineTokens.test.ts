@@ -7,7 +7,7 @@ import { HAIRLINE_TOKENS } from "../hairlineTokens";
  * divider WILL look different. Update intentionally.
  */
 describe("HAIRLINE_TOKENS contract", () => {
-  it("champagne RGB triplet stays #C8A766 (200,167,102)", () => {
+  it("champagne RGB triplet stays #B89555 (200,167,102)", () => {
     expect(HAIRLINE_TOKENS.champagneRgb).toBe("200,167,102");
   });
 

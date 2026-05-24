@@ -240,7 +240,7 @@ const ChatLeadForm = ({
           type="button"
           className="group relative w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden mt-3 hover:scale-[1.02] transform active:scale-95"
           style={{
-            background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
+            background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
             border: '2px solid rgba(200,167,102,0.6)',
             boxShadow: `
               0 8px 20px rgba(200,167,102,0.35),

@@ -245,7 +245,7 @@ export const ShortlistRequestForm = ({
           disabled={isSubmitting}
           className="w-full h-14 text-base font-bold relative overflow-hidden group"
           style={{
-            background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
+            background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
             border: '2px solid rgba(200,167,102,0.6)',
             boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2)',
           }}

@@ -86,7 +86,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
     const esc = (s: string) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
     return `
 <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
-  <p style="margin: 0; font-weight: bold; color: #C8A766;">${esc(name)}</p>
+  <p style="margin: 0; font-weight: bold; color: #B89555;">${esc(name)}</p>
   <p style="margin: 2px 0; color: #666;">${esc(title)}</p>
   <p style="margin: 2px 0; color: #666;">${esc(department)} | JBJ Global Real Estate</p>
   <p style="margin: 8px 0 0 0; font-size: 12px; color: #999;">

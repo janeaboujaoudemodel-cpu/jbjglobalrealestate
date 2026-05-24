@@ -42,7 +42,7 @@ export const STYLES = [
 ];
 
 export const COLOR_PRESETS = [
-  { primary: "#C8A766", secondary: "#1a1a1a", accent: "#ffffff", label: "Gold & Black" },
+  { primary: "#B89555", secondary: "#1a1a1a", accent: "#ffffff", label: "Gold & Black" },
   { primary: "#1e3a8a", secondary: "#ffffff", accent: "#93c5fd", label: "Navy Blue" },
   { primary: "#111827", secondary: "#ffffff", accent: "#6b7280", label: "Obsidian" },
   { primary: "#7c3aed", secondary: "#ffffff", accent: "#ddd6fe", label: "Violet" },

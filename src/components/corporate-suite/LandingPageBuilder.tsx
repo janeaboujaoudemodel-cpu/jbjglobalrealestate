@@ -21,7 +21,7 @@ interface LPData {
 }
 
 const COLOR_PRESETS = [
-  { primary: "#C8A766", bg: "#1a1a1a", label: "Gold Dark" },
+  { primary: "#B89555", bg: "#1a1a1a", label: "Gold Dark" },
   { primary: "#1e40af", bg: "#f0f4ff", label: "Blue Light" },
   { primary: "#0f766e", bg: "#f0fdfb", label: "Teal Light" },
   { primary: "#7c3aed", bg: "#faf5ff", label: "Purple Light" },

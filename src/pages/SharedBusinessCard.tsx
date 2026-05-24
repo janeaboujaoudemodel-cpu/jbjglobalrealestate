@@ -45,7 +45,7 @@ interface CardSnapshot {
 }
 
 const COLOR_PRESETS = [
-  { primary: "#C8A766", secondary: "#ffffff", accent: "#1a1a1a" },
+  { primary: "#B89555", secondary: "#ffffff", accent: "#1a1a1a" },
   { primary: "#1e3a8a", secondary: "#ffffff", accent: "#93c5fd" },
   { primary: "#0f766e", secondary: "#ffffff", accent: "#99f6e4" },
   { primary: "#7c3aed", secondary: "#ffffff", accent: "#ddd6fe" },
@@ -53,7 +53,7 @@ const COLOR_PRESETS = [
   { primary: "#334155", secondary: "#ffffff", accent: "#cbd5e1" },
   { primary: "#111827", secondary: "#ffffff", accent: "#d1d5db" },
   { primary: "#065f46", secondary: "#ffffff", accent: "#6ee7b7" },
-  { primary: "#000000", secondary: "#C8A766", accent: "#C8A766" },
+  { primary: "#000000", secondary: "#B89555", accent: "#B89555" },
 ];
 
 function getShapeStyle(shape: CardShape): React.CSSProperties {
@@ -421,7 +421,7 @@ export default function SharedBusinessCard() {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)" }}>
         <div className="flex flex-col items-center gap-3">
-          <RefreshCw size={28} className="animate-spin text-[#C8A766]" />
+          <RefreshCw size={28} className="animate-spin text-[#B89555]" />
           <p className="text-sm text-white/90">Loading card…</p>
         </div>
       </div>
@@ -437,7 +437,7 @@ export default function SharedBusinessCard() {
           </div>
           <p className="text-white font-semibold text-lg">Card Not Found</p>
           <p className="text-white/90 text-sm">This link may have expired or been removed.</p>
-          <Link to="/toolkit/corporate-suite/business-card" className="inline-block mt-4 text-[#C8A766] text-sm hover:underline">
+          <Link to="/toolkit/corporate-suite/business-card" className="inline-block mt-4 text-[#B89555] text-sm hover:underline">
             Create your own card →
           </Link>
         </div>
@@ -455,7 +455,7 @@ export default function SharedBusinessCard() {
       {/* Header */}
       <div className="mb-6 text-center">
         <div className="flex items-center justify-center gap-2 mb-1">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#C8A766] to-[#A8874A] flex items-center justify-center">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#EFE6D6] to-[#A8874A] flex items-center justify-center">
             <CreditCard size={13} className="text-white" />
           </div>
           <span className="text-white/70 text-sm font-medium">Digital Business Card</span>
@@ -535,7 +535,7 @@ export default function SharedBusinessCard() {
           disabled={saving}
           className="w-full h-14 text-base font-bold rounded-2xl shadow-xl transition-all duration-200 active:scale-[0.98]"
           style={{
-            background: "linear-gradient(135deg, #C8A766 0%, #A8874A 100%)",
+            background: "linear-gradient(135deg, #B89555 0%, #A8874A 100%)",
             color: "#fff",
             boxShadow: "0 8px 30px rgba(200,167,102,0.4)",
           }}
@@ -556,7 +556,7 @@ export default function SharedBusinessCard() {
       <div className="mt-12 text-center">
         <Link
           to="/toolkit/corporate-suite/business-card"
-          className="text-white/80 text-xs hover:text-[#C8A766] transition-colors"
+          className="text-white/80 text-xs hover:text-[#B89555] transition-colors"
         >
           Create your card with JBJ Business Card Designer →
         </Link>

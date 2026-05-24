@@ -352,7 +352,7 @@ const AreaDetail = () => {
                       {/* Badges */}
                       <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                         {relatedArea.is_trending && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-[#1A1A1A] text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#EFE6D6] to-[#ECE2D2] text-[#1A1A1A] text-[9px] font-bold uppercase tracking-wider shadow-lg">
                             Trending
                           </span>
                         )}

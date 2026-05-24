@@ -109,7 +109,7 @@ const TeamMemberDetailDialog = ({
                   onClick={handleContactClick}
                   className="relative inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold rounded-lg transition-all duration-300 group overflow-hidden"
                   style={{
-                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
                     boxShadow: `
                       0 6px 15px rgba(200,167,102,0.3),
                       0 3px 8px rgba(0,0,0,0.1),

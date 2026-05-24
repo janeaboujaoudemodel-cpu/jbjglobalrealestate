@@ -14,14 +14,14 @@ const PREMIUM_PIN_SVG = `
       <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.35"/>
     </filter>
     <linearGradient id="pinGrad" x1="20" y1="0" x2="20" y2="48" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#C8A766"/>
+      <stop offset="0%" stop-color="#B89555"/>
       <stop offset="50%" stop-color="#B8860B"/>
       <stop offset="100%" stop-color="#8B6914"/>
     </linearGradient>
   </defs>
   <path filter="url(#pinShadow)" d="M20 0C9 0 0 9 0 20c0 15 20 32 20 32s20-17 20-32C40 9 31 0 20 0z" fill="url(#pinGrad)"/>
   <circle cx="20" cy="18" r="8" fill="white" opacity="0.95"/>
-  <circle cx="20" cy="18" r="4" fill="#C8A766"/>
+  <circle cx="20" cy="18" r="4" fill="#B89555"/>
 </svg>`;
 
 const PremiumIcon = L.divIcon({

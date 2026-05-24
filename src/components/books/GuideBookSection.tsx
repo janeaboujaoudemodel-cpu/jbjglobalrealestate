@@ -77,7 +77,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
           >
             {/* Header */}
             <div className="flex items-center gap-3 mb-2">
-              <BookOpen className="w-5 h-5 text-[#C8A766]" />
+              <BookOpen className="w-5 h-5 text-[#B89555]" />
               <h2
                 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]"
                 style={{ fontFamily: "'Playfair Display', serif" }}
@@ -91,7 +91,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
             </p>
 
             {/* Gold divider */}
-            <div className="h-[2px] bg-gradient-to-r from-[#C8A766] via-[#C8A766]/60 to-transparent mb-6" />
+            <div className="h-[2px] bg-gradient-to-r from-[#EFE6D6] via-[#EFE6D6]/60 to-transparent mb-6" />
 
             {/* Chapter list */}
             <div className="space-y-1">
@@ -104,17 +104,17 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
                     onClick={isClickable ? () => handleChapterClick(idx) : undefined}
                     className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all group ${
                       isClickable
-                        ? 'hover:bg-[#C8A766]/10 cursor-pointer'
+                        ? 'hover:bg-[#EFE6D6]/10 cursor-pointer'
                         : ''
                     }`}
                   >
                     {/* Chapter number */}
-                    <span className="w-8 h-8 rounded-lg bg-[#C8A766]/10 border border-[#C8A766]/20 flex items-center justify-center text-[#C8A766] text-sm font-semibold flex-shrink-0">
+                    <span className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/20 flex items-center justify-center text-[#B89555] text-sm font-semibold flex-shrink-0">
                       {idx + 1}
                     </span>
 
                     {/* Title */}
-                    <span className="flex-1 text-sm text-left text-[#1A1A1A] font-medium group-hover:text-[#C8A766] transition-colors">
+                    <span className="flex-1 text-sm text-left text-[#1A1A1A] font-medium group-hover:text-[#B89555] transition-colors">
                       {chapter.title}
                     </span>
 
@@ -128,7 +128,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
 
                     {/* Arrow */}
                     {isClickable && (
-                      <ChevronRight className="w-4 h-4 text-white/70 group-hover:text-[#C8A766] transition-colors flex-shrink-0" />
+                      <ChevronRight className="w-4 h-4 text-white/70 group-hover:text-[#B89555] transition-colors flex-shrink-0" />
                     )}
                   </Tag>
                 );

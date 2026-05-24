@@ -55,10 +55,10 @@ const CONTACT_INFO = {
 
 // Luxury gold color - LOCKED (Active Champagne, NO YELLOW)
 const GOLD = {
-  primary: "#C8A766",
+  primary: "#B89555",
   light: "#E0CFA0",
   dark: "#A8925A",
-  gradient: "linear-gradient(135deg, #C8A766, #E0CFA0, #C8A766)",
+  gradient: "linear-gradient(135deg, #B89555, #E0CFA0, #B89555)",
   // Active Champagne background for icons (NO YELLOW)
   activeBackground: "linear-gradient(135deg, #F7F1E6, #ECE2D2, #D8C7A6)",
 };
@@ -326,7 +326,7 @@ const DigitalCard = () => {
               style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
             >
               <Link to="/founder" className="group inline-block">
-                <h1 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A] group-hover:text-[#C8A766] transition-colors">
+                <h1 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A] group-hover:text-[#B89555] transition-colors">
                   {CONTACT_INFO.name}
                 </h1>
                 <p 

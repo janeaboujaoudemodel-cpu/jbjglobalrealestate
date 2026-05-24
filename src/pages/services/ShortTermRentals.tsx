@@ -47,9 +47,9 @@ const stagger = {
 /* ── Section divider ── */
 const GoldDivider = () => (
   <div className="flex items-center justify-center py-2">
-    <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#C8A766]" />
-    <div className="w-2 h-2 rotate-45 border border-[#C8A766] mx-3" />
-    <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#C8A766]" />
+    <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#EFE6D6]" />
+    <div className="w-2 h-2 rotate-45 border border-[#B89555] mx-3" />
+    <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#EFE6D6]" />
   </div>
 );
 
@@ -67,14 +67,14 @@ const PillarCard = ({
 }) => (
   <motion.div
     variants={fadeIn}
-    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F3EB] to-[#EFE6D6] border border-[#C8A766]/30 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow"
+    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F3EB] to-[#EFE6D6] border border-[#B89555]/30 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow"
   >
     <div className="flex items-center gap-4 mb-6">
-      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C8A766] to-[#B8943F] flex items-center justify-center shadow-sm">
+      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#EFE6D6] to-[#B8943F] flex items-center justify-center shadow-sm">
         <Icon className="w-6 h-6 text-white" />
       </div>
       <div>
-        <span className="text-xs font-semibold tracking-[0.2em] uppercase text-[#C8A766]">
+        <span className="text-xs font-semibold tracking-[0.2em] uppercase text-[#B89555]">
           Pillar {number}
         </span>
         <h3
@@ -88,7 +88,7 @@ const PillarCard = ({
     <ul className="space-y-3">
       {items.map((item, i) => (
         <li key={i} className="flex items-start gap-3 text-[#444]">
-          <CheckCircle2 className="w-4 h-4 text-[#C8A766] shrink-0 mt-1" />
+          <CheckCircle2 className="w-4 h-4 text-[#B89555] shrink-0 mt-1" />
           <span className="text-sm leading-relaxed">{item}</span>
         </li>
       ))}
@@ -150,9 +150,9 @@ const ShortTermRentals = () => {
           1. HERO
       ═══════════════════════════════════════════ */}
       <section className="relative flex items-center justify-center min-h-[85vh] overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F8F3EA] to-[#F0E8D8]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#C8A76612_0%,_transparent_60%)]" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-[#C8A766]/6 rounded-full blur-[120px]" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#C8A766]/5 rounded-full blur-[140px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#B8955512_0%,_transparent_60%)]" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-[#EFE6D6]/6 rounded-full blur-[120px]" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#EFE6D6]/5 rounded-full blur-[140px]" />
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -161,9 +161,9 @@ const ShortTermRentals = () => {
             transition={{ duration: 0.7 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-8 border border-[#C8A766]/40 bg-[#FDFBF7]/60 backdrop-blur-md">
-              <Home className="w-4 h-4 text-[#C8A766]" />
-              <span className="text-[#C8A766] font-semibold text-xs uppercase tracking-[0.2em]">
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-8 border border-[#B89555]/40 bg-[#FDFBF7]/60 backdrop-blur-md">
+              <Home className="w-4 h-4 text-[#B89555]" />
+              <span className="text-[#B89555] font-semibold text-xs uppercase tracking-[0.2em]">
                 Holiday Home Services
               </span>
             </div>
@@ -173,7 +173,7 @@ const ShortTermRentals = () => {
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Luxury Short-Term Rental &<br />
-              <span className="text-[#C8A766]">Holiday Home Management</span>
+              <span className="text-[#B89555]">Holiday Home Management</span>
             </h1>
 
             <p className="text-[#6b5d4d] text-lg md:text-xl mb-4 font-medium tracking-wide">
@@ -214,7 +214,7 @@ const ShortTermRentals = () => {
             <SectionHeading title="What Is Short-Term Rental?" />
             <motion.div
               variants={fadeIn}
-              className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-2xl p-8 md:p-10 shadow-sm"
+              className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-8 md:p-10 shadow-sm"
             >
               <p className="text-[#444] text-base leading-relaxed mb-6">
                 Short-term rental refers to furnished property leasing for daily, weekly,
@@ -232,12 +232,12 @@ const ShortTermRentals = () => {
                   "Safety and furnishing requirements",
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-[#444]">
-                    <CheckCircle2 className="w-4 h-4 text-[#C8A766] shrink-0 mt-1" />
+                    <CheckCircle2 className="w-4 h-4 text-[#B89555] shrink-0 mt-1" />
                     <span className="text-sm">{item}</span>
                   </li>
                 ))}
               </ul>
-              <p className="text-[#555] text-sm italic border-l-2 border-[#C8A766] pl-4">
+              <p className="text-[#555] text-sm italic border-l-2 border-[#B89555] pl-4">
                 This service ensures structured compliance while optimizing investor returns.
               </p>
             </motion.div>
@@ -349,12 +349,12 @@ const ShortTermRentals = () => {
             <SectionHeading title="Short-Term vs Long-Term Strategy" />
             <motion.div
               variants={fadeIn}
-              className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-2xl overflow-hidden shadow-sm"
+              className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl overflow-hidden shadow-sm"
             >
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-gradient-to-r from-[#C8A766] to-[#B8943F]">
+                    <tr className="bg-gradient-to-r from-[#EFE6D6] to-[#B8943F]">
                       <th className="text-left text-white font-semibold p-4">Category</th>
                       <th className="text-left text-white font-semibold p-4">Short-Term Rental</th>
                       <th className="text-left text-white font-semibold p-4">Long-Term Rental</th>
@@ -370,7 +370,7 @@ const ShortTermRentals = () => {
                     ].map(([cat, short, long], i) => (
                       <tr
                         key={i}
-                        className={`border-b border-[#C8A766]/10 ${i % 2 === 0 ? "bg-[#FDFBF7]" : "bg-[#FDFBF7]"}`}
+                        className={`border-b border-[#B89555]/10 ${i % 2 === 0 ? "bg-[#FDFBF7]" : "bg-[#FDFBF7]"}`}
                       >
                         <td className="p-4 font-medium text-[#1a1a1a]">{cat}</td>
                         <td className="p-4 text-[#555]">{short}</td>
@@ -418,9 +418,9 @@ const ShortTermRentals = () => {
                 <motion.div
                   key={i}
                   variants={fadeIn}
-                  className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] to-[#F3EDE0] border border-[#C8A766]/20 rounded-xl p-5 shadow-sm"
+                  className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] to-[#F3EDE0] border border-[#B89555]/20 rounded-xl p-5 shadow-sm"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#C8A766] to-[#B8943F] flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#EFE6D6] to-[#B8943F] flex items-center justify-center shrink-0">
                     <item.icon className="w-5 h-5 text-white" />
                   </div>
                   <span className="text-[#333] font-medium text-sm">{item.label}</span>
@@ -446,7 +446,7 @@ const ShortTermRentals = () => {
             <SectionHeading title="Property Eligibility Requirements" />
             <motion.div
               variants={fadeIn}
-              className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-2xl p-8 shadow-sm"
+              className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-8 shadow-sm"
             >
               <p className="text-[#444] text-base mb-6">Properties must meet:</p>
               <ul className="space-y-3 mb-6">
@@ -458,12 +458,12 @@ const ShortTermRentals = () => {
                   "Operational suitability criteria",
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-[#444]">
-                    <CheckCircle2 className="w-4 h-4 text-[#C8A766] shrink-0 mt-1" />
+                    <CheckCircle2 className="w-4 h-4 text-[#B89555] shrink-0 mt-1" />
                     <span className="text-sm">{item}</span>
                   </li>
                 ))}
               </ul>
-              <p className="text-[#888] text-sm italic border-l-2 border-[#C8A766]/50 pl-4">
+              <p className="text-[#888] text-sm italic border-l-2 border-[#B89555]/50 pl-4">
                 Not all properties qualify for short-term rental operations.
               </p>
             </motion.div>
@@ -496,9 +496,9 @@ const ShortTermRentals = () => {
                 <motion.div
                   key={i}
                   variants={fadeIn}
-                  className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-[#C8A766]/20 rounded-xl p-5"
+                  className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/20 rounded-xl p-5"
                 >
-                  <ShieldCheck className="w-5 h-5 text-[#C8A766] shrink-0" />
+                  <ShieldCheck className="w-5 h-5 text-[#B89555] shrink-0" />
                   <span className="text-[#444] text-sm font-medium">{item}</span>
                 </motion.div>
               ))}
@@ -522,9 +522,9 @@ const ShortTermRentals = () => {
             <SectionHeading title="Revenue Projection" />
             <motion.div
               variants={fadeIn}
-              className="bg-gradient-to-br from-[#1a1610] via-[#1e1a14] to-[#0d0b09] border border-[#C8A766]/30 rounded-2xl p-8 md:p-10 text-center"
+              className="bg-gradient-to-br from-[#1a1610] via-[#1e1a14] to-[#0d0b09] border border-[#B89555]/30 rounded-2xl p-8 md:p-10 text-center"
             >
-              <BarChart3 className="w-10 h-10 text-[#C8A766] mx-auto mb-6" />
+              <BarChart3 className="w-10 h-10 text-[#B89555] mx-auto mb-6" />
               <p className="text-[#1A1A1A]/70 text-base mb-6">We provide:</p>
               <ul className="space-y-3 text-left max-w-md mx-auto mb-8">
                 {[
@@ -535,7 +535,7 @@ const ShortTermRentals = () => {
                   "Net yield projection",
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-[#1A1A1A]/70">
-                    <CheckCircle2 className="w-4 h-4 text-[#C8A766] shrink-0 mt-1" />
+                    <CheckCircle2 className="w-4 h-4 text-[#B89555] shrink-0 mt-1" />
                     <span className="text-sm">{item}</span>
                   </li>
                 ))}
@@ -543,7 +543,7 @@ const ShortTermRentals = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="border-[#C8A766] text-[#C8A766] hover:bg-[#C8A766]/10"
+                className="border-[#B89555] text-[#B89555] hover:bg-[#EFE6D6]/10"
                 asChild
               >
                 <Link to="/contact?service=revenue-projection">
@@ -574,7 +574,7 @@ const ShortTermRentals = () => {
             />
             <motion.div
               variants={fadeIn}
-              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F3EB] to-[#EFE6D6] border border-[#C8A766]/25 rounded-2xl p-8"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F3EB] to-[#EFE6D6] border border-[#B89555]/25 rounded-2xl p-8"
             >
               <p className="text-[#444] mb-6">Owners receive access to:</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -586,7 +586,7 @@ const ShortTermRentals = () => {
                   "Maintenance activity logs",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 text-[#444]">
-                    <div className="w-2 h-2 rounded-full bg-[#C8A766]" />
+                    <div className="w-2 h-2 rounded-full bg-[#EFE6D6]" />
                     <span className="text-sm">{item}</span>
                   </div>
                 ))}
@@ -610,7 +610,7 @@ const ShortTermRentals = () => {
           >
             <SectionHeading title="Operational Workflow" />
             <div className="relative max-w-2xl mx-auto">
-              <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-[#C8A766] via-[#C8A766]/40 to-transparent hidden md:block" />
+              <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-[#EFE6D6] via-[#EFE6D6]/40 to-transparent hidden md:block" />
               <div className="space-y-6">
                 {[
                   "Property Assessment",
@@ -625,10 +625,10 @@ const ShortTermRentals = () => {
                     variants={fadeIn}
                     className="flex items-center gap-5"
                   >
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#C8A766] to-[#B8943F] flex items-center justify-center shrink-0 z-10 shadow-sm">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#EFE6D6] to-[#B8943F] flex items-center justify-center shrink-0 z-10 shadow-sm">
                       <span className="text-white font-bold text-sm">{i + 1}</span>
                     </div>
-                    <div className="flex-1 bg-[#FDFBF7] border border-[#C8A766]/20 rounded-xl px-6 py-4 shadow-sm">
+                    <div className="flex-1 bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl px-6 py-4 shadow-sm">
                       <span className="text-[#1a1a1a] font-medium text-sm">{step}</span>
                     </div>
                   </motion.div>
@@ -663,9 +663,9 @@ const ShortTermRentals = () => {
                 <motion.div
                   key={i}
                   variants={fadeIn}
-                  className="bg-gradient-to-br from-[#FDFBF7] to-[#F3EDE0] border border-[#C8A766]/20 rounded-xl p-6 text-center shadow-sm"
+                  className="bg-gradient-to-br from-[#FDFBF7] to-[#F3EDE0] border border-[#B89555]/20 rounded-xl p-6 text-center shadow-sm"
                 >
-                  <CheckCircle2 className="w-6 h-6 text-[#C8A766] mx-auto mb-3" />
+                  <CheckCircle2 className="w-6 h-6 text-[#B89555] mx-auto mb-3" />
                   <span className="text-[#333] font-medium text-sm">{item}</span>
                 </motion.div>
               ))}
@@ -693,7 +693,7 @@ const ShortTermRentals = () => {
             <motion.form
               variants={fadeIn}
               onSubmit={handleSubmit}
-              className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-2xl p-8 md:p-10 shadow-sm space-y-5"
+              className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-8 md:p-10 shadow-sm space-y-5"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-2">
@@ -702,7 +702,7 @@ const ShortTermRentals = () => {
                     placeholder="Enter your full name"
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                    className="border-[#C8A766]/30 focus:border-[#C8A766]"
+                    className="border-[#B89555]/30 focus:border-[#B89555]"
                     required
                   />
                 </div>
@@ -713,7 +713,7 @@ const ShortTermRentals = () => {
                     placeholder="Enter your email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="border-[#C8A766]/30 focus:border-[#C8A766]"
+                    className="border-[#B89555]/30 focus:border-[#B89555]"
                     required
                   />
                 </div>
@@ -723,7 +723,7 @@ const ShortTermRentals = () => {
                     placeholder="+971 XX XXX XXXX"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="border-[#C8A766]/30 focus:border-[#C8A766]"
+                    className="border-[#B89555]/30 focus:border-[#B89555]"
                     required
                   />
                 </div>
@@ -733,7 +733,7 @@ const ShortTermRentals = () => {
                     placeholder="e.g. Dubai Marina, Downtown"
                     value={formData.propertyLocation}
                     onChange={(e) => setFormData({ ...formData, propertyLocation: e.target.value })}
-                    className="border-[#C8A766]/30 focus:border-[#C8A766]"
+                    className="border-[#B89555]/30 focus:border-[#B89555]"
                     required
                   />
                 </div>
@@ -743,7 +743,7 @@ const ShortTermRentals = () => {
                     value={formData.propertyType}
                     onValueChange={(v) => setFormData({ ...formData, propertyType: v })}
                   >
-                    <SelectTrigger className="border-[#C8A766]/30 focus:border-[#C8A766]">
+                    <SelectTrigger className="border-[#B89555]/30 focus:border-[#B89555]">
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -761,7 +761,7 @@ const ShortTermRentals = () => {
                     value={formData.bedrooms}
                     onValueChange={(v) => setFormData({ ...formData, bedrooms: v })}
                   >
-                    <SelectTrigger className="border-[#C8A766]/30 focus:border-[#C8A766]">
+                    <SelectTrigger className="border-[#B89555]/30 focus:border-[#B89555]">
                       <SelectValue placeholder="Select bedrooms" />
                     </SelectTrigger>
                     <SelectContent>
@@ -780,7 +780,7 @@ const ShortTermRentals = () => {
                     value={formData.furnished}
                     onValueChange={(v) => setFormData({ ...formData, furnished: v })}
                   >
-                    <SelectTrigger className="border-[#C8A766]/30 focus:border-[#C8A766]">
+                    <SelectTrigger className="border-[#B89555]/30 focus:border-[#B89555]">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
@@ -795,7 +795,7 @@ const ShortTermRentals = () => {
                     value={formData.currentStrategy}
                     onValueChange={(v) => setFormData({ ...formData, currentStrategy: v })}
                   >
-                    <SelectTrigger className="border-[#C8A766]/30 focus:border-[#C8A766]">
+                    <SelectTrigger className="border-[#B89555]/30 focus:border-[#B89555]">
                       <SelectValue placeholder="Select strategy" />
                     </SelectTrigger>
                     <SelectContent>
@@ -813,7 +813,7 @@ const ShortTermRentals = () => {
                   value={formData.timeline}
                   onValueChange={(v) => setFormData({ ...formData, timeline: v })}
                 >
-                  <SelectTrigger className="border-[#C8A766]/30 focus:border-[#C8A766]">
+                  <SelectTrigger className="border-[#B89555]/30 focus:border-[#B89555]">
                     <SelectValue placeholder="Select timeline" />
                   </SelectTrigger>
                   <SelectContent>
@@ -828,7 +828,7 @@ const ShortTermRentals = () => {
               <Button
                 type="submit"
                 size="lg"
-                className="w-full bg-gradient-to-r from-[#C8A766] to-[#B8943F] text-white hover:from-[#B8943F] hover:to-[#A88535] shadow-md"
+                className="w-full bg-gradient-to-r from-[#EFE6D6] to-[#B8943F] text-white hover:from-[#B8943F] hover:to-[#A88535] shadow-md"
               >
                 <Send className="w-4 h-4 mr-2" />
                 Evaluate My Short-Term Rental Strategy

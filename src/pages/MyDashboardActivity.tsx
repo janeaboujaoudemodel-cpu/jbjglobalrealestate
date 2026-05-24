@@ -236,14 +236,14 @@ const MyDashboardActivity = () => {
                       <Area
                         type="monotone"
                         dataKey={chartMode}
-                        stroke="#C8A766"
+                        stroke="#B89555"
                         fill="url(#goldGradient)"
                         strokeWidth={2}
                       />
                       <defs>
                         <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#C8A766" stopOpacity={0.4} />
-                          <stop offset="100%" stopColor="#C8A766" stopOpacity={0.05} />
+                          <stop offset="0%" stopColor="#B89555" stopOpacity={0.4} />
+                          <stop offset="100%" stopColor="#B89555" stopOpacity={0.05} />
                         </linearGradient>
                       </defs>
                     </AreaChart>

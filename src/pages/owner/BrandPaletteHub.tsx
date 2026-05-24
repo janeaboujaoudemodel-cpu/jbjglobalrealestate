@@ -24,11 +24,11 @@ const PALETTE_KEYS: { key: keyof BrandPalette; label: string; description: strin
 const PRESET_PALETTES: { name: string; palette: BrandPalette }[] = [
   {
     name: 'JBJ Gold (Default)',
-    palette: { primary: '#C8A766', secondary: '#000000', accent: '#D4AF37', background: '#FDFBF7', text: '#1A1A1A' },
+    palette: { primary: '#B89555', secondary: '#000000', accent: '#D4AF37', background: '#FDFBF7', text: '#1A1A1A' },
   },
   {
     name: 'Royal Navy',
-    palette: { primary: '#1B3A5C', secondary: '#0D1B2A', accent: '#C8A766', background: '#F8F9FA', text: '#1A1A1A' },
+    palette: { primary: '#1B3A5C', secondary: '#0D1B2A', accent: '#B89555', background: '#F8F9FA', text: '#1A1A1A' },
   },
   {
     name: 'Emerald Luxury',

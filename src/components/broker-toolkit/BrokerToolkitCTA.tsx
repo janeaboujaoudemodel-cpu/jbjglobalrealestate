@@ -49,7 +49,7 @@ export function BrokerToolkitCTA() {
                     onClick={() => navigate("/auth?redirect=/my-account")}
                     className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] group"
                     style={{
-                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
+                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
                       boxShadow: `
                         0 10px 30px rgba(200,167,102,0.4),
                         0 6px 15px rgba(0,0,0,0.2),
@@ -73,7 +73,7 @@ export function BrokerToolkitCTA() {
                     onClick={() => navigate("/my-account")}
                     className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] group"
                     style={{
-                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
+                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
                       boxShadow: `
                         0 10px 30px rgba(200,167,102,0.4),
                         0 6px 15px rgba(0,0,0,0.2),

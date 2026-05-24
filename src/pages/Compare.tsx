@@ -599,7 +599,7 @@ const Compare = () => {
               <button 
                 className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
                   boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
                 }}
               >
@@ -781,7 +781,7 @@ const Compare = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 pb-16">
         {/* Champagne/gold border wrapper */}
-        <div className="rounded-2xl border-2 border-[#C8A766]/40 shadow-[0_0_40px_rgba(200,167,102,0.08)] p-6 bg-[#FDFBF7]/60 backdrop-blur-sm flex flex-col gap-8">
+        <div className="rounded-2xl border-2 border-[#B89555]/40 shadow-[0_0_40px_rgba(200,167,102,0.08)] p-6 bg-[#FDFBF7]/60 backdrop-blur-sm flex flex-col gap-8">
           {/* Properties Count */}
           <div className="flex items-center gap-2 text-white/70">
             <span className="text-lg font-medium text-white">{projects.length}</span>
@@ -1021,7 +1021,7 @@ const Compare = () => {
             </div>
           ) : isGenerating ? (
             /* Premium loading state */
-            <div className="bg-gradient-to-br from-gold/5 to-zinc-900 rounded-2xl border border-[#C8A766]/30 p-10">
+            <div className="bg-gradient-to-br from-gold/5 to-zinc-900 rounded-2xl border border-[#B89555]/30 p-10">
               <div className="flex flex-col items-center text-center">
                 <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center mx-auto mb-6">
                   <Sparkles className="w-10 h-10 text-[#1A1A1A] animate-pulse" />
@@ -1158,9 +1158,9 @@ const Compare = () => {
           </div>
 
           {/* AI Property Analyzer Integration */}
-          <div className="border-t border-[#C8A766]/20 pt-8">
+          <div className="border-t border-[#B89555]/20 pt-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-lg bg-[#EFE6D6]/10 border border-[#C8A766]/30">
+              <div className="p-2 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30">
                 <Brain className="w-6 h-6 text-[#1A1A1A]" />
               </div>
               <div>

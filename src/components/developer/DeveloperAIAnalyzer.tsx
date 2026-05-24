@@ -90,18 +90,18 @@ function PricePerSqftChart({ text }: { text: string }) {
             <CartesianGrid strokeDasharray="3 3" stroke="#f0ebe0" />
             <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 10, fill: '#71717a' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}`} />
-            <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #C8A76640', borderRadius: '12px', fontSize: '12px' }} formatter={(value: number) => [`AED ${value.toLocaleString()}`, 'Price/sqft']} />
+            <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #B8955540', borderRadius: '12px', fontSize: '12px' }} formatter={(value: number) => [`AED ${value.toLocaleString()}`, 'Price/sqft']} />
             <Bar dataKey="price" radius={[6, 6, 0, 0]}>
               {chartData.map((_, index) => (
-                <Cell key={index} fill={index === chartData.length - 1 ? '#C8A76680' : '#C8A766'} stroke={index === chartData.length - 1 ? '#C8A766' : 'none'} strokeWidth={1.5} strokeDasharray={index === chartData.length - 1 ? '4 2' : '0'} />
+                <Cell key={index} fill={index === chartData.length - 1 ? '#B8955580' : '#B89555'} stroke={index === chartData.length - 1 ? '#B89555' : 'none'} strokeWidth={1.5} strokeDasharray={index === chartData.length - 1 ? '4 2' : '0'} />
               ))}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
       <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/70 mb-3">
-        <span className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: '#C8A766' }} /> Historical</span>
-        <span className="flex items-center gap-1"><div className="w-3 h-3 rounded border-2 border-dashed" style={{ borderColor: '#C8A766', backgroundColor: '#C8A76630' }} /> Projected</span>
+        <span className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: '#B89555' }} /> Historical</span>
+        <span className="flex items-center gap-1"><div className="w-3 h-3 rounded border-2 border-dashed" style={{ borderColor: '#B89555', backgroundColor: '#B8955530' }} /> Projected</span>
       </div>
       {bullets.length > 0 && (
         <div className="border-t border-[#B89555]/10 pt-3 space-y-1.5">
@@ -158,8 +158,8 @@ function SupplyDemandChart({ text }: { text: string }) {
           <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="devSupplyGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#C8A766" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#C8A766" stopOpacity={0.05} />
+                <stop offset="5%" stopColor="#B89555" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#B89555" stopOpacity={0.05} />
               </linearGradient>
               <linearGradient id="devDemandGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#059669" stopOpacity={0.3} />
@@ -169,14 +169,14 @@ function SupplyDemandChart({ text }: { text: string }) {
             <CartesianGrid strokeDasharray="3 3" stroke="#f0ebe0" />
             <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 10, fill: '#71717a' }} axisLine={false} tickLine={false} tickFormatter={(v) => v >= 1000 ? `${(v/1000).toFixed(1)}k` : v} />
-            <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #C8A76640', borderRadius: '12px', fontSize: '12px' }} formatter={(value: number, name: string) => [value.toLocaleString() + ' units', name === 'supply' ? 'Supply' : 'Demand']} />
-            <Area type="monotone" dataKey="supply" stroke="#C8A766" strokeWidth={2.5} fill="url(#devSupplyGrad)" dot={{ fill: '#C8A766', r: 3 }} />
+            <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #B8955540', borderRadius: '12px', fontSize: '12px' }} formatter={(value: number, name: string) => [value.toLocaleString() + ' units', name === 'supply' ? 'Supply' : 'Demand']} />
+            <Area type="monotone" dataKey="supply" stroke="#B89555" strokeWidth={2.5} fill="url(#devSupplyGrad)" dot={{ fill: '#B89555', r: 3 }} />
             <Area type="monotone" dataKey="demand" stroke="#059669" strokeWidth={2.5} fill="url(#devDemandGrad)" dot={{ fill: '#059669', r: 3 }} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
       <div className="flex items-center gap-4 mb-4 text-xs">
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#C8A766' }} /><span className="text-[#1A1A1A]/70">Supply (New Units)</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#B89555' }} /><span className="text-[#1A1A1A]/70">Supply (New Units)</span></div>
         <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-emerald-500" /><span className="text-[#1A1A1A]/70">Demand (Absorption)</span></div>
       </div>
       {bullets.length > 0 && (
@@ -195,7 +195,7 @@ function parseInvestmentMetrics(text: string) {
   const appreciationMatch = text.match(/(\d+(?:\.\d+)?)%\s*(?:appreciation|capital growth|value growth)/i);
   const occupancyMatch = text.match(/(\d+(?:\.\d+)?)%\s*(?:occupancy|occupied)/i);
   return [
-    { name: 'Rental Yield', value: roiMatch ? parseFloat(roiMatch[1]) : 6.5, fill: '#C8A766' },
+    { name: 'Rental Yield', value: roiMatch ? parseFloat(roiMatch[1]) : 6.5, fill: '#B89555' },
     { name: 'Cap Rate', value: capMatch ? parseFloat(capMatch[1]) : 5.8, fill: '#059669' },
     { name: 'Appreciation', value: appreciationMatch ? parseFloat(appreciationMatch[1]) : 8.2, fill: '#6366f1' },
     { name: 'Occupancy', value: occupancyMatch ? parseFloat(occupancyMatch[1]) : 88, fill: '#f59e0b' },
@@ -227,7 +227,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
             <CartesianGrid strokeDasharray="3 3" stroke="#f0ebe0" horizontal={false} />
             <XAxis type="number" tick={{ fontSize: 10, fill: '#71717a' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} domain={[0, 'auto']} />
             <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} width={90} />
-            <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #C8A76640', borderRadius: '12px', fontSize: '12px' }} formatter={(value: number) => [`${value}%`, '']} />
+            <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #B8955540', borderRadius: '12px', fontSize: '12px' }} formatter={(value: number) => [`${value}%`, '']} />
             <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={28}>
               {yieldMetrics.map((entry, index) => <Cell key={index} fill={entry.fill} />)}
             </Bar>
@@ -295,7 +295,7 @@ function PortfolioDonut({ overview }: { overview: string }) {
   const data = useMemo(() => {
     const text = overview.toLowerCase();
     const categories = [
-      { name: 'Residential', keywords: ['residential', 'apartment', 'villa', 'townhouse'], fill: '#C8A766' },
+      { name: 'Residential', keywords: ['residential', 'apartment', 'villa', 'townhouse'], fill: '#B89555' },
       { name: 'Commercial', keywords: ['commercial', 'office', 'retail'], fill: '#6366f1' },
       { name: 'Mixed Use', keywords: ['mixed-use', 'mixed use', 'hospitality', 'hotel'], fill: '#059669' },
       { name: 'Luxury', keywords: ['luxury', 'premium', 'ultra', 'high-end'], fill: '#f59e0b' },
@@ -305,7 +305,7 @@ function PortfolioDonut({ overview }: { overview: string }) {
       value: cat.keywords.some(k => text.includes(k)) ? Math.floor(Math.random() * 30 + 20) : 5,
       fill: cat.fill,
     })).filter(d => d.value > 5);
-    return result.length > 0 ? result : [{ name: 'Residential', value: 70, fill: '#C8A766' }, { name: 'Commercial', value: 30, fill: '#6366f1' }];
+    return result.length > 0 ? result : [{ name: 'Residential', value: 70, fill: '#B89555' }, { name: 'Commercial', value: 30, fill: '#6366f1' }];
   }, [overview]);
 
   return (

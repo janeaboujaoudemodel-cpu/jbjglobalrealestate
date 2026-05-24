@@ -13,7 +13,7 @@
  */
 
 export const HAIRLINE_TOKENS = {
-  /** Brand champagne #C8A766 as an `R,G,B` string for `rgba(${...},${a})`. */
+  /** Brand champagne #B89555 as an `R,G,B` string for `rgba(${...},${a})`. */
   champagneRgb: "200,167,102",
   whiteRgb: "255,255,255",
 

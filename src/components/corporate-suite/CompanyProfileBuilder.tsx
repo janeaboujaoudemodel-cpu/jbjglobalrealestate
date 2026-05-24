@@ -184,7 +184,7 @@ export default function CompanyProfileBuilder() {
         const newPalette: PaletteColor[] = [
           { hex: mapColor(brandColors.primary,     "#1a1a1a"), name: "Primary",    role: "primary",    opacity: 100 },
           { hex: mapColor(brandColors.secondary,   "#666666"), name: "Secondary",  role: "secondary",  opacity: 100 },
-          { hex: mapColor(brandColors.accent,      "#C8A766"), name: "Accent",     role: "accent",     opacity: 100 },
+          { hex: mapColor(brandColors.accent,      "#B89555"), name: "Accent",     role: "accent",     opacity: 100 },
           { hex: mapColor(brandColors.background,  "#ffffff"), name: "Background", role: "background", opacity: 100 },
           { hex: mapColor(brandColors.textPrimary, "#374151"), name: "Text",       role: "text",       opacity: 100 },
         ];

@@ -31,16 +31,16 @@ const tocItems = [
 const GoldDivider = () => (
   <div className="py-6">
     <div className="flex items-center gap-6">
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/30 to-transparent" />
-      <Sparkles className="w-3 h-3 text-[#C8A766]/40" />
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/30 to-transparent" />
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/30 to-transparent" />
+      <Sparkles className="w-3 h-3 text-[#B89555]/40" />
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/30 to-transparent" />
     </div>
   </div>
 );
 
 const ClauseTitle = ({ id, number, children }: { id: string; number: number; children: React.ReactNode }) => (
   <h2 id={id} className="scroll-mt-24 text-2xl md:text-3xl font-bold text-white mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
-    <span className="text-[#C8A766] mr-2">{number}.</span>{children}
+    <span className="text-[#B89555] mr-2">{number}.</span>{children}
   </h2>
 );
 
@@ -48,7 +48,7 @@ const BulletList = ({ items }: { items: string[] }) => (
   <ul className="space-y-2 ml-1">
     {items.map((item, i) => (
       <li key={i} className="flex items-start gap-3 text-[#1A1A1A]/70 leading-relaxed text-[15px]">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#C8A766]/60 shrink-0 mt-2" />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]/60 shrink-0 mt-2" />
         <span>{item}</span>
       </li>
     ))}
@@ -57,7 +57,7 @@ const BulletList = ({ items }: { items: string[] }) => (
 
 /* Champagne card wrapper */
 const CCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30 ${className}`}>
+  <div className={`p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 ${className}`}>
     {children}
   </div>
 );
@@ -68,17 +68,17 @@ const Privacy = () => {
       <SEOHead title="Privacy Policy | JBJ Global Real Estate" description="Learn how JBJ Global Real Estate collects, uses, processes, and protects your personal data in accordance with UAE data protection principles." canonicalPath="/privacy" />
 
       {/* HERO */}
-      <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#C8A766]/8 via-transparent to-transparent" />
-        <div className="absolute top-20 right-20 w-72 h-72 bg-[#C8A766]/6 rounded-full blur-[100px]" />
+      <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#B89555]/20">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#EFE6D6]/8 via-transparent to-transparent" />
+        <div className="absolute top-20 right-20 w-72 h-72 bg-[#EFE6D6]/6 rounded-full blur-[100px]" />
         <div className="max-w-5xl mx-auto px-4 relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#C8A766]/30 bg-[#1A1A1A]/30 backdrop-blur-sm">
-              <Shield className="w-4 h-4 text-[#C8A766]" />
-              <span className="text-[#C8A766] font-semibold text-xs uppercase tracking-[0.2em]">Legal</span>
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#B89555]/30 bg-[#1A1A1A]/30 backdrop-blur-sm">
+              <Shield className="w-4 h-4 text-[#B89555]" />
+              <span className="text-[#B89555] font-semibold text-xs uppercase tracking-[0.2em]">Legal</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>Privacy Policy</h1>
-            <p className="text-lg md:text-xl text-[#C8A766]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>Your Data. Your Rights. Our Responsibility.</p>
+            <p className="text-lg md:text-xl text-[#B89555]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>Your Data. Your Rights. Our Responsibility.</p>
             <p className="text-[#1A1A1A]/70 text-base md:text-lg max-w-3xl leading-relaxed mb-2">This Privacy Policy explains how we collect, use, process, and protect personal data when you interact with our website and services.</p>
             <p className="text-[#1A1A1A]/70 text-base max-w-3xl leading-relaxed">We are committed to safeguarding your information in accordance with applicable UAE data protection principles.</p>
           </motion.div>
@@ -88,21 +88,21 @@ const Privacy = () => {
       <div className="bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
         <div className="max-w-6xl mx-auto px-4 py-12 md:py-16 flex gap-8">
           <aside className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80 backdrop-blur-sm">
-              <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Contents</p>
+            <div className="sticky top-24 p-5 rounded-2xl border border-[#B89555]/20 bg-[#1a1714]/80 backdrop-blur-sm">
+              <p className="text-xs text-[#B89555] font-semibold uppercase tracking-widest mb-4">Contents</p>
               <nav className="space-y-1">
                 {tocItems.map(item => (
-                  <button key={item.id} onClick={() => scrollTo(item.id)} className="block w-full text-left text-sm text-[#1A1A1A]/70 hover:text-[#C8A766] hover:bg-[#C8A766]/5 px-3 py-1.5 rounded-lg transition-colors">{item.label}</button>
+                  <button key={item.id} onClick={() => scrollTo(item.id)} className="block w-full text-left text-sm text-[#1A1A1A]/70 hover:text-[#B89555] hover:bg-[#EFE6D6]/5 px-3 py-1.5 rounded-lg transition-colors">{item.label}</button>
                 ))}
               </nav>
             </div>
           </aside>
 
           <main className="flex-1 min-w-0">
-            <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80">
-              <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
+            <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#B89555]/20 bg-[#1a1714]/80">
+              <p className="text-xs text-[#B89555] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-                {tocItems.map(item => (<button key={item.id} onClick={() => scrollTo(item.id)} className="text-left text-sm text-[#1A1A1A]/70 hover:text-[#C8A766] px-3 py-1.5 rounded-lg hover:bg-[#C8A766]/5 transition-colors">{item.label}</button>))}
+                {tocItems.map(item => (<button key={item.id} onClick={() => scrollTo(item.id)} className="text-left text-sm text-[#1A1A1A]/70 hover:text-[#B89555] px-3 py-1.5 rounded-lg hover:bg-[#EFE6D6]/5 transition-colors">{item.label}</button>))}
               </div>
             </div>
 
@@ -134,7 +134,7 @@ const Privacy = () => {
                     { title: "D. Technical Information", items: ["IP address", "Browser type", "Device type", "Usage analytics"] },
                     { title: "E. Transaction Information", items: ["Property interests", "Service requests", "Consultation notes"] },
                   ].map((cat, i) => (
-                    <div key={i} className="p-5 rounded-xl bg-[#C8A766]/10 border border-[#C8A766]/20">
+                    <div key={i} className="p-5 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/20">
                       <h3 className="font-semibold text-[#1A1A1A] mb-3" style={{ fontFamily: "Playfair Display, serif" }}>{cat.title}</h3>
                       <BulletList items={cat.items} />
                     </div>
@@ -161,8 +161,8 @@ const Privacy = () => {
               <CCard>
                 <p className="text-[#1A1A1A]/70 leading-relaxed mb-4">We use data to:</p>
                 <BulletList items={["Provide real estate services","Facilitate Golden Visa applications (via licensed partners)","Provide property management services","Conduct valuations","Respond to inquiries","Improve website functionality","Send relevant communications (if consented)"]} />
-                <div className="mt-6 flex items-start gap-3 p-4 rounded-xl bg-[#C8A766]/10 border border-[#C8A766]/20">
-                  <Shield className="w-5 h-5 text-[#C8A766] shrink-0 mt-0.5" />
+                <div className="mt-6 flex items-start gap-3 p-4 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/20">
+                  <Shield className="w-5 h-5 text-[#B89555] shrink-0 mt-0.5" />
                   <p className="text-sm text-[#1A1A1A]/70 font-medium">We do not sell personal data.</p>
                 </div>
               </CCard>
@@ -201,7 +201,7 @@ const Privacy = () => {
 
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="cookies" number={12}>Cookies & Tracking</ClauseTitle>
-              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed mb-4">This website uses cookies for:</p><BulletList items={["Functionality","Analytics","Performance optimization"]} /><p className="text-[#1A1A1A]/70 text-sm mt-4 leading-relaxed">Users may manage cookie preferences via browser settings. A detailed <Link to="/cookies" className="text-[#C8A766] hover:underline">Cookie Policy</Link> page provides further breakdown.</p></CCard>
+              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed mb-4">This website uses cookies for:</p><BulletList items={["Functionality","Analytics","Performance optimization"]} /><p className="text-[#1A1A1A]/70 text-sm mt-4 leading-relaxed">Users may manage cookie preferences via browser settings. A detailed <Link to="/cookies" className="text-[#B89555] hover:underline">Cookie Policy</Link> page provides further breakdown.</p></CCard>
             </motion.div>
             <GoldDivider />
 
@@ -221,23 +221,23 @@ const Privacy = () => {
               <ClauseTitle id="contact-info" number={15}>Contact Information</ClauseTitle>
               <CCard>
                 <p className="text-[#1A1A1A]/70 leading-relaxed mb-4">For privacy-related inquiries:</p>
-                <div className="flex items-start gap-3 p-4 rounded-xl bg-[#C8A766]/10 border border-[#C8A766]/20">
-                  <Mail className="w-5 h-5 text-[#C8A766] shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/20">
+                  <Mail className="w-5 h-5 text-[#B89555] shrink-0 mt-0.5" />
                   <div>
                     <p className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</p>
                     <p className="text-[#1A1A1A]/70 text-sm">Dubai, United Arab Emirates</p>
-                    <p className="text-[#1A1A1A]/70 text-sm mt-1">Email: <a href="mailto:privacy@JBJ.ae" className="text-[#C8A766] hover:underline">privacy@JBJ.ae</a></p>
+                    <p className="text-[#1A1A1A]/70 text-sm mt-1">Email: <a href="mailto:privacy@JBJ.ae" className="text-[#B89555] hover:underline">privacy@JBJ.ae</a></p>
                   </div>
                 </div>
               </CCard>
             </motion.div>
 
-            <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
+            <div className="mt-16 pt-8 border-t border-[#B89555]/15 text-center">
               <p className="text-[#1A1A1A]/70 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
-                <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
+                <Link to="/terms" className="text-[#B89555] hover:underline">Terms of Service</Link>
                 <span className="text-[#1A1A1A]/70">|</span>
-                <Link to="/cookies" className="text-[#C8A766] hover:underline">Cookie Policy</Link>
+                <Link to="/cookies" className="text-[#B89555] hover:underline">Cookie Policy</Link>
               </div>
             </div>
           </main>

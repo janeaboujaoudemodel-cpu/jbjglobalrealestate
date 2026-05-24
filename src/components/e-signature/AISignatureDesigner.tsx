@@ -47,7 +47,7 @@ const SIGNATURE_COLORS = [
   { name: "Dark Blue", value: "#0d47a1" },
   { name: "Burgundy", value: "#6b1d1d" },
   { name: "Forest", value: "#1b5e20" },
-  { name: "Gold Champagne", value: "#C8A766" },
+  { name: "Gold Champagne", value: "#B89555" },
   { name: "Pearl", value: "#F7F2EA" },
   { name: "Dark Gold", value: "#9A7B3C" },
   { name: "Rose Gold", value: "#B76E79" },

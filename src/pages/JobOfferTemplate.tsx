@@ -21,7 +21,7 @@ const JobOfferTemplate = () => {
   const [idNumber, setIdNumber] = useState("");
   const [tone, setTone] = useState("professional");
   const [additionalPrompt, setAdditionalPrompt] = useState("");
-  const [headerColor1, setHeaderColor1] = useState("#C8A766");
+  const [headerColor1, setHeaderColor1] = useState("#B89555");
   const [headerColor2, setHeaderColor2] = useState("#8A7356");
   const [generating, setGenerating] = useState(false);
   const [generatedHtml, setGeneratedHtml] = useState("");

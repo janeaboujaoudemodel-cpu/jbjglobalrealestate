@@ -46,18 +46,18 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
         <p className="text-[#1A1A1A]/70 text-sm">Please confirm your details to continue</p>
       </div>
 
-      <div className="w-full bg-[#FDFBF7]/80 rounded-xl border border-[#C8A766]/30 p-4 space-y-3">
+      <div className="w-full bg-[#FDFBF7]/80 rounded-xl border border-[#B89555]/30 p-4 space-y-3">
         {!isEditing ? (
           <>
             <div className="flex items-center gap-3 text-left">
-              <User className="w-4 h-4 text-[#C8A766] shrink-0" />
+              <User className="w-4 h-4 text-[#B89555] shrink-0" />
               <div className="min-w-0">
                 <p className="text-xs text-[#1A1A1A]/70">Name</p>
                 <p className="text-sm font-semibold text-[#1A1A1A] truncate">{name || 'Not provided'}</p>
               </div>
             </div>
             <div className="flex items-center gap-3 text-left">
-              <Mail className="w-4 h-4 text-[#C8A766] shrink-0" />
+              <Mail className="w-4 h-4 text-[#B89555] shrink-0" />
               <div className="min-w-0">
                 <p className="text-xs text-[#1A1A1A]/70">Email</p>
                 <p className="text-sm font-semibold text-[#1A1A1A] truncate">{email}</p>
@@ -65,7 +65,7 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
             </div>
             {phone && (
               <div className="flex items-center gap-3 text-left">
-                <Phone className="w-4 h-4 text-[#C8A766] shrink-0" />
+                <Phone className="w-4 h-4 text-[#B89555] shrink-0" />
                 <div className="min-w-0">
                   <p className="text-xs text-[#1A1A1A]/70">Phone</p>
                   <p className="text-sm font-semibold text-[#1A1A1A] truncate">{phone}</p>
@@ -77,34 +77,34 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
           <>
             <div className="text-left">
               <Label className="text-[#1A1A1A] text-xs flex items-center gap-1.5 mb-1">
-                <User className="w-3.5 h-3.5 text-[#C8A766]" /> Name
+                <User className="w-3.5 h-3.5 text-[#B89555]" /> Name
               </Label>
               <Input
                 value={editName}
                 onChange={(e) => setEditName(e.target.value)}
-                className="bg-[#FDFBF7] border-[#C8A766]/30 text-[#1A1A1A] h-10"
+                className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] h-10"
               />
             </div>
             <div className="text-left">
               <Label className="text-[#1A1A1A] text-xs flex items-center gap-1.5 mb-1">
-                <Mail className="w-3.5 h-3.5 text-[#C8A766]" /> Email
+                <Mail className="w-3.5 h-3.5 text-[#B89555]" /> Email
               </Label>
               <Input
                 type="email"
                 value={editEmail}
                 onChange={(e) => setEditEmail(e.target.value)}
-                className="bg-[#FDFBF7] border-[#C8A766]/30 text-[#1A1A1A] h-10"
+                className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] h-10"
               />
             </div>
             <div className="text-left">
               <Label className="text-[#1A1A1A] text-xs flex items-center gap-1.5 mb-1">
-                <Phone className="w-3.5 h-3.5 text-[#C8A766]" /> Phone
+                <Phone className="w-3.5 h-3.5 text-[#B89555]" /> Phone
               </Label>
               <Input
                 type="tel"
                 value={editPhone}
                 onChange={(e) => setEditPhone(e.target.value)}
-                className="bg-[#FDFBF7] border-[#C8A766]/30 text-[#1A1A1A] h-10"
+                className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] h-10"
               />
             </div>
           </>

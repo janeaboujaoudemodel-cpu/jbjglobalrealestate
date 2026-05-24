@@ -7,7 +7,7 @@ import { Star, Search, MessageSquare, TrendingUp } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { format } from 'date-fns';
 
-const GOLD_COLORS = ['#C8A766', '#B8956E', '#A07D4A', '#E0CFA0', '#917040'];
+const GOLD_COLORS = ['#B89555', '#B8956E', '#A07D4A', '#E0CFA0', '#917040'];
 
 const ratingLabels: Record<string, string> = {
   overall_rating: 'Overall Rating',

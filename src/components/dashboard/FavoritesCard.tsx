@@ -98,11 +98,11 @@ const FavoritesCard = () => {
         <div className="mt-4 pt-4 border-t border-[#B89555]/20 space-y-2">
           <Link
             to="/favorites"
-            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#C8A766]/15 to-[#C8A766]/5 border border-[#C8A766]/30 hover:border-[#C8A766]/60 hover:from-[#C8A766]/25 hover:to-[#C8A766]/10 transition-all duration-300 group"
+            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#EFE6D6]/15 to-[#EFE6D6]/5 border border-[#B89555]/30 hover:border-[#B89555]/60 hover:from-[#EFE6D6]/25 hover:to-[#EFE6D6]/10 transition-all duration-300 group"
           >
-            <Heart className="w-4 h-4 text-[#C8A766]" />
-            <span className="text-sm font-semibold text-[#C8A766]">Visit Favorites Portal</span>
-            <ArrowRight className="w-4 h-4 text-[#C8A766] group-hover:translate-x-1 transition-transform" />
+            <Heart className="w-4 h-4 text-[#B89555]" />
+            <span className="text-sm font-semibold text-[#B89555]">Visit Favorites Portal</span>
+            <ArrowRight className="w-4 h-4 text-[#B89555] group-hover:translate-x-1 transition-transform" />
           </Link>
           {designCount > 0 && (
             <Link
