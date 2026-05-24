@@ -38,7 +38,8 @@ const AreasWeCover = () => {
 
   return (
     <section className="bg-[#FDFBF7] pt-10 md:pt-14 pb-12 md:pb-16">
-      <div className="jj-layer-2">
+      <div className="w-full px-4 md:px-8">
+
         <div className="text-center mb-8 md:mb-10">
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-[10px] md:text-xs uppercase tracking-[0.2em] font-semibold mb-4">
             <MapPin className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
