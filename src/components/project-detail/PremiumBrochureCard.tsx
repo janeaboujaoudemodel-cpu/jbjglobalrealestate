@@ -158,10 +158,10 @@ const PremiumBrochureCard = ({
                 />
               </div>
               <p
-                className="text-[#F7F2EA] text-[10px] font-semibold uppercase tracking-[0.18em] leading-relaxed"
-                style={{ textShadow: "0 2px 6px rgba(0,0,0,0.9)" }}
+                className="text-white text-[10px] font-semibold uppercase tracking-[0.18em] leading-relaxed"
+                style={{ textShadow: "0 2px 8px rgba(0,0,0,0.95), 0 1px 2px rgba(0,0,0,0.9)" }}
               >
-                <span className="text-[#B89555] font-bold">JBJ</span> Global<br/>Real Estate
+                <span className="text-[#E8C77A] font-bold">JBJ</span> Global<br/>Real Estate
               </p>
             </div>
 
