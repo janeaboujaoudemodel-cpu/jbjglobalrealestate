@@ -72,6 +72,7 @@ import { PremiumSectionCard } from "@/components/ui/premium-section-card";
 
 const VerificationBanner = lazy(() => import("@/components/verification/VerificationBanner"));
 const PartnerVerifyHeroCTA = lazy(() => import("@/components/home/PartnerVerifyHeroCTA"));
+const DeveloperPartnersMarquee = lazy(() => import("@/components/DeveloperPartnersMarquee"));
 
 const SectionLoader = forwardRef<HTMLDivElement>((_, ref) => (
   <div ref={ref} className="py-12 flex items-center justify-center">
@@ -272,12 +273,18 @@ const Index = () => {
         </motion.div>
       </div>
 
+      {/* DEVELOPER PARTNERS MARQUEE — directly under hero */}
+      <Suspense fallback={<SectionLoader />}>
+        <DeveloperPartnersMarquee />
+      </Suspense>
+
       {/* CATEGORY SELECTOR — I'm an Investor / Broker / Developer */}
       <div id="category-selector" className="py-8">
         <Suspense fallback={<SectionLoader />}>
           <CategorySelectorSection />
         </Suspense>
       </div>
+
 
       {/* VERIFICATION BANNER */}
       <PremiumSectionCard padding="md" wrapperClassName="py-8">
