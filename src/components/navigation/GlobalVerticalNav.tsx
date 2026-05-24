@@ -1303,8 +1303,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <div className="flex-1" />
 
             {/* Bottom pinned */}
-            <div className="flex flex-col items-center gap-1 pt-1.5">
-              <div className="w-5 h-[1px] bg-gradient-to-r from-gold/10 via-gold/50 to-gold/10 mb-0.5" />
+            <div className="flex flex-col items-center gap-1 pt-1">
+              <div className="w-5 h-[1px] bg-gradient-to-r from-gold/10 via-gold/50 to-gold/10 mb-1" />
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
