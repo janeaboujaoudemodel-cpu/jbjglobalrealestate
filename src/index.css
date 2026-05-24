@@ -5365,3 +5365,28 @@ hr[data-gold-hairline],
 }
 
 
+
+/* Animated gold border (JBJ Support panel cards container) */
+@keyframes jbjGoldBorderSpin {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.jbj-gold-animated-border {
+  background: linear-gradient(
+    120deg,
+    rgba(184, 149, 85, 0.85) 0%,
+    rgba(226, 201, 160, 0.95) 25%,
+    rgba(184, 149, 85, 0.55) 50%,
+    rgba(226, 201, 160, 0.95) 75%,
+    rgba(184, 149, 85, 0.85) 100%
+  );
+  background-size: 220% 220%;
+  animation: jbjGoldBorderSpin 5.5s ease-in-out infinite;
+  box-shadow:
+    0 0 0 1px rgba(184, 149, 85, 0.35),
+    0 0 22px rgba(184, 149, 85, 0.28);
+}
+@media (prefers-reduced-motion: reduce) {
+  .jbj-gold-animated-border { animation: none; }
+}
