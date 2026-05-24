@@ -101,6 +101,8 @@ interface FilterShortcutBarProps {
   resultsLabel?: string;
   /** Show the live results badge inside the shortcut rail. Default false. */
   showResultsCount?: boolean;
+  /** Hide the duplicate sort pills (Newest/Low-High/High-Low/A-Z/Trending) when a SortBySelect is used elsewhere. */
+  hideSort?: boolean;
 }
 
 const PRICE_PRESETS = [
@@ -175,7 +177,7 @@ const CURRENCY_RATES: Record<string, number> = {
 const SQFT_TO_SQM = 1 / 10.764;
 const SQM_TO_SQFT = 10.764;
 
-const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle, searchSlot, priorityFilter, resultsCount, resultsLabel, showResultsCount = false }: FilterShortcutBarProps) => {
+const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle, searchSlot, priorityFilter, resultsCount, resultsLabel, showResultsCount = false, hideSort = false }: FilterShortcutBarProps) => {
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [prevCurrency, setPrevCurrency] = useState<string>('AED');
@@ -823,8 +825,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Divider */}
         <div className="w-px h-5 bg-[#EFE6D6] flex-shrink-0" />
 
-        {/* Sort pills */}
-        {SORT_OPTIONS.map((opt) => (
+        {/* Sort pills (hidden when consumer page uses a dedicated SortBySelect) */}
+        {!hideSort && SORT_OPTIONS.map((opt) => (
           <button
             key={opt.value}
             onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
@@ -837,8 +839,9 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </button>
         ))}
 
-        {/* Divider */}
-        <div className="w-px h-5 bg-[#EFE6D6] flex-shrink-0" />
+        {!hideSort && (
+          <div className="w-px h-5 bg-[#EFE6D6] flex-shrink-0" />
+        )}
 
         {/* Map toggle */}
         <button

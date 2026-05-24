@@ -55,6 +55,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -525,8 +526,11 @@ const Properties = () => {
       {/* Scroll sentinel for two-phase filter fix */}
       <div ref={filterSentinelRef} className="h-0" />
 
-      {/* Filters Section - Champagne page surface (replaces previous black band) */}
-      <section className="z-40 bg-[#FDFBF7] py-3 md:py-4 border-b border-[#B89555]/30" style={{ WebkitOverflowScrolling: 'touch' }}>
+      {/* Filters Section - Champagne page surface, sticks below the 88px header on scroll */}
+      <section
+        className="sticky top-[88px] z-40 bg-[#FDFBF7] py-3 md:py-4 border-b border-[#B89555]/30"
+        style={{ WebkitOverflowScrolling: 'touch' }}
+      >
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Champagne Layer with thin black contour visible at edges */}
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
@@ -565,10 +569,11 @@ const Properties = () => {
                 Resale
               </button>
             </Link>
-            <SortBySelect value={sortBy} onChange={setSortBy} />
+            <SortBySelect value={sortBy} onChange={setSortBy} hideLabel size="compact" />
           </div>
 
-          {/* Single concierge-style unified pill: [Buy ▾] [search input] [Search] | [Filters] */}
+
+          {/* Compact action row: [Search icon] + [Filters] — intent + search input live inside the Filters modal */}
           {(() => {
             const tx = appliedFilters.transactionType;
             const cs = appliedFilters.completionStatus;
@@ -580,6 +585,14 @@ const Properties = () => {
                 : cs === 'off-plan'
                 ? 'buy-offplan'
                 : 'buy';
+            const intentLabel =
+              intentValue === 'rent'
+                ? 'Rent'
+                : intentValue === 'buy-ready'
+                ? 'Buy Ready'
+                : intentValue === 'buy-offplan'
+                ? 'Buy Off-Plan'
+                : 'Buy';
             const setIntent = (val: string) => {
               if (val === 'rent') {
                 updateFilter('transactionType', 'rent');
@@ -600,91 +613,89 @@ const Properties = () => {
               }
             };
             return (
-              <div
-                data-no-contrast-guard
-                className="group relative flex items-stretch h-14 sm:h-[60px] lg:h-[64px] rounded-2xl border border-[#B89555]/55 overflow-hidden bg-white transition-all duration-300 focus-within:border-[#B89555] hover:border-[#B89555]/80"
-                style={{
-                  boxShadow: "0 18px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10)",
-                }}
-              >
-                {/* Intent segment (Buy / Buy Ready / Buy Off-Plan / Rent) */}
-                <Select value={intentValue} onValueChange={setIntent}>
-                  <SelectTrigger
-                    data-no-contrast-guard
-                    className="h-full w-[140px] sm:w-[160px] rounded-none border-0 border-r border-[#B89555]/45 bg-[#F7F2EA] text-[#1A1A1A] text-[13.5px] sm:text-sm font-semibold px-4 focus:ring-0 focus:ring-offset-0 hover:bg-[#EFE6D6]"
-                  >
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="buy">Buy</SelectItem>
-                    <SelectItem value="buy-ready">Buy Ready</SelectItem>
-                    <SelectItem value="buy-offplan">Buy Off-Plan</SelectItem>
-                    <SelectItem value="rent">Rent</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                {/* Search input — white, edge-to-edge */}
-                <form
-                  onSubmit={(e) => { e.preventDefault(); handleSearch(); }}
-                  role="search"
-                  data-no-contrast-guard
-                  className="flex flex-1 items-center pl-4 sm:pl-5 pr-3 min-w-0 bg-white"
-                >
-                  <Search className="w-4 h-4 mr-2 text-[#1A1A1A]/60 flex-shrink-0" strokeWidth={2} />
-                  <input
-                    type="text"
-                    placeholder="Search by project name, developer, location…"
-                    value={filters.search}
-                    onChange={(e) => {
-                      const next = e.target.value;
-                      updateFilter("search", next);
-                      setAppliedFilters((prev) => ({ ...prev, search: next }));
-                    }}
-                    data-no-contrast-guard
-                    className="flex-1 min-w-0 h-full bg-transparent border-0 outline-none text-[14px] sm:text-[15px] tracking-[-0.005em] font-normal"
-                    style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
-                  />
-                </form>
-
-                {/* SEARCH — dark obsidian segment */}
+              <div data-no-contrast-guard className="flex items-center gap-2">
+                {/* Current intent chip — visual indicator, clicking opens Filters where it can be changed */}
                 <button
                   type="button"
-                  onClick={handleSearch}
+                  onClick={() => setIsAdvancedOpen(true)}
                   data-no-contrast-guard
-                  aria-label="Search properties"
-                  className="cta-premium allow-white relative flex items-center justify-center gap-2 self-stretch h-full px-5 sm:px-7 lg:px-9 text-[13px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 bg-[#1A1A1A] hover:bg-[#2A2A2A] transition-colors duration-200"
-                  style={{ color: "#FFFFFF" }}
+                  className="inline-flex items-center gap-1.5 h-11 px-3.5 rounded-xl text-[13px] font-semibold text-[#1A1A1A] border border-[#B89555]/55 bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors flex-shrink-0"
+                  aria-label={`Current intent: ${intentLabel}. Click to change.`}
                 >
-                  <span
-                    className="allow-white"
-                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                  >
-                    Search
-                  </span>
+                  {intentLabel}
                 </button>
 
-                {/* Gold divider */}
-                <span aria-hidden className="self-stretch w-px bg-[#B89555]/55 flex-shrink-0" />
+                {/* Search — icon only; opens a popover with the search input */}
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button
+                      type="button"
+                      data-no-contrast-guard
+                      aria-label="Search properties"
+                      className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white transition-colors flex-shrink-0"
+                      style={{ color: '#FFFFFF' }}
+                    >
+                      <Search className="w-4 h-4 allow-white" style={{ color: '#FFFFFF' }} strokeWidth={2.2} />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    align="start"
+                    sideOffset={8}
+                    className="w-[320px] sm:w-[380px] p-3 bg-white border border-[#B89555]/40"
+                  >
+                    <form
+                      onSubmit={(e) => { e.preventDefault(); handleSearch(); }}
+                      role="search"
+                      className="flex items-center gap-2"
+                    >
+                      <div className="flex flex-1 items-center px-3 h-10 rounded-lg border border-[#B89555]/40 bg-white">
+                        <Search className="w-4 h-4 mr-2 text-[#1A1A1A]/60" strokeWidth={2} />
+                        <input
+                          type="text"
+                          autoFocus
+                          placeholder="Search by project name, developer, location…"
+                          value={filters.search}
+                          onChange={(e) => {
+                            const next = e.target.value;
+                            updateFilter("search", next);
+                            setAppliedFilters((prev) => ({ ...prev, search: next }));
+                          }}
+                          data-no-contrast-guard
+                          className="flex-1 min-w-0 h-full bg-transparent border-0 outline-none text-[14px] tracking-[-0.005em] font-normal"
+                          style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        data-no-contrast-guard
+                        className="h-10 px-4 rounded-lg bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white text-[13px] font-semibold flex-shrink-0 allow-white"
+                        style={{ color: '#FFFFFF' }}
+                      >
+                        Search
+                      </button>
+                    </form>
+                  </PopoverContent>
+                </Popover>
 
-                {/* Filters — dark obsidian segment that opens the unified filter modal */}
+                {/* Filters — opens the unified filter modal (contains Intent + Search + everything) */}
                 <Dialog open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
                   <DialogTrigger asChild>
                     <button
                       type="button"
                       data-no-contrast-guard
                       aria-label="Open all filters"
-                      className="cta-premium allow-white relative flex items-center justify-center gap-2 self-stretch h-full px-4 sm:px-6 lg:px-7 text-[13px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 bg-[#1A1A1A] hover:bg-[#2A2A2A] transition-colors duration-200"
-                      style={{ color: "#FFFFFF" }}
+                      className="inline-flex items-center justify-center gap-2 h-11 px-4 sm:px-5 rounded-xl bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white text-[13px] sm:text-sm font-semibold transition-colors flex-shrink-0 allow-white"
+                      style={{ color: '#FFFFFF' }}
                     >
                       <SlidersHorizontal
                         className="w-4 h-4 allow-white"
-                        style={{ color: "#FFFFFF" }}
+                        style={{ color: '#FFFFFF' }}
                         data-no-contrast-guard
                         strokeWidth={2.2}
                       />
                       <span
-                        className="allow-white hidden sm:inline"
-                        style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                        className="allow-white"
+                        style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                       >
                         Filters
                       </span>
@@ -698,6 +709,7 @@ const Properties = () => {
                       )}
                     </button>
                   </DialogTrigger>
+
                   <DialogContent className="max-w-2xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-[#B89555]/30 text-[#1A1A1A] p-0">
                     <DialogHeader className="p-6 border-b border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
                       <DialogTitle className="text-xl font-semibold text-[#1A1A1A]">
@@ -706,8 +718,46 @@ const Properties = () => {
                     </DialogHeader>
                     <ScrollArea className="max-h-[70vh]">
                       <div className="p-6 space-y-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                        {/* Search */}
+                        <div>
+                          <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Search</label>
+                          <div className="flex items-center h-12 px-3 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg">
+                            <Search className="w-4 h-4 mr-2 text-[#1A1A1A]/60" strokeWidth={2} />
+                            <input
+                              type="text"
+                              placeholder="Project name, developer, location…"
+                              value={filters.search}
+                              onChange={(e) => {
+                                const next = e.target.value;
+                                updateFilter("search", next);
+                                setAppliedFilters((prev) => ({ ...prev, search: next }));
+                              }}
+                              data-no-contrast-guard
+                              className="flex-1 min-w-0 h-full bg-transparent border-0 outline-none text-[14px] text-[#1A1A1A]"
+                              style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Intent (Buy / Buy Ready / Buy Off-Plan / Rent) */}
+                        <div>
+                          <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Intent</label>
+                          <Select value={intentValue} onValueChange={setIntent}>
+                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="buy">Buy</SelectItem>
+                              <SelectItem value="buy-ready">Buy Ready</SelectItem>
+                              <SelectItem value="buy-offplan">Buy Off-Plan</SelectItem>
+                              <SelectItem value="rent">Rent</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
                         {/* Emirate + Area */}
                         <div className="grid grid-cols-2 gap-4">
+
                           <div>
                             <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Emirate</label>
                             <Select
@@ -1037,6 +1087,7 @@ const Properties = () => {
               onFilterChange={setShortcutFilters}
               isMapMode={isMapMode}
               onMapToggle={setIsMapMode}
+              hideSort
             />
           </div>
 
