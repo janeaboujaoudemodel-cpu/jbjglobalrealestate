@@ -51,7 +51,7 @@ const MinimalFooter = () => {
                 <span
                   aria-hidden
                   data-decorative="true"
-                  className="text-white/30 lg:text-[#1A1A1A]/40"
+                  className="text-white/30 lg:text-[#1A1A1A]/40" // contrast-ok — decorative dot separator (aria-hidden)
                 >
                   ·
                 </span>
