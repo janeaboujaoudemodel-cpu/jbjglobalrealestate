@@ -223,7 +223,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   }, [showLayoutDebug, location.pathname]);
 
   return (
-    <div className="min-h-screen bg-background md:bg-[#FDFBF7]">
+    <div className="min-h-screen bg-[#FDFBF7]">
       <AuditorReadOnlyBanner />
       {/* Mobile Desktop Banner */}
       {/* Desktop banner removed — now only shows as bottom toast */}
@@ -256,7 +256,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             header via .jj-hero-fullscreen). This removes the champagne band that was visible
             between the header and the hero on desktop.
         */}
-        <main className={`w-full max-w-full overflow-x-hidden bg-background transition-[padding-left,padding-top] duration-100 ease-out [body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px] ${needsHeaderSpacing ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
+        <main className={`w-full max-w-full overflow-x-hidden bg-[#FDFBF7] transition-[padding-left,padding-top] duration-100 ease-out [body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px] ${needsHeaderSpacing ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
 
 
           {layoutGuardTriggered && isServiceRoute && (
