@@ -2,14 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ════════════════════════════════════════════════════════════════
+   GLOBAL PAINT BASELINE
+   html/body/#root all painted champagne *before* any component
+   mounts, so lazy-loaded sections (hero, footer, etc.) never expose
+   a gray/white flash between header and content during hydration.
+   ════════════════════════════════════════════════════════════════ */
+html,
+body,
+#root {
+  background-color: #FDFBF7 !important;
+}
+
 /* Prevent iOS zoom-out white edges */
 html {
   min-width: 100vw;
   overflow-x: hidden;
-}
-
-/* Safe area insets for notched phones (iPhone X+) */
-html {
   scroll-behavior: smooth;
 }
 
@@ -26,13 +34,9 @@ body {
   padding-right: env(safe-area-inset-right);
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: auto;
+  min-height: 100dvh;
 }
 
-@media (min-width: 768px) {
-  body {
-    background-color: #FDFBF7;
-  }
-}
 
 .jj-transparent-header-wordmark {
   color: hsl(0 0% 100%) !important;
