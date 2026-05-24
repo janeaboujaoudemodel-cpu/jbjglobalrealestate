@@ -16,11 +16,14 @@ interface DeveloperLogoProps {
 }
 
 // Unified champagne plate — identical between `bare` and `nameplate`
-// so every project card has an identical badge footprint.
+// so every project card has an identical badge footprint. Padding is
+// kept minimal so wide wordmarks AND square marks both render at their
+// maximum size without ever being cropped (object-contain enforced).
 const UNIFIED_PLATE =
   "h-14 w-24 inline-flex items-center justify-center overflow-hidden " +
   "rounded-xl bg-[#FDFBF7] border border-[#B89555]/45 " +
-  "shadow-[0_4px_14px_rgba(0,0,0,0.18)] px-2 py-1.5";
+  "shadow-[0_4px_14px_rgba(0,0,0,0.18)] p-1";
+
 
 export function DeveloperLogo({
   src,
@@ -93,7 +96,10 @@ export function DeveloperLogo({
             setError(true);
             onError?.();
           }}
-          className="block w-full h-full object-contain"
+          // max-w/max-h + w-auto/h-auto + object-contain → image scales to
+          // the largest size that fits the plate on BOTH axes without ever
+          // being cropped, regardless of source aspect ratio.
+          className="block max-w-full max-h-full w-auto h-auto object-contain"
           style={{
             // Strip foreign white/light backgrounds into our champagne plate.
             mixBlendMode: "multiply",
@@ -101,6 +107,7 @@ export function DeveloperLogo({
             filter: override.invert ? "invert(1) brightness(0)" : undefined,
           }}
         />
+
       </div>
     );
   }
