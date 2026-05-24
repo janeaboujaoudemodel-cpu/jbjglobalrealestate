@@ -24,6 +24,7 @@ import { FounderContent } from "@/components/FounderContent";
 
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
+import { useConsVisibility } from "@/contexts/ConsVisibilityContext";
 
 const INQUIRY_FORM_URL = "https://JBJ.AE/contact";
 const COMPARE_FREE_KEY = "jbj_compare_free_used";
@@ -87,6 +88,7 @@ interface AIAnalysis {
 
 const Compare = () => {
   const { user } = useAuth();
+  const { isConsVisible } = useConsVisibility();
   const navigate = useNavigate();
   const { activeLead } = useActiveLead();
   const { hasActiveMembership } = useMembership();
@@ -384,9 +386,9 @@ const Compare = () => {
         const color = b.score >= 8 ? '#22C55E' : b.score >= 6 ? '#F59E0B' : '#DC2626';
         return `<div class="score-bar-row"><span class="score-bar-label">${b.label}</span><div class="score-bar-track"><div class="score-bar-fill" style="width:${(b.score/10)*100}%;background:${color}"></div></div><span class="score-bar-value" style="color:${color}">${b.score}</span></div>`;
       }).join('')}
-      <div class="pros-cons">
+      <div class="pros-cons" style="${isConsVisible ? '' : 'grid-template-columns: 1fr;'}">
         <div class="pros"><h4>Pros</h4><ul>${r.pros?.map(p => `<li>${escapeHtml(p)}</li>`).join('') || ''}</ul></div>
-        <div class="cons"><h4>Cons</h4><ul>${r.cons?.map(c => `<li>${escapeHtml(c)}</li>`).join('') || ''}</ul></div>
+        ${isConsVisible ? `<div class="cons"><h4>Cons</h4><ul>${r.cons?.map(c => `<li>${escapeHtml(c)}</li>`).join('') || ''}</ul></div>` : ''}
       </div>
     </div>
     `).join('')}
@@ -942,7 +944,7 @@ const Compare = () => {
                         {renderScoreBar(Math.round((rating.valueRating + rating.investmentRating) / 2), 'Payment Plan')}
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className={isConsVisible ? "grid grid-cols-2 gap-3" : "grid grid-cols-1 gap-3"}>
                         <div className="bg-green-950/30 border border-green-900/30 rounded-lg p-3">
                           <div className="text-green-400 text-xs font-semibold mb-2 flex items-center gap-1">
                             <ThumbsUp className="w-3 h-3" /> Pros
@@ -953,16 +955,18 @@ const Compare = () => {
                             ))}
                           </ul>
                         </div>
-                        <div className="bg-red-950/30 border border-red-900/30 rounded-lg p-3">
-                          <div className="text-red-400 text-xs font-semibold mb-2 flex items-center gap-1">
-                            <ThumbsDown className="w-3 h-3" /> Cons
+                        {isConsVisible && (
+                          <div className="bg-red-950/30 border border-red-900/30 rounded-lg p-3">
+                            <div className="text-red-400 text-xs font-semibold mb-2 flex items-center gap-1">
+                              <ThumbsDown className="w-3 h-3" /> Cons
+                            </div>
+                            <ul className="text-xs text-white/70 space-y-1">
+                              {rating.cons?.slice(0, 3).map((con, i) => (
+                                <li key={i}>• {con}</li>
+                              ))}
+                            </ul>
                           </div>
-                          <ul className="text-xs text-white/70 space-y-1">
-                            {rating.cons?.slice(0, 3).map((con, i) => (
-                              <li key={i}>• {con}</li>
-                            ))}
-                          </ul>
-                        </div>
+                        )}
                       </div>
                     </div>
                   ))}
