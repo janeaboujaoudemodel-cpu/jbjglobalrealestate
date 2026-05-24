@@ -670,9 +670,9 @@ const GoldenVisaGuide = () => {
         </div>
       </section>
 
-      {/* Guide Navigation */}
-      <section className="py-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-2 md:mx-4 lg:mx-6 rounded-2xl">
-        <div className="container mx-auto px-4">
+      {/* Guide Navigation — full-bleed */}
+      <section className="py-12 md:py-16 bg-[#F7F1E6] border-t border-[#B89555]/25">
+        <div className="w-full px-4 md:px-8 lg:px-12">
           <GuideNavigation current="/guides/golden-visa-uae" guides={GUIDE_LINKS} />
         </div>
       </section>
