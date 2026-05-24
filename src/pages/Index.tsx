@@ -276,18 +276,19 @@ const Index = () => {
       </div>
 
       {/* CATEGORY SELECTOR — I'm an Investor / Broker / Developer */}
-      <div id="category-selector">
+      <div id="category-selector" className="py-8">
         <Suspense fallback={<SectionLoader />}>
           <CategorySelectorSection />
         </Suspense>
       </div>
 
       {/* DEVELOPER PARTNERS MARQUEE */}
-      <div id="developer-partners">
+      <div id="developer-partners" className="py-8">
         <Suspense fallback={<SectionLoader />}>
           <DeveloperPartnersMarquee />
         </Suspense>
       </div>
+
 
       {/* VERIFICATION BANNER - moved here after marquee */}
       <PremiumSectionCard padding="md" wrapperClassName="py-8">
