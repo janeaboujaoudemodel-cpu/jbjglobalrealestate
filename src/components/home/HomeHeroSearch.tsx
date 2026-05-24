@@ -213,18 +213,25 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         </div>
 
 
-        {/* Mobile-only stacked CTAs */}
+        {/* Mobile-only stacked CTAs — fiberglass style (no fill), white text on dark hero */}
         <div className="mt-3 flex sm:hidden gap-2">
           <button
             type="button"
             onClick={openBooking}
             data-no-contrast-guard
-            className="group/bookm flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
-              text-[13px] font-semibold text-[#1A1A1A] border border-[#B89555]/55 bg-[#FDFBF7]/85
-              transition-colors duration-200 hover:bg-[#EFE6D6]"
+            aria-label="Book your free consultation now"
+            className="allow-white flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
+              text-[13px] font-semibold whitespace-nowrap
+              border border-[#B89555]/70 bg-transparent backdrop-blur-[2px]
+              transition-colors duration-200 hover:bg-white/5"
+            style={{
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+              boxShadow: "inset 0 1px 0 rgba(255,238,200,0.15)",
+            }}
           >
-            <CalendarCheck className="w-4 h-4 text-[#B89555]" strokeWidth={2.2} />
-            <span className="whitespace-nowrap transition-colors duration-200 group-hover/bookm:text-[#B89555]">
+            <CalendarCheck className="allow-white w-4 h-4" strokeWidth={2.2} style={{ color: "#FFFFFF" }} />
+            <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               Free Consultation
             </span>
           </button>
