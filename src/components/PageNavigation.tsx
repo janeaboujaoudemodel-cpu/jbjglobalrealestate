@@ -12,6 +12,7 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
   const languageContext = useContext(LanguageContext);
   const isRTL = languageContext?.isRTL ?? false;
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
 
   // Drag state
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null);
@@ -24,9 +25,18 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
     setShowScrollTop(scrollTop > 200);
   }, []);
 
-  const supportDrawerOpen =
-    typeof document !== "undefined" &&
-    (!!document.querySelector('[data-jbj-concierge-open="true"]') || !!document.querySelector('[data-jbj-chat-open="true"]'));
+  useEffect(() => {
+    const checkSupportDrawer = () => {
+      setSupportDrawerOpen(
+        !!document.querySelector('[data-jbj-concierge-open="true"]') ||
+          !!document.querySelector('[data-jbj-chat-open="true"]'),
+      );
+    };
+    checkSupportDrawer();
+    const observer = new MutationObserver(checkSupportDrawer);
+    observer.observe(document.body, { attributes: true, subtree: true, attributeFilter: ["data-jbj-concierge-open", "data-jbj-chat-open"] });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -101,7 +111,7 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
       }}
       className={cn(
-        "fixed z-[10049] flex flex-col gap-2 transform-gpu",
+        "fixed z-50 flex flex-col gap-2 transform-gpu",
         // Stacks above voice concierge pill (which sits at bottom-[148px] + ~52px).
         isChatMedium ? "bottom-[280px]" : "bottom-[216px]",
         "pointer-events-auto",
