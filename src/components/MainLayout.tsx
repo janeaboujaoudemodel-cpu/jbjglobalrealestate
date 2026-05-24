@@ -33,7 +33,6 @@ import { useAuditorTracking } from "@/hooks/useAuditorTracking";
 const AuditorFeedbackButton = lazy(() => import("@/components/auditor/AuditorFeedbackButton"));
 
 // Lazy-load non-critical components to reduce initial bundle
-const AIChatWidget = lazy(() => import("@/components/AIChatWidget"));
 const VoiceConciergeWidget = lazy(() => import("@/components/VoiceConciergeWidget"));
 import AIChatWidget from "@/components/AIChatWidget";
 import PageNavigation from "@/components/PageNavigation";
