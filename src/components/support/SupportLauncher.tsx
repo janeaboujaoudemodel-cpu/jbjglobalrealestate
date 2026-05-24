@@ -16,9 +16,9 @@ function useChannels(closeAfter: () => void): ChannelDef[] {
   return [
     {
       id: "concierge",
-      label: "AI Concierge",
+      label: "JBJ Concierge",
       description: "Smart shortcuts & guided filters",
-      responseTime: "Instant",
+      responseTime: "Instant · 24/7",
       Icon: Sparkles,
       action: () => {
         closeAfter();
@@ -29,7 +29,7 @@ function useChannels(closeAfter: () => void): ChannelDef[] {
       id: "chat-support",
       label: "Chat Support",
       description: "Talk to a JBJ agent",
-      responseTime: "Replies in ~2 min",
+      responseTime: "",
       Icon: MessageSquare,
       action: () => {
         closeAfter();
@@ -39,24 +39,24 @@ function useChannels(closeAfter: () => void): ChannelDef[] {
     {
       id: "whatsapp",
       label: "WhatsApp",
-      description: "Reply in minutes",
-      responseTime: "24/7",
+      description: "Message us 24/7",
+      responseTime: "",
       Icon: MessageCircle,
       href: getWhatsAppUrl(),
       external: true,
     },
     {
       id: "call",
-      label: "Call an Agent",
+      label: "Call Us",
       description: CONTACT_INFO.phone,
-      responseTime: "Avg 30s pickup",
+      responseTime: "",
       Icon: Phone,
       href: getCallUrl(),
     },
     {
       id: "voice-ai",
-      label: "Voice AI Call · Free",
-      description: "Speak with our AI agent now",
+      label: "Free Voice Call",
+      description: "Speak to our concierge now",
       responseTime: "Live",
       Icon: PhoneCall,
       action: () => {
@@ -237,10 +237,12 @@ export default function SupportLauncher() {
                     <X className="h-3.5 w-3.5" />
                   </button>
                 </div>
-                <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1 pt-1 pb-1">
-                  {channels.map((c) => (
-                    <ChannelCard key={c.id} channel={c} onActivate={close} />
-                  ))}
+                <div className="jbj-gold-animated-border min-h-0 flex-1 overflow-hidden rounded-xl p-[1.5px]">
+                  <div className="min-h-0 flex-1 h-full space-y-2 overflow-y-auto rounded-[10px] bg-background p-2">
+                    {channels.map((c) => (
+                      <ChannelCard key={c.id} channel={c} onActivate={close} />
+                    ))}
+                  </div>
                 </div>
 
               </motion.div>
