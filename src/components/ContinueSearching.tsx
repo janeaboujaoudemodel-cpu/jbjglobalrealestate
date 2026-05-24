@@ -127,6 +127,13 @@ const ContinueSearching = ({
   const { items, clearAll, patchItem } = useRecentSearches(type);
   const [leadCaptureOpen, setLeadCaptureOpen] = useState(false);
   const [popularProjects, setPopularProjects] = useState<RecentItem[]>([]);
+  const navigate = useNavigate();
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [recentQueries, setRecentQueries] = useState<string[]>([]);
+  useEffect(() => {
+    if (historyOpen) setRecentQueries(getRecentSearches());
+  }, [historyOpen]);
+
 
   // Fetch popular projects from DB when user has no browsing history
   useEffect(() => {
