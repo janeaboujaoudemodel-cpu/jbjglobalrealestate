@@ -339,9 +339,6 @@ export function sharedSections(context: string, teamName = "JBJ Team"): string {
   return `${goldDivider()}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="direction:ltr;text-align:left;"><tr><td>
 ${inquiryBox(context)}
 ${ticketSupportEmbed()}
-${recommendedActionsHtml()}
-${booksShowcaseHtml()}
-${readyToGetStartedHtml()}
 ${signOffHtml(teamName)}
 </td></tr></table>`;
 }
