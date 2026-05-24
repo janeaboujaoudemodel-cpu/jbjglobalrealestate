@@ -704,12 +704,6 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           {/* MOBILE HEADER: touch devices OR when desktop can't fit */}
           {shouldUseMobileHeader && (
             <div className="flex items-center gap-2 shrink-0">
-              {/* Mobile Menu Trigger - Hamburger / X toggle */}
-              <button
-                type="button"
-                className={cn(
-                  "inline-flex h-10 w-10 items-center justify-center appearance-none transition-all duration-300 focus:outline-none group shrink-0 rounded-full"
-                )}
               {/* Mobile Menu Trigger - Bare 3-line hamburger (no circle), premium gold with 3D sheen */}
               <button
                 type="button"
