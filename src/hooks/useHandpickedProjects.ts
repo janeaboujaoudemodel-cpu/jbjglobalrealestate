@@ -74,7 +74,16 @@ function readBrowsingHistory(): Array<{ slug?: string; id?: string; developer_na
 }
 
 function dedupePush(out: Project[], seen: Set<string>, candidates: Project[]) {
-  for (const p of candidates) {
+  // Owner rule: promote off-plan first; direct-with-developer ready can stay
+  // (top priority); generic completed/ready stock is dropped.
+  const filtered = candidates.filter((p) => p && isHomepagePromotable(p));
+  // Direct-with-developer ready units rank first.
+  const sorted = [...filtered].sort((a, b) => {
+    const aDirectReady = isDirectWithDeveloper(a) && isCompletedReady(a) ? 1 : 0;
+    const bDirectReady = isDirectWithDeveloper(b) && isCompletedReady(b) ? 1 : 0;
+    return bDirectReady - aDirectReady;
+  });
+  for (const p of sorted) {
     if (out.length >= TARGET) return;
     if (!p?.id || seen.has(p.id)) continue;
     // Require an image to keep the grid visually uniform
@@ -83,6 +92,7 @@ function dedupePush(out: Project[], seen: Set<string>, candidates: Project[]) {
     out.push(p);
   }
 }
+
 
 async function tierInterestForm(userId: string | undefined, email: string | undefined): Promise<Project[]> {
   if (!email && !userId) return [];
