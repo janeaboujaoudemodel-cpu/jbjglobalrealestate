@@ -218,7 +218,7 @@ export default function SupportLauncher() {
                 exit={{ opacity: 0, x: 18, scale: 0.985 }}
                 transition={{ type: "spring", stiffness: 420, damping: 34, mass: 0.8 }}
                 data-no-contrast-guard
-                className="fixed right-14 top-[116px] bottom-8 flex w-[300px] flex-col overflow-hidden pointer-events-auto
+                className="fixed right-14 top-[calc(50%+24px)] flex max-h-[calc(100dvh-150px)] w-[300px] -translate-y-1/2 flex-col overflow-hidden pointer-events-auto
                   rounded-2xl border border-gold bg-background text-foreground
                   shadow-[0_30px_60px_hsl(var(--foreground)/0.25),0_0_34px_hsl(var(--gold)/0.18)] p-3"
               >
