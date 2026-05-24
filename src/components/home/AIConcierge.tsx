@@ -535,7 +535,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                     disabled={streaming || !draft.trim()}
                     aria-label="Send"
                     data-no-contrast-guard
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center
+                    className="absolute right-1.5 top-1.5 bottom-1.5 flex w-9 items-center justify-center
                       rounded-lg bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#2A2A2A] disabled:opacity-40
                       hover:shadow-[0_0_18px_rgba(184,149,85,0.40)]
                       disabled:cursor-not-allowed transition"
