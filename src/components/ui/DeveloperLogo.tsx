@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 
 interface DeveloperLogoProps {
   src?: string | null;
@@ -9,50 +10,18 @@ interface DeveloperLogoProps {
   className?: string;
   loading?: "eager" | "lazy";
   onError?: () => void;
-  /**
-   * When true, render the approved Building2 icon fallback instead of
-   * returning null if no valid logo is available.
-   * NOTE: Building2 fallback is reserved for internal CRM/admin surfaces
-   * only — never on public project listings.
-   */
   renderFallback?: boolean;
-  /**
-   * Developer name. Used by the `nameplate` variant (and as a last-resort
-   * label for the `bare` variant when the image fails to load) so the
-   * client always knows which developer built the project.
-   */
   name?: string | null;
-  /**
-   * Visual variant.
-   *  - "tile" (default): champagne tile with gold hairline, used in
-   *    developer directories, area chips, dev detail cards.
-   *  - "bare": no border, no background, no inner padding. Used as an
-   *    overlay on project-card photos so the logo reads as a clean,
-   *    full-fit brand mark with a soft drop-shadow for legibility.
-   *  - "card": Reelly-style hero plate. Uniform-size white rounded plate
-   *    used on the developer directory and per-developer header tiles.
-   *    Logo renders `object-contain` with generous padding so wordmark
-   *    and colored marks always read fully without cropping.
-   *  - "nameplate": champagne plate matching `bare` dimensions that
-   *    renders the developer name as an Inter wordmark. Used on project
-   *    cards as the public-safe fallback when no valid logo image is
-   *    available, so the developer is ALWAYS identifiable.
-   */
   variant?: "tile" | "bare" | "card" | "nameplate";
 }
 
-/**
- * LOCKED — Unified developer logo component.
- *
- * RULES (globally enforced, see src/utils/developerLogo.ts):
- *  - Only canonical `logo_url` values pass through.
- *  - Project photos, screenshots, WhatsApp images, initials,
- *    or any other substitute is forbidden and will be rejected.
- *  - The Building2 fallback is reserved for internal/admin tiles
- *    where layout stability matters — public listings must never
- *    show a fake icon.
- *  - DO NOT MODIFY without explicit Founder authorization.
- */
+// Unified champagne plate — identical between `bare` and `nameplate`
+// so every project card has an identical badge footprint.
+const UNIFIED_PLATE =
+  "h-14 w-24 inline-flex items-center justify-center overflow-hidden " +
+  "rounded-xl bg-[#FDFBF7] border border-[#B89555]/45 " +
+  "shadow-[0_4px_14px_rgba(0,0,0,0.18)] px-2 py-1.5";
+
 export function DeveloperLogo({
   src,
   alt = "Developer",
@@ -65,37 +34,34 @@ export function DeveloperLogo({
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
 
+  const override = getDeveloperLogoOverride(name ?? alt);
   const valid = isValidDeveloperLogoUrl(src) && !error;
 
   // ── Nameplate variant — champagne plate with developer NAME wordmark ──
-  // Used as the public-safe fallback on project cards when no logo image
-  // exists, so the developer is always attributable. Matches `bare`
-  // dimensions to keep card layouts stable.
-  if (variant === "nameplate") {
+  if (variant === "nameplate" || (variant === "bare" && override.forceNameplate)) {
     const label = (name || alt || "Developer").trim();
-    // Auto-fit text size by character length so longer names still read.
+    // Auto-shrink so long names ("Expo City Development") fit fully on
+    // two lines without ANY truncation/"…". Plate is h-14 → two lines OK.
     const sizeClass =
       label.length <= 8
+        ? "text-[12px]"
+        : label.length <= 12
         ? "text-[11px]"
-        : label.length <= 14
+        : label.length <= 16
         ? "text-[10px]"
-        : "text-[9px]";
+        : label.length <= 20
+        ? "text-[9px]"
+        : "text-[8px]";
     return (
       <div
-        className={cn(
-          "h-12 w-16 inline-flex items-center justify-center overflow-hidden",
-          "rounded-xl bg-[#FDFBF7]/95 backdrop-blur-sm",
-          "border border-[#B89555]/45 px-1.5 py-1",
-          "shadow-[0_2px_10px_rgba(0,0,0,0.18)]",
-          className,
-        )}
+        className={cn(UNIFIED_PLATE, className)}
         aria-label={label}
         data-developer-nameplate
       >
         <span
           className={cn(
-            "font-semibold tracking-tight leading-tight text-center text-[#1A1A1A]",
-            "line-clamp-2 break-words",
+            "font-semibold tracking-tight leading-[1.05] text-center text-[#1A1A1A]",
+            "whitespace-normal break-words",
             sizeClass,
           )}
         >
@@ -105,33 +71,20 @@ export function DeveloperLogo({
     );
   }
 
-
-
   if (variant === "bare") {
     if (!valid) {
-      // No fake icon on public listings — render nothing so the photo stays clean.
       if (!renderFallback) return null;
       return (
         <div
-          className={cn(
-            "h-12 w-16 inline-flex items-center justify-center",
-            className,
-          )}
+          className={cn(UNIFIED_PLATE, className)}
           aria-label={`${alt} (logo unavailable)`}
         >
-          <Building2 className="w-6 h-6 text-[#FDFBF7]/85 drop-shadow" />
+          <Building2 className="w-6 h-6 text-[#1A1A1A]/70" />
         </div>
       );
     }
     return (
-      <div
-        className={cn(
-          // Approved framed plate: champagne surface with gold hairline border
-          "h-12 w-20 inline-flex items-center justify-center overflow-hidden rounded-md",
-          "bg-[#FDFBF7] border border-[#B89555]/40 p-1.5 shadow-[0_2px_8px_rgba(0,0,0,0.18)]",
-          className,
-        )}
-      >
+      <div className={cn(UNIFIED_PLATE, className)}>
         <img
           src={src as string}
           alt={alt}
@@ -141,6 +94,12 @@ export function DeveloperLogo({
             onError?.();
           }}
           className="block w-full h-full object-contain"
+          style={{
+            // Strip foreign white/light backgrounds into our champagne plate.
+            mixBlendMode: "multiply",
+            // White-on-dark marks (e.g. Ritz-Carlton) → flip to solid ink.
+            filter: override.invert ? "invert(1) brightness(0)" : undefined,
+          }}
         />
       </div>
     );
