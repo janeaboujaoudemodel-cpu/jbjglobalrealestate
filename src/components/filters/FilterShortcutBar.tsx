@@ -101,6 +101,8 @@ interface FilterShortcutBarProps {
   resultsLabel?: string;
   /** Show the live results badge inside the shortcut rail. Default false. */
   showResultsCount?: boolean;
+  /** Hide the duplicate sort pills (Newest/Low-High/High-Low/A-Z/Trending) when a SortBySelect is used elsewhere. */
+  hideSort?: boolean;
 }
 
 const PRICE_PRESETS = [
