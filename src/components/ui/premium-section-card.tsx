@@ -52,12 +52,12 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
     return (
       <section
         ref={ref}
-        className={`w-full ${wrapperClassName}`}
+        className={`w-full empty:hidden has-[>div>div:empty]:hidden ${wrapperClassName}`}
         {...rest}
       >
-        <div className={inner}>
+        <div className={`${inner} empty:hidden`}>
           <div
-            className={`${radius} ${border} ${TONE[tone]} overflow-hidden shadow-none ${PADDING[padding]} ${className}`}
+            className={`${radius} ${border} ${TONE[tone]} overflow-hidden shadow-none ${PADDING[padding]} ${className} empty:hidden`}
           >
             {children}
           </div>
