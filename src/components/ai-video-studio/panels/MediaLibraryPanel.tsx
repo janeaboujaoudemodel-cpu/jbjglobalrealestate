@@ -252,7 +252,7 @@ export function MediaLibraryPanel({
                   className={
                     stockCategory === cat.id
                       ? 'bg-amber-500 text-[#1A1A1A] hover:bg-amber-400 h-7 text-xs font-semibold border border-amber-500'
-                      : 'bg-[#1A1A1A] text-[#1A1A1A] hover:text-white hover:bg-[#1A1A1A] h-7 text-xs border border-[#B89555]/30'
+                      : 'bg-[#1A1A1A] text-white hover:text-white hover:bg-[#1A1A1A] h-7 text-xs border border-[#B89555]/30'
                   }
                 >
                   {cat.label}

@@ -180,7 +180,7 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
                   <Button
                     onClick={handleNext}
                     size="sm"
-                    className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#1A1A1A] text-xs px-4"
+                    className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white text-xs px-4"
                   >
                     {isLastStep ? 'Done' : 'Next'}
                     <ChevronRight className="w-3 h-3 ml-1" />

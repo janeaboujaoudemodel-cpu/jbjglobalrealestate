@@ -317,7 +317,7 @@ const MeetingConsentSection = ({
         <Button
           onClick={handleSubmitConsent}
           disabled={saving || !clientName.trim() || !hasSigned}
-          className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold"
+          className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white font-semibold"
         >
           {saving ? (
             <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Saving Consent...</>

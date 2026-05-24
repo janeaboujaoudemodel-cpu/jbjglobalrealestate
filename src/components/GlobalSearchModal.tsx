@@ -535,7 +535,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                             >
                               <div className={`w-11 h-11 rounded-lg flex items-center justify-center border ${
                                 !hasDbResults && idx === 0
-                                  ? "bg-[#1A1A1A] text-[#1A1A1A] border-[#B89555]/50" 
+                                  ? "bg-[#1A1A1A] text-white border-[#B89555]/50" 
                                   : "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
                               }`}>
                                 {item.icon && <item.icon className="w-5 h-5" />}

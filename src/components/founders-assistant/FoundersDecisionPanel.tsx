@@ -191,7 +191,7 @@ export function FoundersDecisionPanel() {
                 className="pl-10 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
               />
             </div>
-            <Button type="submit" disabled={isQuerying} className="bg-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] border border-[#B89555]/30">
+            <Button type="submit" disabled={isQuerying} className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A] border border-[#B89555]/30">
               {isQuerying ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (

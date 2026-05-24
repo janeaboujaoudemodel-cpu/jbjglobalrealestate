@@ -139,7 +139,7 @@ const EducationHub = () => {
             <div className="mt-8 text-center">
               <Link
                 to="/broker-education"
-                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 transition-all duration-300 font-semibold text-sm"
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-white border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 transition-all duration-300 font-semibold text-sm"
               >
                 Browse Full Books Library
                 <ArrowRight className="w-4 h-4" />
@@ -177,7 +177,7 @@ const EducationHub = () => {
             <div className="mt-8 text-center">
               <Link
                 to="/guides"
-                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 transition-all duration-300 font-semibold text-sm"
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-white border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 transition-all duration-300 font-semibold text-sm"
               >
                 View All Guides
                 <ArrowRight className="w-4 h-4" />
@@ -215,7 +215,7 @@ const EducationHub = () => {
             <div className="mt-8 text-center">
               <Link
                 to="/market-intelligence/reports"
-                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 transition-all duration-300 font-semibold text-sm"
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-white border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 transition-all duration-300 font-semibold text-sm"
               >
                 Explore Market Reports
                 <ArrowRight className="w-4 h-4" />
