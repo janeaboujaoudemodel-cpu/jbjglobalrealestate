@@ -1,49 +1,39 @@
 ## Goal
-Make every developer badge on `ProjectCard` look like one premium, unified plate — Reelly-style — sitting half on the photo, half on the content card, with no cropped names, no foreign backgrounds, no size variation.
 
-## What's wrong today (`src/components/ui/DeveloperLogo.tsx` + `src/components/ProjectCard.tsx`)
-1. `bare` plate = `h-12 w-20`, `nameplate` plate = `h-12 w-16` → two different widths on the same grid.
-2. Logo images render as-is, so brands with built-in backgrounds (Ritz-Carlton black, others white) clash with our champagne plate.
-3. `nameplate` uses `line-clamp-2` → long names like "Expo City Development" get truncated to "Expo City Develop…" (the three-dot crime).
-4. The plate is anchored at `top-3 left-3` of the card → it sits inside the photo instead of straddling the photo/card seam like Reelly.
+Eliminate every visible silver/champagne hairline or gradient strip between the fixed header and the hero, and between every consecutive section across all pages. Sections should flow on padding/band-tone alternation only — no visible rule, no hairline, no gradient seam.
 
-## Plan
+## What's causing the "silver" line today
 
-### 1. One unified plate (size + skin)
-In `DeveloperLogo.tsx`, both `bare` and `nameplate` variants get the exact same outer container:
-- Fixed size: `h-14 w-24` (wider than today so wordmarks fit without cropping, taller so it overlaps cleanly).
-- Skin: `rounded-xl bg-[#FDFBF7] border border-[#B89555]/45 shadow-[0_4px_14px_rgba(0,0,0,0.18)]`.
-- Inner padding: `px-2 py-1.5`.
+1. **Header bottom borders (visible on every page)** — `src/components/GlobalHeader.tsx` lines 631–638 render two thin champagne gradient strips at the header's bottom edge:
+   - A 2px `via-[#B89555]/60` + 1px `via-[#B89555]/40` pair shown when the header is solid.
+   - A 1px `via-[#B89555]/40` gold divider shown when the header is transparent (the one explicitly labeled "separates header from hero").
+2. **Header solid background** — `linear-gradient(90deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)` at line 619 reads as a silver/champagne band where the header meets the dark hero on home and other transparent-hero routes.
+3. **Residual section hairlines** — a handful of components still draw `border-y border-[#B89555]/XX` around full-width section wrappers, perceived as silver seams between sections:
+   - `src/components/home/HeroSearchBar.tsx` line 1187 (suggestions group label band)
+   - any other `border-y border-[#B89555]/…` regressions found via repo scan
+4. **Header gradient overlay between menus** — line 564: `bg-gradient-to-r from-transparent via-gray-200 to-transparent` inside the account dropdown (raw gray — violates No-Gray rule).
 
-### 2. "Our own render" — strip foreign backgrounds from logo images
-Inside the `bare` variant `<img>`:
-- Apply `mix-blend-mode: multiply` so white logo backgrounds disappear into the champagne plate.
-- Add a small per-developer overrides map (`src/utils/developerLogoOverrides.ts`) keyed by slug/name with two flags:
-  - `invert: true` → for white-on-dark marks like Ritz-Carlton; applies `filter: invert(1) brightness(0)` so the wordmark becomes solid ink on champagne. Seed it with `ritz-carlton` (and we'll add others as we spot them).
-  - `forceNameplate: true` → opt-out of the image entirely and render the nameplate wordmark instead (escape hatch for any logo we can't clean).
-- Keep `object-contain` so nothing gets cropped.
+## Changes
 
-### 3. Kill the "…" forever on the nameplate
-Replace `line-clamp-2` + fixed text-size buckets with:
-- `whitespace-normal break-words leading-[1.05] text-center`.
-- A small auto-shrink: start at `text-[11px]`, drop one step per length bucket down to `text-[8px]` so names up to ~22 chars ("Expo City Development") render fully on two lines without ellipsis.
-- No `overflow: hidden`-driven truncation; the plate is tall enough (h-14) to hold two lines.
+### 1. `src/components/GlobalHeader.tsx`
+- Delete the bottom-border block (lines 631–635) and the transparent-state gold divider (line 638). Header gets zero visible bottom edge in either state.
+- Replace the solid-state champagne gradient (line 619) with a flat `#FDFBF7` page tone so the solid header reads as page-continuous, not as a band. Keep opacity transition.
+- Remove the `via-gray-200` dropdown top-fade line (line 564) — replace with nothing (no divider).
 
-### 4. Reelly-style position — straddle photo & card
-In `ProjectCard.tsx` (lines ~210–226), move the `<Link><DeveloperLogo /></Link>` wrapper out of the absolute-positioned top-left slot and re-anchor it to the bottom of the image area:
-- New classes: `absolute left-4 z-30` + `bottom-0 translate-y-1/2` measured against the `<div className="aspect-[16/10] ...">` image wrapper (lines 230–258). So the plate sits exactly on the seam — top half over the photo, bottom half over the body card — and floats just above the title.
-- Add a touch of bottom margin on the title row so text never collides with the floating plate.
-- Adjust the favorite/shortlist stack only if needed (they live top-right, no conflict).
+### 2. Section hairline sweep
+- Run `rg "border-(y|t|b) border-\[#B89555\]/" src` and remove the `border-y …` / `border-t …` / `border-b …` classes from every full-width section wrapper (not from chips, pills, tabs, or icon tiles — only structural section seams). Confirmed targets so far:
+  - `src/components/home/HeroSearchBar.tsx` line 1187 (suggestions group header) — drop `border-y border-[#B89555]/10`.
+  - Any further hits the scan returns get the same treatment.
 
-### 5. Missing logos
-Out-of-scope for this edit: no scraping in this turn. Any developer with no `logo_url` automatically renders the unified `nameplate` (ink wordmark in our box) — same size, same skin, no "…". You'll see the developer name immediately and we can backfill real logos later via the existing logo-ingestion flow.
-
-## Files to touch
-- `src/components/ui/DeveloperLogo.tsx` — unify sizes, multiply-blend + invert support, kill line-clamp.
-- `src/utils/developerLogoOverrides.ts` — new tiny lookup (seed Ritz-Carlton invert).
-- `src/components/ProjectCard.tsx` — reposition the developer plate to straddle image/content seam.
+### 3. Verification
+- After edits, re-run the same `rg` to confirm zero `border-y border-[#B89555]` occurrences on section/wrapper elements remain.
+- Visually confirm in preview at `/` that:
+  - The hero meets the header with no visible line, gradient, or champagne strip.
+  - Scrolling past 80px keeps the header readable (now flat `#FDFBF7`) without re-introducing a seam.
+  - Every other section transitions on padding/tone alone.
 
 ## Out of scope
-- Auto-scraping new logos from Google.
-- Touching developer cards on the directory page (`card` variant) — those already use the Reelly hero plate.
-- The "majority looks good" cards keep their existing real logos; we just normalize the plate around them.
+
+- The `<SectionDivider*>` / `<AdaptiveHairline>` primitives are already permanent no-ops (per `mem://constraints/no-section-dividers-global`) — no change needed.
+- Gold hairlines that are intentional ornament inside cards/pills (`<PremiumSectionCard>`, badges, price pill) stay — only structural section seams are removed.
+- No layout, spacing, copy, or behavior changes. Pure visual seam removal.
