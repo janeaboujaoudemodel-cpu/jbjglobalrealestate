@@ -1,5 +1,6 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 import { useLocation } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import {
   hasTransparentHeader,
   isBackOfficeRoute as isBackOfficePath,
@@ -128,7 +129,21 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       setIsChatCollapsed(true);
       setShowAttentionPulse(false);
     };
-    const handleOpenChatSupport = () => {
+    const handleOpenChatSupport = async () => {
+      // Track chat support open
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        await supabase.from('jbj_analytics').insert({
+          tool_name: 'chat_support',
+          action_type: 'chat_support_opened',
+          tool_category: 'support',
+          user_id: user?.id || null,
+          user_email: user?.email || null,
+          metadata: { page: window.location.pathname, source: 'support_launcher' },
+        });
+      } catch {
+        // Silent fail — analytics should not block UX
+      }
       setPopupsReady(true);
       markDailyShown();
       setShowAttentionPulse(false);
