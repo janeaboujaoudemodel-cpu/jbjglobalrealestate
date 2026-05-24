@@ -29,10 +29,21 @@ const SELECT = `
   reelly_id, construction_status, sale_status,
   area_name, cover_image_url, is_published,
   developer_name, latitude, longitude,
-  developer:developers(id, name, slug, logo_url),
+  developer:developers(id, name, slug, logo_url, has_active_rep),
   community:communities(id, name, slug),
   images:project_images(id, image_url, alt_text, display_order)
 `;
+
+// Promote off-plan; suppress "ready/completed" listings UNLESS the project's
+// developer is direct-with-JBJ (has an active sales rep on our portal → full
+// commission). Owner directive: never show generic ready stock on the homepage.
+const isCompletedReady = (p: any) => {
+  const cs = String(p?.construction_status || "").toLowerCase().trim();
+  return cs === "completed" || cs === "ready" || cs === "complete";
+};
+const isDirectWithDeveloper = (p: any) => p?.developer?.has_active_rep === true;
+const isHomepagePromotable = (p: any) => !isCompletedReady(p) || isDirectWithDeveloper(p);
+
 
 const ELITE_DEVELOPERS = [
   "Emaar",
