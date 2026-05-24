@@ -33,7 +33,7 @@ import {
 import { SaleStatusSelect } from "@/components/filters/SaleStatusFilter";
 import { ActiveFilterIndicator } from "@/components/properties/ActiveFilterIndicator";
 
-import { DisplayModeToggle } from "@/components/filters/DisplayModeToggle";
+// DisplayModeToggle removed — user mode already chosen globally in header
 import { SettingsDropdown } from "@/components/filters/SettingsDropdown";
 import { SortBySelect } from "@/components/filters/SortBySelect";
 import { SectionDividerGold } from "@/components/ui/section-divider-gold";
