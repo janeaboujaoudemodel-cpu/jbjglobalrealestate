@@ -162,7 +162,7 @@ const DesignBuild = () => {
       </div>
 
       {/* Partner Badge Section */}
-      <section className="py-8 bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border-y border-[#B89555]/20">
+      <section className="py-8 bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-6 flex-wrap">
             <div className="flex items-center gap-2 text-[#1A1A1A]">

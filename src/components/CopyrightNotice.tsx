@@ -11,7 +11,7 @@ const CopyrightNotice = ({ variant = "inline", className = "" }: CopyrightNotice
 
   if (variant === "banner") {
     return (
-      <div className={`bg-[#FDFBF7]/95 backdrop-blur-md border-y border-[#B89555]/20 py-4 ${className}`}>
+      <div className={`bg-[#FDFBF7]/95 backdrop-blur-md py-4 ${className}`}>
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-center gap-3 text-center">
             <Shield className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />

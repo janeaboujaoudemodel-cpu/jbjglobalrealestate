@@ -478,7 +478,7 @@ const Sitemap = () => {
         </section>
 
         {/* QUICK LINKS STRIP */}
-        <section className="py-6 bg-[#1A1A1A] border-y border-[#B89555]/20">
+        <section className="py-6 bg-[#1A1A1A]">
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
               {quickLinks.map((link) => {
