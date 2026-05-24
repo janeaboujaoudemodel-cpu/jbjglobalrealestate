@@ -52,7 +52,7 @@ export function arabicDivider(): string {
 // ─── Header ───
 export function sharedHeader(departmentLabel: string): string {
   return `<tr><td style="background:#000;padding:28px 28px 24px;text-align:center;border-radius:18px 18px 0 0;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;"><tr><td align="center">${monogramSvg(84)}</td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;"><tr><td align="center">${monogramSvg(128)}</td></tr></table>
 <p style="color:#C8A766;margin:10px 0 0;font-size:13px;font-weight:700;letter-spacing:2.6px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
 <tr><td style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:20px 26px;text-align:center;border-radius:0;">
