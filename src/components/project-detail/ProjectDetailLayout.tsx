@@ -738,6 +738,25 @@ export default function ProjectDetailLayout({
 
       {adminBar}
 
+      {previousProject && (
+        <div className="sticky top-[88px] z-30 w-full bg-[#FDFBF7]/95 backdrop-blur border-b border-[#B89555]/30">
+          <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-2 flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={handleReturnToPrevious}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] text-sm font-medium hover:bg-[#EFE6D6] transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Return to {previousProject.name}
+            </button>
+            <span className="text-[11px] text-[#1A1A1A]/60 hidden sm:inline">
+              You came from a nearby project map
+            </span>
+          </div>
+        </div>
+      )}
+
+
       {/* STICKY SUB-NAVIGATION - Two rows: Search + Shortcuts */}
       <div 
         className={`fixed top-[88px] [body.jj-vertical-nav-collapsed_&]:top-[48px] left-0 right-0 z-[9990] backdrop-blur-md transition-all duration-300 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] ${
@@ -1186,10 +1205,14 @@ export default function ProjectDetailLayout({
                   <ProjectNearbyPropertiesMap
                     currentProjectId={project.id}
                     currentProjectName={project.name}
+                    currentProjectSlug={project.slug ?? null}
                     latitude={project.latitude}
                     longitude={project.longitude}
                     areaName={project.area_name}
                   />
+                  <p className="mt-2 text-xs text-[#1A1A1A]/70">
+                    Red pin = this project · Blue pins = other developers nearby. Click a blue pin to open that project — you can always return here using the chip at the top.
+                  </p>
                 </div>
               )}
 
