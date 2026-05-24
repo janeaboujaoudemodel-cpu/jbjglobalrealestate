@@ -195,7 +195,7 @@ const Properties = () => {
   const [sortBy, setSortBy] = useState<string>("newest");
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isRequestFormOpen, setIsRequestFormOpen] = useState(false);
-  const [displayMode, setDisplayMode] = useState<DisplayMode>('investor');
+  // displayMode state removed — toggle no longer rendered on Properties page
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const filterSentinelRef = useRef<HTMLDivElement>(null);
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
