@@ -287,7 +287,7 @@ const Index = () => {
 
 
       {/* VERIFICATION BANNER */}
-      <PremiumSectionCard padding="md" wrapperClassName="py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="py-8">
         <Suspense fallback={null}>
           <VerificationBanner />
         </Suspense>
@@ -297,35 +297,35 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* DEVELOPER PORTAL CTA */}
-      <PremiumSectionCard padding="md" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <DeveloperPortalCTA />
         </Suspense>
       </PremiumSectionCard>
 
       {/* FEATURED LISTINGS */}
-      <PremiumSectionCard padding="md" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <FeaturedListings />
         </Suspense>
       </PremiumSectionCard>
 
       {/* CONTINUE SEARCHING */}
-      <PremiumSectionCard padding="md" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <ContinueSearching type="property" />
         </Suspense>
       </PremiumSectionCard>
 
       {/* RESALE PROPERTIES */}
-      <PremiumSectionCard padding="md" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <ResalePropertiesSection />
         </Suspense>
       </PremiumSectionCard>
 
       {/* OVERSEAS INVESTORS */}
-      <PremiumSectionCard padding="md" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <OverseasInvestorsBanner />
         </Suspense>
@@ -359,7 +359,7 @@ const Index = () => {
         </Suspense>
       </PremiumSectionCard>
 
-      <PremiumSectionCard tone="surface" padding="md" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard tone="surface" padding="none" wrapperClassName="cv-auto py-8">
         <div className="rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7]/70 p-5 md:p-8 shadow-[0_1px_0_rgba(184,149,85,0.25),0_10px_30px_-18px_rgba(184,149,85,0.35)]">
           <Suspense fallback={<SectionLoader />}>
             <MortgageCalculator compact />
