@@ -329,7 +329,12 @@ const Index = () => {
         </Suspense>
       </div>
 
-      {/* CONTINUE SEARCHING — removed per owner request */}
+      {/* CONTINUE SEARCHING — restored: history-aware "continue where you left off". */}
+      <div className="cv-auto py-6 md:py-10">
+        <Suspense fallback={<SectionLoader />}>
+          <ContinueSearching type="property" />
+        </Suspense>
+      </div>
 
       {/* RESALE PROPERTIES - single divider before Starting Point */}
       <div className="cv-auto">

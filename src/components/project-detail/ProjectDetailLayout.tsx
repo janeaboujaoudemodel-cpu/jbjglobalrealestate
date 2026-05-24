@@ -74,6 +74,9 @@ import ProjectNearbyPropertiesMap from "@/components/project-detail/ProjectNearb
 import MoreFromDeveloperStrip from "@/components/project-detail/MoreFromDeveloperStrip";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { SectionDivider } from "@/components/ui/section-divider";
+import { recordProjectView, peekBackStack, popBackStack, type BackStackEntry } from "@/lib/browsingHistory";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 // Footer is now rendered globally in MainLayout - do not import here
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
@@ -339,6 +342,31 @@ export default function ProjectDetailLayout({
     }
     return () => document.body.classList.remove('filter-bar-fixed');
   }, [showStickyNav]);
+
+  // Persist this view to browsing history (localStorage + per-user table when signed in)
+  useEffect(() => {
+    if (!project?.id) return;
+    recordProjectView({
+      id: project.id,
+      slug: project.slug ?? undefined,
+      name: project.name,
+      developer_name: project.developer?.name ?? undefined,
+      area_name: project.area_name ?? null,
+      cover_image_url: project.cover_image_url ?? null,
+    });
+  }, [project.id, project.slug, project.name]);
+
+  // "Return to previous project" chip — only when arrived from another project's nearby map
+  const navigateBackTo = useNavigate();
+  const [previousProject, setPreviousProject] = useState<BackStackEntry | null>(null);
+  useEffect(() => {
+    setPreviousProject(peekBackStack(project.slug ?? null));
+  }, [project.slug]);
+  const handleReturnToPrevious = () => {
+    const prev = popBackStack();
+    if (prev?.slug) navigateBackTo(`/project/${prev.slug}`);
+    setPreviousProject(null);
+  };
 
   // Filter and normalize images (remove broken/placeholder URLs)
   const images = useMemo(() => {
@@ -709,6 +737,25 @@ export default function ProjectDetailLayout({
       </section>
 
       {adminBar}
+
+      {previousProject && (
+        <div className="sticky top-[88px] z-30 w-full bg-[#FDFBF7]/95 backdrop-blur border-b border-[#B89555]/30">
+          <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-2 flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={handleReturnToPrevious}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] text-sm font-medium hover:bg-[#EFE6D6] transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Return to {previousProject.name}
+            </button>
+            <span className="text-[11px] text-[#1A1A1A]/60 hidden sm:inline">
+              You came from a nearby project map
+            </span>
+          </div>
+        </div>
+      )}
+
 
       {/* STICKY SUB-NAVIGATION - Two rows: Search + Shortcuts */}
       <div 
@@ -1158,10 +1205,14 @@ export default function ProjectDetailLayout({
                   <ProjectNearbyPropertiesMap
                     currentProjectId={project.id}
                     currentProjectName={project.name}
+                    currentProjectSlug={project.slug ?? null}
                     latitude={project.latitude}
                     longitude={project.longitude}
                     areaName={project.area_name}
                   />
+                  <p className="mt-2 text-xs text-[#1A1A1A]/70">
+                    Red pin = this project · Blue pins = other developers nearby. Click a blue pin to open that project — you can always return here using the chip at the top.
+                  </p>
                 </div>
               )}
 
