@@ -215,7 +215,7 @@ const BestIdeaAward = () => {
                   <div className="text-[11px] space-y-0.5" style={{ color: '#6b7280' }}>
                     <p>• One winner selected monthly from all valid entries</p>
                     <p>• Anonymous submissions are welcome but won't enter the draw</p>
-                    <p>• <span style={{ color: '#C8A766' }} className="font-semibold">Submit multiple unique ideas = Multiple draw tickets!</span></p>
+                    <p>• <span style={{ color: '#B89555' }} className="font-semibold">Submit multiple unique ideas = Multiple draw tickets!</span></p>
                   </div>
                 </div>
 
@@ -401,7 +401,7 @@ const BestIdeaAward = () => {
                   </Dialog>
 
                   <p className="text-sm mt-4" style={{ color: '#6b7280' }}>
-                    Next draw: <span style={{ color: '#C8A766' }} className="font-semibold">{(() => {
+                    Next draw: <span style={{ color: '#B89555' }} className="font-semibold">{(() => {
                       const now = new Date();
                       const nextDraw = new Date(now.getFullYear(), now.getMonth() + 1, 1);
                       return nextDraw.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });

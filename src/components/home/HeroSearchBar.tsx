@@ -688,7 +688,7 @@ const HeroSearchBar = () => {
             className={cn(
               "flex items-center gap-1.5 px-4 transition-all font-semibold min-w-[56px] justify-center",
               areaUnit === 'sqft'
-                ? "bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-[#1A1A1A]"
+                ? "bg-gradient-to-r from-[#EFE6D6] to-[#ECE2D2] text-[#1A1A1A]"
                 : "bg-[#FDFBF7]/10 text-white/70 hover:bg-[#FDFBF7]/20 hover:text-white"
             )}
           >
@@ -701,7 +701,7 @@ const HeroSearchBar = () => {
             className={cn(
               "flex items-center gap-1.5 px-4 transition-all font-semibold min-w-[56px] justify-center",
               areaUnit === 'sqm'
-                ? "bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-[#1A1A1A]"
+                ? "bg-gradient-to-r from-[#EFE6D6] to-[#ECE2D2] text-[#1A1A1A]"
                 : "bg-[#FDFBF7]/10 text-white/70 hover:bg-[#FDFBF7]/20 hover:text-white"
             )}
           >

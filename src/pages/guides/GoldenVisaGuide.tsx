@@ -49,24 +49,24 @@ const Section = ({ id, children, ivory = false }: { id: string; children: React.
       <div className="max-w-5xl mx-auto px-4 md:px-8">{children}</div>
     </div>
     {/* Gold divider */}
-    <div className="h-[2px] bg-gradient-to-r from-transparent via-[#C8A766]/50 to-transparent" />
+    <div className="h-[2px] bg-gradient-to-r from-transparent via-[#EFE6D6]/50 to-transparent" />
   </section>
 );
 
 const SectionHeader = ({ icon: Icon, title, gold }: { icon: any; title: string; gold: string }) => (
-  <div className="flex items-center gap-4 mb-8 pb-4 border-b-2 border-[#C8A766]/30">
-    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border border-[#C8A766]/40 flex items-center justify-center flex-shrink-0">
+  <div className="flex items-center gap-4 mb-8 pb-4 border-b-2 border-[#B89555]/30">
+    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border border-[#B89555]/40 flex items-center justify-center flex-shrink-0">
       <Icon className="w-6 h-6 text-[#8B7340]" />
     </div>
     <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1A1A]">
-      {title} <span className="text-[#C8A766]">{gold}</span>
+      {title} <span className="text-[#B89555]">{gold}</span>
     </h2>
   </div>
 );
 
 const CheckItem = ({ children }: { children: React.ReactNode }) => (
   <li className="flex items-start gap-3 py-2">
-    <CheckCircle2 className="w-5 h-5 text-[#C8A766] flex-shrink-0 mt-0.5" />
+    <CheckCircle2 className="w-5 h-5 text-[#B89555] flex-shrink-0 mt-0.5" />
     <span className="text-[#3D3D3D] leading-relaxed">{children}</span>
   </li>
 );
@@ -114,18 +114,18 @@ const GoldenVisaGuide = () => {
       {/* ═══════════════════════════════════════════ */}
       <div className="relative bg-gradient-to-b from-[#FAF6EE] via-[#F7F1E6] to-white pt-28 pb-20 overflow-hidden">
         {/* Decorative border */}
-        <div className="absolute inset-4 md:inset-8 border border-[#C8A766]/20 rounded-3xl pointer-events-none" />
+        <div className="absolute inset-4 md:inset-8 border border-[#B89555]/20 rounded-3xl pointer-events-none" />
 
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#C8A766]/10 border border-[#C8A766]/30 mb-6">
-              <Shield className="w-4 h-4 text-[#C8A766]" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 mb-6">
+              <Shield className="w-4 h-4 text-[#B89555]" />
               <span className="text-sm font-medium text-[#8B7340]">Official Residency Guide</span>
             </div>
 
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-[#1A1A1A] mb-4 leading-tight">
               United Arab Emirates{" "}
-              <span className="text-[#C8A766]">Golden Visa</span>
+              <span className="text-[#B89555]">Golden Visa</span>
             </h1>
             <p className="text-xl md:text-2xl text-[#6B6B6B] font-serif italic mb-8">
               Long-Term Residency Program
@@ -134,7 +134,7 @@ const GoldenVisaGuide = () => {
               Secure 5 or 10-Year Renewable Residency in the United Arab Emirates
             </p>
 
-            <div className="max-w-3xl mx-auto text-left bg-[#FDFBF7]/80 border border-[#C8A766]/20 rounded-2xl p-6 md:p-8 mb-8 backdrop-blur-sm">
+            <div className="max-w-3xl mx-auto text-left bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-2xl p-6 md:p-8 mb-8 backdrop-blur-sm">
               <p className="text-[#3D3D3D] leading-relaxed mb-4">
                 The UAE Golden Visa is a long-term residence program introduced in 2019 by the Government of the United Arab Emirates. It grants eligible foreign nationals renewable residency for 5 or 10 years without the requirement of a national sponsor.
               </p>
@@ -143,11 +143,11 @@ const GoldenVisaGuide = () => {
               </p>
               <ul className="space-y-2 mb-4">
                 <li className="flex items-start gap-2 text-[#3D3D3D]">
-                  <Landmark className="w-4 h-4 text-[#C8A766] mt-1 flex-shrink-0" />
+                  <Landmark className="w-4 h-4 text-[#B89555] mt-1 flex-shrink-0" />
                   Federal Authority for Identity, Citizenship, Customs & Port Security (ICP)
                 </li>
                 <li className="flex items-start gap-2 text-[#3D3D3D]">
-                  <Landmark className="w-4 h-4 text-[#C8A766] mt-1 flex-shrink-0" />
+                  <Landmark className="w-4 h-4 text-[#B89555] mt-1 flex-shrink-0" />
                   General Directorate of Residency and Foreigners Affairs (GDRFA — Dubai)
                 </li>
               </ul>
@@ -205,9 +205,9 @@ const GoldenVisaGuide = () => {
       <section className="py-16 bg-[#FAF6EE]">
         <div className="max-w-5xl mx-auto px-4 md:px-8">
           <div className="text-center mb-10">
-            <BookOpen className="w-8 h-8 text-[#C8A766] mx-auto mb-3" />
+            <BookOpen className="w-8 h-8 text-[#B89555] mx-auto mb-3" />
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1A1A]">
-              Table of <span className="text-[#C8A766]">Contents</span>
+              Table of <span className="text-[#B89555]">Contents</span>
             </h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -217,23 +217,23 @@ const GoldenVisaGuide = () => {
                 <button
                   key={section.id}
                   onClick={() => scrollTo(section.id)}
-                  className="flex items-center gap-3 p-4 bg-[#FDFBF7] border border-[#C8A766]/15 rounded-xl hover:border-[#C8A766]/40 hover:shadow-md hover:shadow-[#C8A766]/10 transition-all text-left group"
+                  className="flex items-center gap-3 p-4 bg-[#FDFBF7] border border-[#B89555]/15 rounded-xl hover:border-[#B89555]/40 hover:shadow-md hover:shadow-[#B89555]/10 transition-all text-left group"
                 >
-                  <span className="w-8 h-8 rounded-lg bg-[#C8A766]/10 flex items-center justify-center text-[#C8A766] text-sm font-semibold flex-shrink-0">
+                  <span className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center text-[#B89555] text-sm font-semibold flex-shrink-0">
                     {idx + 1}
                   </span>
-                  <span className="text-sm text-[#3D3D3D] font-medium group-hover:text-[#C8A766] transition-colors">{section.title}</span>
-                  <ChevronRight className="w-4 h-4 text-[#C8A766]/40 ml-auto flex-shrink-0 group-hover:text-[#C8A766] transition-colors" />
+                  <span className="text-sm text-[#3D3D3D] font-medium group-hover:text-[#B89555] transition-colors">{section.title}</span>
+                  <ChevronRight className="w-4 h-4 text-[#B89555]/40 ml-auto flex-shrink-0 group-hover:text-[#B89555] transition-colors" />
                 </button>
               );
             })}
           </div>
         </div>
       </section>
-      <div className="h-px bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
+      <div className="h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/40 to-transparent" />
 
       {/* Sticky Side Navigator (desktop) / Top scroll nav (mobile) */}
-      <div className="sticky top-20 z-30 lg:hidden bg-[#FAF6EE]/95 backdrop-blur-sm border-b border-[#C8A766]/20 py-2 px-4">
+      <div className="sticky top-20 z-30 lg:hidden bg-[#FAF6EE]/95 backdrop-blur-sm border-b border-[#B89555]/20 py-2 px-4">
         <div className="overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
           <div className="flex gap-2">
             {tocSections.map((section) => {
@@ -244,8 +244,8 @@ const GoldenVisaGuide = () => {
                   onClick={() => scrollTo(section.id)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap min-w-fit transition-all ${
                     activeSection === section.id
-                      ? "bg-[#C8A766]/20 text-[#C8A766] border border-[#C8A766]/40"
-                      : "text-[#6B6B6B] hover:text-[#C8A766] hover:bg-[#C8A766]/10 border border-transparent"
+                      ? "bg-[#EFE6D6]/20 text-[#B89555] border border-[#B89555]/40"
+                      : "text-[#6B6B6B] hover:text-[#B89555] hover:bg-[#EFE6D6]/10 border border-transparent"
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -265,7 +265,7 @@ const GoldenVisaGuide = () => {
         <p className="text-[#3D3D3D] leading-relaxed mb-6">
           The UAE Golden Visa grants long-term renewable residency to qualified applicants under specific eligibility frameworks established by federal regulations.
         </p>
-        <div className="bg-[#FAF6EE] border border-[#C8A766]/20 rounded-xl p-6 mb-6">
+        <div className="bg-[#FAF6EE] border border-[#B89555]/20 rounded-xl p-6 mb-6">
           <h3 className="font-serif font-semibold text-[#1A1A1A] mb-3">Validity</h3>
           <ul className="space-y-2">
             <CheckItem>10-Year Residency (select categories)</CheckItem>
@@ -273,7 +273,7 @@ const GoldenVisaGuide = () => {
             <CheckItem>Renewable upon continued compliance with eligibility criteria</CheckItem>
           </ul>
         </div>
-        <div className="bg-[#FAF6EE] border border-[#C8A766]/20 rounded-xl p-6">
+        <div className="bg-[#FAF6EE] border border-[#B89555]/20 rounded-xl p-6">
           <h3 className="font-serif font-semibold text-[#1A1A1A] mb-3">Golden Visa Holders</h3>
           <ul className="space-y-2">
             <CheckItem>Do not require a UAE national sponsor</CheckItem>
@@ -290,7 +290,7 @@ const GoldenVisaGuide = () => {
       <Section id="benefits" ivory>
         <SectionHeader icon={Heart} title="Core" gold="Benefits" />
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-xl p-6">
+          <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-6">
             <h3 className="font-serif font-semibold text-[#1A1A1A] mb-4">Residency & Freedom</h3>
             <ul className="space-y-2">
               <CheckItem>Long-term renewable residency</CheckItem>
@@ -300,7 +300,7 @@ const GoldenVisaGuide = () => {
               <CheckItem>Stable residency planning</CheckItem>
             </ul>
           </div>
-          <div className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-xl p-6">
+          <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-6">
             <h3 className="font-serif font-semibold text-[#1A1A1A] mb-4">Access & Sponsorship</h3>
             <ul className="space-y-2">
               <CheckItem>Family sponsorship</CheckItem>
@@ -331,13 +331,13 @@ const GoldenVisaGuide = () => {
             <button
               key={cat.id}
               onClick={() => scrollTo(cat.id)}
-              className="flex items-center gap-4 p-5 bg-[#FAF6EE] border border-[#C8A766]/20 rounded-xl hover:border-[#C8A766]/50 hover:shadow-md transition-all text-left group"
+              className="flex items-center gap-4 p-5 bg-[#FAF6EE] border border-[#B89555]/20 rounded-xl hover:border-[#B89555]/50 hover:shadow-md transition-all text-left group"
             >
-              <div className="w-10 h-10 rounded-lg bg-[#C8A766]/10 flex items-center justify-center flex-shrink-0">
-                <cat.icon className="w-5 h-5 text-[#C8A766]" />
+              <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center flex-shrink-0">
+                <cat.icon className="w-5 h-5 text-[#B89555]" />
               </div>
-              <span className="font-medium text-[#3D3D3D] group-hover:text-[#C8A766] transition-colors">{cat.label}</span>
-              <ChevronRight className="w-4 h-4 text-[#C8A766]/40 ml-auto" />
+              <span className="font-medium text-[#3D3D3D] group-hover:text-[#B89555] transition-colors">{cat.label}</span>
+              <ChevronRight className="w-4 h-4 text-[#B89555]/40 ml-auto" />
             </button>
           ))}
         </div>
@@ -355,9 +355,9 @@ const GoldenVisaGuide = () => {
           <CheckItem>Property may be mortgaged subject to specific compliance conditions</CheckItem>
           <CheckItem>Investment must remain active to maintain residency eligibility</CheckItem>
         </ul>
-        <div className="p-5 bg-[#FDFBF7] border-l-4 border-[#C8A766] rounded-r-xl">
+        <div className="p-5 bg-[#FDFBF7] border-l-4 border-[#B89555] rounded-r-xl">
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-[#C8A766] flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-[#B89555] flex-shrink-0 mt-0.5" />
             <p className="text-[#3D3D3D] text-sm">
               Investment thresholds and qualification conditions are governed by ICP / GDRFA policies and may be updated periodically. Meeting the threshold qualifies the investor to <strong>apply</strong> for the Golden Visa. Issuance is subject to official government approval.
             </p>
@@ -386,8 +386,8 @@ const GoldenVisaGuide = () => {
         <p className="text-[#3D3D3D] leading-relaxed mb-4">Eligible categories include (subject to official criteria):</p>
         <div className="grid sm:grid-cols-2 gap-3 mb-6">
           {["Doctors & Medical Specialists", "Engineers", "Scientists & Researchers", "Executive Directors", "Skilled Professionals", "Creative Talents"].map(role => (
-            <div key={role} className="flex items-center gap-3 p-3 bg-[#FDFBF7] border border-[#C8A766]/15 rounded-lg">
-              <CheckCircle2 className="w-4 h-4 text-[#C8A766] flex-shrink-0" />
+            <div key={role} className="flex items-center gap-3 p-3 bg-[#FDFBF7] border border-[#B89555]/15 rounded-lg">
+              <CheckCircle2 className="w-4 h-4 text-[#B89555] flex-shrink-0" />
               <span className="text-sm text-[#3D3D3D]">{role}</span>
             </div>
           ))}
@@ -421,7 +421,7 @@ const GoldenVisaGuide = () => {
       <Section id="documents" ivory>
         <SectionHeader icon={Clipboard} title="Required" gold="Documentation" />
         <div className="space-y-6">
-          <div className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-xl p-6">
+          <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-6">
             <h3 className="font-serif font-semibold text-[#1A1A1A] mb-4">General Documents</h3>
             <ul className="space-y-2">
               <CheckItem>Passport copy</CheckItem>
@@ -432,7 +432,7 @@ const GoldenVisaGuide = () => {
             </ul>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-xl p-6">
+            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-6">
               <h3 className="font-serif font-semibold text-[#1A1A1A] mb-4">Investor Pathway</h3>
               <ul className="space-y-2">
                 <CheckItem>Title deed</CheckItem>
@@ -440,7 +440,7 @@ const GoldenVisaGuide = () => {
                 <CheckItem>Bank letter (if applicable)</CheckItem>
               </ul>
             </div>
-            <div className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-xl p-6">
+            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-6">
               <h3 className="font-serif font-semibold text-[#1A1A1A] mb-4">Professional Pathway</h3>
               <ul className="space-y-2">
                 <CheckItem>Academic certificates</CheckItem>
@@ -468,9 +468,9 @@ const GoldenVisaGuide = () => {
             { step: 5, title: "Biometrics & Medical" },
             { step: 6, title: "Residency Issuance" },
           ].map(item => (
-            <div key={item.step} className="flex items-center gap-4 p-4 bg-[#FAF6EE] border border-[#C8A766]/15 rounded-xl">
-              <div className="w-10 h-10 rounded-full bg-[#C8A766]/15 border border-[#C8A766]/30 flex items-center justify-center flex-shrink-0">
-                <span className="text-[#C8A766] font-bold">{item.step}</span>
+            <div key={item.step} className="flex items-center gap-4 p-4 bg-[#FAF6EE] border border-[#B89555]/15 rounded-xl">
+              <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/15 border border-[#B89555]/30 flex items-center justify-center flex-shrink-0">
+                <span className="text-[#B89555] font-bold">{item.step}</span>
               </div>
               <span className="text-[#3D3D3D] font-medium">{item.title}</span>
             </div>
@@ -527,7 +527,7 @@ const GoldenVisaGuide = () => {
             { q: "Are mortgaged properties accepted?", a: "Financed properties may be accepted if they meet regulatory conditions set by the relevant authorities." },
             { q: "Who issues the Golden Visa?", a: "The UAE government through ICP (Federal Authority for Identity, Citizenship, Customs & Port Security) and GDRFA (General Directorate of Residency and Foreigners Affairs)." },
           ].map((faq, idx) => (
-            <AccordionItem key={idx} value={`faq-${idx}`} className="border border-[#C8A766]/20 rounded-xl overflow-hidden bg-[#FDFBF7]">
+            <AccordionItem key={idx} value={`faq-${idx}`} className="border border-[#B89555]/20 rounded-xl overflow-hidden bg-[#FDFBF7]">
               <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-[#FAF6EE] transition-colors">
                 <span className="font-medium text-[#1A1A1A]">{faq.q}</span>
               </AccordionTrigger>
@@ -547,7 +547,7 @@ const GoldenVisaGuide = () => {
         <p className="text-[#3D3D3D] leading-relaxed mb-8">
           Submit your details for a preliminary Golden Visa eligibility review. Our advisory team will assess your profile and provide guidance.
         </p>
-        <form onSubmit={handleSubmit} className="bg-[#FAF6EE] border border-[#C8A766]/20 rounded-2xl p-6 md:p-8 space-y-5">
+        <form onSubmit={handleSubmit} className="bg-[#FAF6EE] border border-[#B89555]/20 rounded-2xl p-6 md:p-8 space-y-5">
           <div className="grid md:grid-cols-2 gap-5">
             <div>
               <label className="block text-sm font-medium text-[#3D3D3D] mb-1.5">Full Name</label>
@@ -555,7 +555,7 @@ const GoldenVisaGuide = () => {
                 value={formData.fullName}
                 onChange={e => setFormData(p => ({ ...p, fullName: e.target.value }))}
                 placeholder="Enter your full name"
-                className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766]"
+                className="bg-[#FDFBF7] border-[#B89555]/20 focus:border-[#B89555]"
                 required
               />
             </div>
@@ -566,7 +566,7 @@ const GoldenVisaGuide = () => {
                 value={formData.email}
                 onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
                 placeholder="your@email.com"
-                className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766]"
+                className="bg-[#FDFBF7] border-[#B89555]/20 focus:border-[#B89555]"
                 required
               />
             </div>
@@ -576,7 +576,7 @@ const GoldenVisaGuide = () => {
                 value={formData.phone}
                 onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))}
                 placeholder="+971 XX XXX XXXX"
-                className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766]"
+                className="bg-[#FDFBF7] border-[#B89555]/20 focus:border-[#B89555]"
               />
             </div>
             <div>
@@ -585,13 +585,13 @@ const GoldenVisaGuide = () => {
                 value={formData.country}
                 onChange={e => setFormData(p => ({ ...p, country: e.target.value }))}
                 placeholder="Current country"
-                className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766]"
+                className="bg-[#FDFBF7] border-[#B89555]/20 focus:border-[#B89555]"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-[#3D3D3D] mb-1.5">Category Interested In</label>
               <Select value={formData.category} onValueChange={v => setFormData(p => ({ ...p, category: v }))}>
-                <SelectTrigger className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766]">
+                <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/20 focus:border-[#B89555]">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -609,7 +609,7 @@ const GoldenVisaGuide = () => {
                 value={formData.budget}
                 onChange={e => setFormData(p => ({ ...p, budget: e.target.value }))}
                 placeholder="e.g. AED 2,000,000"
-                className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766]"
+                className="bg-[#FDFBF7] border-[#B89555]/20 focus:border-[#B89555]"
               />
             </div>
           </div>
@@ -619,12 +619,12 @@ const GoldenVisaGuide = () => {
               value={formData.notes}
               onChange={e => setFormData(p => ({ ...p, notes: e.target.value }))}
               placeholder="Any additional information..."
-              className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766] min-h-[100px]"
+              className="bg-[#FDFBF7] border-[#B89555]/20 focus:border-[#B89555] min-h-[100px]"
             />
           </div>
           <Button
             type="submit"
-            className="w-full bg-[#C8A766] hover:bg-[#B89650] text-white font-medium py-3 rounded-xl shadow-lg shadow-[#C8A766]/20"
+            className="w-full bg-[#EFE6D6] hover:bg-[#B89650] text-white font-medium py-3 rounded-xl shadow-lg shadow-[#B89555]/20"
           >
             <Send className="w-4 h-4 mr-2" />
             Check My Golden Visa Eligibility
@@ -638,17 +638,17 @@ const GoldenVisaGuide = () => {
       {/* Premium Contact CTA */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-[#FAF6EE] via-[#F7F1E6] to-[#ECE2D2]">
         <div className="max-w-3xl mx-auto px-4 md:px-8 text-center">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#C8A766]/40 rounded-2xl p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)]">
-            <div className="w-16 h-16 bg-[#1A1A1A] border border-[#C8A766]/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Phone className="w-8 h-8 text-[#C8A766]" />
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)]">
+            <div className="w-16 h-16 bg-[#1A1A1A] border border-[#B89555]/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <Phone className="w-8 h-8 text-[#B89555]" />
             </div>
             <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1A1A] mb-3">
-              Need Professional <span className="text-[#C8A766]">Guidance?</span>
+              Need Professional <span className="text-[#B89555]">Guidance?</span>
             </h3>
             <p className="text-[#6B6B6B] mb-8 max-w-lg mx-auto">
               Our licensed advisors are ready to assist you with your Golden Visa application, documentation, and eligibility assessment.
             </p>
-            <Button className="bg-[#C8A766] hover:bg-[#B89650] text-white font-bold text-lg px-10 py-6 rounded-xl shadow-lg shadow-[#C8A766]/30 transition-all hover:scale-[1.02]" asChild>
+            <Button className="bg-[#EFE6D6] hover:bg-[#B89650] text-white font-bold text-lg px-10 py-6 rounded-xl shadow-lg shadow-[#B89555]/30 transition-all hover:scale-[1.02]" asChild>
               <Link to="/contact?type=golden-visa-consultation">
                 <Phone className="w-5 h-5 mr-3" />
                 Contact Our Team

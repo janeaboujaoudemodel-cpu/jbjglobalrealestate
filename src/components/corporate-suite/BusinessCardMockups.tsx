@@ -18,7 +18,7 @@ export function DeskMockup({ children, finishEffect }: { children: React.ReactNo
         <div style={{ width: 8, height: 80, background: "linear-gradient(to bottom, #2a2a2a, #444)", borderRadius: 4, transform: "rotate(-15deg)" }} />
       </div>
       <div style={{ position: "absolute", bottom: 16, left: 24 }}>
-        <div style={{ width: 48, height: 5, background: "#C8A766", borderRadius: 3, opacity: 0.6 }} />
+        <div style={{ width: 48, height: 5, background: "#B89555", borderRadius: 3, opacity: 0.6 }} />
       </div>
       <p className="absolute bottom-3 left-0 right-0 text-center text-[9px] font-semibold text-[#a09080] tracking-[0.2em] uppercase">Desk Preview</p>
     </div>

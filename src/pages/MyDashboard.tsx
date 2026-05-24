@@ -134,17 +134,17 @@ function UsefulLinksCard() {
               style={{ perspective: '1000px' }}
             >
               {/* Book shadow */}
-              <div className="absolute -bottom-2 left-2 right-2 h-4 bg-[#1A1A1A]/30 blur-lg rounded-full group-hover:blur-xl group-hover:bg-[#C8A766]/20 transition-all" />
+              <div className="absolute -bottom-2 left-2 right-2 h-4 bg-[#1A1A1A]/30 blur-lg rounded-full group-hover:blur-xl group-hover:bg-[#EFE6D6]/20 transition-all" />
 
               <div
-                className="relative w-full h-full border border-[#C8A766]/30 shadow-[4px_4px_15px_rgba(0,0,0,0.4)] group-hover:shadow-[8px_8px_35px_rgba(200,167,102,0.35)] transition-all duration-500 transform-gpu rounded-r-md overflow-hidden"
+                className="relative w-full h-full border border-[#B89555]/30 shadow-[4px_4px_15px_rgba(0,0,0,0.4)] group-hover:shadow-[8px_8px_35px_rgba(200,167,102,0.35)] transition-all duration-500 transform-gpu rounded-r-md overflow-hidden"
                 style={{
                   transformStyle: 'preserve-3d',
                   transform: 'rotateY(-8deg) rotateX(2deg)',
                 }}
               >
                 {/* Spine edge */}
-                <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-[#C8A766]/30 via-black/30 to-transparent z-10" />
+                <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-[#EFE6D6]/30 via-black/30 to-transparent z-10" />
 
                 <BookCoverFace book={book} size="modal" />
 

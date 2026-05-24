@@ -125,7 +125,7 @@ export default function RecommendedProjects({
           </div>
           <Link
             to="/properties"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#C8A766]/60 text-[#1A1A1A] font-semibold text-sm shadow-md hover:shadow-lg hover:border-[#B89555] transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/60 text-[#1A1A1A] font-semibold text-sm shadow-md hover:shadow-lg hover:border-[#B89555] transition-all"
           >
             View All <ChevronRight className="w-4 h-4" />
           </Link>

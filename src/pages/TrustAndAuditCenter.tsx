@@ -8,21 +8,21 @@ import SEOHead from '@/components/SEOHead';
 
 const GoldDivider = () => (
   <div className="flex items-center gap-4 my-10">
-    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
-    <div className="w-1.5 h-1.5 rounded-full bg-[#C8A766]/60" />
-    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
+    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/40 to-transparent" />
+    <div className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]/60" />
+    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/40 to-transparent" />
   </div>
 );
 
 const CCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30 rounded-xl p-6 ${className}`}>{children}</div>
+  <div className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-xl p-6 ${className}`}>{children}</div>
 );
 
 const BulletList = ({ items }: { items: string[] }) => (
   <ul className="space-y-2.5 ml-1">
     {items.map((item, i) => (
       <li key={i} className="flex items-start gap-3">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#C8A766] mt-2 shrink-0" />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6] mt-2 shrink-0" />
         <span>{item}</span>
       </li>
     ))}
@@ -82,16 +82,16 @@ const TrustAndAuditCenter = () => {
 
       <div className="min-h-screen bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
         {/* Hero */}
-        <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
+        <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#B89555]/20">
           <div className="relative max-w-6xl mx-auto px-6 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#C8A766]/10 border border-[#C8A766]/25 rounded-full mb-6">
-              <ShieldCheck className="w-4 h-4 text-[#C8A766]" />
-              <span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Trust & Compliance</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EFE6D6]/10 border border-[#B89555]/25 rounded-full mb-6">
+              <ShieldCheck className="w-4 h-4 text-[#B89555]" />
+              <span className="text-xs font-semibold text-[#B89555] tracking-widest uppercase">Trust & Compliance</span>
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
               Trust, Compliance & Audit Framework
             </h1>
-            <p className="text-lg md:text-xl text-[#C8A766] font-medium mb-6" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
+            <p className="text-lg md:text-xl text-[#B89555] font-medium mb-6" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
               Institutional Standards. Regulated Brokerage. Transparent Operations.
             </p>
             <p className="text-[#1A1A1A]/70 leading-relaxed max-w-3xl mx-auto text-[15px]">
@@ -105,7 +105,7 @@ const TrustAndAuditCenter = () => {
           {/* Sidebar TOC — desktop */}
           <aside className="hidden lg:block w-64 flex-shrink-0">
             <div className="sticky top-24 space-y-1">
-              <p className="text-xs uppercase tracking-widest text-[#C8A766]/60 font-bold mb-3 px-3">Table of Contents</p>
+              <p className="text-xs uppercase tracking-widest text-[#B89555]/60 font-bold mb-3 px-3">Table of Contents</p>
               {tocItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -114,7 +114,7 @@ const TrustAndAuditCenter = () => {
                     onClick={() => scrollTo(item.id)}
                     className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all ${
                       activeSection === item.id
-                        ? "text-[#C8A766] font-semibold border-l-2 border-[#C8A766] bg-[#C8A766]/5"
+                        ? "text-[#B89555] font-semibold border-l-2 border-[#B89555] bg-[#EFE6D6]/5"
                         : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] border-l-2 border-transparent"
                     }`}
                   >
@@ -131,13 +131,13 @@ const TrustAndAuditCenter = () => {
             {/* Trust Pillars Grid */}
             <div id="pillars">
               <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
-                <ShieldCheck className="w-6 h-6 text-[#C8A766]" />Trust Pillars
+                <ShieldCheck className="w-6 h-6 text-[#B89555]" />Trust Pillars
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {pillars.map((p) => (
                   <CCard key={p.title}>
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-[#C8A766]/15">
-                      <p.icon className="w-6 h-6 text-[#C8A766]" />
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-[#EFE6D6]/15">
+                      <p.icon className="w-6 h-6 text-[#B89555]" />
                     </div>
                     <h3 className="text-lg font-bold text-[#1A1A1A] mb-2" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>{p.title}</h3>
                     <p className="text-[#1A1A1A]/70 text-[15px] leading-relaxed">{p.description}</p>
@@ -151,7 +151,7 @@ const TrustAndAuditCenter = () => {
             <div id="oversight">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><ClipboardCheck className="w-5 h-5 text-[#C8A766]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><ClipboardCheck className="w-5 h-5 text-[#B89555]" /></div>
                   <h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Internal Oversight & Process Controls</h2>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -165,7 +165,7 @@ const TrustAndAuditCenter = () => {
             <div id="platform">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Server className="w-5 h-5 text-[#C8A766]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><Server className="w-5 h-5 text-[#B89555]" /></div>
                   <h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Platform Integrity & Data Handling</h2>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -181,7 +181,7 @@ const TrustAndAuditCenter = () => {
             <div id="ai-governance">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Eye className="w-5 h-5 text-[#C8A766]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><Eye className="w-5 h-5 text-[#B89555]" /></div>
                   <h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>AI Tool Governance</h2>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -195,7 +195,7 @@ const TrustAndAuditCenter = () => {
             <div id="integrations">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Handshake className="w-5 h-5 text-[#C8A766]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><Handshake className="w-5 h-5 text-[#B89555]" /></div>
                   <h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>External Platform Integrations</h2>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -211,7 +211,7 @@ const TrustAndAuditCenter = () => {
             <div id="commitment">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><ShieldCheck className="w-5 h-5 text-[#C8A766]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><ShieldCheck className="w-5 h-5 text-[#B89555]" /></div>
                   <h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Professional Commitment</h2>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -225,7 +225,7 @@ const TrustAndAuditCenter = () => {
             <div id="audit">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Landmark className="w-5 h-5 text-[#C8A766]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><Landmark className="w-5 h-5 text-[#B89555]" /></div>
                   <h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Audit Position</h2>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -235,15 +235,15 @@ const TrustAndAuditCenter = () => {
             </div>
 
             {/* Footer */}
-            <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
+            <div className="mt-16 pt-8 border-t border-[#B89555]/15 text-center">
               <p className="text-xs text-[#1A1A1A]/70 max-w-2xl mx-auto leading-relaxed mb-4">
                 This Trust & Audit Framework may be updated periodically to reflect regulatory developments and operational enhancements.
               </p>
               <p className="text-[#1A1A1A]/70 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
-                <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
+                <Link to="/privacy" className="text-[#B89555] hover:underline">Privacy Policy</Link>
                 <span className="text-[#1A1A1A]/70">|</span>
-                <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
+                <Link to="/terms" className="text-[#B89555] hover:underline">Terms of Service</Link>
               </div>
             </div>
           </div>

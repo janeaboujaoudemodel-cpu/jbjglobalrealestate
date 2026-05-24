@@ -14,13 +14,13 @@ const GOLD_PIN_SVG = `
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" viewBox="0 0 32 42" fill="none">
   <defs>
     <linearGradient id="gpin" x1="16" y1="0" x2="16" y2="38" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#C8A766"/>
+      <stop offset="0%" stop-color="#B89555"/>
       <stop offset="100%" stop-color="#8B6914"/>
     </linearGradient>
   </defs>
   <path d="M16 0C7 0 0 7 0 16c0 12 16 26 16 26s16-14 16-26C32 7 25 0 16 0z" fill="url(#gpin)"/>
   <circle cx="16" cy="14" r="6" fill="white" opacity="0.9"/>
-  <circle cx="16" cy="14" r="3" fill="#C8A766"/>
+  <circle cx="16" cy="14" r="3" fill="#B89555"/>
 </svg>`;
 
 const GoldIcon = L.divIcon({

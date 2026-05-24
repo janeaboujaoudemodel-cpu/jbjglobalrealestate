@@ -784,7 +784,7 @@ export function CardCanvas({
           borderTop: "1px dashed rgba(200,167,102,0.8)",
           zIndex: 20, pointerEvents: "none",
         }}>
-          <span style={{ position: "absolute", left: "50%", transform: "translateX(-50%) translateY(-50%)", background: "#C8A766", color: "#fff", fontSize: 7, fontWeight: 700, padding: "1px 4px", borderRadius: 2, letterSpacing: 1 }}>CENTER</span>
+          <span style={{ position: "absolute", left: "50%", transform: "translateX(-50%) translateY(-50%)", background: "#B89555", color: "#fff", fontSize: 7, fontWeight: 700, padding: "1px 4px", borderRadius: 2, letterSpacing: 1 }}>CENTER</span>
         </div>
       )}
       {editLayout && showVGuide && (
@@ -794,7 +794,7 @@ export function CardCanvas({
           borderLeft: "1px dashed rgba(200,167,102,0.8)",
           zIndex: 20, pointerEvents: "none",
         }}>
-          <span style={{ position: "absolute", top: "50%", transform: "translateY(-50%) translateX(-50%)", background: "#C8A766", color: "#fff", fontSize: 7, fontWeight: 700, padding: "1px 4px", borderRadius: 2, letterSpacing: 1, whiteSpace: "nowrap" }}>CENTER</span>
+          <span style={{ position: "absolute", top: "50%", transform: "translateY(-50%) translateX(-50%)", background: "#B89555", color: "#fff", fontSize: 7, fontWeight: 700, padding: "1px 4px", borderRadius: 2, letterSpacing: 1, whiteSpace: "nowrap" }}>CENTER</span>
         </div>
       )}
     </div>

@@ -88,7 +88,7 @@ const TEXT_PRESETS: PresetItem[] = [
   },
   { label: 'Caption Box',    category: 'Caption',     content: 'Caption text',      fontFamily: 'Inter, sans-serif',       fontSize: 24, fontWeight: 'normal', color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.6)', position: 'bottom', style: 'highlight',   textAlign: 'center', hoverAnimation: 'slide-down' },
   { label: 'Subtitle',       category: 'Caption',     content: 'Subtitle goes here',fontFamily: 'Inter, sans-serif',       fontSize: 22, fontWeight: 'normal', color: '#E2E8F0', backgroundColor: 'rgba(0,0,0,0.5)', position: 'bottom', style: 'highlight',   textAlign: 'center', hoverAnimation: 'fade-in'    },
-  { label: 'Luxury Quote',   category: 'Quote',       content: '"Your Quote"',      fontFamily: 'Playfair Display, serif', fontSize: 38, fontWeight: 'normal', color: '#C8A766', backgroundColor: 'transparent',     position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'    },
+  { label: 'Luxury Quote',   category: 'Quote',       content: '"Your Quote"',      fontFamily: 'Playfair Display, serif', fontSize: 38, fontWeight: 'normal', color: '#B89555', backgroundColor: 'transparent',     position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'    },
   { label: 'Minimal Quote',  category: 'Quote',       content: '— Author Name',     fontFamily: 'Georgia, serif',          fontSize: 30, fontWeight: 'normal', color: '#CBD5E1', backgroundColor: 'transparent',     position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'    },
   {
     label: 'Luxury Watermark', category: 'Quote',
@@ -171,7 +171,7 @@ const ANIM_LABEL: Record<string, string> = {
 };
 
 const COLOR_SWATCHES = [
-  '#FFFFFF', '#000000', '#FFD700', '#C8A766', '#FF3B30',
+  '#FFFFFF', '#000000', '#FFD700', '#B89555', '#FF3B30',
   '#34C759', '#007AFF', '#AF52DE', '#FF9500', '#5AC8FA',
 ];
 

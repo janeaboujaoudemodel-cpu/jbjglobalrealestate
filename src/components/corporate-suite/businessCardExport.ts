@@ -224,7 +224,7 @@ export function exportDigitalCardAsHtml(
   const titleColor = template === "classic" ? "#555" : template === "minimal" ? "#666" : template === "bold" ? "#aaa" : `${secondary}cc`;
   const companyColor = template === "classic" ? "#999" : template === "minimal" ? "#999" : template === "bold" ? "#444" : `${secondary}99`;
 
-  const ctaBg = "#C8A766";
+  const ctaBg = "#B89555";
   const ctaText = "#fff";
 
   const nameParts = name.trim().split(/\s+/);

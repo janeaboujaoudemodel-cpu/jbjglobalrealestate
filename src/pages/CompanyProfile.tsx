@@ -363,10 +363,10 @@ const ConsistentBook3D = ({ onClick, isGenerating }: { onClick: () => void; isGe
       <div className="absolute inset-0 flex items-center justify-center bg-[#1A1A1A]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg z-20">
         <div className="text-center">
           {isGenerating ? (
-            <div className="w-12 h-12 border-4 border-[#C8A766]/30 border-t-[#C8A766] rounded-full animate-spin mx-auto" />
+            <div className="w-12 h-12 border-4 border-[#B89555]/30 border-t-[#B89555] rounded-full animate-spin mx-auto" />
           ) : (
             <>
-              <Download className="w-12 h-12 text-[#C8A766] mx-auto mb-2" />
+              <Download className="w-12 h-12 text-[#B89555] mx-auto mb-2" />
               <p className="text-white font-semibold">Download PDF</p>
             </>
           )}
@@ -521,13 +521,13 @@ const CompanyProfile = () => {
                 <a
                   key={index}
                   href={`#${item.anchor}`}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#C8A766]/10 transition-colors group"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors group"
                 >
-                  <span className="w-8 h-8 rounded-lg bg-[#C8A766]/10 border border-[#C8A766]/20 flex items-center justify-center text-[#C8A766] text-sm font-medium flex-shrink-0">
+                  <span className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/20 flex items-center justify-center text-[#B89555] text-sm font-medium flex-shrink-0">
                     {index + 1}
                   </span>
-                  <span className="text-white/80 text-sm flex-1 group-hover:text-[#C8A766] transition-colors">{item.title}</span>
-                  <ChevronRight className="w-4 h-4 text-white/85 group-hover:text-[#C8A766] transition-colors flex-shrink-0" />
+                  <span className="text-white/80 text-sm flex-1 group-hover:text-[#B89555] transition-colors">{item.title}</span>
+                  <ChevronRight className="w-4 h-4 text-white/85 group-hover:text-[#B89555] transition-colors flex-shrink-0" />
                 </a>
               ))}
             </div>
@@ -535,7 +535,7 @@ const CompanyProfile = () => {
         </motion.div>
       </SectionShell>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
+      <div className="h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/40 to-transparent" />
 
       {/* 2. Company Overview (Executive Summary) */}
       <SectionShell>
@@ -862,7 +862,7 @@ const CompanyProfile = () => {
               >
                 <Link
                   to={`/area/${area.slug}`}
-                  className="group relative block h-[180px] md:h-[200px] rounded-xl overflow-hidden border-[3px] border-transparent hover:border-[#C8A766] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.45)]"
+                  className="group relative block h-[180px] md:h-[200px] rounded-xl overflow-hidden border-[3px] border-transparent hover:border-[#B89555] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.45)]"
                 >
                   {area.image_url ? (
                     <div
@@ -879,7 +879,7 @@ const CompanyProfile = () => {
 
                   <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                     {area.is_trending && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-[#1A1A1A] text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#EFE6D6] to-[#ECE2D2] text-[#1A1A1A] text-[9px] font-bold uppercase tracking-wider shadow-lg">
                         <TrendingUp className="w-2.5 h-2.5" />
                         Trending
                       </span>
@@ -894,11 +894,11 @@ const CompanyProfile = () => {
 
                   <div className="absolute bottom-0 left-0 right-0 p-3">
                     {area.property_count != null && area.property_count > 0 && (
-                      <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-[#1A1A1A]/60 text-[#C8A766] text-[9px] font-semibold tracking-wide border border-[#C8A766]/30">
+                      <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-[#1A1A1A]/60 text-[#B89555] text-[9px] font-semibold tracking-wide border border-[#B89555]/30">
                         {area.property_count} Projects
                       </span>
                     )}
-                    <h3 className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-lg group-hover:text-[#C8A766] transition-colors duration-300">
+                    <h3 className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-lg group-hover:text-[#B89555] transition-colors duration-300">
                       {area.name}
                     </h3>
                   </div>
@@ -926,7 +926,7 @@ const CompanyProfile = () => {
         <div className="text-center mt-8">
           <Link
             to="/areas"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#C8A766] rounded-xl text-[#1A1A1A] font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#B89555] rounded-xl text-[#1A1A1A] font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
           >
             <span>View All Areas</span>
             <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

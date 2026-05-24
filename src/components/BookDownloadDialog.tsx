@@ -191,7 +191,7 @@ export default function BookDownloadDialog({
               <Button
                 onClick={handleDownload}
                 disabled={isSubmitting || !email.trim()}
-                className="w-full h-12 rounded-xl bg-gradient-to-r from-[#C8A766] via-[#D4AF37] to-[#C8A766] text-white font-bold text-sm shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:shadow-[0_6px_28px_rgba(200,167,102,0.55)] hover:brightness-105 transition-all border-0"
+                className="w-full h-12 rounded-xl bg-gradient-to-r from-[#EFE6D6] via-[#D4AF37] to-[#EFE6D6] text-white font-bold text-sm shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:shadow-[0_6px_28px_rgba(200,167,102,0.55)] hover:brightness-105 transition-all border-0"
               >
                 {isSubmitting ? (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />

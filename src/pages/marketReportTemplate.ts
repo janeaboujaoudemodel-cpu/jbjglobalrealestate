@@ -205,7 +205,7 @@ function getCoverPage(villaImages: string[], isFounderVisible: boolean): string 
     </div>
     <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, transparent, rgba(168,146,90,0.4), transparent); z-index: 2;"></div>
     <div style="position: relative; z-index: 5; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 48px 48px 48px;">
-      <div style="width: 64px; height: 4px; background: linear-gradient(to right, #A8925A, #C8A766); margin-bottom: 18px; border-radius: 2px;"></div>
+      <div style="width: 64px; height: 4px; background: linear-gradient(to right, #A8925A, #B89555); margin-bottom: 18px; border-radius: 2px;"></div>
       <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: rgba(168,146,90,0.1); border: 1px solid rgba(168,146,90,0.3); width: fit-content; margin-bottom: 18px;">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A8925A" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
         <span style="color: #A8925A; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em;">Latest Edition 2026</span>

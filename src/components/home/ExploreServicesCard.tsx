@@ -266,7 +266,7 @@ const ExploreServicesCard = () => {
           <h4 
             className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 transition-all duration-300" 
             style={{ 
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #F7F1E6 50%, #C8A766 100%)',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #F7F1E6 50%, #B89555 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}

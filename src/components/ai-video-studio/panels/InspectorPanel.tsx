@@ -221,7 +221,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                         <svg viewBox="0 0 100 100" width="32" height="22" fill="none">
                           <path
                             d={opt.curve}
-                            stroke={isActive ? '#C8A766' : '#64748b'}
+                            stroke={isActive ? '#B89555' : '#64748b'}
                             strokeWidth="8"
                             strokeLinecap="round"
                             fill="none"

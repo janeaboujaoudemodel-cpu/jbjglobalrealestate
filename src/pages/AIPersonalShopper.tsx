@@ -180,7 +180,7 @@ const AIPersonalShopper = () => {
     }
 
     try {
-      const fullPlan = messages.map(m => `${m.role === 'user' ? 'Client' : 'AI Concierge'}: ${m.content}`).join('\n\n');
+      const fullPlan = messages.map(m => `${m.role === 'user' ? 'Client' : 'Concierge'}: ${m.content}`).join('\n\n');
       
       // Best-effort notification (must NOT block user success)
       try {
@@ -486,7 +486,7 @@ const AIPersonalShopper = () => {
                             {message.role === 'assistant' && (
                               <div className="flex items-center gap-2 mb-2 text-emerald-400 text-xs font-medium">
                                 <Sparkles className="w-3 h-3" />
-                                AI Concierge
+                                Concierge
                               </div>
                             )}
                             <div className="whitespace-pre-wrap text-sm leading-relaxed">

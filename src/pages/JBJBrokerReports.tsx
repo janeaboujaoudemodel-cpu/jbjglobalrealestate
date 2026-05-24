@@ -55,7 +55,7 @@ interface LeadStatus {
   count: number;
 }
 
-const COLORS = ["#C8A766", "#059669", "#3B82F6", "#8B5CF6", "#F59E0B"];
+const COLORS = ["#B89555", "#059669", "#3B82F6", "#8B5CF6", "#F59E0B"];
 
 export default function JBJBrokerReports() {
   const navigate = useNavigate();
@@ -331,7 +331,7 @@ export default function JBJBrokerReports() {
                   <Tooltip 
                     contentStyle={{ 
                       backgroundColor: '#FDFBF7', 
-                      border: '1px solid #C8A766',
+                      border: '1px solid #B89555',
                       borderRadius: '8px'
                     }} 
                   />

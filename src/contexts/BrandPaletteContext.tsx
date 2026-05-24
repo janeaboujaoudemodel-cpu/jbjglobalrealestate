@@ -19,7 +19,7 @@ export interface SavedPalette {
 }
 
 const DEFAULT_PALETTE: BrandPalette = {
-  primary: '#C8A766',
+  primary: '#B89555',
   secondary: '#000000',
   accent: '#D4AF37',
   background: '#FDFBF7',

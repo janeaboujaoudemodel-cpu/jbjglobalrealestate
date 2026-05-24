@@ -105,7 +105,7 @@ export function useBusinessCardState() {
 
   // Gradient colors
   const [useGradient, setUseGradient] = useState(false);
-  const [gradientEnd, setGradientEnd] = useState("#C8A766");
+  const [gradientEnd, setGradientEnd] = useState("#B89555");
   const [gradientDirection, setGradientDirection] = useState<GradientDirection>("135deg");
 
   // Gallery state

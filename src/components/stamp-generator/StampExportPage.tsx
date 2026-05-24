@@ -284,7 +284,7 @@ const STANDARD_EXPORT_COLORS = [
   { label: 'White',      hex: '#ffffff' },
   { label: 'Black',      hex: '#0d0d0d' },
   { label: 'Navy Ink',   hex: '#1B3A8C' },
-  { label: 'Brand Gold', hex: '#C8A766' },
+  { label: 'Brand Gold', hex: '#B89555' },
   { label: 'Dark Gold',  hex: '#B8860B' },
 ];
 

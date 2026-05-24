@@ -178,7 +178,7 @@ const ProductivitySuite = () => {
           </div>
           
           <h1 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
-            Corporate & <span style={{ background: 'linear-gradient(135deg, #C8A766 0%, #D4AF37 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Productivity</span> Suite
+            Corporate & <span style={{ background: 'linear-gradient(135deg, #B89555 0%, #D4AF37 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Productivity</span> Suite
           </h1>
           
           <p className="text-base md:text-lg text-[#1A1A1A]/70 max-w-2xl mx-auto mb-8">

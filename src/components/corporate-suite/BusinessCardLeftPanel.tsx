@@ -461,7 +461,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
                               template="ai-design"
                               primary={design.bgColor}
                               secondary={design.textColor}
-                              accent={design.accentColor || design.colors?.[0] || "#C8A766"}
+                              accent={design.accentColor || design.colors?.[0] || "#B89555"}
                               side="front"
                               scale={0.35}
                               shapeStyle={{ aspectRatio: "3.5 / 2", borderRadius: 0 }}

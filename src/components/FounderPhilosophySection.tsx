@@ -70,7 +70,7 @@ export const FounderPhilosophySection = () => {
                 to="/founder"
                 className="relative inline-flex items-center justify-center gap-3 px-8 sm:px-12 py-5 sm:py-6 mt-6 text-base sm:text-lg font-bold rounded-xl transition-all duration-300 group overflow-hidden shadow-lg hover:shadow-xl hover:-translate-y-1"
                 style={{
-                  background: 'linear-gradient(135deg, #D4B896, #C8A766, #B8975A)',
+                  background: 'linear-gradient(135deg, #D4B896, #B89555, #B8975A)',
                   color: '#1a1a1a',
                   border: '2px solid rgba(200,167,102,0.6)',
                   boxShadow: '0 4px 20px rgba(200,167,102,0.3)',

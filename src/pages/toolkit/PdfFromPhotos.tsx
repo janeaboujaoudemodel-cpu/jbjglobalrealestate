@@ -63,7 +63,7 @@ const MARGIN_VALUES: Record<Margins, number> = {
 // ─── Gold Palette ─────────────────────────────────────────────────────────────
 
 const G = {
-  gold: "#C8A766",
+  gold: "#B89555",
   goldBright: "#E4C47A",
   goldDim: "#A08040",
   bg: "rgba(200,167,102,0.06)",
@@ -71,7 +71,7 @@ const G = {
   border: "rgba(200,167,102,0.22)",
   borderHover: "rgba(200,167,102,0.55)",
   glow: "rgba(200,167,102,0.18)",
-  text: "#C8A766",
+  text: "#B89555",
   surface: "#0E1018",
   surfaceCard: "#111520",
   surfaceMid: "#151B28",

@@ -17,7 +17,7 @@ function createGoldMarkerIcon(highlighted = false) {
       <defs>
         <radialGradient id="pinGrad" cx="40%" cy="30%" r="70%">
           <stop offset="0%" stop-color="#F5D78E"/>
-          <stop offset="60%" stop-color="#C8A766"/>
+          <stop offset="60%" stop-color="#B89555"/>
           <stop offset="100%" stop-color="#A07840"/>
         </radialGradient>
         <filter id="shadow" x="-30%" y="-10%" width="160%" height="160%">
@@ -29,7 +29,7 @@ function createGoldMarkerIcon(highlighted = false) {
             fill="url(#pinGrad)" stroke="#8B6914" stroke-width="1.2" filter="url(#shadow)"/>
       <!-- Inner circle -->
       <circle cx="17" cy="14" r="5.5" fill="white" opacity="0.92"/>
-      <circle cx="17" cy="14" r="3.5" fill="#C8A766"/>
+      <circle cx="17" cy="14" r="3.5" fill="#B89555"/>
     </svg>
   `;
   const anchor = highlighted ? [22, 52] : [17, 42];

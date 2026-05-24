@@ -41,7 +41,7 @@ export interface TemplateConfig {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 export const TEMPLATES: TemplateConfig[] = [
-  { id: "premium",       label: "Premium Gold",    desc: "Gold accent, dark cover",      accent: "#C8A766", coverBg: "#0a0a0a", contentBg: "#f9f7f3", coverTextColor: "#ffffff", sectionStyle: "card" },
+  { id: "premium",       label: "Premium Gold",    desc: "Gold accent, dark cover",      accent: "#B89555", coverBg: "#0a0a0a", contentBg: "#f9f7f3", coverTextColor: "#ffffff", sectionStyle: "card" },
   { id: "executive",     label: "Executive Blue",  desc: "Navy blue, structured",        accent: "#1e3a8a", coverBg: "#1e3a8a", contentBg: "#ffffff", coverTextColor: "#ffffff", sectionStyle: "list" },
   { id: "clean",         label: "Clean White",     desc: "Minimal, professional",        accent: "#374151", coverBg: "#ffffff", contentBg: "#ffffff", coverTextColor: "#111111", sectionStyle: "underline" },
   { id: "corporate_red", label: "Corporate Red",   desc: "Bold red, high impact",        accent: "#dc2626", coverBg: "#7f1d1d", contentBg: "#ffffff", coverTextColor: "#ffffff", sectionStyle: "card" },
@@ -54,7 +54,7 @@ export const TEMPLATES: TemplateConfig[] = [
 
 export const DEFAULT_PALETTE: PaletteColor[] = [
   { hex: "#1a1a1a", name: "Primary",    role: "primary",    opacity: 100 },
-  { hex: "#C8A766", name: "Secondary",  role: "secondary",  opacity: 100 },
+  { hex: "#B89555", name: "Secondary",  role: "secondary",  opacity: 100 },
   { hex: "#F7F2EA", name: "Accent",     role: "accent",     opacity: 100 },
   { hex: "#ffffff", name: "Background", role: "background", opacity: 100 },
   { hex: "#374151", name: "Text",       role: "text",       opacity: 100 },

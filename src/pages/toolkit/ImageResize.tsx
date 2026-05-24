@@ -93,7 +93,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
   // Edit tools
   const [activeTool, setActiveTool] = useState<EditTool>("none");
   const [borderWidth, setBorderWidth] = useState(0);
-  const [borderColor, setBorderColor] = useState("#C8A766");
+  const [borderColor, setBorderColor] = useState("#B89555");
   const [textOverlays, setTextOverlays] = useState<TextOverlay[]>([]);
   const [newText, setNewText] = useState("");
   const [textColor, setTextColor] = useState("#ffffff");

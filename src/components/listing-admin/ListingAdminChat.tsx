@@ -747,8 +747,8 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
           {listing.developer && (
             <div className="flex items-center gap-1.5 mb-1">
-              <Building2 className="w-3.5 h-3.5 text-[#C8A766]" />
-              <span className="text-xs font-medium text-[#C8A766]">{listing.developer}</span>
+              <Building2 className="w-3.5 h-3.5 text-[#B89555]" />
+              <span className="text-xs font-medium text-[#B89555]">{listing.developer}</span>
             </div>
           )}
           {listing.location && (
@@ -806,8 +806,8 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
           {/* Unit Details (per bedroom) */}
           {listing.unitDetails && listing.unitDetails.length > 0 && (
-            <div className="mb-2 p-2 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] rounded-lg border border-[#C8A766]/20">
-              <p className="text-[9px] font-bold text-[#C8A766] uppercase tracking-wider mb-1">Unit Breakdown</p>
+            <div className="mb-2 p-2 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] rounded-lg border border-[#B89555]/20">
+              <p className="text-[9px] font-bold text-[#B89555] uppercase tracking-wider mb-1">Unit Breakdown</p>
               <div className="space-y-0.5">
                 {listing.unitDetails.slice(0, 6).map((u, i) => (
                   <div key={i} className="flex items-center justify-between text-[10px]">

@@ -1110,7 +1110,7 @@ const Properties = () => {
               onClick={handleSearch}
               className="relative h-10 px-6 rounded-lg text-sm flex-shrink-0 font-bold transition-all duration-300 group overflow-hidden"
               style={{
-                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
                 boxShadow: `
                   0 6px 20px rgba(200,167,102,0.4),
                   0 4px 10px rgba(0,0,0,0.15),
