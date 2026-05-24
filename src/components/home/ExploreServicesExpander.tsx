@@ -18,8 +18,9 @@ import { Link } from "react-router-dom";
 import {
   ArrowRight,
   Home, Tag, Key, Building2, Globe, Calculator, Plane,
-  MessageCircle, Scale, Handshake, Wrench,
+  MessageCircle, Scale, Handshake, Wrench, Sparkles, Crown,
 } from "lucide-react";
+import { PearlButton } from "@/components/ui/pearl-button";
 
 type Service = {
   id: string;
@@ -79,8 +80,12 @@ const ExploreServicesExpander = () => {
 
   return (
     <div className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)]">
-      {/* Header */}
+      {/* Header — mirrors JBJ Royal Tools Hub card */}
       <div className="px-5 md:px-7 pt-5 md:pt-6 pb-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] text-[10px] font-semibold uppercase tracking-[0.2em] mb-3">
+          <Sparkles className="w-3 h-3 text-[#B89555]" />
+          Premium Real Estate Services
+        </div>
         <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] tracking-tight">
           Explore Our Services
         </h2>
@@ -160,6 +165,18 @@ const ExploreServicesExpander = () => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Footer CTA — sits inside the card, mirrors JBJ Royal Tools Hub */}
+      <div className="px-5 md:px-7 py-6 text-center bg-[#FDFBF7]">
+        <PearlButton
+          to="/services"
+          size="lg"
+          leadingIcon={<Crown strokeWidth={2.2} />}
+          trailingIcon={<ArrowRight strokeWidth={2.5} />}
+        >
+          Explore Our Services
+        </PearlButton>
       </div>
 
     </div>
