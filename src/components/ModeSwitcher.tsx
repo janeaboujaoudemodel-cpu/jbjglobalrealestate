@@ -128,12 +128,13 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   // whether selected or not — classy, consistent, no rainbow.
   const triggerStyle: CSSProperties = {
     backgroundColor: 'transparent',
-    borderColor: '#B89555',
+    borderColor: 'rgba(184,149,85,0.55)',
     borderWidth: 1,
     borderStyle: 'solid',
     color: '#1A1A1A',
     boxShadow: 'none',
   };
+
 
 
   if (variant === 'compact') {
