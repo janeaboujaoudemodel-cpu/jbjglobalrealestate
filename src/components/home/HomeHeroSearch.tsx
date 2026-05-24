@@ -137,6 +137,9 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             />
           </form>
 
+          {/* Gold divider between input and Search */}
+          <span aria-hidden className="self-stretch w-px bg-[#B89555]/55 flex-shrink-0" />
+
           {/* Search — white segment merged with input field */}
           <div className="relative flex flex-shrink-0 group/search">
             <button
