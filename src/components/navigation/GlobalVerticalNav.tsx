@@ -1006,7 +1006,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
       {/* ━━━ LOGO HEADER (88px) — clean, no collapse control ━━━ */}
-      <div className="h-[88px] shrink-0 flex flex-row items-center px-2.5 bg-[#FDFBF7]">
+      <div className="h-[88px] shrink-0 flex flex-row items-center px-2.5 bg-[#FDFBF7] border-b border-[#B89555]/40">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-1">
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0" />
           <div className="flex flex-col mt-1">
@@ -1046,7 +1046,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   }}
                   data-no-contrast-guard
                   style={{ color: '#B89555' }}
-                  className={`group flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[12px] font-semibold transition-all duration-200 ${getItemStyle(item)}`}
+                    className={`group flex items-center gap-2 px-2.5 py-[7px] text-[12px] font-semibold transition-all duration-200 ${getItemStyle(item)}`}
                 >
                   <span className="w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65">
                     <Icon className="w-3 h-3" style={{ color: '#B89555' }} />
@@ -1081,11 +1081,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     onClick={(e) => toggleSection(sectionKey, e)}
                     data-no-contrast-guard
                     style={{ color: '#B89555' }}
-                    className={`w-full flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group ${
-                      sectionHighlighted
-                        ? "bg-[#EFE6D6]/[0.25]"
-                        : "hover:bg-[#EFE6D6]/[0.12]"
-                    }`}
+                    className="w-full flex items-center gap-2 px-2.5 py-[7px] text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group"
                   >
                     <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65'}`}>
                       <SectionIcon className="w-3 h-3" style={{ color: '#B89555' }} />
