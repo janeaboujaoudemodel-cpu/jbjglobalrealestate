@@ -45,6 +45,8 @@ import BookStyleDocuments from "@/components/project-detail/BookStyleDocuments";
 import InlineEditable from "@/components/project-detail/owner/InlineEditable";
 import OwnerDocDropzone from "@/components/project-detail/owner/OwnerDocDropzone";
 import OwnerImageManager from "@/components/project-detail/owner/OwnerImageManager";
+import HeroImagePicker from "@/components/project-detail/owner/HeroImagePicker";
+
 import OwnerSectionEditor from "@/components/project-detail/owner/OwnerSectionEditor";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import ProjectBreadcrumb from "@/components/project-detail/ProjectBreadcrumb";
