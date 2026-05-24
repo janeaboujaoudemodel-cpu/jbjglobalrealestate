@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -62,7 +62,6 @@ export default function HorizontalUtilityBar() {
   const [filterState, setFilterState] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const { user } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [areaUnit, setAreaUnit] = useState<'sqft' | 'sqm'>(() => {
     if (typeof window !== 'undefined') {
