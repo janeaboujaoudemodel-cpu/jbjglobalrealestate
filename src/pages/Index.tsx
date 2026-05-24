@@ -21,7 +21,6 @@ import { CONTACT_INFO } from "@/constants/stats";
 
 // Chunk imports — stored so we can preload them all after hero renders
 const chunkImports = {
-  DeveloperPartnersMarquee: () => import("@/components/DeveloperPartnersMarquee"),
   StatsCounter: () => import("@/components/StatsCounter"),
   InquiryFormModal: () => import("@/components/InquiryFormModal"),
   BestIdeaAward: () => import("@/components/BestIdeaAward"),
@@ -44,7 +43,6 @@ const chunkImports = {
 };
 
 // Lazy components using the same import functions
-const DeveloperPartnersMarquee = lazy(chunkImports.DeveloperPartnersMarquee);
 const StatsCounter = lazy(chunkImports.StatsCounter);
 const InquiryFormModal = lazy(chunkImports.InquiryFormModal);
 const BestIdeaAward = lazy(chunkImports.BestIdeaAward);
@@ -282,15 +280,7 @@ const Index = () => {
         </Suspense>
       </div>
 
-      {/* DEVELOPER PARTNERS MARQUEE */}
-      <div id="developer-partners" className="py-8">
-        <Suspense fallback={<SectionLoader />}>
-          <DeveloperPartnersMarquee />
-        </Suspense>
-      </div>
-
-
-      {/* VERIFICATION BANNER - moved here after marquee */}
+      {/* VERIFICATION BANNER */}
       <PremiumSectionCard padding="md" wrapperClassName="py-8">
         <Suspense fallback={null}>
           <VerificationBanner />
