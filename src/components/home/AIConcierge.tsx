@@ -173,7 +173,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
         <>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-x-0 bottom-0 top-[88px] z-[9000] bg-[#1A1A1A]/30 backdrop-blur-2xl backdrop-saturate-150"
+            className="fixed inset-x-0 bottom-0 top-[88px] z-[9000] bg-[#0A0A0A]/85"
             onClick={onClose}
           />
           <motion.aside
