@@ -151,6 +151,7 @@ const CareersDeveloperRep = lazy(() => import("@/pages/CareersDeveloperRep"));
 const Onboarding = lazy(() => import("@/pages/Onboarding"));
 const OnboardingModule = lazy(() => import("@/pages/OnboardingModule"));
 const VerifyCertificate = lazy(() => import("@/pages/VerifyCertificate"));
+const VerificationStatus = lazy(() => import("@/pages/VerificationStatus"));
 const ReferralOnboarding = lazy(() => import("@/pages/ReferralOnboarding"));
 const RedeemReferral = lazy(() => import("@/pages/RedeemReferral"));
 const Spreadsheet = lazy(() => import("@/pages/Spreadsheet"));
