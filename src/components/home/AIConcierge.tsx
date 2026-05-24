@@ -465,7 +465,10 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                     disabled={streaming}
                     data-no-contrast-guard
                     className="w-full h-12 pl-4 pr-14 rounded-xl text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45
-                      bg-[#FDFBF7] border border-[#B89555]/55 focus:border-[#B89555] outline-none transition"
+                      bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(247,242,234,0.88)_100%)]
+                      border border-[#B89555]/55 focus:border-[#B89555] outline-none transition
+                      shadow-[0_1px_0_rgba(255,255,255,0.65)_inset,0_2px_8px_rgba(184,149,85,0.10)]"
+
                   />
                   <button
                     type="submit"
