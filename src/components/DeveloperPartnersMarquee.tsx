@@ -138,8 +138,22 @@ const DeveloperPartnersMarquee = () => {
     : { display: "flex" };
 
   return (
-    <section className="w-full overflow-hidden bg-[#FDFBF7]">
-      {/* Inject keyframes */}
+    <section className="w-full overflow-hidden bg-[#F7F2EA]">
+      <style>{`
+        @keyframes jbj-champagne-shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        .jbj-shimmer-text {
+          background: linear-gradient(90deg, #8a6f3a 0%, #B89555 25%, #F5E6C8 50%, #B89555 75%, #8a6f3a 100%);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: transparent;
+          animation: jbj-champagne-shimmer 6s linear infinite;
+        }
+      `}</style>
       {loopWidth > 0 && (
         <style>{`
           @keyframes marquee-scroll {
@@ -151,13 +165,13 @@ const DeveloperPartnersMarquee = () => {
 
       <div className="w-full">
         <div className="py-5 md:py-6 px-4 mb-2 md:mb-3">
-          <p className="text-center text-[#1A1A1A] text-sm md:text-base font-light tracking-wide">
+          <p className="jbj-shimmer-text text-center text-sm md:text-base font-light tracking-[0.18em] uppercase">
             {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
           </p>
         </div>
 
         <div
-          className="relative w-full overflow-hidden py-6 md:py-8 bg-[#FDFBF7]"
+          className="relative w-full overflow-hidden py-6 md:py-8 bg-[#EFE6D6]"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
