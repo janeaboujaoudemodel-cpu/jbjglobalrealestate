@@ -105,30 +105,26 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.6 }}
-        className="w-full max-w-5xl mx-auto"
+        className="w-full max-w-6xl mx-auto"
       >
-        {/* Crystal-transparent shell — single continuous pill with gold seams */}
+        {/* Solid white shell — single continuous pill with gold seams */}
         <div
           data-no-contrast-guard
           className="group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl
-            border border-[#B89555]/55 overflow-hidden
+            border border-[#B89555]/55 overflow-hidden bg-white
             transition-all duration-300 focus-within:border-[#B89555] hover:border-[#B89555]/80"
           style={{
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.06) 100%)",
-            backdropFilter: "blur(18px) saturate(160%)",
-            WebkitBackdropFilter: "blur(18px) saturate(160%)",
             boxShadow:
-              "inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(184,149,85,0.30), 0 18px 40px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.12)",
+              "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(184,149,85,0.18), 0 18px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10)",
           }}
         >
 
-          {/* LEFT: input */}
+          {/* LEFT: input — solid white, ink text */}
           <form
             onSubmit={onSubmit}
             role="search"
             data-no-contrast-guard
-            className="flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0"
+            className="flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0 bg-white"
           >
             <input
               type="text"
@@ -137,15 +133,15 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               placeholder="Search projects, developers, areas, tools…"
               aria-label="Search the JBJ website"
               data-no-contrast-guard
-              className="allow-white flex-1 min-w-0 h-full bg-transparent border-0 outline-none text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-light"
+              className="flex-1 min-w-0 h-full bg-transparent border-0 outline-none text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-normal"
               style={{
-                color: "#FDFBF7",
-                WebkitTextFillColor: "#FDFBF7",
+                color: "#1A1A1A",
+                WebkitTextFillColor: "#1A1A1A",
               }}
             />
           </form>
 
-          {/* Search — obsidian segment, full edge-to-edge height */}
+          {/* Search — obsidian segment, full edge-to-edge */}
           <button
             type="button"
             onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
@@ -154,7 +150,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             disabled={searching}
             className="cta-premium allow-white group/search relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8
               text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0
-              disabled:cursor-wait transition-colors duration-200"
+              disabled:cursor-wait transition-colors duration-200 hover:bg-[#2A2A2A]"
             style={{
               color: "#FFFFFF",
               background: "#1A1A1A",
@@ -162,7 +158,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             }}
           >
             <span
-              style={{ color: "#FFFFFF" }}
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               className="allow-white relative inline-block after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover/search:after:w-full"
             >
               {searching ? "Searching…" : "Search"}
@@ -179,48 +175,45 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             )}
           </button>
 
-          {/* Book a Free Consultation — transparent crystal segment */}
+          {/* Free Consultation — solid white segment, ink text */}
           <button
             type="button"
             onClick={openBooking}
             data-no-contrast-guard
             aria-label="Book a Free Consultation"
-            className="group/book hidden md:flex items-center justify-center gap-2 self-stretch h-full px-4 lg:px-5
-              text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em]
+            className="group/book hidden md:flex items-center justify-center gap-2 self-stretch h-full px-5 lg:px-6
+              text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-white
               border-l border-[#B89555]/55 flex-shrink-0
-              transition-colors duration-200 bg-transparent hover:bg-[#FDFBF7]/12"
-            style={{ color: "#FDFBF7", WebkitTextFillColor: "#FDFBF7" }}
+              transition-colors duration-200 hover:bg-[#FAF5EC]"
+            style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
           >
             <CalendarCheck className="w-4 h-4 text-[#B89555] transition-transform duration-200 group-hover/book:scale-110" strokeWidth={2.2} />
             <span
-              className="allow-white whitespace-nowrap transition-colors duration-200 group-hover/book:text-[#B89555]"
+              className="whitespace-nowrap transition-colors duration-200 group-hover/book:text-[#B89555]"
               style={{ WebkitTextFillColor: "currentColor" }}
             >
-              Book a Free Consultation
+              Free Consultation
             </span>
           </button>
 
-          {/* Concierge — compact premium chip, rounded right */}
+          {/* Concierge — icon-only chip, rounded right */}
           <button
             type="button"
             onClick={openConcierge}
             data-no-contrast-guard
             aria-label="Open the JBJ Concierge"
-            className="group/conc hidden sm:flex items-center justify-center gap-1.5 self-stretch h-full px-3 lg:px-4
-              text-[12px] lg:text-[12.5px] font-semibold tracking-[-0.005em]
+            title="JBJ Concierge"
+            className="group/conc hidden sm:flex items-center justify-center self-stretch h-full px-4 lg:px-5 bg-white
               border-l border-[#B89555]/55 rounded-r-2xl flex-shrink-0
-              transition-colors duration-200 bg-transparent hover:bg-[#FDFBF7]/12"
-            style={{ color: "#FDFBF7", WebkitTextFillColor: "#FDFBF7" }}
+              transition-colors duration-200 hover:bg-[#FAF5EC]"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#B89555] transition-transform duration-200 group-hover/conc:scale-110" strokeWidth={2.2} />
-            <span
-              className="allow-white whitespace-nowrap transition-colors duration-200 group-hover/conc:text-[#B89555]"
-              style={{ WebkitTextFillColor: "currentColor" }}
-            >
-              Concierge
-            </span>
+            <Sparkles
+              className="w-[18px] h-[18px] text-[#B89555] transition-transform duration-200 group-hover/conc:scale-110 group-hover/conc:rotate-12"
+              strokeWidth={2.2}
+            />
           </button>
         </div>
+
 
         {/* Mobile-only stacked CTAs */}
         <div className="mt-3 flex sm:hidden gap-2">
