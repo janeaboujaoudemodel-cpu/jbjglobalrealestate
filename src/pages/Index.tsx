@@ -186,7 +186,7 @@ const Index = () => {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen bg-[#FDFBF7]">
+    <section data-home-page className="relative w-full min-h-screen bg-[#FDFBF7]">
       {/* SEO Meta Tags */}
       <SEOHead {...pagesSEO.home} />
       
