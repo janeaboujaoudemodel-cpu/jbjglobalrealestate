@@ -72,6 +72,7 @@ import { PremiumSectionCard } from "@/components/ui/premium-section-card";
 
 const VerificationBanner = lazy(() => import("@/components/verification/VerificationBanner"));
 const PartnerVerifyHeroCTA = lazy(() => import("@/components/home/PartnerVerifyHeroCTA"));
+const DeveloperPartnersMarquee = lazy(() => import("@/components/DeveloperPartnersMarquee"));
 
 const SectionLoader = forwardRef<HTMLDivElement>((_, ref) => (
   <div ref={ref} className="py-12 flex items-center justify-center">
