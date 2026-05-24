@@ -1064,6 +1064,19 @@ All colors MUST be HSL.
   100% { transform: translateX(220%) skewX(-18deg); }
 }
 
+@keyframes jbj-champagne-shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.jbj-shimmer-champagne {
+  background-image: linear-gradient(110deg, #EFE6D6 0%, #F7EFDF 25%, #EADBB6 50%, #F7EFDF 75%, #EFE6D6 100%) !important;
+  background-size: 200% 100% !important;
+  animation: jbj-champagne-shimmer 3s linear infinite;
+}
+
+
+
 
 
 .animate-sparkle {
