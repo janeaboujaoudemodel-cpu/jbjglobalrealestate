@@ -1143,14 +1143,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       </nav>
 
       {/* ━━━ BOTTOM — Support + Sign Out ━━━ */}
-      <div className="mt-auto flex-shrink-0">
-        <div className="h-[2px] my-3 bg-gradient-to-r from-transparent via-[#B89555] to-transparent shadow-[0_1px_0_rgba(184,149,85,0.35)]" />
-        <div className="px-2 py-2 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
-          <div className="flex gap-1.5 mb-1.5">
+      <div className="mt-auto flex-shrink-1">
+        <div className="h-[2px] mb-1.5 mt-0 bg-gradient-to-r from-transparent via-[#B89555] to-transparent shadow-[0_1px_0_rgba(184,149,85,0.35)]" />
+        <div className="px-2 py-1.5 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
+          <div className="flex gap-1.5 mb-1">
             <Link
               to="/contact"
               data-no-contrast-guard
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1.5 rounded-lg border will-change-transform"
+              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
               style={{ color: '#1A1A1A', borderColor: '#D4B896', backgroundColor: '#F7F2EA' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#FDFBF7';
@@ -1171,7 +1171,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <Link
               to="/ticket-hub"
               data-no-contrast-guard
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1.5 rounded-lg border will-change-transform"
+              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
               style={{ color: '#1A1A1A', borderColor: '#D4B896', backgroundColor: '#F7F2EA' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#FDFBF7';
@@ -1194,7 +1194,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <button
               data-no-contrast-guard
               onClick={() => { supabase.auth.signOut(); }}
-              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[5px] rounded-lg border w-full group"
+              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[4px] rounded-lg border w-full group"
               style={{ color: '#B91C1C', borderColor: 'rgba(185,28,28,0.35)', backgroundColor: 'rgba(185,28,28,0.04)' }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#B91C1C'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#B91C1C'; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(185,28,28,0.04)'; e.currentTarget.style.color = '#B91C1C'; e.currentTarget.style.borderColor = 'rgba(185,28,28,0.35)'; }}
@@ -1206,7 +1206,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <Link
               to="/auth"
               data-no-contrast-guard
-              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[5px] rounded-lg border w-full group"
+              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[4px] rounded-lg border w-full group"
               style={{ color: '#000000', borderColor: 'rgba(0,0,0,0.25)', backgroundColor: '#ffffff' }}
             >
               <User className="w-3 h-3" style={{ color: '#000000' }} />
@@ -1220,7 +1220,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             data-sidebar-collapse-control
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="jbj-sidebar-collapse-control group mt-2 flex items-center justify-center gap-2 w-full px-3 py-[7px] rounded-lg text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
+            className="jbj-sidebar-collapse-control group mt-1.5 flex items-center justify-center gap-2 w-full px-3 py-[5px] rounded-lg text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
             style={{
               color: '#B89555',
               background: 'transparent',
@@ -1243,7 +1243,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <PanelLeftClose className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#B89555' }} />
             <span data-no-contrast-guard style={{ color: '#B89555' }}>Collapse</span>
           </button>
-
 
         </div>
       </div>
