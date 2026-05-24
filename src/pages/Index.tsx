@@ -237,20 +237,6 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-black/55 z-[3]" />
         </div>
         
-        {/* Animated gold accent lines */}
-        <motion.div 
-          className="absolute left-0 top-1/3 w-48 md:w-96 h-px bg-gradient-to-r from-white/20 to-transparent"
-          initial={{ x: -100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1.5, delay: 0.5 }}
-        />
-        <motion.div 
-          className="absolute right-0 bottom-1/3 w-48 md:w-96 h-px bg-gradient-to-l from-white/20 to-transparent"
-          initial={{ x: 100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1.5, delay: 0.7 }}
-        />
-        
         {/* MERGED HERO CONTENT — tagline + CTAs + pillars */}
         <motion.div 
           className="relative z-10 w-full flex flex-col items-center justify-center text-center px-4 sm:px-8 md:px-12 lg:px-16"

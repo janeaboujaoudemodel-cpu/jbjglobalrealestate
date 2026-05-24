@@ -36,7 +36,7 @@ const VerificationBanner = () => {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative overflow-hidden bg-[#F7F2EA]"
+        className="relative overflow-hidden bg-[#FDFBF7]"
       >
         <div className="max-w-[1600px] mx-auto px-4 py-4 sm:py-5 relative z-10">
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
