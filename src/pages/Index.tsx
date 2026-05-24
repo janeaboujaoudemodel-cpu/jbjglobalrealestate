@@ -379,33 +379,36 @@ const Index = () => {
       <SectionDividerGoldFullBleed size="md" spacing="sm" />
 
       <PremiumSectionCard tone="surface" padding="md" wrapperClassName="cv-auto py-6 md:py-10">
-        <Suspense fallback={<SectionLoader />}>
-          <MortgageCalculator compact />
-        </Suspense>
-        <p className="text-[#1A1A1A]/60 text-[11px] text-center mt-4">
-          Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
-        </p>
+        <div className="rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7]/70 p-5 md:p-8 shadow-[0_1px_0_rgba(184,149,85,0.25),0_10px_30px_-18px_rgba(184,149,85,0.35)]">
+          <Suspense fallback={<SectionLoader />}>
+            <MortgageCalculator compact />
+          </Suspense>
+          <p className="text-[#1A1A1A]/60 text-[11px] text-center mt-4">
+            Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
+          </p>
 
-        <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
-          <PearlButton
-            to="/mortgage-calculator"
-            size="md"
-            leadingIcon={<Sparkles strokeWidth={2.2} />}
-            trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
-          >
-            <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
-          </PearlButton>
+          <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
+            <PearlButton
+              to="/mortgage-calculator"
+              size="md"
+              leadingIcon={<Sparkles strokeWidth={2.2} />}
+              trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
+            >
+              <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
+            </PearlButton>
 
-          <PearlButton
-            to="/partners/mortgage"
-            size="md"
-            leadingIcon={<Users strokeWidth={2.2} />}
-            trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
-          >
-            <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
-          </PearlButton>
+            <PearlButton
+              to="/partners/mortgage"
+              size="md"
+              leadingIcon={<Users strokeWidth={2.2} />}
+              trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
+            >
+              <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
+            </PearlButton>
+          </div>
         </div>
       </PremiumSectionCard>
+
 
 
 
