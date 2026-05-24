@@ -111,20 +111,20 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         <div
           data-no-contrast-guard
           className="group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl
-            border border-[#B89555]/55 overflow-hidden bg-white
+            border border-[#B89555]/55 overflow-hidden bg-white/55 backdrop-blur-xl backdrop-saturate-150
             transition-all duration-300 focus-within:border-[#B89555] hover:border-[#B89555]/80"
           style={{
             boxShadow:
-              "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(184,149,85,0.18), 0 18px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10)",
+              "inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(184,149,85,0.18), 0 18px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10)",
           }}
         >
 
-          {/* LEFT: input — solid white, ink text */}
+          {/* LEFT: input — frosted glass, ink text */}
           <form
             onSubmit={onSubmit}
             role="search"
             data-no-contrast-guard
-            className="flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0 bg-white"
+            className="flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0 bg-transparent"
           >
             <input
               type="text"
