@@ -173,13 +173,13 @@ export default function SupportLauncher() {
       </div>
 
       {/* ============== DESKTOP: vertical edge tag (right) ============== */}
-      <div className="hidden md:block fixed right-0 top-1/2 z-[60] -translate-y-1/2" data-no-contrast-guard data-surface="dark">
+      <div className="hidden md:block fixed inset-0 z-[60] pointer-events-none" data-no-contrast-guard data-surface="dark">
         {/* Tag */}
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-label="Talk to JBJ support"
-          className="group relative flex items-center gap-2 px-2 py-4 rounded-l-xl
+          className="group fixed right-0 top-1/2 -translate-y-1/2 pointer-events-auto flex items-center gap-2 px-2 py-4 rounded-l-xl
             border border-r-0 border-gold/70 bg-primary text-primary-foreground
             shadow-[-8px_0_24px_hsl(var(--foreground)/0.30)] transform-gpu transition-[transform,box-shadow,border-color] duration-200
             hover:-translate-x-1 hover:border-gold
@@ -206,7 +206,7 @@ export default function SupportLauncher() {
             <>
               <motion.div
                 key="dscrim"
-                className="fixed inset-0 bg-transparent"
+                className="fixed inset-0 bg-transparent pointer-events-auto"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 onClick={close}
               />
@@ -217,7 +217,7 @@ export default function SupportLauncher() {
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ type: "spring", stiffness: 320, damping: 30 }}
                 data-no-contrast-guard
-                className="fixed right-14 top-[104px] bottom-5 flex w-[300px] flex-col overflow-hidden
+                className="fixed right-14 top-[104px] bottom-5 flex w-[300px] flex-col overflow-hidden pointer-events-auto
                   rounded-2xl border border-gold bg-background text-foreground
                   shadow-[0_30px_60px_hsl(var(--foreground)/0.25)] p-3"
               >
