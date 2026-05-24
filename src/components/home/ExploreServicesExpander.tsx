@@ -97,7 +97,7 @@ const ExploreServicesExpander = () => {
       {/* Tabs row — horizontally scrollable, never wraps vertically */}
       <div
         ref={tabsRef}
-        className="flex items-stretch gap-1 px-3 md:px-4 overflow-x-auto no-scrollbar border-b border-[#B89555]/25"
+        className="flex items-stretch gap-1.5 px-3 md:px-4 py-2 overflow-x-auto no-scrollbar"
         role="tablist"
         aria-label="Services"
       >
@@ -111,10 +111,10 @@ const ExploreServicesExpander = () => {
               role="tab"
               aria-selected={isActive}
               onClick={() => setActiveId(s.id)}
-              className={`shrink-0 inline-flex items-center gap-2 px-3.5 md:px-4 py-3 text-[13px] font-semibold whitespace-nowrap transition-colors border-b-2 -mb-px text-[#1A1A1A] ${
+              className={`shrink-0 inline-flex items-center gap-2 px-3.5 md:px-4 py-2 rounded-lg text-[13px] font-semibold whitespace-nowrap transition-colors ${
                 isActive
-                  ? "border-[#1A1A1A]"
-                  : "border-transparent hover:border-[#B89555]"
+                  ? "bg-[#EFE6D6] text-[#1A1A1A] ring-1 ring-[#B89555]/55 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]"
+                  : "text-[#1A1A1A]/80 hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
               } ${s.available === false ? "opacity-80" : ""}`}
             >
               <Icon className="w-4 h-4" />
@@ -123,6 +123,7 @@ const ExploreServicesExpander = () => {
           );
         })}
       </div>
+
 
       {/* Hero panel — keyed on active.id so title/description/CTA always re-mount in sync with the tab */}
       <div key={active.id} className="relative h-[280px] md:h-[340px] overflow-hidden">
