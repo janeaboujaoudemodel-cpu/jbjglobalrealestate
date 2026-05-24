@@ -1,12 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { History, X, Building2, MapPin, Home, ChevronLeft, ChevronRight } from "lucide-react";
+import { History, X, Building2, MapPin, Home, ChevronLeft, ChevronRight, Search, Clock } from "lucide-react";
 import { useRecentSearches, type RecentItemType, type RecentItem } from "@/hooks/useRecentSearches";
 import FavoriteButton from "@/components/FavoriteButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { getRecentSearches, clearRecentSearches } from "@/lib/searchHistory";
+
 
 interface ContinueSearchingProps {
   type?: RecentItemType;
