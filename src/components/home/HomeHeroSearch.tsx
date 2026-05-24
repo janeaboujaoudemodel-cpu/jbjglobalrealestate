@@ -216,18 +216,6 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               Free Consultation
             </span>
           </button>
-          <button
-            type="button"
-            onClick={openConcierge}
-            data-no-contrast-guard
-            aria-label="JBJ Concierge"
-            title="JBJ Concierge"
-            className="group/concm inline-flex items-center justify-center h-11 w-11 rounded-xl
-              border border-[#B89555]/55 bg-[#EFE6D6]
-              transition-colors duration-200 hover:bg-[#E7D9C1]"
-          >
-            <Sparkles className="w-[18px] h-[18px] text-[#B89555] transition-transform duration-200 group-hover/concm:scale-110" strokeWidth={2.2} />
-          </button>
         </div>
 
       </motion.div>
