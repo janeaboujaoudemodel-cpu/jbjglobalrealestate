@@ -156,7 +156,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               }}
             >
               <span
-                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                style={{ color: "#B89555", WebkitTextFillColor: "#B89555" }}
                 className="relative inline-block after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover/search:after:w-full"
               >
                 {searching ? "Searching…" : "Search"}
