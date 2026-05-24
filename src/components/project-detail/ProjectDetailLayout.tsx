@@ -238,6 +238,9 @@ export default function ProjectDetailLayout({
   const [showStickyNav, setShowStickyNav] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+  const { isOwner } = useIsAppOwner();
+  const [paymentEnrichOpen, setPaymentEnrichOpen] = useState(false);
+  
   
   const inquiryRef = useRef<HTMLDivElement>(null);
   const mortgageRef = useRef<HTMLDivElement>(null);
