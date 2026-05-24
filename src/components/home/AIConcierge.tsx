@@ -466,7 +466,31 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                   </div>
                 )}
 
+                {/* Persistent quick prompts — always available */}
+                <div className="-mx-1 px-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  <div className="flex items-center gap-1.5 w-max">
+                    {QUICK_PROMPTS.map((q) => (
+                      <button
+                        key={q.label}
+                        type="button"
+                        onClick={() => !streaming && send(q.prompt)}
+                        disabled={streaming}
+                        data-no-contrast-guard
+                        title={q.prompt}
+                        className="shrink-0 inline-flex items-center gap-1 h-7 px-2.5 rounded-full text-[11.5px] font-medium text-[#1A1A1A]
+                          border border-[#B89555]/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(247,242,234,0.85)_100%)]
+                          hover:border-[#B89555] hover:bg-[#FDFBF7] hover:shadow-[0_2px_10px_rgba(184,149,85,0.22)]
+                          disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      >
+                        <Sparkles className="h-3 w-3 text-[#B89555]" />
+                        {q.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <form onSubmit={onSubmit} className="relative">
+
                   <input
                     ref={inputRef}
                     value={draft}
