@@ -26157,6 +26157,39 @@ export type Database = {
           },
         ]
       }
+      project_images_purge_log: {
+        Row: {
+          alt_text: string | null
+          display_order: number | null
+          id: string
+          image_url: string | null
+          original_id: string | null
+          project_id: string | null
+          purged_at: string
+          reason: string | null
+        }
+        Insert: {
+          alt_text?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          original_id?: string | null
+          project_id?: string | null
+          purged_at?: string
+          reason?: string | null
+        }
+        Update: {
+          alt_text?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          original_id?: string | null
+          project_id?: string | null
+          purged_at?: string
+          reason?: string | null
+        }
+        Relationships: []
+      }
       project_reports: {
         Row: {
           created_at: string
