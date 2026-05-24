@@ -145,7 +145,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
     "bg-[#FDFBF7] border border-[#B89555]/45 focus:border-[#B89555] focus:bg-[#FDFBF7] outline-none transition";
 
   return (
-    <div className="flex min-h-full w-full flex-col">
+    <div className="flex min-h-full w-full flex-col pb-[max(0.75rem,env(safe-area-inset-bottom))]">
       {/* 24/7 Free Support badge */}
       <div className="flex items-center justify-center">
         <span
@@ -175,7 +175,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             e.preventDefault();
             sendOtp();
           }}
-          className="mt-4 flex flex-1 flex-col space-y-3"
+          className="mt-4 flex flex-1 flex-col space-y-3 pb-1"
         >
           <div className="grid grid-cols-2 gap-2">
             <div className="relative">
@@ -301,12 +301,12 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             {submitting ? "Sending code…" : "Send verification code"}
           </button>
 
-          <p className="text-[10.5px] text-[#1A1A1A]/60 text-center leading-snug px-2 pb-2">
+          <p className="text-[10.5px] text-[#1A1A1A]/70 text-center leading-snug px-2 pb-1">
             We'll only contact you about your enquiry. By continuing you accept our Privacy Policy.
           </p>
         </form>
       ) : (
-        <div className="mt-4 flex flex-1 flex-col space-y-3">
+        <div className="mt-4 flex flex-1 flex-col space-y-3 pb-1">
           <input
             data-no-contrast-guard
             placeholder="6-digit code"
