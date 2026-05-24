@@ -351,7 +351,7 @@ const Index = () => {
       <SectionDividerGoldFullBleed size="md" spacing="sm" />
 
       {/* EXPLORE OUR SERVICES */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
+      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-6 md:py-10">
         <Suspense fallback={<SectionLoader />}>
           <ExploreServicesCard />
         </Suspense>
