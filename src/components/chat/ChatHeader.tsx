@@ -39,8 +39,15 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
   return (
     <div
       ref={ref}
-      className="flex items-center justify-between p-4 border-b-2 border-[#B89555]/60 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] shadow-[0_2px_10px_rgba(200,167,102,0.3)]"
+      className="shrink-0 flex items-center justify-between p-4 border-b border-[#B89555]/30"
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(255,255,255,0.70) 0%, rgba(247,242,234,0.45) 100%)",
+        backdropFilter: "blur(14px) saturate(140%)",
+        WebkitBackdropFilter: "blur(14px) saturate(140%)",
+      }}
     >
+
       <div className="flex items-center gap-3">
         {showBackButton && (
           <Button

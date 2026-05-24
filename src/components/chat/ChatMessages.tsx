@@ -2,12 +2,22 @@ import React, { useRef, useEffect, useMemo, useState, useCallback } from 'react'
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { User, Send, MessageCircle, Shield, Copy, X } from 'lucide-react';
+import { User, Send, MessageCircle, Shield, Copy, X, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { Message, SERVICES, getRandomAgent } from './types';
 import { CONTACT_INFO } from '@/constants/stats';
 import { T } from '@/components/ui/T';
 import { useLanguage } from '@/contexts/LanguageContext';
+
+const QUICK_PROMPTS: { label: string; prompt: string }[] = [
+  { label: "Golden Visa", prompt: "Tell me about the UAE Golden Visa — eligibility, benefits, and how property investment qualifies." },
+  { label: "ROI Calculator", prompt: "Which calculators on JBJ help me estimate ROI, rental yield, and mortgage on a Dubai property?" },
+  { label: "Book Consultation", prompt: "How do I book a free consultation with a JBJ advisor?" },
+  { label: "Marina < 2M", prompt: "Show me Dubai Marina apartments under 2M AED with strong rental yield." },
+  { label: "Off-plan vs Ready", prompt: "What's the difference between off-plan and ready properties in Dubai for an investor?" },
+  { label: "Payment Plans", prompt: "Which developers offer the best post-handover payment plans right now?" },
+];
+
 
 interface ChatMessagesProps {
   messages: Message[];
@@ -84,7 +94,8 @@ const ChatMessages = React.memo(({
 
   return (
     <>
-      <ScrollArea className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]" ref={scrollRef}>
+      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+
         <div className="space-y-4">
           {messages.map((message) => (
             <div
@@ -194,7 +205,14 @@ const ChatMessages = React.memo(({
 
       {/* Action Buttons */}
       {!showSubmitPanel && (
-        <div className="px-4 py-3 border-t border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex gap-2">
+        <div
+          className="px-4 py-3 border-t border-[#B89555]/30 flex gap-2"
+          style={{
+            background: "linear-gradient(180deg, rgba(247,242,234,0.55) 0%, rgba(239,230,214,0.85) 100%)",
+            backdropFilter: "blur(14px) saturate(140%)",
+            WebkitBackdropFilter: "blur(14px) saturate(140%)",
+          }}
+        >
           {isExistingUser && (
             <a
               href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userFirstName}. I was chatting with the AI about ${serviceName}.`)}`}
@@ -218,8 +236,44 @@ const ChatMessages = React.memo(({
         </div>
       )}
 
-      {/* Input - Using native input to prevent mobile keyboard dismissal */}
-      <div className="p-4 border-t border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
+      {/* Input — glass footer with quick prompts strip */}
+      <div
+        className="p-4 border-t border-[#B89555]/30 space-y-3"
+        style={{
+          background: "linear-gradient(180deg, rgba(247,242,234,0.55) 0%, rgba(239,230,214,0.85) 100%)",
+          backdropFilter: "blur(14px) saturate(140%)",
+          WebkitBackdropFilter: "blur(14px) saturate(140%)",
+        }}
+      >
+        {/* Persistent quick prompts */}
+        <div className="-mx-1 px-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex items-center gap-1.5 w-max">
+            {QUICK_PROMPTS.map((q) => (
+              <button
+                key={q.label}
+                type="button"
+                onClick={() => {
+                  if (isLoading) return;
+                  onInputChange(q.prompt);
+                  if (inputRef.current) inputRef.current.value = q.prompt;
+                  localInputRef.current = q.prompt;
+                  setTimeout(() => onSend(), 0);
+                }}
+                disabled={isLoading}
+                data-no-contrast-guard
+                title={q.prompt}
+                className="shrink-0 inline-flex items-center gap-1 h-7 px-2.5 rounded-full text-[11.5px] font-medium text-[#1A1A1A]
+                  border border-[#B89555]/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(247,242,234,0.85)_100%)]
+                  hover:border-[#B89555] hover:bg-[#FDFBF7] hover:shadow-[0_2px_10px_rgba(184,149,85,0.22)]
+                  disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                <Sparkles className="h-3 w-3 text-[#B89555]" />
+                {q.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="flex gap-3">
           <input
             ref={inputRef}
@@ -232,12 +286,12 @@ const ChatMessages = React.memo(({
             autoComplete="off"
             autoCorrect="off"
             disabled={isLoading}
-            className="flex-1 bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-[#B89555] focus:ring-2 focus:ring-gold/30 h-12 rounded-xl text-sm px-4 py-2 outline-none transition-all duration-200"
+            className="flex-1 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(247,242,234,0.88)_100%)] border border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 focus:border-[#B89555] focus:ring-2 focus:ring-[#B89555]/30 h-12 rounded-xl text-sm px-4 py-2 outline-none transition-all duration-200 shadow-[0_1px_0_rgba(255,255,255,0.65)_inset,0_2px_8px_rgba(184,149,85,0.10)]"
           />
           <Button
             onClick={onSend}
             disabled={!input.trim() || isLoading}
-            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-light hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] active:bg-[#EFE6D6]-dark text-[#1A1A1A] h-12 w-12 rounded-xl transition-all duration-200"
+            className="bg-[#1A1A1A] hover:bg-[#2A2A2A] text-[#FDFBF7] h-12 w-12 rounded-xl hover:shadow-[0_0_18px_rgba(184,149,85,0.40)] transition-all duration-200"
           >
             <Send className="w-5 h-5" />
           </Button>

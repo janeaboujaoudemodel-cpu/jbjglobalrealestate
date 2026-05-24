@@ -845,11 +845,25 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
         initial={{ x: isRTL ? -380 : 380, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: isRTL ? -380 : 380, opacity: 0 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        transition={{ type: 'spring', damping: 28, stiffness: 260 }}
         data-jbj-chat-open="true"
+        data-no-contrast-guard
         onClick={(e) => e.stopPropagation()}
-        className={`fixed ${isRTL ? 'left-0' : 'right-0'} top-[88px] z-[9000] w-full sm:w-[420px] h-[calc(100dvh-88px)] bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-l-2 border-[#B89555] shadow-2xl shadow-gold/20 flex flex-col overflow-hidden`}
+        className={`fixed z-[9000] flex min-h-0 flex-col overflow-hidden
+          inset-x-0 top-[88px] bottom-0
+          ${isRTL ? 'sm:left-4 sm:right-auto' : 'sm:right-4 sm:left-auto'}
+          sm:top-[104px] sm:bottom-4 sm:w-[440px] sm:rounded-3xl
+          border border-[#B89555]/55`}
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,242,234,0.90) 45%, rgba(239,230,214,0.92) 100%)",
+          backdropFilter: "blur(22px) saturate(160%)",
+          WebkitBackdropFilter: "blur(22px) saturate(160%)",
+          boxShadow:
+            "-32px 0 80px rgba(26,26,26,0.28), 0 0 0 1px rgba(184,149,85,0.18) inset, 0 1px 0 rgba(255,255,255,0.65) inset",
+        }}
       >
+
         <ChatHeader
           step={step} 
           isExistingUser={isExistingUser} 
