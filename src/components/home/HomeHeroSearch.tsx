@@ -184,13 +184,13 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             data-no-contrast-guard
             aria-label="Book a Free Consultation"
             className="group/book hidden md:flex items-center justify-center gap-2 self-stretch h-full px-5 lg:px-6
-              text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-[rgba(253,251,247,0.18)]
+              text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-white bg-[rgba(253,251,247,0.18)]
               border-l border-[#B89555]/55 flex-shrink-0
               transition-colors duration-200 hover:bg-[rgba(253,251,247,0.28)]"
             style={{
               color: "#1A1A1A",
               WebkitTextFillColor: "#1A1A1A",
-              backgroundColor: "rgba(253,251,247,0.64)",
+              backgroundColor: "rgba(253,251,247,0.18)",
               WebkitBackdropFilter: "blur(22px) saturate(170%)",
               backdropFilter: "blur(22px) saturate(170%)",
             }}
@@ -211,11 +211,11 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             data-no-contrast-guard
             aria-label="Open the JBJ Concierge"
             title="JBJ Concierge"
-            className="group/conc hidden sm:flex items-center justify-center self-stretch h-full px-4 lg:px-5 bg-[rgba(253,251,247,0.18)]
+            className="group/conc hidden sm:flex items-center justify-center self-stretch h-full px-4 lg:px-5 bg-white bg-[rgba(253,251,247,0.18)]
               border-l border-[#B89555]/55 rounded-r-2xl flex-shrink-0
               transition-colors duration-200 hover:bg-[rgba(253,251,247,0.28)]"
             style={{
-              backgroundColor: "rgba(253,251,247,0.64)",
+              backgroundColor: "rgba(253,251,247,0.18)",
               WebkitBackdropFilter: "blur(22px) saturate(170%)",
               backdropFilter: "blur(22px) saturate(170%)",
             }}
