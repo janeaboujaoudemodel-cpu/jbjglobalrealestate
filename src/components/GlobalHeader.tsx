@@ -710,21 +710,51 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 className={cn(
                   "inline-flex h-10 w-10 items-center justify-center appearance-none transition-all duration-300 focus:outline-none group shrink-0 rounded-full"
                 )}
-                style={{
-                  background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
-                  border: '1px solid rgba(184,149,85,0.6)',
-                  boxShadow: isFullyTransparent
-                    ? '0 4px 14px rgba(0,0,0,0.35), 0 0 0 1px rgba(184,149,85,0.25)'
-                    : '0 2px 6px rgba(184,149,85,0.25)',
-                }}
+              {/* Mobile Menu Trigger - Bare 3-line hamburger (no circle), premium gold with 3D sheen */}
+              <button
+                type="button"
+                className="inline-flex h-10 w-10 items-center justify-center appearance-none bg-transparent border-0 p-0 focus:outline-none shrink-0 group"
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                 data-tour-target="mobile-menu"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? (
-                  <span className="text-[#1A1A1A] text-2xl font-light">✕</span>
+                  <span
+                    className="text-2xl font-light leading-none"
+                    style={{
+                      background: 'linear-gradient(135deg, #E8C887 0%, #B89555 45%, #8A6E3E 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                      filter: 'drop-shadow(0 1px 0 rgba(255,238,200,0.55)) drop-shadow(0 1px 2px rgba(0,0,0,0.45))',
+                    }}
+                  >
+                    ✕
+                  </span>
                 ) : (
-                  <Menu className="w-6 h-6 text-[#1A1A1A] transition-colors" />
+                  <span
+                    aria-hidden="true"
+                    className="flex flex-col items-end justify-center gap-[5px] w-7 transition-transform duration-300 group-active:scale-95"
+                    style={{
+                      filter:
+                        'drop-shadow(0 1px 0 rgba(255,238,200,0.55)) drop-shadow(0 2px 3px rgba(0,0,0,0.55))',
+                    }}
+                  >
+                    {[28, 24, 20].map((w, i) => (
+                      <span
+                        key={i}
+                        className="block rounded-full"
+                        style={{
+                          width: `${w}px`,
+                          height: '2.5px',
+                          background:
+                            'linear-gradient(180deg, #F4DDA6 0%, #D9B26B 35%, #B89555 65%, #8A6E3E 100%)',
+                          boxShadow:
+                            'inset 0 1px 0 rgba(255,245,215,0.85), inset 0 -1px 0 rgba(90,65,25,0.55), 0 1px 2px rgba(0,0,0,0.35)',
+                        }}
+                      />
+                    ))}
+                  </span>
                 )}
               </button>
             </div>
