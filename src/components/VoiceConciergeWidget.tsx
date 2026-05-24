@@ -393,7 +393,7 @@ const VoiceConciergeWidget = () => {
           style={{ background: pearlBg, boxShadow: pearlShadow }}
         >
           <div className="px-3 py-2 border-b border-[#B89555]/20 flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65">Concierge · Complimentary</span>
+            <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65">Concierge · Free call</span>
             <button onClick={closeAndMinimize} aria-label="Close" className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
               <X className="w-3.5 h-3.5" />
             </button>
@@ -483,7 +483,7 @@ const VoiceConciergeWidget = () => {
           style={{ background: pearlBg, boxShadow: pearlShadow }}
           onMouseEnter={(e) => { if (!isConnecting) e.currentTarget.style.boxShadow = pearlShadowHover; }}
           onMouseLeave={(e) => { e.currentTarget.style.boxShadow = pearlShadow; }}
-          aria-label="Complimentary live call with our agent"
+          aria-label="Free live call with our agent"
           aria-expanded={choiceOpen}
         >
           <span
