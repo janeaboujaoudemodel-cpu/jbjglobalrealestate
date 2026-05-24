@@ -823,9 +823,9 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     }
   };
 
-  // Collapsed state
+  // Collapsed state — bubble suppressed; chat opens via "Talk to us" panel
   if (isCollapsed) {
-    return <CollapsedChatButton onToggle={onToggleCollapse} onMinimize={onMinimize} showAttentionPulse={showAttentionPulse} />;
+    return null;
   }
 
   return (
