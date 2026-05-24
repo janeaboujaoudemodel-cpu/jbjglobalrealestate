@@ -1,32 +1,90 @@
 /**
  * HomeHeroSearch — single-line premium pill containing:
  *   [ search input ][ Search ][ Book a Free Consultation ][ Ask Concierge ]
- * All three CTAs sit inline within the same glass shell so the row reads as one bar.
+ *
+ * The Search button performs a real top-match lookup against projects /
+ * developers / areas and redirects the user to that detail page, or falls back
+ * to `/properties?q=<query>` for free-text searches. It does NOT open the
+ * header's `GlobalSearchModal` dropdown — that remains exclusive to the header
+ * search icon.
  */
 
-import { useState, useCallback, lazy, Suspense } from "react";
-import { ArrowRight, CalendarCheck, Sparkles } from "lucide-react";
+import { useState, useCallback } from "react";
+import { ArrowRight, CalendarCheck, Sparkles, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
-
-const GlobalSearchModal = lazy(() => import("@/components/GlobalSearchModal"));
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { saveRecentSearch } from "@/lib/searchHistory";
 
 interface HomeHeroSearchProps {
   onBookConsultation?: () => void;
 }
 
 export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchProps) {
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [initialQuery, setInitialQuery] = useState("");
+  const navigate = useNavigate();
   const [draft, setDraft] = useState("");
+  const [searching, setSearching] = useState(false);
 
-  const launch = useCallback((q: string) => {
-    setInitialQuery(q);
-    setSearchOpen(true);
-  }, []);
+  const runSearch = useCallback(async () => {
+    if (searching) return;
+    const q = draft.trim();
+    if (!q) {
+      navigate("/properties");
+      return;
+    }
+
+    setSearching(true);
+    try {
+      saveRecentSearch(q);
+
+      // Top-match lookup against the same tables GlobalSearchModal queries.
+      const [projectRes, devRes, areaRes] = await Promise.all([
+        supabase
+          .from("projects")
+          .select("slug,name")
+          .ilike("name", q)
+          .eq("status", "active")
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from("developers" as any)
+          .select("slug,name")
+          .ilike("name", q)
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from("areas")
+          .select("slug,name")
+          .ilike("name", q)
+          .eq("is_active", true)
+          .limit(1)
+          .maybeSingle(),
+      ]);
+
+      const projectSlug = (projectRes?.data as { slug?: string } | null)?.slug;
+      const devSlug = (devRes?.data as { slug?: string } | null)?.slug;
+      const areaSlug = (areaRes?.data as { slug?: string } | null)?.slug;
+
+      if (projectSlug) {
+        navigate(`/project/${projectSlug}`);
+      } else if (devSlug) {
+        navigate(`/developer/${devSlug}`);
+      } else if (areaSlug) {
+        navigate(`/area/${areaSlug}`);
+      } else {
+        navigate(`/properties?q=${encodeURIComponent(q)}`);
+      }
+    } catch (err) {
+      console.warn("[HomeHeroSearch] lookup failed, falling back to /properties", err);
+      navigate(`/properties?q=${encodeURIComponent(q)}`);
+    } finally {
+      setSearching(false);
+    }
+  }, [draft, navigate, searching]);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    launch(draft.trim());
+    void runSearch();
   };
 
   const openConcierge = () => {
@@ -34,11 +92,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
   };
 
   const openBooking = () => {
-    if (onBookConsultation) {
-      onBookConsultation();
-    } else {
-      window.dispatchEvent(new CustomEvent("jbj:open-inquiry"));
-    }
+    if (onBookConsultation) onBookConsultation();
+    else window.dispatchEvent(new CustomEvent("jbj:open-inquiry"));
   };
 
   return (
@@ -64,6 +119,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               "inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(184,149,85,0.12), 0 10px 28px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.08)",
           }}
         >
+
           {/* LEFT: input */}
           <form
             onSubmit={onSubmit}
@@ -88,8 +144,10 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
             data-no-contrast-guard
             aria-label="Search"
+            disabled={searching}
             className="cta-premium allow-white flex items-center justify-center gap-2 h-full px-4 sm:px-6 lg:px-7
-              text-[13.5px] sm:text-sm font-semibold border-l border-[#B89555]/45 flex-shrink-0"
+              text-[13.5px] sm:text-sm font-semibold border-l border-[#B89555]/45 flex-shrink-0
+              disabled:cursor-wait"
             style={{
               color: "#FFFFFF",
               background:
@@ -99,15 +157,15 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             }}
           >
             <span style={{ color: "#FFFFFF" }} className="tracking-[-0.005em] allow-white">
-              Search
+              {searching ? "Searching…" : "Search"}
             </span>
-            <ArrowRight
-              className="w-4 h-4 allow-white"
-              style={{ color: "#FFFFFF" }}
-              data-no-contrast-guard
-              strokeWidth={2.4}
-            />
+            {searching ? (
+              <Loader2 className="w-4 h-4 allow-white animate-spin" style={{ color: "#FFFFFF" }} data-no-contrast-guard strokeWidth={2.4} />
+            ) : (
+              <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} data-no-contrast-guard strokeWidth={2.4} />
+            )}
           </button>
+
 
           {/* Book a Free Consultation — champagne pill */}
           <button
@@ -173,16 +231,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         </div>
 
       </motion.div>
-
-      {searchOpen && (
-        <Suspense fallback={null}>
-          <GlobalSearchModal
-            isOpen={searchOpen}
-            initialQuery={initialQuery}
-            onClose={() => setSearchOpen(false)}
-          />
-        </Suspense>
-      )}
     </>
   );
 }
+
