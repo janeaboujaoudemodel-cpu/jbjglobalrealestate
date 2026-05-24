@@ -343,7 +343,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* EXPLORE OUR GUIDES & REPORTS */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-8">
         <LazyVisible minHeight={400}>
           <Suspense fallback={<SectionLoader />}>
             <HomepageBookMarquee />
