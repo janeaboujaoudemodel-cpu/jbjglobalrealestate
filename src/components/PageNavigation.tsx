@@ -92,7 +92,7 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         title={label}
         className={cn(
           "inline-flex items-center justify-center bg-transparent border-0 p-1",
-          "text-[#B89555] hover:text-[#8A6F3E]",
+          "text-[#B89555] hover:text-[#1A1A1A]",
           "drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]",
           "transition-colors duration-200",
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70 rounded-sm",
