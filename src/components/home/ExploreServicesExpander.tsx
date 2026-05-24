@@ -18,8 +18,9 @@ import { Link } from "react-router-dom";
 import {
   ArrowRight,
   Home, Tag, Key, Building2, Globe, Calculator, Plane,
-  MessageCircle, Scale, Handshake, Wrench,
+  MessageCircle, Scale, Handshake, Wrench, Sparkles, Crown,
 } from "lucide-react";
+import { PearlButton } from "@/components/ui/pearl-button";
 
 type Service = {
   id: string;
