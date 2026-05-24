@@ -146,7 +146,7 @@ export default function HorizontalUtilityBar() {
           <div
             data-no-contrast-guard
             data-surface="light"
-            className="hidden sm:inline-flex items-center h-7 rounded-full border border-[#B89555]/50 overflow-hidden bg-transparent"
+            className="hidden sm:inline-flex items-center h-7 rounded-lg border border-[#B89555]/50 overflow-hidden bg-transparent"
           >
             <button
               data-no-contrast-guard

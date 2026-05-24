@@ -86,7 +86,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
           </button>
         ) : isFlag ? (
           <button
-            className="h-8 inline-flex items-center gap-1.5 px-2.5 rounded-full border border-[#B89555]/55 hover:border-[#B89555] hover:bg-[#B89555]/[0.06] transition-colors"
+            className="h-8 inline-flex items-center gap-1.5 px-2.5 rounded-lg border border-[#B89555]/55 hover:border-[#B89555] hover:bg-[#B89555]/[0.06] transition-colors"
             aria-label="Currency"
           >
             <span className="text-sm leading-none">{currentCurrency.flag}</span>
