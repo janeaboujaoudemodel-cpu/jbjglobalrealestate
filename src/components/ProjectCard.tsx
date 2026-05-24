@@ -266,7 +266,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
 
         {/* Content — consistent 4px-grid spacing */}
-        <div className="p-4 flex-1 flex flex-col gap-3">
+        <div className="p-4 pt-8 flex-1 flex flex-col gap-3">
           {/* Header block — title + location, ink-solid */}
           <div className="flex flex-col gap-1.5">
             <h4 className="text-[#1A1A1A] text-lg font-bold break-words leading-tight line-clamp-2 group-hover:text-[#B89555] transition-colors">
