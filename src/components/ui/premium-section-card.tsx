@@ -45,7 +45,7 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
   ({ padding = "md", tone = "page", wrapperClassName = "", className = "", width = "contained", children, ...rest }, ref) => {
     const inner =
       width === "contained"
-        ? "container mx-auto px-4 max-w-7xl"
+        ? "w-full px-2 md:px-3"
         : "w-full";
     const radius = width === "contained" ? "rounded-2xl" : "rounded-none";
     const border = width === "contained" ? "border border-[#B89555]/30" : "border-0";
