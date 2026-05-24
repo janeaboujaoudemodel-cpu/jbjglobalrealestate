@@ -71,7 +71,7 @@ import ReportIssueButton from "@/components/project-detail/ReportIssueButton";
 import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos";
 import PointsOfInterest from "@/components/project-detail/PointsOfInterest";
 import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
-import ProjectLocationFlyover from "@/components/project-detail/ProjectLocationFlyover";
+
 import ProjectNearbyPropertiesMap from "@/components/project-detail/ProjectNearbyPropertiesMap";
 import MoreFromDeveloperStrip from "@/components/project-detail/MoreFromDeveloperStrip";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
@@ -1188,18 +1188,6 @@ export default function ProjectDetailLayout({
                 </div>
               )}
 
-              {/* Location Flyover Animation */}
-              {typeof project.latitude === 'number' && typeof project.longitude === 'number' && !isNaN(project.latitude) && !isNaN(project.longitude) && !(project.latitude === 0 && project.longitude === 0) && (
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-foreground mb-3">Location Flyover</h3>
-                  <ProjectLocationFlyover
-                    projectName={project.name}
-                    latitude={project.latitude}
-                    longitude={project.longitude}
-                    location={project.location}
-                  />
-                </div>
-              )}
 
               {/* Leaflet Map with satellite view, navigation, and view toggle */}
               <ProjectLocationMap
