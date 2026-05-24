@@ -175,9 +175,9 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             e.preventDefault();
             sendOtp();
           }}
-          className="mt-4 flex flex-1 flex-col gap-3 pb-1 min-h-[calc(100dvh-330px)]"
+          className="mt-5 flex flex-1 flex-col gap-3 pb-1 min-h-[calc(100dvh-310px)]"
         >
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 pt-8">
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#B89555]" />
               <input
@@ -201,7 +201,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             />
           </div>
 
-          <div className="relative">
+          <div className="relative mt-3">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#B89555]" />
             <input
               data-no-contrast-guard
@@ -216,7 +216,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             />
           </div>
 
-          <div className="grid grid-cols-[138px_minmax(0,1fr)] gap-2 overflow-visible">
+          <div className="mt-3 grid grid-cols-[138px_minmax(0,1fr)] gap-2 overflow-visible">
             <Popover open={countryOpen} onOpenChange={setCountryOpen}>
               <PopoverTrigger asChild>
                 <button
@@ -293,7 +293,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             type="submit"
             disabled={submitting}
             data-no-contrast-guard
-            className="mt-auto w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A]
+            className="mt-2 w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A]
               disabled:opacity-50 disabled:cursor-not-allowed transition inline-flex items-center justify-center gap-2
               hover:bg-[#F7F2EA] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_0_24px_hsl(var(--gold)/0.22)]"
           >
@@ -301,7 +301,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             {submitting ? "Sending code…" : "Send verification code"}
           </button>
 
-          <p className="text-[10.5px] text-[#1A1A1A]/70 text-center leading-snug px-2 pb-1">
+          <p className="mt-auto text-[10.5px] text-[#1A1A1A]/70 text-center leading-snug px-2 pb-1">
             We'll only contact you about your enquiry. By continuing you accept our Privacy Policy.
           </p>
         </form>

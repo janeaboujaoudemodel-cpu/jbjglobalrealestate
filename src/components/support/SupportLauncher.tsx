@@ -6,7 +6,7 @@
  * Both surfaces dispatch the same window events that AIConcierge / AIChatWidget
  * listen for. Hides itself when those drawers are open.
  */
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useLayoutEffect } from "react";
 import { Sparkles, MessageSquare, MessageCircle, Phone, PhoneCall, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
@@ -92,17 +92,17 @@ export default function SupportLauncher() {
   const channels = useChannels(close);
   const hidden = useSuppressed();
 
+  useLayoutEffect(() => {
+    if (!open) return;
+    document.body.setAttribute("data-jbj-support-open", "true");
+    return () => document.body.removeAttribute("data-jbj-support-open");
+  }, [open]);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
     if (open) window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, close]);
-
-  useEffect(() => {
-    if (open) document.body.setAttribute("data-jbj-support-open", "true");
-    else document.body.removeAttribute("data-jbj-support-open");
-    return () => document.body.removeAttribute("data-jbj-support-open");
-  }, [open]);
 
   if (hidden) return null;
 
@@ -180,13 +180,13 @@ export default function SupportLauncher() {
           onClick={() => setOpen((v) => !v)}
           aria-label="Talk to JBJ support"
           data-surface="dark"
-          className="group fixed right-0 top-1/2 -translate-y-1/2 pointer-events-auto flex items-center gap-2 px-2 py-4 rounded-l-xl
+          className="group fixed right-0 top-1/2 pointer-events-auto flex items-center gap-2 px-2 py-4 rounded-l-xl
             border border-r-0 border-gold/70 bg-primary text-primary-foreground
-            shadow-[-8px_0_24px_hsl(var(--foreground)/0.30)] transform-gpu transition-[transform,box-shadow,border-color] duration-200
-            hover:-translate-x-1 hover:border-gold
-            hover:shadow-[-14px_0_36px_hsl(var(--foreground)/0.42),0_0_30px_hsl(var(--gold)/0.55)]
+            shadow-[-10px_0_28px_hsl(var(--foreground)/0.34),0_0_0_1px_hsl(var(--gold)/0.24)] transform-gpu transition-[box-shadow,border-color] duration-200
+            hover:border-gold
+            hover:shadow-[-18px_0_42px_hsl(var(--foreground)/0.44),0_0_34px_hsl(var(--gold)/0.58)]
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          style={{ writingMode: "vertical-rl", color: "hsl(var(--primary-foreground))", WebkitTextFillColor: "hsl(var(--primary-foreground))" }}
+          style={{ writingMode: "vertical-rl", transform: "translateY(-50%)", color: "hsl(var(--primary-foreground))", WebkitTextFillColor: "hsl(var(--primary-foreground))" }}
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "hsl(var(--primary-foreground))";
             e.currentTarget.style.backgroundColor = "hsl(var(--primary))";
@@ -213,16 +213,16 @@ export default function SupportLauncher() {
               />
               <motion.div
                 key="dpanel"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                initial={{ opacity: 0, x: 18, y: "-50%", scale: 0.985 }}
+                animate={{ opacity: 1, x: 0, y: "-50%", scale: 1 }}
+                exit={{ opacity: 0, x: 18, y: "-50%", scale: 0.985 }}
+                transition={{ type: "spring", stiffness: 420, damping: 34, mass: 0.8 }}
                 data-no-contrast-guard
-                className="fixed right-14 top-[104px] bottom-5 flex w-[300px] flex-col overflow-hidden pointer-events-auto
+                className="fixed right-14 top-[calc(50%+24px)] flex max-h-[calc(100dvh-150px)] w-[300px] flex-col overflow-hidden pointer-events-auto
                   rounded-2xl border border-gold bg-background text-foreground
-                  shadow-[0_30px_60px_hsl(var(--foreground)/0.25)] p-3"
+                  shadow-[0_30px_60px_hsl(var(--foreground)/0.25),0_0_34px_hsl(var(--gold)/0.18)] p-3"
               >
-                <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3">
+                <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-2">
                   <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
                     border border-gold bg-raised text-ink">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -237,7 +237,7 @@ export default function SupportLauncher() {
                     <X className="h-3.5 w-3.5" />
                   </button>
                 </div>
-                <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1 pb-1">
+                <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1 pt-1 pb-1">
                   {channels.map((c) => (
                     <ChannelCard key={c.id} channel={c} onActivate={close} />
                   ))}

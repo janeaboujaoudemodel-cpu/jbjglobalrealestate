@@ -33,15 +33,15 @@ import { useAuditorTracking } from "@/hooks/useAuditorTracking";
 const AuditorFeedbackButton = lazy(() => import("@/components/auditor/AuditorFeedbackButton"));
 
 // Lazy-load non-critical components to reduce initial bundle
-const AIChatWidget = lazy(() => import("@/components/AIChatWidget"));
 const VoiceConciergeWidget = lazy(() => import("@/components/VoiceConciergeWidget"));
+import AIChatWidget from "@/components/AIChatWidget";
 import PageNavigation from "@/components/PageNavigation";
+import GlobalSupportMount from "@/components/support/GlobalSupportMount";
 const MarketingScripts = lazy(() => import("@/components/marketing/MarketingScripts"));
 const PopupLayer = lazy(() => import("@/components/PopupLayer"));
 const CommandPaletteRoot = lazy(() => import("@/components/ui/command-palette-root"));
 const GuidedTour = lazy(() => import("@/components/GuidedTour"));
 const CompleteProfilePrompt = lazy(() => import("@/components/CompleteProfilePrompt"));
-const GlobalSupportMount = lazy(() => import("@/components/support/GlobalSupportMount"));
 
 const CHAT_DAILY_KEY = "jj_chat_daily_shown";
 const SCROLL_DELAY_MS = 1500;
