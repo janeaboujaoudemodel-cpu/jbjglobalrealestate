@@ -76,6 +76,8 @@ import ProjectNearbyPropertiesMap from "@/components/project-detail/ProjectNearb
 import MoreFromDeveloperStrip from "@/components/project-detail/MoreFromDeveloperStrip";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { SectionDivider } from "@/components/ui/section-divider";
+import { SectionDividerGoldFullBleed } from "@/components/ui/section-divider-gold-fullbleed";
+
 import { recordProjectView, peekBackStack, popBackStack, type BackStackEntry } from "@/lib/browsingHistory";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
@@ -1384,7 +1386,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
             </div>
 
            {/* JBJ AI ANALYZER (Order B: after mortgage) */}
-           <div ref={aiRef} id="ai" className="mb-14 scroll-mt-40">
+           <div ref={aiRef} id="ai" className="mb-10 md:mb-12 scroll-mt-40">
               <ProjectAIAnalyzer
                 projectName={project.name}
                 areaName={project.area_name || project.location || "UAE"}
@@ -1397,21 +1399,17 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
               />
             </div>
 
-           {/* DLD MARKET WIDGET (Order B: after AI) */}
-           <div className="py-6">
-              <div className="flex items-center justify-center gap-6">
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-                <div className="w-2 h-2 rotate-45 bg-[#EFE6D6]/40" />
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-              </div>
-            </div>
-            <div className="mb-14">
-              <DLDMarketWidget />
-            </div>
+           {/* DLD MARKET WIDGET — full-bleed band (escapes outer max-w container) */}
+           <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen mb-10 md:mb-12">
+             <SectionDividerGoldFullBleed />
+             <DLDMarketWidget />
+             <SectionDividerGoldFullBleed />
+           </div>
+
 
            {/* INVESTMENT METRICS SECTION */}
            {(project.roi_estimate || project.rental_yield_estimate) && (
-             <div ref={investmentRef} id="investment" className="mb-14 scroll-mt-40 relative">
+             <div ref={investmentRef} id="investment" className="mb-10 md:mb-12 scroll-mt-40 relative">
                <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="investment" initial={project as any} /></div>
                <InvestmentMetricsSection
                  roiEstimate={project.roi_estimate}
@@ -1425,7 +1423,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
 
            {/* USEFUL INFO SECTION */}
            {(project.faqs?.length ?? 0) > 0 && (
-             <div ref={faqRef} id="faq" className="mb-14 scroll-mt-40">
+             <div ref={faqRef} id="faq" className="mb-10 md:mb-12 scroll-mt-40">
                <div className="jj-card-inner">
                  <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
                    <HelpCircle className="w-5 h-5 text-[#1A1A1A]" />
@@ -1449,7 +1447,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
            )}
 
            {/* REPORT AN ISSUE BANNER */}
-           <div className="mb-14">
+           <div className="mb-10 md:mb-12">
              <ReportIssueButton
                projectName={project.name}
                projectId={project.id}
@@ -1458,7 +1456,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
            </div>
 
           {/* INQUIRY FORM - Full Width with premium styling - Uses Contact Page Form */}
-          <div ref={inquiryRef} className="scroll-mt-32 mb-8">
+          <div ref={inquiryRef} className="scroll-mt-32 mb-6">
               <ConsultationRequestForm
                 title={`Register Interest in ${project.name}`}
                 subtitle={`Get expert guidance on ${project.name}${project.location ? ` at ${project.location}` : ''}. Our specialists are ready to assist you.`}
@@ -1468,12 +1466,22 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
           </div>
 
 
-          {/* CallToAction removed - consolidated into ConsultationRequestForm above */}
+
+          {/* CallToAction reinstated below as full-bleed band */}
         </div>
       </section>
 
+      {/* READY TO GET STARTED — full-bleed CTA band */}
+      <SectionDividerGoldFullBleed />
+      <div className="bg-[#FDFBF7]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12">
+          <CallToActionSection projectName={project.name} projectId={project.id} />
+        </div>
+      </div>
+
       {/* Recommended Projects — seamless champagne bg continuation */}
-      <div className="pb-12 md:pb-16" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+      <SectionDividerGoldFullBleed />
+      <div className="pt-10 md:pt-14 pb-10 md:pb-14" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
       <RecommendedProjects
         currentProjectId={project.id}
         currentDeveloperId={(project.developer as any)?.id || null}
@@ -1481,6 +1489,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
         currentEmirate={(project as any).emirate || null}
       />
       </div>
+
 
       {/* DirectContactCTA is now rendered globally in MainLayout - removed duplicate */}
 

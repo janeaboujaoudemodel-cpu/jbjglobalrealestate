@@ -1,40 +1,49 @@
 ## Goal
 
-On every project's hero section, give the owner a quick way to click the hero image, open the project's gallery in a picker, and assign any photo as either:
+Polish the lower half of every project page so the **Dubai Market Intelligence** widget and the sections around it are full-bleed, consistently spaced, and the **Ready to Get Started** CTA returns above Recommended Projects.
 
-- **Use as Cover** → updates `projects.cover_image_url` (the big hero image shown on the detail page)
-- **Use as Profile** → updates `projects.card_image_url` (the thumbnail shown on listing/search cards across the site)
+## Problems today (file: `src/components/project-detail/ProjectDetailLayout.tsx`)
 
-This is owner-only, never visible to public visitors. Listing cards and search/filter UI are not touched — only the data source they already read from changes.
+1. The whole content body is wrapped in `max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16` (line 824). The DLD widget sits inside it, AND the widget itself adds `mx-4 md:mx-8` + `max-w-6xl` inside → it's double-constrained and looks narrow.
+2. Above DLD there's a hand-rolled diamond divider (lines 1401–1407) — not the approved `<SectionDividerGoldFullBleed />` standard.
+3. Every block uses `mb-14` → vertical rhythm is too loose.
+4. RecommendedProjects wrapper (line 1476) has only `pb-12 md:pb-16` and **no top padding** → it visually touches the previous section.
+5. The "Ready to Get Started" CTA (`<CallToActionSection />`) was removed in a prior consolidation (comment line 1471). User wants it back.
 
-## Scope
+## Changes (single file edit)
 
-- Only the hero section of `src/components/project-detail/ProjectDetailLayout.tsx`.
-- New component `src/components/project-detail/owner/HeroImagePicker.tsx`.
-- No DB migration needed — `projects.cover_image_url` and `projects.card_image_url` already exist, and `project_images` already powers the gallery.
-- No changes to listing cards, search, or other layouts.
+### A. DLD section → full-bleed band
 
-## Behavior
+- Wrap `<DLDMarketWidget />` in a full-bleed escape: `relative left-1/2 right-1/2 -mx-[50vw] w-screen` band with `data-marketing-page`-friendly champagne background, replacing the current `<div className="mb-14">`.
+- Above it, replace the hand-rolled diamond divider with `<SectionDividerGoldFullBleed />` (existing primitive).
+- In `src/components/shared/DLDMarketWidget.tsx`:
+  - Remove the outer `mx-4 md:mx-8 rounded-3xl border ...` framing on `<section>` so it can breathe edge-to-edge.
+  - Drop `py-16` → `py-10 md:py-14`.
+  - Widen inner `max-w-6xl` → `max-w-[1600px]` so the grid uses the full band.
+  - Keep all cards, labels, data, sources line untouched (no-removal policy).
 
-1. When viewed by the owner (via existing `useIsAppOwner` / `useCanEdit("project_photos")`), a small champagne "Edit hero" pill appears in the top-right corner of the hero, below the 88px header (uses `top-[112px] xl:top-[120px]` so it never collides with the sticky header in any sidebar/header state). Public visitors see nothing.
-2. Clicking the pill (or clicking anywhere on the hero while holding the owner badge) opens a modal "Select hero image" with:
-   - A responsive grid of all `project_images` for this project (reuses the same query key `["owner-project-images", projectId]` so it stays in sync with the existing Owner · Photos manager).
-   - Hover state on each tile showing two actions:
-     - **Use as Cover** — sets `cover_image_url` (also bumps that image's `display_order` to 0 so it's first in the carousel).
-     - **Use as Profile** — sets `card_image_url`.
-   - Badges on the currently-selected Cover and Profile tiles so the owner sees what's active.
-   - "Upload new photo" button at the top of the modal that reuses the same upload pipeline (`project-images` storage bucket → insert into `project_images`).
-3. After either action, invalidate `["project", slug]`, `["projects"]`, `["owner-project-images", projectId]`, and `["nearby-projects"]` so the hero, listing cards, and nearby map refresh immediately.
-4. Toasts confirm the action ("Cover photo updated" / "Profile photo updated").
-5. All styling stays within the champagne-gold design system — no gray surfaces, no faded gold, gold used only as 1px hairline, premium pill matches the existing "SOLD OUT" badge sizing.
+### B. Tighten vertical rhythm in the content column
+
+- Replace `mb-14` on the major section wrappers in the project content body (AI analyzer block, DLD wrapper, Investment Metrics, FAQ, Report Issue banner) with `mb-10 md:mb-12`.
+- Inquiry form wrapper `mb-8` stays.
+
+### C. Re-mount "Ready to Get Started"
+
+- Right after `</section>` (line 1473) and **before** the RecommendedProjects wrapper, add a full-bleed champagne band containing `<CallToActionSection projectName={project.name} projectId={project.id} location={project.location} />`. Import is already present (line 53), no new import needed.
+- Add `<SectionDividerGoldFullBleed />` above it as the section break (replaces the silent visual gap that previously existed).
+
+### D. RecommendedProjects spacing
+
+- Change the wrapper on line 1476 from `pb-12 md:pb-16` to `pt-10 md:pt-14 pb-10 md:pb-14` so it no longer touches the CTA above and the page bottom is tighter.
+- Add a `<SectionDividerGoldFullBleed />` above it (between CTA and Recommended).
 
 ## Out of scope
 
-- No changes to listing card layout, price pill, or developer label rules.
-- No removal of the existing Owner · Photos manager further down the page — both coexist; the hero picker is just a faster entry point.
-- No new RLS / migrations / edge functions.
+- No data, copy, or card removals (no-removal policy).
+- No changes to the hero, breadcrumb, header, footer, or any other listing/search surface.
+- No new components, no new dependencies, no DB work.
 
 ## Files
 
-- **New:** `src/components/project-detail/owner/HeroImagePicker.tsx`
-- **Edit:** `src/components/project-detail/ProjectDetailLayout.tsx` — mount `<HeroImagePicker />` inside the hero section, gated by `isOwner`.
+- **Edit:** `src/components/project-detail/ProjectDetailLayout.tsx`
+- **Edit:** `src/components/shared/DLDMarketWidget.tsx` (remove outer mx/rounded/border, widen inner max-width, trim py)
