@@ -33155,45 +33155,87 @@ export type Database = {
       }
       user_verifications: {
         Row: {
+          address: Json | null
+          client_ip: unknown
+          consent_snapshot: Json | null
           created_at: string
+          date_of_birth: string | null
+          document_country: string | null
+          document_type: string | null
           full_name: string | null
           id: string
+          id_back_url: string | null
           id_document_url: string | null
+          liveness_challenges: Json | null
+          liveness_frames: Json | null
+          nationality: string | null
+          phone: string | null
+          reference_code: string | null
           rejection_reason: string | null
           reviewed_at: string | null
           reviewed_by: string | null
+          risk_score: number | null
           selfie_url: string | null
           status: string
           submitted_at: string
           updated_at: string
+          user_agent: string | null
           user_id: string
         }
         Insert: {
+          address?: Json | null
+          client_ip?: unknown
+          consent_snapshot?: Json | null
           created_at?: string
+          date_of_birth?: string | null
+          document_country?: string | null
+          document_type?: string | null
           full_name?: string | null
           id?: string
+          id_back_url?: string | null
           id_document_url?: string | null
+          liveness_challenges?: Json | null
+          liveness_frames?: Json | null
+          nationality?: string | null
+          phone?: string | null
+          reference_code?: string | null
           rejection_reason?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          risk_score?: number | null
           selfie_url?: string | null
           status?: string
           submitted_at?: string
           updated_at?: string
+          user_agent?: string | null
           user_id: string
         }
         Update: {
+          address?: Json | null
+          client_ip?: unknown
+          consent_snapshot?: Json | null
           created_at?: string
+          date_of_birth?: string | null
+          document_country?: string | null
+          document_type?: string | null
           full_name?: string | null
           id?: string
+          id_back_url?: string | null
           id_document_url?: string | null
+          liveness_challenges?: Json | null
+          liveness_frames?: Json | null
+          nationality?: string | null
+          phone?: string | null
+          reference_code?: string | null
           rejection_reason?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          risk_score?: number | null
           selfie_url?: string | null
           status?: string
           submitted_at?: string
           updated_at?: string
+          user_agent?: string | null
           user_id?: string
         }
         Relationships: []
@@ -33351,6 +33393,47 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
+          },
+        ]
+      }
+      verification_audit_log: {
+        Row: {
+          actor_user_id: string | null
+          client_ip: unknown
+          created_at: string
+          event: string
+          id: string
+          payload: Json | null
+          user_agent: string | null
+          verification_id: string
+        }
+        Insert: {
+          actor_user_id?: string | null
+          client_ip?: unknown
+          created_at?: string
+          event: string
+          id?: string
+          payload?: Json | null
+          user_agent?: string | null
+          verification_id: string
+        }
+        Update: {
+          actor_user_id?: string | null
+          client_ip?: unknown
+          created_at?: string
+          event?: string
+          id?: string
+          payload?: Json | null
+          user_agent?: string | null
+          verification_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verification_audit_log_verification_id_fkey"
+            columns: ["verification_id"]
+            isOneToOne: false
+            referencedRelation: "user_verifications"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -37133,6 +37216,7 @@ export type Database = {
       generate_company_id: { Args: never; Returns: string }
       generate_referral_code: { Args: never; Returns: string }
       generate_share_token: { Args: never; Returns: string }
+      generate_verification_ref: { Args: never; Returns: string }
       get_all_subscriptions_admin: {
         Args: never
         Returns: {
