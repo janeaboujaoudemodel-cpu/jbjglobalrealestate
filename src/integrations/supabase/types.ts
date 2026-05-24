@@ -32818,6 +32818,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_project_views: {
+        Row: {
+          id: string
+          project_id: string
+          project_slug: string
+          user_id: string
+          viewed_at: string
+        }
+        Insert: {
+          id?: string
+          project_id: string
+          project_slug: string
+          user_id: string
+          viewed_at?: string
+        }
+        Update: {
+          id?: string
+          project_id?: string
+          project_slug?: string
+          user_id?: string
+          viewed_at?: string
+        }
+        Relationships: []
+      }
       user_role_selections: {
         Row: {
           age_range: string | null
