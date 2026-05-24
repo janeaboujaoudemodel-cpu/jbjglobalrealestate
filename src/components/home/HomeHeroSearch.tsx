@@ -227,21 +227,20 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
           >
             <CalendarCheck className="w-4 h-4 text-[#B89555]" strokeWidth={2.2} />
             <span className="whitespace-nowrap transition-colors duration-200 group-hover/bookm:text-[#B89555]">
-              Book Consultation
+              Free Consultation
             </span>
           </button>
           <button
             type="button"
             onClick={openConcierge}
             data-no-contrast-guard
-            className="group/concm flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
-              text-[13px] font-semibold text-[#1A1A1A] border border-[#B89555]/55 bg-[#EFE6D6]
+            aria-label="JBJ Concierge"
+            title="JBJ Concierge"
+            className="group/concm inline-flex items-center justify-center h-11 w-11 rounded-xl
+              border border-[#B89555]/55 bg-[#EFE6D6]
               transition-colors duration-200 hover:bg-[#E7D9C1]"
           >
-            <Sparkles className="w-4 h-4 text-[#B89555]" strokeWidth={2.2} />
-            <span className="whitespace-nowrap transition-colors duration-200 group-hover/concm:text-[#B89555]">
-              Concierge
-            </span>
+            <Sparkles className="w-[18px] h-[18px] text-[#B89555] transition-transform duration-200 group-hover/concm:scale-110" strokeWidth={2.2} />
           </button>
         </div>
 
