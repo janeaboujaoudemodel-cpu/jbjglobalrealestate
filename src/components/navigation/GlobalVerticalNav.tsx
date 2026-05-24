@@ -1254,7 +1254,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       {collapsed ? (
         <div className="hidden sm:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-[#FDFBF7]">
           {/* Logo header (88px) — collapsed: just icon */}
-          <div className="h-[48px] w-full shrink-0 flex items-center justify-center bg-[#FDFBF7] border-b border-[#B89555]/40">
+          <div className="h-[48px] w-full shrink-0 flex items-center justify-center bg-[#FDFBF7] relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-[2px] after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[0_1px_0_rgba(184,149,85,0.35)]">
             <Link to="/">
               <img src={jbjMonogramLightBg} alt="JBJ" className="w-7 h-7 object-contain" />
             </Link>
