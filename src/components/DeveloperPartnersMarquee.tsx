@@ -169,11 +169,15 @@ const DeveloperPartnersMarquee = () => {
       )}
 
       <div className="w-full">
-        <div className="py-5 md:py-6 px-4 mb-2 md:mb-3">
+        <div className="jbj-shimmer-bg py-5 md:py-6 px-4">
           <p className="jbj-shimmer-text text-center text-sm md:text-base font-light tracking-[0.18em] uppercase">
             {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
           </p>
         </div>
+
+        {/* Clean gold divider between title and marquee */}
+        <div aria-hidden className="mx-auto h-px w-full max-w-7xl bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+
 
         <div
           className="relative w-full overflow-hidden py-6 md:py-8 bg-[#EFE6D6]"
