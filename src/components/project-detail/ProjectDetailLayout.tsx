@@ -61,6 +61,9 @@ import PaymentPlanVisualization from "@/components/project-detail/PaymentPlanVis
 import MasterPlanSection from "@/components/project-detail/MasterPlanSection";
 import HouseDetailsSection from "@/components/project-detail/HouseDetailsSection";
 import DataFreshnessIndicator from "@/components/project-detail/DataFreshnessIndicator";
+import OwnerProvenanceCard from "@/components/project-detail/owner/OwnerProvenanceCard";
+import AIEnrichDialog from "@/components/project-detail/owner/AIEnrichDialog";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import RecommendedProjects from "@/components/project-detail/RecommendedProjects";
 import ReportIssueButton from "@/components/project-detail/ReportIssueButton";
 import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos";
@@ -235,6 +238,9 @@ export default function ProjectDetailLayout({
   const [showStickyNav, setShowStickyNav] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+  const { isOwner } = useIsAppOwner();
+  const [paymentEnrichOpen, setPaymentEnrichOpen] = useState(false);
+  
   
   const inquiryRef = useRef<HTMLDivElement>(null);
   const mortgageRef = useRef<HTMLDivElement>(null);
@@ -805,16 +811,22 @@ export default function ProjectDetailLayout({
              />
           </div>
 
-          {/* DATA FRESHNESS INDICATOR */}
-          {(project.updated_at || project.import_source) && (
+          {/* OWNER PROVENANCE CARD — owner/admin only, replaces the old public "Updated X ago" chip */}
+          {isOwner && (
             <div className="mb-8 flex justify-end">
-              <DataFreshnessIndicator
-                updatedAt={project.updated_at}
-                importSource={project.import_source}
-                externalId={project.external_id}
-              />
+              <div className="w-full max-w-md">
+                <OwnerProvenanceCard
+                  projectId={project.id}
+                  projectName={project.name}
+                  createdAt={(project as any).created_at}
+                  updatedAt={project.updated_at}
+                  importSource={project.import_source}
+                  createdSource={(project as any).created_source}
+                />
+              </div>
             </div>
           )}
+
 
           {/* DETAILS SECTION */}
           <div ref={detailsRef} id="details" className="mb-14 scroll-mt-40">
@@ -1186,8 +1198,20 @@ export default function ProjectDetailLayout({
 
            {/* PAYMENT PLAN VISUALIZATION (Order B: Payment first) */}
            {(true) && (
-           <div ref={paymentRef} id="payment" className="mb-14 scroll-mt-40 relative">
-              <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="payment" initial={project as any} /></div>
+           <div ref={paymentRef} id="payment" data-section="payment" className="mb-14 scroll-mt-40 relative">
+              <div className="absolute right-0 -top-2 z-10 flex items-center gap-1.5">
+                {isOwner && (
+                  <button
+                    type="button"
+                    onClick={() => setPaymentEnrichOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-purple-400/60 bg-purple-50 text-purple-800 text-xs font-semibold hover:bg-purple-100 transition shadow-sm"
+                    title="Describe the payment plan with AI"
+                  >
+                    <Sparkles className="w-3 h-3" /> Describe with AI
+                  </button>
+                )}
+                <OwnerSectionEditor projectId={project.id} section="payment" initial={project as any} />
+              </div>
               <PaymentPlanVisualization
                 paymentPlan={project.payment_plan}
                 paymentBreakdown={project.payment_breakdown}
@@ -1202,6 +1226,18 @@ export default function ProjectDetailLayout({
               />
             </div>
             )}
+
+            {/* Owner-only AI enrichment dialog for the Payment Plan section */}
+            {isOwner && (
+              <AIEnrichDialog
+                open={paymentEnrichOpen}
+                onOpenChange={setPaymentEnrichOpen}
+                projectId={project.id}
+                projectName={project.name}
+                section="payment"
+              />
+            )}
+
 
           {/* BROCHURE - Full width two-column layout */}
           <div ref={brochureRef} id="brochure" className="mb-14 scroll-mt-40">

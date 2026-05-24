@@ -107,38 +107,61 @@ export type Database = {
       admin_edit_log: {
         Row: {
           action: string
+          after_values: Json | null
+          before_values: Json | null
           changed_fields: string[] | null
           created_at: string | null
           entity_id: string
           entity_name: string | null
           entity_type: string
           id: string
+          section: string | null
+          source_citation: Json | null
           summary: string | null
+          undo_of: string | null
           user_id: string | null
         }
         Insert: {
           action: string
+          after_values?: Json | null
+          before_values?: Json | null
           changed_fields?: string[] | null
           created_at?: string | null
           entity_id: string
           entity_name?: string | null
           entity_type: string
           id?: string
+          section?: string | null
+          source_citation?: Json | null
           summary?: string | null
+          undo_of?: string | null
           user_id?: string | null
         }
         Update: {
           action?: string
+          after_values?: Json | null
+          before_values?: Json | null
           changed_fields?: string[] | null
           created_at?: string | null
           entity_id?: string
           entity_name?: string | null
           entity_type?: string
           id?: string
+          section?: string | null
+          source_citation?: Json | null
           summary?: string | null
+          undo_of?: string | null
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "admin_edit_log_undo_of_fkey"
+            columns: ["undo_of"]
+            isOneToOne: false
+            referencedRelation: "admin_edit_log"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       admin_scanned_cards: {
         Row: {
@@ -26304,6 +26327,7 @@ export type Database = {
           construction_status: string | null
           cover_image_url: string | null
           created_at: string
+          created_source: string | null
           data_quality_flags: Json
           deleted_at: string | null
           description: string | null
@@ -26400,6 +26424,7 @@ export type Database = {
           construction_status?: string | null
           cover_image_url?: string | null
           created_at?: string
+          created_source?: string | null
           data_quality_flags?: Json
           deleted_at?: string | null
           description?: string | null
@@ -26496,6 +26521,7 @@ export type Database = {
           construction_status?: string | null
           cover_image_url?: string | null
           created_at?: string
+          created_source?: string | null
           data_quality_flags?: Json
           deleted_at?: string | null
           description?: string | null
