@@ -561,7 +561,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           boxShadow: '0 25px 60px -15px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)',
         }}
       >
-        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+        
         <div className="flex flex-col gap-1 px-3">
           {links.map((link, idx) => {
             if ('section' in link) {
@@ -612,11 +612,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         aria-hidden="true"
       />
 
-      {/* Solid header background — champagne (creamy), not raw white */}
+      {/* Solid header background — flat page tone, no seam against hero */}
       <div 
         className={`absolute inset-0 transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
         style={{
-          background: 'linear-gradient(90deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
+          background: '#FDFBF7',
         }}
       />
       
@@ -628,14 +628,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         }}
       />
       
-      {/* Premium Bottom Border — gold hairline on champagne */}
-      <div className="absolute bottom-0 left-0 right-0 h-[2px] z-10">
-        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`} />
-        <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`} />
-      </div>
-      
-      {/* Gold divider when transparent - separates header from hero (no gray per global no-gray rule) */}
-      <div className={`absolute bottom-0 left-0 right-0 h-[1px] z-10 bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`} />
+      {/* Header bottom borders removed — no visible seam between header and page/hero */}
+
       
       {/* Inner shadow for depth */}
       <div 

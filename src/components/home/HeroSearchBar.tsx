@@ -1184,7 +1184,7 @@ const HeroSearchBar = () => {
                       });
                       return EMIRATE_ORDER.filter(em => grouped[em]?.length).map(em => (
                         <div key={em}>
-                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#1A1A1A] bg-[#EFE6D6]/5 border-y border-[#B89555]/10">{em}</div>
+                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#1A1A1A] bg-[#EFE6D6]/5">{em}</div>
                           {grouped[em]!.map(area => (
                             <button
                               key={area.id}
