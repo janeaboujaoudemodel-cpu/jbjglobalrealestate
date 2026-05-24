@@ -1070,10 +1070,12 @@ All colors MUST be HSL.
 }
 
 .jbj-shimmer-champagne {
-  background-image: linear-gradient(110deg, #EFE6D6 0%, #F7EFDF 25%, #EADBB6 50%, #F7EFDF 75%, #EFE6D6 100%) !important;
+  background-image: linear-gradient(110deg, #E6D3A8 0%, #F5E9CC 25%, #D8BE82 50%, #F5E9CC 75%, #E6D3A8 100%) !important;
   background-size: 200% 100% !important;
   animation: jbj-champagne-shimmer 3s linear infinite;
+  box-shadow: inset 0 0 0 1px rgba(184,149,85,0.35);
 }
+
 
 
 
