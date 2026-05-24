@@ -62,7 +62,7 @@ function buildDayPanel(count: number) {
     if (bookable) bookableAdded++;
     out.push({ date: new Date(cursor), bookable });
     cursor.setDate(cursor.getDate() + 1);
-    if (out.length > 60) break; // safety
+    if (out.length > 90) break; // safety — allow full ~30-day preview incl. weekends/Mondays
   }
   return out;
 }
