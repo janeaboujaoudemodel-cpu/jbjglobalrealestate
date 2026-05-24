@@ -591,6 +591,10 @@ export default function GlobalVerticalNav() {
       return true;
     } catch { return true; }
   });
+  const [showExpandPulse, setShowExpandPulse] = useState(() => {
+    try { return sessionStorage.getItem('jj_sidebar_expand_seen_session') !== '1'; }
+    catch { return true; }
+  });
 
   // Collapsible sections state — accordion: only one open at a time
   const [openSection, setOpenSection] = useState<SectionKey | null>(null);
@@ -1359,29 +1363,32 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-sidebar-collapse-control
                     data-tour-target="sidebar-expand"
                     onClick={() => {
-                      try { localStorage.setItem('jj_sidebar_expand_seen', '1'); } catch {}
+                      setShowExpandPulse(false);
+                      try {
+                        sessionStorage.setItem('jj_sidebar_expand_seen_session', '1');
+                        localStorage.setItem('jj_sidebar_expand_seen', '1');
+                      } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-collapse-control group relative w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70 mt-1 mb-1"
+                    className="jbj-sidebar-collapse-control group relative isolate w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70 mt-1 mb-1"
                     style={{ color: '#B89555' }}
                     aria-label="Expand navigation"
                   >
-                    {/* Soft champagne pulse — contained within the button, stops after first click */}
-                    {collapsed && (() => {
-                      try {
-                        return localStorage.getItem('jj_sidebar_expand_seen') !== '1'
-                          && localStorage.getItem('jj_tour_completed') !== '1';
-                      } catch { return true; }
-                    })() && (
+                    {/* Soft champagne pulse — visible, contained, and stops after first expand click */}
+                    {collapsed && showExpandPulse && (
                       <>
                         <span
                           aria-hidden
-                          className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-[#B89555] animate-pulse"
-                          style={{ boxShadow: '0 0 0 2px rgba(184,149,85,0.35), 0 0 10px rgba(184,149,85,0.5)' }}
+                          className="pointer-events-none absolute -inset-[2px] z-[-1] rounded-[10px] border border-[hsl(var(--gold))]/70 animate-[pulse_1.05s_ease-in-out_infinite]"
+                          style={{ boxShadow: '0 0 0 1px rgba(184,149,85,0.24), 0 0 8px rgba(184,149,85,0.38)' }}
+                        />
+                        <span
+                          aria-hidden
+                          className="pointer-events-none absolute inset-[2px] rounded-md border border-[#F7F2EA]/90 animate-[pulse_1.05s_ease-in-out_infinite]"
                         />
                       </>
                     )}
-                    <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5 text-[hsl(var(--gold))]" strokeWidth={2} />
+                    <PanelLeftClose className="relative z-10 w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5 text-[hsl(var(--gold))]" strokeWidth={2} />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={10} className="text-xs z-[10100]">
