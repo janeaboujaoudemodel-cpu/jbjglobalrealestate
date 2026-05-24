@@ -23,6 +23,7 @@ import AppErrorBoundary from "@/components/AppErrorBoundary";
 import GlobalSEO from "@/components/GlobalSEO";
 import SEOServiceArea from "@/components/SEOServiceArea";
 import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
+import OwnerVisitorToggle from "@/components/project-detail/OwnerVisitorToggle";
 import SEOBreadcrumbs from "@/components/SEOBreadcrumbs";
 import CanonicalAndHreflang from "@/components/CanonicalAndHreflang";
 import SeoHighlightOverlay from "@/components/SeoHighlightOverlay";
@@ -96,6 +97,7 @@ const App = () => {
                     <ScrollToTopOnMount />
                   <RouteResume />
                   <GlobalVisitorTracking />
+                  <OwnerVisitorToggle />
                   <SEOBreadcrumbs />
                   <CanonicalAndHreflang />
                   <SeoHighlightOverlay />
