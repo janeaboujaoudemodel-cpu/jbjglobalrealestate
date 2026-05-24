@@ -357,8 +357,7 @@ const Index = () => {
         </Suspense>
       </PremiumSectionCard>
 
-      {/* Premium gold edge-to-edge divider — Services → Royal Tools Hub */}
-      <SectionDividerGoldFullBleed size="md" spacing="md" />
+      <SectionDividerGoldFullBleed size="md" spacing="sm" />
 
       {/* TOOLKIT SHOWCASE CARD */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
@@ -367,8 +366,7 @@ const Index = () => {
         </Suspense>
       </PremiumSectionCard>
 
-      {/* Premium gold edge-to-edge divider — Tools → AI Comparison */}
-      <SectionDividerGoldFullBleed size="md" spacing="md" />
+      <SectionDividerGoldFullBleed size="md" spacing="sm" />
 
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
@@ -378,8 +376,7 @@ const Index = () => {
         </Suspense>
       </PremiumSectionCard>
 
-      {/* Premium gold edge-to-edge divider — AI Comparison → Mortgage */}
-      <SectionDividerGoldFullBleed size="md" spacing="md" />
+      <SectionDividerGoldFullBleed size="md" spacing="sm" />
 
       <PremiumSectionCard tone="surface" padding="md" wrapperClassName="cv-auto py-6 md:py-10">
         <Suspense fallback={<SectionLoader />}>
