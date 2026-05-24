@@ -1370,25 +1370,17 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-collapse-control group relative isolate w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70 mt-1 mb-1"
-                    style={{ color: '#B89555' }}
+                    className="jbj-sidebar-collapse-control group relative w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
                     aria-label="Expand navigation"
                   >
-                    {/* Soft champagne pulse — visible, contained, and stops after first expand click */}
+                    {/* Subtle teaching pulse — sits just outside the button, stops after first click */}
                     {collapsed && showExpandPulse && (
-                      <>
-                        <span
-                          aria-hidden
-                          className="pointer-events-none absolute -inset-[2px] z-[-1] rounded-[10px] border border-[hsl(var(--gold))]/70 animate-[pulse_1.05s_ease-in-out_infinite]"
-                          style={{ boxShadow: '0 0 0 1px rgba(184,149,85,0.24), 0 0 8px rgba(184,149,85,0.38)' }}
-                        />
-                        <span
-                          aria-hidden
-                          className="pointer-events-none absolute inset-[2px] rounded-md border border-[#F7F2EA]/90 animate-[pulse_1.05s_ease-in-out_infinite]"
-                        />
-                      </>
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute -inset-[3px] rounded-[10px] ring-1 ring-[hsl(var(--gold))]/55 animate-[pulse_1.4s_ease-in-out_infinite]"
+                      />
                     )}
-                    <PanelLeftClose className="relative z-10 w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5 text-[hsl(var(--gold))]" strokeWidth={2} />
+                    <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5 text-[hsl(var(--gold))]" strokeWidth={2} />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={10} className="text-xs z-[10100]">
