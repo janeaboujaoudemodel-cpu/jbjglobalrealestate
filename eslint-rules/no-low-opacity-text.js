@@ -7,7 +7,7 @@
  *   - raise the alpha to /60 or higher, OR
  *   - use `text-muted-foreground` / a semantic token, OR
  *   - explicitly opt out with one of:
- *       • inline `{/* contrast-ok *\/}` comment on the JSX element
+ *       • inline contrast-ok comment on the JSX element
  *       • `data-decorative="true"` attribute
  *       • `data-no-contrast-guard` attribute
  *       • class `jj-watermark`
