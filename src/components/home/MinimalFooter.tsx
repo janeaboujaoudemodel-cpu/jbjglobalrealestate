@@ -26,9 +26,9 @@ const MinimalFooter = () => {
       className={[
         // Mobile / iPad-portrait — dark espresso (unchanged)
         "bg-[hsl(32,28%,13%)] border-t border-white/10",
-        // Desktop / iPad-landscape — champagne band matching the header,
-        // aligned to the right of the 200px vertical sidebar
-        "lg:bg-gradient-to-b lg:from-[#FDFBF7] lg:via-[#F7F1E6] lg:to-[#EFE6D6]",
+        // Desktop / iPad-landscape — champagne band matching the vertical sidebar
+        // header gradient (left → right) exactly so they read as one continuous frame.
+        "lg:bg-gradient-to-r lg:from-[#FDFBF7] lg:via-[#F7F1E6] lg:to-[#EFE6D6]",
         "lg:border-t lg:border-[#B89555]/40",
         "lg:ml-[200px]",
       ].join(" ")}
