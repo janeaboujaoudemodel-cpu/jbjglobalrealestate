@@ -33,6 +33,13 @@ type SpotlightStep = {
 
 const SPOTLIGHT_STEPS: SpotlightStep[] = [
   {
+    target: '[data-tour-target="sidebar-expand"]',
+    fallbackTargets: ['[data-sidebar-collapse-control]'],
+    title: "Open the full navigation",
+    description: "This is your sidebar. It stays tucked in so the page stays clean — tap the gold arrow here any time to expand the full menu, and tap it again to tuck it back in.",
+    pulse: true,
+  },
+  {
     target: '[data-tour-target="mobile-menu"]',
     fallbackTargets: ['[data-tour-target="header"] nav', 'header'],
     title: "Main menu",
