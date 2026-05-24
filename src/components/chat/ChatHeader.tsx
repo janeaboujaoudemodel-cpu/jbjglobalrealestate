@@ -86,6 +86,19 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
           <div className="w-2 h-2 rounded-full bg-[#EFE6D6] animate-pulse" />
           <span className="text-[#1A1A1A] text-[10px] font-semibold">{t('chat.available247', 'Available 24/7')}</span>
         </div>
+        {onClearChat && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClearChat}
+            className="w-10 h-10 rounded-lg bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#EFE6D6]/40 hover:border-[#B89555] hover:shadow-lg hover:shadow-gold/20 transition-all"
+            title={t('chat.clearChat', 'Clear chat')}
+            aria-label={t('chat.clearChat', 'Clear chat')}
+          >
+            <Eraser className="w-4 h-4" />
+          </Button>
+        )}
+
         {/* Minimize button instead of X */}
         <Button
           variant="ghost"
