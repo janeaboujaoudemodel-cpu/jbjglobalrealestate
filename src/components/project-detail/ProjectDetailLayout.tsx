@@ -1386,7 +1386,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
             </div>
 
            {/* JBJ AI ANALYZER (Order B: after mortgage) */}
-           <div ref={aiRef} id="ai" className="mb-14 scroll-mt-40">
+           <div ref={aiRef} id="ai" className="mb-10 md:mb-12 scroll-mt-40">
               <ProjectAIAnalyzer
                 projectName={project.name}
                 areaName={project.area_name || project.location || "UAE"}
@@ -1399,17 +1399,13 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
               />
             </div>
 
-           {/* DLD MARKET WIDGET (Order B: after AI) */}
-           <div className="py-6">
-              <div className="flex items-center justify-center gap-6">
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-                <div className="w-2 h-2 rotate-45 bg-[#EFE6D6]/40" />
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-              </div>
-            </div>
-            <div className="mb-14">
-              <DLDMarketWidget />
-            </div>
+           {/* DLD MARKET WIDGET — full-bleed band (escapes outer max-w container) */}
+           <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen mb-10 md:mb-12">
+             <SectionDividerGoldFullBleed />
+             <DLDMarketWidget />
+             <SectionDividerGoldFullBleed />
+           </div>
+
 
            {/* INVESTMENT METRICS SECTION */}
            {(project.roi_estimate || project.rental_yield_estimate) && (
