@@ -206,24 +206,31 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         />
       </div>
 
-      {/* LOCKED: card top-left is developer identity only — never property-type labels. */}
+      {/* LOCKED: card top-left is developer identity only — never property-type labels.
+          Reelly-style position: the plate straddles the photo/content seam (half on
+          image, half on body) just above the title. Implemented with a sibling overlay
+          div that mirrors the image aspect ratio (16/10) so we can anchor at its
+          bottom edge without nesting anchors. */}
       {developerName && developerHref && (
-        <Link
-          to={developerHref}
-          className="absolute top-3 left-3 z-30 inline-flex"
-          aria-label={`View ${developerName}`}
-          onClick={(e) => e.stopPropagation()}
-          data-no-contrast-guard
-        >
-          <DeveloperLogo
-            src={developerLogoUrl}
-            alt={developerName}
-            variant={developerLogoUrl ? "bare" : "nameplate"}
-            name={developerName}
-            loading="lazy"
-          />
-        </Link>
+        <div className="absolute inset-x-0 top-0 aspect-[16/10] pointer-events-none z-30">
+          <Link
+            to={developerHref}
+            className="absolute left-4 bottom-0 translate-y-1/2 inline-flex pointer-events-auto"
+            aria-label={`View ${developerName}`}
+            onClick={(e) => e.stopPropagation()}
+            data-no-contrast-guard
+          >
+            <DeveloperLogo
+              src={developerLogoUrl}
+              alt={developerName}
+              variant={developerLogoUrl ? "bare" : "nameplate"}
+              name={developerName}
+              loading="lazy"
+            />
+          </Link>
+        </div>
       )}
+
 
       <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
         {/* Image — static cover, NO carousel arrows on cards (gallery only). */}
