@@ -82,10 +82,10 @@ export function ToolkitShowcaseCard() {
             </p>
           </div>
 
-          {/* Tabs row — horizontally scrollable, mirrors ExploreServicesExpander */}
+          {/* Unified segmented header — rectangular pill band, dividers between categories */}
           <div
             ref={tabsRef}
-            className="flex items-stretch gap-1.5 px-3 md:px-4 py-2 overflow-x-auto no-scrollbar"
+            className="flex items-stretch overflow-x-auto no-scrollbar border-y border-[#B89555]/45 bg-[#F7F2EA] divide-x divide-[#B89555]/30"
             role="tablist"
             aria-label="Royal tools"
           >
@@ -99,10 +99,10 @@ export function ToolkitShowcaseCard() {
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveId(t.id)}
-                  className={`shrink-0 inline-flex items-center gap-2 px-3.5 md:px-4 py-2 rounded-lg text-[13px] font-semibold whitespace-nowrap transition-colors ${
+                  className={`shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors ${
                     isActive
-                      ? "bg-[#EFE6D6] text-[#1A1A1A] ring-1 ring-[#B89555]/55 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]"
-                      : "text-[#1A1A1A]/80 hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
+                      ? "bg-[#EFE6D6] text-[#1A1A1A] shadow-[inset_0_-2px_0_#B89555,inset_0_1px_0_rgba(255,255,255,0.7)]"
+                      : "text-[#1A1A1A]/80 hover:bg-[#FDFBF7] hover:text-[#1A1A1A]"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -111,6 +111,7 @@ export function ToolkitShowcaseCard() {
               );
             })}
           </div>
+
 
 
           {/* Active tool hero panel — keyed on active.id so it remounts cleanly */}
