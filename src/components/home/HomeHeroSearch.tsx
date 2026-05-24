@@ -229,16 +229,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         </div>
 
       </motion.div>
-
-      {searchOpen && (
-        <Suspense fallback={null}>
-          <GlobalSearchModal
-            isOpen={searchOpen}
-            initialQuery={initialQuery}
-            onClose={() => setSearchOpen(false)}
-          />
-        </Suspense>
-      )}
     </>
   );
 }
+
