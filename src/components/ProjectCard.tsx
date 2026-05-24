@@ -78,6 +78,16 @@ const shouldShowNewStatus = (projectName: string): boolean => {
   return PROJECTS_WITH_NEW_STATUS.some(p => normalized.includes(p) || p.includes(normalized));
 };
 
+const PROPERTY_TYPE_ONLY_LABELS = new Set([
+  'apartment', 'apartments', 'villa', 'villas', 'townhouse', 'townhouses',
+  'penthouse', 'penthouses', 'studio', 'studios', 'duplex', 'duplexes',
+]);
+
+const isPropertyTypeOnlyLabel = (value?: string | null) => {
+  if (!value) return false;
+  return PROPERTY_TYPE_ONLY_LABELS.has(value.trim().toLowerCase());
+};
+
 // Sale status label resolver — visual style is owned by <CardBadge variant="status" />.
 const getSaleStatusLabel = resolveSaleStatusLabel;
 
@@ -87,6 +97,15 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   // Single static cover — carousel arrows are banned on cards (gallery only).
   const images = project.images || [];
   const primaryImageUrl = images[0]?.image_url || project.cover_image_url || null;
+  const rawDeveloperName = project.developer?.name || project.developer_name || null;
+  const developerName = isPropertyTypeOnlyLabel(rawDeveloperName) ? null : rawDeveloperName;
+  const developerSlug = project.developer?.slug || null;
+  const developerLogoUrl = getDeveloperLogoUrl(project.developer as any);
+  const developerHref = developerName
+    ? developerSlug
+      ? `/developer/${developerSlug}`
+      : `/developers?search=${encodeURIComponent(developerName)}`
+    : null;
 
   const whatsappMessage = `Hello JBJ Global Real Estate,\n\nI am interested in ${project.name} located in ${project.location || 'UAE'}.\n\nPlease provide more details about this property.\n\nThank you.`;
   const whatsappHref = getWhatsAppUrl(whatsappMessage);
@@ -187,6 +206,25 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         />
       </div>
 
+      {/* LOCKED: card top-left is developer identity only — never property-type labels. */}
+      {developerName && developerHref && (
+        <Link
+          to={developerHref}
+          className="absolute top-3 left-3 z-30 inline-flex"
+          aria-label={`View ${developerName}`}
+          onClick={(e) => e.stopPropagation()}
+          data-no-contrast-guard
+        >
+          <DeveloperLogo
+            src={developerLogoUrl}
+            alt={developerName}
+            variant={developerLogoUrl ? "bare" : "nameplate"}
+            name={developerName}
+            loading="lazy"
+          />
+        </Link>
+      )}
+
       <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
         {/* Image — static cover, NO carousel arrows on cards (gallery only). */}
         <div className="aspect-[16/10] overflow-hidden relative" data-surface="ink">
@@ -202,37 +240,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               name: project.name,
             }}
           />
-
-          {/* Top-Left: Developer Logo — falls back to a developer NAMEPLATE (never property-type only).
-              Locked rule: cards must always identify the developer. */}
-          {(() => {
-            const logoUrl = getDeveloperLogoUrl(project.developer as any);
-            const devName = project.developer?.name || project.developer_name || null;
-            if (logoUrl) {
-              return (
-                <div className="absolute top-3 left-3 z-20">
-                  <DeveloperLogo
-                    src={logoUrl}
-                    alt={devName || ''}
-                    variant="bare"
-                    loading="lazy"
-                  />
-                </div>
-              );
-            }
-            if (devName) {
-              return (
-                <div className="absolute top-3 left-3 z-20">
-                  <DeveloperLogo
-                    variant="nameplate"
-                    name={devName}
-                    alt={devName}
-                  />
-                </div>
-              );
-            }
-            return null;
-          })()}
 
           {/* Sale Status Badge — opt-in (owner toggles `show_sale_status`).
               Rectangular gold-frame style to match the price pill. */}
@@ -285,11 +292,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           </div>
 
           {/* Developer link — always rendered when a name exists, even without slug */}
-          {(project.developer?.name || project.developer_name) && (
+          {developerName && (
             <DeveloperLink
-              name={project.developer?.name || project.developer_name || ''}
-              slug={project.developer?.slug}
-              logoUrl={getDeveloperLogoUrl(project.developer as any)}
+              name={developerName}
+              slug={developerSlug}
+              logoUrl={developerLogoUrl}
               className="text-sm block"
               showPrefix={true}
             />

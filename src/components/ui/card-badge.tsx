@@ -9,7 +9,8 @@ import { cn } from '@/lib/utils';
  *
  * Variants:
  *  - "status" (default): crystal glass + gold hairline + ink text.
- *      Use for property-type label, On Sale / Announced / Presale, etc.
+ *      Use for On Sale / Announced / Presale, etc. Never use for property-type
+ *      labels on public project cards; top-left card identity is developer logo/nameplate only.
  *  - "sold": ink-red fill + white text (always high-contrast).
  *
  * Typography (locked via .card-status-badge in index.css):

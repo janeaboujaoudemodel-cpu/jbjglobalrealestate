@@ -4615,7 +4615,8 @@ a[class*="bg-red-"]:hover {
 /* ============================================================
    UNIFIED CARD STATUS BADGE — crystal glass + gold hairline
    + ink text. Single shared style for ALL card overlays:
-   property-type label, On Sale / Announced / Presale, etc.
+   On Sale / Announced / Presale, etc. Project-card property-type labels are banned;
+   top-left card identity is developer logo/nameplate only.
    ============================================================ */
 .card-status-badge {
   display: inline-flex !important;
