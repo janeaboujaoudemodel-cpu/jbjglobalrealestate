@@ -30,24 +30,24 @@ export default function ChannelCard({
     <div
       data-premium
       data-no-contrast-guard
-      className={`group/channel flex ${compact ? "flex-row items-center gap-3" : "flex-col items-start gap-1.5"}
-        px-3.5 py-3 rounded-xl text-left w-full
+      className={`group/channel flex ${compact ? "flex-row items-center gap-3" : "flex-col items-start gap-1"}
+        px-3 py-2.5 rounded-xl text-left w-full
         border border-gold bg-raised text-ink
         transform-gpu transition-[border-color,box-shadow,transform]
         hover:bg-primary hover:text-primary-foreground hover:border-gold hover:-translate-y-0.5
         hover:shadow-[0_16px_32px_hsl(var(--foreground)/0.22),0_0_24px_hsl(var(--gold)/0.30)]`}
     >
       <div className="flex items-center gap-2">
-        <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-gold bg-surface text-ink transition-colors group-hover/channel:bg-primary-foreground/10 group-hover/channel:text-primary-foreground">
+        <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-gold bg-surface text-ink transition-colors group-hover/channel:bg-primary-foreground/10 group-hover/channel:text-primary-foreground">
           <channel.Icon className="h-3.5 w-3.5" />
         </span>
         <span className="text-[13px] font-semibold text-current">{channel.label}</span>
       </div>
-      <span className={`text-[11.5px] leading-snug text-current opacity-75 group-hover/channel:opacity-90 ${compact ? "ml-auto" : ""}`}>
+      <span className={`text-[11.5px] leading-tight text-current opacity-75 group-hover/channel:opacity-90 ${compact ? "ml-auto" : ""}`}>
         {channel.description}
       </span>
       {!compact && (
-        <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.14em] font-semibold text-current opacity-70 group-hover/channel:opacity-90">
+        <span className="inline-flex items-center gap-1 pt-0.5 text-[10px] uppercase tracking-[0.14em] font-semibold text-current opacity-70 group-hover/channel:opacity-90">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> {channel.responseTime}
         </span>
       )}
