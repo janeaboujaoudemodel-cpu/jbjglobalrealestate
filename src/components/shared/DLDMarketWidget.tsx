@@ -231,9 +231,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   ];
 
   return (
-    <section className="py-16 overflow-hidden rounded-3xl mx-4 md:mx-8 bg-[#FDFBF7] border border-[#B89555]/30 shadow-[0_8px_40px_rgba(26,26,26,0.04)]">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
+    <section className="py-10 md:py-14 overflow-hidden bg-[#FDFBF7]">
+      <div className="w-full px-4 md:px-8 lg:px-12">
+        <div className="max-w-[1600px] mx-auto">
+
 
           {/* Header */}
           <div className="text-center mb-10">
