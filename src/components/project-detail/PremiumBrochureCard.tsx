@@ -168,15 +168,15 @@ const PremiumBrochureCard = ({
             {/* Bottom: Brochure info */}
             <div className="mt-auto">
               <p
-                className="text-[#B89555] text-[10px] uppercase tracking-[0.32em] font-bold mb-2"
-                style={{ textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
+                className="text-[#E8C77A] text-[10px] uppercase tracking-[0.32em] font-bold mb-2"
+                style={{ textShadow: "0 1px 4px rgba(0,0,0,0.95)" }}
               >
                 Project Brochure
               </p>
 
               <h3
                 className="text-white text-2xl font-semibold mb-3 line-clamp-2 leading-tight"
-                style={{ textShadow: "0 2px 8px rgba(0,0,0,0.85)" }}
+                style={{ textShadow: "0 2px 10px rgba(0,0,0,0.95), 0 1px 3px rgba(0,0,0,0.9)" }}
               >
                 {projectName}
               </h3>
@@ -184,8 +184,8 @@ const PremiumBrochureCard = ({
               <div className="w-20 h-[2px] bg-gradient-to-r from-[#B89555] to-[#B89555]/20 mb-3" />
 
               <p
-                className="text-[#F7F2EA]/90 text-[11px] uppercase tracking-[0.2em] font-medium"
-                style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}
+                className="text-white text-[11px] uppercase tracking-[0.2em] font-medium"
+                style={{ textShadow: "0 1px 5px rgba(0,0,0,0.95)" }}
               >
                 {location || 'Dubai • UAE'}
               </p>
