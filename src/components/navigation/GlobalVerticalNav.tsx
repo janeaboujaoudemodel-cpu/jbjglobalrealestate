@@ -28,7 +28,7 @@ import CurrencySwitcher from "@/components/CurrencySwitcher";
 import { useDevelopers } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
 import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
 import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
