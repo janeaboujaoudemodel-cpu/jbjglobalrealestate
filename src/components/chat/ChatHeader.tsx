@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Minus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Minus, Eraser } from 'lucide-react';
 import { SquareChatIcon } from '@/components/ui/SquareChatIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ChatStep, getRandomAgent } from './types';
@@ -11,9 +11,11 @@ interface ChatHeaderProps {
   isExistingUser: boolean;
   onBack: () => void;
   onToggleCollapse: () => void;
+  onClearChat?: () => void;
 }
 
-const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, isExistingUser, onBack, onToggleCollapse }, ref) => {
+const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, isExistingUser, onBack, onToggleCollapse, onClearChat }, ref) => {
+
   const { isRTL, t } = useLanguage();
   const agent = useMemo(() => getRandomAgent(), []);
 
