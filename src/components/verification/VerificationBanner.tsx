@@ -33,36 +33,36 @@ const VerificationBanner = () => {
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative overflow-hidden bg-[#FDFBF7]"
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.0, ease: "easeInOut" }}
+        className="relative overflow-hidden bg-[#0B1829]"
       >
         <div className="max-w-[1600px] mx-auto px-4 py-4 sm:py-5 relative z-10">
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
             {/* Shield icon */}
-            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#FDFBF7] border border-[#B89555]/40 flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-[#B89555]" />
+            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#162544] border border-white/15 flex items-center justify-center">
+              <ShieldCheck className="w-5 h-5 text-white" />
             </div>
 
             {/* Text */}
             <div className="flex-1 text-center sm:text-left">
-              <p className="text-sm sm:text-base text-[#1A1A1A]/85 font-medium leading-snug">
+              <p className="text-sm sm:text-base text-white/85 font-medium leading-snug">
                 Join us in building a safer community.{" "}
-                <span className="text-[#1A1A1A] font-semibold">Get verified</span> to boost your credibility and assist us in creating trust amongst our users!
+                <span className="text-white font-semibold">Get verified</span> to boost your credibility and assist us in creating trust amongst our users!
               </p>
             </div>
 
-            {/* CTA Button — champagne mother-of-pearl + gold hairline (ink text, no global guard collision) */}
+            {/* CTA Button — light champagne pill on dark navy (navy text, elegant contrast) */}
             <button
               type="button"
               onClick={() => setModalOpen(true)}
-              className="group flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-b from-[#FDFBF7] to-[#EFE6D6] text-[#1A1A1A] font-semibold text-sm tracking-wide border border-[#B89555] shadow-[0_2px_10px_rgba(184,149,85,0.18),inset_0_1px_0_rgba(255,255,255,0.7)] hover:shadow-[0_6px_22px_rgba(184,149,85,0.35),inset_0_1px_0_rgba(255,255,255,0.85)] hover:-translate-y-0.5 transition-all duration-200"
+              className="group flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-b from-[#FDFBF7] to-[#EFE6D6] text-[#0B1829] font-semibold text-sm tracking-wide border border-[#B89555]/40 shadow-[0_2px_10px_rgba(0,0,1,0.20),inset_0_1px_0_rgba(255,255,255,0.7)] hover:shadow-[0_6px_22px_rgba(0,0,1,0.30),inset_0_1px_0_rgba(255,255,255,0.85)] hover:-translate-y-0.5 transition-all duration-200"
               aria-label="Open identity verification"
             >
-              <span className="text-[#1A1A1A]">Get Verified</span>
+              <span className="text-[#0B1829]">Get Verified</span>
               <ArrowRight
-                className="w-4 h-4 text-[#1A1A1A] group-hover:translate-x-0.5 transition-transform"
+                className="w-4 h-4 text-[#0B1829] group-hover:translate-x-0.5 transition-transform"
                 strokeWidth={2.5}
               />
             </button>
