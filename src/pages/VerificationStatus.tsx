@@ -98,6 +98,9 @@ export default function VerificationStatus() {
       await navigator.clipboard.writeText(code);
       toast({ title: "Reference code copied" });
     } catch {}
+  };
+
+
   useEffect(() => {
     document.title = "Identity Verification Status | JBJ Global Real Estate";
   }, []);
