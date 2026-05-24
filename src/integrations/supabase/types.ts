@@ -37471,6 +37471,7 @@ export type Database = {
         Args: { p_owner_id: string }
         Returns: number
       }
+      set_cons_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
       set_database_rows_junk: {
         Args: { junk: boolean; row_ids: string[] }
         Returns: Json
