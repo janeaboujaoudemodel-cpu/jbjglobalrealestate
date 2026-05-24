@@ -80,8 +80,12 @@ const ExploreServicesExpander = () => {
 
   return (
     <div className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)]">
-      {/* Header */}
+      {/* Header — mirrors JBJ Royal Tools Hub card */}
       <div className="px-5 md:px-7 pt-5 md:pt-6 pb-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] text-[10px] font-semibold uppercase tracking-[0.2em] mb-3">
+          <Sparkles className="w-3 h-3 text-[#B89555]" />
+          Premium Real Estate Services
+        </div>
         <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] tracking-tight">
           Explore Our Services
         </h2>
