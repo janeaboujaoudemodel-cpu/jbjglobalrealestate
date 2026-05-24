@@ -73,6 +73,7 @@ const staticEntries: SitemapEntry[] = [
   { path: "/developer-hub", changefreq: "weekly", priority: "0.80" },
   { path: "/developer-center", changefreq: "weekly", priority: "0.78" },
   { path: "/developer-registration", changefreq: "monthly", priority: "0.70" },
+  { path: "/verification", changefreq: "monthly", priority: "0.50" },
   // Legal
   { path: "/privacy", changefreq: "yearly", priority: "0.40" },
   { path: "/terms", changefreq: "yearly", priority: "0.40" },

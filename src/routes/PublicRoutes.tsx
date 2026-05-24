@@ -151,6 +151,7 @@ const CareersDeveloperRep = lazy(() => import("@/pages/CareersDeveloperRep"));
 const Onboarding = lazy(() => import("@/pages/Onboarding"));
 const OnboardingModule = lazy(() => import("@/pages/OnboardingModule"));
 const VerifyCertificate = lazy(() => import("@/pages/VerifyCertificate"));
+const VerificationStatus = lazy(() => import("@/pages/VerificationStatus"));
 const ReferralOnboarding = lazy(() => import("@/pages/ReferralOnboarding"));
 const RedeemReferral = lazy(() => import("@/pages/RedeemReferral"));
 const Spreadsheet = lazy(() => import("@/pages/Spreadsheet"));
@@ -382,6 +383,7 @@ export const PublicRoutes = () => (
     <Route path="/onboarding/module/:moduleId" element={<AuthRequiredRoute><OnboardingModule /></AuthRequiredRoute>} />
     <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
     <Route path="/verify-certificate/lookup" element={<VerifyCertificate />} />
+    <Route path="/verification" element={<VerificationStatus />} />
     <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
     <Route path="/redeem-referral" element={<RedeemReferral />} />
     <Route path="/spreadsheet" element={<AuthRequiredRoute><Spreadsheet /></AuthRequiredRoute>} />
