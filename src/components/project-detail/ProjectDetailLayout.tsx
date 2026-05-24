@@ -593,6 +593,13 @@ export default function ProjectDetailLayout({
     <>
       {/* HERO SECTION - Full Screen */}
       <section className="relative w-full h-screen min-h-[700px] -mt-24 xl:-mt-28">
+        {/* Owner-only: Edit hero / pick from gallery → set as Cover or Profile */}
+        <HeroImagePicker
+          projectId={project.id}
+          coverImageUrl={project.cover_image_url}
+          cardImageUrl={(project as any).card_image_url}
+        />
+
         <div className="absolute inset-0">
           {heroImage?.url ? (
             <SafeImage
