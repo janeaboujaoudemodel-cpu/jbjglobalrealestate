@@ -137,41 +137,51 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             />
           </form>
 
-          {/* Search — obsidian segment */}
-          <button
-            type="button"
-            onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
-            data-no-contrast-guard
-            aria-label="Search"
-            disabled={searching}
-            className="cta-premium allow-white group/search relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8
-              text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 bg-[#1A1A1A]
-              disabled:cursor-wait transition-colors duration-200 hover:bg-[#2A2A2A]"
-            style={{
-              color: "#FFFFFF",
-            }}
-          >
-            <span
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-              className="allow-white relative inline-block after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover/search:after:w-full"
+          {/* Search — obsidian segment with instant tooltip */}
+          <div className="relative flex flex-shrink-0 group/search">
+            <button
+              type="button"
+              onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
+              data-no-contrast-guard
+              aria-label="Search properties now"
+              disabled={searching}
+              className="cta-premium allow-white relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8
+                text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 bg-[#1A1A1A]
+                disabled:cursor-wait transition-colors duration-200 hover:bg-[#2A2A2A]"
+              style={{
+                color: "#FFFFFF",
+              }}
             >
-              {searching ? "Searching…" : "Search"}
+              <span
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                className="allow-white relative inline-block after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover/search:after:w-full"
+              >
+                {searching ? "Searching…" : "Search"}
+              </span>
+              {searching && (
+                <Loader2 className="w-4 h-4 allow-white animate-spin" style={{ color: "#FFFFFF" }} data-no-contrast-guard strokeWidth={2.4} />
+              )}
+            </button>
+            <span
+              role="tooltip"
+              className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2 px-3 py-1.5 rounded-md
+                bg-[#1A1A1A] text-white text-[11.5px] font-medium tracking-[-0.005em] whitespace-nowrap
+                border border-[#B89555]/55 shadow-lg opacity-0 group-hover/search:opacity-100 z-50"
+            >
+              Search properties now
             </span>
-            {searching && (
-              <Loader2 className="w-4 h-4 allow-white animate-spin" style={{ color: "#FFFFFF" }} data-no-contrast-guard strokeWidth={2.4} />
-            )}
-          </button>
+          </div>
 
           {/* Gold divider */}
           <span aria-hidden className="hidden md:block self-stretch w-px bg-[#B89555]/55 flex-shrink-0" />
 
-          {/* Free Consultation — text only, with custom hover tooltip */}
+          {/* Free Consultation — text only, with instant hover tooltip */}
           <div className="relative hidden md:flex flex-shrink-0 group/book">
             <button
               type="button"
               onClick={openBooking}
               data-no-contrast-guard
-              aria-label="Book a Free Consultation"
+              aria-label="Book your free consultation now"
               className="allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
                 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-[#1A1A1A]
                 transition-colors duration-200 hover:bg-[#2A2A2A]"
@@ -191,10 +201,9 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               role="tooltip"
               className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2 px-3 py-1.5 rounded-md
                 bg-[#1A1A1A] text-white text-[11.5px] font-medium tracking-[-0.005em] whitespace-nowrap
-                border border-[#B89555]/55 shadow-lg opacity-0 translate-y-1
-                transition-all duration-150 group-hover/book:opacity-100 group-hover/book:translate-y-0 z-50"
+                border border-[#B89555]/55 shadow-lg opacity-0 group-hover/book:opacity-100 z-50"
             >
-              Book your free consultation
+              Book your free consultation now
             </span>
           </div>
 
