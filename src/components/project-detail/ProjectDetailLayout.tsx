@@ -61,6 +61,9 @@ import PaymentPlanVisualization from "@/components/project-detail/PaymentPlanVis
 import MasterPlanSection from "@/components/project-detail/MasterPlanSection";
 import HouseDetailsSection from "@/components/project-detail/HouseDetailsSection";
 import DataFreshnessIndicator from "@/components/project-detail/DataFreshnessIndicator";
+import OwnerProvenanceCard from "@/components/project-detail/owner/OwnerProvenanceCard";
+import AIEnrichDialog from "@/components/project-detail/owner/AIEnrichDialog";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import RecommendedProjects from "@/components/project-detail/RecommendedProjects";
 import ReportIssueButton from "@/components/project-detail/ReportIssueButton";
 import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos";
