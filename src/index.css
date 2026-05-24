@@ -144,6 +144,23 @@ body {
   stroke: #B89555 !important;
 }
 
+@keyframes jbj-sidebar-teaching-pulse {
+  0%, 100% {
+    opacity: 0.25;
+    box-shadow: 0 0 0 0 hsl(var(--gold) / 0.34), 0 0 0 1px hsl(var(--gold) / 0.16);
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 0 7px hsl(var(--gold) / 0), 0 0 12px hsl(var(--gold) / 0.28);
+    transform: scale(1.04);
+  }
+}
+
+.jbj-sidebar-teaching-pulse {
+  animation: jbj-sidebar-teaching-pulse 1.25s ease-in-out infinite;
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */

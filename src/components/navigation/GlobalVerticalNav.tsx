@@ -1354,7 +1354,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               )}
             </div>
 
-            {/* Expand button — instant tooltip, gold pulse until onboarding tour completed */}
+            {/* Expand button — instant tooltip, soft pulse until first use */}
             <TooltipProvider delayDuration={0} skipDelayDuration={0}>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -1373,11 +1373,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     className="jbj-sidebar-collapse-control group relative w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
                     aria-label="Expand navigation"
                   >
-                    {/* Subtle teaching pulse — sits just outside the button, stops after first click */}
+                    {/* Soft teaching pulse only — no extra visible border */}
                     {collapsed && showExpandPulse && (
                       <span
                         aria-hidden
-                        className="pointer-events-none absolute -inset-[3px] rounded-[10px] ring-1 ring-[hsl(var(--gold))]/55 animate-[pulse_1.4s_ease-in-out_infinite]"
+                        className="pointer-events-none absolute -inset-[4px] rounded-lg jbj-sidebar-teaching-pulse"
                       />
                     )}
                     <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5 text-[hsl(var(--gold))]" strokeWidth={2} />
