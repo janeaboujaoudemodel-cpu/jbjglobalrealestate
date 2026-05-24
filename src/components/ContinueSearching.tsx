@@ -221,6 +221,62 @@ const ContinueSearching = ({
               >
                 Register Your Interest
               </button>
+              <Popover open={historyOpen} onOpenChange={setHistoryOpen}>
+                <PopoverTrigger asChild>
+                  <button
+                    aria-label="View search history"
+                    className="px-3 h-9 rounded-lg bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-xs font-semibold tracking-wide flex items-center gap-1.5 hover:bg-[#EFE6D6] hover:border-[#B89555] transition-all duration-300"
+                  >
+                    <Clock className="w-3.5 h-3.5 text-[#B89555]" />
+                    View Search History
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent
+                  align="end"
+                  className="w-80 p-0 bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_18px_48px_-18px_rgba(0,0,0,0.35)] rounded-xl overflow-hidden"
+                >
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/25 bg-gradient-to-r from-[#F7F2EA] to-[#EFE6D6]">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-[#B89555]" />
+                      <span className="text-[12px] font-bold tracking-[0.14em] uppercase text-[#1A1A1A]">Your Searches</span>
+                    </div>
+                    {recentQueries.length > 0 && (
+                      <button
+                        onClick={() => { clearRecentSearches(); setRecentQueries([]); }}
+                        className="text-[10px] font-semibold tracking-wide text-[#B33B3B] hover:underline"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                  <div className="max-h-72 overflow-y-auto">
+                    {recentQueries.length === 0 ? (
+                      <div className="px-4 py-8 text-center">
+                        <Search className="w-6 h-6 text-[#B89555] mx-auto mb-2" />
+                        <p className="text-[12px] text-[#1A1A1A]/70">No searches yet. Start exploring to build your history.</p>
+                      </div>
+                    ) : (
+                      <ul className="divide-y divide-[#B89555]/15">
+                        {recentQueries.map((q) => (
+                          <li key={q}>
+                            <button
+                              onClick={() => {
+                                setHistoryOpen(false);
+                                navigate(`/properties?q=${encodeURIComponent(q)}`);
+                              }}
+                              className="w-full text-left px-4 py-2.5 flex items-center gap-2.5 hover:bg-[#EFE6D6]/60 transition-colors group"
+                            >
+                              <Search className="w-3.5 h-3.5 text-[#B89555] shrink-0 group-hover:text-[#1A1A1A]" />
+                              <span className="flex-1 text-[13px] text-[#1A1A1A] truncate">{q}</span>
+                              <ChevronRight className="w-3.5 h-3.5 text-[#1A1A1A]/50 group-hover:text-[#B89555]" />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </PopoverContent>
+              </Popover>
               <button
                 onClick={clearAll}
                 aria-label="Clear browsing history"
@@ -232,6 +288,7 @@ const ContinueSearching = ({
             </div>
           )}
         </div>
+
 
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
