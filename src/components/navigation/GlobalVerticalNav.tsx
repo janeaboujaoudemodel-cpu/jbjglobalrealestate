@@ -786,22 +786,22 @@ export default function GlobalVerticalNav() {
       item.href === '/resale-properties'
     ) {
       return shouldHighlight
-        ? "bg-[#EFE6D6]/[0.35] font-bold"
-        : "font-semibold hover:bg-[#EFE6D6]/[0.15]";
+        ? "font-bold"
+        : "font-semibold";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
-        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-        : "text-[#1A1A1A] font-semibold hover:bg-[#EFE6D6]/10";
+        ? "text-[#B89555] font-bold"
+        : "text-[#B89555] font-semibold";
     }
     if (item.highlight) {
       return shouldHighlight
-        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-        : "text-[#1A1A1A] font-semibold hover:bg-[#EFE6D6]/10";
+        ? "text-[#B89555] font-bold"
+        : "text-[#B89555] font-semibold";
     }
     return shouldHighlight
-      ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-      : "text-[#1A1A1A] hover:bg-[#EFE6D6]/[0.08] hover:text-[#1A1A1A]";
+      ? "text-[#B89555] font-bold"
+      : "text-[#B89555]";
   };
 
   // Saturated colored rows where the row background is a vivid fill (not champagne).
