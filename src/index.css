@@ -1330,6 +1330,15 @@ All colors MUST be HSL.
   margin-bottom: clamp(2rem, 4vw, 3.5rem);
 }
 
+/* Home page seam kill-switch: section transitions must be background/padding only. */
+[data-home-page] > div,
+[data-home-page] > section {
+  background-color: #FDFBF7 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
 /* Marketing pages: any rogue dark `bg-[#1A1A1A]` section wrapper is
    re-mapped to champagne so the canvas stays continuous. Owner/admin/
    portal pages are NOT marked `data-marketing-page` and keep their

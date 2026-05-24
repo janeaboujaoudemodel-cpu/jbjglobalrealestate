@@ -138,7 +138,7 @@ const DeveloperPartnersMarquee = () => {
     : { display: "flex" };
 
   return (
-    <section className="w-full overflow-hidden bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
+    <section className="w-full overflow-hidden bg-[#FDFBF7]">
       {/* Inject keyframes */}
       {loopWidth > 0 && (
         <style>{`
@@ -157,7 +157,7 @@ const DeveloperPartnersMarquee = () => {
         </div>
 
         <div
-          className="relative w-full overflow-hidden py-6 md:py-8 bg-gradient-to-r from-[#EFE6D6] via-[#F7F1E6] to-[#EFE6D6]"
+          className="relative w-full overflow-hidden py-6 md:py-8 bg-[#FDFBF7]"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >

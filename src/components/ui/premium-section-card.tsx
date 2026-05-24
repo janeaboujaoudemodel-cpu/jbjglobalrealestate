@@ -57,7 +57,7 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
       >
         <div className={inner}>
           <div
-            className={`${radius} ${border} ${TONE[tone]} overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.06)] ${PADDING[padding]} ${className}`}
+            className={`${radius} ${border} ${TONE[tone]} overflow-hidden shadow-none ${PADDING[padding]} ${className}`}
           >
             {children}
           </div>
