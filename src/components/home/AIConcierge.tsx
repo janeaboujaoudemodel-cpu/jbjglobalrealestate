@@ -383,7 +383,16 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
 
             {/* Footer escalation + input — only when verified */}
             {isVerified && (
-              <div className="shrink-0 border-t border-[#B89555]/40 px-5 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-3 bg-[#F7F2EA]">
+              <div
+                className="shrink-0 border-t border-[#B89555]/30 px-5 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-3"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(247,242,234,0.55) 0%, rgba(239,230,214,0.85) 100%)",
+                  backdropFilter: "blur(14px) saturate(140%)",
+                  WebkitBackdropFilter: "blur(14px) saturate(140%)",
+                }}
+              >
+
                 {messages.length > 0 && (
                   <div className="flex items-center justify-between gap-2">
                     <span className="inline-flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.16em] font-semibold text-[#1A1A1A]/70">
