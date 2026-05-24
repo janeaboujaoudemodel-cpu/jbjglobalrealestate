@@ -8,7 +8,11 @@ on:
 
 jobs:
   contrast:
-    name: Icon / text contrast (WCAG AA)
+    # This job is the merge gate. Mark it as a Required Status Check in
+    # GitHub branch protection so any new contrast regression — tokens,
+    # faded-gold, low-opacity text, white-on-light, black-on-dark, or
+    # same-tone (vs the committed baseline) — blocks the merge button.
+    name: Contrast PR Gate (blocks merges)
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -26,9 +30,12 @@ jobs:
         run: npm ci
 
       # ---------- PR Gate: blocking static guards (fast, run first) ----------
-      # Any failure here blocks the merge. Captures stdout/stderr so we can
-      # post a focused PR comment listing exactly which files regressed.
-      - name: PR Gate — block on faded-gold / low-opacity-white / white-on-light / black-on-dark
+      # Any failure here blocks the merge. Covers all six static contrast
+      # layers. Same-tone is compared against
+      # scripts/contrast/same-tone-baseline.json so only NEW files /
+      # higher counts fail. Captures stdout/stderr so we can post a
+      # focused PR comment listing exactly which files regressed.
+      - name: PR Gate — tokens + faded-gold + low-opacity + white-on-light + black-on-dark + same-tone
         id: pr_gate
         run: |
           mkdir -p artifacts/contrast
@@ -38,10 +45,6 @@ jobs:
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit $status
 
-      # ---------- Layer 1: design tokens (fast, deterministic) ----------
-      - name: Check design-token contrast (WCAG AA)
-        if: success() || steps.pr_gate.outcome == 'success'
-        run: npm run check:contrast:tokens
 
       # ---------- Layer 2: rendered pages (Playwright + axe) ----------
       - name: Install Playwright Chromium
