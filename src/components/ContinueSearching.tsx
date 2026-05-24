@@ -473,9 +473,10 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
               onError={() => setLogoError(true)}
             />
           ) : (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/85 backdrop-blur-sm text-[9px] font-semibold uppercase tracking-wider text-[#F7F2EA] border border-[#B89555]/40">
-              <Icon className="w-2.5 h-2.5 text-[#B89555]" />
-              {item.type}
+            // LOCKED: never show generic "Property" type badge. Use JBJ monogram fallback
+            // when developer logo is unavailable.
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-md bg-[#FDFBF7] border border-[#B89555]/50 text-[10px] font-black tracking-tight text-[#1A1A1A] shadow-sm">
+              JBJ
             </span>
           )}
         </div>
@@ -489,7 +490,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         {/* Bottom content - elevated */}
         <div className="absolute bottom-0 left-0 right-0 p-3 z-20" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
-            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-[#1A1A1A]/60 backdrop-blur-sm text-[10px] text-white font-medium truncate">
+            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-[#1A1A1A]/85 backdrop-blur-sm text-[10px] text-[#E5C97A] font-semibold truncate border border-[#B89555]/40">
               {item.subtitle}
             </span>
           )}
