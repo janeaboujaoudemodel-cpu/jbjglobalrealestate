@@ -123,7 +123,7 @@ export default function SupportLauncher() {
               />
               <motion.div
                 key="orbs"
-                className="absolute bottom-16 right-0 flex flex-col gap-2 w-[240px]"
+                className="absolute bottom-16 right-0 flex max-h-[calc(100dvh-7rem)] w-[260px] flex-col gap-2 overflow-y-auto rounded-2xl p-2"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
@@ -144,7 +144,7 @@ export default function SupportLauncher() {
                   </button>
                 </div>
                 {channels.map((c) => (
-                  <div key={c.id} className="bg-[#FDFBF7] border border-[#B89555]/45 rounded-xl">
+                  <div key={c.id} className="rounded-xl">
                     <ChannelCard channel={c} compact onActivate={close} />
                   </div>
                 ))}
@@ -173,13 +173,14 @@ export default function SupportLauncher() {
       </div>
 
       {/* ============== DESKTOP: vertical edge tag (right) ============== */}
-      <div className="hidden md:block fixed right-0 top-1/2 z-[60] -translate-y-1/2" data-no-contrast-guard data-surface="dark">
+      <div className="hidden md:block fixed inset-0 z-[60] pointer-events-none" data-no-contrast-guard>
         {/* Tag */}
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-label="Talk to JBJ support"
-          className="group relative flex items-center gap-2 px-2 py-4 rounded-l-xl
+          data-surface="dark"
+          className="group fixed right-0 top-1/2 -translate-y-1/2 pointer-events-auto flex items-center gap-2 px-2 py-4 rounded-l-xl
             border border-r-0 border-gold/70 bg-primary text-primary-foreground
             shadow-[-8px_0_24px_hsl(var(--foreground)/0.30)] transform-gpu transition-[transform,box-shadow,border-color] duration-200
             hover:-translate-x-1 hover:border-gold
@@ -206,7 +207,7 @@ export default function SupportLauncher() {
             <>
               <motion.div
                 key="dscrim"
-                className="fixed inset-0 bg-transparent"
+                className="fixed inset-0 bg-transparent pointer-events-auto"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 onClick={close}
               />
@@ -217,13 +218,13 @@ export default function SupportLauncher() {
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ type: "spring", stiffness: 320, damping: 30 }}
                 data-no-contrast-guard
-                className="fixed right-14 top-1/2 -translate-y-1/2 w-[300px] max-h-[calc(100dvh-128px)] overflow-y-auto
-                  rounded-2xl border border-gold/55 bg-background text-foreground
-                  shadow-[0_30px_60px_hsl(var(--foreground)/0.25)] p-3 space-y-2"
+                className="fixed right-14 top-[104px] bottom-5 flex w-[300px] flex-col overflow-hidden pointer-events-auto
+                  rounded-2xl border border-gold bg-background text-foreground
+                  shadow-[0_30px_60px_hsl(var(--foreground)/0.25)] p-3"
               >
-                <div className="flex items-center justify-between px-1 pb-1">
+                <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3">
                   <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
-                    border border-gold/45 bg-secondary text-foreground">
+                    border border-gold bg-raised text-ink">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     Call our agent now · Free
                   </span>
@@ -231,14 +232,16 @@ export default function SupportLauncher() {
                     onClick={close}
                     aria-label="Close"
                     className="h-7 w-7 inline-flex items-center justify-center rounded-full
-                      border border-gold/45 text-foreground hover:bg-accent"
+                      border border-gold bg-raised text-ink hover:bg-primary hover:text-primary-foreground transition-colors"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
                 </div>
-                {channels.map((c) => (
-                  <ChannelCard key={c.id} channel={c} onActivate={close} />
-                ))}
+                <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1 pb-1">
+                  {channels.map((c) => (
+                    <ChannelCard key={c.id} channel={c} onActivate={close} />
+                  ))}
+                </div>
 
               </motion.div>
             </>

@@ -174,7 +174,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 py-5 bg-background">
+            <div ref={scrollRef} className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pt-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] bg-background">
               {!isVerified && (
                 <div className="flex h-full flex-1 items-stretch">
                   <div className="flex h-full w-full flex-1">
@@ -268,7 +268,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         hover:bg-[#2A2A2A] hover:shadow-[0_0_24px_rgba(184,149,85,0.35)] transition-all"
                     >
                       <div className="flex items-center gap-2.5">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#B89555] text-[#1A1A1A]">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[#1A1A1A]">
                           <PhoneCall className="h-4 w-4" />
                         </span>
                         <div className="flex flex-col">
