@@ -173,12 +173,13 @@ export default function SupportLauncher() {
       </div>
 
       {/* ============== DESKTOP: vertical edge tag (right) ============== */}
-      <div className="hidden md:block fixed inset-0 z-[60] pointer-events-none" data-no-contrast-guard data-surface="dark">
+      <div className="hidden md:block fixed inset-0 z-[60] pointer-events-none" data-no-contrast-guard>
         {/* Tag */}
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-label="Talk to JBJ support"
+          data-surface="dark"
           className="group fixed right-0 top-1/2 -translate-y-1/2 pointer-events-auto flex items-center gap-2 px-2 py-4 rounded-l-xl
             border border-r-0 border-gold/70 bg-primary text-primary-foreground
             shadow-[-8px_0_24px_hsl(var(--foreground)/0.30)] transform-gpu transition-[transform,box-shadow,border-color] duration-200
