@@ -251,7 +251,7 @@ export function useHandpickedProjects() {
   const { mode } = useUserModeContext() as any;
 
   return useQuery({
-    queryKey: ["handpicked-projects-v1", user?.id ?? "anon", mode ?? "none"],
+    queryKey: ["handpicked-projects-v2-offplan-first", user?.id ?? "anon", mode ?? "none"],
     staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const out: Project[] = [];
