@@ -55,15 +55,16 @@ function useChannels(closeAfter: () => void): ChannelDef[] {
     },
     {
       id: "voice-ai",
-      label: "Free Voice Call",
-      description: "Speak to our concierge now",
-      responseTime: "Live",
+      label: "Voice Call Free",
+      description: "Speak with our agent now live",
+      responseTime: "",
       Icon: PhoneCall,
       action: () => {
         closeAfter();
         window.dispatchEvent(new CustomEvent("jbj:open-voice-concierge"));
       },
     },
+
   ];
 }
 
