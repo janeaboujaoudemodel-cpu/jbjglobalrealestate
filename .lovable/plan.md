@@ -1,35 +1,50 @@
-## Plan
+## Goal
 
-### 1. Marquee title — stop the shimmer, use solid dark gold
+Every section on every page uses the SAME side gutter (the one currently seen on "Explore Our Services"). Only four sections stay full-bleed, and only on the homepage.
 
-In `src/components/DeveloperPartnersMarquee.tsx`:
-- Remove the `.jbj-shimmer-text` animation from the title "Partners with Dubai's leading developers".
-- Render the title in solid dark gold `#B89555` (no gradient, no animation).
-- Keep the shimmering champagne **background band** behind the title and the gold hairline divider below it — only the text stops animating.
+## Standard gutter (the "Explore Our Services" frame)
 
-### 2. Make every homepage section match the width of Explore Our Services
+Update `PremiumSectionCard` so the default `contained` mode renders a real, visible premium gutter — not the current near-flush `px-2 md:px-3`:
 
-Root cause: `Explore Our Services` is wrapped in `<PremiumSectionCard padding="none">`, so its inner card spans the full wrapper width. Other sections on `Index.tsx` use `padding="md"` (`p-5 md:p-8`), which insets the inner card and makes it visually narrower.
+```
+inner = "w-full max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12"
+```
 
-Fix on `src/pages/Index.tsx` — change all 7 occurrences of `padding="md"` to `padding="none"` on these wrappers so every section's inner card spans the same edge-to-edge width as Explore Our Services:
+This becomes the single source of truth for the site-wide section width. Every section wrapped in `<PremiumSectionCard>` will sit inside this frame, identical to Explore Our Services.
 
-- Verification Banner
-- Developer Portal CTA
-- Featured Listings
-- Continue Searching
-- Resale Properties
-- Overseas Investors
-- (any remaining `padding="md"`)
+## Full-bleed exceptions (homepage only)
 
-For sections whose inner component relied on the wrapper's horizontal padding, add equivalent horizontal padding (`px-5 md:px-8`) inside the component itself so the **content** still breathes, but the **card frame** reaches the same width as Explore Our Services.
+These four sections keep `width="full"` on `/` and ONLY on `/`:
 
-### 3. Verify globally
+1. Verification banner — "Join us in building a safer community"
+2. Overseas Investors — "Invest in Dubai from anywhere"
+3. Homepage Book Marquee — "Explore Our Guides & Reports"
+4. Developer Partners Marquee (the developer logos strip under hero)
 
-`PremiumSectionCard` is only used in `Index.tsx` (the toolkit hub doesn't use it). So once Index sections are aligned, all marketing sections that share this wrapper will be at the same Explore-Our-Services width. No other pages need editing.
+Everything else on the homepage uses the contained gutter, including:
+- Continue Searching (currently `width="full"` → revert to contained)
+- Featured Listings, Resale, Mortgage Calculator, Toolkit, AI Comparison, Podcast, Areas We Cover, Developer Portal CTA, Explore Our Services (already contained)
 
-### Out of scope
-- I will not touch the marquee logo strip itself (locked component) — only the title row above it.
-- I will not change the visual style of any individual section card (gold border, shadows, etc.) — only the outer wrapper width/padding.
+## Other pages
 
-### Clarifying point
-Other pages (e.g. property pages, toolkit pages) do **not** use `PremiumSectionCard`, so this width rule only applies to the homepage marketing stack. If you want the same width rule enforced on other specific pages, tell me which ones and I will extend the fix.
+`PremiumSectionCard` is only used in `src/pages/Index.tsx` today, so no other page edits are required. The new default gutter automatically applies anywhere the component gets adopted later, with no `width="full"` allowed outside the four homepage exceptions above.
+
+## Files to change
+
+1. `src/components/ui/premium-section-card.tsx`
+   - Change `contained` inner to `w-full max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12`.
+   - Keep `width="full"` behavior unchanged (`w-full`, edge-to-edge).
+   - Keep `contained` as the default.
+
+2. `src/pages/Index.tsx`
+   - Line 319 (Continue Searching): remove `width="full"` → falls back to contained.
+   - Line 291 (Verification banner): keep `width="full"`.
+   - Line 337 (Overseas Investors): keep `width="full"`.
+   - Line 346 (Guides & Reports marquee): keep `width="full"`.
+   - Developer Partners Marquee (line 278) already renders outside `PremiumSectionCard` and stays as-is (visually full-bleed).
+
+## What this fixes
+
+- All "card" sections (Featured Listings, Explore Our Services, Toolkit, AI Comparison, Mortgage, Resale, Podcast, Areas, Developer Portal CTA, Continue Searching) align to the exact same left/right gap.
+- The four marketing strips that need to breathe edge-to-edge remain full-bleed on the homepage only.
+- Future sections automatically inherit the standard gutter — no per-section width decisions.
