@@ -1,74 +1,40 @@
-## What already exists (no duplication needed)
+## Goal
 
-- `src/components/project-detail/ProjectNearbyPropertiesMap.tsx` — already rendered under "Project Location" on `/project/:slug` as a second map with the current project in **red** and other nearby projects as pins. Same-area first (matches `area_name`), then ~10km bbox fallback.
-- `src/components/ContinueSearching.tsx` — already built and used on `/areas`, `/developers`, `/properties`. It is imported and lazy-loaded in `src/pages/Index.tsx` but **not rendered** anywhere on the homepage.
-- `JBJ_BROWSING_HISTORY` localStorage key — **read** by `useHandpickedProjects.ts`, but **never written** anywhere in the codebase, so today nothing actually gets saved when a user visits a project.
+On every project's hero section, give the owner a quick way to click the hero image, open the project's gallery in a picker, and assign any photo as either:
 
-The plan extends what's already there. No new map or duplicate "continue searching" component will be created.
+- **Use as Cover** → updates `projects.cover_image_url` (the big hero image shown on the detail page)
+- **Use as Profile** → updates `projects.card_image_url` (the thumbnail shown on listing/search cards across the site)
 
-## 1. Upgrade `ProjectNearbyPropertiesMap`
+This is owner-only, never visible to public visitors. Listing cards and search/filter UI are not touched — only the data source they already read from changes.
 
-Edit the existing file only (no new component):
+## Scope
 
-- Pin colors: keep current project **red** as today; switch the nearby pins from gold to **blue** (`#1D4ED8` → `#1E3A8A` gradient) to match the user's spec.
-- Extend the data fetch to also return `developer_name` (and `developers.slug` via join) so the popup can credit the developer.
-- Popup content per nearby pin:
-  - cover image (existing)
-  - project name → links to `/project/:slug` (existing, clickable)
-  - **`<DeveloperLink />`** with developer name (clickable → `/developer/:slug`) — uses the project-wide standard, not a custom string
-  - **`<PricePill />`** for the price (replaces hand-rolled "From AED …" so it respects the price/developer-label standard)
-  - small **"← Back to {currentProjectName}"** ghost button at the bottom of the popup. It stores the current project's slug in `sessionStorage` under `JBJ_PROJECT_BACK_STACK` (push), then `Link` navigates to the nearby project.
-- On `/project/:slug` mount, if `JBJ_PROJECT_BACK_STACK` is non-empty and the top entry is **not** the current slug, render a sticky **"← Return to previous project"** chip above the title. Clicking it pops the stack and `navigate(-1)`-style routes back to that slug. Pure frontend, no schema change.
+- Only the hero section of `src/components/project-detail/ProjectDetailLayout.tsx`.
+- New component `src/components/project-detail/owner/HeroImagePicker.tsx`.
+- No DB migration needed — `projects.cover_image_url` and `projects.card_image_url` already exist, and `project_images` already powers the gallery.
+- No changes to listing cards, search, or other layouts.
 
-Section heading stays "Other projects in this area" (already present).
+## Behavior
 
-## 2. Actually record browsing history
-
-Create `src/lib/browsingHistory.ts` with a single `recordProjectView({ id, slug, name, developer_name, area_name, cover_image_url })`:
-
-- Writes to the existing `JBJ_BROWSING_HISTORY` localStorage key consumed by `useHandpickedProjects`.
-- Deduplicates by `slug`, most-recent first, capped at 20 entries — matches the "Browsing History Deduplication" memory standard.
-- If the user is signed in, also upserts into a new `user_project_views` table (insert below) so history follows them across devices and surfaces in their account.
-
-Call `recordProjectView(...)` once from `ProjectDetailLayout.tsx` inside a `useEffect` keyed on `project.id`. No UI change there.
-
-### DB migration (one new table)
-
-```sql
-create table public.user_project_views (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid not null,
-  project_id uuid not null,
-  project_slug text not null,
-  viewed_at timestamptz not null default now(),
-  unique (user_id, project_id)
-);
-alter table public.user_project_views enable row level security;
-create policy "own views select" on public.user_project_views
-  for select using (auth.uid() = user_id);
-create policy "own views insert" on public.user_project_views
-  for insert with check (auth.uid() = user_id);
-create policy "own views update" on public.user_project_views
-  for update using (auth.uid() = user_id);
-create index on public.user_project_views (user_id, viewed_at desc);
-```
-
-No foreign key to `auth.users` (per project standard). Upsert refreshes `viewed_at` on revisit.
-
-## 3. Restore "Continue Searching" on the homepage
-
-Render the **existing** `ContinueSearching` (already lazy-imported on line 59 of `Index.tsx`) inside a `<PremiumSectionCard>` block right after `FeaturedListings`, wrapped in a `Suspense` fallback like every other home section. Same `type="property"` prop signature already used on `/properties`. No new component, no duplicated logic. If the user has zero history, `ContinueSearching` already falls back to trending (per the "History & Trending Fallback" memory).
-
-## Files touched
-
-- **Edit** `src/components/project-detail/ProjectNearbyPropertiesMap.tsx` — blue pins, developer in select + popup, `<PricePill />`, `<DeveloperLink />`, back-stack push button.
-- **Edit** `src/components/project-detail/ProjectDetailLayout.tsx` — `recordProjectView` effect + "Return to previous project" chip.
-- **New** `src/lib/browsingHistory.ts` — single source of truth for reads/writes of `JBJ_BROWSING_HISTORY` + `user_project_views`.
-- **Edit** `src/pages/Index.tsx` — render the already-imported `ContinueSearching` after `FeaturedListings`.
-- **Migration** — `user_project_views` table with RLS.
+1. When viewed by the owner (via existing `useIsAppOwner` / `useCanEdit("project_photos")`), a small champagne "Edit hero" pill appears in the top-right corner of the hero, below the 88px header (uses `top-[112px] xl:top-[120px]` so it never collides with the sticky header in any sidebar/header state). Public visitors see nothing.
+2. Clicking the pill (or clicking anywhere on the hero while holding the owner badge) opens a modal "Select hero image" with:
+   - A responsive grid of all `project_images` for this project (reuses the same query key `["owner-project-images", projectId]` so it stays in sync with the existing Owner · Photos manager).
+   - Hover state on each tile showing two actions:
+     - **Use as Cover** — sets `cover_image_url` (also bumps that image's `display_order` to 0 so it's first in the carousel).
+     - **Use as Profile** — sets `card_image_url`.
+   - Badges on the currently-selected Cover and Profile tiles so the owner sees what's active.
+   - "Upload new photo" button at the top of the modal that reuses the same upload pipeline (`project-images` storage bucket → insert into `project_images`).
+3. After either action, invalidate `["project", slug]`, `["projects"]`, `["owner-project-images", projectId]`, and `["nearby-projects"]` so the hero, listing cards, and nearby map refresh immediately.
+4. Toasts confirm the action ("Cover photo updated" / "Profile photo updated").
+5. All styling stays within the champagne-gold design system — no gray surfaces, no faded gold, gold used only as 1px hairline, premium pill matches the existing "SOLD OUT" badge sizing.
 
 ## Out of scope
 
-- No new map library, no second nearby-projects component.
-- No changes to `ContinueSearching.tsx` itself — it already does the right thing.
-- No changes to how `useHandpickedProjects` consumes history — it already reads the same key.
+- No changes to listing card layout, price pill, or developer label rules.
+- No removal of the existing Owner · Photos manager further down the page — both coexist; the hero picker is just a faster entry point.
+- No new RLS / migrations / edge functions.
+
+## Files
+
+- **New:** `src/components/project-detail/owner/HeroImagePicker.tsx`
+- **Edit:** `src/components/project-detail/ProjectDetailLayout.tsx` — mount `<HeroImagePicker />` inside the hero section, gated by `isOwner`.
