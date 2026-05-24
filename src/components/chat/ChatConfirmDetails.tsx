@@ -136,7 +136,7 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
             <Button
               onClick={handleSave}
               disabled={isSaving || !editEmail.trim()}
-              className="w-full h-12 bg-gradient-to-r from-[#C8A766] to-[#B8944A] hover:from-[#B8944A] hover:to-[#A8843A] text-[#1A1A1A] font-bold"
+              className="w-full h-12 bg-[#EFE6D6] hover:bg-[#1A1A1A] text-[#1A1A1A] hover:text-[#EFE6D6] border border-[#B89555] font-bold transition-colors"
             >
               {isSaving ? (
                 <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...</>
