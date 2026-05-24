@@ -141,7 +141,7 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
           className={cn(
             "mt-1 font-semibold tabular-nums leading-tight truncate",
             "text-[15px] sm:text-base",
-            hasPrice ? "text-[color:var(--price-orange,#C2410C)]" : "text-[#1A1A1A]/70",
+            hasPrice ? "text-[hsl(var(--price-orange))]" : "text-[#1A1A1A]/70",
           )}
         >
           {hasPrice ? formatPrice(price!, currency) : "On request"}
