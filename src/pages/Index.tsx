@@ -334,7 +334,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* OVERSEAS INVESTORS */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-8">
         <LazyVisible minHeight={300}>
           <Suspense fallback={<SectionLoader />}>
             <OverseasInvestorsBanner />
