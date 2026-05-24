@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useConsVisibility } from "@/contexts/ConsVisibilityContext";
 import { Brain, Loader2, TrendingUp, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown, RefreshCw, ArrowUpRight, ArrowDownRight, Home, Landmark, MapPin, CalendarDays } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -341,6 +342,7 @@ export const DeveloperAIAnalyzer = ({
   activeProjects,
   projectCount,
 }: DeveloperAIAnalyzerProps) => {
+  const { isConsVisible } = useConsVisibility();
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -664,7 +666,7 @@ export const DeveloperAIAnalyzer = ({
             </div>
 
             {/* Row 4: Pros & Cons */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className={isConsVisible ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "grid grid-cols-1 gap-6"}>
               {sections?.pros && (
                 <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
@@ -674,7 +676,7 @@ export const DeveloperAIAnalyzer = ({
                   <div className="text-emerald-900 text-sm leading-relaxed whitespace-pre-line">{cleanMarkdown(sections.pros)}</div>
                 </div>
               )}
-              {sections?.cons && (
+              {isConsVisible && sections?.cons && (
                 <div className="bg-red-50 border border-red-200 rounded-2xl p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
                     <ThumbsDown className="w-5 h-5 text-red-500" />

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useConsVisibility } from "@/contexts/ConsVisibilityContext";
 import { Brain, Loader2, TrendingUp, TrendingDown, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown, RefreshCw, ArrowUpRight, ArrowDownRight, MapPin, Users, Home, Landmark } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -357,6 +358,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
 }
 
 export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
+  const { isConsVisible } = useConsVisibility();
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -679,7 +681,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             </div>
 
             {/* Row 4: Pros & Cons */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className={isConsVisible ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "grid grid-cols-1 gap-6"}>
               {sections?.pros && (
                 <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
@@ -691,7 +693,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   </div>
                 </div>
               )}
-              {sections?.cons && (
+              {isConsVisible && sections?.cons && (
                 <div className="bg-red-50 border border-red-200 rounded-2xl p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
                     <ThumbsDown className="w-5 h-5 text-red-500" />

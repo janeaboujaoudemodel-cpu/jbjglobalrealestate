@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useConsVisibility } from "@/contexts/ConsVisibilityContext";
 import { Brain, TrendingUp, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown, RefreshCw, CheckCircle2, XCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -101,6 +102,7 @@ export const ProjectAIAnalyzer = ({
   propertyType = "all",
   emirate,
 }: ProjectAIAnalyzerProps) => {
+  const { isConsVisible } = useConsVisibility();
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -504,7 +506,7 @@ export const ProjectAIAnalyzer = ({
             </div>
 
             {/* Row 4: Pros & Cons — styled pill rows */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className={isConsVisible ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "grid grid-cols-1 gap-6"}>
               {/* Pros */}
               <div className="bg-gradient-to-br from-emerald-100 via-emerald-50 to-green-100/80 border-2 border-emerald-400 rounded-2xl p-6 shadow-md shadow-emerald-200/60 ring-1 ring-emerald-300">
                 <div className="flex items-center gap-2 mb-4">
@@ -525,25 +527,27 @@ export const ProjectAIAnalyzer = ({
                 )}
               </div>
 
-              {/* Cons — only show if verified cons exist */}
-              <div className="bg-red-50 border-2 border-red-300 rounded-2xl p-6 shadow-md shadow-red-100 ring-1 ring-red-200">
-                <div className="flex items-center gap-2 mb-4">
-                  <ThumbsDown className="w-5 h-5 text-red-600" />
-                  <h3 className="font-bold text-red-700 text-lg">Cons</h3>
+              {/* Cons — gated by global cons visibility toggle */}
+              {isConsVisible && (
+                <div className="bg-red-50 border-2 border-red-300 rounded-2xl p-6 shadow-md shadow-red-100 ring-1 ring-red-200">
+                  <div className="flex items-center gap-2 mb-4">
+                    <ThumbsDown className="w-5 h-5 text-red-600" />
+                    <h3 className="font-bold text-red-700 text-lg">Cons</h3>
+                  </div>
+                  {consList.length > 0 ? (
+                    <ul className="space-y-2">
+                      {consList.map((item, i) => (
+                        <li key={i} className="flex items-start gap-2 bg-[#FDFBF7] rounded-lg px-3 py-2 border border-red-200">
+                          <XCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-foreground text-sm leading-snug">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-red-600 text-sm font-semibold">No significant risks identified by AI analysis.</p>
+                  )}
                 </div>
-                {consList.length > 0 ? (
-                  <ul className="space-y-2">
-                    {consList.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 bg-[#FDFBF7] rounded-lg px-3 py-2 border border-red-200">
-                        <XCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
-                        <span className="text-foreground text-sm leading-snug">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-red-600 text-sm font-semibold">No significant risks identified by AI analysis.</p>
-                )}
-              </div>
+              )}
             </div>
 
             {/* Footer */}

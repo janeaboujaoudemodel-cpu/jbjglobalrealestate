@@ -1,5 +1,6 @@
 import { FounderVisibilityToggle } from "@/components/admin/FounderVisibilityToggle";
 import { PodcastVisibilityToggle } from "@/components/admin/PodcastVisibilityToggle";
+import { ConsVisibilityToggle } from "@/components/admin/ConsVisibilityToggle";
 import { User, Mic, Shield, Eye, EyeOff, Radio, Info, Headphones, Settings2, Volume2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +29,7 @@ const OwnerFounderSettings = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <FounderVisibilityToggle />
         <PodcastVisibilityToggle />
+        <ConsVisibilityToggle />
       </div>
 
       {/* Podcast Studio Quick Access */}
