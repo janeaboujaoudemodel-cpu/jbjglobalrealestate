@@ -149,11 +149,10 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             aria-label="Search"
             disabled={searching}
             className="cta-premium allow-white group/search relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8
-              text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0
+              text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 bg-[#1A1A1A]
               disabled:cursor-wait transition-colors duration-200 hover:bg-[#2A2A2A]"
             style={{
               color: "#FFFFFF",
-              background: "#1A1A1A",
             }}
           >
             <span
@@ -181,12 +180,11 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             data-no-contrast-guard
             aria-label="Book a Free Consultation"
             className="allow-white group/book hidden md:flex items-center justify-center gap-2 self-stretch h-full px-5 lg:px-6
-              text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] flex-shrink-0
+              text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] flex-shrink-0 bg-[#1A1A1A]
               transition-colors duration-200 hover:bg-[#2A2A2A]"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
-              backgroundColor: "#1A1A1A",
             }}
           >
             <CalendarCheck className="w-4 h-4 allow-white transition-transform duration-200 group-hover/book:scale-110" style={{ color: "#FFFFFF" }} data-no-contrast-guard strokeWidth={2.2} />
@@ -205,11 +203,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             data-no-contrast-guard
             aria-label="Open the JBJ Concierge"
             title="JBJ Concierge"
-            className="allow-white group/conc hidden sm:flex items-center justify-center self-stretch h-full px-4 lg:px-5 rounded-r-2xl flex-shrink-0
+            className="allow-white group/conc hidden sm:flex items-center justify-center self-stretch h-full px-4 lg:px-5 rounded-r-2xl flex-shrink-0 bg-[#1A1A1A]
               transition-colors duration-200 hover:bg-[#2A2A2A]"
-            style={{
-              backgroundColor: "#1A1A1A",
-            }}
           >
             <Sparkles
               className="w-[18px] h-[18px] allow-white transition-transform duration-200 group-hover/conc:scale-110 group-hover/conc:rotate-12"
