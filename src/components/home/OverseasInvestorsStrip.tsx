@@ -20,7 +20,7 @@ const OverseasInvestorsStrip = () => {
         <Link
           to="/overseas-investors"
           aria-label="Invest in Dubai from anywhere in the world — learn more"
-          className="group flex flex-nowrap items-center justify-between gap-3 sm:gap-4 md:gap-6 border-y border-[#B89555]/25 px-2 sm:px-3 py-2.5 md:py-3 transition-colors hover:bg-[#F7F2EA]/60"
+          className="group flex flex-nowrap items-center justify-between gap-3 sm:gap-4 md:gap-6 px-2 sm:px-3 py-2.5 md:py-3 transition-colors hover:bg-[#F7F2EA]/60"
         >
           {/* Left: globe + headline */}
           <span className="flex items-center gap-2 sm:gap-2.5 min-w-0 shrink">
