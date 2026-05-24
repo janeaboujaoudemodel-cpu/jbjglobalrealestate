@@ -27,10 +27,8 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
     const viewport = window.innerHeight;
     const docHeight = document.documentElement.scrollHeight;
     const maxScroll = Math.max(docHeight - viewport, 0);
-    // Only show once the page is meaningfully scrollable
-    setVisible(maxScroll > 200);
-    // If past 60% of the page, offer "back to top"; otherwise offer "jump to bottom"
-    setDirection(scrollY > maxScroll * 0.6 ? "up" : "down");
+    setVisible(maxScroll > 120);
+    setDirection(scrollY > maxScroll * 0.5 ? "up" : "down");
   }, []);
 
   useEffect(() => {
@@ -80,8 +78,9 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
     <div
       ref={ref}
       className={cn(
-        "fixed bottom-6 z-50 pointer-events-auto",
-        isRTL ? "left-6" : "right-6",
+        // Aligned directly under the right-edge "Talk to us" support stack
+        "fixed bottom-24 z-[55] pointer-events-auto",
+        isRTL ? "left-4" : "right-4",
       )}
       data-no-contrast-guard
     >
@@ -91,14 +90,24 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         aria-label={label}
         title={label}
         className={cn(
-          "inline-flex items-center justify-center bg-transparent border-0 p-1",
-          "text-[#B89555] hover:text-[#1A1A1A]",
-          "drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]",
-          "transition-colors duration-200",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70 rounded-sm",
+          "group inline-flex items-center justify-center h-11 w-11 rounded-full",
+          "border border-[#B89555]/65 hover:border-[#B89555]",
+          "bg-[#FDFBF7]/85 hover:bg-[#EFE6D6]",
+          "text-[#B89555]",
+          "shadow-[0_10px_24px_rgba(0,0,0,0.18),0_0_0_1px_rgba(184,149,85,0.18)]",
+          "transition-all duration-200 hover:-translate-y-[1px] active:scale-95",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70",
         )}
+        style={{
+          backdropFilter: "blur(14px) saturate(140%)",
+          WebkitBackdropFilter: "blur(14px) saturate(140%)",
+        }}
       >
-        <Icon className="h-7 w-7" strokeWidth={2.25} />
+        <Icon
+          className="h-5 w-5 text-[#B89555] transition-transform duration-200 group-hover:scale-110"
+          strokeWidth={2.25}
+          data-no-contrast-guard
+        />
       </button>
     </div>
   );
