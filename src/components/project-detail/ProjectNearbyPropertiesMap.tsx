@@ -93,8 +93,12 @@ export default function ProjectNearbyPropertiesMap({
   const navigate = useNavigate();
   const tiles = getMapTiles(language);
 
+  const hasOwnCoords =
+    typeof latitude === "number" && typeof longitude === "number" && !isNaN(latitude) && !isNaN(longitude);
+
   const { data: nearbyProjects } = useQuery({
     queryKey: ["nearby-projects-map", currentProjectId, areaName, latitude, longitude],
+    enabled: hasOwnCoords || !!areaName,
     queryFn: async (): Promise<NearbyRow[]> => {
       const select =
         "id, name, slug, latitude, longitude, price_from, cover_image_url, developer:developers(name, slug)";
@@ -121,41 +125,57 @@ export default function ProjectNearbyPropertiesMap({
               !(p.latitude === 0 && p.longitude === 0),
           );
 
-      // 1) Try matching by area name
+      // 1) Try matching by area name (works whether or not the current project has coords)
       if (areaName) {
+        const { data: byArea } = await supabase
+          .from("projects")
+          .select(select)
+          .neq("id", currentProjectId)
+          .or(`area_name.ilike.%${areaName}%,location.ilike.%${areaName}%`)
+          .not("latitude", "is", null)
+          .not("longitude", "is", null)
+          .limit(40);
+        const valid = shape(byArea as any[]);
+        if (valid.length > 0) return valid;
+      }
+
+      // 2) Fallback: lat/lng bounding box (~11 km radius) — only when we have own coords
+      if (hasOwnCoords) {
+        const delta = 0.1;
         const { data } = await supabase
           .from("projects")
           .select(select)
           .neq("id", currentProjectId)
-          .ilike("location", `%${areaName}%`)
+          .gte("latitude", (latitude as number) - delta)
+          .lte("latitude", (latitude as number) + delta)
+          .gte("longitude", (longitude as number) - delta)
+          .lte("longitude", (longitude as number) + delta)
           .not("latitude", "is", null)
           .not("longitude", "is", null)
           .limit(40);
-        const valid = shape(data as any[]);
-        if (valid.length > 0) return valid;
+        return shape(data as any[]);
       }
 
-      // 2) Fallback: lat/lng bounding box (~11 km radius)
-      const delta = 0.1;
-      const { data } = await supabase
-        .from("projects")
-        .select(select)
-        .neq("id", currentProjectId)
-        .gte("latitude", latitude - delta)
-        .lte("latitude", latitude + delta)
-        .gte("longitude", longitude - delta)
-        .lte("longitude", longitude + delta)
-        .not("latitude", "is", null)
-        .not("longitude", "is", null)
-        .limit(40);
-      return shape(data as any[]);
+      return [];
     },
     staleTime: 5 * 60 * 1000,
   });
 
   const markers = useMemo(() => nearbyProjects || [], [nearbyProjects]);
 
-  if (markers.length === 0) return null;
+  // Derive a map center: project coords if available, otherwise the centroid of area peers.
+  const center = useMemo<[number, number] | null>(() => {
+    if (hasOwnCoords) return [latitude as number, longitude as number];
+    if (markers.length > 0) {
+      const lat = markers.reduce((s, m) => s + (m.latitude as number), 0) / markers.length;
+      const lng = markers.reduce((s, m) => s + (m.longitude as number), 0) / markers.length;
+      return [lat, lng];
+    }
+    return null;
+  }, [hasOwnCoords, latitude, longitude, markers]);
+
+  if (!center || markers.length === 0) return null;
+
 
   const handleOpenNearby = (slug: string | null) => {
     if (!slug) return;
