@@ -1409,7 +1409,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
 
            {/* INVESTMENT METRICS SECTION */}
            {(project.roi_estimate || project.rental_yield_estimate) && (
-             <div ref={investmentRef} id="investment" className="mb-14 scroll-mt-40 relative">
+             <div ref={investmentRef} id="investment" className="mb-10 md:mb-12 scroll-mt-40 relative">
                <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="investment" initial={project as any} /></div>
                <InvestmentMetricsSection
                  roiEstimate={project.roi_estimate}
@@ -1423,7 +1423,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
 
            {/* USEFUL INFO SECTION */}
            {(project.faqs?.length ?? 0) > 0 && (
-             <div ref={faqRef} id="faq" className="mb-14 scroll-mt-40">
+             <div ref={faqRef} id="faq" className="mb-10 md:mb-12 scroll-mt-40">
                <div className="jj-card-inner">
                  <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
                    <HelpCircle className="w-5 h-5 text-[#1A1A1A]" />
@@ -1447,7 +1447,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
            )}
 
            {/* REPORT AN ISSUE BANNER */}
-           <div className="mb-14">
+           <div className="mb-10 md:mb-12">
              <ReportIssueButton
                projectName={project.name}
                projectId={project.id}
@@ -1456,7 +1456,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
            </div>
 
           {/* INQUIRY FORM - Full Width with premium styling - Uses Contact Page Form */}
-          <div ref={inquiryRef} className="scroll-mt-32 mb-8">
+          <div ref={inquiryRef} className="scroll-mt-32 mb-6">
               <ConsultationRequestForm
                 title={`Register Interest in ${project.name}`}
                 subtitle={`Get expert guidance on ${project.name}${project.location ? ` at ${project.location}` : ''}. Our specialists are ready to assist you.`}
@@ -1464,6 +1464,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
                 projectName={project.name}
               />
           </div>
+
 
 
           {/* CallToAction removed - consolidated into ConsultationRequestForm above */}
