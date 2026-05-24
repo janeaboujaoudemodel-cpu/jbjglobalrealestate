@@ -1,17 +1,4 @@
-/**
- * SectionDividerGoldFullBleed — DISABLED globally.
- *
- * Per user directive: NO visible dividers between sections anywhere on the
- * site. Sections sit on one continuous champagne canvas and are separated
- * purely by padding/margin breathing room.
- *
- * Kept as a spacing-only presentational shim so existing call sites still
- * contribute vertical rhythm between sections without rendering any rule.
- *
- * Do not re-enable. See mem://constraints/no-gray-surfaces and
- * mem://ui-ux/visual-standards/sort-and-divider-standard (updated:
- * dividers removed, spacing-only).
- */
+/** Thin premium gold divider between sections. */
 interface Props {
   size?: "sm" | "md" | "lg";
   spacing?: "sm" | "md" | "lg";
@@ -19,19 +6,18 @@ interface Props {
 }
 
 export function SectionDividerGoldFullBleed({
-  spacing = "md",
+  size = "md",
   className = "",
 }: Props) {
-  // Preserve vertical breathing room from the original divider so layouts
-  // that relied on it don't visually collapse. No visible line.
-  const my =
-    spacing === "sm" ? "my-6 md:my-8" : spacing === "lg" ? "my-14 md:my-20" : "my-10 md:my-14";
+  const height = size === "sm" ? "h-px" : size === "lg" ? "h-[2px]" : "h-px";
   return (
     <div
       aria-hidden="true"
       role="presentation"
-      className={`w-full ${my} ${className}`}
-    />
+      className={`w-full my-0 ${className}`}
+    >
+      <div className={`${height} w-full bg-gradient-to-r from-transparent via-[#B89555] to-transparent shadow-[0_0_10px_rgba(184,149,85,0.28)]`} />
+    </div>
   );
 }
 
