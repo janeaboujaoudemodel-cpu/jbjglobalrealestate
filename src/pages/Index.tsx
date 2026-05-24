@@ -302,38 +302,32 @@ const Index = () => {
                 type="button"
                 onClick={() => setIsInquiryOpen(true)}
                 data-no-contrast-guard
-                className="group inline-flex h-10 sm:h-11 items-center justify-center gap-2 rounded-xl px-5 sm:px-6
-                  text-[13px] font-semibold tracking-tight
-                  transition-[transform,box-shadow,border-color,background] duration-300 ease-out
-                  hover:-translate-y-0.5
+                className="cta-premium group inline-flex h-12 sm:h-[52px] items-center justify-center gap-2 rounded-xl px-5 sm:px-6
+                  text-[13.5px] font-semibold tracking-tight allow-white
                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2C9A0]/65 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
                 style={{
                   color: '#FDFBF7',
-                  background: 'rgba(253, 251, 247, 0.10)',
-                  WebkitBackdropFilter: 'blur(18px) saturate(160%)',
-                  backdropFilter: 'blur(18px) saturate(160%)',
-                  border: '1px solid rgba(212,184,150,0.55)',
+                  background: 'rgba(253, 251, 247, 0.18)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  backdropFilter: 'blur(8px)',
+                  border: '1px solid rgba(212,184,150,0.45)',
                   boxShadow:
-                    'inset 0 1px 0 rgba(255,255,255,0.22), 0 8px 22px rgba(0,0,0,0.32)',
-                  textShadow: '0 1px 4px rgba(0,0,0,0.55)',
+                    'inset 0 1px 0 rgba(255,255,255,0.28), 0 6px 18px rgba(0,0,0,0.22)',
+                  textShadow: '0 1px 3px rgba(0,0,0,0.40)',
                 }}
                 onMouseEnter={(e) => {
                   const t = e.currentTarget;
                   t.style.background = '#EFE6D6';
                   t.style.color = '#1A1A1A';
                   t.style.borderColor = '#B89555';
-                  t.style.boxShadow =
-                    'inset 1px 1px 0 rgba(255,255,255,0.55), 0 12px 28px rgba(0,0,0,0.22), 0 0 22px rgba(184,149,85,0.22)';
                   t.style.textShadow = 'none';
                 }}
                 onMouseLeave={(e) => {
                   const t = e.currentTarget;
-                  t.style.background = 'rgba(253, 251, 247, 0.10)';
+                  t.style.background = 'rgba(253, 251, 247, 0.18)';
                   t.style.color = '#FDFBF7';
-                  t.style.borderColor = 'rgba(212,184,150,0.55)';
-                  t.style.boxShadow =
-                    'inset 0 1px 0 rgba(255,255,255,0.22), 0 8px 22px rgba(0,0,0,0.32)';
-                  t.style.textShadow = '0 1px 4px rgba(0,0,0,0.55)';
+                  t.style.borderColor = 'rgba(212,184,150,0.45)';
+                  t.style.textShadow = '0 1px 3px rgba(0,0,0,0.40)';
                 }}
               >
                 <span>Book a Free Consultation</span>
@@ -363,30 +357,26 @@ const Index = () => {
       </div>
 
       {/* VERIFICATION BANNER - moved here after marquee */}
-      <Suspense fallback={null}>
-        <VerificationBanner />
-      </Suspense>
+      <div className="py-10 sm:py-14">
+        <Suspense fallback={null}>
+          <VerificationBanner />
+        </Suspense>
 
-      {/* PARTNER VERIFY CTA — only shown to registered partners */}
-      <Suspense fallback={null}>
-        <PartnerVerifyHeroCTA />
-      </Suspense>
-
+        {/* PARTNER VERIFY CTA — only shown to registered partners */}
+        <Suspense fallback={null}>
+          <PartnerVerifyHeroCTA />
+        </Suspense>
+      </div>
 
       {/* DEVELOPER PORTAL CTA */}
-      <div className="cv-auto">
+      <div className="cv-auto py-10 sm:py-14">
         <Suspense fallback={<SectionLoader />}>
           <DeveloperPortalCTA />
         </Suspense>
       </div>
 
-      {/* TrustBar (RERA / 8-card grid) removed per founder request — component retained on disk */}
-      <SectionDivider fullWidth />
-
-
-
       {/* FEATURED LISTINGS */}
-      <div className="cv-auto">
+      <div className="cv-auto py-10 sm:py-14">
         <Suspense fallback={<SectionLoader />}>
           <FeaturedListings />
         </Suspense>

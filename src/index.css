@@ -37,6 +37,30 @@ body {
   min-height: 100dvh;
 }
 
+/* ════════════════════════════════════════════════════════════════
+   .cta-premium — premium hover lift + glow + 3D for primary CTAs
+   ════════════════════════════════════════════════════════════════ */
+.cta-premium {
+  transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease, border-color .25s ease;
+  will-change: transform;
+}
+.cta-premium:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.32),
+    0 0 22px rgba(255, 255, 255, 0.18);
+}
+.cta-premium:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
+}
+.cta-premium svg {
+  transition: filter .25s ease, transform .25s ease;
+}
+.cta-premium:hover svg {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
+}
+
 
 .jj-transparent-header-wordmark {
   color: hsl(0 0% 100%) !important;

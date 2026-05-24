@@ -56,10 +56,15 @@ const VerificationBanner = () => {
             {/* CTA Button */}
             <button
               onClick={() => setModalOpen(true)}
-              className="flex-shrink-0 group inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#1A1A1A] text-white font-semibold text-sm tracking-wide border border-[#1A1A1A] hover:bg-[#1A1A1A] transition-all duration-300"
+              className="cta-premium flex-shrink-0 group inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#1A1A1A] text-white font-semibold text-sm tracking-wide border border-[#1A1A1A] hover:bg-[#1A1A1A] allow-white"
+              data-no-contrast-guard
             >
               Get Verified
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight
+                className="w-4 h-4 text-white allow-white group-hover:translate-x-0.5 transition-transform"
+                data-no-contrast-guard
+                style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.55))' }}
+              />
             </button>
           </div>
         </div>
