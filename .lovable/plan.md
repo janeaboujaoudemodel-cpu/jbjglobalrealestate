@@ -1,27 +1,49 @@
 ## Goal
-Replace every gray scrollbar with the brand gold (#B89555) across the entire site — both the global page scrollbar and all inner scroll containers (Toolkit Showcase row, modals, sidebars, dropdowns, tables, etc.).
+Make every developer badge on `ProjectCard` look like one premium, unified plate — Reelly-style — sitting half on the photo, half on the content card, with no cropped names, no foreign backgrounds, no size variation.
 
-## Findings
-- `src/index.css` defines several scrollbar utilities (`.jj-scrollbar-gold`, `.jj-scrollbar-gold-x`, `.jj-scrollbar-always-visible`, `.scrollbar-thumb-gold`, `.scrollbar-thumb-gold/60`, `.scrollbar-track-gold/10`) but every one of them is currently set to gray (`hsl(0 0% 40%)`). Despite the "gold" name, none of them actually render gold — that's why the Toolkit Showcase shows a gray scroller.
-- There is no global `::-webkit-scrollbar` / `scrollbar-color` rule, so default scrollbars on body and many containers fall back to the browser's gray.
+## What's wrong today (`src/components/ui/DeveloperLogo.tsx` + `src/components/ProjectCard.tsx`)
+1. `bare` plate = `h-12 w-20`, `nameplate` plate = `h-12 w-16` → two different widths on the same grid.
+2. Logo images render as-is, so brands with built-in backgrounds (Ritz-Carlton black, others white) clash with our champagne plate.
+3. `nameplate` uses `line-clamp-2` → long names like "Expo City Development" get truncated to "Expo City Develop…" (the three-dot crime).
+4. The plate is anchored at `top-3 left-3` of the card → it sits inside the photo instead of straddling the photo/card seam like Reelly.
 
 ## Plan
 
-1. Add a global scrollbar rule in `src/index.css` (top of base layer) so every scrollable element on every page defaults to gold:
-   - `* { scrollbar-width: thin; scrollbar-color: #B89555 transparent; }`
-   - `::-webkit-scrollbar { width: 8px; height: 8px; }`
-   - `::-webkit-scrollbar-track { background: transparent; }`
-   - `::-webkit-scrollbar-thumb { background: #B89555; border-radius: 999px; }`
-   - `::-webkit-scrollbar-thumb:hover { background: #C9A766-equivalent → use #B89555 with brightness, keep within palette: rgba(184,149,85,0.85). }` (we'll stay on the approved gold; no banned bright yellow-gold hexes).
+### 1. One unified plate (size + skin)
+In `DeveloperLogo.tsx`, both `bare` and `nameplate` variants get the exact same outer container:
+- Fixed size: `h-14 w-24` (wider than today so wordmarks fit without cropping, taller so it overlaps cleanly).
+- Skin: `rounded-xl bg-[#FDFBF7] border border-[#B89555]/45 shadow-[0_4px_14px_rgba(0,0,0,0.18)]`.
+- Inner padding: `px-2 py-1.5`.
 
-2. Rewrite every existing scrollbar utility in `src/index.css` (lines ~1398–1472 and ~2441–2475) to use the gold token instead of the gray HSL values — so any component already using `jj-scrollbar-gold`, `scrollbar-thumb-gold`, etc. immediately becomes truly gold. Track stays transparent / very faint champagne; thumb is `#B89555`; hover slightly more opaque.
+### 2. "Our own render" — strip foreign backgrounds from logo images
+Inside the `bare` variant `<img>`:
+- Apply `mix-blend-mode: multiply` so white logo backgrounds disappear into the champagne plate.
+- Add a small per-developer overrides map (`src/utils/developerLogoOverrides.ts`) keyed by slug/name with two flags:
+  - `invert: true` → for white-on-dark marks like Ritz-Carlton; applies `filter: invert(1) brightness(0)` so the wordmark becomes solid ink on champagne. Seed it with `ritz-carlton` (and we'll add others as we spot them).
+  - `forceNameplate: true` → opt-out of the image entirely and render the nameplate wordmark instead (escape hatch for any logo we can't clean).
+- Keep `object-contain` so nothing gets cropped.
 
-3. Keep `.scrollbar-hide` (line 2715) untouched — it's used intentionally to hide scrollbars on certain horizontal rows.
+### 3. Kill the "…" forever on the nameplate
+Replace `line-clamp-2` + fixed text-size buckets with:
+- `whitespace-normal break-words leading-[1.05] text-center`.
+- A small auto-shrink: start at `text-[11px]`, drop one step per length bucket down to `text-[8px]` so names up to ~22 chars ("Expo City Development") render fully on two lines without ellipsis.
+- No `overflow: hidden`-driven truncation; the plate is tall enough (h-14) to hold two lines.
 
-4. Leave the Toolkit Showcase component itself alone — once the global + utility rules are gold, its scroller will inherit the brand color automatically.
+### 4. Reelly-style position — straddle photo & card
+In `ProjectCard.tsx` (lines ~210–226), move the `<Link><DeveloperLogo /></Link>` wrapper out of the absolute-positioned top-left slot and re-anchor it to the bottom of the image area:
+- New classes: `absolute left-4 z-30` + `bottom-0 translate-y-1/2` measured against the `<div className="aspect-[16/10] ...">` image wrapper (lines 230–258). So the plate sits exactly on the seam — top half over the photo, bottom half over the body card — and floats just above the title.
+- Add a touch of bottom margin on the title row so text never collides with the floating plate.
+- Adjust the favorite/shortlist stack only if needed (they live top-right, no conflict).
 
-5. No JS/logic changes, no removed features. Purely CSS theming, consistent with the champagne-gold standard and the no-gray rule.
+### 5. Missing logos
+Out-of-scope for this edit: no scraping in this turn. Any developer with no `logo_url` automatically renders the unified `nameplate` (ink wordmark in our box) — same size, same skin, no "…". You'll see the developer name immediately and we can backfill real logos later via the existing logo-ingestion flow.
+
+## Files to touch
+- `src/components/ui/DeveloperLogo.tsx` — unify sizes, multiply-blend + invert support, kill line-clamp.
+- `src/utils/developerLogoOverrides.ts` — new tiny lookup (seed Ritz-Carlton invert).
+- `src/components/ProjectCard.tsx` — reposition the developer plate to straddle image/content seam.
 
 ## Out of scope
-- Custom-painted scrollbars inside iframes / third-party embeds (browser-controlled).
-- Touch devices that don't render a visible scrollbar.
+- Auto-scraping new logos from Google.
+- Touching developer cards on the directory page (`card` variant) — those already use the Reelly hero plate.
+- The "majority looks good" cards keep their existing real logos; we just normalize the plate around them.
