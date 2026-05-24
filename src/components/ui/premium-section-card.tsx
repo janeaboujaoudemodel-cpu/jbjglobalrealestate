@@ -48,7 +48,7 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
         ? "container mx-auto px-4 max-w-7xl"
         : "w-full";
     const radius = width === "contained" ? "rounded-2xl" : "rounded-none";
-    const border = width === "contained" ? "border border-[#B89555]/30" : "border-y border-[#B89555]/25";
+    const border = width === "contained" ? "border border-[#B89555]/30" : "border-0";
     return (
       <section
         ref={ref}
