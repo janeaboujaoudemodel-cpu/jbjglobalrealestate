@@ -69,6 +69,7 @@ import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { SectionDividerGoldFullBleed } from "@/components/ui/section-divider-gold-fullbleed";
 import { PremiumSectionCard } from "@/components/ui/premium-section-card";
+import LazyVisible from "@/components/util/LazyVisible";
 
 const VerificationBanner = lazy(() => import("@/components/verification/VerificationBanner"));
 const PartnerVerifyHeroCTA = lazy(() => import("@/components/home/PartnerVerifyHeroCTA"));
@@ -298,111 +299,135 @@ const Index = () => {
 
       {/* DEVELOPER PORTAL CTA */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
-        <Suspense fallback={<SectionLoader />}>
-          <DeveloperPortalCTA />
-        </Suspense>
+        <LazyVisible minHeight={280}>
+          <Suspense fallback={<SectionLoader />}>
+            <DeveloperPortalCTA />
+          </Suspense>
+        </LazyVisible>
       </PremiumSectionCard>
 
       {/* FEATURED LISTINGS */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
-        <Suspense fallback={<SectionLoader />}>
-          <FeaturedListings />
-        </Suspense>
+        <LazyVisible minHeight={500}>
+          <Suspense fallback={<SectionLoader />}>
+            <FeaturedListings />
+          </Suspense>
+        </LazyVisible>
       </PremiumSectionCard>
 
       {/* CONTINUE SEARCHING */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
-        <Suspense fallback={<SectionLoader />}>
-          <ContinueSearching type="property" />
-        </Suspense>
+        <LazyVisible minHeight={400}>
+          <Suspense fallback={<SectionLoader />}>
+            <ContinueSearching type="property" />
+          </Suspense>
+        </LazyVisible>
       </PremiumSectionCard>
 
       {/* RESALE PROPERTIES */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
-        <Suspense fallback={<SectionLoader />}>
-          <ResalePropertiesSection />
-        </Suspense>
+        <LazyVisible minHeight={500}>
+          <Suspense fallback={<SectionLoader />}>
+            <ResalePropertiesSection />
+          </Suspense>
+        </LazyVisible>
       </PremiumSectionCard>
 
       {/* OVERSEAS INVESTORS */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
-        <Suspense fallback={<SectionLoader />}>
-          <OverseasInvestorsBanner />
-        </Suspense>
+        <LazyVisible minHeight={300}>
+          <Suspense fallback={<SectionLoader />}>
+            <OverseasInvestorsBanner />
+          </Suspense>
+        </LazyVisible>
       </PremiumSectionCard>
 
       {/* EXPLORE OUR GUIDES & REPORTS */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
-        <Suspense fallback={<SectionLoader />}>
-          <HomepageBookMarquee />
-        </Suspense>
+        <LazyVisible minHeight={400}>
+          <Suspense fallback={<SectionLoader />}>
+            <HomepageBookMarquee />
+          </Suspense>
+        </LazyVisible>
       </PremiumSectionCard>
 
       {/* EXPLORE OUR SERVICES */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
-        <Suspense fallback={<SectionLoader />}>
-          <ExploreServicesCard />
-        </Suspense>
+        <LazyVisible minHeight={500}>
+          <Suspense fallback={<SectionLoader />}>
+            <ExploreServicesCard />
+          </Suspense>
+        </LazyVisible>
       </PremiumSectionCard>
 
       {/* TOOLKIT SHOWCASE CARD */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
-        <Suspense fallback={<SectionLoader />}>
-          <ToolkitShowcaseCard />
-        </Suspense>
+        <LazyVisible minHeight={400}>
+          <Suspense fallback={<SectionLoader />}>
+            <ToolkitShowcaseCard />
+          </Suspense>
+        </LazyVisible>
       </PremiumSectionCard>
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
-        <Suspense fallback={<SectionLoader />}>
-          <AIComparisonWidget />
-        </Suspense>
+        <LazyVisible minHeight={400}>
+          <Suspense fallback={<SectionLoader />}>
+            <AIComparisonWidget />
+          </Suspense>
+        </LazyVisible>
       </PremiumSectionCard>
 
       <PremiumSectionCard tone="surface" padding="none" wrapperClassName="cv-auto py-8">
-        <div className="rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7]/70 p-5 md:p-8 shadow-[0_1px_0_rgba(184,149,85,0.25),0_10px_30px_-18px_rgba(184,149,85,0.35)]">
-          <Suspense fallback={<SectionLoader />}>
-            <MortgageCalculator compact />
-          </Suspense>
-          <p className="text-[#1A1A1A]/60 text-[11px] text-center mt-4">
-            Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
-          </p>
+        <LazyVisible minHeight={500}>
+          <div className="rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7]/70 p-5 md:p-8 shadow-[0_1px_0_rgba(184,149,85,0.25),0_10px_30px_-18px_rgba(184,149,85,0.35)]">
+            <Suspense fallback={<SectionLoader />}>
+              <MortgageCalculator compact />
+            </Suspense>
+            <p className="text-[#1A1A1A]/60 text-[11px] text-center mt-4">
+              Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
+            </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
-            <PearlButton
-              to="/mortgage-calculator"
-              size="md"
-              leadingIcon={<Sparkles strokeWidth={2.2} />}
-              trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
-            >
-              <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
-            </PearlButton>
+            <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
+              <PearlButton
+                to="/mortgage-calculator"
+                size="md"
+                leadingIcon={<Sparkles strokeWidth={2.2} />}
+                trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
+              >
+                <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
+              </PearlButton>
 
-            <PearlButton
-              to="/partners/mortgage"
-              size="md"
-              leadingIcon={<Users strokeWidth={2.2} />}
-              trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
-            >
-              <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
-            </PearlButton>
+              <PearlButton
+                to="/partners/mortgage"
+                size="md"
+                leadingIcon={<Users strokeWidth={2.2} />}
+                trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
+              >
+                <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
+              </PearlButton>
+            </div>
           </div>
-        </div>
+        </LazyVisible>
       </PremiumSectionCard>
 
       <PodcastVisibilityGate>
         <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
-          <Suspense fallback={<SectionLoader />}>
-            <JBJPodcastSection />
-          </Suspense>
+          <LazyVisible minHeight={400}>
+            <Suspense fallback={<SectionLoader />}>
+              <JBJPodcastSection />
+            </Suspense>
+          </LazyVisible>
         </PremiumSectionCard>
       </PodcastVisibilityGate>
 
       {/* TOP AREAS IN DUBAI */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
-        <Suspense fallback={<SectionLoader />}>
-          <AreasWeCover />
-        </Suspense>
+        <LazyVisible minHeight={400}>
+          <Suspense fallback={<SectionLoader />}>
+            <AreasWeCover />
+          </Suspense>
+        </LazyVisible>
       </PremiumSectionCard>
 
 
