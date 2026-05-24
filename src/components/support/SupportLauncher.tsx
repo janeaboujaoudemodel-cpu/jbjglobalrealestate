@@ -218,34 +218,33 @@ export default function SupportLauncher() {
                 exit={{ opacity: 0, x: 18, y: "-50%", scale: 0.985 }}
                 transition={{ type: "spring", stiffness: 420, damping: 34, mass: 0.8 }}
                 data-no-contrast-guard
-                className="fixed right-14 top-[calc(50%+24px)] flex max-h-[calc(100dvh-150px)] w-[300px] flex-col overflow-hidden pointer-events-auto
-                  rounded-2xl border border-gold bg-background text-foreground
-                  shadow-[0_30px_60px_hsl(var(--foreground)/0.25),0_0_34px_hsl(var(--gold)/0.18)] p-3"
+                className="jbj-gold-animated-border fixed right-14 top-[calc(50%+24px)] w-[300px] max-h-[calc(100dvh-150px)] rounded-2xl p-[1.5px] pointer-events-auto
+                  shadow-[0_30px_60px_hsl(var(--foreground)/0.25),0_0_34px_hsl(var(--gold)/0.22)]"
               >
-                <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-2">
-                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
-                    border border-gold bg-raised text-ink">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    Call our agent now · Free
-                  </span>
-                  <button
-                    onClick={close}
-                    aria-label="Close"
-                    className="h-7 w-7 inline-flex items-center justify-center rounded-full
-                      border border-gold bg-raised text-ink hover:bg-primary hover:text-primary-foreground transition-colors"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-                <div className="jbj-gold-animated-border min-h-0 flex-1 overflow-hidden rounded-xl p-[1.5px]">
-                  <div className="min-h-0 flex-1 h-full space-y-2 overflow-y-auto rounded-[10px] bg-background p-2">
+                <div className="flex h-full max-h-[calc(100dvh-150px)] flex-col overflow-hidden rounded-[14px] bg-background text-foreground p-3">
+                  <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-2">
+                    <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
+                      border border-gold bg-raised text-ink">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Call our agent now · Free
+                    </span>
+                    <button
+                      onClick={close}
+                      aria-label="Close"
+                      className="h-7 w-7 inline-flex items-center justify-center rounded-full
+                        border border-gold bg-raised text-ink hover:bg-primary hover:text-primary-foreground transition-colors"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  <div className="min-h-0 flex-1 space-y-2 overflow-y-auto rounded-xl p-1">
                     {channels.map((c) => (
                       <ChannelCard key={c.id} channel={c} onActivate={close} />
                     ))}
                   </div>
                 </div>
-
               </motion.div>
+
             </>
           )}
         </AnimatePresence>
