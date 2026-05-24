@@ -61,8 +61,9 @@ interface ProjectNearbyPropertiesMapProps {
   currentProjectId: string;
   currentProjectName: string;
   currentProjectSlug?: string | null;
-  latitude: number;
-  longitude: number;
+  /** May be null when the project itself has no coords — we'll derive a centroid from area peers. */
+  latitude: number | null;
+  longitude: number | null;
   areaName?: string | null;
   className?: string;
 }
@@ -92,8 +93,12 @@ export default function ProjectNearbyPropertiesMap({
   const navigate = useNavigate();
   const tiles = getMapTiles(language);
 
+  const hasOwnCoords =
+    typeof latitude === "number" && typeof longitude === "number" && !isNaN(latitude) && !isNaN(longitude);
+
   const { data: nearbyProjects } = useQuery({
     queryKey: ["nearby-projects-map", currentProjectId, areaName, latitude, longitude],
+    enabled: hasOwnCoords || !!areaName,
     queryFn: async (): Promise<NearbyRow[]> => {
       const select =
         "id, name, slug, latitude, longitude, price_from, cover_image_url, developer:developers(name, slug)";
@@ -120,41 +125,57 @@ export default function ProjectNearbyPropertiesMap({
               !(p.latitude === 0 && p.longitude === 0),
           );
 
-      // 1) Try matching by area name
+      // 1) Try matching by area name (works whether or not the current project has coords)
       if (areaName) {
+        const { data: byArea } = await supabase
+          .from("projects")
+          .select(select)
+          .neq("id", currentProjectId)
+          .or(`area_name.ilike.%${areaName}%,location.ilike.%${areaName}%`)
+          .not("latitude", "is", null)
+          .not("longitude", "is", null)
+          .limit(40);
+        const valid = shape(byArea as any[]);
+        if (valid.length > 0) return valid;
+      }
+
+      // 2) Fallback: lat/lng bounding box (~11 km radius) — only when we have own coords
+      if (hasOwnCoords) {
+        const delta = 0.1;
         const { data } = await supabase
           .from("projects")
           .select(select)
           .neq("id", currentProjectId)
-          .ilike("location", `%${areaName}%`)
+          .gte("latitude", (latitude as number) - delta)
+          .lte("latitude", (latitude as number) + delta)
+          .gte("longitude", (longitude as number) - delta)
+          .lte("longitude", (longitude as number) + delta)
           .not("latitude", "is", null)
           .not("longitude", "is", null)
           .limit(40);
-        const valid = shape(data as any[]);
-        if (valid.length > 0) return valid;
+        return shape(data as any[]);
       }
 
-      // 2) Fallback: lat/lng bounding box (~11 km radius)
-      const delta = 0.1;
-      const { data } = await supabase
-        .from("projects")
-        .select(select)
-        .neq("id", currentProjectId)
-        .gte("latitude", latitude - delta)
-        .lte("latitude", latitude + delta)
-        .gte("longitude", longitude - delta)
-        .lte("longitude", longitude + delta)
-        .not("latitude", "is", null)
-        .not("longitude", "is", null)
-        .limit(40);
-      return shape(data as any[]);
+      return [];
     },
     staleTime: 5 * 60 * 1000,
   });
 
   const markers = useMemo(() => nearbyProjects || [], [nearbyProjects]);
 
-  if (markers.length === 0) return null;
+  // Derive a map center: project coords if available, otherwise the centroid of area peers.
+  const center = useMemo<[number, number] | null>(() => {
+    if (hasOwnCoords) return [latitude as number, longitude as number];
+    if (markers.length > 0) {
+      const lat = markers.reduce((s, m) => s + (m.latitude as number), 0) / markers.length;
+      const lng = markers.reduce((s, m) => s + (m.longitude as number), 0) / markers.length;
+      return [lat, lng];
+    }
+    return null;
+  }, [hasOwnCoords, latitude, longitude, markers]);
+
+  if (!center || markers.length === 0) return null;
+
 
   const handleOpenNearby = (slug: string | null) => {
     if (!slug) return;
@@ -179,7 +200,7 @@ export default function ProjectNearbyPropertiesMap({
         .leaflet-popup-content { margin: 0; }
       `}</style>
       <MapContainer
-        center={[latitude, longitude]}
+        center={center}
         zoom={13}
         scrollWheelZoom={false}
         touchZoom={true}
@@ -189,19 +210,22 @@ export default function ProjectNearbyPropertiesMap({
         attributionControl={false}
       >
         <TileLayer url={tiles.satellite.url} attribution={tiles.satellite.attribution} maxZoom={19} />
-        <MapNavigationControls latitude={latitude} longitude={longitude} />
+        <MapNavigationControls latitude={center[0]} longitude={center[1]} />
 
-        {/* Current project marker (red) */}
-        <Marker position={[latitude, longitude]} icon={RedIcon}>
-          <Popup>
-            <div className="min-w-[200px] max-w-[260px] p-3">
-              <div className="text-sm font-bold text-[#1A1A1A]">{currentProjectName}</div>
-              <div className="text-xs text-[#1A1A1A]/70 mt-1">
-                {t("map.thisProject") || "This project"}
+        {/* Current project marker (red) — only when we have real coords */}
+        {hasOwnCoords && (
+          <Marker position={[latitude as number, longitude as number]} icon={RedIcon}>
+            <Popup>
+              <div className="min-w-[200px] max-w-[260px] p-3">
+                <div className="text-sm font-bold text-[#1A1A1A]">{currentProjectName}</div>
+                <div className="text-xs text-[#1A1A1A]/70 mt-1">
+                  {t("map.thisProject") || "This project"}
+                </div>
               </div>
-            </div>
-          </Popup>
-        </Marker>
+            </Popup>
+          </Marker>
+        )}
+
 
         {/* Nearby projects (champagne/gold) */}
         {markers.map((p) => (
