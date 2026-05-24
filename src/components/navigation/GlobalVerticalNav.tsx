@@ -1089,7 +1089,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     <span
                       data-no-contrast-guard
                       style={{ color: '#B89555' }}
-                      className="flex-1 text-left relative inline-block after:content-[''] after:absolute after:bottom-[-3px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full"
+                      className="flex-1 text-left relative inline-block !text-[#B89555] after:content-[''] after:absolute after:bottom-[-3px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full"
                     >{sectionKey}</span>
                     <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: '#B89555' }} />
                     {!isOpen && hasActiveChild && (
@@ -1387,7 +1387,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-[#FDFBF7] h-full relative overscroll-contain">
+        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-[#FDFBF7] h-full relative overscroll-contain [&_button>span]:!text-[#B89555] [&_button_svg]:!text-[#B89555]">
           {renderNavContent()}
         </div>
       )}
