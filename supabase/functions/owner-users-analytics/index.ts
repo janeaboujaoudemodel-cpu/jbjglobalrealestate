@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 function categorize(p: any): 'investor' | 'broker' | 'developer' | 'unassigned' {
-  const m = (p.mode_default || p.user_type || p.user_role || '').toLowerCase();
+  const m = (p.mode_default || p.user_type || '').toLowerCase();
   if (m.includes('broker')) return 'broker';
   if (m.includes('develop')) return 'developer';
   if (m.includes('invest') || m === 'client') return 'investor';
