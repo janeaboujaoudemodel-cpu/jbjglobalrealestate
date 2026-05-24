@@ -144,8 +144,10 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
             data-no-contrast-guard
             aria-label="Search"
+            disabled={searching}
             className="cta-premium allow-white flex items-center justify-center gap-2 h-full px-4 sm:px-6 lg:px-7
-              text-[13.5px] sm:text-sm font-semibold border-l border-[#B89555]/45 flex-shrink-0"
+              text-[13.5px] sm:text-sm font-semibold border-l border-[#B89555]/45 flex-shrink-0
+              disabled:cursor-wait"
             style={{
               color: "#FFFFFF",
               background:
@@ -155,15 +157,15 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             }}
           >
             <span style={{ color: "#FFFFFF" }} className="tracking-[-0.005em] allow-white">
-              Search
+              {searching ? "Searching…" : "Search"}
             </span>
-            <ArrowRight
-              className="w-4 h-4 allow-white"
-              style={{ color: "#FFFFFF" }}
-              data-no-contrast-guard
-              strokeWidth={2.4}
-            />
+            {searching ? (
+              <Loader2 className="w-4 h-4 allow-white animate-spin" style={{ color: "#FFFFFF" }} data-no-contrast-guard strokeWidth={2.4} />
+            ) : (
+              <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} data-no-contrast-guard strokeWidth={2.4} />
+            )}
           </button>
+
 
           {/* Book a Free Consultation — champagne pill */}
           <button
