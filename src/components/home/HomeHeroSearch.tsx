@@ -1,7 +1,7 @@
 /**
  * HomeHeroSearch — premium crystal-glass hero search bar.
  * - Left half: input + Search submit (opens the shared GlobalSearchModal).
- * - Right half: "Ask our AI Concierge" launcher (opens AIConcierge drawer).
+ * - Right half: "Ask our Concierge" launcher (opens AIConcierge drawer).
  * - No solid gold fills, no hard divider — a hair-thin champagne seam separates the two actions.
  */
 
@@ -38,7 +38,7 @@ export default function HomeHeroSearch() {
         transition={{ delay: 0.4, duration: 0.6 }}
         className="w-full max-w-4xl mx-auto"
       >
-        {/* Unified crystal-glass shell — input + Search + AI Concierge live together */}
+        {/* Unified crystal-glass shell — input + Search + Concierge live together */}
         <div
           data-no-contrast-guard
           className="group relative flex items-stretch h-14 sm:h-16 lg:h-[68px] rounded-2xl
@@ -96,19 +96,19 @@ export default function HomeHeroSearch() {
           {/* Hair-thin champagne seam — not a hard divider */}
           <div aria-hidden className="w-px self-stretch my-2 bg-gradient-to-b from-transparent via-[#D4B896]/40 to-transparent" />
 
-          {/* RIGHT: Ask our AI Concierge */}
+          {/* RIGHT: Ask our Concierge */}
           <button
             type="button"
             onClick={openConcierge}
             data-no-contrast-guard
-            aria-label="Ask our AI Concierge"
+            aria-label="Ask our Concierge"
             className="flex items-center gap-2 px-3 sm:px-5 flex-shrink-0
               text-[#FDFBF7] hover:bg-[rgba(253,251,247,0.10)] transition-all
               focus-visible:outline-none focus-visible:bg-[rgba(253,251,247,0.10)]"
             style={{ textShadow: "0 1px 3px rgba(0,0,0,0.45)" }}
           >
             <Sparkles className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-[#E2C9A0] flex-shrink-0" strokeWidth={2} />
-            <span className="hidden md:inline text-[13px] font-semibold whitespace-nowrap">Ask our AI Concierge</span>
+            <span className="hidden md:inline text-[13px] font-semibold whitespace-nowrap">Ask our Concierge</span>
             <span className="md:hidden sm:inline hidden text-[12.5px] font-semibold whitespace-nowrap">Ask AI</span>
           </button>
         </div>
