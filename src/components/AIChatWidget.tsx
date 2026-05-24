@@ -930,7 +930,9 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
           isExistingUser={isExistingUser} 
           onBack={handleBack} 
           onToggleCollapse={onToggleCollapse} 
+          onClearChat={messages.length > 0 ? clearChat : undefined}
         />
+
 
         {step === 'welcome_choice' && (
           <ChatWelcome onStartChat={() => {
