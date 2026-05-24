@@ -1,49 +1,88 @@
-## Goal
+# Bank-Grade Identity Verification — Rebuild Plan
 
-Polish the lower half of every project page so the **Dubai Market Intelligence** widget and the sections around it are full-bleed, consistently spaced, and the **Ready to Get Started** CTA returns above Recommended Projects.
+## 1. Fix the broken CTA on the homepage banner
 
-## Problems today (file: `src/components/project-detail/ProjectDetailLayout.tsx`)
+**Problem:** `Get Verified` button on `/` banner is dark + white text, but the global contrast guard in `index.css` (`.bg-[#F7F2EA] ... .text-white → !important ink`) re-flips it to ink, so the label and arrow vanish into black-on-black.
 
-1. The whole content body is wrapped in `max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16` (line 824). The DLD widget sits inside it, AND the widget itself adds `mx-4 md:mx-8` + `max-w-6xl` inside → it's double-constrained and looks narrow.
-2. Above DLD there's a hand-rolled diamond divider (lines 1401–1407) — not the approved `<SectionDividerGoldFullBleed />` standard.
-3. Every block uses `mb-14` → vertical rhythm is too loose.
-4. RecommendedProjects wrapper (line 1476) has only `pb-12 md:pb-16` and **no top padding** → it visually touches the previous section.
-5. The "Ready to Get Started" CTA (`<CallToActionSection />`) was removed in a prior consolidation (comment line 1471). User wants it back.
+**Fix in `VerificationBanner.tsx`:**
+- Replace the raw `bg-[#1A1A1A] text-white` button with a champagne mother-of-pearl primary `Button` carrying `variant="default"` + `data-allow-dark-cta` and explicit `[#1A1A1A]` ink text (matches the Mother-of-Pearl CTA rule already in memory), OR
+- Keep dark obsidian variant and add `data-allow-dark-cta` + `data-on-dark` to the button AND every child (`<ArrowRight>` + the label span) so the guard skips them. Strip the drop-shadow hack, add `text-[#FDFBF7]` explicit, ensure arrow has `stroke-[#FDFBF7]`.
+- Visual: rounded-xl pill, gold 1px hairline ring, gold glow on hover, animated arrow translate, never gray.
 
-## Changes (single file edit)
+## 2. Bank-level KYC verification flow (rebuild)
 
-### A. DLD section → full-bleed band
+A 7-step wizard that mirrors retail-bank onboarding. Each step is its own panel inside `VerificationModal` with a top progress rail (1/7 … 7/7), Back/Next, and inline validation.
 
-- Wrap `<DLDMarketWidget />` in a full-bleed escape: `relative left-1/2 right-1/2 -mx-[50vw] w-screen` band with `data-marketing-page`-friendly champagne background, replacing the current `<div className="mb-14">`.
-- Above it, replace the hand-rolled diamond divider with `<SectionDividerGoldFullBleed />` (existing primitive).
-- In `src/components/shared/DLDMarketWidget.tsx`:
-  - Remove the outer `mx-4 md:mx-8 rounded-3xl border ...` framing on `<section>` so it can breathe edge-to-edge.
-  - Drop `py-16` → `py-10 md:py-14`.
-  - Widen inner `max-w-6xl` → `max-w-[1600px]` so the grid uses the full band.
-  - Keep all cards, labels, data, sources line untouched (no-removal policy).
+```text
+Step 1  Welcome & consent      → AML/KYC notice, 3 checkboxes (T&C, data-processing, truthful info)
+Step 2  Country + ID type      → Country select, document type (Passport / Emirates ID / National ID / Driver License)
+Step 3  Personal details       → Full legal name (as on ID), DOB, nationality, residential address, phone
+Step 4  ID document front      → Upload OR camera capture, client-side blur/MIME/size check
+Step 5  ID document back       → Auto-skipped for Passport; required otherwise
+Step 6  Selfie with ID         → Live capture only (no upload), face-in-oval guide
+Step 7  Liveness challenge     → 3 randomized prompts (blink, turn left, turn right, smile, nod) — server picks order
+Review  Summary + final submit → All inputs read-only, "Edit" link per row, big "Submit for review"
+```
 
-### B. Tighten vertical rhythm in the content column
+After submit: success screen with reference number (`VRF-XXXXXX`), ETA (24–48h), CTA "Track status" → `/verification`.
 
-- Replace `mb-14` on the major section wrappers in the project content body (AI analyzer block, DLD wrapper, Investment Metrics, FAQ, Report Issue banner) with `mb-10 md:mb-12`.
-- Inquiry form wrapper `mb-8` stays.
+## 3. Backend — new edge function + schema hardening
 
-### C. Re-mount "Ready to Get Started"
+**New edge function `submit-verification`** (verify_jwt = true):
+- Validates: required fields, file MIME (image/jpeg/png/webp only), per-file ≤ 8 MB, total payload ≤ 40 MB.
+- Re-uploads files to `verification-documents` bucket under `{user_id}/{submission_id}/...` using service role (client never holds service key).
+- Inserts `user_verifications` row with all new fields below + sets `status='pending'`, `reference_code`, `client_ip`, `user_agent`.
+- Writes immutable `verification_audit_log` event (`submitted`).
+- Sends confirmation email via existing Resend wrapper to the user (templated, champagne brand).
+- Returns `{ reference_code, status }`.
 
-- Right after `</section>` (line 1473) and **before** the RecommendedProjects wrapper, add a full-bleed champagne band containing `<CallToActionSection projectName={project.name} projectId={project.id} location={project.location} />`. Import is already present (line 53), no new import needed.
-- Add `<SectionDividerGoldFullBleed />` above it as the section break (replaces the silent visual gap that previously existed).
+**Schema additions (migration):**
+- `user_verifications`: add `reference_code TEXT UNIQUE`, `document_type TEXT`, `document_country TEXT`, `date_of_birth DATE`, `nationality TEXT`, `address JSONB`, `phone TEXT`, `id_back_url TEXT`, `liveness_frames JSONB`, `liveness_challenges JSONB`, `client_ip INET`, `user_agent TEXT`, `consent_snapshot JSONB`, `risk_score NUMERIC`.
+- New table `verification_audit_log` (id, verification_id, actor_user_id, event, payload jsonb, created_at). RLS: owner/admin SELECT all; insert only via edge function (service role).
+- `profiles.verification_status` enum already exists — keep; trigger updates it on `user_verifications` status change (`pending → approved/rejected`).
 
-### D. RecommendedProjects spacing
+**Existing RLS already correct** (users insert/select own, owner/admin manage). Bucket stays private.
 
-- Change the wrapper on line 1476 from `pb-12 md:pb-16` to `pt-10 md:pt-14 pb-10 md:pb-14` so it no longer touches the CTA above and the page bottom is tighter.
-- Add a `<SectionDividerGoldFullBleed />` above it (between CTA and Recommended).
+## 4. Owner review surface
 
-## Out of scope
+`/owner/verifications` (already exists) gets:
+- Reference code column + filter (Pending / Approved / Rejected).
+- Detail drawer with signed URLs for ID front/back, selfie, liveness contact sheet (all 3 challenge frames side-by-side), submitted personal data, reference, audit trail.
+- Approve / Reject buttons call **new edge function `review-verification`** (verify_jwt + admin/owner role check) which updates row, writes audit row, fires approval/rejection email.
 
-- No data, copy, or card removals (no-removal policy).
-- No changes to the hero, breadcrumb, header, footer, or any other listing/search surface.
-- No new components, no new dependencies, no DB work.
+## 5. User-facing status page
 
-## Files
+New route `/verification` (public when logged in, redirects to `/auth` otherwise):
+- Card with current status (None → Start CTA, Pending → review timeline, Approved → green check + badge preview, Rejected → reason + Resubmit CTA).
+- Lists past submissions (reference code, date, status).
 
-- **Edit:** `src/components/project-detail/ProjectDetailLayout.tsx`
-- **Edit:** `src/components/shared/DLDMarketWidget.tsx` (remove outer mx/rounded/border, widen inner max-width, trim py)
+## 6. SEO + sitemap
+
+- Add `/verification` and `/legal/aml-kyc-policy` (already exists) entries to `public/sitemap.xml`.
+- Add `<title>` "Identity Verification — JBJ Global Real Estate" and meta description for `/verification` via the existing per-page head pattern (`index.html` defaults stay sitewide; page sets its own via the project's title helper).
+- After deploy, trigger an SEO scan and mark addressed findings fixed.
+
+## 7. QA / edge-to-edge testing
+
+1. Sign in as test user → open homepage → click `Get Verified` → confirm CTA + arrow are visible (fix #1 verified in the browser).
+2. Walk the 7 wizard steps end to end, including camera permission denial fallback.
+3. Submit → assert (a) Supabase row created with `pending` + reference code, (b) all files appear in bucket under `{uid}/{submission}/...`, (c) audit row written, (d) confirmation email landed (sent to `infoo.jane@gmail.com` per session preference).
+4. Log in as owner → `/owner/verifications` → review the submission → approve → assert status flips on profile, approval email sent, audit row appended.
+5. Re-load `/verification` as the user → status reads "Approved" with verified badge.
+6. Re-submit as the user after rejection path → ensure new reference code and old submission preserved.
+
+## Technical details
+
+- **Files to edit**: `src/components/verification/VerificationBanner.tsx`, `src/components/verification/VerificationModal.tsx` (substantial refactor into step components under `src/components/verification/steps/`), `src/pages/owner/VerificationRequests.tsx`, `src/pages/Verification.tsx` (new), `src/App.tsx` (route), `public/sitemap.xml`, `index.html` (only if global meta needed).
+- **New edge functions**: `supabase/functions/submit-verification/index.ts`, `supabase/functions/review-verification/index.ts`. Both verify JWT, the review function additionally checks `has_role(uid, 'owner'|'admin')`. Service role only used inside the function.
+- **Migrations**: add columns + audit table + trigger that mirrors `user_verifications.status` into `profiles.verification_status` + sequence/function for reference code (`'VRF-' || lpad(nextval('verification_ref_seq')::text, 6, '0')`).
+- **Email**: reuse existing transactional email infra (Resend wrapper already shipped). Two templates: `verification-submitted`, `verification-decision` (branching on approved/rejected reason).
+- **Validation**: zod schemas in `src/lib/verification/schema.ts` shared by wizard + edge function (duplicate file in `supabase/functions/_shared/verification-schema.ts` since Deno cannot import from `src/`).
+- **Security**: file MIME sniff via magic bytes server-side, strip EXIF on re-upload, rate limit submissions to 3/24h per user via `rate_limits` table (existing pattern), log IP/UA, never expose raw storage paths to other users.
+- **No removal**: existing modal/banner/admin page stay live during the rewrite (refactor in place, do not delete the components or the route).
+
+## Out of scope (not in this plan)
+
+- Third-party KYC provider integration (Sumsub/Onfido) — current flow remains manual owner review.
+- OCR auto-extraction from the ID image.
+- Sanctions/PEP screening — call out as a future hardening pass.
