@@ -825,8 +825,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Divider */}
         <div className="w-px h-5 bg-[#EFE6D6] flex-shrink-0" />
 
-        {/* Sort pills */}
-        {SORT_OPTIONS.map((opt) => (
+        {/* Sort pills (hidden when consumer page uses a dedicated SortBySelect) */}
+        {!hideSort && SORT_OPTIONS.map((opt) => (
           <button
             key={opt.value}
             onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
@@ -839,8 +839,9 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </button>
         ))}
 
-        {/* Divider */}
-        <div className="w-px h-5 bg-[#EFE6D6] flex-shrink-0" />
+        {!hideSort && (
+          <div className="w-px h-5 bg-[#EFE6D6] flex-shrink-0" />
+        )}
 
         {/* Map toggle */}
         <button
