@@ -26,6 +26,16 @@ const SUGGESTIONS = [
   "How do I book a free consultation?",
 ];
 
+const QUICK_PROMPTS: { label: string; prompt: string }[] = [
+  { label: "Golden Visa", prompt: "Tell me about the UAE Golden Visa — eligibility, benefits, and how property investment qualifies." },
+  { label: "ROI Calculator", prompt: "Which calculators on JBJ help me estimate ROI, rental yield, and mortgage on a Dubai property?" },
+  { label: "Book Consultation", prompt: "How do I book a free consultation with a JBJ advisor?" },
+  { label: "Marina < 2M", prompt: "Show me Dubai Marina apartments under 2M AED with strong rental yield." },
+  { label: "Off-plan vs Ready", prompt: "What's the difference between off-plan and ready properties in Dubai for an investor?" },
+  { label: "Payment Plans", prompt: "Which developers offer the best post-handover payment plans right now?" },
+];
+
+
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-concierge`;
 
 export default function AIConcierge({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -456,7 +466,31 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                   </div>
                 )}
 
+                {/* Persistent quick prompts — always available */}
+                <div className="-mx-1 px-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  <div className="flex items-center gap-1.5 w-max">
+                    {QUICK_PROMPTS.map((q) => (
+                      <button
+                        key={q.label}
+                        type="button"
+                        onClick={() => !streaming && send(q.prompt)}
+                        disabled={streaming}
+                        data-no-contrast-guard
+                        title={q.prompt}
+                        className="shrink-0 inline-flex items-center gap-1 h-7 px-2.5 rounded-full text-[11.5px] font-medium text-[#1A1A1A]
+                          border border-[#B89555]/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(247,242,234,0.85)_100%)]
+                          hover:border-[#B89555] hover:bg-[#FDFBF7] hover:shadow-[0_2px_10px_rgba(184,149,85,0.22)]
+                          disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      >
+                        <Sparkles className="h-3 w-3 text-[#B89555]" />
+                        {q.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <form onSubmit={onSubmit} className="relative">
+
                   <input
                     ref={inputRef}
                     value={draft}
