@@ -26,17 +26,6 @@ function useChannels(closeAfter: () => void): ChannelDef[] {
       },
     },
     {
-      id: "chat-support",
-      label: "Chat Support",
-      description: "Live chat with our team",
-      responseTime: "Avg < 2 min",
-      Icon: MessageSquare,
-      action: () => {
-        closeAfter();
-        window.dispatchEvent(new CustomEvent("jbj:open-chat-support"));
-      },
-    },
-    {
       id: "whatsapp",
       label: "WhatsApp",
       description: "Message us 24/7",
