@@ -343,6 +343,31 @@ export default function ProjectDetailLayout({
     return () => document.body.classList.remove('filter-bar-fixed');
   }, [showStickyNav]);
 
+  // Persist this view to browsing history (localStorage + per-user table when signed in)
+  useEffect(() => {
+    if (!project?.id) return;
+    recordProjectView({
+      id: project.id,
+      slug: project.slug ?? undefined,
+      name: project.name,
+      developer_name: project.developer?.name ?? undefined,
+      area_name: project.area_name ?? null,
+      cover_image_url: project.cover_image_url ?? null,
+    });
+  }, [project.id, project.slug, project.name]);
+
+  // "Return to previous project" chip — only when arrived from another project's nearby map
+  const navigateBackTo = useNavigate();
+  const [previousProject, setPreviousProject] = useState<BackStackEntry | null>(null);
+  useEffect(() => {
+    setPreviousProject(peekBackStack(project.slug ?? null));
+  }, [project.slug]);
+  const handleReturnToPrevious = () => {
+    const prev = popBackStack();
+    if (prev?.slug) navigateBackTo(`/project/${prev.slug}`);
+    setPreviousProject(null);
+  };
+
   // Filter and normalize images (remove broken/placeholder URLs)
   const images = useMemo(() => {
     const raw = project.images?.filter((i) => i.url) || [];
