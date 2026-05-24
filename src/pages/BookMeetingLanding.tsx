@@ -318,9 +318,9 @@ export default function BookMeetingLanding() {
                     title={bookable ? "" : "Booked — first availability shown below"}
                     onClick={() => bookable && setSelectedDate(new Date(date))}
                     disabled={!bookable}
-                    className={`px-2 py-3 rounded-lg text-xs border transition relative ${
+                    className={`px-2 py-3 rounded-lg text-xs border transition relative overflow-hidden ${
                       !bookable
-                        ? "bg-[#FDFBF7] border-[#B89555]/15 text-[#1A1A1A]/30 cursor-not-allowed line-through decoration-[#B89555]/40"
+                        ? "bg-[#FDFBF7] border-[#B89555]/15 text-[#1A1A1A]/30 cursor-not-allowed"
                         : sel
                           ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A] ring-1 ring-[#B89555]"
                           : "bg-white border-[#B89555]/20 text-[#1A1A1A]/80 hover:border-[#B89555]/60"
@@ -330,7 +330,15 @@ export default function BookMeetingLanding() {
                     <div className="text-base">{date.getDate()}</div>
                     <div className="opacity-70">{date.toLocaleDateString("en-GB", { month: "short" })} {date.getFullYear()}</div>
                     {!bookable && (
-                      <div className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[#B89555]/70">Booked</div>
+                      <>
+                        <span
+                          aria-hidden
+                          className="pointer-events-none absolute -right-7 top-2 rotate-45 bg-[#B89555]/85 text-[#FDFBF7] text-[8px] font-semibold uppercase tracking-[0.22em] px-7 py-[2px] shadow-sm"
+                        >
+                          Booked
+                        </span>
+                        <span className="sr-only">Booked</span>
+                      </>
                     )}
                   </button>
                 );
