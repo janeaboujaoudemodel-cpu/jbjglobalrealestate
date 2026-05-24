@@ -184,5 +184,3 @@ const ExploreServicesExpander = () => {
 };
 
 export default ExploreServicesExpander;
-
-export default ExploreServicesExpander;
