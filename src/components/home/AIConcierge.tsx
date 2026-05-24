@@ -137,7 +137,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
         <>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-x-0 bottom-0 top-[88px] z-[9000] bg-primary/55 backdrop-blur-sm"
+            className="fixed inset-x-0 bottom-0 top-[88px] z-[9000] bg-[#1A1A1A]/35 backdrop-blur-xl backdrop-saturate-150"
             onClick={onClose}
           />
           <motion.aside
@@ -159,7 +159,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                   <Sparkles className="h-5 w-5 text-[#B89555]" strokeWidth={2} />
                 </div>
                 <div className="min-w-0">
-                  <div className="text-[15px] font-semibold text-[#1A1A1A] leading-tight truncate">AI Concierge</div>
+                  <div className="text-[15px] font-semibold text-[#B89555] leading-tight truncate">JBJ Concierge</div>
                   <div className="text-[11px] text-[#1A1A1A]/65 leading-tight truncate">JBJ Global Real Estate</div>
                 </div>
               </div>
@@ -205,7 +205,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                     >
                       <div className="flex items-center gap-2">
                         <Sparkles className="h-4 w-4 text-[#B89555]" />
-                        <span className="text-[12.5px] font-semibold text-[#1A1A1A]">AI Concierge</span>
+                        <span className="text-[12.5px] font-semibold text-[#B89555]">JBJ Concierge</span>
                       </div>
                       <span className="text-[11px] text-[#1A1A1A]/70 leading-snug">Instant answers · 24/7</span>
                       <span className="absolute top-2 right-2 text-[9.5px] tracking-[0.14em] uppercase font-semibold text-[#B89555]">Active</span>
@@ -222,8 +222,8 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
                     >
                       <div className="flex items-center gap-2">
-                        <MessageSquare className="h-4 w-4 text-[#1A1A1A]" />
-                        <span className="text-[12.5px] font-semibold text-[#1A1A1A]">Chat Support</span>
+                        <MessageSquare className="h-4 w-4 text-[#B89555]" />
+                        <span className="text-[12.5px] font-semibold text-[#B89555]">Chat Support</span>
                       </div>
                       <span className="text-[11px] text-[#1A1A1A]/70 leading-snug">Talk to a JBJ agent</span>
                     </button>
@@ -237,10 +237,10 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
                     >
                       <div className="flex items-center gap-2">
-                        <MessageCircle className="h-4 w-4 text-[#1A1A1A]" />
-                        <span className="text-[12.5px] font-semibold text-[#1A1A1A]">WhatsApp</span>
+                        <MessageCircle className="h-4 w-4 text-[#B89555]" />
+                        <span className="text-[12.5px] font-semibold text-[#B89555]">WhatsApp</span>
                       </div>
-                      <span className="text-[11px] text-[#1A1A1A]/70 leading-snug">Reply in minutes</span>
+                      <span className="text-[11px] text-[#1A1A1A]/70 leading-snug">Message us 24/7</span>
                     </a>
                     {/* Call */}
                     <a
@@ -250,8 +250,8 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
                     >
                       <div className="flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-[#1A1A1A]" />
-                        <span className="text-[12.5px] font-semibold text-[#1A1A1A]">Call an Agent</span>
+                        <Phone className="h-4 w-4 text-[#B89555]" />
+                        <span className="text-[12.5px] font-semibold text-[#B89555]">Call Us</span>
                       </div>
                       <span className="text-[11px] text-[#1A1A1A]/70 leading-snug">{CONTACT_INFO.phone}</span>
                     </a>
@@ -272,8 +272,8 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                           <PhoneCall className="h-4 w-4" />
                         </span>
                         <div className="flex flex-col">
-                          <span className="text-[12.5px] font-semibold">Voice AI Call · Free</span>
-                          <span className="text-[11px] text-[#FDFBF7]/70 leading-snug">Speak with our AI agent now</span>
+                          <span className="text-[12.5px] font-semibold text-[#E2C9A0]">Free Voice Call</span>
+                          <span className="text-[11px] text-[#FDFBF7]/70 leading-snug">Speak to our concierge now</span>
                         </div>
                       </div>
                       <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#B89555]">
