@@ -166,8 +166,8 @@ const Index = () => {
     return () => globalThis.clearTimeout(timer);
   }, []);
 
-  // Scroll safety net — guarantees the homepage is always scrollable even if
-  // a previously-mounted modal/dialog left body.overflow=hidden behind.
+  // Scroll safety net — runs once on mount + when tab regains focus, instead
+  // of polling every 1.5s forever (wasteful background tick).
   useEffect(() => {
     const releaseScroll = () => {
       if (typeof document === 'undefined') return;
@@ -179,8 +179,8 @@ const Index = () => {
       body.style.pointerEvents = '';
     };
     releaseScroll();
-    const id = window.setInterval(releaseScroll, 1500);
-    return () => window.clearInterval(id);
+    window.addEventListener('focus', releaseScroll);
+    return () => window.removeEventListener('focus', releaseScroll);
   }, []);
 
   return (
