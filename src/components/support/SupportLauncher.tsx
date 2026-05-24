@@ -198,7 +198,7 @@ export default function SupportLauncher() {
           }}
         >
           <Sparkles className="h-3.5 w-3.5 rotate-90" style={{ color: "hsl(var(--gold-light))", stroke: "hsl(var(--gold-light))" }} />
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: "hsl(var(--primary-foreground))", WebkitTextFillColor: "hsl(var(--primary-foreground))" }}>Talk to us</span>
+          
           <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
         </button>
 
