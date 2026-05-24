@@ -278,66 +278,13 @@ const Index = () => {
               Your Gateway to Dubai's Finest Real Estate
             </motion.h1>
 
-            {/* Hero global search — long-stretch bar wired to the same engine as the header icon */}
+            {/* Hero global search — long-stretch bar with inline Book + Concierge CTAs */}
             <motion.div variants={fadeInUp} className="w-full">
-              <HomeHeroSearch />
+              <HomeHeroSearch onBookConsultation={() => setIsInquiryOpen(true)} />
             </motion.div>
 
-            {/* Hero action pills row (Browse Properties → Careers) removed per owner directive —
-                those shortcuts live inside the role-specific portal CTA below. */}
+            {/* Standalone "Book a Free Consultation" CTA removed — now lives inline inside the search bar above. */}
 
-            {/* Pillars block removed per owner directive — the hero now uses a single
-                always-visible premium search bar (HomeHeroSearch above) on all devices. */}
-
-
-
-            {/* Book a Free Consultation CTA — replaces the old Explore arrow */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9, duration: 0.6 }}
-              className="flex justify-center pt-2"
-            >
-              <button
-                type="button"
-                onClick={() => setIsInquiryOpen(true)}
-                data-no-contrast-guard
-                className="cta-premium group inline-flex h-12 sm:h-[52px] items-center justify-center gap-2 rounded-xl px-5 sm:px-6
-                  text-[13.5px] font-semibold tracking-tight allow-white
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2C9A0]/65 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-                style={{
-                  color: '#FDFBF7',
-                  background: 'rgba(253, 251, 247, 0.18)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                  backdropFilter: 'blur(8px)',
-                  border: '1px solid rgba(212,184,150,0.45)',
-                  boxShadow:
-                    'inset 0 1px 0 rgba(255,255,255,0.28), 0 6px 18px rgba(0,0,0,0.22)',
-                  textShadow: '0 1px 3px rgba(0,0,0,0.40)',
-                }}
-                onMouseEnter={(e) => {
-                  const t = e.currentTarget;
-                  t.style.background = '#EFE6D6';
-                  t.style.color = '#1A1A1A';
-                  t.style.borderColor = '#B89555';
-                  t.style.textShadow = 'none';
-                }}
-                onMouseLeave={(e) => {
-                  const t = e.currentTarget;
-                  t.style.background = 'rgba(253, 251, 247, 0.18)';
-                  t.style.color = '#FDFBF7';
-                  t.style.borderColor = 'rgba(212,184,150,0.45)';
-                  t.style.textShadow = '0 1px 3px rgba(0,0,0,0.40)';
-                }}
-              >
-                <span>Book a Free Consultation</span>
-                <ArrowUpRight
-                  className="h-3.5 w-3.5 text-[#E2C9A0] transition-all duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#B89555]"
-                  strokeWidth={2.25}
-                />
-              </button>
-
-            </motion.div>
           </div>
         </motion.div>
       </div>
