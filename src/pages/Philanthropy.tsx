@@ -95,7 +95,7 @@ const Philanthropy = () => {
                 JBJ Global Real Estate is making a difference.
               </p>
               <Link to="/contact">
-                <Button className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#1A1A1A] px-8 py-6">
+                <Button className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white px-8 py-6">
                   Contact Us to Learn More
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>

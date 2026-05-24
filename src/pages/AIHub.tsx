@@ -1083,7 +1083,7 @@ const AIHub = () => {
                 {user ? (
                   <button 
                     onClick={() => document.getElementById('investor-tools')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-[#1A1A1A] border-2 border-[#B89555]/50 hover:bg-[#EFE6D6]/10 transition-all"
+                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-white border-2 border-[#B89555]/50 hover:bg-[#EFE6D6]/10 transition-all"
                   >
                     <Sparkles className="w-5 h-5" />
                     Explore Tools Above
@@ -1092,7 +1092,7 @@ const AIHub = () => {
                 ) : (
                   <button 
                     onClick={() => navigate("/auth?redirect=/ai-hub")}
-                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-[#1A1A1A] border-2 border-[#B89555]/50 hover:bg-[#EFE6D6]/10 transition-all"
+                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-white border-2 border-[#B89555]/50 hover:bg-[#EFE6D6]/10 transition-all"
                   >
                     <Sparkles className="w-5 h-5" />
                     Sign In / Create Account

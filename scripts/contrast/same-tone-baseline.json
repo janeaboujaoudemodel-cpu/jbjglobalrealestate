@@ -1,29 +1,4 @@
 {
-  "_comment": "Pre-existing same-tone offenders snapshotted on 2026-05-24. New files added by future PRs will block merges; entries here are tolerated until cleaned up. Refresh with: node scripts/contrast/check-same-tone.mjs --print-baseline > scripts/contrast/same-tone-baseline.json",
-  "entries": [
-    { "file": "src/components/GlobalSearchModal.tsx", "count": 1 },
-    { "file": "src/components/MobileMenuWalkthrough.tsx", "count": 1 },
-    { "file": "src/components/RoleSelectionModal.tsx", "count": 2 },
-    { "file": "src/components/admin/AdminAIAssistant.tsx", "count": 1 },
-    { "file": "src/components/ai-broker/AIBrokerLeadCard.tsx", "count": 1 },
-    { "file": "src/components/ai-tools/premium/AIMeetingSummarizerPremium.tsx", "count": 8 },
-    { "file": "src/components/ai-tools/premium/MeetingConsentSection.tsx", "count": 1 },
-    { "file": "src/components/ai-video-studio/features/AIEditorPanel.tsx", "count": 1 },
-    { "file": "src/components/ai-video-studio/features/TextOverlayPanel.tsx", "count": 1 },
-    { "file": "src/components/ai-video-studio/panels/MediaLibraryPanel.tsx", "count": 1 },
-    { "file": "src/components/ai-video-studio/timeline/TimelineEditor.tsx", "count": 3 },
-    { "file": "src/components/books/BookShelf.tsx", "count": 1 },
-    { "file": "src/components/faq/FAQFloatingSidebar.tsx", "count": 1 },
-    { "file": "src/components/founders-assistant/FoundersDecisionPanel.tsx", "count": 1 },
-    { "file": "src/components/guides/GuideTableOfContents.tsx", "count": 1 },
-    { "file": "src/components/listing-admin/media-ingestion/MatchEditor.tsx", "count": 1 },
-    { "file": "src/components/referral/SignatureDesigner.tsx", "count": 1 },
-    { "file": "src/components/ui/phone-input.tsx", "count": 1 },
-    { "file": "src/pages/AIHub.tsx", "count": 2 },
-    { "file": "src/pages/EducationHub.tsx", "count": 3 },
-    { "file": "src/pages/Guides.tsx", "count": 1 },
-    { "file": "src/pages/Philanthropy.tsx", "count": 1 },
-    { "file": "src/pages/SellerListing.tsx", "count": 1 },
-    { "file": "src/pages/toolkit/ToolkitLanding.tsx", "count": 1 }
-  ]
+  "_comment": "Same-tone baseline cleared on 2026-05-24 after sweep — all 37 pre-existing bg-[#1A1A1A] + text-[#1A1A1A] hits across 24 files were fixed by swapping the text colour to white. From now on, ANY new file or hit blocks the PR gate. Refresh with: node scripts/contrast/check-same-tone.mjs --print-baseline > scripts/contrast/same-tone-baseline.json",
+  "entries": []
 }

@@ -715,7 +715,7 @@ const AIMeetingSummarizerPremium = () => {
                         size="sm"
                         onClick={handleCreateNewLead}
                         disabled={creatingLead || !newLeadName.trim()}
-                        className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] text-xs"
+                        className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white text-xs"
                       >
                         {creatingLead ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <UserPlus className="h-3 w-3 mr-1" />}
                         Create & Link Lead
@@ -768,7 +768,7 @@ const AIMeetingSummarizerPremium = () => {
                   <Button
                     type="button"
                     onClick={startRecording}
-                    className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] shadow-lg shadow-black/20 px-6"
+                    className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white shadow-lg shadow-black/20 px-6"
                     size="lg"
                   >
                     <Mic className="h-4 w-4 mr-2" /> Start Recording Session
@@ -901,7 +901,7 @@ const AIMeetingSummarizerPremium = () => {
                       size="sm"
                       onClick={handleGenerateResponse}
                       disabled={generatingResponse}
-                      className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] text-xs"
+                      className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white text-xs"
                     >
                       {generatingResponse ? <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Generating...</> : <><Send className="h-3 w-3 mr-1" /> Generate Response</>}
                     </Button>
@@ -943,7 +943,7 @@ const AIMeetingSummarizerPremium = () => {
                         onClick={handlePropertySearch}
                         disabled={searchingProperties}
                         size="sm"
-                        className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A]"
+                        className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white"
                       >
                         {searchingProperties ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Home className="h-4 w-4 mr-1" />}
                         Find Matching Properties
@@ -973,7 +973,7 @@ const AIMeetingSummarizerPremium = () => {
                           onChange={(e) => setMortgagePrice(e.target.value)}
                           className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] focus:border-[#B89555] text-sm"
                         />
-                        <Button onClick={handleMortgageCalc} size="sm" className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A]">
+                        <Button onClick={handleMortgageCalc} size="sm" className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white">
                           Calculate
                         </Button>
                       </div>
@@ -1008,7 +1008,7 @@ const AIMeetingSummarizerPremium = () => {
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold py-6 shadow-lg shadow-black/20 text-base"
+              className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white font-semibold py-6 shadow-lg shadow-black/20 text-base"
             >
               {loading ? (
                 <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Summarizing Meeting...</>
@@ -1041,7 +1041,7 @@ const AIMeetingSummarizerPremium = () => {
                         disabled={creatingTasks || tasksCreated}
                         className={tasksCreated
                           ? "bg-emerald-600 text-white text-xs"
-                          : "bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] text-xs"
+                          : "bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white text-xs"
                         }
                       >
                         {tasksCreated ? <><Check className="h-3 w-3 mr-1" /> Synced + Follow-ups</> : creatingTasks ? <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Creating...</> : <><Plus className="h-3 w-3 mr-1" /> Create Tasks + Follow-ups</>}
@@ -1050,7 +1050,7 @@ const AIMeetingSummarizerPremium = () => {
                     <ul className="space-y-2.5">
                       {response.actionItems.map((item: any, idx: number) => (
                         <li key={idx} className="flex items-start gap-3 text-sm">
-                          <span className="w-6 h-6 rounded-full bg-[#1A1A1A] flex items-center justify-center flex-shrink-0 text-xs text-[#1A1A1A] font-semibold">{idx + 1}</span>
+                          <span className="w-6 h-6 rounded-full bg-[#1A1A1A] flex items-center justify-center flex-shrink-0 text-xs text-white font-semibold">{idx + 1}</span>
                           <span className="text-[#1A1A1A]/70">{typeof item === "string" ? item : item.task || JSON.stringify(item)}</span>
                         </li>
                       ))}

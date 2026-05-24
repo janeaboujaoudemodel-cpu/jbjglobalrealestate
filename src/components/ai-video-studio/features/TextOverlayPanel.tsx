@@ -369,7 +369,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
               value={presetSearch}
               onChange={e => setPresetSearch(e.target.value)}
               placeholder="Search presets…"
-              className="w-full h-10 bg-[#1A1A1A] border border-[#B89555]/30 rounded-lg pl-8 pr-8 text-xs text-[#1A1A1A] placeholder-slate-500 focus:outline-none focus:border-amber-500/60 transition-colors"
+              className="w-full h-10 bg-[#1A1A1A] border border-[#B89555]/30 rounded-lg pl-8 pr-8 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/60 transition-colors"
             />
             {presetSearch && (
               <button

@@ -543,7 +543,7 @@ Requirements:
         <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-t-2xl">
           <div className="container mx-auto px-4 py-12">
             <div className="max-w-4xl mx-auto text-center">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-[#1A1A1A] text-[#1A1A1A] text-sm font-medium mb-4 border border-[#B89555]/30">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-[#1A1A1A] text-white text-sm font-medium mb-4 border border-[#B89555]/30">
                 Seller Listing Tool
               </span>
               <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-3">

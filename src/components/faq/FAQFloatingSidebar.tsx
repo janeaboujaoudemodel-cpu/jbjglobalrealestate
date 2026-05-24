@@ -173,7 +173,7 @@ export const FAQFloatingSidebar = ({
                   <span className={cn(
                     "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium flex-shrink-0",
                     activeId === `category-${index}`
-                      ? "bg-[#1A1A1A] text-[#1A1A1A]"
+                      ? "bg-[#1A1A1A] text-white"
                       : "bg-[#EFE6D6]/10 text-[#1A1A1A]"
                   )}>
                     {index + 1}

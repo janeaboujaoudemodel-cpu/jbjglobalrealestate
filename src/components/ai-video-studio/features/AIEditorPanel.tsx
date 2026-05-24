@@ -478,7 +478,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
               <div className="space-y-1">
                 {assembleResult.editPlan.map((step, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
-                    <span className="w-4 h-4 rounded bg-[#1A1A1A] flex items-center justify-center text-[#1A1A1A] font-bold text-[10px] shrink-0">
+                    <span className="w-4 h-4 rounded bg-[#1A1A1A] flex items-center justify-center text-white font-bold text-[10px] shrink-0">
                       {i + 1}
                     </span>
                     <span className="flex-1 truncate">Clip #{step.clipIndex + 1} — {step.duration}s</span>

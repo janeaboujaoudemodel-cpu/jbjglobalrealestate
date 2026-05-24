@@ -368,7 +368,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                 <Button
                   onClick={handleConfirmRole}
                   disabled={!selectedRole}
-                  className="w-full py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold text-base shadow-xl rounded-xl group border border-[#B89555]/20 disabled:opacity-50"
+                  className="w-full py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white font-semibold text-base shadow-xl rounded-xl group border border-[#B89555]/20 disabled:opacity-50"
                 >
                   Continue
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -618,7 +618,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
 
                 <Button
                   onClick={handleEmployeeWelcomeClose}
-                  className="w-full py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold text-base shadow-xl rounded-xl group border border-[#B89555]/20"
+                  className="w-full py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white font-semibold text-base shadow-xl rounded-xl group border border-[#B89555]/20"
                 >
                   <Briefcase className="w-5 h-5 mr-2" />
                   Go to My CRM Dashboard

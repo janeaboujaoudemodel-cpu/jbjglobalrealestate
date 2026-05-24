@@ -96,7 +96,7 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">
               <Avatar className="h-10 w-10 border border-[#1A1A1A]">
-                <AvatarFallback className="bg-[#1A1A1A] text-[#1A1A1A] text-sm">
+                <AvatarFallback className="bg-[#1A1A1A] text-white text-sm">
                   {getInitials(lead.full_name)}
                 </AvatarFallback>
               </Avatar>

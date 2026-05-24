@@ -144,7 +144,7 @@ export function MatchEditor({ developerId, projectId, docType, onApply }: MatchE
             detected_doc_type: type,
           });
         }}
-        className="w-full mt-1 rounded-lg bg-[#1A1A1A] text-[#1A1A1A] py-1.5 text-sm font-medium hover:bg-[#000]"
+        className="w-full mt-1 rounded-lg bg-[#1A1A1A] text-white py-1.5 text-sm font-medium hover:bg-[#000]"
       >
         Apply
       </button>

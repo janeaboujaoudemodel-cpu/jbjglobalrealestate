@@ -61,7 +61,7 @@ const ToolCard: React.FC<ToolCardProps> = ({
       <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl mb-4 ${
         isFlagship 
           ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' 
-          : 'bg-[#1A1A1A] text-[#1A1A1A] group-hover:bg-[#EFE6D6]/20'
+          : 'bg-[#1A1A1A] text-white group-hover:bg-[#EFE6D6]/20'
       } transition-colors`}>
         {icon}
       </div>

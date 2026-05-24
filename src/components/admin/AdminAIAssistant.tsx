@@ -194,7 +194,7 @@ export const AdminAIAssistant = () => {
           <Button
             onClick={handleAskAI}
             disabled={loading || !query.trim()}
-            className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#1A1A1A] shadow-lg"
+            className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white shadow-lg"
           >
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin" />

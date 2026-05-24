@@ -191,7 +191,7 @@ export const GuideTableOfContents = ({
                   <span className={cn(
                     "w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium",
                     activeId === item.id
-                      ? "bg-[#1A1A1A] text-[#1A1A1A]"
+                      ? "bg-[#1A1A1A] text-white"
                       : "bg-[#EFE6D6]/10 text-[#1A1A1A]"
                   )}>
                     {index + 1}
