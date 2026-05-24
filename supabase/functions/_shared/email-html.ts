@@ -210,8 +210,7 @@ function socialLinksFooter(): string {
 
 export function sharedFooterHtml(): string {
   return `<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;border-radius:0 0 18px 18px;"><tr><td style="padding:34px 18px 34px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;"><tr><td align="center">${monogramSvg(72)}</td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:12px auto 12px;"><tr><td style="border-top:1px solid #C8A76655;"></td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 12px;"><tr><td style="border-top:1px solid #C8A76655;"></td></tr></table>
 <p style="color:#C8A766;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 14px;">Connect with us on social media</p>
 ${socialLinksFooter()}
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:4px auto 14px;"><tr>
