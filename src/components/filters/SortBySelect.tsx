@@ -51,8 +51,8 @@ export function SortBySelect({
   const frame = borderless
     ? "bg-transparent border-0 shadow-none hover:bg-[#EFE6D6]/40"
     : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl shadow-sm hover:border-[#B89555]";
-  // In iconOnly mode, hide the trailing Radix chevron (last span child of trigger)
-  const chevronOff = iconOnly ? "[&>span[data-radix-select-icon]]:hidden" : "";
+  // In iconOnly mode, hide the trailing Radix chevron
+  const chevronOff = iconOnly ? "[&_.lucide-chevron-down]:hidden" : "";
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger
