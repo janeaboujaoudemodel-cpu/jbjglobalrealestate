@@ -302,8 +302,10 @@ export default function PaymentPlanVisualization({
             </div>
           )}
 
-          {/* Detailed Payment Structure Card */}
-          {isDetailedBreakdown && detailedMilestones.length >= 2 && (
+          {/* Detailed Payment Structure Card — only show if we actually have a granular
+              monthly/multi-installment schedule (more than the standard booking/construction/handover trio),
+              or any installment carries explicit timing info. Otherwise it just duplicates the timeline + cards above. */}
+          {isDetailedBreakdown && (detailedMilestones.length > 3 || detailedMilestones.some(m => !!m.timing)) && (
             <div className="mt-6 p-5 rounded-xl border border-[#B89555]/30 bg-[#FDFBF7]">
               <div className="flex items-center gap-2 mb-4">
                 <List className="w-5 h-5 text-[#1A1A1A]" />
