@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Minus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Minus, Eraser } from 'lucide-react';
 import { SquareChatIcon } from '@/components/ui/SquareChatIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ChatStep, getRandomAgent } from './types';
@@ -11,9 +11,11 @@ interface ChatHeaderProps {
   isExistingUser: boolean;
   onBack: () => void;
   onToggleCollapse: () => void;
+  onClearChat?: () => void;
 }
 
-const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, isExistingUser, onBack, onToggleCollapse }, ref) => {
+const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, isExistingUser, onBack, onToggleCollapse, onClearChat }, ref) => {
+
   const { isRTL, t } = useLanguage();
   const agent = useMemo(() => getRandomAgent(), []);
 
@@ -84,6 +86,19 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
           <div className="w-2 h-2 rounded-full bg-[#EFE6D6] animate-pulse" />
           <span className="text-[#1A1A1A] text-[10px] font-semibold">{t('chat.available247', 'Available 24/7')}</span>
         </div>
+        {onClearChat && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClearChat}
+            className="w-10 h-10 rounded-lg bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#EFE6D6]/40 hover:border-[#B89555] hover:shadow-lg hover:shadow-gold/20 transition-all"
+            title={t('chat.clearChat', 'Clear chat')}
+            aria-label={t('chat.clearChat', 'Clear chat')}
+          >
+            <Eraser className="w-4 h-4" />
+          </Button>
+        )}
+
         {/* Minimize button instead of X */}
         <Button
           variant="ghost"

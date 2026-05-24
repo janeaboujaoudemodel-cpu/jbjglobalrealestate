@@ -161,6 +161,67 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     sessionStorage.setItem('jbj_chat_user', JSON.stringify(userInfo));
   }, [step, userInfo]);
 
+  // Restore chat messages from sessionStorage on mount
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem('jbj_chat_session_v1');
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      const restored: Message[] = Array.isArray(saved?.messages)
+        ? saved.messages
+            .filter((m: any) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+            .slice(-100)
+            .map((m: any, i: number) => ({
+              id: m.id || `restored-${Date.now()}-${i}`,
+              role: m.role,
+              content: m.content,
+              timestamp: m.timestamp ? new Date(m.timestamp) : new Date(),
+            }))
+        : [];
+      if (restored.length > 0) setMessages(restored);
+      if (saved?.conversationId) setConversationId(saved.conversationId);
+      if (saved?.selectedService) setSelectedService(saved.selectedService);
+    } catch (e) {
+      console.warn('Failed to restore chat session:', e);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist messages + conversation to sessionStorage on change
+  useEffect(() => {
+    try {
+      if (messages.length === 0 && !conversationId) {
+        sessionStorage.removeItem('jbj_chat_session_v1');
+        return;
+      }
+      const payload = {
+        conversationId,
+        selectedService,
+        messages: messages.slice(-100).map(m => ({
+          id: m.id,
+          role: m.role,
+          content: m.content,
+          timestamp: m.timestamp instanceof Date ? m.timestamp.toISOString() : m.timestamp,
+        })),
+      };
+      sessionStorage.setItem('jbj_chat_session_v1', JSON.stringify(payload));
+    } catch {
+      // ignore quota / privacy mode errors
+    }
+  }, [messages, conversationId, selectedService]);
+
+  // Clear current chat thread (keeps user identity, drops conversation + messages)
+  const clearChat = useCallback(() => {
+    setMessages([]);
+    setConversationId(null);
+    setSelectedService(null);
+    setSelectedShortcut(null);
+    try { sessionStorage.removeItem('jbj_chat_session_v1'); } catch {}
+    setStep(isExistingUser ? 'shortcuts' : 'welcome_choice');
+    toast.success('Chat cleared');
+  }, [isExistingUser]);
+
+
   // Check email in database
   const checkEmailInDatabase = async (email: string): Promise<{ exists: boolean; data?: any }> => {
     try {
@@ -869,7 +930,9 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
           isExistingUser={isExistingUser} 
           onBack={handleBack} 
           onToggleCollapse={onToggleCollapse} 
+          onClearChat={messages.length > 0 ? clearChat : undefined}
         />
+
 
         {step === 'welcome_choice' && (
           <ChatWelcome onStartChat={() => {
