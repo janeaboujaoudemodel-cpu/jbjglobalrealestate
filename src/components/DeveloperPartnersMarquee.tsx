@@ -170,9 +170,10 @@ const DeveloperPartnersMarquee = () => {
 
       <div className="w-full">
         <div className="jbj-shimmer-bg py-5 md:py-6 px-4">
-          <p className="jbj-shimmer-text text-center text-sm md:text-base font-light tracking-[0.18em] uppercase">
+          <p className="text-center text-sm md:text-base font-semibold tracking-[0.18em] uppercase text-[#B89555]">
             {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
           </p>
+
         </div>
 
         {/* Clean gold divider between title and marquee */}
