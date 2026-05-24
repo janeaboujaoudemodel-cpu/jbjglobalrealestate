@@ -581,7 +581,15 @@ export default function GlobalVerticalNav() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(() => {
-    try { return localStorage.getItem('jj_nav_collapsed') === '1'; } catch { return false; }
+    try {
+      const stored = localStorage.getItem('jj_nav_collapsed');
+      if (stored === '0') return false;
+      if (stored === null) {
+        // Default: collapsed on first visit so the page stays clean.
+        try { localStorage.setItem('jj_nav_collapsed', '1'); } catch {}
+      }
+      return true;
+    } catch { return true; }
   });
 
   // Collapsible sections state — accordion: only one open at a time
