@@ -631,13 +631,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       {/* Header bottom borders removed — no visible seam between header and page/hero */}
 
       
-      {/* Inner shadow for depth */}
-      <div 
-        className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
-        style={{
-          boxShadow: 'inset 0 -1px 0 rgba(0,0,0,0.05)'
-        }}
-      />
+      {/* Header shadow removed — no visible seam between header and page/hero */}
       
       
       {/* HEADER CONTENT */}

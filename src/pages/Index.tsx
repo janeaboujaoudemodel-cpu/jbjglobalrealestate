@@ -186,7 +186,7 @@ const Index = () => {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <section className="relative w-full min-h-screen bg-[#FDFBF7]">
       {/* SEO Meta Tags */}
       <SEOHead {...pagesSEO.home} />
       
