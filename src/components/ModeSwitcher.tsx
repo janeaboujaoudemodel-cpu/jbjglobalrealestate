@@ -127,13 +127,15 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   // accent rail on the leading edge in the active mode's tone. Same look
   // whether selected or not — classy, consistent, no rainbow.
   const triggerStyle: CSSProperties = {
-    backgroundImage: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
+    backgroundColor: 'transparent',
     borderColor: 'rgba(184,149,85,0.55)',
+    borderWidth: 1,
+    borderStyle: 'solid',
     color: '#1A1A1A',
-    // No mode-tinted left rail on the trigger chip — keep it uniformly
-    // champagne/gold on every edge regardless of selected mode.
-    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 2px rgba(26,26,26,0.06)',
+    boxShadow: 'none',
   };
+
+
 
   if (variant === 'compact') {
     return (

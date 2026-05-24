@@ -96,8 +96,9 @@ export default function HorizontalUtilityBar() {
   return (
     <>
       <div
-        className="fixed top-0 right-0 h-[88px] [body.jj-vertical-nav-collapsed_&]:h-[48px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]"
+        className="fixed top-0 right-0 h-[88px] [body.jj-vertical-nav-collapsed_&]:h-[48px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7 bg-[#FDFBF7] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-[2px] after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[0_1px_0_rgba(184,149,85,0.35)]"
       >
+
         {/* ── LEFT: Search only ── */}
         <div className="flex items-center gap-3 shrink-0">
           <Tooltip>
@@ -152,22 +153,21 @@ export default function HorizontalUtilityBar() {
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqft') toggleAreaUnit(); }}
               style={{
-                backgroundColor: areaUnit === 'sqft' ? '#EFE6D6' : 'transparent',
                 color: areaUnit === 'sqft' ? '#1A1A1A' : '#B89555',
               }}
-              className="px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors"
+              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors ${areaUnit === 'sqft' ? 'jbj-shimmer-champagne' : 'bg-transparent'}`}
               aria-label="Square feet"
             >sq ft</button>
             <button
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqm') toggleAreaUnit(); }}
               style={{
-                backgroundColor: areaUnit === 'sqm' ? '#EFE6D6' : 'transparent',
                 color: areaUnit === 'sqm' ? '#1A1A1A' : '#B89555',
               }}
-              className="px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors border-l border-[#B89555]/40"
+              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors border-l border-[#B89555]/40 ${areaUnit === 'sqm' ? 'jbj-shimmer-champagne' : 'bg-transparent'}`}
               aria-label="Square meters"
             >sq m</button>
+
           </div>
 
 
