@@ -49,16 +49,15 @@ export function DeveloperLogo({
     const label = (name || alt || "Developer").trim();
     // Auto-shrink so long names ("Expo City Development") fit fully on
     // two lines without ANY truncation/"…". Plate is h-14 → two lines OK.
+    // Auto-shrink so long names fit the smaller plate without truncation.
     const sizeClass =
-      label.length <= 8
-        ? "text-[12px]"
-        : label.length <= 12
-        ? "text-[11px]"
-        : label.length <= 16
+      label.length <= 6
         ? "text-[10px]"
-        : label.length <= 20
+        : label.length <= 10
         ? "text-[9px]"
-        : "text-[8px]";
+        : label.length <= 14
+        ? "text-[8px]"
+        : "text-[7px]";
     return (
       <div
         className={cn(UNIFIED_PLATE, className)}
@@ -86,7 +85,7 @@ export function DeveloperLogo({
           className={cn(UNIFIED_PLATE, className)}
           aria-label={`${alt} (logo unavailable)`}
         >
-          <Building2 className="w-6 h-6 text-[#1A1A1A]/70" />
+          <Building2 className="w-4 h-4 text-[#1A1A1A]/70" />
         </div>
       );
     }
