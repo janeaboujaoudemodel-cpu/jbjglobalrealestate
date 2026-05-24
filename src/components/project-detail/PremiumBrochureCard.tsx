@@ -128,28 +128,35 @@ const PremiumBrochureCard = ({
             style={{ backgroundImage: `url(${projectImageUrl || BROCHURE_BG_URL})` }}
           />
           
-          {/* Gradient overlay for text contrast - heavier at top and bottom where text lives */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/20" />
-          <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/85 via-black/55 to-transparent" />
-          
+          {/* Lighter overlays — keep photo visible; readability comes from text panels */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
+
           {/* Premium Gold Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-gold/15 via-transparent to-gold/5" />
-          
+          <div className="absolute inset-0 bg-gradient-to-tr from-gold/10 via-transparent to-gold/5" />
+
           {/* Spine effect on left - book binding */}
-          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/55 via-black/25 to-transparent" />
           <div className="absolute left-2 top-4 bottom-4 w-[2px] bg-[#EFE6D6]/40 rounded-full" />
 
           {/* Gold border accent */}
           <div className="absolute inset-0 border-2 border-[#B89555]/50 rounded-lg group-hover:border-[#B89555]/80 transition-colors" />
-          
+
           {/* Top gold line accent */}
           <div className="absolute top-0 left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
 
           {/* Content Layout */}
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
-            {/* Top: Brand mark with real monogram */}
-            <div className="absolute top-4 left-10 flex items-center gap-3">
-              <div className="w-14 h-14 rounded-full border-2 border-[#B89555]/70 flex items-center justify-center bg-[#1A1A1A] backdrop-blur-sm overflow-hidden shadow-lg">
+            {/* Top: Brand mark with real monogram — on a deep navy panel for readability */}
+            <div
+              className="absolute top-4 left-10 flex items-center gap-3 pl-1.5 pr-3 py-1.5 rounded-md"
+              style={{
+                background: "linear-gradient(135deg, rgba(10,20,45,0.78) 0%, rgba(12,28,60,0.7) 100%)",
+                backdropFilter: "blur(6px)",
+                boxShadow: "0 4px 14px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08)",
+                border: "1px solid rgba(184,149,85,0.35)",
+              }}
+            >
+              <div className="w-11 h-11 rounded-full border-2 border-[#B89555]/70 flex items-center justify-center bg-[#1A1A1A] overflow-hidden shadow-lg shrink-0">
                 <img
                   src={jbjFullLogoDarkBg}
                   alt="JBJ"
@@ -157,44 +164,51 @@ const PremiumBrochureCard = ({
                   style={{ transform: "scale(1.2)" }}
                 />
               </div>
-              <p
-                className="text-white text-[10px] font-semibold uppercase tracking-[0.18em] leading-relaxed"
-                style={{ textShadow: "0 2px 8px rgba(0,0,0,0.95), 0 1px 2px rgba(0,0,0,0.9)" }}
-              >
-                <span className="text-[#E8C77A] font-bold">JBJ</span> Global<br/>Real Estate
+              <p className="text-white text-[10px] font-semibold uppercase tracking-[0.18em] leading-none whitespace-nowrap">
+                <span className="text-[#E8C77A] font-bold">JBJ</span> Global Real Estate
               </p>
             </div>
 
-            {/* Bottom: Brochure info */}
-            <div className="mt-auto">
-              <p
-                className="text-[#E8C77A] text-[10px] uppercase tracking-[0.32em] font-bold mb-2"
-                style={{ textShadow: "0 1px 4px rgba(0,0,0,0.95)" }}
-              >
+            {/* Bottom: Brochure info — on a deep navy readability panel */}
+            <div
+              className="mt-auto -mx-2 px-4 py-4 rounded-lg"
+              style={{
+                background: "linear-gradient(180deg, rgba(8,18,40,0) 0%, rgba(8,18,40,0.55) 35%, rgba(8,18,40,0.85) 100%)",
+                backdropFilter: "blur(3px)",
+              }}
+            >
+              <p className="text-[#E8C77A] text-[10px] uppercase tracking-[0.32em] font-bold mb-2">
                 Project Brochure
               </p>
 
-              <h3
-                className="text-white text-2xl font-semibold mb-3 line-clamp-2 leading-tight"
-                style={{ textShadow: "0 2px 10px rgba(0,0,0,0.95), 0 1px 3px rgba(0,0,0,0.9)" }}
-              >
+              <h3 className="text-white text-2xl font-semibold mb-3 line-clamp-2 leading-tight">
                 {projectName}
               </h3>
 
               <div className="w-20 h-[2px] bg-gradient-to-r from-[#B89555] to-[#B89555]/20 mb-3" />
 
-              <p
-                className="text-white text-[11px] uppercase tracking-[0.2em] font-medium"
-                style={{ textShadow: "0 1px 5px rgba(0,0,0,0.95)" }}
-              >
+              <p className="text-white/95 text-[11px] uppercase tracking-[0.2em] font-medium">
                 {location || 'Dubai • UAE'}
               </p>
             </div>
 
-            {/* Lock indicator for locked state */}
+            {/* Premium 3D gold lock indicator */}
             {isLocked && (
-              <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#1A1A1A]/70 border-2 border-[#B89555]/70 flex items-center justify-center backdrop-blur-sm">
-                <Lock className="w-5 h-5 text-[#B89555]" />
+              <div
+                className="absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center"
+                style={{
+                  background: "linear-gradient(135deg, #F7ECD0 0%, #E8C77A 45%, #B89555 100%)",
+                  boxShadow:
+                    "0 10px 24px rgba(0,0,0,0.45), 0 4px 8px rgba(184,149,85,0.5), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -2px 4px rgba(120,90,30,0.4)",
+                  border: "1px solid rgba(120,90,30,0.55)",
+                }}
+                aria-hidden="true"
+              >
+                <Lock
+                  className="w-5 h-5"
+                  strokeWidth={2.5}
+                  style={{ color: "#3A2A0E", filter: "drop-shadow(0 1px 0 rgba(255,255,255,0.55))" }}
+                />
               </div>
             )}
           </div>

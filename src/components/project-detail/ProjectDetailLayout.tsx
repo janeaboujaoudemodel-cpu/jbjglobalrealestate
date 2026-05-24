@@ -1328,10 +1328,13 @@ export default function ProjectDetailLayout({
                     ].map((item) => (
                       <li key={item} className="flex items-center gap-3">
                         <span
-                          className="inline-flex w-6 h-6 rounded-full items-center justify-center bg-[#F7F2EA] ring-1 ring-[#B89555]/60 shadow-[0_1px_2px_rgba(0,0,0,0.06)] shrink-0"
+                          className="inline-flex w-6 h-6 rounded-full items-center justify-center shrink-0 ring-1 ring-[#B89555]/70 shadow-[0_2px_4px_rgba(184,149,85,0.25),inset_0_1px_0_rgba(255,255,255,0.6)]"
+                          style={{ background: "linear-gradient(135deg, #F7ECD0 0%, #E8C77A 50%, #B89555 100%)" }}
                           aria-hidden="true"
                         >
-                          <Check className="w-3.5 h-3.5 text-[#1A1A1A]" strokeWidth={2.5} />
+                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="#1A1A1A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 12.5l4.5 4.5L19 7.5" />
+                          </svg>
                         </span>
                         <span className="text-[#1A1A1A]/90">{item}</span>
                       </li>
