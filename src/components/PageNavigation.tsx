@@ -78,9 +78,9 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
     <div
       ref={ref}
       className={cn(
-        // Aligned directly under the right-edge "Talk to us" support stack
-        "fixed bottom-24 z-[55] pointer-events-auto",
-        isRTL ? "left-4" : "right-4",
+        // Aligned under the right-edge "Talk to us" stack, nudged down + right
+        "fixed bottom-16 z-[55] pointer-events-auto",
+        isRTL ? "left-3" : "right-3",
       )}
       data-no-contrast-guard
     >
@@ -90,22 +90,15 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         aria-label={label}
         title={label}
         className={cn(
-          "group inline-flex items-center justify-center h-11 w-11 rounded-full",
-          "border border-[#B89555]/65 hover:border-[#B89555]",
-          "bg-[#FDFBF7]/85 hover:bg-[#EFE6D6]",
-          "text-[#B89555]",
-          "shadow-[0_10px_24px_rgba(0,0,0,0.18),0_0_0_1px_rgba(184,149,85,0.18)]",
+          "group inline-flex items-center justify-center h-9 w-9 bg-transparent border-0 shadow-none p-0",
+          "text-[#B89555] hover:text-[#1A1A1A]",
           "transition-all duration-200 hover:-translate-y-[1px] active:scale-95",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70 rounded-sm",
         )}
-        style={{
-          backdropFilter: "blur(14px) saturate(140%)",
-          WebkitBackdropFilter: "blur(14px) saturate(140%)",
-        }}
       >
         <Icon
-          className="h-5 w-5 text-[#B89555] transition-transform duration-200 group-hover:scale-110"
-          strokeWidth={2.25}
+          className="h-6 w-6 transition-transform duration-200 group-hover:scale-110"
+          strokeWidth={2.5}
           data-no-contrast-guard
         />
       </button>
