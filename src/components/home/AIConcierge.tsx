@@ -215,7 +215,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                       type="button"
                       onClick={() => {
                         onClose();
-                        setTimeout(() => window.dispatchEvent(new CustomEvent('jbj:open-chat-support')), 250);
+                        requestAnimationFrame(() => window.dispatchEvent(new CustomEvent('jbj:open-chat-support')));
                       }}
                       data-no-contrast-guard
                       className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl text-left
@@ -397,7 +397,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                           description: "Talk to a JBJ agent",
                           responseTime: "Replies in ~2 min",
                           Icon: MessageSquare,
-                          action: () => { onClose(); setTimeout(() => window.dispatchEvent(new CustomEvent('jbj:open-chat-support')), 250); },
+                          action: () => { onClose(); requestAnimationFrame(() => window.dispatchEvent(new CustomEvent('jbj:open-chat-support'))); },
                         }} />
                         <ChannelCard channel={{
                           id: "whatsapp",
@@ -422,7 +422,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                           description: "Speak with our AI agent now",
                           responseTime: "Live",
                           Icon: PhoneCall,
-                          action: () => { onClose(); setTimeout(() => window.dispatchEvent(new CustomEvent('jbj:open-voice-concierge')), 250); },
+                          action: () => { onClose(); requestAnimationFrame(() => window.dispatchEvent(new CustomEvent('jbj:open-voice-concierge'))); },
                         }} />
                       </PopoverContent>
                     </Popover>
