@@ -32,19 +32,20 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
   };
 
   return (
-    <div className="flex-1 p-5 pb-8 flex flex-col items-center justify-center text-center overflow-y-auto">
-      <div className="mb-4">
+    <div className="flex-1 px-5 pt-6 pb-8 flex flex-col items-center text-center overflow-y-auto">
+      <div className="mb-3">
         <img
           src={jbjMonogramLightBg}
           alt="JBJ Global Real Estate"
-          className="h-16 w-auto mx-auto object-contain"
+          className="h-20 w-auto mx-auto object-contain"
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-5">
         <h4 className="text-[#1a1a1a] text-lg font-bold mb-1">Welcome Back!</h4>
         <p className="text-[#1A1A1A]/70 text-sm">Please confirm your details to continue</p>
       </div>
+
 
       <div className="w-full bg-[#FDFBF7]/80 rounded-xl border border-[#B89555]/30 p-4 space-y-3">
         {!isEditing ? (
