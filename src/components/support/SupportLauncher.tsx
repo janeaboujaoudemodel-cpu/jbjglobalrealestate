@@ -25,17 +25,7 @@ function useChannels(closeAfter: () => void): ChannelDef[] {
         window.dispatchEvent(new CustomEvent("jbj:open-concierge"));
       },
     },
-    {
-      id: "chat-support",
-      label: "Chat Support",
-      description: "Talk to a JBJ agent",
-      responseTime: "",
-      Icon: MessageSquare,
-      action: () => {
-        closeAfter();
-        window.dispatchEvent(new CustomEvent("jbj:open-chat-support"));
-      },
-    },
+    // Chat Support merged into JBJ Concierge — no longer a separate channel.
     {
       id: "whatsapp",
       label: "WhatsApp",
