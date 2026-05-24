@@ -46,10 +46,15 @@ export default function PartnerVerifyHeroCTA() {
         </div>
         <Link
           to="/partners"
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/50 hover:bg-[#E5D8BD] transition-colors shrink-0"
+          className="cta-premium inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1A1A1A] text-white text-sm font-semibold border border-[#1A1A1A] hover:bg-[#1A1A1A] shrink-0 allow-white"
+          data-no-contrast-guard
         >
           {verified ? "Open Portal" : "Get Verified"}
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight
+            className="w-4 h-4 text-white allow-white"
+            data-no-contrast-guard
+            style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.55))' }}
+          />
         </Link>
       </div>
     </section>
