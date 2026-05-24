@@ -525,8 +525,11 @@ const Properties = () => {
       {/* Scroll sentinel for two-phase filter fix */}
       <div ref={filterSentinelRef} className="h-0" />
 
-      {/* Filters Section - Champagne page surface (replaces previous black band) */}
-      <section className="z-40 bg-[#FDFBF7] py-3 md:py-4 border-b border-[#B89555]/30" style={{ WebkitOverflowScrolling: 'touch' }}>
+      {/* Filters Section - Champagne page surface, sticks below the 88px header on scroll */}
+      <section
+        className="sticky top-[88px] z-40 bg-[#FDFBF7] py-3 md:py-4 border-b border-[#B89555]/30"
+        style={{ WebkitOverflowScrolling: 'touch' }}
+      >
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Champagne Layer with thin black contour visible at edges */}
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
@@ -565,8 +568,9 @@ const Properties = () => {
                 Resale
               </button>
             </Link>
-            <SortBySelect value={sortBy} onChange={setSortBy} />
+            <SortBySelect value={sortBy} onChange={setSortBy} hideLabel size="compact" />
           </div>
+
 
           {/* Single concierge-style unified pill: [Buy ▾] [search input] [Search] | [Filters] */}
           {(() => {
