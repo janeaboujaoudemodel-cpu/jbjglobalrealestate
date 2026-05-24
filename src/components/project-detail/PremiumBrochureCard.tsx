@@ -146,26 +146,30 @@ const PremiumBrochureCard = ({
 
           {/* Content Layout */}
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
-            {/* Top: Brand mark with real monogram — on a deep navy panel for readability */}
-            <div
-              className="absolute top-4 left-10 flex items-center gap-3 pl-1.5 pr-3 py-1.5 rounded-md"
-              style={{
-                background: "linear-gradient(135deg, rgba(10,20,45,0.78) 0%, rgba(12,28,60,0.7) 100%)",
-                backdropFilter: "blur(6px)",
-                boxShadow: "0 4px 14px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08)",
-                border: "1px solid rgba(184,149,85,0.35)",
-              }}
-            >
-              <div className="w-11 h-11 rounded-full border-2 border-[#B89555]/70 flex items-center justify-center bg-[#1A1A1A] overflow-hidden shadow-lg shrink-0">
+            {/* Top: Brand mark — refined monogram + wordmark, no rectangular plate */}
+            <div className="absolute top-5 left-10 flex items-center gap-2.5">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden shrink-0"
+                style={{
+                  background: "radial-gradient(circle at 30% 30%, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%)",
+                  border: "1px solid rgba(184,149,85,0.65)",
+                  boxShadow:
+                    "0 6px 14px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(255,255,255,0.18)",
+                }}
+              >
                 <img
                   src={jbjFullLogoDarkBg}
                   alt="JBJ"
                   className="w-full h-full object-cover"
-                  style={{ transform: "scale(1.2)" }}
+                  style={{ transform: "scale(1.18)" }}
                 />
               </div>
-              <p className="text-white text-[10px] font-semibold uppercase tracking-[0.18em] leading-none whitespace-nowrap">
-                <span className="text-[#E8C77A] font-bold">JBJ</span> Global Real Estate
+              <p
+                className="text-white text-[11px] font-semibold uppercase tracking-[0.22em] leading-none whitespace-nowrap"
+                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.55), 0 0 14px rgba(0,0,0,0.35)" }}
+              >
+                <span style={{ color: "#E8C77A" }} className="font-bold">JBJ</span>{" "}
+                <span className="font-light tracking-[0.26em]">Global Real Estate</span>
               </p>
             </div>
 
