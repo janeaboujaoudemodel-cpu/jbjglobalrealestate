@@ -329,8 +329,7 @@ const Index = () => {
         </Suspense>
       </div>
 
-      {/* Premium gold edge-to-edge divider — Featured/Resale → Invest in Dubai */}
-      <SectionDividerGoldFullBleed size="md" spacing="md" />
+      <SectionDividerGoldFullBleed size="md" spacing="sm" />
 
 
       {/* OVERSEAS INVESTORS — Invest in Dubai */}
@@ -340,8 +339,7 @@ const Index = () => {
         </Suspense>
       </div>
 
-      {/* Premium gold edge-to-edge divider — Invest in Dubai → Explore Our Guides */}
-      <SectionDividerGoldFullBleed size="md" spacing="md" />
+      <SectionDividerGoldFullBleed size="md" spacing="sm" />
 
       {/* EXPLORE OUR GUIDES & REPORTS — wrapped in gold-bordered premium card */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
@@ -350,8 +348,7 @@ const Index = () => {
         </Suspense>
       </PremiumSectionCard>
 
-      {/* Premium gold edge-to-edge divider — Guides → Explore Our Services */}
-      <SectionDividerGoldFullBleed size="md" spacing="md" />
+      <SectionDividerGoldFullBleed size="md" spacing="sm" />
 
       {/* EXPLORE OUR SERVICES */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
