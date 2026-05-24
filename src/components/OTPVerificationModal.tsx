@@ -98,7 +98,24 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
 
       const { data, error } = await supabase.functions.invoke(functionName, { body });
 
-      if (error) throw error;
+      // Supabase-js returns non-2xx as `error` (FunctionsHttpError) with the
+      // parsed body on error.context. Extract our { error: "..." } payload
+      // so the user sees the real message instead of a generic toast / crash.
+      if (error) {
+        let serverMessage = '';
+        try {
+          const ctx: any = (error as any).context;
+          if (ctx && typeof ctx.json === 'function') {
+            const parsed = await ctx.json();
+            serverMessage = parsed?.error || '';
+          } else if (ctx && typeof ctx.text === 'function') {
+            const txt = await ctx.text();
+            try { serverMessage = JSON.parse(txt)?.error || txt; } catch { serverMessage = txt; }
+          }
+        } catch { /* ignore parse errors */ }
+        setError(serverMessage || "We couldn't verify that code. Please request a new one and try again.");
+        return;
+      }
 
       if (data?.error) {
         setError(data.error);
