@@ -213,12 +213,12 @@ export default function SupportLauncher() {
               />
               <motion.div
                 key="dpanel"
-                initial={{ opacity: 0, x: 18, scale: 0.985 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 18, scale: 0.985 }}
+                initial={{ opacity: 0, x: 18, y: "-50%", scale: 0.985 }}
+                animate={{ opacity: 1, x: 0, y: "-50%", scale: 1 }}
+                exit={{ opacity: 0, x: 18, y: "-50%", scale: 0.985 }}
                 transition={{ type: "spring", stiffness: 420, damping: 34, mass: 0.8 }}
                 data-no-contrast-guard
-                className="fixed right-14 top-[calc(50%+24px)] flex max-h-[calc(100dvh-150px)] w-[300px] -translate-y-1/2 flex-col overflow-hidden pointer-events-auto
+                className="fixed right-14 top-[calc(50%+24px)] flex max-h-[calc(100dvh-150px)] w-[300px] flex-col overflow-hidden pointer-events-auto
                   rounded-2xl border border-gold bg-background text-foreground
                   shadow-[0_30px_60px_hsl(var(--foreground)/0.25),0_0_34px_hsl(var(--gold)/0.18)] p-3"
               >
