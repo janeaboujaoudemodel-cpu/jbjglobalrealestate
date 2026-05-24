@@ -42,7 +42,7 @@ const VerificationBanner = () => {
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
             {/* Shield icon */}
             <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#162544] border border-white/15 flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-white" />
+              <ShieldCheck className="w-5 h-5 !text-white" />
             </div>
 
             {/* Text */}
@@ -62,7 +62,7 @@ const VerificationBanner = () => {
             >
               <span className="text-[#0B1829]">Get Verified</span>
               <ArrowRight
-                className="w-4 h-4 text-[#0B1829] group-hover:translate-x-0.5 transition-transform"
+                className="w-4 h-4 !text-[#1A1A1A] group-hover:translate-x-0.5 transition-transform"
                 strokeWidth={2.5}
               />
             </button>
