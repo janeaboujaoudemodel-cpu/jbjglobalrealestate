@@ -153,6 +153,11 @@ const DeveloperPartnersMarquee = () => {
           color: transparent;
           animation: jbj-champagne-shimmer 6s linear infinite;
         }
+        .jbj-shimmer-bg {
+          background: linear-gradient(90deg, #F7F2EA 0%, #EFE6D6 25%, #F9F2DF 50%, #EFE6D6 75%, #F7F2EA 100%);
+          background-size: 200% auto;
+          animation: jbj-champagne-shimmer 10s linear infinite;
+        }
       `}</style>
       {loopWidth > 0 && (
         <style>{`
