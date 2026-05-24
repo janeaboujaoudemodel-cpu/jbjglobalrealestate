@@ -172,7 +172,7 @@ export default function BookStyleDocuments({
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] uppercase tracking-[0.2em] text-[#B89555] font-semibold">View</span>
-                  <Eye className="w-3.5 h-3.5 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors" />
+                  <Eye className="w-3.5 h-3.5 text-[#1A1A1A] transition-colors" />
                 </div>
               </div>
 
