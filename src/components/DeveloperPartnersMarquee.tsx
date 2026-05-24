@@ -157,7 +157,7 @@ const DeveloperPartnersMarquee = () => {
         </div>
 
         <div
-          className="relative w-full overflow-hidden py-6 md:py-8 bg-gradient-to-r from-[#EFE6D6] via-[#F7F1E6] to-[#EFE6D6] border-t border-b border-[#B89555]/30"
+          className="relative w-full overflow-hidden py-6 md:py-8 bg-gradient-to-r from-[#EFE6D6] via-[#F7F1E6] to-[#EFE6D6]"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
