@@ -175,7 +175,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             e.preventDefault();
             sendOtp();
           }}
-          className="mt-4 flex flex-1 flex-col gap-3 pb-1 min-h-[calc(100dvh-330px)]"
+          className="mt-5 flex flex-1 flex-col pb-1 min-h-[calc(100dvh-310px)]"
         >
           <div className="grid grid-cols-2 gap-2">
             <div className="relative">
@@ -201,7 +201,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             />
           </div>
 
-          <div className="relative">
+          <div className="relative mt-3">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#B89555]" />
             <input
               data-no-contrast-guard
@@ -216,7 +216,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             />
           </div>
 
-          <div className="grid grid-cols-[138px_minmax(0,1fr)] gap-2 overflow-visible">
+          <div className="mt-3 grid grid-cols-[138px_minmax(0,1fr)] gap-2 overflow-visible">
             <Popover open={countryOpen} onOpenChange={setCountryOpen}>
               <PopoverTrigger asChild>
                 <button
