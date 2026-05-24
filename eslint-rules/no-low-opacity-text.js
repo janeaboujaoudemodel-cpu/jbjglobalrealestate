@@ -16,7 +16,7 @@
  * but runs inside the editor + pre-commit ESLint pass so developers see the
  * fix-it before they ever push.
  *
- * Threshold: anything below 40 (i.e. text-*/30, opacity-[0.2], opacity-25, …)
+ * Threshold: anything below 40 (i.e. text-foo slash 30, opacity-[0.2], opacity-25, ...)
  * applied to a text-bearing element is treated as a violation.
  *
  * Honors the same baseline as the scanner (scripts/contrast/allowlist.json →
