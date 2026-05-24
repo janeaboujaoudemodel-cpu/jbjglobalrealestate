@@ -115,7 +115,7 @@ export default function SupportLauncher() {
             <>
               <motion.div
                 key="scrim"
-                className="fixed inset-0 bg-[#0F0F0F]/60 backdrop-blur-2xl"
+                className="fixed inset-0 bg-[#0F0F0F]/25"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -207,7 +207,7 @@ export default function SupportLauncher() {
             <>
               <motion.div
                 key="dscrim"
-                className="fixed inset-0 bg-[#0F0F0F]/55 backdrop-blur-2xl pointer-events-auto"
+                className="fixed inset-0 bg-[#0F0F0F]/20 pointer-events-auto"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 onClick={close}
               />
