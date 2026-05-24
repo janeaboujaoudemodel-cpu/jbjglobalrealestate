@@ -1467,12 +1467,21 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
 
 
 
-          {/* CallToAction removed - consolidated into ConsultationRequestForm above */}
+          {/* CallToAction reinstated below as full-bleed band */}
         </div>
       </section>
 
+      {/* READY TO GET STARTED — full-bleed CTA band */}
+      <SectionDividerGoldFullBleed />
+      <div className="bg-[#FDFBF7]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12">
+          <CallToActionSection projectName={project.name} projectId={project.id} />
+        </div>
+      </div>
+
       {/* Recommended Projects — seamless champagne bg continuation */}
-      <div className="pb-12 md:pb-16" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+      <SectionDividerGoldFullBleed />
+      <div className="pt-10 md:pt-14 pb-10 md:pb-14" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
       <RecommendedProjects
         currentProjectId={project.id}
         currentDeveloperId={(project.developer as any)?.id || null}
@@ -1480,6 +1489,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
         currentEmirate={(project as any).emirate || null}
       />
       </div>
+
 
       {/* DirectContactCTA is now rendered globally in MainLayout - removed duplicate */}
 
