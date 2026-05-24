@@ -94,16 +94,17 @@ const AreasWeCover = () => {
               </div>
 
               {/* Solid ink caption bar — maximum legibility for area name + count */}
-              <div className="absolute bottom-0 left-0 right-0 bg-[#1A1A1A]/92 backdrop-blur-[2px] border-t border-[#B89555]/40 px-4 py-3">
+              <div className="absolute bottom-0 left-0 right-0 bg-[#1A1A1A] backdrop-blur-md border-t border-[#B89555]/50 px-4 py-3 shadow-[0_-12px_24px_-12px_rgba(0,0,0,0.55)]">
                 <div className="flex items-end justify-between gap-3">
                   <div className="min-w-0">
                     <h3 className="text-[#FDFBF7] font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
                       {area.name}
                     </h3>
-                    <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#B89555]">
+                    <p className="mt-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[#E8C77A] [text-shadow:0_1px_2px_rgba(0,0,0,0.6)]">
                       {(area.propertyCount ?? 0).toLocaleString()} {(area.propertyCount ?? 0) === 1 ? "project" : "projects"} available
                     </p>
                   </div>
+
                   <span
                     data-no-contrast-guard
                     className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#1A1A1A] transition-all group-hover:translate-y-[-1px]"
