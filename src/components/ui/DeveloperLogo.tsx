@@ -19,10 +19,14 @@ interface DeveloperLogoProps {
 // so every project card has an identical badge footprint. Padding is
 // kept minimal so wide wordmarks AND square marks both render at their
 // maximum size without ever being cropped (object-contain enforced).
+// Square-ish, ~35% smaller than the previous h-14 w-24 plate so cards feel
+// closer to the Reelly reference. Padding stays minimal + object-contain
+// is enforced on the <img/> so wide wordmarks AND square marks render at
+// their largest fitting size and are NEVER cropped.
 const UNIFIED_PLATE =
-  "h-14 w-24 inline-flex items-center justify-center overflow-hidden " +
-  "rounded-xl bg-[#FDFBF7] border border-[#B89555]/45 " +
-  "shadow-[0_4px_14px_rgba(0,0,0,0.18)] p-1";
+  "h-10 w-14 sm:h-11 sm:w-16 inline-flex items-center justify-center overflow-hidden " +
+  "rounded-lg bg-[#FDFBF7] border border-[#B89555]/45 " +
+  "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-[3px]";
 
 
 export function DeveloperLogo({
