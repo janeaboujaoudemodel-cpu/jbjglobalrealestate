@@ -287,7 +287,7 @@ const Index = () => {
 
 
       {/* VERIFICATION BANNER */}
-      <PremiumSectionCard padding="none" wrapperClassName="py-8">
+      <PremiumSectionCard padding="none" width="full" wrapperClassName="py-8">
         <Suspense fallback={null}>
           <VerificationBanner />
         </Suspense>
