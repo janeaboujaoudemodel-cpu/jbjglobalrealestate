@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
 
     const { data: profiles } = await admin
       .from('profiles')
-      .select('id, full_name, email, user_role, user_type, mode_default, created_at, last_login_at, total_login_days')
+      .select('id, full_name, email, user_type, mode_default, created_at, last_login_at, total_login_days')
       .order('created_at', { ascending: false })
       .limit(2000);
 
