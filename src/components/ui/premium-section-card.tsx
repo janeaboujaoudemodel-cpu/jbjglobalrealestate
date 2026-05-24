@@ -46,7 +46,9 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
     const inner =
       width === "contained"
         ? "container mx-auto px-4 max-w-7xl"
-        : "w-full px-3 md:px-5";
+        : "w-full";
+    const radius = width === "contained" ? "rounded-2xl" : "rounded-none";
+    const border = width === "contained" ? "border border-[#B89555]/30" : "border-y border-[#B89555]/25";
     return (
       <section
         ref={ref}
@@ -55,7 +57,7 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
       >
         <div className={inner}>
           <div
-            className={`rounded-2xl border border-[#B89555]/30 ${TONE[tone]} overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)] ${PADDING[padding]} ${className}`}
+            className={`${radius} ${border} ${TONE[tone]} overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.06)] ${PADDING[padding]} ${className}`}
           >
             {children}
           </div>
