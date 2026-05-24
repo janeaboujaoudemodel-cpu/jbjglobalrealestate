@@ -5390,3 +5390,40 @@ hr[data-gold-hairline],
 @media (prefers-reduced-motion: reduce) {
   .jbj-gold-animated-border { animation: none; }
 }
+
+/* ──────────────────────────────────────────────────────────────
+   Banned bright yellow-gold guard
+   The hexes #C8A766 / #B8944A / #A8843A are FORBIDDEN site-wide.
+   Any element still using them as a Tailwind arbitrary value is
+   auto-remapped to brand champagne + ink + 1px brand-gold hairline.
+   Per "No Gold Fills" rule: gold survives only as hairline accent.
+   Opt-out: add `data-allow-bright-gold` to the element.
+   ────────────────────────────────────────────────────────────── */
+[class*="bg-[#C8A766]"]:not([data-allow-bright-gold]),
+[class*="bg-[#B8944A]"]:not([data-allow-bright-gold]),
+[class*="bg-[#A8843A]"]:not([data-allow-bright-gold]),
+[class*="from-[#C8A766]"]:not([data-allow-bright-gold]),
+[class*="from-[#B8944A]"]:not([data-allow-bright-gold]),
+[class*="to-[#C8A766]"]:not([data-allow-bright-gold]),
+[class*="to-[#B8944A]"]:not([data-allow-bright-gold]),
+[class*="to-[#A8843A]"]:not([data-allow-bright-gold]),
+[class*="via-[#C8A766]"]:not([data-allow-bright-gold]),
+[class*="via-[#B8944A]"]:not([data-allow-bright-gold]) {
+  background-image: none !important;
+  background-color: #EFE6D6 !important;
+  color: #1A1A1A !important;
+}
+[class*="text-[#C8A766]"]:not([data-allow-bright-gold]),
+[class*="text-[#B8944A]"]:not([data-allow-bright-gold]),
+[class*="text-[#A8843A]"]:not([data-allow-bright-gold]) {
+  color: #B89555 !important;
+}
+[class*="border-[#C8A766]"]:not([data-allow-bright-gold]),
+[class*="border-[#B8944A]"]:not([data-allow-bright-gold]),
+[class*="border-[#A8843A]"]:not([data-allow-bright-gold]) {
+  border-color: #B89555 !important;
+}
+[class*="ring-[#C8A766]"]:not([data-allow-bright-gold]),
+[class*="ring-[#B8944A]"]:not([data-allow-bright-gold]) {
+  --tw-ring-color: #B89555 !important;
+}
