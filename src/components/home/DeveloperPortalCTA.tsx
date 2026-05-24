@@ -180,8 +180,8 @@ const DeveloperPortalCTA = () => {
     href: string;
   }) => (
     <section className="py-8 md:py-10 bg-[#FDFBF7]">
-      <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto rounded-2xl border border-[#B89555]/40 bg-[#F7F2EA] p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="rounded-2xl border border-[#B89555]/40 bg-[#F7F2EA] p-6 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
           <div className="min-w-0">
             <h2 className="text-lg md:text-xl font-bold text-[#1A1A1A] leading-tight">
               {title}
