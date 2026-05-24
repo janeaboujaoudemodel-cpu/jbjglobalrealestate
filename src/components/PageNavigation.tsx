@@ -91,15 +91,14 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         aria-label={label}
         title={label}
         className={cn(
-          "h-11 w-11 rounded-full inline-flex items-center justify-center",
-          "border border-[#B89555]/70 bg-[#FDFBF7] text-[#1A1A1A]",
-          "shadow-[0_8px_24px_rgba(0,0,0,0.18),0_0_0_1px_rgba(184,149,85,0.18)]",
-          "hover:bg-[#1A1A1A] hover:text-[#E2C9A0] hover:border-[#B89555]",
+          "inline-flex items-center justify-center bg-transparent border-0 p-1",
+          "text-[#B89555] hover:text-[#8A6F3E]",
+          "drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]",
           "transition-colors duration-200",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70 rounded-sm",
         )}
       >
-        <Icon className="h-5 w-5" strokeWidth={2} />
+        <Icon className="h-7 w-7" strokeWidth={2.25} />
       </button>
     </div>
   );
