@@ -175,7 +175,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             e.preventDefault();
             sendOtp();
           }}
-          className="mt-4 flex flex-1 flex-col space-y-3 pb-1 min-h-[calc(100dvh-330px)]"
+          className="mt-4 flex flex-1 flex-col gap-3 pb-1 min-h-[calc(100dvh-330px)]"
         >
           <div className="grid grid-cols-2 gap-2">
             <div className="relative">
@@ -306,7 +306,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
           </p>
         </form>
       ) : (
-        <div className="mt-4 flex flex-1 flex-col space-y-3 pb-1 min-h-[calc(100dvh-330px)]">
+        <div className="mt-4 flex flex-1 flex-col gap-3 pb-1 min-h-[calc(100dvh-330px)]">
           <input
             data-no-contrast-guard
             placeholder="6-digit code"
