@@ -290,95 +290,79 @@ const Index = () => {
       </div>
 
       {/* VERIFICATION BANNER - moved here after marquee */}
-      <div className="py-10 sm:py-14">
+      <PremiumSectionCard padding="md" wrapperClassName="py-8">
         <Suspense fallback={null}>
           <VerificationBanner />
         </Suspense>
-
-        {/* PARTNER VERIFY CTA — only shown to registered partners */}
         <Suspense fallback={null}>
           <PartnerVerifyHeroCTA />
         </Suspense>
-      </div>
+      </PremiumSectionCard>
 
       {/* DEVELOPER PORTAL CTA */}
-      <div className="cv-auto py-10 sm:py-14">
+      <PremiumSectionCard padding="md" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <DeveloperPortalCTA />
         </Suspense>
-      </div>
+      </PremiumSectionCard>
 
       {/* FEATURED LISTINGS */}
-      <div className="cv-auto py-10 sm:py-14">
+      <PremiumSectionCard padding="md" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <FeaturedListings />
         </Suspense>
-      </div>
+      </PremiumSectionCard>
 
-      {/* CONTINUE SEARCHING — restored: history-aware "continue where you left off". */}
-      <div className="cv-auto py-6 md:py-10">
+      {/* CONTINUE SEARCHING */}
+      <PremiumSectionCard padding="md" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <ContinueSearching type="property" />
         </Suspense>
-      </div>
+      </PremiumSectionCard>
 
-      {/* RESALE PROPERTIES - single divider before Starting Point */}
-      <div className="cv-auto">
+      {/* RESALE PROPERTIES */}
+      <PremiumSectionCard padding="md" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <ResalePropertiesSection />
         </Suspense>
-      </div>
+      </PremiumSectionCard>
 
-      <SectionDividerGoldFullBleed size="md" spacing="sm" />
-
-
-      {/* OVERSEAS INVESTORS — Invest in Dubai */}
-      <div className="cv-auto">
+      {/* OVERSEAS INVESTORS */}
+      <PremiumSectionCard padding="md" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <OverseasInvestorsBanner />
         </Suspense>
-      </div>
+      </PremiumSectionCard>
 
-      <SectionDividerGoldFullBleed size="md" spacing="sm" />
-
-      {/* EXPLORE OUR GUIDES & REPORTS — wrapped in gold-bordered premium card */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
+      {/* EXPLORE OUR GUIDES & REPORTS */}
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <HomepageBookMarquee />
         </Suspense>
       </PremiumSectionCard>
 
-      <SectionDividerGoldFullBleed size="md" spacing="sm" />
-
       {/* EXPLORE OUR SERVICES */}
-      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-6 md:py-10">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <ExploreServicesCard />
         </Suspense>
       </PremiumSectionCard>
 
-      <SectionDividerGoldFullBleed size="md" spacing="sm" />
-
       {/* TOOLKIT SHOWCASE CARD */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <ToolkitShowcaseCard />
         </Suspense>
       </PremiumSectionCard>
 
-      <SectionDividerGoldFullBleed size="md" spacing="sm" />
-
-
       {/* AI COMPARISON & ANALYZER PREVIEW */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <AIComparisonWidget />
         </Suspense>
       </PremiumSectionCard>
 
-      <SectionDividerGoldFullBleed size="md" spacing="sm" />
-
-      <PremiumSectionCard tone="surface" padding="md" wrapperClassName="cv-auto py-6 md:py-10">
+      <PremiumSectionCard tone="surface" padding="md" wrapperClassName="cv-auto py-8">
         <div className="rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7]/70 p-5 md:p-8 shadow-[0_1px_0_rgba(184,149,85,0.25),0_10px_30px_-18px_rgba(184,149,85,0.35)]">
           <Suspense fallback={<SectionLoader />}>
             <MortgageCalculator compact />
@@ -409,23 +393,16 @@ const Index = () => {
         </div>
       </PremiumSectionCard>
 
-
-
-
       <PodcastVisibilityGate>
-        <SectionDividerGoldFullBleed size="md" spacing="sm" />
-        <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
+        <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
           <Suspense fallback={<SectionLoader />}>
             <JBJPodcastSection />
           </Suspense>
         </PremiumSectionCard>
       </PodcastVisibilityGate>
 
-
-      <SectionDividerGoldFullBleed size="md" spacing="sm" />
-
-      {/* TOP AREAS IN DUBAI — wrapped in gold-bordered premium card */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
+      {/* TOP AREAS IN DUBAI */}
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
         <Suspense fallback={<SectionLoader />}>
           <AreasWeCover />
         </Suspense>
