@@ -2,12 +2,22 @@ import React, { useRef, useEffect, useMemo, useState, useCallback } from 'react'
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { User, Send, MessageCircle, Shield, Copy, X } from 'lucide-react';
+import { User, Send, MessageCircle, Shield, Copy, X, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { Message, SERVICES, getRandomAgent } from './types';
 import { CONTACT_INFO } from '@/constants/stats';
 import { T } from '@/components/ui/T';
 import { useLanguage } from '@/contexts/LanguageContext';
+
+const QUICK_PROMPTS: { label: string; prompt: string }[] = [
+  { label: "Golden Visa", prompt: "Tell me about the UAE Golden Visa — eligibility, benefits, and how property investment qualifies." },
+  { label: "ROI Calculator", prompt: "Which calculators on JBJ help me estimate ROI, rental yield, and mortgage on a Dubai property?" },
+  { label: "Book Consultation", prompt: "How do I book a free consultation with a JBJ advisor?" },
+  { label: "Marina < 2M", prompt: "Show me Dubai Marina apartments under 2M AED with strong rental yield." },
+  { label: "Off-plan vs Ready", prompt: "What's the difference between off-plan and ready properties in Dubai for an investor?" },
+  { label: "Payment Plans", prompt: "Which developers offer the best post-handover payment plans right now?" },
+];
+
 
 interface ChatMessagesProps {
   messages: Message[];
