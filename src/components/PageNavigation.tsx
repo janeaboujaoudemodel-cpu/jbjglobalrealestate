@@ -24,6 +24,10 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
     setShowScrollTop(scrollTop > 200);
   }, []);
 
+  const supportDrawerOpen =
+    typeof document !== "undefined" &&
+    (!!document.querySelector('[data-jbj-concierge-open="true"]') || !!document.querySelector('[data-jbj-chat-open="true"]'));
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
@@ -84,6 +88,7 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
 
   // Hide when chat is open, or when user hasn't scrolled far enough yet.
   if (isChatOpen) return null;
+  if (supportDrawerOpen) return null;
   if (!showScrollTop) return null;
 
   const transform = dragOffset ? `translate(${dragOffset.x}px, ${dragOffset.y}px)` : undefined;
