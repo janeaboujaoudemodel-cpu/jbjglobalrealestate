@@ -128,8 +128,9 @@ const PremiumBrochureCard = ({
             style={{ backgroundImage: `url(${projectImageUrl || BROCHURE_BG_URL})` }}
           />
           
-          {/* Gradient overlay for text contrast - heavier at bottom where text lives */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/30" />
+          {/* Gradient overlay for text contrast - heavier at top and bottom where text lives */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/20" />
+          <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/85 via-black/55 to-transparent" />
           
           {/* Premium Gold Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-tr from-gold/15 via-transparent to-gold/5" />
