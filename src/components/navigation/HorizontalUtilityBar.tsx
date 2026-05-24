@@ -63,7 +63,6 @@ export default function HorizontalUtilityBar() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const isHomePage = location.pathname === "/";
 
   const [areaUnit, setAreaUnit] = useState<'sqft' | 'sqm'>(() => {
     if (typeof window !== 'undefined') {
@@ -98,7 +97,7 @@ export default function HorizontalUtilityBar() {
   return (
     <>
       <div
-        className={`fixed top-0 right-0 h-[88px] [body.jj-vertical-nav-collapsed_&]:h-[48px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7 ${isHomePage ? "bg-transparent" : "bg-[#FDFBF7]"}`}
+        className="fixed top-0 right-0 h-[88px] [body.jj-vertical-nav-collapsed_&]:h-[48px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]"
       >
         {/* ── LEFT: Search only ── */}
         <div className="flex items-center gap-3 shrink-0">
