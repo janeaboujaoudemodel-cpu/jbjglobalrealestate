@@ -153,6 +153,11 @@ const DeveloperPartnersMarquee = () => {
           color: transparent;
           animation: jbj-champagne-shimmer 6s linear infinite;
         }
+        .jbj-shimmer-bg {
+          background: linear-gradient(90deg, #F7F2EA 0%, #EFE6D6 25%, #F9F2DF 50%, #EFE6D6 75%, #F7F2EA 100%);
+          background-size: 200% auto;
+          animation: jbj-champagne-shimmer 10s linear infinite;
+        }
       `}</style>
       {loopWidth > 0 && (
         <style>{`
@@ -164,11 +169,15 @@ const DeveloperPartnersMarquee = () => {
       )}
 
       <div className="w-full">
-        <div className="py-5 md:py-6 px-4 mb-2 md:mb-3">
+        <div className="jbj-shimmer-bg py-5 md:py-6 px-4">
           <p className="jbj-shimmer-text text-center text-sm md:text-base font-light tracking-[0.18em] uppercase">
             {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
           </p>
         </div>
+
+        {/* Clean gold divider between title and marquee */}
+        <div aria-hidden className="mx-auto h-px w-full max-w-7xl bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+
 
         <div
           className="relative w-full overflow-hidden py-6 md:py-8 bg-[#EFE6D6]"
