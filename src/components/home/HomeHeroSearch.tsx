@@ -182,9 +182,9 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             data-no-contrast-guard
             aria-label="Book a Free Consultation"
             className="group/book hidden md:flex items-center justify-center gap-2 self-stretch h-full px-5 lg:px-6
-              text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-white
+              text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-transparent
               border-l border-[#B89555]/55 flex-shrink-0
-              transition-colors duration-200 hover:bg-[#FAF5EC]"
+              transition-colors duration-200 hover:bg-white/35"
             style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
           >
             <CalendarCheck className="w-4 h-4 text-[#B89555] transition-transform duration-200 group-hover/book:scale-110" strokeWidth={2.2} />
@@ -203,9 +203,9 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             data-no-contrast-guard
             aria-label="Open the JBJ Concierge"
             title="JBJ Concierge"
-            className="group/conc hidden sm:flex items-center justify-center self-stretch h-full px-4 lg:px-5 bg-white
+            className="group/conc hidden sm:flex items-center justify-center self-stretch h-full px-4 lg:px-5 bg-transparent
               border-l border-[#B89555]/55 rounded-r-2xl flex-shrink-0
-              transition-colors duration-200 hover:bg-[#FAF5EC]"
+              transition-colors duration-200 hover:bg-white/35"
           >
             <Sparkles
               className="w-[18px] h-[18px] text-[#B89555] transition-transform duration-200 group-hover/conc:scale-110 group-hover/conc:rotate-12"
