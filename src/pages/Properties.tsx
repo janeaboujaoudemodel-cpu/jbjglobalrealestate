@@ -553,9 +553,8 @@ const Properties = () => {
               }));
             }}
           />
-          {/* Intent dropdown — replaces the noisy Buy/Rent/Ready/Off-Plan tab row */}
-          <div className="flex items-center gap-2 sm:gap-3 mb-3 md:mb-4 flex-wrap">
-            <span className="text-[#1A1A1A]/70 text-sm font-medium">I want to:</span>
+          {/* Premium compact toolbar — Intent · Resale · Filters · Search · Sort */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3 md:mb-4">
             {(() => {
               const tx = appliedFilters.transactionType;
               const cs = appliedFilters.completionStatus;
@@ -588,275 +587,42 @@ const Properties = () => {
               };
               return (
                 <Select value={intentValue} onValueChange={setIntent}>
-                  <SelectTrigger className="w-[220px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm hover:border-[#B89555]">
+                  <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/50 text-[#1A1A1A] rounded-lg text-sm shadow-sm hover:border-[#B89555] font-medium">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="buy">Buy — All</SelectItem>
-                    <SelectItem value="buy-ready">Buy — Ready</SelectItem>
-                    <SelectItem value="buy-offplan">Buy — Off-Plan</SelectItem>
+                    <SelectItem value="buy">Buy</SelectItem>
+                    <SelectItem value="buy-ready">Buy Ready</SelectItem>
+                    <SelectItem value="buy-offplan">Buy Off-Plan</SelectItem>
                     <SelectItem value="rent">Rent</SelectItem>
                   </SelectContent>
                 </Select>
               );
             })()}
 
-            {/* Resale shortcut (kept) */}
+            {/* Resale shortcut */}
             <Link to="/resale-properties">
               <Button
                 variant="secondary"
                 size="sm"
-                className="h-11 px-4 rounded-xl flex items-center gap-1.5 border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/40"
+                className="h-11 px-4 rounded-lg flex items-center gap-1.5 border border-[#B89555]/50 hover:border-[#B89555] hover:bg-[#EFE6D6]/40"
               >
                 <ArrowUpRight className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 Resale
               </Button>
             </Link>
-          </div>
-          
-          {/* Keyword Search - Full Width */}
-          <div className="relative w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]" />
-            <Input
-              placeholder="Search by project name, developer, location..."
-              value={filters.search}
-              onChange={(e) => {
-                const next = e.target.value;
-                updateFilter("search", next);
-                setAppliedFilters((prev) => ({ ...prev, search: next }));
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSearch();
-              }}
-              className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] rounded-lg text-base shadow-sm w-full"
-            />
 
-          </div>
-
-          {/* Filter Shortcut Bar - Light variant */}
-          <div className="mt-3">
-            <FilterShortcutBar
-              variant="light"
-              filters={shortcutFilters}
-              onFilterChange={setShortcutFilters}
-              isMapMode={isMapMode}
-              onMapToggle={setIsMapMode}
-            />
-          </div>
-
-          {/* Second Row - All Filters Inline */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-3 md:mt-4">
-            {/* Location - All 7 Emirates */}
-            <Select
-              value={filters.emirate || "all"}
-              onValueChange={(value) => updateFilter("emirate", value === "all" ? null : value)}
-            >
-              <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                <MapPin className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                <span className="truncate text-left flex-1">{filters.emirate || "All Emirates"}</span>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Emirates</SelectItem>
-                <SelectItem value="Dubai">Dubai</SelectItem>
-                <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
-                <SelectItem value="Sharjah">Sharjah</SelectItem>
-                <SelectItem value="Ajman">Ajman</SelectItem>
-                <SelectItem value="Ras Al Khaimah">Ras Al Khaimah</SelectItem>
-                <SelectItem value="Fujairah">Fujairah</SelectItem>
-                <SelectItem value="Umm Al Quwain">Umm Al Quwain</SelectItem>
-              </SelectContent>
-            </Select>
-
-            {/* Area/Community */}
-            <Select
-              value={filters.communityId || "all"}
-              onValueChange={(value) => updateFilter("communityId", value === "all" ? null : value)}
-            >
-              <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                <Home className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                <span className="truncate text-left flex-1">
-                  {filters.communityId 
-                    ? allAreasSorted?.find(a => a.id === filters.communityId)?.name || "All Areas"
-                    : "All Areas"}
-                </span>
-              </SelectTrigger>
-              <SelectContent className="max-h-60">
-                <SelectItem value="all">All Areas</SelectItem>
-                {allAreasSorted?.map((area) => (
-                  <SelectItem key={area.id} value={area.id}>
-                    {area.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* Developer - ALL developers sorted by rank */}
-            <Select
-              value={filters.developerId || "all"}
-              onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
-            >
-              <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                <Building2 className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                <span className="truncate text-left flex-1">
-                  {filters.developerId 
-                    ? allDevelopersSorted?.find(d => d.id === filters.developerId)?.name || "All Developers"
-                    : "All Developers"}
-                </span>
-              </SelectTrigger>
-              <SelectContent className="max-h-72">
-                <SelectItem value="all">All Developers</SelectItem>
-                {allDevelopersSorted?.map((dev) => (
-                  <SelectItem key={dev.id} value={dev.id}>
-                    {dev.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* Price Range - Full readable text */}
-            <Select
-              value={
-                filters.priceMin === 0 && filters.priceMax === 500000000 
-                  ? "all" 
-                  : `${filters.priceMin}-${filters.priceMax}`
-              }
-              onValueChange={(value) => {
-                if (value === "all") {
-                  updateFilter("priceMin", 0);
-                  updateFilter("priceMax", 500000000);
-                } else {
-                  const [min, max] = value.split("-").map(Number);
-                  updateFilter("priceMin", min);
-                  updateFilter("priceMax", max);
-                }
-              }}
-            >
-              <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                <DollarSign className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                <span className="truncate text-left flex-1">
-                  {filters.priceMin === 0 && filters.priceMax === 500000000
-                    ? "Any Price"
-                    : filters.priceMax === 1000000
-                    ? "Under AED 1M"
-                    : filters.priceMax === 3000000
-                    ? "AED 1M - 3M"
-                    : filters.priceMax === 5000000
-                    ? "AED 3M - 5M"
-                    : filters.priceMax === 10000000
-                    ? "AED 5M - 10M"
-                    : "AED 10M+"}
-                </span>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Any Price</SelectItem>
-                <SelectItem value="0-1000000">Under AED 1M</SelectItem>
-                <SelectItem value="1000000-3000000">AED 1M - 3M</SelectItem>
-                <SelectItem value="3000000-5000000">AED 3M - 5M</SelectItem>
-                <SelectItem value="5000000-10000000">AED 5M - 10M</SelectItem>
-                <SelectItem value="10000000-500000000">AED 10M+</SelectItem>
-              </SelectContent>
-            </Select>
-
-            {/* Size Unit */}
-            <Select
-              value={filters.sizeUnit}
-              onValueChange={(value) => updateFilter("sizeUnit", value as 'sqft' | 'sqm')}
-            >
-              <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                <Maximize2 className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                <span className="truncate text-left flex-1">{filters.sizeUnit === 'sqft' ? 'Square Feet' : 'Square Meters'}</span>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="sqft">Square Feet (sq ft)</SelectItem>
-                <SelectItem value="sqm">Square Meters (sq m)</SelectItem>
-              </SelectContent>
-            </Select>
-
-            {/* Currency */}
-            <Select
-              value={filters.currency}
-              onValueChange={(value) => updateFilter("currency", value as ExtendedCurrency)}
-            >
-              <SelectTrigger className="w-[140px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                <span className="truncate text-left flex-1">
-                  {filters.currency === 'AED' ? 'AED (Dirham)' 
-                    : filters.currency === 'USD' ? 'USD (Dollar)' 
-                    : filters.currency === 'EUR' ? 'EUR (Euro)' 
-                    : filters.currency === 'GBP' ? 'GBP (Pound)' 
-                    : 'INR (Rupee)'}
-                </span>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="AED">AED (Dirham)</SelectItem>
-                <SelectItem value="USD">USD (Dollar)</SelectItem>
-                <SelectItem value="EUR">EUR (Euro)</SelectItem>
-                <SelectItem value="GBP">GBP (Pound)</SelectItem>
-                <SelectItem value="INR">INR (Rupee)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Third Row - Display Mode, Sale Status, Premium, Advanced Filters */}
-          <div className="flex items-center gap-2 md:gap-2 sm:gap-3 mt-3 md:mt-4 flex-wrap">
-            {/* Display Mode Toggle */}
-            <DisplayModeToggle
-              value={displayMode}
-              onChange={setDisplayMode}
-              variant="light"
-              size="sm"
-            />
-
-            {/* Sale Status with colored dots */}
-            <SaleStatusSelect
-              value={filters.saleStatus}
-              onChange={(val) => {
-                updateFilter("saleStatus", val);
-                setAppliedFilters(prev => ({ ...prev, saleStatus: val }));
-              }}
-              variant="light"
-            />
-
-            {/* Premium Filter Toggle */}
-            <Button
-              variant={filters.premiumOnly ? "default" : "outline"}
-              onClick={() => {
-                updateFilter("premiumOnly", !filters.premiumOnly);
-                setAppliedFilters(prev => ({ ...prev, premiumOnly: !filters.premiumOnly }));
-              }}
-              className={`h-11 px-4 rounded-lg flex items-center gap-2 text-sm shadow-sm ${
-                filters.premiumOnly 
-                  ? "bg-gradient-to-r from-gold to-[#E8D5A3] text-[#1A1A1A] border-[#B89555] font-bold" 
-                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555]"
-              }`}
-            >
-              <Crown className="w-4 h-4" />
-              Premium Only
-            </Button>
-
-            {/* Hide Sold Out Toggle */}
-            <label className="flex items-center gap-2 h-11 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-lg cursor-pointer hover:border-[#B89555] transition-all shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
-              <span className="text-sm text-[#1A1A1A] font-medium whitespace-nowrap">Hide Sold Out</span>
-              <Switch
-                checked={appliedFilters.hideSoldOut}
-                onCheckedChange={(checked) => {
-                  updateFilter("hideSoldOut", checked);
-                  setAppliedFilters(prev => ({ ...prev, hideSoldOut: checked }));
-                }}
-              />
-            </label>
-
-            {/* Advanced Filters Button */}
+            {/* Filters button — opens unified modal containing every refinement */}
             <Dialog open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
               <DialogTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  className="h-11 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555] rounded-lg shadow-sm flex items-center gap-2"
+                <Button
+                  variant="outline"
+                  className="h-11 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] rounded-lg shadow-sm flex items-center gap-2 font-medium"
                 >
-                  <Filter className="w-4 h-4 text-[#1A1A1A]" />
-                  <span>More Filters</span>
+                  <SlidersHorizontal className="w-4 h-4 text-[#1A1A1A]" />
+                  <span>Filters</span>
                   {activeFilterCount > 0 && (
-                    <span className="px-2 py-0.5 bg-[#EFE6D6] text-[#1A1A1A] text-xs font-bold rounded-full">
+                    <span className="px-2 py-0.5 bg-[#EFE6D6] text-[#1A1A1A] text-xs font-bold rounded-full border border-[#B89555]/40">
                       {activeFilterCount}
                     </span>
                   )}
@@ -865,11 +631,75 @@ const Properties = () => {
               <DialogContent className="max-w-2xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-[#B89555]/30 text-[#1A1A1A] p-0">
                 <DialogHeader className="p-6 border-b border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
                   <DialogTitle className="text-xl font-semibold text-[#1A1A1A]">
-                    Advanced <span className="text-[#1A1A1A]">Filters</span>
+                    Filters
                   </DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh]">
                   <div className="p-6 space-y-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                    {/* Emirate + Area */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Emirate</label>
+                        <Select
+                          value={filters.emirate || "all"}
+                          onValueChange={(value) => updateFilter("emirate", value === "all" ? null : value)}
+                        >
+                          <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                            <MapPin className="w-4 h-4 mr-2 text-[#1A1A1A]" />
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Emirates</SelectItem>
+                            <SelectItem value="Dubai">Dubai</SelectItem>
+                            <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
+                            <SelectItem value="Sharjah">Sharjah</SelectItem>
+                            <SelectItem value="Ajman">Ajman</SelectItem>
+                            <SelectItem value="Ras Al Khaimah">Ras Al Khaimah</SelectItem>
+                            <SelectItem value="Fujairah">Fujairah</SelectItem>
+                            <SelectItem value="Umm Al Quwain">Umm Al Quwain</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Area / Community</label>
+                        <Select
+                          value={filters.communityId || "all"}
+                          onValueChange={(value) => updateFilter("communityId", value === "all" ? null : value)}
+                        >
+                          <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                            <Home className="w-4 h-4 mr-2 text-[#1A1A1A]" />
+                            <SelectValue placeholder="All Areas" />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-60">
+                            <SelectItem value="all">All Areas</SelectItem>
+                            {allAreasSorted?.map((area) => (
+                              <SelectItem key={area.id} value={area.id}>{area.name}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    {/* Developer */}
+                    <div>
+                      <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Developer</label>
+                      <Select
+                        value={filters.developerId || "all"}
+                        onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
+                      >
+                        <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                          <Building2 className="w-4 h-4 mr-2 text-[#1A1A1A]" />
+                          <SelectValue placeholder="All Developers" />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-72">
+                          <SelectItem value="all">All Developers</SelectItem>
+                          {allDevelopersSorted?.map((dev) => (
+                            <SelectItem key={dev.id} value={dev.id}>{dev.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
                     {/* Property Type */}
                     <div>
                       <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Property Type</label>
@@ -936,10 +766,25 @@ const Properties = () => {
                       </div>
                     </div>
 
-                    {/* Size Range */}
+                    {/* Size Range + Unit */}
                     <div>
-                      <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Size ({filters.sizeUnit})</label>
-                      <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="text-sm text-[#1A1A1A] font-medium block">Size ({filters.sizeUnit})</label>
+                        <Select
+                          value={filters.sizeUnit}
+                          onValueChange={(value) => updateFilter("sizeUnit", value as 'sqft' | 'sqm')}
+                        >
+                          <SelectTrigger className="w-[170px] h-9 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] text-xs">
+                            <Maximize2 className="w-3.5 h-3.5 mr-2 text-[#1A1A1A]" />
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="sqft">Square Feet (sq ft)</SelectItem>
+                            <SelectItem value="sqm">Square Meters (sq m)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
                         <Input
                           type="number"
                           placeholder="Min"
@@ -957,10 +802,27 @@ const Properties = () => {
                       </div>
                     </div>
 
-                    {/* Price Range */}
+                    {/* Price Range + Currency */}
                     <div>
-                      <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Price Range ({filters.currency})</label>
-                      <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="text-sm text-[#1A1A1A] font-medium block">Price Range ({filters.currency})</label>
+                        <Select
+                          value={filters.currency}
+                          onValueChange={(value) => updateFilter("currency", value as ExtendedCurrency)}
+                        >
+                          <SelectTrigger className="w-[160px] h-9 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="AED">AED (Dirham)</SelectItem>
+                            <SelectItem value="USD">USD (Dollar)</SelectItem>
+                            <SelectItem value="EUR">EUR (Euro)</SelectItem>
+                            <SelectItem value="GBP">GBP (Pound)</SelectItem>
+                            <SelectItem value="INR">INR (Rupee)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
                         <Input
                           type="text"
                           placeholder="Min"
@@ -999,6 +861,30 @@ const Properties = () => {
                       </Select>
                     </div>
 
+                    {/* Sale Status */}
+                    <div>
+                      <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Sale Status</label>
+                      <Select
+                        value={filters.saleStatus || "all"}
+                        onValueChange={(value) => {
+                          updateFilter("saleStatus", value === "all" ? null : value);
+                          setAppliedFilters((prev) => ({ ...prev, saleStatus: value === "all" ? null : value }));
+                        }}
+                      >
+                        <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                          <CheckCircle className="w-4 h-4 mr-2 text-[#1A1A1A]" />
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {SALE_STATUS.map((status) => (
+                            <SelectItem key={status.value} value={status.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]">
+                              {status.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
                     {/* Investment Type */}
                     <div>
                       <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Investment Type</label>
@@ -1020,69 +906,34 @@ const Properties = () => {
                       </Select>
                     </div>
 
-                    {/* Sale Status */}
-                    <div>
-                      <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Sale Status</label>
-                      <Select
-                        value={filters.saleStatus || "all"}
-                        onValueChange={(value) => updateFilter("saleStatus", value === "all" ? null : value)}
-                      >
-                        <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
-                          <CheckCircle className="w-4 h-4 mr-2 text-[#1A1A1A]" />
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {SALE_STATUS.map((status) => (
-                            <SelectItem key={status.value} value={status.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]">
-                              {status.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Area Filter */}
-                    <div>
-                      <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Area</label>
-                      <Select
-                        value={filters.areaId || "all"}
-                        onValueChange={(value) => updateFilter("areaId", value === "all" ? null : value)}
-                      >
-                        <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
-                          <MapPin className="w-4 h-4 mr-2 text-[#1A1A1A]" />
-                          <SelectValue placeholder="All Areas" />
-                        </SelectTrigger>
-                        <SelectContent className="max-h-60">
-                          <SelectItem value="all" className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]">All Areas</SelectItem>
-                          {areas?.map((area) => (
-                            <SelectItem key={area.id} value={area.id} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]">
-                              {area.name} ({area.emirate})
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Community */}
-                    <div>
-                      <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Community</label>
-                      <Select
-                        value={filters.communityId || "all"}
-                        onValueChange={(value) => updateFilter("communityId", value === "all" ? null : value)}
-                      >
-                        <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
-                          <MapPin className="w-4 h-4 mr-2 text-[#1A1A1A]" />
-                          <SelectValue placeholder="All Communities" />
-                        </SelectTrigger>
-                        <SelectContent className="max-h-60">
-                          <SelectItem value="all" className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]">All Communities</SelectItem>
-                          {communities?.map((comm) => (
-                            <SelectItem key={comm.id} value={comm.id} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]">
-                              {comm.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                    {/* Quick toggles: Premium + Hide Sold Out */}
+                    <div className="grid grid-cols-2 gap-4 pt-2">
+                      <label className="flex items-center justify-between gap-2 h-12 px-4 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg cursor-pointer hover:border-[#B89555] transition-all">
+                        <span className="flex items-center gap-2 text-sm text-[#1A1A1A] font-medium">
+                          <Crown className="w-4 h-4" />
+                          Premium Only
+                        </span>
+                        <Switch
+                          checked={!!filters.premiumOnly}
+                          onCheckedChange={(checked) => {
+                            updateFilter("premiumOnly", checked);
+                            setAppliedFilters((prev) => ({ ...prev, premiumOnly: checked }));
+                          }}
+                        />
+                      </label>
+                      <label className="flex items-center justify-between gap-2 h-12 px-4 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg cursor-pointer hover:border-[#B89555] transition-all">
+                        <span className="flex items-center gap-2 text-sm text-[#1A1A1A] font-medium">
+                          <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
+                          Hide Sold Out
+                        </span>
+                        <Switch
+                          checked={appliedFilters.hideSoldOut}
+                          onCheckedChange={(checked) => {
+                            updateFilter("hideSoldOut", checked);
+                            setAppliedFilters((prev) => ({ ...prev, hideSoldOut: checked }));
+                          }}
+                        />
+                      </label>
                     </div>
                   </div>
                 </ScrollArea>
@@ -1106,9 +957,9 @@ const Properties = () => {
             </Dialog>
 
             {/* SEARCH Button - 3D Premium Style */}
-            <button 
+            <button
               onClick={handleSearch}
-              className="relative h-10 px-6 rounded-lg text-sm flex-shrink-0 font-bold transition-all duration-300 group overflow-hidden"
+              className="relative h-11 px-6 rounded-lg text-sm flex-shrink-0 font-bold transition-all duration-300 group overflow-hidden"
               style={{
                 background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
                 boxShadow: `
@@ -1124,12 +975,42 @@ const Properties = () => {
               <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 30px rgba(200,167,102,0.6), inset 0 0 15px rgba(200,167,102,0.1)' }} />
               <span className="relative text-[#1A1A1A] font-semibold">SEARCH</span>
             </button>
+
+            {/* Sort — right aligned */}
+            <div className="ml-auto">
+              <SortBySelect value={sortBy} onChange={setSortBy} />
+            </div>
           </div>
 
-          {/* Sort By — unified premium dropdown */}
-          <div className="flex items-center justify-end gap-3 mt-5">
-            <SortBySelect value={sortBy} onChange={setSortBy} />
+          {/* Keyword Search - Full Width */}
+          <div className="relative w-full">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]" />
+            <Input
+              placeholder="Search by project name, developer, location..."
+              value={filters.search}
+              onChange={(e) => {
+                const next = e.target.value;
+                updateFilter("search", next);
+                setAppliedFilters((prev) => ({ ...prev, search: next }));
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSearch();
+              }}
+              className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] rounded-lg text-base shadow-sm w-full"
+            />
           </div>
+
+          {/* Premium shortcut chip bar (same as header) */}
+          <div className="mt-3">
+            <FilterShortcutBar
+              variant="light"
+              filters={shortcutFilters}
+              onFilterChange={setShortcutFilters}
+              isMapMode={isMapMode}
+              onMapToggle={setIsMapMode}
+            />
+          </div>
+
           </div>
         </div>
       </section>
