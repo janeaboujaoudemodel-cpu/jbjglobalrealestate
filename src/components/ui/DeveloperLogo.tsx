@@ -16,11 +16,14 @@ interface DeveloperLogoProps {
 }
 
 // Unified champagne plate — identical between `bare` and `nameplate`
-// so every project card has an identical badge footprint.
+// so every project card has an identical badge footprint. Padding is
+// kept minimal so wide wordmarks AND square marks both render at their
+// maximum size without ever being cropped (object-contain enforced).
 const UNIFIED_PLATE =
   "h-14 w-24 inline-flex items-center justify-center overflow-hidden " +
   "rounded-xl bg-[#FDFBF7] border border-[#B89555]/45 " +
-  "shadow-[0_4px_14px_rgba(0,0,0,0.18)] px-2 py-1.5";
+  "shadow-[0_4px_14px_rgba(0,0,0,0.18)] p-1";
+
 
 export function DeveloperLogo({
   src,
