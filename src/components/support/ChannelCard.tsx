@@ -28,25 +28,26 @@ export default function ChannelCard({
 }) {
   const Inner = (
     <div
+      data-premium
       data-no-contrast-guard
-      className={`group flex ${compact ? "flex-row items-center gap-3" : "flex-col items-start gap-1.5"}
+      className={`group/channel flex ${compact ? "flex-row items-center gap-3" : "flex-col items-start gap-1.5"}
         px-3.5 py-3 rounded-xl text-left w-full
-        border border-[#B89555]/45 bg-[#FDFBF7] text-[#1A1A1A]
+        border border-gold bg-raised text-ink
         transform-gpu transition-[border-color,box-shadow,transform]
-        hover:bg-[#F7F2EA] hover:text-[#1A1A1A] hover:border-[#B89555]/75 hover:-translate-y-0.5
-        hover:shadow-[0_14px_28px_rgba(26,26,26,0.12),0_0_18px_rgba(184,149,85,0.18)]`}
+        hover:bg-primary hover:text-primary-foreground hover:border-gold hover:-translate-y-0.5
+        hover:shadow-[0_16px_32px_hsl(var(--foreground)/0.22),0_0_24px_hsl(var(--gold)/0.30)]`}
     >
       <div className="flex items-center gap-2">
-        <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-[#B89555]/45 bg-[#F7F2EA] text-[#1A1A1A]">
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-gold bg-surface text-ink transition-colors group-hover/channel:bg-primary-foreground/10 group-hover/channel:text-primary-foreground">
           <channel.Icon className="h-3.5 w-3.5" />
         </span>
-        <span className="text-[13px] font-semibold text-[#1A1A1A]">{channel.label}</span>
+        <span className="text-[13px] font-semibold text-current">{channel.label}</span>
       </div>
-      <span className={`text-[11.5px] text-[#1A1A1A]/70 leading-snug ${compact ? "ml-auto" : ""}`}>
+      <span className={`text-[11.5px] leading-snug text-current opacity-75 group-hover/channel:opacity-90 ${compact ? "ml-auto" : ""}`}>
         {channel.description}
       </span>
       {!compact && (
-        <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.14em] font-semibold text-[#1A1A1A]/65">
+        <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.14em] font-semibold text-current opacity-70 group-hover/channel:opacity-90">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> {channel.responseTime}
         </span>
       )}
