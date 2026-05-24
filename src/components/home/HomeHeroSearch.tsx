@@ -107,26 +107,24 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         transition={{ delay: 0.4, duration: 0.6 }}
         className="w-full max-w-6xl mx-auto"
       >
-        {/* Frosted glass shell — single continuous pill with gold seams */}
+        {/* Single continuous pill: white search field, then dark action segments */}
         <div
           data-no-contrast-guard
           className="group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl
-            border border-[#B89555]/55 overflow-hidden bg-[rgba(253,251,247,0.46)] backdrop-blur-xl backdrop-saturate-150
+            border border-[#B89555]/55 overflow-hidden bg-transparent
             transition-all duration-300 focus-within:border-[#B89555] hover:border-[#B89555]/80"
           style={{
-            WebkitBackdropFilter: "blur(22px) saturate(170%)",
-            backdropFilter: "blur(22px) saturate(170%)",
             boxShadow:
-              "inset 0 1px 0 rgba(255,255,255,0.58), inset 0 -1px 0 rgba(184,149,85,0.18), 0 18px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10)",
+              "0 18px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10)",
           }}
         >
 
-          {/* LEFT: input — frosted glass, ink text */}
+          {/* LEFT: input — full white, edge-to-edge until the Search button */}
           <form
             onSubmit={onSubmit}
             role="search"
             data-no-contrast-guard
-            className="flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0 bg-[rgba(253,251,247,0.18)]"
+            className="flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0 bg-white"
           >
             <input
               type="text"
@@ -156,7 +154,6 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             style={{
               color: "#FFFFFF",
               background: "#1A1A1A",
-              boxShadow: "inset 1px 0 0 rgba(184,149,85,0.45)",
             }}
           >
             <span
@@ -177,51 +174,47 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             )}
           </button>
 
-          {/* Free Consultation — same frosted-glass segment as search */}
+          {/* Free Consultation — same dark style as the Search button */}
           <button
             type="button"
             onClick={openBooking}
             data-no-contrast-guard
             aria-label="Book a Free Consultation"
-            className="group/book hidden md:flex items-center justify-center gap-2 self-stretch h-full px-5 lg:px-6
-              text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-white bg-[rgba(253,251,247,0.18)]
-              border-l border-[#B89555]/55 flex-shrink-0
-              transition-colors duration-200 hover:bg-[rgba(253,251,247,0.28)]"
+            className="allow-white group/book hidden md:flex items-center justify-center gap-2 self-stretch h-full px-5 lg:px-6
+              text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] flex-shrink-0
+              transition-colors duration-200 hover:bg-[#2A2A2A]"
             style={{
-              color: "#1A1A1A",
-              WebkitTextFillColor: "#1A1A1A",
-              backgroundColor: "rgba(253,251,247,0.18)",
-              WebkitBackdropFilter: "blur(22px) saturate(170%)",
-              backdropFilter: "blur(22px) saturate(170%)",
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+              backgroundColor: "#1A1A1A",
             }}
           >
-            <CalendarCheck className="w-4 h-4 text-[#B89555] transition-transform duration-200 group-hover/book:scale-110" strokeWidth={2.2} />
+            <CalendarCheck className="w-4 h-4 allow-white transition-transform duration-200 group-hover/book:scale-110" style={{ color: "#FFFFFF" }} data-no-contrast-guard strokeWidth={2.2} />
             <span
-              className="whitespace-nowrap transition-colors duration-200 group-hover/book:text-[#B89555]"
-              style={{ WebkitTextFillColor: "currentColor" }}
+              className="allow-white whitespace-nowrap"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
               Free Consultation
             </span>
           </button>
 
-          {/* Concierge — same frosted-glass segment as search */}
+          {/* Concierge — same dark style as the Search button */}
           <button
             type="button"
             onClick={openConcierge}
             data-no-contrast-guard
             aria-label="Open the JBJ Concierge"
             title="JBJ Concierge"
-            className="group/conc hidden sm:flex items-center justify-center self-stretch h-full px-4 lg:px-5 bg-white bg-[rgba(253,251,247,0.18)]
-              border-l border-[#B89555]/55 rounded-r-2xl flex-shrink-0
-              transition-colors duration-200 hover:bg-[rgba(253,251,247,0.28)]"
+            className="allow-white group/conc hidden sm:flex items-center justify-center self-stretch h-full px-4 lg:px-5 rounded-r-2xl flex-shrink-0
+              transition-colors duration-200 hover:bg-[#2A2A2A]"
             style={{
-              backgroundColor: "rgba(253,251,247,0.18)",
-              WebkitBackdropFilter: "blur(22px) saturate(170%)",
-              backdropFilter: "blur(22px) saturate(170%)",
+              backgroundColor: "#1A1A1A",
             }}
           >
             <Sparkles
-              className="w-[18px] h-[18px] text-[#B89555] transition-transform duration-200 group-hover/conc:scale-110 group-hover/conc:rotate-12"
+              className="w-[18px] h-[18px] allow-white transition-transform duration-200 group-hover/conc:scale-110 group-hover/conc:rotate-12"
+              style={{ color: "#FFFFFF" }}
+              data-no-contrast-guard
               strokeWidth={2.2}
             />
           </button>
