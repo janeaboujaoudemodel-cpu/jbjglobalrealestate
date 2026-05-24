@@ -141,7 +141,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             />
           </form>
 
-          {/* Search — obsidian segment, full edge-to-edge */}
+          {/* Search — obsidian segment */}
           <button
             type="button"
             onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
@@ -161,58 +161,77 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             >
               {searching ? "Searching…" : "Search"}
             </span>
-            {searching ? (
+            {searching && (
               <Loader2 className="w-4 h-4 allow-white animate-spin" style={{ color: "#FFFFFF" }} data-no-contrast-guard strokeWidth={2.4} />
-            ) : (
-              <ArrowRight
-                className="w-4 h-4 allow-white transition-transform duration-200 group-hover/search:translate-x-0.5"
-                style={{ color: "#FFFFFF" }}
-                data-no-contrast-guard
-                strokeWidth={2.4}
-              />
             )}
           </button>
 
-          {/* Free Consultation — same dark style as the Search button */}
-          <button
-            type="button"
-            onClick={openBooking}
-            data-no-contrast-guard
-            aria-label="Book a Free Consultation"
-            className="allow-white group/book hidden md:flex items-center justify-center gap-2 self-stretch h-full px-5 lg:px-6
-              text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] flex-shrink-0 bg-[#1A1A1A]
-              transition-colors duration-200 hover:bg-[#2A2A2A]"
-            style={{
-              color: "#FFFFFF",
-              WebkitTextFillColor: "#FFFFFF",
-            }}
-          >
-            <CalendarCheck className="w-4 h-4 allow-white transition-transform duration-200 group-hover/book:scale-110" style={{ color: "#FFFFFF" }} data-no-contrast-guard strokeWidth={2.2} />
-            <span
-              className="allow-white whitespace-nowrap"
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-            >
-              Free Consultation
-            </span>
-          </button>
+          {/* Gold divider */}
+          <span aria-hidden className="hidden md:block self-stretch w-px bg-[#B89555]/55 flex-shrink-0" />
 
-          {/* Concierge — same dark style as the Search button */}
-          <button
-            type="button"
-            onClick={openConcierge}
-            data-no-contrast-guard
-            aria-label="Open the JBJ Concierge"
-            title="JBJ Concierge"
-            className="allow-white group/conc hidden sm:flex items-center justify-center self-stretch h-full px-4 lg:px-5 rounded-r-2xl flex-shrink-0 bg-[#1A1A1A]
-              transition-colors duration-200 hover:bg-[#2A2A2A]"
-          >
-            <Sparkles
-              className="w-[18px] h-[18px] allow-white transition-transform duration-200 group-hover/conc:scale-110 group-hover/conc:rotate-12"
-              style={{ color: "#FFFFFF" }}
+          {/* Free Consultation — text only, with custom hover tooltip */}
+          <div className="relative hidden md:flex flex-shrink-0 group/book">
+            <button
+              type="button"
+              onClick={openBooking}
               data-no-contrast-guard
-              strokeWidth={2.2}
-            />
-          </button>
+              aria-label="Book a Free Consultation"
+              className="allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
+                text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-[#1A1A1A]
+                transition-colors duration-200 hover:bg-[#2A2A2A]"
+              style={{
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
+              }}
+            >
+              <span
+                className="allow-white whitespace-nowrap"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              >
+                Free Consultation
+              </span>
+            </button>
+            <span
+              role="tooltip"
+              className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2 px-3 py-1.5 rounded-md
+                bg-[#1A1A1A] text-white text-[11.5px] font-medium tracking-[-0.005em] whitespace-nowrap
+                border border-[#B89555]/55 shadow-lg opacity-0 translate-y-1
+                transition-all duration-150 group-hover/book:opacity-100 group-hover/book:translate-y-0 z-50"
+            >
+              Book your free consultation
+            </span>
+          </div>
+
+          {/* Gold divider */}
+          <span aria-hidden className="hidden sm:block self-stretch w-px bg-[#B89555]/55 flex-shrink-0" />
+
+          {/* Concierge — icon only, with custom hover tooltip */}
+          <div className="relative hidden sm:flex flex-shrink-0 group/conc">
+            <button
+              type="button"
+              onClick={openConcierge}
+              data-no-contrast-guard
+              aria-label="Open the JBJ Concierge"
+              className="allow-white flex items-center justify-center self-stretch h-full px-4 lg:px-5 rounded-r-2xl bg-[#1A1A1A]
+                transition-colors duration-200 hover:bg-[#2A2A2A]"
+            >
+              <Sparkles
+                className="w-[18px] h-[18px] allow-white transition-transform duration-200 group-hover/conc:scale-110 group-hover/conc:rotate-12"
+                style={{ color: "#FFFFFF" }}
+                data-no-contrast-guard
+                strokeWidth={2.2}
+              />
+            </button>
+            <span
+              role="tooltip"
+              className="pointer-events-none absolute right-0 top-full mt-2 px-3 py-1.5 rounded-md
+                bg-[#1A1A1A] text-white text-[11.5px] font-medium tracking-[-0.005em] whitespace-nowrap
+                border border-[#B89555]/55 shadow-lg opacity-0 translate-y-1
+                transition-all duration-150 group-hover/conc:opacity-100 group-hover/conc:translate-y-0 z-50"
+            >
+              JBJ Concierge
+            </span>
+          </div>
         </div>
 
 
