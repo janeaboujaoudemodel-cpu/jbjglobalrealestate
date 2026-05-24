@@ -2,11 +2,10 @@
  * MinimalFooter — single-line public footer per founder directive.
  * Links: Privacy · Cookies · Sitemap · Contact. Copyright underneath.
  *
- * Responsive theme:
- *  - Phone + iPad portrait (< lg / 1024px): dark espresso (kept as-is).
- *  - Desktop + iPad landscape (>= lg): champagne to match the fixed header,
- *    and offset by the 200px sidebar so it aligns with the sidebar footer row
- *    (Contact / Support / Sign Out / Collapse).
+ * Unified champagne theme across all devices, matching the vertical sidebar
+ * header gradient (left → right) so they read as one continuous frame.
+ * Offset by the 200px sidebar on desktop so it aligns with the sidebar footer row
+ * (Contact / Support / Sign Out / Collapse).
  *
  * The full corporate footer (Footer.tsx) remains available for back-office /
  * marketing surfaces.
@@ -24,12 +23,9 @@ const MinimalFooter = () => {
   return (
     <footer
       className={[
-        // Mobile / iPad-portrait — dark espresso (unchanged)
-        "bg-[hsl(32,28%,13%)] border-t border-white/10",
-        // Desktop / iPad-landscape — champagne band matching the vertical sidebar
-        // header gradient (left → right) exactly so they read as one continuous frame.
-        "lg:bg-gradient-to-r lg:from-[#FDFBF7] lg:via-[#F7F1E6] lg:to-[#EFE6D6]",
-        "lg:border-t lg:border-[#B89555]/40",
+        // Champagne band matching the vertical sidebar on all devices
+        "bg-gradient-to-r from-[#FDFBF7] via-[#F7F1E6] to-[#EFE6D6]",
+        "border-t border-[#B89555]/40",
         "lg:ml-[200px]",
       ].join(" ")}
       data-surface="champagne"
@@ -43,7 +39,7 @@ const MinimalFooter = () => {
             <span key={l.href} className="inline-flex items-center gap-x-5 md:gap-x-7">
               <Link
                 to={l.href}
-                className="text-[12px] md:text-[13px] font-medium text-white/85 hover:text-white lg:text-[#1A1A1A] lg:hover:text-[#1A1A1A] transition-colors"
+                className="text-[12px] md:text-[13px] font-medium text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors"
               >
                 {l.label}
               </Link>
@@ -51,7 +47,7 @@ const MinimalFooter = () => {
                 <span
                   aria-hidden
                   data-decorative="true"
-                  className="text-white/30 lg:text-[#1A1A1A]/40" // contrast-ok — decorative dot separator (aria-hidden)
+                  className="text-[#1A1A1A]/40" // contrast-ok — decorative dot separator (aria-hidden)
                 >
                   ·
                 </span>
@@ -69,7 +65,7 @@ const MinimalFooter = () => {
           aria-hidden
         />
 
-        <p className="mt-3 text-center text-[11px] md:text-[12px] text-white/65 lg:text-[#1A1A1A]/70 tracking-[0.02em]">
+        <p className="mt-3 text-center text-[11px] md:text-[12px] text-[#1A1A1A]/70 tracking-[0.02em]">
           © 2026 JBJ GLOBAL REAL ESTATE. All rights reserved.
         </p>
       </div>
