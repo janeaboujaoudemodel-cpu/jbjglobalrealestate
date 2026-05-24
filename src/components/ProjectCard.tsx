@@ -292,11 +292,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           </div>
 
           {/* Developer link — always rendered when a name exists, even without slug */}
-          {(project.developer?.name || project.developer_name) && (
+          {developerName && (
             <DeveloperLink
-              name={project.developer?.name || project.developer_name || ''}
-              slug={project.developer?.slug}
-              logoUrl={getDeveloperLogoUrl(project.developer as any)}
+              name={developerName}
+              slug={developerSlug}
+              logoUrl={developerLogoUrl}
               className="text-sm block"
               showPrefix={true}
             />
