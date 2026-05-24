@@ -38,15 +38,15 @@ export default function ChannelCard({
         hover:shadow-[0_16px_32px_hsl(var(--foreground)/0.22),0_0_24px_hsl(var(--gold)/0.30)]`}
     >
       <div className="flex items-center gap-2">
-        <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-gold bg-surface text-ink transition-colors group-hover/channel:bg-primary-foreground/10 group-hover/channel:text-primary-foreground">
+        <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-gold bg-surface text-[#B89555] transition-colors group-hover/channel:bg-primary-foreground/10 group-hover/channel:text-[#E2C9A0]">
           <channel.Icon className="h-3.5 w-3.5" />
         </span>
-        <span className="text-[13px] font-semibold text-current">{channel.label}</span>
+        <span className="text-[13px] font-semibold text-[#B89555] group-hover/channel:text-[#E2C9A0] transition-colors">{channel.label}</span>
       </div>
       <span className={`text-[11.5px] leading-tight text-current opacity-75 group-hover/channel:opacity-90 ${compact ? "ml-auto" : ""}`}>
         {channel.description}
       </span>
-      {!compact && (
+      {!compact && channel.responseTime && (
         <span className="inline-flex items-center gap-1 pt-0.5 text-[10px] uppercase tracking-[0.14em] font-semibold text-current opacity-70 group-hover/channel:opacity-90">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> {channel.responseTime}
         </span>
