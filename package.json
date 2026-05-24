@@ -32,7 +32,11 @@
   "lint-staged": {
     "src/index.css": "node scripts/contrast/check-tokens.mjs",
     "tailwind.config.ts": "node scripts/contrast/check-tokens.mjs",
-    "src/**/*.{tsx,jsx}": "node scripts/a11y/check-static-aria.mjs"
+    "src/**/*.{tsx,jsx}": [
+      "node scripts/a11y/check-static-aria.mjs",
+      "eslint --no-warn-ignored --max-warnings 0 --rule 'jbj-contrast/no-low-opacity-text: error'",
+      "node scripts/contrast/check-low-opacity-text.mjs"
+    ]
   },
   "dependencies": {
     "@capacitor/android": "^8.0.1",
