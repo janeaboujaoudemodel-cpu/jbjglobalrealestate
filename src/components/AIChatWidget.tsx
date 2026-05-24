@@ -837,7 +837,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.15 }}
-        className="fixed inset-0 z-[8999] bg-transparent"
+        className="fixed inset-0 z-[8999] bg-[#0F0F0F]/45 backdrop-blur-[2px]"
         onClick={() => { onMinimize ? onMinimize() : onToggleCollapse(); }}
         aria-hidden="true"
       />
