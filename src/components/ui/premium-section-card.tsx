@@ -45,7 +45,7 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
   ({ padding = "md", tone = "page", wrapperClassName = "", className = "", width = "contained", children, ...rest }, ref) => {
     const inner =
       width === "contained"
-        ? "w-full px-2 md:px-3"
+        ? "w-full max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12"
         : "w-full";
     // Global fix: removed the wrapper gold border + rounded shell so sections
     // that already render their OWN bordered card (Explore Our Services,
