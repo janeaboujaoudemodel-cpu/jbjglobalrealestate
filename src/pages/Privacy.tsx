@@ -73,10 +73,6 @@ const Privacy = () => {
         <div className="absolute top-20 right-20 w-72 h-72 bg-[#EFE6D6]/6 rounded-full blur-[100px]" />
         <div className="max-w-5xl mx-auto px-4 relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#B89555]/30 bg-[#1A1A1A]/30 backdrop-blur-sm">
-              <Shield className="w-4 h-4 text-[#B89555]" />
-              <span className="text-[#B89555] font-semibold text-xs uppercase tracking-[0.2em]">Legal</span>
-            </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>Privacy Policy</h1>
             <p className="text-lg md:text-xl text-[#B89555]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>Your Data. Your Rights. Our Responsibility.</p>
             <p className="text-[#1A1A1A]/70 text-base md:text-lg max-w-3xl leading-relaxed mb-2">This Privacy Policy explains how we collect, use, process, and protect personal data when you interact with our website and services.</p>

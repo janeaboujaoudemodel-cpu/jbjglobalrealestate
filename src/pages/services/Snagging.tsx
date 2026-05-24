@@ -312,13 +312,6 @@ const Snagging = () => {
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#B89555]/40 bg-[#FDFBF7]/60 backdrop-blur-sm">
-              <ClipboardCheck className="w-4 h-4 text-[#B89555]" />
-              <span className="text-[#B89555] font-semibold text-xs uppercase tracking-[0.2em]">
-                Property Advisory
-              </span>
-            </div>
-
             <h1
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1a1a1a] mb-6 tracking-[-0.02em]"
               style={{ fontFamily: "Playfair Display, serif" }}

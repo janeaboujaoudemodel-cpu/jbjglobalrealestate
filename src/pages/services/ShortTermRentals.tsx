@@ -161,13 +161,6 @@ const ShortTermRentals = () => {
             transition={{ duration: 0.7 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-8 border border-[#B89555]/40 bg-[#FDFBF7]/60 backdrop-blur-md">
-              <Home className="w-4 h-4 text-[#B89555]" />
-              <span className="text-[#B89555] font-semibold text-xs uppercase tracking-[0.2em]">
-                Holiday Home Services
-              </span>
-            </div>
-
             <h1
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1a1714] mb-6 tracking-tight"
               style={{ fontFamily: "Playfair Display, serif" }}
