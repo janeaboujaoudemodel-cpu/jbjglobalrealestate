@@ -90,10 +90,6 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
     void runSearch();
   };
 
-  const openConcierge = () => {
-    window.dispatchEvent(new CustomEvent("jbj:open-concierge"));
-  };
-
   const openBooking = () => {
     if (onBookConsultation) onBookConsultation();
     else window.dispatchEvent(new CustomEvent("jbj:open-inquiry"));
