@@ -705,6 +705,24 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
           .eq('id', conversationId);
         
         toast.success('Thank you for your feedback!');
+
+        // Track chat handoff — completed with rating
+        try {
+          await supabase.from('jbj_analytics').insert({
+            tool_name: 'chat_support',
+            action_type: 'chat_handoff_completed',
+            tool_category: 'support',
+            user_email: userInfo.email || null,
+            metadata: {
+              page: window.location.pathname,
+              conversation_id: conversationId,
+              rating,
+              has_feedback: !!feedback,
+            },
+          });
+        } catch {
+          // Silent fail — analytics should not block UX
+        }
       } catch (error) {
         console.error('Error saving rating:', error);
       }
