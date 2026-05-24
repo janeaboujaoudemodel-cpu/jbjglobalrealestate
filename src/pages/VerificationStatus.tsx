@@ -98,19 +98,13 @@ export default function VerificationStatus() {
       await navigator.clipboard.writeText(code);
       toast({ title: "Reference code copied" });
     } catch {}
-  };
+  useEffect(() => {
+    document.title = "Identity Verification Status | JBJ Global Real Estate";
+  }, []);
 
   return (
     <>
-      <Helmet>
-        <title>Identity Verification Status | JBJ Global Real Estate</title>
-        <meta
-          name="description"
-          content="Track the status of your JBJ Global Real Estate identity verification, view your reference code, and see review history."
-        />
-        <link rel="canonical" href="/verification" />
-        <meta name="robots" content="noindex,follow" />
-      </Helmet>
+
 
       <main className="min-h-[70vh] bg-[#FDFBF7] px-4 sm:px-6 py-10 md:py-14">
         <div className="max-w-3xl mx-auto">
