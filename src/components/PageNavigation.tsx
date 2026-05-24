@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback, useContext, forwardRef, useRef } from "react";
-import { ArrowUp } from "lucide-react";
+import { useEffect, useState, useCallback, useContext, forwardRef } from "react";
+import { ArrowUp, ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LanguageContext } from "@/contexts/LanguageContext";
 
@@ -8,137 +8,103 @@ interface PageNavigationProps {
   isChatMedium?: boolean;
 }
 
-const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChatOpen = false, isChatMedium = false }, ref) => {
+/**
+ * Floating gold arrow that scrolls to the top or bottom of the page.
+ * - Shows ↓ (jump to bottom) when user is in the top half.
+ * - Shows ↑ (back to top) when user is past the top half.
+ * - Non-draggable (per global rule), pinned bottom-right.
+ * - Auto-hides when chat / concierge / support drawers are open.
+ */
+const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChatOpen = false }, ref) => {
   const languageContext = useContext(LanguageContext);
   const isRTL = languageContext?.isRTL ?? false;
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
+  const [direction, setDirection] = useState<"down" | "up">("down");
+  const [visible, setVisible] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // Drag state
-  const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragRef = useRef({ startX: 0, startY: 0, startOffX: 0, startOffY: 0, moved: false });
-  const buttonRef = useRef<HTMLDivElement>(null);
-
-  const handleScroll = useCallback(() => {
-    const scrollTop = window.scrollY;
-    setShowScrollTop(scrollTop > 200);
+  const recompute = useCallback(() => {
+    const scrollY = window.scrollY;
+    const viewport = window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+    const maxScroll = Math.max(docHeight - viewport, 0);
+    // Only show once the page is meaningfully scrollable
+    setVisible(maxScroll > 200);
+    // If past 60% of the page, offer "back to top"; otherwise offer "jump to bottom"
+    setDirection(scrollY > maxScroll * 0.6 ? "up" : "down");
   }, []);
 
   useEffect(() => {
-    const checkSupportDrawer = () => {
-      setSupportDrawerOpen(
+    window.addEventListener("scroll", recompute, { passive: true });
+    window.addEventListener("resize", recompute);
+    recompute();
+    const t = setTimeout(recompute, 400);
+    return () => {
+      window.removeEventListener("scroll", recompute);
+      window.removeEventListener("resize", recompute);
+      clearTimeout(t);
+    };
+  }, [recompute]);
+
+  useEffect(() => {
+    const check = () => {
+      setDrawerOpen(
         !!document.querySelector('[data-jbj-concierge-open="true"]') ||
-          !!document.querySelector('[data-jbj-chat-open="true"]'),
+          !!document.querySelector('[data-jbj-chat-open="true"]') ||
+          !!document.querySelector('[data-jbj-support-open="true"]'),
       );
     };
-    checkSupportDrawer();
-    const observer = new MutationObserver(checkSupportDrawer);
-    observer.observe(document.body, { attributes: true, subtree: true, attributeFilter: ["data-jbj-concierge-open", "data-jbj-chat-open"] });
-    return () => observer.disconnect();
+    check();
+    const obs = new MutationObserver(check);
+    obs.observe(document.body, {
+      attributes: true,
+      subtree: true,
+      attributeFilter: ["data-jbj-concierge-open", "data-jbj-chat-open", "data-jbj-support-open"],
+    });
+    return () => obs.disconnect();
   }, []);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    const timer = setTimeout(handleScroll, 500);
-    return () => { window.removeEventListener("scroll", handleScroll); clearTimeout(timer); };
-  }, [handleScroll]);
+  if (isChatOpen || drawerOpen || !visible) return null;
 
-  function onPointerDown(e: React.PointerEvent) {
-    if (e.button !== undefined && e.button !== 0) return;
-    e.currentTarget.setPointerCapture(e.pointerId);
-    const curOff = dragOffset ?? { x: 0, y: 0 };
-    dragRef.current = { startX: e.clientX, startY: e.clientY, startOffX: curOff.x, startOffY: curOff.y, moved: false };
-    setIsDragging(true);
-  }
-
-  function onPointerMove(e: React.PointerEvent) {
-    if (!isDragging) return;
-    const dx = e.clientX - dragRef.current.startX;
-    const dy = e.clientY - dragRef.current.startY;
-    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
-      dragRef.current.moved = true;
+  const handleClick = () => {
+    if (direction === "up") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
     }
-    if (dragRef.current.moved) {
-      setDragOffset({ x: dragRef.current.startOffX + dx, y: dragRef.current.startOffY + dy });
-    }
-  }
-
-  function onPointerUp() {
-    setIsDragging(false);
-    if (dragRef.current.moved && buttonRef.current) {
-      // Clamp to viewport
-      const rect = buttonRef.current.getBoundingClientRect();
-      const margin = 20;
-      let adjX = 0, adjY = 0;
-      if (rect.left < margin) adjX = margin - rect.left;
-      if (rect.top < margin) adjY = margin - rect.top;
-      if (rect.right > window.innerWidth - margin) adjX = window.innerWidth - margin - rect.right;
-      if (rect.bottom > window.innerHeight - margin) adjY = window.innerHeight - margin - rect.bottom;
-      if (adjX !== 0 || adjY !== 0) {
-        setDragOffset(prev => prev ? { x: prev.x + adjX, y: prev.y + adjY } : null);
-      }
-    }
-  }
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const buttonBaseClass = cn(
-    "h-9 w-9 sm:h-10 sm:w-10",
-    "text-[#1A1A1A] hover:text-[#B89555]",
-    "transition-colors duration-200",
-    "focus:outline-none focus-visible:ring-1 focus-visible:ring-[#B89555]/60 rounded-sm",
-    "flex items-center justify-center",
-    "pointer-events-auto select-none touch-manipulation cursor-pointer",
-    "drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
-  );
-
-  // Hide when chat is open, or when user hasn't scrolled far enough yet.
-  if (isChatOpen) return null;
-  if (supportDrawerOpen) return null;
-  if (!showScrollTop) return null;
-
-  const transform = dragOffset ? `translate(${dragOffset.x}px, ${dragOffset.y}px)` : undefined;
+  const Icon = direction === "up" ? ArrowUp : ArrowDown;
+  const label = direction === "up" ? "Scroll to top" : "Scroll to bottom";
 
   return (
-    <div 
-      ref={(node) => {
-        (buttonRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
-      }}
+    <div
+      ref={ref}
       className={cn(
-        "fixed z-50 flex flex-col gap-2 transform-gpu",
-        // Stacks above voice concierge pill (which sits at bottom-[148px] + ~52px).
-        isChatMedium ? "bottom-[280px]" : "bottom-[216px]",
-        "pointer-events-auto",
-        isRTL ? "left-4" : "right-6"
+        "fixed bottom-6 z-50 pointer-events-auto",
+        isRTL ? "left-6" : "right-6",
       )}
-      style={{ 
-        transform, 
-        transition: isDragging ? 'none' : 'transform 0.2s ease', 
-        cursor: isDragging ? 'grabbing' : 'grab',
-        touchAction: "manipulation" 
-      }}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
+      data-no-contrast-guard
     >
       <button
         type="button"
-        onClick={(e) => { if (!dragRef.current.moved) scrollToTop(); e.stopPropagation(); }}
-        className={buttonBaseClass}
-        aria-label="Scroll to top"
+        onClick={handleClick}
+        aria-label={label}
+        title={label}
+        className={cn(
+          "h-11 w-11 rounded-full inline-flex items-center justify-center",
+          "border border-[#B89555]/70 bg-[#FDFBF7] text-[#1A1A1A]",
+          "shadow-[0_8px_24px_rgba(0,0,0,0.18),0_0_0_1px_rgba(184,149,85,0.18)]",
+          "hover:bg-[#1A1A1A] hover:text-[#E2C9A0] hover:border-[#B89555]",
+          "transition-colors duration-200",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70",
+        )}
       >
-        <ArrowUp className="w-5 h-5" strokeWidth={1.75} />
+        <Icon className="h-5 w-5" strokeWidth={2} />
       </button>
     </div>
   );
 });
 
-PageNavigation.displayName = 'PageNavigation';
+PageNavigation.displayName = "PageNavigation";
 
 export default PageNavigation;
