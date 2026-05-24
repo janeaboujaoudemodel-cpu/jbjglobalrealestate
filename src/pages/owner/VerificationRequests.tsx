@@ -109,7 +109,7 @@ const VerificationRequests = () => {
       reason?: string;
     }) => {
       const { data, error } = await supabase.functions.invoke("review-verification", {
-        body: { verificationId, decision, reason },
+        body: { verificationId, decision, rejectionReason: reason },
       });
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
