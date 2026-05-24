@@ -61,8 +61,9 @@ interface ProjectNearbyPropertiesMapProps {
   currentProjectId: string;
   currentProjectName: string;
   currentProjectSlug?: string | null;
-  latitude: number;
-  longitude: number;
+  /** May be null when the project itself has no coords — we'll derive a centroid from area peers. */
+  latitude: number | null;
+  longitude: number | null;
   areaName?: string | null;
   className?: string;
 }
