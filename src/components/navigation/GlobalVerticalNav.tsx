@@ -1358,18 +1358,24 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-no-contrast-guard
                     data-sidebar-collapse-control
                     data-tour-target="sidebar-expand"
-                    onClick={toggleCollapse}
+                    onClick={() => {
+                      try { localStorage.setItem('jj_sidebar_expand_seen', '1'); } catch {}
+                      toggleCollapse();
+                    }}
                     className="jbj-sidebar-collapse-control group relative w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70 mt-1 mb-1"
                     style={{ color: '#B89555' }}
                     aria-label="Expand navigation"
                   >
-                    {/* Pulse ring — only while collapsed AND tour not yet completed */}
+                    {/* Soft champagne pulse — contained within the button, stops after first click */}
                     {collapsed && (() => {
-                      try { return localStorage.getItem('jj_tour_completed') !== '1'; } catch { return true; }
+                      try {
+                        return localStorage.getItem('jj_sidebar_expand_seen') !== '1'
+                          && localStorage.getItem('jj_tour_completed') !== '1';
+                      } catch { return true; }
                     })() && (
                       <span
                         aria-hidden
-                        className="pointer-events-none absolute inset-0 rounded-lg ring-2 ring-[#B89555]/70 animate-ping opacity-60"
+                        className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-[#B89555]/60 animate-pulse"
                       />
                     )}
                     <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5 text-[hsl(var(--gold))]" strokeWidth={2} />
