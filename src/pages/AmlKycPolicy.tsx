@@ -46,14 +46,14 @@ const AmlKycPolicy = () => {
         canonicalPath="/aml-kyc-policy"
       />
 
-      <section className="min-h-screen bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
+      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {/* Hero — standardized */}
-        <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#B89555]/20">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#EFE6D6]/8 via-transparent to-transparent" />
-          <div className="absolute top-20 right-20 w-72 h-72 bg-[#EFE6D6]/6 rounded-full blur-[100px]" />
+        <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7E9CC] to-[#EFD9A3] border-b border-[#B89555]/20">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#FFD27A]/35 via-transparent to-transparent" />
+          <div className="absolute top-20 right-20 w-72 h-72 bg-[#FFC56B]/30 rounded-full blur-[100px]" />
           <div className="max-w-5xl mx-auto px-4 relative z-10">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>
                 Anti-Money Laundering &amp; KYC Policy
               </h1>
               <p className="text-lg md:text-xl text-[#B89555]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
