@@ -1386,7 +1386,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-[#FDFBF7] h-full relative overscroll-contain [&_button>span]:!text-[#B89555] [&_button_svg]:!text-[#B89555]">
+        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-[#FDFBF7] h-full relative overscroll-contain [&_button>span]:!text-[#B89555] [&_button_svg]:!text-[#B89555] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
           {renderNavContent()}
         </div>
       )}
