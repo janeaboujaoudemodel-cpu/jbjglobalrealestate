@@ -58,7 +58,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1 }: VideoBack
   }, []);
 
   return (
-    <div ref={containerRef} className={`absolute inset-0 ${className}`}>
+    <div ref={containerRef} className={`absolute inset-0 bg-[#1A1A1A] ${className}`}>
       {/* Poster image — shown immediately */}
       <img
         src={poster}
