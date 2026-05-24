@@ -11,26 +11,26 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
   const { t } = useLanguage();
   
   return (
-    <div className="flex-1 px-4 pt-4 pb-6 flex flex-col items-center text-center overflow-y-auto">
-      {/* Logo - at TOP now */}
-      <div className="mb-4">
+    <div className="flex-1 px-4 py-5 flex flex-col items-center text-center overflow-y-auto">
+      {/* Logo */}
+      <div className="mb-3">
         <img
           src={jbjMonogramLightBg}
           alt="JBJ Global Real Estate"
-          className="h-24 w-auto mx-auto object-contain"
+          className="h-20 w-auto mx-auto object-contain"
         />
       </div>
 
-      {/* Welcome text - centered */}
-      <div className="mb-4">
-        <h4 className="text-[#1A1A1A] text-xl font-bold mb-2">
+      {/* Welcome text */}
+      <div className="mb-5">
+        <h4 className="text-[#1A1A1A] text-xl font-bold mb-1.5">
           {t('chat.welcomeTitle', 'Chat with our team')} 👋
         </h4>
         <p className="text-[#1A1A1A] text-sm font-medium">{t('chat.welcomeSubtitle', 'Talk directly with our experts')}</p>
       </div>
 
-      {/* Action buttons - full width, centered */}
-      <div className="w-full space-y-3 mb-4">
+      {/* Action buttons — centered, balanced */}
+      <div className="w-full flex-1 flex flex-col justify-center gap-3">
         {/* Chat with Team Option */}
         <button
           onClick={onStartChat}
@@ -68,8 +68,8 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
         </a>
       </div>
 
-      {/* Tip at BOTTOM now */}
-      <div className="w-full mt-auto px-4 py-3 bg-[#FDFBF7]/80 rounded-lg border border-[#B89555]/30">
+      {/* Tip — sits naturally below CTAs, no forced spacer */}
+      <div className="w-full mt-5 px-4 py-3 bg-[#FDFBF7]/80 rounded-lg border border-[#B89555]/30">
         <p className="text-sm flex flex-wrap items-center justify-center gap-1">
           <span className="text-[#1A1A1A]">💡</span>
           <span className="text-[#1A1A1A] font-bold">{t('chat.tip', 'Tip:')}</span>
@@ -77,6 +77,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
         </p>
       </div>
     </div>
+
   );
 };
 
