@@ -1394,11 +1394,34 @@ All colors MUST be HSL.
     color: hsl(var(--foreground));
   }
 
-/* Scrollbar styling — monochrome */
+/* ===== GLOBAL GOLD SCROLLBAR — site-wide default ===== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #B89555 transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: #B89555;
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(184, 149, 85, 0.85);
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Scrollbar styling — gold */
 .jj-scrollbar-gold {
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: hsl(0 0% 40% / 0.85) hsl(0 0% 20% / 0.2);
+  scrollbar-color: #B89555 rgba(184, 149, 85, 0.08);
 }
 
 .jj-scrollbar-gold::-webkit-scrollbar {
@@ -1407,18 +1430,18 @@ All colors MUST be HSL.
 }
 
 .jj-scrollbar-gold::-webkit-scrollbar-track {
-  background: hsl(0 0% 20% / 0.1);
+  background: rgba(184, 149, 85, 0.08);
   border-radius: 4px;
 }
 
 .jj-scrollbar-gold::-webkit-scrollbar-thumb {
-  background: hsl(0 0% 40% / 0.7);
+  background: #B89555;
   border-radius: 4px;
   min-height: 40px;
 }
 
 .jj-scrollbar-gold::-webkit-scrollbar-thumb:hover {
-  background: hsl(0 0% 60%);
+  background: rgba(184, 149, 85, 0.85);
 }
 
 /* Force scrollbar always visible */
@@ -1432,12 +1455,12 @@ All colors MUST be HSL.
 }
 
 .jj-scrollbar-always-visible::-webkit-scrollbar-track {
-  background: hsl(0 0% 20% / 0.15);
+  background: rgba(184, 149, 85, 0.1);
   border-radius: 4px;
 }
 
 .jj-scrollbar-always-visible::-webkit-scrollbar-thumb {
-  background: hsl(0 0% 40% / 0.7);
+  background: #B89555;
   border-radius: 4px;
   min-height: 30px;
 }
@@ -1449,11 +1472,11 @@ All colors MUST be HSL.
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: hsl(0 0% 40% / 0.6) transparent;
+  scrollbar-color: #B89555 transparent;
 }
 
 .jj-scrollbar-gold-x::-webkit-scrollbar {
-  height: 3px;
+  height: 6px;
   display: block !important;
 }
 
@@ -1462,13 +1485,14 @@ All colors MUST be HSL.
 }
 
 .jj-scrollbar-gold-x::-webkit-scrollbar-thumb {
-  background: hsl(0 0% 40% / 0.5);
+  background: #B89555;
   border-radius: 4px;
 }
 
 .jj-scrollbar-gold-x::-webkit-scrollbar-thumb:hover {
-  background: hsl(0 0% 60% / 0.8);
+  background: rgba(184, 149, 85, 0.85);
 }
+
 
   /* Title styling: First word white, rest gray */
   .jj-title-split span:first-child {
@@ -2437,21 +2461,21 @@ All colors MUST be HSL.
     text-shadow: none;
   }
 
-  /* Scrollbar styling — monochrome */
+  /* Scrollbar utilities — gold */
   .scrollbar-thin {
     scrollbar-width: thin;
   }
   
   .scrollbar-thumb-gold {
-    scrollbar-color: hsl(0 0% 40%) transparent;
+    scrollbar-color: #B89555 transparent;
   }
   
   .scrollbar-thumb-gold\/60 {
-    scrollbar-color: hsl(0 0% 40% / 0.6) hsl(0 0% 20% / 0.1);
+    scrollbar-color: #B89555 rgba(184, 149, 85, 0.1);
   }
   
   .scrollbar-track-gold\/10 {
-    scrollbar-color: inherit hsl(0 0% 20% / 0.1);
+    scrollbar-color: inherit rgba(184, 149, 85, 0.1);
   }
 
   /* Webkit scrollbar styling */
@@ -2461,18 +2485,19 @@ All colors MUST be HSL.
   }
   
   .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb {
-    background: hsl(0 0% 40% / 0.6);
+    background: #B89555;
     border-radius: 3px;
   }
   
   .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb:hover {
-    background: hsl(0 0% 60%);
+    background: rgba(184, 149, 85, 0.85);
   }
   
   .scrollbar-track-gold\/10::-webkit-scrollbar-track {
-    background: hsl(0 0% 20% / 0.1);
+    background: rgba(184, 149, 85, 0.1);
     border-radius: 3px;
   }
+
 
   /* ============================================================
    * GLOBAL RESPONSIVE UTILITIES - Mobile-First Design System
