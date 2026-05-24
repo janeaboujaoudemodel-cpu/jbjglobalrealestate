@@ -96,7 +96,10 @@ export function DeveloperLogo({
             setError(true);
             onError?.();
           }}
-          className="block w-full h-full object-contain"
+          // max-w/max-h + w-auto/h-auto + object-contain → image scales to
+          // the largest size that fits the plate on BOTH axes without ever
+          // being cropped, regardless of source aspect ratio.
+          className="block max-w-full max-h-full w-auto h-auto object-contain"
           style={{
             // Strip foreign white/light backgrounds into our champagne plate.
             mixBlendMode: "multiply",
@@ -104,6 +107,7 @@ export function DeveloperLogo({
             filter: override.invert ? "invert(1) brightness(0)" : undefined,
           }}
         />
+
       </div>
     );
   }
