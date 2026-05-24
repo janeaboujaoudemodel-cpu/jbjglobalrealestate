@@ -1373,10 +1373,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           && localStorage.getItem('jj_tour_completed') !== '1';
                       } catch { return true; }
                     })() && (
-                      <span
-                        aria-hidden
-                        className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-[#B89555]/60 animate-pulse"
-                      />
+                      <>
+                        <span
+                          aria-hidden
+                          className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-[#B89555] animate-pulse"
+                          style={{ boxShadow: '0 0 0 2px rgba(184,149,85,0.35), 0 0 10px rgba(184,149,85,0.5)' }}
+                        />
+                      </>
                     )}
                     <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5 text-[hsl(var(--gold))]" strokeWidth={2} />
                   </button>
