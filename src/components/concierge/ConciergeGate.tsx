@@ -175,7 +175,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             e.preventDefault();
             sendOtp();
           }}
-          className="mt-5 flex flex-1 flex-col pb-1 min-h-[calc(100dvh-310px)]"
+          className="mt-5 flex flex-1 flex-col justify-between gap-3 pb-1 min-h-[calc(100dvh-310px)]"
         >
           <div className="grid grid-cols-2 gap-2">
             <div className="relative">
@@ -293,7 +293,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             type="submit"
             disabled={submitting}
             data-no-contrast-guard
-            className="mt-auto w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A]
+            className="w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A]
               disabled:opacity-50 disabled:cursor-not-allowed transition inline-flex items-center justify-center gap-2
               hover:bg-[#F7F2EA] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_0_24px_hsl(var(--gold)/0.22)]"
           >
