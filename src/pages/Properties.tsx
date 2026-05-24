@@ -1087,6 +1087,7 @@ const Properties = () => {
               onFilterChange={setShortcutFilters}
               isMapMode={isMapMode}
               onMapToggle={setIsMapMode}
+              hideSort
             />
           </div>
 
