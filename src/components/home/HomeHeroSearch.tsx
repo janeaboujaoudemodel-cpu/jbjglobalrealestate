@@ -14,7 +14,7 @@
  */
 
 import { useState, useCallback } from "react";
-import { CalendarCheck, Sparkles, Loader2 } from "lucide-react";
+import { CalendarCheck, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -88,10 +88,6 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     void runSearch();
-  };
-
-  const openConcierge = () => {
-    window.dispatchEvent(new CustomEvent("jbj:open-concierge"));
   };
 
   const openBooking = () => {
@@ -202,36 +198,6 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             </span>
           </div>
 
-          {/* Gold divider */}
-          <span aria-hidden className="hidden sm:block self-stretch w-px bg-[#B89555]/55 flex-shrink-0" />
-
-          {/* Concierge — icon only, with custom hover tooltip */}
-          <div className="relative hidden sm:flex flex-shrink-0 group/conc">
-            <button
-              type="button"
-              onClick={openConcierge}
-              data-no-contrast-guard
-              aria-label="Open the JBJ Concierge"
-              className="allow-white flex items-center justify-center self-stretch h-full px-4 lg:px-5 rounded-r-2xl bg-[#1A1A1A]
-                transition-colors duration-200 hover:bg-[#2A2A2A]"
-            >
-              <Sparkles
-                className="w-[18px] h-[18px] allow-white transition-transform duration-200 group-hover/conc:scale-110 group-hover/conc:rotate-12"
-                style={{ color: "#FFFFFF" }}
-                data-no-contrast-guard
-                strokeWidth={2.2}
-              />
-            </button>
-            <span
-              role="tooltip"
-              className="pointer-events-none absolute right-0 top-full mt-2 px-3 py-1.5 rounded-md
-                bg-[#1A1A1A] text-white text-[11.5px] font-medium tracking-[-0.005em] whitespace-nowrap
-                border border-[#B89555]/55 shadow-lg opacity-0 translate-y-1
-                transition-all duration-150 group-hover/conc:opacity-100 group-hover/conc:translate-y-0 z-50"
-            >
-              JBJ Concierge
-            </span>
-          </div>
         </div>
 
 
@@ -249,18 +215,6 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             <span className="whitespace-nowrap transition-colors duration-200 group-hover/bookm:text-[#B89555]">
               Free Consultation
             </span>
-          </button>
-          <button
-            type="button"
-            onClick={openConcierge}
-            data-no-contrast-guard
-            aria-label="JBJ Concierge"
-            title="JBJ Concierge"
-            className="group/concm inline-flex items-center justify-center h-11 w-11 rounded-xl
-              border border-[#B89555]/55 bg-[#EFE6D6]
-              transition-colors duration-200 hover:bg-[#E7D9C1]"
-          >
-            <Sparkles className="w-[18px] h-[18px] text-[#B89555] transition-transform duration-200 group-hover/concm:scale-110" strokeWidth={2.2} />
           </button>
         </div>
 
