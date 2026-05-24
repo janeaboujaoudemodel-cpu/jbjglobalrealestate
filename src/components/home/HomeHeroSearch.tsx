@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 
 const GlobalSearchModal = lazy(() => import("@/components/GlobalSearchModal"));
 
-const openConcierge = () => window.dispatchEvent(new CustomEvent("jbj:open-concierge"));
+const openConcierge = () => window.dispatchEvent(new CustomEvent("jbj:open-chat-support"));
 
 const QUICK_QUERIES = ["Marina apartments", "Off-plan villas", "Emaar", "Golden Visa", "Palm Jumeirah"];
 
