@@ -14,7 +14,7 @@
  */
 
 import { useState, useCallback } from "react";
-import { ArrowRight, CalendarCheck, Sparkles, Loader2 } from "lucide-react";
+import { CalendarCheck, Sparkles, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
