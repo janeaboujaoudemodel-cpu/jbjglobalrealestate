@@ -137,7 +137,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             />
           </form>
 
-          {/* Search — obsidian segment with instant tooltip */}
+          {/* Search — white segment merged with input field */}
           <div className="relative flex flex-shrink-0 group/search">
             <button
               type="button"
@@ -145,21 +145,21 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               data-no-contrast-guard
               aria-label="Search properties now"
               disabled={searching}
-              className="cta-premium allow-white relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8
-                text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 bg-[#1A1A1A]
-                disabled:cursor-wait transition-colors duration-200 hover:bg-[#2A2A2A]"
+              className="relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8
+                text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 bg-white
+                disabled:cursor-wait transition-colors duration-200 hover:bg-[#F8F8F8]"
               style={{
-                color: "#FFFFFF",
+                color: "#1A1A1A",
               }}
             >
               <span
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                className="allow-white relative inline-block after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover/search:after:w-full"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                className="relative inline-block after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover/search:after:w-full"
               >
                 {searching ? "Searching…" : "Search"}
               </span>
               {searching && (
-                <Loader2 className="w-4 h-4 allow-white animate-spin" style={{ color: "#FFFFFF" }} data-no-contrast-guard strokeWidth={2.4} />
+                <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#1A1A1A" }} data-no-contrast-guard strokeWidth={2.4} />
               )}
             </button>
             <span
