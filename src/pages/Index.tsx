@@ -426,84 +426,76 @@ const Index = () => {
       <SectionDividerGoldFullBleed size="md" spacing="md" />
 
       {/* EXPLORE OUR SERVICES */}
-      <section>
-        <div className="jj-layer-2">
-          <Suspense fallback={<SectionLoader />}>
-            <ExploreServicesCard />
-          </Suspense>
-        </div>
-      </section>
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
+        <Suspense fallback={<SectionLoader />}>
+          <ExploreServicesCard />
+        </Suspense>
+      </PremiumSectionCard>
 
       {/* Premium gold edge-to-edge divider — Services → Royal Tools Hub */}
       <SectionDividerGoldFullBleed size="md" spacing="md" />
 
       {/* TOOLKIT SHOWCASE CARD */}
-      <div className="cv-auto">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
         <Suspense fallback={<SectionLoader />}>
           <ToolkitShowcaseCard />
         </Suspense>
-      </div>
+      </PremiumSectionCard>
 
       {/* Premium gold edge-to-edge divider — Tools → AI Comparison */}
       <SectionDividerGoldFullBleed size="md" spacing="md" />
 
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
-      <section>
-        <div className="jj-layer-2">
-          <Suspense fallback={<SectionLoader />}>
-            <AIComparisonWidget />
-          </Suspense>
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
+        <Suspense fallback={<SectionLoader />}>
+          <AIComparisonWidget />
+        </Suspense>
+      </PremiumSectionCard>
+
+      {/* Premium gold edge-to-edge divider — AI Comparison → Mortgage */}
+      <SectionDividerGoldFullBleed size="md" spacing="md" />
+
+      <PremiumSectionCard tone="surface" padding="md" wrapperClassName="cv-auto py-6 md:py-10">
+        <Suspense fallback={<SectionLoader />}>
+          <MortgageCalculator compact />
+        </Suspense>
+        <p className="text-[#1A1A1A]/60 text-[11px] text-center mt-4">
+          Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
+          <PearlButton
+            to="/mortgage-calculator"
+            size="md"
+            leadingIcon={<Sparkles strokeWidth={2.2} />}
+            trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
+          >
+            <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
+          </PearlButton>
+
+          <PearlButton
+            to="/partners/mortgage"
+            size="md"
+            leadingIcon={<Users strokeWidth={2.2} />}
+            trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
+          >
+            <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
+          </PearlButton>
         </div>
-      </section>
+      </PremiumSectionCard>
 
-      <SectionDivider />
-
-      <section className="py-6 md:py-8">
-        <div className="jj-layer-2">
-          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-4 md:p-8 relative overflow-hidden">
-            <div className="relative z-10">
-              <Suspense fallback={<SectionLoader />}>
-                <MortgageCalculator compact />
-              </Suspense>
-              <p className="text-[#1A1A1A]/60 text-[11px] text-center mt-4">
-                Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
-                <PearlButton
-                  to="/mortgage-calculator"
-                  size="md"
-                  leadingIcon={<Sparkles strokeWidth={2.2} />}
-                  trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
-                >
-                  <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
-                </PearlButton>
-
-                <PearlButton
-                  to="/partners/mortgage"
-                  size="md"
-                  leadingIcon={<Users strokeWidth={2.2} />}
-                  trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
-                >
-                  <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
-                </PearlButton>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </section>
 
 
       <PodcastVisibilityGate>
-        <SectionDivider fullWidth />
-        <div className="cv-auto">
+        <SectionDividerGoldFullBleed size="md" spacing="md" />
+        <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
           <Suspense fallback={<SectionLoader />}>
             <JBJPodcastSection />
           </Suspense>
-        </div>
+        </PremiumSectionCard>
       </PodcastVisibilityGate>
+
 
       <SectionDividerGoldFullBleed size="md" spacing="md" />
 
