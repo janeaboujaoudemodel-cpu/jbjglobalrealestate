@@ -31,6 +31,7 @@ import {
   HardHat,
   Video,
   TrendingUp,
+  Sparkles,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
