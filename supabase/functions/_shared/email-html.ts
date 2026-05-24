@@ -90,21 +90,19 @@ export function inquiryBox(contextLabel: string): string {
 // ─── Ticket Support (flat — blends into single card, no separate border/bg) ───
 export function ticketSupportEmbed(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:16px 0 24px;"><tr><td style="padding:24px 20px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:48px;height:48px;border-radius:48px;background:#1a1a1a;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#C8A766;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#1a1a1a;">Need Help? Open a Support Ticket</p>
 <p style="margin:0 0 14px;font-size:13px;color:#666;">Our team typically responds within 24 hours</p>
-<a href="${SITE_URL}/contact-support" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">Submit a Ticket</a>
+<a href="${SITE_URL}/contact-support" style="display:inline-block;background:transparent;color:#dc2626;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:700;font-size:13px;border:1.5px solid #dc2626;">Submit a Ticket</a>
 </td></tr></table>`;
 }
 
 export function ticketSupportEmbedAr(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:16px 0 24px;direction:rtl;"><tr><td style="padding:24px 20px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:48px;height:48px;border-radius:48px;background:#1a1a1a;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#C8A766;letter-spacing:2px;">دعم على مدار الساعة</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#1a1a1a;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p>
 <p style="margin:0 0 14px;font-size:13px;color:#666;">فريقنا يرد عادةً خلال ٢٤ ساعة</p>
-<a href="${SITE_URL}/contact-support" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">إرسال تذكرة</a>
+<a href="${SITE_URL}/contact-support" style="display:inline-block;background:transparent;color:#dc2626;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:700;font-size:13px;border:1.5px solid #dc2626;">إرسال تذكرة</a>
 </td></tr></table>`;
 }
 
