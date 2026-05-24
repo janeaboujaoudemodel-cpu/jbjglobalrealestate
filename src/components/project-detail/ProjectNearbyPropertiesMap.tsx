@@ -205,7 +205,23 @@ export default function ProjectNearbyPropertiesMap({
 
         {/* Nearby projects (champagne/gold) */}
         {markers.map((p) => (
-          <Marker key={p.id} position={[p.latitude!, p.longitude!]} icon={ChampagneIcon}>
+          <Marker
+            key={p.id}
+            position={[p.latitude!, p.longitude!]}
+            icon={ChampagneIcon}
+            eventHandlers={{
+              mouseover: (e) => e.target.openPopup(),
+              mouseout: (e) => {
+                // Keep popup open if user is hovering over it
+                setTimeout(() => {
+                  const popup = e.target.getPopup();
+                  if (popup && !popup.getElement()?.matches(':hover')) {
+                    e.target.closePopup();
+                  }
+                }, 250);
+              },
+            }}
+          >
             <Popup>
               <div className="min-w-[220px] max-w-[280px]">
                 {p.cover_image_url && (
