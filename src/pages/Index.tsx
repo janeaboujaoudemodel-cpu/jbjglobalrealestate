@@ -410,7 +410,7 @@ const Index = () => {
 
 
       <PodcastVisibilityGate>
-        <SectionDividerGoldFullBleed size="md" spacing="md" />
+        <SectionDividerGoldFullBleed size="md" spacing="sm" />
         <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
           <Suspense fallback={<SectionLoader />}>
             <JBJPodcastSection />
@@ -419,7 +419,7 @@ const Index = () => {
       </PodcastVisibilityGate>
 
 
-      <SectionDividerGoldFullBleed size="md" spacing="md" />
+      <SectionDividerGoldFullBleed size="md" spacing="sm" />
 
       {/* TOP AREAS IN DUBAI — wrapped in gold-bordered premium card */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
