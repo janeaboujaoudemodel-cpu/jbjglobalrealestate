@@ -391,19 +391,33 @@ export function useProjectsListing() {
         community:communities(id, name, slug)
       `;
 
-      // Single lean query — first 500 published projects with covers.
-      // Avoids the heavy multi-page background backfill that froze the UI.
-      const { data, error } = await supabase
-        .from("projects")
-        .select(LISTING_COLUMNS)
-        .eq("is_published", true)
-        .not("cover_image_url", "is", null)
-        .neq("cover_image_url", "")
-        .order("created_at", { ascending: false })
-        .range(0, 499);
+      // Paginated fetch — Supabase caps at 1000 rows per request.
+      // Page through ALL published projects with a cover image so the
+      // listings count never silently shrinks as the catalog grows.
+      const PAGE_SIZE = 1000;
+      const MAX_PAGES = 10; // hard ceiling = 10,000 rows safety net
+      const all: unknown[] = [];
 
-      if (error) throw error;
-      return dedupePublicProjects((data ?? []) as unknown as UnifiedProject[]);
+      for (let page = 0; page < MAX_PAGES; page++) {
+        const from = page * PAGE_SIZE;
+        const to = from + PAGE_SIZE - 1;
+        const { data, error } = await supabase
+          .from("projects")
+          .select(LISTING_COLUMNS)
+          .eq("is_published", true)
+          .not("cover_image_url", "is", null)
+          .neq("cover_image_url", "")
+          .order("created_at", { ascending: false })
+          .range(from, to);
+
+        if (error) throw error;
+        const rows = data ?? [];
+        all.push(...rows);
+        if (rows.length < PAGE_SIZE) break;
+      }
+
+      return dedupePublicProjects(all as unknown as UnifiedProject[]);
+
     },
   });
 }
