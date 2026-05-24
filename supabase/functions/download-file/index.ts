@@ -172,16 +172,14 @@ serve(async (req: Request): Promise<Response> => {
     let isPrivileged = ownerEmail !== "" && userEmail === ownerEmail;
 
     if (!isPrivileged) {
-      const { data: profile } = await adminClient
-        .from("profiles")
-        .select("user_role")
-        .eq("id", userData.user.id)
-        .maybeSingle();
+      // Check canonical user_roles table for owner/admin (avoids profile-based privilege escalation)
+      const { data: roles } = await adminClient
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userData.user.id);
 
-      const userRole = (profile as any)?.user_role;
-      if (typeof userRole === "string") {
-        isPrivileged = ["owner", "admin", "owner_admin", "hr_admin", "super_admin"].includes(userRole.toLowerCase());
-      }
+      const roleSet = new Set((roles || []).map((r: any) => String(r.role).toLowerCase()));
+      isPrivileged = roleSet.has("owner") || roleSet.has("admin");
     }
 
     if (!isPrivileged) {
