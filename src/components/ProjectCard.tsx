@@ -15,6 +15,7 @@ import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
 import { useUserRole } from "@/hooks/useUserRole";
 import OwnerCardEditMenu from "@/components/cards/OwnerCardEditMenu";
+import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null; show_sale_status?: boolean | null };
@@ -320,19 +321,16 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Thin gold hairline — separates description from bottom row (no spacer rectangle). */}
           <div className="w-full border-t border-[#B89555]/45" />
 
-          {/* Bottom row — Price (left) parallel to Handover/Ready (right). Same on every page. */}
-          <div className="flex items-center justify-between gap-2">
-            {project.price_from ? (
-              <div className="price-pill-premium" data-price-badge>
-                <span className="price-pill-eyebrow">From</span>
-                <span className="price-pill-value">
-                  {formatPriceWithCurrency(project.price_from, currency)}
-                </span>
-              </div>
-            ) : (
-              <span aria-hidden="true" />
-            )}
-            <span className="text-[#1A1A1A] text-xs font-semibold tabular-nums handover-orange">
+          {/* Bottom row — Reelly-style: Price from (left) + Payment plan (right) with info popover. */}
+          <CardPricePaymentRow
+            price={project.price_from}
+            currency={currency}
+            project={project as any}
+          />
+
+          {/* Handover / Ready — kept as a thin meta line beneath, right-aligned. */}
+          <div className="flex justify-end -mt-1">
+            <span className="text-[#1A1A1A]/75 text-[11px] font-semibold tabular-nums handover-orange">
               {deriveHandover(project) || HANDOVER_FALLBACK}
             </span>
           </div>
