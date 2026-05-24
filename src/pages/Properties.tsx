@@ -718,8 +718,46 @@ const Properties = () => {
                     </DialogHeader>
                     <ScrollArea className="max-h-[70vh]">
                       <div className="p-6 space-y-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                        {/* Search */}
+                        <div>
+                          <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Search</label>
+                          <div className="flex items-center h-12 px-3 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg">
+                            <Search className="w-4 h-4 mr-2 text-[#1A1A1A]/60" strokeWidth={2} />
+                            <input
+                              type="text"
+                              placeholder="Project name, developer, location…"
+                              value={filters.search}
+                              onChange={(e) => {
+                                const next = e.target.value;
+                                updateFilter("search", next);
+                                setAppliedFilters((prev) => ({ ...prev, search: next }));
+                              }}
+                              data-no-contrast-guard
+                              className="flex-1 min-w-0 h-full bg-transparent border-0 outline-none text-[14px] text-[#1A1A1A]"
+                              style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Intent (Buy / Buy Ready / Buy Off-Plan / Rent) */}
+                        <div>
+                          <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Intent</label>
+                          <Select value={intentValue} onValueChange={setIntent}>
+                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="buy">Buy</SelectItem>
+                              <SelectItem value="buy-ready">Buy Ready</SelectItem>
+                              <SelectItem value="buy-offplan">Buy Off-Plan</SelectItem>
+                              <SelectItem value="rent">Rent</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
                         {/* Emirate + Area */}
                         <div className="grid grid-cols-2 gap-4">
+
                           <div>
                             <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Emirate</label>
                             <Select
