@@ -25814,7 +25814,6 @@ export type Database = {
           tier_updated_at: string | null
           total_login_days: number | null
           updated_at: string
-          user_role: string | null
           user_type: string | null
           verification_status: string
           verified_at: string | null
@@ -25847,7 +25846,6 @@ export type Database = {
           tier_updated_at?: string | null
           total_login_days?: number | null
           updated_at?: string
-          user_role?: string | null
           user_type?: string | null
           verification_status?: string
           verified_at?: string | null
@@ -25880,7 +25878,6 @@ export type Database = {
           tier_updated_at?: string | null
           total_login_days?: number | null
           updated_at?: string
-          user_role?: string | null
           user_type?: string | null
           verification_status?: string
           verified_at?: string | null
@@ -34663,6 +34660,51 @@ export type Database = {
           },
         ]
       }
+      customer_reviews_public: {
+        Row: {
+          created_at: string | null
+          display_name: string | null
+          feature_key: string | null
+          id: string | null
+          improve_text: string | null
+          is_anonymous: boolean | null
+          published_at: string | null
+          rating: number | null
+          review_text: string | null
+          service_type: string | null
+          status: string | null
+          would_recommend: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          display_name?: never
+          feature_key?: string | null
+          id?: string | null
+          improve_text?: string | null
+          is_anonymous?: boolean | null
+          published_at?: string | null
+          rating?: number | null
+          review_text?: string | null
+          service_type?: string | null
+          status?: string | null
+          would_recommend?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          display_name?: never
+          feature_key?: string | null
+          id?: string | null
+          improve_text?: string | null
+          is_anonymous?: boolean | null
+          published_at?: string | null
+          rating?: number | null
+          review_text?: string | null
+          service_type?: string | null
+          status?: string | null
+          would_recommend?: string | null
+        }
+        Relationships: []
+      }
       developer_sales_reps_public: {
         Row: {
           created_at: string | null
@@ -35382,16 +35424,6 @@ export type Database = {
           full_name: string | null
           id: string | null
           user_role: string | null
-        }
-        Insert: {
-          full_name?: string | null
-          id?: string | null
-          user_role?: string | null
-        }
-        Update: {
-          full_name?: string | null
-          id?: string | null
-          user_role?: string | null
         }
         Relationships: []
       }
