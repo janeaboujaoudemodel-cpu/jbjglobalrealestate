@@ -101,6 +101,7 @@ export const ProjectAIAnalyzer = ({
   propertyType = "all",
   emirate,
 }: ProjectAIAnalyzerProps) => {
+  const { isConsVisible } = useConsVisibility();
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
