@@ -299,9 +299,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             {/* Off-Plan vs Secondary */}
             <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30">
               <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-4 h-4 text-[#1E5F3F]" />
-                <h3 className="text-[#1A1A1A] font-semibold text-sm">Off-Plan vs Secondary</h3>
+                <TrendingUp className="w-4 h-4 text-[#B89555]" />
+                <h3 className="text-[#102540] font-semibold text-sm">Off-Plan vs Secondary</h3>
               </div>
+
               <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#EFE6D6] border border-[#B89555]/30">
                 <div className="h-full bg-[#1E5F3F] rounded-l-full flex items-center justify-center" style={{ width: `${offPlanPct}%` }}>
                   <span className="text-[#FDFBF7] text-[10px] font-bold">{offPlanPct}%</span>
