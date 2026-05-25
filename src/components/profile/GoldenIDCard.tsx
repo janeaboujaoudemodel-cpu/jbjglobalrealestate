@@ -174,7 +174,7 @@ export function GoldenIDCard() {
             </div>
           </div>
           <div className="text-right">
-            <p className="text-xs text-amber-300/70">JBJ Global</p>
+            <p className="text-xs text-amber-300/70">JBJ GLOBAL REAL ESTATE</p>
             <p className="text-xs text-amber-300/70">Real Estate</p>
           </div>
         </div>

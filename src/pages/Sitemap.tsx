@@ -200,7 +200,7 @@ const hubSections: HubSection[] = [
     title: "Company",
     icon: Building2,
     links: [
-      { href: "/about", label: "About JBJ Global" },
+      { href: "/about", label: "About JBJ GLOBAL REAL ESTATE" },
       { href: "/contact", label: "Contact Us" },
       { href: "/news", label: "News & Insights" },
       { href: "/join", label: "Join Our Team" },

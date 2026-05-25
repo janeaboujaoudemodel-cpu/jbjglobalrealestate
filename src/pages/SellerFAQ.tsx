@@ -79,7 +79,7 @@ const SellerFAQ = () => {
       questions: [
         {
           question: "How will my property be marketed?",
-          answer: "JBJ Global employs a comprehensive marketing strategy:\n\n• Professional photography and videography\n• 360° virtual tours for remote buyers\n• Premium listings on Bayut, Property Finder, and Dubizzle\n• Social media campaigns (Instagram, LinkedIn, YouTube)\n• Email marketing to our database of qualified buyers\n• Agent-to-agent networking within major brokerage firms\n• International exposure through overseas property portals\n• Featured listings and premium placement on key platforms\n\nAll marketing costs are included in the standard agency commission."
+          answer: "JBJ GLOBAL REAL ESTATE employs a comprehensive marketing strategy:\n\n• Professional photography and videography\n• 360° virtual tours for remote buyers\n• Premium listings on Bayut, Property Finder, and Dubizzle\n• Social media campaigns (Instagram, LinkedIn, YouTube)\n• Email marketing to our database of qualified buyers\n• Agent-to-agent networking within major brokerage firms\n• International exposure through overseas property portals\n• Featured listings and premium placement on key platforms\n\nAll marketing costs are included in the standard agency commission."
         },
         {
           question: "Should I stage or renovate before selling?",

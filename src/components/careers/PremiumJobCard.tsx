@@ -178,7 +178,7 @@ export default function PremiumJobCard({
 
         <div className="flex items-center justify-between gap-3 pt-2 border-t border-[#BFA46A]/60">
           <span className="text-[10px] tracking-[0.12em] uppercase font-semibold text-[#071B33] pt-3">
-            JBJ Global · Dubai
+            JBJ GLOBAL REAL ESTATE · Dubai
           </span>
           <Button
             type="button"

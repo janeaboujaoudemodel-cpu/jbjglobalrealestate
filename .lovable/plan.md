@@ -1,96 +1,42 @@
-## Part 1 — Apply Buttons (public Careers page)
 
-Fix all "Apply" CTAs on the position cards (the 6 default cards AND every additional card revealed by "View all N positions") so they are unmistakably 3D, fully filled navy, white text.
+I'll split this into 4 sequential batches. Each batch ships independently so you can QA before the next one starts. Tell me which batch to start with (or "all in order").
 
-**File:** `src/pages/JoinApplication.tsx` (line ~660)
+## Batch 1 — Public /join wizard + branding sweep (FAST, ~1 pass)
+1. **Wizard step sync bug**: `ApplicationProgress` currently shows step 1 even when on step 5. Fix `activeStep` prop wiring in `JoinApplication.tsx` so clicking a pill jumps to that step, header reads "Step N of 5 — {label}", and progress % = max(validity, (activeStep+1)/5).
+2. **Active vs inactive contrast**: active pill = solid navy `#102540` + white text/icon (force via inline style, bypass contrast guard). Inactive = cream `#F7F2EA` + ink `#1A1A1A` + visible champagne border. Completed = navy check tick (not faded gold).
+3. **Brand sweep**: repo-wide replace `JBJ Global` → `JBJ GLOBAL REAL ESTATE` (job cards, footer, email templates, form labels, badges). Excludes code identifiers/URLs.
+4. **Copy fix**: "Every section above reflects current JBJ operations — not a robot." → "Every section above reflects current JBJ Global Real Estate operations — not a roadmap."
+5. **Fix runtime error**: `CareersPortal.tsx` fails to dynamically import — repair or stub the export so the route stops 500'ing.
 
-- Replace the current outlined/transparent variant with a single solid style:
-  - Background: `#102540` (navy)
-  - Hover: `#1a3d63`
-  - Text + icon: white
-  - 1px gold hairline (`#B89555`), `rounded-lg`, soft drop shadow + inner top highlight for 3D feel (`shadow-[0_4px_10px_-2px_rgba(16,37,64,0.35),inset_0_1px_0_rgba(255,255,255,0.18)]`)
-  - Active press: `translate-y-[1px]` and reduced shadow
-- "Selected" state: same navy fill + white check + label "Selected" (still high contrast, no white-on-light regressions). Tag with `data-allow-dark-cta` + `data-no-contrast-guard` so the global black-CTA guard leaves it alone.
-- Applies automatically to every card (live DB list AND the "View all 21 positions" expansion) since they share this one render block.
+## Batch 2 — Job lifecycle states (public + admin)
+1. Extend `open_positions` with `status` enum: `open | urgent | paused | closed | hidden | featured` + `application_cap` + `applications_count`.
+2. Public `/careers` card: when status ≠ open/urgent/featured, replace "Apply" with disabled "Applications Closed" pill. Show "Urgent Hiring" / "Featured" ribbons.
+3. Owner Careers Portal → **Open Positions** tab: full CRUD with status dropdown, cap, featured toggle. (AI JD generation already in plan.md Part 2c — kept.)
 
-No other field, label, or copy on `/careers` changes.
+## Batch 3 — Applications + CV + Status pipeline backend
+1. **Applications Received** section in Careers Portal: list `hr_applications` (existing table) with filters (role, status, date, nationality, language, source). Drawer view + status changer.
+2. **CVs Received** section: list `hr_cv_submissions`, in-platform PDF preview, download, link to applicant, "AI Summarize CV" button (Lovable AI Gateway, `google/gemini-2.5-flash`).
+3. **Status enum** on `hr_applications`: `new | cv_received | pending_review | shortlisted | interview_scheduled | interview_completed | approved | rejected | kept_in_records | position_closed`. Status change writes `admin_edit_log` (Owner Provenance standard).
+4. **Email templates**: seed 10 templates in existing `email_template_library` (category `careers`, audience `candidate`) — one per status. Status-change drawer has "Send templated email" with AI rewrite (uses existing `send-transactional-email` infra). NO new email system.
+5. Hook public `/join` submit to write both `hr_applications` row + `hr_cv_submissions` row + uploaded CV to existing storage bucket, set status=`new`, fire `application-received` template.
 
----
+## Batch 4 — Jessica candidate interview product (largest)
+1. New public route `/careers/interview/:applicationId` (NOT `/hr-agent` which is owner-only).
+2. UI: video-call shell with Jessica avatar (left), candidate camera tile (right, opt-in via `getUserMedia`), live transcript pane, text input + push-to-talk mic.
+3. New edge function `careers-jessica-interview`: streams from Lovable AI Gateway (`google/gemini-2.5-pro`), system prompt loaded per-job (role, seniority, must-haves). Asks 6–10 role-specific questions, asks for CV if missing, scores 0–100, returns recommendation (`strong_yes | yes | maybe | no`).
+4. New table `hr_interview_sessions`: `application_id`, `transcript jsonb`, `score`, `recommendation`, `summary`, `started_at`, `ended_at`, `consent_camera`, `consent_mic`. RLS: candidate sees own (by application token), owner sees all.
+5. On finish: auto-update `hr_applications.status` → `interview_completed`, attach summary to applicant profile, notify owner inbox.
+6. "Start Conversation" buttons on `/careers` and the Jessica panel route here (NOT `/hr-agent`).
 
-## Part 2 — Careers Portal (owner back-end consolidation)
-
-Build **one** owner-only hub at `/owner/careers-portal` that becomes the single home for every HR / employee / payroll / hiring surface. Today these are scattered across 8+ separate routes; we wire them all in as **sections** first, then retire the standalone routes via redirects (no feature deletion).
-
-### 2a. New route + shell
-
-- New page: `src/pages/owner/CareersPortal.tsx` (guarded by `OwnerGuard`).
-- New route: `/owner/careers-portal` in `src/routes/AdminRoutes.tsx`.
-- Layout = fixed 88px global header + a **second sub-header** (sticky, champagne band, gold hairline) listing every section as tabs/pills. Sub-header sections (initial set, derived from the audit):
-  1. **Overview** — KPIs (open positions, applications this week, headcount, payroll due)
-  2. **Open Positions** — list + create/edit/remove (see 2c)
-  3. **Applications & CVs** — embeds existing `HRDashboard` CV-Center tab
-  4. **Candidates & Interviews** — embeds `hr_candidates`, `hr_interview_assessments` views
-  5. **Hiring Pipeline / Job Offers** — embeds `JobOfferTemplate` + offer workflow
-  6. **Employees** — embeds `EmployeeManagementHub` (roster, journey, activity audit)
-  7. **Onboarding** — embeds `AdminOnboarding` + `hr_employee_onboarding`
-  8. **Payroll & Salaries** — embeds `employee_salaries`, `employee_commissions`, `employee_payment_history`, `employee_earnings_summary` (uses existing salary access audit)
-  9. **Performance & Warnings** — `employee_performance_summary`, warning/disciplinary records
-  10. **Employee Comms** — `EmployeeChatPage`, `employee_emails`, `employee_notifications`
-  11. **HR Agent / AI** — embeds `HRAgent`
-  12. **Audit & Access Logs** — `hr_access_logs`, `hr_audit_logs`, `employee_salary_access_audit`
-
-Section selection driven by `?section=` query param so deep-links survive.
-
-### 2b. Section embedding strategy (NO feature deletion)
-
-Each existing page is refactored into a presentational component (mirroring the existing `EmbeddedHRDashboard`, `EmbeddedEmployeeHub`, `EmbeddedITDepartment` pattern already in `src/components/admin/`). The portal renders these inline. Standalone pages are kept on disk one release, then their routes become `<Navigate to="/owner/careers-portal?section=…" replace />`:
-
-| Old route                                  | Section param                                |
-| ------------------------------------------ | -------------------------------------------- |
-| `/hr-dashboard`                            | `?section=applications`                      |
-| `/employee-management`, `/it-department`   | `?section=employees`                         |
-| `/employee-hub`                            | `?section=employees&view=hub`                |
-| `/employee-chat`                           | `?section=comms`                             |
-| `/hr-agent`                                | `?section=hr-agent`                          |
-| `/owner/job-offer-template`                | `?section=offers`                            |
-| `/admin/onboarding`                        | `?section=onboarding`                        |
-| `/admin/hr`, `/hr-hub`                     | redirect → portal                            |
-
-Each redirect uses `replace` so back-button stays clean. We do NOT delete the page files in this iteration — only after the portal is verified working end-to-end (per the user's instruction "first add them all, then delete").
-
-### 2c. Position management (new in portal)
-
-In the **Open Positions** section, owner can:
-
-- See full list of `open_positions` rows with status (open / closed / draft).
-- **Add new position** dialog — fields: title, department, location, employment type, seniority, salary band, status. On title entry, a **"Generate with AI"** button calls a new edge function `generate-job-description` (model `google/gemini-2.5-pro` via Lovable AI Gateway) which fills: summary, responsibilities, requirements, benefits, ideal-candidate profile, SEO blurb.
-- **Edit position** — same dialog prefilled. Two AI affordances:
-  - **Regenerate** — recompose the full JD.
-  - **Edit with AI** — free-text prompt ("make it more senior", "add Arabic-language requirement", "shorten responsibilities") sent with current JD; AI returns edited JD; owner previews diff → Apply.
-- **Manual edit** — rich-text editor (existing sanitized editor) always available; AI is optional, never forced.
-- **Remove position** — soft-delete (sets `status='archived'`, hides from public Careers page but keeps history for audit).
-- All writes go through Supabase with RLS scoped to owner. Audit row written to `admin_edit_log` per the Owner Provenance standard.
-
-Public Careers page (`/careers`) already reads from `open_positions`, so changes appear live with no further wiring.
-
-### 2d. Audit & cleanup pass
-
-Before shipping, run a repo-wide grep for direct links/buttons pointing at the old standalone HR/employee routes and re-point them to the portal section params. Owner sidebar (`OwnerSidebarNav.tsx`) gets a single **"Careers Portal"** entry replacing the current scattered HR/Employees items (old items stay during transition then are removed in the same PR that flips the redirects).
+## Out of scope (will refuse if mixed in)
+- Building a second careers admin, second CV store, or second email provider — all wiring goes through existing `hr_*` tables, `email_template_library`, and `send-transactional-email`.
+- Changing the global Champagne-Gold / Black-CTA-to-Navy standards.
 
 ---
 
-## Technical Notes
+**Please reply with one of:**
+- `batch 1` / `batch 2` / `batch 3` / `batch 4`
+- `all in order` (I'll ship 1 → 2 → 3 → 4 across separate turns, pausing for your QA between each)
+- specific edits to the plan
 
-- **Tables already present (no migration needed for embedding):** `open_positions`, `hr_cv_submissions`, `hr_applications`, `hr_candidates`, `hr_interview_assessments`, `hr_employees`, `hr_employee_onboarding`, `hr_audit_logs`, `hr_access_logs`, `employee_salaries`, `employee_commissions`, `employee_payment_history`, `employee_performance_summary`, `employee_chat_messages`, `employee_emails`, `employee_notifications`, `employee_activity_audit`, `employee_salary_access_audit`.
-- **Possibly needed (will confirm during build):** add `status` enum + `archived_at` columns to `open_positions` if not present; add `ai_generated`, `ai_last_prompt` provenance columns.
-- **Edge function (new):** `supabase/functions/generate-job-description/index.ts` — Lovable AI Gateway, `requireOwnerAuth`, returns structured JD JSON. No external API key required.
-- **Design tokens:** Portal sub-header uses existing champagne band tokens, navy `#102540` tabs, gold `#B89555` hairline — fully compliant with Champagne-Gold standard and Black-CTA→Navy global rule.
-- **No removal in this PR:** standalone HR/Employee page files remain on disk; only routes redirect. Deletion is a follow-up after portal QA passes.
-
----
-
-## Out of Scope
-
-- No changes to the public `/careers` form fields, labels, search bar, phone input, or any non-Apply visuals.
-- No changes to CRM relationship sub-tabs (Employees view under `/owner/crm` continues to exist and links into the portal).
-- No new auth flows; portal inherits `OwnerGuard`.
+I will NOT start coding Batch 4 (Jessica interview) before Batches 1–3 are merged, because Jessica writes into the `hr_applications` row created in Batch 3.

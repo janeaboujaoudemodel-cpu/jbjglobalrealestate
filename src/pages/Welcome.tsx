@@ -85,7 +85,7 @@ export default function Welcome() {
 
       toast.success(
         <div className="flex flex-col gap-1">
-          <span className="font-semibold">Welcome to JBJ Global!</span>
+          <span className="font-semibold">Welcome to JBJ GLOBAL REAL ESTATE!</span>
           <span className="text-sm text-[#1A1A1A]/70">
             Your {CATEGORIES.find(c => c.id === selected)?.label} experience is ready.
           </span>
@@ -126,7 +126,7 @@ export default function Welcome() {
             <JJLogoImage variant="light" size="md" />
           </div>
           <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
-            Welcome to <span className="text-[#1A1A1A]">JBJ Global</span>
+            Welcome to <span className="text-[#1A1A1A]">JBJ GLOBAL REAL ESTATE</span>
           </h1>
           <p className="text-[#1A1A1A]/70 text-sm">
             {user.email && (

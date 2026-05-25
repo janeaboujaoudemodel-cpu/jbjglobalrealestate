@@ -18,7 +18,7 @@ const REASON_HEADLINES: Record<string, string> = {
   access_portal: "Enter Your Private Portal",
   access_tools: "Unlock Premium AI Tools",
   view_documents: "Access Your Documents",
-  general: "Unlock the Full JBJ Global Experience",
+  general: "Unlock the Full JBJ GLOBAL REAL ESTATE Experience",
 };
 
 const benefits = [

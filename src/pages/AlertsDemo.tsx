@@ -50,7 +50,7 @@ export default function AlertsDemo() {
               />
             </div>
             <div className="mt-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <p className="text-lg font-bold text-white tracking-[0.2em] uppercase">JBJ Global</p>
+              <p className="text-lg font-bold text-white tracking-[0.2em] uppercase">JBJ GLOBAL REAL ESTATE</p>
               <p className="text-sm font-semibold text-[#D4B896] tracking-[0.25em] uppercase mt-1">Real Estate</p>
             </div>
             <button className="mt-8 flex items-center gap-2 px-5 py-2.5 rounded-full border border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] text-sm font-medium">

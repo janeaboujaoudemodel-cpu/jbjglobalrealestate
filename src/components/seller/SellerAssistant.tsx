@@ -107,7 +107,7 @@ STEPS:
 6. Documents Vault - title deed, ID, POA
 7. Review & Submit - final confirmation
 
-COMPANY: JBJ Global Real Estate (never say "JBJ Global" alone)
+COMPANY: JBJ Global Real Estate (never say "JBJ GLOBAL REAL ESTATE" alone)
 SCOPE: Real estate brokerage services only
 GEOGRAPHY: UAE Real Estate (say "Dubai" only when specifically relevant)
 

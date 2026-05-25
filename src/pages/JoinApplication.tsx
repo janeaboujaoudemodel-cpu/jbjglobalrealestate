@@ -535,7 +535,7 @@ export default function JoinApplication() {
                     </p>
                     <div className="pt-4">
                       <Button variant="secondary" size="lg" asChild className="px-8 py-6 text-lg">
-                        <Link to="/">Explore JBJ Global</Link>
+                        <Link to="/">Explore JBJ GLOBAL REAL ESTATE</Link>
                       </Button>
                     </div>
                   </>

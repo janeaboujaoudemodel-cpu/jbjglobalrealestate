@@ -282,7 +282,7 @@ const CompanyCommunicationHub = () => {
                 JJ
               </div>
               <div>
-                <h1 className="font-bold text-sm">JBJ Global</h1>
+                <h1 className="font-bold text-sm">JBJ GLOBAL REAL ESTATE</h1>
                 <p className="text-xs text-white/70">Real Estate</p>
               </div>
             </div>

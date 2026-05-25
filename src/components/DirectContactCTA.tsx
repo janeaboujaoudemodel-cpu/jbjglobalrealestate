@@ -62,7 +62,7 @@ const downloadVCard = () => {
 const shareContact = async () => {
   const shareData = {
     title: 'JBJ Global Real Estate',
-    text: 'Premium Real Estate Brokerage in Dubai - Contact JBJ Global',
+    text: 'Premium Real Estate Brokerage in Dubai - Contact JBJ GLOBAL REAL ESTATE',
     url: SOCIAL_LINKS.website,
   };
 

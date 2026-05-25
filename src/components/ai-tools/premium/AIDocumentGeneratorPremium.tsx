@@ -101,7 +101,7 @@ const DOCUMENT_TYPE_CONFIGS: Record<string, DocTypeConfig> = {
     fields: [
       { key: "clientName", label: "Client Name *", type: "input", placeholder: "e.g. Mr. James Wilson", required: true },
       { key: "clientNationality", label: "Client Nationality", type: "input", placeholder: "e.g. British, Emirati, Indian" },
-      { key: "howTheyFoundUs", label: "How They Found JBJ Global", type: "select", options: ["Bayut / PropertyFinder", "Instagram / Social Media", "Referral from friend", "Walk-in", "Website", "Event / Exhibition", "Google Search", "Other"] },
+      { key: "howTheyFoundUs", label: "How They Found JBJ GLOBAL REAL ESTATE", type: "select", options: ["Bayut / PropertyFinder", "Instagram / Social Media", "Referral from friend", "Walk-in", "Website", "Event / Exhibition", "Google Search", "Other"] },
       { key: "interestedIn", label: "Property Interest", type: "select", options: ["Investment property", "Own use / residence", "Both investment & living", "Commercial space", "Rental property", "Off-plan only", "Ready property only"] },
       { key: "budget", label: "Budget Range", type: "input", placeholder: "e.g. AED 2–4M" },
       { key: "preferredAreas", label: "Preferred Areas / Communities", type: "textarea", placeholder: "e.g. Dubai Marina, Business Bay, Palm Jumeirah", rows: 2 },

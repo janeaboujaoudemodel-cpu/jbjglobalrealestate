@@ -195,7 +195,7 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
                   <Building2 className="w-4 h-4 text-muted-foreground" />
                   <span className="font-semibold text-muted-foreground">Our Sales Office</span>
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">JBJ Global headquarters</p>
+                <p className="text-xs text-muted-foreground mt-1">JBJ GLOBAL REAL ESTATE headquarters</p>
               </label>
               <Badge className="absolute top-2 right-2 bg-amber-500/20 text-amber-700 border-amber-500/30 text-[10px]">
                 <AlertTriangle className="w-3 h-3 mr-1" />

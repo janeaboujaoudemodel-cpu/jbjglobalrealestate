@@ -319,7 +319,7 @@ export default function BrokersRegistry() {
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
       <SEOHead
-        title="Brokers | JBJ Global"
+        title="Brokers | JBJ GLOBAL REAL ESTATE"
         description="Every broker in the market, every company they work for. Searchable, filterable, exportable."
         canonicalPath="/owner/crm/brokers"
       />

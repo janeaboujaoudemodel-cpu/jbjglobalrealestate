@@ -508,7 +508,7 @@ const Documents = () => {
                   <DialogHeader><DialogTitle className="text-[hsl(var(--popover-foreground))]">🔍 Find & Replace</DialogTitle><DialogDescription>Replace text. Enable AI for intelligent replacements.</DialogDescription></DialogHeader>
                   <div className="space-y-3">
                     <div><Label>Find</Label><Input value={findText} onChange={e => setFindText(e.target.value)} placeholder="e.g. XYZ Company" /></div>
-                    <div><Label>Replace with</Label><Input value={replaceText} onChange={e => setReplaceText(e.target.value)} placeholder="e.g. JBJ Global" /></div>
+                    <div><Label>Replace with</Label><Input value={replaceText} onChange={e => setReplaceText(e.target.value)} placeholder="e.g. JBJ GLOBAL REAL ESTATE" /></div>
                     <div className="flex items-center gap-2"><Switch checked={useAiReplace} onCheckedChange={setUseAiReplace} /><Label className="text-sm">AI-powered</Label></div>
                   </div>
                   <DialogFooter><Button onClick={handleFindReplace} disabled={findReplaceLoading || !findText}>{findReplaceLoading ? <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Replacing...</> : "Replace All"}</Button></DialogFooter>

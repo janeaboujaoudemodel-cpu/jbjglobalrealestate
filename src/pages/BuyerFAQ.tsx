@@ -137,7 +137,7 @@ const BuyerFAQ = () => {
       questions: [
         {
           question: "What happens after I complete the purchase?",
-          answer: "After receiving your title deed and keys:\n\n1. Register with the community management / owners' association\n2. Set up DEWA (Dubai Electricity & Water Authority) in your name\n3. Connect internet/TV services (du or Etisalat)\n4. Obtain home insurance (recommended)\n5. If renting out: register the tenancy contract on Ejari and list the property\n6. If living in: complete move-in procedures with building management\n\nJBJ Global assists with post-purchase services including tenant sourcing, property management introductions, and resale strategies."
+          answer: "After receiving your title deed and keys:\n\n1. Register with the community management / owners' association\n2. Set up DEWA (Dubai Electricity & Water Authority) in your name\n3. Connect internet/TV services (du or Etisalat)\n4. Obtain home insurance (recommended)\n5. If renting out: register the tenancy contract on Ejari and list the property\n6. If living in: complete move-in procedures with building management\n\nJBJ GLOBAL REAL ESTATE assists with post-purchase services including tenant sourcing, property management introductions, and resale strategies."
         },
         {
           question: "Can I get a UAE residency visa through property purchase?",
@@ -145,7 +145,7 @@ const BuyerFAQ = () => {
         },
         {
           question: "How do I sell my property in the future?",
-          answer: "When you're ready to sell:\n\n1. Engage a licensed real estate agent (like JBJ Global)\n2. Obtain a valuation to determine market price\n3. List the property on major platforms (Bayut, Property Finder, Dubizzle)\n4. Market through agent networks, social media, and open houses\n5. Negotiate and sign MOU (Form F) with buyer\n6. Obtain NOC from developer\n7. Complete transfer at DLD\n\nFor off-plan properties still under construction, you can assign (flip) the unit to a new buyer, subject to developer approval and applicable fees (typically 2–5% of the purchase price)."
+          answer: "When you're ready to sell:\n\n1. Engage a licensed real estate agent (like JBJ GLOBAL REAL ESTATE)\n2. Obtain a valuation to determine market price\n3. List the property on major platforms (Bayut, Property Finder, Dubizzle)\n4. Market through agent networks, social media, and open houses\n5. Negotiate and sign MOU (Form F) with buyer\n6. Obtain NOC from developer\n7. Complete transfer at DLD\n\nFor off-plan properties still under construction, you can assign (flip) the unit to a new buyer, subject to developer approval and applicable fees (typically 2–5% of the purchase price)."
         }
       ]
     },

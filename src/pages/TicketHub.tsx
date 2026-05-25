@@ -431,7 +431,7 @@ const TicketHub = () => {
 
   return (
     <>
-      <SEOHead title="Support Ticket Hub | JBJ Global" description="Submit a new support ticket or track existing tickets." />
+      <SEOHead title="Support Ticket Hub | JBJ GLOBAL REAL ESTATE" description="Submit a new support ticket or track existing tickets." />
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="pt-8 pb-16 px-4">
           <div className="max-w-5xl mx-auto">

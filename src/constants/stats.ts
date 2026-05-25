@@ -56,7 +56,7 @@ export const CONTACT_INFO = {
   securityEmail: 'SECURITY@JBJ.AE',
   happinessEmail: 'HAPPINESS@JBJ.AE',
   whatsappNumber: '971547167107',
-  whatsappMessage: "Hi JBJ Global Real Estate, I am contacting you from the JBJ Global Digital Platform and would like support with my property enquiry.",
+  whatsappMessage: "Hi JBJ Global Real Estate, I am contacting you from the JBJ GLOBAL REAL ESTATE Digital Platform and would like support with my property enquiry.",
   address: 'Downtown Dubai, UAE',
   inquiryFormUrl: 'https://jbj.ae/property-inquiry-form/',
   companyDescriptor: 'JBJ Global Real Estate',

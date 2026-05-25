@@ -645,7 +645,7 @@ const TeamChat = () => {
             </div>
           )}
           <div className="flex items-center justify-between mt-1.5 px-1">
-            <p className="text-[10px] text-[#1A1A1A]/25">Press Enter to send · Secured by JBJ Global</p>
+            <p className="text-[10px] text-[#1A1A1A]/25">Press Enter to send · Secured by JBJ GLOBAL REAL ESTATE</p>
             {/* Cross-channel toggle — shared component */}
             <CrossChannelToggle
               recipientEmail=""
