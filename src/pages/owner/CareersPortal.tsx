@@ -153,7 +153,7 @@ export default function CareersPortal() {
         <Suspense fallback={<Loading />}>
           {active === "overview"     && <CareersPortalOverview onJump={setSection} />}
           {active === "positions"    && <PositionManager />}
-          {active === "applications" && <CVCenter />}
+          {active === "applications" && <CVCenter userId={user?.id || ""} />}
           {active === "candidates"   && <EmbeddedHRDashboard />}
           {active === "offers"       && <JobOfferTemplate />}
           {active === "employees"    && <EmployeeManagementHub />}
