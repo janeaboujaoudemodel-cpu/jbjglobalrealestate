@@ -515,10 +515,15 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
 
     // Theme-based styling - CHAMPAGNE gradient for light variant, GOLD borders
     const isLight = variant === 'light';
-    const buttonStyles = isLight 
+    const isCareersPhoneInput = className?.includes("careers-phone-input");
+    const buttonStyles = isCareersPhoneInput
+      ? "bg-[#102540] border-2 border-[#102540] text-white hover:bg-[#102540] hover:text-white hover:border-[#102540] focus:border-[#102540]"
+      : isLight 
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555] focus:border-[#B89555]"
       : "bg-[#1A1A1A] border border-[#B89555]/50 text-white hover:bg-[#1A1A1A] hover:text-[#1A1A1A] hover:border-[#B89555] focus:border-[#B89555]";
-    const inputStyles = isLight
+    const inputStyles = isCareersPhoneInput
+      ? "bg-[#FDFBF7] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/60 focus:border-[#102540] hover:border-[#102540]"
+      : isLight
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] hover:border-[#B89555]"
       : "bg-[#1A1A1A] border-2 border-[#B89555]/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] hover:border-[#B89555]";
     const popoverStyles = isLight
@@ -566,7 +571,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                   <span className="text-xl">{currentCountry.flag}</span>
                   <span className="font-medium">{currentCode}</span>
                 </span>
-                <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-50" />
+                <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-100" style={{ color: isCareersPhoneInput ? "#FFFFFF" : undefined, stroke: isCareersPhoneInput ? "#FFFFFF" : undefined }} />
               </Button>
             </PopoverTrigger>
             <PopoverContent 
