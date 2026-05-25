@@ -1167,42 +1167,42 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               to="/contact"
               data-no-contrast-guard
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
-              style={{ color: '#1A1A1A', borderColor: '#D4B896', backgroundColor: '#F7F2EA' }}
+              style={{ color: '#102540', borderColor: '#102540', backgroundColor: '#F7F2EA' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#FDFBF7';
-                e.currentTarget.style.borderColor = '#E2C9A0';
+                e.currentTarget.style.borderColor = '#102540';
                 e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(212,184,150,0.55), 0 0 0 1px rgba(226,201,160,0.50)';
                 e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#F7F2EA';
-                e.currentTarget.style.borderColor = '#D4B896';
+                e.currentTarget.style.borderColor = '#102540';
                 e.currentTarget.style.boxShadow = 'none';
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#C9A86A' }} />
+              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#102540' }} />
               <span style={{ color: 'inherit' }}>Contact</span>
             </Link>
             <Link
               to="/ticket-hub"
               data-no-contrast-guard
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
-              style={{ color: '#1A1A1A', borderColor: '#D4B896', backgroundColor: '#F7F2EA' }}
+              style={{ color: '#102540', borderColor: '#102540', backgroundColor: '#F7F2EA' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#FDFBF7';
-                e.currentTarget.style.borderColor = '#E2C9A0';
+                e.currentTarget.style.borderColor = '#102540';
                 e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(212,184,150,0.55), 0 0 0 1px rgba(226,201,160,0.50)';
                 e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#F7F2EA';
-                e.currentTarget.style.borderColor = '#D4B896';
+                e.currentTarget.style.borderColor = '#102540';
                 e.currentTarget.style.boxShadow = 'none';
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#C9A86A' }} />
+              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#102540' }} />
               <span style={{ color: 'inherit' }}>Support</span>
             </Link>
           </div>
@@ -1211,9 +1211,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               data-no-contrast-guard
               onClick={() => { supabase.auth.signOut(); }}
               className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[4px] rounded-lg border w-full group"
-              style={{ color: '#B91C1C', borderColor: 'rgba(185,28,28,0.35)', backgroundColor: 'rgba(185,28,28,0.04)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#B91C1C'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#B91C1C'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(185,28,28,0.04)'; e.currentTarget.style.color = '#B91C1C'; e.currentTarget.style.borderColor = 'rgba(185,28,28,0.35)'; }}
+              style={{ color: '#102540', borderColor: 'rgba(16,37,64,0.55)', backgroundColor: 'rgba(16,37,64,0.04)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(16,37,64,0.08)'; e.currentTarget.style.color = '#102540'; e.currentTarget.style.borderColor = '#102540'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(16,37,64,0.04)'; e.currentTarget.style.color = '#102540'; e.currentTarget.style.borderColor = 'rgba(16,37,64,0.55)'; }}
             >
               <LogOut className="w-3 h-3" style={{ color: 'inherit' }} />
               <span style={{ color: 'inherit' }}>Sign Out</span>
