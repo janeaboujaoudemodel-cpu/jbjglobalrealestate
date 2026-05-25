@@ -34,6 +34,13 @@ const royalTools: RoyalTool[] = [
   { id: "logo-creator",        name: "AI Logo Maker",        description: "Generate a polished brand logo with AI assistance.",    icon: Wand2,      href: "/toolkit/corporate-suite/logo-creator",  cta: "Create Logo",     image: "/services/general-inquiries-bg.jpg" },
 ];
 
+const GOLD_HOVER_IDS = new Set([
+  "property-comparison",
+  "ai-home-finder",
+  "list-property-sale",
+  "list-property-rent",
+]);
+
 export function ToolkitShowcaseCard() {
   const visibility = useToolVisibility();
   const tools = royalTools.filter(t => isApprovedPublicToolId(t.id) && visibility.isPublic(t.id));
