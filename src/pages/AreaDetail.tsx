@@ -294,7 +294,7 @@ const AreaDetail = () => {
               </Link>
               <Link to="/contact">
                 <Button variant="secondary" className="border-2 border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white px-8 py-6 text-base font-bold transition-all duration-300 rounded-xl bg-transparent">
-                  <Phone className="w-5 h-5 mr-2" />
+                  <Phone className="w-5 h-5 mr-2 text-[#B89555]" />
                   Contact Us
                 </Button>
               </Link>
