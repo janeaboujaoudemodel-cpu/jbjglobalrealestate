@@ -18,7 +18,9 @@ import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { FounderContent } from "@/components/FounderContent";
+import { ToolHero } from "@/components/tools/ToolHero";
+import { PoweredByJBJ } from "@/components/tools/PoweredByJBJ";
+import { toolThemes, TOOL_GOLD, TOOL_PAGE_BG } from "@/components/tools/toolThemes";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
 
 interface PropertyDetails {
@@ -295,42 +297,22 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
-      {/* Hero Section with Video */}
-      <div className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
-        <VideoBackground 
-          src="/videos/burj-khalifa-day-to-night.mp4"
-          poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
-          opacity={0.3}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-950/80 via-black/70 to-black" />
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative text-center px-4 py-16"
-        >
-          <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/40 rounded-full px-4 py-2 mb-6">
-            <Sparkles className="w-5 h-5 text-blue-400" />
-            <span className="text-blue-300 text-sm font-semibold">AI-Powered Valuation</span>
-          </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
-            Property <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Evaluator</span>
-          </h1>
-          <p className="text-xl text-white/85 max-w-2xl mx-auto mb-2">
-            Get an AI-powered property valuation based on DLD transaction data, RERA Rental Index, and institutional market analysis.
-          </p>
-          <p className="text-sm text-white/90 max-w-xl mx-auto">
-            Sources: DLD Public Records · RERA · JBJ Analysis Framework
-          </p>
-          <FounderContent>
-            <div className="text-center mt-4">
-              <p className="text-white/85 text-sm font-medium">Jane Bou Jaoude</p>
-              <p className="text-blue-400 text-xs mt-0.5">Founder & CEO</p>
-              <p className="text-white/90 text-xs mt-0.5">JBJ Global Real Estate</p>
-            </div>
-          </FounderContent>
-        </motion.div>
-      </div>
+    <section className="min-h-screen" style={{ background: TOOL_PAGE_BG }}>
+      <ToolHero
+        theme={toolThemes.navy}
+        eyebrowIcon={Sparkles}
+        eyebrow="AI-Powered Valuation"
+        title={
+          <>
+            Property <span style={{ color: TOOL_GOLD }}>Evaluator</span>
+          </>
+        }
+        subtitle="AI-powered valuation built on DLD transaction data, RERA Rental Index and institutional market analysis."
+      >
+        <div className="mt-6">
+          <PoweredByJBJ onDark className="justify-start" />
+        </div>
+      </ToolHero>
 
       <div className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
