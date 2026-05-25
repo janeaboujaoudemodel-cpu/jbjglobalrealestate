@@ -761,7 +761,12 @@ export default function JoinApplication() {
                       done: !!formData.consentAccurate && !!formData.consentTerms,
                     },
                   ]}
+                  activeStep={currentStep}
+                  onStepClick={goToStep}
                 />
+
+                {/* Step 0 — Personal */}
+                <div className={currentStep === 0 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
 
                 {/* Honeypot */}
                 <div className="hidden" aria-hidden="true">
