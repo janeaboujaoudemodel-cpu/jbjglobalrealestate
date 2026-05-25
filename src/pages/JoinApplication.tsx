@@ -893,6 +893,11 @@ export default function JoinApplication() {
                   </div>
                 </div>
 
+                </div>
+                {/* End of step 1 (Location & Language) */}
+
+                {/* Step 2 — Role & Experience */}
+                <div className={currentStep === 2 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
                 {/* Position fallback (only when no DB positions) */}
                 {openPositions.length === 0 && (
                   <div className="space-y-2">
