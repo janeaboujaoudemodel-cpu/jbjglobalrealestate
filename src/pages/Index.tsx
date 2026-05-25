@@ -432,6 +432,18 @@ const Index = () => {
         </LazyVisible>
       </PremiumSectionCard>
 
+      {/* READY TO GET STARTED — restored under Top Areas */}
+      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-8">
+        <LazyVisible minHeight={300}>
+          <Suspense fallback={<SectionLoader />}>
+            <CTABand />
+          </Suspense>
+        </LazyVisible>
+      </PremiumSectionCard>
+
+
+
+
 
 
       <Suspense fallback={null}>
