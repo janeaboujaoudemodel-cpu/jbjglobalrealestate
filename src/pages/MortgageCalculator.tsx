@@ -165,19 +165,14 @@ const MortgageCalculatorPage = () => {
             <p className="text-[#1A1A1A]/70 text-lg mb-8">
               Speak with our mortgage advisors today and get personalized guidance for your property investment financing needs.
             </p>
-            <button 
+            <button
               onClick={() => setIsInquiryOpen(true)}
-              className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold transition-all duration-300 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#B89555]/60 hover:scale-[1.02] transform active:scale-95 group text-[#1A1A1A]"
-              style={{
-                boxShadow: `
-                  0 10px 30px rgba(200,167,102,0.3),
-                  0 6px 15px rgba(0,0,0,0.15),
-                  0 0 20px rgba(200,167,102,0.2)
-                `,
-              }}
+              data-allow-dark-cta
+              data-on-dark
+              className="allow-white relative inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold rounded-lg transition-all duration-300 bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/60 text-white hover:scale-[1.02] transform active:scale-95 group shadow-[0_10px_30px_rgba(16,37,64,0.35)]"
             >
-              <span className="font-bold group-hover:text-[#1A1A1A] transition-colors">{t('mortgage.contactAdvisor')}</span>
-              <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <span className="font-bold text-white">{t('mortgage.contactAdvisor')}</span>
+              <ArrowUpRight className="w-5 h-5 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </button>
           </div>
         </div>
