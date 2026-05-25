@@ -279,15 +279,7 @@ const Index = () => {
         <DeveloperPartnersMarquee />
       </Suspense>
 
-      {/* CATEGORY SELECTOR — I'm an Investor / Broker / Developer */}
-      <div id="category-selector" className="py-8">
-        <Suspense fallback={<SectionLoader />}>
-          <CategorySelectorSection />
-        </Suspense>
-      </div>
-
-
-      {/* VERIFICATION BANNER */}
+      {/* VERIFICATION BANNER — sits immediately under the marquee */}
       <PremiumSectionCard padding="none" width="full" wrapperClassName="py-8">
         <Suspense fallback={null}>
           <VerificationBanner />
@@ -296,6 +288,14 @@ const Index = () => {
           <PartnerVerifyHeroCTA />
         </Suspense>
       </PremiumSectionCard>
+
+      {/* CATEGORY SELECTOR — I'm an Investor / Broker / Developer */}
+      <div id="category-selector" className="py-8">
+        <Suspense fallback={<SectionLoader />}>
+          <CategorySelectorSection />
+        </Suspense>
+      </div>
+
 
       {/* DEVELOPER PORTAL CTA */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
