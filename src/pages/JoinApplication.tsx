@@ -14,6 +14,7 @@ import {
   User, Phone, Mail, MapPin, Star, Search, ChevronDown, ChevronUp,
 } from "lucide-react";
 import { CONTACT_INFO } from "@/constants/stats";
+import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { SearchableSelect } from "@/components/ui/searchable-select";
 
@@ -41,9 +42,19 @@ const NATIONALITIES = [
   "Ukrainian", "Uruguayan", "Uzbek", "Venezuelan", "Vietnamese", "Yemeni", "Zambian", "Zimbabwean",
 ];
 
-const LANGUAGES = [
-  "English", "Arabic", "Hindi", "Urdu", "Chinese", "Russian",
-  "French", "German", "Spanish", "Portuguese", "Persian (Farsi)", "Turkish",
+const LANGUAGES = getLanguageList();
+
+const UAE_CITIES = [
+  "Abu Dhabi",
+  "Ajman",
+  "Al Ain",
+  "Dubai",
+  "Fujairah",
+  "Kalba",
+  "Khor Fakkan",
+  "Ras Al Khaimah",
+  "Sharjah",
+  "Umm Al Quwain",
 ];
 
 // Map display name -> ISO-ish code we persist in DB
@@ -65,21 +76,7 @@ const FALLBACK_POSITIONS: { value: string; label: string; department: string; is
   { value: "other", label: "Other – General Application", department: "General", is_broker_role: false },
 ];
 
-const COUNTRIES = [
-  "Afghanistan", "Albania", "Algeria", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
-  "Bahrain", "Bangladesh", "Belgium", "Bolivia", "Bosnia", "Brazil", "Bulgaria", "Cambodia",
-  "Cameroon", "Canada", "Chile", "China", "Colombia", "Croatia", "Cuba", "Czech Republic",
-  "Denmark", "Ecuador", "Egypt", "Estonia", "Ethiopia", "Finland", "France", "Georgia",
-  "Germany", "Ghana", "Greece", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq",
-  "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kuwait",
-  "Latvia", "Lebanon", "Libya", "Lithuania", "Luxembourg", "Malaysia", "Maldives", "Malta",
-  "Mexico", "Moldova", "Mongolia", "Morocco", "Nepal", "Netherlands", "New Zealand", "Nigeria",
-  "Norway", "Oman", "Pakistan", "Palestine", "Panama", "Peru", "Philippines", "Poland",
-  "Portugal", "Qatar", "Romania", "Russia", "Saudi Arabia", "Serbia", "Singapore", "Slovakia",
-  "Slovenia", "South Africa", "South Korea", "Spain", "Sri Lanka", "Sudan", "Sweden", "Switzerland",
-  "Syria", "Taiwan", "Thailand", "Tunisia", "Turkey", "Ukraine", "United Arab Emirates",
-  "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe",
-];
+const COUNTRIES = getCountryList();
 
 // ---- Department classifier ----
 type QualKind = "sales" | "marketing" | "hr_ops" | "tech" | "general";
@@ -750,8 +747,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                       placeholder="e.g. Sarah"
                       disabled={loading}
-                      className="careers-blue-field bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
-                      style={{ border: "2px solid #102540", boxShadow: "none" }}
+                      className="careers-blue-field bg-[#F7F2EA] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 h-12 rounded-lg text-base"
                     />
                   </div>
                   <div className="space-y-2">
@@ -762,8 +758,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                       placeholder="e.g. Khan"
                       disabled={loading}
-                      className="careers-blue-field bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
-                      style={{ border: "2px solid #102540", boxShadow: "none" }}
+                      className="careers-blue-field bg-[#F7F2EA] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 h-12 rounded-lg text-base"
                     />
                   </div>
                 </div>
@@ -777,8 +772,7 @@ export default function JoinApplication() {
                     value={user?.email || ""}
                     placeholder="you@email.com"
                     disabled
-                    className="careers-blue-field bg-[#F7F2EA] border-2 border-[#102540] text-[#1A1A1A] h-11 text-base"
-                    style={{ border: "2px solid #102540", boxShadow: "none" }}
+                    className="careers-blue-field bg-[#F7F2EA] border-2 border-[#102540] text-[#102540] h-12 rounded-lg text-base"
                   />
                   <p className="text-xs text-[#102540] font-bold">Email is linked to your account</p>
                 </div>
@@ -806,9 +800,9 @@ export default function JoinApplication() {
                       options={NATIONALITIES}
                       placeholder="Select nationality"
                       searchPlaceholder="Search nationality..."
-                      flagType="country"
+                      flagType="nationality"
                       disabled={loading}
-                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540]"
+                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540] bg-[#F7F2EA] h-12 rounded-lg"
                     />
                   </div>
                   <div className="space-y-2">
@@ -821,7 +815,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search language..."
                       flagType="language"
                       disabled={loading}
-                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540]"
+                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540] bg-[#F7F2EA] h-12 rounded-lg"
                     />
                   </div>
                 </div>
@@ -838,21 +832,21 @@ export default function JoinApplication() {
                       searchPlaceholder="Search country..."
                       flagType="country"
                       disabled={loading}
-                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540]"
+                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540] bg-[#F7F2EA] h-12 rounded-lg"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="city" className="text-sm font-semibold text-[#1A1A1A]">City</Label>
-                    <Input
-                      id="city"
+                    <Label className="text-sm font-semibold text-[#1A1A1A]">City</Label>
+                    <SearchableSelect
                       value={formData.city}
-                      onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                      placeholder="e.g. Dubai"
+                      onChange={(v) => setFormData({ ...formData, city: v })}
+                      options={UAE_CITIES}
+                      placeholder="Select city"
+                      searchPlaceholder="Search UAE city..."
+                      showFlags={false}
                       disabled={loading}
-                      className="careers-blue-field bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base focus-visible:ring-[#102540]/40"
-                      style={{ border: "2px solid #102540", boxShadow: "none" }}
+                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540] bg-[#F7F2EA] h-12 rounded-lg"
                     />
-
                   </div>
                 </div>
 
