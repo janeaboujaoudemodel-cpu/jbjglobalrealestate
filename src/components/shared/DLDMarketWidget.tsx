@@ -238,10 +238,11 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Header */}
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 bg-[#F7F2EA] border border-[#B89555]/40 rounded-full px-4 py-1.5 mb-4">
-              <Banknote className="w-4 h-4 text-[#B89555]" />
-              <span className="text-[#B89555] text-xs uppercase tracking-[0.2em] font-semibold">Live Market Data</span>
+            <div data-allow-dark-cta data-no-contrast-guard className="allow-white inline-flex items-center gap-2 bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/60 rounded-full px-4 py-1.5 mb-4 transition-colors">
+              <Banknote className="w-4 h-4 text-white" />
+              <span className="text-white text-xs uppercase tracking-[0.2em] font-semibold">Live Market Data</span>
             </div>
+
             <h2 className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-2">
               Dubai Market Intelligence
             </h2>
