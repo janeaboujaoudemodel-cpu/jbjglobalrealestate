@@ -68,27 +68,30 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
               type={clickable ? "button" : undefined}
               onClick={clickable ? () => onStepClick!(idx) : undefined}
               className={cn(
-                "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition",
+                "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition allow-white",
                 clickable && "cursor-pointer hover:-translate-y-0.5",
                 isActive
-                  ? "border-[#102540] bg-[#102540] text-white shadow-[0_4px_14px_-6px_rgba(16,37,64,0.55)]"
+                  ? "border-[#102540] bg-[#102540] shadow-[0_4px_14px_-6px_rgba(16,37,64,0.55)]"
                   : s.done
                   ? "border-emerald-600/40 bg-emerald-50 text-emerald-800"
-                  : "border-[#102540]/25 bg-[#FDFBF7] text-[#102540]/80"
+                  : "border-[#B89555]/55 bg-[#FDFBF7] text-[#1A1A1A] hover:border-[#B89555] hover:bg-[#FDFBF7]"
               )}
+
+              style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
               data-allow-dark-cta={isActive ? "" : undefined}
               data-no-contrast-guard={isActive ? "" : undefined}
             >
               {s.done && !isActive ? (
                 <CheckCircle2 className="h-3.5 w-3.5" />
               ) : (
-                <span className="grid h-3.5 w-3.5 place-items-center">{s.icon}</span>
+                <span className="grid h-3.5 w-3.5 place-items-center" style={isActive ? { color: "#FFFFFF" } : undefined}>{s.icon}</span>
               )}
-              <span>
+              <span style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>
                 <span className="opacity-70 mr-1">{idx + 1}.</span>
                 {s.label}
               </span>
             </Tag>
+
           );
         })}
       </div>

@@ -1191,7 +1191,7 @@ export default function JoinApplication() {
                       disabled={loading}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="sm:w-48 h-12 rounded-xl border border-[#B89555] bg-[#102540] hover:bg-[#1a3d63] text-white font-semibold"
+                      className="sm:w-48 h-12 rounded-xl border border-[#B89555] !bg-[#102540] hover:!bg-[#1a3d63] !text-white font-semibold"
                     >
                       Continue <ArrowRight className="w-4 h-4 ml-1.5" />
                     </Button>
@@ -1201,7 +1201,8 @@ export default function JoinApplication() {
                       disabled={loading}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="sm:flex-1 h-14 rounded-xl border border-[#B89555] bg-[#102540] hover:bg-[#1a3d63] text-white font-bold text-base sm:text-lg"
+                      className="sm:flex-1 h-14 rounded-xl border border-[#B89555] !bg-[#102540] hover:!bg-[#1a3d63] !text-white font-bold text-base sm:text-lg"
+
                     >
                       {loading ? (
                         <>

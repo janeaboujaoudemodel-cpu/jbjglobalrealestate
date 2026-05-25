@@ -598,3 +598,28 @@
   }
 }
 
+/* ============================================================
+ * CAREERS — HARD WHITE-ON-NAVY OVERRIDE
+ * Highest-specificity safety net. The global same-tone contrast
+ * guard is documented to spare elements carrying [data-allow-dark-cta]
+ * or [data-no-contrast-guard], but a few descendants still slip
+ * through. Lock the foreground colour for any dark CTA inside the
+ * careers page so the button text NEVER disappears again.
+ * ============================================================ */
+[data-careers-page] [data-allow-dark-cta],
+[data-careers-page] [data-allow-dark-cta] *:not(svg),
+[data-careers-page] [data-no-contrast-guard][data-allow-dark-cta],
+[data-careers-page] [data-no-contrast-guard][data-allow-dark-cta] *:not(svg),
+[data-careers-page] .allow-white,
+[data-careers-page] .allow-white * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+[data-careers-page] [data-allow-dark-cta] svg,
+[data-careers-page] .allow-white svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+
