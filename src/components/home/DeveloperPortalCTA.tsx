@@ -274,7 +274,6 @@ const DeveloperPortalCTA = () => {
           </div>
           </div>
         </div>
-      </div>
     </section>
 
   );
