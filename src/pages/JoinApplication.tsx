@@ -23,6 +23,7 @@ import PremiumJobCard, { type JobCardTag } from "@/components/careers/PremiumJob
 import PremiumCVUpload from "@/components/careers/PremiumCVUpload";
 import ApplicationProgress, { STEP_ICONS } from "@/components/careers/ApplicationProgress";
 import SelectedRoleChip from "@/components/careers/SelectedRoleChip";
+import CareersEcosystem from "@/components/careers/CareersEcosystem";
 
 interface OpenPosition {
   id: string;
@@ -1109,6 +1110,8 @@ export default function JoinApplication() {
 
         </div>
       </section>
+
+      <CareersEcosystem />
     </div>
   );
 }
