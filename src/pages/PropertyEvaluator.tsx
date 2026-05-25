@@ -309,8 +309,20 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
         }
         subtitle="AI-powered valuation built on DLD transaction data, RERA Rental Index and institutional market analysis."
       >
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           <PoweredByJBJ onDark className="justify-start" />
+          <a
+            href="/sell/valuation"
+            data-allow-dark-cta
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-[0.14em] text-white transition-colors"
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              border: `1px solid ${TOOL_GOLD}66`,
+            }}
+          >
+            <Info className="w-3.5 h-3.5" style={{ color: TOOL_GOLD }} />
+            Read more · Valuation & Strategic Pricing Advisory
+          </a>
         </div>
       </ToolHero>
 
