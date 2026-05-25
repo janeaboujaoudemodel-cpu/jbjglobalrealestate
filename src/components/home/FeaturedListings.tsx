@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 import { Home, ArrowRight, Building2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PearlButton } from "@/components/ui/pearl-button";
 import ProjectCard from "@/components/ProjectCard";
 import { useHandpickedProjects } from "@/hooks/useHandpickedProjects";
 
