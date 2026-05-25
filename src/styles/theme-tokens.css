@@ -622,4 +622,31 @@
   stroke: #FFFFFF !important;
 }
 
+/* ─────────────────────────────────────────────
+   Careers — contrast and hierarchy reinforcement
+   Tightens the remaining washed-out states without introducing
+   a second visual system.
+   ───────────────────────────────────────────── */
+[data-careers-page] [data-careers-hero] a[href="#open-positions"],
+[data-careers-page] form button[type="submit"],
+[data-careers-page] form button[type="button"][data-allow-dark-cta],
+[data-careers-page] #open-positions button[data-allow-dark-cta] {
+  background: linear-gradient(180deg, #143052 0%, #102540 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+[data-careers-page] #open-positions [class*="rounded-2xl border bg-"][class*="cursor-pointer"] {
+  backdrop-filter: blur(2px);
+}
+
+[data-careers-page] form > div:last-of-type > p {
+  color: #102540 !important;
+  -webkit-text-fill-color: #102540 !important;
+}
+
+[data-careers-page] section button[aria-expanded="true"] + div {
+  background: linear-gradient(180deg, rgba(247,242,234,0.45), rgba(239,230,214,0.28)) !important;
+}
+
 
