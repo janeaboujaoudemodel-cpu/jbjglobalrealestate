@@ -655,8 +655,7 @@ const Favorites = () => {
             </div>
 
             <p className="text-[#1A1A1A]/30 text-xs text-center leading-relaxed">
-              Software developed and implemented by The Founder & CEO, Jane Bou Jaoude<br />
-              Designed exclusively for JBJ Global Real Estate
+              Powered by JBJ Global Real Estate
             </p>
           </div>
         </DialogContent>
