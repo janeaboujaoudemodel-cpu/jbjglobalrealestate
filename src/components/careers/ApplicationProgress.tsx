@@ -82,7 +82,7 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
               data-no-contrast-guard={isActive ? "" : undefined}
             >
               {s.done && !isActive ? (
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#7A5C28]" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#102540]" />
               ) : (
                 <span className="grid h-4.5 w-4.5 place-items-center text-[#1A1A1A]" style={isActive ? { color: "#FFFFFF" } : undefined}>{s.icon}</span>
               )}

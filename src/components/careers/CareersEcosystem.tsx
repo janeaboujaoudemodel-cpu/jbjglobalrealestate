@@ -116,7 +116,7 @@ export function CareersEcosystem() {
         </div>
 
         <p className="mt-12 text-center text-sm font-semibold text-[#102540]/80">
-          Every section above reflects current JBJ operations — not a roadmap.
+          Every section above reflects current JBJ Global Real Estate operations — not a roadmap.
         </p>
       </div>
     </section>
