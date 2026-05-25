@@ -20,6 +20,8 @@ import { SearchableSelect } from "@/components/ui/searchable-select";
 import PremiumCareersHero from "@/components/careers/PremiumCareersHero";
 import JessicaAIPanel from "@/components/careers/JessicaAIPanel";
 import PremiumJobCard, { type JobCardTag } from "@/components/careers/PremiumJobCard";
+import PremiumCVUpload from "@/components/careers/PremiumCVUpload";
+import ApplicationProgress, { STEP_ICONS } from "@/components/careers/ApplicationProgress";
 
 interface OpenPosition {
   id: string;
