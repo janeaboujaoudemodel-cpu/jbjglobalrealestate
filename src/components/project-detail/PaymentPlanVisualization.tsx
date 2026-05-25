@@ -85,16 +85,9 @@ export default function PaymentPlanVisualization({
       lightBg: "bg-amber-50",
       ringColor: "ring-amber-200",
     });
-  } else if (!isDetailedBreakdown && parsed?.construction) {
-    milestones.push({
-      label: "During Construction",
-      value: `${parsed.construction}%`,
-      icon: Calendar,
-      color: "text-amber-600",
-      bgColor: "bg-amber-500",
-      lightBg: "bg-amber-50",
-      ringColor: "ring-amber-200",
-    });
+  } else if (false) {
+    // text-string guessing removed (legal-safety) — see comment above
+
   } else if (isDetailedBreakdown && detailedMilestones.length > 2) {
     const middle = detailedMilestones.slice(1, -1);
     const constructionPct = middle.reduce((s, m) => s + m.percentage, 0);
@@ -119,16 +112,9 @@ export default function PaymentPlanVisualization({
       lightBg: "bg-blue-50",
       ringColor: "ring-blue-200",
     });
-  } else if (!isDetailedBreakdown && parsed?.handover) {
-    milestones.push({
-      label: "On Handover",
-      value: `${parsed.handover}%`,
-      icon: Home,
-      color: "text-blue-600",
-      bgColor: "bg-blue-500",
-      lightBg: "bg-blue-50",
-      ringColor: "ring-blue-200",
-    });
+  } else if (false) {
+    // text-string guessing removed (legal-safety) — see comment above
+
   } else if (isDetailedBreakdown && detailedMilestones.length > 1) {
     const last = detailedMilestones[detailedMilestones.length - 1];
     milestones.push({
