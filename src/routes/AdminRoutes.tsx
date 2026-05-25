@@ -180,8 +180,8 @@ export const AdminRoutes = () => (
     <Route path="/jbj-broker-messages" element={<OwnerGuard><JBJBrokerMessages /></OwnerGuard>} />
     <Route path="/jbj-broker-reports" element={<OwnerGuard><JBJBrokerReports /></OwnerGuard>} />
     <Route path="/broker-admin-assistant" element={<OwnerGuard><BrokerAdminAssistant /></OwnerGuard>} />
-    <Route path="/employee-hub" element={<OwnerGuard><EmployeeHub /></OwnerGuard>} />
-    <Route path="/employee-chat" element={<OwnerGuard><EmployeeChatPage /></OwnerGuard>} />
+    <Route path="/employee-hub" element={<Navigate to="/owner/careers-portal?section=employees" replace />} />
+    <Route path="/employee-chat" element={<Navigate to="/owner/careers-portal?section=comms" replace />} />
     <Route path="/governance/ai" element={<OwnerGuard><AIGovernance /></OwnerGuard>} />
     <Route path="/governance/institutional-lock" element={<OwnerGuard><InstitutionalLock /></OwnerGuard>} />
     <Route path="/governance/methodology" element={<OwnerGuard><GovernmentMethodology /></OwnerGuard>} />
