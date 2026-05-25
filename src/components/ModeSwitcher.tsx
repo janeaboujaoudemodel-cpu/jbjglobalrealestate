@@ -254,14 +254,13 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               const isHovered = hoveredMode === modeKey;
 
               const rowStyle: CSSProperties = {
-                backgroundImage: isHovered
+                backgroundImage: isActive
+                  ? `linear-gradient(135deg, ${config.rowTo} 0%, ${config.rowHover} 100%)`
+                  : isHovered
                   ? `linear-gradient(135deg, ${config.rowTo} 0%, ${config.rowHover} 100%)`
                   : `linear-gradient(135deg, ${config.rowFrom} 0%, ${config.rowTo} 100%)`,
                 borderColor: config.base,
                 color: config.dark,
-                // Thin 1px outer ring when active, plus the 3px inset left rail
-                // in the mode tone. Keeps the card clearly active without a
-                // chunky black box around it.
                 boxShadow: isActive
                   ? `inset 3px 0 0 ${config.base}, 0 0 0 1px ${config.base}`
                   : `inset 3px 0 0 ${config.base}`,
