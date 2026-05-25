@@ -210,4 +210,82 @@
   stroke: #FFFFFF !important;
 }
 
+/* ============================================================
+ * GLOBAL FORM STANDARD — JBJ Navy Form
+ * Opt in by adding `data-jbj-form` to a form, section or page.
+ * Mirrors the Careers form: champagne fields, navy borders,
+ * navy labels, h-12 / rounded-lg. Layout/widths stay up to the
+ * consuming page — only the shape, color and chrome are
+ * standardised so every form across the product matches.
+ * ============================================================ */
+
+[data-jbj-form] label {
+  color: #102540 !important;
+  -webkit-text-fill-color: #102540 !important;
+  font-weight: 600 !important;
+}
+[data-jbj-form] label[for*="consent"],
+[data-jbj-form] label[for*="terms"],
+[data-jbj-form] label[for*="agree"] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  font-weight: 400 !important;
+}
+
+[data-jbj-form] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]):not([type="color"]),
+[data-jbj-form] textarea,
+[data-jbj-form] select,
+[data-jbj-form] button[role="combobox"],
+[data-jbj-form] [data-jbj-field] {
+  background-color: #F7F2EA !important;
+  border: 2px solid #102540 !important;
+  border-radius: 0.5rem !important;
+  color: #102540 !important;
+  -webkit-text-fill-color: #102540 !important;
+  box-shadow: none !important;
+  min-height: 3rem;
+}
+
+[data-jbj-form] input::placeholder,
+[data-jbj-form] textarea::placeholder {
+  color: rgba(16, 37, 64, 0.55) !important;
+  -webkit-text-fill-color: rgba(16, 37, 64, 0.55) !important;
+  opacity: 1 !important;
+}
+
+[data-jbj-form] input:focus,
+[data-jbj-form] input:focus-visible,
+[data-jbj-form] textarea:focus,
+[data-jbj-form] textarea:focus-visible,
+[data-jbj-form] select:focus,
+[data-jbj-form] button[role="combobox"]:focus,
+[data-jbj-form] button[role="combobox"]:focus-visible {
+  outline: none !important;
+  border-color: #102540 !important;
+  box-shadow: 0 0 0 3px rgba(16, 37, 64, 0.18) !important;
+}
+
+[data-jbj-form] [data-jbj-dropzone] {
+  border: 2px dashed #102540 !important;
+  border-radius: 0.5rem !important;
+  background-color: #F7F2EA !important;
+  color: #102540 !important;
+}
+
+[data-jbj-form] [data-phone-code-trigger] {
+  background-color: #102540 !important;
+  border: 2px solid #102540 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+[data-jbj-form] [data-phone-code-trigger] span,
+[data-jbj-form] [data-phone-code-trigger] svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+
 
