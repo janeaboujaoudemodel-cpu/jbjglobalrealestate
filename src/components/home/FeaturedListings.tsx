@@ -25,9 +25,16 @@ const FeaturedListings = () => {
         <div className="rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)] p-5 md:p-8">
           {/* Section Header */}
           <div className="text-center mb-8">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-              <Home className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-              <span className="text-[#1A1A1A]">{t("featured.title", "Featured Properties")}</span>
+            <span
+              data-surface="dark"
+              data-on-dark
+              data-no-contrast-guard
+              data-allow-dark-cta
+              className="allow-white inline-flex items-center gap-2 px-4 py-2 bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/50 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4 transition-colors"
+              style={{ color: "#FFFFFF" }}
+            >
+              <Home className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>{t("featured.title", "Featured Properties")}</span>
             </span>
             <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
               {t("featured.heading", "Handpicked For You")}
