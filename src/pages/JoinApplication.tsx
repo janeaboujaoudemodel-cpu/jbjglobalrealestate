@@ -607,7 +607,7 @@ export default function JoinApplication() {
                   Tap <strong className="text-gold">Apply</strong> on any role to auto-select it below.
                 </CardDescription>
                 <div className="relative mt-3">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#102540]/70" />
                   <Input
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
@@ -802,7 +802,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search nationality..."
                       flagType="nationality"
                       disabled={loading}
-                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540] bg-[#F7F2EA] h-12 rounded-lg"
+                      triggerClassName="careers-blue-field h-12 rounded-lg"
                     />
                   </div>
                   <div className="space-y-2">
@@ -815,7 +815,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search language..."
                       flagType="language"
                       disabled={loading}
-                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540] bg-[#F7F2EA] h-12 rounded-lg"
+                      triggerClassName="careers-blue-field h-12 rounded-lg"
                     />
                   </div>
                 </div>
@@ -832,7 +832,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search country..."
                       flagType="country"
                       disabled={loading}
-                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540] bg-[#F7F2EA] h-12 rounded-lg"
+                      triggerClassName="careers-blue-field h-12 rounded-lg"
                     />
                   </div>
                   <div className="space-y-2">
@@ -845,7 +845,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search UAE city..."
                       showFlags={false}
                       disabled={loading}
-                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540] bg-[#F7F2EA] h-12 rounded-lg"
+                      triggerClassName="careers-blue-field h-12 rounded-lg"
                     />
                   </div>
                 </div>
@@ -1040,7 +1040,7 @@ export default function JoinApplication() {
                 {/* CV / Resume */}
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold text-[#1A1A1A]">CV / Resume</Label>
-                  <div className="border-2 border-dashed border-[#102540] rounded-xl p-8 text-center hover:border-[#102540] transition-colors bg-[#F7F2EA]/30">
+                  <div data-jbj-dropzone className="jbj-form-dropzone rounded-xl p-8 text-center hover:border-[#102540] transition-colors">
                     {cvFile ? (
                       <div className="flex flex-col items-center gap-2 text-[#1A1A1A]">
                         <FileText className="h-7 w-7 text-emerald-600" />
