@@ -158,7 +158,8 @@ export default function JoinApplication() {
       const raw = sessionStorage.getItem(FORM_DRAFT_KEY);
       if (raw) {
         const draft = JSON.parse(raw);
-        setFormData((prev) => ({ ...prev, ...draft }));
+        const { phone: _phone, ...safeDraft } = draft || {};
+        setFormData((prev) => ({ ...prev, ...safeDraft, phone: "" }));
       }
     } catch {}
   }, []);
@@ -784,7 +785,7 @@ export default function JoinApplication() {
                     value={formData.phone}
                     onChange={(value) => setFormData({ ...formData, phone: value || "" })}
                     disabled={loading}
-                    placeholder="+971 54 716 7107"
+                    placeholder="Phone number"
                     variant="light"
                     className="careers-phone-input"
                   />

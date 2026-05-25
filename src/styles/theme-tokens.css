@@ -151,7 +151,7 @@
 }
 
 [data-careers-page] .careers-phone-input [data-phone-code-trigger] {
-  background: #F7F2EA !important;
+  background: #102540 !important;
   border: 2px solid #102540 !important;
   box-shadow: none !important;
 }
@@ -166,8 +166,8 @@
 }
 
 [data-careers-page] .careers-phone-input [data-phone-code-trigger] span {
-  color: #102540 !important;
-  -webkit-text-fill-color: #102540 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 [data-careers-page] .careers-phone-input [data-phone-code-trigger] svg {
