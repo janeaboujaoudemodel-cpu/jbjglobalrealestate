@@ -88,7 +88,7 @@ export function SearchableSelect({
           aria-expanded={open}
           className={cn(
             "w-full justify-between h-12 rounded-lg min-w-0",
-            !triggerClassName && "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]/60 hover:text-[#1A1A1A]",
+            !triggerClassName && "bg-[#FDFBF7] border-2 border-[#102540] text-[#102540] hover:bg-[#FDFBF7] hover:border-[#102540] hover:text-[#102540]",
             !value && "text-[#1A1A1A]/70",
             triggerClassName
           )}
@@ -97,7 +97,7 @@ export function SearchableSelect({
             {selectedFlag && <span className="text-xl leading-none shrink-0">{selectedFlag}</span>}
             <span className="truncate">{value || placeholder}</span>
           </span>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-[#1A1A1A]/70" />
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-[#B89555]" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -121,7 +121,7 @@ export function SearchableSelect({
               placeholder={searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-10 pl-9 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] rounded-md"
+              className="h-10 pl-9 bg-[#FDFBF7] border-2 border-[#B89555] text-[#102540] placeholder:text-[#102540]/60 focus:border-[#B89555] rounded-md"
             />
           </div>
         </div>
@@ -161,7 +161,7 @@ export function SearchableSelect({
                   )}
                 >
                   <span className="w-4 h-4 shrink-0 flex items-center justify-center">
-                    {isSelected && <Check className="h-4 w-4 text-[#1A1A1A]" strokeWidth={2.5} />}
+                    {isSelected && <Check className="h-4 w-4 text-[#B89555]" strokeWidth={2.8} />}
                   </span>
                   {flag && <span className="text-xl leading-none shrink-0">{flag}</span>}
                   <span className="truncate text-sm sm:text-base flex-1 min-w-0">{option}</span>
