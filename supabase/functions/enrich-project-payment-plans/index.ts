@@ -275,7 +275,7 @@ Deno.serve(async (req) => {
         };
         const after = {
           payment_plan: summary,
-          payment_breakdown: ai.payment_breakdown,
+          payment_breakdown: normalized,
         };
         const { error: updErr } = await supabase
           .from("projects")
