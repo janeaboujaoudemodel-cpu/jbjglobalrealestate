@@ -28,7 +28,7 @@ const OverseasInvestorsStrip = () => {
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="overseas-investors-strip-link allow-white group flex flex-wrap xl:flex-nowrap items-center justify-between gap-4 md:gap-8 px-6 sm:px-10 md:px-14 py-10 md:py-14 lg:py-16 text-white transition-colors hover:bg-[#1a3d63]"
+        className="overseas-investors-strip-link allow-white group flex flex-wrap xl:flex-nowrap items-center justify-between gap-4 md:gap-8 px-6 sm:px-10 md:px-14 py-10 md:py-14 lg:py-16 text-white"
       >
 
         {/* Left: globe + headline — full width below xl so it never gets crushed into one-char-per-line */}
