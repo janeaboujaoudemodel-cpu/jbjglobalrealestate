@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, ArrowRight, Brain, Download, Award, Share2, Users, X, Mail } from "lucide-react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { Sparkles, ArrowRight, Brain, Download, Award, Share2, Users, X, Mail, MessageCircle, Link as LinkIcon, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ProjectCard from "@/components/ProjectCard";
@@ -26,6 +28,9 @@ import { useMembership } from "@/hooks/useMembership";
 import { useAuth } from "@/contexts/AuthContext";
 
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";
+const JBJ_CONSULTANT_EMAIL = "CONTACT@JBJ.AE";
+const JBJ_CONSULTANT_WHATSAPP = "971501234567"; // International format, no + or spaces
+
 
 
 const QuizResults = () => {
