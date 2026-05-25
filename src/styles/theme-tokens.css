@@ -150,7 +150,9 @@
   -webkit-text-fill-color: #102540 !important;
 }
 
-[data-careers-page] button[role="combobox"] svg {
+[data-careers-page] .careers-phone-input button[role="combobox"],
+[data-careers-page] .careers-phone-input button[role="combobox"] span,
+[data-careers-page] .careers-phone-input button[role="combobox"] svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
