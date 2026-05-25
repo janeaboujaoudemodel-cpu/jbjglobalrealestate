@@ -545,15 +545,15 @@ const Footer = () => {
                 <span className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A] font-bold">Connect</span>
                 <SocialLinks variant="premium" className="gap-2" />
               </div>
-              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
+              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/40 relative" aria-hidden="true" />
               <div className="relative">
                 <GoogleMyBusinessLink />
               </div>
-              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
+              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/40 relative" aria-hidden="true" />
               <div className="relative">
                 <ModeSwitcher variant="header" side="top" showForUnselected />
               </div>
-              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
+              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/40 relative" aria-hidden="true" />
               <div className="relative">
                 <FooterCurrencyUnit />
               </div>
