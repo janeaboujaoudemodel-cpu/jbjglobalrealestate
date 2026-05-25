@@ -122,3 +122,20 @@
   border-color: #B89555 !important;
 }
 
+[data-careers-page] input,
+[data-careers-page] button[role="combobox"] {
+  border-color: #102540 !important;
+}
+
+[data-careers-page] input#city,
+[data-careers-page] .careers-city-gold {
+  border-color: #B89555 !important;
+}
+
+[data-careers-page] .careers-open-badge,
+[data-careers-page] .careers-open-badge * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
