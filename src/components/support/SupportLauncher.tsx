@@ -84,15 +84,12 @@ function useOverHero() {
   //   /mortgage-calculator, /contact, dashboard tools) are NOT heroes —
   //   so the launcher must stay in its normal navy-blue style there.
   // Default is the safe navy variant.
-  const [overHero, setOverHero] = useState(false);
+  // Default to TRUE so the tag is hidden until we confirm we're not over a
+  // video hero — prevents a flash of the navy tag on initial homepage paint.
+  const [overHero, setOverHero] = useState(true);
   useEffect(() => {
     const check = () => {
       const vh = window.innerHeight;
-      // Tag flips to transparent ONLY while the hero still dominates the
-      // viewport — i.e. its bottom edge is still near the bottom of the
-      // viewport (≥ 85% down). As soon as the next section (e.g. "Partners
-      // with Dubai's leading developers") appears at the bottom, we flip
-      // back to solid navy.
       const heroes = document.querySelectorAll<HTMLElement>("[data-hero-dark]");
       let hit = false;
       heroes.forEach((el) => {
@@ -104,15 +101,21 @@ function useOverHero() {
     };
 
     check();
+    // Re-check shortly after mount in case hero mounts after launcher.
+    const t1 = window.setTimeout(check, 100);
+    const t2 = window.setTimeout(check, 500);
     window.addEventListener("scroll", check, { passive: true });
     window.addEventListener("resize", check);
     return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
       window.removeEventListener("scroll", check);
       window.removeEventListener("resize", check);
     };
   }, []);
   return overHero;
 }
+
 
 
 export default function SupportLauncher() {
@@ -212,15 +215,16 @@ export default function SupportLauncher() {
           data-surface="dark"
           data-allow-dark-cta
           data-no-contrast-guard
-          className={`allow-white group fixed right-0 top-1/2 pointer-events-auto flex items-center gap-2 px-2 py-4 rounded-l-xl
+          className={`allow-white group fixed right-0 top-1/2 flex items-center gap-2 px-2 py-4 rounded-l-xl
             border border-r-0 border-[#B89555]/70 text-white transform-gpu
-            transition-[background-color,box-shadow,border-color,backdrop-filter] duration-300
+            transition-opacity duration-300
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#102540]
             ${overHero
-              ? "bg-white/8 backdrop-blur-xl backdrop-saturate-150 hover:bg-white/14 shadow-[-10px_0_28px_rgba(0,0,0,0.28),inset_0_0_0_1px_rgba(255,255,255,0.08),0_0_0_1px_rgba(184,149,85,0.20)] hover:shadow-[-18px_0_42px_rgba(0,0,0,0.36),inset_0_0_0_1px_rgba(255,255,255,0.14),0_0_24px_rgba(184,149,85,0.42)]"
-              : "bg-[#102540] hover:bg-[#1a3d63] hover:border-[#B89555] shadow-[-10px_0_28px_rgba(0,0,0,0.34),0_0_0_1px_rgba(184,149,85,0.24)] hover:shadow-[-18px_0_42px_rgba(0,0,0,0.44),0_0_34px_rgba(184,149,85,0.58)]"}
+              ? "opacity-0 pointer-events-none bg-transparent border-transparent shadow-none"
+              : "pointer-events-auto bg-[#102540] hover:bg-[#1a3d63] hover:border-[#B89555] shadow-[-10px_0_28px_rgba(0,0,0,0.34),0_0_0_1px_rgba(184,149,85,0.24)] hover:shadow-[-18px_0_42px_rgba(0,0,0,0.44),0_0_34px_rgba(184,149,85,0.58)]"}
           `}
           style={{ writingMode: "vertical-rl", transform: "translateY(-50%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+
         >
           <Sparkles className="h-3.5 w-3.5 rotate-90 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           <span className="allow-white text-[11px] font-semibold uppercase tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact us</span>
