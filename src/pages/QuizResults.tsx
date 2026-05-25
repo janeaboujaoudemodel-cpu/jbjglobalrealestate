@@ -515,9 +515,9 @@ const QuizResults = () => {
         )}
 
         {/* Action Cards */}
-        <div className="border-2 border-[#B89555]/30 rounded-2xl p-6 bg-[#FDFBF7]/60 backdrop-blur-sm mb-12">
-          <h3 className="text-[#1A1A1A] text-lg font-semibold mb-5 flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
+        <div data-allow-dark-cta className="rounded-2xl p-6 bg-[#102540] border border-[#B89555] mb-12">
+          <h3 className="text-white text-lg font-semibold mb-5 flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-[#B89555]" />
             Want More AI Power?
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
