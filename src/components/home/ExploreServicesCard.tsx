@@ -290,6 +290,7 @@ const ExploreServicesCard = () => {
                   <PearlButton
                     to="/guides/golden-visa-uae"
                     size="md"
+                    variant="secondary"
                   >
                     Read Guide
                   </PearlButton>
