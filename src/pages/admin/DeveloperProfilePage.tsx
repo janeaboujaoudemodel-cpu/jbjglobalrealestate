@@ -675,7 +675,7 @@ export default function DeveloperProfilePage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
-                      {r.phone && <a className="p-2 rounded bg-blue-50 text-blue-700" href={`tel:${r.phone}`}><Phone className="w-3.5 h-3.5" /></a>}
+                      {r.phone && <a className="p-2 rounded bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30" href={`tel:${r.phone}`}><Phone className="w-3.5 h-3.5" /></a>}
                       {r.email && <a className="p-2 rounded bg-purple-50 text-purple-700" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
                     </div>
                   </div>
