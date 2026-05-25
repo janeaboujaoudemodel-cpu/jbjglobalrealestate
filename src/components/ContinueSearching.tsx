@@ -506,10 +506,10 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
           item.type === "property" && item.subtitle && !item.subtitle.includes(",") && (
             <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
               <span
-                className="inline-flex items-center px-2.5 h-7 rounded-md bg-[#FDFBF7] border border-[#B89555]/55 text-[10px] font-bold tracking-[0.08em] uppercase text-[#1A1A1A] shadow-[0_4px_12px_rgba(0,0,0,0.35)] max-w-[140px] truncate"
+                className="w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center text-center px-1.5 bg-[#FDFBF7] border border-[#B89555]/55 text-[10px] leading-[1.05] font-bold tracking-[0.04em] uppercase text-[#1A1A1A] shadow-[0_4px_12px_rgba(0,0,0,0.35)] overflow-hidden break-words"
                 title={item.subtitle}
               >
-                {item.subtitle}
+                <span className="line-clamp-3">{item.subtitle}</span>
               </span>
             </div>
           )
