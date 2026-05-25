@@ -528,44 +528,14 @@ export default function JoinApplication() {
   // ---- Render: full-width application form ----
   return (
     <div data-premium data-careers-page className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-      <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-10 pt-24 lg:pt-20">
-        <div className="max-w-5xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-10">
-            <h1 className="text-4xl md:text-5xl font-semibold mb-3 careers-navy tracking-tight">
-              Join JBJ Global Real Estate
-            </h1>
-            <div className="mx-auto mb-4 h-[2px] w-24 bg-[#B89555] rounded-full" />
-            <p className="text-base md:text-lg careers-gold font-semibold max-w-2xl mx-auto">
-              Apply to become part of our team. Complete the form below to start your journey.
-            </p>
-          </div>
+      {/* Premium hero — replaces former simple title block */}
+      <PremiumCareersHero />
 
-          {/* Jessica CTA */}
-          <Card className="bg-[#FDFBF7] border-2 border-[#102540] shadow-sm mb-8">
-            <CardContent className="pt-6">
-              <div className="flex flex-col sm:flex-row items-center gap-4">
-                <div data-no-contrast-guard className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 bg-[#102540] border border-[#B89555]/60">
-                  <Bot className="w-8 h-8 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-                </div>
-                <div className="text-center sm:text-left flex-1">
-                  <h3 className="text-lg font-semibold mb-1 careers-navy">Prefer a Conversation?</h3>
-                  <p className="text-sm text-[#102540]/80">
-                    Meet Jessica — available 24/7 to support you. She'll collect your CV, qualify you, and conduct your interview.
-                  </p>
-                </div>
-                <Link
-                  to="/hr-agent"
-                  data-allow-dark-cta
-                  data-no-contrast-guard
-                  className="careers-white inline-flex items-center justify-center gap-2 rounded-md px-4 h-10 font-semibold shadow-sm transition-colors whitespace-nowrap bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>Contact Our HR · Jessica</span>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
+      <section className="px-4 sm:px-6 lg:px-10 pb-12 md:pb-16">
+        <div className="max-w-5xl mx-auto">
+          {/* Jessica AI live concierge panel */}
+          <JessicaAIPanel />
+
 
 
           {!user && (
