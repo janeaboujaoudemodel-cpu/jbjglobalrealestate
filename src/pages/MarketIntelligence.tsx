@@ -240,9 +240,9 @@ const MarketIntelligence = () => {
       <section className="surface-light py-12 bg-muted" data-surface="light">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="rounded-2xl p-8 text-center bg-card border border-border">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 bg-foreground">
-                <Info className="w-6 h-6 text-background" />
+            <div className="rounded-2xl p-8 text-center bg-card border-2 border-[#102540]/40">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 bg-[#102540]" data-no-contrast-guard>
+                <Info className="w-6 h-6 text-white allow-white" />
               </div>
               <h3 className={`${MI_CARD_TITLE} mb-4`}>
                 Compliance & Transparency
