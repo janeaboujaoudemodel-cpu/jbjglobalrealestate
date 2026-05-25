@@ -207,57 +207,75 @@ const DeveloperPortalCTA = () => {
 
 
           <div className="relative grid lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-center">
-            {/* LEFT — content */}
+            {/* LEFT — content (premium pass) */}
             <div className="min-w-0">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FDFBF7] border border-[#B89555]/50 mb-5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#B89555]" />
-                <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-[#1A1A1A]">
+              {/* Eyebrow — gold hairline plaque with diamond + monogram bead */}
+              <div className="inline-flex items-center gap-2.5 pl-2.5 pr-3.5 py-1.5 rounded-full bg-[#FDFBF7] border border-[#B89555]/55 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_6px_18px_-12px_rgba(184,149,85,0.45)] mb-6">
+                <span className="relative inline-flex items-center justify-center w-4 h-4">
+                  <span className="absolute inset-0 rotate-45 rounded-[3px] border border-[#B89555]/70" aria-hidden="true" />
+                  <span className="w-1 h-1 rounded-full bg-[#B89555]" aria-hidden="true" />
+                </span>
+                <span className="text-[10.5px] font-semibold tracking-[0.28em] uppercase text-[#1A1A1A]">
                   {eyebrow}
                 </span>
               </div>
 
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-[#1A1A1A] leading-[1.05] tracking-tight">
+              {/* Title — refined display with gold hairline accent underneath */}
+              <h2 className="text-3xl md:text-[2.6rem] lg:text-[3.1rem] font-serif font-bold text-[#1A1A1A] leading-[1.02] tracking-[-0.018em]">
                 {title}
               </h2>
+              <div className="mt-4 flex items-center gap-3" aria-hidden="true">
+                <span className="block h-px w-10 bg-gradient-to-r from-[#B89555]/80 to-transparent" />
+                <span className="block w-1 h-1 rotate-45 bg-[#B89555]/70" />
+                <span className="block h-px w-3 bg-[#B89555]/40" />
+              </div>
 
-              <p className="text-[#1A1A1A]/75 text-base md:text-lg mt-5 leading-relaxed max-w-2xl">
+              {/* Description — slightly richer ink, generous leading, refined width */}
+              <p className="text-[#1A1A1A]/80 text-[15.5px] md:text-[17px] mt-5 leading-[1.75] max-w-[58ch]">
                 {description}
               </p>
 
-              {/* Feature chips */}
-              <div className="flex flex-wrap gap-2.5 mt-7">
+              {/* Feature chips — sculpted plaques w/ cream inset + gold gleam on hover */}
+              <ul className="flex flex-wrap gap-2.5 mt-8 list-none p-0">
                 {features.map((f) => (
-                  <span
-                    key={f.label}
-                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#FDFBF7] border border-[#B89555]/35 text-[12.5px] font-semibold text-[#1A1A1A]"
-                  >
-                    <f.icon className="w-3.5 h-3.5 text-[#B89555]" strokeWidth={2.2} />
-                    {f.label}
-                  </span>
+                  <li key={f.label}>
+                    <span
+                      className="group/chip inline-flex items-center gap-2 pl-2 pr-3.5 py-1.5 rounded-full bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/40 text-[12.5px] font-semibold text-[#1A1A1A] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_4px_12px_-8px_rgba(184,149,85,0.35)] hover:border-[#B89555]/75 hover:shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_8px_20px_-10px_rgba(184,149,85,0.55)] transition-all duration-300"
+                    >
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#FDFBF7] border border-[#B89555]/45 group-hover/chip:border-[#B89555]/75 transition-colors">
+                        <f.icon className="w-3 h-3 text-[#1A1A1A]" strokeWidth={2.2} />
+                      </span>
+                      {f.label}
+                    </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
 
-              {/* CTA row — navy blue with white text + blue circle with white arrow */}
-              <div className="mt-9 flex flex-wrap items-center gap-4">
+              {/* CTA row — sculpted navy CTA + refined helper with gold rule */}
+              <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-3">
                 <Link
                   to={href}
                   data-surface="dark"
                   data-on-dark
                   data-no-contrast-guard
                   data-allow-dark-cta
-                  className="allow-white group inline-flex items-center gap-3 pl-7 pr-3 py-3 rounded-2xl bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/60 text-white text-[15px] font-bold tracking-tight shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)] hover:shadow-[0_18px_50px_-14px_rgba(16,37,64,0.7)] hover:-translate-y-0.5 transition-all duration-300"
+                  className="allow-white group inline-flex items-center gap-3 pl-7 pr-3 py-3 rounded-2xl bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/65 text-white text-[15px] font-bold tracking-tight shadow-[0_1px_0_rgba(255,255,255,0.08)_inset,0_12px_34px_-14px_rgba(16,37,64,0.6)] hover:shadow-[0_1px_0_rgba(255,255,255,0.10)_inset,0_22px_56px_-16px_rgba(16,37,64,0.75)] hover:-translate-y-0.5 transition-all duration-300"
                   style={{ color: "#FFFFFF" }}
                 >
                   <span className="allow-white" style={{ color: "#FFFFFF" }}>{cta}</span>
-                  <span className="w-9 h-9 rounded-full bg-[#1a3d63] border border-white/30 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1">
+                  <span className="w-9 h-9 rounded-full bg-[#1a3d63] border border-[#B89555]/60 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.12)_inset] transition-transform duration-300 group-hover:translate-x-1">
                     <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
                   </span>
                 </Link>
-                <span className="text-[12.5px] text-[#1A1A1A]/70 font-medium">
-                  Secure sign-in with your JBJ account — your workspace, personalized.
+                <span className="inline-flex items-center gap-3 text-[12.5px] text-[#1A1A1A]/75 font-medium">
+                  <span className="hidden sm:block h-4 w-px bg-[#B89555]/45" aria-hidden="true" />
+                  <span className="italic font-normal">
+                    Secure sign-in with your JBJ account — your workspace, personalized.
+                  </span>
                 </span>
               </div>
             </div>
+
 
             {/* RIGHT — emblem */}
             <div className="relative hidden lg:flex items-center justify-center">
