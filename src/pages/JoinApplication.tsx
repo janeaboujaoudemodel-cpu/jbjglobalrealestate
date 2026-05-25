@@ -22,6 +22,7 @@ import JessicaAIPanel from "@/components/careers/JessicaAIPanel";
 import PremiumJobCard, { type JobCardTag } from "@/components/careers/PremiumJobCard";
 import PremiumCVUpload from "@/components/careers/PremiumCVUpload";
 import ApplicationProgress, { STEP_ICONS } from "@/components/careers/ApplicationProgress";
+import SelectedRoleChip from "@/components/careers/SelectedRoleChip";
 
 interface OpenPosition {
   id: string;
@@ -282,6 +283,11 @@ export default function JoinApplication() {
 
   const handleApplyPosition = (id: string) => {
     setFormData((prev) => ({ ...prev, positionApplied: id }));
+    const dbPos = openPositions.find((p) => p.id === id);
+    const label = dbPos?.title || FALLBACK_POSITIONS.find((p) => p.value === id)?.label || "this role";
+    toast.success(`Selected: ${label}`, {
+      description: "Application form synced. Continue below to complete your application.",
+    });
     setTimeout(scrollToForm, 80);
   };
 
