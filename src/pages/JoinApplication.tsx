@@ -1198,6 +1198,54 @@ export default function JoinApplication() {
                     </Button>
                   )}
                 </div>
+
+                {/* Mobile sticky CTA (Phase 10) — duplicates the primary action of the current step */}
+                <div data-careers-mobile-cta className="sm:hidden">
+                  <div className="flex items-center gap-2">
+                    {currentStep > 0 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleBack}
+                        disabled={loading}
+                        aria-label="Previous step"
+                        className="h-[52px] !w-[52px] rounded-2xl border-2 border-[#102540] bg-[#FDFBF7] text-[#102540] p-0"
+                      >
+                        <ArrowLeft className="w-5 h-5" />
+                      </Button>
+                    )}
+                    {currentStep < TOTAL_STEPS - 1 ? (
+                      <Button
+                        type="button"
+                        onClick={handleNext}
+                        disabled={loading}
+                        data-allow-dark-cta
+                        data-no-contrast-guard
+                        className="flex-1 bg-[#102540] hover:bg-[#1a3d63] text-white font-semibold border border-[#B89555]"
+                      >
+                        Continue · Step {currentStep + 2}
+                        <ArrowRight className="w-4 h-4 ml-1.5" />
+                      </Button>
+                    ) : (
+                      <Button
+                        type="submit"
+                        disabled={loading}
+                        data-allow-dark-cta
+                        data-no-contrast-guard
+                        className="flex-1 bg-[#102540] hover:bg-[#1a3d63] text-white font-bold border border-[#B89555]"
+                      >
+                        {loading ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />
+                            <span className="text-white">Submitting...</span>
+                          </>
+                        ) : (
+                          <span className="text-white">{user ? "Submit Application" : "Sign In to Submit"}</span>
+                        )}
+                      </Button>
+                    )}
+                  </div>
+                </div>
               </form>
             </CardContent>
           </Card>
