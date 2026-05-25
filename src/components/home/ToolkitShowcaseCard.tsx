@@ -121,8 +121,8 @@ export function ToolkitShowcaseCard() {
                   style={isActive ? undefined : { color: "#FFFFFF" }}
                   className={`allow-white shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors ${
                     isActive
-                      ? "bg-[#EFE6D6] text-[#1A1A1A] shadow-[inset_0_-2px_0_#B89555,inset_0_1px_0_rgba(255,255,255,0.7)]"
-                      : "text-white hover:bg-[#1a3d63] hover:text-white"
+                      ? `bg-[#EFE6D6] text-[#1A1A1A] ${GOLD_HOVER_IDS.has(t.id) ? "hover:text-[#B89555]" : ""} shadow-[inset_0_-2px_0_#B89555,inset_0_1px_0_rgba(255,255,255,0.7)]`
+                      : `text-white hover:bg-[#1a3d63] ${GOLD_HOVER_IDS.has(t.id) ? "hover:text-[#B89555]" : "hover:text-white"}`
                   }`}
                 >
                   <Icon className="w-4 h-4 allow-white" style={isActive ? undefined : { color: "#FFFFFF", stroke: "#FFFFFF" }} />
