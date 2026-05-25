@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import {
   Loader2, Upload, CheckCircle, FileText, Bot, MessageCircle, Briefcase,
   User, Phone, Mail, MapPin, Star, Search, ChevronDown, ChevronUp,
+  ArrowLeft, ArrowRight,
 } from "lucide-react";
 import { CONTACT_INFO } from "@/constants/stats";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
@@ -161,6 +162,10 @@ export default function JoinApplication() {
   const [showAllPositions, setShowAllPositions] = useState(false);
   const formAnchorRef = useRef<HTMLDivElement>(null);
 
+  // ---- Wizard state ----
+  const [currentStep, setCurrentStep] = useState(0);
+  const TOTAL_STEPS = 5;
+
   // ---- Load draft on mount (resume after auth) ----
   useEffect(() => {
     try {
@@ -291,8 +296,43 @@ export default function JoinApplication() {
     toast.success(`Selected: ${label}`, {
       description: "Application form synced. Continue below to complete your application.",
     });
+    // Jump wizard to Role & Experience step so users see the sync immediately
+    setCurrentStep((s) => (s < 2 ? 2 : s));
     setTimeout(scrollToForm, 80);
   };
+
+  // ---- Wizard step validation ----
+  const stepValidity = useMemo(() => {
+    return [
+      // 0 Personal
+      !!formData.firstName.trim() && !!formData.lastName.trim() && !!formData.phone.trim(),
+      // 1 Location & Language
+      !!formData.nationality && !!formData.preferredLanguage && !!formData.country && !!formData.city,
+      // 2 Role & Experience
+      !!formData.positionApplied,
+      // 3 CV
+      !!cvFile,
+      // 4 Review & Consent
+      !!formData.consentAccurate && !!formData.consentTerms,
+    ];
+  }, [formData, cvFile]);
+
+  const STEP_LABELS = ["Personal", "Location & Language", "Role & Experience", "CV / Resume", "Review & Consent"];
+
+  const goToStep = (idx: number) => {
+    const clamped = Math.max(0, Math.min(TOTAL_STEPS - 1, idx));
+    setCurrentStep(clamped);
+    setTimeout(scrollToForm, 50);
+  };
+
+  const handleNext = () => {
+    if (!stepValidity[currentStep]) {
+      toast.error(`Please complete: ${STEP_LABELS[currentStep]}`);
+      return;
+    }
+    goToStep(currentStep + 1);
+  };
+  const handleBack = () => goToStep(currentStep - 1);
 
   // ---- File change ----
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -721,7 +761,12 @@ export default function JoinApplication() {
                       done: !!formData.consentAccurate && !!formData.consentTerms,
                     },
                   ]}
+                  activeStep={currentStep}
+                  onStepClick={goToStep}
                 />
+
+                {/* Step 0 — Personal */}
+                <div className={currentStep === 0 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
 
                 {/* Honeypot */}
                 <div className="hidden" aria-hidden="true">
@@ -788,6 +833,11 @@ export default function JoinApplication() {
                   />
                 </div>
 
+                </div>
+                {/* End of step 0 (Personal) */}
+
+                {/* Step 1 — Location & Language */}
+                <div className={currentStep === 1 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
                 {/* Nationality + Language */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -848,6 +898,11 @@ export default function JoinApplication() {
                   </div>
                 </div>
 
+                </div>
+                {/* End of step 1 (Location & Language) */}
+
+                {/* Step 2 — Role & Experience */}
+                <div className={currentStep === 2 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
                 {/* Position fallback (only when no DB positions) */}
                 {openPositions.length === 0 && (
                   <div className="space-y-2">
@@ -1035,6 +1090,11 @@ export default function JoinApplication() {
                   </div>
                 )}
 
+                </div>
+                {/* End of step 2 (Role & Experience) */}
+
+                {/* Step 3 — CV / Resume */}
+                <div className={currentStep === 3 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
                 {/* CV / Resume — Premium upload */}
                 <PremiumCVUpload
                   file={cvFile}
@@ -1043,6 +1103,11 @@ export default function JoinApplication() {
                   uploadProgress={uploadProgress}
                 />
 
+                </div>
+                {/* End of step 3 (CV) */}
+
+                {/* Step 4 — Review & Consent */}
+                <div className={currentStep === 4 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
                 {/* Consent */}
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
@@ -1082,23 +1147,57 @@ export default function JoinApplication() {
                   </div>
                 )}
 
-                {/* Submit */}
-                <Button
-                  type="submit"
-                  className="w-full bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#102540] border-2 border-[#102540] font-bold h-14 text-lg"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin text-[#102540]" />
-                      <span className="text-[#102540]">Submitting...</span>
-                    </>
-                  ) : user ? (
-                    <span className="text-[#102540]">Submit Application</span>
+                </div>
+                {/* End of step 4 wrapper */}
+
+                {/* Wizard navigation */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleBack}
+                    disabled={currentStep === 0 || loading}
+                    className="sm:w-40 h-12 rounded-xl border-2 border-[#102540] bg-[#FDFBF7] text-[#102540] font-semibold disabled:opacity-40"
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-1.5" /> Back
+                  </Button>
+
+                  <p className="text-xs font-semibold text-[#102540]/70 text-center order-first sm:order-none">
+                    Step {currentStep + 1} of {TOTAL_STEPS} — {STEP_LABELS[currentStep]}
+                  </p>
+
+                  {currentStep < TOTAL_STEPS - 1 ? (
+                    <Button
+                      type="button"
+                      onClick={handleNext}
+                      disabled={loading}
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                      className="sm:w-48 h-12 rounded-xl border border-[#B89555] bg-[#102540] hover:bg-[#1a3d63] text-white font-semibold"
+                    >
+                      Continue <ArrowRight className="w-4 h-4 ml-1.5" />
+                    </Button>
                   ) : (
-                    <span className="text-[#102540]">Continue & Sign In to Submit</span>
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                      className="sm:flex-1 h-14 rounded-xl border border-[#B89555] bg-[#102540] hover:bg-[#1a3d63] text-white font-bold text-base sm:text-lg"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />
+                          <span className="text-white">Submitting...</span>
+                        </>
+                      ) : user ? (
+                        <span className="text-white">Submit Application</span>
+                      ) : (
+                        <span className="text-white">Continue & Sign In to Submit</span>
+                      )}
+                    </Button>
                   )}
-                </Button>
+                </div>
               </form>
             </CardContent>
           </Card>

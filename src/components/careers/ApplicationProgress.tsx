@@ -10,9 +10,11 @@ export interface StepStatus {
 
 interface ApplicationProgressProps {
   steps: StepStatus[];
+  activeStep?: number;
+  onStepClick?: (index: number) => void;
 }
 
-export function ApplicationProgress({ steps }: ApplicationProgressProps) {
+export function ApplicationProgress({ steps, activeStep, onStepClick }: ApplicationProgressProps) {
   const completed = steps.filter((s) => s.done).length;
   const pct = Math.round((completed / steps.length) * 100);
 
@@ -24,7 +26,9 @@ export function ApplicationProgress({ steps }: ApplicationProgressProps) {
             Application Progress
           </p>
           <p className="text-sm font-semibold text-[#1A1A1A] mt-0.5">
-            {completed} of {steps.length} sections complete
+            {typeof activeStep === "number"
+              ? `Step ${activeStep + 1} of ${steps.length} — ${steps[activeStep]?.label}`
+              : `${completed} of ${steps.length} sections complete`}
           </p>
         </div>
         <div className="text-right">
@@ -42,24 +46,39 @@ export function ApplicationProgress({ steps }: ApplicationProgressProps) {
 
       {/* Step pills */}
       <div className="flex flex-wrap gap-2">
-        {steps.map((s) => (
-          <div
-            key={s.id}
-            className={cn(
-              "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition",
-              s.done
-                ? "border-emerald-600/40 bg-emerald-50 text-emerald-800"
-                : "border-[#102540]/25 bg-[#FDFBF7] text-[#102540]/80"
-            )}
-          >
-            {s.done ? (
-              <CheckCircle2 className="h-3.5 w-3.5" />
-            ) : (
-              <span className="grid h-3.5 w-3.5 place-items-center">{s.icon}</span>
-            )}
-            <span>{s.label}</span>
-          </div>
-        ))}
+        {steps.map((s, idx) => {
+          const isActive = activeStep === idx;
+          const clickable = !!onStepClick;
+          const Tag: any = clickable ? "button" : "div";
+          return (
+            <Tag
+              key={s.id}
+              type={clickable ? "button" : undefined}
+              onClick={clickable ? () => onStepClick!(idx) : undefined}
+              className={cn(
+                "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition",
+                clickable && "cursor-pointer hover:-translate-y-0.5",
+                isActive
+                  ? "border-[#102540] bg-[#102540] text-white shadow-[0_4px_14px_-6px_rgba(16,37,64,0.55)]"
+                  : s.done
+                  ? "border-emerald-600/40 bg-emerald-50 text-emerald-800"
+                  : "border-[#102540]/25 bg-[#FDFBF7] text-[#102540]/80"
+              )}
+              data-allow-dark-cta={isActive ? "" : undefined}
+              data-no-contrast-guard={isActive ? "" : undefined}
+            >
+              {s.done && !isActive ? (
+                <CheckCircle2 className="h-3.5 w-3.5" />
+              ) : (
+                <span className="grid h-3.5 w-3.5 place-items-center">{s.icon}</span>
+              )}
+              <span>
+                <span className="opacity-70 mr-1">{idx + 1}.</span>
+                {s.label}
+              </span>
+            </Tag>
+          );
+        })}
       </div>
     </div>
   );
