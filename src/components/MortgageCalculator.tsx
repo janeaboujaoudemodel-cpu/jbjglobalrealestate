@@ -114,7 +114,7 @@ const MortgageCalculator = ({
       <div className="max-w-5xl mx-auto">
         {showHeading && (
         <div className="text-center mb-6 md:mb-8">
-          <h3 className="text-[#1A1A1A] text-2xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap">
+          <h3 className="text-[#102540] text-2xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap">
             Mortgage Calculator
           </h3>
           <p className="text-[#1A1A1A]/70 mt-2 md:mt-3 max-w-lg mx-auto text-sm md:text-base">
