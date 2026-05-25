@@ -4510,15 +4510,38 @@ a[class*="bg-red-"]:hover {
   opacity: 1 !important;
 }
 
-/* HOVER: keep nav item text + icons solid ink on champagne hover bg */
+/* HOVER: keep nav item text + icons solid ink on champagne hover bg.
+   IMPORTANT: opt out dark CTAs that sit on a champagne parent (e.g. the
+   navy "Explore Our Services" link inside a bg-[#FDFBF7] footer). Those
+   carry `.allow-white`, `data-on-dark`, `data-allow-dark-cta`, or
+   `data-no-contrast-guard` and must keep WHITE text/icons on hover. */
 :where(
   .bg-card, .bg-background, .bg-popover, .bg-white,
   [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
   [class*="from-[#F7F1E6]"]
 ):not([data-surface="dark"]):not(.jj-hero-fullscreen)
-  :where(a, button, [role="button"], [role="link"], [role="menuitem"], [role="tab"]):hover
-  :where(span, p, svg, [class*="lucide"]):not([data-decorative="true"]):not(.jj-text-fade-allow):not(.jj-text-fade-allow *) {
+  :where(a, button, [role="button"], [role="link"], [role="menuitem"], [role="tab"]):not(.allow-white):not([data-on-dark]):not([data-allow-dark-cta]):not([data-no-contrast-guard]):not([class*="bg-[#102540]"]):not([class*="bg-[#1a3d63]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"]):hover
+  :where(span, p, svg, [class*="lucide"]):not([data-decorative="true"]):not(.jj-text-fade-allow):not(.jj-text-fade-allow *):not(.allow-white):not([data-no-contrast-guard]) {
   color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* HOVER inverse: dark/navy CTAs on champagne keep WHITE text + icons
+   regardless of guard ordering. Belt-and-braces lock. */
+:where(
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
+  .bg-card, .bg-background, .bg-popover, .bg-white
+):not([data-surface="dark"])
+  :where(a, button, [role="button"]):is(.allow-white, [data-on-dark], [data-allow-dark-cta], [data-no-contrast-guard], [class*="bg-[#102540]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]):hover,
+:where(
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
+  .bg-card, .bg-background, .bg-popover, .bg-white
+):not([data-surface="dark"])
+  :where(a, button, [role="button"]):is(.allow-white, [data-on-dark], [data-allow-dark-cta], [data-no-contrast-guard], [class*="bg-[#102540]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]):hover
+  :where(span, p, svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
 }
 
