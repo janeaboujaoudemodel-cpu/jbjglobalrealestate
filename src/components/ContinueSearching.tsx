@@ -27,11 +27,23 @@ const TYPE_CONFIG: Record<RecentItemType, { icon: typeof Home; label: string; pa
 // Walking strip that uses translateX transform like book marquee.
 // Only animates (and only clones the list) when the unique items overflow
 // the visible viewport, so short lists never show the same card twice.
+/**
+ * WalkingStrip — stable horizontal scroller for Continue Searching cards.
+ *
+ * Replaces the previous marquee/auto-translate animation, which was flaky:
+ * the "shouldAnimate" toggle flipped between static-centered and animated
+ * states whenever the viewport width or the items array changed (e.g. when
+ * a self-heal fetch patched a developer logo). That caused the section to
+ * collapse to a single centered card or "get stuck".
+ *
+ * New behaviour: items always render in a single horizontal row inside a
+ * native overflow-x-auto rail with `no-scrollbar` (no visible gold rail —
+ * two-finger swipe / wheel / trackpad scroll still works). Snap-mandatory
+ * for a clean stop on each card. No transforms, no rAF loop, no re-flow
+ * on patch — fully deterministic.
+ */
 function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  // Deduplicate items by slug+type to prevent visual duplicates
+  // Deduplicate items by slug+type to prevent visual duplicates.
   const seen = new Set<string>();
   const uniqueItems = items.filter(item => {
     const key = `${item.type}-${item.slug}`;
@@ -40,82 +52,26 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     return true;
   });
 
-  // Card width (200px on md+, 160px below) + gap (16px) — use the larger value
-  // for overflow measurement so we err on the side of NOT animating.
-  const CARD_STRIDE = 216;
-  const singleSetWidth = uniqueItems.length * CARD_STRIDE;
-
-  const [viewportWidth, setViewportWidth] = useState(0);
-
-  useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
-    const update = () => setViewportWidth(el.clientWidth);
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    window.addEventListener('resize', update);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener('resize', update);
-    };
-  }, []);
-
-  // Only animate (and clone) when unique items would actually overflow.
-  const shouldAnimate = viewportWidth > 0 && singleSetWidth > viewportWidth + 32;
-  const rendered = shouldAnimate ? [...uniqueItems, ...uniqueItems] : uniqueItems;
-
-  useEffect(() => {
-    if (!shouldAnimate) {
-      // Reset any previous transform so the static list renders cleanly.
-      if (scrollRef.current) scrollRef.current.style.transform = 'translateX(0)';
-      return;
-    }
-    const el = scrollRef.current;
-    if (!el) return;
-    let animId: number;
-    const speed = 0.4;
-    let pos = 0;
-
-    const tick = () => {
-      pos -= speed;
-      if (pos <= -singleSetWidth) pos += singleSetWidth;
-      el.style.transform = `translateX(${pos}px)`;
-      animId = requestAnimationFrame(tick);
-    };
-    animId = requestAnimationFrame(tick);
-
-    const pause = () => cancelAnimationFrame(animId);
-    const resume = () => { animId = requestAnimationFrame(tick); };
-    el.addEventListener('mouseenter', pause);
-    el.addEventListener('mouseleave', resume);
-
-    return () => {
-      cancelAnimationFrame(animId);
-      el.removeEventListener('mouseenter', pause);
-      el.removeEventListener('mouseleave', resume);
-    };
-  }, [shouldAnimate, singleSetWidth]);
-
   return (
-    <div ref={wrapperRef} className="overflow-hidden w-full">
-      <div
-        ref={scrollRef}
-        className={`flex gap-4 py-2 ${shouldAnimate ? 'will-change-transform' : 'justify-center flex-wrap md:flex-nowrap'}`}
-        style={shouldAnimate ? { width: 'max-content' } : undefined}
-      >
-        {rendered.map((item, i) => (
-          <RecentCard3D
-            key={`${item.type}-${item.id}-${i}`}
-            item={item}
-            index={i % Math.max(uniqueItems.length, 1)}
-            patchItem={patchItem}
-          />
+    <div
+      className="no-scrollbar overflow-x-auto overscroll-x-contain snap-x snap-mandatory w-full"
+      style={{ WebkitOverflowScrolling: "touch" }}
+    >
+      <div className="flex gap-4 py-2 px-4 md:px-8 lg:px-12 justify-start min-w-max">
+        {uniqueItems.map((item, i) => (
+          <div key={`${item.type}-${item.id}-${i}`} className="snap-start shrink-0">
+            <RecentCard3D
+              item={item}
+              index={i}
+              patchItem={patchItem}
+            />
+          </div>
         ))}
       </div>
     </div>
   );
 }
+
 
 const ContinueSearching = ({
   type,
@@ -189,7 +145,7 @@ const ContinueSearching = ({
   const eyebrow = hasUserHistory ? "Recently viewed" : "Editor's picks";
 
   return (
-    <section className={`py-10 md:py-14 relative overflow-hidden w-screen left-1/2 right-1/2 -mx-[50vw] ${className}`}>
+    <section className={`py-10 md:py-14 relative overflow-hidden w-full ${className}`}>
       {/* Premium champagne backdrop — full-bleed edge to edge */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#FDFBF7] z-[1]" />
@@ -197,7 +153,9 @@ const ContinueSearching = ({
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent z-[2]" />
       </div>
 
-      <div className="px-4 md:px-8 lg:px-12 relative z-20">
+      <div className="relative z-20">
+        <div className="px-4 md:px-8 lg:px-12">
+
 
         {/* Header */}
         <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
@@ -292,10 +250,11 @@ const ContinueSearching = ({
             </div>
           )}
         </div>
-
+        {/* /header padded inner */}
+        </div>
 
         {isEmpty ? (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="px-4 md:px-8 lg:px-12 flex flex-col items-center justify-center py-12 text-center">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center mb-4">
               <Home className="w-8 h-8 text-[#B89555]" />
             </div>
@@ -310,7 +269,7 @@ const ContinueSearching = ({
           </div>
         ) : (
           <div
-            className="relative"
+            className="relative w-full"
             style={{
               WebkitMaskImage:
                 "linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%)",
@@ -322,6 +281,7 @@ const ContinueSearching = ({
           </div>
         )}
       </div>
+
 
       {/* Lead Capture Modal */}
       <LeadCaptureModal
@@ -546,22 +506,23 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             <FavoriteButton projectId={item.id} showShortlist={false} size="sm" />
           </div>
         )}
-        {/* Bottom content - elevated. Heavy bottom scrim + strong shadow guarantees
-            project-name contrast over any image. */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 z-10 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
+        {/* Bottom content - full-card scrim guarantees project-name contrast
+            over any image (light, dark, busy, washed out). */}
+        <div className="absolute inset-x-0 bottom-0 h-3/5 z-10 bg-gradient-to-t from-black via-black/85 to-transparent pointer-events-none" />
         <div className="absolute bottom-0 left-0 right-0 p-3 z-20" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
-            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/20 allow-white">
+            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/25 allow-white">
               {item.subtitle}
             </span>
           )}
           <h3
-            className="allow-white text-white font-bold text-xs md:text-sm leading-tight truncate transition-colors duration-300"
-            style={{ textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 1px 2px rgba(0,0,0,0.9)" }}
+            className="allow-white text-white font-bold text-sm md:text-base leading-tight line-clamp-2 transition-colors duration-300"
+            style={{ textShadow: "0 2px 8px rgba(0,0,0,1), 0 1px 3px rgba(0,0,0,1), 0 0 14px rgba(0,0,0,0.9)" }}
           >
             {typeof item.name === 'string' ? item.name : String(item.name || '')}
           </h3>
         </div>
+
 
       </Link>
     </div>
