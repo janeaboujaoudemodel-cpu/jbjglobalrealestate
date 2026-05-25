@@ -97,7 +97,9 @@ const ExploreServicesExpander = () => {
       {/* Unified segmented header — rectangular pill band, dividers between categories */}
       <div
         ref={tabsRef}
-        className="flex items-stretch overflow-x-auto no-scrollbar border-y border-[#B89555]/45 bg-[#F7F2EA] divide-x divide-[#B89555]/30"
+        data-on-dark
+        data-no-contrast-guard
+        className="flex items-stretch overflow-x-auto no-scrollbar border-y border-[#B89555]/55 bg-[#102540] divide-x divide-white/15"
         role="tablist"
         aria-label="Services"
       >
@@ -114,7 +116,7 @@ const ExploreServicesExpander = () => {
               className={`shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors ${
                 isActive
                   ? "bg-[#EFE6D6] text-[#1A1A1A] shadow-[inset_0_-2px_0_#B89555,inset_0_1px_0_rgba(255,255,255,0.7)]"
-                  : "text-[#1A1A1A]/80 hover:bg-[#FDFBF7] hover:text-[#1A1A1A]"
+                  : "text-white/85 hover:bg-[#1a3d63] hover:text-white"
               } ${s.available === false ? "opacity-80" : ""}`}
             >
               <Icon className="w-4 h-4" />

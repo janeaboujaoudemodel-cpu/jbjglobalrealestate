@@ -119,7 +119,7 @@ const FooterCurrencyUnit = () => {
         {currencyOpen && (
           <div
             className="absolute bottom-full mb-2 left-0 w-52 rounded-md overflow-hidden z-50 max-h-80 overflow-y-auto shadow-[0_20px_40px_rgba(0,0,0,0.55)]"
-            style={{ background: "#0F0E0C", border: `1px solid ${HAIRLINE}` }}
+            style={{ background: "#0d2138", border: `1px solid ${HAIRLINE}` }}
           >
             <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} aria-hidden="true" />
             {SUPPORTED_CURRENCIES.map((cur) => (
@@ -453,8 +453,8 @@ const Footer = () => {
       data-hairline-luminance={hairline.luminance.toFixed(4)}
       className="relative overflow-x-hidden isolate"
       style={{
-        background: "#0A0908",
-        color: "rgba(255,255,255,0.85)",
+        background: "#102540",
+        color: "rgba(255,255,255,0.92)",
         fontFamily: "Inter, system-ui, sans-serif",
         // Expose alphas as CSS vars so descendants can opt in if needed.
         ["--fh-white" as string]: `rgba(${HAIRLINE_TOKENS.whiteRgb},${hairline.white})`,
@@ -545,15 +545,15 @@ const Footer = () => {
                 <span className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A] font-bold">Connect</span>
                 <SocialLinks variant="premium" className="gap-2" />
               </div>
-              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
+              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/40 relative" aria-hidden="true" />
               <div className="relative">
                 <GoogleMyBusinessLink />
               </div>
-              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
+              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/40 relative" aria-hidden="true" />
               <div className="relative">
                 <ModeSwitcher variant="header" side="top" showForUnselected />
               </div>
-              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
+              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/40 relative" aria-hidden="true" />
               <div className="relative">
                 <FooterCurrencyUnit />
               </div>
