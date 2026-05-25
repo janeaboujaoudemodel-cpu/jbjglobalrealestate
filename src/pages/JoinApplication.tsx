@@ -769,7 +769,7 @@ export default function JoinApplication() {
                   <Input
                     id="email"
                     type="email"
-                    value={user?.email || ""}
+                    value=""
                     placeholder="you@email.com"
                     disabled
                     className="careers-blue-field h-12 rounded-lg text-base"

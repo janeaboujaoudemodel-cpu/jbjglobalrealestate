@@ -63,6 +63,25 @@
   opacity: 1 !important;
 }
 
+/* Kill browser autofill white background */
+.jbj-form-field:-webkit-autofill,
+.jbj-form-field:-webkit-autofill:hover,
+.jbj-form-field:-webkit-autofill:focus,
+.jbj-form-field:-webkit-autofill:active,
+[data-careers-page] .careers-blue-field:-webkit-autofill,
+[data-careers-page] .careers-blue-field:-webkit-autofill:hover,
+[data-careers-page] .careers-blue-field:-webkit-autofill:focus,
+[data-careers-page] .careers-phone-tel:-webkit-autofill,
+[data-careers-page] .careers-phone-input input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  box-shadow: 0 0 0px 1000px transparent inset !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
+  caret-color: var(--t-form-blue) !important;
+  background-color: transparent !important;
+  background-clip: content-box !important;
+  transition: background-color 9999s ease-in-out 0s !important;
+}
+
 .jbj-form-field:focus,
 .jbj-form-field:focus-visible {
   border-color: var(--t-form-blue) !important;
