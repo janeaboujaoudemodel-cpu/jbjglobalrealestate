@@ -871,8 +871,8 @@ const Quiz = () => {
 
           {/* Preferences Summary Sidebar (desktop only) */}
           <div className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24 rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7]/80 backdrop-blur-sm p-5">
-              <h3 className="text-sm font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
+            <div className="sticky top-24 rounded-2xl border border-[#B89555]/30 bg-[#102540] backdrop-blur-sm p-5">
+              <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-[#B89555]" />
                 Your Preferences
               </h3>
@@ -885,15 +885,15 @@ const Quiz = () => {
                     : q.options.find(o => o.value === answer)?.label || String(answer);
                   return (
                     <div key={q.id} className="text-xs">
-                      <p className="text-[#1A1A1A]/70 uppercase tracking-wider text-[10px] mb-0.5">
+                      <p className="text-white/60 uppercase tracking-wider text-[10px] mb-0.5">
                         {q.id.replace(/_/g, " ")}
                       </p>
-                      <p className="text-[#1A1A1A] font-medium truncate">{displayValue}</p>
+                      <p className="text-white font-medium truncate">{displayValue}</p>
                     </div>
                   );
                 })}
                 {Object.keys(answers).length === 0 && (
-                  <p className="text-[#1A1A1A]/70 text-xs italic">Answer questions to see your preferences here</p>
+                  <p className="text-white/60 text-xs italic">Answer questions to see your preferences here</p>
                 )}
               </div>
             </div>
