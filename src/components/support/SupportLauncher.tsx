@@ -84,15 +84,12 @@ function useOverHero() {
   //   /mortgage-calculator, /contact, dashboard tools) are NOT heroes —
   //   so the launcher must stay in its normal navy-blue style there.
   // Default is the safe navy variant.
-  const [overHero, setOverHero] = useState(false);
+  // Default to TRUE so the tag is hidden until we confirm we're not over a
+  // video hero — prevents a flash of the navy tag on initial homepage paint.
+  const [overHero, setOverHero] = useState(true);
   useEffect(() => {
     const check = () => {
       const vh = window.innerHeight;
-      // Tag flips to transparent ONLY while the hero still dominates the
-      // viewport — i.e. its bottom edge is still near the bottom of the
-      // viewport (≥ 85% down). As soon as the next section (e.g. "Partners
-      // with Dubai's leading developers") appears at the bottom, we flip
-      // back to solid navy.
       const heroes = document.querySelectorAll<HTMLElement>("[data-hero-dark]");
       let hit = false;
       heroes.forEach((el) => {
@@ -104,15 +101,21 @@ function useOverHero() {
     };
 
     check();
+    // Re-check shortly after mount in case hero mounts after launcher.
+    const t1 = window.setTimeout(check, 100);
+    const t2 = window.setTimeout(check, 500);
     window.addEventListener("scroll", check, { passive: true });
     window.addEventListener("resize", check);
     return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
       window.removeEventListener("scroll", check);
       window.removeEventListener("resize", check);
     };
   }, []);
   return overHero;
 }
+
 
 
 export default function SupportLauncher() {
