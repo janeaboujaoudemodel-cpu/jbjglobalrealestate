@@ -28,8 +28,9 @@ const OverseasInvestorsStrip = () => {
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="allow-white group flex flex-wrap md:flex-nowrap items-center justify-between gap-3 md:gap-6 px-4 sm:px-6 md:px-10 py-3 md:py-4 text-white transition-colors hover:bg-[#1a3d63]"
+        className="allow-white group flex flex-wrap md:flex-nowrap items-center justify-between gap-4 md:gap-8 px-6 sm:px-10 md:px-14 py-10 md:py-14 lg:py-16 text-white transition-colors hover:bg-[#1a3d63]"
       >
+
         {/* Left: globe + headline (never truncate) */}
         <span className="allow-white flex items-center gap-2.5 min-w-0 flex-1 md:flex-none">
           <Globe className="w-4 h-4 md:w-5 md:h-5 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
