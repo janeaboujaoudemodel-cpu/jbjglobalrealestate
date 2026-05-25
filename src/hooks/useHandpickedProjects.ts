@@ -34,15 +34,22 @@ const SELECT = `
   images:project_images(id, image_url, alt_text, display_order)
 `;
 
-// Promote off-plan; suppress "ready/completed" listings UNLESS the project's
-// developer is direct-with-JBJ (has an active sales rep on our portal → full
-// commission). Owner directive: never show generic ready stock on the homepage.
+// Promote off-plan; suppress ANY "ready/completed" listing on the homepage
+// (owner directive: homepage promotes off-plan only). We check both the raw
+// construction_status AND the derived handover so projects with past handover
+// dates or "Ready"-style labels never slip through.
+import { deriveHandover } from "@/utils/handoverDerivation";
 const isCompletedReady = (p: any) => {
   const cs = String(p?.construction_status || "").toLowerCase().trim();
-  return cs === "completed" || cs === "ready" || cs === "complete";
+  if (/ready|complet|handed.?over/.test(cs)) return true;
+  const derived = deriveHandover(p);
+  if (derived && /^ready$/i.test(derived)) return true;
+  return false;
 };
 const isDirectWithDeveloper = (p: any) => p?.developer?.has_active_rep === true;
-const isHomepagePromotable = (p: any) => !isCompletedReady(p) || isDirectWithDeveloper(p);
+// Owner directive (explicit): NEVER show any ready project on the homepage,
+// even from direct-with-developer brands. Off-plan only on /.
+const isHomepagePromotable = (p: any) => !isCompletedReady(p);
 
 
 const ELITE_DEVELOPERS = [
