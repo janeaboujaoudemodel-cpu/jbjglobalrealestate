@@ -191,6 +191,8 @@ export const AdminRoutes = () => (
     <Route path="/it-department" element={<OwnerGuard><EmployeeManagementHub /></OwnerGuard>} />
     <Route path="/employee-management" element={<OwnerGuard><EmployeeManagementHub /></OwnerGuard>} />
     <Route path="/hr-dashboard" element={<OwnerGuard><HRDashboard /></OwnerGuard>} />
+    <Route path="/owner/careers-portal" element={<OwnerGuard><CareersPortal /></OwnerGuard>} />
+    <Route path="/careers-portal" element={<Navigate to="/owner/careers-portal" replace />} />
 
     {/* ── Communication & Productivity ── */}
     <Route path="/company-comm" element={<Navigate to="/owner/inbox" replace />} />
