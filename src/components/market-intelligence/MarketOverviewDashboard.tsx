@@ -57,7 +57,7 @@ const StatCard = ({
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="transition-all h-full bg-card border border-[#102540]/35 hover:border-[#102540]/60 hover:shadow-[0_4px_20px_rgba(16,37,64,0.12)]">
+      <Card className="transition-all h-full bg-card border-2 border-[#102540]/45 hover:border-[#102540]/60 hover:shadow-[0_4px_20px_rgba(16,37,64,0.12)]">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
@@ -142,7 +142,7 @@ export const MarketOverviewDashboard = () => {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full bg-card border border-[#102540]/35 hover:border-[#102540]/60 transition-all">
+              <Card className="h-full bg-card border-2 border-[#102540]/45 hover:border-[#102540]/60 transition-all">
                 <CardHeader>
                   <CardTitle className="text-[#102540] flex items-center gap-3">
                     <IconBox icon={BarChart3} className="w-10 h-10" />
@@ -186,7 +186,7 @@ export const MarketOverviewDashboard = () => {
 
             {/* Property Type Breakdown */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full bg-card border border-[#102540]/35 hover:border-[#102540]/60 transition-all">
+              <Card className="h-full bg-card border-2 border-[#102540]/45 hover:border-[#102540]/60 transition-all">
                 <CardHeader>
                   <CardTitle className="text-[#102540] flex items-center gap-3">
                     <IconBox icon={Building2} className="w-10 h-10" />
