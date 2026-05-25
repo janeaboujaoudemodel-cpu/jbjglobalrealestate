@@ -242,8 +242,8 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
     <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
-          <h3 className="font-bold text-[#1A1A1A] text-lg">Supply vs Demand</h3>
+          <TrendingUp className="w-5 h-5 text-[#B89555]" />
+          <h3 className="font-bold text-[#102540] text-lg">Supply vs Demand</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
           ratio > 0.9 ? 'bg-emerald-50 text-emerald-700' : ratio > 0.7 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'
