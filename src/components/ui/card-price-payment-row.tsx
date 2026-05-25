@@ -121,8 +121,8 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
 }) => {
   const hasPrice = typeof price === "number" && price > 0;
   const summary = formatPaymentPlanSummary(project);
-  const planLabel = summary ?? PAYMENT_PLAN_NA;
   const breakdown = getBreakdownRows(project);
+  const hasPlan = Boolean(summary);
 
   return (
     <div
@@ -148,78 +148,81 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
         </span>
       </div>
 
-      {/* RIGHT — Payment plan + info popover */}
-      <div className="flex flex-col items-end min-w-0">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium text-[#1A1A1A]/65 leading-none">
-          Payment plan
-        </span>
-        <div className="mt-1 flex items-center gap-1.5">
-          <span
-            className={cn(
-              "font-semibold tabular-nums leading-tight",
-              "text-[15px] sm:text-base",
-              summary ? "text-[#1A1A1A]" : "text-[#1A1A1A]/60",
-            )}
-          >
-            {planLabel}
+      {/* RIGHT — Payment plan + info popover.
+          Hidden entirely when the plan is unknown — never render "N/A".
+          The price column simply sits alone on the row in that case. */}
+      {hasPlan && (
+        <div className="flex flex-col items-end min-w-0">
+          <span className="text-[10px] uppercase tracking-[0.14em] font-medium text-[#1A1A1A]/65 leading-none">
+            Payment plan
           </span>
-          {breakdown && breakdown.length > 0 && (
-            <Popover>
-              <PopoverTrigger asChild>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  aria-label="View payment plan breakdown"
+          <div className="mt-1 flex items-center gap-1.5">
+            <span
+              className={cn(
+                "font-semibold tabular-nums leading-tight text-[#1A1A1A]",
+                "text-[15px] sm:text-base",
+              )}
+            >
+              {summary}
+            </span>
+            {breakdown && breakdown.length > 0 && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    aria-label="View payment plan breakdown"
+                    className={cn(
+                      "inline-flex h-5 w-5 items-center justify-center rounded-full",
+                      "text-[#1A1A1A]/70 hover:text-[#1A1A1A]",
+                      "hover:bg-[#EFE6D6] transition-colors",
+                      "focus:outline-none focus-visible:ring-1 focus-visible:ring-[#B89555]/60",
+                    )}
+                    data-no-contrast-guard
+                  >
+                    <Info className="h-3.5 w-3.5" aria-hidden="true" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent
+                  align="end"
+                  side="top"
+                  sideOffset={6}
                   className={cn(
-                    "inline-flex h-5 w-5 items-center justify-center rounded-full",
-                    "text-[#1A1A1A]/70 hover:text-[#1A1A1A]",
-                    "hover:bg-[#EFE6D6] transition-colors",
-                    "focus:outline-none focus-visible:ring-1 focus-visible:ring-[#B89555]/60",
+                    "w-60 p-0 overflow-hidden",
+                    "bg-[#FDFBF7] border border-[#B89555]/45",
+                    "shadow-[0_18px_50px_rgba(0,0,0,0.18)] rounded-xl",
                   )}
-                  data-no-contrast-guard
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <Info className="h-3.5 w-3.5" aria-hidden="true" />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent
-                align="end"
-                side="top"
-                sideOffset={6}
-                className={cn(
-                  "w-60 p-0 overflow-hidden",
-                  "bg-[#FDFBF7] border border-[#B89555]/45",
-                  "shadow-[0_18px_50px_rgba(0,0,0,0.18)] rounded-xl",
-                )}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="px-3.5 py-2.5 border-b border-[#B89555]/30 bg-[#F7F2EA]">
-                  <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[#1A1A1A]">
-                    Payment plan breakdown
-                  </span>
-                </div>
-                <ul className="divide-y divide-[#B89555]/15">
-                  {breakdown.map((row, i) => (
-                    <li
-                      key={`${row.label}-${i}`}
-                      className="flex items-center justify-between gap-3 px-3.5 py-2.5"
-                    >
-                      <span className="text-[13px] text-[#1A1A1A]/85 truncate">
-                        {row.label}
-                      </span>
-                      <span className="text-[13px] font-semibold tabular-nums text-[#1A1A1A]">
-                        {row.value}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </PopoverContent>
-            </Popover>
-          )}
+                  <div className="px-3.5 py-2.5 border-b border-[#B89555]/30 bg-[#F7F2EA]">
+                    <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[#1A1A1A]">
+                      Payment plan breakdown
+                    </span>
+                  </div>
+                  <ul className="divide-y divide-[#B89555]/15">
+                    {breakdown.map((row, i) => (
+                      <li
+                        key={`${row.label}-${i}`}
+                        className="flex items-center justify-between gap-3 px-3.5 py-2.5"
+                      >
+                        <span className="text-[13px] text-[#1A1A1A]/85 truncate">
+                          {row.label}
+                        </span>
+                        <span className="text-[13px] font-semibold tabular-nums text-[#1A1A1A]">
+                          {row.value}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
