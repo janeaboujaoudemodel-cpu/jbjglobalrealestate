@@ -142,9 +142,9 @@ export const MarketOverviewDashboard = () => {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full bg-card border border-border">
+              <Card className="h-full bg-card border border-[#102540]/35 hover:border-[#102540]/60 transition-all">
                 <CardHeader>
-                  <CardTitle className="text-foreground flex items-center gap-3">
+                  <CardTitle className="text-[#102540] flex items-center gap-3">
                     <IconBox icon={BarChart3} className="w-10 h-10" />
                     <span>Quarterly Transaction Trends</span>
                   </CardTitle>
@@ -186,9 +186,9 @@ export const MarketOverviewDashboard = () => {
 
             {/* Property Type Breakdown */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full bg-card border border-border">
+              <Card className="h-full bg-card border border-[#102540]/35 hover:border-[#102540]/60 transition-all">
                 <CardHeader>
-                  <CardTitle className="text-foreground flex items-center gap-3">
+                  <CardTitle className="text-[#102540] flex items-center gap-3">
                     <IconBox icon={Building2} className="w-10 h-10" />
                     <span>Price by Property Type</span>
                   </CardTitle>
