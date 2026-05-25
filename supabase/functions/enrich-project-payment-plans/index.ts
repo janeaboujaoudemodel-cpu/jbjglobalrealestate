@@ -238,6 +238,14 @@ Deno.serve(async (req) => {
       const search = await firecrawlSearch(altQ || q, firecrawlKey);
       const docs = extractDocs(search);
       if (docs.length === 0) {
+        if (!dryRun) {
+          await supabase
+            .from("projects")
+            .update({ payment_plan: "TBD", payment_breakdown: [] })
+            .eq("id", p.id)
+            .then(() => {})
+            .catch(() => {});
+        }
         results.push({ id: p.id, name: p.name, status: "skipped", reason: "no-search-results" });
         continue;
       }
