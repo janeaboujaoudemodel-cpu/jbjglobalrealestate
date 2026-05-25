@@ -359,12 +359,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             project={project as any}
           />
 
-          {/* Handover / Ready — kept as a thin meta line beneath, right-aligned. */}
-          <div className="flex justify-end -mt-1">
-            <span className="text-[#1A1A1A]/75 text-[11px] font-semibold tabular-nums handover-orange">
-              {deriveHandover(project) || HANDOVER_FALLBACK}
-            </span>
-          </div>
+          {/* Handover quarter is now shown as a Reelly-style pill on the
+              image (top-left), so the redundant bottom line is removed. */}
+
+
 
           {/* Owner-only diagnostic — Updated date hidden from public */}
           {isOwner && (project as any).updated_at && (
