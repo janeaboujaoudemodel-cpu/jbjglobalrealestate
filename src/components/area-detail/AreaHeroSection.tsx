@@ -181,7 +181,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
 
         {/* DLD source note */}
         {dldAreaData && (
-          <motion.p className="mt-3 text-[#1A1A1A]/70 text-[10px] uppercase tracking-widest" variants={fadeInUp}>
+          <motion.p className="mt-3 text-white/70 text-[10px] uppercase tracking-widest" variants={fadeInUp}>
             ↑ Live data · Dubai Land Department (DLD) · 2026 YTD
           </motion.p>
         )}
