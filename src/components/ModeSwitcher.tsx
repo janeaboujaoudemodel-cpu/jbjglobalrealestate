@@ -335,6 +335,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                         '--mode-on-base': config.onBase,
                         backgroundColor: config.base,
                         color: config.onBase,
+                        WebkitTextFillColor: config.onBase,
                         borderColor: config.base,
                       } as CSSProperties}
                     >
@@ -343,7 +344,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                         className="mode-switcher-selected-icon w-3 h-3 shrink-0 allow-white"
                         style={{ color: config.onBase, stroke: config.onBase }}
                       />
-                      Selected
+                      <span style={{ color: config.onBase, WebkitTextFillColor: config.onBase }}>Selected</span>
                     </span>
                   ) : (
                     <span
