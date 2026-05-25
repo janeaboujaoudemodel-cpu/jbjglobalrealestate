@@ -189,15 +189,16 @@ const ContinueSearching = ({
   const eyebrow = hasUserHistory ? "Recently viewed" : "Editor's picks";
 
   return (
-    <section className={`py-10 md:py-14 relative overflow-hidden ${className}`}>
-      {/* Premium champagne backdrop */}
+    <section className={`py-10 md:py-14 relative overflow-hidden w-screen left-1/2 right-1/2 -mx-[50vw] ${className}`}>
+      {/* Premium champagne backdrop — full-bleed edge to edge */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#FDFBF7] z-[1]" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent z-[2]" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent z-[2]" />
       </div>
 
-      <div className="px-4 md:px-6 lg:px-8 relative z-20">
+      <div className="px-4 md:px-8 lg:px-12 relative z-20">
+
         {/* Header */}
         <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
           <div className="flex items-center gap-3">
