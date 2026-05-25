@@ -7,8 +7,33 @@ import { cn } from "@/lib/utils";
 import {
   getCountryFlagForName,
   getLanguageFlagForName,
-  getNationalityFlagForName,
 } from "@/constants/localeOptions";
+
+const NATIONALITY_TO_COUNTRY: Record<string, string> = {
+  Afghan: "Afghanistan", Albanian: "Albania", Algerian: "Algeria", American: "United States", Andorran: "Andorra", Angolan: "Angola",
+  Argentine: "Argentina", Armenian: "Armenia", Australian: "Australia", Austrian: "Austria", Azerbaijani: "Azerbaijan", Bahraini: "Bahrain",
+  Bangladeshi: "Bangladesh", Belgian: "Belgium", Bolivian: "Bolivia", Bosnian: "Bosnia and Herzegovina", Brazilian: "Brazil", British: "United Kingdom",
+  Bulgarian: "Bulgaria", Cambodian: "Cambodia", Cameroonian: "Cameroon", Canadian: "Canada", Chilean: "Chile", Chinese: "China",
+  Colombian: "Colombia", Croatian: "Croatia", Cuban: "Cuba", Czech: "Czech Republic", Danish: "Denmark", Dutch: "Netherlands",
+  Ecuadorian: "Ecuador", Egyptian: "Egypt", Emirati: "United Arab Emirates", Estonian: "Estonia", Ethiopian: "Ethiopia", Filipino: "Philippines",
+  Finnish: "Finland", French: "France", Georgian: "Georgia", German: "Germany", Ghanaian: "Ghana", Greek: "Greece",
+  Hungarian: "Hungary", Icelandic: "Iceland", Indian: "India", Indonesian: "Indonesia", Iranian: "Iran", Iraqi: "Iraq",
+  Irish: "Ireland", Israeli: "Israel", Italian: "Italy", Jamaican: "Jamaica", Japanese: "Japan", Jordanian: "Jordan",
+  Kazakh: "Kazakhstan", Kenyan: "Kenya", Korean: "South Korea", Kuwaiti: "Kuwait", Latvian: "Latvia", Lebanese: "Lebanon",
+  Libyan: "Libya", Lithuanian: "Lithuania", Luxembourgish: "Luxembourg", Malaysian: "Malaysia", Maldivian: "Maldives", Maltese: "Malta",
+  Mexican: "Mexico", Moldovan: "Moldova", Mongolian: "Mongolia", Moroccan: "Morocco", Nepalese: "Nepal", "New Zealander": "New Zealand",
+  Nigerian: "Nigeria", Norwegian: "Norway", Omani: "Oman", Pakistani: "Pakistan", Palestinian: "Palestine", Panamanian: "Panama",
+  Peruvian: "Peru", Polish: "Poland", Portuguese: "Portugal", Qatari: "Qatar", Romanian: "Romania", Russian: "Russia",
+  Saudi: "Saudi Arabia", Serbian: "Serbia", Singaporean: "Singapore", Slovak: "Slovakia", Slovenian: "Slovenia", "South African": "South Africa",
+  Spanish: "Spain", "Sri Lankan": "Sri Lanka", Sudanese: "Sudan", Swedish: "Sweden", Swiss: "Switzerland", Syrian: "Syria",
+  Taiwanese: "Taiwan", Thai: "Thailand", Tunisian: "Tunisia", Turkish: "Turkey", Ukrainian: "Ukraine", Uruguayan: "Uruguay",
+  Uzbek: "Uzbekistan", Venezuelan: "Venezuela", Vietnamese: "Vietnam", Yemeni: "Yemen", Zambian: "Zambia", Zimbabwean: "Zimbabwe",
+};
+
+function getNationalityFlagForName(nationality: string): string {
+  const country = NATIONALITY_TO_COUNTRY[nationality] || nationality;
+  return getCountryFlagForName(country);
+}
 
 interface SearchableSelectProps {
   value: string;
