@@ -72,7 +72,7 @@ export const DataSourcesPanel = () => {
               const fc = frequencyClasses[source.updateFrequency] || frequencyClasses.monthly;
               return (
                 <motion.div key={source.id} variants={fadeInUp}>
-                  <Card className="h-full transition-all hover:shadow-lg bg-card border border-border">
+                  <Card className="h-full transition-all hover:shadow-lg bg-card border-2 border-[#102540]/45">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <IconBox icon={Database} />
