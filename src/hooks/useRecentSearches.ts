@@ -69,12 +69,15 @@ function loadItems(): RecentItem[] {
     const parsed = raw ? JSON.parse(raw) : [];
     if (!Array.isArray(parsed)) return [];
 
+    const now = Date.now();
     const normalized = parsed
       .map(normalizeItem)
       .filter((item): item is RecentItem => item !== null)
-      .sort((a, b) => b.viewedAt - a.viewedAt);
+      // Drop anything older than the 30-day TTL
+      .filter((item) => now - item.viewedAt <= TTL_MS);
 
-    // Deduplicate by type+slug (keep most recent)
+    // Deduplicate by type+slug — keep the FIRST occurrence so order is stable
+    // across renders (no shuffling on revisit).
     const seen = new Set<string>();
     return normalized.filter((item) => {
       const key = `${item.type}-${item.slug}`;
