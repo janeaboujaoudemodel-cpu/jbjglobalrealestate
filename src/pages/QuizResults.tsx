@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, ArrowRight, Brain, Download, Award, Share2, Users, X, Mail } from "lucide-react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { Sparkles, ArrowRight, Brain, Download, Award, Share2, Users, X, Mail, MessageCircle, Link as LinkIcon, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ProjectCard from "@/components/ProjectCard";
@@ -26,6 +28,9 @@ import { useMembership } from "@/hooks/useMembership";
 import { useAuth } from "@/contexts/AuthContext";
 
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";
+const JBJ_CONSULTANT_EMAIL = "CONTACT@JBJ.AE";
+const JBJ_CONSULTANT_WHATSAPP = "971501234567"; // International format, no + or spaces
+
 
 
 const QuizResults = () => {
@@ -37,6 +42,7 @@ const QuizResults = () => {
   const isFreeUse = searchParams.get("free") === "true";
   const [badges, setBadges] = useState<Record<string, 'top1' | 'top2' | 'top3' | null>>({});
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [shareTrigger, setShareTrigger] = useState<"share" | "post-download">("share");
   const [showVipModal, setShowVipModal] = useState(false);
 
   const { data: projects, isLoading } = useQuery({
@@ -68,22 +74,11 @@ const QuizResults = () => {
       }));
 
       return normalized
-        .filter(p => p.cover_image_url || p.images.length > 0)
-        .filter(p => {
-          const hd = (p as any).handover_date;
-          if (hd) {
-            const hLower = hd.toLowerCase();
-            if (!hLower.includes("ready")) {
-              const yearMatch = hd.match(/\b(20\d{2})\b/);
-              if (yearMatch && parseInt(yearMatch[1]) < 2026) return false;
-            }
-          }
-          return true;
-        })
         .sort((a, b) => projectSlugs.indexOf(a.slug) - projectSlugs.indexOf(b.slug));
     },
     enabled: projectSlugs.length > 0,
   });
+
 
   const handleSetBadge = (projectId: string, badge: 'top1' | 'top2' | 'top3' | null) => {
     setBadges(prev => ({ ...prev, [projectId]: badge }));
@@ -95,143 +90,227 @@ const QuizResults = () => {
     top3: { label: "Top 3", sublabel: "Bronze", color: "bg-gradient-to-r from-[#CD7F32] via-[#E8A84C] to-[#CD7F32] border-2 border-[#CD7F32] shadow-lg", textColor: "text-white", medalColor: "text-[#CD7F32]" },
   };
 
-  const handleDownloadReport = () => {
-    if (!projects?.length) return;
-
-    const reportHTML = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>JBJ Global Real Estate - AI Property Recommendations</title>
-  <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; background: #FDFBF7; color: #1a1a1a; }
-    .header { text-align: center; margin-bottom: 40px; border-bottom: 3px solid #B89555; padding-bottom: 30px; }
-    .logo { font-size: 24px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a; }
-    .logo span { color: #B89555; }
-    .title { font-size: 32px; margin: 20px 0 10px; color: #1a1a1a; }
-    .subtitle { color: #666; font-size: 16px; }
-    .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-right: 8px; }
-    .badge-gold { background: linear-gradient(to right, #B89555, #E8D5A3); color: #000; border: 2px solid #B89555; }
-    .badge-silver { background: linear-gradient(to right, #A0A0A0, #E8E8E8); color: #000; border: 2px solid #B0B0B0; }
-    .badge-bronze { background: linear-gradient(to right, #CD7F32, #E8A84C); color: #fff; border: 2px solid #CD7F32; }
-    .project { background: #fff; border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 2px solid #B89555; box-shadow: 0 4px 16px rgba(200,167,102,0.15); }
-    .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-    .project-name { font-size: 20px; font-weight: bold; margin-bottom: 4px; color: #1a1a1a; }
-    .developer { color: #B89555; font-size: 14px; font-weight: 600; }
-    .rank { font-size: 28px; font-weight: bold; color: #B89555; }
-    .details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
-    .detail-item { background: #F7F2EA; padding: 12px; border-radius: 8px; border: 1px solid #B8955520; }
-    .detail-label { color: #888; font-size: 12px; margin-bottom: 4px; }
-    .detail-value { font-size: 14px; font-weight: 600; color: #1a1a1a; }
-    .footer { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 2px solid #B89555; color: #666; }
-    .exclusive { background: linear-gradient(to right, rgba(201,168,76,0.15), rgba(201,168,76,0.08)); border: 2px solid rgba(201,168,76,0.4); padding: 12px 20px; border-radius: 8px; text-align: center; margin-bottom: 30px; }
-    .exclusive span { color: #B89555; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <div class="logo"><span>JBJ</span> GLOBAL REAL ESTATE</div>
-    <h1 class="title">Your AI Property Recommendations</h1>
-    <p class="subtitle">Personalized selection based on your preferences</p>
-  </div>
-
-  <div class="exclusive">
-    <span>&#9733;</span> #1 AI Property Matchmaker — Exclusive by JBJ Global Real Estate <span>&#9733;</span>
-  </div>
-
-  ${projects.map((project, index) => {
-    const badge = badges[project.id];
-    return `
-    <div class="project">
-      <div class="project-header">
-        <div>
-          ${badge ? `<span class="badge badge-${badge === 'top1' ? 'gold' : badge === 'top2' ? 'silver' : 'bronze'}">${badgeLabels[badge].label} (${badgeLabels[badge].sublabel})</span>` : ''}
-          <h2 class="project-name">${project.name}</h2>
-          <p class="developer">${project.developer?.name || 'Developer'}</p>
-        </div>
-        <div class="rank">#${index + 1}</div>
-      </div>
-      <div class="details">
-        <div class="detail-item">
-          <div class="detail-label">Location</div>
-          <div class="detail-value">${project.location || 'N/A'}, ${project.emirate || 'UAE'}</div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-label">Price From</div>
-          <div class="detail-value">${project.price_from ? `AED ${(project.price_from / 1000000).toFixed(1)}M` : 'Price on Request'}</div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-label">Bedrooms</div>
-          <div class="detail-value">${project.bedrooms_min != null && project.bedrooms_max != null ? `${project.bedrooms_min === 0 ? 'Studio' : project.bedrooms_min} - ${project.bedrooms_max} BR` : 'Type TBC'}</div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-label">Handover</div>
-          <div class="detail-value">${project.handover_date || 'TBA'}</div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-label">Size Range</div>
-          <div class="detail-value">${project.size_min?.toLocaleString() || 'N/A'} - ${project.size_max?.toLocaleString() || 'N/A'} sqft</div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-label">Payment Plan</div>
-          <div class="detail-value">${project.payment_plan || 'Contact Us'}</div>
-        </div>
-      </div>
-    </div>
-    `;
-  }).join('')}
-
-  <div class="footer">
-    <p>Generated by JBJ Global Real Estate AI Property Matcher</p>
-    <p>Powered & Made by JBJ Global Real Estate — Brokerage</p>
-    <p>Contact: CONTACT@JBJ.AE | www.JBJ.ae</p>
-  </div>
-</body>
-</html>
-    `;
-
-    const blob = new Blob([reportHTML], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'JBJ-Global-Real-Estate-AI-Recommendations.html';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast.success("Report downloaded!");
-  };
-
-  const handleShareToCompany = () => {
-    if (!projects?.length) return;
-
-    const projectList = projects.map((p, i) => {
+  // Build a plain-text summary of recommendations (used by share channels)
+  const buildShareText = (includeIntro = true) => {
+    if (!projects?.length) return "";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://jbj.ae";
+    const lines = projects.map((p, i) => {
       const badge = badges[p.id];
-      const badgeStr = badge ? ` [${badgeLabels[badge].label} - ${badgeLabels[badge].sublabel}]` : '';
-      return `${i + 1}. ${p.name}${badgeStr}
-   Developer: ${p.developer?.name || 'N/A'}
-   Location: ${p.location}, ${p.emirate}
-    Price: ${p.price_from ? `AED ${(p.price_from / 1000000).toFixed(1)}M` : 'Price on Request'}
-   Bedrooms: ${p.bedrooms_min != null && p.bedrooms_max != null ? `${p.bedrooms_min === 0 ? 'Studio' : p.bedrooms_min} - ${p.bedrooms_max} BR` : 'Type TBC'}
-   Handover: ${p.handover_date || 'TBA'}`;
-    }).join('\n\n');
-
-    const subject = encodeURIComponent("AI Property Recommendations - Request for Consultation");
-    const body = encodeURIComponent(`Dear JBJ Global Real Estate Team,
-
-I have completed the AI Property Assessment and would like to request a consultation regarding the following recommendations:
-
-${projectList}
-
-Please contact me to discuss these options further.
-
-Best regards`);
-
-    window.location.href = `mailto:CONTACT@JBJ.AE?subject=${subject}&body=${body}`;
-    setShareModalOpen(false);
-    toast.success("Opening email client...");
+      const badgeStr = badge ? ` [${badgeLabels[badge].label}]` : "";
+      const price = p.price_from
+        ? `AED ${(p.price_from / 1000000).toFixed(1)}M`
+        : "Price on Request";
+      const beds =
+        p.bedrooms_min != null && p.bedrooms_max != null
+          ? p.bedrooms_min === 0
+            ? `Studio${p.bedrooms_max > 0 ? ` - ${p.bedrooms_max} BR` : ""}`
+            : `${p.bedrooms_min} - ${p.bedrooms_max} BR`
+          : "Type TBC";
+      return [
+        `#${i + 1} ${p.name}${badgeStr}`,
+        `Developer: ${p.developer?.name || "N/A"}`,
+        `Location: ${p.location || ""}, ${p.emirate || "UAE"}`,
+        `Price: ${price}`,
+        `Bedrooms: ${beds}`,
+        `Handover: ${p.handover_date || "TBA"}`,
+        `Link: ${origin}/project/${p.slug}`,
+      ].join("\n");
+    });
+    const intro = includeIntro
+      ? "JBJ Global Real Estate — AI Property Recommendations\n\n"
+      : "";
+    return intro + lines.join("\n\n");
   };
+
+  // Build a real, branded PDF report via jsPDF
+  const buildPdf = () => {
+    if (!projects?.length) return null;
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const ink: [number, number, number] = [26, 26, 26];
+    const gold: [number, number, number] = [184, 149, 85];
+    const champagne: [number, number, number] = [247, 242, 234];
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://jbj.ae";
+
+    const drawHeader = () => {
+      // Champagne header bar
+      doc.setFillColor(...champagne);
+      doc.rect(0, 0, pageW, 70, "F");
+      // Gold hairline
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.8);
+      doc.line(0, 70, pageW, 70);
+      // Brand
+      doc.setTextColor(...ink);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(16);
+      doc.text("JBJ GLOBAL REAL ESTATE", 40, 32);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(...gold);
+      doc.text("AI Property Recommendations", 40, 50);
+      // Date right
+      doc.setTextColor(120, 120, 120);
+      doc.setFontSize(8);
+      doc.text(new Date().toLocaleDateString(), pageW - 40, 50, { align: "right" });
+    };
+
+    const drawFooter = (pageNum: number, total: number) => {
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.6);
+      doc.line(40, pageH - 50, pageW - 40, pageH - 50);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.setTextColor(110, 110, 110);
+      doc.text("Powered by JBJ Global Real Estate — Brokerage | Dubai, UAE", 40, pageH - 32);
+      doc.text("CONTACT@JBJ.AE  ·  www.jbj.ae", 40, pageH - 20);
+      doc.text(`Page ${pageNum} / ${total}`, pageW - 40, pageH - 20, { align: "right" });
+    };
+
+    drawHeader();
+
+    // Title
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.text("Your AI-Selected Properties", 40, 110);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.text(
+      "Personalized selection based on your preferences",
+      40,
+      130
+    );
+
+    // Build one table per project
+    let cursorY = 160;
+    projects.forEach((p, idx) => {
+      const badge = badges[p.id];
+      const badgeStr = badge ? `  [${badgeLabels[badge].label}]` : "";
+      if (cursorY > pageH - 200) {
+        doc.addPage();
+        drawHeader();
+        cursorY = 100;
+      }
+
+      // Project title row
+      doc.setFillColor(...champagne);
+      doc.rect(40, cursorY, pageW - 80, 32, "F");
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.5);
+      doc.rect(40, cursorY, pageW - 80, 32);
+      doc.setTextColor(...ink);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(13);
+      doc.text(`#${idx + 1}  ${p.name}${badgeStr}`, 50, cursorY + 21);
+      cursorY += 32;
+
+      const beds =
+        p.bedrooms_min != null && p.bedrooms_max != null
+          ? p.bedrooms_min === 0
+            ? `Studio${p.bedrooms_max > 0 ? ` - ${p.bedrooms_max} BR` : ""}`
+            : `${p.bedrooms_min} - ${p.bedrooms_max} BR`
+          : "Type TBC";
+
+      autoTable(doc, {
+        startY: cursorY,
+        margin: { left: 40, right: 40 },
+        theme: "grid",
+        styles: { font: "helvetica", fontSize: 10, textColor: ink, lineColor: [220, 200, 160] },
+        headStyles: { fillColor: champagne, textColor: ink, fontStyle: "bold" },
+        body: [
+          ["Developer", p.developer?.name || "N/A"],
+          ["Location", `${p.location || ""}, ${p.emirate || "UAE"}`],
+          [
+            "Price From",
+            p.price_from ? `AED ${(p.price_from / 1000000).toFixed(1)}M` : "Price on Request",
+          ],
+          ["Bedrooms", beds],
+          ["Handover", p.handover_date || "TBA"],
+          ["Payment Plan", p.payment_plan || "Contact Us"],
+          ["Listing", `${origin}/project/${p.slug}`],
+        ],
+        columnStyles: {
+          0: { cellWidth: 110, fontStyle: "bold", fillColor: [253, 251, 247] },
+          1: { cellWidth: "auto" },
+        },
+      });
+
+      cursorY = (doc as any).lastAutoTable.finalY + 18;
+    });
+
+    // Page numbers
+    const total = doc.getNumberOfPages();
+    for (let i = 1; i <= total; i++) {
+      doc.setPage(i);
+      drawFooter(i, total);
+    }
+
+    return doc;
+  };
+
+  const handleDownloadReport = () => {
+    const doc = buildPdf();
+    if (!doc) return;
+    doc.save("JBJ-AI-Property-Recommendations.pdf");
+    toast.success("Report downloaded!");
+    // Immediately offer sharing options after download
+    setShareTrigger("post-download");
+    setShareModalOpen(true);
+  };
+
+  const handleOpenShare = () => {
+    setShareTrigger("share");
+    setShareModalOpen(true);
+  };
+
+  // Channel handlers
+  const handleShareWhatsApp = () => {
+    const text = encodeURIComponent(buildShareText());
+    window.open(`https://wa.me/?text=${text}`, "_blank", "noopener,noreferrer");
+    toast.success("Opening WhatsApp…");
+  };
+
+  const handleShareEmail = () => {
+    const subject = encodeURIComponent("My JBJ AI Property Recommendations");
+    const body = encodeURIComponent(buildShareText());
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    toast.success("Opening email client…");
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(buildShareText());
+      toast.success("Recommendations copied to clipboard");
+    } catch {
+      toast.error("Unable to copy");
+    }
+  };
+
+  const handleShareToConsultant = () => {
+    if (!projects?.length) return;
+    const subject = encodeURIComponent("AI Property Recommendations — Request Consultation");
+    const body = encodeURIComponent(
+      `Dear JBJ Global Real Estate Team,\n\nI have completed the AI Property Assessment and would like a consultation on the following recommendations:\n\n${buildShareText(false)}\n\nPlease contact me to discuss further.\n\nBest regards`
+    );
+    window.location.href = `mailto:${JBJ_CONSULTANT_EMAIL}?subject=${subject}&body=${body}`;
+    toast.success("Sending to JBJ Consultant…");
+  };
+
+  const handleConsultantWhatsApp = () => {
+    const text = encodeURIComponent(
+      `Hello JBJ Global Real Estate,\n\nI just completed the AI Property Finder and would like a consultation on these recommendations:\n\n${buildShareText(false)}`
+    );
+    window.open(
+      `https://wa.me/${JBJ_CONSULTANT_WHATSAPP}?text=${text}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+    toast.success("Opening WhatsApp to JBJ…");
+  };
+
 
   if (isLoading) {
     return (
@@ -254,7 +333,7 @@ Best regards`);
             <span className="text-[#1A1A1A] text-sm font-medium">#1 AI Property Matchmaker — Exclusive by JBJ Global Real Estate</span>
           </div>
           
-          <h1 className="text-[#1A1A1A] text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-[#102540] text-4xl md:text-5xl font-bold mb-4">
             Your AI-Selected Properties
           </h1>
           <p className="text-[#1A1A1A]/70 text-lg max-w-2xl mx-auto mb-6">
@@ -265,20 +344,22 @@ Best regards`);
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button
               onClick={handleDownloadReport}
-              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] hover:brightness-95 font-semibold shadow-md border-2 border-[#B89555] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+              className="bg-[#FDFBF7] text-[#B89555] hover:bg-[#F7F2EA] hover:text-[#B89555] hover:[&_svg]:text-[#B89555] font-semibold shadow-md border border-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
             >
-              <Download className="w-4 h-4 mr-2" />
+              <Download className="w-4 h-4 mr-2 text-[#B89555]" />
               Download Report
             </Button>
             <Button
-              onClick={() => setShareModalOpen(true)}
-              className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110 font-semibold"
+              onClick={handleOpenShare}
+              data-allow-dark-cta
+              className="bg-[#102540] text-white hover:bg-[#1a3d63] hover:text-white [&_svg]:text-white font-semibold border border-[#B89555]"
             >
               <Share2 className="w-4 h-4 mr-2" />
               Share with Consultant
             </Button>
           </div>
         </div>
+
 
         {/* Top Recommendation */}
         {projects && projects.length > 0 && (
@@ -434,9 +515,9 @@ Best regards`);
         )}
 
         {/* Action Cards */}
-        <div className="border-2 border-[#B89555]/30 rounded-2xl p-6 bg-[#FDFBF7]/60 backdrop-blur-sm mb-12">
-          <h3 className="text-[#1A1A1A] text-lg font-semibold mb-5 flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
+        <div data-allow-dark-cta className="rounded-2xl p-6 bg-[#102540] border border-[#B89555] mb-12">
+          <h3 className="text-white text-lg font-semibold mb-5 flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-[#B89555]" />
             Want More AI Power?
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -514,7 +595,7 @@ Best regards`);
         <div className="text-center">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <Link to="/">
-              <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] hover:brightness-95 font-semibold px-6 py-3 border-2 border-[#B89555] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+              <Button data-allow-dark-cta className="bg-[#102540] text-white hover:bg-[#1a3d63] hover:text-white [&_svg]:text-white font-semibold px-6 py-3 border border-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
                 Browse All Properties
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -528,52 +609,108 @@ Best regards`);
         </div>
       </div>
 
-      {/* Share Modal */}
+      {/* Share Modal — unified channels (WhatsApp / Email / Copy / JBJ Consultant) */}
       <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
         <DialogContent className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               <Share2 className="w-5 h-5 text-[#B89555]" />
-              Share Your Results
+              {shareTrigger === "post-download" ? "Share your report" : "Share your recommendations"}
             </DialogTitle>
             <DialogDescription className="text-[#1A1A1A]/70">
-              Send your AI recommendations to our team for a personalized consultation
+              {shareTrigger === "post-download"
+                ? "Your PDF has been downloaded. You can also share these properties with anyone, or send them directly to a JBJ Consultant."
+                : "Pick a channel to share the full list of AI recommendations."}
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 mt-4">
-            <div className="bg-[#F7F2EA] rounded-lg p-4 border border-[#B89555]/20">
-              <p className="text-[#1A1A1A]/70 text-xs mb-3">Properties to share:</p>
+          <div className="space-y-4 mt-2">
+            <div className="bg-[#F7F2EA] rounded-lg p-3 border border-[#B89555]/20 max-h-40 overflow-y-auto">
+              <p className="text-[#1A1A1A]/70 text-xs mb-2">Properties included:</p>
               {projects?.map((p, i) => {
                 const badge = badges[p.id];
                 return (
-                  <div key={p.id} className="flex items-center gap-2 text-sm py-1">
+                  <div key={p.id} className="flex items-center gap-2 text-sm py-0.5">
                     <span className="text-[#B89555] font-semibold">#{i + 1}</span>
                     {badge && (
                       <span className={badgeLabels[badge].medalColor}>
-                        {badge === 'top1' ? '(Gold)' : badge === 'top2' ? '(Silver)' : '(Bronze)'}
+                        {badge === "top1" ? "(Gold)" : badge === "top2" ? "(Silver)" : "(Bronze)"}
                       </span>
                     )}
-                    <span className="text-[#1A1A1A]">{p.name}</span>
+                    <span className="text-[#1A1A1A] truncate">{p.name}</span>
                   </div>
                 );
               })}
             </div>
 
-            <Button
-              onClick={handleShareToCompany}
-              className="w-full bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110 font-semibold"
-            >
-              <Mail className="w-4 h-4 mr-2" />
-              Send to CONTACT@JBJ.AE
-            </Button>
+            {/* Channel grid */}
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                onClick={handleShareWhatsApp}
+                variant="outline"
+                className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border-[#B89555]/40 justify-start"
+              >
+                <MessageCircle className="w-4 h-4 mr-2 text-[#B89555]" />
+                WhatsApp
+              </Button>
+              <Button
+                onClick={handleShareEmail}
+                variant="outline"
+                className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border-[#B89555]/40 justify-start"
+              >
+                <Mail className="w-4 h-4 mr-2 text-[#B89555]" />
+                Email
+              </Button>
+              <Button
+                onClick={handleCopyLink}
+                variant="outline"
+                className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border-[#B89555]/40 justify-start"
+              >
+                <LinkIcon className="w-4 h-4 mr-2 text-[#B89555]" />
+                Copy text
+              </Button>
+              <Button
+                onClick={handleDownloadReport}
+                variant="outline"
+                className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border-[#B89555]/40 justify-start"
+              >
+                <Download className="w-4 h-4 mr-2 text-[#B89555]" />
+                Download PDF
+              </Button>
+            </div>
 
-            <p className="text-[#1A1A1A]/70 text-xs text-center">
-              Our property consultants will contact you within 24 hours
-            </p>
+            <div className="pt-2 border-t border-[#B89555]/20 space-y-2">
+              <p className="text-[#1A1A1A] text-xs font-semibold flex items-center gap-1.5">
+                <Building2 className="w-3.5 h-3.5 text-[#B89555]" />
+                Send to a JBJ Consultant
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  onClick={handleShareToConsultant}
+                  data-allow-dark-cta
+                  className="bg-[#102540] text-white hover:bg-[#1a3d63] hover:text-white [&_svg]:text-white font-semibold border border-[#B89555]"
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  Email JBJ
+                </Button>
+                <Button
+                  onClick={handleConsultantWhatsApp}
+                  data-allow-dark-cta
+                  className="bg-[#102540] text-white hover:bg-[#1a3d63] hover:text-white [&_svg]:text-white font-semibold border border-[#B89555]"
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  WhatsApp JBJ
+                </Button>
+              </div>
+              <p className="text-[#1A1A1A]/60 text-[11px] text-center pt-1">
+                Our consultants typically reply within 24 hours.
+              </p>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
+
+
 
       {/* VIP Upgrade Modal */}
       <PaymentModal
