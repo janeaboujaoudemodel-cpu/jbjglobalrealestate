@@ -543,13 +543,12 @@ const Compare = () => {
               Thank you for exploring our exclusive AI-powered property comparison tool.
               Get detailed insights, ROI projections, and expert recommendations.
             </p>
-            <FounderContent>
-              <div className="text-center mb-12">
-                <p className="text-white/85 text-sm font-medium">Jane Bou Jaoude</p>
-                <p className="text-[#1A1A1A] text-xs mt-0.5">Founder & CEO</p>
-                <p className="text-white/90 text-xs mt-0.5">JBJ Global Real Estate</p>
-              </div>
-            </FounderContent>
+            <div className="flex items-center justify-center gap-3 mb-10 mt-2">
+              <div className="h-px w-16" style={{ background: "#B89555" }} />
+              <span className="text-[10px] uppercase tracking-[0.22em] font-semibold text-white/60">Powered by</span>
+              <span className="text-xs font-bold tracking-[0.14em] text-white">JBJ GLOBAL REAL ESTATE</span>
+              <div className="h-px w-16" style={{ background: "#B89555" }} />
+            </div>
 
             {/* Steps Guide */}
             <div className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/20 rounded-3xl p-8 md:p-10 mb-10">
