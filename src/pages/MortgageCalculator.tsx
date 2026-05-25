@@ -95,13 +95,13 @@ const MortgageCalculatorPage = () => {
       <div className="py-16 md:py-24 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <span className="inline-block px-4 py-1.5 bg-[#1A1A1A]/10 border border-[#B89555]/40 rounded-full text-[#1A1A1A]/80 text-sm font-medium mb-6">
+            <span className="inline-block px-4 py-1.5 bg-[#102540]/10 border border-[#102540]/30 rounded-full text-[#102540] text-sm font-semibold mb-6">
               Professional Support
             </span>
-            <h2 
+            <h2
               className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
             >
-              Prefer a <span className="text-[#1A1A1A]">Mortgage Advisor</span> Through Our Licensed Partners?
+              Prefer a <span className="text-[#102540]">Mortgage Advisor</span> Through Our Licensed Partners?
             </h2>
             <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
               Our calculator gives you instant estimates, but for personalized guidance, through our licensed partners, we connect you with dedicated mortgage advisors who work with leading UAE banks to secure the best rates and terms for your property investment.
