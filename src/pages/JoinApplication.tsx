@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import {
   Loader2, Upload, CheckCircle, FileText, Bot, MessageCircle, Briefcase,
   User, Phone, Mail, MapPin, Star, Search, ChevronDown, ChevronUp,
-  ArrowLeft, ArrowRight,
+  ArrowLeft, ArrowRight, Sparkles,
 } from "lucide-react";
 import { CONTACT_INFO } from "@/constants/stats";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
