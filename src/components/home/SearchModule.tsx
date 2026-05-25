@@ -124,7 +124,27 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
   const [bedrooms, setBedrooms] = useState('any');
   const [priceRange, setPriceRange] = useState('any');
   const [currency, setCurrency] = useState<'AED' | 'USD' | 'EUR'>('AED');
-  const [areaUnit, setAreaUnit] = useState<'sqft' | 'sqm'>('sqft');
+  const [areaUnit, setAreaUnitState] = useState<'sqft' | 'sqm'>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('jj_area_unit') as 'sqft' | 'sqm') || 'sqft';
+    }
+    return 'sqft';
+  });
+  const setAreaUnit = (unit: 'sqft' | 'sqm') => {
+    setAreaUnitState(unit);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('jj_area_unit', unit);
+      window.dispatchEvent(new CustomEvent('areaUnitChange', { detail: unit }));
+    }
+  };
+  useEffect(() => {
+    const onUnit = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail === 'sqft' || detail === 'sqm') setAreaUnitState(detail);
+    };
+    window.addEventListener('areaUnitChange', onUnit);
+    return () => window.removeEventListener('areaUnitChange', onUnit);
+  }, []);
   const [sizeRange, setSizeRange] = useState('any');
   
   const navigate = useNavigate();
