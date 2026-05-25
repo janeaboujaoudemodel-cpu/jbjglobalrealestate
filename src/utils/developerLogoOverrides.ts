@@ -22,6 +22,9 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   ritzcarlton: { invert: true },
   theritzcarlton: { invert: true },
   ritzcarltonresidences: { invert: true },
+  // H&H Development / H and H Development — black filled logo, white H letters.
+  hhdevelopment: { invert: true },
+  handhdevelopment: { invert: true },
 };
 
 export function getDeveloperLogoOverride(
