@@ -664,15 +664,20 @@ export default function JoinApplication() {
             <CardHeader className="text-center pt-10 pb-6">
               <CardTitle className="text-4xl md:text-5xl font-semibold careers-navy tracking-tight">Application Form</CardTitle>
               <CardDescription className="careers-gold font-semibold text-lg">
-                All fields are required.{" "}
-                {selectedPosition && (
-                  <span className="font-semibold careers-gold">Applying for: {selectedPosition.label}</span>
-                )}
+                All fields are required.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-7 px-1 md:px-3" data-jbj-form noValidate>
+                {/* Selected role sync chip (mirrors Apply selection) */}
+                <SelectedRoleChip
+                  label={selectedPosition?.label || null}
+                  department={selectedPosition?.department}
+                  isBrokerRole={selectedPosition?.is_broker_role}
+                  onClear={() => setFormData({ ...formData, positionApplied: "" })}
+                />
+
                 {/* Wizard-style progress indicator (non-destructive) */}
                 <ApplicationProgress
                   steps={[
