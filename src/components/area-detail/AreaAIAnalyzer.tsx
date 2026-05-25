@@ -554,29 +554,29 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {hasStats && stats.totalProjects > 0 && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
-                          <Home className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
-                          <div className="text-lg font-bold text-[#1A1A1A]">{stats.totalProjects}</div>
+                          <Home className="w-4 h-4 text-[#B89555] mx-auto mb-1" />
+                          <div className="text-lg font-bold text-[#102540]">{stats.totalProjects}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Projects</div>
                         </div>
                       )}
                       {hasStats && stats.developers?.length > 0 && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
-                          <Landmark className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
-                          <div className="text-lg font-bold text-[#1A1A1A]">{stats.developers.length}</div>
+                          <Landmark className="w-4 h-4 text-[#B89555] mx-auto mb-1" />
+                          <div className="text-lg font-bold text-[#102540]">{stats.developers.length}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Developers</div>
                         </div>
                       )}
                       {hasStats && stats.pricePerSqft && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
-                          <BarChart3 className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
-                          <div className="text-lg font-bold text-[#1A1A1A]">{stats.pricePerSqft.toLocaleString()}</div>
+                          <BarChart3 className="w-4 h-4 text-[#B89555] mx-auto mb-1" />
+                          <div className="text-lg font-bold text-[#B89555]">{stats.pricePerSqft.toLocaleString()}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">AED/sqft</div>
                         </div>
                       )}
                       {hasStats && stats.avgPrice && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
-                          <TrendingUp className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
-                          <div className="text-lg font-bold text-[#1A1A1A]">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
+                          <TrendingUp className="w-4 h-4 text-[#B89555] mx-auto mb-1" />
+                          <div className="text-lg font-bold text-[#B89555]">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Avg Price</div>
                         </div>
                       )}
