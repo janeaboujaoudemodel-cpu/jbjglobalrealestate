@@ -285,7 +285,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   unstyled
                   className={cn(
                     "mode-switcher-item",
-                    "relative flex items-center gap-3 pl-5 pr-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 border w-full min-h-[72px]",
+                    "relative flex items-start gap-3 pl-5 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-200 border w-full",
                     "focus:outline-none",
                   )}
                 >
