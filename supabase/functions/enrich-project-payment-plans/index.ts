@@ -143,10 +143,21 @@ Return the JSON object only.`;
   }
 }
 
+const DEFAULT_LABELS = ["Down payment", "During construction", "Post handover", "Stage 4"];
+
 function validBreakdown(ms: Milestone[]): boolean {
   if (!Array.isArray(ms) || ms.length < 2 || ms.length > 4) return false;
-  const sum = ms.reduce((a, b) => a + Number(b?.percentage || 0), 0);
-  return Math.round(sum) === 100 && ms.every((m) => Number(m?.percentage) > 0 && m?.milestone);
+  const pcts = ms.map((m) => Number(m?.percentage || 0));
+  if (!pcts.every((n) => Number.isFinite(n) && n > 0)) return false;
+  const sum = pcts.reduce((a, b) => a + b, 0);
+  return sum >= 95 && sum <= 105;
+}
+
+function normalizeBreakdown(ms: Milestone[]): Milestone[] {
+  return ms.map((m, i) => ({
+    milestone: m?.milestone?.toString().trim() || DEFAULT_LABELS[i] || `Stage ${i + 1}`,
+    percentage: Math.round(Number(m?.percentage || 0)),
+  }));
 }
 
 Deno.serve(async (req) => {
@@ -188,7 +199,10 @@ Deno.serve(async (req) => {
       .limit(1);
   } else {
     // Filter in JS for missing/invalid breakdowns — easier than complex SQL on jsonb shape
-    query = query.or("payment_breakdown.is.null,payment_plan.is.null");
+    // Only pick rows we haven't tried yet (payment_plan IS NULL). After every
+    // attempt we set payment_plan to a real summary or to "TBD", so the same
+    // row is never re-picked in a future batch.
+    query = query.is("payment_plan", null);
   }
 
   const { data: projects, error } = await query;
@@ -229,7 +243,20 @@ Deno.serve(async (req) => {
       }
 
       const ai = await askAI(p.name, dev || null, docs, lovableKey);
-      if (ai.confidence !== "high" || !validBreakdown(ai.payment_breakdown)) {
+      const normalized = normalizeBreakdown(ai.payment_breakdown || []);
+      if (ai.confidence !== "high" || !validBreakdown(normalized)) {
+        // Mark as attempted so future batches don't keep re-picking the same rows.
+        // payment_plan = "TBD" + payment_breakdown = [] are both non-null, so the
+        // `is.null` OR filter excludes them. UI's regex won't parse "TBD" — the
+        // payment line stays hidden, never showing "TBD" to users.
+        if (!dryRun) {
+          await supabase
+            .from("projects")
+            .update({ payment_plan: "TBD", payment_breakdown: [] })
+            .eq("id", p.id)
+            .then(() => {})
+            .catch(() => {});
+        }
         results.push({
           id: p.id,
           name: p.name,
@@ -242,7 +269,7 @@ Deno.serve(async (req) => {
 
       const summary =
         ai.payment_plan_summary ||
-        ai.payment_breakdown.map((m) => Math.round(m.percentage)).join(" / ");
+        normalized.map((m) => Math.round(m.percentage)).join(" / ");
 
       if (!dryRun) {
         const before = {
@@ -251,7 +278,7 @@ Deno.serve(async (req) => {
         };
         const after = {
           payment_plan: summary,
-          payment_breakdown: ai.payment_breakdown,
+          payment_breakdown: normalized,
         };
         const { error: updErr } = await supabase
           .from("projects")
