@@ -48,7 +48,7 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpe
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <Building2 className="w-16 h-16 text-muted-foreground/30" />
+              <Building2 className="w-16 h-16 text-muted-foreground/60" />
             </div>
           )}
           {/* Badges overlay */}

@@ -130,7 +130,7 @@ export default function EventManagementHub() {
       ) : events.length === 0 ? (
         <Card className="border-[hsl(36,40%,70%)]/20">
           <CardContent className="p-8 text-center">
-            <Calendar className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+            <Calendar className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
             <p className="text-muted-foreground">No events created yet</p>
           </CardContent>
         </Card>

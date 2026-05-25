@@ -594,7 +594,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <ImageIcon className="w-12 h-12 text-muted-foreground/30" />
+                          <ImageIcon className="w-12 h-12 text-muted-foreground/60" />
                         </div>
                       )}
                       {testResult.project.status_label && (

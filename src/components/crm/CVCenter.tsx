@@ -1268,7 +1268,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
                 {filteredCVs.length === 0 && !isLoading && (
                   <div className="py-16 text-center">
-                    <FileText className="h-16 w-16 mx-auto mb-4 text-crm-text-muted opacity-30" />
+                    <FileText className="h-16 w-16 mx-auto mb-4 text-crm-text-muted opacity-60" />
                     <p className="text-crm-text-muted text-lg font-medium">No CVs found</p>
                   </div>
                 )}

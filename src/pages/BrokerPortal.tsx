@@ -349,7 +349,7 @@ export default function BrokerPortal() {
                 </div>
                 <Card className="border-[hsl(36,40%,70%)]/20">
                   <CardContent className="p-8 text-center">
-                    <MapPin className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+                    <MapPin className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
                     <p className="text-muted-foreground">No listings submitted yet</p>
                     <Link to="/listing-portal"><Button variant="outline" className="mt-4 border-[hsl(36,40%,70%)]/30 text-[hsl(36,40%,70%)]">Submit a Listing</Button></Link>
                   </CardContent>
@@ -475,7 +475,7 @@ export default function BrokerPortal() {
                 <CardContent>
                   {invitations.length === 0 ? (
                     <div className="text-center py-8">
-                      <Calendar className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+                      <Calendar className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
                       <p className="text-sm text-muted-foreground">No upcoming events</p>
                     </div>
                   ) : (

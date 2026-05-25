@@ -81,7 +81,7 @@ export function HRInboxTab() {
           <div className="py-8 text-center text-muted-foreground">Loading...</div>
         ) : threads.length === 0 ? (
           <div className="py-12 text-center">
-            <Mail className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
+            <Mail className="h-12 w-12 mx-auto mb-3 text-muted-foreground/60" />
             <p className="text-muted-foreground">No HR messages yet</p>
             <p className="text-xs text-muted-foreground/60 mt-1">
               Inbound replies from candidates will appear here
