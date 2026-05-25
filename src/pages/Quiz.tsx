@@ -798,7 +798,7 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleSelectAll}
                   disabled={allSelected()}
-                  className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
+                  className="bg-[#FDFBF7] text-[#102540] hover:bg-[#F7F2EA] hover:text-[#102540] border-[#B89555]/40 font-semibold disabled:opacity-50"
                 >
                   Select All
                 </Button>
@@ -807,7 +807,7 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleClearAll}
                   disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
-                  className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
+                  className="bg-[#FDFBF7] text-[#102540] hover:bg-[#F7F2EA] hover:text-[#102540] border-[#B89555]/40 font-semibold disabled:opacity-50"
                 >
                   Clear All
                 </Button>
