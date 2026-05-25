@@ -34,7 +34,7 @@ const WhyChooseUs = () => {
               <Award className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
               <span className="text-[#1A1A1A]">{t('whyUs.ourCommitment', 'Our Commitment')}</span>
             </span>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-3">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#102540] mb-3">
               {t('whyUs.title', 'Why Choose Us')}
             </h2>
             <p className="text-[#1A1A1A]/70 text-sm max-w-md mx-auto">

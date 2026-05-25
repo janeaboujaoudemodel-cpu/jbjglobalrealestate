@@ -33,7 +33,7 @@ const OverseasInvestorsBanner = () => {
 
         {/* Hero content */}
         <div className="max-w-4xl mx-auto text-center mb-8 md:mb-10 animate-fade-in-up">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#102540] mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
             Invest in Dubai From Anywhere in the World
           </h2>
           <p className="text-[#1A1A1A]/70 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
