@@ -607,13 +607,12 @@ export default function JoinApplication() {
                   Tap <strong className="text-gold">Apply</strong> on any role to auto-select it below.
                 </CardDescription>
                 <div className="relative mt-3">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#102540]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
                   <Input
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
                     placeholder="Search positions by title, department, or location"
-                    className="careers-blue-field pl-9 bg-[#FDFBF7] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 focus-visible:ring-[#102540]/40"
-                    style={{ border: "2px solid #102540", boxShadow: "none" }}
+                    className="careers-blue-field pl-9 h-12 rounded-lg text-base"
                   />
                 </div>
               </CardHeader>
@@ -748,7 +747,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                       placeholder="e.g. Sarah"
                       disabled={loading}
-                      className="careers-blue-field bg-[#F7F2EA] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 h-12 rounded-lg text-base"
+                      className="careers-blue-field h-12 rounded-lg text-base"
                     />
                   </div>
                   <div className="space-y-2">
@@ -759,7 +758,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                       placeholder="e.g. Khan"
                       disabled={loading}
-                      className="careers-blue-field bg-[#F7F2EA] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 h-12 rounded-lg text-base"
+                      className="careers-blue-field h-12 rounded-lg text-base"
                     />
                   </div>
                 </div>
@@ -773,9 +772,9 @@ export default function JoinApplication() {
                     value={user?.email || ""}
                     placeholder="you@email.com"
                     disabled
-                    className="careers-blue-field bg-[#F7F2EA] border-2 border-[#102540] text-[#102540] h-12 rounded-lg text-base"
+                    className="careers-blue-field h-12 rounded-lg text-base"
                   />
-                  <p className="text-xs text-[#102540] font-bold">Email is linked to your account</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Email is linked to your account</p>
                 </div>
 
                 {/* Phone */}

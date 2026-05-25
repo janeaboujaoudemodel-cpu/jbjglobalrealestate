@@ -115,7 +115,7 @@
 }
 
 [data-careers-page] .careers-blue-border {
-  border-color: #102540 !important;
+  border-color: rgba(184, 149, 85, 0.40) !important;
 }
 
 [data-careers-page] .careers-blue-field,
@@ -126,30 +126,38 @@
 [data-careers-page] input.careers-blue-field:hover,
 [data-careers-page] input.careers-blue-field:focus,
 [data-careers-page] input.careers-blue-field:focus-visible {
-  border-color: #102540 !important;
-  box-shadow: 0 0 0 1px rgba(16, 37, 64, 0.18) !important;
-  --tw-ring-color: rgba(16, 37, 64, 0.35) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(184, 149, 85, 0.40) !important;
+  box-shadow: none !important;
+  --tw-ring-color: rgba(184, 149, 85, 0.55) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+[data-careers-page] .careers-blue-field:focus,
+[data-careers-page] .careers-blue-field:focus-visible,
+[data-careers-page] input.careers-blue-field:focus,
+[data-careers-page] input.careers-blue-field:focus-visible {
+  border-color: #B89555 !important;
+  box-shadow: 0 0 0 3px rgba(184, 149, 85, 0.18) !important;
 }
 
 [data-careers-page] .careers-gold-border {
   border-color: #B89555 !important;
 }
 
-[data-careers-page] input,
+/* Generic inputs/triggers on careers page: soft gold hairline, transparent */
+[data-careers-page] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
 [data-careers-page] button[role="combobox"],
 [data-careers-page] .PhoneInputInput,
 [data-careers-page] input[type="tel"] {
-  border-color: #102540 !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(184, 149, 85, 0.40) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 
-[data-careers-page] .PhoneInputInput,
-[data-careers-page] input[type="tel"],
-[data-careers-page] button[role="combobox"] {
-  border-color: #102540 !important;
-  color: #102540 !important;
-  -webkit-text-fill-color: #102540 !important;
-}
-
+/* Country-code pill stays navy with white icons (locked) */
 [data-careers-page] .careers-phone-input [data-phone-code-trigger] {
   background: #102540 !important;
   border: 2px solid #102540 !important;
@@ -158,12 +166,12 @@
 
 [data-careers-page] .careers-phone-input input,
 [data-careers-page] .careers-phone-input input[type="tel"] {
-  background: #F7F2EA !important;
-  border: 2px solid #102540 !important;
-  border-left: 2px solid #102540 !important;
+  background: transparent !important;
+  border: 1px solid rgba(184, 149, 85, 0.40) !important;
   border-radius: 0.5rem !important;
-  color: #102540 !important;
-  box-shadow: inset 0 0 0 2px #102540 !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: none !important;
   appearance: none !important;
   -webkit-appearance: none !important;
 }
@@ -187,8 +195,11 @@
 [data-careers-page] input[type="tel"],
 [data-careers-page] .PhoneInputInput,
 [data-careers-page] input[placeholder="Search positions by title, department, or location"] {
-  border: 2px solid #102540 !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(184, 149, 85, 0.40) !important;
   box-shadow: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 
 /* All form labels on careers page → navy */
@@ -240,19 +251,19 @@
 [data-jbj-form] select,
 [data-jbj-form] button[role="combobox"],
 [data-jbj-form] [data-jbj-field] {
-  background-color: #F7F2EA !important;
-  border: 2px solid #102540 !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(184, 149, 85, 0.40) !important;
   border-radius: 0.5rem !important;
-  color: #102540 !important;
-  -webkit-text-fill-color: #102540 !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
   box-shadow: none !important;
   min-height: 3rem;
 }
 
 [data-jbj-form] input::placeholder,
 [data-jbj-form] textarea::placeholder {
-  color: rgba(16, 37, 64, 0.55) !important;
-  -webkit-text-fill-color: rgba(16, 37, 64, 0.55) !important;
+  color: rgba(26, 26, 26, 0.55) !important;
+  -webkit-text-fill-color: rgba(26, 26, 26, 0.55) !important;
   opacity: 1 !important;
 }
 
@@ -264,15 +275,15 @@
 [data-jbj-form] button[role="combobox"]:focus,
 [data-jbj-form] button[role="combobox"]:focus-visible {
   outline: none !important;
-  border-color: #102540 !important;
-  box-shadow: 0 0 0 3px rgba(16, 37, 64, 0.18) !important;
+  border-color: #B89555 !important;
+  box-shadow: 0 0 0 3px rgba(184, 149, 85, 0.18) !important;
 }
 
 [data-jbj-form] [data-jbj-dropzone] {
-  border: 2px dashed #102540 !important;
+  border: 1px dashed rgba(184, 149, 85, 0.55) !important;
   border-radius: 0.5rem !important;
-  background-color: #F7F2EA !important;
-  color: #102540 !important;
+  background-color: transparent !important;
+  color: #1A1A1A !important;
 }
 
 [data-jbj-form] [data-phone-code-trigger] {
