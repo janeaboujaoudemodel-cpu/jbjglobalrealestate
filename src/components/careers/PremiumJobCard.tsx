@@ -91,10 +91,10 @@ export default function PremiumJobCard({
   return (
     <div
       onClick={() => onSelect?.(id)}
-      className={`group relative rounded-2xl border bg-[linear-gradient(180deg,rgba(253,251,247,0.98),rgba(247,242,234,0.94))] p-6 cursor-pointer transition-all overflow-hidden ${
+      className={`group careers-card-strong relative rounded-2xl border p-6 cursor-pointer transition-all overflow-hidden ${
         selected
-          ? "border-[#102540] shadow-[0_0_0_3px_rgba(16,37,64,0.14),0_22px_44px_-28px_rgba(16,37,64,0.5)]"
-          : "border-[#B89555]/60 shadow-[0_12px_28px_-24px_rgba(16,37,64,0.22)] hover:-translate-y-[3px] hover:border-[#B89555] hover:shadow-[0_24px_48px_-28px_rgba(16,37,64,0.38),0_0_0_1px_rgba(184,149,85,0.4)]"
+          ? "border-[#071B33] shadow-[0_0_0_3px_rgba(7,27,51,0.16),0_30px_54px_-32px_rgba(7,27,51,0.55)]"
+          : "hover:-translate-y-[3px]"
       }`}
     >
       {/* Hover glow accent */}
@@ -110,7 +110,7 @@ export default function PremiumJobCard({
       <div className="relative">
         {/* Title row + selected check */}
         <div className="flex items-start justify-between gap-3 mb-3">
-          <h4 className="font-semibold text-lg md:text-[1.22rem] leading-snug text-[#102540] tracking-tight">
+          <h4 className="font-semibold text-lg md:text-[1.22rem] leading-snug text-[#071B33] tracking-tight">
             {title}
           </h4>
           {selected && (
@@ -144,40 +144,40 @@ export default function PremiumJobCard({
         )}
 
         {/* Meta row */}
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] mb-4">
-          <span className="inline-flex items-center gap-1.5 text-[#1A1A1A]/82 font-medium">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] mb-4">
+          <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
             <Briefcase className="w-3.5 h-3.5 text-[#102540]" />
             {department}
           </span>
           {location && (
-            <span className="inline-flex items-center gap-1.5 text-[#1A1A1A]/82 font-medium">
+            <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
               <MapPin className="w-3.5 h-3.5 text-[#102540]" />
               {location}
             </span>
           )}
           {isCommissionBased || isBrokerRole ? (
-            <span className="rounded-full border border-[#B89555]/55 bg-[#F7F2EA] px-2 py-0.5 font-semibold text-[#8B5E1A]">Commission Basis</span>
+            <span className="rounded-full border border-[#BFA46A] bg-[#EDE1CD] px-2.5 py-1 font-semibold text-[#5E4314] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">Commission Basis</span>
           ) : null}
           {level && (
-            <span className="inline-flex items-center text-[#1A1A1A]/76">
+            <span className="inline-flex items-center text-[#1A1A1A]/86">
               · {level}
             </span>
           )}
           {category && (
-            <span className="inline-flex items-center text-[#1A1A1A]/76">
+            <span className="inline-flex items-center text-[#1A1A1A]/86">
               · {category}
             </span>
           )}
         </div>
 
         {description && (
-          <p className="text-[13px] md:text-[13.5px] text-[#1A1A1A]/82 leading-relaxed line-clamp-3 mb-5">
+          <p className="text-[13px] md:text-[13.5px] text-[#1A1A1A] leading-relaxed line-clamp-3 mb-5">
             {description}
           </p>
         )}
 
-        <div className="flex items-center justify-between gap-3 pt-2 border-t border-[#B89555]/28">
-          <span className="text-[10px] tracking-[0.12em] uppercase font-semibold text-[#102540]/72 pt-3">
+        <div className="flex items-center justify-between gap-3 pt-2 border-t border-[#BFA46A]/60">
+          <span className="text-[10px] tracking-[0.12em] uppercase font-semibold text-[#071B33] pt-3">
             JBJ Global · Dubai
           </span>
           <Button
@@ -185,11 +185,11 @@ export default function PremiumJobCard({
             size="sm"
             data-allow-dark-cta
             data-no-contrast-guard
+            className="careers-navy-cta h-10 rounded-xl px-5 font-semibold active:translate-y-[1px] transition-all"
             onClick={(e) => {
               e.stopPropagation();
               onApply(id);
             }}
-            className="h-10 !bg-[#102540] hover:!bg-[#1a3d63] !text-white border border-[#B89555]/70 rounded-xl px-5 font-semibold shadow-[0_12px_22px_-10px_rgba(16,37,64,0.62),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_18px_28px_-12px_rgba(16,37,64,0.68),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] active:shadow-[0_4px_10px_-4px_rgba(16,37,64,0.4),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all"
           >
             {selected ? (
               <>

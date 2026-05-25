@@ -619,7 +619,7 @@ export default function JoinApplication() {
 
           {/* Open Positions */}
           {!positionsLoading && openPositions.length > 0 && (
-            <Card id="open-positions" className="mb-8 bg-[#FDFBF7] border border-[#B89555]/55 shadow-[0_18px_44px_-32px_rgba(16,37,64,0.25)] rounded-2xl scroll-mt-24 overflow-hidden">
+            <Card id="open-positions" className="careers-card-strong mb-8 rounded-2xl scroll-mt-24 overflow-hidden">
               <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
               <CardHeader className="pt-9 pb-5">
                 <div className="flex items-end justify-between flex-wrap gap-4">
@@ -1175,12 +1175,12 @@ export default function JoinApplication() {
                     variant="outline"
                     onClick={handleBack}
                     disabled={currentStep === 0 || loading}
-                    className="sm:w-40 h-12 rounded-xl border-2 border-[#102540] bg-[#FDFBF7] text-[#102540] font-semibold disabled:opacity-40"
+                    className="sm:w-40 h-12 rounded-xl border-2 border-[#BFA46A] bg-[#F7F2EA] text-[#071B33] font-semibold disabled:border-[#D5C3A0] disabled:bg-[#F3EBDD] disabled:text-[#7A7469] disabled:opacity-100"
                   >
                     <ArrowLeft className="w-4 h-4 mr-1.5" /> Back
                   </Button>
 
-                  <p className="rounded-full border border-[#B89555]/55 bg-[#F7F2EA] px-4 py-2 text-xs font-semibold text-[#102540] text-center order-first sm:order-none shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
+                  <p className="rounded-full border border-[#BFA46A] bg-[linear-gradient(180deg,#FBF6EE_0%,#F2E8D8_100%)] px-4 py-2 text-xs font-semibold text-[#1A1A1A] text-center order-first sm:order-none shadow-[inset_0_1px_0_rgba(255,255,255,0.72),0_10px_20px_-18px_rgba(7,27,51,0.35)]">
                     Step {currentStep + 1} of {TOTAL_STEPS} — {STEP_LABELS[currentStep]}
                   </p>
 
@@ -1191,7 +1191,7 @@ export default function JoinApplication() {
                       disabled={loading}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="sm:w-48 h-12 rounded-xl border border-[#B89555] !bg-[#102540] hover:!bg-[#1a3d63] !text-white font-semibold shadow-[0_12px_22px_-10px_rgba(16,37,64,0.62),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_18px_28px_-12px_rgba(16,37,64,0.68),inset_0_1px_0_rgba(255,255,255,0.18)]"
+                      className="careers-navy-cta sm:w-48 h-12 rounded-xl font-semibold"
                     >
                       Continue <ArrowRight className="w-4 h-4 ml-1.5" />
                     </Button>
@@ -1201,7 +1201,7 @@ export default function JoinApplication() {
                       disabled={loading}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="sm:flex-1 h-14 rounded-xl border border-[#B89555] !bg-[#102540] hover:!bg-[#1a3d63] !text-white font-bold text-base sm:text-lg shadow-[0_14px_26px_-10px_rgba(16,37,64,0.62),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_32px_-12px_rgba(16,37,64,0.68),inset_0_1px_0_rgba(255,255,255,0.18)]"
+                      className="careers-navy-cta sm:flex-1 h-14 rounded-xl font-bold text-base sm:text-lg"
 
                     >
                       {loading ? (
@@ -1240,7 +1240,7 @@ export default function JoinApplication() {
                         disabled={loading}
                         data-allow-dark-cta
                         data-no-contrast-guard
-                        className="flex-1 bg-[#102540] hover:bg-[#1a3d63] text-white font-semibold border border-[#B89555] shadow-[0_12px_22px_-10px_rgba(16,37,64,0.62),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_18px_28px_-12px_rgba(16,37,64,0.68),inset_0_1px_0_rgba(255,255,255,0.18)]"
+                        className="careers-navy-cta flex-1 font-semibold"
                       >
                         Continue · Step {currentStep + 2}
                         <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -1251,7 +1251,7 @@ export default function JoinApplication() {
                         disabled={loading}
                         data-allow-dark-cta
                         data-no-contrast-guard
-                        className="flex-1 bg-[#102540] hover:bg-[#1a3d63] text-white font-bold border border-[#B89555] shadow-[0_14px_26px_-10px_rgba(16,37,64,0.62),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_32px_-12px_rgba(16,37,64,0.68),inset_0_1px_0_rgba(255,255,255,0.18)]"
+                        className="careers-navy-cta flex-1 font-bold"
                       >
                         {loading ? (
                           <>

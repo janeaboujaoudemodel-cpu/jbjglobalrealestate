@@ -89,21 +89,21 @@ export function CareersEcosystem() {
           {PILLARS.map((tile) => {
             const Icon = tile.icon;
             return (
-              <article
+            <article
                 key={tile.title}
-                className="group relative overflow-hidden rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_22px_55px_-28px_rgba(16,37,64,0.35)] hover:border-[#B89555]"
+              className="careers-card-strong group relative overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1"
               >
                 {/* Decorative glow */}
                 <div className="pointer-events-none absolute -top-16 -left-16 h-32 w-32 rounded-full bg-[#102540]/[0.04] blur-3xl group-hover:bg-[#102540]/[0.09] transition" />
 
                 <div className="relative">
-                  <div className="grid h-12 w-12 place-items-center rounded-xl border border-[#B89555]/70 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]">
-                    <Icon className="h-6 w-6 text-[#102540]" strokeWidth={1.75} />
+                  <div className="grid h-12 w-12 place-items-center rounded-xl border border-[#BFA46A] bg-gradient-to-br from-[#FFFDF8] to-[#EADCC6] shadow-[0_12px_26px_-18px_rgba(7,27,51,0.34)]">
+                    <Icon className="h-6 w-6 text-[#071B33]" strokeWidth={2} />
                   </div>
-                  <h3 className="mt-4 text-lg font-semibold text-[#1A1A1A] leading-snug tracking-tight">
+                  <h3 className="mt-4 text-lg font-semibold text-[#071B33] leading-snug tracking-tight">
                     {tile.title}
                   </h3>
-                  <p className="mt-2 text-sm text-[#1A1A1A]/72 leading-relaxed">
+                  <p className="mt-2 text-sm text-[#1A1A1A] leading-relaxed">
                     {tile.description}
                   </p>
                 </div>
