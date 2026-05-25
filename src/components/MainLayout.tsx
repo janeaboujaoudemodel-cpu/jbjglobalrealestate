@@ -284,9 +284,15 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           {children}
         </main>
       </GlobalContactGating>
-      <div data-chrome="footer" className="transition-[padding-left] duration-100 ease-out [body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]">
+      {/* Footer: full-bleed navy. NO left padding here so the navy background
+          runs edge-to-edge underneath the fixed vertical sidebar (instead of
+          leaving a champagne strip between the sidebar and the footer). The
+          sidebar visually overlays the leftmost slice; footer inner content
+          uses max-w-7xl mx-auto so it stays optically centered. */}
+      <div data-chrome="footer" className="w-full">
         {!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
       </div>
+
       {popupsReady && (
         <Suspense fallback={null}>
           <PopupLayer />
