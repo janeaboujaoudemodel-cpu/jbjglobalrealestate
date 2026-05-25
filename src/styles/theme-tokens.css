@@ -215,16 +215,22 @@
 [data-careers-page] .careers-blue-field:hover,
 [data-careers-page] .careers-blue-field:focus,
 [data-careers-page] .careers-blue-field:focus-visible,
+[data-careers-page] .careers-blue-field:disabled,
+[data-careers-page] .careers-blue-field[disabled],
 [data-careers-page] input.careers-blue-field,
 [data-careers-page] input.careers-blue-field:hover,
 [data-careers-page] input.careers-blue-field:focus,
-[data-careers-page] input.careers-blue-field:focus-visible {
+[data-careers-page] input.careers-blue-field:focus-visible,
+[data-careers-page] input.careers-blue-field:disabled,
+[data-careers-page] input.careers-blue-field[disabled] {
   background-color: transparent !important;
   border: 2px solid var(--t-form-blue) !important;
   box-shadow: none !important;
   --tw-ring-color: var(--t-form-blue-ring) !important;
   color: var(--t-form-blue) !important;
   -webkit-text-fill-color: var(--t-form-blue) !important;
+  opacity: 1 !important;
+  cursor: not-allowed;
 }
 
 [data-careers-page] .careers-blue-field::placeholder,
