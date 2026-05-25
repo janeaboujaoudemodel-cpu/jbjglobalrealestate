@@ -267,15 +267,17 @@ const RequestValuation = () => {
             <SectionHeader icon={Database} eyebrow="04 · Inputs" title="Data Sources" />
             <BlueCard>
               <p className="text-sm text-white/80 mb-4">Every valuation is constructed from authenticated, institutional inputs:</p>
-              <div className="grid sm:grid-cols-2 gap-2.5">
+              <div className="grid sm:grid-cols-2 gap-2.5" data-no-contrast-guard>
                 {dataSources.map(src => (
                   <div
                     key={src}
-                    className="flex items-start gap-2.5 px-3 py-2.5 rounded-lg"
-                    style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${TOOL_GOLD}33` }}
+                    data-allow-dark-cta
+                    data-no-contrast-guard
+                    className="allow-white flex items-start gap-2.5 px-3 py-2.5 rounded-lg"
+                    style={{ background: 'rgba(255,255,255,0.10)', border: `1px solid ${TOOL_GOLD}66` }}
                   >
                     <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: TOOL_GOLD }} />
-                    <span className="text-sm text-white/90">{src}</span>
+                    <span className="text-sm text-white">{src}</span>
                   </div>
                 ))}
               </div>
