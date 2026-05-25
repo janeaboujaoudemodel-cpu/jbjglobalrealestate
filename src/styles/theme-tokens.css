@@ -123,13 +123,25 @@
 }
 
 [data-careers-page] input,
-[data-careers-page] button[role="combobox"] {
+[data-careers-page] button[role="combobox"],
+[data-careers-page] .PhoneInputInput,
+[data-careers-page] input[type="tel"] {
   border-color: #102540 !important;
 }
 
-[data-careers-page] input#city,
-[data-careers-page] .careers-city-gold {
-  border-color: #B89555 !important;
+/* All form labels on careers page → navy */
+[data-careers-page] label {
+  color: #102540 !important;
+  -webkit-text-fill-color: #102540 !important;
+  font-weight: 600 !important;
+}
+
+/* Checkbox consent labels stay readable ink */
+[data-careers-page] label[for="consentAccurate"],
+[data-careers-page] label[for="consentTerms"] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  font-weight: 400 !important;
 }
 
 [data-careers-page] .careers-open-badge,
@@ -138,4 +150,5 @@
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
 

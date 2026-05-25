@@ -43,7 +43,7 @@ const MinimalFooter = () => {
             <span key={l.href} className="inline-flex items-center gap-x-5 md:gap-x-7">
               <Link
                 to={l.href}
-                className="text-[12px] md:text-[13px] font-medium text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors"
+                className="text-[12px] md:text-[13px] font-semibold text-[#102540] hover:text-[#1a3d63] transition-colors"
               >
                 {l.label}
               </Link>
@@ -51,7 +51,7 @@ const MinimalFooter = () => {
                 <span
                   aria-hidden
                   data-decorative="true"
-                  className="text-[#1A1A1A]/40" // contrast-ok — decorative dot separator (aria-hidden)
+                  className="text-[#102540]" // contrast-ok — decorative dot separator (aria-hidden)
                 >
                   ·
                 </span>

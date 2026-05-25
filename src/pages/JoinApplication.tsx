@@ -609,12 +609,12 @@ export default function JoinApplication() {
                   Tap <strong className="text-gold">Apply</strong> on any role to auto-select it below.
                 </CardDescription>
                 <div className="relative mt-3">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#B89555]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#102540]" />
                   <Input
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
                     placeholder="Search positions by title, department, or location"
-                    className="pl-9 bg-[#F7F2EA] border-2 border-[#B89555] text-[#102540] placeholder:text-[#102540]/55 focus-visible:ring-[#B89555]/40"
+                    className="pl-9 bg-[#FDFBF7] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 focus-visible:ring-[#102540]/40"
                   />
                 </div>
               </CardHeader>
@@ -776,7 +776,7 @@ export default function JoinApplication() {
                     disabled
                     className="bg-[#F7F2EA] border-2 border-[#102540] text-[#1A1A1A] h-11 text-base"
                   />
-                  <p className="text-xs text-[#1A1A1A]/60">Email is linked to your account</p>
+                  <p className="text-xs text-[#102540] font-bold">Email is linked to your account</p>
                 </div>
 
                 {/* Phone */}
@@ -840,7 +840,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                       placeholder="e.g. Dubai"
                       disabled={loading}
-                      className="careers-city-gold bg-[#FDFBF7] border-2 border-[#B89555] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base focus-visible:ring-[#B89555]/40"
+                      className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base focus-visible:ring-[#102540]/40"
                     />
 
                   </div>
@@ -1036,7 +1036,7 @@ export default function JoinApplication() {
                 {/* CV / Resume */}
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold text-[#1A1A1A]">CV / Resume</Label>
-                  <div className="border-2 border-dashed border-[#B89555] rounded-xl p-8 text-center hover:border-[#B89555] transition-colors bg-[#F7F2EA]/30">
+                  <div className="border-2 border-dashed border-[#102540] rounded-xl p-8 text-center hover:border-[#102540] transition-colors bg-[#F7F2EA]/30">
                     {cvFile ? (
                       <div className="flex flex-col items-center gap-2 text-[#1A1A1A]">
                         <FileText className="h-7 w-7 text-emerald-600" />
@@ -1056,8 +1056,8 @@ export default function JoinApplication() {
                       <label className="cursor-pointer block w-full">
                         <div className="flex flex-col items-center gap-2 py-2">
                           <Upload className="h-9 w-9 text-[#102540]" />
-                          <span className="text-base font-semibold text-[#102540]">Click to upload your CV</span>
-                          <span className="text-sm text-[#B89555] font-medium">PDF, Word, or photo (JPG / PNG / HEIC) — max 10 MB</span>
+                          <span className="text-base font-bold text-[#102540]">Click to upload your CV</span>
+                          <span className="text-sm text-[#102540] font-bold">PDF, Word, or photo (JPG / PNG / HEIC) — max 10 MB</span>
                         </div>
                         <input
                           type="file"
