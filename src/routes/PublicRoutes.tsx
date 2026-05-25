@@ -279,7 +279,7 @@ export const PublicRoutes = () => (
     <Route path="/market-intelligence/reports/quarterly/:period" element={<QuarterlyMarketReview />} />
     <Route path="/market-intelligence/reports/annual/:year" element={<AnnualMarketSummary />} />
     <Route path="/market-intelligence/methodology" element={<Methodology />} />
-    <Route path="/insights" element={<MarketIntelligence />} />
+    
 
     {/* ── Services ── */}
     <Route path="/services" element={<Services />} />
