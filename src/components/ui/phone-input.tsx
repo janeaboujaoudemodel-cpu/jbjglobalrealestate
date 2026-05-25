@@ -516,31 +516,31 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     const isLight = variant === 'light';
     const isCareersPhoneInput = className?.includes("careers-phone-input");
     const buttonStyles = isCareersPhoneInput
-      ? "bg-[#102540] border-2 border-[#102540] text-white hover:bg-[#102540] hover:text-white hover:border-[#102540] focus:border-[#102540] rounded-lg"
+      ? "jbj-form-trigger-filled hover:bg-[#102540] hover:text-white hover:border-[#102540] focus:border-[#102540] rounded-lg"
       : isLight 
-      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555] focus:border-[#B89555]"
+      ? "jbj-form-trigger-filled"
       : "bg-[#1A1A1A] border border-[#B89555]/50 text-white hover:bg-[#1A1A1A] hover:text-[#1A1A1A] hover:border-[#B89555] focus:border-[#B89555]";
     const inputStyles = isCareersPhoneInput
-      ? "bg-[#F7F2EA] border-2 border-[#102540] rounded-lg text-[#102540] placeholder:text-[#102540]/60 focus:border-[#102540] hover:border-[#102540]"
+      ? "jbj-form-field rounded-lg"
       : isLight
-      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] hover:border-[#B89555]"
+      ? "jbj-form-field"
       : "bg-[#1A1A1A] border-2 border-[#B89555]/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] hover:border-[#B89555]";
     const popoverStyles = isLight
-      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50"
+      ? "jbj-form-popover"
       : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50";
     // Make the cmdk search row full-bleed (no inner px gutter) so the input visually fills
     // the popover edge-to-edge instead of leaving a champagne strip on the right.
     const commandStyles =
       "bg-transparent " +
       "[&_[cmdk-input-wrapper]]:px-4 [&_[cmdk-input-wrapper]]:py-1 " +
-      "[&_[cmdk-input-wrapper]]:border-b [&_[cmdk-input-wrapper]]:border-[#B89555]/40 " +
+      "[&_[cmdk-input-wrapper]]:border-b [&_[cmdk-input-wrapper]]:border-[#102540]/15 " +
       "[&_[cmdk-input-wrapper]]:bg-[#FDFBF7]/70 " +
-      "[&_[cmdk-input-wrapper]_svg]:text-[#1A1A1A]/60";
+      "[&_[cmdk-input-wrapper]_svg]:text-[#102540]/60";
     const commandInputStyles =
-      "w-full bg-transparent text-[#1A1A1A] placeholder:text-[#1A1A1A]/60 border-0";
+      "jbj-form-field w-full border-0 bg-transparent text-[#102540] placeholder:text-[#102540]/60";
 
     const commandItemStyles = isLight
-      ? "text-[#1A1A1A] hover:bg-[#EFE6D6]/20 data-[selected=true]:bg-[#EFE6D6]/30 data-[selected=true]:text-[#1A1A1A]"
+      ? "jbj-form-option text-[#102540] hover:bg-[#102540]/5 data-[selected=true]:bg-[#102540]/8 data-[selected=true]:text-[#102540]"
       : "text-[#1A1A1A] hover:bg-[#EFE6D6]/20 data-[selected=true]:bg-[#EFE6D6]/30 data-[selected=true]:text-[#1A1A1A]";
     const commandEmptyStyles = isLight
       ? "text-[#1A1A1A]/70"
@@ -628,7 +628,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 onChange={handleNumberChange}
                 disabled={disabled}
                 placeholder={placeholder || "Phone number"}
-                className="careers-phone-tel flex h-12 w-full rounded-lg px-3 py-2 text-base text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/40 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+                className="careers-phone-tel jbj-form-field flex h-12 w-full rounded-lg px-3 py-2 text-base focus-visible:outline-none focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
               />
             ) : (
               <Input 

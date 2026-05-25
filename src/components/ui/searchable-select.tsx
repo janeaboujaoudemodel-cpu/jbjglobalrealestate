@@ -115,7 +115,7 @@ export function SearchableSelect({
           aria-haspopup="dialog"
           data-searchable-trigger
           className={cn(
-            "w-full h-12 rounded-lg min-w-0 inline-flex items-center justify-between gap-3 px-4 transition-colors border-2 border-[#102540] bg-[#F7F2EA] text-[#102540] hover:bg-[#F7F2EA] hover:border-[#102540] disabled:opacity-50 disabled:cursor-not-allowed",
+            "jbj-form-field w-full h-12 rounded-lg min-w-0 inline-flex items-center justify-between gap-3 px-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
             !value && "text-[#102540]/70",
             triggerClassName
           )}
@@ -129,7 +129,7 @@ export function SearchableSelect({
       </PopoverTrigger>
       <PopoverContent
         className={cn(
-          "w-[var(--radix-popover-trigger-width)] min-w-[260px] p-0 bg-[#FDFBF7] border-2 border-[#102540] shadow-xl z-[10210]",
+          "jbj-form-popover w-[var(--radix-popover-trigger-width)] min-w-[260px] p-0 shadow-xl z-[10210]",
           className
         )}
         align="start"
@@ -147,7 +147,7 @@ export function SearchableSelect({
               placeholder={searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-11 rounded-lg pl-9 bg-[#F7F2EA] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="jbj-form-field h-11 rounded-lg pl-9 focus-visible:ring-0 focus-visible:ring-offset-0"
             />
           </div>
         </div>
@@ -168,7 +168,7 @@ export function SearchableSelect({
                     setOpen(false);
                   }}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-3 text-left min-h-[46px] transition-colors text-[#102540] hover:bg-[#F7F2EA]",
+                    "jbj-form-option w-full flex items-center gap-3 px-3 py-3 text-left min-h-[46px] transition-colors text-[#102540] hover:bg-[#102540]/5",
                     isSelected && "font-semibold"
                   )}
                 >
