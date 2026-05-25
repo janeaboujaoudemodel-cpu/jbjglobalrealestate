@@ -126,11 +126,11 @@ export const ConsVisibilityToggle = () => {
             </Button>
           </div>
 
-          <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 border border-blue-200">
-            <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-            <div className="text-sm text-blue-800">
+          <div className="flex items-start gap-3 p-4 rounded-xl bg-[#EFE6D6] border border-[#B89555]/30">
+            <AlertTriangle className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
+            <div className="text-sm text-[#1A1A1A]">
               <p className="font-medium mb-1">What this controls</p>
-              <ul className="list-disc list-inside space-y-1 text-blue-700">
+              <ul className="list-disc list-inside space-y-1 text-[#1A1A1A]/80">
                 <li>All published projects (AI Analyzer Cons card)</li>
                 <li>All draft / pending-approval projects</li>
                 <li>All upcoming projects, with no exception</li>
