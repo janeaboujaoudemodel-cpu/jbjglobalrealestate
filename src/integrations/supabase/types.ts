@@ -26399,6 +26399,9 @@ export type Database = {
           owner_pii_hidden: boolean
           payment_breakdown: Json | null
           payment_plan: string | null
+          payment_plan_verified: boolean
+          payment_plan_verified_at: string | null
+          payment_plan_verified_by: string | null
           price_currency: string | null
           price_from: number | null
           price_to: number | null
@@ -26496,6 +26499,9 @@ export type Database = {
           owner_pii_hidden?: boolean
           payment_breakdown?: Json | null
           payment_plan?: string | null
+          payment_plan_verified?: boolean
+          payment_plan_verified_at?: string | null
+          payment_plan_verified_by?: string | null
           price_currency?: string | null
           price_from?: number | null
           price_to?: number | null
@@ -26593,6 +26599,9 @@ export type Database = {
           owner_pii_hidden?: boolean
           payment_breakdown?: Json | null
           payment_plan?: string | null
+          payment_plan_verified?: boolean
+          payment_plan_verified_at?: string | null
+          payment_plan_verified_by?: string | null
           price_currency?: string | null
           price_from?: number | null
           price_to?: number | null
