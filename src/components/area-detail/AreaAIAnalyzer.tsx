@@ -473,8 +473,8 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
     <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
-          <Brain className="w-6 h-6 text-[#1A1A1A]" />
-          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
+          <Brain className="w-6 h-6 text-[#B89555]" />
+          <h2 className="text-2xl md:text-3xl font-bold text-[#102540]">
             JBJ AI Area Intelligence
           </h2>
         </div>
@@ -483,22 +483,22 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
         {hasStats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
-              <div className="text-2xl font-bold text-[#1A1A1A]">{stats.totalProjects}</div>
+              <div className="text-2xl font-bold text-[#102540]">{stats.totalProjects}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Active Projects</div>
             </div>
             <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
-              <div className="text-2xl font-bold text-[#1A1A1A]">{stats.developers.length}</div>
+              <div className="text-2xl font-bold text-[#102540]">{stats.developers.length}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Developers</div>
             </div>
             {stats.avgPrice && (
               <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
-                <div className="text-2xl font-bold text-price-orange">AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
+                <div className="text-2xl font-bold text-[#B89555]">AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
                 <div className="text-[#1A1A1A]/70 text-xs mt-1">Avg. Starting Price</div>
               </div>
             )}
             {stats.pricePerSqft && (
               <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
-                <div className="text-2xl font-bold text-price-orange">AED {stats.pricePerSqft.toLocaleString()}</div>
+                <div className="text-2xl font-bold text-[#B89555]">AED {stats.pricePerSqft.toLocaleString()}</div>
                 <div className="text-[#1A1A1A]/70 text-xs mt-1">Est. Price/sqft</div>
               </div>
             )}
