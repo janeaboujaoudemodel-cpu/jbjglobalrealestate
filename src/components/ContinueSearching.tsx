@@ -490,9 +490,10 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
           }}
         />
 
-        {/* Top-left: Developer logo ONLY. JBJ monogram is the brand mark and is
-            never used as a developer fallback on these cards. */}
-        {(showDevLogo || showDevCardLogo) && (
+        {/* Top-left: Developer logo, with a name-text badge fallback when no
+            logo exists in the DB (e.g. Wasl). JBJ monogram is the brand mark
+            and is NEVER used as a developer fallback on these cards. */}
+        {(showDevLogo || showDevCardLogo) ? (
           <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
             <DeveloperLogo
               src={item.developerLogo}
@@ -501,6 +502,17 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
               onError={() => setLogoError(true)}
             />
           </div>
+        ) : (
+          item.type === "property" && item.subtitle && (
+            <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
+              <span
+                className="inline-flex items-center px-2.5 h-7 rounded-md bg-[#FDFBF7] border border-[#B89555]/55 text-[10px] font-bold tracking-[0.08em] uppercase text-[#1A1A1A] shadow-[0_4px_12px_rgba(0,0,0,0.35)] max-w-[140px] truncate"
+                title={item.subtitle}
+              >
+                {item.subtitle}
+              </span>
+            </div>
+          )
         )}
 
         {/* Favorite button */}
@@ -509,18 +521,23 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             <FavoriteButton projectId={item.id} showShortlist={false} size="sm" />
           </div>
         )}
-        {/* Bottom content - full-card scrim guarantees project-name contrast
-            over any image (light, dark, busy, washed out). */}
-        <div className="absolute inset-x-0 bottom-0 h-3/5 z-10 bg-gradient-to-t from-black via-black/85 to-transparent pointer-events-none" />
+        {/* Bottom content — heavy opaque black plate guarantees project-name
+            legibility over any image (light, dark, busy, washed out). */}
+        <div className="absolute inset-x-0 bottom-0 h-[55%] z-10 bg-gradient-to-t from-black via-black/95 via-40% to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-[34%] z-10 bg-black/80 pointer-events-none" style={{ mixBlendMode: "normal" }} />
         <div className="absolute bottom-0 left-0 right-0 p-3 z-20" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
-            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/25 allow-white">
+            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/90 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/30 allow-white" style={{ color: "#FFFFFF" }}>
               {item.subtitle}
             </span>
           )}
           <h3
-            className="allow-white text-white font-bold text-sm md:text-base leading-tight line-clamp-2 transition-colors duration-300"
-            style={{ textShadow: "0 2px 8px rgba(0,0,0,1), 0 1px 3px rgba(0,0,0,1), 0 0 14px rgba(0,0,0,0.9)" }}
+            className="allow-white font-extrabold text-[15px] md:text-base leading-tight line-clamp-2 transition-colors duration-300"
+            style={{
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+              textShadow: "0 2px 10px rgba(0,0,0,1), 0 1px 2px rgba(0,0,0,1), 0 0 18px rgba(0,0,0,0.95)",
+            }}
           >
             {typeof item.name === 'string' ? item.name : String(item.name || '')}
           </h3>
