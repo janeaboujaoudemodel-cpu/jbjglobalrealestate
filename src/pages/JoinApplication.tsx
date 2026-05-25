@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import {
   Loader2, Upload, CheckCircle, FileText, Bot, MessageCircle, Briefcase,
   User, Phone, Mail, MapPin, Star, Search, ChevronDown, ChevronUp,
-  ArrowLeft, ArrowRight,
+  ArrowLeft, ArrowRight, Sparkles,
 } from "lucide-react";
 import { CONTACT_INFO } from "@/constants/stats";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
@@ -591,16 +591,23 @@ export default function JoinApplication() {
 
 
           {!user && (
-            <Card className="border-2 border-[#B89555] bg-[#EFE6D6]/10 backdrop-blur-sm rounded-2xl shadow-md mb-6">
-              <CardContent className="pt-6">
-                <p className="text-center text-[#1A1A1A] font-semibold mb-2 text-lg">
-                  Fill the form below — then sign in to submit
-                </p>
-                <p className="text-center text-[#1A1A1A]/75 mb-4 text-sm">
-                  You can complete the entire form first. Sign in or create an account when you're ready to submit.
-                </p>
-                <div className="flex justify-center">
-                  <Button variant="primary" asChild>
+            <Card className="relative overflow-hidden border border-[#B89555]/55 bg-[linear-gradient(135deg,rgba(253,251,247,0.95),rgba(247,242,234,0.85))] backdrop-blur-md rounded-2xl shadow-[0_18px_44px_-32px_rgba(16,37,64,0.35)] mb-6">
+              <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
+              <div className="pointer-events-none absolute -top-16 -right-10 h-40 w-40 rounded-full bg-[#102540]/10 blur-3xl" />
+              <CardContent className="pt-6 sm:pt-7 pb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#102540]/80 mb-1">
+                      Sign in optional now
+                    </p>
+                    <p className="text-[#1A1A1A] font-semibold text-base sm:text-lg leading-snug">
+                      Fill the form first — sign in only when ready to submit.
+                    </p>
+                    <p className="text-[#1A1A1A]/70 text-sm mt-1">
+                      Your progress is saved automatically as you type.
+                    </p>
+                  </div>
+                  <Button variant="primary" asChild className="shrink-0">
                     <Link to="/auth?redirect=/careers" className="text-white">
                       <span className="text-white font-semibold">Sign In / Create Account</span>
                     </Link>
@@ -612,26 +619,32 @@ export default function JoinApplication() {
 
           {/* Open Positions */}
           {!positionsLoading && openPositions.length > 0 && (
-            <Card id="open-positions" className="mb-8 bg-[#FDFBF7] border border-[#B89555]/55 shadow-[0_18px_44px_-32px_rgba(16,37,64,0.25)] rounded-2xl scroll-mt-24">
-              <CardHeader className="pt-8 pb-4">
-                <div className="flex items-center justify-between flex-wrap gap-3">
-                  <div className="flex items-center gap-3">
-                    <CardTitle className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] tracking-tight">Open Positions</CardTitle>
-                    <Badge
-                      data-allow-dark-cta
-                      data-no-contrast-guard
-                      className="careers-open-badge bg-[#102540] border border-[#B89555] inline-flex items-center gap-1.5 px-3 py-1"
-                      style={{ color: "#FFFFFF" }}
-                    >
-                      <Briefcase className="w-3 h-3" />
-                      <span>{filteredPositions.length} open</span>
-                    </Badge>
+            <Card id="open-positions" className="mb-8 bg-[#FDFBF7] border border-[#B89555]/55 shadow-[0_18px_44px_-32px_rgba(16,37,64,0.25)] rounded-2xl scroll-mt-24 overflow-hidden">
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
+              <CardHeader className="pt-9 pb-5">
+                <div className="flex items-end justify-between flex-wrap gap-4">
+                  <div className="min-w-0">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#102540] mb-2">
+                      <Briefcase className="w-3 h-3" /> Live Roles
+                    </span>
+                    <CardTitle className="text-3xl md:text-4xl font-semibold text-[#1A1A1A] tracking-tight leading-tight">
+                      Open Positions
+                    </CardTitle>
+                    <CardDescription className="text-[#1A1A1A]/75 font-medium mt-1.5">
+                      Tap <strong className="text-[#102540] font-semibold">Apply</strong> on any role to auto-select it in the form below.
+                    </CardDescription>
                   </div>
+                  <Badge
+                    data-allow-dark-cta
+                    data-no-contrast-guard
+                    className="careers-open-badge bg-[#102540] border border-[#B89555] inline-flex items-center gap-1.5 px-3 py-1.5 self-start sm:self-end"
+                    style={{ color: "#FFFFFF" }}
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>{filteredPositions.length} open</span>
+                  </Badge>
                 </div>
-                <CardDescription className="text-[#1A1A1A]/75 font-medium">
-                  Tap <strong className="text-[#102540] font-semibold">Apply</strong> on any role to auto-select it below.
-                </CardDescription>
-                <div className="relative mt-3">
+                <div className="relative mt-5">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#102540] z-10 pointer-events-none" strokeWidth={2.5} />
                   <Input
                     value={positionSearch}
@@ -704,11 +717,15 @@ export default function JoinApplication() {
 
           {/* Application Form */}
           <div ref={formAnchorRef} />
-          <Card className="bg-[#FDFBF7] border-2 careers-blue-border shadow-sm">
+          <Card className="bg-[#FDFBF7] border-2 careers-blue-border shadow-[0_22px_60px_-40px_rgba(16,37,64,0.45)] overflow-hidden">
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
             <CardHeader className="text-center pt-10 pb-6">
+              <span className="inline-flex items-center justify-center gap-1.5 mx-auto rounded-full border border-[#B89555]/60 bg-[#FDFBF7] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#102540] mb-3 w-fit">
+                <Sparkles className="w-3 h-3" /> Five quick steps · ~3 min
+              </span>
               <CardTitle className="text-4xl md:text-5xl font-semibold careers-navy tracking-tight">Application Form</CardTitle>
-              <CardDescription className="careers-gold font-semibold text-lg">
-                All fields are required.
+              <CardDescription className="careers-gold font-semibold text-base md:text-lg mt-1.5">
+                All fields are required · Your progress saves automatically.
               </CardDescription>
             </CardHeader>
 
