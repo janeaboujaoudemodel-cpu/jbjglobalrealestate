@@ -62,6 +62,7 @@ const CustomerHappiness = lazy(() => import("@/pages/CustomerHappiness"));
 const SecurityConsole = lazy(() => import("@/pages/SecurityConsole"));
 const EmployeeManagementHub = lazy(() => import("@/pages/EmployeeManagementHub"));
 const HRDashboard = lazy(() => import("@/pages/HRDashboard"));
+const CareersPortal = lazy(() => import("@/pages/owner/CareersPortal"));
 // CompanyComm + EmailClient deleted — both redirect to /owner/inbox
 const TeamChat = lazy(() => import("@/pages/TeamChat"));
 const KanbanBoard = lazy(() => import("@/pages/KanbanBoard"));
