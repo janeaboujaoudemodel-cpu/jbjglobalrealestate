@@ -326,8 +326,10 @@ const PUBLIC_TOOLS_WORKSPACE_ITEMS: NavItem[] = [
   { label: "AI Home Finder", href: "/quiz", icon: Home, section: "TOOLS" },
   { label: "Property Comparison", href: "/compare", icon: GitCompare },
   { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
-  { label: "Rental Index", href: "/rental-index", icon: TrendingUp },
   { label: "Property Evaluator", href: "/property-evaluator", icon: BarChart3 },
+  { label: "Rental Index", href: "/rental-index", icon: TrendingUp },
+  { label: "Property Valuation", href: "/sell/valuation", icon: DollarSign },
+  { label: "Property Measurement", href: "/property-measurement", icon: Ruler },
   { label: "List Property for Sale", href: "/list-property?purpose=sale&mode=manual", icon: ClipboardCheck },
   { label: "List Property for Rent", href: "/list-property?purpose=rent&mode=manual", icon: Key },
 ];
