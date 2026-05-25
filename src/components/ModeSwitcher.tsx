@@ -285,7 +285,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   unstyled
                   className={cn(
                     "mode-switcher-item",
-                    "relative flex items-center gap-3 pl-5 pr-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 border w-full min-h-[72px]",
+                    "relative flex items-start gap-3 pl-5 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-200 border w-full",
                     "focus:outline-none",
                   )}
                 >
@@ -314,11 +314,11 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
 
 
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-bold leading-tight" style={{ color: config.dark }}>
+                    <p className="text-[13px] font-bold leading-tight break-words" style={{ color: config.dark }}>
                       {config.label}
                     </p>
                     <p
-                      className="text-[11px] leading-snug mt-0.5"
+                      className="text-[11px] leading-snug mt-0.5 break-words whitespace-normal"
                       style={{ color: config.dark }}
                     >
                       {config.description}
@@ -329,7 +329,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     <span
                       data-no-contrast-guard
                       data-mode-selected-pill={config.surface}
-                      className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[96px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
+                      className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
                       style={{
                         '--mode-base': config.base,
                         '--mode-on-base': config.onBase,
@@ -348,7 +348,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     </span>
                   ) : (
                     <span
-                      className="ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[96px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap border"
+                      className="ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap border"
                       style={{
                         color: '#1A1A1A',
                         borderColor: 'rgba(26,26,26,0.25)',
