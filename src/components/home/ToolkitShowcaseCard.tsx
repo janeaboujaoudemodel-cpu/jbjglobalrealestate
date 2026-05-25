@@ -161,16 +161,21 @@ export function ToolkitShowcaseCard() {
             </div>
           </div>
 
-          {/* Footer — Explore JBJ Tools secondary CTA */}
+          {/* Footer — Explore JBJ Tools CTA in navy blue */}
           <div className="px-5 md:px-7 py-6 text-center bg-[#FDFBF7]">
-            <PearlButton
+            <Link
               to="/ai-hub"
-              size="lg"
-              leadingIcon={<Crown strokeWidth={2.2} />}
-              trailingIcon={<ArrowRight strokeWidth={2.5} />}
+              data-surface="dark"
+              data-on-dark
+              data-no-contrast-guard
+              data-allow-dark-cta
+              className="allow-white inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 text-white text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)]"
+              style={{ color: "#FFFFFF" }}
             >
-              Explore JBJ Tools
-            </PearlButton>
+              <Crown className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>Explore JBJ Tools</span>
+              <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
+            </Link>
           </div>
         </div>
       </div>
