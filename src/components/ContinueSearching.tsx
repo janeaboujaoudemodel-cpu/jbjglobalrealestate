@@ -315,13 +315,16 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
   const cardRef = useRef<HTMLDivElement>(null);
   const fetchAttempted = useRef(false);
 
-  // Self-heal: fetch missing developer logo
+  // Self-heal: fetch missing developer logo — ALWAYS prefer a row that has a
+  // non-null logo_url (some developers like Emaar exist as multiple slugs,
+  // not all of which carry the logo).
   useEffect(() => {
     if (item.type === "property" && !item.developerLogo && item.subtitle) {
       supabase
         .from("developers")
         .select("logo_url")
         .ilike("name", `%${item.subtitle}%`)
+        .not("logo_url", "is", null)
         .limit(1)
         .maybeSingle()
         .then(({ data }) => {
