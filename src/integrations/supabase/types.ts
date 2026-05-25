@@ -23357,6 +23357,9 @@ export type Database = {
       }
       open_positions: {
         Row: {
+          ai_generated: boolean | null
+          ai_last_prompt: string | null
+          archived_at: string | null
           created_at: string | null
           created_by: string | null
           department: string
@@ -23367,9 +23370,15 @@ export type Database = {
           is_broker_role: boolean | null
           location: string | null
           requirements: Json | null
+          salary_band: string | null
+          seniority: string | null
+          slug: string | null
           title: string
         }
         Insert: {
+          ai_generated?: boolean | null
+          ai_last_prompt?: string | null
+          archived_at?: string | null
           created_at?: string | null
           created_by?: string | null
           department: string
@@ -23380,9 +23389,15 @@ export type Database = {
           is_broker_role?: boolean | null
           location?: string | null
           requirements?: Json | null
+          salary_band?: string | null
+          seniority?: string | null
+          slug?: string | null
           title: string
         }
         Update: {
+          ai_generated?: boolean | null
+          ai_last_prompt?: string | null
+          archived_at?: string | null
           created_at?: string | null
           created_by?: string | null
           department?: string
@@ -23393,6 +23408,9 @@ export type Database = {
           is_broker_role?: boolean | null
           location?: string | null
           requirements?: Json | null
+          salary_band?: string | null
+          seniority?: string | null
+          slug?: string | null
           title?: string
         }
         Relationships: []

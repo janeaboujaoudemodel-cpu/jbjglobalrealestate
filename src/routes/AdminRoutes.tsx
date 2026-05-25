@@ -62,6 +62,7 @@ const CustomerHappiness = lazy(() => import("@/pages/CustomerHappiness"));
 const SecurityConsole = lazy(() => import("@/pages/SecurityConsole"));
 const EmployeeManagementHub = lazy(() => import("@/pages/EmployeeManagementHub"));
 const HRDashboard = lazy(() => import("@/pages/HRDashboard"));
+const CareersPortal = lazy(() => import("@/pages/owner/CareersPortal"));
 // CompanyComm + EmailClient deleted — both redirect to /owner/inbox
 const TeamChat = lazy(() => import("@/pages/TeamChat"));
 const KanbanBoard = lazy(() => import("@/pages/KanbanBoard"));
@@ -190,6 +191,8 @@ export const AdminRoutes = () => (
     <Route path="/it-department" element={<OwnerGuard><EmployeeManagementHub /></OwnerGuard>} />
     <Route path="/employee-management" element={<OwnerGuard><EmployeeManagementHub /></OwnerGuard>} />
     <Route path="/hr-dashboard" element={<OwnerGuard><HRDashboard /></OwnerGuard>} />
+    <Route path="/owner/careers-portal" element={<OwnerGuard><CareersPortal /></OwnerGuard>} />
+    <Route path="/careers-portal" element={<Navigate to="/owner/careers-portal" replace />} />
 
     {/* ── Communication & Productivity ── */}
     <Route path="/company-comm" element={<Navigate to="/owner/inbox" replace />} />
