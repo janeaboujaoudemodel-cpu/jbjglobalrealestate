@@ -1,68 +1,76 @@
-# Navy Blue Accent Restyle + Broker Portal Fix
+## Goal
 
-Apply the same premium navy blue (`#102540` bg / `#1a3d63` inner) used on the "Get Verified / Join Benzini Community" banner as a site-wide accent. Keep champagne as the dominant palette; navy is only used to add contrast on selected sections and CTAs.
+Bring three calculator-style tools — **Rental Index**, **Property Evaluator**, **Property Comparison** — onto one shared "Tool Page Shell" with the same layout as today's Dubai Rental Index. Each tool gets its own signature ombré accent. Fix all readability/contrast bugs, remove the leftover gray frame on `/compare`, kill the Founder/Jane block, consolidate Compare into a single route, and confirm backend wiring.
 
-## Token
+---
 
-Add `--accent-navy: #102540` and `--accent-navy-soft: #1a3d63` to `src/index.css` so every restyled surface pulls from one source. Foreground on navy = white; secondary text = `white/75`; hairline = `white/15`; CTA on navy = champagne mother-of-pearl with ink text (matches existing button standard, no solid black/white).
+## 1. Unified Tool Page Shell
 
-## Sections to restyle to navy
+Create `src/components/tools/ToolPageShell.tsx` with a single themable layout used by all three tools:
 
-Homepage:
-- Footer (main band) — navy background, white text, gold hairline dividers, champagne CTA buttons
-- Contact Us section — navy band as the page-level accent block
-- "Join Benzini / Get Verified" banner — already navy, used as reference
+- **Outer page frame** — full‑bleed champagne band (`.jj-band page`) with a 1px gold hairline. No more gray section dividers anywhere on these pages.
+- **Hero band** — full width, ombré gradient (per‑tool palette below), white H1 + ink‑on‑light subhead, breadcrumb + back arrow.
+- **Two‑column body** (lg: 2/3 form, 1/3 sidebar):
+  - Left: "Property Details" card — premium champagne surface, gold hairline, ombré accent on the section title and on the icon tile beside each label.
+  - Right: stack of three cards — **How It Works**, **Data Sources**, **AI Tool Disclaimer**. All three use the same ombré accent on icon + title, ink body text on champagne surface.
+- **Primary CTA** ("Get Rental Estimate" / "Run Evaluation" / "Start Comparing") — ombré gradient fill, white text, gold hairline; hover = ink→ombré reverse (black to accent), never solid flat green/blue/red.
+- **Results panel** — appears under the form card; same shell, same ombré accent.
 
-Across site:
-- Broker Portal hero/header band only (see fix below)
-- Any standalone "Join us / Become a member / Apply" CTA bands
+The shell takes one `theme` prop: `{ name, from, via, to, ink, hairline }`. All accent usage (icons, hairlines, hover, CTA gradient, hero gradient) is driven from that one object so palettes stay consistent and swap-safe.
 
-## Sections explicitly NOT touched
+### Per‑tool palettes (my recommendation)
 
-- Partners with Dubai Police (homepage)
-- Help / Support section
-- Any page or card surfacing Properties, Projects, Areas, Developers (listings, detail pages, filters, maps)
-- "Explore Our Properties" section + tutorial/tool tabs
-- Mortgage Calculator
-- "Top Areas in Dubai" block
-- Global header (top bar)
-- Vertical sidebar
-- Mode pills, price pills, developer logos, listing cards
+| Tool | Ombré accent | Notes |
+|---|---|---|
+| Rental Index | **Emerald → Ink** (`#0F3D2E → #082018 → #000000`) | green you already use for the form borders, deepened |
+| Property Evaluator | **Royal Blue → Ink** (`#102540 → #0A1830 → #000000`) | same blue family as the Get Verified banner |
+| Property Comparison | **Burgundy → Ink** (`#5A0F1A → #2E0810 → #000000`) | "ombré red" you suggested; reads premium, not alarm-red |
 
-## Contrast rules on navy surfaces
+Gold (#B89555) remains the universal 1px hairline on every card and on the hero's bottom edge so the brand reads as one family.
 
-- Body text → `text-white`
-- Secondary text → `text-white/75` (never faded gold, never gray)
-- Icons → white via existing `<IconTile />` with `tone="ink"` inverted variant; no black SVG on navy
-- Hairlines → `white/15` (no gray dividers, per No-Gray rule)
-- Buttons → champagne mother-of-pearl + 1px gold hairline + ink text (existing `Button` default); mark dark-section opt-out with `data-on-dark` where needed
-- Links → white with gold underline on hover
+---
 
-## Broker Portal fix
+## 2. Fix the readability/contrast bugs
 
-Current state: three stacked borders around the portal frame, and the main outer border is narrower than the content width.
+- **Rental Index** — labels above "Community / Area *", "Property Type *", etc. are currently faded gold on champagne. Switch to ink `#1A1A1A` with the asterisk in accent ombré start color. Same fix on Property Evaluator.
+- Any title currently rendered in faded gold (`text-gold/XX` or muddy hexes) on the three tools → ink `#1A1A1A`. Subtitles → `#1A1A1A]/70`.
+- Icon tiles inside form labels → `<IconTile tone="emerald|blue|rose">` matching the tool theme, never white-on-gold.
+- Disclaimer/data‑source small print → ink/70, not gold.
 
-Fix:
-1. Remove the middle border entirely (single inner divider, not a framed box)
-2. Keep one outer border only, extend it to full content width (match the page container's max width, not the inner card)
-3. Re-skin the outer band to navy with white text per rules above
-4. Verify on the current 975px viewport and at sm/md/lg breakpoints
+---
 
-## Files (expected)
+## 3. `/compare` deep cleanup
 
-- `src/index.css` — add navy tokens, ensure contrast guards allow white text on navy via `data-on-dark`
-- `src/components/layout/Footer*.tsx` — repaint to navy band
-- `src/components/home/ContactUs*.tsx` (or equivalent contact section) — repaint to navy band
-- `src/pages/BrokerPortal*.tsx` / `src/components/broker-portal/*` — remove middle border, widen outer border, repaint header to navy
-- Any shared "JoinCommunity" / "GetVerified" CTA component — already navy, leave as canonical reference
+- **Remove the gray internal frame** still rendering around "Welcome to Property Comparison" — replaced by the new ToolPageShell (champagne card + gold hairline, no gray anywhere).
+- **Outer frame** → blue ombré (the Evaluator/Compare blue family, since Compare's signature is burgundy the outer chrome stays champagne; only the hero band carries the burgundy ombré — confirm in question 1 below).
+- **Welcome card** → premium champagne ("leather" texture via subtle gold radial), H1 "Welcome to Property Comparison" in tool accent color, body copy "Thank you for exploring our exclusive AI‑powered…" in gold `#B89555`.
+- **Remove Jane / Founder block entirely.** Delete both `<FounderContent>` usages in `Compare.tsx` (lines ~546 and ~656) and replace with a single small "Powered by JBJ Global Real Estate" lockup (monogram + wordmark, gold hairline above).
+- **Consolidate routes** — merge `CompareManual.tsx` features into `Compare.tsx`, point `/compare-manual` as a redirect to `/compare`, and remove the duplicate file. Audit every "Start Comparing" / "Property Comparison" button across the app (`AIComparisonWidget`, `ComparisonBar`, `AdvancedBrokerToolkit`, `AIHub`, `Favorites`, `InvestorDashboard`, `InvestorHub`, `BrokerHub`, `QuizResults`, shortcut configs, registries) and rewire every CTA to `/compare`.
 
-## Out of scope
+---
 
-No business logic, no route changes, no new components beyond a small `<NavyBand>` wrapper if reuse warrants it. Pure presentational restyle.
+## 4. Backend / wiring verification
 
-## QA
+- Rental Index → existing `rental-estimate` edge function call path unchanged; verify Zod input still matches new form field order. Log writes to `tool_usage_log` (or current equivalent) keep firing.
+- Property Evaluator → same; confirm `property-evaluator` function still receives the same payload.
+- Compare → confirm `ai_comparison` save path (Compare.tsx:459) still runs after restyle; no field rename.
+- Government/source links (DLD, RERA, Bayut market data, developer/area pages) — keep all current outbound integrations in the Data Sources card; verify URLs resolve.
+- After edits, run the build and a smoke pass on each `/rental-index`, `/property-evaluator`, `/compare` route to confirm forms submit and results render.
 
-- 975px (current), 1280px desktop, 768px tablet, 390px phone
-- Verify excluded sections are visually unchanged
-- Verify no white-on-light or black-on-navy contrast regressions
-- Verify Broker Portal shows exactly one outer border at full content width, zero middle border
+---
+
+## 5. Files touched (high‑level)
+
+- New: `src/components/tools/ToolPageShell.tsx`, `src/components/tools/toolThemes.ts`
+- Edit: `src/pages/RentalIndex.tsx`, `src/pages/PropertyEvaluator.tsx`, `src/pages/Compare.tsx`
+- Delete + redirect: `src/pages/CompareManual.tsx` → route redirect in `src/routes/PublicRoutes.tsx`
+- Edit (CTA rewiring): `AIComparisonWidget.tsx`, `ComparisonBar.tsx`, `AdvancedBrokerToolkit.tsx`, shortcut/registry configs that still point at `/compare-manual` or duplicate compare entry points
+
+---
+
+## Open question before I build
+
+Two quick confirmations so I don't redo it:
+
+1. **Compare hero ombré color** — you said "ombré red with black" but also mentioned blue for the outer frame. My recommendation: **burgundy ombré hero + champagne body + gold hairline** (no blue on Compare; blue stays the Evaluator's signature). OK to proceed with that, or do you want blue on Compare and a different accent on Evaluator?
+2. **CompareManual deletion** — confirm I can delete `CompareManual.tsx` outright and 301 `/compare-manual` → `/compare`. Any feature there I should port into the main page first? (My read: it's a lighter manual form already covered by Compare's flow.)
