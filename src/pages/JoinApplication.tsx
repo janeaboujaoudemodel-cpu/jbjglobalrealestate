@@ -1080,6 +1080,11 @@ export default function JoinApplication() {
                   </div>
                 )}
 
+                </div>
+                {/* End of step 2 (Role & Experience) */}
+
+                {/* Step 3 — CV / Resume */}
+                <div className={currentStep === 3 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
                 {/* CV / Resume — Premium upload */}
                 <PremiumCVUpload
                   file={cvFile}
