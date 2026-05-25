@@ -3,38 +3,39 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
-
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
-  SelectContentDark,
-  SelectItemDark,
-  SelectTriggerDark,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { 
-  Building, 
-  Home, 
-  TrendingUp, 
-  DollarSign, 
-  MapPin, 
-  Search, 
+import {
+  Building,
+  Home,
+  TrendingUp,
+  DollarSign,
+  MapPin,
+  Search,
   AlertCircle,
   Sparkles,
   ArrowUpRight,
   FileText,
   CheckCircle,
-  Info
+  Info,
+  Database,
 } from "lucide-react";
 import { toast } from "sonner";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
+import { ToolHero } from "@/components/tools/ToolHero";
+import { ToolCard } from "@/components/tools/ToolCard";
+import { PrimaryCTA } from "@/components/tools/PrimaryCTA";
+import { PoweredByJBJ } from "@/components/tools/PoweredByJBJ";
+import { toolThemes, TOOL_GOLD, TOOL_INK, TOOL_PAGE_BG } from "@/components/tools/toolThemes";
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-};
+const theme = toolThemes.emerald;
 
 const dubaiCommunities = [
   "Downtown Dubai",
@@ -66,7 +67,7 @@ const dubaiCommunities = [
   "Bluewaters Island",
   "City Walk",
   "La Mer",
-  "Sobha Hartland"
+  "Sobha Hartland",
 ];
 
 const propertyTypes = [
@@ -95,6 +96,42 @@ interface RentalAnalysis {
   disclaimer: string;
 }
 
+// Reusable form-label primitive — ink text, accent icon tile, no faded gold
+const FormLabel = ({
+  icon: Icon,
+  children,
+  required,
+}: {
+  icon?: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  children: React.ReactNode;
+  required?: boolean;
+}) => (
+  <Label
+    className="flex items-center gap-2 mb-2 text-sm font-semibold"
+    style={{ color: TOOL_INK }}
+  >
+    {Icon && (
+      <span
+        className="inline-flex items-center justify-center w-6 h-6 rounded-md"
+        style={{
+          background: theme.accentSoft,
+          border: `1px solid ${theme.accentBorder}`,
+        }}
+      >
+        <Icon className="w-3.5 h-3.5" style={{ color: theme.accent }} />
+      </span>
+    )}
+    <span>
+      {children}
+      {required && (
+        <span style={{ color: theme.accent }} className="ml-0.5">
+          *
+        </span>
+      )}
+    </span>
+  </Label>
+);
+
 const RentalIndex = () => {
   const [community, setCommunity] = useState("");
   const [propertyType, setPropertyType] = useState("");
@@ -113,13 +150,13 @@ const RentalIndex = () => {
     setAnalysis(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke('rental-index-analysis', {
-        body: { 
-          community, 
-          propertyType, 
+      const { data, error } = await supabase.functions.invoke("rental-index-analysis", {
+        body: {
+          community,
+          propertyType,
           size: size ? parseInt(size) : null,
-          furnished 
-        }
+          furnished,
+        },
       });
 
       if (error) {
@@ -143,316 +180,326 @@ const RentalIndex = () => {
     }
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-AE', {
-      style: 'currency',
-      currency: 'AED',
+  const formatCurrency = (amount: number) =>
+    new Intl.NumberFormat("en-AE", {
+      style: "currency",
+      currency: "AED",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
-  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-      
-      
-      {/* Hero Section - Emerald Green Theme */}
-      <section className="pt-32 pb-16 bg-gradient-to-b from-emerald-950/60 via-emerald-950/30 to-black">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 border border-emerald-500/40 rounded-full mb-6">
-              <TrendingUp className="w-4 h-4 text-emerald-400" />
-              <span className="text-emerald-400 text-xs font-semibold uppercase tracking-wider">AI Rental Index</span>
-            </div>
-            
-            <h1 
-              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-            >
-              Dubai <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-400">Rental Index</span> Evaluator
-            </h1>
-            
-            <p className="text-white/70 text-lg md:text-xl mb-4">
-              Get AI-powered rental estimates for any Dubai property. Understand current market rates, trends, and investment potential.
-            </p>
-            
-            <p className="text-emerald-400/70 text-sm">
-              Powered by AI • Data-driven insights • Real-time market analysis
-            </p>
-          </motion.div>
+    <div className="min-h-screen" style={{ background: TOOL_PAGE_BG }}>
+      <ToolHero
+        theme={theme}
+        eyebrowIcon={TrendingUp}
+        eyebrow="AI Rental Index"
+        title={
+          <>
+            Dubai <span style={{ color: TOOL_GOLD }}>Rental Index</span> Evaluator
+          </>
+        }
+        subtitle="AI-powered rental estimates for any Dubai property. Live market rates, trends and investment context — sourced from DLD, RERA and our internal data fabric."
+      >
+        <div className="mt-6">
+          <PoweredByJBJ onDark className="justify-start" />
         </div>
-      </section>
+      </ToolHero>
 
-      {/* Analysis Form - Emerald Green Theme */}
-      <section className="py-12 bg-[#1A1A1A]">
+      {/* Body */}
+      <section className="py-12 md:py-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-              className="bg-gradient-to-br from-emerald-950/40 via-zinc-900/60 to-emerald-950/20 backdrop-blur-sm border border-emerald-500/30 rounded-3xl p-8 md:p-10"
-            >
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center">
-                  <Search className="w-6 h-6 text-emerald-400" />
-                </div>
-                <div>
-                  <h2 className="text-white text-xl font-bold">Property Details</h2>
-                  <p className="text-emerald-400/70 text-sm">Enter property information for rental analysis</p>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6 mb-8">
-                {/* Community */}
-                <div>
-                  <Label className="text-white/85 text-sm font-medium mb-2 block">
-                    <MapPin className="w-4 h-4 inline mr-1 text-emerald-400" />
-                    Community / Area <span className="text-emerald-400">*</span>
-                  </Label>
-                  <Select value={community} onValueChange={setCommunity}>
-                    <SelectTriggerDark className="h-12 rounded-xl border-emerald-500/30 hover:border-emerald-500/50">
-                      <SelectValue placeholder="Select community" />
-                    </SelectTriggerDark>
-                    <SelectContentDark className="border-emerald-500/30 max-h-64">
-                      {dubaiCommunities.map((c) => (
-                        <SelectItemDark key={c} value={c}>{c}</SelectItemDark>
-                      ))}
-                    </SelectContentDark>
-                  </Select>
-                </div>
-
-                {/* Property Type */}
-                <div>
-                  <Label className="text-white/85 text-sm font-medium mb-2 block">
-                    <Home className="w-4 h-4 inline mr-1 text-emerald-400" />
-                    Property Type <span className="text-emerald-400">*</span>
-                  </Label>
-                  <Select value={propertyType} onValueChange={setPropertyType}>
-                    <SelectTriggerDark className="h-12 rounded-xl border-emerald-500/30 hover:border-emerald-500/50">
-                      <SelectValue placeholder="Select type" />
-                    </SelectTriggerDark>
-                    <SelectContentDark className="border-emerald-500/30">
-                      {propertyTypes.map((t) => (
-                        <SelectItemDark key={t.value} value={t.value}>{t.label}</SelectItemDark>
-                      ))}
-                    </SelectContentDark>
-                  </Select>
-                </div>
-
-                {/* Size */}
-                <div>
-                  <Label className="text-white/85 text-sm font-medium mb-2 block">
-                    <Building className="w-4 h-4 inline mr-1 text-emerald-400" />
-                    Size (sq.ft) - Optional
-                  </Label>
-                  <Input
-                    type="number"
-                    value={size}
-                    onChange={(e) => setSize(e.target.value)}
-                    placeholder="e.g., 1200"
-                    className="bg-[#FDFBF7]/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
-                  />
-                </div>
-
-                {/* Furnished */}
-                <div>
-                  <Label className="text-white/85 text-sm font-medium mb-2 block">
-                    Furnished Status - Optional
-                  </Label>
-                  <Select value={furnished} onValueChange={setFurnished}>
-                    <SelectTriggerDark className="h-12 rounded-xl border-emerald-500/30 hover:border-emerald-500/50">
-                      <SelectValue placeholder="Select status" />
-                    </SelectTriggerDark>
-                    <SelectContentDark className="border-emerald-500/30">
-                      <SelectItemDark value="unfurnished">Unfurnished</SelectItemDark>
-                      <SelectItemDark value="furnished">Furnished</SelectItemDark>
-                      <SelectItemDark value="semi-furnished">Semi-Furnished</SelectItemDark>
-                    </SelectContentDark>
-                  </Select>
-                </div>
-              </div>
-
-              <Button
-                onClick={handleAnalyze}
-                disabled={isLoading || !community || !propertyType}
-                className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold py-6 text-lg rounded-xl transition-all duration-300 disabled:opacity-50 border border-emerald-400/30"
-              >
-                {isLoading ? (
-                  <>
-                    <Sparkles className="w-5 h-5 mr-2 animate-spin" />
-                    Analyzing Rental Data...
-                  </>
-                ) : (
-                  <>
-                    <TrendingUp className="w-5 h-5 mr-2" />
-                    Get Rental Estimate
-                  </>
-                )}
-              </Button>
-            </motion.div>
-
-            {/* Results Section - Emerald Green Theme */}
-            {analysis && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="mt-8 space-y-6"
-              >
-                {/* Main Result Card */}
-                <div className="bg-gradient-to-br from-emerald-500/15 to-emerald-600/10 border border-emerald-500/40 rounded-3xl p-8 md:p-10">
-                  <div className="flex items-center gap-3 mb-6">
-                    <DollarSign className="w-8 h-8 text-emerald-400" />
-                    <div>
-                      <h3 className="text-white text-2xl font-bold">Estimated Annual Rent</h3>
-                      <p className="text-emerald-400/70 text-sm">{analysis.community} • {propertyTypes.find(t => t.value === analysis.propertyType)?.label}</p>
-                    </div>
-                  </div>
-
-                  <div className="grid md:grid-cols-3 gap-6 mb-8">
-                    <div className="bg-[#1A1A1A]/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
-                      <p className="text-white/70 text-sm mb-2">Minimum</p>
-                      <p className="text-emerald-400 text-3xl font-bold">{formatCurrency(analysis.estimatedRentMin)}</p>
-                      <p className="text-white/90 text-xs mt-1">/year</p>
-                    </div>
-                    <div className="bg-emerald-500/20 border border-emerald-400/50 rounded-2xl p-6 text-center">
-                      <p className="text-emerald-400 text-sm mb-2 font-medium">Average</p>
-                      <p className="text-white text-4xl font-bold">{formatCurrency(analysis.averageRent)}</p>
-                      <p className="text-white/70 text-xs mt-1">/year</p>
-                    </div>
-                    <div className="bg-[#1A1A1A]/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
-                      <p className="text-white/70 text-sm mb-2">Maximum</p>
-                      <p className="text-emerald-400 text-3xl font-bold">{formatCurrency(analysis.estimatedRentMax)}</p>
-                      <p className="text-white/90 text-xs mt-1">/year</p>
-                    </div>
-                  </div>
-
-                  {/* Additional Metrics */}
-                  <div className="grid md:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-4">
-                      <p className="text-emerald-400/70 text-xs uppercase tracking-wider mb-1">Price per Sq.Ft</p>
-                      <p className="text-white text-lg font-semibold">AED {analysis.pricePerSqft}</p>
-                    </div>
-                    <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-4">
-                      <p className="text-emerald-400/70 text-xs uppercase tracking-wider mb-1">Yearly Increase</p>
-                      <p className="text-emerald-400 text-lg font-semibold">{analysis.yearlyIncrease}</p>
-                    </div>
-                    <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-4">
-                      <p className="text-emerald-400/70 text-xs uppercase tracking-wider mb-1">Market Trend</p>
-                      <p className="text-white text-lg font-semibold">{analysis.marketTrend}</p>
-                    </div>
-                  </div>
-
-                  {/* Demand Level */}
-                  <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-4 mb-6">
-                    <p className="text-emerald-400/70 text-xs uppercase tracking-wider mb-2">Demand Level</p>
-                    <div className="flex items-center gap-2">
-                      <div className={`h-2 flex-1 rounded-full ${
-                        analysis.demandLevel === 'Very High' ? 'bg-gradient-to-r from-emerald-500 to-green-400' :
-                        analysis.demandLevel === 'High' ? 'bg-gradient-to-r from-emerald-600 to-emerald-500' :
-                        analysis.demandLevel === 'Moderate' ? 'bg-gradient-to-r from-yellow-500 to-yellow-400' :
-                        'bg-gradient-to-r from-orange-500 to-orange-400'
-                      }`} />
-                      <span className="text-white font-medium">{analysis.demandLevel}</span>
-                    </div>
-                  </div>
-
-                  {/* AI Insights */}
-                  <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-6">
-                    <div className="flex items-center gap-2 mb-4">
-                      <Sparkles className="w-5 h-5 text-emerald-400" />
-                      <h4 className="text-white font-semibold">AI Market Insights</h4>
-                    </div>
-                    <ul className="space-y-3">
-                      {analysis.insights.map((insight, i) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                          <span className="text-white/85 text-sm">{insight}</span>
-                        </li>
-                      ))}
-                    </ul>
+          <div className="grid lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {/* Left: Form (2/3) */}
+            <div className="lg:col-span-2 space-y-6">
+              <ToolCard theme={theme} accentEdge>
+                <div className="flex items-center gap-3 mb-6">
+                  <span
+                    className="inline-flex items-center justify-center w-11 h-11 rounded-xl"
+                    style={{
+                      background: theme.accentSoft,
+                      border: `1px solid ${theme.accentBorder}`,
+                    }}
+                  >
+                    <Search className="w-5 h-5" style={{ color: theme.accent }} />
+                  </span>
+                  <div>
+                    <h2 className="text-xl font-bold" style={{ color: TOOL_INK }}>
+                      Property Details
+                    </h2>
+                    <p className="text-sm" style={{ color: "rgba(26,26,26,0.65)" }}>
+                      Enter property information for rental analysis
+                    </p>
                   </div>
                 </div>
 
-                {/* Disclaimer - Neutral dark styling */}
-                <div className="bg-[#F7F2EA]/50 border border-[#1A1A1A] rounded-2xl p-6">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="w-6 h-6 text-white/70 flex-shrink-0" />
-                    <div>
-                      <h4 className="text-white/85 font-semibold mb-2">Important Disclaimer</h4>
-                      <p className="text-white/70 text-sm leading-relaxed">
-                        {analysis.disclaimer}
-                      </p>
-                      <p className="text-white/90 text-xs mt-3">
-                        For more accurate and updated information, we recommend verifying with official government sources such as the Dubai Land Department (DLD), RERA, and DXB Interact. Rental values can vary based on specific building, view, condition, and market timing.
-                      </p>
-                    </div>
+                <div className="grid md:grid-cols-2 gap-5 mb-6">
+                  <div>
+                    <FormLabel icon={MapPin} required>
+                      Community / Area
+                    </FormLabel>
+                    <Select value={community} onValueChange={setCommunity}>
+                      <SelectTrigger className="h-12 rounded-xl bg-white">
+                        <SelectValue placeholder="Select community" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-64">
+                        {dubaiCommunities.map((c) => (
+                          <SelectItem key={c} value={c}>
+                            {c}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <FormLabel icon={Home} required>
+                      Property Type
+                    </FormLabel>
+                    <Select value={propertyType} onValueChange={setPropertyType}>
+                      <SelectTrigger className="h-12 rounded-xl bg-white">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {propertyTypes.map((t) => (
+                          <SelectItem key={t.value} value={t.value}>
+                            {t.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <FormLabel icon={Building}>Size (sq.ft) — Optional</FormLabel>
+                    <Input
+                      type="number"
+                      value={size}
+                      onChange={(e) => setSize(e.target.value)}
+                      placeholder="e.g., 1200"
+                      className="h-12 rounded-xl bg-white"
+                      style={{ color: TOOL_INK }}
+                    />
+                  </div>
+
+                  <div>
+                    <FormLabel>Furnished Status — Optional</FormLabel>
+                    <Select value={furnished} onValueChange={setFurnished}>
+                      <SelectTrigger className="h-12 rounded-xl bg-white">
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="unfurnished">Unfurnished</SelectItem>
+                        <SelectItem value="furnished">Furnished</SelectItem>
+                        <SelectItem value="semi-furnished">Semi-Furnished</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
-                {/* CTA - Emerald Theme */}
-                <div className="bg-[#FDFBF7]/60 border border-emerald-500/30 rounded-2xl p-6 text-center">
-                  <p className="text-white/70 text-sm mb-4">
-                    Need expert guidance on your rental investment?
-                  </p>
-                  <div className="flex flex-wrap justify-center gap-3">
-                    <Link to="/properties">
-                      <button 
-                        className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white border border-emerald-400/30"
+                <PrimaryCTA
+                  theme={theme}
+                  onClick={handleAnalyze}
+                  disabled={isLoading || !community || !propertyType}
+                  icon={isLoading ? Sparkles : TrendingUp}
+                >
+                  {isLoading ? "Analysing Rental Data…" : "Get Rental Estimate"}
+                </PrimaryCTA>
+              </ToolCard>
+
+              {/* Results */}
+              {analysis && (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="space-y-6"
+                >
+                  <ToolCard theme={theme} accentEdge>
+                    <div className="flex items-center gap-3 mb-6">
+                      <span
+                        className="inline-flex items-center justify-center w-11 h-11 rounded-xl"
                         style={{
-                          boxShadow: '0 10px 30px rgba(16,185,129,0.3), 0 6px 15px rgba(0,0,0,0.2)',
+                          background: theme.accentSoft,
+                          border: `1px solid ${theme.accentBorder}`,
                         }}
                       >
-                        <span className="relative flex items-center gap-2">
-                          <span>Browse Properties</span>
-                          <ArrowUpRight className="w-4 h-4" />
-                        </span>
-                      </button>
+                        <DollarSign className="w-5 h-5" style={{ color: theme.accent }} />
+                      </span>
+                      <div>
+                        <h3 className="text-xl font-bold" style={{ color: TOOL_INK }}>
+                          Estimated Annual Rent
+                        </h3>
+                        <p className="text-sm" style={{ color: "rgba(26,26,26,0.65)" }}>
+                          {analysis.community} •{" "}
+                          {propertyTypes.find((t) => t.value === analysis.propertyType)?.label}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-4 mb-6">
+                      {[
+                        { label: "Minimum", value: formatCurrency(analysis.estimatedRentMin), highlight: false },
+                        { label: "Average", value: formatCurrency(analysis.averageRent), highlight: true },
+                        { label: "Maximum", value: formatCurrency(analysis.estimatedRentMax), highlight: false },
+                      ].map((m) => (
+                        <div
+                          key={m.label}
+                          className="rounded-xl p-5 text-center"
+                          style={{
+                            background: m.highlight ? theme.accentSoft : "#FFFFFF",
+                            border: `1px solid ${m.highlight ? theme.accentBorder : `${TOOL_GOLD}55`}`,
+                          }}
+                        >
+                          <p className="text-xs uppercase tracking-wider mb-2" style={{ color: theme.accent }}>
+                            {m.label}
+                          </p>
+                          <p className="text-2xl md:text-3xl font-bold" style={{ color: TOOL_INK }}>
+                            {m.value}
+                          </p>
+                          <p className="text-xs mt-1" style={{ color: "rgba(26,26,26,0.55)" }}>
+                            / year
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-3 mb-5">
+                      {[
+                        { label: "Price per Sq.Ft", value: `AED ${analysis.pricePerSqft}` },
+                        { label: "Yearly Increase", value: analysis.yearlyIncrease },
+                        { label: "Market Trend", value: analysis.marketTrend },
+                      ].map((m) => (
+                        <div
+                          key={m.label}
+                          className="rounded-xl p-4"
+                          style={{ background: "#FFFFFF", border: `1px solid ${TOOL_GOLD}55` }}
+                        >
+                          <p
+                            className="text-[10px] uppercase tracking-wider mb-1 font-semibold"
+                            style={{ color: theme.accent }}
+                          >
+                            {m.label}
+                          </p>
+                          <p className="text-base font-semibold" style={{ color: TOOL_INK }}>
+                            {m.value}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div
+                      className="rounded-xl p-5"
+                      style={{ background: "#FFFFFF", border: `1px solid ${TOOL_GOLD}55` }}
+                    >
+                      <div className="flex items-center gap-2 mb-3">
+                        <Sparkles className="w-4 h-4" style={{ color: theme.accent }} />
+                        <h4 className="font-semibold" style={{ color: TOOL_INK }}>
+                          AI Market Insights
+                        </h4>
+                      </div>
+                      <ul className="space-y-2">
+                        {analysis.insights.map((insight, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <CheckCircle
+                              className="w-4 h-4 mt-0.5 flex-shrink-0"
+                              style={{ color: theme.accent }}
+                            />
+                            <span className="text-sm" style={{ color: "rgba(26,26,26,0.85)" }}>
+                              {insight}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </ToolCard>
+
+                  {/* Disclaimer */}
+                  <ToolCard>
+                    <div className="flex items-start gap-3">
+                      <AlertCircle
+                        className="w-5 h-5 mt-0.5 flex-shrink-0"
+                        style={{ color: theme.accent }}
+                      />
+                      <div>
+                        <h4 className="font-semibold mb-1" style={{ color: TOOL_INK }}>
+                          Important Disclaimer
+                        </h4>
+                        <p className="text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.75)" }}>
+                          {analysis.disclaimer}
+                        </p>
+                        <p className="text-xs mt-2" style={{ color: "rgba(26,26,26,0.55)" }}>
+                          For accurate official records, verify with Dubai Land Department (DLD), RERA and DXB Interact.
+                        </p>
+                      </div>
+                    </div>
+                  </ToolCard>
+
+                  <div className="flex flex-wrap justify-center gap-3 pt-2">
+                    <Link to="/properties">
+                      <PrimaryCTA theme={theme} icon={ArrowUpRight} className="!w-auto">
+                        Browse Properties
+                      </PrimaryCTA>
                     </Link>
                     <Link to="/contact">
-                      <button className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-400 group">
-                        <FileText className="w-4 h-4" />
+                      <button
+                        className="inline-flex items-center gap-2 px-7 py-5 rounded-xl text-base font-bold transition-all"
+                        style={{
+                          background: "#FFFFFF",
+                          color: TOOL_INK,
+                          border: `1px solid ${TOOL_GOLD}`,
+                        }}
+                      >
+                        <FileText className="w-4 h-4" style={{ color: theme.accent }} />
                         Consult an Expert
                       </button>
                     </Link>
                   </div>
-                </div>
-              </motion.div>
-            )}
+                </motion.div>
+              )}
+            </div>
 
-            {/* Info Cards - Emerald Green Theme */}
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-              className="mt-12 grid md:grid-cols-2 gap-6"
-            >
-              <div className="bg-[#FDFBF7]/40 border border-emerald-500/30 rounded-2xl p-6">
-                <Info className="w-6 h-6 text-emerald-400 mb-4" />
-                <h3 className="text-white font-semibold mb-2">How It Works</h3>
-                <p className="text-white/70 text-sm leading-relaxed">
-                  Our AI analyzes current rental trends, historical data, and market conditions to provide estimates. 
-                  The tool considers location, property type, size, and amenities to calculate rental ranges.
-                </p>
-              </div>
-              <div className="bg-[#FDFBF7]/40 border border-emerald-500/30 rounded-2xl p-6">
-                <TrendingUp className="w-6 h-6 text-emerald-400 mb-4" />
-                <h3 className="text-white font-semibold mb-2">Data Sources</h3>
-                <p className="text-white/70 text-sm leading-relaxed">
-                  Estimates are based on aggregated market data. For official records, please refer to Dubai Land Department (DLD) and RERA.
-                </p>
-              </div>
-            </motion.div>
+            {/* Right: Side cards (1/3) */}
+            <aside className="space-y-5">
+              {[
+                {
+                  icon: Info,
+                  title: "How It Works",
+                  body:
+                    "Our AI analyses current rental trends, historical data and market conditions to provide estimates. It considers location, property type, size and amenities to calculate rental ranges.",
+                },
+                {
+                  icon: Database,
+                  title: "Data Sources",
+                  body:
+                    "Estimates aggregate market signals from across the UAE. For official records, refer to Dubai Land Department (DLD) and RERA.",
+                },
+              ].map((c) => (
+                <ToolCard key={c.title} theme={theme} accentEdge>
+                  <div className="flex items-start gap-3">
+                    <span
+                      className="inline-flex items-center justify-center w-10 h-10 rounded-lg flex-shrink-0"
+                      style={{
+                        background: theme.accentSoft,
+                        border: `1px solid ${theme.accentBorder}`,
+                      }}
+                    >
+                      <c.icon className="w-5 h-5" style={{ color: theme.accent }} />
+                    </span>
+                    <div>
+                      <h3 className="font-semibold mb-1" style={{ color: TOOL_INK }}>
+                        {c.title}
+                      </h3>
+                      <p className="text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.72)" }}>
+                        {c.body}
+                      </p>
+                    </div>
+                  </div>
+                </ToolCard>
+              ))}
 
-            {/* Legal Disclaimer */}
-            <LegalDisclaimer variant="ai-tools" className="mt-8" />
+              <LegalDisclaimer variant="ai-tools" />
+            </aside>
           </div>
         </div>
       </section>
