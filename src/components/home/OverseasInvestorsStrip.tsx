@@ -68,7 +68,7 @@ const OverseasInvestorsStrip = () => {
         {/* Right: CTA */}
         <span
           data-no-contrast-guard
-          className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/65 text-sm md:text-base font-bold shrink-0 whitespace-nowrap shadow-[0_6px_18px_-6px_rgba(0,0,0,0.45)] transition-transform group-hover:-translate-y-0.5"
+          className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/65 text-sm md:text-base font-bold shrink-0 whitespace-nowrap shadow-[0_6px_18px_-6px_rgba(0,0,0,0.45)] transition-all group-hover:bg-white/10 group-hover:border-white/85 group-hover:-translate-y-0.5"
           style={{ color: "#FFFFFF" }}
         >
           <span className="allow-white" style={{ color: "#FFFFFF" }}>Learn more</span>
