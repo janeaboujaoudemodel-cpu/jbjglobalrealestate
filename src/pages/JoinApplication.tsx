@@ -1113,30 +1113,31 @@ export default function JoinApplication() {
                 {/* Submit */}
                 <Button
                   type="submit"
-                  className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-bold h-12 text-base"
+                  className="w-full bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#102540] border-2 border-[#102540] font-bold h-12 text-base"
                   disabled={loading}
                 >
                   {loading ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Submitting...
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin text-[#102540]" />
+                      <span className="text-[#102540]">Submitting...</span>
                     </>
                   ) : user ? (
-                    "Submit Application"
+                    <span className="text-[#102540]">Submit Application</span>
                   ) : (
-                    "Continue & Sign In to Submit"
+                    <span className="text-[#102540]">Continue & Sign In to Submit</span>
                   )}
                 </Button>
               </form>
             </CardContent>
           </Card>
 
-          <p className="text-center text-sm text-[#1A1A1A]/70 mt-6">
+          <p className="text-center text-sm text-[#B89555] font-medium mt-6">
             Questions? Contact us at{" "}
-            <a href="mailto:contact@JBJ.ae" className="text-[#1A1A1A] underline font-medium">
+            <a href="mailto:contact@JBJ.ae" className="text-[#B89555] underline font-semibold">
               contact@JBJ.ae
             </a>
           </p>
+
         </div>
       </section>
     </div>
