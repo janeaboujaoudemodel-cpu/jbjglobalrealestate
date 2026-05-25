@@ -785,7 +785,7 @@ const Quiz = () => {
           {/* Main Question Area */}
           <div className="flex-1 max-w-2xl mx-auto">
             <h2
-              className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-8 text-center"
+              className="text-[#102540] text-2xl md:text-3xl font-bold mb-8 text-center"
             >
               {currentQuestion.question}
             </h2>
