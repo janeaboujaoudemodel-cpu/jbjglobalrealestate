@@ -105,7 +105,7 @@ export const AdminRoutes = () => (
     <Route path="/admin-inquiries" element={<OwnerGuard><RouteErrorBoundary routeName="Inquiry Management Hub"><InquiryManagementHub /></RouteErrorBoundary></OwnerGuard>} />
     <Route path="/admin/crm" element={<OwnerGuard><AdminCRM /></OwnerGuard>} />
     <Route path="/admin/chat-conversations" element={<OwnerGuard><AdminChatDashboard /></OwnerGuard>} />
-    <Route path="/admin/onboarding" element={<OwnerGuard><AdminOnboarding /></OwnerGuard>} />
+    {/* /admin/onboarding redirected to Careers Portal below */}
     <Route path="/admin/roles" element={<OwnerGuard><AdminRoleManagement /></OwnerGuard>} />
     <Route path="/admin/intelligence" element={<OwnerGuard><AdminIntelligence /></OwnerGuard>} />
     {/* Legacy /admin/developers/* → redirect to new Developer Hub */}
@@ -141,7 +141,7 @@ export const AdminRoutes = () => (
     <Route path="/admin/training-guide" element={<OwnerGuard><AdminTrainingGuide /></OwnerGuard>} />
     <Route path="/admin/translation-coverage" element={<OwnerGuard><Suspense fallback={<PageLoader />}><TranslationCoverage /></Suspense></OwnerGuard>} />
     <Route path="/admin/faded-gold-allowlist" element={<OwnerGuard><Suspense fallback={<PageLoader />}><FadedGoldAllowlist /></Suspense></OwnerGuard>} />
-    <Route path="/admin/hr" element={<Navigate to="/hr-dashboard?tab=cv-center" replace />} />
+    <Route path="/admin/hr" element={<Navigate to="/owner/careers-portal?section=applications" replace />} />
 
     {/* ── Internal Market Intelligence ── */}
     <Route path="/internal/market-intelligence/dashboard" element={<OwnerGuard><InternalDashboard /></OwnerGuard>} />
@@ -158,15 +158,15 @@ export const AdminRoutes = () => (
     <Route path="/listing-admin/preview/:id" element={<Navigate to="/owner/listing-admin" replace />} />
     <Route path="/automations" element={<Navigate to="/owner/automations" replace />} />
     <Route path="/founder-assistant" element={<Navigate to="/owner/founder-assistant" replace />} />
-    <Route path="/hr-hub" element={<Navigate to="/employee-management" replace />} />
+    <Route path="/hr-hub" element={<Navigate to="/owner/careers-portal?section=employees" replace />} />
 
     {/* ── Owner Tools (in main layout) ── */}
     <Route path="/owner/creative-suite" element={<OwnerGuard><OwnerCreativeSuite /></OwnerGuard>} />
     <Route path="/owner/brand-palette" element={<BrandPaletteHub />} />
     <Route path="/brand-palette" element={<BrandPaletteHub />} />
-    <Route path="/owner/job-offer-template" element={<OwnerGuard><JobOfferTemplate /></OwnerGuard>} />
+    <Route path="/owner/job-offer-template" element={<Navigate to="/owner/careers-portal?section=offers" replace />} />
     <Route path="/owner/recommendations" element={<OwnerGuard><OwnerRecommendations /></OwnerGuard>} />
-    <Route path="/hr-agent" element={<OwnerGuard><HRAgent /></OwnerGuard>} />
+    <Route path="/hr-agent" element={<Navigate to="/owner/careers-portal?section=hr-agent" replace />} />
     <Route path="/referral-admin" element={<OwnerGuard><ReferralAdmin /></OwnerGuard>} />
     <Route path="/executive-assistant" element={<OwnerGuard><ExecutiveAssistant /></OwnerGuard>} />
     <Route path="/call-review" element={<OwnerGuard><CallReview /></OwnerGuard>} />
@@ -180,17 +180,18 @@ export const AdminRoutes = () => (
     <Route path="/jbj-broker-messages" element={<OwnerGuard><JBJBrokerMessages /></OwnerGuard>} />
     <Route path="/jbj-broker-reports" element={<OwnerGuard><JBJBrokerReports /></OwnerGuard>} />
     <Route path="/broker-admin-assistant" element={<OwnerGuard><BrokerAdminAssistant /></OwnerGuard>} />
-    <Route path="/employee-hub" element={<OwnerGuard><EmployeeHub /></OwnerGuard>} />
-    <Route path="/employee-chat" element={<OwnerGuard><EmployeeChatPage /></OwnerGuard>} />
+    <Route path="/employee-hub" element={<Navigate to="/owner/careers-portal?section=employees" replace />} />
+    <Route path="/employee-chat" element={<Navigate to="/owner/careers-portal?section=comms" replace />} />
     <Route path="/governance/ai" element={<OwnerGuard><AIGovernance /></OwnerGuard>} />
     <Route path="/governance/institutional-lock" element={<OwnerGuard><InstitutionalLock /></OwnerGuard>} />
     <Route path="/governance/methodology" element={<OwnerGuard><GovernmentMethodology /></OwnerGuard>} />
     <Route path="/customer-happiness/tickets" element={<OwnerGuard><SupportTicketHub /></OwnerGuard>} />
     <Route path="/customer-happiness" element={<OwnerGuard><CustomerHappiness /></OwnerGuard>} />
     <Route path="/security-console" element={<OwnerGuard><SecurityConsole /></OwnerGuard>} />
-    <Route path="/it-department" element={<OwnerGuard><EmployeeManagementHub /></OwnerGuard>} />
-    <Route path="/employee-management" element={<OwnerGuard><EmployeeManagementHub /></OwnerGuard>} />
-    <Route path="/hr-dashboard" element={<OwnerGuard><HRDashboard /></OwnerGuard>} />
+    <Route path="/it-department" element={<Navigate to="/owner/careers-portal?section=employees" replace />} />
+    <Route path="/employee-management" element={<Navigate to="/owner/careers-portal?section=employees" replace />} />
+    <Route path="/hr-dashboard" element={<Navigate to="/owner/careers-portal?section=applications" replace />} />
+    <Route path="/admin/onboarding" element={<Navigate to="/owner/careers-portal?section=onboarding" replace />} />
     <Route path="/owner/careers-portal" element={<OwnerGuard><CareersPortal /></OwnerGuard>} />
     <Route path="/careers-portal" element={<Navigate to="/owner/careers-portal" replace />} />
 
