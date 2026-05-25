@@ -1088,6 +1088,11 @@ export default function JoinApplication() {
                   uploadProgress={uploadProgress}
                 />
 
+                </div>
+                {/* End of step 3 (CV) */}
+
+                {/* Step 4 — Review & Consent */}
+                <div className={currentStep === 4 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
                 {/* Consent */}
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
