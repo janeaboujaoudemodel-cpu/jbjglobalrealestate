@@ -39,43 +39,22 @@ export default function PaymentPlanVisualization({
   postHandoverYears,
   onRegisterInterest,
 }: PaymentPlanVisualizationProps) {
-  const parsePaymentPlan = (plan?: string | null): { booking: number; construction: number; handover: number } | null => {
-    if (!plan) return null;
-    const match = plan.match(/(\d+)\s*[\/\-]\s*(\d+)/);
-    if (match) {
-      const first = parseInt(match[1], 10);
-      const second = parseInt(match[2], 10);
-      if (first + second === 100) {
-        const booking = Math.min(first, 20);
-        const construction = first - booking;
-        return { booking, construction, handover: second };
-      }
-    }
-    return null;
-  };
-
-  const parsed = parsePaymentPlan(paymentPlan);
+  // SAFETY: we no longer parse `payment_plan` text into booking/construction/handover
+  // percentages. Strings like "10/90" or "90/10" are ambiguous and guessing
+  // misrepresents the developer's official plan (legal risk). We only render
+  // structured percentages from the authoritative `payment_breakdown` array
+  // or legacy object. The raw `payment_plan` text is still shown verbatim.
 
   const isDetailedBreakdown = Array.isArray(paymentBreakdown);
   const detailedMilestones: PaymentMilestone[] = isDetailedBreakdown ? (paymentBreakdown as PaymentMilestone[]) : [];
   const legacyBreakdown = !isDetailedBreakdown ? (paymentBreakdown as PaymentBreakdownLegacy | null) : null;
-  
+
   const milestones = [];
-  
+
   if (legacyBreakdown?.down_payment) {
     milestones.push({
       label: "On Booking",
       value: legacyBreakdown.down_payment,
-      icon: CheckCircle,
-      color: "text-emerald-600",
-      bgColor: "bg-emerald-500",
-      lightBg: "bg-emerald-50",
-      ringColor: "ring-emerald-200",
-    });
-  } else if (!isDetailedBreakdown && (parsed || downPaymentPercent)) {
-    milestones.push({
-      label: "On Booking",
-      value: `${downPaymentPercent || parsed?.booking || 10}%`,
       icon: CheckCircle,
       color: "text-emerald-600",
       bgColor: "bg-emerald-500",
@@ -94,6 +73,7 @@ export default function PaymentPlanVisualization({
       ringColor: "ring-emerald-200",
     });
   }
+
   
   if (legacyBreakdown?.during_construction) {
     milestones.push({
@@ -105,17 +85,8 @@ export default function PaymentPlanVisualization({
       lightBg: "bg-amber-50",
       ringColor: "ring-amber-200",
     });
-  } else if (!isDetailedBreakdown && parsed?.construction) {
-    milestones.push({
-      label: "During Construction",
-      value: `${parsed.construction}%`,
-      icon: Calendar,
-      color: "text-amber-600",
-      bgColor: "bg-amber-500",
-      lightBg: "bg-amber-50",
-      ringColor: "ring-amber-200",
-    });
   } else if (isDetailedBreakdown && detailedMilestones.length > 2) {
+
     const middle = detailedMilestones.slice(1, -1);
     const constructionPct = middle.reduce((s, m) => s + m.percentage, 0);
     milestones.push({
@@ -139,17 +110,8 @@ export default function PaymentPlanVisualization({
       lightBg: "bg-blue-50",
       ringColor: "ring-blue-200",
     });
-  } else if (!isDetailedBreakdown && parsed?.handover) {
-    milestones.push({
-      label: "On Handover",
-      value: `${parsed.handover}%`,
-      icon: Home,
-      color: "text-blue-600",
-      bgColor: "bg-blue-500",
-      lightBg: "bg-blue-50",
-      ringColor: "ring-blue-200",
-    });
   } else if (isDetailedBreakdown && detailedMilestones.length > 1) {
+
     const last = detailedMilestones[detailedMilestones.length - 1];
     milestones.push({
       label: last.milestone || "On Handover",
@@ -226,8 +188,20 @@ export default function PaymentPlanVisualization({
                   </span>
                 </div>
               )}
+
+              {/* Legal-safety note: when only a free-text plan exists (no structured
+                  breakdown), we display the developer string verbatim and tell the
+                  buyer to confirm with our team — never invent splits. */}
+              {!isDetailedBreakdown && (!legacyBreakdown || (!legacyBreakdown.down_payment && !legacyBreakdown.during_construction && !legacyBreakdown.on_completion)) && (
+                <p className="mt-4 text-xs text-[#1A1A1A]/70 italic">
+                  Plan shown as provided by the developer. Please confirm the official
+                  milestone breakdown with our team before signing.
+                </p>
+              )}
             </div>
           )}
+
+
 
           {/* Visual Timeline with Progress Bar */}
           {total > 0 && (
