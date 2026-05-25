@@ -27,11 +27,23 @@ const TYPE_CONFIG: Record<RecentItemType, { icon: typeof Home; label: string; pa
 // Walking strip that uses translateX transform like book marquee.
 // Only animates (and only clones the list) when the unique items overflow
 // the visible viewport, so short lists never show the same card twice.
+/**
+ * WalkingStrip — stable horizontal scroller for Continue Searching cards.
+ *
+ * Replaces the previous marquee/auto-translate animation, which was flaky:
+ * the "shouldAnimate" toggle flipped between static-centered and animated
+ * states whenever the viewport width or the items array changed (e.g. when
+ * a self-heal fetch patched a developer logo). That caused the section to
+ * collapse to a single centered card or "get stuck".
+ *
+ * New behaviour: items always render in a single horizontal row inside a
+ * native overflow-x-auto rail with `no-scrollbar` (no visible gold rail —
+ * two-finger swipe / wheel / trackpad scroll still works). Snap-mandatory
+ * for a clean stop on each card. No transforms, no rAF loop, no re-flow
+ * on patch — fully deterministic.
+ */
 function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  // Deduplicate items by slug+type to prevent visual duplicates
+  // Deduplicate items by slug+type to prevent visual duplicates.
   const seen = new Set<string>();
   const uniqueItems = items.filter(item => {
     const key = `${item.type}-${item.slug}`;
@@ -40,82 +52,26 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     return true;
   });
 
-  // Card width (200px on md+, 160px below) + gap (16px) — use the larger value
-  // for overflow measurement so we err on the side of NOT animating.
-  const CARD_STRIDE = 216;
-  const singleSetWidth = uniqueItems.length * CARD_STRIDE;
-
-  const [viewportWidth, setViewportWidth] = useState(0);
-
-  useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
-    const update = () => setViewportWidth(el.clientWidth);
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    window.addEventListener('resize', update);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener('resize', update);
-    };
-  }, []);
-
-  // Only animate (and clone) when unique items would actually overflow.
-  const shouldAnimate = viewportWidth > 0 && singleSetWidth > viewportWidth + 32;
-  const rendered = shouldAnimate ? [...uniqueItems, ...uniqueItems] : uniqueItems;
-
-  useEffect(() => {
-    if (!shouldAnimate) {
-      // Reset any previous transform so the static list renders cleanly.
-      if (scrollRef.current) scrollRef.current.style.transform = 'translateX(0)';
-      return;
-    }
-    const el = scrollRef.current;
-    if (!el) return;
-    let animId: number;
-    const speed = 0.4;
-    let pos = 0;
-
-    const tick = () => {
-      pos -= speed;
-      if (pos <= -singleSetWidth) pos += singleSetWidth;
-      el.style.transform = `translateX(${pos}px)`;
-      animId = requestAnimationFrame(tick);
-    };
-    animId = requestAnimationFrame(tick);
-
-    const pause = () => cancelAnimationFrame(animId);
-    const resume = () => { animId = requestAnimationFrame(tick); };
-    el.addEventListener('mouseenter', pause);
-    el.addEventListener('mouseleave', resume);
-
-    return () => {
-      cancelAnimationFrame(animId);
-      el.removeEventListener('mouseenter', pause);
-      el.removeEventListener('mouseleave', resume);
-    };
-  }, [shouldAnimate, singleSetWidth]);
-
   return (
-    <div ref={wrapperRef} className="overflow-hidden w-full">
-      <div
-        ref={scrollRef}
-        className={`flex gap-4 py-2 ${shouldAnimate ? 'will-change-transform' : 'justify-center flex-wrap md:flex-nowrap'}`}
-        style={shouldAnimate ? { width: 'max-content' } : undefined}
-      >
-        {rendered.map((item, i) => (
-          <RecentCard3D
-            key={`${item.type}-${item.id}-${i}`}
-            item={item}
-            index={i % Math.max(uniqueItems.length, 1)}
-            patchItem={patchItem}
-          />
+    <div
+      className="no-scrollbar overflow-x-auto overscroll-x-contain snap-x snap-mandatory w-full"
+      style={{ WebkitOverflowScrolling: "touch" }}
+    >
+      <div className="flex gap-4 py-2 px-4 md:px-8 lg:px-12 justify-start min-w-max">
+        {uniqueItems.map((item, i) => (
+          <div key={`${item.type}-${item.id}-${i}`} className="snap-start shrink-0">
+            <RecentCard3D
+              item={item}
+              index={i}
+              patchItem={patchItem}
+            />
+          </div>
         ))}
       </div>
     </div>
   );
 }
+
 
 const ContinueSearching = ({
   type,
