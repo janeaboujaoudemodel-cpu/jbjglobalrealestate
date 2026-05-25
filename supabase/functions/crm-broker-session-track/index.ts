@@ -41,8 +41,8 @@ Deno.serve(async (req) => {
       .select("id, owner_id, blocked_at")
       .eq("user_id", caller.id)
       .maybeSingle();
-    if (!broker) return json({ error: "Not a broker" }, 403);
-    if (broker.blocked_at) return json({ error: "Account blocked" }, 403);
+    if (!broker) return json({ ok: false, force_signout: true, error: "Not a broker" }, 200);
+    if (broker.blocked_at) return json({ ok: false, force_signout: true, error: "Account blocked" }, 200);
 
     // Check blocked devices
     if (fingerprint) {
