@@ -240,7 +240,20 @@ Deno.serve(async (req) => {
       }
 
       const ai = await askAI(p.name, dev || null, docs, lovableKey);
-      if (ai.confidence !== "high" || !validBreakdown(ai.payment_breakdown)) {
+      const normalized = normalizeBreakdown(ai.payment_breakdown || []);
+      if (ai.confidence !== "high" || !validBreakdown(normalized)) {
+        // Mark as attempted so future batches don't keep re-picking the same rows.
+        // payment_plan = "TBD" + payment_breakdown = [] are both non-null, so the
+        // `is.null` OR filter excludes them. UI's regex won't parse "TBD" — the
+        // payment line stays hidden, never showing "TBD" to users.
+        if (!dryRun) {
+          await supabase
+            .from("projects")
+            .update({ payment_plan: "TBD", payment_breakdown: [] })
+            .eq("id", p.id)
+            .then(() => {})
+            .catch(() => {});
+        }
         results.push({
           id: p.id,
           name: p.name,
@@ -253,7 +266,7 @@ Deno.serve(async (req) => {
 
       const summary =
         ai.payment_plan_summary ||
-        ai.payment_breakdown.map((m) => Math.round(m.percentage)).join(" / ");
+        normalized.map((m) => Math.round(m.percentage)).join(" / ");
 
       if (!dryRun) {
         const before = {
