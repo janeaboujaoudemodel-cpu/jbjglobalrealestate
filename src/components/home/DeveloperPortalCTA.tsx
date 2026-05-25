@@ -186,8 +186,8 @@ const DeveloperPortalCTA = () => {
     Icon: any;
   }) => (
     <section className="jj-band jj-band-surface py-16 md:py-24 relative overflow-hidden">
-      {/* Decorative gold corner hairlines */}
-      <div className="pointer-events-none absolute inset-x-6 inset-y-6 md:inset-x-12 md:inset-y-10 border border-[#B89555]/15 rounded-[2rem]" />
+      {/* Decorative outer frame — bold gold hairline spanning full container width */}
+      <div className="pointer-events-none absolute inset-x-2 inset-y-4 md:inset-x-4 md:inset-y-6 border-2 border-[#B89555]/45 rounded-[2.25rem]" />
 
       <div className="container mx-auto px-4 md:px-8 max-w-6xl relative">
         <div
@@ -195,8 +195,7 @@ const DeveloperPortalCTA = () => {
         >
           {/* Inner light wash */}
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(184,149,85,0.10),transparent_55%)]" />
-          {/* Inner gold hairline frame */}
-          <div className="pointer-events-none absolute inset-3 md:inset-4 rounded-[1.6rem] border border-[#B89555]/20" />
+          {/* Middle decorative border removed per owner directive — keep one outer frame + one card border only */}
 
           <div className="relative grid lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-center">
             {/* LEFT — content */}
