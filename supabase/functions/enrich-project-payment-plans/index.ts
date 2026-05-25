@@ -143,10 +143,21 @@ Return the JSON object only.`;
   }
 }
 
+const DEFAULT_LABELS = ["Down payment", "During construction", "Post handover", "Stage 4"];
+
 function validBreakdown(ms: Milestone[]): boolean {
   if (!Array.isArray(ms) || ms.length < 2 || ms.length > 4) return false;
-  const sum = ms.reduce((a, b) => a + Number(b?.percentage || 0), 0);
-  return Math.round(sum) === 100 && ms.every((m) => Number(m?.percentage) > 0 && m?.milestone);
+  const pcts = ms.map((m) => Number(m?.percentage || 0));
+  if (!pcts.every((n) => Number.isFinite(n) && n > 0)) return false;
+  const sum = pcts.reduce((a, b) => a + b, 0);
+  return sum >= 95 && sum <= 105;
+}
+
+function normalizeBreakdown(ms: Milestone[]): Milestone[] {
+  return ms.map((m, i) => ({
+    milestone: m?.milestone?.toString().trim() || DEFAULT_LABELS[i] || `Stage ${i + 1}`,
+    percentage: Math.round(Number(m?.percentage || 0)),
+  }));
 }
 
 Deno.serve(async (req) => {
