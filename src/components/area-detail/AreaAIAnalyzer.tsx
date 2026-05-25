@@ -683,12 +683,12 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             {/* Row 4: Pros & Cons */}
             <div className={isConsVisible ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "grid grid-cols-1 gap-6"}>
               {sections?.pros && (
-                <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 shadow-sm">
+                <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
-                    <ThumbsUp className="w-5 h-5 text-emerald-600" />
-                    <h3 className="font-bold text-emerald-800 text-lg">Pros</h3>
+                    <ThumbsUp className="w-5 h-5 text-[#B89555]" />
+                    <h3 className="font-bold text-[#102540] text-lg">Pros</h3>
                   </div>
-                  <div className="text-emerald-900 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="text-[#1A1A1A] text-sm leading-relaxed whitespace-pre-line">
                     {cleanMarkdown(sections.pros)}
                   </div>
                 </div>
