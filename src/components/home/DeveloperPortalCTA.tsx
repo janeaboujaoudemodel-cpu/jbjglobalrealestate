@@ -186,21 +186,27 @@ const DeveloperPortalCTA = () => {
     Icon: any;
   }) => (
     <section
-      data-surface="dark"
-      data-on-dark
-      data-no-contrast-guard
-      className="allow-white py-16 md:py-24 relative overflow-hidden bg-[#102540]"
+      className="py-16 md:py-24 relative overflow-hidden"
     >
-      {/* Decorative outer frame — gold hairline on navy */}
-      <div className="pointer-events-none absolute inset-x-2 inset-y-4 md:inset-x-4 md:inset-y-6 border-2 border-[#B89555]/55 rounded-[2.25rem]" />
+      {/* Decorative outer frame — beige page tone, gold hairline (restored) */}
+      <div className="pointer-events-none absolute inset-x-2 inset-y-4 md:inset-x-4 md:inset-y-6 border border-[#B89555]/40 rounded-[2.25rem]" />
 
       <div className="container mx-auto px-4 md:px-8 max-w-6xl relative">
+        {/* MIDDLE layer — navy blue wrapper with gold hairline */}
         <div
-          data-surface="page"
-          className="relative rounded-[2rem] border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-8 md:p-14 lg:p-16 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.55),0_2px_0_rgba(255,255,255,0.9)_inset] overflow-hidden"
+          data-surface="dark"
+          data-on-dark
+          data-no-contrast-guard
+          className="allow-white relative rounded-[2.25rem] bg-[#102540] border border-[#B89555]/55 p-3 md:p-5 shadow-[0_30px_80px_-40px_rgba(16,37,64,0.65)]"
         >
+          {/* INNER broker/investor portal card — untouched champagne */}
+          <div
+            data-surface="page"
+            className="relative rounded-[2rem] border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-8 md:p-14 lg:p-16 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.55),0_2px_0_rgba(255,255,255,0.9)_inset] overflow-hidden"
+          >
           {/* Inner light wash */}
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(184,149,85,0.10),transparent_55%)]" />
+
 
           <div className="relative grid lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-center">
             {/* LEFT — content */}
@@ -268,9 +274,11 @@ const DeveloperPortalCTA = () => {
               </div>
             </div>
           </div>
+          </div>
         </div>
       </div>
     </section>
+
   );
 
   // ─────────────────────────────────────────────────────────────────────
