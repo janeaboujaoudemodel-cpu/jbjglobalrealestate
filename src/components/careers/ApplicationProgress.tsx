@@ -68,13 +68,13 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
               type={clickable ? "button" : undefined}
               onClick={clickable ? () => onStepClick!(idx) : undefined}
               className={cn(
-                "flex min-h-[38px] items-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-semibold transition-all allow-white",
+                "flex min-h-[40px] items-center gap-2 rounded-full border px-3.5 py-2.5 text-xs font-semibold transition-all",
                 clickable && "cursor-pointer hover:-translate-y-0.5",
                 isActive
-                  ? "border-[#102540] bg-[#102540] shadow-[0_10px_24px_-10px_rgba(16,37,64,0.62),inset_0_1px_0_rgba(255,255,255,0.16)]"
+                  ? "careers-pill-active allow-white data-[allow-dark-cta]:text-white"
                   : s.done
-                  ? "border-emerald-700/35 bg-[linear-gradient(180deg,#F2FBF6_0%,#E7F7EE_100%)] text-emerald-900 shadow-[0_8px_20px_-16px_rgba(4,120,87,0.4)]"
-                  : "border-[#B89555]/75 bg-[linear-gradient(180deg,rgba(247,242,234,0.98),rgba(239,230,214,0.82))] text-[#102540] shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_12px_-10px_rgba(16,37,64,0.18)] hover:border-[#B89555] hover:bg-[#F7F2EA] hover:shadow-[0_10px_22px_-16px_rgba(16,37,64,0.22)]"
+                  ? "careers-pill-complete"
+                  : "careers-pill-inactive hover:border-[#BFA46A] hover:shadow-[0_14px_22px_-18px_rgba(7,27,51,0.4)]"
               )}
 
               style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
@@ -82,12 +82,12 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
               data-no-contrast-guard={isActive ? "" : undefined}
             >
               {s.done && !isActive ? (
-                <CheckCircle2 className="h-3.5 w-3.5" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#7A5C28]" />
               ) : (
-                <span className="grid h-4 w-4 place-items-center" style={isActive ? { color: "#FFFFFF" } : undefined}>{s.icon}</span>
+                <span className="grid h-4.5 w-4.5 place-items-center text-[#1A1A1A]" style={isActive ? { color: "#FFFFFF" } : undefined}>{s.icon}</span>
               )}
               <span style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>
-                <span className={cn("mr-1", isActive ? "opacity-75" : "opacity-80")}>{idx + 1}.</span>
+                <span className="mr-1">{idx + 1}.</span>
                 {s.label}
               </span>
             </Tag>
