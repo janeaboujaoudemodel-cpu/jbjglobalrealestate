@@ -772,9 +772,9 @@ export default function JoinApplication() {
                     value={user?.email || ""}
                     placeholder="you@email.com"
                     disabled
-                    className="careers-blue-field bg-[#F7F2EA] border-2 border-[#102540] text-[#102540] h-12 rounded-lg text-base"
+                    className="careers-blue-field h-12 rounded-lg text-base"
                   />
-                  <p className="text-xs text-[#102540] font-bold">Email is linked to your account</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Email is linked to your account</p>
                 </div>
 
                 {/* Phone */}
