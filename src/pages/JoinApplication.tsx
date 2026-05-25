@@ -749,7 +749,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                       placeholder="e.g. Sarah"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                      className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                     />
                   </div>
                   <div className="space-y-2">
@@ -760,7 +760,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                       placeholder="e.g. Khan"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                      className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                     />
                   </div>
                 </div>
@@ -774,7 +774,7 @@ export default function JoinApplication() {
                     value={user?.email || ""}
                     placeholder="you@email.com"
                     disabled
-                    className="bg-[#F7F2EA] border-[#1A1A1A]/15 text-[#1A1A1A] h-11 text-base"
+                    className="bg-[#F7F2EA] border-[#102540]/60 text-[#1A1A1A] h-11 text-base"
                   />
                   <p className="text-xs text-[#1A1A1A]/60">Email is linked to your account</p>
                 </div>
@@ -840,7 +840,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                       placeholder="e.g. Dubai"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                      className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                     />
                   </div>
                 </div>
@@ -877,24 +877,24 @@ export default function JoinApplication() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">How many deals have you closed?</Label>
-                        <Input value={formData.dealsClosed} onChange={(e) => setFormData({ ...formData, dealsClosed: e.target.value })} placeholder="e.g. 25" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.dealsClosed} onChange={(e) => setFormData({ ...formData, dealsClosed: e.target.value })} placeholder="e.g. 25" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Total value of deals closed (AED)</Label>
-                        <Input value={formData.totalDealValue} onChange={(e) => setFormData({ ...formData, totalDealValue: e.target.value })} placeholder="e.g. 50,000,000" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.totalDealValue} onChange={(e) => setFormData({ ...formData, totalDealValue: e.target.value })} placeholder="e.g. 50,000,000" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Which projects/areas have you sold in?</Label>
-                      <Input value={formData.projectsSold} onChange={(e) => setFormData({ ...formData, projectsSold: e.target.value })} placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.projectsSold} onChange={(e) => setFormData({ ...formData, projectsSold: e.target.value })} placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Which developers have you worked with?</Label>
-                      <Input value={formData.developerWorkedWith} onChange={(e) => setFormData({ ...formData, developerWorkedWith: e.target.value })} placeholder="e.g. DAMAC, Emaar, Meraas" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.developerWorkedWith} onChange={(e) => setFormData({ ...formData, developerWorkedWith: e.target.value })} placeholder="e.g. DAMAC, Emaar, Meraas" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Why are you leaving your current position?</Label>
-                      <Input value={formData.reasonForLeaving} onChange={(e) => setFormData({ ...formData, reasonForLeaving: e.target.value })} placeholder="Reason for seeking new opportunity" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.reasonForLeaving} onChange={(e) => setFormData({ ...formData, reasonForLeaving: e.target.value })} placeholder="Reason for seeking new opportunity" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
 
                     <h3 className="text-lg font-semibold text-[#1A1A1A] mt-2 flex items-center gap-2">
@@ -910,14 +910,14 @@ export default function JoinApplication() {
                             onChange={(e) => setFormData({ ...formData, [`reference${n}Name`]: e.target.value } as any)}
                             placeholder="Full name (e.g. Director / HR Manager)"
                             disabled={loading}
-                            className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                            className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                           />
                           <Input
                             value={(formData as any)[`reference${n}Title`]}
                             onChange={(e) => setFormData({ ...formData, [`reference${n}Title`]: e.target.value } as any)}
                             placeholder="Title & Company"
                             disabled={loading}
-                            className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                            className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                           />
                           <Input
                             type="email"
@@ -925,14 +925,14 @@ export default function JoinApplication() {
                             onChange={(e) => setFormData({ ...formData, [`reference${n}Email`]: e.target.value } as any)}
                             placeholder="Company email"
                             disabled={loading}
-                            className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                            className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                           />
                           <Input
                             value={(formData as any)[`reference${n}Phone`]}
                             onChange={(e) => setFormData({ ...formData, [`reference${n}Phone`]: e.target.value } as any)}
                             placeholder="Phone number"
                             disabled={loading}
-                            className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                            className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                           />
                         </div>
                       </div>
@@ -947,21 +947,21 @@ export default function JoinApplication() {
                     </h3>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Notable campaigns you have led</Label>
-                      <Input value={formData.marketingCampaigns} onChange={(e) => setFormData({ ...formData, marketingCampaigns: e.target.value })} placeholder="e.g. Off-plan launch — 5M reach, 8% CTR" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.marketingCampaigns} onChange={(e) => setFormData({ ...formData, marketingCampaigns: e.target.value })} placeholder="e.g. Off-plan launch — 5M reach, 8% CTR" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Largest budget managed (AED)</Label>
-                        <Input value={formData.marketingBudget} onChange={(e) => setFormData({ ...formData, marketingBudget: e.target.value })} placeholder="e.g. 1,500,000" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.marketingBudget} onChange={(e) => setFormData({ ...formData, marketingBudget: e.target.value })} placeholder="e.g. 1,500,000" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Tools / platforms</Label>
-                        <Input value={formData.marketingTools} onChange={(e) => setFormData({ ...formData, marketingTools: e.target.value })} placeholder="e.g. Meta Ads, GA4, HubSpot, Figma" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.marketingTools} onChange={(e) => setFormData({ ...formData, marketingTools: e.target.value })} placeholder="e.g. Meta Ads, GA4, HubSpot, Figma" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Portfolio link</Label>
-                      <Input value={formData.portfolioLink} onChange={(e) => setFormData({ ...formData, portfolioLink: e.target.value })} placeholder="https://your-portfolio.com" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.portfolioLink} onChange={(e) => setFormData({ ...formData, portfolioLink: e.target.value })} placeholder="https://your-portfolio.com" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                   </div>
                 )}
@@ -974,16 +974,16 @@ export default function JoinApplication() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Years of experience</Label>
-                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 5" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 5" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Systems used</Label>
-                        <Input value={formData.systemsUsed} onChange={(e) => setFormData({ ...formData, systemsUsed: e.target.value })} placeholder="e.g. Bayut Pro, Property Finder, Salesforce" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.systemsUsed} onChange={(e) => setFormData({ ...formData, systemsUsed: e.target.value })} placeholder="e.g. Bayut Pro, Property Finder, Salesforce" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Certifications</Label>
-                      <Input value={formData.certifications} onChange={(e) => setFormData({ ...formData, certifications: e.target.value })} placeholder="e.g. RERA, CIPD, PMP" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.certifications} onChange={(e) => setFormData({ ...formData, certifications: e.target.value })} placeholder="e.g. RERA, CIPD, PMP" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                   </div>
                 )}
@@ -996,16 +996,16 @@ export default function JoinApplication() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Years of experience</Label>
-                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 7" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 7" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Stack / specialties</Label>
-                        <Input value={formData.techStack} onChange={(e) => setFormData({ ...formData, techStack: e.target.value })} placeholder="e.g. React, TypeScript, Supabase, AWS" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.techStack} onChange={(e) => setFormData({ ...formData, techStack: e.target.value })} placeholder="e.g. React, TypeScript, Supabase, AWS" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">GitHub / portfolio link</Label>
-                      <Input value={formData.githubLink} onChange={(e) => setFormData({ ...formData, githubLink: e.target.value })} placeholder="https://github.com/your-handle" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.githubLink} onChange={(e) => setFormData({ ...formData, githubLink: e.target.value })} placeholder="https://github.com/your-handle" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                   </div>
                 )}
@@ -1018,16 +1018,16 @@ export default function JoinApplication() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Years of experience</Label>
-                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 3" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 3" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Portfolio / LinkedIn link</Label>
-                        <Input value={formData.portfolioLink} onChange={(e) => setFormData({ ...formData, portfolioLink: e.target.value })} placeholder="https://linkedin.com/in/your-handle" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.portfolioLink} onChange={(e) => setFormData({ ...formData, portfolioLink: e.target.value })} placeholder="https://linkedin.com/in/your-handle" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Tell us briefly about yourself</Label>
-                      <Input value={formData.aboutYou} onChange={(e) => setFormData({ ...formData, aboutYou: e.target.value })} placeholder="What makes you a strong fit for this role?" disabled={loading} className="bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.aboutYou} onChange={(e) => setFormData({ ...formData, aboutYou: e.target.value })} placeholder="What makes you a strong fit for this role?" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                   </div>
                 )}
