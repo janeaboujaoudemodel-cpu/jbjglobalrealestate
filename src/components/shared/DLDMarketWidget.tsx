@@ -334,17 +334,18 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             {/* Cash vs Mortgage */}
             <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30">
               <div className="flex items-center gap-2 mb-4">
-                <Banknote className="w-4 h-4 text-[#2D4F6E]" />
-                <h3 className="text-[#1A1A1A] font-semibold text-sm">Cash vs Mortgage</h3>
+                <Banknote className="w-4 h-4 text-[#B89555]" />
+                <h3 className="text-[#102540] font-semibold text-sm">Cash vs Mortgage</h3>
               </div>
               <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#EFE6D6] border border-[#B89555]/30">
-                <div className="h-full bg-[#2D4F6E] rounded-l-full flex items-center justify-center" style={{ width: `${cashPct}%` }}>
-                  <span className="text-[#FDFBF7] text-[10px] font-bold">{cashPct}%</span>
+                <div className="h-full bg-[#102540] rounded-l-full flex items-center justify-center" style={{ width: `${cashPct}%` }}>
+                  <span className="text-white text-[10px] font-bold">{cashPct}%</span>
                 </div>
-                <div className="h-full bg-[#8B6F3F] flex-1 rounded-r-full flex items-center justify-center">
-                  <span className="text-[#FDFBF7] text-[10px] font-bold">{mortgagePct}%</span>
+                <div className="h-full bg-[#B89555] flex-1 rounded-r-full flex items-center justify-center">
+                  <span className="text-[#1A1A1A] text-[10px] font-bold">{mortgagePct}%</span>
                 </div>
               </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-[#2D4F6E]/8 border border-[#2D4F6E]/25 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
