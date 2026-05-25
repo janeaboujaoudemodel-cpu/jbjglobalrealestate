@@ -833,6 +833,11 @@ export default function JoinApplication() {
                   />
                 </div>
 
+                </div>
+                {/* End of step 0 (Personal) */}
+
+                {/* Step 1 — Location & Language */}
+                <div className={currentStep === 1 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
                 {/* Nationality + Language */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
