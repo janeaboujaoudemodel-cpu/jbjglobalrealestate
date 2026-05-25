@@ -412,10 +412,11 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                           </span>
                           {nats.length > 0 &&
                             (isExpanded ? (
-                              <ChevronUp className="w-3.5 h-3.5 text-[#1A1A1A]/55" />
+                              <ChevronUp className="w-3.5 h-3.5 text-[#B89555]" strokeWidth={2.5} />
                             ) : (
-                              <ChevronDown className="w-3.5 h-3.5 text-[#1A1A1A]/55" />
+                              <ChevronDown className="w-3.5 h-3.5 text-[#B89555]" strokeWidth={2.5} />
                             ))}
+
                         </div>
                       </button>
 
