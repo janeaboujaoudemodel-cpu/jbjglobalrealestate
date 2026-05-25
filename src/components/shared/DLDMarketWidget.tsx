@@ -407,7 +407,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                           </span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-[#1A1A1A] text-xs font-bold">{area.transactions.toLocaleString()}</span>
+                          <span className="text-[#102540] text-xs font-bold">{area.transactions.toLocaleString()}</span>
                           <span className="text-[#1E5F3F] text-xs font-extrabold bg-[#1E5F3F]/8 border border-[#1E5F3F]/25 px-2 py-0.5 rounded-full">
                             {area.change}
                           </span>
