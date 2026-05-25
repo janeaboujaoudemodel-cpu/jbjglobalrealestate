@@ -352,12 +352,21 @@
 [data-careers-page] input[type="tel"],
 [data-careers-page] .PhoneInputInput,
 [data-careers-page] input[placeholder="Search positions by title, department, or location"] {
-  background-color: transparent !important;
-  border: 2px solid var(--t-form-blue) !important;
-  box-shadow: none !important;
-  color: var(--t-form-blue) !important;
-  -webkit-text-fill-color: var(--t-form-blue) !important;
+  background-color: rgba(253, 251, 247, 0.55) !important;
+  border: 1px solid var(--t-gold-soft) !important;
+  border-radius: 0.625rem !important;
+  box-shadow: 0 1px 2px rgba(16, 37, 64, 0.04) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
+
+[data-careers-page] input[placeholder="Search positions by title, department, or location"]:focus {
+  border-color: var(--t-form-blue) !important;
+  background-color: #FDFBF7 !important;
+  box-shadow: 0 0 0 3px var(--t-form-blue-ring), 0 0 0 6px rgba(184, 149, 85, 0.18) !important;
+  outline: none !important;
+}
+
 
 /* All form labels on careers page → navy */
 [data-careers-page] label {
