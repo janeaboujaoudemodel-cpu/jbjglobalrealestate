@@ -31,11 +31,11 @@ const OverseasInvestorsStrip = () => {
         className="allow-white group flex flex-wrap md:flex-nowrap items-center justify-between gap-4 md:gap-8 px-6 sm:px-10 md:px-14 py-10 md:py-14 lg:py-16 text-white transition-colors hover:bg-[#1a3d63]"
       >
 
-        {/* Left: globe + headline (never truncate) */}
-        <span className="allow-white flex items-center gap-3 min-w-0 flex-1 md:flex-none">
+        {/* Left: globe + headline (wraps, never overflows) */}
+        <span className="allow-white flex items-center gap-3 min-w-0 flex-1">
           <Globe className="w-6 h-6 md:w-7 md:h-7 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           <span
-            className="allow-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight"
+            className="allow-white text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-tight tracking-tight break-words"
             style={{ color: "#FFFFFF" }}
           >
             Invest in Dubai from anywhere in the world
@@ -43,20 +43,20 @@ const OverseasInvestorsStrip = () => {
         </span>
 
         {/* Center micro-stats */}
-        <span className="allow-white flex items-center flex-wrap gap-x-5 gap-y-2 md:gap-x-7 divide-x divide-white/15">
+        <span className="allow-white flex items-center flex-wrap gap-x-4 gap-y-2 md:gap-x-6 divide-x divide-white/15 min-w-0">
           {microStats.map((s, i) => (
             <span
               key={s.l}
-              className={`allow-white flex items-baseline gap-2 whitespace-nowrap ${i === 0 ? "" : "pl-5 md:pl-7"}`}
+              className={`allow-white flex items-baseline gap-1.5 whitespace-nowrap ${i === 0 ? "" : "pl-4 md:pl-6"}`}
             >
               <span
-                className="allow-white text-xl sm:text-2xl md:text-3xl font-bold tabular-nums"
+                className="allow-white text-lg sm:text-xl md:text-2xl font-bold tabular-nums"
                 style={{ color: "#FFFFFF" }}
               >
                 {s.v}
               </span>
               <span
-                className="allow-white text-[11px] sm:text-xs uppercase tracking-[0.14em]"
+                className="allow-white text-[10px] sm:text-[11px] uppercase tracking-[0.14em]"
                 style={{ color: "rgba(255,255,255,0.75)" }}
               >
                 {s.l}
@@ -65,14 +65,16 @@ const OverseasInvestorsStrip = () => {
           ))}
         </span>
 
-        {/* Right: CTA */}
+        {/* Right: CTA — champagne/gold button with black text + icon */}
         <span
-          className="allow-white inline-flex items-center gap-2 text-sm md:text-base font-semibold shrink-0 whitespace-nowrap"
-          style={{ color: "#FFFFFF" }}
+          data-no-contrast-guard
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-b from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555] text-sm md:text-base font-bold shrink-0 whitespace-nowrap shadow-[0_6px_18px_-6px_rgba(0,0,0,0.45)] transition-transform group-hover:-translate-y-0.5"
+          style={{ color: "#1A1A1A" }}
         >
-          <span className="allow-white" style={{ color: "#FFFFFF" }}>Learn more</span>
-          <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+          <span style={{ color: "#1A1A1A" }}>Learn more</span>
+          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
         </span>
+
 
       </Link>
     </section>
