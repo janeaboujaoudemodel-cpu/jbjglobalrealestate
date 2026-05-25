@@ -541,10 +541,10 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-4">
                       <div className="w-9 h-9 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/20 flex items-center justify-center">
-                        <Building2 className="w-5 h-5 text-[#1A1A1A]" />
+                        <Building2 className="w-5 h-5 text-[#B89555]" />
                       </div>
                       <div>
-                        <h3 className="font-bold text-[#1A1A1A] text-lg">Area Overview</h3>
+                        <h3 className="font-bold text-[#102540] text-lg">Area Overview</h3>
                         <span className="text-[#1A1A1A]/70 text-xs">{areaName} Community Profile</span>
                       </div>
                     </div>
