@@ -194,7 +194,9 @@ export function DeveloperLogo({
           onError?.();
         }}
         className="block max-h-full max-w-full w-auto h-auto rounded-sm object-contain"
+        style={{ filter: "contrast(1.08) saturate(1.1)" }}
       />
+
     </div>
   );
 }
