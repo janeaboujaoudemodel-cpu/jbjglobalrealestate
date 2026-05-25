@@ -738,7 +738,7 @@ export default function JoinApplication() {
                 {/* Names */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="firstName" className="text-sm font-semibold text-[#1A1A1A]">First Name</Label>
+                  <Label htmlFor="firstName" className="jbj-form-label text-sm font-semibold">First Name</Label>
                     <Input
                       id="firstName"
                       value={formData.firstName}
@@ -749,7 +749,7 @@ export default function JoinApplication() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="lastName" className="text-sm font-semibold text-[#1A1A1A]">Last Name</Label>
+                  <Label htmlFor="lastName" className="jbj-form-label text-sm font-semibold">Last Name</Label>
                     <Input
                       id="lastName"
                       value={formData.lastName}
@@ -763,7 +763,7 @@ export default function JoinApplication() {
 
                 {/* Email */}
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-semibold text-[#1A1A1A]">Email</Label>
+                  <Label htmlFor="email" className="jbj-form-label text-sm font-semibold">Email</Label>
                   <Input
                     id="email"
                     type="email"
@@ -777,7 +777,7 @@ export default function JoinApplication() {
 
                 {/* Phone */}
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-sm font-semibold text-[#1A1A1A]">Phone Number</Label>
+                  <Label htmlFor="phone" className="jbj-form-label text-sm font-semibold">Phone Number</Label>
                   <PhoneInput
                     value={formData.phone}
                     onChange={(value) => setFormData({ ...formData, phone: value || "" })}
@@ -791,7 +791,7 @@ export default function JoinApplication() {
                 {/* Nationality + Language */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-sm font-semibold text-[#1A1A1A]">Nationality</Label>
+                    <Label className="jbj-form-label text-sm font-semibold">Nationality</Label>
                     <SearchableSelect
                       value={formData.nationality}
                       onChange={(v) => setFormData({ ...formData, nationality: v })}
@@ -804,7 +804,7 @@ export default function JoinApplication() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-semibold text-[#1A1A1A]">Preferred Language</Label>
+                    <Label className="jbj-form-label text-sm font-semibold">Preferred Language</Label>
                     <SearchableSelect
                       value={formData.preferredLanguage}
                       onChange={(v) => setFormData({ ...formData, preferredLanguage: v })}
@@ -821,7 +821,7 @@ export default function JoinApplication() {
                 {/* Country + City */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-sm font-semibold text-[#1A1A1A]">Country</Label>
+                    <Label className="jbj-form-label text-sm font-semibold">Country</Label>
                     <SearchableSelect
                       value={formData.country}
                       onChange={(v) => setFormData({ ...formData, country: v })}
@@ -834,7 +834,7 @@ export default function JoinApplication() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-semibold text-[#1A1A1A]">City</Label>
+                    <Label className="jbj-form-label text-sm font-semibold">City</Label>
                     <SearchableSelect
                       value={formData.city}
                       onChange={(v) => setFormData({ ...formData, city: v })}
@@ -851,7 +851,7 @@ export default function JoinApplication() {
                 {/* Position fallback (only when no DB positions) */}
                 {openPositions.length === 0 && (
                   <div className="space-y-2">
-                    <Label className="text-sm font-semibold text-[#1A1A1A]">
+                      <Label className="jbj-form-label text-sm font-semibold">
                       Position Applied For <span className="text-red-600">*</span>
                     </Label>
                     <SearchableSelect
