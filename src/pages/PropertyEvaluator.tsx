@@ -18,7 +18,9 @@ import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { FounderContent } from "@/components/FounderContent";
+import { ToolHero } from "@/components/tools/ToolHero";
+import { PoweredByJBJ } from "@/components/tools/PoweredByJBJ";
+import { toolThemes, TOOL_GOLD, TOOL_PAGE_BG } from "@/components/tools/toolThemes";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
 
 interface PropertyDetails {
