@@ -188,8 +188,20 @@ export default function PaymentPlanVisualization({
                   </span>
                 </div>
               )}
+
+              {/* Legal-safety note: when only a free-text plan exists (no structured
+                  breakdown), we display the developer string verbatim and tell the
+                  buyer to confirm with our team — never invent splits. */}
+              {!isDetailedBreakdown && (!legacyBreakdown || (!legacyBreakdown.down_payment && !legacyBreakdown.during_construction && !legacyBreakdown.on_completion)) && (
+                <p className="mt-4 text-xs text-[#1A1A1A]/70 italic">
+                  Plan shown as provided by the developer. Please confirm the official
+                  milestone breakdown with our team before signing.
+                </p>
+              )}
             </div>
           )}
+
+
 
           {/* Visual Timeline with Progress Bar */}
           {total > 0 && (
