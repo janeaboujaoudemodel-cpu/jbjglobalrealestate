@@ -360,7 +360,6 @@ const QuizResults = () => {
           </div>
         </div>
 
-        </div>
 
         {/* Top Recommendation */}
         {projects && projects.length > 0 && (
