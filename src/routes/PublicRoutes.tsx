@@ -354,7 +354,7 @@ export const PublicRoutes = () => (
     <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
     <Route path="/favorites" element={<AuthRequiredRoute><Favorites /></AuthRequiredRoute>} />
     <Route path="/compare" element={<AuthRequiredRoute><Compare /></AuthRequiredRoute>} />
-    <Route path="/compare-manual" element={<AuthRequiredRoute><CompareManual /></AuthRequiredRoute>} />
+    <Route path="/compare-manual" element={<Navigate to="/compare" replace />} />
     <Route path="/quiz" element={<Quiz />} />
     <Route path="/quiz-results" element={<QuizResults />} />
     <Route path="/dashboard" element={<Dashboard />} />
