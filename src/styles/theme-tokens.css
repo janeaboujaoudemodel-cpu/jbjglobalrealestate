@@ -73,14 +73,15 @@
 [data-careers-page] .careers-blue-field:-webkit-autofill:focus,
 [data-careers-page] .careers-phone-tel:-webkit-autofill,
 [data-careers-page] .careers-phone-input input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-  box-shadow: 0 0 0px 1000px transparent inset !important;
-  -webkit-text-fill-color: var(--t-form-blue) !important;
-  caret-color: var(--t-form-blue) !important;
-  background-color: transparent !important;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(253, 251, 247, 0.85) inset !important;
+  box-shadow: 0 0 0px 1000px rgba(253, 251, 247, 0.85) inset !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  caret-color: #1A1A1A !important;
+  background-color: rgba(253, 251, 247, 0.85) !important;
   background-clip: content-box !important;
   transition: background-color 9999s ease-in-out 0s !important;
 }
+
 
 .jbj-form-field:focus,
 .jbj-form-field:focus-visible {
