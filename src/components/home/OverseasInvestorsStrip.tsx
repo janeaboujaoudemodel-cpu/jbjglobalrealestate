@@ -32,10 +32,10 @@ const OverseasInvestorsStrip = () => {
       >
 
         {/* Left: globe + headline (never truncate) */}
-        <span className="allow-white flex items-center gap-2.5 min-w-0 flex-1 md:flex-none">
-          <Globe className="w-4 h-4 md:w-5 md:h-5 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        <span className="allow-white flex items-center gap-3 min-w-0 flex-1 md:flex-none">
+          <Globe className="w-6 h-6 md:w-7 md:h-7 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           <span
-            className="allow-white text-[12px] sm:text-sm md:text-base font-semibold leading-snug"
+            className="allow-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight"
             style={{ color: "#FFFFFF" }}
           >
             Invest in Dubai from anywhere in the world
@@ -43,20 +43,20 @@ const OverseasInvestorsStrip = () => {
         </span>
 
         {/* Center micro-stats */}
-        <span className="allow-white flex items-center flex-wrap gap-x-4 gap-y-1 md:gap-x-5 divide-x divide-white/15">
+        <span className="allow-white flex items-center flex-wrap gap-x-5 gap-y-2 md:gap-x-7 divide-x divide-white/15">
           {microStats.map((s, i) => (
             <span
               key={s.l}
-              className={`allow-white flex items-baseline gap-1.5 whitespace-nowrap ${i === 0 ? "" : "pl-4 md:pl-5"}`}
+              className={`allow-white flex items-baseline gap-2 whitespace-nowrap ${i === 0 ? "" : "pl-5 md:pl-7"}`}
             >
               <span
-                className="allow-white text-xs sm:text-sm md:text-base font-bold tabular-nums"
+                className="allow-white text-xl sm:text-2xl md:text-3xl font-bold tabular-nums"
                 style={{ color: "#FFFFFF" }}
               >
                 {s.v}
               </span>
               <span
-                className="allow-white text-[10px] sm:text-[11px] uppercase tracking-[0.14em]"
+                className="allow-white text-[11px] sm:text-xs uppercase tracking-[0.14em]"
                 style={{ color: "rgba(255,255,255,0.75)" }}
               >
                 {s.l}
@@ -67,12 +67,13 @@ const OverseasInvestorsStrip = () => {
 
         {/* Right: CTA */}
         <span
-          className="allow-white inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold shrink-0 whitespace-nowrap"
+          className="allow-white inline-flex items-center gap-2 text-sm md:text-base font-semibold shrink-0 whitespace-nowrap"
           style={{ color: "#FFFFFF" }}
         >
           <span className="allow-white" style={{ color: "#FFFFFF" }}>Learn more</span>
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+          <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
         </span>
+
       </Link>
     </section>
   );
