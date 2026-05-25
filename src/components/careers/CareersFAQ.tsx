@@ -54,10 +54,10 @@ export function CareersFAQ() {
               <div
                 key={f.q}
                 className={cn(
-                  "overflow-hidden rounded-2xl border bg-[linear-gradient(180deg,rgba(253,251,247,0.98),rgba(247,242,234,0.96))] backdrop-blur-sm transition-all duration-300",
+                  "overflow-hidden rounded-2xl border bg-[linear-gradient(180deg,rgba(255,253,249,0.98),rgba(243,235,221,0.96))] backdrop-blur-sm transition-all duration-300",
                   open
-                    ? "border-[#102540]/50 shadow-[0_24px_48px_-30px_rgba(16,37,64,0.34)]"
-                    : "border-[#B89555]/50 hover:border-[#B89555]/80 hover:shadow-[0_14px_32px_-24px_rgba(16,37,64,0.24)]"
+                    ? "careers-faq-open"
+                    : "careers-faq-closed hover:border-[#BFA46A] hover:shadow-[0_18px_36px_-24px_rgba(7,27,51,0.24)]"
                 )}
               >
                 <button
@@ -65,23 +65,23 @@ export function CareersFAQ() {
                   onClick={() => setOpenIdx(open ? null : i)}
                   className={cn(
                     "flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors",
-                    open ? "bg-[#F7F2EA]/72" : "bg-transparent"
+                    open ? "bg-[#F3E8D6]" : "bg-transparent"
                   )}
                   aria-expanded={open}
                 >
-                  <span className={cn("text-base font-semibold leading-snug", open ? "text-[#102540]" : "text-[#1A1A1A]")}>{f.q}</span>
+                  <span className={cn("text-base font-semibold leading-snug", open ? "text-[#071B33]" : "text-[#1A1A1A]")}>{f.q}</span>
                   <span
                     className={cn(
-                      "grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
+                      "grid h-9 w-9 shrink-0 place-items-center rounded-full border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
                       open
-                        ? "border-[#102540] bg-[#102540] shadow-[0_10px_20px_-12px_rgba(16,37,64,0.6)]"
-                        : "border-[#B89555]/75 bg-[#F7F2EA]"
+                        ? "border-[#071B33] bg-[#071B33] shadow-[0_12px_22px_-12px_rgba(7,27,51,0.62)]"
+                        : "border-[#BFA46A] bg-[#F7F2EA]"
                     )}
                   >
                     <ChevronDown
                       className={cn(
-                        "h-3.5 w-3.5 transition-transform",
-                        open ? "rotate-180 text-white" : "text-[#102540]"
+                        "h-4 w-4 transition-transform",
+                        open ? "rotate-180 text-white" : "text-[#071B33]"
                       )}
                       data-allow-dark-cta={open ? "" : undefined}
                       data-no-contrast-guard={open ? "" : undefined}
@@ -95,7 +95,7 @@ export function CareersFAQ() {
                   )}
                 >
                   <div className="overflow-hidden">
-                    <p className="px-5 pb-5 pt-0.5 text-sm leading-relaxed text-[#1A1A1A]/84">{f.a}</p>
+                    <p className="px-5 pb-5 pt-0.5 text-sm leading-relaxed text-[#1A1A1A]">{f.a}</p>
                   </div>
                 </div>
               </div>
