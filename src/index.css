@@ -4885,8 +4885,8 @@ a[class*="bg-red-"]:hover {
   min-width: 0;
 }
 
-/* 9. Owner sidebar nav — LOCKED active/hover system.
- *    Active = gold gradient + ink text. Hover = soft gold wash + ink text.
+/* 9. Sidebar nav — LOCKED active/hover system.
+ *    Active/rest stays readable; hover uses brand navy.
  *    Never allow text bleach to white or black-on-black active state. */
 [data-surface="champagne"] nav button[data-no-contrast-guard],
 [data-surface="champagne"] nav button[data-no-contrast-guard] * {
@@ -4894,7 +4894,8 @@ a[class*="bg-red-"]:hover {
 }
 [data-surface="champagne"] nav button[data-no-contrast-guard]:hover,
 [data-surface="champagne"] nav button[data-no-contrast-guard]:hover * {
-  color: #1A1A1A !important;
+  color: #102540 !important;
+  stroke: #102540 !important;
 }
 
 [data-surface="champagne"] nav button[data-sidebar-collapse-control],
