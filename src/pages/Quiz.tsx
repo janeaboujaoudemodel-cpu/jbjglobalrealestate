@@ -581,14 +581,10 @@ const Quiz = () => {
                   Save money by choosing the right property the first time.
                 </p>
 
-                <div className="mt-8 pt-6 border-t border-[#B89555]/25">
+                <div className="mt-8">
                   <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">
-                    Software developed and implemented by<br />
-                    <FounderContent fallback={<span className="text-[#1A1A1A] font-medium">JBJ Global Real Estate Team</span>}>
-                      <span className="text-[#1A1A1A] font-medium">The Founder &amp; CEO, Jane Bou Jaoude</span>
-                    </FounderContent><br />
-                    Designed exclusively for{" "}
-                    <span className="text-[#1A1A1A] font-medium">JBJ Global Real Estate</span>
+                    Powered by{" "}
+                    <span className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</span>
                   </p>
                 </div>
               </div>
