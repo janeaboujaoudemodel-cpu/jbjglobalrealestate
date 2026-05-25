@@ -46,28 +46,34 @@ export function DeveloperLogo({
 
   // ── Nameplate variant — champagne plate with developer NAME wordmark ──
   if (variant === "nameplate" || (variant === "bare" && override.forceNameplate)) {
-    const label = (name || alt || "Developer").trim();
-    // Auto-shrink so long names ("Expo City Development") fit fully on
-    // two lines without ANY truncation/"…". Plate is h-14 → two lines OK.
-    // Auto-shrink so long names fit the smaller plate without truncation.
+    const raw = (name || alt || "Developer").trim();
+    // Drop generic legal/suffix words so wordmark fits on ONE line
+    // ("Avenew Development" → "Avenew", "Sobha Realty" → "Sobha").
+    const SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
+    const cleaned = raw.replace(SUFFIX, "").replace(/\s{2,}/g, " ").trim();
+    const label = cleaned || raw.split(/\s+/)[0];
+    // Auto-shrink so any label fits on a SINGLE line (no wrap, no truncate).
     const sizeClass =
-      label.length <= 6
+      label.length <= 5
+        ? "text-[11px]"
+        : label.length <= 7
         ? "text-[10px]"
-        : label.length <= 10
+        : label.length <= 9
         ? "text-[9px]"
-        : label.length <= 14
+        : label.length <= 12
         ? "text-[8px]"
         : "text-[7px]";
     return (
       <div
         className={cn(UNIFIED_PLATE, className)}
-        aria-label={label}
+        aria-label={raw}
+        title={raw}
         data-developer-nameplate
       >
         <span
           className={cn(
-            "font-semibold tracking-tight leading-[1.05] text-center text-[#1A1A1A]",
-            "whitespace-normal break-words",
+            "font-bold tracking-tight leading-none text-center text-[#1A1A1A]",
+            "whitespace-nowrap",
             sizeClass,
           )}
         >
