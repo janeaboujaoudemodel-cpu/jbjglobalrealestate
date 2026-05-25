@@ -153,7 +153,7 @@ export default function HorizontalUtilityBar() {
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqft') toggleAreaUnit(); }}
               style={{
-                color: areaUnit === 'sqft' ? '#1A1A1A' : '#B89555',
+                color: areaUnit === 'sqft' ? '#1A1A1A' : 'rgba(26,26,26,0.62)',
               }}
               className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors ${areaUnit === 'sqft' ? 'jbj-shimmer-champagne' : 'bg-transparent'}`}
               aria-label="Square feet"
@@ -162,7 +162,7 @@ export default function HorizontalUtilityBar() {
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqm') toggleAreaUnit(); }}
               style={{
-                color: areaUnit === 'sqm' ? '#1A1A1A' : '#B89555',
+                color: areaUnit === 'sqm' ? '#1A1A1A' : 'rgba(26,26,26,0.62)',
               }}
               className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors border-l border-[#B89555]/40 ${areaUnit === 'sqm' ? 'jbj-shimmer-champagne' : 'bg-transparent'}`}
               aria-label="Square meters"
