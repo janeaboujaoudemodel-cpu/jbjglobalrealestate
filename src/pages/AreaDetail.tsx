@@ -217,14 +217,15 @@ const AreaDetail = () => {
       <div ref={sentinelRef} className="h-0" />
 
       {/* Phase 1: Inline filter bar — always rendered in natural flow */}
-      <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 px-4 md:px-6 border-b border-[#B89555]/20 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 px-4 md:px-6 border-b border-[#B89555]/20 transition-all duration-300">
         <div className="container mx-auto">
-          <div className="flex flex-wrap items-center gap-3">
-            {filterBarContent}
-          </div>
-          <div className="mt-3">
-            <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} priorityFilter="areas" />
-          </div>
+          <FilterShortcutBar
+            variant="light"
+            filters={shortcutFilters}
+            onFilterChange={setShortcutFilters}
+            priorityFilter="areas"
+            searchSlot={filterBarContent}
+          />
         </div>
       </div>
 
@@ -234,16 +235,18 @@ const AreaDetail = () => {
           className="fixed top-[88px] left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] backdrop-blur-md bg-gradient-to-r from-[#FDFBF7]/90 via-[#F7F2EA]/90 to-[#EFE6D6]/90 border-b border-[#B89555]/20 py-2 px-2 sm:py-3 sm:px-4 transition-all duration-200 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px]"
         >
           <div className="container mx-auto px-4">
-            <div className="flex flex-wrap items-center gap-3">
-              {filterBarContent}
-            </div>
-            <div className="mt-3">
-              <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} priorityFilter="areas" />
-            </div>
+            <FilterShortcutBar
+              variant="light"
+              filters={shortcutFilters}
+              onFilterChange={setShortcutFilters}
+              priorityFilter="areas"
+              searchSlot={filterBarContent}
+            />
           </div>
         </div>,
         document.body
       )}
+
 
       {/* Projects Grid - edge to edge */}
       <AreaProjectsGrid areaName={area.name} areaSlug={area.slug} shortcutFilters={shortcutFilters} searchQuery={searchQuery} onClearFilters={() => { setSearchQuery(""); setShortcutFilters(defaultShortcutFilters); }} />
