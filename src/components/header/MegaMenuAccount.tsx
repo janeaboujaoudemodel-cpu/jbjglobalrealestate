@@ -233,6 +233,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     { href: '/my-dashboard#tasks', label: t('account.myTasks', 'My Tasks'), icon: ListChecks, description: t('account.myTasksDesc', 'View and manage your tasks'), badge: alertCounts?.pendingTasks || 0 },
     { href: '/profile', label: t('account.myProfile', 'My Profile'), icon: User, description: t('account.myProfileDesc', 'View and edit your profile'), badge: 0 },
     { href: '/favorites', label: t('nav.favorites', 'Favorites') + ' / ' + t('nav.shortlist', 'Shortlist'), icon: Heart, description: t('account.favoritesDesc', 'Your saved & shortlisted properties'), badge: 0 },
+    { href: '#recommended', label: t('account.recommended', 'Recommended for You'), icon: Sparkles, description: t('account.recommendedDesc', 'Based on your latest search'), badge: 0, action: 'open-recommendations' as const },
     { href: '/toolkit', label: t('account.aiTools', 'AI Tools'), icon: Sparkles, description: t('account.aiToolsDesc', 'Professional AI-powered tools'), badge: 0 },
   ];
 
