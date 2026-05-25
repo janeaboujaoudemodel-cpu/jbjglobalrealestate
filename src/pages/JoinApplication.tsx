@@ -614,7 +614,8 @@ export default function JoinApplication() {
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
                     placeholder="Search positions by title, department, or location"
-                    className="pl-9 bg-[#FDFBF7] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 focus-visible:ring-[#102540]/40"
+                    className="careers-blue-field pl-9 bg-[#FDFBF7] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 focus-visible:ring-[#102540]/40"
+                    style={{ borderColor: "#102540", boxShadow: "0 0 0 1px rgba(16,37,64,0.2)" }}
                   />
                 </div>
               </CardHeader>
@@ -749,7 +750,8 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                       placeholder="e.g. Sarah"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                      className="careers-blue-field bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                      style={{ borderColor: "#102540", boxShadow: "0 0 0 1px rgba(16,37,64,0.2)" }}
                     />
                   </div>
                   <div className="space-y-2">
@@ -760,7 +762,8 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                       placeholder="e.g. Khan"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                      className="careers-blue-field bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                      style={{ borderColor: "#102540", boxShadow: "0 0 0 1px rgba(16,37,64,0.2)" }}
                     />
                   </div>
                 </div>
@@ -774,7 +777,8 @@ export default function JoinApplication() {
                     value={user?.email || ""}
                     placeholder="you@email.com"
                     disabled
-                    className="bg-[#F7F2EA] border-2 border-[#102540] text-[#1A1A1A] h-11 text-base"
+                    className="careers-blue-field bg-[#F7F2EA] border-2 border-[#102540] text-[#1A1A1A] h-11 text-base"
+                    style={{ borderColor: "#102540", boxShadow: "0 0 0 1px rgba(16,37,64,0.2)" }}
                   />
                   <p className="text-xs text-[#102540] font-bold">Email is linked to your account</p>
                 </div>
@@ -787,6 +791,8 @@ export default function JoinApplication() {
                     onChange={(value) => setFormData({ ...formData, phone: value || "" })}
                     disabled={loading}
                     placeholder="+971 54 716 7107"
+                    variant="light"
+                    className="careers-phone-input"
                   />
                 </div>
 
@@ -802,6 +808,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search nationality..."
                       flagType="country"
                       disabled={loading}
+                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540]"
                     />
                   </div>
                   <div className="space-y-2">
@@ -814,6 +821,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search language..."
                       flagType="language"
                       disabled={loading}
+                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540]"
                     />
                   </div>
                 </div>
@@ -830,6 +838,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search country..."
                       flagType="country"
                       disabled={loading}
+                      triggerClassName="careers-blue-field border-2 border-[#102540] text-[#102540]"
                     />
                   </div>
                   <div className="space-y-2">
@@ -840,7 +849,8 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                       placeholder="e.g. Dubai"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base focus-visible:ring-[#102540]/40"
+                      className="careers-blue-field bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base focus-visible:ring-[#102540]/40"
+                      style={{ borderColor: "#102540", boxShadow: "0 0 0 1px rgba(16,37,64,0.2)" }}
                     />
 
                   </div>

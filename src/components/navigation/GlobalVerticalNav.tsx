@@ -820,6 +820,8 @@ export default function GlobalVerticalNav() {
     return 'text-[hsl(var(--gold))]';
   };
 
+  const navHoverUnderline = "group-hover:!text-[#102540] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full after:bg-[#102540]";
+
   // Premium gold-bordered icon tile shared across nav rows.
   const getIconTileClass = (item: NavItem) => {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
@@ -1047,10 +1049,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   style={{ color: '#B89555' }}
                     className={`group flex items-center gap-2 px-2.5 py-[7px] text-[12px] font-semibold transition-all duration-200 !text-[#B89555] ${getItemStyle(item)}`}
                 >
-                  <span className="w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65">
-                    <Icon className="w-3 h-3" style={{ color: '#B89555' }} />
+                  <span className="w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[#102540]/10 group-hover:border-[#102540]/70">
+                    <Icon className="w-3 h-3 text-[#B89555] group-hover:text-[#102540] transition-colors" />
                   </span>
-                  <span data-no-contrast-guard className="flex-1 text-left relative inline-block !text-[#B89555] group-hover:!text-[#1A1A1A] transition-colors duration-200 after:content-[''] after:absolute after:bottom-[-3px] after:left-0 after:h-[1.5px] after:bg-[#1A1A1A] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full">{item.label}</span>
+                  <span data-no-contrast-guard className={`flex-1 text-left relative inline-block !text-[#B89555] transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}>{item.label}</span>
                   {hasMega && (
                     <ChevronRight data-no-contrast-guard style={{ color: '#B89555' }} className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90" : "opacity-60"}`} />
                   )}
@@ -1079,13 +1081,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     style={{ color: '#B89555' }}
                     className="w-full flex items-center gap-2 px-2.5 py-[7px] text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group"
                   >
-                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65'}`}>
-                      <SectionIcon className="w-3 h-3" style={{ color: '#B89555' }} />
+                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[#102540]/10 group-hover:border-[#102540]/70'}`}>
+                      <SectionIcon className="w-3 h-3 text-[#B89555] group-hover:text-[#102540] transition-colors" />
                     </div>
                     <span
                       data-no-contrast-guard
                       style={{ color: '#B89555' }}
-                      className="flex-1 text-left relative inline-block !text-[#B89555] group-hover:!text-[#1A1A1A] transition-colors duration-200 after:content-[''] after:absolute after:bottom-[-3px] after:left-0 after:h-[1.5px] after:bg-[#1A1A1A] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full"
+                      className={`flex-1 text-left relative inline-block !text-[#B89555] transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
                     >{sectionKey}</span>
                     <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: '#B89555' }} />
                     {!isOpen && hasActiveChild && (
@@ -1139,10 +1141,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             }}
                             className={`group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 ${getItemStyle(item, sectionKey)}`}
                           >
-                            <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
-                              <Icon className={`w-3 h-3 ${getIconStyle(item, sectionKey)}`} />
+                            <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)} group-hover:bg-[#102540]/10 group-hover:border-[#102540]/70`}>
+                              <Icon className={`w-3 h-3 ${getIconStyle(item, sectionKey)} group-hover:text-[#102540] transition-colors`} />
                             </span>
-                            <span className="flex-1 relative after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-10">{item.label}</span>
+                            <span className={`flex-1 relative transition-colors after:bottom-[-2px] after:h-[1.5px] group-hover:!text-[#102540] ${navHoverUnderline}`}>{item.label}</span>
                           </Link>
                         );
                       })}
@@ -1165,42 +1167,42 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               to="/contact"
               data-no-contrast-guard
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
-              style={{ color: '#1A1A1A', borderColor: '#D4B896', backgroundColor: '#F7F2EA' }}
+              style={{ color: '#102540', borderColor: '#102540', backgroundColor: '#F7F2EA' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#FDFBF7';
-                e.currentTarget.style.borderColor = '#E2C9A0';
+                e.currentTarget.style.borderColor = '#102540';
                 e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(212,184,150,0.55), 0 0 0 1px rgba(226,201,160,0.50)';
                 e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#F7F2EA';
-                e.currentTarget.style.borderColor = '#D4B896';
+                e.currentTarget.style.borderColor = '#102540';
                 e.currentTarget.style.boxShadow = 'none';
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#C9A86A' }} />
+              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#102540' }} />
               <span style={{ color: 'inherit' }}>Contact</span>
             </Link>
             <Link
               to="/ticket-hub"
               data-no-contrast-guard
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
-              style={{ color: '#1A1A1A', borderColor: '#D4B896', backgroundColor: '#F7F2EA' }}
+              style={{ color: '#102540', borderColor: '#102540', backgroundColor: '#F7F2EA' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#FDFBF7';
-                e.currentTarget.style.borderColor = '#E2C9A0';
+                e.currentTarget.style.borderColor = '#102540';
                 e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(212,184,150,0.55), 0 0 0 1px rgba(226,201,160,0.50)';
                 e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#F7F2EA';
-                e.currentTarget.style.borderColor = '#D4B896';
+                e.currentTarget.style.borderColor = '#102540';
                 e.currentTarget.style.boxShadow = 'none';
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#C9A86A' }} />
+              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#102540' }} />
               <span style={{ color: 'inherit' }}>Support</span>
             </Link>
           </div>
@@ -1209,9 +1211,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               data-no-contrast-guard
               onClick={() => { supabase.auth.signOut(); }}
               className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[4px] rounded-lg border w-full group"
-              style={{ color: '#B91C1C', borderColor: 'rgba(185,28,28,0.35)', backgroundColor: 'rgba(185,28,28,0.04)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#B91C1C'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#B91C1C'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(185,28,28,0.04)'; e.currentTarget.style.color = '#B91C1C'; e.currentTarget.style.borderColor = 'rgba(185,28,28,0.35)'; }}
+              style={{ color: '#102540', borderColor: 'rgba(16,37,64,0.55)', backgroundColor: 'rgba(16,37,64,0.04)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(16,37,64,0.08)'; e.currentTarget.style.color = '#102540'; e.currentTarget.style.borderColor = '#102540'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(16,37,64,0.04)'; e.currentTarget.style.color = '#102540'; e.currentTarget.style.borderColor = 'rgba(16,37,64,0.55)'; }}
             >
               <LogOut className="w-3 h-3" style={{ color: 'inherit' }} />
               <span style={{ color: 'inherit' }}>Sign Out</span>
@@ -1304,10 +1306,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
                         isActive
                           ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/80 shadow-sm shadow-gold/15'
-                          : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70'
+                          : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[#102540]/10 hover:border-[#102540]/70'
                       }`}
                     >
-                      <SectionIcon className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
+                      <SectionIcon className="w-3.5 h-3.5 text-[#102540] sm:text-[hsl(var(--gold))]" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
@@ -1325,9 +1327,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <Link
                     to="/contact"
                     onClick={collapseAfterNavigation}
-                    className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
+                    className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[#102540]/10 hover:border-[#102540]/70"
                   >
-                    <Headphones className="w-3.5 h-3.5 text-[hsl(var(--gold))]" strokeWidth={2} />
+                    <Headphones className="w-3.5 h-3.5 text-[#102540] sm:text-[hsl(var(--gold))]" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1337,9 +1339,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <Link
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
-                    className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
+                    className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[#102540]/10 hover:border-[#102540]/70"
                   >
-                    <Ticket className="w-3.5 h-3.5 text-[hsl(var(--gold))]" strokeWidth={2} />
+                    <Ticket className="w-3.5 h-3.5 text-[#102540] sm:text-[hsl(var(--gold))]" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
@@ -1349,7 +1351,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <TooltipTrigger asChild>
                     <button
                       onClick={() => { supabase.auth.signOut(); }}
-                      className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border text-[#DC2626] border-[#DC2626]/45 bg-[#DC2626]/[0.06] hover:text-white hover:bg-[#DC2626] hover:border-[#DC2626]"
+                      className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border text-[#102540] border-[#102540]/55 bg-[#102540]/[0.06] hover:text-[#102540] hover:bg-[#102540]/10 hover:border-[#102540]"
                     >
                       <LogOut className="w-3.5 h-3.5" strokeWidth={2.25} />
                     </button>
