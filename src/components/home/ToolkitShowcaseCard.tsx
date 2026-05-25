@@ -81,7 +81,7 @@ export function ToolkitShowcaseCard() {
               <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               <span className="allow-white" style={{ color: "#FFFFFF" }}>Free Professional Tools</span>
             </div>
-            <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] tracking-tight">
+            <h2 className="text-xl md:text-2xl font-bold text-[#102540] tracking-tight">
               JBJ Royal Tools Hub
             </h2>
             <p className="mt-1 text-sm text-[#1A1A1A]/70">

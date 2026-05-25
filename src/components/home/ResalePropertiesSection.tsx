@@ -36,7 +36,7 @@ const ResalePropertiesSection = () => {
                   Investor Network
                 </Badge>
                 <h2
-                  className="text-2xl md:text-3xl font-bold text-[#1A1A1A]"
+                  className="text-2xl md:text-3xl font-bold text-[#102540]"
                 >
                   Resale Properties
                 </h2>

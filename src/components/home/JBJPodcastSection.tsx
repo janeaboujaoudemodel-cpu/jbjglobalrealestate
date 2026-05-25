@@ -176,8 +176,8 @@ const JBJPodcastSection = () => {
             <Radio className="w-4 h-4" />
             <T>JBJ Podcast</T>
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1A1A1A] mb-4">
-            <T>The JBJ</T> <span className="text-[#1A1A1A]/70"><T>Perspective</T></span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#102540] mb-4">
+            <T>The JBJ</T> <span className="text-[#102540]/70"><T>Perspective</T></span>
           </h2>
           <p className="text-lg md:text-xl text-[#1A1A1A]/70 max-w-2xl mx-auto">
             <T>Real Estate, Power & Global Opportunity</T>

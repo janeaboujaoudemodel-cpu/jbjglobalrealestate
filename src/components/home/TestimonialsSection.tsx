@@ -70,7 +70,7 @@ const TestimonialsSection = () => {
         {/* Section Header */}
         <div className="text-center mb-10">
           <h2 
-            className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-3"
+            className="text-2xl md:text-3xl font-bold text-[#102540] mb-3"
           >
             {t('testimonials.title', 'What Our Clients Say')}
           </h2>

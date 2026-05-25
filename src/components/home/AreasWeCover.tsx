@@ -45,7 +45,7 @@ const AreasWeCover = () => {
             <MapPin className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
             <span className="text-[#1A1A1A]">{t("areas.topLabel", "Top Areas")}</span>
           </span>
-          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#102540]">
             {t("areas.topTitle", "Top Areas in Dubai")}
           </h2>
           <p className="mt-3 text-sm text-[#1A1A1A]/70 max-w-xl mx-auto">
