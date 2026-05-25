@@ -143,10 +143,30 @@ export default function PaymentPlanVisualization({
 
   return (
     <div className="rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 p-6 md:p-8 shadow-sm">
-      <h3 className="text-h3-sm font-medium text-[#1A1A1A] flex items-center gap-2 mb-6">
-        <CreditCard className="w-5 h-5 text-[#1A1A1A]" />
-        Payment Plan
-      </h3>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <h3 className="text-h3-sm font-medium text-[#1A1A1A] flex items-center gap-2">
+          <CreditCard className="w-5 h-5 text-[#1A1A1A]" />
+          Payment Plan
+        </h3>
+        {paymentPlanVerified ? (
+          <span
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-300"
+            title={paymentPlanVerifiedAt ? `Verified ${new Date(paymentPlanVerifiedAt).toLocaleDateString()}` : "Verified by JBJ"}
+          >
+            <ShieldCheck className="w-3.5 h-3.5" />
+            Verified by JBJ
+          </span>
+        ) : (
+          <span
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-300"
+            title="Confirm the official milestone breakdown with our team before signing."
+          >
+            <ShieldAlert className="w-3.5 h-3.5" />
+            Pending verification — confirm with our team
+          </span>
+        )}
+      </div>
+
 
       <Tabs defaultValue="installment" className="w-full">
         <TabsList className="w-full mb-6 bg-[#F7F2EA] border border-[#B89555]/30">
