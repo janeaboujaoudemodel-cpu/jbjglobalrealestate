@@ -634,7 +634,7 @@ export default function JoinApplication() {
                           }`}
                         >
                           <div className="flex items-start justify-between mb-2 gap-2">
-                            <h4 className="font-semibold text-base leading-snug text-[#B89555]">{pos.title}</h4>
+                            <h4 className="font-semibold text-base leading-snug text-[#102540]">{pos.title}</h4>
                             <Badge className="border border-[#B89555] bg-[#F7F2EA] text-[#B89555] text-[10px] px-2 py-0.5 shrink-0 whitespace-nowrap">
                               <Star className="w-2.5 h-2.5 mr-0.5 text-[#B89555]" /> Partner
                             </Badge>
@@ -666,13 +666,13 @@ export default function JoinApplication() {
                               }}
                               className={
                                 selected
-                                  ? "bg-[#F7F2EA] text-[#B89555] border border-[#B89555] hover:bg-[#EFE6D6]"
-                                  : "bg-transparent text-[#B89555] border border-[#B89555] hover:bg-[#F7F2EA]"
+                                  ? "bg-[#F7F2EA] text-[#102540] border border-[#102540] hover:bg-[#EFE6D6]"
+                                  : "bg-transparent text-[#102540] border border-[#102540] hover:bg-[#F7F2EA]"
                               }
                             >
                               {selected ? (
                                 <>
-                                  <CheckCircle className="w-3.5 h-3.5 mr-1.5 text-[#B89555]" /> Selected
+                                  <CheckCircle className="w-3.5 h-3.5 mr-1.5 text-[#102540]" /> Selected
                                 </>
                               ) : (
                                 "Apply"
