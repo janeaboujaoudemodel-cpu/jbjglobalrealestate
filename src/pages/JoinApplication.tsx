@@ -296,8 +296,43 @@ export default function JoinApplication() {
     toast.success(`Selected: ${label}`, {
       description: "Application form synced. Continue below to complete your application.",
     });
+    // Jump wizard to Role & Experience step so users see the sync immediately
+    setCurrentStep((s) => (s < 2 ? 2 : s));
     setTimeout(scrollToForm, 80);
   };
+
+  // ---- Wizard step validation ----
+  const stepValidity = useMemo(() => {
+    return [
+      // 0 Personal
+      !!formData.firstName.trim() && !!formData.lastName.trim() && !!formData.phone.trim(),
+      // 1 Location & Language
+      !!formData.nationality && !!formData.preferredLanguage && !!formData.country && !!formData.city,
+      // 2 Role & Experience
+      !!formData.positionApplied,
+      // 3 CV
+      !!cvFile,
+      // 4 Review & Consent
+      !!formData.consentAccurate && !!formData.consentTerms,
+    ];
+  }, [formData, cvFile]);
+
+  const STEP_LABELS = ["Personal", "Location & Language", "Role & Experience", "CV / Resume", "Review & Consent"];
+
+  const goToStep = (idx: number) => {
+    const clamped = Math.max(0, Math.min(TOTAL_STEPS - 1, idx));
+    setCurrentStep(clamped);
+    setTimeout(scrollToForm, 50);
+  };
+
+  const handleNext = () => {
+    if (!stepValidity[currentStep]) {
+      toast.error(`Please complete: ${STEP_LABELS[currentStep]}`);
+      return;
+    }
+    goToStep(currentStep + 1);
+  };
+  const handleBack = () => goToStep(currentStep - 1);
 
   // ---- File change ----
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
