@@ -50,6 +50,8 @@ const services: Service[] = [
   { id: "facility", title: "Facility Management",  description: "Building-grade maintenance for owners — launching soon.",                                     icon: Wrench,       href: "/services/facility-management",       image: "/services/facility-management-bg.jpg", available: false },
 ];
 
+const GOLD_HOVER_IDS = new Set(["sell", "rent"]);
+
 const ExploreServicesExpander = () => {
   const [activeId, setActiveId] = useState<string>(services[0].id);
   const tabsRef = useRef<HTMLDivElement>(null);
