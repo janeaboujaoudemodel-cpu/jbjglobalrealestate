@@ -265,8 +265,8 @@ const AreaDetail = () => {
           >
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
             
-            <div className="w-14 h-14 rounded-2xl bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center mx-auto mb-6">
-              <MapPin className="w-7 h-7 text-[#1A1A1A]" />
+            <div className="w-14 h-14 rounded-2xl bg-[#EFE6D6]/30 border border-[#B89555]/40 flex items-center justify-center mx-auto mb-6">
+              <MapPin className="w-7 h-7 text-[#B89555]" />
             </div>
             <h2 className="text-[#1A1A1A] text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
               Properties in {area.name}
@@ -294,7 +294,7 @@ const AreaDetail = () => {
 
       {/* Similar Areas — new tall photo card style */}
       {relatedAreas.length > 0 && (
-        <section id="ready-to-get-started" className="py-16 bg-[#1A1A1A]">
+        <section id="ready-to-get-started" className="py-16 bg-[#102540]">
           <div className="container mx-auto px-4">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               {/* Header */}
@@ -376,7 +376,7 @@ const AreaDetail = () => {
                   style={{ boxShadow: "0 6px 20px rgba(200,167,102,0.3), inset 0 2px 4px rgba(255,255,255,0.8)" }}
                 >
                   <span>View All Areas</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 text-[#B89555] group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </motion.div>
