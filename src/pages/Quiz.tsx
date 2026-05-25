@@ -529,7 +529,7 @@ const Quiz = () => {
                   <div className="rounded-2xl p-5 text-left bg-gradient-to-br from-[#B89555]/15 to-[#B89555]/5 border border-[#B89555]/40 shadow-sm">
                     <div className="flex items-center gap-2 mb-3">
                       <Gift className="w-5 h-5 text-[#B89555]" />
-                      <span className="font-semibold text-[#B89555]">FREE Access</span>
+                      <span className="font-semibold text-[#1A1A1A]">FREE Access</span>
                     </div>
                     <ul className="space-y-2.5 text-sm">
                       {[
