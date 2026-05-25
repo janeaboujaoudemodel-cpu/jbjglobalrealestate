@@ -620,21 +620,33 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
           
           {/* Phone Number Input - Fills remaining space */}
           <div className="relative flex-1 w-full min-w-0">
-            <Input 
-              ref={ref}
-              type="tel"
-              value={localNumber}
-              onChange={handleNumberChange}
-              disabled={disabled}
-              className={cn(
-                "h-12 text-base pr-10 w-full pl-3",
-                inputStyles,
-                !isCareersPhoneInput && localNumber && validation.isValid && "border-green-500/50",
-                !isCareersPhoneInput && localNumber && !validation.isValid && "border-amber-500/50"
-              )}
-              placeholder={placeholder || "Phone number"}
-              style={isCareersPhoneInput ? { border: "2px solid #102540", backgroundColor: "#F7F2EA", color: "#102540", boxShadow: "none" } : undefined}
-            />
+            {isCareersPhoneInput ? (
+              <input
+                ref={ref}
+                type="tel"
+                value={localNumber}
+                onChange={handleNumberChange}
+                disabled={disabled}
+                placeholder={placeholder || "Phone number"}
+                className="careers-phone-tel flex h-12 w-full rounded-lg px-3 py-2 text-base placeholder:text-[#102540]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#102540]/30 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+                style={{ border: "2px solid #102540", backgroundColor: "#F7F2EA", color: "#102540", boxShadow: "none" }}
+              />
+            ) : (
+              <Input 
+                ref={ref}
+                type="tel"
+                value={localNumber}
+                onChange={handleNumberChange}
+                disabled={disabled}
+                className={cn(
+                  "h-12 text-base pr-10 w-full pl-3",
+                  inputStyles,
+                  localNumber && validation.isValid && "border-green-500/50",
+                  localNumber && !validation.isValid && "border-amber-500/50"
+                )}
+                placeholder={placeholder || "Phone number"}
+              />
+            )}
             {showValidation && localNumber && validation.isValid && (
               <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
             )}
