@@ -128,11 +128,11 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   // whether selected or not — classy, consistent, no rainbow.
   const triggerStyle: CSSProperties = {
     backgroundColor: 'transparent',
-    borderColor: 'rgba(184,149,85,0.55)',
+    borderColor: '#B89555',
     borderWidth: 1,
     borderStyle: 'solid',
     color: '#1A1A1A',
-    boxShadow: 'none',
+    boxShadow: 'inset 0 0 0 1px rgba(184,149,85,0.35)',
   };
 
 
