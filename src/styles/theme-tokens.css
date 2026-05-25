@@ -219,6 +219,78 @@
   border-color: var(--t-gold-soft) !important;
 }
 
+[data-careers-page] .careers-navy-cta,
+[data-careers-page] .careers-navy-cta:hover,
+[data-careers-page] .careers-navy-cta:focus,
+[data-careers-page] .careers-navy-cta:focus-visible {
+  background: var(--t-careers-navy) !important;
+  border-color: var(--t-careers-border-strong) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow:
+    0 16px 28px -14px rgba(7, 27, 51, 0.72),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+[data-careers-page] .careers-navy-cta:hover {
+  background: var(--t-careers-navy-hover) !important;
+}
+
+[data-careers-page] .careers-navy-cta:disabled,
+[data-careers-page] .careers-navy-cta[disabled] {
+  background: rgba(7, 27, 51, 0.36) !important;
+  border-color: rgba(191, 164, 106, 0.55) !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.88) !important;
+  box-shadow: none !important;
+}
+
+[data-careers-page] .careers-pill-inactive {
+  background: var(--t-careers-cream) !important;
+  border-color: var(--t-careers-border-strong) !important;
+  color: var(--t-ink) !important;
+  -webkit-text-fill-color: var(--t-ink) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 8px 22px -18px rgba(7, 27, 51, 0.32) !important;
+}
+
+[data-careers-page] .careers-pill-active {
+  background: var(--t-careers-navy) !important;
+  border-color: var(--t-careers-navy) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow:
+    0 14px 24px -12px rgba(7, 27, 51, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+}
+
+[data-careers-page] .careers-pill-complete {
+  background: linear-gradient(180deg, #F3E8D6 0%, var(--t-careers-complete) 100%) !important;
+  border-color: var(--t-careers-border-strong) !important;
+  color: var(--t-ink) !important;
+  -webkit-text-fill-color: var(--t-ink) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.68),
+    0 10px 20px -16px rgba(120, 88, 32, 0.35) !important;
+}
+
+[data-careers-page] .careers-card-strong {
+  background: linear-gradient(180deg, var(--t-careers-card-top) 0%, var(--t-careers-card-bottom) 100%) !important;
+  border-color: rgba(191, 164, 106, 0.75) !important;
+  box-shadow:
+    0 24px 54px -34px rgba(7, 27, 51, 0.46),
+    0 1px 0 rgba(255, 255, 255, 0.8) inset !important;
+}
+
+[data-careers-page] .careers-card-strong:hover {
+  border-color: rgba(191, 164, 106, 0.95) !important;
+  box-shadow:
+    0 28px 60px -34px rgba(7, 27, 51, 0.52),
+    0 0 0 1px rgba(191, 164, 106, 0.28),
+    0 1px 0 rgba(255, 255, 255, 0.82) inset !important;
+}
+
 /* ---- Premium luxury form fields (champagne hairline, navy on focus) ---- */
 [data-careers-page] .careers-blue-field,
 [data-careers-page] input.careers-blue-field {
