@@ -241,6 +241,14 @@
   opacity: 1 !important;
 }
 
+[data-careers-page] .careers-blue-placeholder::placeholder,
+[data-careers-page] input.careers-blue-placeholder::placeholder {
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
+  opacity: 1 !important;
+  font-weight: 500;
+}
+
 [data-careers-page] .careers-blue-field:focus,
 [data-careers-page] .careers-blue-field:focus-visible,
 [data-careers-page] input.careers-blue-field:focus,

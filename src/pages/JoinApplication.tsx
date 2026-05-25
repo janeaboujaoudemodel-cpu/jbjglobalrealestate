@@ -607,12 +607,12 @@ export default function JoinApplication() {
                   Tap <strong className="text-gold">Apply</strong> on any role to auto-select it below.
                 </CardDescription>
                 <div className="relative mt-3">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#102540]/70" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#102540] z-10 pointer-events-none" strokeWidth={2.5} />
                   <Input
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
                     placeholder="Search positions by title, department, or location"
-                    className="careers-blue-field pl-9 h-12 rounded-lg text-base"
+                    className="careers-blue-field careers-blue-placeholder pl-10 h-12 rounded-lg text-base"
                   />
                 </div>
               </CardHeader>
