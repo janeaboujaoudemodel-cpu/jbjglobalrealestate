@@ -506,22 +506,23 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             <FavoriteButton projectId={item.id} showShortlist={false} size="sm" />
           </div>
         )}
-        {/* Bottom content - elevated. Heavy bottom scrim + strong shadow guarantees
-            project-name contrast over any image. */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 z-10 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
+        {/* Bottom content - full-card scrim guarantees project-name contrast
+            over any image (light, dark, busy, washed out). */}
+        <div className="absolute inset-x-0 bottom-0 h-3/5 z-10 bg-gradient-to-t from-black via-black/85 to-transparent pointer-events-none" />
         <div className="absolute bottom-0 left-0 right-0 p-3 z-20" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
-            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/20 allow-white">
+            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/25 allow-white">
               {item.subtitle}
             </span>
           )}
           <h3
-            className="allow-white text-white font-bold text-xs md:text-sm leading-tight truncate transition-colors duration-300"
-            style={{ textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 1px 2px rgba(0,0,0,0.9)" }}
+            className="allow-white text-white font-bold text-sm md:text-base leading-tight line-clamp-2 transition-colors duration-300"
+            style={{ textShadow: "0 2px 8px rgba(0,0,0,1), 0 1px 3px rgba(0,0,0,1), 0 0 14px rgba(0,0,0,0.9)" }}
           >
             {typeof item.name === 'string' ? item.name : String(item.name || '')}
           </h3>
         </div>
+
 
       </Link>
     </div>
