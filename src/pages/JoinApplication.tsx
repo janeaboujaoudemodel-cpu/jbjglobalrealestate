@@ -747,7 +747,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                       placeholder="e.g. Sarah"
                       disabled={loading}
-                      className="careers-blue-field bg-[#F7F2EA] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 h-12 rounded-lg text-base"
+                      className="careers-blue-field h-12 rounded-lg text-base"
                     />
                   </div>
                   <div className="space-y-2">
