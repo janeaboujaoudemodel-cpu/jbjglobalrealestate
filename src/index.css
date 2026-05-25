@@ -4527,17 +4527,24 @@ a[class*="bg-red-"]:hover {
 }
 
 /* HOVER inverse: dark/navy CTAs on champagne keep WHITE text + icons
-   regardless of guard ordering. Belt-and-braces lock. */
+   regardless of guard ordering. Belt-and-braces lock.
+   IMPORTANT: trigger ONLY when the interactive element's OWN background
+   is actually dark (navy / black / ink). The opt-out markers
+   `.allow-white`, `data-on-dark`, `data-allow-dark-cta`, and
+   `data-no-contrast-guard` only mean "exempt from the contrast guard" —
+   they MUST NOT force white text on champagne role-picker cards,
+   sqft/sqm toggles, sidebar items, etc. Forcing white there was the
+   regression we're rolling back. */
 :where(
   [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
   .bg-card, .bg-background, .bg-popover, .bg-white
 ):not([data-surface="dark"])
-  :where(a, button, [role="button"]):is(.allow-white, [data-on-dark], [data-allow-dark-cta], [data-no-contrast-guard], [class*="bg-[#102540]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]):hover,
+  :where(a, button, [role="button"]):is([class*="bg-[#102540]"], [class*="bg-[#1a3d63]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]):hover,
 :where(
   [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
   .bg-card, .bg-background, .bg-popover, .bg-white
 ):not([data-surface="dark"])
-  :where(a, button, [role="button"]):is(.allow-white, [data-on-dark], [data-allow-dark-cta], [data-no-contrast-guard], [class*="bg-[#102540]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]):hover
+  :where(a, button, [role="button"]):is([class*="bg-[#102540]"], [class*="bg-[#1a3d63]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]):hover
   :where(span, p, svg, [class*="lucide"]) {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
