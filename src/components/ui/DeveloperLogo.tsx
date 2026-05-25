@@ -110,10 +110,12 @@ export function DeveloperLogo({
           // being cropped, regardless of source aspect ratio.
           className="block max-w-full max-h-full w-auto h-auto object-contain"
           style={{
-            // Strip foreign white/light backgrounds into our champagne plate.
-            mixBlendMode: "multiply",
-            // White-on-dark marks (e.g. Ritz-Carlton) → flip to solid ink.
-            filter: override.invert ? "invert(1) brightness(0)" : undefined,
+            // Keep logos at full color saturation (no multiply — it dimmed
+            // Emaar/Sobha to a faded look). White-on-dark marks still flip
+            // to solid ink via the override `invert` flag.
+            filter: override.invert
+              ? "invert(1) brightness(0)"
+              : "contrast(1.08) saturate(1.1)",
           }}
         />
 
