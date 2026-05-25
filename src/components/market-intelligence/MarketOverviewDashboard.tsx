@@ -57,7 +57,7 @@ const StatCard = ({
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="transition-all h-full bg-card border border-border">
+      <Card className="transition-all h-full bg-card border border-[#102540]/35 hover:border-[#102540]/60 hover:shadow-[0_4px_20px_rgba(16,37,64,0.12)]">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
@@ -67,7 +67,7 @@ const StatCard = ({
             </div>
           </div>
           <div className="mt-4">
-            <p className={`${MI_BODY} mb-1`}>{title}</p>
+            <p className="text-sm font-semibold leading-snug text-[#102540] mb-1">{title}</p>
             <p className={`${MI_KPI} ${accentColor ?? 'text-foreground'} truncate`}>
               {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
             </p>
