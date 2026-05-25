@@ -150,7 +150,7 @@ export default function BrokerAdminAssistant() {
                   <p className="text-xs text-[#1A1A1A]/70">👥 Total Brokers</p>
                   <p className="text-2xl font-bold text-emerald-400">{stats.totalBrokers}</p>
                 </div>
-                <Users className="h-8 w-8 text-emerald-500/30" />
+                <Users className="h-8 w-8 text-emerald-500/60" />
               </CardContent>
             </Card>
             <Card className="bg-[#0E0E0E] border-green-500/20">
@@ -159,7 +159,7 @@ export default function BrokerAdminAssistant() {
                   <p className="text-xs text-[#1A1A1A]/70">✅ Active</p>
                   <p className="text-2xl font-bold text-green-400">{stats.activeBrokers}</p>
                 </div>
-                <Shield className="h-8 w-8 text-green-500/30" />
+                <Shield className="h-8 w-8 text-green-500/60" />
               </CardContent>
             </Card>
             <Card className="bg-[#0E0E0E] border-yellow-500/20">
@@ -168,7 +168,7 @@ export default function BrokerAdminAssistant() {
                   <p className="text-xs text-[#1A1A1A]/70">⏳ Pending Onboarding</p>
                   <p className="text-2xl font-bold text-yellow-400">{stats.pendingOnboarding}</p>
                 </div>
-                <UserPlus className="h-8 w-8 text-yellow-500/30" />
+                <UserPlus className="h-8 w-8 text-yellow-500/60" />
               </CardContent>
             </Card>
             <Card className="bg-[#0E0E0E] border-orange-500/20">
@@ -177,7 +177,7 @@ export default function BrokerAdminAssistant() {
                   <p className="text-xs text-[#1A1A1A]/70">⚠️ RERA Expiring</p>
                   <p className="text-2xl font-bold text-orange-400">{stats.reraExpiringThisMonth}</p>
                 </div>
-                <ClipboardCheck className="h-8 w-8 text-orange-500/30" />
+                <ClipboardCheck className="h-8 w-8 text-orange-500/60" />
               </CardContent>
             </Card>
           </div>

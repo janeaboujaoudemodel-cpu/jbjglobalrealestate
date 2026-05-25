@@ -409,7 +409,7 @@ Generated on: ${new Date().toLocaleDateString()}
           ) : filteredEmails.length === 0 ? (
             <Card className="bg-[#FDFBF7] border-crm-border">
               <CardContent className="py-12 text-center">
-                <Mail className="h-12 w-12 text-crm-text-muted/30 mx-auto mb-4" />
+                <Mail className="h-12 w-12 text-crm-text-muted/60 mx-auto mb-4" />
                 <p className="text-crm-text-muted font-medium">No email accounts yet</p>
                 <p className="text-xs text-crm-text-muted mt-1">
                   Click "Create Email Account" to generate the first one

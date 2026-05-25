@@ -230,7 +230,7 @@ export default function InvestorDashboard() {
               {favorites.length === 0 ? (
                 <Card className="border-[hsl(36,40%,70%)]/20">
                   <CardContent className="p-8 text-center">
-                    <Heart className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+                    <Heart className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
                     <p className="text-muted-foreground">No saved properties yet</p>
                     <Link to="/properties"><Button variant="outline" className="mt-4 border-[hsl(36,40%,70%)]/30 text-[hsl(36,40%,70%)]">Browse Properties</Button></Link>
                   </CardContent>
@@ -259,7 +259,7 @@ export default function InvestorDashboard() {
               </h3>
               <Card className="border-[hsl(36,40%,70%)]/20">
                 <CardContent className="p-6 text-center">
-                  <History className="w-10 h-10 text-muted-foreground/30 mx-auto mb-2" />
+                  <History className="w-10 h-10 text-muted-foreground/60 mx-auto mb-2" />
                   <p className="text-sm text-muted-foreground">Property viewing history will appear here</p>
                 </CardContent>
               </Card>

@@ -234,7 +234,7 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <ImageIcon className="h-10 w-10 text-muted-foreground/30" />
+                        <ImageIcon className="h-10 w-10 text-muted-foreground/60" />
                       </div>
                     )}
                   </div>

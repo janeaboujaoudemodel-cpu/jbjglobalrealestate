@@ -55,7 +55,7 @@ const ShortlistCard = () => {
           </div>
         ) : count === 0 ? (
           <div className="text-center py-6">
-            <ClipboardList className="w-10 h-10 text-muted-foreground/30 mx-auto mb-2" />
+            <ClipboardList className="w-10 h-10 text-muted-foreground/60 mx-auto mb-2" />
             <p className="text-sm text-muted-foreground">No shortlists yet</p>
             <Button variant="link" className="text-[#1A1A1A] mt-2" asChild>
               <Link to="/properties">Start Building Your List</Link>

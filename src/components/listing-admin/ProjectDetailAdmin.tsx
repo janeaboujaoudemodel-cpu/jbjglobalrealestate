@@ -137,7 +137,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
               <SafeImage src={heroImage} alt={project.name} className="w-full h-full object-cover" fallbackSrc="/placeholder.svg" />
             ) : (
               <div className="w-full h-full min-h-[200px] flex items-center justify-center">
-                <Building2 className="w-16 h-16 text-muted-foreground/30" />
+                <Building2 className="w-16 h-16 text-muted-foreground/60" />
               </div>
             )}
           </div>

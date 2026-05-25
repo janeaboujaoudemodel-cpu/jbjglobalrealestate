@@ -237,7 +237,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
             </div>
           ) : filteredApps.length === 0 ? (
             <div className="text-center py-12">
-              <CheckCircle className="w-12 h-12 text-green-500/30 mx-auto mb-4" />
+              <CheckCircle className="w-12 h-12 text-green-500/60 mx-auto mb-4" />
               <p className="text-[#1A1A1A]/70">All caught up! No pending provisioning tasks.</p>
             </div>
           ) : (
