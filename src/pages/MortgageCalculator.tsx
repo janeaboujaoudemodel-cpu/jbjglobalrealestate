@@ -129,16 +129,23 @@ const MortgageCalculatorPage = () => {
         </div>
       </div>
 
-      {/* Banks Section - Dark with gold accents */}
-      <div className="py-16 border-t border-[#B89555]/20 bg-[#1A1A1A]">
+      {/* Banks Section - Navy with white wordmarks */}
+      <div
+        className="py-16 border-t border-[#B89555]/20 bg-[#102540]"
+        data-allow-dark-cta
+        data-on-dark
+      >
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
-            <p className="text-[#1A1A1A]/70 text-sm uppercase tracking-wider mb-2">Partnered With</p>
+            <p className="text-white/70 text-sm uppercase tracking-wider mb-2">Partnered With</p>
             <h3 className="text-xl font-semibold text-white">Leading UAE Banks</h3>
           </div>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6">
             {["Emirates NBD", "ADCB", "FAB", "Mashreq", "DIB", "RAKBANK"].map((bank) => (
-              <div key={bank} className="text-white/70 font-semibold text-lg hover:text-[#1A1A1A] transition-colors">
+              <div
+                key={bank}
+                className="px-5 py-3 rounded-lg border border-white/25 bg-white/5 text-white font-semibold text-base md:text-lg tracking-wide hover:bg-white/10 hover:border-white/50 transition-colors allow-white"
+              >
                 {bank}
               </div>
             ))}
