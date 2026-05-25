@@ -15,8 +15,20 @@ interface ApplicationProgressProps {
 }
 
 export function ApplicationProgress({ steps, activeStep, onStepClick }: ApplicationProgressProps) {
+  const total = steps.length;
   const completed = steps.filter((s) => s.done).length;
-  const pct = Math.round((completed / steps.length) * 100);
+  // Wizard-aware progress: reflect both the step the user is on AND
+  // the sections they've actually completed. Never shows 0 once you're
+  // past step 1, and never shows 100 until every section is valid.
+  const validityPct = (completed / total) * 100;
+  const wizardFloor =
+    typeof activeStep === "number"
+      ? ((activeStep + 0.5) / total) * 100
+      : 0;
+  const raw = Math.max(validityPct, wizardFloor);
+  const pct = Math.min(100, Math.max(completed === total ? 100 : 5, Math.round(raw)));
+
+
 
   return (
     <div className="rounded-2xl border-2 border-[#102540] bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] p-5 shadow-[0_6px_20px_-10px_rgba(16,37,64,0.25)]">
