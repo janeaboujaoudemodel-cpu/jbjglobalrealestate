@@ -159,6 +159,23 @@
   opacity: 1 !important;
 }
 
+[data-careers-page] .careers-phone-input button[role="combobox"] {
+  background: #102540 !important;
+  border: 2px solid #102540 !important;
+  box-shadow: none !important;
+}
+
+[data-careers-page] #firstName,
+[data-careers-page] #lastName,
+[data-careers-page] #email,
+[data-careers-page] #city,
+[data-careers-page] input[type="tel"],
+[data-careers-page] .PhoneInputInput,
+[data-careers-page] input[placeholder="Search positions by title, department, or location"] {
+  border: 2px solid #102540 !important;
+  box-shadow: none !important;
+}
+
 /* All form labels on careers page → navy */
 [data-careers-page] label {
   color: #102540 !important;
