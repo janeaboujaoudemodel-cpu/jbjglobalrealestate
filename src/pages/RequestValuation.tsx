@@ -179,10 +179,11 @@ const RequestValuation = () => {
             <Link
               to="/property-evaluator"
               data-allow-dark-cta
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors"
+              data-no-contrast-guard
+              className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors"
               style={{
-                background: 'rgba(255,255,255,0.06)',
-                border: `1px solid ${TOOL_GOLD}66`,
+                background: 'rgba(255,255,255,0.10)',
+                border: `1px solid ${TOOL_GOLD}`,
               }}
             >
               <Calculator className="w-4 h-4" style={{ color: TOOL_GOLD }} /> Try Instant Evaluator
