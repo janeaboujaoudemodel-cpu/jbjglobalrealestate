@@ -17,6 +17,9 @@ import { CONTACT_INFO } from "@/constants/stats";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import PremiumCareersHero from "@/components/careers/PremiumCareersHero";
+import JessicaAIPanel from "@/components/careers/JessicaAIPanel";
+import PremiumJobCard, { type JobCardTag } from "@/components/careers/PremiumJobCard";
 
 interface OpenPosition {
   id: string;
