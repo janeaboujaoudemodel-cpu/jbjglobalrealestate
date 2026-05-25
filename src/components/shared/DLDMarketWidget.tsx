@@ -105,11 +105,12 @@ const DownloadReportDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="gold" size="sm" className="gap-2">
-          <Download className="w-4 h-4" />
+        <Button variant="gold" size="sm" className="gap-2 !text-[#102540] hover:!text-[#102540]">
+          <Download className="w-4 h-4 text-[#102540]" />
           Download Report
         </Button>
       </DialogTrigger>
+
       <DialogContent className="bg-[#FDFBF7] border border-[#B89555]/40">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A]">Download Market Intelligence Report</DialogTitle>
