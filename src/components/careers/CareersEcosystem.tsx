@@ -72,17 +72,18 @@ export function CareersEcosystem() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 bg-[#FDFBF7] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#102540]">
-            <Sparkles className="h-3 w-3 text-[#B89555]" /> The JBJ Ecosystem
+            <Sparkles className="h-3 w-3 text-[#B89555]" /> Broker Growth Ecosystem
           </div>
           <h2 className="mt-5 text-3xl md:text-5xl font-semibold text-[#1A1A1A] tracking-tight">
-            More than a job — a full operating platform
+            The JBJ Broker Growth Ecosystem
           </h2>
           <p className="mt-4 text-base md:text-lg text-[#1A1A1A]/75 max-w-3xl mx-auto leading-relaxed">
-            JBJ GLOBAL REAL ESTATE pairs institutional brokerage operations with AI-powered
-            infrastructure, direct developer access, and a global investor base — so every
-            hire steps into a platform engineered for performance.
+            A live operating platform — direct developer access, AI sales infrastructure,
+            a global investor base, and dedicated marketing, training, and onboarding —
+            engineered to amplify the performance of every JBJ broker.
           </p>
         </div>
+
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {PILLARS.map((tile) => {
