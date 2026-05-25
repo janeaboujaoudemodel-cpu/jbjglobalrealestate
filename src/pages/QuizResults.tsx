@@ -42,6 +42,7 @@ const QuizResults = () => {
   const isFreeUse = searchParams.get("free") === "true";
   const [badges, setBadges] = useState<Record<string, 'top1' | 'top2' | 'top3' | null>>({});
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [shareTrigger, setShareTrigger] = useState<"share" | "post-download">("share");
   const [showVipModal, setShowVipModal] = useState(false);
 
   const { data: projects, isLoading } = useQuery({
