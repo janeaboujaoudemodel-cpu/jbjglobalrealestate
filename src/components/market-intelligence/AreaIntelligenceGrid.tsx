@@ -147,7 +147,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Link */}
           <Link
             to={`/area/${slugify(area.area)}`}
-            className="flex items-center justify-center gap-2 w-full py-2 text-sm font-semibold rounded-md transition-colors bg-muted text-foreground hover:bg-foreground hover:text-background"
+            className="flex items-center justify-center gap-2 w-full py-2 text-sm font-semibold rounded-md transition-colors bg-white text-[#102540] border border-[#102540]/50 hover:bg-[#102540] hover:text-white hover:border-[#102540]"
           >
             <span>View Area Details</span>
             <ArrowUpRight className="w-4 h-4" />
