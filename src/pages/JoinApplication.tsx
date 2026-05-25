@@ -20,6 +20,8 @@ import { SearchableSelect } from "@/components/ui/searchable-select";
 import PremiumCareersHero from "@/components/careers/PremiumCareersHero";
 import JessicaAIPanel from "@/components/careers/JessicaAIPanel";
 import PremiumJobCard, { type JobCardTag } from "@/components/careers/PremiumJobCard";
+import PremiumCVUpload from "@/components/careers/PremiumCVUpload";
+import ApplicationProgress, { STEP_ICONS } from "@/components/careers/ApplicationProgress";
 
 interface OpenPosition {
   id: string;
@@ -665,6 +667,48 @@ export default function JoinApplication() {
 
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-7 px-1 md:px-3" data-jbj-form noValidate>
+                {/* Wizard-style progress indicator (non-destructive) */}
+                <ApplicationProgress
+                  steps={[
+                    {
+                      id: "personal",
+                      label: "Personal",
+                      icon: STEP_ICONS.user,
+                      done:
+                        !!formData.firstName.trim() &&
+                        !!formData.lastName.trim() &&
+                        !!formData.phone.trim(),
+                    },
+                    {
+                      id: "location",
+                      label: "Location & Language",
+                      icon: STEP_ICONS.user,
+                      done:
+                        !!formData.nationality &&
+                        !!formData.country &&
+                        !!formData.city,
+                    },
+                    {
+                      id: "role",
+                      label: "Role & Experience",
+                      icon: STEP_ICONS.briefcase,
+                      done: !!formData.positionApplied,
+                    },
+                    {
+                      id: "cv",
+                      label: "CV / Resume",
+                      icon: STEP_ICONS.file,
+                      done: !!cvFile,
+                    },
+                    {
+                      id: "consent",
+                      label: "Review & Consent",
+                      icon: STEP_ICONS.shield,
+                      done: !!formData.consentAccurate && !!formData.consentTerms,
+                    },
+                  ]}
+                />
+
                 {/* Honeypot */}
                 <div className="hidden" aria-hidden="true">
                   <Input
@@ -977,43 +1021,13 @@ export default function JoinApplication() {
                   </div>
                 )}
 
-                {/* CV / Resume */}
-                <div className="space-y-2">
-                  <Label className="jbj-form-label text-sm font-semibold">CV / Resume</Label>
-                  <div data-jbj-dropzone className="jbj-form-dropzone rounded-xl p-8 text-center hover:border-[#102540] transition-colors">
-                    {cvFile ? (
-                      <div className="flex flex-col items-center gap-2 text-[#1A1A1A]">
-                        <FileText className="h-7 w-7 text-emerald-600" />
-                        <span className="font-medium text-base">{cvFile.name}</span>
-                        <span className="text-xs text-[#1A1A1A]/60">{formatSize(cvFile.size)}</span>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setCvFile(null)}
-                          disabled={loading}
-                        >
-                          Remove
-                        </Button>
-                      </div>
-                    ) : (
-                      <label className="cursor-pointer block w-full">
-                        <div className="flex flex-col items-center gap-2 py-2">
-                          <Upload className="h-9 w-9 text-[#102540]" />
-                          <span className="text-base font-bold text-[#102540]">Click to upload your CV</span>
-                          <span className="text-sm text-[#102540] font-bold">PDF, Word, or photo (JPG / PNG / HEIC) — max 10 MB</span>
-                        </div>
-                        <input
-                          type="file"
-                          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.heic,.heif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*"
-                          onChange={handleFileChange}
-                          className="hidden"
-                          disabled={loading}
-                        />
-                      </label>
-                    )}
-                  </div>
-                </div>
+                {/* CV / Resume — Premium upload */}
+                <PremiumCVUpload
+                  file={cvFile}
+                  onFileChange={setCvFile}
+                  disabled={loading}
+                  uploadProgress={uploadProgress}
+                />
 
                 {/* Consent */}
                 <div className="space-y-4">

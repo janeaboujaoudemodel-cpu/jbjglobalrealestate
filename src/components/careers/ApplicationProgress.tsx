@@ -1,0 +1,75 @@
+import { CheckCircle2, User, Briefcase, FileText, ShieldCheck } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+export interface StepStatus {
+  id: string;
+  label: string;
+  done: boolean;
+  icon: React.ReactNode;
+}
+
+interface ApplicationProgressProps {
+  steps: StepStatus[];
+}
+
+export function ApplicationProgress({ steps }: ApplicationProgressProps) {
+  const completed = steps.filter((s) => s.done).length;
+  const pct = Math.round((completed / steps.length) * 100);
+
+  return (
+    <div className="rounded-2xl border-2 border-[#102540] bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] p-5 shadow-[0_6px_20px_-10px_rgba(16,37,64,0.25)]">
+      <div className="flex items-center justify-between mb-3">
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#102540]/70">
+            Application Progress
+          </p>
+          <p className="text-sm font-semibold text-[#1A1A1A] mt-0.5">
+            {completed} of {steps.length} sections complete
+          </p>
+        </div>
+        <div className="text-right">
+          <p className="text-2xl font-bold text-[#102540] leading-none">{pct}%</p>
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div className="relative h-2 w-full overflow-hidden rounded-full bg-[#102540]/10 mb-4">
+        <div
+          className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-[#102540] via-[#1a3d63] to-[#102540] transition-all duration-500"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+
+      {/* Step pills */}
+      <div className="flex flex-wrap gap-2">
+        {steps.map((s) => (
+          <div
+            key={s.id}
+            className={cn(
+              "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition",
+              s.done
+                ? "border-emerald-600/40 bg-emerald-50 text-emerald-800"
+                : "border-[#102540]/25 bg-[#FDFBF7] text-[#102540]/80"
+            )}
+          >
+            {s.done ? (
+              <CheckCircle2 className="h-3.5 w-3.5" />
+            ) : (
+              <span className="grid h-3.5 w-3.5 place-items-center">{s.icon}</span>
+            )}
+            <span>{s.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export const STEP_ICONS = {
+  user: <User className="h-3 w-3" />,
+  briefcase: <Briefcase className="h-3 w-3" />,
+  file: <FileText className="h-3 w-3" />,
+  shield: <ShieldCheck className="h-3 w-3" />,
+};
+
+export default ApplicationProgress;
