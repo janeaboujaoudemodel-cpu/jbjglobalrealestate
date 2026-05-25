@@ -24,6 +24,8 @@ import PremiumCVUpload from "@/components/careers/PremiumCVUpload";
 import ApplicationProgress, { STEP_ICONS } from "@/components/careers/ApplicationProgress";
 import SelectedRoleChip from "@/components/careers/SelectedRoleChip";
 import CareersEcosystem from "@/components/careers/CareersEcosystem";
+import CareersWhyJBJ from "@/components/careers/CareersWhyJBJ";
+import CareersFAQ from "@/components/careers/CareersFAQ";
 
 interface OpenPosition {
   id: string;
