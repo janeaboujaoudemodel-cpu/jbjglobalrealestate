@@ -259,12 +259,12 @@ const DeveloperPortalCTA = () => {
                   data-on-dark
                   data-no-contrast-guard
                   data-allow-dark-cta
-                  className="allow-white group inline-flex items-center gap-3 pl-7 pr-3 py-3 rounded-2xl bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/65 text-white text-[15px] font-bold tracking-tight shadow-[0_1px_0_rgba(255,255,255,0.08)_inset,0_12px_34px_-14px_rgba(16,37,64,0.6)] hover:shadow-[0_1px_0_rgba(255,255,255,0.10)_inset,0_22px_56px_-16px_rgba(16,37,64,0.75)] hover:-translate-y-0.5 transition-all duration-300"
+                  className="allow-white group inline-flex items-center gap-3 pl-7 pr-3 py-3 rounded-2xl bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/65 text-white hover:text-white [&_*]:hover:!text-white [&_svg]:hover:!stroke-white text-[15px] font-bold tracking-tight shadow-[0_1px_0_rgba(255,255,255,0.08)_inset,0_12px_34px_-14px_rgba(16,37,64,0.6)] hover:shadow-[0_1px_0_rgba(255,255,255,0.10)_inset,0_22px_56px_-16px_rgba(16,37,64,0.75)] hover:-translate-y-0.5 transition-all duration-300"
                   style={{ color: "#FFFFFF" }}
                 >
-                  <span className="allow-white" style={{ color: "#FFFFFF" }}>{cta}</span>
+                  <span className="allow-white" data-no-contrast-guard style={{ color: "#FFFFFF" }}>{cta}</span>
                   <span className="w-9 h-9 rounded-full bg-[#1a3d63] border border-[#B89555]/60 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.12)_inset] transition-transform duration-300 group-hover:translate-x-1">
-                    <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
+                    <ArrowRight className="w-4 h-4 allow-white" data-no-contrast-guard style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
                   </span>
                 </Link>
                 <span className="inline-flex items-center gap-3 text-[12.5px] text-[#1A1A1A]/75 font-medium">
