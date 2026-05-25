@@ -6,6 +6,7 @@
  * Results are personalized via useHandpickedProjects (interest form → favorites
  * → browsing history → mode-aware elite fallback).
  */
+import { Link } from "react-router-dom";
 import { Home, ArrowRight, Building2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
