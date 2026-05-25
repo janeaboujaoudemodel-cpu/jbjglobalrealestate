@@ -168,10 +168,12 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
             scrollWheelZoom={false}
             dragging={true}
             touchZoom={false}
+            preferCanvas={true}
             style={{ height: "100%", width: "100%" }}
             zoomControl={false}
             attributionControl={false}
           >
+
             <DynamicTileLayer mapView={mapView} language={language} />
             <EnableMapInteraction enabled={mapInteractive} />
             <MapViewToggle

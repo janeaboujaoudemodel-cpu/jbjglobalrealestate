@@ -27,16 +27,16 @@ export function MapNavigationControls({ latitude, longitude }: MapNavigationCont
   return (
     <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
       <button onClick={handleZoomIn} className={btnClass} aria-label="Zoom in">
-        <ZoomIn className="w-5 h-5" />
+        <ZoomIn className="w-5 h-5 text-[#102540]" strokeWidth={2.5} />
       </button>
       <button onClick={handleZoomOut} className={btnClass} aria-label="Zoom out">
-        <ZoomOut className="w-5 h-5" />
+        <ZoomOut className="w-5 h-5 text-[#102540]" strokeWidth={2.5} />
       </button>
       <button onClick={handleRecenter} className={btnClass} aria-label="Recenter map">
-        <Navigation className="w-5 h-5" />
+        <Navigation className="w-5 h-5 text-[#102540]" strokeWidth={2.5} />
       </button>
       <button onClick={handleOpen3D} className={btnClass} aria-label="Open 3D view in Google Earth">
-        <Box className="w-5 h-5" />
+        <Box className="w-5 h-5 text-[#102540]" strokeWidth={2.5} />
       </button>
     </div>
   );
@@ -72,16 +72,16 @@ export function MapNavigationControlsStandalone({
   return (
     <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
       <button onClick={handleZoomIn} className={btnClass} aria-label="Zoom in">
-        <ZoomIn className="w-5 h-5" />
+        <ZoomIn className="w-5 h-5 text-[#102540]" strokeWidth={2.5} />
       </button>
       <button onClick={handleZoomOut} className={btnClass} aria-label="Zoom out">
-        <ZoomOut className="w-5 h-5" />
+        <ZoomOut className="w-5 h-5 text-[#102540]" strokeWidth={2.5} />
       </button>
       <button onClick={handleRecenter} className={btnClass} aria-label="Recenter map">
-        <Navigation className="w-5 h-5" />
+        <Navigation className="w-5 h-5 text-[#102540]" strokeWidth={2.5} />
       </button>
       <button onClick={handleOpen3D} className={btnClass} aria-label="Open 3D view in Google Earth">
-        <Box className="w-5 h-5" />
+        <Box className="w-5 h-5 text-[#102540]" strokeWidth={2.5} />
       </button>
     </div>
   );
