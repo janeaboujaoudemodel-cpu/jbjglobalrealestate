@@ -87,17 +87,22 @@ function useOverHero() {
   const [overHero, setOverHero] = useState(false);
   useEffect(() => {
     const check = () => {
-      const centerY = window.innerHeight / 2;
+      const vh = window.innerHeight;
+      // Tag flips to transparent ONLY while the hero still dominates the
+      // viewport — i.e. its bottom edge is still near the bottom of the
+      // viewport (≥ 85% down). As soon as the next section (e.g. "Partners
+      // with Dubai's leading developers") appears at the bottom, we flip
+      // back to solid navy.
       const heroes = document.querySelectorAll<HTMLElement>("[data-hero-dark]");
       let hit = false;
       heroes.forEach((el) => {
-        // Must contain an actual <video> to qualify as a video hero.
         if (!el.querySelector("video")) return;
         const r = el.getBoundingClientRect();
-        if (r.top <= centerY && r.bottom >= centerY) hit = true;
+        if (r.top <= 0 ? r.bottom >= vh * 0.85 : r.top <= vh * 0.15) hit = true;
       });
       setOverHero(hit);
     };
+
     check();
     window.addEventListener("scroll", check, { passive: true });
     window.addEventListener("resize", check);
