@@ -720,27 +720,19 @@ const Quiz = () => {
               </Button>
 
               {!needsPayment && (
-                <div className="bg-[#B89555]/10 border border-[#B89555]/30 rounded-lg p-3 mt-4 text-center">
-                  <p className="text-[#B89555] text-sm font-medium">
-                    Your first AI Property Match & Analysis is FREE!
-                  </p>
-                </div>
+                <p className="text-[#B89555] text-base font-semibold text-center mt-4">
+                  Your first AI Property Match & Analysis is FREE!
+                </p>
               )}
 
               {needsPayment && (
-                <div className="bg-[#B89555]/10 border border-[#B89555]/30 rounded-lg p-3 mt-4 text-center">
-                  <p className="text-[#B89555] text-sm">
-                    You've used your free trial. Upgrade to VIP for unlimited access.
-                  </p>
-                </div>
+                <p className="text-[#B89555] text-sm font-medium text-center mt-4">
+                  You've used your free trial. Upgrade to VIP for unlimited access.
+                </p>
               )}
 
               <p className="text-[#1A1A1A]/70 text-xs text-center mt-6 leading-relaxed">
-                Software developed and implemented by<br />
-                <FounderContent fallback={<span className="text-[#1A1A1A]">JBJ Global Real Estate Team</span>}>
-                  <span className="text-[#1A1A1A]">The Founder & CEO, Jane Bou Jaoude</span>
-                </FounderContent><br />
-                Designed exclusively for <span className="text-[#1A1A1A]">JBJ Global Real Estate</span>
+                Powered by <span className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</span>
               </p>
             </div>
           </div>
