@@ -39,43 +39,22 @@ export default function PaymentPlanVisualization({
   postHandoverYears,
   onRegisterInterest,
 }: PaymentPlanVisualizationProps) {
-  const parsePaymentPlan = (plan?: string | null): { booking: number; construction: number; handover: number } | null => {
-    if (!plan) return null;
-    const match = plan.match(/(\d+)\s*[\/\-]\s*(\d+)/);
-    if (match) {
-      const first = parseInt(match[1], 10);
-      const second = parseInt(match[2], 10);
-      if (first + second === 100) {
-        const booking = Math.min(first, 20);
-        const construction = first - booking;
-        return { booking, construction, handover: second };
-      }
-    }
-    return null;
-  };
-
-  const parsed = parsePaymentPlan(paymentPlan);
+  // SAFETY: we no longer parse `payment_plan` text into booking/construction/handover
+  // percentages. Strings like "10/90" or "90/10" are ambiguous and guessing
+  // misrepresents the developer's official plan (legal risk). We only render
+  // structured percentages from the authoritative `payment_breakdown` array
+  // or legacy object. The raw `payment_plan` text is still shown verbatim.
 
   const isDetailedBreakdown = Array.isArray(paymentBreakdown);
   const detailedMilestones: PaymentMilestone[] = isDetailedBreakdown ? (paymentBreakdown as PaymentMilestone[]) : [];
   const legacyBreakdown = !isDetailedBreakdown ? (paymentBreakdown as PaymentBreakdownLegacy | null) : null;
-  
+
   const milestones = [];
-  
+
   if (legacyBreakdown?.down_payment) {
     milestones.push({
       label: "On Booking",
       value: legacyBreakdown.down_payment,
-      icon: CheckCircle,
-      color: "text-emerald-600",
-      bgColor: "bg-emerald-500",
-      lightBg: "bg-emerald-50",
-      ringColor: "ring-emerald-200",
-    });
-  } else if (!isDetailedBreakdown && (parsed || downPaymentPercent)) {
-    milestones.push({
-      label: "On Booking",
-      value: `${downPaymentPercent || parsed?.booking || 10}%`,
       icon: CheckCircle,
       color: "text-emerald-600",
       bgColor: "bg-emerald-500",
@@ -94,6 +73,7 @@ export default function PaymentPlanVisualization({
       ringColor: "ring-emerald-200",
     });
   }
+
   
   if (legacyBreakdown?.during_construction) {
     milestones.push({
