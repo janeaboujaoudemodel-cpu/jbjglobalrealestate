@@ -140,7 +140,7 @@ const NAV_ITEMS: NavItem[] = [
 
   // ── Insights ──
   { label: "Market Intelligence", href: "/market-intelligence", icon: BarChart3, section: "INSIGHTS" },
-  { label: "Insights", href: "/insights", icon: Lightbulb, megaMenu: 'insights' },
+  
   { label: "News", href: "/news", icon: Megaphone },
   { label: "Market Report", href: "/market-report", icon: FileText },
   { label: "Market Overview", href: "/market-intelligence/overview", icon: BarChart3 },
