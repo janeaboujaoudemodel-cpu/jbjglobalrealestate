@@ -107,8 +107,8 @@ function InvestmentMetricsChart({ text }: { text: string }) {
     <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Shield className="w-5 h-5 text-[#1A1A1A]" />
-          <h3 className="font-bold text-[#1A1A1A] text-lg">Investment Metrics</h3>
+          <Shield className="w-5 h-5 text-[#B89555]" />
+          <h3 className="font-bold text-[#102540] text-lg">Investment Metrics</h3>
         </div>
         {occupancy && (
           <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">
