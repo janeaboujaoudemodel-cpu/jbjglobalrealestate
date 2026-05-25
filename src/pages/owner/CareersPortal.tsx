@@ -1,5 +1,6 @@
 import { lazy, Suspense, useMemo } from "react";
 import { useSearchParams, Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Briefcase, FileText, Users, UserCheck, Award,
