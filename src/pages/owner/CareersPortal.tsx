@@ -76,6 +76,7 @@ function Placeholder({ title, blurb }: { title: string; blurb: string }) {
 }
 
 export default function CareersPortal() {
+  const { user } = useAuth();
   const [params, setParams] = useSearchParams();
   const active = (params.get("section") as SectionKey) || "overview";
 
