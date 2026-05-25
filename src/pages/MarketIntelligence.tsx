@@ -131,28 +131,18 @@ const MarketIntelligence = () => {
           animate="visible"
           variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
         >
-          <motion.div 
-            className="inline-flex items-center justify-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-[#B89555]/40"
-            variants={fadeInUp}
-          >
-            <BarChart3 className="w-4 h-4 text-[#B89555]" />
-            <span className="text-[#B89555] text-[11px] font-semibold uppercase tracking-[0.3em]">
-              Official Open Data
-            </span>
-          </motion.div>
-
           <motion.h1 
-            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl mx-auto"
+            className="text-white text-5xl md:text-6xl lg:text-7xl font-bold mb-6 max-w-4xl mx-auto drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
             variants={fadeInUp}
           >
             Market Intelligence
           </motion.h1>
 
           <motion.p 
-            className="text-base md:text-lg max-w-2xl mx-auto mb-8 text-white/85"
+            className="text-base md:text-lg max-w-2xl mx-auto mb-8 text-white/90"
             variants={fadeInUp}
           >
-            Data-driven insights powered by official government Open Data. 
+            Data-driven insights powered by official government sources.
             Analytics, trends, and education — not listings.
           </motion.p>
 
@@ -160,12 +150,22 @@ const MarketIntelligence = () => {
             className="flex flex-wrap justify-center gap-4"
             variants={fadeInUp}
           >
-            <PremiumHeroButton href="#overview" size="lg">
-              Explore Dashboard
-            </PremiumHeroButton>
-            <PremiumHeroButton href="/market-report" size="lg" icon={ArrowUpRight}>
-              Download Reports
-            </PremiumHeroButton>
+            <a
+              href="#overview"
+              data-no-contrast-guard
+              className="allow-white inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold bg-[#102540] text-white border border-[#B89555] hover:bg-[#1a3d63] transition-colors shadow-lg"
+            >
+              <span className="allow-white">Explore Dashboard</span>
+              <ArrowUpRight className="w-5 h-5 allow-white" />
+            </a>
+            <Link
+              to="/market-report"
+              data-no-contrast-guard
+              className="allow-white inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold bg-[#102540] text-white border border-[#B89555] hover:bg-[#1a3d63] transition-colors shadow-lg"
+            >
+              <span className="allow-white">Download Reports</span>
+              <ArrowUpRight className="w-5 h-5 allow-white" />
+            </Link>
           </motion.div>
 
           {/* Trust Badges */}
@@ -174,7 +174,7 @@ const MarketIntelligence = () => {
             variants={fadeInUp}
           >
             {[
-              { Icon: Database, label: "Government Open Data" },
+              { Icon: Database, label: "Government Sources" },
               { Icon: Shield,   label: "Analytics Only" },
               { Icon: BarChart3, label: "No Listings" },
             ].map(({ Icon, label }) => (
@@ -240,9 +240,9 @@ const MarketIntelligence = () => {
       <section className="surface-light py-12 bg-muted" data-surface="light">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="rounded-2xl p-8 text-center bg-card border border-border">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 bg-foreground">
-                <Info className="w-6 h-6 text-background" />
+            <div className="rounded-2xl p-8 text-center bg-card border-2 border-[#102540]/40">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 bg-[#102540]" data-no-contrast-guard>
+                <Info className="w-6 h-6 text-white allow-white" />
               </div>
               <h3 className={`${MI_CARD_TITLE} mb-4`}>
                 Compliance & Transparency

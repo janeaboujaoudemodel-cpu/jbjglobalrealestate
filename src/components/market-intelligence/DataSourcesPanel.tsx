@@ -32,9 +32,10 @@ const frequencyClasses: Record<string, string> = {
 
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-foreground shadow-md ${className}`}
+    data-no-contrast-guard
+    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#102540] border border-[#102540]/40 shadow-sm allow-white ${className}`}
   >
-    <Icon className="w-6 h-6 text-background" />
+    <Icon className="w-6 h-6 text-white allow-white" />
   </div>
 );
 
@@ -53,14 +54,15 @@ export const DataSourcesPanel = () => {
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
             <span className={`${MI_EYEBROW} mb-4 block`}>
-              Data Sources
+              Understanding the Market
             </span>
             <h2 className={`${MI_H2} mb-4`}>
-              Powered by Official Open Data
+              Powered by Official Government Sources
             </h2>
             <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
-              All Market Intelligence is derived exclusively from official government Open Data sources.
-              We do not scrape, republish, or use proprietary third-party data.
+              All Market Intelligence is derived exclusively from official government sources
+              and licensed market data partners. We do not scrape, republish, or rely on
+              proprietary third-party platforms.
             </p>
           </motion.div>
 
@@ -70,7 +72,7 @@ export const DataSourcesPanel = () => {
               const fc = frequencyClasses[source.updateFrequency] || frequencyClasses.monthly;
               return (
                 <motion.div key={source.id} variants={fadeInUp}>
-                  <Card className="h-full transition-all hover:shadow-lg bg-card border border-border">
+                  <Card className="h-full transition-all hover:shadow-lg bg-card border-2 border-[#102540]/45">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <IconBox icon={Database} />
