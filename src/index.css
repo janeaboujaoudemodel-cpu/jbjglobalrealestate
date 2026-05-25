@@ -5589,3 +5589,57 @@ hr[data-gold-hairline],
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
+
+/* ============================================================
+   GLOBAL NAVY ACCENT PASS — Other pages must show the same
+   navy (#102540) accent treatment as the homepage. This adds
+   a navy accent to:
+     1. Page H1 underline accent
+     2. Active pill / tab borders (keeps champagne fill)
+     3. Outline buttons containing primary intent words
+   It NEVER fills gold surfaces and respects the no-gold-fills
+   rule by keeping champagne cream backgrounds intact.
+   ============================================================ */
+
+/* 1. Page H1 — short navy underline accent under top-level page titles
+      (applied site-wide except homepage and dashboards which opt out). */
+main h1:not([data-no-navy-accent]),
+section h1:not([data-no-navy-accent]) {
+  position: relative;
+}
+main h1:not([data-no-navy-accent])::after,
+section h1:not([data-no-navy-accent])::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 3px;
+  margin-top: 10px;
+  background-color: #102540;
+  border-radius: 2px;
+}
+
+/* 2. Active pills / tabs / segmented controls — swap gold border
+      for navy border + navy text, champagne fill preserved. */
+[aria-current="page"],
+[aria-current="true"],
+[data-state="active"]:not([data-no-navy-accent]),
+[data-active="true"]:not([data-no-navy-accent]) {
+  border-color: #102540 !important;
+}
+[aria-current="page"]:not([data-on-dark]):not(.allow-white),
+[aria-current="true"]:not([data-on-dark]):not(.allow-white),
+[data-state="active"]:not([data-no-navy-accent]):not([data-on-dark]):not(.allow-white),
+[data-active="true"]:not([data-no-navy-accent]):not([data-on-dark]):not(.allow-white) {
+  color: #102540 !important;
+}
+
+/* 3. Hero/marketing eyebrow chips — any small uppercase tag with
+      tracking-[0.2em] class becomes a navy chip with white text. */
+.tracking-\[0\.2em\][class*="rounded-full"][class*="border"]:not([data-no-navy-accent]):not([data-on-dark]) {
+  background-color: #102540 !important;
+  color: #FFFFFF !important;
+  border-color: rgba(184,149,85,0.55) !important;
+}
+.tracking-\[0\.2em\][class*="rounded-full"][class*="border"]:not([data-no-navy-accent]):not([data-on-dark]) :is(span, svg) {
+  color: #FFFFFF !important;
+}
