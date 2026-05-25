@@ -233,6 +233,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     { href: '/my-dashboard#tasks', label: t('account.myTasks', 'My Tasks'), icon: ListChecks, description: t('account.myTasksDesc', 'View and manage your tasks'), badge: alertCounts?.pendingTasks || 0 },
     { href: '/profile', label: t('account.myProfile', 'My Profile'), icon: User, description: t('account.myProfileDesc', 'View and edit your profile'), badge: 0 },
     { href: '/favorites', label: t('nav.favorites', 'Favorites') + ' / ' + t('nav.shortlist', 'Shortlist'), icon: Heart, description: t('account.favoritesDesc', 'Your saved & shortlisted properties'), badge: 0 },
+    { href: '#recommended', label: t('account.recommended', 'Recommended for You'), icon: Sparkles, description: t('account.recommendedDesc', 'Based on your latest search'), badge: 0, action: 'open-recommendations' as const },
     { href: '/toolkit', label: t('account.aiTools', 'AI Tools'), icon: Sparkles, description: t('account.aiToolsDesc', 'Professional AI-powered tools'), badge: 0 },
   ];
 
@@ -384,33 +385,56 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               {/* Left Column - Account Links */}
               <div>
                 <div className="space-y-1">
-                  {accountLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      to={link.href}
-                      onClick={onClose}
-                      className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gray-300/15 hover:to-gray-300/5 group"
-                    >
-                      <div className="w-9 h-9 rounded-lg bg-transparent border-2 border-[#B89555]/30 flex items-center justify-center group-hover:border-[#B89555]/30 group-hover:bg-[#F7F2EA] transition-colors relative">
-                        <link.icon className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
-                        {link.badge > 0 && (
-                          <span className="absolute -top-1.5 -right-1.5 min-w-[18px] min-h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
-                            {link.badge > 9 ? '9+' : link.badge}
+                  {accountLinks.map((link) => {
+                    const isAction = (link as any).action === 'open-recommendations';
+                    const commonInner = (
+                      <>
+                        <div className="w-9 h-9 rounded-lg bg-transparent border-2 border-[#B89555]/30 flex items-center justify-center group-hover:border-[#B89555]/30 group-hover:bg-[#F7F2EA] transition-colors relative">
+                          <link.icon className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+                          {link.badge > 0 && (
+                            <span className="absolute -top-1.5 -right-1.5 min-w-[18px] min-h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                              {link.badge > 9 ? '9+' : link.badge}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[#1A1A1A] font-semibold text-sm group-hover:text-[#1A1A1A] transition-colors block">
+                            {link.label}
                           </span>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-[#1A1A1A] font-semibold text-sm group-hover:text-[#1A1A1A] transition-colors block">
-                          {link.label}
-                        </span>
-                        {link.description && (
-                          <span className="text-[#1A1A1A]/50 text-xs truncate block">
-                            {link.description}
-                          </span>
-                        )}
-                      </div>
-                    </Link>
-                  ))}
+                          {link.description && (
+                            <span className="text-[#1A1A1A]/50 text-xs truncate block">
+                              {link.description}
+                            </span>
+                          )}
+                        </div>
+                      </>
+                    );
+                    if (isAction) {
+                      return (
+                        <button
+                          key={link.href}
+                          type="button"
+                          onClick={() => {
+                            window.dispatchEvent(new Event('jbj:open-recommendations'));
+                            onClose();
+                          }}
+                          className="w-full text-left flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gray-300/15 hover:to-gray-300/5 group"
+                        >
+                          {commonInner}
+                        </button>
+                      );
+                    }
+                    return (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={onClose}
+                        className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gray-300/15 hover:to-gray-300/5 group"
+                      >
+                        {commonInner}
+                      </Link>
+                    );
+                  })}
 
                 </div>
               </div>

@@ -1,11 +1,19 @@
 /**
  * PropertyRecommendationPopup — Behavior-based property advertising
- * Shows personalized property suggestions based on browsing behavior
- * Integrated with PopupCoordinator for single-popup-at-a-time enforcement
+ * Shows personalized property suggestions based on browsing behavior.
+ *
+ * UX rules (per product spec):
+ *  • Always SYNCS with the user's latest search / area browsed — refetches
+ *    whenever the route changes or a search is dispatched.
+ *  • The "X" button MINIMIZES the popup to a small floating chip (does NOT
+ *    permanently dismiss it) — clicking the chip re-expands it.
+ *  • A "Hide from my page" link fully hides it for the session.
+ *  • Re-openable any time from the header account menu via the
+ *    `jbj:open-recommendations` window event.
  */
 
-import { useState, useEffect, useCallback } from "react";
-import { X, ArrowRight, Sparkles, MapPin, Building2 } from "lucide-react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { X, ArrowRight, Sparkles, MapPin, Building2, Minus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,8 +33,10 @@ interface RecommendedProject {
 
 const STORAGE_KEY = "jbj_browsing_history";
 const POPUP_COOLDOWN_KEY = "jbj_rec_popup_last";
+const SESSION_HIDDEN_KEY = "jbj_rec_hidden_session";
+const MINIMIZED_KEY = "jbj_rec_minimized";
 const MIN_PAGES_BEFORE_SHOW = 3;
-const COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24h between recommendation popups
+const COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24h between auto-shows (NOT applied to manual re-open)
 
 function getBrowsingHistory(): { areas: string[]; types: string[] } {
   try {
@@ -40,13 +50,20 @@ function getBrowsingHistory(): { areas: string[]; types: string[] } {
 
 function trackBrowsing(area?: string, type?: string) {
   const history = getBrowsingHistory();
+  let changed = false;
   if (area && !history.areas.includes(area)) {
     history.areas.push(area);
+    changed = true;
   }
   if (type && !history.types.includes(type)) {
     history.types.push(type);
+    changed = true;
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+  if (changed) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    // Notify recommendation engine to refetch live.
+    window.dispatchEvent(new Event("jbj:browsing-tracked"));
+  }
 }
 
 const PropertyRecommendationPopup = () => {
@@ -54,31 +71,44 @@ const PropertyRecommendationPopup = () => {
   const { formatPrice } = useCurrency();
   const [projects, setProjects] = useState<RecommendedProject[]>([]);
   const [topArea, setTopArea] = useState<string>("");
+  const [minimized, setMinimized] = useState<boolean>(() => sessionStorage.getItem(MINIMIZED_KEY) === "1");
+  const [sessionHidden, setSessionHidden] = useState<boolean>(() => sessionStorage.getItem(SESSION_HIDDEN_KEY) === "1");
   const navigate = useNavigate();
   const location = useLocation();
+  const manualOpenRef = useRef(false);
 
   // Track current page browsing
   useEffect(() => {
     const path = location.pathname;
+    const search = location.search;
     const areaMatch = path.match(/\/area\/([^/]+)/);
     if (areaMatch) {
       trackBrowsing(areaMatch[1].replace(/-/g, " "));
     }
-    const projectMatch = path.match(/\/project\//);
-    if (projectMatch) {
+    if (path.match(/\/project\//)) {
       trackBrowsing(undefined, "offplan");
     }
     if (path.includes("/properties")) {
       trackBrowsing(undefined, "listing");
+      // Pick up ?area= / ?location= filters from the URL so recommendations
+      // follow the user's live search.
+      try {
+        const params = new URLSearchParams(search);
+        const liveArea = params.get("area") || params.get("location") || params.get("q");
+        if (liveArea) trackBrowsing(liveArea.toLowerCase());
+      } catch { /* noop */ }
     }
-  }, [location.pathname]);
+  }, [location.pathname, location.search]);
 
-  const fetchRecommendations = useCallback(async () => {
+  const fetchRecommendations = useCallback(async (opts?: { force?: boolean }) => {
+    const force = !!opts?.force;
     const history = getBrowsingHistory();
     const lastShown = localStorage.getItem(POPUP_COOLDOWN_KEY);
-    
-    if (lastShown && Date.now() - parseInt(lastShown) < COOLDOWN_MS) return;
-    if (history.areas.length + history.types.length < MIN_PAGES_BEFORE_SHOW) return;
+
+    if (!force) {
+      if (lastShown && Date.now() - parseInt(lastShown) < COOLDOWN_MS) return;
+      if (history.areas.length + history.types.length < MIN_PAGES_BEFORE_SHOW) return;
+    }
 
     const primaryArea = history.areas[history.areas.length - 1] || "";
     setTopArea(primaryArea);
@@ -89,13 +119,12 @@ const PropertyRecommendationPopup = () => {
       .eq("is_published", true)
       .not("sale_status", "ilike", "%sold%")
       .limit(3);
-    
+
     if (primaryArea) {
       query = query.ilike("area_name", `%${primaryArea}%`);
     }
 
     const { data } = await query;
-    
     let results = (data as RecommendedProject[] | null) || [];
 
     // Backfill to always get 3 results
@@ -108,7 +137,7 @@ const PropertyRecommendationPopup = () => {
         .eq("is_published", true)
         .not("sale_status", "ilike", "%sold%")
         .order("created_at", { ascending: false })
-        .limit(needed + 5); // fetch extra to filter dupes
+        .limit(needed + 5);
 
       if (existingIds.length > 0) {
         backfillQuery = backfillQuery.not("id", "in", `(${existingIds.join(",")})`);
@@ -122,7 +151,6 @@ const PropertyRecommendationPopup = () => {
     }
 
     if (results && results.length > 0) {
-      // For projects missing cover_image_url, fetch first gallery image
       const missingIds = results.filter(p => !p.cover_image_url).map(p => p.id);
       if (missingIds.length > 0) {
         const { data: images } = await supabase
@@ -144,12 +172,23 @@ const PropertyRecommendationPopup = () => {
         }
       }
       setProjects(results);
-      requestToShow();
-      window.dispatchEvent(new Event('recommendation-popup-opened'));
-      localStorage.setItem(POPUP_COOLDOWN_KEY, Date.now().toString());
+
+      // Only auto-pop the full popup when NOT minimized and NOT hidden.
+      const isHidden = sessionStorage.getItem(SESSION_HIDDEN_KEY) === "1";
+      const isMin = sessionStorage.getItem(MINIMIZED_KEY) === "1";
+      if (force || (!isHidden && !isMin)) {
+        if (!isHidden) {
+          if (force || !isMin) {
+            requestToShow();
+            window.dispatchEvent(new Event('recommendation-popup-opened'));
+          }
+        }
+        localStorage.setItem(POPUP_COOLDOWN_KEY, Date.now().toString());
+      }
     }
   }, [requestToShow]);
 
+  // Initial timed surface
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchRecommendations();
@@ -157,21 +196,85 @@ const PropertyRecommendationPopup = () => {
     return () => clearTimeout(timer);
   }, [fetchRecommendations]);
 
-  const handleClose = () => {
+  // Live re-sync with route/search changes and browsing tracker
+  useEffect(() => {
+    // Debounced refetch when route changes (keeps recs in sync with search).
+    const t = setTimeout(() => { fetchRecommendations(); }, 600);
+    const onTracked = () => fetchRecommendations();
+    window.addEventListener("jbj:browsing-tracked", onTracked);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("jbj:browsing-tracked", onTracked);
+    };
+  }, [location.pathname, location.search, fetchRecommendations]);
+
+  // Manual re-open from header account menu
+  useEffect(() => {
+    const onOpen = () => {
+      sessionStorage.removeItem(SESSION_HIDDEN_KEY);
+      sessionStorage.removeItem(MINIMIZED_KEY);
+      setSessionHidden(false);
+      setMinimized(false);
+      manualOpenRef.current = true;
+      fetchRecommendations({ force: true });
+    };
+    window.addEventListener("jbj:open-recommendations", onOpen);
+    return () => window.removeEventListener("jbj:open-recommendations", onOpen);
+  }, [fetchRecommendations]);
+
+  const handleMinimize = () => {
+    sessionStorage.setItem(MINIMIZED_KEY, "1");
+    setMinimized(true);
     dismiss();
+  };
+
+  const handleHideForSession = () => {
+    sessionStorage.setItem(SESSION_HIDDEN_KEY, "1");
+    sessionStorage.removeItem(MINIMIZED_KEY);
+    setSessionHidden(true);
+    setMinimized(false);
+    dismiss();
+  };
+
+  const handleExpand = () => {
+    sessionStorage.removeItem(MINIMIZED_KEY);
+    setMinimized(false);
+    requestToShow();
   };
 
   const handleExplore = (slug: string | null) => {
-    dismiss();
+    handleMinimize();
     if (slug) navigate(`/project/${slug}`);
   };
 
-  // formatPrice is now provided by useCurrency hook
+  // Fully hidden for session — render nothing (still accessible via header).
+  if (sessionHidden) return null;
 
   return (
-    <AnimatePresence>
-      {isVisible && projects.length > 0 && (
+    <AnimatePresence mode="wait">
+      {/* Compact chip when minimized */}
+      {minimized && projects.length > 0 && (
+        <motion.button
+          key="rec-chip"
+          type="button"
+          onClick={handleExpand}
+          aria-label="Open recommended properties"
+          className="fixed bottom-4 right-4 z-[10060] inline-flex items-center gap-2 px-3 py-2 rounded-full
+            bg-[#FDFBF7] border border-[#B89555]/60 shadow-[0_10px_28px_rgba(0,0,0,0.18)]
+            text-[#1A1A1A] text-xs font-semibold hover:bg-[#F7F2EA] transition-colors"
+          initial={{ opacity: 0, y: 20, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.9 }}
+        >
+          <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
+          <span>Recommended ({projects.length})</span>
+        </motion.button>
+      )}
+
+      {/* Full popup */}
+      {!minimized && isVisible && projects.length > 0 && (
         <motion.div
+          key="rec-full"
           className="fixed bottom-4 right-4 z-[10060] max-w-sm w-full"
           initial={{ opacity: 0, y: 80, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -185,9 +288,24 @@ const PropertyRecommendationPopup = () => {
                 <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-[#1A1A1A] text-sm font-semibold">Recommended for You</span>
               </div>
-              <button onClick={handleClose} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">
-                <X className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={handleMinimize}
+                  aria-label="Minimize"
+                  title="Minimize"
+                  className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors p-1 rounded hover:bg-[#FDFBF7]/60"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={handleHideForSession}
+                  aria-label="Hide from my page"
+                  title="Hide from my page"
+                  className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors p-1 rounded hover:bg-[#FDFBF7]/60"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
             {topArea && (
@@ -240,16 +358,23 @@ const PropertyRecommendationPopup = () => {
               ))}
             </div>
 
-            {/* CTA */}
-            <div className="px-3 pb-3">
+            {/* CTA + Hide link */}
+            <div className="px-3 pb-3 space-y-2">
               <Button
-                onClick={() => { dismiss(); navigate("/properties"); }}
+                onClick={() => { handleMinimize(); navigate("/properties"); }}
                 className="w-full bg-gradient-to-r from-gold/90 to-amber-600 text-[#1A1A1A] font-semibold text-sm hover:from-gold hover:to-amber-500"
                 size="sm"
               >
                 Explore All Properties
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
+              <button
+                type="button"
+                onClick={handleHideForSession}
+                className="w-full text-center text-[11px] text-[#1A1A1A]/60 hover:text-[#1A1A1A] underline-offset-2 hover:underline transition-colors"
+              >
+                Hide from my page (still available in your account)
+              </button>
             </div>
           </div>
         </motion.div>
