@@ -59,6 +59,8 @@ import InvestmentMetricsSection from "@/components/project-detail/InvestmentMetr
 import DeveloperInfoCard from "@/components/project-detail/DeveloperInfoCard";
 import QuickFactsBar from "@/components/project-detail/QuickFactsBar";
 import PaymentPlanVisualization from "@/components/project-detail/PaymentPlanVisualization";
+import PaymentPlanVerificationToggle from "@/components/project-detail/PaymentPlanVerificationToggle";
+
 // DirectContactCTA is now rendered globally in MainLayout - do not import here
 import MasterPlanSection from "@/components/project-detail/MasterPlanSection";
 import HouseDetailsSection from "@/components/project-detail/HouseDetailsSection";
