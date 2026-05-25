@@ -1180,7 +1180,7 @@ export default function JoinApplication() {
                     <ArrowLeft className="w-4 h-4 mr-1.5" /> Back
                   </Button>
 
-                  <p className="text-xs font-semibold text-[#102540]/70 text-center order-first sm:order-none">
+                  <p className="rounded-full border border-[#B89555]/55 bg-[#F7F2EA] px-4 py-2 text-xs font-semibold text-[#102540] text-center order-first sm:order-none shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
                     Step {currentStep + 1} of {TOTAL_STEPS} — {STEP_LABELS[currentStep]}
                   </p>
 
@@ -1191,7 +1191,7 @@ export default function JoinApplication() {
                       disabled={loading}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="sm:w-48 h-12 rounded-xl border border-[#B89555] !bg-[#102540] hover:!bg-[#1a3d63] !text-white font-semibold"
+                      className="sm:w-48 h-12 rounded-xl border border-[#B89555] !bg-[#102540] hover:!bg-[#1a3d63] !text-white font-semibold shadow-[0_12px_22px_-10px_rgba(16,37,64,0.62),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_18px_28px_-12px_rgba(16,37,64,0.68),inset_0_1px_0_rgba(255,255,255,0.18)]"
                     >
                       Continue <ArrowRight className="w-4 h-4 ml-1.5" />
                     </Button>
@@ -1201,7 +1201,7 @@ export default function JoinApplication() {
                       disabled={loading}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="sm:flex-1 h-14 rounded-xl border border-[#B89555] !bg-[#102540] hover:!bg-[#1a3d63] !text-white font-bold text-base sm:text-lg"
+                      className="sm:flex-1 h-14 rounded-xl border border-[#B89555] !bg-[#102540] hover:!bg-[#1a3d63] !text-white font-bold text-base sm:text-lg shadow-[0_14px_26px_-10px_rgba(16,37,64,0.62),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_32px_-12px_rgba(16,37,64,0.68),inset_0_1px_0_rgba(255,255,255,0.18)]"
 
                     >
                       {loading ? (
@@ -1240,7 +1240,7 @@ export default function JoinApplication() {
                         disabled={loading}
                         data-allow-dark-cta
                         data-no-contrast-guard
-                        className="flex-1 bg-[#102540] hover:bg-[#1a3d63] text-white font-semibold border border-[#B89555]"
+                        className="flex-1 bg-[#102540] hover:bg-[#1a3d63] text-white font-semibold border border-[#B89555] shadow-[0_12px_22px_-10px_rgba(16,37,64,0.62),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_18px_28px_-12px_rgba(16,37,64,0.68),inset_0_1px_0_rgba(255,255,255,0.18)]"
                       >
                         Continue · Step {currentStep + 2}
                         <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -1251,7 +1251,7 @@ export default function JoinApplication() {
                         disabled={loading}
                         data-allow-dark-cta
                         data-no-contrast-guard
-                        className="flex-1 bg-[#102540] hover:bg-[#1a3d63] text-white font-bold border border-[#B89555]"
+                        className="flex-1 bg-[#102540] hover:bg-[#1a3d63] text-white font-bold border border-[#B89555] shadow-[0_14px_26px_-10px_rgba(16,37,64,0.62),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_32px_-12px_rgba(16,37,64,0.68),inset_0_1px_0_rgba(255,255,255,0.18)]"
                       >
                         {loading ? (
                           <>

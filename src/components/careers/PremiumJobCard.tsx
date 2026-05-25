@@ -91,10 +91,10 @@ export default function PremiumJobCard({
   return (
     <div
       onClick={() => onSelect?.(id)}
-      className={`group relative rounded-2xl border bg-[#FDFBF7] p-5 cursor-pointer transition-all overflow-hidden ${
+      className={`group relative rounded-2xl border bg-[linear-gradient(180deg,rgba(253,251,247,0.98),rgba(247,242,234,0.94))] p-6 cursor-pointer transition-all overflow-hidden ${
         selected
-          ? "border-[#102540] shadow-[0_0_0_3px_rgba(16,37,64,0.18),0_16px_32px_-22px_rgba(16,37,64,0.45)]"
-          : "border-[#B89555]/55 shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:-translate-y-[2px] hover:border-[#B89555] hover:shadow-[0_18px_38px_-22px_rgba(16,37,64,0.35),0_0_0_1px_rgba(184,149,85,0.45)]"
+          ? "border-[#102540] shadow-[0_0_0_3px_rgba(16,37,64,0.14),0_22px_44px_-28px_rgba(16,37,64,0.5)]"
+          : "border-[#B89555]/60 shadow-[0_12px_28px_-24px_rgba(16,37,64,0.22)] hover:-translate-y-[3px] hover:border-[#B89555] hover:shadow-[0_24px_48px_-28px_rgba(16,37,64,0.38),0_0_0_1px_rgba(184,149,85,0.4)]"
       }`}
     >
       {/* Hover glow accent */}
@@ -109,8 +109,8 @@ export default function PremiumJobCard({
 
       <div className="relative">
         {/* Title row + selected check */}
-        <div className="flex items-start justify-between gap-3 mb-2">
-          <h4 className="font-semibold text-base md:text-lg leading-snug text-[#102540] tracking-tight">
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <h4 className="font-semibold text-lg md:text-[1.22rem] leading-snug text-[#102540] tracking-tight">
             {title}
           </h4>
           {selected && (
@@ -126,14 +126,14 @@ export default function PremiumJobCard({
 
         {/* Tag row */}
         {tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-3">
+          <div className="flex flex-wrap gap-1.5 mb-4">
             {tags.map((t) => {
               const cfg = TAG_STYLES[t];
               const Icon = cfg.icon;
               return (
                 <span
                   key={t}
-                  className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold whitespace-nowrap ${cfg.bg} ${cfg.ring} ${cfg.text}`}
+                  className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text}`}
                 >
                   <Icon className="w-3 h-3" />
                   {cfg.label}
@@ -144,40 +144,40 @@ export default function PremiumJobCard({
         )}
 
         {/* Meta row */}
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] mb-3">
-          <span className="inline-flex items-center gap-1 text-[#1A1A1A]/75">
-            <Briefcase className="w-3 h-3 text-[#1A1A1A]/65" />
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] mb-4">
+          <span className="inline-flex items-center gap-1.5 text-[#1A1A1A]/82 font-medium">
+            <Briefcase className="w-3.5 h-3.5 text-[#102540]" />
             {department}
           </span>
           {location && (
-            <span className="inline-flex items-center gap-1 text-[#1A1A1A]/75">
-              <MapPin className="w-3 h-3 text-[#1A1A1A]/65" />
+            <span className="inline-flex items-center gap-1.5 text-[#1A1A1A]/82 font-medium">
+              <MapPin className="w-3.5 h-3.5 text-[#102540]" />
               {location}
             </span>
           )}
           {isCommissionBased || isBrokerRole ? (
-            <span className="font-semibold text-[#B45309]">Commission Basis</span>
+            <span className="rounded-full border border-[#B89555]/55 bg-[#F7F2EA] px-2 py-0.5 font-semibold text-[#8B5E1A]">Commission Basis</span>
           ) : null}
           {level && (
-            <span className="inline-flex items-center text-[#1A1A1A]/70">
+            <span className="inline-flex items-center text-[#1A1A1A]/76">
               · {level}
             </span>
           )}
           {category && (
-            <span className="inline-flex items-center text-[#1A1A1A]/70">
+            <span className="inline-flex items-center text-[#1A1A1A]/76">
               · {category}
             </span>
           )}
         </div>
 
         {description && (
-          <p className="text-xs md:text-[13px] text-[#1A1A1A]/75 leading-relaxed line-clamp-2 mb-4">
+          <p className="text-[13px] md:text-[13.5px] text-[#1A1A1A]/82 leading-relaxed line-clamp-3 mb-5">
             {description}
           </p>
         )}
 
-        <div className="flex items-center justify-between gap-3 pt-1">
-          <span className="text-[10px] tracking-[0.12em] uppercase font-semibold text-[#1A1A1A]/55">
+        <div className="flex items-center justify-between gap-3 pt-2 border-t border-[#B89555]/28">
+          <span className="text-[10px] tracking-[0.12em] uppercase font-semibold text-[#102540]/72 pt-3">
             JBJ Global · Dubai
           </span>
           <Button
@@ -189,7 +189,7 @@ export default function PremiumJobCard({
               e.stopPropagation();
               onApply(id);
             }}
-            className="!bg-[#102540] hover:!bg-[#1a3d63] !text-white border border-[#B89555]/70 rounded-lg px-5 font-semibold shadow-[0_6px_14px_-4px_rgba(16,37,64,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] active:shadow-[0_2px_6px_-2px_rgba(16,37,64,0.35),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all"
+            className="h-10 !bg-[#102540] hover:!bg-[#1a3d63] !text-white border border-[#B89555]/70 rounded-xl px-5 font-semibold shadow-[0_12px_22px_-10px_rgba(16,37,64,0.62),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_18px_28px_-12px_rgba(16,37,64,0.68),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] active:shadow-[0_4px_10px_-4px_rgba(16,37,64,0.4),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all"
           >
             {selected ? (
               <>

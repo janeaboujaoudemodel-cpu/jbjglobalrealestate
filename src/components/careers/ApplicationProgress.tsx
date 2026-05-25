@@ -31,10 +31,10 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
 
 
   return (
-    <div className="rounded-2xl border-2 border-[#102540] bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] p-5 shadow-[0_6px_20px_-10px_rgba(16,37,64,0.25)]">
+    <div className="rounded-2xl border border-[#B89555]/60 bg-[linear-gradient(180deg,rgba(253,251,247,0.98),rgba(247,242,234,0.96))] p-5 shadow-[0_18px_42px_-30px_rgba(16,37,64,0.32)]">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#102540]/70">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#102540]/82">
             Application Progress
           </p>
           <p className="text-sm font-semibold text-[#1A1A1A] mt-0.5">
@@ -49,9 +49,9 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
       </div>
 
       {/* Progress bar */}
-      <div className="relative h-2 w-full overflow-hidden rounded-full bg-[#102540]/10 mb-4">
+      <div className="relative h-2.5 w-full overflow-hidden rounded-full border border-[#B89555]/30 bg-[#102540]/8 mb-4 shadow-inner">
         <div
-          className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-[#102540] via-[#1a3d63] to-[#102540] transition-all duration-500"
+          className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-[#102540] via-[#1a3d63] to-[#102540] shadow-[0_6px_16px_-8px_rgba(16,37,64,0.65)] transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -68,13 +68,13 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
               type={clickable ? "button" : undefined}
               onClick={clickable ? () => onStepClick!(idx) : undefined}
               className={cn(
-                "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition allow-white",
+                "flex min-h-[38px] items-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-semibold transition-all allow-white",
                 clickable && "cursor-pointer hover:-translate-y-0.5",
                 isActive
-                  ? "border-[#102540] bg-[#102540] shadow-[0_4px_14px_-6px_rgba(16,37,64,0.55)]"
+                  ? "border-[#102540] bg-[#102540] shadow-[0_10px_24px_-10px_rgba(16,37,64,0.62),inset_0_1px_0_rgba(255,255,255,0.16)]"
                   : s.done
-                  ? "border-emerald-600/40 bg-emerald-50 text-emerald-800"
-                  : "border-[#B89555]/55 bg-[#FDFBF7] text-[#1A1A1A] hover:border-[#B89555] hover:bg-[#FDFBF7]"
+                  ? "border-emerald-700/35 bg-[linear-gradient(180deg,#F2FBF6_0%,#E7F7EE_100%)] text-emerald-900 shadow-[0_8px_20px_-16px_rgba(4,120,87,0.4)]"
+                  : "border-[#B89555]/75 bg-[linear-gradient(180deg,rgba(247,242,234,0.98),rgba(239,230,214,0.82))] text-[#102540] shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_12px_-10px_rgba(16,37,64,0.18)] hover:border-[#B89555] hover:bg-[#F7F2EA] hover:shadow-[0_10px_22px_-16px_rgba(16,37,64,0.22)]"
               )}
 
               style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
@@ -84,10 +84,10 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
               {s.done && !isActive ? (
                 <CheckCircle2 className="h-3.5 w-3.5" />
               ) : (
-                <span className="grid h-3.5 w-3.5 place-items-center" style={isActive ? { color: "#FFFFFF" } : undefined}>{s.icon}</span>
+                <span className="grid h-4 w-4 place-items-center" style={isActive ? { color: "#FFFFFF" } : undefined}>{s.icon}</span>
               )}
               <span style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>
-                <span className="opacity-70 mr-1">{idx + 1}.</span>
+                <span className={cn("mr-1", isActive ? "opacity-75" : "opacity-80")}>{idx + 1}.</span>
                 {s.label}
               </span>
             </Tag>
