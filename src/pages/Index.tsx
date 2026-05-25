@@ -202,7 +202,7 @@ const Index = () => {
           MERGED HERO: Video Background + Gateway Tagline + CTA Pills
           Single fullscreen section — no separate IntroHeroSection
          ═══════════════════════════════════════════════════════════ */}
-      <div data-surface="dark" className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <div data-surface="dark" data-hero-dark className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         {/* Video Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
           {/* Branded fallback — renders instantly, unmounts after video loads */}

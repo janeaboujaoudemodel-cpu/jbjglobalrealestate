@@ -77,11 +77,13 @@ function useSuppressed() {
 }
 
 function useOverHero() {
-  // True ONLY when the launcher's vertical center overlaps an explicitly-marked
-  // dark hero ([data-hero-dark]). Previously this fell back to "assume hero
-  // occupies first viewport" when no markers existed, which painted the rail
-  // as translucent white over the champagne page background — invisible.
-  // Default is now the safe navy variant.
+  // STRICT hero rule (per product definition):
+  //   A "hero section" = a section explicitly marked [data-hero-dark]
+  //   AND containing a real <video> element (i.e. cinematic video hero).
+  // Pages that simply put a tool / calculator / form at the top (e.g.
+  //   /mortgage-calculator, /contact, dashboard tools) are NOT heroes —
+  //   so the launcher must stay in its normal navy-blue style there.
+  // Default is the safe navy variant.
   const [overHero, setOverHero] = useState(false);
   useEffect(() => {
     const check = () => {
@@ -89,6 +91,8 @@ function useOverHero() {
       const heroes = document.querySelectorAll<HTMLElement>("[data-hero-dark]");
       let hit = false;
       heroes.forEach((el) => {
+        // Must contain an actual <video> to qualify as a video hero.
+        if (!el.querySelector("video")) return;
         const r = el.getBoundingClientRect();
         if (r.top <= centerY && r.bottom >= centerY) hit = true;
       });
