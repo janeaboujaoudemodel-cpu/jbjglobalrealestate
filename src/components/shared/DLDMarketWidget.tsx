@@ -453,8 +453,9 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30">
               <div className="flex items-center gap-2 mb-5">
                 <Globe className="w-4 h-4 text-[#B89555]" />
-                <h3 className="text-[#1A1A1A] text-sm font-bold">Top 10 Buyer Nationalities</h3>
+                <h3 className="text-[#102540] text-sm font-bold">Top 10 Buyer Nationalities</h3>
               </div>
+
               <div className="space-y-1.5">
                 {topNationalities.slice(0, 10).map((nat: any) => {
                   const maxPct = topNationalities[0]?.percentage || 1;
