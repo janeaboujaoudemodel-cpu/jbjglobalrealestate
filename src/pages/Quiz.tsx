@@ -840,7 +840,7 @@ const Quiz = () => {
                       </div>
                     )}
                     <span className="text-2xl mb-2 block">{option.icon}</span>
-                    <span className={`font-medium text-sm md:text-base ${isSelected ? "text-[#B89555]" : "text-[#1A1A1A]"}`}>
+                    <span className={`font-medium text-sm md:text-base ${isSelected ? "text-[#102540]" : "text-[#1A1A1A]"}`}>
                       {option.label}
                     </span>
                   </button>
