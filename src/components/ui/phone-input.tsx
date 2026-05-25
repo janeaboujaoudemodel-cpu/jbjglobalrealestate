@@ -560,10 +560,11 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
             <PopoverTrigger asChild>
               <button
                 type="button"
-                role="combobox"
                 aria-expanded={codeOpen}
+                aria-haspopup="dialog"
                 disabled={disabled}
-                className={cn("w-full sm:w-[160px] h-12 justify-between shrink-0", buttonStyles)}
+                data-phone-code-trigger
+                className={cn("w-full sm:w-[160px] h-12 inline-flex items-center justify-between shrink-0 rounded-md px-3 transition-colors", buttonStyles)}
                 data-no-contrast-guard={isCareersPhoneInput ? true : undefined}
                 style={isCareersPhoneInput ? { backgroundColor: "#102540", border: "2px solid #102540", color: "#FFFFFF" } : undefined}
               >
