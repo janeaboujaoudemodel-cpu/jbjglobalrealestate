@@ -26,12 +26,13 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
-/* ICON BOX - inverted on light surfaces */
+/* ICON BOX — navy blue with white icon (global standard) */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-foreground ${className}`}
+    data-no-contrast-guard
+    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#102540] border border-[#102540]/40 shadow-sm allow-white ${className}`}
   >
-    <Icon className="w-6 h-6 text-background" />
+    <Icon className="w-6 h-6 text-white allow-white" />
   </div>
 );
 
@@ -56,7 +57,7 @@ const StatCard = ({
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="transition-all h-full bg-card border border-border">
+      <Card className="transition-all h-full bg-card border border-[#102540]/35 hover:border-[#102540]/60 hover:shadow-[0_4px_20px_rgba(16,37,64,0.12)]">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
@@ -66,7 +67,7 @@ const StatCard = ({
             </div>
           </div>
           <div className="mt-4">
-            <p className={`${MI_BODY} mb-1`}>{title}</p>
+            <p className="text-sm font-semibold leading-snug text-[#102540] mb-1">{title}</p>
             <p className={`${MI_KPI} ${accentColor ?? 'text-foreground'} truncate`}>
               {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
             </p>
@@ -141,9 +142,9 @@ export const MarketOverviewDashboard = () => {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full bg-card border border-border">
+              <Card className="h-full bg-card border border-[#102540]/35 hover:border-[#102540]/60 transition-all">
                 <CardHeader>
-                  <CardTitle className="text-foreground flex items-center gap-3">
+                  <CardTitle className="text-[#102540] flex items-center gap-3">
                     <IconBox icon={BarChart3} className="w-10 h-10" />
                     <span>Quarterly Transaction Trends</span>
                   </CardTitle>
@@ -185,9 +186,9 @@ export const MarketOverviewDashboard = () => {
 
             {/* Property Type Breakdown */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full bg-card border border-border">
+              <Card className="h-full bg-card border border-[#102540]/35 hover:border-[#102540]/60 transition-all">
                 <CardHeader>
-                  <CardTitle className="text-foreground flex items-center gap-3">
+                  <CardTitle className="text-[#102540] flex items-center gap-3">
                     <IconBox icon={Building2} className="w-10 h-10" />
                     <span>Price by Property Type</span>
                   </CardTitle>

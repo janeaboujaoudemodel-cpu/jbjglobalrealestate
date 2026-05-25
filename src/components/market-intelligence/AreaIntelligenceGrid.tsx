@@ -49,12 +49,13 @@ const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => 
   );
 };
 
-/* ICON BOX - inverted on light surfaces (foreground bg, background icon) */
+/* ICON BOX — navy blue with white icon (global standard) */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 bg-foreground ${className}`}
+    data-no-contrast-guard
+    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 bg-[#102540] border border-[#102540]/40 shadow-sm allow-white ${className}`}
   >
-    <Icon className="w-5 h-5 text-background" />
+    <Icon className="w-5 h-5 text-white allow-white" />
   </div>
 );
 
@@ -63,7 +64,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="transition-all group h-full hover:shadow-lg bg-card border border-border">
+      <Card className="transition-all group h-full hover:shadow-[0_6px_24px_rgba(16,37,64,0.15)] bg-card border border-[#102540]/35 hover:border-[#102540]/70">
         <CardContent className="p-6">
           {/* Header */}
           <div className="flex items-start justify-between mb-4 gap-2">
@@ -73,7 +74,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
                 <h3 className={`${MI_CARD_TITLE} truncate transition-colors`}>
                   {area.area}
                 </h3>
-                <p className={MI_CAPTION}>Dubai, UAE</p>
+                <p className="text-xs font-medium leading-relaxed text-[#B89555]">Dubai, UAE</p>
               </div>
             </div>
             <TrendBadge trend={area.trend} />
@@ -146,7 +147,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Link */}
           <Link
             to={`/area/${slugify(area.area)}`}
-            className="flex items-center justify-center gap-2 w-full py-2 text-sm font-semibold rounded-md transition-colors bg-muted text-foreground hover:bg-foreground hover:text-background"
+            className="flex items-center justify-center gap-2 w-full py-2 text-sm font-semibold rounded-md transition-colors bg-white text-[#102540] border border-[#102540]/50 hover:bg-[#102540] hover:text-white hover:border-[#102540]"
           >
             <span>View Area Details</span>
             <ArrowUpRight className="w-4 h-4" />

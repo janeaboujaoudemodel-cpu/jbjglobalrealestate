@@ -10,24 +10,24 @@
  * the appropriate semantic color class alongside the token.
  */
 
-// Section eyebrow / kicker (above an H2)
+// Section eyebrow / kicker (above an H2) — gold accent
 export const MI_EYEBROW =
-  "text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground";
+  "text-xs font-semibold uppercase tracking-[0.3em] text-[#B89555]";
 
-// Section H2
+// Section H2 — navy blue accent
 export const MI_H2 =
-  "text-3xl md:text-4xl font-bold leading-tight tracking-tight text-foreground";
+  "text-3xl md:text-4xl font-bold leading-tight tracking-tight text-[#102540]";
 
-// Section lead paragraph (under H2)
+// Section lead paragraph (under H2) — gold
 export const MI_LEAD =
-  "text-base md:text-lg font-normal leading-relaxed text-muted-foreground";
+  "text-base md:text-lg font-normal leading-relaxed text-[#B89555]";
 
-// Card title / H3 / shadcn CardTitle
+// Card title / H3 / shadcn CardTitle — navy blue
 export const MI_CARD_TITLE =
-  "text-lg font-semibold leading-snug text-foreground";
+  "text-lg font-semibold leading-snug text-[#102540]";
 
 // Sub-heading / H4
-export const MI_H4 = "text-sm font-semibold leading-snug text-foreground";
+export const MI_H4 = "text-sm font-semibold leading-snug text-[#102540]";
 
 // Body
 export const MI_BODY =

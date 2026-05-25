@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { SEOHead } from "@/components/SEOHead";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
-import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
+
 import { PreFooterSeparator } from "@/components/PreFooterSeparator";
 import {
   MarketOverviewDashboard,
@@ -107,7 +107,7 @@ const MarketIntelligence = () => {
   }, []);
 
   return (
-    <div data-marketing-page className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Market Intelligence | Dubai Real Estate Insights | BUY · SELL · RENT | JBJ GLOBAL REAL ESTATE"
         description="Data-driven Dubai real estate insights powered by official government Open Data. Explore market trends, area analysis, and AI-generated reports. No predictions, just trusted insights."
@@ -115,30 +115,28 @@ const MarketIntelligence = () => {
         canonicalPath="/market-intelligence"
       />
 
-      {/* Hero Section */}
-      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
-        {/* Video background with poster fallback */}
+      {/* Hero — full intelligence video background */}
+      <section className="relative w-full h-[78vh] min-h-[560px] flex items-center overflow-hidden">
         <VideoBackground
           src="https://videos.pexels.com/video-files/3629519/3629519-uhd_2560_1440_25fps.mp4"
           poster={marketIntelligenceHero}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/70 to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
-        
+        {/* Layered scrim for readability — no blue divider, no harsh line */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/80" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.10),transparent_60%)]" />
+
         <motion.div 
-          className="relative z-10 container mx-auto px-4 py-32 text-center"
+          className="relative z-10 container mx-auto px-4 text-center"
           initial="hidden"
           animate="visible"
-          variants={{
-            visible: { transition: { staggerChildren: 0.15 } }
-          }}
+          variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
         >
           <motion.div 
-            className="flex items-center justify-center gap-2 mb-6"
+            className="inline-flex items-center justify-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-[#B89555]/40"
             variants={fadeInUp}
           >
-            <BarChart3 className="w-6 h-6 text-[#1A1A1A]" />
-            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">
+            <BarChart3 className="w-4 h-4 text-[#B89555]" />
+            <span className="text-[#B89555] text-[11px] font-semibold uppercase tracking-[0.3em]">
               Official Open Data
             </span>
           </motion.div>
@@ -151,7 +149,7 @@ const MarketIntelligence = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-lg md:text-xl max-w-2xl mx-auto mb-8 text-white/90"
+            className="text-base md:text-lg max-w-2xl mx-auto mb-8 text-white/85"
             variants={fadeInUp}
           >
             Data-driven insights powered by official government Open Data. 
@@ -172,27 +170,54 @@ const MarketIntelligence = () => {
 
           {/* Trust Badges */}
           <motion.div 
-            className="flex flex-wrap justify-center gap-6 mt-12"
+            className="flex flex-wrap justify-center gap-x-8 gap-y-3 mt-10"
             variants={fadeInUp}
           >
-            <div className="flex items-center gap-2 text-white">
-              <Database className="w-5 h-5" />
-              <span className="text-sm font-semibold leading-none tracking-tight">Government Open Data</span>
-            </div>
-            <div className="flex items-center gap-2 text-white">
-              <Shield className="w-5 h-5" />
-              <span className="text-sm font-semibold leading-none tracking-tight">Analytics Only</span>
-            </div>
-            <div className="flex items-center gap-2 text-white">
-              <BarChart3 className="w-5 h-5" />
-              <span className="text-sm font-semibold leading-none tracking-tight">No Listings</span>
-            </div>
+            {[
+              { Icon: Database, label: "Government Open Data" },
+              { Icon: Shield,   label: "Analytics Only" },
+              { Icon: BarChart3, label: "No Listings" },
+            ].map(({ Icon, label }) => (
+              <div key={label} className="flex items-center gap-2 text-white/90">
+                <Icon className="w-4 h-4 text-[#B89555]" />
+                <span className="text-xs md:text-sm font-medium tracking-wide">{label}</span>
+              </div>
+            ))}
           </motion.div>
         </motion.div>
       </section>
 
-      {/* Founder-Led Philosophy & Advisory Positioning */}
-      <FounderPhilosophySection />
+      {/* Compact Founder Banner — navy, white text & icons */}
+      <section className="w-full bg-[#102540] border-y border-[#B89555]/25">
+        <div className="container mx-auto px-4 py-6 md:py-7">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/10 border border-white/20 shrink-0" data-no-contrast-guard>
+                <Info className="w-5 h-5 text-white allow-white" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-white text-sm md:text-base font-semibold leading-snug">
+                  Founder-Led Intelligence —{" "}
+                  <Link to="/founder" className="underline decoration-[#B89555] decoration-1 underline-offset-4 hover:text-[#B89555] transition-colors">
+                    Jane Bou Jaoude, Founder &amp; CEO
+                  </Link>
+                </p>
+                <p className="text-white/70 text-xs md:text-sm">
+                  Analytics and education — no predictions, no listings.
+                </p>
+              </div>
+            </div>
+            <Link
+              to="/founder"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs md:text-sm font-semibold bg-white/10 hover:bg-white/15 text-white border border-[#B89555]/50 transition-colors whitespace-nowrap"
+              data-no-contrast-guard
+            >
+              <span>Learn About the Founder</span>
+              <ArrowUpRight className="w-4 h-4 text-white allow-white" />
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Market Overview Dashboard - Edge to Edge */}
       <div id="overview">
