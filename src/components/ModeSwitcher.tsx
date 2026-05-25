@@ -329,7 +329,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     <span
                       data-no-contrast-guard
                       data-mode-selected-pill={config.surface}
-                      className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[96px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
+                      className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
                       style={{
                         '--mode-base': config.base,
                         '--mode-on-base': config.onBase,
@@ -348,7 +348,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     </span>
                   ) : (
                     <span
-                      className="ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[96px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap border"
+                      className="ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap border"
                       style={{
                         color: '#1A1A1A',
                         borderColor: 'rgba(26,26,26,0.25)',
