@@ -317,52 +317,56 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         </div>
 
 
-        {/* Content — consistent 4px-grid spacing */}
+        {/* Content — consistent 4px-grid spacing.
+            Every row below reserves a fixed min-height so cards stay
+            pixel-identical even when properties have missing/short
+            location, unit-types, size, developer, or description. */}
         <div className="p-4 pt-8 flex-1 flex flex-col gap-3">
-          {/* Header block — title + location, ink-solid */}
+          {/* Header block — title (always 2 lines) + location (always 1 line) */}
           <div className="flex flex-col gap-1.5">
-            <h4 className="text-[#1A1A1A] text-lg font-bold break-words leading-tight line-clamp-2 group-hover:text-[#B89555] transition-colors">
+            <h4 className="text-[#1A1A1A] text-lg font-bold break-words leading-tight line-clamp-2 min-h-[2.75rem] group-hover:text-[#B89555] transition-colors">
               {project.name}
             </h4>
-            {project.location && (
-              <div className="flex items-center gap-1.5 text-[#1A1A1A] text-sm font-medium">
-                <MapPin className="w-3.5 h-3.5 text-[#B89555] flex-shrink-0" aria-hidden="true" />
-                <span className="truncate">{project.location}</span>
-              </div>
-            )}
+            <div className="flex items-center gap-1.5 text-[#1A1A1A] text-sm font-medium min-h-[1.25rem]">
+              {project.location && (
+                <>
+                  <MapPin className="w-3.5 h-3.5 text-[#B89555] flex-shrink-0" aria-hidden="true" />
+                  <span className="truncate">{project.location}</span>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Premium gold divider — between header and developer/meta */}
           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
 
-          {/* Detail metadata above developer name */}
-          <div className="flex flex-col gap-2">
-            {(getUnitTypesText() || getSizeText()) && (
-              <div className="flex items-center gap-2 text-[#1A1A1A] text-xs flex-wrap font-medium">
-                {getUnitTypesText() && (
-                  <span className="font-semibold">{getUnitTypesText()}</span>
-                )}
-                {getUnitTypesText() && getSizeText() && (
-                  <span className="text-[#B89555]" aria-hidden="true">|</span>
-                )}
-                {getSizeText() && <span>{getSizeText()}</span>}
-              </div>
+          {/* Detail metadata above developer name — reserved 1-line slot */}
+          <div className="flex items-center gap-2 text-[#1A1A1A] text-xs flex-wrap font-medium min-h-[1.1rem]">
+            {getUnitTypesText() && (
+              <span className="font-semibold">{getUnitTypesText()}</span>
+            )}
+            {getUnitTypesText() && getSizeText() && (
+              <span className="text-[#B89555]" aria-hidden="true">|</span>
+            )}
+            {getSizeText() && <span>{getSizeText()}</span>}
+          </div>
+
+          {/* Developer link — reserved 1-line slot so cards without a
+              developer still match cards that have one. */}
+          <div className="min-h-[1.25rem]">
+            {developerName && (
+              <DeveloperLink
+                name={developerName}
+                slug={developerSlug}
+                logoUrl={developerLogoUrl}
+                className="text-sm block"
+                showPrefix={true}
+              />
             )}
           </div>
 
-          {/* Developer link — always rendered when a name exists, even without slug */}
-          {developerName && (
-            <DeveloperLink
-              name={developerName}
-              slug={developerSlug}
-              logoUrl={developerLogoUrl}
-              className="text-sm block"
-              showPrefix={true}
-            />
-          )}
-
-          {/* Description */}
-          <p className="text-[#1A1A1A] text-sm leading-relaxed line-clamp-3 overflow-hidden">
+          {/* Description — fixed 3-line block (always reserves 3 lines) */}
+          <p className="text-[#1A1A1A] text-sm leading-relaxed line-clamp-3 overflow-hidden min-h-[3.9rem]">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
             <span className="text-[#B89555] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
               ...more
