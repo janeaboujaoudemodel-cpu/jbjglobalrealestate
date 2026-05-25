@@ -560,11 +560,11 @@ export default function JoinApplication() {
 
           {/* Open Positions */}
           {!positionsLoading && openPositions.length > 0 && (
-            <Card className="mb-8 bg-[#FDFBF7] border-2 careers-blue-border shadow-sm">
+            <Card id="open-positions" className="mb-8 bg-[#FDFBF7] border border-[#B89555]/55 shadow-[0_18px_44px_-32px_rgba(16,37,64,0.25)] rounded-2xl scroll-mt-24">
               <CardHeader className="pt-8 pb-4">
                 <div className="flex items-center justify-between flex-wrap gap-3">
                   <div className="flex items-center gap-3">
-                    <CardTitle className="text-2xl md:text-3xl font-semibold careers-navy">Open Positions</CardTitle>
+                    <CardTitle className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] tracking-tight">Open Positions</CardTitle>
                     <Badge
                       data-allow-dark-cta
                       data-no-contrast-guard
@@ -576,8 +576,8 @@ export default function JoinApplication() {
                     </Badge>
                   </div>
                 </div>
-                <CardDescription className="text-gold font-semibold">
-                  Tap <strong className="text-gold">Apply</strong> on any role to auto-select it below.
+                <CardDescription className="text-[#1A1A1A]/75 font-medium">
+                  Tap <strong className="text-[#102540] font-semibold">Apply</strong> on any role to auto-select it below.
                 </CardDescription>
                 <div className="relative mt-3">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#102540] z-10 pointer-events-none" strokeWidth={2.5} />
@@ -593,76 +593,44 @@ export default function JoinApplication() {
                 {visiblePositions.length === 0 ? (
                   <p className="text-center text-[#1A1A1A]/70 py-6">No positions match your search.</p>
                 ) : (
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {visiblePositions.map((pos) => {
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {visiblePositions.map((pos, idx) => {
                       const selected = formData.positionApplied === pos.id;
+                      // Heuristic auto-tags so badges feel curated without DB schema changes
+                      const tags: JobCardTag[] = [];
+                      if (idx === 0) tags.push("top-opportunity");
+                      if (pos.is_broker_role) tags.push("premium");
+                      if (idx === 1) tags.push("urgent");
+                      if (idx === 2) tags.push("most-applied");
+                      if (!tags.length) tags.push("partner");
                       return (
-                        <div
+                        <PremiumJobCard
                           key={pos.id}
-                          onClick={() => setFormData({ ...formData, positionApplied: pos.id })}
-                          className={`p-5 rounded-xl border-2 bg-[#FDFBF7] shadow-sm transition-all cursor-pointer ${
-                            selected
-                              ? "border-[#102540] ring-2 ring-[#102540]/30 bg-[#F7F2EA]"
-                              : "border-[#102540] hover:border-[#102540] hover:shadow-md"
-                          }`}
-                        >
-                          <div className="flex items-start justify-between mb-2 gap-2">
-                            <h4 className="font-semibold text-base leading-snug text-[#102540]">{pos.title}</h4>
-                            <Badge className="border border-[#B89555] bg-[#F7F2EA] text-[#B89555] text-[10px] px-2 py-0.5 shrink-0 whitespace-nowrap">
-                              <Star className="w-2.5 h-2.5 mr-0.5 text-[#B89555]" /> Partner
-                            </Badge>
-                          </div>
-                          <div className="flex flex-wrap items-center gap-2 text-xs">
-                            <Badge variant="outline" className="border-[#102540] bg-[#F7F2EA] text-[10px] px-2 py-0.5 font-medium whitespace-nowrap text-[#102540]">
-                              {pos.department}
-                            </Badge>
-                            {pos.is_broker_role && (
-                              <span className="font-semibold whitespace-nowrap text-[#b45309]">Commission Basis</span>
-                            )}
-                            {pos.location && (
-                              <span className="flex items-center gap-0.5 whitespace-nowrap text-[#102540]/80">
-                                <MapPin className="w-2.5 h-2.5 text-[#102540]" />
-                                {pos.location}
-                              </span>
-                            )}
-                          </div>
-                          {pos.description && (
-                            <p className="text-xs text-[#102540]/85 mt-2 line-clamp-2 leading-relaxed">{pos.description}</p>
-                          )}
-                          <div className="mt-3 flex justify-end">
-                            <Button
-                              type="button"
-                              size="sm"
-                              data-allow-dark-cta
-                              data-no-contrast-guard
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleApplyPosition(pos.id);
-                              }}
-                              className="bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555] rounded-lg shadow-[0_4px_10px_-2px_rgba(16,37,64,0.35),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] active:shadow-[0_2px_6px_-2px_rgba(16,37,64,0.35),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all"
-                            >
-                              {selected ? (
-                                <>
-                                  <CheckCircle className="w-3.5 h-3.5 mr-1.5 text-white" /> Selected
-                                </>
-                              ) : (
-                                "Apply"
-                              )}
-                            </Button>
-                          </div>
-                        </div>
+                          id={pos.id}
+                          title={pos.title}
+                          department={pos.department}
+                          location={pos.location}
+                          description={pos.description}
+                          employmentType={pos.employment_type}
+                          isBrokerRole={pos.is_broker_role}
+                          isCommissionBased={pos.is_broker_role}
+                          tags={tags}
+                          selected={selected}
+                          onApply={handleApplyPosition}
+                          onSelect={(id) => setFormData({ ...formData, positionApplied: id })}
+                        />
                       );
                     })}
                   </div>
                 )}
 
                 {filteredPositions.length > 6 && (
-                  <div className="mt-4 text-center">
+                  <div className="mt-6 text-center">
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => setShowAllPositions((v) => !v)}
-                      className="bg-[#F7F2EA] text-[#B89555] border-2 border-[#B89555] hover:bg-[#EFE6D6]"
+                      className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555] hover:bg-[#F7F2EA] rounded-xl px-5 h-11 font-semibold"
                     >
                       {showAllPositions ? (
                         <>
@@ -679,6 +647,7 @@ export default function JoinApplication() {
               </CardContent>
             </Card>
           )}
+
 
 
           {/* Application Form */}
