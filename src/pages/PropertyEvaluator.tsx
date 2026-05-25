@@ -297,7 +297,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
+    <section className="min-h-screen" style={{ background: TOOL_PAGE_BG }}>
       <ToolHero
         theme={toolThemes.navy}
         eyebrowIcon={Sparkles}
