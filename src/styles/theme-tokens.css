@@ -91,3 +91,34 @@
 [data-premium] .bg-page    { background-color: var(--t-page)    !important; }
 [data-premium] .bg-surface { background-color: var(--t-surface) !important; }
 [data-premium] .bg-raised  { background-color: var(--t-raised)  !important; }
+
+/* Careers page locked styling — scoped escape hatch for /join.
+   Needed because legacy global guards remap raw gold text to ink. */
+[data-careers-page] .careers-gold,
+[data-careers-page] .careers-gold * {
+  color: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+}
+
+[data-careers-page] .careers-navy,
+[data-careers-page] .careers-navy * {
+  color: #102540 !important;
+  -webkit-text-fill-color: #102540 !important;
+}
+
+[data-careers-page] .careers-white,
+[data-careers-page] .careers-white *,
+[data-careers-page] .careers-white svg {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+[data-careers-page] .careers-blue-border {
+  border-color: #102540 !important;
+}
+
+[data-careers-page] .careers-gold-border {
+  border-color: #B89555 !important;
+}
+

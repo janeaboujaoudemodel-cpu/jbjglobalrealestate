@@ -531,11 +531,11 @@ export default function JoinApplication() {
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
-            <h1 className="text-4xl md:text-5xl font-semibold mb-3 text-[#102540] tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-semibold mb-3 careers-navy tracking-tight">
               Join JBJ Global Real Estate
             </h1>
             <div className="mx-auto mb-4 h-[2px] w-24 bg-[#B89555] rounded-full" />
-            <p className="text-base md:text-lg text-gold font-semibold max-w-2xl mx-auto">
+            <p className="text-base md:text-lg careers-gold font-semibold max-w-2xl mx-auto">
               Apply to become part of our team. Complete the form below to start your journey.
             </p>
           </div>
@@ -548,7 +548,7 @@ export default function JoinApplication() {
                   <Bot className="w-8 h-8 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                 </div>
                 <div className="text-center sm:text-left flex-1">
-                  <h3 className="text-lg font-semibold mb-1 text-[#102540]">Prefer a Conversation?</h3>
+                  <h3 className="text-lg font-semibold mb-1 careers-navy">Prefer a Conversation?</h3>
                   <p className="text-sm text-[#102540]/80">
                     Meet Jessica — available 24/7 to support you. She'll collect your CV, qualify you, and conduct your interview.
                   </p>
@@ -557,10 +557,10 @@ export default function JoinApplication() {
                   to="/hr-agent"
                   data-allow-dark-cta
                   data-no-contrast-guard
-                  className="allow-white inline-flex items-center justify-center gap-2 rounded-md px-4 h-10 font-semibold shadow-sm transition-colors whitespace-nowrap bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555] !text-white [&_*]:!text-white [&_svg]:!text-white" style={{ color: "#FFFFFF" }}
+                  className="careers-white inline-flex items-center justify-center gap-2 rounded-md px-4 h-10 font-semibold shadow-sm transition-colors whitespace-nowrap bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]"
                 >
-                  <MessageCircle className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-                  <span className="allow-white !text-white" style={{ color: "#FFFFFF" }}>Contact Our HR · Jessica</span>
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Contact Our HR · Jessica</span>
                 </Link>
               </div>
             </CardContent>
@@ -589,11 +589,11 @@ export default function JoinApplication() {
 
           {/* Open Positions */}
           {!positionsLoading && openPositions.length > 0 && (
-            <Card className="mb-8 bg-[#FDFBF7] border-2 border-[#102540] shadow-sm">
+            <Card className="mb-8 bg-[#FDFBF7] border-2 careers-blue-border shadow-sm">
               <CardHeader className="pt-8 pb-4">
                 <div className="flex items-center justify-between flex-wrap gap-3">
                   <div className="flex items-center gap-3">
-                    <CardTitle className="text-2xl md:text-3xl font-semibold text-[#102540]">Open Positions</CardTitle>
+                    <CardTitle className="text-2xl md:text-3xl font-semibold careers-navy">Open Positions</CardTitle>
                     <Badge
                       data-allow-dark-cta
                       data-no-contrast-guard
@@ -714,13 +714,13 @@ export default function JoinApplication() {
 
           {/* Application Form */}
           <div ref={formAnchorRef} />
-          <Card className="bg-[#FDFBF7] border-2 border-[#102540] shadow-sm">
+          <Card className="bg-[#FDFBF7] border-2 careers-blue-border shadow-sm">
             <CardHeader className="text-center pt-10 pb-6">
-              <CardTitle className="text-4xl md:text-5xl font-semibold text-[#102540] tracking-tight">Application Form</CardTitle>
-              <CardDescription className="text-gold font-semibold text-lg">
+              <CardTitle className="text-4xl md:text-5xl font-semibold careers-navy tracking-tight">Application Form</CardTitle>
+              <CardDescription className="careers-gold font-semibold text-lg">
                 All fields are required.{" "}
                 {selectedPosition && (
-                  <span className="font-semibold text-gold">Applying for: {selectedPosition.label}</span>
+                  <span className="font-semibold careers-gold">Applying for: {selectedPosition.label}</span>
                 )}
               </CardDescription>
             </CardHeader>
@@ -1131,9 +1131,9 @@ export default function JoinApplication() {
             </CardContent>
           </Card>
 
-          <p className="text-center text-sm text-gold font-semibold mt-6">
+          <p className="text-center text-sm careers-gold font-semibold mt-6">
             Questions? Contact us at{" "}
-            <a href="mailto:contact@JBJ.ae" className="text-gold underline font-semibold">
+            <a href="mailto:contact@JBJ.ae" className="careers-gold underline font-semibold">
               contact@JBJ.ae
             </a>
           </p>
