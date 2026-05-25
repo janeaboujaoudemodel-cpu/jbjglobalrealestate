@@ -278,15 +278,39 @@ const DeveloperPortalCTA = () => {
             </div>
 
 
-            {/* RIGHT — emblem */}
+            {/* RIGHT — editorial emblem (no concentric rings) */}
             <div className="relative hidden lg:flex items-center justify-center">
-              <div className="relative w-[260px] h-[260px] flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full border border-[#B89555]/25" />
-                <div className="absolute inset-5 rounded-full border border-[#B89555]/20" />
-                <div className="absolute inset-10 rounded-full border border-[#B89555]/15" />
-                <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(184,149,85,0.18),transparent_65%)]" />
-                <div className="relative w-32 h-32 rounded-3xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/50 shadow-[0_18px_45px_-18px_rgba(184,149,85,0.55),0_1px_0_rgba(255,255,255,0.9)_inset] flex items-center justify-center">
-                  <Icon className="w-14 h-14 text-[#1A1A1A]" strokeWidth={1.6} />
+              <div className="relative w-[300px] h-[300px] flex items-center justify-center">
+                {/* Soft champagne glow wash */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-[40px] bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.10),transparent_70%)]"
+                />
+                {/* Vertical hairline accents — editorial, not circular */}
+                <div aria-hidden="true" className="absolute left-0 top-8 bottom-8 w-px bg-gradient-to-b from-transparent via-[#B89555]/35 to-transparent" />
+                <div aria-hidden="true" className="absolute right-0 top-8 bottom-8 w-px bg-gradient-to-b from-transparent via-[#B89555]/35 to-transparent" />
+
+                {/* Centerpiece — tall portrait tile */}
+                <div className="relative w-[200px] h-[260px] rounded-[28px] bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/55 shadow-[0_30px_70px_-28px_rgba(16,37,64,0.35),0_1px_0_rgba(255,255,255,0.95)_inset] flex flex-col items-center justify-between py-7 px-5">
+                  {/* Eyebrow rule */}
+                  <div className="flex items-center gap-2">
+                    <span className="block w-6 h-px bg-[#B89555]/70" />
+                    <span className="text-[10px] tracking-[0.28em] font-bold text-[#1A1A1A]/70 uppercase">JBJ</span>
+                    <span className="block w-6 h-px bg-[#B89555]/70" />
+                  </div>
+
+                  {/* Icon mark */}
+                  <div className="relative flex items-center justify-center">
+                    <Icon className="w-20 h-20 text-[#1A1A1A]" strokeWidth={1.4} />
+                  </div>
+
+                  {/* Footer rule + serial */}
+                  <div className="w-full flex flex-col items-center gap-2">
+                    <span className="block h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/55 to-transparent" />
+                    <span className="text-[9.5px] tracking-[0.32em] font-semibold text-[#1A1A1A]/60 uppercase">
+                      Est · MMXXV
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
