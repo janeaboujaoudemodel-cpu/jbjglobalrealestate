@@ -76,11 +76,43 @@ function useSuppressed() {
   return hidden;
 }
 
+function useOverHero() {
+  // True when the launcher's vertical center overlaps a dark hero section.
+  // We detect heroes by `[data-hero-dark]` markers, falling back to "near top
+  // of page" so any first-fold dark hero qualifies even without a marker.
+  const [overHero, setOverHero] = useState(true);
+  useEffect(() => {
+    const check = () => {
+      const centerY = window.innerHeight / 2;
+      const heroes = document.querySelectorAll<HTMLElement>("[data-hero-dark]");
+      let hit = false;
+      heroes.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top <= centerY && r.bottom >= centerY) hit = true;
+      });
+      if (!hit && heroes.length === 0) {
+        // Fallback: assume hero occupies first viewport.
+        hit = window.scrollY < window.innerHeight - 120;
+      }
+      setOverHero(hit);
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, []);
+  return overHero;
+}
+
 export default function SupportLauncher() {
   const [open, setOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
   const channels = useChannels(close);
   const hidden = useSuppressed();
+  const overHero = useOverHero();
 
   useLayoutEffect(() => {
     if (!open) return;
