@@ -1274,14 +1274,23 @@ export default function ProjectDetailLayout({
                 handoverDate={project.handover_date}
                 downPaymentPercent={project.down_payment_percent}
                 projectName={project.name}
+                paymentPlanVerified={(project as any).payment_plan_verified}
+                paymentPlanVerifiedAt={(project as any).payment_plan_verified_at}
                 onRegisterInterest={() => {
                   setCaptureDocType("payment_plan");
                   setCaptureDocUrl(undefined);
                   setLeadCaptureOpen(true);
                 }}
               />
+              {isOwner && (
+                <PaymentPlanVerificationToggle
+                  projectId={project.id}
+                  verified={!!(project as any).payment_plan_verified}
+                />
+              )}
             </div>
             )}
+
 
             {/* Owner-only AI enrichment dialog for the Payment Plan section */}
             {isOwner && (
