@@ -492,7 +492,7 @@ export default function InvestorDashboard() {
                 <CardContent>
                   {invitations.length === 0 ? (
                     <div className="text-center py-8">
-                      <Calendar className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+                      <Calendar className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
                       <p className="text-sm text-muted-foreground">No upcoming events</p>
                       <p className="text-[10px] text-muted-foreground/60 mt-1">Events from JBJ Global Real Estate will appear here</p>
                     </div>
