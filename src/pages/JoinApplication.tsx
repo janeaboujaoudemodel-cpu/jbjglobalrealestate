@@ -591,16 +591,23 @@ export default function JoinApplication() {
 
 
           {!user && (
-            <Card className="border-2 border-[#B89555] bg-[#EFE6D6]/10 backdrop-blur-sm rounded-2xl shadow-md mb-6">
-              <CardContent className="pt-6">
-                <p className="text-center text-[#1A1A1A] font-semibold mb-2 text-lg">
-                  Fill the form below — then sign in to submit
-                </p>
-                <p className="text-center text-[#1A1A1A]/75 mb-4 text-sm">
-                  You can complete the entire form first. Sign in or create an account when you're ready to submit.
-                </p>
-                <div className="flex justify-center">
-                  <Button variant="primary" asChild>
+            <Card className="relative overflow-hidden border border-[#B89555]/55 bg-[linear-gradient(135deg,rgba(253,251,247,0.95),rgba(247,242,234,0.85))] backdrop-blur-md rounded-2xl shadow-[0_18px_44px_-32px_rgba(16,37,64,0.35)] mb-6">
+              <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
+              <div className="pointer-events-none absolute -top-16 -right-10 h-40 w-40 rounded-full bg-[#102540]/10 blur-3xl" />
+              <CardContent className="pt-6 sm:pt-7 pb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#102540]/80 mb-1">
+                      Sign in optional now
+                    </p>
+                    <p className="text-[#1A1A1A] font-semibold text-base sm:text-lg leading-snug">
+                      Fill the form first — sign in only when ready to submit.
+                    </p>
+                    <p className="text-[#1A1A1A]/70 text-sm mt-1">
+                      Your progress is saved automatically as you type.
+                    </p>
+                  </div>
+                  <Button variant="primary" asChild className="shrink-0">
                     <Link to="/auth?redirect=/careers" className="text-white">
                       <span className="text-white font-semibold">Sign In / Create Account</span>
                     </Link>
