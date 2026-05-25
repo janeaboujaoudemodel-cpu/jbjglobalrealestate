@@ -141,7 +141,7 @@ export const AdminRoutes = () => (
     <Route path="/admin/training-guide" element={<OwnerGuard><AdminTrainingGuide /></OwnerGuard>} />
     <Route path="/admin/translation-coverage" element={<OwnerGuard><Suspense fallback={<PageLoader />}><TranslationCoverage /></Suspense></OwnerGuard>} />
     <Route path="/admin/faded-gold-allowlist" element={<OwnerGuard><Suspense fallback={<PageLoader />}><FadedGoldAllowlist /></Suspense></OwnerGuard>} />
-    <Route path="/admin/hr" element={<Navigate to="/hr-dashboard?tab=cv-center" replace />} />
+    <Route path="/admin/hr" element={<Navigate to="/owner/careers-portal?section=applications" replace />} />
 
     {/* ── Internal Market Intelligence ── */}
     <Route path="/internal/market-intelligence/dashboard" element={<OwnerGuard><InternalDashboard /></OwnerGuard>} />
