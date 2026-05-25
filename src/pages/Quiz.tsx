@@ -625,7 +625,7 @@ const Quiz = () => {
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#B89555] to-[#A68444] mx-auto mb-4 flex items-center justify-center shadow-lg shadow-[#B89555]/30">
                 <Sparkles className="w-8 h-8 text-[#1A1A1A]" />
               </div>
-              <h2 className="text-[#1A1A1A] text-3xl font-bold mb-2">
+              <h2 className="text-[#102540] text-3xl font-bold mb-2">
                 Get Your AI Analysis
               </h2>
               <p className="text-[#1A1A1A]/70">
@@ -697,8 +697,8 @@ const Quiz = () => {
                 disabled={!isFormValid() || isSubmitting}
                 className={`w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
                   needsPayment
-                    ? "bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110"
-                    : "bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110"
+                    ? "bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#102540] hover:brightness-110"
+                    : "bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#102540] hover:brightness-110"
                 }`}
               >
                 {isSubmitting ? (
@@ -785,7 +785,7 @@ const Quiz = () => {
           {/* Main Question Area */}
           <div className="flex-1 max-w-2xl mx-auto">
             <h2
-              className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-8 text-center"
+              className="text-[#102540] text-2xl md:text-3xl font-bold mb-8 text-center"
             >
               {currentQuestion.question}
             </h2>
@@ -798,7 +798,7 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleSelectAll}
                   disabled={allSelected()}
-                  className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
+                  className="bg-[#FDFBF7] text-[#102540] hover:bg-[#F7F2EA] hover:text-[#102540] border-[#B89555]/40 font-semibold disabled:opacity-50"
                 >
                   Select All
                 </Button>
@@ -807,7 +807,7 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleClearAll}
                   disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
-                  className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
+                  className="bg-[#FDFBF7] text-[#102540] hover:bg-[#F7F2EA] hover:text-[#102540] border-[#B89555]/40 font-semibold disabled:opacity-50"
                 >
                   Clear All
                 </Button>
@@ -840,7 +840,7 @@ const Quiz = () => {
                       </div>
                     )}
                     <span className="text-2xl mb-2 block">{option.icon}</span>
-                    <span className={`font-medium text-sm md:text-base ${isSelected ? "text-[#B89555]" : "text-[#1A1A1A]"}`}>
+                    <span className={`font-medium text-sm md:text-base ${isSelected ? "text-[#102540]" : "text-[#1A1A1A]"}`}>
                       {option.label}
                     </span>
                   </button>
@@ -853,7 +853,7 @@ const Quiz = () => {
               <Button
                 variant="outline"
                 onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-                className="border-[#B89555]/40 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] px-8 py-6 text-lg"
+                className="border-[#B89555]/40 text-[#102540] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:text-[#102540] px-8 py-6 text-lg"
               >
                 <ChevronLeft className="w-5 h-5 mr-2" />
                 Back
@@ -861,7 +861,7 @@ const Quiz = () => {
               <Button
                 onClick={handleNext}
                 disabled={!isAnswered()}
-                className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#B89555]/20"
+                className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#102540] font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#B89555]/20"
               >
                 {currentStep === QUIZ_QUESTIONS.length - 1 ? "Continue" : "Next"}
                 <ChevronRight className="w-5 h-5 ml-2" />
