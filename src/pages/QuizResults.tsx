@@ -333,7 +333,7 @@ const QuizResults = () => {
             <span className="text-[#1A1A1A] text-sm font-medium">#1 AI Property Matchmaker — Exclusive by JBJ Global Real Estate</span>
           </div>
           
-          <h1 className="text-[#1A1A1A] text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-[#102540] text-4xl md:text-5xl font-bold mb-4">
             Your AI-Selected Properties
           </h1>
           <p className="text-[#1A1A1A]/70 text-lg max-w-2xl mx-auto mb-6">
@@ -344,19 +344,22 @@ const QuizResults = () => {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button
               onClick={handleDownloadReport}
-              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] hover:brightness-95 font-semibold shadow-md border-2 border-[#B89555] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+              className="bg-[#FDFBF7] text-[#B89555] hover:bg-[#F7F2EA] hover:text-[#B89555] hover:[&_svg]:text-[#B89555] font-semibold shadow-md border border-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
             >
-              <Download className="w-4 h-4 mr-2" />
+              <Download className="w-4 h-4 mr-2 text-[#B89555]" />
               Download Report
             </Button>
             <Button
-              onClick={() => setShareModalOpen(true)}
-              className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110 font-semibold"
+              onClick={handleOpenShare}
+              data-allow-dark-cta
+              className="bg-[#102540] text-white hover:bg-[#1a3d63] hover:text-white [&_svg]:text-white font-semibold border border-[#B89555]"
             >
               <Share2 className="w-4 h-4 mr-2" />
               Share with Consultant
             </Button>
           </div>
+        </div>
+
         </div>
 
         {/* Top Recommendation */}
