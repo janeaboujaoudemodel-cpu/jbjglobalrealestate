@@ -17,7 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { SearchableSelect } from "@/components/ui/searchable-select";
 // Payment removed — quiz is fully free, no API/credits consumed
-import { FounderContent } from "@/components/FounderContent";
+
 
 
 
