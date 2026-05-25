@@ -184,13 +184,36 @@ Respond with ONLY the JSON array.`;
   }
   const aiData = await aiResp.json();
   const content = aiData.choices?.[0]?.message?.content || "";
-  const match = content.match(/\[[\s\S]*\]/);
-  if (!match) throw new Error("AI returned no JSON array");
-  let parsed: any[];
-  try {
-    parsed = JSON.parse(match[0]);
-  } catch (e: any) {
-    throw new Error(`AI JSON parse: ${e.message}`);
+
+  // Strip markdown fences and isolate the first JSON array.
+  const cleaned = content
+    .replace(/```json\s*/gi, "")
+    .replace(/```\s*/g, "")
+    .replace(/[\x00-\x1F\x7F]/g, " ")
+    .trim();
+  const start = cleaned.indexOf("[");
+  const end = cleaned.lastIndexOf("]");
+  let parsed: any[] = [];
+  if (start !== -1 && end !== -1 && end > start) {
+    let slice = cleaned.substring(start, end + 1)
+      .replace(/,\s*]/g, "]")
+      .replace(/,\s*}/g, "}");
+    try {
+      parsed = JSON.parse(slice);
+    } catch {
+      parsed = [];
+    }
+  }
+  if (!Array.isArray(parsed) || parsed.length === 0) {
+    // Graceful skip — surface to caller without 500ing the whole request.
+    return {
+      skipped: true,
+      reason: "AI returned no parsable JSON array",
+      updated: 0,
+      failed: rows.length,
+      details: [content.slice(0, 200)],
+      remaining: rows.length,
+    };
   }
 
   const stats = { updated: 0, failed: 0, details: [] as string[] };
