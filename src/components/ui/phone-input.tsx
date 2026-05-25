@@ -521,7 +521,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555] focus:border-[#B89555]"
       : "bg-[#1A1A1A] border border-[#B89555]/50 text-white hover:bg-[#1A1A1A] hover:text-[#1A1A1A] hover:border-[#B89555] focus:border-[#B89555]";
     const inputStyles = isCareersPhoneInput
-      ? "bg-[#FDFBF7] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/60 focus:border-[#102540] hover:border-[#102540]"
+      ? "bg-[#F7F2EA] border-2 border-[#102540] rounded-lg text-[#102540] placeholder:text-[#102540]/60 focus:border-[#102540] hover:border-[#102540]"
       : isLight
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] hover:border-[#B89555]"
       : "bg-[#1A1A1A] border-2 border-[#B89555]/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] hover:border-[#B89555]";
@@ -633,7 +633,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 !isCareersPhoneInput && localNumber && !validation.isValid && "border-amber-500/50"
               )}
               placeholder={placeholder || "Phone number"}
-              style={isCareersPhoneInput ? { border: "2px solid #102540", boxShadow: "none" } : undefined}
+              style={isCareersPhoneInput ? { border: "2px solid #102540", backgroundColor: "#F7F2EA", color: "#102540", boxShadow: "none" } : undefined}
             />
             {showValidation && localNumber && validation.isValid && (
               <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />

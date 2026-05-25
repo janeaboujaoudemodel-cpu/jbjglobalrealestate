@@ -156,6 +156,15 @@
   box-shadow: none !important;
 }
 
+[data-careers-page] .careers-phone-input input,
+[data-careers-page] .careers-phone-input input[type="tel"] {
+  background: #F7F2EA !important;
+  border: 2px solid #102540 !important;
+  border-radius: 0.5rem !important;
+  color: #102540 !important;
+  box-shadow: none !important;
+}
+
 [data-careers-page] .careers-phone-input [data-phone-code-trigger] span {
   color: #102540 !important;
   -webkit-text-fill-color: #102540 !important;
