@@ -515,12 +515,12 @@ const Quiz = () => {
                   <Wand2 className="w-10 h-10 text-[#1A1A1A]" />
                 </div>
 
-                <h1 className="text-[#1A1A1A] text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+                <h1 className="text-[#102540] text-4xl md:text-5xl font-bold mb-4 tracking-tight">
                   AI Property Finder
                 </h1>
 
-                <p className="text-[#1A1A1A]/70 text-lg mb-7 max-w-lg mx-auto leading-relaxed">
-                  Try our AI Property Matchmaker &amp; Analysis — completely{" "}
+                <p className="text-[#1A1A1A]/75 text-lg mb-7 max-w-lg mx-auto leading-relaxed">
+                  Find your perfect property match with our AI — it searches across every project on JBJ and matches them to your exact requirements. Completely{" "}
                   <span className="text-[#B89555] font-semibold">FREE</span>.
                 </p>
 
