@@ -614,7 +614,7 @@ export default function JoinApplication() {
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
                     placeholder="Search positions by title, department, or location"
-                    className="pl-9 bg-[#FDFBF7] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 focus-visible:ring-[#102540]/40"
+                    className="careers-blue-field pl-9 bg-[#FDFBF7] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 focus-visible:ring-[#102540]/40"
                   />
                 </div>
               </CardHeader>
@@ -749,7 +749,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                       placeholder="e.g. Sarah"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                      className="careers-blue-field bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                     />
                   </div>
                   <div className="space-y-2">
@@ -760,7 +760,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                       placeholder="e.g. Khan"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                      className="careers-blue-field bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                     />
                   </div>
                 </div>
@@ -774,7 +774,7 @@ export default function JoinApplication() {
                     value={user?.email || ""}
                     placeholder="you@email.com"
                     disabled
-                    className="bg-[#F7F2EA] border-2 border-[#102540] text-[#1A1A1A] h-11 text-base"
+                    className="careers-blue-field bg-[#F7F2EA] border-2 border-[#102540] text-[#1A1A1A] h-11 text-base"
                   />
                   <p className="text-xs text-[#102540] font-bold">Email is linked to your account</p>
                 </div>
@@ -840,7 +840,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                       placeholder="e.g. Dubai"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base focus-visible:ring-[#102540]/40"
+                      className="careers-blue-field bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base focus-visible:ring-[#102540]/40"
                     />
 
                   </div>
