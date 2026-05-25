@@ -697,8 +697,8 @@ const Quiz = () => {
                 disabled={!isFormValid() || isSubmitting}
                 className={`w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
                   needsPayment
-                    ? "bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110"
-                    : "bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110"
+                    ? "bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#102540] hover:brightness-110"
+                    : "bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#102540] hover:brightness-110"
                 }`}
               >
                 {isSubmitting ? (
