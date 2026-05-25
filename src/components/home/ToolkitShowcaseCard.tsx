@@ -87,7 +87,7 @@ export function ToolkitShowcaseCard() {
             ref={tabsRef}
             data-on-dark
             data-no-contrast-guard
-            className="flex items-stretch overflow-x-auto no-scrollbar border-y border-[#B89555]/55 bg-[#102540] divide-x divide-white/15"
+            className="allow-white flex items-stretch overflow-x-auto no-scrollbar border-y border-[#B89555]/55 bg-[#102540] divide-x divide-white/30"
             role="tablist"
             aria-label="Royal tools"
           >
@@ -98,16 +98,18 @@ export function ToolkitShowcaseCard() {
                 <button
                   key={t.id}
                   data-tab-id={t.id}
+                  data-no-contrast-guard
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveId(t.id)}
-                  className={`shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors ${
+                  style={isActive ? undefined : { color: "#FFFFFF" }}
+                  className={`allow-white shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors ${
                     isActive
                       ? "bg-[#EFE6D6] text-[#1A1A1A] shadow-[inset_0_-2px_0_#B89555,inset_0_1px_0_rgba(255,255,255,0.7)]"
-                      : "text-white/85 hover:bg-[#1a3d63] hover:text-white"
+                      : "text-white hover:bg-[#1a3d63]"
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-4 h-4" style={isActive ? undefined : { color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   <span>{t.name}</span>
                 </button>
               );
