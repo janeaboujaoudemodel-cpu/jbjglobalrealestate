@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState, useEffect, useMemo } from "react";
 import { CheckCircle, ChevronsUpDown, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
@@ -559,9 +558,8 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
           {/* Country Code Selector - Responsive width */}
           <Popover open={codeOpen} onOpenChange={setCodeOpen}>
             <PopoverTrigger asChild>
-              <Button
+              <button
                 type="button"
-                variant="outline"
                 role="combobox"
                 aria-expanded={codeOpen}
                 disabled={disabled}
@@ -574,7 +572,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                   <span className="font-medium">{currentCode}</span>
                 </span>
                 <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-100" style={{ color: isCareersPhoneInput ? "#FFFFFF" : undefined, stroke: isCareersPhoneInput ? "#FFFFFF" : undefined }} />
-              </Button>
+              </button>
             </PopoverTrigger>
             <PopoverContent 
               className={cn("w-[340px] p-0 z-[100]", popoverStyles)} 
