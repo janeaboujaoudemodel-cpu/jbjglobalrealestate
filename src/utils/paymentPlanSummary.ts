@@ -31,9 +31,14 @@ const toNum = (v: unknown): number | null => {
 };
 
 /**
- * Returns either a concise plan label (e.g. "20 / 80", "10 / 50 / 40")
- * or `null` when nothing usable is available. Callers should render
- * `PAYMENT_PLAN_NA` for the null case.
+ * Returns a concise 2-part plan label in the form `DP / REST`
+ * (e.g. "10 / 90", "20 / 80") where REST = 100 − down-payment and
+ * combines the during-construction + post-handover shares. The full
+ * milestone-by-milestone breakdown is surfaced in the info popover —
+ * the card row itself stays a clean two-number summary.
+ *
+ * Returns `null` when nothing usable is available; callers render
+ * `PAYMENT_PLAN_NA` in that case.
  */
 export const formatPaymentPlanSummary = (project: {
   payment_breakdown?: unknown;
@@ -41,11 +46,32 @@ export const formatPaymentPlanSummary = (project: {
 } | null | undefined): string | null => {
   if (!project) return null;
 
-  // 1. Direct string like "20/80" or "10 / 50 / 40"
+  const toTwoPart = (parts: number[]): string | null => {
+    if (parts.length < 2) return null;
+    const total = parts.reduce((s, n) => s + n, 0);
+    if (total < 95 || total > 105) return null;
+    const dp = Math.round(parts[0]);
+    const rest = Math.max(0, Math.min(100, 100 - dp));
+    return `${dp} / ${rest}`;
+  };
+
+  // 1. Direct string like "20/80" or "10 / 50 / 40" — keep first
+  //    number as down-payment, collapse remainder into "rest".
   const planStr = project.payment_plan ? String(project.payment_plan).trim() : "";
   if (planStr) {
     const m = planStr.match(/\d{1,3}(?:\s*[\/\-]\s*\d{1,3}){1,3}/);
-    if (m) return m[0].replace(/\s*[\/\-]\s*/g, " / ");
+    if (m) {
+      const nums = m[0]
+        .split(/\s*[\/\-]\s*/)
+        .map((s) => Number(s))
+        .filter((n) => Number.isFinite(n) && n >= 0);
+      const collapsed = toTwoPart(nums);
+      if (collapsed) return collapsed;
+      // If totals don't add to ~100, still render DP / (100−DP) when DP is sane.
+      if (nums.length >= 2 && nums[0] >= 0 && nums[0] <= 100) {
+        return `${Math.round(nums[0])} / ${100 - Math.round(nums[0])}`;
+      }
+    }
   }
 
   const pb = project.payment_breakdown as
@@ -59,10 +85,8 @@ export const formatPaymentPlanSummary = (project: {
     const pcts = pb
       .map((m) => toNum(m?.percentage))
       .filter((n): n is number => n !== null);
-    const total = pcts.reduce((s, n) => s + n, 0);
-    if (pcts.length >= 2 && total >= 95 && total <= 105) {
-      return pcts.map((n) => Math.round(n)).join(" / ");
-    }
+    const collapsed = toTwoPart(pcts);
+    if (collapsed) return collapsed;
   }
 
   // 3. Legacy object
@@ -71,11 +95,10 @@ export const formatPaymentPlanSummary = (project: {
     const dc = toNum((pb as LegacyBreakdown).during_construction);
     const oc = toNum((pb as LegacyBreakdown).on_completion);
     const parts = [dp, dc, oc].filter((n): n is number => n !== null);
-    const total = parts.reduce((s, n) => s + n, 0);
-    if (parts.length >= 2 && total >= 95 && total <= 105) {
-      return parts.map((n) => Math.round(n)).join(" / ");
-    }
+    const collapsed = toTwoPart(parts);
+    if (collapsed) return collapsed;
   }
 
   return null;
 };
+
