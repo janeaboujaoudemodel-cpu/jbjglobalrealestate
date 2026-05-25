@@ -321,7 +321,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             Every row below reserves a fixed min-height so cards stay
             pixel-identical even when properties have missing/short
             location, unit-types, size, developer, or description. */}
-        <div className="p-4 pt-8 flex-1 flex flex-col gap-3">
+        <div className="p-5 pt-7 flex-1 flex flex-col gap-3">
           {/* Header block — title (always 2 lines) + location (always 1 line) */}
           <div className="flex flex-col gap-1.5">
             <h4 className="text-[#1A1A1A] text-lg font-bold break-words leading-tight line-clamp-2 min-h-[2.75rem] group-hover:text-[#B89555] transition-colors">
@@ -373,15 +373,20 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </span>
           </p>
 
-          {/* Thin gold hairline — separates description from bottom row (no spacer rectangle). */}
-          <div className="w-full border-t border-[#B89555]/45" />
+          {/* Bottom group — pinned to card bottom so price rows align across
+              every card regardless of content length above. */}
+          <div className="mt-auto flex flex-col gap-3 pt-1">
+            {/* Thin gold hairline — separates description from bottom row */}
+            <div className="w-full border-t border-[#B89555]/45" />
 
-          {/* Bottom row — Reelly-style: Price from (left) + Payment plan (right) with info popover. */}
-          <CardPricePaymentRow
-            price={project.price_from}
-            currency={currency}
-            project={project as any}
-          />
+            {/* Bottom row — Reelly-style: Price from (left) + Payment plan (right) with info popover. */}
+            <CardPricePaymentRow
+              price={project.price_from}
+              currency={currency}
+              project={project as any}
+            />
+          </div>
+
 
           {/* Handover quarter is now shown as a Reelly-style pill on the
               image (top-left), so the redundant bottom line is removed. */}
