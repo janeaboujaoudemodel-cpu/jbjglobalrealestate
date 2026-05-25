@@ -128,11 +128,11 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   // whether selected or not — classy, consistent, no rainbow.
   const triggerStyle: CSSProperties = {
     backgroundColor: 'transparent',
-    borderColor: 'rgba(184,149,85,0.55)',
+    borderColor: '#B89555',
     borderWidth: 1,
     borderStyle: 'solid',
     color: '#1A1A1A',
-    boxShadow: 'none',
+    boxShadow: 'inset 0 0 0 1px rgba(184,149,85,0.35)',
   };
 
 
@@ -254,14 +254,13 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               const isHovered = hoveredMode === modeKey;
 
               const rowStyle: CSSProperties = {
-                backgroundImage: isHovered
+                backgroundImage: isActive
+                  ? `linear-gradient(135deg, ${config.rowTo} 0%, ${config.rowHover} 100%)`
+                  : isHovered
                   ? `linear-gradient(135deg, ${config.rowTo} 0%, ${config.rowHover} 100%)`
                   : `linear-gradient(135deg, ${config.rowFrom} 0%, ${config.rowTo} 100%)`,
                 borderColor: config.base,
                 color: config.dark,
-                // Thin 1px outer ring when active, plus the 3px inset left rail
-                // in the mode tone. Keeps the card clearly active without a
-                // chunky black box around it.
                 boxShadow: isActive
                   ? `inset 3px 0 0 ${config.base}, 0 0 0 1px ${config.base}`
                   : `inset 3px 0 0 ${config.base}`,
@@ -319,7 +318,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                       {config.label}
                     </p>
                     <p
-                      className="text-[11px] leading-snug mt-0.5 line-clamp-1"
+                      className="text-[11px] leading-snug mt-0.5"
                       style={{ color: config.dark }}
                     >
                       {config.description}
@@ -336,6 +335,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                         '--mode-on-base': config.onBase,
                         backgroundColor: config.base,
                         color: config.onBase,
+                        WebkitTextFillColor: config.onBase,
                         borderColor: config.base,
                       } as CSSProperties}
                     >
@@ -344,7 +344,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                         className="mode-switcher-selected-icon w-3 h-3 shrink-0 allow-white"
                         style={{ color: config.onBase, stroke: config.onBase }}
                       />
-                      Selected
+                      <span style={{ color: config.onBase, WebkitTextFillColor: config.onBase }}>Selected</span>
                     </span>
                   ) : (
                     <span
