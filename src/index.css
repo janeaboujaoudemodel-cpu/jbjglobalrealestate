@@ -5580,3 +5580,12 @@ hr[data-gold-hairline],
   stroke: currentColor !important;
 }
 
+.overseas-investors-strip-link,
+.overseas-investors-strip-link:hover,
+.overseas-investors-strip-link :is(span, svg),
+.overseas-investors-strip-link:hover :is(span, svg) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
