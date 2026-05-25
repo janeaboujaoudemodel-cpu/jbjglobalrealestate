@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { PaymentModal } from "@/components/PaymentModal";
 import { Badge } from "@/components/ui/badge";
-import { FounderContent } from "@/components/FounderContent";
+// Founder block removed — replaced by "Powered by JBJ Global Real Estate" lockup
 
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
