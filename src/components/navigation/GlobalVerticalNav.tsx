@@ -1100,6 +1100,28 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     className={`overflow-hidden transition-all duration-250 ease-out ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}
                   >
                     <div className="ml-4 pl-2.5 border-l border-[#B89555]/15 space-y-1 pt-1 pb-1.5">
+                      {sectionKey === 'TOOLS & WORKSPACE' && (
+                        <>
+                          <Link
+                            to="/ai-hub"
+                            onClick={collapseAfterNavigation}
+                            data-no-contrast-guard
+                            className="group flex items-center gap-2 px-2.5 py-[7px] rounded-lg text-[12px] font-bold transition-all duration-150 border border-[#B89555]/60 bg-[#FDFBF7] hover:bg-[#EFE6D6]/40"
+                            style={{ color: '#1A1A1A' }}
+                          >
+                            <span className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 border border-[#B89555]/60 bg-[#EFE6D6]/40">
+                              <Eye className="w-3 h-3" style={{ color: '#B89555' }} />
+                            </span>
+                            <span className="flex-1">View All Tools</span>
+                            <ChevronRight className="w-3 h-3" style={{ color: '#B89555' }} />
+                          </Link>
+                          <div
+                            className="my-1.5 mx-1 h-px"
+                            style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(184,149,85,0.35) 50%, transparent 100%)' }}
+                            aria-hidden="true"
+                          />
+                        </>
+                      )}
                       {items.map((item, i) => {
                         const hasMega = !!item.megaMenu;
                         const isMenuOpen = activeMegaMenu === item.megaMenu;
