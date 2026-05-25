@@ -26,12 +26,13 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
-/* ICON BOX - inverted on light surfaces */
+/* ICON BOX — navy blue with white icon (global standard) */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-foreground ${className}`}
+    data-no-contrast-guard
+    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#102540] border border-[#102540]/40 shadow-sm allow-white ${className}`}
   >
-    <Icon className="w-6 h-6 text-background" />
+    <Icon className="w-6 h-6 text-white allow-white" />
   </div>
 );
 
