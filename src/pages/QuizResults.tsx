@@ -73,22 +73,11 @@ const QuizResults = () => {
       }));
 
       return normalized
-        .filter(p => p.cover_image_url || p.images.length > 0)
-        .filter(p => {
-          const hd = (p as any).handover_date;
-          if (hd) {
-            const hLower = hd.toLowerCase();
-            if (!hLower.includes("ready")) {
-              const yearMatch = hd.match(/\b(20\d{2})\b/);
-              if (yearMatch && parseInt(yearMatch[1]) < 2026) return false;
-            }
-          }
-          return true;
-        })
         .sort((a, b) => projectSlugs.indexOf(a.slug) - projectSlugs.indexOf(b.slug));
     },
     enabled: projectSlugs.length > 0,
   });
+
 
   const handleSetBadge = (projectId: string, badge: 'top1' | 'top2' | 'top3' | null) => {
     setBadges(prev => ({ ...prev, [projectId]: badge }));
