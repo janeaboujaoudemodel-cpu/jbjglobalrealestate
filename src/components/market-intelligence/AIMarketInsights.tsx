@@ -35,12 +35,13 @@ interface InsightCard {
   category: 'trend' | 'demand' | 'supply' | 'opportunity';
 }
 
-/* ICON BOX - inverted on light surfaces */
+/* ICON BOX - approved navy with white icon */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 bg-foreground shadow-md ${className}`}
+    data-no-contrast-guard
+    className={`w-10 h-10 rounded-none flex items-center justify-center transition-all duration-300 bg-[hsl(var(--mi-navy))] border border-[hsl(var(--mi-gold)/0.45)] shadow-md allow-white ${className}`}
   >
-    <Icon className="w-5 h-5 text-background" />
+    <Icon className="w-5 h-5 text-white allow-white" />
   </div>
 );
 
@@ -152,7 +153,7 @@ export const AIMarketInsights = () => {
               Understanding the Market
             </h2>
             <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
-              AI-generated explanations of market trends based on official government data.
+              AI-assisted explanations of market trends based on official government sources.
               These insights help contextualize the "why" behind the numbers.
             </p>
           </motion.div>
@@ -161,7 +162,7 @@ export const AIMarketInsights = () => {
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {PRESET_INSIGHTS.map((insight) => (
               <motion.div key={insight.id} variants={fadeInUp}>
-                <Card className="h-full transition-all hover:shadow-lg bg-card border border-border">
+                <Card className="h-full rounded-none transition-all hover:shadow-[0_16px_38px_hsl(var(--mi-navy)/0.12)] bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)]">
                   <CardHeader className="pb-3">
                     <div className="flex items-start gap-3">
                       <IconBox icon={insight.icon} className="shrink-0" />
@@ -183,7 +184,7 @@ export const AIMarketInsights = () => {
 
           {/* AI Narrative Generator */}
           <motion.div variants={fadeInUp}>
-            <Card className="shadow-lg bg-card border border-border">
+            <Card className="rounded-none shadow-lg bg-card border border-[hsl(var(--mi-navy)/0.42)]">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-start gap-6 mb-6">
                   <IconBox icon={Brain} className="w-12 h-12 shrink-0" />
@@ -192,14 +193,14 @@ export const AIMarketInsights = () => {
                       Generate Market Narrative
                     </h3>
                     <p className={`${MI_BODY_MUTED} mb-4`}>
-                      Get an AI-generated analysis based on official government Open Data.
+                      Get an AI-assisted analysis based on official government sources.
                       Select a topic below to generate educational market insights.
                     </p>
                   </div>
                 </div>
 
                 <Tabs value={activeNarrativeType} onValueChange={(v) => setActiveNarrativeType(v as NarrativeType)}>
-                  <TabsList className="mb-6 bg-muted border border-border">
+                  <TabsList className="mb-6 rounded-none bg-muted border border-[hsl(var(--mi-navy)/0.28)]">
                     {narrativeOptions.map((opt) => (
                       <TabsTrigger
                         key={opt.id}
@@ -215,10 +216,12 @@ export const AIMarketInsights = () => {
                   {narrativeOptions.map((opt) => (
                     <TabsContent key={opt.id} value={opt.id}>
                       <div className="space-y-4">
-                        <Button
+                         <Button
                           variant="primary"
                           onClick={() => generatePublicNarrative(opt.id)}
                           disabled={isGenerating}
+                          className="rounded-none bg-[hsl(var(--mi-navy))] text-white border border-[hsl(var(--mi-gold))] hover:bg-[hsl(var(--mi-navy-soft))]"
+                          data-no-contrast-guard
                         >
                           {isGenerating && activeNarrativeType === opt.id ? (
                             <>
@@ -235,7 +238,7 @@ export const AIMarketInsights = () => {
                         </Button>
 
                         {generatedNarratives[opt.id] && (
-                          <div className="p-6 rounded-xl bg-muted border border-border">
+                           <div className="p-6 rounded-none bg-muted border border-[hsl(var(--mi-navy)/0.28)]">
                             <div className={`${MI_H4} flex items-center gap-2 mb-3`}>
                               <MessageSquare className="w-4 h-4" />
                               AI Market Analysis
@@ -255,12 +258,12 @@ export const AIMarketInsights = () => {
 
           {/* Disclaimer */}
           <motion.div
-            className="mt-8 flex items-start gap-3 p-4 max-w-3xl mx-auto rounded-xl bg-muted border border-border"
+            className="mt-8 flex items-start gap-3 p-4 max-w-3xl mx-auto rounded-none bg-muted border border-[hsl(var(--mi-navy)/0.28)]"
             variants={fadeInUp}
           >
             <Info className="w-5 h-5 shrink-0 mt-0.5 text-foreground" />
             <p className={MI_CAPTION}>
-              AI-generated insights are based on aggregated government Open Data and are provided for informational purposes only.
+              AI-assisted insights are based on official government sources and are provided for informational purposes only.
               They do not constitute financial, investment, or legal advice.
               AI explains data but does not predict prices or provide specific investment recommendations.
             </p>

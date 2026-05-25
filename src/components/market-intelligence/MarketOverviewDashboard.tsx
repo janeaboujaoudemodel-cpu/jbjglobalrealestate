@@ -26,11 +26,11 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
-/* ICON BOX — navy blue with white icon (global standard) */
+/* ICON BOX — approved navy with white icon (global standard) */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
     data-no-contrast-guard
-    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#102540] border border-[#102540]/40 shadow-sm allow-white ${className}`}
+    className={`w-12 h-12 rounded-none flex items-center justify-center transition-all duration-300 bg-[hsl(var(--mi-navy))] border border-[hsl(var(--mi-gold)/0.45)] shadow-sm allow-white ${className}`}
   >
     <Icon className="w-6 h-6 text-white allow-white" />
   </div>
@@ -57,7 +57,7 @@ const StatCard = ({
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="transition-all h-full bg-card border-2 border-[#102540]/45 hover:border-[#102540]/60 hover:shadow-[0_4px_20px_rgba(16,37,64,0.12)]">
+      <Card className="transition-all h-full rounded-none bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)] hover:shadow-[0_16px_38px_hsl(var(--mi-navy)/0.12)]">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
@@ -67,7 +67,7 @@ const StatCard = ({
             </div>
           </div>
           <div className="mt-4">
-            <p className="text-sm font-semibold leading-snug text-[#102540] mb-1">{title}</p>
+            <p className="text-sm font-semibold leading-snug text-[hsl(var(--mi-navy))] mb-1">{title}</p>
             <p className={`${MI_KPI} ${accentColor ?? 'text-foreground'} truncate`}>
               {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
             </p>
@@ -99,7 +99,7 @@ export const MarketOverviewDashboard = () => {
               Dubai Real Estate Dashboard
             </h2>
             <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
-              High-level market metrics aggregated from official government Open Data sources.
+              High-level market metrics refreshed daily from official government sources.
             </p>
           </motion.div>
 
@@ -142,9 +142,9 @@ export const MarketOverviewDashboard = () => {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full bg-card border-2 border-[#102540]/45 hover:border-[#102540]/60 transition-all">
+              <Card className="h-full rounded-none bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)] transition-all">
                 <CardHeader>
-                  <CardTitle className="text-[#102540] flex items-center gap-3">
+                  <CardTitle className="text-[hsl(var(--mi-navy))] flex items-center gap-3">
                     <IconBox icon={BarChart3} className="w-10 h-10" />
                     <span>Quarterly Transaction Trends</span>
                   </CardTitle>
@@ -178,7 +178,7 @@ export const MarketOverviewDashboard = () => {
                     })}
                   </div>
                   <p className={`${MI_CAPTION} mt-4`}>
-                    Source: Dubai Government Open Data
+                    Source: Official government sources
                   </p>
                 </CardContent>
               </Card>
@@ -186,9 +186,9 @@ export const MarketOverviewDashboard = () => {
 
             {/* Property Type Breakdown */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full bg-card border-2 border-[#102540]/45 hover:border-[#102540]/60 transition-all">
+              <Card className="h-full rounded-none bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)] transition-all">
                 <CardHeader>
-                  <CardTitle className="text-[#102540] flex items-center gap-3">
+                  <CardTitle className="text-[hsl(var(--mi-navy))] flex items-center gap-3">
                     <IconBox icon={Building2} className="w-10 h-10" />
                     <span>Price by Property Type</span>
                   </CardTitle>
@@ -220,10 +220,10 @@ export const MarketOverviewDashboard = () => {
             className="mt-8 text-center"
             variants={fadeInUp}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border bg-muted border-border">
+            <div className="inline-flex flex-wrap items-center justify-center gap-2 border border-[hsl(var(--mi-navy)/0.35)] bg-card px-4 py-2">
               <Calendar className="w-4 h-4 text-foreground" />
               <span className="text-sm font-semibold leading-none text-foreground">
-                Last updated: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                Daily freshness check: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
               </span>
               <span className="text-muted-foreground">•</span>
               <span className={MI_BODY_MUTED}>

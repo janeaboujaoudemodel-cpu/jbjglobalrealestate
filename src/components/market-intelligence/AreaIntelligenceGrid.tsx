@@ -49,11 +49,11 @@ const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => 
   );
 };
 
-/* ICON BOX — navy blue with white icon (global standard) */
+/* ICON BOX — approved navy with white icon (global standard) */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
     data-no-contrast-guard
-    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 bg-[#102540] border border-[#102540]/40 shadow-sm allow-white ${className}`}
+    className={`w-10 h-10 rounded-none flex items-center justify-center transition-all duration-300 bg-[hsl(var(--mi-navy))] border border-[hsl(var(--mi-gold)/0.45)] shadow-sm allow-white ${className}`}
   >
     <Icon className="w-5 h-5 text-white allow-white" />
   </div>
@@ -64,7 +64,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="transition-all group h-full hover:shadow-[0_6px_24px_rgba(16,37,64,0.15)] bg-card border-2 border-[#102540]/45 hover:border-[#102540]/70">
+      <Card className="transition-all group h-full rounded-none hover:shadow-[0_16px_38px_hsl(var(--mi-navy)/0.14)] bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)]">
         <CardContent className="p-6">
           {/* Header */}
           <div className="flex items-start justify-between mb-4 gap-2">
@@ -145,11 +145,12 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           </div>
 
           {/* Link */}
-          <Link
+            <Link
             to={`/area/${slugify(area.area)}`}
-            className="flex items-center justify-center gap-2 w-full py-2 text-sm font-semibold rounded-md transition-colors bg-white text-[#102540] border border-[#102540]/50 hover:bg-[#102540] hover:text-white hover:border-[#102540]"
+            data-no-contrast-guard
+            className="allow-white flex items-center justify-center gap-2 w-full py-2 text-sm font-semibold rounded-none transition-colors bg-white text-[hsl(var(--mi-navy))] border border-[hsl(var(--mi-navy)/0.50)] hover:bg-[hsl(var(--mi-navy))] hover:text-white hover:border-[hsl(var(--mi-navy))]"
           >
-            <span>View Area Details</span>
+            <span className="group-hover:allow-white">View Area Details</span>
             <ArrowUpRight className="w-4 h-4" />
           </Link>
         </CardContent>
@@ -180,7 +181,7 @@ export const AreaIntelligenceGrid = () => {
             </h2>
             <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
               Explore aggregated market data for Dubai's most sought-after communities. 
-              Data derived from official government Open Data sources.
+              Data derived from official government sources with daily freshness checks.
             </p>
           </motion.div>
 
@@ -196,7 +197,7 @@ export const AreaIntelligenceGrid = () => {
             <Link
               to="/areas"
               data-no-contrast-guard
-              className="allow-white inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold bg-[#102540] text-white border border-[#B89555] hover:bg-[#1a3d63] transition-colors shadow-lg"
+              className="allow-white inline-flex items-center justify-center gap-2 px-8 py-4 rounded-none text-base font-semibold bg-[hsl(var(--mi-navy))] text-white border border-[hsl(var(--mi-gold))] hover:bg-[hsl(var(--mi-navy-soft))] transition-colors shadow-lg"
             >
               <BarChart2 className="w-5 h-5 allow-white" />
               <span className="allow-white">Explore All Area Guides</span>

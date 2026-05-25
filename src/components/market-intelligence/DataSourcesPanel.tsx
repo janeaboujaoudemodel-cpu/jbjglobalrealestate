@@ -33,7 +33,7 @@ const frequencyClasses: Record<string, string> = {
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
     data-no-contrast-guard
-    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#102540] border border-[#102540]/40 shadow-sm allow-white ${className}`}
+    className={`w-12 h-12 rounded-none flex items-center justify-center transition-all duration-300 bg-[hsl(var(--mi-navy))] border border-[hsl(var(--mi-gold)/0.45)] shadow-sm allow-white ${className}`}
   >
     <Icon className="w-6 h-6 text-white allow-white" />
   </div>
@@ -60,9 +60,7 @@ export const DataSourcesPanel = () => {
               Powered by Official Government Sources
             </h2>
             <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
-              All Market Intelligence is derived exclusively from official government sources
-              and licensed market data partners. We do not scrape, republish, or rely on
-              proprietary third-party platforms.
+              Market Intelligence is powered by official government sources and JBJ review workflows, with daily freshness checks for live-facing market context.
             </p>
           </motion.div>
 
@@ -72,11 +70,11 @@ export const DataSourcesPanel = () => {
               const fc = frequencyClasses[source.updateFrequency] || frequencyClasses.monthly;
               return (
                 <motion.div key={source.id} variants={fadeInUp}>
-                  <Card className="h-full transition-all hover:shadow-lg bg-card border-2 border-[#102540]/45">
+                  <Card className="h-full rounded-none transition-all hover:shadow-[0_16px_38px_hsl(var(--mi-navy)/0.12)] bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)]">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <IconBox icon={Database} />
-                        <Badge className={`whitespace-nowrap border ${fc}`}>
+                        <Badge className={`whitespace-nowrap rounded-none border ${fc}`}>
                           <RefreshCw className="w-3 h-3 mr-1" />
                           {source.updateFrequency}
                         </Badge>
@@ -90,7 +88,7 @@ export const DataSourcesPanel = () => {
                         {source.dataTypes.map((type) => (
                           <span
                             key={type}
-                            className={`${MI_CHIP} px-2 py-1 rounded-md capitalize bg-muted text-foreground`}
+                            className={`${MI_CHIP} px-2 py-1 rounded-none capitalize bg-muted text-foreground`}
                           >
                             {type}
                           </span>

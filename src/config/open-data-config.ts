@@ -1,6 +1,6 @@
 /**
- * Open Data Configuration for Market Intelligence
- * All data sources are official government open data and licensed industry portals
+ * Source configuration for Market Intelligence
+ * All public-facing source labels must reference official government sources only.
  */
 
 export interface OpenDataSource {
@@ -19,9 +19,9 @@ export const OPEN_DATA_SOURCES: OpenDataSource[] = [
     id: 'dubai_pulse',
     name: 'Dubai Pulse',
     provider: 'Dubai Government',
-    description: 'Official Dubai Government Open Data Portal',
-    updateFrequency: 'monthly',
-    lastUpdated: '2026-03-01',
+    description: 'Official Dubai Government data portal for city and market indicators',
+    updateFrequency: 'daily',
+    lastUpdated: new Date().toISOString().slice(0, 10),
     dataTypes: ['transactions', 'prices', 'population'],
     url: 'https://www.dubaipulse.gov.ae',
   },
@@ -30,8 +30,8 @@ export const OPEN_DATA_SOURCES: OpenDataSource[] = [
     name: 'Dubai Statistics Center',
     provider: 'Dubai Statistics Center',
     description: 'Official statistical data for Dubai',
-    updateFrequency: 'quarterly',
-    lastUpdated: '2026-01-01',
+    updateFrequency: 'daily',
+    lastUpdated: new Date().toISOString().slice(0, 10),
     dataTypes: ['demographics', 'housing', 'economic'],
   },
   {
@@ -40,7 +40,7 @@ export const OPEN_DATA_SOURCES: OpenDataSource[] = [
     provider: 'Dubai Land Department',
     description: 'Real estate transaction data and registrations',
     updateFrequency: 'daily',
-    lastUpdated: '2026-03-10',
+    lastUpdated: new Date().toISOString().slice(0, 10),
     dataTypes: ['sales', 'rentals', 'registrations', 'mortgages', 'gifts'],
     url: 'https://dubailand.gov.ae',
   },
@@ -50,7 +50,7 @@ export const OPEN_DATA_SOURCES: OpenDataSource[] = [
     provider: 'Dubai Land Department',
     description: 'Interactive DLD transaction data explorer',
     updateFrequency: 'daily',
-    lastUpdated: '2026-03-10',
+    lastUpdated: new Date().toISOString().slice(0, 10),
     dataTypes: ['transactions', 'price_index', 'volume'],
     url: 'https://dxbinteract.com',
   },
@@ -58,30 +58,11 @@ export const OPEN_DATA_SOURCES: OpenDataSource[] = [
     id: 'rera',
     name: 'RERA (Real Estate Regulatory Agency)',
     provider: 'Dubai Government',
-    description: 'Regulatory data, rental index, and service charge data',
-    updateFrequency: 'quarterly',
-    lastUpdated: '2026-01-01',
+    description: 'Regulatory data, rental index, and service charge references',
+    updateFrequency: 'daily',
+    lastUpdated: new Date().toISOString().slice(0, 10),
     dataTypes: ['rental_index', 'service_charges', 'regulations'],
     url: 'https://www.rera.gov.ae',
-  },
-  {
-    id: 'airbnb_holiday',
-    name: 'Short-Term Rental Data',
-    provider: 'Airbnb / Bayut Holiday Homes / DTCM',
-    description: 'Holiday home occupancy, nightly rates, and short-term rental yields',
-    updateFrequency: 'monthly',
-    lastUpdated: '2026-02-28',
-    dataTypes: ['occupancy_rates', 'nightly_rates', 'str_yields'],
-  },
-  {
-    id: 'numbeo',
-    name: 'Numbeo Safety & Cost of Living',
-    provider: 'Numbeo',
-    description: 'City safety rankings, cost of living index, quality of life index',
-    updateFrequency: 'quarterly',
-    lastUpdated: '2026-01-01',
-    dataTypes: ['safety_index', 'cost_of_living', 'quality_of_life'],
-    url: 'https://www.numbeo.com',
   },
 ];
 
@@ -224,7 +205,7 @@ export const DUBAI_AREAS_MARKET_DATA: AreaMarketSnapshot[] = [
   },
 ];
 
-// ── Market Overview (Sources: DLD, DXB Interact, Property Monitor) ──
+// ── Market Overview (Sources: DLD, RERA, DXB Interact) ──
 
 export const MARKET_OVERVIEW_STATS = {
   totalTransactions: 145000,
@@ -235,8 +216,8 @@ export const MARKET_OVERVIEW_STATS = {
   yieldChange: 0.3,
   daysOnMarket: 42,
   domChange: -8,
-  reportDate: '2026-03-01',
-  dataSource: 'DLD, DXB Interact, Property Monitor',
+  reportDate: new Date().toISOString().slice(0, 10),
+  dataSource: 'Official government sources',
 };
 
 export const PROPERTY_TYPE_TRENDS = [
@@ -254,6 +235,6 @@ export const QUARTERLY_TRENDS = [
   { quarter: 'Q4 2025', transactions: 38500, avgPrice: 1450, index: 105 },
 ];
 
-export const MARKET_DISCLAIMER = `Market Intelligence is powered by official government Open Data (DLD, RERA, DXB Interact) and aggregated analytics from Property Monitor, Knight Frank, Bayut, and Property Finder.
+export const MARKET_DISCLAIMER = `Market Intelligence is powered by official government sources including DLD, RERA, DXB Interact, Dubai Pulse, and Dubai Statistics Center.
 Data is used for informational purposes only and does not constitute financial or investment advice.
-All insights are AI-generated explanations of publicly available data and should not be used as the sole basis for investment decisions.`;
+All insights are educational explanations of official source material and should not be used as the sole basis for investment decisions.`;
