@@ -4,7 +4,7 @@
  * Enhanced with: sqm/sqft toggle, currency selector (AED/USD/EUR), full-width
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Home, Key, MapPin, Building2, Bed, DollarSign, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
