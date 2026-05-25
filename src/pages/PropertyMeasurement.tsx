@@ -315,11 +315,25 @@ jbj.ae
 
   return (
     <section className="relative w-full min-h-screen bg-[#1A1A1A]">
+      {/* Animated emerald border keyframes (page-local) */}
+      <style>{`
+        @keyframes jbjEmeraldFlow {
+          0%, 100% { box-shadow: 0 0 0 1px rgba(16,185,129,0.55), 0 0 28px rgba(16,185,129,0.35), inset 0 0 24px rgba(16,185,129,0.10); }
+          50%      { box-shadow: 0 0 0 2px rgba(52,211,153,0.85), 0 0 48px rgba(16,185,129,0.55), inset 0 0 36px rgba(16,185,129,0.18); }
+        }
+        .jbj-emerald-ring { animation: jbjEmeraldFlow 3.2s ease-in-out infinite; }
+        @keyframes jbjEmeraldEdge {
+          0%, 100% { box-shadow: 0 0 0 1px rgba(16,185,129,0.45), 0 0 14px rgba(16,185,129,0.25); }
+          50%      { box-shadow: 0 0 0 2px rgba(52,211,153,0.75), 0 0 22px rgba(16,185,129,0.45); }
+        }
+        .jbj-emerald-edge { animation: jbjEmeraldEdge 2.6s ease-in-out infinite; }
+      `}</style>
+
       {/* Hero Section */}
       <div className="relative py-20 md:py-28 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-900/30 via-black to-emerald-900/20" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(20,184,166,0.15),transparent_50%)]" />
-        
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/40 via-black to-teal-900/30" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(16,185,129,0.18),transparent_55%)]" />
+
         <div className="container mx-auto px-4 relative z-10">
           <motion.div 
             className="text-center max-w-4xl mx-auto"
@@ -327,40 +341,36 @@ jbj.ae
             animate="visible"
             variants={fadeInUp}
           >
-            <Badge className="mb-6 bg-teal-500/20 text-teal-300 border-teal-500/30 px-4 py-2">
+            <span className="inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 select-none">
               <Ruler className="w-4 h-4 mr-2" />
               FREE AI Tool
-            </Badge>
-            
+            </span>
+
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              AI Property{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">
+              Property{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-300 to-emerald-500">
                 Measurement
               </span>
             </h1>
-            
-            <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto mb-8">
+
+            <p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-8">
               Verify your property size with AI precision. Upload photos room by room — 
-              get accurate measurements in seconds. <span className="text-teal-400 font-semibold">100% Free.</span>
+              get accurate measurements in seconds. <span className="text-emerald-300 font-semibold">100% Free.</span>
             </p>
 
-            {/* Why Use This Tool - Enhanced */}
+            {/* Why Use This Tool */}
             <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto mt-12">
-              <div className="bg-[#FDFBF7]/50 border border-teal-500/20 rounded-xl p-4">
-                <CheckCircle2 className="w-8 h-8 text-teal-400 mx-auto mb-2" />
-                <p className="text-white font-medium">Verify Developer Claims</p>
-                <p className="text-white/90 text-sm">Check if the property matches the stated size before you buy</p>
-              </div>
-              <div className="bg-[#FDFBF7]/50 border border-teal-500/20 rounded-xl p-4">
-                <AlertCircle className="w-8 h-8 text-teal-400 mx-auto mb-2" />
-                <p className="text-white font-medium">Check Rental Sizes</p>
-                <p className="text-white/90 text-sm">Verify apartment sizes before signing a rental agreement</p>
-              </div>
-              <div className="bg-[#FDFBF7]/50 border border-teal-500/20 rounded-xl p-4">
-                <Sparkles className="w-8 h-8 text-teal-400 mx-auto mb-2" />
-                <p className="text-white font-medium">Secondary Market Check</p>
-                <p className="text-white/90 text-sm">Verify size claims before viewing a resale property</p>
-              </div>
+              {[
+                { Icon: CheckCircle2, title: "Verify Developer Claims", body: "Check if the property matches the stated size before you buy" },
+                { Icon: AlertCircle,  title: "Check Rental Sizes",      body: "Verify apartment sizes before signing a rental agreement" },
+                { Icon: Sparkles,     title: "Secondary Market Check",  body: "Verify size claims before viewing a resale property" },
+              ].map(({ Icon, title, body }) => (
+                <div key={title} className="bg-gradient-to-br from-emerald-950/80 via-black/70 to-emerald-900/60 border border-emerald-500/30 rounded-xl p-4">
+                  <Icon className="w-8 h-8 text-emerald-300 mx-auto mb-2" />
+                  <p className="text-white font-medium">{title}</p>
+                  <p className="text-white/75 text-sm">{body}</p>
+                </div>
+              ))}
             </div>
           </motion.div>
         </div>
@@ -375,13 +385,13 @@ jbj.ae
               <div key={s} className="flex items-center">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
                   step >= s 
-                    ? "bg-teal-500 text-white" 
-                    : "bg-[#F7F2EA] text-white/90"
+                    ? "bg-emerald-500 text-white shadow-[0_0_16px_rgba(16,185,129,0.55)]" 
+                    : "bg-white/10 text-white/70 border border-white/15"
                 }`}>
                   {step > s ? <CheckCircle2 className="w-5 h-5" /> : s}
                 </div>
                 {s < 5 && (
-                  <div className={`w-8 md:w-12 h-1 ${step > s ? "bg-teal-500" : "bg-[#F7F2EA]"}`} />
+                  <div className={`w-8 md:w-12 h-1 rounded-full ${step > s ? "bg-emerald-500" : "bg-white/10"}`} />
                 )}
               </div>
             ))}
@@ -395,78 +405,86 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="!border-teal-500/30 !border bg-[#FDFBF7]/50">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Building2 className="w-5 h-5 text-teal-400" />
-                  Step 1: Property Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <Label className="text-white mb-3 block">Property Type</Label>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {propertyTypes.map((type) => (
-                      <button
-                        key={type.id}
-                        onClick={() => setPropertyType(type.id as PropertyType)}
-                        className={`p-4 rounded-xl border transition-all ${
-                          propertyType === type.id
-                            ? "border-teal-500 bg-teal-500/20 text-teal-300"
-                            : "border-[#1A1A1A] bg-[#F7F2EA]/50 text-white/70 hover:border-[#1A1A1A]"
-                        }`}
-                      >
-                        <type.icon className="w-6 h-6 mx-auto mb-2" />
-                        <p className="text-sm font-medium">{type.label}</p>
-                      </button>
-                    ))}
+            <div className="jbj-emerald-ring rounded-2xl">
+              <Card className="!border-0 rounded-2xl bg-gradient-to-br from-emerald-950 via-black to-emerald-900/70 overflow-hidden">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Building2 className="w-5 h-5 text-emerald-300" />
+                    Step 1: Property Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label className="text-white mb-3 block">Property Type</Label>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {propertyTypes.map((type) => {
+                        const active = propertyType === type.id;
+                        return (
+                          <button
+                            key={type.id}
+                            onClick={() => setPropertyType(type.id as PropertyType)}
+                            className={`relative p-4 rounded-xl transition-all text-left ${
+                              active
+                                ? "jbj-emerald-edge bg-gradient-to-br from-emerald-900/80 via-black to-emerald-950 text-emerald-200"
+                                : "border border-emerald-500/25 bg-black/40 text-white/80 hover:border-emerald-400/60 hover:bg-emerald-950/40"
+                            }`}
+                          >
+                            <type.icon className={`w-6 h-6 mx-auto mb-2 ${active ? "text-emerald-300" : "text-white/80"}`} />
+                            <p className={`text-sm font-medium text-center ${active ? "text-emerald-200" : "text-white/90"}`}>{type.label}</p>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <Label htmlFor="propertyName" className="text-white">Property Name (Optional)</Label>
-                  <Input
-                    id="propertyName"
-                    value={propertyName}
-                    onChange={(e) => setPropertyName(e.target.value)}
-                    placeholder="e.g., My Dubai Marina Apartment"
-                    className="bg-[#F7F2EA]/50 border-[#1A1A1A] text-white mt-2"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-white mb-3 block">Unit Preference</Label>
-                  <div className="flex gap-3">
-                    {[
-                      { id: "sqft", label: "Square Feet" },
-                      { id: "sqm", label: "Square Meters" },
-                      { id: "both", label: "Both" },
-                    ].map((unit) => (
-                      <button
-                        key={unit.id}
-                        onClick={() => setUnitPreference(unit.id as UnitType)}
-                        className={`px-4 py-2 rounded-lg border transition-all ${
-                          unitPreference === unit.id
-                            ? "border-teal-500 bg-teal-500/20 text-teal-300"
-                            : "border-[#1A1A1A] bg-[#F7F2EA]/50 text-white/70 hover:border-[#1A1A1A]"
-                        }`}
-                      >
-                        {unit.label}
-                      </button>
-                    ))}
+                  <div>
+                    <Label htmlFor="propertyName" className="text-white">Property Name (Optional)</Label>
+                    <Input
+                      id="propertyName"
+                      value={propertyName}
+                      onChange={(e) => setPropertyName(e.target.value)}
+                      placeholder="e.g., My Dubai Marina Apartment"
+                      className="bg-black/40 border-emerald-500/30 text-white placeholder:text-white/40 mt-2 focus-visible:ring-emerald-400"
+                    />
                   </div>
-                </div>
 
-                <Button 
-                  onClick={() => setStep(2)}
-                  disabled={!propertyType}
-                  className="w-full bg-teal-500 hover:bg-teal-600 text-white py-6"
-                >
-                  Continue
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
+                  <div>
+                    <Label className="text-white mb-3 block">Unit Preference</Label>
+                    <div className="flex gap-3 flex-wrap">
+                      {[
+                        { id: "sqft", label: "Square Feet" },
+                        { id: "sqm", label: "Square Meters" },
+                        { id: "both", label: "Both" },
+                      ].map((unit) => {
+                        const active = unitPreference === unit.id;
+                        return (
+                          <button
+                            key={unit.id}
+                            onClick={() => setUnitPreference(unit.id as UnitType)}
+                            className={`px-4 py-2 rounded-lg transition-all text-sm font-medium ${
+                              active
+                                ? "jbj-emerald-edge bg-gradient-to-r from-emerald-700 via-emerald-800 to-black text-emerald-100"
+                                : "border border-emerald-500/25 bg-black/40 text-white/80 hover:border-emerald-400/60 hover:bg-emerald-950/40"
+                            }`}
+                          >
+                            {unit.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <Button 
+                    onClick={() => setStep(2)}
+                    disabled={!propertyType}
+                    className="w-full bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-700 hover:from-emerald-400 hover:via-emerald-500 hover:to-teal-600 text-white py-6 shadow-[0_0_24px_rgba(16,185,129,0.35)]"
+                  >
+                    Continue
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </motion.div>
         )}
 
