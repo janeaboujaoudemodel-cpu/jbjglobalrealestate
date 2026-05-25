@@ -27,6 +27,7 @@ import SelectedRoleChip from "@/components/careers/SelectedRoleChip";
 import CareersEcosystem from "@/components/careers/CareersEcosystem";
 import CareersWhyJBJ from "@/components/careers/CareersWhyJBJ";
 import CareersFAQ from "@/components/careers/CareersFAQ";
+import CareersContactBlock from "@/components/careers/CareersContactBlock";
 
 interface OpenPosition {
   id: string;
