@@ -141,19 +141,18 @@ const ExploreServicesExpander = () => {
 
 
 
-      {/* Hero panel — keyed on active.id so title/description/CTA always re-mount in sync with the tab */}
+      {/* Hero panel — image fills full card; only a soft bottom gradient
+          keeps the text/CTA legible. Button uses frosted-glass white so the
+          image shows through behind it. */}
       <div key={active.id} className="relative h-[280px] md:h-[340px] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center animate-fade-in"
           style={{ backgroundImage: `url(${active.image})` }}
         />
-        {/* Left-anchored gradient — keeps right side of image fully visible
-            while guaranteeing text legibility on the left third. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent" />
+        {/* Soft bottom fade only — no heavy left wall, image stays crisp */}
+        <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
 
         <div className="relative h-full flex flex-col justify-end p-5 md:p-8 max-w-xl">
-          {/* Eyebrow "JBJ Service" removed per owner directive — the tab strip already identifies the active service. */}
           <h3
             className="text-white text-2xl md:text-3xl font-extrabold leading-tight"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 14px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9)" }}
@@ -168,21 +167,23 @@ const ExploreServicesExpander = () => {
           </p>
           <div className="mt-4">
             {active.available === false ? (
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 text-white border border-white/35 text-sm font-semibold backdrop-blur-sm">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 text-white border border-white/40 text-sm font-semibold backdrop-blur-md">
                 Coming soon
               </span>
             ) : (
               <Link
                 to={active.href}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-[#1A1A1A] font-semibold text-sm hover:bg-[#F7F2EA] transition-colors shadow-[0_6px_18px_rgba(0,0,0,0.25)]"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/25 hover:bg-white/40 backdrop-blur-md text-white font-semibold text-sm border border-white/50 transition-colors shadow-[0_8px_24px_rgba(0,0,0,0.35)]"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}
               >
-                Explore Now
-                <ArrowRight className="w-4 h-4" />
+                <span className="allow-white" style={{ color: "#FFFFFF" }}>Explore Now</span>
+                <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </Link>
             )}
           </div>
         </div>
       </div>
+
 
       {/* Footer CTA — navy blue, white text */}
       <div className="px-5 md:px-7 py-6 text-center bg-[#FDFBF7]">
