@@ -24,9 +24,9 @@ interface DeveloperLogoProps {
 // is enforced on the <img/> so wide wordmarks AND square marks render at
 // their largest fitting size and are NEVER cropped.
 const UNIFIED_PLATE =
-  "h-10 w-14 sm:h-11 sm:w-16 inline-flex items-center justify-center overflow-hidden " +
+  "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden " +
   "rounded-lg bg-[#FDFBF7] border border-[#B89555]/45 " +
-  "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-[3px]";
+  "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-[4px]";
 
 
 export function DeveloperLogo({
