@@ -32,6 +32,80 @@
   --t-gold-soft:  rgba(184, 149, 85, 0.40);
   --t-gold-faint: rgba(184, 149, 85, 0.25);
   --t-gold-ring:  rgba(184, 149, 85, 0.55);
+  --t-form-blue:  #102540;
+  --t-form-blue-soft: rgba(16, 37, 64, 0.22);
+  --t-form-blue-muted: rgba(16, 37, 64, 0.58);
+  --t-form-blue-ring: rgba(16, 37, 64, 0.18);
+  --t-form-blue-tint: rgba(16, 37, 64, 0.06);
+}
+
+.jbj-form-label {
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
+  font-weight: 600 !important;
+}
+
+.jbj-form-field,
+.jbj-form-field:hover,
+.jbj-form-field:focus,
+.jbj-form-field:focus-visible {
+  background-color: transparent !important;
+  border: 2px solid var(--t-form-blue) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: none !important;
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
+}
+
+.jbj-form-field::placeholder {
+  color: var(--t-form-blue-muted) !important;
+  -webkit-text-fill-color: var(--t-form-blue-muted) !important;
+  opacity: 1 !important;
+}
+
+.jbj-form-field:focus,
+.jbj-form-field:focus-visible {
+  border-color: var(--t-form-blue) !important;
+  box-shadow: 0 0 0 3px var(--t-form-blue-ring) !important;
+}
+
+.jbj-form-trigger-filled {
+  background-color: var(--t-form-blue) !important;
+  border: 2px solid var(--t-form-blue) !important;
+  box-shadow: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+.jbj-form-trigger-filled span,
+.jbj-form-trigger-filled svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+.jbj-form-popover {
+  background-color: var(--t-page) !important;
+  border: 2px solid var(--t-form-blue) !important;
+}
+
+.jbj-form-option {
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
+}
+
+.jbj-form-option:hover,
+.jbj-form-option:focus,
+.jbj-form-option[data-selected="true"] {
+  background-color: var(--t-form-blue-tint) !important;
+}
+
+.jbj-form-dropzone {
+  background-color: transparent !important;
+  border: 2px dashed var(--t-form-blue) !important;
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
 }
 
 /* Canonical semantic utilities. !important so they survive any
@@ -115,7 +189,7 @@
 }
 
 [data-careers-page] .careers-blue-border {
-  border-color: rgba(184, 149, 85, 0.40) !important;
+  border-color: var(--t-form-blue) !important;
 }
 
 [data-careers-page] .careers-blue-field,
@@ -127,19 +201,27 @@
 [data-careers-page] input.careers-blue-field:focus,
 [data-careers-page] input.careers-blue-field:focus-visible {
   background-color: transparent !important;
-  border: 1px solid rgba(184, 149, 85, 0.40) !important;
+  border: 2px solid var(--t-form-blue) !important;
   box-shadow: none !important;
-  --tw-ring-color: rgba(184, 149, 85, 0.55) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  --tw-ring-color: var(--t-form-blue-ring) !important;
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
+}
+
+[data-careers-page] .careers-blue-field::placeholder,
+[data-careers-page] input.careers-blue-field::placeholder,
+[data-careers-page] .careers-phone-tel::placeholder {
+  color: var(--t-form-blue-muted) !important;
+  -webkit-text-fill-color: var(--t-form-blue-muted) !important;
+  opacity: 1 !important;
 }
 
 [data-careers-page] .careers-blue-field:focus,
 [data-careers-page] .careers-blue-field:focus-visible,
 [data-careers-page] input.careers-blue-field:focus,
 [data-careers-page] input.careers-blue-field:focus-visible {
-  border-color: #B89555 !important;
-  box-shadow: 0 0 0 3px rgba(184, 149, 85, 0.18) !important;
+  border-color: var(--t-form-blue) !important;
+  box-shadow: 0 0 0 3px var(--t-form-blue-ring) !important;
 }
 
 [data-careers-page] .careers-gold-border {
@@ -152,9 +234,9 @@
 [data-careers-page] .PhoneInputInput,
 [data-careers-page] input[type="tel"] {
   background-color: transparent !important;
-  border: 1px solid rgba(184, 149, 85, 0.40) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  border: 2px solid var(--t-form-blue) !important;
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
 }
 
 /* Country-code pill stays navy with white icons (locked) */
@@ -167,10 +249,10 @@
 [data-careers-page] .careers-phone-input input,
 [data-careers-page] .careers-phone-input input[type="tel"] {
   background: transparent !important;
-  border: 1px solid rgba(184, 149, 85, 0.40) !important;
+  border: 2px solid var(--t-form-blue) !important;
   border-radius: 0.5rem !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
   box-shadow: none !important;
   appearance: none !important;
   -webkit-appearance: none !important;
@@ -196,16 +278,16 @@
 [data-careers-page] .PhoneInputInput,
 [data-careers-page] input[placeholder="Search positions by title, department, or location"] {
   background-color: transparent !important;
-  border: 1px solid rgba(184, 149, 85, 0.40) !important;
+  border: 2px solid var(--t-form-blue) !important;
   box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
 }
 
 /* All form labels on careers page → navy */
 [data-careers-page] label {
-  color: #102540 !important;
-  -webkit-text-fill-color: #102540 !important;
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
   font-weight: 600 !important;
 }
 
@@ -225,76 +307,73 @@
 }
 
 /* ============================================================
- * GLOBAL FORM STANDARD — JBJ Navy Form
- * Opt in by adding `data-jbj-form` to a form, section or page.
- * Mirrors the Careers form: champagne fields, navy borders,
- * navy labels, h-12 / rounded-lg. Layout/widths stay up to the
- * consuming page — only the shape, color and chrome are
- * standardised so every form across the product matches.
+ * GLOBAL FORM STANDARD — JBJ Blue Form
+ * Applies automatically to forms site-wide and to any opt-in
+ * section marked with `data-jbj-form`.
  * ============================================================ */
 
-[data-jbj-form] label {
-  color: #102540 !important;
-  -webkit-text-fill-color: #102540 !important;
+:where(form, [data-jbj-form]) label {
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
   font-weight: 600 !important;
 }
-[data-jbj-form] label[for*="consent"],
-[data-jbj-form] label[for*="terms"],
-[data-jbj-form] label[for*="agree"] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+
+:where(form, [data-jbj-form]) label[for*="consent"],
+:where(form, [data-jbj-form]) label[for*="terms"],
+:where(form, [data-jbj-form]) label[for*="agree"] {
+  color: var(--t-ink) !important;
+  -webkit-text-fill-color: var(--t-ink) !important;
   font-weight: 400 !important;
 }
 
-[data-jbj-form] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]):not([type="color"]),
-[data-jbj-form] textarea,
-[data-jbj-form] select,
-[data-jbj-form] button[role="combobox"],
-[data-jbj-form] [data-jbj-field] {
+:where(form, [data-jbj-form]) :where(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]):not([type="color"]),
+  textarea,
+  select,
+  button[role="combobox"],
+  [data-jbj-field],
+  [data-searchable-trigger]
+) {
   background-color: transparent !important;
-  border: 1px solid rgba(184, 149, 85, 0.40) !important;
+  border: 2px solid var(--t-form-blue) !important;
   border-radius: 0.5rem !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
   box-shadow: none !important;
   min-height: 3rem;
 }
 
-[data-jbj-form] input::placeholder,
-[data-jbj-form] textarea::placeholder {
-  color: rgba(26, 26, 26, 0.55) !important;
-  -webkit-text-fill-color: rgba(26, 26, 26, 0.55) !important;
+:where(form, [data-jbj-form]) :where(input, textarea)::placeholder {
+  color: var(--t-form-blue-muted) !important;
+  -webkit-text-fill-color: var(--t-form-blue-muted) !important;
   opacity: 1 !important;
 }
 
-[data-jbj-form] input:focus,
-[data-jbj-form] input:focus-visible,
-[data-jbj-form] textarea:focus,
-[data-jbj-form] textarea:focus-visible,
-[data-jbj-form] select:focus,
-[data-jbj-form] button[role="combobox"]:focus,
-[data-jbj-form] button[role="combobox"]:focus-visible {
+:where(form, [data-jbj-form]) :where(input, textarea, select, button[role="combobox"], [data-jbj-field], [data-searchable-trigger]):focus,
+:where(form, [data-jbj-form]) :where(input, textarea, select, button[role="combobox"], [data-jbj-field], [data-searchable-trigger]):focus-visible {
   outline: none !important;
-  border-color: #B89555 !important;
-  box-shadow: 0 0 0 3px rgba(184, 149, 85, 0.18) !important;
+  border-color: var(--t-form-blue) !important;
+  box-shadow: 0 0 0 3px var(--t-form-blue-ring) !important;
 }
 
-[data-jbj-form] [data-jbj-dropzone] {
-  border: 1px dashed rgba(184, 149, 85, 0.55) !important;
-  border-radius: 0.5rem !important;
+:where(form, [data-jbj-form]) [data-jbj-dropzone] {
+  border: 2px dashed var(--t-form-blue) !important;
+  border-radius: 0.75rem !important;
   background-color: transparent !important;
-  color: #1A1A1A !important;
+  color: var(--t-form-blue) !important;
+  -webkit-text-fill-color: var(--t-form-blue) !important;
 }
 
-[data-jbj-form] [data-phone-code-trigger] {
-  background-color: #102540 !important;
-  border: 2px solid #102540 !important;
+:where(form, [data-jbj-form]) [data-phone-code-trigger] {
+  background-color: var(--t-form-blue) !important;
+  border: 2px solid var(--t-form-blue) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow: none !important;
 }
-[data-jbj-form] [data-phone-code-trigger] span,
-[data-jbj-form] [data-phone-code-trigger] svg {
+
+:where(form, [data-jbj-form]) [data-phone-code-trigger] span,
+:where(form, [data-jbj-form]) [data-phone-code-trigger] svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
