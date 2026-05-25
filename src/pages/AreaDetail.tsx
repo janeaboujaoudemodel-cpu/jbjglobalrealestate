@@ -217,7 +217,7 @@ const AreaDetail = () => {
       <div ref={sentinelRef} className="h-0" />
 
       {/* Phase 1: Inline filter bar — always rendered in natural flow */}
-      <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 px-4 md:px-6 border-b border-[#B89555]/20 transition-all duration-300">
+      <div className="sticky top-[88px] z-[60] bg-gradient-to-r from-[#FDFBF7]/95 via-[#F7F2EA]/95 to-[#EFE6D6]/95 backdrop-blur-md py-3 px-4 md:px-6 border-b border-[#B89555]/20 shadow-[0_4px_20px_rgba(184,149,85,0.10)] transition-all duration-300">
         <div className="container mx-auto">
           <FilterShortcutBar
             variant="light"
@@ -228,6 +228,7 @@ const AreaDetail = () => {
           />
         </div>
       </div>
+
 
       {/* Phase 2: Fixed portal copy — only when scrolled past sentinel */}
       {isFixed && !bottomReached && createPortal(
