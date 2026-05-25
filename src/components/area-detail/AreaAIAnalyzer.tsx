@@ -604,13 +604,13 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                 </div>
               )}
               
-              {/* Rating Card - Enhanced with radial gauge */}
+              {/* Rating Card - Premium navy + gold champagne */}
               {ratingScore !== null && (
-                <div className="bg-[#1A1A1A] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden">
-                  {/* Ambient glow */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#EFE6D6]/10 rounded-full blur-[60px] pointer-events-none" />
+                <div className="bg-gradient-to-br from-[#102540] via-[#0c1c30] to-[#102540] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden border border-[#B89555]/40">
+                  {/* Ambient gold glow */}
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#B89555]/20 rounded-full blur-[60px] pointer-events-none" />
                   
-                  <Star className="w-7 h-7 text-[#1A1A1A] mb-3 relative z-10" />
+                  <Star className="w-7 h-7 text-[#B89555] mb-3 relative z-10" fill="#B89555" />
                   
                   {/* Radial gauge */}
                   <div className="relative w-32 h-32 mb-3">
@@ -618,8 +618,8 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                       <PieChart>
                         <Pie
                           data={[
-                            { value: ratingScore, fill: '#D4AF37' },
-                            { value: 10 - ratingScore, fill: 'rgba(255,255,255,0.08)' },
+                            { value: ratingScore, fill: '#B89555' },
+                            { value: 10 - ratingScore, fill: 'rgba(255,255,255,0.10)' },
                           ]}
                           cx="50%"
                           cy="50%"
@@ -630,29 +630,29 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                           dataKey="value"
                           stroke="none"
                         >
-                          <Cell fill="#D4AF37" />
-                          <Cell fill="rgba(255,255,255,0.08)" />
+                          <Cell fill="#B89555" />
+                          <Cell fill="rgba(255,255,255,0.10)" />
                         </Pie>
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-4xl font-bold text-[#1A1A1A]">{ratingScore}</span>
-                      <span className="text-[#1A1A1A]/70 text-[10px] font-medium">/10</span>
+                      <span className="text-4xl font-bold text-[#B89555]">{ratingScore}</span>
+                      <span className="text-white/60 text-[10px] font-medium">/10</span>
                     </div>
                   </div>
                   
-                  <div className="text-[#1A1A1A]/70 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
+                  <div className="text-white text-sm font-semibold mb-2 relative z-10">Investment Rating</div>
                   {sections?.rating && (
-                    <p className="text-[#1A1A1A]/70 text-xs leading-relaxed max-w-[200px] relative z-10">
+                    <p className="text-white/75 text-xs leading-relaxed max-w-[200px] relative z-10">
                       {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim().slice(0, 120)}
                     </p>
                   )}
                   
                   {/* Rating quality label */}
-                  <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 ${
-                    ratingScore >= 8 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                    ratingScore >= 6 ? 'bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/30' :
-                    'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/30'
+                  <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 border ${
+                    ratingScore >= 8 ? 'bg-[#B89555]/20 text-[#B89555] border-[#B89555]/50' :
+                    ratingScore >= 6 ? 'bg-white/10 text-white border-white/25' :
+                    'bg-amber-500/20 text-amber-300 border-amber-500/40'
                   }`}>
                     {ratingScore >= 8 ? 'Excellent' : ratingScore >= 6 ? 'Good' : 'Moderate'}
                   </div>
