@@ -28,14 +28,14 @@ const OverseasInvestorsStrip = () => {
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="overseas-investors-strip-link allow-white group flex flex-wrap md:flex-nowrap items-center justify-between gap-4 md:gap-8 px-6 sm:px-10 md:px-14 py-10 md:py-14 lg:py-16 text-white transition-colors hover:bg-[#1a3d63]"
+        className="overseas-investors-strip-link allow-white group flex flex-wrap xl:flex-nowrap items-center justify-between gap-4 md:gap-8 px-6 sm:px-10 md:px-14 py-10 md:py-14 lg:py-16 text-white transition-colors hover:bg-[#1a3d63]"
       >
 
-        {/* Left: globe + headline (wraps, never overflows) */}
-        <span className="allow-white flex items-center gap-3 min-w-0 flex-1">
+        {/* Left: globe + headline — full width below xl so it never gets crushed into one-char-per-line */}
+        <span className="allow-white flex items-center gap-3 min-w-0 basis-full xl:basis-auto xl:flex-1">
           <Globe className="w-6 h-6 md:w-7 md:h-7 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           <span
-            className="allow-white text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-tight tracking-tight break-words"
+            className="allow-white text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-tight tracking-tight break-normal"
             style={{ color: "#FFFFFF" }}
           >
             Invest in Dubai from anywhere in the world
