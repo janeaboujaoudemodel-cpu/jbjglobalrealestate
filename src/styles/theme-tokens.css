@@ -710,9 +710,10 @@
 [data-careers-page] form button[type="submit"],
 [data-careers-page] form button[type="button"][data-allow-dark-cta],
 [data-careers-page] #open-positions button[data-allow-dark-cta] {
-  background: linear-gradient(180deg, #143052 0%, #102540 100%) !important;
+  background: var(--t-careers-navy) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
+  border-color: var(--t-careers-border-strong) !important;
 }
 
 [data-careers-page] #open-positions [class*="rounded-2xl border bg-"][class*="cursor-pointer"] {
@@ -720,12 +721,25 @@
 }
 
 [data-careers-page] form > div:last-of-type > p {
-  color: #102540 !important;
-  -webkit-text-fill-color: #102540 !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: var(--t-careers-border-strong) !important;
+  background: linear-gradient(180deg, #FBF6EE 0%, #F2E8D8 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.75), 0 10px 22px -18px rgba(7,27,51,0.36) !important;
 }
 
 [data-careers-page] section button[aria-expanded="true"] + div {
-  background: linear-gradient(180deg, rgba(247,242,234,0.45), rgba(239,230,214,0.28)) !important;
+  background: linear-gradient(180deg, rgba(247,242,234,0.94), rgba(233,221,200,0.72)) !important;
+}
+
+[data-careers-page] .careers-faq-open {
+  background: linear-gradient(180deg, #FBF6EE 0%, #EEE2CF 100%) !important;
+  border-color: rgba(7, 27, 51, 0.55) !important;
+  box-shadow: 0 22px 48px -32px rgba(7, 27, 51, 0.34) !important;
+}
+
+[data-careers-page] .careers-faq-closed {
+  border-color: rgba(191, 164, 106, 0.72) !important;
 }
 
 
