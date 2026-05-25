@@ -48,8 +48,8 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
     <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-[#1A1A1A]" />
-          <h3 className="font-bold text-[#1A1A1A] text-lg">Price Per Sqft</h3>
+          <BarChart3 className="w-5 h-5 text-[#B89555]" />
+          <h3 className="font-bold text-[#102540] text-lg">Price Per Sqft</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
           isPositive ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'
