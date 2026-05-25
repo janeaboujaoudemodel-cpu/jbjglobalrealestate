@@ -629,7 +629,16 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 disabled={disabled}
                 placeholder={placeholder || "Phone number"}
                 className="careers-phone-tel flex h-12 w-full rounded-lg px-3 py-2 text-base placeholder:text-[#102540]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#102540]/30 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
-                style={{ border: "2px solid #102540", backgroundColor: "#F7F2EA", color: "#102540", boxShadow: "none" }}
+                style={{
+                  border: "2px solid #102540",
+                  borderLeft: "2px solid #102540",
+                  backgroundColor: "#F7F2EA",
+                  color: "#102540",
+                  boxShadow: "inset 0 0 0 2px #102540",
+                  outline: "2px solid transparent",
+                  WebkitAppearance: "none",
+                  appearance: "none",
+                }}
               />
             ) : (
               <Input 
