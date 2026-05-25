@@ -97,11 +97,12 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
 
         {/* Breadcrumb */}
         <motion.nav className="flex items-center gap-2 text-sm mb-6" variants={fadeInUp}>
-          <Link to="/" className="text-[#1A1A1A]/70 hover:text-white transition-colors">Home</Link>
-          <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70" />
-          <Link to="/areas" className="text-[#1A1A1A]/70 hover:text-white transition-colors">Areas</Link>
-          <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70" />
-          <span className="text-[#1A1A1A]">{area.name}</span>
+          <Link to="/" className="text-white/70 hover:text-white transition-colors">Home</Link>
+          <ChevronRight className="w-4 h-4 text-white/60" />
+          <Link to="/areas" className="text-white/70 hover:text-white transition-colors">Areas</Link>
+          <ChevronRight className="w-4 h-4 text-white/60" />
+          <span className="text-white">{area.name}</span>
+
         </motion.nav>
 
         {/* Stats Bar */}
@@ -110,12 +111,14 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
           {(liveProjectCount ?? area.project_count_sale ?? area.property_count ?? 0) > 0 && (
             <button
               onClick={() => scrollToId('projects-section')}
-              className="flex items-center gap-2 bg-[#FDFBF7]/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-[#FDFBF7]/20 hover:border-[#B89555]/40 transition-all duration-200"
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3 cursor-pointer hover:bg-black/55 hover:border-[#B89555]/60 transition-all duration-200"
             >
-              <Building2 className="w-5 h-5 text-[#1A1A1A]" />
+              <Building2 className="w-5 h-5 text-white" />
               <div className="text-left">
-                <div className="text-xl font-bold text-white">{liveProjectCount ?? area.project_count_sale ?? area.property_count}</div>
-                <div className="text-[#1A1A1A]/70 text-xs">Projects</div>
+                <div className="text-xl font-bold text-white leading-tight">{liveProjectCount ?? area.project_count_sale ?? area.property_count}</div>
+                <div className="text-white/80 text-xs">Projects</div>
               </div>
             </button>
           )}
@@ -124,23 +127,25 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
           {(area.developer_count ?? 0) > 0 && (
             <button
               onClick={() => scrollToId('developers-section')}
-              className="flex items-center gap-2 bg-[#FDFBF7]/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-[#FDFBF7]/20 hover:border-[#B89555]/40 transition-all duration-200"
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3 cursor-pointer hover:bg-black/55 hover:border-[#B89555]/60 transition-all duration-200"
             >
-              <Users className="w-5 h-5 text-[#1A1A1A]" />
+              <Users className="w-5 h-5 text-white" />
               <div className="text-left">
-                <div className="text-xl font-bold text-white">{area.developer_count}</div>
-                <div className="text-[#1A1A1A]/70 text-xs">Developers</div>
+                <div className="text-xl font-bold text-white leading-tight">{area.developer_count}</div>
+                <div className="text-white/80 text-xs">Developers</div>
               </div>
             </button>
           )}
 
           {/* Avg Price/sqft */}
           {(area.avg_price_sqft ?? 0) > 0 && (
-            <div className="flex items-center gap-2 bg-[#FDFBF7]/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
-              <BarChart3 className="w-5 h-5 text-[#1A1A1A]" />
+            <div data-allow-dark-cta data-no-contrast-guard className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3">
+              <BarChart3 className="w-5 h-5 text-white" />
               <div>
-                <div className="text-xl font-bold text-white">AED {Math.round(area.avg_price_sqft!).toLocaleString()}</div>
-                <div className="text-[#1A1A1A]/70 text-xs">Avg. Price/sqft</div>
+                <div className="text-xl font-bold text-white leading-tight">AED {Math.round(area.avg_price_sqft!).toLocaleString()}</div>
+                <div className="text-white/80 text-xs">Avg. Price/sqft</div>
               </div>
             </div>
           )}
@@ -148,34 +153,35 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
           {/* DLD YTD Transactions */}
           {dldAreaData && (
             <>
-              <div className="flex items-center gap-2 bg-gradient-to-br from-gold/20 to-gold/10 backdrop-blur-sm border border-[#B89555]/40 rounded-xl px-5 py-3">
-                <Activity className="w-5 h-5 text-[#1A1A1A]" />
+              <div data-allow-dark-cta data-no-contrast-guard className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-[#B89555]/50 rounded-xl px-5 py-3">
+                <Activity className="w-5 h-5 text-[#B89555]" />
                 <div>
-                  <div className="text-xl font-bold text-white">{dldAreaData.transactions.toLocaleString()}</div>
-                  <div className="text-[#1A1A1A]/70 text-xs">DLD Transactions (YTD)</div>
+                  <div className="text-xl font-bold text-white leading-tight">{dldAreaData.transactions.toLocaleString()}</div>
+                  <div className="text-white/80 text-xs">DLD Transactions (YTD)</div>
                 </div>
               </div>
 
-              <div className={`flex items-center gap-2 backdrop-blur-sm border rounded-xl px-5 py-3 ${
+              <div data-allow-dark-cta data-no-contrast-guard className={`allow-white flex items-center gap-2 backdrop-blur-md border rounded-xl px-5 py-3 ${
                 isPositive
-                  ? 'bg-emerald-500/15 border-emerald-500/30'
-                  : 'bg-red-500/15 border-red-500/30'
+                  ? 'bg-emerald-500/20 border-emerald-400/40'
+                  : 'bg-red-500/20 border-red-400/40'
               }`}>
-                <ArrowUpRight className={`w-5 h-5 transition-transform ${isPositive ? 'text-emerald-400' : 'text-red-400 rotate-180'}`} />
+                <ArrowUpRight className={`w-5 h-5 transition-transform ${isPositive ? 'text-emerald-300' : 'text-red-300 rotate-180'}`} />
                 <div>
-                  <div className={`text-xl font-bold ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
+                  <div className={`text-xl font-bold leading-tight ${isPositive ? 'text-emerald-300' : 'text-red-300'}`}>
                     {dldAreaData.change}
                   </div>
-                  <div className="text-[#1A1A1A]/70 text-xs">YoY Growth</div>
+                  <div className="text-white/80 text-xs">YoY Growth</div>
                 </div>
               </div>
             </>
           )}
         </motion.div>
 
+
         {/* DLD source note */}
         {dldAreaData && (
-          <motion.p className="mt-3 text-[#1A1A1A]/70 text-[10px] uppercase tracking-widest" variants={fadeInUp}>
+          <motion.p className="mt-3 text-white/70 text-[10px] uppercase tracking-widest" variants={fadeInUp}>
             ↑ Live data · Dubai Land Department (DLD) · 2026 YTD
           </motion.p>
         )}
