@@ -515,12 +515,12 @@ const Quiz = () => {
                   <Wand2 className="w-10 h-10 text-[#1A1A1A]" />
                 </div>
 
-                <h1 className="text-[#1A1A1A] text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+                <h1 className="text-[#102540] text-4xl md:text-5xl font-bold mb-4 tracking-tight">
                   AI Property Finder
                 </h1>
 
-                <p className="text-[#1A1A1A]/70 text-lg mb-7 max-w-lg mx-auto leading-relaxed">
-                  Try our AI Property Matchmaker &amp; Analysis — completely{" "}
+                <p className="text-[#1A1A1A]/75 text-lg mb-7 max-w-lg mx-auto leading-relaxed">
+                  Find your perfect property match with our AI — it searches across every project on JBJ and matches them to your exact requirements. Completely{" "}
                   <span className="text-[#B89555] font-semibold">FREE</span>.
                 </p>
 
@@ -529,7 +529,7 @@ const Quiz = () => {
                   <div className="rounded-2xl p-5 text-left bg-gradient-to-br from-[#B89555]/15 to-[#B89555]/5 border border-[#B89555]/40 shadow-sm">
                     <div className="flex items-center gap-2 mb-3">
                       <Gift className="w-5 h-5 text-[#B89555]" />
-                      <span className="font-semibold text-[#B89555]">FREE Access</span>
+                      <span className="font-semibold text-[#1A1A1A]">FREE Access</span>
                     </div>
                     <ul className="space-y-2.5 text-sm">
                       {[
@@ -581,14 +581,10 @@ const Quiz = () => {
                   Save money by choosing the right property the first time.
                 </p>
 
-                <div className="mt-8 pt-6 border-t border-[#B89555]/25">
+                <div className="mt-8">
                   <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">
-                    Software developed and implemented by<br />
-                    <FounderContent fallback={<span className="text-[#1A1A1A] font-medium">JBJ Global Real Estate Team</span>}>
-                      <span className="text-[#1A1A1A] font-medium">The Founder &amp; CEO, Jane Bou Jaoude</span>
-                    </FounderContent><br />
-                    Designed exclusively for{" "}
-                    <span className="text-[#1A1A1A] font-medium">JBJ Global Real Estate</span>
+                    Powered by{" "}
+                    <span className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</span>
                   </p>
                 </div>
               </div>
