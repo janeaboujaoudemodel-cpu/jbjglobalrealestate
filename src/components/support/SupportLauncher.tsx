@@ -170,26 +170,21 @@ export default function SupportLauncher() {
           onClick={() => setOpen((v) => !v)}
           aria-label="Talk to JBJ support"
           data-surface="dark"
-          className="group fixed right-0 top-1/2 pointer-events-auto flex items-center gap-2 px-2 py-4 rounded-l-xl
-            border border-r-0 border-gold/70 bg-primary text-primary-foreground
-            shadow-[-10px_0_28px_hsl(var(--foreground)/0.34),0_0_0_1px_hsl(var(--gold)/0.24)] transform-gpu transition-[box-shadow,border-color] duration-200
-            hover:border-gold
-            hover:shadow-[-18px_0_42px_hsl(var(--foreground)/0.44),0_0_34px_hsl(var(--gold)/0.58)]
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          style={{ writingMode: "vertical-rl", transform: "translateY(-50%)", color: "hsl(var(--primary-foreground))", WebkitTextFillColor: "hsl(var(--primary-foreground))" }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = "hsl(var(--primary-foreground))";
-            e.currentTarget.style.backgroundColor = "hsl(var(--primary))";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = "hsl(var(--primary-foreground))";
-            e.currentTarget.style.backgroundColor = "hsl(var(--primary))";
-          }}
+          data-allow-dark-cta
+          data-no-contrast-guard
+          className="allow-white group fixed right-0 top-1/2 pointer-events-auto flex items-center gap-2 px-2 py-4 rounded-l-xl
+            border border-r-0 border-[#B89555]/70 bg-[#102540] text-white
+            shadow-[-10px_0_28px_rgba(0,0,0,0.34),0_0_0_1px_rgba(184,149,85,0.24)] transform-gpu transition-[background-color,box-shadow,border-color] duration-200
+            hover:bg-[#475569] hover:border-[#B89555]
+            hover:shadow-[-18px_0_42px_rgba(0,0,0,0.44),0_0_34px_rgba(184,149,85,0.58)]
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#102540]"
+          style={{ writingMode: "vertical-rl", transform: "translateY(-50%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
-          <Sparkles className="h-3.5 w-3.5 rotate-90" style={{ color: "hsl(var(--gold-light))", stroke: "hsl(var(--gold-light))" }} />
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: "hsl(var(--primary-foreground))", WebkitTextFillColor: "hsl(var(--primary-foreground))" }}>Contact us</span>
-          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+          <Sparkles className="h-3.5 w-3.5 rotate-90 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+          <span className="allow-white text-[11px] font-semibold uppercase tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact us</span>
+          <span className="h-2 w-2 rounded-full bg-[#B89555] animate-pulse" />
         </button>
+
 
         {/* Slide-out panel */}
         <AnimatePresence>

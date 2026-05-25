@@ -189,15 +189,16 @@ const ContinueSearching = ({
   const eyebrow = hasUserHistory ? "Recently viewed" : "Editor's picks";
 
   return (
-    <section className={`py-10 md:py-14 relative overflow-hidden ${className}`}>
-      {/* Premium champagne backdrop */}
+    <section className={`py-10 md:py-14 relative overflow-hidden w-screen left-1/2 right-1/2 -mx-[50vw] ${className}`}>
+      {/* Premium champagne backdrop — full-bleed edge to edge */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#FDFBF7] z-[1]" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent z-[2]" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent z-[2]" />
       </div>
 
-      <div className="px-4 md:px-6 lg:px-8 relative z-20">
+      <div className="px-4 md:px-8 lg:px-12 relative z-20">
+
         {/* Header */}
         <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
           <div className="flex items-center gap-3">
@@ -225,12 +226,15 @@ const ContinueSearching = ({
                 <PopoverTrigger asChild>
                   <button
                     aria-label="View search history"
-                    className="px-3 h-9 rounded-lg bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-xs font-semibold tracking-wide flex items-center gap-1.5 hover:bg-[#EFE6D6] hover:border-[#B89555] transition-all duration-300"
+                    data-surface="dark"
+                    data-allow-dark-cta
+                    className="allow-white px-3 h-9 rounded-lg bg-[#102540] hover:bg-[#475569] border border-[#B89555]/55 hover:border-[#B89555] text-white text-xs font-semibold tracking-wide flex items-center gap-1.5 transition-all duration-300 shadow-[0_8px_22px_-12px_rgba(16,37,64,0.55)] hover:-translate-y-0.5"
                   >
-                    <Clock className="w-3.5 h-3.5 text-[#B89555]" />
+                    <Clock className="w-3.5 h-3.5 text-white allow-white" />
                     View Search History
                   </button>
                 </PopoverTrigger>
+
                 <PopoverContent
                   align="end"
                   className="w-80 p-0 bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_18px_48px_-18px_rgba(0,0,0,0.35)] rounded-xl overflow-hidden"
@@ -523,30 +527,18 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
           }}
         />
 
-        {/* Top-left: Developer logo or type badge */}
-        <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
-          {showDevLogo ? (
+        {/* Top-left: Developer logo ONLY. JBJ monogram is the brand mark and is
+            never used as a developer fallback on these cards. */}
+        {(showDevLogo || showDevCardLogo) && (
+          <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
             <DeveloperLogo
               src={item.developerLogo}
-              alt={item.subtitle || "Developer"}
+              alt={item.subtitle || item.name || "Developer"}
               className=""
               onError={() => setLogoError(true)}
             />
-          ) : showDevCardLogo ? (
-            <DeveloperLogo
-              src={item.developerLogo}
-              alt={item.name}
-              className=""
-              onError={() => setLogoError(true)}
-            />
-          ) : (
-            // LOCKED: never show generic "Property" type badge. Use JBJ monogram fallback
-            // when developer logo is unavailable.
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-md bg-[#FDFBF7] border border-[#B89555]/50 text-[10px] font-black tracking-tight text-[#1A1A1A] shadow-sm">
-              JBJ
-            </span>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Favorite button */}
         {item.type === "property" && (
@@ -554,20 +546,23 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             <FavoriteButton projectId={item.id} showShortlist={false} size="sm" />
           </div>
         )}
-        {/* Bottom content - elevated */}
+        {/* Bottom content - elevated. Heavy bottom scrim + strong shadow guarantees
+            project-name contrast over any image. */}
+        <div className="absolute inset-x-0 bottom-0 h-1/2 z-10 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
         <div className="absolute bottom-0 left-0 right-0 p-3 z-20" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
-            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-[#1A1A1A]/85 backdrop-blur-sm text-[10px] text-[#E5C97A] font-semibold truncate border border-[#B89555]/40">
+            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/20 allow-white">
               {item.subtitle}
             </span>
           )}
           <h3
-            className="text-white font-semibold text-xs md:text-sm leading-tight truncate group-hover:text-[#E5C97A] transition-colors duration-300"
-            style={{ textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}
+            className="allow-white text-white font-bold text-xs md:text-sm leading-tight truncate transition-colors duration-300"
+            style={{ textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 1px 2px rgba(0,0,0,0.9)" }}
           >
             {typeof item.name === 'string' ? item.name : String(item.name || '')}
           </h3>
         </div>
+
       </Link>
     </div>
   );
