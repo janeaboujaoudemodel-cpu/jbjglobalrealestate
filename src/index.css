@@ -5082,7 +5082,7 @@ button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
   [class*="from-[#F7F2EA]"],
   [class*="from-[#F7F1E6]"]
 ):not(:where([data-surface="dark"], [data-surface="dark"] *, [data-surface="ink"], [data-surface="ink"] *, .jj-hero-fullscreen, .jj-hero-fullscreen *))
-  :where(h1, h2, h3, h4, h5, h6, p, span, label, small, strong, em, li, a, button, [role="button"], [role="tab"], [role="menuitem"], svg.lucide):not(:where(.bg-black, .bg-black *, .bg-primary, .bg-primary *, .bg-foreground, .bg-foreground *, [class~="bg-[#1A1A1A]"], [class~="bg-[#1A1A1A]"] *, [class*="bg-gray-8"], [class*="bg-gray-8"] *, [class*="bg-gray-9"], [class*="bg-gray-9"] *, [class*="bg-zinc-8"], [class*="bg-zinc-8"] *, [class*="bg-zinc-9"], [class*="bg-zinc-9"] *, [data-surface="dark"], [data-surface="dark"] *, [data-surface="ink"], [data-surface="ink"] *, .jj-hero-fullscreen, .jj-hero-fullscreen *, .text-price-orange, [class*="text-price-orange"])) {
+  :where(h1, h2, h3, h4, h5, h6, p, span, label, small, strong, em, li, a, button, [role="button"], [role="tab"], [role="menuitem"], svg.lucide):not(:where(.bg-black, .bg-black *, .bg-primary, .bg-primary *, .bg-foreground, .bg-foreground *, [class~="bg-[#1A1A1A]"], [class~="bg-[#1A1A1A]"] *, [class*="bg-gray-8"], [class*="bg-gray-8"] *, [class*="bg-gray-9"], [class*="bg-gray-9"] *, [class*="bg-zinc-8"], [class*="bg-zinc-8"] *, [class*="bg-zinc-9"], [class*="bg-zinc-9"] *, [data-surface="dark"], [data-surface="dark"] *, [data-surface="ink"], [data-surface="ink"] *, .jj-hero-fullscreen, .jj-hero-fullscreen *, .text-price-orange, [class*="text-price-orange"], [class*="text-[#102540]"], [class*="text-[#1a3d63]"])) {
   color: hsl(0 0% 10%) !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
