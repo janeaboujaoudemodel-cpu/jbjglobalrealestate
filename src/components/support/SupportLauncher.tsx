@@ -76,11 +76,43 @@ function useSuppressed() {
   return hidden;
 }
 
+function useOverHero() {
+  // True when the launcher's vertical center overlaps a dark hero section.
+  // We detect heroes by `[data-hero-dark]` markers, falling back to "near top
+  // of page" so any first-fold dark hero qualifies even without a marker.
+  const [overHero, setOverHero] = useState(true);
+  useEffect(() => {
+    const check = () => {
+      const centerY = window.innerHeight / 2;
+      const heroes = document.querySelectorAll<HTMLElement>("[data-hero-dark]");
+      let hit = false;
+      heroes.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top <= centerY && r.bottom >= centerY) hit = true;
+      });
+      if (!hit && heroes.length === 0) {
+        // Fallback: assume hero occupies first viewport.
+        hit = window.scrollY < window.innerHeight - 120;
+      }
+      setOverHero(hit);
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, []);
+  return overHero;
+}
+
 export default function SupportLauncher() {
   const [open, setOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
   const channels = useChannels(close);
   const hidden = useSuppressed();
+  const overHero = useOverHero();
 
   useLayoutEffect(() => {
     if (!open) return;
@@ -172,12 +204,14 @@ export default function SupportLauncher() {
           data-surface="dark"
           data-allow-dark-cta
           data-no-contrast-guard
-          className="allow-white group fixed right-0 top-1/2 pointer-events-auto flex items-center gap-2 px-2 py-4 rounded-l-xl
-            border border-r-0 border-[#B89555]/70 bg-[#102540] text-white
-            shadow-[-10px_0_28px_rgba(0,0,0,0.34),0_0_0_1px_rgba(184,149,85,0.24)] transform-gpu transition-[background-color,box-shadow,border-color] duration-200
-            hover:bg-[#1a3d63] hover:border-[#B89555]
-            hover:shadow-[-18px_0_42px_rgba(0,0,0,0.44),0_0_34px_rgba(184,149,85,0.58)]
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#102540]"
+          className={`allow-white group fixed right-0 top-1/2 pointer-events-auto flex items-center gap-2 px-2 py-4 rounded-l-xl
+            border border-r-0 border-[#B89555]/70 text-white transform-gpu
+            transition-[background-color,box-shadow,border-color,backdrop-filter] duration-300
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#102540]
+            ${overHero
+              ? "bg-white/8 backdrop-blur-xl backdrop-saturate-150 hover:bg-white/14 shadow-[-10px_0_28px_rgba(0,0,0,0.28),inset_0_0_0_1px_rgba(255,255,255,0.08),0_0_0_1px_rgba(184,149,85,0.20)] hover:shadow-[-18px_0_42px_rgba(0,0,0,0.36),inset_0_0_0_1px_rgba(255,255,255,0.14),0_0_24px_rgba(184,149,85,0.42)]"
+              : "bg-[#102540] hover:bg-[#1a3d63] hover:border-[#B89555] shadow-[-10px_0_28px_rgba(0,0,0,0.34),0_0_0_1px_rgba(184,149,85,0.24)] hover:shadow-[-18px_0_42px_rgba(0,0,0,0.44),0_0_34px_rgba(184,149,85,0.58)]"}
+          `}
           style={{ writingMode: "vertical-rl", transform: "translateY(-50%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
           <Sparkles className="h-3.5 w-3.5 rotate-90 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
