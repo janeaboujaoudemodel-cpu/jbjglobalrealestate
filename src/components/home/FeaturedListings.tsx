@@ -75,11 +75,22 @@ const FeaturedListings = () => {
             )}
           </div>
 
-          {/* View All CTA — premium pearl, kept inside the same gold-bordered card per owner directive */}
+          {/* View All CTA — navy blue, white text + icon */}
           <div className="text-center mt-10">
-            <PearlButton to="/properties" size="lg" trailingIcon={<ArrowRight strokeWidth={2.5} />}>
-              {t("featured.viewAll", "View All Projects")}
-            </PearlButton>
+            <Link
+              to="/properties"
+              data-surface="dark"
+              data-on-dark
+              data-no-contrast-guard
+              data-allow-dark-cta
+              className="allow-white inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 text-white text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)]"
+              style={{ color: "#FFFFFF" }}
+            >
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>
+                {t("featured.viewAll", "View All Projects")}
+              </span>
+              <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
+            </Link>
           </div>
         </div>
       </div>
