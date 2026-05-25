@@ -376,7 +376,7 @@ const AreaDetail = () => {
                   style={{ boxShadow: "0 6px 20px rgba(200,167,102,0.3), inset 0 2px 4px rgba(255,255,255,0.8)" }}
                 >
                   <span>View All Areas</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 text-[#B89555] group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </motion.div>
