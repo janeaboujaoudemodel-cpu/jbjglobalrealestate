@@ -148,8 +148,10 @@ const AreasWeCover = () => {
           </PearlButton>
         </div>
 
+        </div>
       </div>
     </section>
+
   );
 };
 
