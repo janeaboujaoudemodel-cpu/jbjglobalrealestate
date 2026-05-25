@@ -523,30 +523,18 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
           }}
         />
 
-        {/* Top-left: Developer logo or type badge */}
-        <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
-          {showDevLogo ? (
+        {/* Top-left: Developer logo ONLY. JBJ monogram is the brand mark and is
+            never used as a developer fallback on these cards. */}
+        {(showDevLogo || showDevCardLogo) && (
+          <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
             <DeveloperLogo
               src={item.developerLogo}
-              alt={item.subtitle || "Developer"}
+              alt={item.subtitle || item.name || "Developer"}
               className=""
               onError={() => setLogoError(true)}
             />
-          ) : showDevCardLogo ? (
-            <DeveloperLogo
-              src={item.developerLogo}
-              alt={item.name}
-              className=""
-              onError={() => setLogoError(true)}
-            />
-          ) : (
-            // LOCKED: never show generic "Property" type badge. Use JBJ monogram fallback
-            // when developer logo is unavailable.
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-md bg-[#FDFBF7] border border-[#B89555]/50 text-[10px] font-black tracking-tight text-[#1A1A1A] shadow-sm">
-              JBJ
-            </span>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Favorite button */}
         {item.type === "property" && (
@@ -554,20 +542,23 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             <FavoriteButton projectId={item.id} showShortlist={false} size="sm" />
           </div>
         )}
-        {/* Bottom content - elevated */}
+        {/* Bottom content - elevated. Heavy bottom scrim + strong shadow guarantees
+            project-name contrast over any image. */}
+        <div className="absolute inset-x-0 bottom-0 h-1/2 z-10 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
         <div className="absolute bottom-0 left-0 right-0 p-3 z-20" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
-            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-[#1A1A1A]/85 backdrop-blur-sm text-[10px] text-[#E5C97A] font-semibold truncate border border-[#B89555]/40">
+            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/20 allow-white">
               {item.subtitle}
             </span>
           )}
           <h3
-            className="text-white font-semibold text-xs md:text-sm leading-tight truncate group-hover:text-[#E5C97A] transition-colors duration-300"
-            style={{ textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}
+            className="allow-white text-white font-bold text-xs md:text-sm leading-tight truncate transition-colors duration-300"
+            style={{ textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 1px 2px rgba(0,0,0,0.9)" }}
           >
             {typeof item.name === 'string' ? item.name : String(item.name || '')}
           </h3>
         </div>
+
       </Link>
     </div>
   );
