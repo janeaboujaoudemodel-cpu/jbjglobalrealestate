@@ -49,12 +49,13 @@ const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => 
   );
 };
 
-/* ICON BOX - inverted on light surfaces (foreground bg, background icon) */
+/* ICON BOX — navy blue with white icon (global standard) */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 bg-foreground ${className}`}
+    data-no-contrast-guard
+    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 bg-[#102540] border border-[#102540]/40 shadow-sm allow-white ${className}`}
   >
-    <Icon className="w-5 h-5 text-background" />
+    <Icon className="w-5 h-5 text-white allow-white" />
   </div>
 );
 
