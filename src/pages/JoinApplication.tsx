@@ -597,11 +597,11 @@ export default function JoinApplication() {
                     <Badge
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="allow-white bg-[#102540] border border-[#B89555] inline-flex items-center gap-1.5 px-3 py-1"
+                      className="careers-open-badge bg-[#102540] border border-[#B89555] inline-flex items-center gap-1.5 px-3 py-1"
                       style={{ color: "#FFFFFF" }}
                     >
-                      <Briefcase className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-                      <span className="allow-white text-white" style={{ color: "#FFFFFF" }}>{filteredPositions.length} open</span>
+                      <Briefcase className="w-3 h-3" />
+                      <span>{filteredPositions.length} open</span>
                     </Badge>
                   </div>
                 </div>
@@ -840,7 +840,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                       placeholder="e.g. Dubai"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-2 border-[#B89555] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base focus-visible:ring-[#B89555]/40"
+                      className="careers-city-gold bg-[#FDFBF7] border-2 border-[#B89555] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base focus-visible:ring-[#B89555]/40"
                     />
 
                   </div>
