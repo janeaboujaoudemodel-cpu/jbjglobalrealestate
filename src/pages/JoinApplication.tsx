@@ -722,7 +722,7 @@ export default function JoinApplication() {
             </CardHeader>
 
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-7 px-1 md:px-3" noValidate>
+              <form onSubmit={handleSubmit} className="space-y-7 px-1 md:px-3" data-jbj-form noValidate>
                 {/* Honeypot */}
                 <div className="hidden" aria-hidden="true">
                   <Input
