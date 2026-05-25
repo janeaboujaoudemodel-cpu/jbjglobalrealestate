@@ -531,10 +531,11 @@ export default function JoinApplication() {
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
-            <h1 className="text-4xl md:text-5xl font-semibold mb-3 text-[#1A1A1A] tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-semibold mb-3 text-[#102540] tracking-tight">
               Join JBJ Global Real Estate
             </h1>
-            <p className="text-base md:text-lg text-[#1A1A1A]/75 max-w-2xl mx-auto">
+            <div className="mx-auto mb-4 h-[2px] w-24 bg-[#B89555] rounded-full" />
+            <p className="text-base md:text-lg text-[#B89555] font-medium max-w-2xl mx-auto">
               Apply to become part of our team. Complete the form below to start your journey.
             </p>
           </div>
@@ -543,25 +544,28 @@ export default function JoinApplication() {
           <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 shadow-sm mb-8">
             <CardContent className="pt-6">
               <div className="flex flex-col sm:flex-row items-center gap-4">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 bg-[#1A1A1A]">
-                  <Bot className="w-8 h-8 text-white" />
+                <div data-no-contrast-guard className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 bg-[#102540] border border-[#B89555]/60">
+                  <Bot className="w-8 h-8 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                 </div>
                 <div className="text-center sm:text-left flex-1">
-                  <h3 className="text-lg font-semibold mb-1 text-[#1A1A1A]">Prefer a Conversation?</h3>
+                  <h3 className="text-lg font-semibold mb-1 text-[#102540]">Prefer a Conversation?</h3>
                   <p className="text-sm text-[#1A1A1A]/75">
                     Meet Jessica — available 24/7 to support you. She'll collect your CV, qualify you, and conduct your interview.
                   </p>
                 </div>
                 <Link
                   to="/hr-agent"
-                  className="inline-flex items-center justify-center gap-2 rounded-md px-4 h-10 font-semibold shadow-sm hover:opacity-90 transition-opacity whitespace-nowrap bg-[#1A1A1A] text-white"
+                  data-allow-dark-cta
+                  data-no-contrast-guard
+                  className="allow-white inline-flex items-center justify-center gap-2 rounded-md px-4 h-10 font-semibold shadow-sm transition-colors whitespace-nowrap bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/60 text-white"
                 >
-                  <MessageCircle className="w-4 h-4 text-white" />
-                  <span className="text-white">Contact Our HR · Jessica</span>
+                  <MessageCircle className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  <span className="allow-white text-white">Contact Our HR · Jessica</span>
                 </Link>
               </div>
             </CardContent>
           </Card>
+
 
           {!user && (
             <Card className="border-2 border-[#B89555] bg-[#EFE6D6]/10 backdrop-blur-sm rounded-2xl shadow-md mb-6">
@@ -585,26 +589,32 @@ export default function JoinApplication() {
 
           {/* Open Positions */}
           {!positionsLoading && openPositions.length > 0 && (
-            <Card className="mb-8 bg-[#FDFBF7] border border-[#1A1A1A]/10 shadow-sm">
-              <CardHeader>
+            <Card className="mb-8 bg-[#FDFBF7] border-2 border-[#102540] shadow-sm">
+              <CardHeader className="pt-7">
                 <div className="flex items-center justify-between flex-wrap gap-3">
                   <div className="flex items-center gap-3">
-                    <CardTitle className="text-2xl text-[#1A1A1A]">Open Positions</CardTitle>
-                    <Badge className="bg-[#1A1A1A] text-white border-transparent">
-                      {filteredPositions.length} open
+                    <CardTitle className="text-2xl text-[#102540]">Open Positions</CardTitle>
+                    <Badge
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                      className="allow-white bg-[#102540] border border-[#B89555]/60 inline-flex items-center gap-1.5 px-2.5 py-0.5"
+                      style={{ color: "#FFFFFF" }}
+                    >
+                      <Briefcase className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                      <span className="allow-white text-white" style={{ color: "#FFFFFF" }}>{filteredPositions.length} open</span>
                     </Badge>
                   </div>
                 </div>
                 <CardDescription className="text-[#1A1A1A]/70">
-                  Tap <strong>Apply</strong> on any role to auto-select it below.
+                  Tap <strong className="text-[#B89555]">Apply</strong> on any role to auto-select it below.
                 </CardDescription>
                 <div className="relative mt-3">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/60" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#B89555]" />
                   <Input
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
                     placeholder="Search positions by title, department, or location"
-                    className="pl-9 bg-[#FDFBF7] border-[#1A1A1A]/15 text-[#1A1A1A] placeholder:text-[#1A1A1A]/50"
+                    className="pl-9 bg-[#F7F2EA] border border-[#B89555] text-[#1A1A1A] placeholder:text-[#1A1A1A]/50 focus-visible:ring-[#B89555]/40"
                   />
                 </div>
               </CardHeader>
@@ -619,19 +629,17 @@ export default function JoinApplication() {
                         <div
                           key={pos.id}
                           onClick={() => setFormData({ ...formData, positionApplied: pos.id })}
-                          className={`p-4 rounded-xl border bg-[#FDFBF7] shadow-sm transition-all cursor-pointer ${
+                          className={`p-4 rounded-xl border-2 bg-[#FDFBF7] shadow-sm transition-all cursor-pointer ${
                             selected
-                              ? "border-[#1A1A1A] ring-2 ring-[#1A1A1A] bg-[#F7F2EA]"
-                              : "border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40 hover:shadow-md"
+                              ? "border-[#102540] ring-2 ring-[#102540]/30 bg-[#F7F2EA]"
+                              : "border-[#102540]/70 hover:border-[#102540] hover:shadow-md"
                           }`}
                         >
                           <div className="flex items-start justify-between mb-2 gap-2">
-                            <h4 className="font-semibold text-base leading-snug text-[#1A1A1A]">{pos.title}</h4>
-                            {pos.is_broker_role && (
-                              <Badge className="border-transparent text-[10px] px-2 py-0.5 shrink-0 whitespace-nowrap bg-[#1A1A1A] text-white">
-                                <Star className="w-2.5 h-2.5 mr-0.5 text-white" /> Partner
-                              </Badge>
-                            )}
+                            <h4 className="font-semibold text-base leading-snug text-[#B89555]">{pos.title}</h4>
+                            <Badge className="border border-[#B89555] bg-[#F7F2EA] text-[#B89555] text-[10px] px-2 py-0.5 shrink-0 whitespace-nowrap">
+                              <Star className="w-2.5 h-2.5 mr-0.5 text-[#B89555]" /> Partner
+                            </Badge>
                           </div>
                           <div className="flex flex-wrap items-center gap-2 text-xs">
                             <Badge variant="outline" className="border-[#1A1A1A]/20 bg-[#F7F2EA] text-[10px] px-2 py-0.5 font-medium whitespace-nowrap text-[#1A1A1A]">
@@ -658,11 +666,15 @@ export default function JoinApplication() {
                                 e.stopPropagation();
                                 handleApplyPosition(pos.id);
                               }}
-                              className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90"
+                              className={
+                                selected
+                                  ? "bg-[#F7F2EA] text-[#B89555] border border-[#B89555] hover:bg-[#EFE6D6]"
+                                  : "bg-transparent text-[#B89555] border border-[#B89555] hover:bg-[#F7F2EA]"
+                              }
                             >
                               {selected ? (
                                 <>
-                                  <CheckCircle className="w-3.5 h-3.5 mr-1.5" /> Selected
+                                  <CheckCircle className="w-3.5 h-3.5 mr-1.5 text-[#B89555]" /> Selected
                                 </>
                               ) : (
                                 "Apply"
@@ -681,15 +693,15 @@ export default function JoinApplication() {
                       type="button"
                       variant="outline"
                       onClick={() => setShowAllPositions((v) => !v)}
-                      className="border-[#1A1A1A]/20 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA]"
+                      className="bg-[#F7F2EA] text-[#B89555] border border-[#B89555] hover:bg-[#EFE6D6]"
                     >
                       {showAllPositions ? (
                         <>
-                          <ChevronUp className="w-4 h-4 mr-1" /> Show less
+                          <ChevronUp className="w-4 h-4 mr-1 text-[#B89555]" /> Show less
                         </>
                       ) : (
                         <>
-                          <ChevronDown className="w-4 h-4 mr-1" /> View all {filteredPositions.length} positions
+                          <ChevronDown className="w-4 h-4 mr-1 text-[#B89555]" /> View all {filteredPositions.length} positions
                         </>
                       )}
                     </Button>
@@ -698,6 +710,7 @@ export default function JoinApplication() {
               </CardContent>
             </Card>
           )}
+
 
           {/* Application Form */}
           <div ref={formAnchorRef} />
