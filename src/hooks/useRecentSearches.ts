@@ -14,8 +14,12 @@ export interface RecentItem {
 }
 
 const STORAGE_KEY = "jbj_recent_searches";
-const MAX_ITEMS_PER_TYPE = 10;
-const MAX_TOTAL = 30;
+const MAX_ITEMS_PER_TYPE = 30;
+const MAX_TOTAL = 60;
+// Recents live for 30 days from first view, then auto-expire. Within that
+// window the order is STABLE — revisiting an item does not bump it to the
+// front and does not evict others.
+const TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
 const normalizeType = (value: unknown): RecentItemType | null => {
   if (typeof value !== "string") return null;
