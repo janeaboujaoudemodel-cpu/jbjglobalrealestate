@@ -73,7 +73,8 @@ export function ToolkitShowcaseCard() {
 
   return (
     <section className="bg-[#FDFBF7] py-10 md:py-14">
-      <div className="container mx-auto px-4 max-w-7xl">
+      <div className="w-full">
+
         <div className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)]">
           {/* Header */}
           <div className="px-5 md:px-7 pt-5 md:pt-6 pb-4">
