@@ -114,7 +114,7 @@ export function DeveloperLogo({
             // Emaar/Sobha to a faded look). White-on-dark marks still flip
             // to solid ink via the override `invert` flag.
             filter: override.invert
-              ? "invert(1) brightness(0)"
+              ? "invert(1) brightness(1)"
               : "contrast(1.08) saturate(1.1)",
           }}
         />
