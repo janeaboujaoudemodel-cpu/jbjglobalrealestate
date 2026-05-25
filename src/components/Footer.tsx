@@ -119,7 +119,7 @@ const FooterCurrencyUnit = () => {
         {currencyOpen && (
           <div
             className="absolute bottom-full mb-2 left-0 w-52 rounded-md overflow-hidden z-50 max-h-80 overflow-y-auto shadow-[0_20px_40px_rgba(0,0,0,0.55)]"
-            style={{ background: "#0F0E0C", border: `1px solid ${HAIRLINE}` }}
+            style={{ background: "#0d2138", border: `1px solid ${HAIRLINE}` }}
           >
             <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} aria-hidden="true" />
             {SUPPORTED_CURRENCIES.map((cur) => (
