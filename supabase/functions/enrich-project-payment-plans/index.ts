@@ -199,7 +199,10 @@ Deno.serve(async (req) => {
       .limit(1);
   } else {
     // Filter in JS for missing/invalid breakdowns — easier than complex SQL on jsonb shape
-    query = query.or("payment_breakdown.is.null,payment_plan.is.null");
+    // Only pick rows we haven't tried yet (payment_plan IS NULL). After every
+    // attempt we set payment_plan to a real summary or to "TBD", so the same
+    // row is never re-picked in a future batch.
+    query = query.is("payment_plan", null);
   }
 
   const { data: projects, error } = await query;
