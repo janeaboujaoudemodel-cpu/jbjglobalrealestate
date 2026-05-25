@@ -134,14 +134,14 @@ export function ToolkitShowcaseCard() {
 
 
 
-          {/* Active tool hero panel — keyed on active.id so it remounts cleanly */}
+          {/* Active tool hero panel — image fills card; soft bottom fade
+              only; frosted-glass CTA so the image shows through. */}
           <div key={active.id} className="relative h-[280px] md:h-[340px] overflow-hidden">
             <div
               className="absolute inset-0 bg-cover bg-center animate-fade-in"
               style={{ backgroundImage: `url(${active.image})` }}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
 
             <div className="relative h-full flex flex-col justify-end p-5 md:p-8 max-w-xl">
               <h3
@@ -159,14 +159,16 @@ export function ToolkitShowcaseCard() {
               <div className="mt-4">
                 <Link
                   to={active.href}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-[#1A1A1A] font-semibold text-sm hover:bg-[#F7F2EA] transition-colors shadow-[0_6px_18px_rgba(0,0,0,0.25)]"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/25 hover:bg-white/40 backdrop-blur-md text-white font-semibold text-sm border border-white/50 transition-colors shadow-[0_8px_24px_rgba(0,0,0,0.35)]"
+                  style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}
                 >
-                  {active.cta}
-                  <ArrowRight className="w-4 h-4" />
+                  <span className="allow-white" style={{ color: "#FFFFFF" }}>{active.cta}</span>
+                  <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                 </Link>
               </div>
             </div>
           </div>
+
 
           {/* Footer — Explore JBJ Tools CTA in navy blue */}
           <div className="px-5 md:px-7 py-6 text-center bg-[#FDFBF7]">
