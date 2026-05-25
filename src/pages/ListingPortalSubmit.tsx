@@ -608,57 +608,63 @@ const ListingPortalSubmit = () => {
               <Badge className="mb-3 bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/40 px-4 py-1.5">
                 <Wand2 className="w-3.5 h-3.5 mr-2" /> AI-Powered
               </Badge>
-              <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
+              <h1 className="text-2xl md:text-3xl font-bold text-[#102540] mb-2">
                 Smart Listing Creator
               </h1>
-              <p className="text-[#1A1A1A]/70 text-sm">
+              <p className="text-[#B89555] text-sm font-medium">
                 Upload your documents and let AI create a professional listing for you
               </p>
             </div>
 
-            {/* Draft Action Bar */}
-            <FormDraftBar
-              hasDraft={phase !== 'upload' || uploadedDocs.length > 0}
-              onSaveDraft={() => {
-                const stateToSave = { phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode, sourceUrl, sourceText };
-                sessionStorage.setItem(SESSION_KEY, JSON.stringify(stateToSave));
-                toast.success("Draft saved successfully");
-              }}
-              onReset={() => {
-                sessionStorage.removeItem(SESSION_KEY);
-                setPhase('upload');
-                setUploadedDocs([]);
-                setExtractedData(null);
-                setUploadedImageUrls([]);
-                setPricePrediction(null);
-                setForm({ title: '', description: '', listing_type: initialListingType, listing_category: initialCategory, property_type: '', developer_name: '', project_name: '', location: '', emirate: 'Dubai', area: '', bedrooms: '', bathrooms: '', area_sqft: '', price: '', furnishing: '', handover_date: '', payment_plan: '', amenities: [], key_features: [] });
-                toast.info("Form cleared");
-              }}
-              onNew={() => {
-                sessionStorage.removeItem(SESSION_KEY);
-                setPhase('upload');
-                setUploadedDocs([]);
-                setExtractedData(null);
-                setUploadedImageUrls([]);
-                setPricePrediction(null);
-                setForm({ title: '', description: '', listing_type: initialListingType, listing_category: initialCategory, property_type: '', developer_name: '', project_name: '', location: '', emirate: 'Dubai', area: '', bedrooms: '', bathrooms: '', area_sqft: '', price: '', furnishing: '', handover_date: '', payment_plan: '', amenities: [], key_features: [] });
-                toast.info("New listing started");
-              }}
-              label="Listing"
-              theme="gold"
-            />
+            {/* Draft Action Bar + Progress steps — connected blue header */}
+            <div className="mb-8 rounded-2xl bg-[#102540]/15 border border-[#102540]/30 overflow-hidden">
+              <div className="[&>div]:mb-0 [&>div]:rounded-none [&>div]:border-0 [&>div]:bg-transparent">
+                <FormDraftBar
+                  hasDraft={phase !== 'upload' || uploadedDocs.length > 0}
+                  onSaveDraft={() => {
+                    const stateToSave = { phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode, sourceUrl, sourceText };
+                    sessionStorage.setItem(SESSION_KEY, JSON.stringify(stateToSave));
+                    toast.success("Draft saved successfully");
+                  }}
+                  onReset={() => {
+                    sessionStorage.removeItem(SESSION_KEY);
+                    setPhase('upload');
+                    setUploadedDocs([]);
+                    setExtractedData(null);
+                    setUploadedImageUrls([]);
+                    setPricePrediction(null);
+                    setForm({ title: '', description: '', listing_type: initialListingType, listing_category: initialCategory, property_type: '', developer_name: '', project_name: '', location: '', emirate: 'Dubai', area: '', bedrooms: '', bathrooms: '', area_sqft: '', price: '', furnishing: '', handover_date: '', payment_plan: '', amenities: [], key_features: [] });
+                    toast.info("Form cleared");
+                  }}
+                  onNew={() => {
+                    sessionStorage.removeItem(SESSION_KEY);
+                    setPhase('upload');
+                    setUploadedDocs([]);
+                    setExtractedData(null);
+                    setUploadedImageUrls([]);
+                    setPricePrediction(null);
+                    setForm({ title: '', description: '', listing_type: initialListingType, listing_category: initialCategory, property_type: '', developer_name: '', project_name: '', location: '', emirate: 'Dubai', area: '', bedrooms: '', bathrooms: '', area_sqft: '', price: '', furnishing: '', handover_date: '', payment_plan: '', amenities: [], key_features: [] });
+                    toast.info("New listing started");
+                  }}
+                  label="Listing"
+                  theme="blue"
+                />
+              </div>
 
-            {/* Progress indicator — 6 steps */}
-            <div className="flex gap-1.5 mb-8">
-              {PHASES.map((step, i) => {
-                const stepIndex = getPhaseIndex();
-                return (
-                  <div key={step} className="flex-1">
-                    <div className={`h-1.5 rounded-full transition-all ${i <= stepIndex ? 'bg-[#EFE6D6]' : 'bg-[#EFE6D6]/20'}`} />
-                    <p className={`text-[9px] mt-1 text-center ${i <= stepIndex ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`}>{step}</p>
-                  </div>
-                );
-              })}
+              {/* Progress indicator — connected to the New Listing card, centered */}
+              <div className="border-t border-[#102540]/15 px-6 py-4">
+                <div className="flex gap-1.5 max-w-2xl mx-auto">
+                  {PHASES.map((step, i) => {
+                    const stepIndex = getPhaseIndex();
+                    return (
+                      <div key={step} className="flex-1">
+                        <div className={`h-1.5 rounded-full transition-all ${i <= stepIndex ? 'bg-[#102540]' : 'bg-[#102540]/15'}`} />
+                        <p className={`text-[9px] mt-1 text-center font-medium ${i <= stepIndex ? 'text-[#102540]' : 'text-[#102540]/50'}`}>{step}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
 
             <AnimatePresence mode="wait">
@@ -672,7 +678,7 @@ const ListingPortalSubmit = () => {
                   className="space-y-6"
                 >
                   <div className="relative">
-                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#FDFBF7]/40 border border-[#B89555]/15" />
+                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#102540]/15 border border-[#102540]/30" />
                     <div className="relative space-y-6 p-3">
                       {/* Category Selection */}
                       <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
@@ -806,9 +812,10 @@ const ListingPortalSubmit = () => {
                         <Button
                           onClick={runAIExtraction}
                           disabled={uploadedDocs.length === 0 && !sourceUrl.trim() && !sourceText.trim()}
-                          className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] border-0 h-12 text-base disabled:opacity-50"
+                          data-allow-dark-cta
+                          className="flex-1 bg-white hover:bg-[#102540]/5 text-[#102540] border-2 border-[#102540] h-12 text-base font-semibold disabled:opacity-50 [&_svg]:text-[#102540]"
                         >
-                          <Sparkles className="w-5 h-5 mr-2" />
+                          <Sparkles className="w-5 h-5 mr-2 text-[#102540]" />
                           Extract with AI
                           {uploadedDocs.length > 0 && ` (${uploadedDocs.length} file${uploadedDocs.length === 1 ? '' : 's'})`}
                           {sourceUrl.trim() && ' + URL'}
@@ -816,7 +823,8 @@ const ListingPortalSubmit = () => {
                         </Button>
                         <Button
                           onClick={() => setPhase('pricing_ai')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+                          data-allow-dark-cta
+                          className="bg-transparent border-2 border-[#B89555]/50 text-[#B89555] hover:bg-[#B89555]/10 hover:text-[#B89555] hover:border-[#B89555] h-12 font-semibold transition-all duration-300"
                         >
                           Skip — Fill Manually
                         </Button>

@@ -23,10 +23,10 @@ const themeMap = {
     newBtn: 'border-[#B89555]/40 text-foreground hover:bg-[#EFE6D6]/10',
   },
   blue: {
-    bar: 'bg-[#FDFBF7]/40 border border-blue-300/30',
-    icon: 'text-blue-600',
-    save: 'bg-blue-600 text-white hover:bg-blue-700',
-    newBtn: 'border-blue-400/40 text-foreground hover:bg-blue-50',
+    bar: 'bg-[#102540]/15 border border-[#102540]/30 rounded-xl',
+    icon: 'text-[#102540]',
+    save: 'bg-[#102540] text-white hover:bg-[#1a3d63] rounded-md',
+    newBtn: 'border-[#102540]/40 text-[#102540] hover:bg-[#102540]/10 rounded-md',
   },
   purple: {
     bar: 'bg-[#FDFBF7]/40 border border-purple-300/30',
