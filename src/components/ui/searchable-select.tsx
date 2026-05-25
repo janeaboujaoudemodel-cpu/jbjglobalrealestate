@@ -1,11 +1,14 @@
 import * as React from "react";
 import { useState, useMemo, useRef, useEffect } from "react";
 import { Check, ChevronsUpDown, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { getCountryFlagForName, getLanguageFlagForName } from "@/constants/localeOptions";
+import {
+  getCountryFlagForName,
+  getLanguageFlagForName,
+  getNationalityFlagForName,
+} from "@/constants/localeOptions";
 
 interface SearchableSelectProps {
   value: string;
@@ -18,7 +21,7 @@ interface SearchableSelectProps {
   triggerClassName?: string;
   disabled?: boolean;
   showFlags?: boolean;
-  flagType?: 'country' | 'language';
+  flagType?: "country" | "language" | "nationality";
 }
 
 export function SearchableSelect({
@@ -37,19 +40,19 @@ export function SearchableSelect({
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
 
   const detectedFlagType = flagType || (
-    searchPlaceholder?.toLowerCase().includes('countr') || placeholder?.toLowerCase().includes('national')
-      ? 'country'
-      : searchPlaceholder?.toLowerCase().includes('lang')
-        ? 'language'
-        : 'country'
+    searchPlaceholder?.toLowerCase().includes("lang")
+      ? "language"
+      : placeholder?.toLowerCase().includes("national")
+        ? "nationality"
+        : "country"
   );
 
   const getFlag = (option: string): string => {
     if (!showFlags) return "";
-    if (detectedFlagType === 'language') return getLanguageFlagForName(option);
+    if (detectedFlagType === "language") return getLanguageFlagForName(option);
+    if (detectedFlagType === "nationality") return getNationalityFlagForName(option);
     return getCountryFlagForName(option);
   };
 
@@ -81,28 +84,27 @@ export function SearchableSelect({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild disabled={disabled}>
-        <Button
+        <button
           type="button"
-          variant="outline"
-          role="combobox"
           aria-expanded={open}
+          aria-haspopup="dialog"
+          data-searchable-trigger
           className={cn(
-            "w-full justify-between h-12 rounded-lg min-w-0",
-            !triggerClassName && "bg-[#FDFBF7] border-2 border-[#102540] text-[#102540] hover:bg-[#FDFBF7] hover:border-[#102540] hover:text-[#102540]",
-            !value && "text-[#1A1A1A]/70",
+            "w-full h-12 rounded-lg min-w-0 inline-flex items-center justify-between gap-3 px-4 transition-colors border-2 border-[#102540] bg-[#F7F2EA] text-[#102540] hover:bg-[#F7F2EA] hover:border-[#102540] disabled:opacity-50 disabled:cursor-not-allowed",
+            !value && "text-[#102540]/70",
             triggerClassName
           )}
         >
-          <span className="truncate flex items-center gap-2 min-w-0 flex-1">
+          <span className="truncate flex items-center gap-2 min-w-0 flex-1 text-left">
             {selectedFlag && <span className="text-xl leading-none shrink-0">{selectedFlag}</span>}
-            <span className="truncate">{value || placeholder}</span>
+            <span className="truncate font-medium">{value || placeholder}</span>
           </span>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-[#B89555]" />
-        </Button>
+          <ChevronsUpDown className="h-4 w-4 shrink-0 text-[#B89555]" />
+        </button>
       </PopoverTrigger>
       <PopoverContent
         className={cn(
-          "w-[var(--radix-popover-trigger-width)] min-w-[260px] p-0 bg-[#FDFBF7] border-[#B89555]/30 shadow-xl shadow-gold/10 z-[10210]",
+          "w-[var(--radix-popover-trigger-width)] min-w-[260px] p-0 bg-[#FDFBF7] border-2 border-[#102540] shadow-xl z-[10210]",
           className
         )}
         align="start"
@@ -112,35 +114,22 @@ export function SearchableSelect({
         collisionPadding={12}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
-
-        <div className="p-2 border-b border-[#B89555]/20">
+        <div className="p-2 border-b border-[#102540]/15">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#B89555]" />
             <Input
               ref={inputRef}
               placeholder={searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-10 pl-9 bg-[#FDFBF7] border-2 border-[#B89555] text-[#102540] placeholder:text-[#102540]/60 focus:border-[#B89555] rounded-md"
+              className="h-11 rounded-lg pl-9 bg-[#F7F2EA] border-2 border-[#102540] text-[#102540] placeholder:text-[#102540]/55 focus-visible:ring-0 focus-visible:ring-offset-0"
             />
           </div>
         </div>
 
-        <div
-          ref={listRef}
-          className="max-h-[280px] overflow-y-auto p-1 overscroll-contain"
-          onWheel={(e) => {
-            // Prevent parent scroll from hijacking
-            e.stopPropagation();
-          }}
-          onTouchMove={(e) => {
-            e.stopPropagation();
-          }}
-        >
+        <div className="max-h-[280px] overflow-y-auto py-1 overscroll-contain">
           {filteredOptions.length === 0 ? (
-            <div className="py-6 text-center text-sm text-[#1A1A1A]/70">
-              No results found
-            </div>
+            <div className="py-6 text-center text-sm text-[#102540]/70">No results found</div>
           ) : (
             filteredOptions.map((option) => {
               const flag = getFlag(option);
@@ -154,21 +143,16 @@ export function SearchableSelect({
                     setOpen(false);
                   }}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-3 text-base rounded-md transition-colors text-left min-h-[44px]",
-                    isSelected
-                      ? "bg-[#EFE6D6] text-[#1A1A1A]"
-                      : "text-[#1A1A1A] hover:bg-[#EFE6D6]/60"
+                    "w-full flex items-center gap-3 px-3 py-3 text-left min-h-[46px] transition-colors text-[#102540] hover:bg-[#F7F2EA]",
+                    isSelected && "font-semibold"
                   )}
                 >
-                  <span className="w-4 h-4 shrink-0 flex items-center justify-center">
-                    {isSelected && <Check className="h-4 w-4 text-[#B89555]" strokeWidth={2.8} />}
-                  </span>
                   {flag && <span className="text-xl leading-none shrink-0">{flag}</span>}
-                  <span className="truncate text-sm sm:text-base flex-1 min-w-0">{option}</span>
+                  <span className="truncate text-sm sm:text-base flex-1 min-w-0 text-[#102540]">{option}</span>
+                  {isSelected && <Check className="h-4 w-4 shrink-0 text-[#B89555]" strokeWidth={2.8} />}
                 </button>
               );
             })
-
           )}
         </div>
       </PopoverContent>
