@@ -104,6 +104,7 @@ const OverseasInvestorsBanner = () => {
           <PearlButton
             to="/investor-hub"
             size="lg"
+            variant="secondary"
             leadingIcon={<TrendingUp strokeWidth={2.2} />}
             trailingIcon={<ArrowRight strokeWidth={2.2} />}
           >
