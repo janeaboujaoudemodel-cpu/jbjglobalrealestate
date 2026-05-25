@@ -714,16 +714,17 @@ export default function JoinApplication() {
 
           {/* Application Form */}
           <div ref={formAnchorRef} />
-          <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-2xl text-[#1A1A1A]">Application Form</CardTitle>
-              <CardDescription className="text-[#1A1A1A]/70">
+          <Card className="bg-[#FDFBF7] border-2 border-[#102540] shadow-sm">
+            <CardHeader className="text-center pt-8">
+              <CardTitle className="text-3xl md:text-4xl font-semibold text-[#102540] tracking-tight">Application Form</CardTitle>
+              <CardDescription className="text-[#B89555] font-medium text-base">
                 All fields are required.{" "}
                 {selectedPosition && (
-                  <span className="font-medium text-[#1A1A1A]">Applying for: {selectedPosition.label}</span>
+                  <span className="font-semibold text-[#B89555]">Applying for: {selectedPosition.label}</span>
                 )}
               </CardDescription>
             </CardHeader>
+
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                 {/* Honeypot */}
