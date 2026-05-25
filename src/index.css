@@ -157,6 +157,11 @@ body {
   }
 }
 
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-33.333%); }
+}
+
 .jbj-sidebar-teaching-pulse {
   animation: jbj-sidebar-teaching-pulse 1.25s ease-in-out infinite;
 }
