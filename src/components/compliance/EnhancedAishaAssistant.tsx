@@ -78,7 +78,7 @@ const EnhancedAishaAssistant: React.FC = () => {
     {
       id: '1',
       role: 'assistant',
-      content: `Assalamu Alaikum. I am **Aisha**, your Compliance AI Assistant. I serve as the guardian of JBJ Global's data integrity, ethical conduct, and security compliance.
+      content: `Assalamu Alaikum. I am **Aisha**, your Compliance AI Assistant. I serve as the guardian of JBJ GLOBAL REAL ESTATE's data integrity, ethical conduct, and security compliance.
 
 **Current Security Index: ${securityScore}/100**
 

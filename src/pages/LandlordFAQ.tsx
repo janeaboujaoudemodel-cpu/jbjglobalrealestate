@@ -60,7 +60,7 @@ const LandlordFAQ = () => {
       questions: [
         {
           question: "How do I find reliable tenants?",
-          answer: "To attract and screen quality tenants:\n\n• List on major portals (Bayut, Property Finder, Dubizzle) with professional photos\n• Work with a licensed real estate agent who can pre-screen applicants\n• Verify employment and salary (standard practice is rent should be ≤30% of annual income)\n• Check references from previous landlords\n• Verify identification documents\n• Consider background checks for higher-value properties\n• Use Ejari history to check rental track record\n\nJBJ Global provides tenant sourcing and screening services as part of our landlord support."
+          answer: "To attract and screen quality tenants:\n\n• List on major portals (Bayut, Property Finder, Dubizzle) with professional photos\n• Work with a licensed real estate agent who can pre-screen applicants\n• Verify employment and salary (standard practice is rent should be ≤30% of annual income)\n• Check references from previous landlords\n• Verify identification documents\n• Consider background checks for higher-value properties\n• Use Ejari history to check rental track record\n\nJBJ GLOBAL REAL ESTATE provides tenant sourcing and screening services as part of our landlord support."
         },
         {
           question: "What can I do if my tenant doesn't pay rent?",

@@ -354,7 +354,7 @@ export default function AgencyActivityLog() {
     <TooltipProvider delayDuration={200}>
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A] pb-24">
       <SEOHead
-        title="Agency Activity Log | JBJ Global"
+        title="Agency Activity Log | JBJ GLOBAL REAL ESTATE"
         description="Every reminder, calendar event, note and outreach logged against UAE real estate agencies."
         canonicalPath="/owner/crm/relationships/activity"
       />

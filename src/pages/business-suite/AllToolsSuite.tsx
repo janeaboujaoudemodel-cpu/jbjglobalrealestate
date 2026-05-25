@@ -35,7 +35,7 @@ const AllToolsSuite = () => {
   return (
     <>
       <SEOHead 
-        title="All Tools Suite | JBJ Global"
+        title="All Tools Suite | JBJ GLOBAL REAL ESTATE"
         description="Access all AI and productivity tools in one unified hub - Property analysis, investment calculators, communication tools, and more."
       />
       

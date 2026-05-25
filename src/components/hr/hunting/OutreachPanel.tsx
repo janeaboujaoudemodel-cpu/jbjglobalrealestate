@@ -112,7 +112,7 @@ export function OutreachPanel({ targetType }: OutreachPanelProps) {
         // Generate a basic message
         const targetMessages = {
           investor: `Dear ${selectedProspectData.full_name.split(' ')[0]},\n\nI hope this message finds you well. I'm reaching out from JBJ Global Real Estate regarding exclusive investment opportunities in Dubai's premium real estate market.\n\nWould you be interested in learning more about our current offerings?\n\nBest regards,\nJBJ Global Real Estate`,
-          broker: `Hi ${selectedProspectData.full_name.split(' ')[0]},\n\nI noticed your work at ${selectedProspectData.company || 'your company'} and wanted to discuss a potential partnership opportunity.\n\nAt JBJ Global Real Estate, we're always looking to work with talented brokers. Would you be open to a quick conversation?\n\nBest,\nJBJ Global Team`,
+          broker: `Hi ${selectedProspectData.full_name.split(' ')[0]},\n\nI noticed your work at ${selectedProspectData.company || 'your company'} and wanted to discuss a potential partnership opportunity.\n\nAt JBJ Global Real Estate, we're always looking to work with talented brokers. Would you be open to a quick conversation?\n\nBest,\nJBJ GLOBAL REAL ESTATE Team`,
           employee: `Hi ${selectedProspectData.full_name.split(' ')[0]},\n\nYour profile caught my attention, and I believe you would be a great fit for our team at JBJ Global Real Estate.\n\nWe're currently looking for talented professionals like yourself. Would you be interested in learning more about this opportunity?\n\nBest regards,\nHR Team, JBJ Global Real Estate`,
         };
         

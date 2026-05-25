@@ -93,7 +93,7 @@ export default function ResearchUsersPanel() {
     try {
       const ExcelJS = await import("exceljs");
       const wb = new ExcelJS.Workbook();
-      const ws = wb.addWorksheet("JBJ Global Research Users");
+      const ws = wb.addWorksheet("JBJ GLOBAL REAL ESTATE Research Users");
 
       const cols = [
         "Email", "Full Name", "Phone", "Subscribed", "Subscribed At",
@@ -180,7 +180,7 @@ export default function ResearchUsersPanel() {
             <Users className="w-5 h-5 text-[#8A7356]" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-[#1A1A1A]">JBJ Global Research Users</h2>
+            <h2 className="text-xl font-bold text-[#1A1A1A]">JBJ GLOBAL REAL ESTATE Research Users</h2>
             <p className="text-sm text-[#1A1A1A]/70">{filtered.length} users found</p>
           </div>
         </div>

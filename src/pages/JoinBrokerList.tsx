@@ -334,7 +334,7 @@ const JoinBrokerList = () => {
           <div className="max-w-5xl mx-auto px-4 flex items-center justify-center gap-2">
             <Shield className="w-4 h-4 text-blue-600" />
             <p className="text-center text-sm text-muted-foreground">
-              Your details are confidential and reviewed exclusively by JBJ Global management.
+              Your details are confidential and reviewed exclusively by JBJ GLOBAL REAL ESTATE management.
             </p>
           </div>
         </section>

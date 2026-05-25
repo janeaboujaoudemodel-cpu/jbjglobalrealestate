@@ -103,7 +103,7 @@ export default function RegisterBroker() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] py-10 px-4">
-      <SEOHead title="Broker Registration | JBJ Global" description="Register as a broker and access CRM, leads, and developer inventory." />
+      <SEOHead title="Broker Registration | JBJ GLOBAL REAL ESTATE" description="Register as a broker and access CRM, leads, and developer inventory." />
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
           <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center">

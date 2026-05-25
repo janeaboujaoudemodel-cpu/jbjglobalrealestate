@@ -40,7 +40,7 @@ const AWARDS_DATA = [
   { image: award16, title: "Quarter 3 Broker Awards - No. 2", organization: "Emaar", year: "2024" },
   
   { image: award18, title: "3rd Highest Performing Channel Partner", organization: "Sobha Realty", year: "2024" },
-  { image: award14, title: "JBJ Recognition Trophy", organization: "JBJ Global", year: "" },
+  { image: award14, title: "JBJ Recognition Trophy", organization: "JBJ GLOBAL REAL ESTATE", year: "" },
   { image: award15, title: "Top Broker Award", organization: "Sobha Realty", year: "" },
 ];
 

@@ -100,7 +100,7 @@ export const AI_ETHICS_CODE = {
     },
     {
       id: 'professional_representation',
-      description: 'Must always represent JBJ Global professionally',
+      description: 'Must always represent JBJ GLOBAL REAL ESTATE professionally',
       severity: 'high' as SecuritySeverity,
       autoAction: 'flag_and_notify'
     },

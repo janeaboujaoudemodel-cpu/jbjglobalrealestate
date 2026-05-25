@@ -131,7 +131,7 @@ export default function RegisterInvestor() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] py-10 px-4">
-      <SEOHead title="Investor Registration | JBJ Global" description="Complete your investor profile to access tailored properties and intelligence." />
+      <SEOHead title="Investor Registration | JBJ GLOBAL REAL ESTATE" description="Complete your investor profile to access tailored properties and intelligence." />
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
           <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center">

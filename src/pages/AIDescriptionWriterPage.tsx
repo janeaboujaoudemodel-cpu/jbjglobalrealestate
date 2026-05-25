@@ -75,7 +75,7 @@ export default function AIDescriptionWriterPage() {
           shortDescription: sections.areaOverview?.substring(0, 200) || data.fullAnalysis?.substring(0, 200),
           fullDescription: data.fullAnalysis,
           highlights: features.split(",").map((f: string) => f.trim()).filter(Boolean),
-          seoTitle: `${bedrooms} Bedroom ${propertyType} for Sale in ${location} | JBJ Global`,
+          seoTitle: `${bedrooms} Bedroom ${propertyType} for Sale in ${location} | JBJ GLOBAL REAL ESTATE`,
           seoDescription: `Discover this beautiful ${bedrooms} bedroom ${propertyType} in ${location}. ${size ? size + " sqft." : ""} ${views ? views + "." : ""} Contact JBJ Global Real Estate.`,
         });
         toast.success("Property description generated!");

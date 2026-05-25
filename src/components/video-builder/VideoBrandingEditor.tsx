@@ -212,7 +212,7 @@ const VideoBrandingEditor = ({ project, onUpdate, onNext }: VideoBrandingEditorP
               {project.branding.watermark && (
                 <div className="absolute top-3 left-3">
                   <Badge className="bg-background/80 text-foreground text-xs">
-                    JBJ Global
+                    JBJ GLOBAL REAL ESTATE
                   </Badge>
                 </div>
               )}

@@ -304,7 +304,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           <div className="absolute inset-0 border border-[#B89555]/20 rounded-l-md" />
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-[#1A1A1A]/70 text-xs uppercase tracking-[0.2em]">
-              JBJ Global
+              JBJ GLOBAL REAL ESTATE
             </span>
           </div>
         </div>

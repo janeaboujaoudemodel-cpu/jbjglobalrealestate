@@ -190,7 +190,7 @@ const VideoPreviewPlayer = ({ project }: VideoPreviewPlayerProps) => {
           {project.branding.watermark && currentTime >= 3 && (
             <div className="absolute top-3 left-3 z-10">
               <Badge className="bg-background/70 text-foreground text-xs backdrop-blur-sm">
-                JBJ Global
+                JBJ GLOBAL REAL ESTATE
               </Badge>
             </div>
           )}

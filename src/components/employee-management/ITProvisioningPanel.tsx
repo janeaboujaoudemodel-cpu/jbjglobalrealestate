@@ -93,7 +93,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
     Tel: +971 4 XXX XXXX | Email: ${generateEmail(name)}<br/>
     Web: www.jbjglobalrealestate.com
   </p>
-  <img src="https://jbjglobalrealestate.com/logo.png" alt="JBJ Global" style="height: 40px; margin-top: 8px;"/>
+  <img src="https://jbjglobalrealestate.com/logo.png" alt="JBJ GLOBAL REAL ESTATE" style="height: 40px; margin-top: 8px;"/>
 </div>`.trim();
   };
 

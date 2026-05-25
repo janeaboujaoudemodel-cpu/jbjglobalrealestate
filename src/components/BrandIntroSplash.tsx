@@ -100,7 +100,7 @@ export default function BrandIntroSplash() {
         className="mt-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300"
       >
         <p className="text-lg md:text-2xl font-bold text-white tracking-[0.2em] uppercase">
-          JBJ Global
+          JBJ GLOBAL REAL ESTATE
         </p>
         <p className="text-sm md:text-base font-semibold text-[#D4B896] tracking-[0.25em] uppercase mt-1">
           Real Estate

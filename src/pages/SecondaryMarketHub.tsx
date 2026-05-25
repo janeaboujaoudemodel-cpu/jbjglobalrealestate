@@ -59,7 +59,7 @@ export default function SecondaryMarketHub() {
 
   return (
     <>
-      <SEOHead title="Secondary Market Hub | JBJ Global" description="Partner inventory and database files" canonicalPath="/owner/crm/relationships/secondary-market" />
+      <SEOHead title="Secondary Market Hub | JBJ GLOBAL REAL ESTATE" description="Partner inventory and database files" canonicalPath="/owner/crm/relationships/secondary-market" />
       <div className="min-h-screen bg-[#FDFBF7] w-full">
         <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-12 pt-[96px] pb-12">
           <div className="flex items-center gap-4 mb-6 pb-6 border-b border-[#1A1A1A]/10">

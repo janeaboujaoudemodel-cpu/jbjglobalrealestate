@@ -12,7 +12,7 @@ export const COMPANY_NAP = {
   // Identity
   name: "JBJ Global Real Estate",
   legalName: "JBJ GLOBAL REAL ESTATE",
-  alternateNames: ["JBJ", "JBJ Real Estate", "JBJ Global"],
+  alternateNames: ["JBJ", "JBJ Real Estate", "JBJ GLOBAL REAL ESTATE"],
   description:
     "Dubai's premier RERA-licensed real estate brokerage. Buy, sell, or rent luxury apartments, villas, penthouses, and off-plan properties across the UAE.",
   shortDescription:

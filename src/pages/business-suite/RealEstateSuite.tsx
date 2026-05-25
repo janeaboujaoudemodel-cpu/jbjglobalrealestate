@@ -174,7 +174,7 @@ const RealEstateSuite = () => {
   return (
     <>
       <SEOHead 
-        title="Real Estate Intelligence Suite | JBJ Global"
+        title="Real Estate Intelligence Suite | JBJ GLOBAL REAL ESTATE"
         description="Complete AI-powered toolkit for property analysis, valuation, market intelligence, and real estate productivity."
       />
       

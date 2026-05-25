@@ -107,7 +107,7 @@ const JoinDeveloperList = () => {
     <>
       <SEOHead
         title="Developer Partnership | JBJ Global Real Estate"
-        description="Register as a developer partner with JBJ Global. List projects, connect with brokers, and reach international investors."
+        description="Register as a developer partner with JBJ GLOBAL REAL ESTATE. List projects, connect with brokers, and reach international investors."
         keywords="dubai developer partnership, real estate developer listing, developer broker network"
         canonicalPath="/developers/join"
       />
@@ -325,7 +325,7 @@ const JoinDeveloperList = () => {
           <div className="max-w-5xl mx-auto px-4 flex items-center justify-center gap-2">
             <Shield className="w-4 h-4 text-purple-600" />
             <p className="text-center text-sm text-muted-foreground">
-              Your details are confidential and reviewed exclusively by JBJ Global management.
+              Your details are confidential and reviewed exclusively by JBJ GLOBAL REAL ESTATE management.
             </p>
           </div>
         </section>
