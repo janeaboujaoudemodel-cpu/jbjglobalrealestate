@@ -531,10 +531,11 @@ export default function JoinApplication() {
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
-            <h1 className="text-4xl md:text-5xl font-semibold mb-3 text-[#1A1A1A] tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-semibold mb-3 text-[#102540] tracking-tight">
               Join JBJ Global Real Estate
             </h1>
-            <p className="text-base md:text-lg text-[#1A1A1A]/75 max-w-2xl mx-auto">
+            <div className="mx-auto mb-4 h-[2px] w-24 bg-[#B89555] rounded-full" />
+            <p className="text-base md:text-lg text-[#B89555] font-medium max-w-2xl mx-auto">
               Apply to become part of our team. Complete the form below to start your journey.
             </p>
           </div>
@@ -543,25 +544,28 @@ export default function JoinApplication() {
           <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 shadow-sm mb-8">
             <CardContent className="pt-6">
               <div className="flex flex-col sm:flex-row items-center gap-4">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 bg-[#1A1A1A]">
-                  <Bot className="w-8 h-8 text-white" />
+                <div data-no-contrast-guard className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 bg-[#102540] border border-[#B89555]/60">
+                  <Bot className="w-8 h-8 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                 </div>
                 <div className="text-center sm:text-left flex-1">
-                  <h3 className="text-lg font-semibold mb-1 text-[#1A1A1A]">Prefer a Conversation?</h3>
+                  <h3 className="text-lg font-semibold mb-1 text-[#102540]">Prefer a Conversation?</h3>
                   <p className="text-sm text-[#1A1A1A]/75">
                     Meet Jessica — available 24/7 to support you. She'll collect your CV, qualify you, and conduct your interview.
                   </p>
                 </div>
                 <Link
                   to="/hr-agent"
-                  className="inline-flex items-center justify-center gap-2 rounded-md px-4 h-10 font-semibold shadow-sm hover:opacity-90 transition-opacity whitespace-nowrap bg-[#1A1A1A] text-white"
+                  data-allow-dark-cta
+                  data-no-contrast-guard
+                  className="allow-white inline-flex items-center justify-center gap-2 rounded-md px-4 h-10 font-semibold shadow-sm transition-colors whitespace-nowrap bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/60 text-white"
                 >
-                  <MessageCircle className="w-4 h-4 text-white" />
-                  <span className="text-white">Contact Our HR · Jessica</span>
+                  <MessageCircle className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  <span className="allow-white text-white">Contact Our HR · Jessica</span>
                 </Link>
               </div>
             </CardContent>
           </Card>
+
 
           {!user && (
             <Card className="border-2 border-[#B89555] bg-[#EFE6D6]/10 backdrop-blur-sm rounded-2xl shadow-md mb-6">
