@@ -37,6 +37,13 @@
   --t-form-blue-muted: rgba(16, 37, 64, 0.58);
   --t-form-blue-ring: rgba(16, 37, 64, 0.18);
   --t-form-blue-tint: rgba(16, 37, 64, 0.06);
+  --t-careers-navy: #071B33;
+  --t-careers-navy-hover: #0E2848;
+  --t-careers-cream: #F7F2EA;
+  --t-careers-border-strong: #BFA46A;
+  --t-careers-complete: #E9DDC8;
+  --t-careers-card-top: #FFFDF9;
+  --t-careers-card-bottom: #F3EBDD;
 }
 
 .jbj-form-label {
