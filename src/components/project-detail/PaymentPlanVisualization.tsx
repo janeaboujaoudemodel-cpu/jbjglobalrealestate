@@ -29,6 +29,8 @@ interface PaymentPlanVisualizationProps {
   projectName: string;
   postHandoverYears?: number | null;
   onRegisterInterest?: () => void;
+  paymentPlanVerified?: boolean | null;
+  paymentPlanVerifiedAt?: string | null;
 }
 
 export default function PaymentPlanVisualization({
@@ -39,7 +41,10 @@ export default function PaymentPlanVisualization({
   projectName,
   postHandoverYears,
   onRegisterInterest,
+  paymentPlanVerified,
+  paymentPlanVerifiedAt,
 }: PaymentPlanVisualizationProps) {
+
   // SAFETY: we no longer parse `payment_plan` text into booking/construction/handover
   // percentages. Strings like "10/90" or "90/10" are ambiguous and guessing
   // misrepresents the developer's official plan (legal risk). We only render
