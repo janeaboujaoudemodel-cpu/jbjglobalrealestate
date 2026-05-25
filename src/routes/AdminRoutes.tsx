@@ -166,7 +166,7 @@ export const AdminRoutes = () => (
     <Route path="/brand-palette" element={<BrandPaletteHub />} />
     <Route path="/owner/job-offer-template" element={<Navigate to="/owner/careers-portal?section=offers" replace />} />
     <Route path="/owner/recommendations" element={<OwnerGuard><OwnerRecommendations /></OwnerGuard>} />
-    <Route path="/hr-agent" element={<OwnerGuard><HRAgent /></OwnerGuard>} />
+    <Route path="/hr-agent" element={<Navigate to="/owner/careers-portal?section=hr-agent" replace />} />
     <Route path="/referral-admin" element={<OwnerGuard><ReferralAdmin /></OwnerGuard>} />
     <Route path="/executive-assistant" element={<OwnerGuard><ExecutiveAssistant /></OwnerGuard>} />
     <Route path="/call-review" element={<OwnerGuard><CallReview /></OwnerGuard>} />
