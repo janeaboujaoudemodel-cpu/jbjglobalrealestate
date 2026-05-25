@@ -76,18 +76,24 @@ function InnerContent({
   leadingIcon,
   trailingIcon,
   children,
-}: Pick<CommonProps, "leadingIcon" | "trailingIcon" | "children">) {
+  variant,
+}: Pick<CommonProps, "leadingIcon" | "trailingIcon" | "children"> & { variant: PearlButtonVariant }) {
+  const iconColor = variant === "secondary" ? "text-white allow-white" : "text-[#B89555]";
+  const labelColor = variant === "secondary" ? "text-white allow-white" : "text-[#1A1A1A]";
   return (
     <>
       {leadingIcon ? (
-        <span className="inline-flex items-center text-[#B89555] [&_svg]:w-[1.05em] [&_svg]:h-[1.05em]" aria-hidden>
+        <span className={cn("inline-flex items-center [&_svg]:w-[1.05em] [&_svg]:h-[1.05em]", iconColor)} aria-hidden>
           {leadingIcon}
         </span>
       ) : null}
-      <span className="inline-flex items-center text-[#1A1A1A]">{children}</span>
+      <span className={cn("inline-flex items-center", labelColor)}>{children}</span>
       {trailingIcon ? (
         <span
-          className="inline-flex items-center text-[#B89555] transition-transform duration-300 group-hover:translate-x-1 [&_svg]:w-[1.05em] [&_svg]:h-[1.05em]"
+          className={cn(
+            "inline-flex items-center transition-transform duration-300 group-hover:translate-x-1 [&_svg]:w-[1.05em] [&_svg]:h-[1.05em]",
+            iconColor
+          )}
           aria-hidden
         >
           {trailingIcon}
@@ -101,36 +107,40 @@ export const PearlButton = React.forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
   AsButtonProps | AsLinkProps
 >(function PearlButton(props, ref) {
-  const { size = "md", className, children, leadingIcon, trailingIcon } = props;
+  const { size = "md", variant = "primary", className, children, leadingIcon, trailingIcon } = props;
   const sizeCls = sizeMap[size];
+  const variantCls = variant === "secondary" ? secondaryClass : primaryClass;
+  const surfaceAttr = variant === "secondary" ? { "data-surface": "dark" as const } : {};
 
   if ("to" in props && props.to !== undefined) {
-    const { to, leadingIcon: _l, trailingIcon: _t, size: _s, className: _c, children: _ch, ...rest } =
+    const { to, leadingIcon: _l, trailingIcon: _t, size: _s, variant: _v, className: _c, children: _ch, ...rest } =
       props as AsLinkProps;
     return (
       <Link
         ref={ref as React.Ref<HTMLAnchorElement>}
         to={to}
-        className={cn(baseClass, sizeCls, className)}
+        className={cn(baseLayout, variantCls, sizeCls, className)}
+        {...surfaceAttr}
         {...rest}
       >
-        <InnerContent leadingIcon={leadingIcon} trailingIcon={trailingIcon}>
+        <InnerContent leadingIcon={leadingIcon} trailingIcon={trailingIcon} variant={variant}>
           {children}
         </InnerContent>
       </Link>
     );
   }
 
-  const { leadingIcon: _l, trailingIcon: _t, size: _s, className: _c, children: _ch, ...rest } =
+  const { leadingIcon: _l, trailingIcon: _t, size: _s, variant: _v, className: _c, children: _ch, ...rest } =
     props as AsButtonProps;
   return (
     <button
       ref={ref as React.Ref<HTMLButtonElement>}
       type="button"
-      className={cn(baseClass, sizeCls, className)}
+      className={cn(baseLayout, variantCls, sizeCls, className)}
+      {...surfaceAttr}
       {...rest}
     >
-      <InnerContent leadingIcon={leadingIcon} trailingIcon={trailingIcon}>
+      <InnerContent leadingIcon={leadingIcon} trailingIcon={trailingIcon} variant={variant}>
         {children}
       </InnerContent>
     </button>
