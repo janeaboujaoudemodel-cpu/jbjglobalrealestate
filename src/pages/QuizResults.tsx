@@ -90,143 +90,227 @@ const QuizResults = () => {
     top3: { label: "Top 3", sublabel: "Bronze", color: "bg-gradient-to-r from-[#CD7F32] via-[#E8A84C] to-[#CD7F32] border-2 border-[#CD7F32] shadow-lg", textColor: "text-white", medalColor: "text-[#CD7F32]" },
   };
 
-  const handleDownloadReport = () => {
-    if (!projects?.length) return;
-
-    const reportHTML = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>JBJ Global Real Estate - AI Property Recommendations</title>
-  <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; background: #FDFBF7; color: #1a1a1a; }
-    .header { text-align: center; margin-bottom: 40px; border-bottom: 3px solid #B89555; padding-bottom: 30px; }
-    .logo { font-size: 24px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a; }
-    .logo span { color: #B89555; }
-    .title { font-size: 32px; margin: 20px 0 10px; color: #1a1a1a; }
-    .subtitle { color: #666; font-size: 16px; }
-    .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-right: 8px; }
-    .badge-gold { background: linear-gradient(to right, #B89555, #E8D5A3); color: #000; border: 2px solid #B89555; }
-    .badge-silver { background: linear-gradient(to right, #A0A0A0, #E8E8E8); color: #000; border: 2px solid #B0B0B0; }
-    .badge-bronze { background: linear-gradient(to right, #CD7F32, #E8A84C); color: #fff; border: 2px solid #CD7F32; }
-    .project { background: #fff; border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 2px solid #B89555; box-shadow: 0 4px 16px rgba(200,167,102,0.15); }
-    .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-    .project-name { font-size: 20px; font-weight: bold; margin-bottom: 4px; color: #1a1a1a; }
-    .developer { color: #B89555; font-size: 14px; font-weight: 600; }
-    .rank { font-size: 28px; font-weight: bold; color: #B89555; }
-    .details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
-    .detail-item { background: #F7F2EA; padding: 12px; border-radius: 8px; border: 1px solid #B8955520; }
-    .detail-label { color: #888; font-size: 12px; margin-bottom: 4px; }
-    .detail-value { font-size: 14px; font-weight: 600; color: #1a1a1a; }
-    .footer { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 2px solid #B89555; color: #666; }
-    .exclusive { background: linear-gradient(to right, rgba(201,168,76,0.15), rgba(201,168,76,0.08)); border: 2px solid rgba(201,168,76,0.4); padding: 12px 20px; border-radius: 8px; text-align: center; margin-bottom: 30px; }
-    .exclusive span { color: #B89555; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <div class="logo"><span>JBJ</span> GLOBAL REAL ESTATE</div>
-    <h1 class="title">Your AI Property Recommendations</h1>
-    <p class="subtitle">Personalized selection based on your preferences</p>
-  </div>
-
-  <div class="exclusive">
-    <span>&#9733;</span> #1 AI Property Matchmaker — Exclusive by JBJ Global Real Estate <span>&#9733;</span>
-  </div>
-
-  ${projects.map((project, index) => {
-    const badge = badges[project.id];
-    return `
-    <div class="project">
-      <div class="project-header">
-        <div>
-          ${badge ? `<span class="badge badge-${badge === 'top1' ? 'gold' : badge === 'top2' ? 'silver' : 'bronze'}">${badgeLabels[badge].label} (${badgeLabels[badge].sublabel})</span>` : ''}
-          <h2 class="project-name">${project.name}</h2>
-          <p class="developer">${project.developer?.name || 'Developer'}</p>
-        </div>
-        <div class="rank">#${index + 1}</div>
-      </div>
-      <div class="details">
-        <div class="detail-item">
-          <div class="detail-label">Location</div>
-          <div class="detail-value">${project.location || 'N/A'}, ${project.emirate || 'UAE'}</div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-label">Price From</div>
-          <div class="detail-value">${project.price_from ? `AED ${(project.price_from / 1000000).toFixed(1)}M` : 'Price on Request'}</div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-label">Bedrooms</div>
-          <div class="detail-value">${project.bedrooms_min != null && project.bedrooms_max != null ? `${project.bedrooms_min === 0 ? 'Studio' : project.bedrooms_min} - ${project.bedrooms_max} BR` : 'Type TBC'}</div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-label">Handover</div>
-          <div class="detail-value">${project.handover_date || 'TBA'}</div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-label">Size Range</div>
-          <div class="detail-value">${project.size_min?.toLocaleString() || 'N/A'} - ${project.size_max?.toLocaleString() || 'N/A'} sqft</div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-label">Payment Plan</div>
-          <div class="detail-value">${project.payment_plan || 'Contact Us'}</div>
-        </div>
-      </div>
-    </div>
-    `;
-  }).join('')}
-
-  <div class="footer">
-    <p>Generated by JBJ Global Real Estate AI Property Matcher</p>
-    <p>Powered & Made by JBJ Global Real Estate — Brokerage</p>
-    <p>Contact: CONTACT@JBJ.AE | www.JBJ.ae</p>
-  </div>
-</body>
-</html>
-    `;
-
-    const blob = new Blob([reportHTML], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'JBJ-Global-Real-Estate-AI-Recommendations.html';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast.success("Report downloaded!");
-  };
-
-  const handleShareToCompany = () => {
-    if (!projects?.length) return;
-
-    const projectList = projects.map((p, i) => {
+  // Build a plain-text summary of recommendations (used by share channels)
+  const buildShareText = (includeIntro = true) => {
+    if (!projects?.length) return "";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://jbj.ae";
+    const lines = projects.map((p, i) => {
       const badge = badges[p.id];
-      const badgeStr = badge ? ` [${badgeLabels[badge].label} - ${badgeLabels[badge].sublabel}]` : '';
-      return `${i + 1}. ${p.name}${badgeStr}
-   Developer: ${p.developer?.name || 'N/A'}
-   Location: ${p.location}, ${p.emirate}
-    Price: ${p.price_from ? `AED ${(p.price_from / 1000000).toFixed(1)}M` : 'Price on Request'}
-   Bedrooms: ${p.bedrooms_min != null && p.bedrooms_max != null ? `${p.bedrooms_min === 0 ? 'Studio' : p.bedrooms_min} - ${p.bedrooms_max} BR` : 'Type TBC'}
-   Handover: ${p.handover_date || 'TBA'}`;
-    }).join('\n\n');
-
-    const subject = encodeURIComponent("AI Property Recommendations - Request for Consultation");
-    const body = encodeURIComponent(`Dear JBJ Global Real Estate Team,
-
-I have completed the AI Property Assessment and would like to request a consultation regarding the following recommendations:
-
-${projectList}
-
-Please contact me to discuss these options further.
-
-Best regards`);
-
-    window.location.href = `mailto:CONTACT@JBJ.AE?subject=${subject}&body=${body}`;
-    setShareModalOpen(false);
-    toast.success("Opening email client...");
+      const badgeStr = badge ? ` [${badgeLabels[badge].label}]` : "";
+      const price = p.price_from
+        ? `AED ${(p.price_from / 1000000).toFixed(1)}M`
+        : "Price on Request";
+      const beds =
+        p.bedrooms_min != null && p.bedrooms_max != null
+          ? p.bedrooms_min === 0
+            ? `Studio${p.bedrooms_max > 0 ? ` - ${p.bedrooms_max} BR` : ""}`
+            : `${p.bedrooms_min} - ${p.bedrooms_max} BR`
+          : "Type TBC";
+      return [
+        `#${i + 1} ${p.name}${badgeStr}`,
+        `Developer: ${p.developer?.name || "N/A"}`,
+        `Location: ${p.location || ""}, ${p.emirate || "UAE"}`,
+        `Price: ${price}`,
+        `Bedrooms: ${beds}`,
+        `Handover: ${p.handover_date || "TBA"}`,
+        `Link: ${origin}/project/${p.slug}`,
+      ].join("\n");
+    });
+    const intro = includeIntro
+      ? "JBJ Global Real Estate — AI Property Recommendations\n\n"
+      : "";
+    return intro + lines.join("\n\n");
   };
+
+  // Build a real, branded PDF report via jsPDF
+  const buildPdf = () => {
+    if (!projects?.length) return null;
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const ink: [number, number, number] = [26, 26, 26];
+    const gold: [number, number, number] = [184, 149, 85];
+    const champagne: [number, number, number] = [247, 242, 234];
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://jbj.ae";
+
+    const drawHeader = () => {
+      // Champagne header bar
+      doc.setFillColor(...champagne);
+      doc.rect(0, 0, pageW, 70, "F");
+      // Gold hairline
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.8);
+      doc.line(0, 70, pageW, 70);
+      // Brand
+      doc.setTextColor(...ink);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(16);
+      doc.text("JBJ GLOBAL REAL ESTATE", 40, 32);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(...gold);
+      doc.text("AI Property Recommendations", 40, 50);
+      // Date right
+      doc.setTextColor(120, 120, 120);
+      doc.setFontSize(8);
+      doc.text(new Date().toLocaleDateString(), pageW - 40, 50, { align: "right" });
+    };
+
+    const drawFooter = (pageNum: number, total: number) => {
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.6);
+      doc.line(40, pageH - 50, pageW - 40, pageH - 50);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.setTextColor(110, 110, 110);
+      doc.text("Powered by JBJ Global Real Estate — Brokerage | Dubai, UAE", 40, pageH - 32);
+      doc.text("CONTACT@JBJ.AE  ·  www.jbj.ae", 40, pageH - 20);
+      doc.text(`Page ${pageNum} / ${total}`, pageW - 40, pageH - 20, { align: "right" });
+    };
+
+    drawHeader();
+
+    // Title
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.text("Your AI-Selected Properties", 40, 110);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.text(
+      "Personalized selection based on your preferences",
+      40,
+      130
+    );
+
+    // Build one table per project
+    let cursorY = 160;
+    projects.forEach((p, idx) => {
+      const badge = badges[p.id];
+      const badgeStr = badge ? `  [${badgeLabels[badge].label}]` : "";
+      if (cursorY > pageH - 200) {
+        doc.addPage();
+        drawHeader();
+        cursorY = 100;
+      }
+
+      // Project title row
+      doc.setFillColor(...champagne);
+      doc.rect(40, cursorY, pageW - 80, 32, "F");
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.5);
+      doc.rect(40, cursorY, pageW - 80, 32);
+      doc.setTextColor(...ink);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(13);
+      doc.text(`#${idx + 1}  ${p.name}${badgeStr}`, 50, cursorY + 21);
+      cursorY += 32;
+
+      const beds =
+        p.bedrooms_min != null && p.bedrooms_max != null
+          ? p.bedrooms_min === 0
+            ? `Studio${p.bedrooms_max > 0 ? ` - ${p.bedrooms_max} BR` : ""}`
+            : `${p.bedrooms_min} - ${p.bedrooms_max} BR`
+          : "Type TBC";
+
+      autoTable(doc, {
+        startY: cursorY,
+        margin: { left: 40, right: 40 },
+        theme: "grid",
+        styles: { font: "helvetica", fontSize: 10, textColor: ink, lineColor: [220, 200, 160] },
+        headStyles: { fillColor: champagne, textColor: ink, fontStyle: "bold" },
+        body: [
+          ["Developer", p.developer?.name || "N/A"],
+          ["Location", `${p.location || ""}, ${p.emirate || "UAE"}`],
+          [
+            "Price From",
+            p.price_from ? `AED ${(p.price_from / 1000000).toFixed(1)}M` : "Price on Request",
+          ],
+          ["Bedrooms", beds],
+          ["Handover", p.handover_date || "TBA"],
+          ["Payment Plan", p.payment_plan || "Contact Us"],
+          ["Listing", `${origin}/project/${p.slug}`],
+        ],
+        columnStyles: {
+          0: { cellWidth: 110, fontStyle: "bold", fillColor: [253, 251, 247] },
+          1: { cellWidth: "auto" },
+        },
+      });
+
+      cursorY = (doc as any).lastAutoTable.finalY + 18;
+    });
+
+    // Page numbers
+    const total = doc.getNumberOfPages();
+    for (let i = 1; i <= total; i++) {
+      doc.setPage(i);
+      drawFooter(i, total);
+    }
+
+    return doc;
+  };
+
+  const handleDownloadReport = () => {
+    const doc = buildPdf();
+    if (!doc) return;
+    doc.save("JBJ-AI-Property-Recommendations.pdf");
+    toast.success("Report downloaded!");
+    // Immediately offer sharing options after download
+    setShareTrigger("post-download");
+    setShareModalOpen(true);
+  };
+
+  const handleOpenShare = () => {
+    setShareTrigger("share");
+    setShareModalOpen(true);
+  };
+
+  // Channel handlers
+  const handleShareWhatsApp = () => {
+    const text = encodeURIComponent(buildShareText());
+    window.open(`https://wa.me/?text=${text}`, "_blank", "noopener,noreferrer");
+    toast.success("Opening WhatsApp…");
+  };
+
+  const handleShareEmail = () => {
+    const subject = encodeURIComponent("My JBJ AI Property Recommendations");
+    const body = encodeURIComponent(buildShareText());
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    toast.success("Opening email client…");
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(buildShareText());
+      toast.success("Recommendations copied to clipboard");
+    } catch {
+      toast.error("Unable to copy");
+    }
+  };
+
+  const handleShareToConsultant = () => {
+    if (!projects?.length) return;
+    const subject = encodeURIComponent("AI Property Recommendations — Request Consultation");
+    const body = encodeURIComponent(
+      `Dear JBJ Global Real Estate Team,\n\nI have completed the AI Property Assessment and would like a consultation on the following recommendations:\n\n${buildShareText(false)}\n\nPlease contact me to discuss further.\n\nBest regards`
+    );
+    window.location.href = `mailto:${JBJ_CONSULTANT_EMAIL}?subject=${subject}&body=${body}`;
+    toast.success("Sending to JBJ Consultant…");
+  };
+
+  const handleConsultantWhatsApp = () => {
+    const text = encodeURIComponent(
+      `Hello JBJ Global Real Estate,\n\nI just completed the AI Property Finder and would like a consultation on these recommendations:\n\n${buildShareText(false)}`
+    );
+    window.open(
+      `https://wa.me/${JBJ_CONSULTANT_WHATSAPP}?text=${text}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+    toast.success("Opening WhatsApp to JBJ…");
+  };
+
 
   if (isLoading) {
     return (
