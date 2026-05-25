@@ -74,8 +74,9 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
                   ? "border-[#102540] bg-[#102540] shadow-[0_4px_14px_-6px_rgba(16,37,64,0.55)]"
                   : s.done
                   ? "border-emerald-600/40 bg-emerald-50 text-emerald-800"
-                  : "border-[#B89555]/50 bg-[#FDFBF7] text-[#102540]/85 hover:border-[#B89555] hover:bg-[#FDFBF7]"
+                  : "border-[#B89555]/55 bg-[#FDFBF7] text-[#1A1A1A] hover:border-[#B89555] hover:bg-[#FDFBF7]"
               )}
+
               style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
               data-allow-dark-cta={isActive ? "" : undefined}
               data-no-contrast-guard={isActive ? "" : undefined}

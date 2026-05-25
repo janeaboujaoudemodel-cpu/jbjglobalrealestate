@@ -189,7 +189,7 @@ export default function PremiumJobCard({
               e.stopPropagation();
               onApply(id);
             }}
-            className="bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555]/70 rounded-lg px-5 font-semibold shadow-[0_6px_14px_-4px_rgba(16,37,64,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] active:shadow-[0_2px_6px_-2px_rgba(16,37,64,0.35),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all"
+            className="!bg-[#102540] hover:!bg-[#1a3d63] !text-white border border-[#B89555]/70 rounded-lg px-5 font-semibold shadow-[0_6px_14px_-4px_rgba(16,37,64,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] active:shadow-[0_2px_6px_-2px_rgba(16,37,64,0.35),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all"
           >
             {selected ? (
               <>
