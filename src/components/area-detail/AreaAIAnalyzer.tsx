@@ -323,10 +323,10 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
     <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Building2 className="w-5 h-5 text-[#1A1A1A]" />
-          <h3 className="font-bold text-[#1A1A1A] text-lg">Developer Landscape</h3>
+          <Building2 className="w-5 h-5 text-[#B89555]" />
+          <h3 className="font-bold text-[#102540] text-lg">Developer Landscape</h3>
         </div>
-        <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">
+        <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-[#EFE6D6] text-[#102540] border border-[#B89555]/40">
           {totalDevs} Developers
         </div>
       </div>
@@ -334,16 +334,16 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
       <div className="space-y-3">
         {devEntries.map((dev, i) => (
           <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/10 hover:border-[#B89555]/30 transition-colors">
-            <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-              <span className="text-[#1A1A1A] font-bold text-xs">{dev.name.charAt(0)}</span>
+            <div className="w-8 h-8 rounded-lg bg-[#102540] border border-[#B89555]/40 flex items-center justify-center flex-shrink-0">
+              <span className="text-[#B89555] font-bold text-xs">{dev.name.charAt(0)}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[#1A1A1A] font-semibold text-sm truncate">{dev.name}</p>
+              <p className="text-[#102540] font-semibold text-sm truncate">{dev.name}</p>
               {dev.projects && (
                 <p className="text-[#1A1A1A]/70 text-xs mt-0.5 truncate">{dev.projects}</p>
               )}
             </div>
-            <ArrowUpRight className="w-3.5 h-3.5 text-[#1A1A1A]/70 flex-shrink-0 mt-1" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-[#B89555] flex-shrink-0 mt-1" />
           </div>
         ))}
       </div>
