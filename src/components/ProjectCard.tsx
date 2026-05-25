@@ -249,6 +249,37 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             }}
           />
 
+          {/* Reelly-style top-left badge row: EOI + handover quarter.
+              Two compact ink/glass pills sitting on the photo, above the
+              developer logo. Hidden when project is "Ready" (which on the
+              homepage should never happen — off-plan only). */}
+          {(() => {
+            const handover = deriveHandover(project);
+            const showHandover = handover && !/^ready$/i.test(handover);
+            const showEoi = !project.is_sold_out;
+            if (!showEoi && !showHandover) return null;
+            return (
+              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5" data-no-contrast-guard>
+                {showEoi && (
+                  <span
+                    className="allow-white inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-[0.12em] uppercase bg-[#1A1A1A]/85 backdrop-blur-sm text-white border border-white/15 shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
+                    style={{ color: "#FFFFFF" }}
+                  >
+                    EOI
+                  </span>
+                )}
+                {showHandover && (
+                  <span
+                    className="allow-white inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide bg-[#1A1A1A]/85 backdrop-blur-sm text-white border border-white/15 shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
+                    style={{ color: "#FFFFFF" }}
+                  >
+                    {handover}
+                  </span>
+                )}
+              </div>
+            );
+          })()}
+
           {/* Sale Status Badge — opt-in (owner toggles `show_sale_status`).
               Rectangular gold-frame style to match the price pill. */}
           {(project as any).show_sale_status && saleStatusLabel && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
@@ -259,7 +290,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
           {/* Sold Out Badge */}
           {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
-            <CardBadge variant="sold" className={`absolute ${badgePosition} z-10`}>
+            <CardBadge variant="sold" className={`absolute top-3 right-3 z-10`}>
               Sold Out
             </CardBadge>
           )}
