@@ -612,26 +612,32 @@ export default function JoinApplication() {
 
           {/* Open Positions */}
           {!positionsLoading && openPositions.length > 0 && (
-            <Card id="open-positions" className="mb-8 bg-[#FDFBF7] border border-[#B89555]/55 shadow-[0_18px_44px_-32px_rgba(16,37,64,0.25)] rounded-2xl scroll-mt-24">
-              <CardHeader className="pt-8 pb-4">
-                <div className="flex items-center justify-between flex-wrap gap-3">
-                  <div className="flex items-center gap-3">
-                    <CardTitle className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] tracking-tight">Open Positions</CardTitle>
-                    <Badge
-                      data-allow-dark-cta
-                      data-no-contrast-guard
-                      className="careers-open-badge bg-[#102540] border border-[#B89555] inline-flex items-center gap-1.5 px-3 py-1"
-                      style={{ color: "#FFFFFF" }}
-                    >
-                      <Briefcase className="w-3 h-3" />
-                      <span>{filteredPositions.length} open</span>
-                    </Badge>
+            <Card id="open-positions" className="mb-8 bg-[#FDFBF7] border border-[#B89555]/55 shadow-[0_18px_44px_-32px_rgba(16,37,64,0.25)] rounded-2xl scroll-mt-24 overflow-hidden">
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
+              <CardHeader className="pt-9 pb-5">
+                <div className="flex items-end justify-between flex-wrap gap-4">
+                  <div className="min-w-0">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#102540] mb-2">
+                      <Briefcase className="w-3 h-3" /> Live Roles
+                    </span>
+                    <CardTitle className="text-3xl md:text-4xl font-semibold text-[#1A1A1A] tracking-tight leading-tight">
+                      Open Positions
+                    </CardTitle>
+                    <CardDescription className="text-[#1A1A1A]/75 font-medium mt-1.5">
+                      Tap <strong className="text-[#102540] font-semibold">Apply</strong> on any role to auto-select it in the form below.
+                    </CardDescription>
                   </div>
+                  <Badge
+                    data-allow-dark-cta
+                    data-no-contrast-guard
+                    className="careers-open-badge bg-[#102540] border border-[#B89555] inline-flex items-center gap-1.5 px-3 py-1.5 self-start sm:self-end"
+                    style={{ color: "#FFFFFF" }}
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>{filteredPositions.length} open</span>
+                  </Badge>
                 </div>
-                <CardDescription className="text-[#1A1A1A]/75 font-medium">
-                  Tap <strong className="text-[#102540] font-semibold">Apply</strong> on any role to auto-select it below.
-                </CardDescription>
-                <div className="relative mt-3">
+                <div className="relative mt-5">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#102540] z-10 pointer-events-none" strokeWidth={2.5} />
                   <Input
                     value={positionSearch}
