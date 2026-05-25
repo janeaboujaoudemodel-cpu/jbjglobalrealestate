@@ -44,15 +44,15 @@ const FeaturedListings = () => {
 
           {/* Listings Grid — 3 per row on desktop horizontal, 2 rows = 6 total.
               Phone portrait: first 3 only (premium > dense) via hide-on-small classes. */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 items-stretch auto-rows-fr">
             {isLoading
               ? [1, 2, 3, 4, 5, 6].map((i) => (
                   <div
                     key={i}
-                    className="bg-[#FDFBF7] rounded-2xl overflow-hidden border border-[#B89555]/30"
+                    className="bg-[#FDFBF7] rounded-2xl overflow-hidden border border-[#B89555]/30 h-full flex flex-col"
                   >
                     <Skeleton className="aspect-[16/10] rounded-none" />
-                    <div className="p-4 space-y-2">
+                    <div className="p-4 space-y-2 flex-1">
                       <Skeleton className="h-3 w-2/3" />
                       <Skeleton className="h-4 w-full" />
                       <Skeleton className="h-3 w-1/2" />
@@ -63,7 +63,7 @@ const FeaturedListings = () => {
                   <div
                     key={project.id}
                     // On phone portrait, render only first 3 cards (idx 0..2); hidden on >=sm.
-                    className={idx >= 3 ? 'hidden sm:block' : ''}
+                    className={`h-full flex ${idx >= 3 ? 'hidden sm:flex' : ''} [&>*]:w-full [&>*]:h-full`}
                   >
                     <ProjectCard project={project as any} />
                   </div>
