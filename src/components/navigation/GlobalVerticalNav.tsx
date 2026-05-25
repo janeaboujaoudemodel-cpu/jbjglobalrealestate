@@ -1085,7 +1085,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     <span
                       data-no-contrast-guard
                       style={{ color: '#B89555' }}
-                      className="flex-1 text-left relative inline-block !text-[#B89555] after:content-[''] after:absolute after:bottom-[-3px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full"
+                      className="flex-1 text-left relative inline-block !text-[#B89555] group-hover:!text-[#1A1A1A] transition-colors duration-200 after:content-[''] after:absolute after:bottom-[-3px] after:left-0 after:h-[1.5px] after:bg-[#1A1A1A] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full"
                     >{sectionKey}</span>
                     <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: '#B89555' }} />
                     {!isOpen && hasActiveChild && (
