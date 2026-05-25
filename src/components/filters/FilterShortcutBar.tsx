@@ -413,9 +413,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
           {/* Search slot or built-in search */}
           {searchSlot ? (
-            <div className="min-w-0 max-w-[180px] flex-shrink-0" title="Search area, project, keyword">
+            <div className="min-w-0 flex-1 min-w-[200px] max-w-[420px] flex-shrink" title="Search area, project, keyword">
               {searchSlot}
             </div>
+
           ) : (
             <div className={cn(filterSearchPillWrapper, "w-[160px]")}>
               <input
