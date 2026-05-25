@@ -226,12 +226,15 @@ const ContinueSearching = ({
                 <PopoverTrigger asChild>
                   <button
                     aria-label="View search history"
-                    className="px-3 h-9 rounded-lg bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-xs font-semibold tracking-wide flex items-center gap-1.5 hover:bg-[#EFE6D6] hover:border-[#B89555] transition-all duration-300"
+                    data-surface="dark"
+                    data-allow-dark-cta
+                    className="allow-white px-3 h-9 rounded-lg bg-[#102540] hover:bg-[#475569] border border-[#B89555]/55 hover:border-[#B89555] text-white text-xs font-semibold tracking-wide flex items-center gap-1.5 transition-all duration-300 shadow-[0_8px_22px_-12px_rgba(16,37,64,0.55)] hover:-translate-y-0.5"
                   >
-                    <Clock className="w-3.5 h-3.5 text-[#B89555]" />
+                    <Clock className="w-3.5 h-3.5 text-white allow-white" />
                     View Search History
                   </button>
                 </PopoverTrigger>
+
                 <PopoverContent
                   align="end"
                   className="w-80 p-0 bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_18px_48px_-18px_rgba(0,0,0,0.35)] rounded-xl overflow-hidden"
