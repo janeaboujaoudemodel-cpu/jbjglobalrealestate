@@ -667,6 +667,48 @@ export default function JoinApplication() {
 
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-7 px-1 md:px-3" data-jbj-form noValidate>
+                {/* Wizard-style progress indicator (non-destructive) */}
+                <ApplicationProgress
+                  steps={[
+                    {
+                      id: "personal",
+                      label: "Personal",
+                      icon: STEP_ICONS.user,
+                      done:
+                        !!formData.firstName.trim() &&
+                        !!formData.lastName.trim() &&
+                        !!formData.phone.trim(),
+                    },
+                    {
+                      id: "location",
+                      label: "Location & Language",
+                      icon: STEP_ICONS.user,
+                      done:
+                        !!formData.nationality &&
+                        !!formData.country &&
+                        !!formData.city,
+                    },
+                    {
+                      id: "role",
+                      label: "Role & Experience",
+                      icon: STEP_ICONS.briefcase,
+                      done: !!formData.positionApplied,
+                    },
+                    {
+                      id: "cv",
+                      label: "CV / Resume",
+                      icon: STEP_ICONS.file,
+                      done: !!cvFile,
+                    },
+                    {
+                      id: "consent",
+                      label: "Review & Consent",
+                      icon: STEP_ICONS.shield,
+                      done: !!formData.consentAccurate && !!formData.consentTerms,
+                    },
+                  ]}
+                />
+
                 {/* Honeypot */}
                 <div className="hidden" aria-hidden="true">
                   <Input
