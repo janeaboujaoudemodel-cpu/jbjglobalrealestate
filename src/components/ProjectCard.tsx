@@ -282,16 +282,16 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5" data-no-contrast-guard>
                 {showEoi && (
                   <span
-                    className="allow-white inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-[0.12em] uppercase bg-[#1A1A1A]/85 backdrop-blur-sm text-white border border-white/15 shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
-                    style={{ color: "#FFFFFF" }}
+                    className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-[0.12em] uppercase bg-white/95 backdrop-blur-sm text-[#1A1A1A] border border-[#B89555]/40 shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
+                    style={{ color: "#1A1A1A" }}
                   >
                     EOI
                   </span>
                 )}
                 {showHandover && (
                   <span
-                    className="allow-white inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide bg-[#1A1A1A]/85 backdrop-blur-sm text-white border border-white/15 shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
-                    style={{ color: "#FFFFFF" }}
+                    className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide bg-white/95 backdrop-blur-sm text-[#1A1A1A] border border-[#B89555]/40 shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
+                    style={{ color: "#1A1A1A" }}
                   >
                     {handover}
                   </span>
