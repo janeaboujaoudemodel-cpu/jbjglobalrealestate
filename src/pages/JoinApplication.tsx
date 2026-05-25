@@ -27,6 +27,7 @@ import SelectedRoleChip from "@/components/careers/SelectedRoleChip";
 import CareersEcosystem from "@/components/careers/CareersEcosystem";
 import CareersWhyJBJ from "@/components/careers/CareersWhyJBJ";
 import CareersFAQ from "@/components/careers/CareersFAQ";
+import CareersContactBlock from "@/components/careers/CareersContactBlock";
 
 interface OpenPosition {
   id: string;
@@ -1250,12 +1251,7 @@ export default function JoinApplication() {
             </CardContent>
           </Card>
 
-          <p className="text-center text-sm careers-gold font-semibold mt-6">
-            Questions? Contact us at{" "}
-            <a href="mailto:contact@JBJ.ae" className="careers-gold underline font-semibold">
-              contact@JBJ.ae
-            </a>
-          </p>
+          <CareersContactBlock />
 
         </div>
       </section>
