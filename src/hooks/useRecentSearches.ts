@@ -14,8 +14,12 @@ export interface RecentItem {
 }
 
 const STORAGE_KEY = "jbj_recent_searches";
-const MAX_ITEMS_PER_TYPE = 10;
-const MAX_TOTAL = 30;
+const MAX_ITEMS_PER_TYPE = 30;
+const MAX_TOTAL = 60;
+// Recents live for 30 days from first view, then auto-expire. Within that
+// window the order is STABLE — revisiting an item does not bump it to the
+// front and does not evict others.
+const TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
 const normalizeType = (value: unknown): RecentItemType | null => {
   if (typeof value !== "string") return null;
@@ -65,12 +69,15 @@ function loadItems(): RecentItem[] {
     const parsed = raw ? JSON.parse(raw) : [];
     if (!Array.isArray(parsed)) return [];
 
+    const now = Date.now();
     const normalized = parsed
       .map(normalizeItem)
       .filter((item): item is RecentItem => item !== null)
-      .sort((a, b) => b.viewedAt - a.viewedAt);
+      // Drop anything older than the 30-day TTL
+      .filter((item) => now - item.viewedAt <= TTL_MS);
 
-    // Deduplicate by type+slug (keep most recent)
+    // Deduplicate by type+slug — keep the FIRST occurrence so order is stable
+    // across renders (no shuffling on revisit).
     const seen = new Set<string>();
     return normalized.filter((item) => {
       const key = `${item.type}-${item.slug}`;
@@ -116,18 +123,27 @@ export function useRecentSearches(filterType?: RecentItemType) {
     if (!normalized) return;
 
     setItems((prev) => {
-      const filtered = prev.filter((i) => !(
+      // STABLE ORDER: if already present (by id+type or slug+type), keep its
+      // existing position and do NOT bump viewedAt — the 30-day TTL is
+      // measured from the FIRST view so cards don't linger forever just
+      // because the user revisits them.
+      const existingIndex = prev.findIndex((i) =>
         (i.id === normalized.id && i.type === normalized.type) ||
         (i.slug === normalized.slug && i.type === normalized.type)
-      ));
-      const updated: RecentItem[] = [normalized, ...filtered];
+      );
+      if (existingIndex !== -1) return prev;
 
-      // Cap per type
+      // New item — append to the end so existing cards don't shift.
+      const updated: RecentItem[] = [...prev, normalized];
+
+      // Cap per type (drop oldest of that type, not the newest)
       const counts: Record<string, number> = {};
-      const capped = updated.filter((i) => {
+      const reversed = [...updated].reverse();
+      const keptReversed = reversed.filter((i) => {
         counts[i.type] = (counts[i.type] || 0) + 1;
         return counts[i.type] <= MAX_ITEMS_PER_TYPE;
       });
+      const capped = keptReversed.reverse().slice(-MAX_TOTAL);
 
       saveItems(capped);
       return capped;
