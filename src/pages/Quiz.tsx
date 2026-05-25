@@ -625,7 +625,7 @@ const Quiz = () => {
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#B89555] to-[#A68444] mx-auto mb-4 flex items-center justify-center shadow-lg shadow-[#B89555]/30">
                 <Sparkles className="w-8 h-8 text-[#1A1A1A]" />
               </div>
-              <h2 className="text-[#1A1A1A] text-3xl font-bold mb-2">
+              <h2 className="text-[#102540] text-3xl font-bold mb-2">
                 Get Your AI Analysis
               </h2>
               <p className="text-[#1A1A1A]/70">
