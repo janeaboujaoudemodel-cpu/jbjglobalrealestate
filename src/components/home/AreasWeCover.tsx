@@ -131,6 +131,7 @@ const AreasWeCover = () => {
           <PearlButton
             to="/areas"
             size="md"
+            variant="secondary"
             leadingIcon={<Compass strokeWidth={2.2} />}
             trailingIcon={<ArrowRight strokeWidth={2.2} />}
           >
