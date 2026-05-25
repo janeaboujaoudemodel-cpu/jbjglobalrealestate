@@ -162,6 +162,10 @@ export default function JoinApplication() {
   const [showAllPositions, setShowAllPositions] = useState(false);
   const formAnchorRef = useRef<HTMLDivElement>(null);
 
+  // ---- Wizard state ----
+  const [currentStep, setCurrentStep] = useState(0);
+  const TOTAL_STEPS = 5;
+
   // ---- Load draft on mount (resume after auth) ----
   useEffect(() => {
     try {
