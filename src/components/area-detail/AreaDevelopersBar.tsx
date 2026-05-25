@@ -43,15 +43,16 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
   if (!developers || developers.length === 0) return null;
 
   return (
-    <section id="developers-section" className="py-12" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
+    <section id="developers-section" className="pt-0 pb-12" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
       <div className="jj-layer-2">
         <div className="flex items-center gap-3 mb-6">
           <Users className="w-6 h-6 text-[#1A1A1A]" />
-          <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A]">
+          <h2 className="text-xl md:text-2xl font-bold text-[#102540]">
             Developers in {areaName}
           </h2>
           <span className="text-[#1A1A1A]/70 text-sm">({developers.length})</span>
         </div>
+
 
         <div className="flex flex-wrap gap-3">
           {developers.map((dev, i) => (
