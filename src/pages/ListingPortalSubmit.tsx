@@ -617,7 +617,7 @@ const ListingPortalSubmit = () => {
             </div>
 
             {/* Draft Action Bar + Progress steps — connected blue header */}
-            <div className="mb-8 rounded-2xl bg-[#102540]/8 border border-[#102540]/25 overflow-hidden">
+            <div className="mb-8 rounded-2xl bg-[#102540]/15 border border-[#102540]/30 overflow-hidden">
               <div className="[&>div]:mb-0 [&>div]:rounded-none [&>div]:border-0 [&>div]:bg-transparent">
                 <FormDraftBar
                   hasDraft={phase !== 'upload' || uploadedDocs.length > 0}
@@ -678,7 +678,7 @@ const ListingPortalSubmit = () => {
                   className="space-y-6"
                 >
                   <div className="relative">
-                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#102540]/8 border border-[#102540]/25" />
+                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#102540]/15 border border-[#102540]/30" />
                     <div className="relative space-y-6 p-3">
                       {/* Category Selection */}
                       <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
