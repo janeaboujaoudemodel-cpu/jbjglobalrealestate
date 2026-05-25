@@ -150,19 +150,31 @@
   -webkit-text-fill-color: #102540 !important;
 }
 
-[data-careers-page] .careers-phone-input [data-phone-code-trigger],
-[data-careers-page] .careers-phone-input [data-phone-code-trigger] span,
+[data-careers-page] .careers-phone-input [data-phone-code-trigger] {
+  background: #F7F2EA !important;
+  border: 2px solid #102540 !important;
+  box-shadow: none !important;
+}
+
+[data-careers-page] .careers-phone-input input,
+[data-careers-page] .careers-phone-input input[type="tel"] {
+  background: #F7F2EA !important;
+  border: 2px solid #102540 !important;
+  border-radius: 0.5rem !important;
+  color: #102540 !important;
+  box-shadow: none !important;
+}
+
+[data-careers-page] .careers-phone-input [data-phone-code-trigger] span {
+  color: #102540 !important;
+  -webkit-text-fill-color: #102540 !important;
+}
+
 [data-careers-page] .careers-phone-input [data-phone-code-trigger] svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
-}
-
-[data-careers-page] .careers-phone-input [data-phone-code-trigger] {
-  background: #102540 !important;
-  border: 2px solid #102540 !important;
-  box-shadow: none !important;
 }
 
 [data-careers-page] #firstName,
