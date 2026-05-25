@@ -5651,21 +5651,17 @@ hr[data-gold-hairline],
    rule by keeping champagne cream backgrounds intact.
    ============================================================ */
 
-/* 1. Page H1 — short navy underline accent under top-level page titles
-      (applied site-wide except homepage and dashboards which opt out). */
+/* 1. Page H1 — short navy underline accent REMOVED site-wide per design
+      directive. Headings now use solid navy (#102540) color only. */
 main h1:not([data-no-navy-accent]),
 section h1:not([data-no-navy-accent]) {
   position: relative;
+  color: #102540;
 }
 main h1:not([data-no-navy-accent])::after,
 section h1:not([data-no-navy-accent])::after {
-  content: "";
-  display: block;
-  width: 48px;
-  height: 3px;
-  margin-top: 10px;
-  background-color: #102540;
-  border-radius: 2px;
+  content: none !important;
+  display: none !important;
 }
 
 /* 2. Active pills / tabs / segmented controls — swap gold border
