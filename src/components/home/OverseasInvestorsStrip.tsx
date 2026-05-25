@@ -28,7 +28,7 @@ const OverseasInvestorsStrip = () => {
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="allow-white group flex flex-wrap md:flex-nowrap items-center justify-between gap-4 md:gap-8 px-6 sm:px-10 md:px-14 py-10 md:py-14 lg:py-16 text-white transition-colors hover:bg-[#1a3d63]"
+        className="overseas-investors-strip-link allow-white group flex flex-wrap md:flex-nowrap items-center justify-between gap-4 md:gap-8 px-6 sm:px-10 md:px-14 py-10 md:py-14 lg:py-16 text-white transition-colors hover:bg-[#1a3d63]"
       >
 
         {/* Left: globe + headline (wraps, never overflows) */}
@@ -65,14 +65,14 @@ const OverseasInvestorsStrip = () => {
           ))}
         </span>
 
-        {/* Right: CTA — champagne/gold button with black text + icon */}
+        {/* Right: CTA */}
         <span
           data-no-contrast-guard
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-b from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555] text-sm md:text-base font-bold shrink-0 whitespace-nowrap shadow-[0_6px_18px_-6px_rgba(0,0,0,0.45)] transition-transform group-hover:-translate-y-0.5"
-          style={{ color: "#1A1A1A" }}
+          className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/65 text-sm md:text-base font-bold shrink-0 whitespace-nowrap shadow-[0_6px_18px_-6px_rgba(0,0,0,0.45)] transition-transform group-hover:-translate-y-0.5"
+          style={{ color: "#FFFFFF" }}
         >
-          <span style={{ color: "#1A1A1A" }}>Learn more</span>
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
+          <span className="allow-white" style={{ color: "#FFFFFF" }}>Learn more</span>
+          <ArrowRight className="allow-white w-4 h-4 transition-transform group-hover:translate-x-0.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
         </span>
 
 
