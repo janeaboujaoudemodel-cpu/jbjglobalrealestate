@@ -167,14 +167,14 @@ export default function CategorySelectorSection() {
                 >
                   <span
                     className="text-sm font-semibold"
-                    style={{ color: "#B89555" }}
+                    style={{ color: "#1A1A1A" }}
                   >
                     Continue
                   </span>
                   <ArrowRight
                     className="w-4 h-4 group-hover:translate-x-1 transition-transform flex-shrink-0"
                     strokeWidth={2.5}
-                    style={{ color: "#B89555", stroke: "#B89555", opacity: 1 }}
+                    style={{ color: "#1A1A1A", stroke: "#1A1A1A", opacity: 1 }}
                   />
                 </div>
               </motion.button>
