@@ -230,23 +230,8 @@ const AreaDetail = () => {
       </div>
 
 
-      {/* Phase 2: Fixed portal copy — only when scrolled past sentinel */}
-      {isFixed && !bottomReached && createPortal(
-        <div
-          className="fixed top-[88px] left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] backdrop-blur-md bg-gradient-to-r from-[#FDFBF7]/90 via-[#F7F2EA]/90 to-[#EFE6D6]/90 border-b border-[#B89555]/20 py-2 px-2 sm:py-3 sm:px-4 transition-all duration-200 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px]"
-        >
-          <div className="container mx-auto px-4">
-            <FilterShortcutBar
-              variant="light"
-              filters={shortcutFilters}
-              onFilterChange={setShortcutFilters}
-              priorityFilter="areas"
-              searchSlot={filterBarContent}
-            />
-          </div>
-        </div>,
-        document.body
-      )}
+
+
 
 
       {/* Projects Grid - edge to edge */}
