@@ -150,16 +150,16 @@
   -webkit-text-fill-color: #102540 !important;
 }
 
-[data-careers-page] .careers-phone-input button[role="combobox"],
-[data-careers-page] .careers-phone-input button[role="combobox"] span,
-[data-careers-page] .careers-phone-input button[role="combobox"] svg {
+[data-careers-page] .careers-phone-input [data-phone-code-trigger],
+[data-careers-page] .careers-phone-input [data-phone-code-trigger] span,
+[data-careers-page] .careers-phone-input [data-phone-code-trigger] svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
 }
 
-[data-careers-page] .careers-phone-input button[role="combobox"] {
+[data-careers-page] .careers-phone-input [data-phone-code-trigger] {
   background: #102540 !important;
   border: 2px solid #102540 !important;
   box-shadow: none !important;
