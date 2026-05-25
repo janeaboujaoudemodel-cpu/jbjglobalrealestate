@@ -250,10 +250,11 @@ const ContinueSearching = ({
             </div>
           )}
         </div>
-
+        {/* /header padded inner */}
+        </div>
 
         {isEmpty ? (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="px-4 md:px-8 lg:px-12 flex flex-col items-center justify-center py-12 text-center">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center mb-4">
               <Home className="w-8 h-8 text-[#B89555]" />
             </div>
@@ -268,7 +269,7 @@ const ContinueSearching = ({
           </div>
         ) : (
           <div
-            className="relative"
+            className="relative w-full"
             style={{
               WebkitMaskImage:
                 "linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%)",
@@ -280,6 +281,7 @@ const ContinueSearching = ({
           </div>
         )}
       </div>
+
 
       {/* Lead Capture Modal */}
       <LeadCaptureModal
