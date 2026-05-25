@@ -186,7 +186,7 @@ const DeveloperPortalCTA = () => {
     Icon: any;
   }) => (
     <section
-      className="py-16 md:py-24 relative overflow-hidden"
+      className="py-20 md:py-28 relative overflow-hidden"
     >
       {/* Decorative outer frame — navy blue card sitting behind the champagne portal card.
           Stretched fully edge-to-edge horizontally (no champagne side-highlight); vertical insets preserved. */}
@@ -194,14 +194,14 @@ const DeveloperPortalCTA = () => {
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="allow-white pointer-events-none absolute inset-x-0 inset-y-4 md:inset-y-6 rounded-[2.25rem] bg-[#102540] border border-[#B89555]/55 shadow-[0_30px_80px_-40px_rgba(16,37,64,0.65)]"
+        className="allow-white pointer-events-none absolute inset-x-1 md:inset-x-3 inset-y-2 md:inset-y-3 rounded-[2.5rem] bg-[#102540] border border-[#B89555]/55 shadow-[0_30px_80px_-40px_rgba(16,37,64,0.65)]"
       />
 
-      <div className="container mx-auto px-4 md:px-8 max-w-6xl relative">
+      <div className="container mx-auto px-3 md:px-6 max-w-7xl relative">
         {/* INNER broker/investor portal card — untouched champagne, now floats directly on the navy frame */}
         <div
           data-surface="page"
-          className="relative rounded-[2rem] border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-8 md:p-14 lg:p-16 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.55),0_2px_0_rgba(255,255,255,0.9)_inset] overflow-hidden m-3 md:m-5"
+          className="relative rounded-[2rem] border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-10 md:p-16 lg:p-20 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.55),0_2px_0_rgba(255,255,255,0.9)_inset] overflow-hidden m-1 md:m-2"
         >
           {/* Inner light wash */}
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(184,149,85,0.10),transparent_55%)]" />
