@@ -80,10 +80,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' },
   { label: "Communities", href: "/communities", icon: Users },
   { label: "Map", href: "/map", icon: MapPin },
-  { label: "Property Evaluator", href: "/property-evaluator", icon: BarChart3 },
-  { label: "Rental Index", href: "/rental-index", icon: TrendingUp },
-  { label: "Property Valuation", href: "/sell/valuation", icon: DollarSign },
-  { label: "Property Measurement", href: "/property-measurement", icon: Ruler },
 
   // ── Creative & Tools ──
   { label: "Royal Tools Hub", href: "/ai-hub", icon: Sparkles, section: "TOOLS" },
