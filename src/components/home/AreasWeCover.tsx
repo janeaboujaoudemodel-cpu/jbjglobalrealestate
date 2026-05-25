@@ -41,9 +41,9 @@ const AreasWeCover = () => {
       <div className="w-full px-4 md:px-8">
 
         <div className="text-center mb-8 md:mb-10">
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-[10px] md:text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-            <MapPin className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-            <span className="text-[#1A1A1A]">{t("areas.topLabel", "Top Areas")}</span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F2EA] border border-[#102540]/30 rounded-full text-[10px] md:text-xs uppercase tracking-[0.2em] font-semibold mb-4">
+            <MapPin className="w-3.5 h-3.5 text-[#102540]" />
+            <span className="text-[#102540]">{t("areas.topLabel", "Top Areas")}</span>
           </span>
           <h2 className="text-2xl md:text-3xl font-bold text-[#102540]">
             {t("areas.topTitle", "Top Areas in Dubai")}
