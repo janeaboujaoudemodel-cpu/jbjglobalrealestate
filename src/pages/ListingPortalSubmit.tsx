@@ -678,7 +678,7 @@ const ListingPortalSubmit = () => {
                   className="space-y-6"
                 >
                   <div className="relative">
-                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#FDFBF7]/40 border border-[#B89555]/15" />
+                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#102540]/8 border border-[#102540]/25" />
                     <div className="relative space-y-6 p-3">
                       {/* Category Selection */}
                       <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
@@ -812,9 +812,10 @@ const ListingPortalSubmit = () => {
                         <Button
                           onClick={runAIExtraction}
                           disabled={uploadedDocs.length === 0 && !sourceUrl.trim() && !sourceText.trim()}
-                          className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] border-0 h-12 text-base disabled:opacity-50"
+                          data-allow-dark-cta
+                          className="flex-1 bg-white hover:bg-[#102540]/5 text-[#102540] border-2 border-[#102540] h-12 text-base font-semibold disabled:opacity-50 [&_svg]:text-[#102540]"
                         >
-                          <Sparkles className="w-5 h-5 mr-2" />
+                          <Sparkles className="w-5 h-5 mr-2 text-[#102540]" />
                           Extract with AI
                           {uploadedDocs.length > 0 && ` (${uploadedDocs.length} file${uploadedDocs.length === 1 ? '' : 's'})`}
                           {sourceUrl.trim() && ' + URL'}
@@ -822,7 +823,8 @@ const ListingPortalSubmit = () => {
                         </Button>
                         <Button
                           onClick={() => setPhase('pricing_ai')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+                          data-allow-dark-cta
+                          className="bg-transparent border-2 border-[#B89555]/50 text-[#B89555] hover:bg-[#B89555]/10 hover:text-[#B89555] hover:border-[#B89555] h-12 font-semibold transition-all duration-300"
                         >
                           Skip — Fill Manually
                         </Button>
