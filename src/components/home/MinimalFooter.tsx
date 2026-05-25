@@ -23,14 +23,18 @@ const MinimalFooter = () => {
   return (
     <footer
       className={[
-        // Champagne band matching the vertical sidebar on all devices
-        "bg-gradient-to-r from-[#FDFBF7] via-[#F7F1E6] to-[#EFE6D6]",
+        // Champagne band — full-bleed edge-to-edge UNDER the fixed vertical
+        // sidebar so there is no gap between the sidebar's right border and
+        // the footer (whether the sidebar is expanded 200px or collapsed 48px).
+        "w-full bg-gradient-to-r from-[#FDFBF7] via-[#F7F1E6] to-[#EFE6D6]",
         "border-t border-[#B89555]/40",
-        "lg:ml-[200px]",
       ].join(" ")}
       data-surface="champagne"
     >
-      <div className="max-w-[1600px] mx-auto px-5 md:px-10 py-5 md:py-6">
+      {/* Inner content offsets by the live sidebar width so links stay
+          optically centered in the visible content area; the band itself
+          extends behind the sidebar. */}
+      <div className="max-w-[1600px] mx-auto px-5 md:px-10 py-5 md:py-6 transition-[padding-left] duration-100 ease-out [body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]">
         <nav
           aria-label="Footer"
           className="flex flex-wrap items-center justify-center gap-x-5 md:gap-x-7 gap-y-2"
