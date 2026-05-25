@@ -251,19 +251,19 @@
 [data-jbj-form] select,
 [data-jbj-form] button[role="combobox"],
 [data-jbj-form] [data-jbj-field] {
-  background-color: #F7F2EA !important;
-  border: 2px solid #102540 !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(184, 149, 85, 0.40) !important;
   border-radius: 0.5rem !important;
-  color: #102540 !important;
-  -webkit-text-fill-color: #102540 !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
   box-shadow: none !important;
   min-height: 3rem;
 }
 
 [data-jbj-form] input::placeholder,
 [data-jbj-form] textarea::placeholder {
-  color: rgba(16, 37, 64, 0.55) !important;
-  -webkit-text-fill-color: rgba(16, 37, 64, 0.55) !important;
+  color: rgba(26, 26, 26, 0.55) !important;
+  -webkit-text-fill-color: rgba(26, 26, 26, 0.55) !important;
   opacity: 1 !important;
 }
 
@@ -275,15 +275,15 @@
 [data-jbj-form] button[role="combobox"]:focus,
 [data-jbj-form] button[role="combobox"]:focus-visible {
   outline: none !important;
-  border-color: #102540 !important;
-  box-shadow: 0 0 0 3px rgba(16, 37, 64, 0.18) !important;
+  border-color: #B89555 !important;
+  box-shadow: 0 0 0 3px rgba(184, 149, 85, 0.18) !important;
 }
 
 [data-jbj-form] [data-jbj-dropzone] {
-  border: 2px dashed #102540 !important;
+  border: 1px dashed rgba(184, 149, 85, 0.55) !important;
   border-radius: 0.5rem !important;
-  background-color: #F7F2EA !important;
-  color: #102540 !important;
+  background-color: transparent !important;
+  color: #1A1A1A !important;
 }
 
 [data-jbj-form] [data-phone-code-trigger] {
