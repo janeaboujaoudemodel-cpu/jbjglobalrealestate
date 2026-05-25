@@ -1250,12 +1250,7 @@ export default function JoinApplication() {
             </CardContent>
           </Card>
 
-          <p className="text-center text-sm careers-gold font-semibold mt-6">
-            Questions? Contact us at{" "}
-            <a href="mailto:contact@JBJ.ae" className="careers-gold underline font-semibold">
-              contact@JBJ.ae
-            </a>
-          </p>
+          <CareersContactBlock />
 
         </div>
       </section>
