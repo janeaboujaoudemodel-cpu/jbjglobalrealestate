@@ -22,6 +22,7 @@ import JessicaAIPanel from "@/components/careers/JessicaAIPanel";
 import PremiumJobCard, { type JobCardTag } from "@/components/careers/PremiumJobCard";
 import PremiumCVUpload from "@/components/careers/PremiumCVUpload";
 import ApplicationProgress, { STEP_ICONS } from "@/components/careers/ApplicationProgress";
+import SelectedRoleChip from "@/components/careers/SelectedRoleChip";
 
 interface OpenPosition {
   id: string;
@@ -282,6 +283,11 @@ export default function JoinApplication() {
 
   const handleApplyPosition = (id: string) => {
     setFormData((prev) => ({ ...prev, positionApplied: id }));
+    const dbPos = openPositions.find((p) => p.id === id);
+    const label = dbPos?.title || FALLBACK_POSITIONS.find((p) => p.value === id)?.label || "this role";
+    toast.success(`Selected: ${label}`, {
+      description: "Application form synced. Continue below to complete your application.",
+    });
     setTimeout(scrollToForm, 80);
   };
 
@@ -658,15 +664,20 @@ export default function JoinApplication() {
             <CardHeader className="text-center pt-10 pb-6">
               <CardTitle className="text-4xl md:text-5xl font-semibold careers-navy tracking-tight">Application Form</CardTitle>
               <CardDescription className="careers-gold font-semibold text-lg">
-                All fields are required.{" "}
-                {selectedPosition && (
-                  <span className="font-semibold careers-gold">Applying for: {selectedPosition.label}</span>
-                )}
+                All fields are required.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-7 px-1 md:px-3" data-jbj-form noValidate>
+                {/* Selected role sync chip (mirrors Apply selection) */}
+                <SelectedRoleChip
+                  label={selectedPosition?.label || null}
+                  department={selectedPosition?.department}
+                  isBrokerRole={selectedPosition?.is_broker_role}
+                  onClear={() => setFormData({ ...formData, positionApplied: "" })}
+                />
+
                 {/* Wizard-style progress indicator (non-destructive) */}
                 <ApplicationProgress
                   steps={[
