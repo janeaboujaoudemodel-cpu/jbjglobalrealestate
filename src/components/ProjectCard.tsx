@@ -340,16 +340,19 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Premium gold divider — between header and developer/meta */}
           <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
 
-          {/* Detail metadata above developer name — reserved 1-line slot */}
-          <div className="flex items-center gap-2 text-[#1A1A1A] text-xs flex-wrap font-medium min-h-[1.1rem]">
+          {/* Detail metadata above developer name — strict 1-line slot
+              (truncate, no wrap) so cards with long unit-type or size
+              strings stay the same height as cards with short ones. */}
+          <div className="flex items-center gap-2 text-[#1A1A1A] text-xs font-medium min-h-[1.1rem] whitespace-nowrap overflow-hidden">
             {getUnitTypesText() && (
-              <span className="font-semibold">{getUnitTypesText()}</span>
+              <span className="font-semibold truncate">{getUnitTypesText()}</span>
             )}
             {getUnitTypesText() && getSizeText() && (
-              <span className="text-[#B89555]" aria-hidden="true">|</span>
+              <span className="text-[#B89555] flex-shrink-0" aria-hidden="true">|</span>
             )}
-            {getSizeText() && <span>{getSizeText()}</span>}
+            {getSizeText() && <span className="truncate">{getSizeText()}</span>}
           </div>
+
 
           {/* Developer link — reserved 1-line slot so cards without a
               developer still match cards that have one. */}
