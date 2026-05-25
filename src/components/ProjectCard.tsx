@@ -254,7 +254,27 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               developer logo. Hidden when project is "Ready" (which on the
               homepage should never happen — off-plan only). */}
           {(() => {
-            const handover = deriveHandover(project);
+            const raw = deriveHandover(project);
+            // Format raw handover into Reelly-style "Q# YYYY".
+            const formatHandover = (v: string | null): string | null => {
+              if (!v) return null;
+              const s = v.trim();
+              if (/^ready$/i.test(s)) return "Ready";
+              // Already "Q# YYYY"
+              const qm = s.match(/Q\s?([1-4])\s*[\/\-\s]?\s*(20\d{2})/i);
+              if (qm) return `Q${qm[1]} ${qm[2]}`;
+              // ISO / parseable date → derive quarter
+              const d = new Date(s);
+              if (!Number.isNaN(d.getTime())) {
+                const q = Math.floor(d.getMonth() / 3) + 1;
+                return `Q${q} ${d.getFullYear()}`;
+              }
+              // Bare year
+              const ym = s.match(/^(20\d{2})$/);
+              if (ym) return ym[1];
+              return s;
+            };
+            const handover = formatHandover(raw);
             const showHandover = handover && !/^ready$/i.test(handover);
             const showEoi = !project.is_sold_out;
             if (!showEoi && !showHandover) return null;
