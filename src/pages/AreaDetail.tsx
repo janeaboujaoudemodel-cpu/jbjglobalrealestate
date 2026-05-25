@@ -265,8 +265,8 @@ const AreaDetail = () => {
           >
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
             
-            <div className="w-14 h-14 rounded-2xl bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center mx-auto mb-6">
-              <MapPin className="w-7 h-7 text-[#1A1A1A]" />
+            <div className="w-14 h-14 rounded-2xl bg-[#EFE6D6]/30 border border-[#B89555]/40 flex items-center justify-center mx-auto mb-6">
+              <MapPin className="w-7 h-7 text-[#B89555]" />
             </div>
             <h2 className="text-[#1A1A1A] text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
               Properties in {area.name}
