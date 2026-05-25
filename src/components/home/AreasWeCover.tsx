@@ -38,9 +38,10 @@ const AreasWeCover = () => {
 
   return (
     <section className="bg-[#FDFBF7] py-12 md:py-20">
-      <div className="w-full px-4 md:px-8">
+      <div className="w-full">
         {/* Premium navy frame */}
-        <div className="relative max-w-[1400px] mx-auto rounded-[28px] border border-[#102540] bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] p-6 md:p-10 lg:p-12 shadow-[0_30px_80px_-40px_rgba(16,37,64,0.45)]">
+        <div className="relative w-full mx-auto rounded-[28px] border border-[#102540] bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] p-6 md:p-10 lg:p-12 shadow-[0_30px_80px_-40px_rgba(16,37,64,0.45)]">
+
           {/* Inner hairline (gold) for double-frame depth */}
           <div className="pointer-events-none absolute inset-2 rounded-[22px] border border-[#B89555]/35" aria-hidden="true" />
           {/* Corner accents */}

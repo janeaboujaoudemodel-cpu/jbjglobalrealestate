@@ -197,7 +197,7 @@ const DeveloperPortalCTA = () => {
         className="allow-white pointer-events-none absolute inset-x-1 md:inset-x-3 inset-y-2 md:inset-y-3 rounded-[2.5rem] bg-[#102540] border border-[#B89555]/55 shadow-[0_30px_80px_-40px_rgba(16,37,64,0.65)]"
       />
 
-      <div className="container mx-auto px-3 md:px-6 max-w-7xl relative">
+      <div className="w-full px-1 md:px-3 relative">
         {/* INNER broker/investor portal card — untouched champagne, now floats directly on the navy frame */}
         <div
           data-surface="page"
