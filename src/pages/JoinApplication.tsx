@@ -840,8 +840,9 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                       placeholder="e.g. Dubai"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                      className="bg-[#FDFBF7] border border-[#B89555] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base focus-visible:ring-[#B89555]/40"
                     />
+
                   </div>
                 </div>
 
