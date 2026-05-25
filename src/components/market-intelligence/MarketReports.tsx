@@ -74,12 +74,13 @@ const REPORT_TYPES: MarketReportType[] = [
   },
 ];
 
-/* ICON BOX - inverted on light surfaces */
+/* ICON BOX - approved navy with white icon */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-foreground shadow-md ${className}`}
+    data-no-contrast-guard
+    className={`w-12 h-12 rounded-none flex items-center justify-center transition-all duration-300 bg-[hsl(var(--mi-navy))] border border-[hsl(var(--mi-gold)/0.45)] shadow-md allow-white ${className}`}
   >
-    <Icon className="w-6 h-6 text-background" />
+    <Icon className="w-6 h-6 text-white allow-white" />
   </div>
 );
 
@@ -141,7 +142,7 @@ export const MarketReports = () => {
               Downloadable Reports
             </h2>
             <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
-              Generate AI-powered market reports based on official Open Data.
+              Generate AI-assisted market reports based on official government sources.
               Reports are descriptive summaries, not predictive forecasts.
             </p>
           </motion.div>
@@ -150,13 +151,13 @@ export const MarketReports = () => {
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {REPORT_TYPES.map((report) => (
               <motion.div key={report.id} variants={fadeInUp} className="h-full">
-                <Card className="transition-all h-full flex flex-col hover:shadow-lg bg-card border border-border">
+                <Card className="transition-all h-full flex flex-col rounded-none hover:shadow-[0_16px_38px_hsl(var(--mi-navy)/0.12)] bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)]">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <IconBox icon={report.icon} />
                       <Badge
                         variant="outline"
-                        className="whitespace-nowrap bg-muted text-foreground border-border"
+                          className="whitespace-nowrap rounded-none bg-muted text-foreground border-[hsl(var(--mi-navy)/0.28)]"
                       >
                         <Clock className="w-3 h-3 mr-1" />
                         {report.frequency}
@@ -172,7 +173,7 @@ export const MarketReports = () => {
                     <div className="space-y-2 mb-6 flex-1">
                       <div className={`${MI_CAPTION} flex items-center gap-2 text-foreground`}>
                         <CheckCircle className="w-4 h-4 text-emerald-700" />
-                        Powered by Government Open Data
+                        Powered by official government sources
                       </div>
                       <div className={`${MI_CAPTION} flex items-center gap-2 text-foreground`}>
                         <CheckCircle className="w-4 h-4 text-emerald-700" />
@@ -188,7 +189,8 @@ export const MarketReports = () => {
                       variant="primary"
                       onClick={() => generateReport(report)}
                       disabled={generatingId === report.id}
-                      className="w-full mt-auto"
+                      className="w-full mt-auto rounded-none bg-[hsl(var(--mi-navy))] text-white border border-[hsl(var(--mi-gold))] hover:bg-[hsl(var(--mi-navy-soft))]"
+                      data-no-contrast-guard
                     >
                       {generatingId === report.id ? (
                         <>
@@ -211,7 +213,7 @@ export const MarketReports = () => {
 
           {/* Report Disclaimer */}
           <motion.div
-            className="mt-10 p-6 max-w-3xl mx-auto text-center rounded-2xl bg-card border border-border"
+            className="mt-10 p-6 max-w-3xl mx-auto text-center rounded-none bg-card border border-[hsl(var(--mi-navy)/0.42)]"
             variants={fadeInUp}
           >
             <div className="flex justify-center mb-4">
@@ -221,7 +223,7 @@ export const MarketReports = () => {
               Report Disclaimer
             </h4>
             <p className={MI_BODY_MUTED}>
-              All market reports are generated using AI analysis of publicly available government Open Data.
+              All market reports are generated using AI-assisted analysis of official government sources.
               Reports are for informational purposes only and do not constitute investment advice.
               Data sources include Dubai Pulse, Dubai Statistics Center, and Dubai Land Department.
               Always verify information independently before making decisions.
