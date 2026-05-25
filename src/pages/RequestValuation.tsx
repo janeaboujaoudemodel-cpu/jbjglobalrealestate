@@ -1,81 +1,112 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  BarChart3, Building2, TrendingUp, DollarSign, Layers, Target,
-  Home, Calculator, Search, Shield, Send, ChevronDown, CheckCircle2,
-  ArrowRight, Briefcase
+  BarChart3, TrendingUp, DollarSign, Layers, Target,
+  Calculator, Search, Shield, Send, CheckCircle2,
+  ArrowRight, Briefcase, Sparkles, Database, FileBarChart, Building,
+  Coins, Activity, Info,
 } from 'lucide-react';
 import SEOHead from '@/components/SEOHead';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLeadCapture } from '@/hooks/useLeadCapture';
 import { toast } from 'sonner';
+import { ToolHero } from '@/components/tools/ToolHero';
+import { toolThemes, TOOL_GOLD, TOOL_PAGE_BG } from '@/components/tools/toolThemes';
 
-/* ─── Primitives ─── */
-const GoldDivider = () => (
-  <div className="flex items-center gap-4 my-12">
-    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#EFE6D6]/40 to-transparent" />
-    <div className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]/60" />
-    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#EFE6D6]/40 to-transparent" />
+/* ── Navy palette tokens (matches PropertyEvaluator) ── */
+const NAVY = '#102540';
+const NAVY_DEEP = '#0A1830';
+const NAVY_BORDER = 'rgba(16,37,64,0.45)';
+
+/* ── Section header (blue band with white content) ── */
+const SectionHeader = ({
+  icon: Icon,
+  eyebrow,
+  title,
+}: { icon: any; eyebrow: string; title: string }) => (
+  <div
+    className="rounded-2xl px-6 py-5 mb-6 flex items-center gap-4"
+    style={{
+      background: `linear-gradient(135deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)`,
+      border: `1px solid ${TOOL_GOLD}55`,
+    }}
+  >
+    <div
+      className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+      style={{ background: 'rgba(255,255,255,0.08)', border: `1px solid ${TOOL_GOLD}66` }}
+    >
+      <Icon className="w-5 h-5" style={{ color: TOOL_GOLD }} />
+    </div>
+    <div>
+      <p className="text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: TOOL_GOLD }}>
+        {eyebrow}
+      </p>
+      <h2 className="text-xl md:text-2xl font-bold text-white leading-tight">{title}</h2>
+    </div>
   </div>
 );
 
-const BulletList = ({ items }: { items: string[] }) => (
-  <ul className="space-y-2.5 ml-1">
-    {items.map((item, i) => (
-      <li key={i} className="flex items-start gap-3">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6] mt-2 shrink-0" />
-        <span>{item}</span>
-      </li>
-    ))}
-  </ul>
+/* ── Blue card (white content) ── */
+const BlueCard = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+  <div
+    className={`rounded-2xl p-5 md:p-6 ${className}`}
+    style={{
+      background: `linear-gradient(160deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)`,
+      border: `1px solid ${TOOL_GOLD}40`,
+      boxShadow: '0 10px 30px -18px rgba(0,0,0,0.35)',
+    }}
+  >
+    {children}
+  </div>
 );
 
-const SectionHeading = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1A1A] mb-6">{children}</h2>
+/* ── Champagne card (ink content) — used for the form & strategic insight ── */
+const ChampagneCard = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+  <div
+    className={`rounded-2xl p-5 md:p-7 ${className}`}
+    style={{
+      background: '#F7F2EA',
+      border: `1px solid ${TOOL_GOLD}55`,
+      boxShadow: '0 10px 30px -18px rgba(0,0,0,0.15)',
+    }}
+  >
+    {children}
+  </div>
 );
 
-/* ─── Anchor Nav ─── */
-const anchors = [
-  { id: 'why', label: 'Why It Matters' },
-  { id: 'methodology', label: 'Methodology' },
-  { id: 'types', label: 'Valuation Types' },
-  { id: 'sources', label: 'Data Sources' },
-  { id: 'form', label: 'Request Form' },
-  { id: 'output', label: 'Sample Output' },
-];
-
-/* ─── Comparison Table ─── */
-const comparisonRows = [
-  { informal: 'Based on listing prices', professional: 'Based on transaction data' },
-  { informal: 'Emotional pricing', professional: 'Analytical pricing' },
-  { informal: 'No yield modeling', professional: 'ROI & yield analysis' },
-  { informal: 'No liquidity insight', professional: 'Market absorption metrics' },
-];
-
-/* ─── Methodology Cards ─── */
+/* ── Methodology cards ── */
 const methodologies = [
-  { letter: 'A', title: 'Comparative Market Analysis (CMA)', items: ['Recent transaction records', 'Price per sqft benchmarking', 'Unit-type comparison'] },
-  { letter: 'B', title: 'Income Approach', items: ['Rental yield modeling', 'Gross vs net yield', 'Occupancy stability analysis'] },
-  { letter: 'C', title: 'Market Positioning Analysis', items: ['Supply pipeline', 'Upcoming handovers', 'Developer competition'] },
-  { letter: 'D', title: 'Liquidity & Absorption', items: ['Average days on market', 'Buyer demand index', 'Investor activity trends'] },
+  { icon: BarChart3, title: 'Comparative Market Analysis', desc: 'Transaction records, price-per-sqft benchmarking and unit-type comparison.' },
+  { icon: Coins, title: 'Income Approach', desc: 'Rental-yield modelling, gross vs net yield and occupancy stability.' },
+  { icon: Building, title: 'Market Positioning', desc: 'Supply pipeline, upcoming handovers and developer competition.' },
+  { icon: Activity, title: 'Liquidity & Absorption', desc: 'Days on market, buyer demand index and investor activity.' },
 ];
 
-/* ─── Service Types ─── */
+/* ── Valuation types ── */
 const serviceTypes = [
   { icon: TrendingUp, title: 'Seller Pricing Strategy', desc: 'Accurate exit pricing with demand positioning.' },
-  { icon: Search, title: 'Buyer Acquisition Evaluation', desc: 'Determine fair acquisition value before offer submission.' },
-  { icon: Layers, title: 'Portfolio Reassessment', desc: 'Multi-asset valuation review for restructuring or refinancing.' },
-  { icon: Target, title: 'Pre-Listing Advisory', desc: 'Optimize asset presentation before listing.' },
-  { icon: Calculator, title: 'Mortgage Pre-Assessment Support', desc: 'Prepare valuation alignment for bank financing.' },
+  { icon: Search, title: 'Buyer Acquisition Eval.', desc: 'Fair acquisition value before offer submission.' },
+  { icon: Layers, title: 'Portfolio Reassessment', desc: 'Multi-asset review for restructuring or refinancing.' },
+  { icon: Target, title: 'Pre-Listing Advisory', desc: 'Optimise asset presentation before listing.' },
+  { icon: Calculator, title: 'Mortgage Pre-Assessment', desc: 'Align valuation for bank financing.' },
 ];
 
-/* ─── Output Preview ─── */
+/* ── Data sources ── */
+const dataSources = [
+  'Dubai Land Department transaction data',
+  'RERA Rental Index benchmarks',
+  'Developer pricing releases',
+  'Live market listing analytics',
+  'AI-powered demand modelling',
+];
+
+/* ── Output preview ── */
 const outputRows = [
-  { label: 'Estimated Market Value Range', value: 'AED X,XXX,XXX – AED X,XXX,XXX' },
-  { label: 'Estimated Rental Yield', value: '6.2% – 7.1%' },
-  { label: 'Market Liquidity Rating', value: 'High / Moderate / Low' },
-  { label: 'Risk Level', value: 'Low / Medium / Elevated' },
+  { icon: DollarSign, label: 'Estimated Market Value', value: 'AED X.XM – X.XM' },
+  { icon: TrendingUp, label: 'Estimated Rental Yield', value: '6.2% – 7.1%' },
+  { icon: Activity, label: 'Liquidity Rating', value: 'High / Moderate / Low' },
+  { icon: Shield, label: 'Risk Level', value: 'Low / Medium / Elevated' },
 ];
 
 const RequestValuation = () => {
@@ -114,298 +145,323 @@ const RequestValuation = () => {
     <>
       <SEOHead
         title="Property Valuation & Strategic Pricing Advisory | JBJ Global Real Estate"
-        description="Data-driven real estate valuation for informed decision-making. Professional property assessment using transaction data, comparative analytics, and demand indicators."
+        description="Data-driven real estate valuation: DLD transactions, RERA Rental Index, comparative analytics and demand indicators."
         keywords="property valuation dubai, real estate pricing, market analysis, CMA, rental yield, valuation advisory"
         canonicalPath="/sell/valuation"
       />
 
-      <div className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#FAF7F2] to-[#F5F0E8]">
-
-        {/* ─── HERO ─── */}
-        <section className="relative py-20 md:py-28 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#FAF7F2] via-white/60 to-[#F5F0E8]" />
-          <div className="relative max-w-4xl mx-auto px-6 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EFE6D6]/10 border border-[#B89555]/25 rounded-full mb-6">
-              <BarChart3 className="w-4 h-4 text-[#B89555]" />
-              <span className="text-xs font-semibold text-[#B89555] tracking-widest uppercase">Valuation Advisory</span>
-            </div>
-            <h1 className="text-3xl md:text-5xl font-serif font-bold text-[#1A1A1A] mb-4 leading-tight">
-              Property Valuation & Strategic Pricing Advisory
-            </h1>
-            <p className="text-lg md:text-xl text-[#B89555] font-medium mb-6">
-              Data-Driven Real Estate Valuation for Informed Decision-Making
-            </p>
-            <p className="text-[#1A1A1A]/70 leading-relaxed max-w-3xl mx-auto text-[15px] md:text-base mb-8">
-              Our valuation service provides structured, market-based property assessment using transactional data, comparative analytics, and current demand indicators across Dubai and the UAE. Whether selling, acquiring, or restructuring assets, accurate valuation is the foundation of intelligent real estate strategy.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <a href="#form" className="inline-flex items-center gap-2 px-6 py-3 bg-[#EFE6D6] text-white font-semibold rounded-xl hover:bg-[#b8964f] transition-colors shadow-md">
-                Request Valuation <ArrowRight className="w-4 h-4" />
-              </a>
-              <Link to="/contact" className="inline-flex items-center gap-2 px-6 py-3 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] font-semibold rounded-xl hover:border-[#B89555]/60 transition-colors">
-                Schedule Consultation
-              </Link>
-            </div>
-            <div className="mt-8 h-px w-32 mx-auto bg-gradient-to-r from-transparent via-[#EFE6D6]/50 to-transparent" />
+      <div className="min-h-screen" style={{ background: TOOL_PAGE_BG }}>
+        {/* ── Premium navy hero ── */}
+        <ToolHero
+          theme={toolThemes.navy}
+          eyebrowIcon={Sparkles}
+          eyebrow="Valuation Advisory"
+          title={
+            <>
+              Property Valuation &{' '}
+              <span style={{ color: TOOL_GOLD }}>Strategic Pricing</span>
+            </>
+          }
+          subtitle="Structured, transaction-grade property assessment across Dubai and the UAE — for sellers, buyers and portfolio holders."
+        >
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="#form"
+              data-allow-dark-cta
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors"
+              style={{
+                background: `linear-gradient(135deg, ${NAVY} 0%, ${NAVY_DEEP} 60%, #000 100%)`,
+                border: `1px solid ${TOOL_GOLD}`,
+              }}
+            >
+              Request Valuation <ArrowRight className="w-4 h-4" />
+            </a>
+            <Link
+              to="/property-evaluator"
+              data-allow-dark-cta
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors"
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                border: `1px solid ${TOOL_GOLD}66`,
+              }}
+            >
+              <Calculator className="w-4 h-4" style={{ color: TOOL_GOLD }} /> Try Instant Evaluator
+            </Link>
           </div>
-        </section>
+        </ToolHero>
 
-        {/* ─── ANCHOR NAV ─── */}
-        <nav className="sticky top-0 lg:top-[48px] z-30 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-[#B89555]/15 shadow-sm">
-          <div className="max-w-5xl mx-auto px-6 overflow-x-auto scrollbar-hide">
-            <div className="flex gap-6 py-3 min-w-max">
-              {anchors.map(a => (
-                <a key={a.id} href={`#${a.id}`} className="text-sm text-[#1A1A1A]/70 hover:text-[#B89555] transition-colors whitespace-nowrap font-medium">
-                  {a.label}
-                </a>
-              ))}
-            </div>
-          </div>
-        </nav>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 space-y-12">
 
-        <div className="max-w-5xl mx-auto px-6 pb-20">
-
-          {/* ─── WHY VALUATION MATTERS ─── */}
-          <section id="why" className="pt-16">
-            <SectionHeading>Why Professional Valuation Matters</SectionHeading>
-            <div className="text-[#1A1A1A]/70 text-[15px] leading-relaxed space-y-4 mb-10">
-              <BulletList items={[
-                'Overpricing reduces liquidity and delays transactions',
-                'Underpricing causes capital loss',
-                'Market cycles directly affect asset positioning',
-                'Developer pricing strategies shift by micro-location',
-                'Bank mortgage approvals rely on valuation accuracy',
-              ]} />
-            </div>
-
-            {/* Comparison Table */}
-            <div className="grid md:grid-cols-2 gap-5">
-              <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-6">
-                <h3 className="font-serif font-bold text-[#1A1A1A]/70 text-lg mb-4">Informal Estimate</h3>
-                {comparisonRows.map((r, i) => (
-                  <p key={i} className="text-[#1A1A1A]/70 text-sm py-2 border-b border-[#B89555]/30 last:border-0">{r.informal}</p>
-                ))}
-              </div>
-              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-2xl p-6 shadow-sm">
-                <h3 className="font-serif font-bold text-[#B89555] text-lg mb-4">Professional Valuation</h3>
-                {comparisonRows.map((r, i) => (
-                  <p key={i} className="text-[#1A1A1A] text-sm py-2 border-b border-[#B89555]/10 last:border-0 flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#B89555] mt-0.5 shrink-0" /> {r.professional}
-                  </p>
-                ))}
-              </div>
+          {/* ── WHY IT MATTERS ── */}
+          <section id="why">
+            <SectionHeader icon={Info} eyebrow="01 · Foundations" title="Why Professional Valuation Matters" />
+            <div className="grid md:grid-cols-2 gap-4">
+              <ChampagneCard>
+                <h3 className="font-bold text-[#1A1A1A] mb-3 text-base">Informal Estimate</h3>
+                <ul className="space-y-2 text-sm text-[#1A1A1A]/75">
+                  <li>Based on listing prices</li>
+                  <li>Emotional pricing</li>
+                  <li>No yield modelling</li>
+                  <li>No liquidity insight</li>
+                </ul>
+              </ChampagneCard>
+              <BlueCard>
+                <h3 className="font-bold text-white mb-3 text-base flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" style={{ color: TOOL_GOLD }} /> Professional Valuation
+                </h3>
+                <ul className="space-y-2 text-sm text-white/85">
+                  {['Based on transaction data', 'Analytical pricing', 'ROI & yield analysis', 'Market absorption metrics'].map(t => (
+                    <li key={t} className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: TOOL_GOLD }} />
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </BlueCard>
             </div>
           </section>
 
-          <GoldDivider />
-
-          {/* ─── METHODOLOGY ─── */}
+          {/* ── METHODOLOGY ── */}
           <section id="methodology">
-            <SectionHeading>Our Valuation Methodology</SectionHeading>
-            <div className="grid md:grid-cols-2 gap-5">
+            <SectionHeader icon={FileBarChart} eyebrow="02 · Methodology" title="Our Valuation Methodology" />
+            <div className="grid sm:grid-cols-2 gap-4">
               {methodologies.map(m => (
-                <div key={m.letter} className="bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="w-8 h-8 rounded-lg bg-[#EFE6D6]/15 flex items-center justify-center text-[#B89555] font-bold text-sm">{m.letter}</span>
-                    <h3 className="font-serif font-bold text-[#1A1A1A]">{m.title}</h3>
+                <BlueCard key={m.title}>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div
+                      className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                      style={{ background: 'rgba(255,255,255,0.08)', border: `1px solid ${TOOL_GOLD}55` }}
+                    >
+                      <m.icon className="w-5 h-5" style={{ color: TOOL_GOLD }} />
+                    </div>
+                    <h3 className="font-bold text-white text-[15px]">{m.title}</h3>
                   </div>
-                  <BulletList items={m.items} />
-                </div>
+                  <p className="text-sm text-white/80 leading-relaxed">{m.desc}</p>
+                </BlueCard>
               ))}
             </div>
           </section>
 
-          <GoldDivider />
-
-          {/* ─── VALUATION TYPES ─── */}
+          {/* ── VALUATION TYPES ── */}
           <section id="types">
-            <SectionHeading>Valuation Types Offered</SectionHeading>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <SectionHeader icon={Layers} eyebrow="03 · Coverage" title="Valuation Types Offered" />
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {serviceTypes.map(s => (
-                <div key={s.title} className="bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/15 flex items-center justify-center mb-4">
-                    <s.icon className="w-5 h-5 text-[#B89555]" />
+                <ChampagneCard key={s.title} className="hover:shadow-md transition-shadow">
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
+                    style={{ background: `${NAVY}12`, border: `1px solid ${NAVY_BORDER}` }}
+                  >
+                    <s.icon className="w-5 h-5" style={{ color: NAVY }} />
                   </div>
-                  <h3 className="font-serif font-bold text-[#1A1A1A] mb-2">{s.title}</h3>
-                  <p className="text-[#1A1A1A]/70 text-[15px] leading-relaxed">{s.desc}</p>
-                </div>
+                  <h3 className="font-bold text-[#1A1A1A] mb-1.5 text-[15px]">{s.title}</h3>
+                  <p className="text-sm text-[#1A1A1A]/70 leading-relaxed">{s.desc}</p>
+                </ChampagneCard>
               ))}
             </div>
           </section>
 
-          <GoldDivider />
-
-          {/* ─── DATA SOURCES ─── */}
+          {/* ── DATA SOURCES (blue card, white content) ── */}
           <section id="sources">
-            <SectionHeading>Data Sources</SectionHeading>
-            <div className="bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
-              <p className="text-[#1A1A1A]/70 text-[15px] mb-4">Valuation analysis is based on:</p>
-              <BulletList items={[
-                'Dubai Land Department transaction data',
-                'Market listing analytics',
-                'Developer pricing releases',
-                'Rental transaction benchmarks',
-                'AI-powered demand modeling tools',
-              ]} />
-            </div>
-          </section>
-
-          <GoldDivider />
-
-          {/* ─── FORM ─── */}
-          <section id="form">
-            <SectionHeading>Request Professional Valuation</SectionHeading>
-            <form onSubmit={handleSubmit} className="bg-[#FDFBF7]/90 border border-[#B89555]/20 rounded-2xl p-6 md:p-8 shadow-sm space-y-5">
-              <div className="grid md:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1.5">Full Name *</label>
-                  <Input value={form.fullName} onChange={e => updateField('fullName', e.target.value)} placeholder="Your full name" className="border-[#B89555]/20 focus:border-[#B89555]" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1.5">Email *</label>
-                  <Input type="email" value={form.email} onChange={e => updateField('email', e.target.value)} placeholder="your@email.com" className="border-[#B89555]/20 focus:border-[#B89555]" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1.5">Phone *</label>
-                  <Input type="tel" value={form.phone} onChange={e => updateField('phone', e.target.value)} placeholder="+971 XX XXX XXXX" className="border-[#B89555]/20 focus:border-[#B89555]" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1.5">Property Type</label>
-                  <Select value={form.propertyType} onValueChange={v => updateField('propertyType', v)}>
-                    <SelectTrigger className="border-[#B89555]/20"><SelectValue placeholder="Select type" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="apartment">Apartment</SelectItem>
-                      <SelectItem value="villa">Villa</SelectItem>
-                      <SelectItem value="townhouse">Townhouse</SelectItem>
-                      <SelectItem value="commercial">Commercial</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1.5">Developer</label>
-                  <Input value={form.developer} onChange={e => updateField('developer', e.target.value)} placeholder="e.g. Emaar, DAMAC" className="border-[#B89555]/20 focus:border-[#B89555]" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1.5">Community</label>
-                  <Input value={form.community} onChange={e => updateField('community', e.target.value)} placeholder="e.g. Downtown, Marina" className="border-[#B89555]/20 focus:border-[#B89555]" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1.5">Unit Size (sqft)</label>
-                  <Input type="number" value={form.unitSize} onChange={e => updateField('unitSize', e.target.value)} placeholder="e.g. 1200" className="border-[#B89555]/20 focus:border-[#B89555]" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1.5">Bedrooms</label>
-                  <Select value={form.bedrooms} onValueChange={v => updateField('bedrooms', v)}>
-                    <SelectTrigger className="border-[#B89555]/20"><SelectValue placeholder="Select" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="studio">Studio</SelectItem>
-                      <SelectItem value="1">1 BR</SelectItem>
-                      <SelectItem value="2">2 BR</SelectItem>
-                      <SelectItem value="3">3 BR</SelectItem>
-                      <SelectItem value="4">4 BR</SelectItem>
-                      <SelectItem value="5+">5+ BR</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1.5">Current Status</label>
-                  <Select value={form.currentStatus} onValueChange={v => updateField('currentStatus', v)}>
-                    <SelectTrigger className="border-[#B89555]/20"><SelectValue placeholder="Select status" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="vacant">Vacant</SelectItem>
-                      <SelectItem value="tenanted">Tenanted</SelectItem>
-                      <SelectItem value="offplan">Off-plan</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1.5">Purpose</label>
-                  <Select value={form.purpose} onValueChange={v => updateField('purpose', v)}>
-                    <SelectTrigger className="border-[#B89555]/20"><SelectValue placeholder="Select purpose" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="sell">Sell</SelectItem>
-                      <SelectItem value="buy">Buy</SelectItem>
-                      <SelectItem value="refinance">Refinance</SelectItem>
-                      <SelectItem value="portfolio">Portfolio Review</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            <SectionHeader icon={Database} eyebrow="04 · Inputs" title="Data Sources" />
+            <BlueCard>
+              <p className="text-sm text-white/80 mb-4">Every valuation is constructed from authenticated, institutional inputs:</p>
+              <div className="grid sm:grid-cols-2 gap-2.5">
+                {dataSources.map(src => (
+                  <div
+                    key={src}
+                    className="flex items-start gap-2.5 px-3 py-2.5 rounded-lg"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${TOOL_GOLD}33` }}
+                  >
+                    <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: TOOL_GOLD }} />
+                    <span className="text-sm text-white/90">{src}</span>
+                  </div>
+                ))}
               </div>
-
-              <label className="flex items-start gap-3 cursor-pointer pt-2">
-                <input type="checkbox" checked={confirmed} onChange={e => setConfirmed(e.target.checked)} className="mt-1 accent-[#B89555]" />
-                <span className="text-sm text-[#1A1A1A]/70">I confirm the information provided is accurate.</span>
-              </label>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="inline-flex items-center gap-2 px-8 py-3 bg-[#EFE6D6] text-white font-semibold rounded-xl hover:bg-[#b8964f] transition-colors shadow-md disabled:opacity-50"
-              >
-                <Send className="w-4 h-4" />
-                {isSubmitting ? 'Submitting...' : 'Request Professional Valuation'}
-              </button>
-            </form>
+            </BlueCard>
           </section>
 
-          <GoldDivider />
-
-          {/* ─── OUTPUT PREVIEW ─── */}
-          <section id="output">
-            <SectionHeading>Premium Analytical Output Preview</SectionHeading>
-            <div className="grid sm:grid-cols-2 gap-5">
-              {outputRows.map(r => (
-                <div key={r.label} className="bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-2xl p-6 shadow-sm text-center">
-                  <p className="text-sm text-[#1A1A1A]/70 mb-2">{r.label}</p>
-                  <p className="text-xl font-serif font-bold text-[#1A1A1A]">{r.value}</p>
+          {/* ── REQUEST FORM (champagne) ── */}
+          <section id="form">
+            <SectionHeader icon={Send} eyebrow="05 · Request" title="Request Professional Valuation" />
+            <ChampagneCard>
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1A1A1A]/75 mb-1.5 uppercase tracking-wide">Full Name *</label>
+                    <Input value={form.fullName} onChange={e => updateField('fullName', e.target.value)} placeholder="Your full name" className="border-[#B89555]/30 focus:border-[#B89555]" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1A1A1A]/75 mb-1.5 uppercase tracking-wide">Email *</label>
+                    <Input type="email" value={form.email} onChange={e => updateField('email', e.target.value)} placeholder="your@email.com" className="border-[#B89555]/30 focus:border-[#B89555]" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1A1A1A]/75 mb-1.5 uppercase tracking-wide">Phone *</label>
+                    <Input type="tel" value={form.phone} onChange={e => updateField('phone', e.target.value)} placeholder="+971 XX XXX XXXX" className="border-[#B89555]/30 focus:border-[#B89555]" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1A1A1A]/75 mb-1.5 uppercase tracking-wide">Property Type</label>
+                    <Select value={form.propertyType} onValueChange={v => updateField('propertyType', v)}>
+                      <SelectTrigger className="border-[#B89555]/30"><SelectValue placeholder="Select type" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="apartment">Apartment</SelectItem>
+                        <SelectItem value="villa">Villa</SelectItem>
+                        <SelectItem value="townhouse">Townhouse</SelectItem>
+                        <SelectItem value="commercial">Commercial</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1A1A1A]/75 mb-1.5 uppercase tracking-wide">Developer</label>
+                    <Input value={form.developer} onChange={e => updateField('developer', e.target.value)} placeholder="e.g. Emaar, DAMAC" className="border-[#B89555]/30 focus:border-[#B89555]" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1A1A1A]/75 mb-1.5 uppercase tracking-wide">Community</label>
+                    <Input value={form.community} onChange={e => updateField('community', e.target.value)} placeholder="e.g. Downtown, Marina" className="border-[#B89555]/30 focus:border-[#B89555]" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1A1A1A]/75 mb-1.5 uppercase tracking-wide">Unit Size (sqft)</label>
+                    <Input type="number" value={form.unitSize} onChange={e => updateField('unitSize', e.target.value)} placeholder="e.g. 1200" className="border-[#B89555]/30 focus:border-[#B89555]" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1A1A1A]/75 mb-1.5 uppercase tracking-wide">Bedrooms</label>
+                    <Select value={form.bedrooms} onValueChange={v => updateField('bedrooms', v)}>
+                      <SelectTrigger className="border-[#B89555]/30"><SelectValue placeholder="Select" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="studio">Studio</SelectItem>
+                        <SelectItem value="1">1 BR</SelectItem>
+                        <SelectItem value="2">2 BR</SelectItem>
+                        <SelectItem value="3">3 BR</SelectItem>
+                        <SelectItem value="4">4 BR</SelectItem>
+                        <SelectItem value="5+">5+ BR</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1A1A1A]/75 mb-1.5 uppercase tracking-wide">Current Status</label>
+                    <Select value={form.currentStatus} onValueChange={v => updateField('currentStatus', v)}>
+                      <SelectTrigger className="border-[#B89555]/30"><SelectValue placeholder="Select status" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="vacant">Vacant</SelectItem>
+                        <SelectItem value="tenanted">Tenanted</SelectItem>
+                        <SelectItem value="offplan">Off-plan</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1A1A1A]/75 mb-1.5 uppercase tracking-wide">Purpose</label>
+                    <Select value={form.purpose} onValueChange={v => updateField('purpose', v)}>
+                      <SelectTrigger className="border-[#B89555]/30"><SelectValue placeholder="Select purpose" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="sell">Sell</SelectItem>
+                        <SelectItem value="buy">Buy</SelectItem>
+                        <SelectItem value="refinance">Refinance</SelectItem>
+                        <SelectItem value="portfolio">Portfolio Review</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-              ))}
-            </div>
+
+                <label className="flex items-start gap-3 cursor-pointer pt-1">
+                  <input type="checkbox" checked={confirmed} onChange={e => setConfirmed(e.target.checked)} className="mt-1 accent-[#B89555]" />
+                  <span className="text-sm text-[#1A1A1A]/75">I confirm the information provided is accurate.</span>
+                </label>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  data-allow-dark-cta
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white transition-colors disabled:opacity-50"
+                  style={{
+                    background: `linear-gradient(135deg, ${NAVY} 0%, ${NAVY_DEEP} 60%, #000 100%)`,
+                    border: `1px solid ${TOOL_GOLD}`,
+                  }}
+                >
+                  <Send className="w-4 h-4" />
+                  {isSubmitting ? 'Submitting...' : 'Request Professional Valuation'}
+                </button>
+              </form>
+            </ChampagneCard>
           </section>
 
-          <GoldDivider />
+          {/* ── ANALYTICAL OUTPUT PREVIEW (upgraded) ── */}
+          <section id="output">
+            <SectionHeader icon={BarChart3} eyebrow="06 · Deliverable" title="Premium Analytical Output Preview" />
+            <BlueCard>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {outputRows.map(r => (
+                  <div
+                    key={r.label}
+                    className="rounded-xl p-4"
+                    style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${TOOL_GOLD}40` }}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <r.icon className="w-4 h-4" style={{ color: TOOL_GOLD }} />
+                      <p className="text-[11px] uppercase tracking-wider text-white/70 font-semibold">{r.label}</p>
+                    </div>
+                    <p className="text-base font-bold text-white">{r.value}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 pt-4 flex items-start gap-3" style={{ borderTop: `1px solid ${TOOL_GOLD}33` }}>
+                <Sparkles className="w-4 h-4 mt-0.5 shrink-0" style={{ color: TOOL_GOLD }} />
+                <p className="text-xs text-white/75 leading-relaxed">
+                  Delivered as a structured PDF including comparable transactions, yield modelling and
+                  positioning notes — typically within 48 business hours.
+                </p>
+              </div>
+            </BlueCard>
+          </section>
 
-          {/* ─── STRATEGIC INSIGHT ─── */}
-          <section>
-            <div className="bg-gradient-to-br from-[#FAF7F2] to-white border border-[#B89555]/20 rounded-2xl p-8 text-center shadow-sm">
-              <h2 className="text-2xl font-serif font-bold text-[#1A1A1A] mb-4">Strategic Pricing Insight</h2>
-              <p className="text-[#1A1A1A]/70 leading-relaxed max-w-2xl mx-auto text-[15px]">
-                Pricing is not simply about numbers — it is about positioning within active market demand. Strategic valuation increases liquidity, enhances negotiation strength, and protects long-term capital appreciation.
+          {/* ── STRATEGIC INSIGHT + COMPLIANCE ── */}
+          <section className="grid md:grid-cols-3 gap-4">
+            <ChampagneCard className="md:col-span-2">
+              <h3 className="text-lg font-bold text-[#1A1A1A] mb-2">Strategic Pricing Insight</h3>
+              <p className="text-sm text-[#1A1A1A]/75 leading-relaxed">
+                Pricing is not simply about numbers — it is about positioning within active market demand.
+                Strategic valuation increases liquidity, sharpens negotiation and protects long-term capital appreciation.
               </p>
-            </div>
+            </ChampagneCard>
+            <ChampagneCard>
+              <div className="flex items-start gap-2.5">
+                <Shield className="w-5 h-5 shrink-0 mt-0.5" style={{ color: NAVY }} />
+                <p className="text-xs text-[#1A1A1A]/75 leading-relaxed">
+                  Conducted within licensed brokerage advisory scope. Not a certified bank appraisal unless
+                  requested via authorised partners.
+                </p>
+              </div>
+            </ChampagneCard>
           </section>
 
-          {/* ─── COMPLIANCE NOTE ─── */}
-          <div className="mt-8 bg-[#EFE6D6]/5 border border-[#B89555]/15 rounded-xl p-5">
-            <p className="text-sm text-[#1A1A1A]/70 leading-relaxed flex items-start gap-3">
-              <Shield className="w-5 h-5 text-[#B89555] shrink-0 mt-0.5" />
-              Valuation services are conducted within the scope of licensed brokerage advisory and do not constitute certified bank appraisal unless specifically requested through authorized partners.
-            </p>
-          </div>
-
-          <GoldDivider />
-
-          {/* ─── FINAL CTA ─── */}
-          <section className="text-center">
-            <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1A1A] mb-4">
-              Position Your Asset With Precision
+          {/* ── FINAL CTA ── */}
+          <section className="text-center pt-4">
+            <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-4">
+              Position your asset with precision.
             </h2>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <a href="#form" className="inline-flex items-center gap-2 px-6 py-3 bg-[#EFE6D6] text-white font-semibold rounded-xl hover:bg-[#b8964f] transition-colors shadow-md">
+              <a
+                href="#form"
+                data-allow-dark-cta
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white transition-colors"
+                style={{
+                  background: `linear-gradient(135deg, ${NAVY} 0%, ${NAVY_DEEP} 60%, #000 100%)`,
+                  border: `1px solid ${TOOL_GOLD}`,
+                }}
+              >
                 Request Valuation Now <ArrowRight className="w-4 h-4" />
               </a>
-              <Link to="/contact" className="inline-flex items-center gap-2 px-6 py-3 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] font-semibold rounded-xl hover:border-[#B89555]/60 transition-colors">
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-[#1A1A1A] transition-colors"
+                style={{
+                  background: '#F7F2EA',
+                  border: `1px solid ${TOOL_GOLD}55`,
+                }}
+              >
                 <Briefcase className="w-4 h-4" /> Speak to an Advisor
               </Link>
             </div>
           </section>
-
-          {/* Footer note */}
-          <div className="pt-10 text-center">
-            <p className="text-xs text-[#1A1A1A]/70">
-              This page may be updated periodically to reflect market developments.
-            </p>
-          </div>
         </div>
       </div>
     </>
