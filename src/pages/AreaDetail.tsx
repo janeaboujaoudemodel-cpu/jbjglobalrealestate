@@ -294,7 +294,7 @@ const AreaDetail = () => {
 
       {/* Similar Areas — new tall photo card style */}
       {relatedAreas.length > 0 && (
-        <section id="ready-to-get-started" className="py-16 bg-[#1A1A1A]">
+        <section id="ready-to-get-started" className="py-16 bg-[#102540]">
           <div className="container mx-auto px-4">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               {/* Header */}
