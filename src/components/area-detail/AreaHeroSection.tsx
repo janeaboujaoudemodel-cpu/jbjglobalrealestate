@@ -97,11 +97,12 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
 
         {/* Breadcrumb */}
         <motion.nav className="flex items-center gap-2 text-sm mb-6" variants={fadeInUp}>
-          <Link to="/" className="text-[#1A1A1A]/70 hover:text-white transition-colors">Home</Link>
-          <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70" />
-          <Link to="/areas" className="text-[#1A1A1A]/70 hover:text-white transition-colors">Areas</Link>
-          <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70" />
-          <span className="text-[#1A1A1A]">{area.name}</span>
+          <Link to="/" className="text-white/70 hover:text-white transition-colors">Home</Link>
+          <ChevronRight className="w-4 h-4 text-white/60" />
+          <Link to="/areas" className="text-white/70 hover:text-white transition-colors">Areas</Link>
+          <ChevronRight className="w-4 h-4 text-white/60" />
+          <span className="text-white">{area.name}</span>
+
         </motion.nav>
 
         {/* Stats Bar */}
