@@ -609,52 +609,108 @@ const QuizResults = () => {
         </div>
       </div>
 
-      {/* Share Modal */}
+      {/* Share Modal — unified channels (WhatsApp / Email / Copy / JBJ Consultant) */}
       <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
         <DialogContent className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               <Share2 className="w-5 h-5 text-[#B89555]" />
-              Share Your Results
+              {shareTrigger === "post-download" ? "Share your report" : "Share your recommendations"}
             </DialogTitle>
             <DialogDescription className="text-[#1A1A1A]/70">
-              Send your AI recommendations to our team for a personalized consultation
+              {shareTrigger === "post-download"
+                ? "Your PDF has been downloaded. You can also share these properties with anyone, or send them directly to a JBJ Consultant."
+                : "Pick a channel to share the full list of AI recommendations."}
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 mt-4">
-            <div className="bg-[#F7F2EA] rounded-lg p-4 border border-[#B89555]/20">
-              <p className="text-[#1A1A1A]/70 text-xs mb-3">Properties to share:</p>
+          <div className="space-y-4 mt-2">
+            <div className="bg-[#F7F2EA] rounded-lg p-3 border border-[#B89555]/20 max-h-40 overflow-y-auto">
+              <p className="text-[#1A1A1A]/70 text-xs mb-2">Properties included:</p>
               {projects?.map((p, i) => {
                 const badge = badges[p.id];
                 return (
-                  <div key={p.id} className="flex items-center gap-2 text-sm py-1">
+                  <div key={p.id} className="flex items-center gap-2 text-sm py-0.5">
                     <span className="text-[#B89555] font-semibold">#{i + 1}</span>
                     {badge && (
                       <span className={badgeLabels[badge].medalColor}>
-                        {badge === 'top1' ? '(Gold)' : badge === 'top2' ? '(Silver)' : '(Bronze)'}
+                        {badge === "top1" ? "(Gold)" : badge === "top2" ? "(Silver)" : "(Bronze)"}
                       </span>
                     )}
-                    <span className="text-[#1A1A1A]">{p.name}</span>
+                    <span className="text-[#1A1A1A] truncate">{p.name}</span>
                   </div>
                 );
               })}
             </div>
 
-            <Button
-              onClick={handleShareToCompany}
-              className="w-full bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110 font-semibold"
-            >
-              <Mail className="w-4 h-4 mr-2" />
-              Send to CONTACT@JBJ.AE
-            </Button>
+            {/* Channel grid */}
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                onClick={handleShareWhatsApp}
+                variant="outline"
+                className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border-[#B89555]/40 justify-start"
+              >
+                <MessageCircle className="w-4 h-4 mr-2 text-[#B89555]" />
+                WhatsApp
+              </Button>
+              <Button
+                onClick={handleShareEmail}
+                variant="outline"
+                className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border-[#B89555]/40 justify-start"
+              >
+                <Mail className="w-4 h-4 mr-2 text-[#B89555]" />
+                Email
+              </Button>
+              <Button
+                onClick={handleCopyLink}
+                variant="outline"
+                className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border-[#B89555]/40 justify-start"
+              >
+                <LinkIcon className="w-4 h-4 mr-2 text-[#B89555]" />
+                Copy text
+              </Button>
+              <Button
+                onClick={handleDownloadReport}
+                variant="outline"
+                className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border-[#B89555]/40 justify-start"
+              >
+                <Download className="w-4 h-4 mr-2 text-[#B89555]" />
+                Download PDF
+              </Button>
+            </div>
 
-            <p className="text-[#1A1A1A]/70 text-xs text-center">
-              Our property consultants will contact you within 24 hours
-            </p>
+            <div className="pt-2 border-t border-[#B89555]/20 space-y-2">
+              <p className="text-[#1A1A1A] text-xs font-semibold flex items-center gap-1.5">
+                <Building2 className="w-3.5 h-3.5 text-[#B89555]" />
+                Send to a JBJ Consultant
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  onClick={handleShareToConsultant}
+                  data-allow-dark-cta
+                  className="bg-[#102540] text-white hover:bg-[#1a3d63] hover:text-white [&_svg]:text-white font-semibold border border-[#B89555]"
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  Email JBJ
+                </Button>
+                <Button
+                  onClick={handleConsultantWhatsApp}
+                  data-allow-dark-cta
+                  className="bg-[#102540] text-white hover:bg-[#1a3d63] hover:text-white [&_svg]:text-white font-semibold border border-[#B89555]"
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  WhatsApp JBJ
+                </Button>
+              </div>
+              <p className="text-[#1A1A1A]/60 text-[11px] text-center pt-1">
+                Our consultants typically reply within 24 hours.
+              </p>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
+
+
 
       {/* VIP Upgrade Modal */}
       <PaymentModal
