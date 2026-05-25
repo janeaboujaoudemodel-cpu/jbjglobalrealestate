@@ -652,13 +652,11 @@ const Compare = () => {
             <p className="text-white/85 text-lg md:text-xl mb-4 max-w-2xl">
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
-            <FounderContent>
-              <div className="mt-2">
-                <p className="text-white/85 text-sm font-medium">Jane Bou Jaoude</p>
-                <p className="text-[#1A1A1A] text-xs mt-0.5">Founder & CEO</p>
-                <p className="text-white/90 text-xs mt-0.5">JBJ Global Real Estate</p>
-              </div>
-            </FounderContent>
+            <div className="flex items-center gap-3 mt-3">
+              <div className="h-px w-12" style={{ background: "#B89555" }} />
+              <span className="text-[10px] uppercase tracking-[0.22em] font-semibold text-white/60">Powered by</span>
+              <span className="text-xs font-bold tracking-[0.14em] text-white">JBJ GLOBAL REAL ESTATE</span>
+            </div>
 
             {/* Feature Cards - Champagne Theme */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
