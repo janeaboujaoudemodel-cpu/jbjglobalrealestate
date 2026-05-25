@@ -105,7 +105,7 @@ export const AdminRoutes = () => (
     <Route path="/admin-inquiries" element={<OwnerGuard><RouteErrorBoundary routeName="Inquiry Management Hub"><InquiryManagementHub /></RouteErrorBoundary></OwnerGuard>} />
     <Route path="/admin/crm" element={<OwnerGuard><AdminCRM /></OwnerGuard>} />
     <Route path="/admin/chat-conversations" element={<OwnerGuard><AdminChatDashboard /></OwnerGuard>} />
-    <Route path="/admin/onboarding" element={<OwnerGuard><AdminOnboarding /></OwnerGuard>} />
+    {/* /admin/onboarding redirected to Careers Portal below */}
     <Route path="/admin/roles" element={<OwnerGuard><AdminRoleManagement /></OwnerGuard>} />
     <Route path="/admin/intelligence" element={<OwnerGuard><AdminIntelligence /></OwnerGuard>} />
     {/* Legacy /admin/developers/* → redirect to new Developer Hub */}
