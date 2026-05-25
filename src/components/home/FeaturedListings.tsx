@@ -6,6 +6,7 @@
  * Results are personalized via useHandpickedProjects (interest form → favorites
  * → browsing history → mode-aware elite fallback).
  */
+import { Link } from "react-router-dom";
 import { Home, ArrowRight, Building2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,9 +26,16 @@ const FeaturedListings = () => {
         <div className="rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)] p-5 md:p-8">
           {/* Section Header */}
           <div className="text-center mb-8">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-              <Home className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-              <span className="text-[#1A1A1A]">{t("featured.title", "Featured Properties")}</span>
+            <span
+              data-surface="dark"
+              data-on-dark
+              data-no-contrast-guard
+              data-allow-dark-cta
+              className="allow-white inline-flex items-center gap-2 px-4 py-2 bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/50 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4 transition-colors"
+              style={{ color: "#FFFFFF" }}
+            >
+              <Home className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>{t("featured.title", "Featured Properties")}</span>
             </span>
             <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
               {t("featured.heading", "Handpicked For You")}
@@ -68,11 +76,22 @@ const FeaturedListings = () => {
             )}
           </div>
 
-          {/* View All CTA — premium pearl, kept inside the same gold-bordered card per owner directive */}
+          {/* View All CTA — navy blue, white text + icon */}
           <div className="text-center mt-10">
-            <PearlButton to="/properties" size="lg" trailingIcon={<ArrowRight strokeWidth={2.5} />}>
-              {t("featured.viewAll", "View All Projects")}
-            </PearlButton>
+            <Link
+              to="/properties"
+              data-surface="dark"
+              data-on-dark
+              data-no-contrast-guard
+              data-allow-dark-cta
+              className="allow-white inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 text-white text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)]"
+              style={{ color: "#FFFFFF" }}
+            >
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>
+                {t("featured.viewAll", "View All Projects")}
+              </span>
+              <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
+            </Link>
           </div>
         </div>
       </div>

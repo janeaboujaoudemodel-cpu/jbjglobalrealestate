@@ -185,17 +185,22 @@ const DeveloperPortalCTA = () => {
     features: { label: string; icon: any }[];
     Icon: any;
   }) => (
-    <section className="jj-band jj-band-surface py-16 md:py-24 relative overflow-hidden">
-      {/* Decorative outer frame — bold gold hairline spanning full container width */}
-      <div className="pointer-events-none absolute inset-x-2 inset-y-4 md:inset-x-4 md:inset-y-6 border-2 border-[#B89555]/45 rounded-[2.25rem]" />
+    <section
+      data-surface="dark"
+      data-on-dark
+      data-no-contrast-guard
+      className="allow-white py-16 md:py-24 relative overflow-hidden bg-[#102540]"
+    >
+      {/* Decorative outer frame — gold hairline on navy */}
+      <div className="pointer-events-none absolute inset-x-2 inset-y-4 md:inset-x-4 md:inset-y-6 border-2 border-[#B89555]/55 rounded-[2.25rem]" />
 
       <div className="container mx-auto px-4 md:px-8 max-w-6xl relative">
         <div
-          className="relative rounded-[2rem] border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-8 md:p-14 lg:p-16 shadow-[0_30px_80px_-40px_rgba(184,149,85,0.45),0_2px_0_rgba(255,255,255,0.9)_inset] overflow-hidden"
+          data-surface="page"
+          className="relative rounded-[2rem] border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-8 md:p-14 lg:p-16 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.55),0_2px_0_rgba(255,255,255,0.9)_inset] overflow-hidden"
         >
           {/* Inner light wash */}
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(184,149,85,0.10),transparent_55%)]" />
-          {/* Middle decorative border removed per owner directive — keep one outer frame + one card border only */}
 
           <div className="relative grid lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-center">
             {/* LEFT — content */}
@@ -228,19 +233,24 @@ const DeveloperPortalCTA = () => {
                 ))}
               </div>
 
-              {/* CTA row */}
+              {/* CTA row — navy blue with white text + blue circle with white arrow */}
               <div className="mt-9 flex flex-wrap items-center gap-4">
                 <Link
                   to={href}
-                  className="group inline-flex items-center gap-3 pl-7 pr-6 py-4 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555] text-[#1A1A1A] text-[15px] font-bold tracking-tight shadow-[0_10px_30px_-12px_rgba(184,149,85,0.55),0_1px_0_rgba(255,255,255,0.9)_inset] hover:shadow-[0_18px_50px_-14px_rgba(184,149,85,0.7),0_1px_0_rgba(255,255,255,0.9)_inset] hover:-translate-y-0.5 transition-all duration-300"
+                  data-surface="dark"
+                  data-on-dark
+                  data-no-contrast-guard
+                  data-allow-dark-cta
+                  className="allow-white group inline-flex items-center gap-3 pl-7 pr-3 py-3 rounded-2xl bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/60 text-white text-[15px] font-bold tracking-tight shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)] hover:shadow-[0_18px_50px_-14px_rgba(16,37,64,0.7)] hover:-translate-y-0.5 transition-all duration-300"
+                  style={{ color: "#FFFFFF" }}
                 >
-                  {cta}
-                  <span className="w-9 h-9 rounded-full bg-[#1A1A1A] flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1" data-allow-dark-cta>
-                    <ArrowRight className="w-4 h-4 text-[#FDFBF7]" strokeWidth={2.4} />
+                  <span className="allow-white" style={{ color: "#FFFFFF" }}>{cta}</span>
+                  <span className="w-9 h-9 rounded-full bg-[#1a3d63] border border-white/30 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1">
+                    <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
                   </span>
                 </Link>
-                <span className="text-[12.5px] text-[#1A1A1A]/60 font-medium">
-                  Single sign-on · Tailored to your account
+                <span className="text-[12.5px] text-[#1A1A1A]/70 font-medium">
+                  Secure sign-in with your JBJ account — your workspace, personalized.
                 </span>
               </div>
             </div>

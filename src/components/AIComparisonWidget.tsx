@@ -56,8 +56,14 @@ const AIComparisonWidget = () => {
               Powered by JBJ Global Real Estate
             </p>
           </div>
-          <div className="hidden md:flex w-16 h-16 bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-2xl items-center justify-center shadow-lg border border-[#B89555]/30">
-            <BarChart3 className="w-8 h-8 text-[#1A1A1A]" />
+          <div
+            data-surface="dark"
+            data-on-dark
+            data-no-contrast-guard
+            data-allow-dark-cta
+            className="allow-white hidden md:flex w-16 h-16 bg-[#102540] rounded-2xl items-center justify-center shadow-lg border border-[#B89555]/55"
+          >
+            <BarChart3 className="w-8 h-8 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </div>
         </div>
 

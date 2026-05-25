@@ -70,9 +70,16 @@ export function ToolkitShowcaseCard() {
         <div className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)]">
           {/* Header */}
           <div className="px-5 md:px-7 pt-5 md:pt-6 pb-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] text-[10px] font-semibold uppercase tracking-[0.2em] mb-3">
-              <Sparkles className="w-3 h-3 text-[#B89555]" />
-              Free Professional Tools
+            <div
+              data-surface="dark"
+              data-on-dark
+              data-no-contrast-guard
+              data-allow-dark-cta
+              className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/50 text-[10px] font-semibold uppercase tracking-[0.2em] mb-3 transition-colors"
+              style={{ color: "#FFFFFF" }}
+            >
+              <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>Free Professional Tools</span>
             </div>
             <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] tracking-tight">
               JBJ Royal Tools Hub
@@ -154,16 +161,21 @@ export function ToolkitShowcaseCard() {
             </div>
           </div>
 
-          {/* Footer — Explore JBJ Tools secondary CTA */}
+          {/* Footer — Explore JBJ Tools CTA in navy blue */}
           <div className="px-5 md:px-7 py-6 text-center bg-[#FDFBF7]">
-            <PearlButton
+            <Link
               to="/ai-hub"
-              size="lg"
-              leadingIcon={<Crown strokeWidth={2.2} />}
-              trailingIcon={<ArrowRight strokeWidth={2.5} />}
+              data-surface="dark"
+              data-on-dark
+              data-no-contrast-guard
+              data-allow-dark-cta
+              className="allow-white inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 text-white text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)]"
+              style={{ color: "#FFFFFF" }}
             >
-              Explore JBJ Tools
-            </PearlButton>
+              <Crown className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>Explore JBJ Tools</span>
+              <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
+            </Link>
           </div>
         </div>
       </div>
