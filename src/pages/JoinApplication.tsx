@@ -526,30 +526,30 @@ export default function JoinApplication() {
 
   // ---- Render: full-width application form ----
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+    <div data-premium data-careers-page className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-10 pt-24 lg:pt-20">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
-            <h1 className="text-4xl md:text-5xl font-semibold mb-3 text-[#102540] tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-semibold mb-3 careers-navy tracking-tight">
               Join JBJ Global Real Estate
             </h1>
             <div className="mx-auto mb-4 h-[2px] w-24 bg-[#B89555] rounded-full" />
-            <p className="text-base md:text-lg text-[#B89555] font-medium max-w-2xl mx-auto">
+            <p className="text-base md:text-lg careers-gold font-semibold max-w-2xl mx-auto">
               Apply to become part of our team. Complete the form below to start your journey.
             </p>
           </div>
 
           {/* Jessica CTA */}
-          <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 shadow-sm mb-8">
+          <Card className="bg-[#FDFBF7] border-2 border-[#102540] shadow-sm mb-8">
             <CardContent className="pt-6">
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div data-no-contrast-guard className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 bg-[#102540] border border-[#B89555]/60">
                   <Bot className="w-8 h-8 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                 </div>
                 <div className="text-center sm:text-left flex-1">
-                  <h3 className="text-lg font-semibold mb-1 text-[#102540]">Prefer a Conversation?</h3>
-                  <p className="text-sm text-[#1A1A1A]/75">
+                  <h3 className="text-lg font-semibold mb-1 careers-navy">Prefer a Conversation?</h3>
+                  <p className="text-sm text-[#102540]/80">
                     Meet Jessica — available 24/7 to support you. She'll collect your CV, qualify you, and conduct your interview.
                   </p>
                 </div>
@@ -557,10 +557,10 @@ export default function JoinApplication() {
                   to="/hr-agent"
                   data-allow-dark-cta
                   data-no-contrast-guard
-                  className="allow-white inline-flex items-center justify-center gap-2 rounded-md px-4 h-10 font-semibold shadow-sm transition-colors whitespace-nowrap bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/60 text-white"
+                  className="careers-white inline-flex items-center justify-center gap-2 rounded-md px-4 h-10 font-semibold shadow-sm transition-colors whitespace-nowrap bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]"
                 >
-                  <MessageCircle className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-                  <span className="allow-white text-white">Contact Our HR · Jessica</span>
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Contact Our HR · Jessica</span>
                 </Link>
               </div>
             </CardContent>
@@ -589,24 +589,24 @@ export default function JoinApplication() {
 
           {/* Open Positions */}
           {!positionsLoading && openPositions.length > 0 && (
-            <Card className="mb-8 bg-[#FDFBF7] border-2 border-[#102540] shadow-sm">
-              <CardHeader className="pt-7">
+            <Card className="mb-8 bg-[#FDFBF7] border-2 careers-blue-border shadow-sm">
+              <CardHeader className="pt-8 pb-4">
                 <div className="flex items-center justify-between flex-wrap gap-3">
                   <div className="flex items-center gap-3">
-                    <CardTitle className="text-2xl text-[#102540]">Open Positions</CardTitle>
+                    <CardTitle className="text-2xl md:text-3xl font-semibold careers-navy">Open Positions</CardTitle>
                     <Badge
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="allow-white bg-[#102540] border border-[#B89555]/60 inline-flex items-center gap-1.5 px-2.5 py-0.5"
+                      className="careers-open-badge bg-[#102540] border border-[#B89555] inline-flex items-center gap-1.5 px-3 py-1"
                       style={{ color: "#FFFFFF" }}
                     >
-                      <Briefcase className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-                      <span className="allow-white text-white" style={{ color: "#FFFFFF" }}>{filteredPositions.length} open</span>
+                      <Briefcase className="w-3 h-3" />
+                      <span>{filteredPositions.length} open</span>
                     </Badge>
                   </div>
                 </div>
-                <CardDescription className="text-[#1A1A1A]/70">
-                  Tap <strong className="text-[#B89555]">Apply</strong> on any role to auto-select it below.
+                <CardDescription className="text-gold font-semibold">
+                  Tap <strong className="text-gold">Apply</strong> on any role to auto-select it below.
                 </CardDescription>
                 <div className="relative mt-3">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#B89555]" />
@@ -614,7 +614,7 @@ export default function JoinApplication() {
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
                     placeholder="Search positions by title, department, or location"
-                    className="pl-9 bg-[#F7F2EA] border border-[#B89555] text-[#1A1A1A] placeholder:text-[#1A1A1A]/50 focus-visible:ring-[#B89555]/40"
+                    className="pl-9 bg-[#F7F2EA] border-2 border-[#B89555] text-[#102540] placeholder:text-[#102540]/55 focus-visible:ring-[#B89555]/40"
                   />
                 </div>
               </CardHeader>
@@ -629,10 +629,10 @@ export default function JoinApplication() {
                         <div
                           key={pos.id}
                           onClick={() => setFormData({ ...formData, positionApplied: pos.id })}
-                          className={`p-4 rounded-xl border-2 bg-[#FDFBF7] shadow-sm transition-all cursor-pointer ${
+                          className={`p-5 rounded-xl border-2 bg-[#FDFBF7] shadow-sm transition-all cursor-pointer ${
                             selected
                               ? "border-[#102540] ring-2 ring-[#102540]/30 bg-[#F7F2EA]"
-                              : "border-[#102540]/70 hover:border-[#102540] hover:shadow-md"
+                              : "border-[#102540] hover:border-[#102540] hover:shadow-md"
                           }`}
                         >
                           <div className="flex items-start justify-between mb-2 gap-2">
@@ -642,21 +642,21 @@ export default function JoinApplication() {
                             </Badge>
                           </div>
                           <div className="flex flex-wrap items-center gap-2 text-xs">
-                            <Badge variant="outline" className="border-[#1A1A1A]/20 bg-[#F7F2EA] text-[10px] px-2 py-0.5 font-medium whitespace-nowrap text-[#1A1A1A]">
+                            <Badge variant="outline" className="border-[#102540] bg-[#F7F2EA] text-[10px] px-2 py-0.5 font-medium whitespace-nowrap text-[#102540]">
                               {pos.department}
                             </Badge>
                             {pos.is_broker_role && (
                               <span className="font-semibold whitespace-nowrap text-[#b45309]">Commission Basis</span>
                             )}
                             {pos.location && (
-                              <span className="flex items-center gap-0.5 whitespace-nowrap text-[#1A1A1A]/70">
-                                <MapPin className="w-2.5 h-2.5 text-[#1A1A1A]" />
+                              <span className="flex items-center gap-0.5 whitespace-nowrap text-[#102540]/80">
+                                <MapPin className="w-2.5 h-2.5 text-[#102540]" />
                                 {pos.location}
                               </span>
                             )}
                           </div>
                           {pos.description && (
-                            <p className="text-xs text-[#1A1A1A]/70 mt-2 line-clamp-2 leading-relaxed">{pos.description}</p>
+                            <p className="text-xs text-[#102540]/85 mt-2 line-clamp-2 leading-relaxed">{pos.description}</p>
                           )}
                           <div className="mt-3 flex justify-end">
                             <Button
@@ -693,7 +693,7 @@ export default function JoinApplication() {
                       type="button"
                       variant="outline"
                       onClick={() => setShowAllPositions((v) => !v)}
-                      className="bg-[#F7F2EA] text-[#B89555] border border-[#B89555] hover:bg-[#EFE6D6]"
+                      className="bg-[#F7F2EA] text-[#B89555] border-2 border-[#B89555] hover:bg-[#EFE6D6]"
                     >
                       {showAllPositions ? (
                         <>
@@ -714,19 +714,19 @@ export default function JoinApplication() {
 
           {/* Application Form */}
           <div ref={formAnchorRef} />
-          <Card className="bg-[#FDFBF7] border-2 border-[#102540] shadow-sm">
-            <CardHeader className="text-center pt-8">
-              <CardTitle className="text-3xl md:text-4xl font-semibold text-[#102540] tracking-tight">Application Form</CardTitle>
-              <CardDescription className="text-[#B89555] font-medium text-base">
+          <Card className="bg-[#FDFBF7] border-2 careers-blue-border shadow-sm">
+            <CardHeader className="text-center pt-10 pb-6">
+              <CardTitle className="text-4xl md:text-5xl font-semibold careers-navy tracking-tight">Application Form</CardTitle>
+              <CardDescription className="careers-gold font-semibold text-lg">
                 All fields are required.{" "}
                 {selectedPosition && (
-                  <span className="font-semibold text-[#B89555]">Applying for: {selectedPosition.label}</span>
+                  <span className="font-semibold careers-gold">Applying for: {selectedPosition.label}</span>
                 )}
               </CardDescription>
             </CardHeader>
 
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+              <form onSubmit={handleSubmit} className="space-y-7 px-1 md:px-3" noValidate>
                 {/* Honeypot */}
                 <div className="hidden" aria-hidden="true">
                   <Input
@@ -749,7 +749,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                       placeholder="e.g. Sarah"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                      className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                     />
                   </div>
                   <div className="space-y-2">
@@ -760,7 +760,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                       placeholder="e.g. Khan"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                      className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                     />
                   </div>
                 </div>
@@ -774,7 +774,7 @@ export default function JoinApplication() {
                     value={user?.email || ""}
                     placeholder="you@email.com"
                     disabled
-                    className="bg-[#F7F2EA] border-[#102540]/60 text-[#1A1A1A] h-11 text-base"
+                    className="bg-[#F7F2EA] border-2 border-[#102540] text-[#1A1A1A] h-11 text-base"
                   />
                   <p className="text-xs text-[#1A1A1A]/60">Email is linked to your account</p>
                 </div>
@@ -840,7 +840,7 @@ export default function JoinApplication() {
                       onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                       placeholder="e.g. Dubai"
                       disabled={loading}
-                      className="bg-[#FDFBF7] border border-[#B89555] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base focus-visible:ring-[#B89555]/40"
+                      className="careers-city-gold bg-[#FDFBF7] border-2 border-[#B89555] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base focus-visible:ring-[#B89555]/40"
                     />
 
                   </div>
@@ -871,39 +871,39 @@ export default function JoinApplication() {
 
                 {/* Role-aware Qualification */}
                 {qualKind === "sales" && (
-                  <div className="space-y-4 p-5 rounded-xl border border-[#B89555]/30 bg-[#EFE6D6]/5">
-                    <h3 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
+                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#102540] bg-[#F7F2EA]/40">
+                    <h3 className="text-lg font-semibold text-[#102540] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Sales Qualification
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">How many deals have you closed?</Label>
-                        <Input value={formData.dealsClosed} onChange={(e) => setFormData({ ...formData, dealsClosed: e.target.value })} placeholder="e.g. 25" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.dealsClosed} onChange={(e) => setFormData({ ...formData, dealsClosed: e.target.value })} placeholder="e.g. 25" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Total value of deals closed (AED)</Label>
-                        <Input value={formData.totalDealValue} onChange={(e) => setFormData({ ...formData, totalDealValue: e.target.value })} placeholder="e.g. 50,000,000" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.totalDealValue} onChange={(e) => setFormData({ ...formData, totalDealValue: e.target.value })} placeholder="e.g. 50,000,000" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Which projects/areas have you sold in?</Label>
-                      <Input value={formData.projectsSold} onChange={(e) => setFormData({ ...formData, projectsSold: e.target.value })} placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.projectsSold} onChange={(e) => setFormData({ ...formData, projectsSold: e.target.value })} placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Which developers have you worked with?</Label>
-                      <Input value={formData.developerWorkedWith} onChange={(e) => setFormData({ ...formData, developerWorkedWith: e.target.value })} placeholder="e.g. DAMAC, Emaar, Meraas" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.developerWorkedWith} onChange={(e) => setFormData({ ...formData, developerWorkedWith: e.target.value })} placeholder="e.g. DAMAC, Emaar, Meraas" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Why are you leaving your current position?</Label>
-                      <Input value={formData.reasonForLeaving} onChange={(e) => setFormData({ ...formData, reasonForLeaving: e.target.value })} placeholder="Reason for seeking new opportunity" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.reasonForLeaving} onChange={(e) => setFormData({ ...formData, reasonForLeaving: e.target.value })} placeholder="Reason for seeking new opportunity" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
 
-                    <h3 className="text-lg font-semibold text-[#1A1A1A] mt-2 flex items-center gap-2">
+                    <h3 className="text-lg font-semibold text-[#102540] mt-2 flex items-center gap-2">
                       <User className="h-5 w-5" /> Professional References (2 required)
                     </h3>
                     <p className="text-sm text-[#1A1A1A]/70">Provide references from your previous employer so we can verify your experience.</p>
                     {[1, 2].map((n) => (
-                      <div key={n} className="space-y-3 p-3 rounded-lg border border-[#B89555]/20 bg-[#FDFBF7]">
+                      <div key={n} className="space-y-3 p-3 rounded-lg border-2 border-[#102540] bg-[#FDFBF7]">
                         <p className="text-sm font-semibold text-[#1A1A1A]">Reference {n}</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <Input
@@ -911,14 +911,14 @@ export default function JoinApplication() {
                             onChange={(e) => setFormData({ ...formData, [`reference${n}Name`]: e.target.value } as any)}
                             placeholder="Full name (e.g. Director / HR Manager)"
                             disabled={loading}
-                            className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                            className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                           />
                           <Input
                             value={(formData as any)[`reference${n}Title`]}
                             onChange={(e) => setFormData({ ...formData, [`reference${n}Title`]: e.target.value } as any)}
                             placeholder="Title & Company"
                             disabled={loading}
-                            className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                            className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                           />
                           <Input
                             type="email"
@@ -926,14 +926,14 @@ export default function JoinApplication() {
                             onChange={(e) => setFormData({ ...formData, [`reference${n}Email`]: e.target.value } as any)}
                             placeholder="Company email"
                             disabled={loading}
-                            className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                            className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                           />
                           <Input
                             value={(formData as any)[`reference${n}Phone`]}
                             onChange={(e) => setFormData({ ...formData, [`reference${n}Phone`]: e.target.value } as any)}
                             placeholder="Phone number"
                             disabled={loading}
-                            className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
+                            className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
                           />
                         </div>
                       </div>
@@ -942,93 +942,93 @@ export default function JoinApplication() {
                 )}
 
                 {qualKind === "marketing" && (
-                  <div className="space-y-4 p-5 rounded-xl border border-[#B89555]/30 bg-[#EFE6D6]/5">
-                    <h3 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
+                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#102540] bg-[#F7F2EA]/40">
+                    <h3 className="text-lg font-semibold text-[#102540] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Marketing Qualification
                     </h3>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Notable campaigns you have led</Label>
-                      <Input value={formData.marketingCampaigns} onChange={(e) => setFormData({ ...formData, marketingCampaigns: e.target.value })} placeholder="e.g. Off-plan launch — 5M reach, 8% CTR" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.marketingCampaigns} onChange={(e) => setFormData({ ...formData, marketingCampaigns: e.target.value })} placeholder="e.g. Off-plan launch — 5M reach, 8% CTR" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Largest budget managed (AED)</Label>
-                        <Input value={formData.marketingBudget} onChange={(e) => setFormData({ ...formData, marketingBudget: e.target.value })} placeholder="e.g. 1,500,000" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.marketingBudget} onChange={(e) => setFormData({ ...formData, marketingBudget: e.target.value })} placeholder="e.g. 1,500,000" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Tools / platforms</Label>
-                        <Input value={formData.marketingTools} onChange={(e) => setFormData({ ...formData, marketingTools: e.target.value })} placeholder="e.g. Meta Ads, GA4, HubSpot, Figma" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.marketingTools} onChange={(e) => setFormData({ ...formData, marketingTools: e.target.value })} placeholder="e.g. Meta Ads, GA4, HubSpot, Figma" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Portfolio link</Label>
-                      <Input value={formData.portfolioLink} onChange={(e) => setFormData({ ...formData, portfolioLink: e.target.value })} placeholder="https://your-portfolio.com" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.portfolioLink} onChange={(e) => setFormData({ ...formData, portfolioLink: e.target.value })} placeholder="https://your-portfolio.com" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                   </div>
                 )}
 
                 {qualKind === "hr_ops" && (
-                  <div className="space-y-4 p-5 rounded-xl border border-[#B89555]/30 bg-[#EFE6D6]/5">
-                    <h3 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
+                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#102540] bg-[#F7F2EA]/40">
+                    <h3 className="text-lg font-semibold text-[#102540] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Role Qualification
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Years of experience</Label>
-                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 5" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 5" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Systems used</Label>
-                        <Input value={formData.systemsUsed} onChange={(e) => setFormData({ ...formData, systemsUsed: e.target.value })} placeholder="e.g. Bayut Pro, Property Finder, Salesforce" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.systemsUsed} onChange={(e) => setFormData({ ...formData, systemsUsed: e.target.value })} placeholder="e.g. Bayut Pro, Property Finder, Salesforce" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Certifications</Label>
-                      <Input value={formData.certifications} onChange={(e) => setFormData({ ...formData, certifications: e.target.value })} placeholder="e.g. RERA, CIPD, PMP" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.certifications} onChange={(e) => setFormData({ ...formData, certifications: e.target.value })} placeholder="e.g. RERA, CIPD, PMP" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                   </div>
                 )}
 
                 {qualKind === "tech" && (
-                  <div className="space-y-4 p-5 rounded-xl border border-[#B89555]/30 bg-[#EFE6D6]/5">
-                    <h3 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
+                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#102540] bg-[#F7F2EA]/40">
+                    <h3 className="text-lg font-semibold text-[#102540] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Technical Qualification
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Years of experience</Label>
-                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 7" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 7" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Stack / specialties</Label>
-                        <Input value={formData.techStack} onChange={(e) => setFormData({ ...formData, techStack: e.target.value })} placeholder="e.g. React, TypeScript, Supabase, AWS" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.techStack} onChange={(e) => setFormData({ ...formData, techStack: e.target.value })} placeholder="e.g. React, TypeScript, Supabase, AWS" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">GitHub / portfolio link</Label>
-                      <Input value={formData.githubLink} onChange={(e) => setFormData({ ...formData, githubLink: e.target.value })} placeholder="https://github.com/your-handle" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.githubLink} onChange={(e) => setFormData({ ...formData, githubLink: e.target.value })} placeholder="https://github.com/your-handle" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                   </div>
                 )}
 
                 {qualKind === "general" && selectedPosition && (
-                  <div className="space-y-4 p-5 rounded-xl border border-[#B89555]/30 bg-[#EFE6D6]/5">
-                    <h3 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
+                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#102540] bg-[#F7F2EA]/40">
+                    <h3 className="text-lg font-semibold text-[#102540] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> About You
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Years of experience</Label>
-                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 3" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 3" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-semibold text-[#1A1A1A]">Portfolio / LinkedIn link</Label>
-                        <Input value={formData.portfolioLink} onChange={(e) => setFormData({ ...formData, portfolioLink: e.target.value })} placeholder="https://linkedin.com/in/your-handle" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                        <Input value={formData.portfolioLink} onChange={(e) => setFormData({ ...formData, portfolioLink: e.target.value })} placeholder="https://linkedin.com/in/your-handle" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-semibold text-[#1A1A1A]">Tell us briefly about yourself</Label>
-                      <Input value={formData.aboutYou} onChange={(e) => setFormData({ ...formData, aboutYou: e.target.value })} placeholder="What makes you a strong fit for this role?" disabled={loading} className="bg-[#FDFBF7] border-[#102540]/60 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
+                      <Input value={formData.aboutYou} onChange={(e) => setFormData({ ...formData, aboutYou: e.target.value })} placeholder="What makes you a strong fit for this role?" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
                     </div>
                   </div>
                 )}
@@ -1036,7 +1036,7 @@ export default function JoinApplication() {
                 {/* CV / Resume */}
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold text-[#1A1A1A]">CV / Resume</Label>
-                  <div className="border-2 border-dashed border-[#B89555]/40 rounded-xl p-7 text-center hover:border-[#B89555]/60 transition-colors">
+                  <div className="border-2 border-dashed border-[#B89555] rounded-xl p-8 text-center hover:border-[#B89555] transition-colors bg-[#F7F2EA]/30">
                     {cvFile ? (
                       <div className="flex flex-col items-center gap-2 text-[#1A1A1A]">
                         <FileText className="h-7 w-7 text-emerald-600" />
@@ -1055,9 +1055,9 @@ export default function JoinApplication() {
                     ) : (
                       <label className="cursor-pointer block w-full">
                         <div className="flex flex-col items-center gap-2 py-2">
-                          <Upload className="h-9 w-9 text-[#1A1A1A]/70" />
-                          <span className="text-base font-medium text-[#1A1A1A]">Click to upload your CV</span>
-                          <span className="text-sm text-[#1A1A1A]/65">PDF, Word, or photo (JPG / PNG / HEIC) — max 10 MB</span>
+                          <Upload className="h-9 w-9 text-[#102540]" />
+                          <span className="text-base font-semibold text-[#102540]">Click to upload your CV</span>
+                          <span className="text-sm text-[#B89555] font-medium">PDF, Word, or photo (JPG / PNG / HEIC) — max 10 MB</span>
                         </div>
                         <input
                           type="file"
@@ -1113,7 +1113,7 @@ export default function JoinApplication() {
                 {/* Submit */}
                 <Button
                   type="submit"
-                  className="w-full bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#102540] border-2 border-[#102540] font-bold h-12 text-base"
+                  className="w-full bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#102540] border-2 border-[#102540] font-bold h-14 text-lg"
                   disabled={loading}
                 >
                   {loading ? (
@@ -1131,9 +1131,9 @@ export default function JoinApplication() {
             </CardContent>
           </Card>
 
-          <p className="text-center text-sm text-[#B89555] font-medium mt-6">
+          <p className="text-center text-sm careers-gold font-semibold mt-6">
             Questions? Contact us at{" "}
-            <a href="mailto:contact@JBJ.ae" className="text-[#B89555] underline font-semibold">
+            <a href="mailto:contact@JBJ.ae" className="careers-gold underline font-semibold">
               contact@JBJ.ae
             </a>
           </p>
