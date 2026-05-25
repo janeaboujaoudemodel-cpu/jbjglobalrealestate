@@ -59,6 +59,8 @@ import InvestmentMetricsSection from "@/components/project-detail/InvestmentMetr
 import DeveloperInfoCard from "@/components/project-detail/DeveloperInfoCard";
 import QuickFactsBar from "@/components/project-detail/QuickFactsBar";
 import PaymentPlanVisualization from "@/components/project-detail/PaymentPlanVisualization";
+import PaymentPlanVerificationToggle from "@/components/project-detail/PaymentPlanVerificationToggle";
+
 // DirectContactCTA is now rendered globally in MainLayout - do not import here
 import MasterPlanSection from "@/components/project-detail/MasterPlanSection";
 import HouseDetailsSection from "@/components/project-detail/HouseDetailsSection";
@@ -149,6 +151,9 @@ export type ProjectDetailData = {
   floor_plan_types?: Array<{ label: string; pdfUrl?: string }> | null;
   faqs?: Array<{ question: string; answer: string }> | null;
   payment_breakdown?: { down_payment?: string; during_construction?: string; on_completion?: string } | Array<{ milestone: string; percentage: number; timing?: string; amount?: number | null; stage_type?: string }> | null;
+  payment_plan_verified?: boolean | null;
+  payment_plan_verified_at?: string | null;
+
   // Reelly-compatible fields
   unit_types?: Array<{
     type: string;
@@ -1271,14 +1276,23 @@ export default function ProjectDetailLayout({
                 handoverDate={project.handover_date}
                 downPaymentPercent={project.down_payment_percent}
                 projectName={project.name}
+                paymentPlanVerified={(project as any).payment_plan_verified}
+                paymentPlanVerifiedAt={(project as any).payment_plan_verified_at}
                 onRegisterInterest={() => {
                   setCaptureDocType("payment_plan");
                   setCaptureDocUrl(undefined);
                   setLeadCaptureOpen(true);
                 }}
               />
+              {isOwner && (
+                <PaymentPlanVerificationToggle
+                  projectId={project.id}
+                  verified={!!(project as any).payment_plan_verified}
+                />
+              )}
             </div>
             )}
+
 
             {/* Owner-only AI enrichment dialog for the Payment Plan section */}
             {isOwner && (
