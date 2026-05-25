@@ -1,9 +1,8 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, BarChart3, Database, Shield, Info } from "lucide-react";
+import { ArrowUpRight, BarChart3, Database, Shield, Info, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { SEOHead } from "@/components/SEOHead";
-import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
 import { PreFooterSeparator } from "@/components/PreFooterSeparator";
 import {
@@ -20,11 +19,20 @@ import {
 import { MARKET_DISCLAIMER } from "@/config/open-data-config";
 import VideoBackground from "@/components/VideoBackground";
 import marketIntelligenceHero from "@/assets/market-intelligence-hero.jpg";
+import marketIntelligenceVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
+import jbjLogoLight from "@/assets/jbj-fulllogo-light.png";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
+
+const heroKeywords = ["DLD", "RERA", "DXB", "TRANSACTIONS", "RENTAL INDEX", "AREA DEMAND", "SUPPLY PIPELINE", "DAILY REFRESH"];
+
+const sourceBadges = ["DLD", "RERA", "DXB Interact", "Dubai Statistics", "JBJ Intelligence"];
+
+const heroCtaClass =
+  "allow-white group inline-flex items-center justify-center gap-2 rounded-none border border-white/45 bg-white/[0.07] px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition-colors hover:border-[hsl(var(--mi-gold))] hover:bg-white/[0.12] md:px-8 md:py-4 md:text-base";
 
 // Organization schema for main Market Intelligence page
 const organizationSchema = {
@@ -68,7 +76,7 @@ const webPageSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
   name: "Dubai Real Estate Market Intelligence | BUY · SELL · RENT Insights",
-  description: "Data-driven Dubai real estate insights powered by official government Open Data. Explore market trends, area analysis, and AI-generated reports for BUY · SELL · RENT decisions.",
+  description: "Data-driven Dubai real estate insights powered by official government sources. Explore market trends, area analysis, and AI-generated reports for BUY · SELL · RENT decisions.",
   url: "https://www.jbj.ae/market-intelligence",
   isPartOf: {
     "@type": "WebSite",
@@ -107,114 +115,127 @@ const MarketIntelligence = () => {
   }, []);
 
   return (
-    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
+    <div data-marketing-page className="min-h-screen bg-background [--mi-gold:40_35%_53%] [--mi-navy:210_60%_16%] [--mi-navy-soft:210_49%_24%]">
       <SEOHead 
         title="Market Intelligence | Dubai Real Estate Insights | BUY · SELL · RENT | JBJ GLOBAL REAL ESTATE"
-        description="Data-driven Dubai real estate insights powered by official government Open Data. Explore market trends, area analysis, and AI-generated reports. No predictions, just trusted insights."
-        keywords="Dubai real estate market, property trends, market intelligence, open data, Dubai property analysis, rent trends Dubai, BUY SELL RENT Dubai, Jane Bou Jaoude"
+        description="Data-driven Dubai real estate insights powered by official government sources. Explore market trends, area analysis, and AI-generated reports. No predictions, just trusted insights."
+        keywords="Dubai real estate market, property trends, market intelligence, Dubai property analysis, rent trends Dubai, BUY SELL RENT Dubai, Jane Bou Jaoude"
         canonicalPath="/market-intelligence"
       />
 
-      {/* Hero — full intelligence video background */}
-      <section className="relative w-full h-[78vh] min-h-[560px] flex items-center overflow-hidden">
+      {/* Hero — premium video intelligence background */}
+      <section data-surface="dark" className="jj-hero-fullscreen relative flex min-h-[680px] w-full items-center overflow-hidden bg-[hsl(var(--mi-navy))] py-24 md:min-h-[760px]">
         <VideoBackground
-          src="https://videos.pexels.com/video-files/3629519/3629519-uhd_2560_1440_25fps.mp4"
+          src={marketIntelligenceVideo}
           poster={marketIntelligenceHero}
         />
-        {/* Layered scrim for readability — no blue divider, no harsh line */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/80" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.10),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.88)_0%,rgba(5,15,27,0.74)_44%,rgba(0,0,0,0.48)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_30%,hsl(var(--mi-gold)/0.18),transparent_34%),radial-gradient(circle_at_82%_18%,rgba(255,255,255,0.10),transparent_30%)]" />
+        <div className="pointer-events-none absolute inset-x-0 top-24 hidden overflow-hidden text-[10px] font-semibold uppercase tracking-[0.42em] text-white/[0.08] md:block">
+          <div className="flex min-w-max animate-[marquee_38s_linear_infinite] gap-10 whitespace-nowrap">
+            {[...heroKeywords, ...heroKeywords, ...heroKeywords].map((word, index) => (
+              <span key={`${word}-${index}`}>{word}</span>
+            ))}
+          </div>
+        </div>
 
         <motion.div 
-          className="relative z-10 container mx-auto px-4 text-center"
+          className="relative z-10 container mx-auto px-4"
           initial="hidden"
           animate="visible"
           variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
         >
+          <motion.div className="mb-8 flex flex-wrap items-center gap-3" variants={fadeInUp}>
+            <img src={jbjLogoLight} alt="JBJ GLOBAL REAL ESTATE" className="h-10 w-auto object-contain md:h-12" />
+            <span className="h-8 w-px bg-white/25" aria-hidden="true" />
+            <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[hsl(var(--mi-gold))]">Daily Market Desk</span>
+          </motion.div>
+
           <motion.h1 
-            className="text-white text-5xl md:text-6xl lg:text-7xl font-bold mb-6 max-w-4xl mx-auto drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
+            className="max-w-4xl text-left text-5xl font-bold leading-[0.92] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.75)] md:text-7xl lg:text-8xl"
             variants={fadeInUp}
           >
             Market Intelligence
           </motion.h1>
 
           <motion.p 
-            className="text-base md:text-lg max-w-2xl mx-auto mb-8 text-white/90"
+            className="mt-6 max-w-2xl text-left text-lg leading-relaxed text-white/88 md:text-xl"
             variants={fadeInUp}
           >
-            Data-driven insights powered by official government sources.
-            Analytics, trends, and education — not listings.
+            Daily refreshed Dubai real estate intelligence powered by official government sources, licensed market data partners, and JBJ editorial review.
           </motion.p>
 
           <motion.div 
-            className="flex flex-wrap justify-center gap-4"
+            className="mt-8 flex flex-wrap gap-3"
             variants={fadeInUp}
           >
             <a
               href="#overview"
               data-no-contrast-guard
-              className="allow-white inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold bg-[#102540] text-white border border-[#B89555] hover:bg-[#1a3d63] transition-colors shadow-lg"
+              className={heroCtaClass}
             >
-              <span className="allow-white">Explore Dashboard</span>
+              <span className="allow-white">Explore Market Dashboard</span>
               <ArrowUpRight className="w-5 h-5 allow-white" />
             </a>
             <Link
               to="/market-report"
               data-no-contrast-guard
-              className="allow-white inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold bg-[#102540] text-white border border-[#B89555] hover:bg-[#1a3d63] transition-colors shadow-lg"
+              className={heroCtaClass}
             >
-              <span className="allow-white">Download Reports</span>
+              <span className="allow-white">View Daily Reports</span>
               <ArrowUpRight className="w-5 h-5 allow-white" />
             </Link>
           </motion.div>
 
-          {/* Trust Badges */}
           <motion.div 
-            className="flex flex-wrap justify-center gap-x-8 gap-y-3 mt-10"
+            className="mt-10 grid max-w-5xl grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5"
             variants={fadeInUp}
           >
-            {[
-              { Icon: Database, label: "Government Sources" },
-              { Icon: Shield,   label: "Analytics Only" },
-              { Icon: BarChart3, label: "No Listings" },
-            ].map(({ Icon, label }) => (
-              <div key={label} className="flex items-center gap-2 text-white/90">
-                <Icon className="w-4 h-4 text-[#B89555]" />
-                <span className="text-xs md:text-sm font-medium tracking-wide">{label}</span>
+            {sourceBadges.map((label) => (
+              <div key={label} className="border border-white/18 bg-black/24 px-3 py-2 text-center backdrop-blur-md">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/82">{label}</span>
               </div>
             ))}
+          </motion.div>
+
+          <motion.div className="mt-10 max-w-3xl border border-white/18 bg-black/62 p-5 shadow-[0_18px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl md:p-6" variants={fadeInUp}>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-start gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-[hsl(var(--mi-gold)/0.55)] bg-white/8" data-no-contrast-guard>
+                  <Info className="h-5 w-5 text-white allow-white" />
+                </div>
+                <div>
+                  <p className="text-base font-semibold text-white md:text-lg">Founder Market Intelligence</p>
+                  <p className="mt-1 text-sm leading-relaxed text-white/72">Founder-led interpretation by Jane Bou Jaoude, supported by verified source tracking and daily freshness checks.</p>
+                </div>
+              </div>
+              <Link to="/founder" className="inline-flex items-center gap-2 text-sm font-semibold text-white underline decoration-[hsl(var(--mi-gold))] underline-offset-4" data-no-contrast-guard>
+                <span>Founder Profile</span>
+                <ArrowUpRight className="h-4 w-4 text-white allow-white" />
+              </Link>
+            </div>
           </motion.div>
         </motion.div>
       </section>
 
-      {/* Compact Founder Banner — navy, white text & icons */}
-      <section className="w-full bg-[#102540] border-y border-[#B89555]/25">
-        <div className="container mx-auto px-4 py-6 md:py-7">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/10 border border-white/20 shrink-0" data-no-contrast-guard>
-                <Info className="w-5 h-5 text-white allow-white" />
+      <section className="w-full bg-[hsl(var(--mi-navy))] py-6" data-surface="dark">
+        <div className="container mx-auto px-4">
+          <div className="grid gap-3 md:grid-cols-3">
+            {[
+              { Icon: Database, title: "Government Sources", text: "Official transaction, rental, and registration references." },
+              { Icon: RefreshCw, title: "Daily Freshness", text: "Market pages show a current daily freshness check." },
+              { Icon: Shield, title: "No Forecast Claims", text: "Analytics and education only, with source attribution." },
+            ].map(({ Icon, title, text }) => (
+              <div key={title} className="border border-white/15 bg-white/[0.06] p-4 backdrop-blur-md">
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center border border-[hsl(var(--mi-gold)/0.5)]" data-no-contrast-guard>
+                    <Icon className="h-4 w-4 text-white allow-white" />
+                  </div>
+                  <p className="text-sm font-semibold text-white">{title}</p>
+                </div>
+                <p className="text-xs leading-relaxed text-white/68">{text}</p>
               </div>
-              <div className="min-w-0">
-                <p className="text-white text-sm md:text-base font-semibold leading-snug">
-                  Founder-Led Intelligence —{" "}
-                  <Link to="/founder" className="underline decoration-[#B89555] decoration-1 underline-offset-4 hover:text-[#B89555] transition-colors">
-                    Jane Bou Jaoude, Founder &amp; CEO
-                  </Link>
-                </p>
-                <p className="text-white/70 text-xs md:text-sm">
-                  Analytics and education — no predictions, no listings.
-                </p>
-              </div>
-            </div>
-            <Link
-              to="/founder"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs md:text-sm font-semibold bg-white/10 hover:bg-white/15 text-white border border-[#B89555]/50 transition-colors whitespace-nowrap"
-              data-no-contrast-guard
-            >
-              <span>Learn About the Founder</span>
-              <ArrowUpRight className="w-4 h-4 text-white allow-white" />
-            </Link>
+            ))}
           </div>
         </div>
       </section>
