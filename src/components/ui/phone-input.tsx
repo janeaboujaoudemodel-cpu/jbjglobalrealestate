@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState, useEffect, useMemo } from "react";
 import { CheckCircle, ChevronsUpDown, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
@@ -559,20 +558,22 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
           {/* Country Code Selector - Responsive width */}
           <Popover open={codeOpen} onOpenChange={setCodeOpen}>
             <PopoverTrigger asChild>
-              <Button
+              <button
                 type="button"
-                variant="outline"
-                role="combobox"
                 aria-expanded={codeOpen}
+                aria-haspopup="dialog"
                 disabled={disabled}
-                className={cn("w-full sm:w-[160px] h-12 justify-between shrink-0", buttonStyles)}
+                data-phone-code-trigger
+                className={cn("w-full sm:w-[160px] h-12 inline-flex items-center justify-between shrink-0 rounded-md px-3 transition-colors", buttonStyles)}
+                data-no-contrast-guard={isCareersPhoneInput ? true : undefined}
+                style={isCareersPhoneInput ? { backgroundColor: "#102540", border: "2px solid #102540", color: "#FFFFFF" } : undefined}
               >
                 <span className="flex items-center gap-2 truncate">
                   <span className="text-xl">{currentCountry.flag}</span>
                   <span className="font-medium">{currentCode}</span>
                 </span>
                 <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-100" style={{ color: isCareersPhoneInput ? "#FFFFFF" : undefined, stroke: isCareersPhoneInput ? "#FFFFFF" : undefined }} />
-              </Button>
+              </button>
             </PopoverTrigger>
             <PopoverContent 
               className={cn("w-[340px] p-0 z-[100]", popoverStyles)} 
@@ -628,10 +629,11 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               className={cn(
                 "h-12 text-base pr-10 w-full pl-3",
                 inputStyles,
-                localNumber && validation.isValid && "border-green-500/50",
-                localNumber && !validation.isValid && "border-amber-500/50"
+                !isCareersPhoneInput && localNumber && validation.isValid && "border-green-500/50",
+                !isCareersPhoneInput && localNumber && !validation.isValid && "border-amber-500/50"
               )}
               placeholder={placeholder || "Phone number"}
+              style={isCareersPhoneInput ? { border: "2px solid #102540", boxShadow: "none" } : undefined}
             />
             {showValidation && localNumber && validation.isValid && (
               <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
