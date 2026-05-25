@@ -1,104 +1,121 @@
 import {
-  Brain, Video, GraduationCap, BarChart3, Users, Award,
-  Sparkles, Clock,
+  Building2, Users, Bot, GraduationCap, Globe2, Megaphone,
+  Sparkles, Award, Briefcase,
 } from "lucide-react";
 
-interface EcosystemTile {
+interface PillarTile {
   icon: React.ElementType;
   title: string;
   description: string;
-  eta: string;
 }
 
-const TILES: EcosystemTile[] = [
+const PILLARS: PillarTile[] = [
   {
-    icon: Brain,
-    title: "AI CV Matching",
-    description: "Jessica AI scores every CV against role requirements and surfaces top candidates instantly.",
-    eta: "Q2 2026",
+    icon: Building2,
+    title: "Direct Developer Access",
+    description:
+      "Tier-1 relationships with the most active Dubai developers — early off-plan allocations, exclusive inventory, and direct commercial channels.",
   },
   {
-    icon: Video,
-    title: "Async Video Interviews",
-    description: "Candidates record one-take answers; AI summarises tone, fluency, and culture-fit signals.",
-    eta: "Q2 2026",
+    icon: Bot,
+    title: "AI Sales Infrastructure",
+    description:
+      "CRM, lead routing, AI follow-ups, and Jessica-powered investor qualification engineered to multiply broker productivity from day one.",
+  },
+  {
+    icon: Globe2,
+    title: "Global Investor Network",
+    description:
+      "Multilingual investor base across the GCC, Europe, CIS, India, and the Far East — supported by translation, compliance, and timezone-aware operations.",
   },
   {
     icon: GraduationCap,
-    title: "JBJ Sales Academy",
-    description: "On-demand RERA prep, Dubai market masterclasses, and developer-specific training tracks.",
-    eta: "Q3 2026",
+    title: "Training & RERA Pathway",
+    description:
+      "Structured onboarding, Dubai market masterclasses, product certifications, and guided RERA progression for qualifying sales hires.",
   },
   {
-    icon: BarChart3,
-    title: "Performance Dashboard",
-    description: "Live deal velocity, conversion analytics, and AI coaching tips for every hire.",
-    eta: "Q3 2026",
-  },
-  {
-    icon: Users,
-    title: "Talent Referral Network",
-    description: "Earn rewards for referring vetted brokers, marketers, and operators into JBJ.",
-    eta: "Q4 2026",
+    icon: Megaphone,
+    title: "Marketing & Lead Engine",
+    description:
+      "Performance media, social, content, and SEO infrastructure generating a continuous pipeline of qualified, intent-verified investor leads.",
   },
   {
     icon: Award,
-    title: "Elite Broker Certification",
-    description: "Tiered recognition program with public profile, premium leads, and partner benefits.",
-    eta: "Q4 2026",
+    title: "Personal Brand Support",
+    description:
+      "Professional photography, broker landing pages, branded presentations, and luxury collateral aligned with JBJ's institutional standards.",
+  },
+  {
+    icon: Briefcase,
+    title: "Off-Plan & Resale Expertise",
+    description:
+      "Deep research, comparable-data tooling, and senior advisory support across off-plan launches, secondary market, and prime-resale transactions.",
+  },
+  {
+    icon: Users,
+    title: "Private Events & Roadshows",
+    description:
+      "Closed-door investor dinners, developer launches, and international roadshows where brokers connect with HNW clients face-to-face.",
+  },
+  {
+    icon: Sparkles,
+    title: "Elite Onboarding",
+    description:
+      "Hands-on integration with leadership, structured 30/60/90-day milestones, and dedicated operational support so every hire ramps quickly.",
   },
 ];
 
 export function CareersEcosystem() {
   return (
-    <section className="relative py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F7F2EA] via-[#FDFBF7] to-[#EFE6D6]">
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F7F2EA] via-[#FDFBF7] to-[#EFE6D6]">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555] bg-[#FDFBF7] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#102540]">
-            <Sparkles className="h-3 w-3 text-[#B89555]" /> Recruitment Ecosystem
+        <div className="text-center mb-14">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 bg-[#FDFBF7] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#102540]">
+            <Sparkles className="h-3 w-3 text-[#B89555]" /> The JBJ Ecosystem
           </div>
-          <h2 className="mt-4 text-3xl md:text-5xl font-semibold text-[#1A1A1A] tracking-tight">
-            More than a job — a launchpad
+          <h2 className="mt-5 text-3xl md:text-5xl font-semibold text-[#1A1A1A] tracking-tight">
+            More than a job — a full operating platform
           </h2>
-          <p className="mt-3 text-base md:text-lg text-[#1A1A1A]/75 max-w-2xl mx-auto">
-            The JBJ Careers platform is expanding into a full talent operating system. Here's what's coming next.
+          <p className="mt-4 text-base md:text-lg text-[#1A1A1A]/75 max-w-3xl mx-auto leading-relaxed">
+            JBJ GLOBAL REAL ESTATE pairs institutional brokerage operations with AI-powered
+            infrastructure, direct developer access, and a global investor base — so every
+            hire steps into a platform engineered for performance.
           </p>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {TILES.map((tile) => {
+          {PILLARS.map((tile) => {
             const Icon = tile.icon;
             return (
               <article
                 key={tile.title}
-                className="group relative overflow-hidden rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] p-6 transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_-25px_rgba(16,37,64,0.35)] hover:border-[#102540]"
+                className="group relative overflow-hidden rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_22px_55px_-28px_rgba(16,37,64,0.35)] hover:border-[#B89555]"
               >
-                {/* Coming soon ribbon */}
-                <div className="absolute top-4 right-4 flex items-center gap-1.5 rounded-full border border-[#102540]/25 bg-[#F7F2EA] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#102540]">
-                  <Clock className="h-3 w-3" />
-                  {tile.eta}
-                </div>
-
                 {/* Decorative glow */}
-                <div className="pointer-events-none absolute -top-16 -left-16 h-32 w-32 rounded-full bg-[#102540]/5 blur-3xl group-hover:bg-[#102540]/10 transition" />
+                <div className="pointer-events-none absolute -top-16 -left-16 h-32 w-32 rounded-full bg-[#102540]/[0.04] blur-3xl group-hover:bg-[#102540]/[0.09] transition" />
 
                 <div className="relative">
-                  <div className="grid h-12 w-12 place-items-center rounded-xl border border-[#B89555] bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]">
-                    <Icon className="h-6 w-6 text-[#102540]" strokeWidth={2} />
+                  <div className="grid h-12 w-12 place-items-center rounded-xl border border-[#B89555]/70 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]">
+                    <Icon className="h-6 w-6 text-[#102540]" strokeWidth={1.75} />
                   </div>
-                  <h3 className="mt-4 text-lg font-bold text-[#1A1A1A] leading-snug">{tile.title}</h3>
-                  <p className="mt-2 text-sm text-[#1A1A1A]/70 leading-relaxed">{tile.description}</p>
+                  <h3 className="mt-4 text-lg font-semibold text-[#1A1A1A] leading-snug tracking-tight">
+                    {tile.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-[#1A1A1A]/72 leading-relaxed">
+                    {tile.description}
+                  </p>
                 </div>
 
                 {/* Bottom hairline */}
-                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent" />
+                <div className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent" />
               </article>
             );
           })}
         </div>
 
-        <p className="mt-10 text-center text-sm font-semibold text-[#102540]/80">
-          Want early access to these tools? Apply above — accepted candidates get first invitation.
+        <p className="mt-12 text-center text-sm font-semibold text-[#102540]/80">
+          Every section above reflects current JBJ operations — not a roadmap.
         </p>
       </div>
     </section>
