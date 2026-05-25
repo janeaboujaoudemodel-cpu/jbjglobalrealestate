@@ -1113,7 +1113,9 @@ export default function JoinApplication() {
         </div>
       </section>
 
+      <CareersWhyJBJ />
       <CareersEcosystem />
+      <CareersFAQ />
     </div>
   );
 }
