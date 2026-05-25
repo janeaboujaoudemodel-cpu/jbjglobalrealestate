@@ -314,11 +314,11 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
 
 
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-bold leading-tight" style={{ color: config.dark }}>
+                    <p className="text-[13px] font-bold leading-tight break-words" style={{ color: config.dark }}>
                       {config.label}
                     </p>
                     <p
-                      className="text-[11px] leading-snug mt-0.5"
+                      className="text-[11px] leading-snug mt-0.5 break-words whitespace-normal"
                       style={{ color: config.dark }}
                     >
                       {config.description}
