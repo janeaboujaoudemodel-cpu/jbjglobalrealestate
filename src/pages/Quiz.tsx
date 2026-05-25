@@ -853,7 +853,7 @@ const Quiz = () => {
               <Button
                 variant="outline"
                 onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-                className="border-[#B89555]/40 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] px-8 py-6 text-lg"
+                className="border-[#B89555]/40 text-[#102540] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:text-[#102540] px-8 py-6 text-lg"
               >
                 <ChevronLeft className="w-5 h-5 mr-2" />
                 Back
@@ -861,7 +861,7 @@ const Quiz = () => {
               <Button
                 onClick={handleNext}
                 disabled={!isAnswered()}
-                className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#B89555]/20"
+                className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#102540] font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#B89555]/20"
               >
                 {currentStep === QUIZ_QUESTIONS.length - 1 ? "Continue" : "Next"}
                 <ChevronRight className="w-5 h-5 ml-2" />
