@@ -80,7 +80,7 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
       className={cn(
         // Aligned under the right-edge "Talk to us" stack, nudged down + right
         "fixed bottom-16 z-[55] pointer-events-auto",
-        isRTL ? "left-3" : "right-3",
+        isRTL ? "left-0" : "right-0",
       )}
       data-no-contrast-guard
     >
@@ -91,9 +91,9 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         title={label}
         className={cn(
           "group inline-flex items-center justify-center h-9 w-9 bg-transparent border-0 shadow-none p-0",
-          "text-[#B89555] hover:text-[#1A1A1A]",
+          "text-[#102540] hover:text-[#1a3d63]",
           "transition-all duration-200 hover:-translate-y-[1px] active:scale-95",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70 rounded-sm",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#102540]/70 rounded-sm",
         )}
       >
         <Icon
