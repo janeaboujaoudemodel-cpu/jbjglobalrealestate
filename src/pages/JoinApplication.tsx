@@ -660,19 +660,17 @@ export default function JoinApplication() {
                             <Button
                               type="button"
                               size="sm"
+                              data-allow-dark-cta
+                              data-no-contrast-guard
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleApplyPosition(pos.id);
                               }}
-                              className={
-                                selected
-                                  ? "bg-[#F7F2EA] text-[#102540] border border-[#102540] hover:bg-[#EFE6D6]"
-                                  : "bg-transparent text-[#102540] border border-[#102540] hover:bg-[#F7F2EA]"
-                              }
+                              className="bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555] rounded-lg shadow-[0_4px_10px_-2px_rgba(16,37,64,0.35),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] active:shadow-[0_2px_6px_-2px_rgba(16,37,64,0.35),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all"
                             >
                               {selected ? (
                                 <>
-                                  <CheckCircle className="w-3.5 h-3.5 mr-1.5 text-[#102540]" /> Selected
+                                  <CheckCircle className="w-3.5 h-3.5 mr-1.5 text-white" /> Selected
                                 </>
                               ) : (
                                 "Apply"
