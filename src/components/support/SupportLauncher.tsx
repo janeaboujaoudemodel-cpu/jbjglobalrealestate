@@ -77,10 +77,12 @@ function useSuppressed() {
 }
 
 function useOverHero() {
-  // True when the launcher's vertical center overlaps a dark hero section.
-  // We detect heroes by `[data-hero-dark]` markers, falling back to "near top
-  // of page" so any first-fold dark hero qualifies even without a marker.
-  const [overHero, setOverHero] = useState(true);
+  // True ONLY when the launcher's vertical center overlaps an explicitly-marked
+  // dark hero ([data-hero-dark]). Previously this fell back to "assume hero
+  // occupies first viewport" when no markers existed, which painted the rail
+  // as translucent white over the champagne page background — invisible.
+  // Default is now the safe navy variant.
+  const [overHero, setOverHero] = useState(false);
   useEffect(() => {
     const check = () => {
       const centerY = window.innerHeight / 2;
@@ -90,10 +92,6 @@ function useOverHero() {
         const r = el.getBoundingClientRect();
         if (r.top <= centerY && r.bottom >= centerY) hit = true;
       });
-      if (!hit && heroes.length === 0) {
-        // Fallback: assume hero occupies first viewport.
-        hit = window.scrollY < window.innerHeight - 120;
-      }
       setOverHero(hit);
     };
     check();
@@ -106,6 +104,7 @@ function useOverHero() {
   }, []);
   return overHero;
 }
+
 
 export default function SupportLauncher() {
   const [open, setOpen] = useState(false);
