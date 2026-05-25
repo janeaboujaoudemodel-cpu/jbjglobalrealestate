@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { SEOHead } from "@/components/SEOHead";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
-import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
+
 import { PreFooterSeparator } from "@/components/PreFooterSeparator";
 import {
   MarketOverviewDashboard,
