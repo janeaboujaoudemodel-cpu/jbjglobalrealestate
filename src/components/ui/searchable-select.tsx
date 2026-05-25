@@ -165,9 +165,6 @@ export function SearchableSelect({
                   </span>
                   {flag && <span className="text-xl leading-none shrink-0">{flag}</span>}
                   <span className="truncate text-sm sm:text-base flex-1 min-w-0">{option}</span>
-                  {option === priorityItem && (
-                    <span className="ml-auto text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 whitespace-nowrap shrink-0">Default</span>
-                  )}
                 </button>
               );
             })
