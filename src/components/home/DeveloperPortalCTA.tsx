@@ -188,12 +188,13 @@ const DeveloperPortalCTA = () => {
     <section
       className="py-16 md:py-24 relative overflow-hidden"
     >
-      {/* Decorative outer frame — navy blue card sitting behind the champagne portal card */}
+      {/* Decorative outer frame — navy blue card sitting behind the champagne portal card.
+          Stretched fully edge-to-edge horizontally (no champagne side-highlight); vertical insets preserved. */}
       <div
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="allow-white pointer-events-none absolute inset-x-2 inset-y-4 md:inset-x-4 md:inset-y-6 rounded-[2.25rem] bg-[#102540] border border-[#B89555]/55 shadow-[0_30px_80px_-40px_rgba(16,37,64,0.65)]"
+        className="allow-white pointer-events-none absolute inset-x-0 inset-y-4 md:inset-y-6 rounded-[2.25rem] bg-[#102540] border border-[#B89555]/55 shadow-[0_30px_80px_-40px_rgba(16,37,64,0.65)]"
       />
 
       <div className="container mx-auto px-4 md:px-8 max-w-6xl relative">
