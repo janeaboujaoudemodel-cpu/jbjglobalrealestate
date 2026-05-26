@@ -1250,7 +1250,7 @@ function StudioShell({
                   {marks.showSigB !== false && (
                     <DraggableMark
                       x={marks.signatureBXY?.x ?? 460}
-                      y={marks.signatureBXY?.y ?? 420}
+                      y={marks.signatureBXY?.y ?? 540}
                       onChange={(x, y) => setMarks((m) => ({ ...m, signatureBXY: { x, y } }))}
                       onRemove={() => removeMark("signatureB")}
                       ariaLabel="Party B signature"
