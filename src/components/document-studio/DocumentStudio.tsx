@@ -426,6 +426,7 @@ function StudioShell({
   const handleSelectTemplate = (id: string) => {
     setTemplateId(id);
     setFields({});
+    setExtraSignatories([]);
     autoBodyRef.current = "";
     userEditedRef.current = false;
     setUserEdited(false);
