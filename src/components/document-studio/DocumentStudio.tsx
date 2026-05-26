@@ -251,6 +251,8 @@ function StudioShell({
         aiIntro,
         aiClosing,
         ownerTitle: "Director",
+        commissionRows: usesCommission ? commissionRows : undefined,
+        customFields,
       });
       setBodyHtml(html);
       toast.success("Document generated");
