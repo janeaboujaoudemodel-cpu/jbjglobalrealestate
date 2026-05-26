@@ -30,7 +30,7 @@ import {
   Sparkles, Loader2, Wand2, Printer, Mail, FlaskConical, X, ChevronRight,
   ChevronLeft, ZoomIn, ZoomOut, Bold, Italic, List, Heading2, Search,
   PanelRightClose, PanelRightOpen, Check, Download, FileText, Stamp,
-  PenLine, ChevronDown, Trash2, Maximize2, Minimize2, Plus,
+  PenLine, ChevronDown, Trash2, Maximize2, Minimize2, Plus, Globe,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -148,6 +148,9 @@ function StudioShell({
   const [autoFillText, setAutoFillText] = useState("");
   const [autoFillBusy, setAutoFillBusy] = useState(false);
   const autoFillFileRef = useRef<HTMLInputElement>(null);
+
+  // Document language (drives translation + AI replies + STT).
+  const [docLanguage, setDocLanguage] = useState<string>("English");
 
   // Signature + stamp placement (with x/y positions for free dragging)
   const { defaultSignature, defaultStamp } = useOwnerAssets();
