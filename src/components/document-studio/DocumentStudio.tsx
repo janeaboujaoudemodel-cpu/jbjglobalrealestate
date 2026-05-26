@@ -1498,7 +1498,7 @@ function StudioShell({
                   {marks.showDate !== false && (
                     <DraggableMark
                       x={marks.dateXY?.x ?? 560}
-                      y={marks.dateXY?.y ?? 0}
+                      y={marks.dateXY?.y ?? 24}
                       onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))}
                       onRemove={() => removeMark("date")}
                       ariaLabel="Date"
