@@ -727,13 +727,23 @@ function StudioShell({
                       <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
                         Commission Structure
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => setCommissionRows((rs) => [...rs, { label: "", rate: "", trigger: "", notes: "" }])}
-                        className="text-[11px] text-[#1A1A1A] hover:text-[#B89555] inline-flex items-center gap-1"
-                      >
-                        <Plus className="w-3 h-3" /> Add tier
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setCommissionRows((rs) => [...rs, { label: "", rate: "", trigger: "", notes: "" }])}
+                          className="text-[11px] text-[#1A1A1A] hover:text-[#B89555] inline-flex items-center gap-1"
+                        >
+                          <Plus className="w-3 h-3" /> Add tier
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => toggleSection("commission")}
+                          className="text-[#1A1A1A]/55 hover:text-red-600"
+                          title="Hide this section from the document"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                     <div className="space-y-2">
                       {commissionRows.map((r, i) => (
