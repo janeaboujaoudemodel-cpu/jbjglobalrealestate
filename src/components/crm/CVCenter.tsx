@@ -25,6 +25,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { maybeProxyStorageUrl } from '@/utils/downloadProxy';
 import { SUPABASE_URL } from "@/config/backend";
+import {
+  ApplicantStatusPill,
+  APPLICANT_STATUS_META,
+  APPLICANT_STATUS_ORDER,
+  getApplicantStatusMeta,
+} from "@/components/crm/ApplicantStatusPill";
 
 // Department categories with icons
 const DEPARTMENT_CATEGORIES = [
@@ -41,13 +47,17 @@ const DEPARTMENT_CATEGORIES = [
   { id: 'general', label: 'Other', icon: FileText, color: 'text-[#1A1A1A]/70' },
 ];
 
+// Full 10-status lifecycle (plus "all" + "flagged" filters).
+// Visual identity comes from ApplicantStatusPill — these tabs only
+// describe filter behaviour + iconography for the stats row.
 const STATUS_TABS = [
-  { id: 'all', label: 'All', icon: FileText, count: 0, color: 'bg-[#B89555]' },
-  { id: 'pending', label: 'Pending', icon: Clock, count: 0, color: 'bg-amber-500' },
-  { id: 'approved', label: 'Accepted', icon: CheckCircle, count: 0, color: 'bg-green-500' },
-  { id: 'rejected', label: 'Rejected', icon: XCircle, count: 0, color: 'bg-red-500' },
-  { id: 'flagged', label: 'Flagged', icon: Flag, count: 0, color: 'bg-yellow-500' },
-];
+  { id: 'all', label: 'All', icon: FileText },
+  { id: 'flagged', label: 'Flagged', icon: Flag },
+  ...APPLICANT_STATUS_ORDER.map((id) => {
+    const meta = APPLICANT_STATUS_META[id];
+    return { id, label: meta.label, icon: meta.icon };
+  }),
+] as { id: string; label: string; icon: any }[];
 
 interface CVEntry {
   id: string;
@@ -364,13 +374,27 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     }
   }, [cvEntries, activeStatusTab, activeDeptCategory, searchQuery, sortBy]);
 
-  const stats = useMemo(() => ({
-    total: cvEntries.length,
-    pending: cvEntries.filter(cv => cv.status === 'pending').length,
-    approved: cvEntries.filter(cv => cv.status === 'approved').length,
-    rejected: cvEntries.filter(cv => cv.status === 'rejected').length,
-    flagged: cvEntries.filter(cv => cv.flag_reason !== null).length,
-  }), [cvEntries]);
+  const stats = useMemo(() => {
+    const byStatus: Record<string, number> = {};
+    for (const id of APPLICANT_STATUS_ORDER) byStatus[id] = 0;
+    for (const cv of cvEntries) {
+      const key = cv.status && byStatus.hasOwnProperty(cv.status)
+        ? cv.status
+        : cv.status === 'pending'
+        ? 'pending_review'
+        : null;
+      if (key) byStatus[key] = (byStatus[key] || 0) + 1;
+    }
+    return {
+      total: cvEntries.length,
+      flagged: cvEntries.filter((cv) => cv.flag_reason !== null).length,
+      byStatus,
+      // legacy fields retained for any in-file references
+      pending: cvEntries.filter((cv) => cv.status === 'pending' || cv.status === 'pending_review').length,
+      approved: byStatus.approved,
+      rejected: byStatus.rejected,
+    };
+  }, [cvEntries]);
 
   /**
    * Resolves a cv_url (either a storage path or full URL) into:
@@ -799,16 +823,23 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-4 p-4 bg-[#FDFBF7] rounded-xl border border-crm-border shadow-sm">
-        <div>
-          <h2 className="text-2xl font-bold text-crm-text flex items-center gap-3">
-            <FileText className="h-7 w-7 text-[#1A1A1A]" />
-            CV Center
-          </h2>
-          <p className="text-crm-text-muted mt-1">
-            AI-powered candidate scoring & management — analysis runs automatically
-          </p>
+      {/* Premium command-center header */}
+      <div className="flex items-center justify-between flex-wrap gap-4 px-6 py-5 bg-[#FDFBF7] rounded-2xl border border-[#B89555]/40 shadow-[0_1px_0_rgba(184,149,85,0.08)]">
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
+            <FileText className="h-6 w-6 text-[#1A1A1A]" strokeWidth={1.75} />
+          </div>
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.28em] text-[#1A1A1A]/55 font-semibold">
+              JBJ Global Real Estate · Recruitment
+            </p>
+            <h2 className="text-[22px] font-bold text-[#1A1A1A] leading-tight mt-0.5">
+              CV Center
+            </h2>
+            <p className="text-[12px] text-[#1A1A1A]/65 mt-0.5">
+              Executive applicant pipeline · AI scoring runs automatically
+            </p>
+          </div>
         </div>
         <div>
           <input
@@ -847,7 +878,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
             }}
           />
           <Button
-            className="gap-2 bg-[#EFE6D6] text-white hover:bg-[#EFE6D6]-dark font-semibold"
+            className="gap-2 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#F2EAD3] border border-[#B89555] font-semibold"
             onClick={() => document.getElementById('cv-upload-input')?.click()}
           >
             <Upload className="h-4 w-4" />
@@ -856,32 +887,68 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         </div>
       </div>
 
-      {/* Status Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        {STATUS_TABS.map((tab) => {
-          const count = tab.id === 'all' ? stats.total :
-                       tab.id === 'flagged' ? stats.flagged :
-                       stats[tab.id as keyof typeof stats] || 0;
-          const IconComponent = tab.icon;
-          return (
-            <Card
-              key={tab.id}
-              className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all ${
-                activeStatusTab === tab.id ? 'border-[#B89555] ring-2 ring-gold/20' : 'border-crm-border'
-              }`}
-              onClick={() => setActiveStatusTab(tab.id)}
-            >
-              <CardContent className="p-4 text-center">
-                <IconComponent className={`h-5 w-5 mx-auto mb-2 ${
-                  tab.id === 'pending' ? 'text-amber-500' : tab.id === 'approved' ? 'text-green-500' :
-                  tab.id === 'rejected' ? 'text-red-500' : tab.id === 'flagged' ? 'text-yellow-500' : 'text-[#1A1A1A]'
-                }`} />
-                <p className="text-xl font-bold text-crm-text">{count}</p>
-                <p className="text-xs text-crm-text-muted font-medium">{tab.label}</p>
-              </CardContent>
-            </Card>
-          );
-        })}
+      {/* Lifecycle status rail — full 10-status pipeline */}
+      <div className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] shadow-[0_1px_0_rgba(184,149,85,0.08)]">
+        <div className="px-5 pt-4 pb-2 flex items-center justify-between">
+          <p className="text-[11px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 font-semibold">
+            Applicant Lifecycle
+          </p>
+          <p className="text-[11px] text-[#1A1A1A]/55">
+            {stats.total} total · {stats.flagged} flagged
+          </p>
+        </div>
+        <div className="px-3 pb-3 overflow-x-auto">
+          <div className="flex items-stretch gap-1.5 min-w-max">
+            {STATUS_TABS.map((tab) => {
+              const count =
+                tab.id === 'all'
+                  ? stats.total
+                  : tab.id === 'flagged'
+                  ? stats.flagged
+                  : stats.byStatus[tab.id] ?? 0;
+              const Icon = tab.icon;
+              const active = activeStatusTab === tab.id;
+              const meta = tab.id !== 'all' && tab.id !== 'flagged'
+                ? getApplicantStatusMeta(tab.id)
+                : null;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveStatusTab(tab.id)}
+                  className={[
+                    'group flex items-center gap-2 rounded-full border px-3 py-2 transition-all whitespace-nowrap',
+                    active
+                      ? 'bg-[#EFE6D6] border-[#B89555] shadow-[inset_0_0_0_1px_rgba(184,149,85,0.35)]'
+                      : 'bg-[#FDFBF7] border-[#B89555]/25 hover:bg-[#F7F2EA] hover:border-[#B89555]/55',
+                  ].join(' ')}
+                >
+                  <Icon
+                    className={[
+                      'h-3.5 w-3.5',
+                      active ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/65',
+                    ].join(' ')}
+                    strokeWidth={2.25}
+                  />
+                  <span className={['text-[12px] font-semibold tracking-[0.01em]', active ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/80'].join(' ')}>
+                    {tab.label}
+                  </span>
+                  <span
+                    className={[
+                      'inline-flex items-center justify-center rounded-full text-[10px] font-bold min-w-[20px] h-[18px] px-1.5 border',
+                      active
+                        ? 'bg-[#1A1A1A] text-[#FDFBF7] border-[#1A1A1A]'
+                        : 'bg-[#F2EAD3] text-[#1A1A1A] border-[#B89555]/30',
+                    ].join(' ')}
+                    data-no-contrast-guard
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* Department Categories */}
@@ -899,7 +966,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                   key={cat.id}
                   variant={activeDeptCategory === cat.id ? 'default' : 'outline'}
                   className={`cursor-pointer px-3 py-2 ${
-                    activeDeptCategory === cat.id ? 'bg-[#EFE6D6] text-white border-[#B89555]' : 'hover:bg-[#EFE6D6]/10 border-crm-border text-crm-text'
+                    activeDeptCategory === cat.id ? 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]' : 'hover:bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]/80'
                   }`}
                   onClick={() => setActiveDeptCategory(cat.id)}
                 >
@@ -988,9 +1055,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                     {score.final}/10 · {score.level}
                                   </Badge>
                                 ) : null}
-                                {cv.status === 'approved' && <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Accepted</Badge>}
-                                {cv.status === 'rejected' && <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Rejected</Badge>}
-                                {cv.status === 'pending' && <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Pending Review</Badge>}
+                                {cv.status && <ApplicantStatusPill status={cv.status} size="sm" />}
                               </div>
 
                               {/* Quick info pills */}
