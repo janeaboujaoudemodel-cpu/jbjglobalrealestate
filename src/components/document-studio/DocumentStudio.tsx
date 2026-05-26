@@ -498,6 +498,101 @@ function StudioShell({
                     )}
                   </Field>
                 ))}
+
+                {usesCommission && (
+                  <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
+                        Commission Structure
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setCommissionRows((rs) => [...rs, { label: "", rate: "", trigger: "", notes: "" }])}
+                        className="text-[11px] text-[#1A1A1A] hover:text-[#B89555] inline-flex items-center gap-1"
+                      >
+                        <Plus className="w-3 h-3" /> Add tier
+                      </button>
+                    </div>
+                    <div className="space-y-2">
+                      {commissionRows.map((r, i) => (
+                        <div key={i} className="grid grid-cols-12 gap-1.5 items-start">
+                          <Input
+                            placeholder="Tier (e.g. Direct deals)"
+                            value={r.label || ""}
+                            onChange={(e) => setCommissionRows((rs) => rs.map((x, j) => j === i ? { ...x, label: e.target.value } : x))}
+                            className="col-span-5 h-8 text-[12px] bg-[#FDFBF7]"
+                          />
+                          <Input
+                            placeholder="Rate"
+                            value={r.rate || ""}
+                            onChange={(e) => setCommissionRows((rs) => rs.map((x, j) => j === i ? { ...x, rate: e.target.value } : x))}
+                            className="col-span-3 h-8 text-[12px] bg-[#FDFBF7]"
+                          />
+                          <Input
+                            placeholder="Trigger"
+                            value={r.trigger || ""}
+                            onChange={(e) => setCommissionRows((rs) => rs.map((x, j) => j === i ? { ...x, trigger: e.target.value } : x))}
+                            className="col-span-3 h-8 text-[12px] bg-[#FDFBF7]"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setCommissionRows((rs) => rs.filter((_, j) => j !== i))}
+                            className="col-span-1 h-8 flex items-center justify-center text-[#1A1A1A]/55 hover:text-red-600"
+                            title="Remove tier"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-[#1A1A1A]/55 mt-2">Empty rows are skipped — only filled tiers appear in the document.</p>
+                  </div>
+                )}
+
+                <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
+                      Custom Fields
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setCustomFields((cs) => [...cs, { label: "", value: "" }])}
+                      className="text-[11px] text-[#1A1A1A] hover:text-[#B89555] inline-flex items-center gap-1"
+                    >
+                      <Plus className="w-3 h-3" /> Add field
+                    </button>
+                  </div>
+                  {customFields.length === 0 ? (
+                    <p className="text-[10px] text-[#1A1A1A]/55">Add any extra clause — e.g. "Sign-on bonus", "Car allowance".</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {customFields.map((c, i) => (
+                        <div key={i} className="grid grid-cols-12 gap-1.5">
+                          <Input
+                            placeholder="Field name"
+                            value={c.label}
+                            onChange={(e) => setCustomFields((cs) => cs.map((x, j) => j === i ? { ...x, label: e.target.value } : x))}
+                            className="col-span-5 h-8 text-[12px] bg-[#FDFBF7]"
+                          />
+                          <Input
+                            placeholder="Value"
+                            value={c.value}
+                            onChange={(e) => setCustomFields((cs) => cs.map((x, j) => j === i ? { ...x, value: e.target.value } : x))}
+                            className="col-span-6 h-8 text-[12px] bg-[#FDFBF7]"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setCustomFields((cs) => cs.filter((_, j) => j !== i))}
+                            className="col-span-1 h-8 flex items-center justify-center text-[#1A1A1A]/55 hover:text-red-600"
+                            title="Remove field"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="p-3 border-t border-[#B89555]/20 space-y-2">
                 <Button
