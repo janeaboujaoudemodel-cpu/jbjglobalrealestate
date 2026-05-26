@@ -148,19 +148,22 @@ function StudioShell({
   const [search, setSearch] = useState("");
   const [pages, setPages] = useState<number | "auto">("auto");
 
-  // Auto-fit preview: scale the 816px A4 page down to whatever width the
-  // center pane has so it never overflows or gets clipped at the edges.
+  // Auto-fit preview: scale the fixed 816×1154 (A4 at 96dpi) page down
+  // to whatever width the center pane has so it never overflows.
+  // The page is a HARD A4 rectangle — header, body and footer share a
+  // single flex column so the footer is always pinned to the bottom.
+  const PAGE_W = 816;
+  const PAGE_H = 1154; // A4 ratio @ 96dpi
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
-  const [pageHeight, setPageHeight] = useState(1154);
   useEffect(() => {
     const wrap = previewWrapRef.current;
     if (!wrap) return;
     const update = () => {
       const w = wrap.clientWidth;
       const padding = 48; // breathing room on both sides
-      const fit = Math.min(1, Math.max(0.3, (w - padding) / 816));
+      const fit = Math.min(1, Math.max(0.3, (w - padding) / PAGE_W));
       setFitScale(fit);
     };
     update();
@@ -168,16 +171,8 @@ function StudioShell({
     ro.observe(wrap);
     return () => ro.disconnect();
   }, []);
-  useEffect(() => {
-    const page = pageRef.current;
-    if (!page) return;
-    const update = () => setPageHeight(page.offsetHeight);
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(page);
-    return () => ro.disconnect();
-  });
   const effectiveScale = (zoom / 100) * fitScale;
+
 
 
   // Owner-side signature defaults (editable from the left rail).
