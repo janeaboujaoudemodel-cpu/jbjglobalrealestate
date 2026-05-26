@@ -148,15 +148,17 @@ function StudioShell({
   const [search, setSearch] = useState("");
   const [pages, setPages] = useState<number | "auto">("auto");
 
-  // Auto-fit preview: scale the fixed 816×1154 (A4 at 96dpi) page down
-  // to whatever width the center pane has so it never overflows.
-  // The page is a HARD A4 rectangle — header, body and footer share a
-  // single flex column so the footer is always pinned to the bottom.
+  // Auto-fit preview: scale the fixed 816-wide A4 page down to whatever
+  // width the center pane has so it never overflows horizontally.
+  // The page MIN-height is A4 (1154 × pageCount), but it can grow taller
+  // when the body content needs more space — the PDF exporter slices the
+  // resulting tall canvas into A4 pages so the export still paginates.
   const PAGE_W = 816;
-  const PAGE_H = 1154; // A4 ratio @ 96dpi
+  const PAGE_H = 1154; // A4 ratio @ 96dpi (one page)
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
+  const [measuredPageH, setMeasuredPageH] = useState(PAGE_H);
   useEffect(() => {
     const wrap = previewWrapRef.current;
     if (!wrap) return;
@@ -171,7 +173,17 @@ function StudioShell({
     ro.observe(wrap);
     return () => ro.disconnect();
   }, []);
+  useEffect(() => {
+    const page = pageRef.current;
+    if (!page) return;
+    const update = () => setMeasuredPageH(page.offsetHeight || PAGE_H);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(page);
+    return () => ro.disconnect();
+  });
   const effectiveScale = (zoom / 100) * fitScale;
+
 
 
 
