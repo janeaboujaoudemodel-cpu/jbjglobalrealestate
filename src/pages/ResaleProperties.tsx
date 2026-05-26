@@ -239,7 +239,7 @@ const ResaleProperties = () => {
       </section>
 
       {/* Filters - Champagne bar connected to hero (no black gap) */}
-      <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 md:py-4 border-b border-[#B89555]/30 sticky top-0">
+      <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 md:py-4 sticky top-0">
         <div className="container mx-auto px-3 sm:px-4">
           <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl p-4 sm:p-5 shadow-lg backdrop-blur-sm">
             {/* Search Bar */}
