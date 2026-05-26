@@ -343,8 +343,11 @@ export function getCountryFlagForName(country: string): string {
 
 export function getLanguageFlagForName(language: string): string {
   if (!language) return "";
-  return LANGUAGE_FLAGS[language] || "🌐";
+  // Never use 🌐 globe — every language must show a real national flag.
+  // Falls back to white-flag glyph (neutral, still a flag) only if mapping missing.
+  return LANGUAGE_FLAGS[language] || "🏳️";
 }
+
 
 export function getCountryList(locale: string = "en"): string[] {
   try {
