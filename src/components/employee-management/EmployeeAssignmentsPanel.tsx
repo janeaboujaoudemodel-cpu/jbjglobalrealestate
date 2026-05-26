@@ -13,7 +13,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ShieldCheck, Users, Database, UserPlus, Loader2, Search, FileLock2 } from "lucide-react";
+import { ShieldCheck, Users, Database, UserPlus, Loader2, Search, FileLock2, Settings2, X } from "lucide-react";
 import { toast } from "sonner";
 
 interface Employee {
