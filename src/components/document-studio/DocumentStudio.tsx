@@ -44,7 +44,7 @@ import { DEPARTMENTS } from "@/hooks/useHRJobOffers";
 import { stripChromeArtifacts } from "@/templates/jbjLockedChrome";
 import { LockedLetterhead, LockedFooter } from "./LockedLetterhead";
 import DraggableMark from "./DraggableMark";
-import AiEditChatPanel from "./AiEditChatPanel";
+import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
 import { exportPdf, exportDocx, printDocument, DocumentMarks } from "./export/exporters";
@@ -433,18 +433,36 @@ function StudioShell({
         }} hasTemplate={!!templateId} hasBody={!!bodyHtml} />
 
         <div className="ml-auto flex items-center gap-2">
-          <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 border border-[#B89555]/30 bg-[#F7F2EA] rounded-md px-2 py-1">
+          <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 border border-[#B89555]/30 bg-[#F7F2EA] rounded-md pl-2 pr-1 py-0.5">
+            <Globe className="w-3.5 h-3.5" />
+            <span className="uppercase tracking-[0.14em]">Lang</span>
+            <Select value={docLanguage} onValueChange={setDocLanguage}>
+              <SelectTrigger className="h-6 w-[112px] border-0 bg-transparent px-1.5 text-[12px] font-semibold text-[#1A1A1A] focus:ring-0 focus:ring-offset-0 shadow-none">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="z-[2147483647]">
+                {AI_LANGUAGES.map((l) => (
+                  <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 border border-[#B89555]/30 bg-[#F7F2EA] rounded-md pl-2 pr-1 py-0.5">
             <span className="uppercase tracking-[0.14em]">Pages</span>
-            <select
+            <Select
               value={String(pages)}
-              onChange={(e) => setPages(e.target.value === "auto" ? "auto" : Number(e.target.value))}
-              className="bg-transparent text-[12px] font-semibold text-[#1A1A1A] outline-none cursor-pointer"
+              onValueChange={(v) => setPages(v === "auto" ? "auto" : Number(v))}
             >
-              <option value="auto">Auto</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </select>
+              <SelectTrigger className="h-6 w-[72px] border-0 bg-transparent px-1.5 text-[12px] font-semibold text-[#1A1A1A] focus:ring-0 focus:ring-offset-0 shadow-none">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="z-[2147483647]">
+                <SelectItem value="auto">Auto</SelectItem>
+                <SelectItem value="1">1</SelectItem>
+                <SelectItem value="2">2</SelectItem>
+                <SelectItem value="3">3</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <Button variant="outline" size="sm" onClick={() => setAssetDialog("signature")}>
             <PenLine className="w-4 h-4 mr-1.5" /> Signature
@@ -1081,6 +1099,7 @@ function StudioShell({
           <aside className="w-[360px] shrink-0 border-l border-[#B89555]/25 bg-[#FDFBF7] p-3">
             <AiEditChatPanel
               currentBody={bodyHtml}
+              language={docLanguage}
               aiInstructions={template?.aiInstructions || ""}
               onApply={(next) => setBodyHtml(next)}
             />
