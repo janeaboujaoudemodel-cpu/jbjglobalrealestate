@@ -25,45 +25,56 @@ export interface HRPillProps
 
 export const HRPill = React.forwardRef<HTMLButtonElement, HRPillProps>(
   (
-    { active, icon: Icon, count, size = "md", className, children, ...rest },
+    { active, icon: Icon, count, size = "md", className, style, children, ...rest },
     ref,
   ) => {
     const pad = size === "sm" ? "px-2.5 py-1 text-[12px]" : "px-3 py-1.5 text-[13px]";
+    // Inline style beats any stylesheet (including contrast guards) and any
+    // runtime DOM mutation. Active = navy fill + white text at ALL states
+    // (idle, hover, focus). Idle = champagne + ink. No ambiguity.
+    const lockedStyle: React.CSSProperties = active
+      ? { backgroundColor: "#102540", color: "#FFFFFF", borderColor: "#B89555" }
+      : { backgroundColor: "#FDFBF7", color: "#1A1A1A" };
     return (
       <button
         ref={ref}
         type="button"
         aria-pressed={active}
         data-active={active ? "true" : "false"}
+        data-hr-pill=""
         data-allow-dark-cta={active ? "" : undefined}
         data-no-contrast-guard={active ? "" : undefined}
+        style={{ ...lockedStyle, ...style }}
         className={cn(
           "inline-flex items-center gap-1.5 rounded-full border font-semibold whitespace-nowrap transition-colors select-none",
           pad,
           active
-            ? "bg-[#102540] text-white border-[#B89555] shadow-sm hover:bg-[#1a3d63]"
-            : "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6] hover:border-[#B89555] hover:text-[#1A1A1A]",
+            ? "border-[#B89555] shadow-sm hover:bg-[#1a3d63]"
+            : "border-[#B89555]/40 hover:bg-[#EFE6D6] hover:border-[#B89555]",
           className,
         )}
         {...rest}
       >
         {Icon ? (
-          <Icon
-            className={cn(
-              "h-3.5 w-3.5 shrink-0",
-              active ? "text-white allow-white" : "text-[#1A1A1A]",
-            )}
-          />
+          <span
+            data-no-contrast-guard
+            style={{ color: active ? "#FFFFFF" : "#1A1A1A" }}
+            className={cn("inline-flex shrink-0", active ? "allow-white" : "")}
+          >
+            <Icon className="h-3.5 w-3.5" />
+          </span>
         ) : null}
-        <span className={cn("inline-flex items-baseline gap-1", active ? "text-white" : "text-[#1A1A1A]")}>
+        <span
+          data-no-contrast-guard
+          style={{ color: active ? "#FFFFFF" : "#1A1A1A" }}
+          className="inline-flex items-baseline gap-1"
+        >
           <span>{children}</span>
           {typeof count === "number" && (
             <span
               data-no-contrast-guard
-              className={cn(
-                "tabular-nums text-[11px] font-semibold",
-                active ? "text-white/85 allow-white" : "text-[#1A1A1A]/65",
-              )}
+              style={{ color: active ? "rgba(255,255,255,0.85)" : "rgba(26,26,26,0.65)" }}
+              className="tabular-nums text-[11px] font-semibold"
             >
               ({count})
             </span>
