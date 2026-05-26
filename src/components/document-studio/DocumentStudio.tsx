@@ -551,7 +551,7 @@ function StudioShell({
                   <Field label="Department">
                     <Select value={department} onValueChange={setDepartment}>
                       <SelectTrigger className="bg-[#FDFBF7]"><SelectValue /></SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="z-[2147483647] bg-[#FDFBF7]">
                         {DEPARTMENTS.map((d) => (
                           <SelectItem key={d} value={d}>{d}</SelectItem>
                         ))}
