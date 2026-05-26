@@ -5010,14 +5010,35 @@ a[class*="bg-red-"]:hover {
 
 /* 7. Sidebar nav active item — locked cream system (front + back).
  *    Hover: soft cream wash + 1px gold left bar. Active: same cream + bold. */
-nav button[aria-current="page"],
-nav a[aria-current="page"],
-nav button[data-active="true"],
-nav a[data-active="true"] {
+nav button[aria-current="page"]:not([data-allow-dark-cta]):not([data-hr-pill]),
+nav a[aria-current="page"]:not([data-allow-dark-cta]):not([data-hr-pill]),
+nav button[data-active="true"]:not([data-allow-dark-cta]):not([data-hr-pill]),
+nav a[data-active="true"]:not([data-allow-dark-cta]):not([data-hr-pill]) {
   background-color: #EFE6D6 !important;
   color: #1A1A1A !important;
   border-left: 2px solid #B89555 !important;
   font-weight: 600;
+}
+
+/* Careers Portal tabs + HRPill segmented controls: active state is navy fill,
+ * white text, gold hairline — exempt from sidebar's cream-active treatment. */
+nav button[data-allow-dark-cta][aria-current="page"],
+nav button[data-allow-dark-cta][aria-pressed="true"],
+nav button[data-hr-pill][data-active="true"],
+[data-allow-dark-cta][aria-current="page"],
+[data-allow-dark-cta][aria-pressed="true"] {
+  background-color: #102540 !important;
+  color: #ffffff !important;
+  border: 1px solid #B89555 !important;
+  border-left: 1px solid #B89555 !important;
+  font-weight: 600;
+}
+nav button[data-allow-dark-cta][aria-current="page"] *,
+nav button[data-allow-dark-cta][aria-pressed="true"] *,
+[data-allow-dark-cta][aria-current="page"] *,
+[data-allow-dark-cta][aria-pressed="true"] * {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
 }
 
 /* 8. Keep gold for hairline borders, focus rings, and small text accents. */
