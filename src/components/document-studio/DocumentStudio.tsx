@@ -533,12 +533,13 @@ function StudioShell({
     if (!bodyHtml || !template) { toast.error("Nothing to export yet"); return; }
     setExporting(kind);
     try {
-      if (kind === "pdf") await exportPdf(bodyHtml, marks, template);
+      const src = pageRef.current;
+      if (kind === "pdf") await exportPdf(bodyHtml, marks, template, src);
       else if (kind === "docx") await exportDocx(bodyHtml, marks, template);
-      else if (kind === "png") await exportPng(bodyHtml, marks, template);
+      else if (kind === "png") await exportPng(bodyHtml, marks, template, src);
       else if (kind === "both") {
-        await exportPdf(bodyHtml, marks, template);
-        await exportPng(bodyHtml, marks, template);
+        await exportPdf(bodyHtml, marks, template, src);
+        await exportPng(bodyHtml, marks, template, src);
       }
       toast.success(`${kind.toUpperCase()} downloaded`);
     } catch (e: any) {
