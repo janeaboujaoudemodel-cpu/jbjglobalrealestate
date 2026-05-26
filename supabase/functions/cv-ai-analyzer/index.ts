@@ -1,6 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import pako from "npm:pako@2.1.0";
+import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
+
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
