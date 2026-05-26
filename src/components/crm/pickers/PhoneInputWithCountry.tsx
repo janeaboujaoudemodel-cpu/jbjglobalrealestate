@@ -40,15 +40,15 @@ export default function PhoneInputWithCountry({
   };
 
   return (
-    <div className={cn("flex w-full h-10 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] overflow-hidden focus-within:ring-2 focus-within:ring-[#B89555]/40", className)}>
+    <div className={cn("flex flex-row flex-nowrap items-stretch w-full h-10 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] overflow-hidden focus-within:ring-2 focus-within:ring-[#B89555]/40", className)}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="flex items-center gap-1.5 px-2.5 border-r border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] text-sm text-[#1A1A1A] focus-visible:outline-none"
+            className="shrink-0 h-full flex items-center gap-1.5 px-2.5 border-r border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] text-sm text-[#1A1A1A] focus-visible:outline-none whitespace-nowrap"
           >
             <span className="text-base leading-none">{selectedCountry?.flag || "🏳️"}</span>
-            <span className="font-medium">{dial}</span>
+            <span className="font-medium leading-none">{dial}</span>
             <ChevronsUpDown className="w-3.5 h-3.5 text-[#1A1A1A]/50" />
           </button>
         </PopoverTrigger>
@@ -86,7 +86,7 @@ export default function PhoneInputWithCountry({
         value={national}
         onChange={(e) => setNational(e.target.value)}
         placeholder={placeholder}
-        className="flex-1 min-w-0 bg-transparent px-3 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none"
+        className="flex-1 min-w-0 h-full bg-transparent px-3 text-sm leading-none text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none"
       />
     </div>
   );

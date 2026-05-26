@@ -166,6 +166,18 @@ export function findCountryByNationality(nat: string): CountryEntry | undefined 
   return COUNTRIES.find((c) => c.nationality.toLowerCase() === n);
 }
 
+export function findCountryByName(name: string): CountryEntry | undefined {
+  const n = (name || "").trim().toLowerCase();
+  if (!n) return undefined;
+  return COUNTRIES.find((c) => c.name.toLowerCase() === n);
+}
+
+/** Resolve a country by either country name OR nationality/demonym. */
+export function resolveCountry(value: string): CountryEntry | undefined {
+  if (!value) return undefined;
+  return findCountryByName(value) || findCountryByNationality(value) || findCountryByCode(value);
+}
+
 /** Parse an E.164 phone string into { dial, national }. Greedy longest match. */
 export function splitE164(phone: string): { dial: string; national: string } {
   const p = (phone || "").replace(/\s+/g, "");

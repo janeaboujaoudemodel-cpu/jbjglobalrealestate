@@ -2,19 +2,24 @@ import { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
-import { COUNTRIES, findCountryByNationality } from "@/data/countries";
+import { COUNTRIES, resolveCountry } from "@/data/countries";
 import { cn } from "@/lib/utils";
 
 interface Props {
   value: string;
-  onChange: (nationality: string) => void;
+  onChange: (country: string) => void;
   placeholder?: string;
   className?: string;
 }
 
-export default function NationalityPicker({ value, onChange, placeholder = "Select nationality", className }: Props) {
+/**
+ * Nationality picker — displays and stores COUNTRY NAMES
+ * (e.g. "United Arab Emirates", "Bahrain", "Japan") instead of demonyms.
+ * Legacy demonym values (e.g. "Emirati") are still recognised on read.
+ */
+export default function NationalityPicker({ value, onChange, placeholder = "Select country", className }: Props) {
   const [open, setOpen] = useState(false);
-  const selected = findCountryByNationality(value || "");
+  const selected = resolveCountry(value || "");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -30,7 +35,7 @@ export default function NationalityPicker({ value, onChange, placeholder = "Sele
             {selected ? (
               <>
                 <span className="text-base leading-none">{selected.flag}</span>
-                <span className="truncate">{selected.nationality}</span>
+                <span className="truncate">{selected.name}</span>
               </>
             ) : value ? (
               <span className="truncate">{value}</span>
@@ -46,7 +51,7 @@ export default function NationalityPicker({ value, onChange, placeholder = "Sele
         className="p-0 w-[var(--radix-popover-trigger-width)] min-w-[260px] bg-[#FDFBF7] border-[#B89555]/40"
       >
         <Command>
-          <CommandInput placeholder="Search nationality or country…" className="text-[#1A1A1A]" />
+          <CommandInput placeholder="Search country…" className="text-[#1A1A1A]" />
           <CommandList
             className="max-h-72 overflow-y-auto overscroll-contain"
             onWheel={(e) => e.stopPropagation()}
@@ -59,13 +64,12 @@ export default function NationalityPicker({ value, onChange, placeholder = "Sele
                 return (
                   <CommandItem
                     key={c.code}
-                    value={`${c.nationality} ${c.name} ${c.code}`}
-                    onSelect={() => { onChange(c.nationality); setOpen(false); }}
+                    value={`${c.name} ${c.nationality} ${c.code}`}
+                    onSelect={() => { onChange(c.name); setOpen(false); }}
                     className="flex items-center gap-2 cursor-pointer"
                   >
                     <span className="text-base leading-none">{c.flag}</span>
-                    <span className="flex-1 truncate">{c.nationality}</span>
-                    <span className="text-xs text-[#1A1A1A]/50 truncate">{c.name}</span>
+                    <span className="flex-1 truncate">{c.name}</span>
                     {isSelected && <Check className="w-4 h-4 text-[#B89555]" />}
                   </CommandItem>
                 );
