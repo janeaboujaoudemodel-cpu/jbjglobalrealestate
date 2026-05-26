@@ -823,16 +823,23 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-4 p-4 bg-[#FDFBF7] rounded-xl border border-crm-border shadow-sm">
-        <div>
-          <h2 className="text-2xl font-bold text-crm-text flex items-center gap-3">
-            <FileText className="h-7 w-7 text-[#1A1A1A]" />
-            CV Center
-          </h2>
-          <p className="text-crm-text-muted mt-1">
-            AI-powered candidate scoring & management — analysis runs automatically
-          </p>
+      {/* Premium command-center header */}
+      <div className="flex items-center justify-between flex-wrap gap-4 px-6 py-5 bg-[#FDFBF7] rounded-2xl border border-[#B89555]/40 shadow-[0_1px_0_rgba(184,149,85,0.08)]">
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
+            <FileText className="h-6 w-6 text-[#1A1A1A]" strokeWidth={1.75} />
+          </div>
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.28em] text-[#1A1A1A]/55 font-semibold">
+              JBJ Global Real Estate · Recruitment
+            </p>
+            <h2 className="text-[22px] font-bold text-[#1A1A1A] leading-tight mt-0.5">
+              CV Center
+            </h2>
+            <p className="text-[12px] text-[#1A1A1A]/65 mt-0.5">
+              Executive applicant pipeline · AI scoring runs automatically
+            </p>
+          </div>
         </div>
         <div>
           <input
