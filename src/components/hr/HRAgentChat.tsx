@@ -34,8 +34,10 @@ export default function HRAgentChat() {
   const [loading, setLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [stage, setStage] = useState<string>('greeting');
+  const [mode, setMode] = useState<'applicant' | 'owner'>('applicant');
   const [initializing, setInitializing] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     if (user) {
