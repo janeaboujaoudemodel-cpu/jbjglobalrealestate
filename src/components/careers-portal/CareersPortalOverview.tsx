@@ -60,24 +60,26 @@ export default function CareersPortalOverview({ onJump }: { onJump: (s: SectionK
       const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
 
       // Each query is wrapped so a single missing table never breaks Overview.
-      const safe = async (p: Promise<any>) => {
-        try { const r = await p; return r.count ?? 0; } catch { return 0; }
+      const sb = supabase as any;
+      const safe = async (q: any): Promise<number> => {
+        try { const r = await q; return (r?.count as number | null) ?? 0; } catch { return 0; }
       };
 
       const [
         employees, activePositions, pendingApprovals, cvsAwaiting,
         onboarding, recentHires, payroll, aiInsights, recentComms,
       ] = await Promise.all([
-        safe(supabase.from("hr_employees").select("id", { count: "exact", head: true })),
-        safe(supabase.from("open_positions").select("id", { count: "exact", head: true }).eq("is_active", true)),
-        safe(supabase.from("hr_approval_requests").select("id", { count: "exact", head: true }).eq("status", "pending")),
-        safe(supabase.from("hr_cv_submissions").select("id", { count: "exact", head: true }).eq("status", "new")),
-        safe(supabase.from("hr_employee_onboarding").select("id", { count: "exact", head: true }).neq("status", "completed")),
-        safe(supabase.from("hr_employees").select("id", { count: "exact", head: true }).gte("hired_at", thirtyDaysAgo)),
-        safe(supabase.from("employee_salaries").select("id", { count: "exact", head: true })),
-        safe(supabase.from("hunt_prospects").select("id", { count: "exact", head: true }).eq("status", "active")),
-        safe(supabase.from("employee_chat_messages").select("id", { count: "exact", head: true }).gte("created_at", sevenDaysAgo)),
+        safe(sb.from("hr_employees").select("id", { count: "exact", head: true })),
+        safe(sb.from("open_positions").select("id", { count: "exact", head: true }).eq("is_active", true)),
+        safe(sb.from("hr_approval_requests").select("id", { count: "exact", head: true }).eq("status", "pending")),
+        safe(sb.from("hr_cv_submissions").select("id", { count: "exact", head: true }).eq("status", "new")),
+        safe(sb.from("hr_employee_onboarding").select("id", { count: "exact", head: true }).neq("status", "completed")),
+        safe(sb.from("hr_employees").select("id", { count: "exact", head: true }).gte("hired_at", thirtyDaysAgo)),
+        safe(sb.from("employee_salaries").select("id", { count: "exact", head: true })),
+        safe(sb.from("hunt_prospects").select("id", { count: "exact", head: true }).eq("status", "new")),
+        safe(sb.from("employee_chat_messages").select("id", { count: "exact", head: true }).gte("created_at", sevenDaysAgo)),
       ]);
+
 
       if (cancelled) return;
       setStats({
