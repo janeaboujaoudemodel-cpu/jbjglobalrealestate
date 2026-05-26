@@ -34630,6 +34630,38 @@ export type Database = {
         }
         Relationships: []
       }
+      broker_education_tests_public: {
+        Row: {
+          id: string | null
+          module_id: string | null
+          options: Json | null
+          question: string | null
+          sort_order: number | null
+        }
+        Insert: {
+          id?: string | null
+          module_id?: string | null
+          options?: Json | null
+          question?: string | null
+          sort_order?: number | null
+        }
+        Update: {
+          id?: string | null
+          module_id?: string | null
+          options?: Json | null
+          question?: string | null
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_education_tests_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_profiles_public: {
         Row: {
           bio: string | null
@@ -37409,6 +37441,13 @@ export type Database = {
           id: string
           notes: string
           user_id: string
+        }[]
+      }
+      get_shared_business_card: {
+        Args: { card_token: string }
+        Returns: {
+          card_data: Json
+          view_count: number
         }[]
       }
       get_subscription_payment_details: {
