@@ -1297,19 +1297,20 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <Tooltip key={sectionKey}>
                   <TooltipTrigger asChild>
                     <button
+                      data-no-contrast-guard
                       onClick={() => {
                         const firstItem = items?.[0];
                         if (firstItem?.href && firstItem.href !== '#') {
                           navigate(firstItem.href);
                         }
                       }}
-                      className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
+                      className={`group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
                         isActive
                           ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/80 shadow-sm shadow-gold/15'
-                          : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[#102540]/10 hover:border-[#102540]/70'
+                          : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70'
                       }`}
                     >
-                      <SectionIcon className="w-3.5 h-3.5 text-[#102540] sm:text-[hsl(var(--gold))]" />
+                      <SectionIcon className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
@@ -1327,9 +1328,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <Link
                     to="/contact"
                     onClick={collapseAfterNavigation}
-                    className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[#102540]/10 hover:border-[#102540]/70"
+                    data-no-contrast-guard
+                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
                   >
-                    <Headphones className="w-3.5 h-3.5 text-[#102540] sm:text-[hsl(var(--gold))]" strokeWidth={2} />
+                    <Headphones className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1339,9 +1341,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <Link
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
-                    className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[#102540]/10 hover:border-[#102540]/70"
+                    data-no-contrast-guard
+                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
                   >
-                    <Ticket className="w-3.5 h-3.5 text-[#102540] sm:text-[hsl(var(--gold))]" strokeWidth={2} />
+                    <Ticket className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
@@ -1351,9 +1354,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <TooltipTrigger asChild>
                     <button
                       onClick={() => { supabase.auth.signOut(); }}
-                      className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border text-[#102540] border-[#102540]/55 bg-[#102540]/[0.06] hover:text-[#102540] hover:bg-[#102540]/10 hover:border-[#102540]"
+                      data-no-contrast-guard
+                      className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border text-[#B91C1C] border-[#B91C1C]/45 bg-[#B91C1C]/[0.06] hover:bg-[#B91C1C]/12 hover:border-[#B91C1C]/70"
                     >
-                      <LogOut className="w-3.5 h-3.5" strokeWidth={2.25} />
+                      <LogOut className="w-3.5 h-3.5 text-[#B91C1C] group-hover:text-[#B91C1C]" strokeWidth={2.25} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign Out</TooltipContent>
@@ -1361,8 +1365,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               ) : (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to="/auth" className="w-7 h-7 rounded-lg flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6]/10 transition-all">
-                      <User className="w-3.5 h-3.5" />
+                    <Link to="/auth" data-no-contrast-guard className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-all">
+                      <User className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign In</TooltipContent>
