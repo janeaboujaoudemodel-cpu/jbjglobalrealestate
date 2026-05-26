@@ -149,6 +149,9 @@ function StudioShell({
   const [autoFillBusy, setAutoFillBusy] = useState(false);
   const autoFillFileRef = useRef<HTMLInputElement>(null);
 
+  // Document language (drives translation + AI replies + STT).
+  const [docLanguage, setDocLanguage] = useState<string>("English");
+
   // Signature + stamp placement (with x/y positions for free dragging)
   const { defaultSignature, defaultStamp } = useOwnerAssets();
   const [marks, setMarks] = useState<DocumentMarks & {
