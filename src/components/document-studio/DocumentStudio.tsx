@@ -30,7 +30,7 @@ import {
   Sparkles, Loader2, Wand2, Printer, Mail, FlaskConical, X, ChevronRight,
   ChevronLeft, ZoomIn, ZoomOut, Bold, Italic, List, Heading2, Search,
   PanelRightClose, PanelRightOpen, Check, Download, FileText, Stamp,
-  PenLine, ChevronDown, Trash2, Maximize2, Minimize2,
+  PenLine, ChevronDown, Trash2, Maximize2, Minimize2, Plus,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -47,7 +47,12 @@ import AiEditChatPanel from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
 import { exportPdf, exportDocx, printDocument, DocumentMarks } from "./export/exporters";
-import { compose as composeDocument } from "@/templates/composers";
+import {
+  compose as composeDocument,
+  DEFAULT_BROKER_COMMISSIONS,
+  type CommissionRow,
+  type CustomField,
+} from "@/templates/composers";
 
 interface Props {
   catalog: DocumentAudience;
