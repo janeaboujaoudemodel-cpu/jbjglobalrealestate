@@ -45,10 +45,10 @@ export default function PhoneInputWithCountry({
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="flex items-center gap-1.5 px-2.5 border-r border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] text-sm text-[#1A1A1A] focus-visible:outline-none"
+            className="shrink-0 h-full flex items-center gap-1.5 px-2.5 border-r border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] text-sm text-[#1A1A1A] focus-visible:outline-none whitespace-nowrap"
           >
             <span className="text-base leading-none">{selectedCountry?.flag || "🏳️"}</span>
-            <span className="font-medium">{dial}</span>
+            <span className="font-medium leading-none">{dial}</span>
             <ChevronsUpDown className="w-3.5 h-3.5 text-[#1A1A1A]/50" />
           </button>
         </PopoverTrigger>
