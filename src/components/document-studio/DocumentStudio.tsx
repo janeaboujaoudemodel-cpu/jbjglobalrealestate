@@ -296,7 +296,7 @@ function StudioShell({
     showSigB?: boolean;
   }>({ showDate: true, showSigB: true, dateValue: new Date().toISOString().slice(0, 10) });
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
-  const [exporting, setExporting] = useState<null | "pdf" | "docx">(null);
+  const [exporting, setExporting] = useState<null | "pdf" | "docx" | "png" | "both">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const toggleFullscreen = async () => {
