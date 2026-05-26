@@ -150,6 +150,15 @@ export default function EmployeeAssignmentsPanel({ searchQuery = "" }: { searchQ
                     </Badge>
                     <Button
                       size="sm"
+                      variant="outline"
+                      onClick={() => setManage(e)}
+                      className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                      disabled={!e.assigned_count}
+                    >
+                      <Settings2 className="w-3.5 h-3.5 mr-1.5" /> Manage
+                    </Button>
+                    <Button
+                      size="sm"
                       onClick={() => setTarget(e)}
                       className="bg-[#1A1A1A] text-white hover:bg-[#2a2a2a]"
                     >
