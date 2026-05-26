@@ -216,10 +216,35 @@ function StudioShell({
 
   const setField = (k: string, v: string) => setFields((p) => ({ ...p, [k]: v }));
 
+  // Auto-render locked standard body whenever template / fields / commissions change.
+  // Only overwrites bodyHtml if (a) it's empty OR (b) it still equals the previously
+  // auto-rendered body (i.e. owner hasn't manually edited it).
+  const autoBodyRef = useRef<string>("");
+  useEffect(() => {
+    if (!template) return;
+    const next = renderStandardBody({
+      templateId: template.id,
+      fields,
+      department: template.needsPosition ? department : undefined,
+      commissionRows: usesCommission ? commissionRows : undefined,
+      customFields,
+      ownerTitle: "Director",
+    });
+    setBodyHtml((curr) => {
+      if (!curr || curr === autoBodyRef.current) {
+        autoBodyRef.current = next;
+        return next;
+      }
+      return curr;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [template?.id, JSON.stringify(fields), department, JSON.stringify(commissionRows), JSON.stringify(customFields)]);
+
   const handleSelectTemplate = (id: string) => {
     setTemplateId(id);
-    setBodyHtml("");
     setFields({});
+    autoBodyRef.current = "";
+    setBodyHtml("");
     setStep(2);
   };
 
