@@ -1427,9 +1427,10 @@ function StudioShell({
           <div className="min-h-full flex justify-center py-10 px-6">
             {template ? (
               <div
-                className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20"
+                className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20 shrink-0"
                 style={{
                   width: 816,
+                  minWidth: 816,
                   transform: `scale(${zoom / 100})`,
                   transformOrigin: "top center",
                 }}
@@ -1475,29 +1476,13 @@ function StudioShell({
                       y={marks.signatureXY?.y ?? 420}
                       onChange={(x, y) => setMarks((m) => ({ ...m, signatureXY: { x, y } }))}
                       onRemove={() => removeMark("signature")}
-                      ariaLabel="Party A signature"
+                      ariaLabel="Authorised signature"
                     >
                       <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 240 }} className="block pointer-events-none" />
-                      <div className="border-t border-[#1A1A1A] mt-1 pt-1 text-[10px] text-[#1A1A1A]/70" style={{ width: 220 }}>Authorised signature (Party A)</div>
                     </DraggableMark>
                   )}
 
-                  {marks.showSigB !== false && (
-                    <DraggableMark
-                      x={marks.signatureBXY?.x ?? 460}
-                      y={marks.signatureBXY?.y ?? 540}
-                      onChange={(x, y) => setMarks((m) => ({ ...m, signatureBXY: { x, y } }))}
-                      onRemove={() => removeMark("signatureB")}
-                      ariaLabel="Party B signature"
-                    >
-                      {marks.signatureB ? (
-                        <img src={marks.signatureB.url} alt="Signature B" style={{ width: marks.signatureB.width, maxWidth: 240 }} className="block pointer-events-none" />
-                      ) : (
-                        <div style={{ width: 220, height: 40 }} />
-                      )}
-                      <div className="border-t border-[#1A1A1A] mt-1 pt-1 text-[10px] text-[#1A1A1A]/70" style={{ width: 220 }}>Applicant signature (Party B)</div>
-                    </DraggableMark>
-                  )}
+
 
                   {marks.stamp && (
                     <DraggableMark
