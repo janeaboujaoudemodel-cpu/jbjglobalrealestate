@@ -44,7 +44,7 @@ export const LANGUAGES: Array<{ code: string; label: string; bcp47: string }> = 
   { code: "Chinese",    label: "中文",        bcp47: "zh-CN" },
 ];
 
-export default function AiEditChatPanel({ currentBody, aiInstructions, onApply }: Props) {
+export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, language: languageProp }: Props) {
   const [messages, setMessages] = useState<Msg[]>([
     {
       role: "assistant",
@@ -54,7 +54,7 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply }
   ]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
-  const [language, setLanguage] = useState("English");
+  const language = languageProp || "English";
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const fileRef = useRef<HTMLInputElement>(null);
 
