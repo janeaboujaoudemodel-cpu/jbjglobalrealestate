@@ -31,6 +31,7 @@ import {
   APPLICANT_STATUS_ORDER,
   getApplicantStatusMeta,
 } from "@/components/crm/ApplicantStatusPill";
+import ApplicantProfileDrawer from "@/components/crm/ApplicantProfileDrawer";
 
 // Department categories with icons
 const DEPARTMENT_CATEGORIES = [
@@ -124,6 +125,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const [analyzingIds, setAnalyzingIds] = useState<Set<string>>(new Set());
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'score' | 'position'>('newest');
+  const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
   const autoAnalyzeRef = useRef(false);
 
   // --- Auto-save composer drafts to survive page reloads ---
@@ -724,6 +726,26 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     setContactActionsOpen(true);
   };
 
+  const openApplicantProfile = (cv: CVEntry) => {
+    setSelectedCV(cv);
+    setProfileDrawerOpen(true);
+  };
+
+  const handleSaveApplicantNotes = async (id: string, nextNotes: string) => {
+    const target = cvEntries.find((c) => c.id === id);
+    if (!target) return;
+    const patch =
+      target.record_source === 'hr_applications'
+        ? { internal_comments: nextNotes }
+        : { notes: nextNotes };
+    const { error } = await supabase
+      .from(target.record_source)
+      .update(patch as any)
+      .eq('id', id);
+    if (error) throw error;
+    setCvEntries((prev) => prev.map((c) => (c.id === id ? ({ ...c, notes: nextNotes } as any) : c)));
+  };
+
   const openEmailComposerFromContact = () => {
     setContactActionsOpen(false);
     setContactOpen(true);
@@ -1165,7 +1187,15 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 Re-Analyze
                               </Button>
                             )}
-                            <Button size="sm" onClick={() => handleViewCV(cv)} className="bg-[#F7F2EA] hover:bg-[#1A1A1A] text-white font-bold shadow-lg px-4 py-2">
+                            <Button
+                              size="sm"
+                              onClick={() => openApplicantProfile(cv)}
+                              className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white font-semibold shadow-sm px-4 py-2"
+                              data-allow-dark-cta
+                            >
+                              <User className="h-4 w-4 mr-1.5" /> Profile
+                            </Button>
+                            <Button size="sm" variant="outline" onClick={() => handleViewCV(cv)} className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] font-semibold px-4 py-2">
                               <Eye className="h-4 w-4 mr-1.5" /> View CV
                             </Button>
                             <Button size="sm" onClick={() => openContactActions(cv)} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-white font-bold px-4 py-2">
@@ -1342,6 +1372,18 @@ const CVCenter = ({ userId }: CVCenterProps) => {
           )}
         </CardContent>
       </Card>
+
+      <ApplicantProfileDrawer
+        open={profileDrawerOpen}
+        onOpenChange={setProfileDrawerOpen}
+        candidate={selectedCV as any}
+        onUpdateStatus={(id, status) => handleUpdateStatus(id, status)}
+        onViewCV={() => { if (selectedCV) handleViewCV(selectedCV); }}
+        onContact={() => { setProfileDrawerOpen(false); if (selectedCV) openContactActions(selectedCV); }}
+        onSchedule={() => { setProfileDrawerOpen(false); setScheduleOpen(true); }}
+        onSaveNotes={handleSaveApplicantNotes}
+      />
+
 
       <Dialog open={cvPreviewOpen} onOpenChange={setCvPreviewOpen}>
         <DialogContent className="max-w-6xl h-[85vh]" aria-describedby="cv-preview-desc">
