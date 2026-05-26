@@ -11,36 +11,36 @@ import { JBJ_BRAND, JBJ_GOLD, JBJ_INK, JBJ_CHAMPAGNE, jbjMonogramSrc } from "@/t
 export function LockedLetterhead() {
   return (
     <header
-      className="relative w-full py-5"
+      className="relative w-full py-6"
       style={{
         background: JBJ_CHAMPAGNE,
         borderBottom: `1px solid ${JBJ_GOLD}`,
         fontFamily: "Inter, system-ui, sans-serif",
-        paddingLeft: 24,
-        paddingRight: 40,
+        paddingLeft: 32,
+        paddingRight: 48,
       }}
     >
-      <div className="flex items-center gap-[20px]">
+      <div className="flex items-center gap-[28px]">
         <img
           src={jbjMonogramSrc}
           alt="JBJ"
           className="block shrink-0 object-contain"
           style={{
-            width: 96,
-            height: 96,
+            width: 132,
+            height: 132,
             background: "transparent",
           }}
         />
-        <div className="leading-tight min-w-0">
+        <div className="leading-tight min-w-0 flex-1">
           <div
             className="font-semibold whitespace-nowrap"
-            style={{ fontSize: 19, color: JBJ_INK, letterSpacing: "0.01em" }}
+            style={{ fontSize: 30, color: JBJ_INK, letterSpacing: "0.015em", lineHeight: 1.1 }}
           >
             {JBJ_BRAND.legalName}
           </div>
           <div
-            className="font-semibold whitespace-nowrap mt-0.5"
-            style={{ fontSize: 13, color: JBJ_INK, letterSpacing: "0.04em" }}
+            className="font-semibold whitespace-nowrap"
+            style={{ fontSize: 17, color: JBJ_INK, letterSpacing: "0.18em", marginTop: 6 }}
           >
             {JBJ_BRAND.legalSuffix}
           </div>

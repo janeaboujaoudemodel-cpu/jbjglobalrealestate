@@ -533,12 +533,13 @@ function StudioShell({
     if (!bodyHtml || !template) { toast.error("Nothing to export yet"); return; }
     setExporting(kind);
     try {
-      if (kind === "pdf") await exportPdf(bodyHtml, marks, template);
+      const src = pageRef.current;
+      if (kind === "pdf") await exportPdf(bodyHtml, marks, template, src);
       else if (kind === "docx") await exportDocx(bodyHtml, marks, template);
-      else if (kind === "png") await exportPng(bodyHtml, marks, template);
+      else if (kind === "png") await exportPng(bodyHtml, marks, template, src);
       else if (kind === "both") {
-        await exportPdf(bodyHtml, marks, template);
-        await exportPng(bodyHtml, marks, template);
+        await exportPdf(bodyHtml, marks, template, src);
+        await exportPng(bodyHtml, marks, template, src);
       }
       toast.success(`${kind.toUpperCase()} downloaded`);
     } catch (e: any) {
@@ -1497,13 +1498,22 @@ function StudioShell({
 
                   {marks.showDate !== false && (
                     <DraggableMark
-                      x={marks.dateXY?.x ?? 560}
-                      y={marks.dateXY?.y ?? 24}
+                      x={marks.dateXY?.x ?? 612}
+                      y={marks.dateXY?.y ?? 16}
                       onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))}
                       onRemove={() => removeMark("date")}
                       ariaLabel="Date"
                     >
-                      <div className="text-[12px] text-[#1A1A1A] font-medium">
+                      <div
+                        className="text-[11px] uppercase"
+                        style={{
+                          color: "#1A1A1A",
+                          opacity: 0.42,
+                          letterSpacing: "0.22em",
+                          fontVariantNumeric: "tabular-nums",
+                          textShadow: "0 1px 0 rgba(255,255,255,0.65)",
+                        }}
+                      >
                         {new Date(marks.dateValue || ownerDate || new Date().toISOString().slice(0,10))
                           .toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
                       </div>
