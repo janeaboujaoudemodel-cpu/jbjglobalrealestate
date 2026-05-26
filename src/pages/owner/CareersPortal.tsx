@@ -1,7 +1,7 @@
-import { lazy, Suspense, useMemo } from "react";
+import { lazy, Suspense, useMemo, useRef, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { cn } from "@/lib/utils";
+import HRPill from "@/components/careers-portal/HRPill";
 import {
   LayoutDashboard, Briefcase, FileText, Users, Award,
   GraduationCap, Wallet, AlertTriangle, MessagesSquare, Bot, ShieldCheck,
