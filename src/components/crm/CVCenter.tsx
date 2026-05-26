@@ -1187,7 +1187,15 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 Re-Analyze
                               </Button>
                             )}
-                            <Button size="sm" onClick={() => handleViewCV(cv)} className="bg-[#F7F2EA] hover:bg-[#1A1A1A] text-white font-bold shadow-lg px-4 py-2">
+                            <Button
+                              size="sm"
+                              onClick={() => openApplicantProfile(cv)}
+                              className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white font-semibold shadow-sm px-4 py-2"
+                              data-allow-dark-cta
+                            >
+                              <User className="h-4 w-4 mr-1.5" /> Profile
+                            </Button>
+                            <Button size="sm" variant="outline" onClick={() => handleViewCV(cv)} className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] font-semibold px-4 py-2">
                               <Eye className="h-4 w-4 mr-1.5" /> View CV
                             </Button>
                             <Button size="sm" onClick={() => openContactActions(cv)} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-white font-bold px-4 py-2">
