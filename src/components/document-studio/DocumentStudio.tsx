@@ -747,7 +747,7 @@ function StudioShell({
                   className="relative px-12 py-10 bg-[#FDFBF7]"
                   style={
                     pages === "auto"
-                      ? { minHeight: 520 }
+                      ? {}
                       : { minHeight: 1056 * (pages as number) - 260 }
                   }
                 >
