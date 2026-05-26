@@ -220,13 +220,19 @@ export default function PositionManager() {
   };
 
   const toggleFeatured = async (p: Position) => {
+    const next = !p.is_featured;
+    // Optimistic local update — no full refresh, no page blink
+    setPositions((prev) => prev.map((row) => (row.id === p.id ? { ...row, is_featured: next } : row)));
     const { error } = await supabase
       .from("open_positions")
-      .update({ is_featured: !p.is_featured })
+      .update({ is_featured: next })
       .eq("id", p.id);
-    if (error) return toast.error(error.message);
-    toast.success(p.is_featured ? "Removed from Featured" : "Marked as Featured");
-    refresh();
+    if (error) {
+      // Roll back on failure
+      setPositions((prev) => prev.map((row) => (row.id === p.id ? { ...row, is_featured: !next } : row)));
+      return toast.error(error.message);
+    }
+    toast.success(next ? "Marked as Featured" : "Removed from Featured");
   };
 
   const visible = positions.filter((p) => {
