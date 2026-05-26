@@ -175,8 +175,20 @@ export default function EmployeeAssignmentsPanel({ searchQuery = "" }: { searchQ
       {target && (
         <AssignmentDialog
           employee={target}
+          employees={employees}
           onClose={(changed) => {
             setTarget(null);
+            if (changed) load();
+          }}
+        />
+      )}
+
+      {manage && (
+        <ManageAssignmentsDialog
+          employee={manage}
+          employees={employees}
+          onClose={(changed) => {
+            setManage(null);
             if (changed) load();
           }}
         />
