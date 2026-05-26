@@ -30,7 +30,7 @@ import {
   Sparkles, Loader2, Wand2, Printer, Mail, FlaskConical, X, ChevronRight,
   ChevronLeft, ZoomIn, ZoomOut, Bold, Italic, List, Heading2, Search,
   PanelRightClose, PanelRightOpen, Check, Download, FileText, Stamp,
-  PenLine, ChevronDown, Trash2,
+  PenLine, ChevronDown, Trash2, Maximize2, Minimize2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -119,6 +119,27 @@ function StudioShell({
   const [marks, setMarks] = useState<DocumentMarks>({});
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
   const [exporting, setExporting] = useState<null | "pdf" | "docx">(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const toggleFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+        setIsFullscreen(true);
+      } else {
+        await document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    } catch {
+      // Some browsers block fullscreen; ignore silently.
+    }
+  };
+
+  useEffect(() => {
+    const onFs = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onFs);
+    return () => document.removeEventListener("fullscreenchange", onFs);
+  }, []);
 
   // Auto-attach owner's default signature & stamp the first time they exist.
   useEffect(() => {
@@ -272,8 +293,13 @@ function StudioShell({
   const overlay = (
     <div
       data-no-contrast-guard
-      className="fixed inset-0 z-[100] bg-[#FDFBF7] flex flex-col"
-      style={{ fontFamily: "Inter, system-ui, sans-serif" }}
+      data-document-studio-overlay
+      className="fixed inset-0 bg-[#FDFBF7] flex flex-col"
+      style={{
+        fontFamily: "Inter, system-ui, sans-serif",
+        zIndex: 2147483000,
+        isolation: "isolate",
+      }}
     >
       {/* ─── Topbar ─── */}
       <div className="shrink-0 h-14 border-b border-[#B89555]/30 bg-[#FDFBF7] flex items-center px-4 gap-4">
@@ -301,6 +327,15 @@ function StudioShell({
           </Button>
           <Button variant="outline" size="sm" onClick={() => setAssetDialog("stamp")}>
             <Stamp className="w-4 h-4 mr-1.5" /> Stamp
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleFullscreen}
+            title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+          >
+            {isFullscreen ? <Minimize2 className="w-4 h-4 mr-1.5" /> : <Maximize2 className="w-4 h-4 mr-1.5" />}
+            {isFullscreen ? "Exit fullscreen" : "Fullscreen"}
           </Button>
           <Button variant="ghost" size="sm" onClick={() => setAiOpen((v) => !v)}>
             {aiOpen ? <PanelRightClose className="w-4 h-4 mr-1.5" /> : <PanelRightOpen className="w-4 h-4 mr-1.5" />}
@@ -539,7 +574,7 @@ function StudioShell({
                 }}
               >
                 <LockedLetterhead />
-                <div className="relative px-12 py-10 min-h-[700px] bg-[#FDFBF7]">
+                <div className="relative px-12 py-10 bg-[#FDFBF7]" style={{ minHeight: bodyHtml ? 0 : 420 }}>
                   {bodyHtml ? (
                     <EditableBody html={bodyHtml} onChange={setBodyHtml} />
                   ) : (
