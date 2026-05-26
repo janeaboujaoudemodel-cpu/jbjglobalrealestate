@@ -42,10 +42,12 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
   
   // Provisioning form state
   const [generatedEmail, setGeneratedEmail] = useState('');
+  const [personalEmail, setPersonalEmail] = useState('');
   const [tempPassword, setTempPassword] = useState('');
   const [emailSignature, setEmailSignature] = useState('');
   const [grantCRM, setGrantCRM] = useState(true);
   const [sendWelcomeEmail, setSendWelcomeEmail] = useState(true);
+  const [testMode, setTestMode] = useState(true); // default: preview to owner first
 
   useEffect(() => {
     fetchPendingApplications();
