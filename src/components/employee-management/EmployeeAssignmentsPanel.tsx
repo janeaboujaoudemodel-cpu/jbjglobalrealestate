@@ -46,6 +46,7 @@ export default function EmployeeAssignmentsPanel({ searchQuery = "" }: { searchQ
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [target, setTarget] = useState<Employee | null>(null);
+  const [manage, setManage] = useState<Employee | null>(null);
 
   const load = async () => {
     setLoading(true);
