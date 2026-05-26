@@ -113,12 +113,23 @@ function StudioShell({
   const [bodyHtml, setBodyHtml] = useState<string>("");
   const [generating, setGenerating] = useState(false);
 
+  // Commission rows — pre-seeded for broker/HR templates
+  const usesCommission =
+    !!template &&
+    (template.id === "job_offer" ||
+      template.id === "commission_agreement" ||
+      template.id === "employment_contract" ||
+      template.id === "partnership_referral");
+  const [commissionRows, setCommissionRows] = useState<CommissionRow[]>(DEFAULT_BROKER_COMMISSIONS);
+  const [customFields, setCustomFields] = useState<CustomField[]>([]);
+
   const [emailTo, setEmailTo] = useState("");
   const [sending, setSending] = useState(false);
 
   const [zoom, setZoom] = useState(100);
   const [aiOpen, setAiOpen] = useState(true);
   const [search, setSearch] = useState("");
+  const [pages, setPages] = useState<number | "auto">("auto");
 
   // Signature + stamp placement
   const { defaultSignature, defaultStamp } = useOwnerAssets();
