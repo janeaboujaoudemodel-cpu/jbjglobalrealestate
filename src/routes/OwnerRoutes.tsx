@@ -83,6 +83,8 @@ const OwnerSignatureStudio = lazy(() => import("@/pages/e-signature/SignatureStu
 const OwnerBlankLetterStudio = lazy(() => import("@/pages/e-signature/BlankLetterStudio"));
 const OwnerContractReview = lazy(() => import("@/pages/e-signature/ContractReview"));
 const OwnerMeetings = lazy(() => import("@/pages/owner/OwnerMeetings"));
+const OwnerNewsHub = lazy(() => import("@/pages/owner/OwnerNewsHub"));
+const OwnerMarketIntel = lazy(() => import("@/pages/owner/OwnerMarketIntel"));
 
 const OwnerDocumentsTab = () => <DocumentsFormsHub initialTabOverride="documents" />;
 const OwnerEsignTab = () => <DocumentsFormsHub initialTabOverride="esign" />;
@@ -211,6 +213,8 @@ export const OwnerRoutes = () => (
     <Route path="relationships" element={<OwnerRelationships />} />
     <Route path="relationships/revenue" element={<OwnerRelationshipsRevenue />} />
     <Route path="media-ingest" element={<OwnerMediaIngest />} />
+    <Route path="news" element={<OwnerNewsHub />} />
+    <Route path="market-intel" element={<OwnerMarketIntel />} />
     <Route path="crm/relationships/activity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/AgencyActivityLog")))}</Suspense>} />
     <Route path="crm/brokerage-actions" element={<Navigate to="/owner/crm/relationships/activity" replace />} />
     <Route path="crm/brokers" element={<Navigate to="/owner/crm?section=relationships&sub=brokers" replace />} />
