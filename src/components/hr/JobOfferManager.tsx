@@ -30,6 +30,7 @@ const JobOfferManager = () => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingOffer, setEditingOffer] = useState<JobOffer | null>(null);
   const [formData, setFormData] = useState({
+    template_type: 'job_offer' as string,
     department: '',
     position_title: '',
     description: '',
@@ -42,6 +43,7 @@ const JobOfferManager = () => {
 
   const resetForm = () => {
     setFormData({
+      template_type: 'job_offer',
       department: '',
       position_title: '',
       description: '',
