@@ -734,12 +734,16 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const handleSaveApplicantNotes = async (id: string, nextNotes: string) => {
     const target = cvEntries.find((c) => c.id === id);
     if (!target) return;
+    const patch =
+      target.record_source === 'hr_applications'
+        ? { internal_comments: nextNotes }
+        : { notes: nextNotes };
     const { error } = await supabase
       .from(target.record_source)
-      .update({ notes: nextNotes } as any)
+      .update(patch as any)
       .eq('id', id);
     if (error) throw error;
-    setCvEntries((prev) => prev.map((c) => (c.id === id ? { ...c, notes: nextNotes } as any : c)));
+    setCvEntries((prev) => prev.map((c) => (c.id === id ? ({ ...c, notes: nextNotes } as any) : c)));
   };
 
   const openEmailComposerFromContact = () => {
