@@ -224,7 +224,7 @@ export function recipientBlock(fields: Record<string, string>, opts?: { greeting
 }
 
 export function dateLine(custom?: string): string {
-  return `<div style="text-align:right;font-size:11px;color:${MUTED};margin-bottom:6px;">${esc(formatHumanDate(custom) || todayLong())}</div>`;
+  return `<div style="text-align:right;font-size:11px;color:${MUTED};margin:24px 0 18px;">${esc(formatHumanDate(custom) || todayLong())}</div>`;
 }
 
 export function subjectLine(text: string): string {
