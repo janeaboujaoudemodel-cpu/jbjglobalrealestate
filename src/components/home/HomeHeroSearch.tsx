@@ -130,10 +130,13 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               placeholder="Search projects, developers, areas, tools…"
               aria-label="Search the JBJ website"
               data-no-contrast-guard
+              data-jbj-field
               className="flex-1 min-w-0 h-full bg-transparent border-0 outline-none text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-normal"
               style={{
                 color: "#1A1A1A",
                 WebkitTextFillColor: "#1A1A1A",
+                border: "none",
+                boxShadow: "none",
               }}
             />
           </form>
