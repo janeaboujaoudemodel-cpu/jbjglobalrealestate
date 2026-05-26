@@ -173,6 +173,111 @@ serve(async (req) => {
 
     const { action, message, conversationId, applicationId } = await req.json();
 
+    // ============================================================
+    // ROLE DETECTION — owner/admin/hr_manager must NEVER receive the
+    // applicant CV-collection / qualification / interview script.
+    // ============================================================
+    const PRIVILEGED_ROLES = new Set(['owner', 'admin', 'hr_manager', 'super_admin']);
+    let isPrivileged = false;
+    try {
+      const { data: roleRows } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id);
+      if (roleRows?.some((r: { role: string }) => PRIVILEGED_ROLES.has(r.role))) {
+        isPrivileged = true;
+      }
+    } catch (_) { /* fall through to applicant flow */ }
+
+    if (!isPrivileged) {
+      // Secondary signal: crm_users_profile.crm_role (e.g. 'owner', 'admin').
+      try {
+        const { data: profile } = await supabase
+          .from('crm_users_profile')
+          .select('crm_role')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        if (profile?.crm_role && PRIVILEGED_ROLES.has(profile.crm_role)) {
+          isPrivileged = true;
+        }
+      } catch (_) { /* ignore */ }
+    }
+
+    // ----- Owner / admin branch (executive HR assistant) -----
+    if (isPrivileged) {
+      const ownerSystemPrompt = `You are Jessica, the executive HR assistant for JBJ Global Real Estate (Dubai).
+You are speaking with an owner / admin of the company — NOT a job applicant.
+
+ABSOLUTE RULES:
+- Never ask the user to submit a CV.
+- Never ask qualification or interview questions of the user.
+- Never describe yourself as conducting an interview of the user.
+- Do not push them toward the /join page.
+
+YOUR ROLE FOR OWNERS/ADMINS:
+- Brief them on hiring pipeline, open positions, recent applicants, interview results.
+- Help draft job descriptions, offer letters, rejection emails, and onboarding plans.
+- Answer questions about candidates, approvals, payroll workflows, and policies.
+- Be concise (2-4 sentences unless detail is requested) and professional.
+- If the requested data isn't available, say so plainly — do not invent numbers.`;
+
+      if (action === 'start_conversation') {
+        let conversation;
+        const { data: existingConv } = await supabase
+          .from('hr_agent_conversations')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single();
+        if (existingConv && existingConv.stage !== 'completed') {
+          conversation = existingConv;
+        } else {
+          const { data: newConv, error: convError } = await supabase
+            .from('hr_agent_conversations')
+            .insert({ user_id: user.id, messages: [], stage: 'completed' })
+            .select()
+            .single();
+          if (convError) throw convError;
+          conversation = newConv;
+        }
+        const greetingMessage = `Hello — I'm Jessica, your HR assistant. I can brief you on the hiring pipeline, draft offer letters, summarise interview results, or help with policies. What do you need?`;
+        await supabase
+          .from('hr_agent_conversations')
+          .update({ messages: [{ role: 'assistant', content: greetingMessage, timestamp: new Date().toISOString() }], stage: 'completed' })
+          .eq('id', conversation.id);
+        return new Response(JSON.stringify({
+          conversationId: conversation.id,
+          message: greetingMessage,
+          stage: 'completed',
+          mode: 'owner',
+        }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      if (action === 'send_message') {
+        if (!conversationId || !message) throw new Error('Missing conversationId or message');
+        const { data: conversation } = await supabase
+          .from('hr_agent_conversations')
+          .select('*')
+          .eq('id', conversationId)
+          .single();
+        const history: Message[] = conversation?.messages || [];
+        history.push({ role: 'user', content: message, timestamp: new Date().toISOString() });
+        const reply = await callLovableAI(ownerSystemPrompt, message, history.slice(-10));
+        history.push({ role: 'assistant', content: reply, timestamp: new Date().toISOString() });
+        await supabase
+          .from('hr_agent_conversations')
+          .update({ messages: history, stage: 'completed' })
+          .eq('id', conversationId);
+        return new Response(JSON.stringify({
+          message: reply,
+          stage: 'completed',
+          conversationId,
+          mode: 'owner',
+        }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+    }
+
     switch (action) {
       case 'start_conversation': {
         // Get application data
@@ -254,6 +359,7 @@ If the candidate has already submitted an application, acknowledge that and move
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
       }
+
 
       case 'send_message': {
         if (!conversationId || !message) {
