@@ -571,6 +571,17 @@ function StudioShell({
             <Stamp className="w-4 h-4 lg:mr-1.5" />
             <span className="hidden lg:inline">Stamp</span>
           </Button>
+          {template && userEdited && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={resetToTemplate}
+              title="Discard edits and re-render from template"
+            >
+              <X className="w-4 h-4 lg:mr-1.5" />
+              <span className="hidden lg:inline">Reset</span>
+            </Button>
+          )}
           {template && (
             <Button
               variant="outline"
