@@ -42,10 +42,12 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
   
   // Provisioning form state
   const [generatedEmail, setGeneratedEmail] = useState('');
+  const [personalEmail, setPersonalEmail] = useState('');
   const [tempPassword, setTempPassword] = useState('');
   const [emailSignature, setEmailSignature] = useState('');
   const [grantCRM, setGrantCRM] = useState(true);
   const [sendWelcomeEmail, setSendWelcomeEmail] = useState(true);
+  const [testMode, setTestMode] = useState(true); // default: preview to owner first
 
   useEffect(() => {
     fetchPendingApplications();
@@ -100,62 +102,98 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
   const handleStartProvisioning = (app: PendingApplication) => {
     setSelectedApp(app);
     setGeneratedEmail(generateEmail(app.full_name));
+    setPersonalEmail(app.email || '');
     setTempPassword(generatePassword());
     setEmailSignature(generateSignature(app.full_name, app.job_title, app.department));
+    setTestMode(true);
     setShowProvisionDialog(true);
   };
 
   const handleProvision = async () => {
     if (!selectedApp) return;
-    
+
     setProvisioning(true);
     try {
-      // Update application status
+      // 1. Call edge function: creates auth user, assigns role, sends branded email
+      const { data: result, error: fnErr } = await supabase.functions.invoke(
+        'provision-employee-account',
+        {
+          body: {
+            application_id: selectedApp.id,
+            employee_email: generatedEmail,
+            personal_email: personalEmail,
+            full_name: selectedApp.full_name,
+            job_title: selectedApp.job_title,
+            department: selectedApp.department,
+            crm_role: selectedApp.crm_role,
+            temporary_password: tempPassword,
+            email_signature_html: emailSignature,
+            grant_crm: grantCRM,
+            test_mode: testMode && sendWelcomeEmail,
+          },
+        }
+      );
+
+      if (fnErr || !(result as any)?.ok) {
+        throw new Error((result as any)?.error || fnErr?.message || 'Provisioning failed');
+      }
+
+      const deliveredTo = (result as any).delivered_to;
+
+      // 2. Update application status
       await supabase
         .from('new_joiner_applications')
         .update({
           status: 'completed',
           generated_email: generatedEmail,
           it_completed_at: new Date().toISOString(),
-          completed_at: new Date().toISOString()
+          completed_at: new Date().toISOString(),
         })
         .eq('id', selectedApp.id);
 
-      // Create provisioning record
+      // 3. Provisioning record
       await supabase
         .from('it_provisioning_records')
         .insert({
           application_id: selectedApp.id,
           employee_email: generatedEmail,
-          temporary_password: '***SECURED***', // Don't store actual password
+          temporary_password: '***SECURED***',
           email_signature_html: emailSignature,
           crm_access_granted: grantCRM,
           welcome_email_sent: sendWelcomeEmail,
           welcome_email_sent_at: sendWelcomeEmail ? new Date().toISOString() : null,
-          status: 'completed'
+          status: 'completed',
         });
 
-      // Log the journey event
+      // 4. Journey log
       await supabase
         .from('employee_journey_logs')
         .insert({
           event_type: 'hired',
           event_category: 'it',
-          new_value: { 
-            email: generatedEmail, 
+          new_value: {
+            email: generatedEmail,
             department: selectedApp.department,
-            role: selectedApp.crm_role 
+            role: selectedApp.crm_role,
+            invite_delivered_to: deliveredTo,
+            test_mode: testMode,
           },
-          notes: `IT provisioning completed. Email: ${generatedEmail}`
+          notes: testMode
+            ? `Provisioned. Test invite routed to ${deliveredTo} for owner preview.`
+            : `Provisioned. Welcome email sent to ${deliveredTo}.`,
         });
 
-      toast.success('Employee provisioned successfully!');
+      toast.success(
+        testMode && sendWelcomeEmail
+          ? `Test invite sent to ${deliveredTo} — review, then re-run with test mode off.`
+          : `Employee provisioned — invite sent to ${deliveredTo}.`
+      );
       setShowProvisionDialog(false);
       fetchPendingApplications();
       onRefresh();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Provisioning error:', error);
-      toast.error('Failed to provision employee');
+      toast.error(error?.message || 'Failed to provision employee');
     } finally {
       setProvisioning(false);
     }
@@ -320,6 +358,19 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
               </div>
             </div>
 
+            {/* Personal Email (invite delivery target) */}
+            <div className="space-y-2">
+              <Label className="text-[#1A1A1A]">Personal Email (invite recipient)</Label>
+              <Input
+                type="email"
+                value={personalEmail}
+                onChange={(e) => setPersonalEmail(e.target.value)}
+                placeholder="employee@personal.com"
+                className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
+              />
+              <p className="text-xs text-[#1A1A1A]/70">Credentials are sent here. Falls back to company email if empty.</p>
+            </div>
+
             {/* Password Generation */}
             <div className="space-y-2">
               <Label className="text-[#1A1A1A]">Temporary Password</Label>
@@ -361,13 +412,25 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                 </label>
               </div>
               <div className="flex items-center gap-2">
-                <Checkbox 
-                  id="sendWelcome" 
-                  checked={sendWelcomeEmail} 
-                  onCheckedChange={(v) => setSendWelcomeEmail(v as boolean)} 
+                <Checkbox
+                  id="sendWelcome"
+                  checked={sendWelcomeEmail}
+                  onCheckedChange={(v) => setSendWelcomeEmail(v as boolean)}
                 />
                 <label htmlFor="sendWelcome" className="text-sm text-[#1A1A1A]/70">
                   Send welcome email with credentials
+                </label>
+              </div>
+              <div className="flex items-center gap-2 pt-2 mt-2 border-t border-[#B89555]/20">
+                <Checkbox
+                  id="testMode"
+                  checked={testMode}
+                  onCheckedChange={(v) => setTestMode(v as boolean)}
+                  disabled={!sendWelcomeEmail}
+                />
+                <label htmlFor="testMode" className="text-sm text-[#1A1A1A]">
+                  <span className="font-medium">Send first invite to me (test mode)</span>
+                  <span className="block text-xs text-[#1A1A1A]/60">Routes to infoo.jane@gmail.com so you can preview before the joiner receives it.</span>
                 </label>
               </div>
             </div>
