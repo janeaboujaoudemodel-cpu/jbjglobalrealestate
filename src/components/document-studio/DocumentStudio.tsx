@@ -134,7 +134,7 @@ function StudioShell({
   const [pages, setPages] = useState<number | "auto">("auto");
 
   // Owner-side signature defaults (editable from the left rail).
-  const [ownerName, setOwnerName] = useState<string>("Jane Bou Jaude");
+  const [ownerName, setOwnerName] = useState<string>("Jameel Bou Jaoude");
   const [ownerTitle, setOwnerTitle] = useState<string>("Founder & CEO");
   const [ownerDate, setOwnerDate] = useState<string>(new Date().toISOString().slice(0, 10));
   const [applicantDate, setApplicantDate] = useState<string>(""); // blank by design
