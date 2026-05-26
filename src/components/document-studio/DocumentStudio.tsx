@@ -54,6 +54,7 @@ import {
   type CommissionRow,
   type CustomField,
 } from "@/templates/composers";
+import { renderStandardBody } from "@/templates/composers/standardBody";
 
 interface Props {
   catalog: DocumentAudience;
