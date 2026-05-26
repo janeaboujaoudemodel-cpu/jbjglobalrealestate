@@ -496,14 +496,20 @@ function StudioShell({
     printDocument(bodyHtml, marks);
   };
 
-  const handleExport = async (kind: "pdf" | "docx") => {
-    if (!bodyHtml || !template) return;
+  const handleExport = async (kind: "pdf" | "docx" | "png" | "both") => {
+    if (!bodyHtml || !template) { toast.error("Nothing to export yet"); return; }
     setExporting(kind);
     try {
       if (kind === "pdf") await exportPdf(bodyHtml, marks, template);
-      else await exportDocx(bodyHtml, marks, template);
+      else if (kind === "docx") await exportDocx(bodyHtml, marks, template);
+      else if (kind === "png") await exportPng(bodyHtml, marks, template);
+      else if (kind === "both") {
+        await exportPdf(bodyHtml, marks, template);
+        await exportPng(bodyHtml, marks, template);
+      }
       toast.success(`${kind.toUpperCase()} downloaded`);
     } catch (e: any) {
+      console.error("[DocumentStudio] export failed", kind, e);
       toast.error(e?.message || `${kind.toUpperCase()} export failed`);
     } finally {
       setExporting(null);
