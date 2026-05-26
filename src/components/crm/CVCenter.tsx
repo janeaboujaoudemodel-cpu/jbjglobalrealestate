@@ -928,45 +928,17 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                   : tab.id === 'flagged'
                   ? stats.flagged
                   : stats.byStatus[tab.id] ?? 0;
-              const Icon = tab.icon;
               const active = activeStatusTab === tab.id;
-              const meta = tab.id !== 'all' && tab.id !== 'flagged'
-                ? getApplicantStatusMeta(tab.id)
-                : null;
               return (
-                <button
+                <HRPill
                   key={tab.id}
-                  type="button"
+                  active={active}
+                  icon={tab.icon}
+                  count={count}
                   onClick={() => setActiveStatusTab(tab.id)}
-                  className={[
-                    'group flex items-center gap-2 rounded-full border px-3 py-2 transition-all whitespace-nowrap',
-                    active
-                      ? 'bg-[#EFE6D6] border-[#B89555] shadow-[inset_0_0_0_1px_rgba(184,149,85,0.35)]'
-                      : 'bg-[#FDFBF7] border-[#B89555]/25 hover:bg-[#F7F2EA] hover:border-[#B89555]/55',
-                  ].join(' ')}
                 >
-                  <Icon
-                    className={[
-                      'h-3.5 w-3.5',
-                      active ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/65',
-                    ].join(' ')}
-                    strokeWidth={2.25}
-                  />
-                  <span className={['text-[12px] font-semibold tracking-[0.01em]', active ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/80'].join(' ')}>
-                    {tab.label}
-                  </span>
-                  <span
-                    className={[
-                      'inline-flex items-center justify-center rounded-full text-[10px] font-bold min-w-[20px] h-[18px] px-1.5 border',
-                      active
-                        ? 'bg-[#1A1A1A] text-[#FDFBF7] border-[#1A1A1A]'
-                        : 'bg-[#F2EAD3] text-[#1A1A1A] border-[#B89555]/30',
-                    ].join(' ')}
-                    data-no-contrast-guard
-                  >
-                    {count}
-                  </span>
-                </button>
+                  {tab.label}
+                </HRPill>
               );
             })}
           </div>
