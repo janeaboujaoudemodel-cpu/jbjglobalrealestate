@@ -137,11 +137,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             />
           </form>
 
-          {/* Gold divider between input and Search */}
-          <span aria-hidden className="self-stretch w-px bg-[#B89555] flex-shrink-0" />
-
-          {/* Search — white segment merged with input field */}
-          <div className="relative flex flex-shrink-0 group/search">
+          {/* Search — unified white segment, no divider */}
+          <div className="relative flex flex-shrink-0 group/search bg-white">
             <button
               type="button"
               onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
@@ -150,7 +147,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               disabled={searching}
               className="relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8
                 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 bg-white
-                disabled:cursor-wait transition-colors duration-200 hover:bg-[#F8F8F8]"
+                disabled:cursor-wait transition-colors duration-200 hover:bg-[#F8F4EC]"
               style={{
                 color: "#1A1A1A",
               }}
@@ -175,27 +172,24 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             </span>
           </div>
 
-          {/* Gold divider */}
-          <span aria-hidden className="hidden md:block self-stretch w-px bg-[#B89555]/55 flex-shrink-0" />
-
-          {/* Free Consultation — text only, with instant hover tooltip */}
-          <div className="relative hidden md:flex flex-shrink-0 group/book">
+          {/* Free Consultation — same white pill, ink text, no divider */}
+          <div className="relative hidden md:flex flex-shrink-0 group/book bg-white">
             <button
               type="button"
               onClick={openBooking}
               data-no-contrast-guard
               aria-label="Book your free consultation now"
-              className="allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
-                text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-[#1A1A1A]
-                transition-colors duration-200 hover:bg-[#2A2A2A]"
+              className="flex items-center justify-center self-stretch h-full pl-4 pr-5 lg:pl-5 lg:pr-6
+                text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-white
+                transition-colors duration-200 hover:bg-[#F8F4EC]"
               style={{
-                color: "#FFFFFF",
-                WebkitTextFillColor: "#FFFFFF",
+                color: "#1A1A1A",
+                WebkitTextFillColor: "#1A1A1A",
               }}
             >
               <span
-                className="allow-white whitespace-nowrap"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                className="relative inline-block whitespace-nowrap after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover/book:after:w-full"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
               >
                 Free Consultation
               </span>
