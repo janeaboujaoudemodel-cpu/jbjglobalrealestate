@@ -47,13 +47,17 @@ const DEPARTMENT_CATEGORIES = [
   { id: 'general', label: 'Other', icon: FileText, color: 'text-[#1A1A1A]/70' },
 ];
 
+// Full 10-status lifecycle (plus "all" + "flagged" filters).
+// Visual identity comes from ApplicantStatusPill — these tabs only
+// describe filter behaviour + iconography for the stats row.
 const STATUS_TABS = [
-  { id: 'all', label: 'All', icon: FileText, count: 0, color: 'bg-[#B89555]' },
-  { id: 'pending', label: 'Pending', icon: Clock, count: 0, color: 'bg-amber-500' },
-  { id: 'approved', label: 'Accepted', icon: CheckCircle, count: 0, color: 'bg-green-500' },
-  { id: 'rejected', label: 'Rejected', icon: XCircle, count: 0, color: 'bg-red-500' },
-  { id: 'flagged', label: 'Flagged', icon: Flag, count: 0, color: 'bg-yellow-500' },
-];
+  { id: 'all', label: 'All', icon: FileText },
+  { id: 'flagged', label: 'Flagged', icon: Flag },
+  ...APPLICANT_STATUS_ORDER.map((id) => {
+    const meta = APPLICANT_STATUS_META[id];
+    return { id, label: meta.label, icon: meta.icon };
+  }),
+] as { id: string; label: string; icon: any }[];
 
 interface CVEntry {
   id: string;
