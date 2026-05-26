@@ -338,21 +338,21 @@ export default function PositionManager() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="border-[#B89555]"
                       onClick={() => toggleFeatured(p)}
                       title={p.is_featured ? "Unfeature this role" : "Mark this role as Featured"}
                       data-allow-dark-cta={p.is_featured ? "" : undefined}
-                      data-no-contrast-guard={p.is_featured ? "" : undefined}
+                      data-no-contrast-guard
+                      className={p.is_featured ? "allow-white transition-none" : "transition-none"}
                       style={
                         p.is_featured
-                          ? { backgroundColor: "#102540", color: "#FFFFFF", borderColor: "#B89555" }
-                          : undefined
+                          ? { backgroundColor: "#102540", color: "#FFFFFF", borderColor: "#102540" }
+                          : { backgroundColor: "transparent", color: "#102540", borderColor: "#102540" }
                       }
                     >
                       <Star
                         className="w-3.5 h-3.5 mr-1"
                         style={{
-                          color: p.is_featured ? "#FFFFFF" : "#1A1A1A",
+                          color: p.is_featured ? "#FFFFFF" : "#102540",
                           fill: p.is_featured ? "#FFFFFF" : "transparent",
                         }}
                       />
