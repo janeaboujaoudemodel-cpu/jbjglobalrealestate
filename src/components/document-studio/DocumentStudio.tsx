@@ -463,6 +463,14 @@ function StudioShell({
     userEditedRef.current = false;
     setUserEdited(false);
     setBodyHtml("");
+    // Reset draggable mark positions so a new template starts clean
+    // (prevents the date drifting onto the footer after a previous drag).
+    setMarks((m) => ({
+      ...m,
+      dateXY: undefined,
+      signatureXY: undefined,
+      stampXY: undefined,
+    }));
     setStep(2);
   };
 
