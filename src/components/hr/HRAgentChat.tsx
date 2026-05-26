@@ -70,11 +70,13 @@ export default function HRAgentChat() {
       const data = response.data;
       setConversationId(data.conversationId);
       setStage(data.stage);
+      if (data.mode === 'owner') setMode('owner');
       setMessages([{
         role: 'assistant',
         content: data.message,
         timestamp: new Date().toISOString()
       }]);
+
     } catch (error) {
       console.error('Failed to start conversation:', error);
       toast.error('Failed to connect to Jessica');
