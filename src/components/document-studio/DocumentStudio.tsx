@@ -351,6 +351,19 @@ function StudioShell({
         }} hasTemplate={!!templateId} hasBody={!!bodyHtml} />
 
         <div className="ml-auto flex items-center gap-2">
+          <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 border border-[#B89555]/30 bg-[#F7F2EA] rounded-md px-2 py-1">
+            <span className="uppercase tracking-[0.14em]">Pages</span>
+            <select
+              value={String(pages)}
+              onChange={(e) => setPages(e.target.value === "auto" ? "auto" : Number(e.target.value))}
+              className="bg-transparent text-[12px] font-semibold text-[#1A1A1A] outline-none cursor-pointer"
+            >
+              <option value="auto">Auto</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
           <Button variant="outline" size="sm" onClick={() => setAssetDialog("signature")}>
             <PenLine className="w-4 h-4 mr-1.5" /> Signature
           </Button>
