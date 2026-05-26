@@ -1427,9 +1427,10 @@ function StudioShell({
           <div className="min-h-full flex justify-center py-10 px-6">
             {template ? (
               <div
-                className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20"
+                className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20 shrink-0"
                 style={{
                   width: 816,
+                  minWidth: 816,
                   transform: `scale(${zoom / 100})`,
                   transformOrigin: "top center",
                 }}
