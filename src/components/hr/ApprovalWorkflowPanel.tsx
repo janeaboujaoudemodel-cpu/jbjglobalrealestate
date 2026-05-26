@@ -81,34 +81,12 @@ export function ApprovalWorkflowPanel() {
   const fetchExtraApprovals = useCallback(async () => {
     setExtraLoading(true);
     try {
-      const [cvRes, leaveRes] = await Promise.all([
-        supabase.from('hr_cv_submissions').select('*').order('created_at', { ascending: false }),
-        supabase.from('hr_leave_requests').select('*').order('created_at', { ascending: false }),
-      ]);
-
-      const cvApprovals: ApprovalRequest[] = (cvRes.data || []).map((cv: any) => ({
-        id: cv.id,
-        request_type: 'cv_application',
-        reference_id: cv.id,
-        reference_table: 'hr_cv_submissions',
-        requester_id: cv.user_id || '',
-        requester_name: cv.full_name || 'Unknown',
-        department: cv.position_applied || null,
-        title: `CV: ${cv.full_name}`,
-        description: cv.ai_summary || `CV from ${cv.email || 'unknown'}`,
-        amount: null,
-        currency: 'AED',
-        current_stage: 1,
-        total_stages: 1,
-        stage1_approver_name: cv.reviewed_by,
-        stage1_status: cv.status === 'approved' ? 'approved' : cv.status === 'rejected' ? 'rejected' : 'pending',
-        stage1_decision_at: cv.reviewed_at,
-        stage1_notes: cv.notes,
-        stage2_approver_name: null, stage2_status: 'pending', stage2_decision_at: null, stage2_notes: null,
-        stage3_approver_name: null, stage3_status: 'pending', stage3_decision_at: null, stage3_notes: null,
-        overall_status: cv.status === 'approved' ? 'approved' : cv.status === 'rejected' ? 'rejected' : 'pending',
-        created_at: cv.created_at,
-      }));
+      // Phase 3: Approvals shows ONLY real approval-flow records.
+      // CVs live in their own canonical CV Center tab — never inflated here.
+      const leaveRes = await supabase
+        .from('hr_leave_requests')
+        .select('*')
+        .order('created_at', { ascending: false });
 
       const leaveApprovals: ApprovalRequest[] = (leaveRes.data || []).map((lr: any) => ({
         id: lr.id,
@@ -131,7 +109,7 @@ export function ApprovalWorkflowPanel() {
         created_at: lr.created_at,
       }));
 
-      setExtraApprovals([...cvApprovals, ...leaveApprovals]);
+      setExtraApprovals(leaveApprovals);
     } catch (err) {
       console.error('Error fetching extra approvals:', err);
     } finally {
@@ -143,7 +121,7 @@ export function ApprovalWorkflowPanel() {
 
   const loading = approvalsLoading || extraLoading;
 
-  // Merge and deduplicate (hr_approval_requests + cv + leave)
+  // Merge and deduplicate (hr_approval_requests + leave)
   const allApprovals = [...approvals, ...extraApprovals.filter(ea => !approvals.some(a => a.id === ea.id))];
 
   const pendingApprovals = allApprovals.filter(a => a.overall_status === 'pending');
