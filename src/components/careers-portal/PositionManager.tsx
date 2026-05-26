@@ -295,8 +295,12 @@ export default function PositionManager() {
                         {meta.label}
                       </span>
                       {p.is_featured && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-[#B89555] bg-[#102540] text-white px-2 py-0.5 text-[10px] font-semibold" data-no-contrast-guard>
-                          <Star className="w-3 h-3 allow-white" /> Featured
+                        <span
+                          className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold"
+                          style={{ backgroundColor: "#102540", color: "#FFFFFF", borderColor: "#B89555" }}
+                          data-no-contrast-guard
+                        >
+                          <Star className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} /> Featured
                         </span>
                       )}
                       {limitReached && (
@@ -326,11 +330,26 @@ export default function PositionManager() {
                       </SelectContent>
                     </Select>
                     <Button
-                      size="sm" variant="outline" className="border-[#B89555]"
+                      size="sm"
+                      variant="outline"
+                      className="border-[#B89555]"
                       onClick={() => toggleFeatured(p)}
-                      title={p.is_featured ? "Unfeature" : "Mark as Featured"}
+                      title={p.is_featured ? "Unfeature this role" : "Mark this role as Featured"}
+                      data-allow-dark-cta={p.is_featured ? "" : undefined}
+                      data-no-contrast-guard={p.is_featured ? "" : undefined}
+                      style={
+                        p.is_featured
+                          ? { backgroundColor: "#102540", color: "#FFFFFF", borderColor: "#B89555" }
+                          : undefined
+                      }
                     >
-                      <Star className={`w-3.5 h-3.5 mr-1 ${p.is_featured ? "fill-[#B89555] text-[#B89555]" : ""}`} />
+                      <Star
+                        className="w-3.5 h-3.5 mr-1"
+                        style={{
+                          color: p.is_featured ? "#FFFFFF" : "#1A1A1A",
+                          fill: p.is_featured ? "#FFFFFF" : "transparent",
+                        }}
+                      />
                       {p.is_featured ? "Featured" : "Feature"}
                     </Button>
                     <Button size="sm" variant="outline" className="border-[#B89555]" onClick={() => openEdit(p)}>
