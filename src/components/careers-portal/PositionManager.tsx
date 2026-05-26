@@ -225,7 +225,30 @@ export default function PositionManager() {
     refresh();
   };
 
-  const visible = positions.filter((p) => showArchived ? !p.is_active : p.is_active);
+  const changeStatus = async (p: Position, status: JobStatus) => {
+    const { error } = await supabase
+      .from("open_positions")
+      .update({ status })
+      .eq("id", p.id);
+    if (error) return toast.error(error.message);
+    toast.success(`Status set to ${STATUS_META[status].label}`);
+    refresh();
+  };
+
+  const toggleFeatured = async (p: Position) => {
+    const { error } = await supabase
+      .from("open_positions")
+      .update({ is_featured: !p.is_featured })
+      .eq("id", p.id);
+    if (error) return toast.error(error.message);
+    toast.success(p.is_featured ? "Removed from Featured" : "Marked as Featured");
+    refresh();
+  };
+
+  const visible = positions.filter((p) => {
+    const isHidden = (p.status ?? (p.is_active ? "open" : "hidden")) === "hidden";
+    return showArchived ? isHidden : !isHidden;
+  });
 
   return (
     <div className="space-y-4">
@@ -233,7 +256,7 @@ export default function PositionManager() {
         <div>
           <h2 className="text-xl font-semibold text-[#1A1A1A]">Open Positions</h2>
           <p className="text-sm text-[#1A1A1A]/70">
-            Add, edit, archive or remove roles. Use AI to draft and refine the job description.
+            Add, edit, change status, cap applications, or feature roles. Hidden roles disappear from the public Careers page.
           </p>
         </div>
         <div className="flex gap-2">
@@ -244,7 +267,7 @@ export default function PositionManager() {
             className="border-[#B89555]"
           >
             {showArchived ? <Eye className="w-4 h-4 mr-1.5" /> : <EyeOff className="w-4 h-4 mr-1.5" />}
-            {showArchived ? "Showing archived" : "Show archived"}
+            {showArchived ? "Showing hidden" : "Show hidden"}
           </Button>
           <Button
             data-allow-dark-cta
@@ -263,50 +286,83 @@ export default function PositionManager() {
         </div>
       ) : visible.length === 0 ? (
         <Card><CardContent className="py-8 text-center text-[#1A1A1A]/70">
-          {showArchived ? "No archived positions." : "No active positions yet. Click \"New Position\" to add one."}
+          {showArchived ? "No hidden positions." : "No active positions yet. Click \"New Position\" to add one."}
         </CardContent></Card>
       ) : (
         <div className="grid gap-3">
-          {visible.map((p) => (
-            <Card key={p.id} className="border-[#B89555]/30">
-              <CardContent className="p-4 flex flex-col md:flex-row md:items-center gap-3 justify-between">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-semibold text-[#1A1A1A]">{p.title}</h3>
-                    {p.ai_generated && (
-                      <Badge variant="outline" className="border-[#B89555] text-[#1A1A1A]">
-                        <Sparkles className="w-3 h-3 mr-1" /> AI drafted
-                      </Badge>
-                    )}
-                    {!p.is_active && <Badge variant="secondary">Archived</Badge>}
+          {visible.map((p) => {
+            const status = (p.status as JobStatus) ?? (p.is_active ? "open" : "hidden");
+            const meta = STATUS_META[status];
+            const cap = p.application_cap;
+            const count = p.applications_count ?? 0;
+            const limitReached = cap != null && count >= cap;
+            const StatusIcon = meta.icon;
+            return (
+              <Card key={p.id} className="border-[#B89555]/30">
+                <CardContent className="p-4 flex flex-col md:flex-row md:items-center gap-3 justify-between">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-semibold text-[#1A1A1A]">{p.title}</h3>
+                      <span
+                        data-no-contrast-guard={status === "hidden" ? "" : undefined}
+                        className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold ${meta.pill}`}
+                      >
+                        <StatusIcon className={`w-3 h-3 ${status === "hidden" ? "allow-white" : ""}`} />
+                        {meta.label}
+                      </span>
+                      {p.is_featured && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-[#B89555] bg-[#102540] text-white px-2 py-0.5 text-[10px] font-semibold" data-no-contrast-guard>
+                          <Star className="w-3 h-3 allow-white" /> Featured
+                        </span>
+                      )}
+                      {limitReached && (
+                        <Badge variant="outline" className="border-[#1A1A1A]/40 text-[#1A1A1A]">
+                          Application Limit Reached
+                        </Badge>
+                      )}
+                      {p.ai_generated && (
+                        <Badge variant="outline" className="border-[#B89555] text-[#1A1A1A]">
+                          <Sparkles className="w-3 h-3 mr-1" /> AI drafted
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-[#1A1A1A]/70">
+                      {p.department} • {p.location ?? "Dubai, UAE"} • {p.employment_type ?? "full_time"}
+                      {p.seniority ? ` • ${p.seniority}` : ""}
+                      {cap != null ? ` • ${count}/${cap} applicants` : count ? ` • ${count} applicants` : ""}
+                    </p>
                   </div>
-                  <p className="text-sm text-[#1A1A1A]/70">
-                    {p.department} • {p.location ?? "Dubai, UAE"} • {p.employment_type ?? "full_time"}
-                    {p.seniority ? ` • ${p.seniority}` : ""}
-                  </p>
-                </div>
-                <div className="flex gap-2 shrink-0">
-                  <Button size="sm" variant="outline" className="border-[#B89555]" onClick={() => openEdit(p)}>
-                    <Pencil className="w-3.5 h-3.5 mr-1" /> Edit
-                  </Button>
-                  {p.is_active ? (
-                    <Button size="sm" variant="outline" className="border-[#B89555]" onClick={() => archive(p)}>
-                      <Archive className="w-3.5 h-3.5 mr-1" /> Archive
+                  <div className="flex gap-2 shrink-0 flex-wrap">
+                    <Select value={status} onValueChange={(v) => changeStatus(p, v as JobStatus)}>
+                      <SelectTrigger className="h-9 w-[170px] border-[#B89555]"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {(Object.keys(STATUS_META) as JobStatus[]).map((s) => (
+                          <SelectItem key={s} value={s}>{STATUS_META[s].label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      size="sm" variant="outline" className="border-[#B89555]"
+                      onClick={() => toggleFeatured(p)}
+                      title={p.is_featured ? "Unfeature" : "Mark as Featured"}
+                    >
+                      <Star className={`w-3.5 h-3.5 mr-1 ${p.is_featured ? "fill-[#B89555] text-[#B89555]" : ""}`} />
+                      {p.is_featured ? "Featured" : "Feature"}
                     </Button>
-                  ) : (
-                    <Button size="sm" variant="outline" className="border-[#B89555]" onClick={() => unarchive(p)}>
-                      <RefreshCw className="w-3.5 h-3.5 mr-1" /> Restore
+                    <Button size="sm" variant="outline" className="border-[#B89555]" onClick={() => openEdit(p)}>
+                      <Pencil className="w-3.5 h-3.5 mr-1" /> Edit
                     </Button>
-                  )}
-                  <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700" onClick={() => remove(p)}>
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                    <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700" onClick={() => remove(p)}>
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
+
 
       <Dialog open={editorOpen} onOpenChange={setEditorOpen}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
