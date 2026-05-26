@@ -129,18 +129,28 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
       setMessageInput('');
       setPendingAttachments([]);
 
-      // Cross-channel: also send by email if toggle is ON
+      // Cross-channel: also send by email if toggle is ON.
+      // Use the REAL employee email from team-members config (never a guessed
+      // `${id}@jbj.ae` slug) and the REAL authenticated sender persona
+      // (never a hardcoded "Jane Bou Jaoude" fallback).
       if (alsoSendByEmail && selectedEmployeeData) {
-        const recipientEmail = `${selectedEmployee}@jbj.ae`;
+        const recipientEmail =
+          selectedEmployeeData.email ||
+          `${selectedEmployeeData.name.toLowerCase().replace(/\s+/g, '.')}@jbj.ae`;
         sendSecondaryEmail({
           primaryChannel: "chat",
           recipientEmail,
-          subject: `Chat message regarding ${selectedEmployeeData.name}`,
+          subject: `Message from ${me?.name || 'JBJ Global'} — ${new Date().toLocaleDateString()}`,
           body: msgContent,
           alsoSendSecondary: true,
           recipientName: selectedEmployeeData.name,
+          senderId: me?.id,
+          senderName: me?.name,
+          senderEmail: me?.email,
+          senderTitle: me?.title,
         });
       }
+
     }
   };
 
