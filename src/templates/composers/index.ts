@@ -95,7 +95,7 @@ export function termsTable(rows: Array<[string, string | undefined]>): string {
 
 export function commissionTable(rows: CommissionRow[]): string {
   const visible = (rows || []).filter(
-    (r) => (r.label || "").trim() || (r.rate || "").trim() || (r.trigger || "").trim() || (r.notes || "").trim(),
+    (r) => (r.label || "").trim() || (r.rate || "").trim() || (r.trigger || "").trim(),
   );
   if (visible.length === 0) return "";
   const body = visible
@@ -105,7 +105,6 @@ export function commissionTable(rows: CommissionRow[]): string {
         <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;font-weight:600;color:${INK};">${esc(r.label) || "—"}</td>
         <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;color:${INK};white-space:nowrap;">${esc(r.rate) || "—"}</td>
         <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;color:${INK};">${esc(r.trigger) || "—"}</td>
-        <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;color:${MUTED};">${esc(r.notes) || ""}</td>
       </tr>`,
     )
     .join("");
@@ -113,7 +112,7 @@ export function commissionTable(rows: CommissionRow[]): string {
     <table style="border-collapse:collapse;width:100%;margin:6px 0 8px;font-family:Inter,system-ui,sans-serif;">
       <thead>
         <tr>
-          <th colspan="4" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
+          <th colspan="3" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
             Commission Structure
           </th>
         </tr>
@@ -121,7 +120,6 @@ export function commissionTable(rows: CommissionRow[]): string {
           <th style="padding:7px 12px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};text-align:left;">Tier</th>
           <th style="padding:7px 12px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};text-align:left;">Rate</th>
           <th style="padding:7px 12px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};text-align:left;">When Paid</th>
-          <th style="padding:7px 12px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};text-align:left;">Notes</th>
         </tr>
       </thead>
       <tbody>${body}</tbody>
