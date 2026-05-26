@@ -141,7 +141,7 @@ export function signatureBlock(opts: {
   applicantLabel?: string;
   extraSignatories?: Array<{ name?: string; title?: string; date?: string; label?: string }>;
 }): string {
-  const oName = esc(opts.ownerName || "Jameel Bou Jaoude");
+  const oName = esc(opts.ownerName || "Jane Bou Jaoude");
   const oTitle = esc(opts.ownerTitle || "Founder & CEO");
   const oDate = esc(formatHumanDate(opts.ownerDate) || todayLong());
   const aName = esc(opts.applicantName || "");
@@ -172,7 +172,7 @@ export function signatureBlock(opts: {
 
   const applicantLines = [
     row("Name", aName),
-    row("ID / Passport", aId),
+    aId ? row("ID / Passport", aId) : "",
     row("Date", aDate),
   ].join("");
 
