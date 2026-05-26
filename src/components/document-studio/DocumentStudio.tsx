@@ -573,7 +573,7 @@ function StudioShell({
                     ) : f.type === "select" ? (
                       <Select value={fields[f.key] || ""} onValueChange={(v) => setField(f.key, v)}>
                         <SelectTrigger className="bg-[#FDFBF7]"><SelectValue placeholder="Select…" /></SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="z-[2147483647] bg-[#FDFBF7]">
                           {f.options?.map((o) => (
                             <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
                           ))}
