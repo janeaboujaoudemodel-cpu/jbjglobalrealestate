@@ -31,6 +31,7 @@ import {
   APPLICANT_STATUS_ORDER,
   getApplicantStatusMeta,
 } from "@/components/crm/ApplicantStatusPill";
+import ApplicantProfileDrawer from "@/components/crm/ApplicantProfileDrawer";
 
 // Department categories with icons
 const DEPARTMENT_CATEGORIES = [
