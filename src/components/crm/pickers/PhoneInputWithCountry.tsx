@@ -86,7 +86,7 @@ export default function PhoneInputWithCountry({
         value={national}
         onChange={(e) => setNational(e.target.value)}
         placeholder={placeholder}
-        className="flex-1 min-w-0 bg-transparent px-3 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none"
+        className="flex-1 min-w-0 h-full bg-transparent px-3 text-sm leading-none text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none"
       />
     </div>
   );
