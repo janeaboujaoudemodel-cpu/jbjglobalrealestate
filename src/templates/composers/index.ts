@@ -155,8 +155,8 @@ export function signatureBlock(opts: {
       <span style="margin-left:4px;">${value || (fallbackDots ? "____________________" : "")}</span>
     </div>`;
 
-  const cell = (heading: string, lines: string) => `
-    <td style="width:44%;vertical-align:top;padding:0 28px;">
+  const cell = (sigId: string, heading: string, lines: string) => `
+    <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 28px;">
       <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};margin-bottom:36px;font-weight:600;">${heading}</div>
       <div style="border-top:1px solid ${INK};padding-top:10px;">
         ${lines}
@@ -187,17 +187,17 @@ export function signatureBlock(opts: {
     const bLines = b
       ? [row("Name", esc(b?.name || "")), row("Title", esc(b?.title || "")), row("Date", esc(formatHumanDate(b?.date)))].join("")
       : "";
-    extraRows.push(`<tr><td colspan="3" style="height:32px;"></td></tr><tr>${cell(esc(a?.label || "Additional Signatory"), aLines)}${gapCell}${b ? cell(esc(b?.label || "Additional Signatory"), bLines) : `<td style="width:44%;"></td>`}</tr>`);
+    extraRows.push(`<tr><td colspan="3" style="height:32px;"></td></tr><tr>${cell(`extra-${i}`, esc(a?.label || "Additional Signatory"), aLines)}${gapCell}${b ? cell(`extra-${i + 1}`, esc(b?.label || "Additional Signatory"), bLines) : `<td style="width:44%;"></td>`}</tr>`);
   }
 
   return `
-    <div style="margin-top:36px;page-break-inside:avoid;">
+    <div data-signature-block="1" style="margin-top:36px;page-break-inside:avoid;">
       <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
         <tbody>
           <tr>
-            ${cell("JBJ GLOBAL REAL ESTATE", ownerLines)}
+            ${cell("owner", "JBJ GLOBAL REAL ESTATE", ownerLines)}
             ${gapCell}
-            ${cell(aLabel, applicantLines)}
+            ${cell("recipient", aLabel, applicantLines)}
           </tr>
           ${extraRows.join("")}
         </tbody>
