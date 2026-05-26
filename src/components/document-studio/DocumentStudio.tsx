@@ -397,6 +397,7 @@ function StudioShell({
     JSON.stringify(Array.from(hiddenSections)),
     JSON.stringify(Array.from(hiddenFieldKeys)),
     ownerName, ownerTitle, ownerDate, applicantDate,
+    JSON.stringify(extraSignatories),
   ]);
 
   const resetToTemplate = () => {
