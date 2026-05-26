@@ -263,7 +263,7 @@ export default function PositionManager() {
             data-allow-dark-cta
             data-no-contrast-guard
             onClick={openCreate}
-            className="bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555]"
+            className="bg-[#102540] hover:bg-[#1a3d63] text-white hover:text-white border border-[#B89555] [&_svg]:text-white [&_svg]:!stroke-white"
           >
             <Plus className="w-4 h-4 mr-1.5" /> New Position
           </Button>
@@ -302,11 +302,9 @@ export default function PositionManager() {
                       </span>
                       {p.is_featured && (
                         <span
-                          className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold"
-                          style={{ backgroundColor: "#102540", color: "#FFFFFF", borderColor: "#B89555" }}
-                          data-no-contrast-guard
+                          className="inline-flex items-center gap-1 rounded-full border border-[#B89555] bg-[#EFE6D6] text-[#1A1A1A] px-2 py-0.5 text-[10px] font-semibold"
                         >
-                          <Star className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} /> Featured
+                          <Star className="w-3 h-3 text-[#B89555]" style={{ fill: "#B89555" }} /> Featured
                         </span>
                       )}
                       {limitReached && (
@@ -340,20 +338,15 @@ export default function PositionManager() {
                       variant="outline"
                       onClick={() => toggleFeatured(p)}
                       title={p.is_featured ? "Unfeature this role" : "Mark this role as Featured"}
-                      data-no-contrast-guard
-                      className="transition-none"
-                      style={
+                      className={
                         p.is_featured
-                          ? { backgroundColor: "#2563EB", color: "#FFFFFF", borderColor: "#2563EB" }
-                          : { backgroundColor: "transparent", color: "#2563EB", borderColor: "#2563EB" }
+                          ? "border-[#B89555] bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E5D9C2]"
+                          : "border-[#B89555] bg-transparent text-[#1A1A1A] hover:bg-[#F7F2EA]"
                       }
                     >
                       <Star
-                        className="w-3.5 h-3.5 mr-1"
-                        style={{
-                          color: p.is_featured ? "#FFFFFF" : "#2563EB",
-                          fill: p.is_featured ? "#FFFFFF" : "transparent",
-                        }}
+                        className="w-3.5 h-3.5 mr-1 text-[#B89555]"
+                        style={{ fill: p.is_featured ? "#B89555" : "transparent" }}
                       />
                       {p.is_featured ? "Featured" : "Feature"}
                     </Button>
@@ -389,7 +382,7 @@ export default function PositionManager() {
                   data-no-contrast-guard
                   onClick={() => callAI("generate")}
                   disabled={!!aiBusy || !form.title.trim()}
-                  className="shrink-0 bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555]"
+                  className="shrink-0 bg-[#102540] hover:bg-[#1a3d63] text-white hover:text-white border border-[#B89555] [&_svg]:text-white [&_svg]:!stroke-white"
                 >
                   {aiBusy === "generate" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 mr-1.5" />}
                   Generate with AI
@@ -473,7 +466,7 @@ export default function PositionManager() {
                   data-allow-dark-cta data-no-contrast-guard
                   disabled={!!aiBusy || !aiInstruction.trim() || !form.description.trim()}
                   onClick={() => callAI("edit")}
-                  className="shrink-0 bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555]">
+                  className="shrink-0 bg-[#102540] hover:bg-[#1a3d63] text-white hover:text-white border border-[#B89555] [&_svg]:text-white [&_svg]:!stroke-white">
                   {aiBusy === "edit" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4 mr-1.5" />}
                   Apply AI Edit
                 </Button>
@@ -490,44 +483,57 @@ export default function PositionManager() {
               />
             </div>
 
-            <div className="md:col-span-2 grid gap-3 md:grid-cols-3 rounded-lg border border-[#B89555]/40 p-3 bg-[#F7F2EA]/40">
-              <div>
+            <div className="md:col-span-2 grid gap-4 md:grid-cols-3 rounded-lg border border-[#B89555]/40 p-4 bg-[#F7F2EA]/40 items-start">
+              <div className="flex flex-col gap-1.5 min-w-0">
                 <Label>Status</Label>
                 <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v as JobStatus })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-10 w-full"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {(Object.keys(STATUS_META) as JobStatus[]).map((s) => (
                       <SelectItem key={s} value={s}>{STATUS_META[s].label}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="text-[11px] text-[#1A1A1A]/60 mt-1">
+                <p className="text-[11px] text-[#1A1A1A]/60">
                   Hidden removes the role from the public page entirely.
                 </p>
               </div>
-              <div>
+              <div className="flex flex-col gap-1.5 min-w-0">
                 <Label>Application cap (optional)</Label>
                 <Input
                   type="number"
                   min={0}
+                  className="h-10"
                   value={form.application_cap}
                   onChange={(e) => setForm({ ...form, application_cap: e.target.value })}
                   placeholder="e.g. 50"
                 />
-                <p className="text-[11px] text-[#1A1A1A]/60 mt-1">
+                <p className="text-[11px] text-[#1A1A1A]/60">
                   Auto-shows "Application Limit Reached" when met.
                 </p>
               </div>
-              <div className="flex items-center gap-2 pt-6">
-                <input
-                  id="is_featured"
-                  type="checkbox"
-                  checked={form.is_featured}
-                  onChange={(e) => setForm({ ...form, is_featured: e.target.checked })}
-                />
-                <Label htmlFor="is_featured" className="flex items-center gap-1">
-                  <Star className="w-3.5 h-3.5 text-[#B89555]" /> Featured
-                </Label>
+              <div className="flex flex-col gap-1.5 min-w-0">
+                <Label>Visibility</Label>
+                <label
+                  htmlFor="is_featured"
+                  className="h-10 flex items-center gap-2 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] px-3 cursor-pointer hover:bg-[#F7F2EA]"
+                >
+                  <input
+                    id="is_featured"
+                    type="checkbox"
+                    checked={form.is_featured}
+                    onChange={(e) => setForm({ ...form, is_featured: e.target.checked })}
+                    className="h-4 w-4 rounded border-[#B89555] accent-[#B89555] cursor-pointer"
+                  />
+                  <Star
+                    className="w-3.5 h-3.5 text-[#B89555]"
+                    style={{ fill: form.is_featured ? "#B89555" : "transparent" }}
+                  />
+                  <span className="text-sm text-[#1A1A1A] font-medium">Featured</span>
+                </label>
+                <p className="text-[11px] text-[#1A1A1A]/60">
+                  Pinned to the top of the public Careers page.
+                </p>
               </div>
             </div>
           </div>
@@ -537,7 +543,7 @@ export default function PositionManager() {
             <Button
               data-allow-dark-cta data-no-contrast-guard
               onClick={save} disabled={saving}
-              className="bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555]"
+              className="bg-[#102540] hover:bg-[#1a3d63] text-white hover:text-white border border-[#B89555] [&_svg]:text-white [&_svg]:!stroke-white"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin mr-1.5" /> : null}
               {form.id ? "Save changes" : "Create position"}
