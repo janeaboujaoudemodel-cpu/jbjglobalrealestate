@@ -21,7 +21,7 @@ import { toast } from "sonner";
 interface Application {
   id: string;
   user_id: string;
-  status: "pending" | "approved" | "rejected";
+  status: "pending" | "approved" | "rejected" | "cv_received" | "pending_review" | "shortlisted" | "interview_scheduled" | "interview_completed" | "kept_in_records" | "position_closed";
   full_name: string;
   email: string;
   phone_e164: string;
