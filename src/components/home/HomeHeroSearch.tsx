@@ -107,8 +107,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         <div
           data-no-contrast-guard
           className="group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl
-            border border-[#B89555]/55 overflow-hidden bg-transparent
-            transition-all duration-300 focus-within:border-[#B89555] hover:border-[#B89555]/80"
+            overflow-hidden bg-transparent
+            transition-all duration-300"
           style={{
             boxShadow:
               "0 18px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10)",
@@ -136,9 +136,6 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               }}
             />
           </form>
-
-          {/* Gold divider between input and Search */}
-          <span aria-hidden className="self-stretch w-px bg-[#B89555] flex-shrink-0" />
 
           {/* Search — white segment merged with input field */}
           <div className="relative flex flex-shrink-0 group/search">
@@ -174,9 +171,6 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               Search properties now
             </span>
           </div>
-
-          {/* Gold divider */}
-          <span aria-hidden className="hidden md:block self-stretch w-px bg-[#B89555]/55 flex-shrink-0" />
 
           {/* Free Consultation — text only, with instant hover tooltip */}
           <div className="relative hidden md:flex flex-shrink-0 group/book">
