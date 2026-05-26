@@ -31,6 +31,7 @@ import {
   ChevronLeft, ZoomIn, ZoomOut, Bold, Italic, List, Heading2, Search,
   PanelRightClose, PanelRightOpen, Check, Download, FileText, Stamp,
   PenLine, ChevronDown, Trash2, Maximize2, Minimize2, Plus, Globe,
+  Copy,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
