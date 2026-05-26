@@ -263,7 +263,7 @@ export default function PositionManager() {
             data-allow-dark-cta
             data-no-contrast-guard
             onClick={openCreate}
-            className="bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555]"
+            className="bg-[#102540] hover:bg-[#1a3d63] text-white hover:text-white border border-[#B89555] [&_svg]:text-white [&_svg]:!stroke-white"
           >
             <Plus className="w-4 h-4 mr-1.5" /> New Position
           </Button>
@@ -382,7 +382,7 @@ export default function PositionManager() {
                   data-no-contrast-guard
                   onClick={() => callAI("generate")}
                   disabled={!!aiBusy || !form.title.trim()}
-                  className="shrink-0 bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555]"
+                  className="shrink-0 bg-[#102540] hover:bg-[#1a3d63] text-white hover:text-white border border-[#B89555] [&_svg]:text-white [&_svg]:!stroke-white"
                 >
                   {aiBusy === "generate" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 mr-1.5" />}
                   Generate with AI
@@ -466,7 +466,7 @@ export default function PositionManager() {
                   data-allow-dark-cta data-no-contrast-guard
                   disabled={!!aiBusy || !aiInstruction.trim() || !form.description.trim()}
                   onClick={() => callAI("edit")}
-                  className="shrink-0 bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555]">
+                  className="shrink-0 bg-[#102540] hover:bg-[#1a3d63] text-white hover:text-white border border-[#B89555] [&_svg]:text-white [&_svg]:!stroke-white">
                   {aiBusy === "edit" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4 mr-1.5" />}
                   Apply AI Edit
                 </Button>
@@ -543,7 +543,7 @@ export default function PositionManager() {
             <Button
               data-allow-dark-cta data-no-contrast-guard
               onClick={save} disabled={saving}
-              className="bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555]"
+              className="bg-[#102540] hover:bg-[#1a3d63] text-white hover:text-white border border-[#B89555] [&_svg]:text-white [&_svg]:!stroke-white"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin mr-1.5" /> : null}
               {form.id ? "Save changes" : "Create position"}
