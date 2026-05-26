@@ -158,7 +158,6 @@ function StudioShell({
   const [autoFillText, setAutoFillText] = useState("");
   const [autoFillBusy, setAutoFillBusy] = useState(false);
   const autoFillFileRef = useRef<HTMLInputElement>(null);
-  const autoFillFileRef = useRef<HTMLInputElement>(null);
 
   // Document language (drives translation + AI replies + STT).
   const [docLanguage, setDocLanguage] = useState<string>("English");
