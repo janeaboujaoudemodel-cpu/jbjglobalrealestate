@@ -441,7 +441,6 @@ function StudioShell({
         <div className="ml-auto flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 border border-[#B89555]/30 bg-[#F7F2EA] rounded-md pl-2 pr-1 py-0.5">
             <Globe className="w-3.5 h-3.5" />
-            <span className="uppercase tracking-[0.14em]">Lang</span>
             <Select value={docLanguage} onValueChange={setDocLanguage}>
               <SelectTrigger className="h-6 w-[112px] border-0 bg-transparent px-1.5 text-[12px] font-semibold text-[#1A1A1A] focus:ring-0 focus:ring-offset-0 shadow-none">
                 <SelectValue />
