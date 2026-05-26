@@ -190,16 +190,31 @@ export function ApprovalWorkflowPanel() {
 
       {/* Tabs */}
       <Tabs defaultValue="pending" className="space-y-4">
-        <TabsList className="bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30">
-          <TabsTrigger value="pending" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+        <TabsList className="bg-[#F7F2EA] border border-[#B89555]/40 p-1 gap-1">
+          <TabsTrigger
+            value="pending"
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="rounded-full px-3 py-1.5 text-[13px] font-semibold text-[#1A1A1A] data-[state=active]:bg-[#102540] data-[state=active]:text-white data-[state=active]:border-[#B89555] border border-transparent hover:bg-[#EFE6D6] data-[state=active]:hover:bg-[#1a3d63]"
+          >
             <Clock className="h-4 w-4 mr-2" />
             Pending ({pendingApprovals.length})
           </TabsTrigger>
-          <TabsTrigger value="approved" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger
+            value="approved"
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="rounded-full px-3 py-1.5 text-[13px] font-semibold text-[#1A1A1A] data-[state=active]:bg-[#102540] data-[state=active]:text-white data-[state=active]:border-[#B89555] border border-transparent hover:bg-[#EFE6D6] data-[state=active]:hover:bg-[#1a3d63]"
+          >
             <CheckCircle className="h-4 w-4 mr-2" />
             Approved ({approvedRequests.length})
           </TabsTrigger>
-          <TabsTrigger value="rejected" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger
+            value="rejected"
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="rounded-full px-3 py-1.5 text-[13px] font-semibold text-[#1A1A1A] data-[state=active]:bg-[#102540] data-[state=active]:text-white data-[state=active]:border-[#B89555] border border-transparent hover:bg-[#EFE6D6] data-[state=active]:hover:bg-[#1a3d63]"
+          >
             <XCircle className="h-4 w-4 mr-2" />
             Rejected ({rejectedRequests.length})
           </TabsTrigger>
