@@ -42,6 +42,8 @@ export interface ComposerInput {
   ownerDate?: string;
   /** Applicant signing date — usually blank (filled on sign). */
   applicantDate?: string;
+  /** Additional signatories appended below the main two-column signature block. */
+  extraSignatories?: Array<{ name?: string; title?: string; date?: string; label?: string }>;
   /** Custom date for the top-right of the letter. Empty → today. */
   letterDate?: string;
   /** Hide the static letter date entirely (the draggable date chip is in use). */
