@@ -726,6 +726,22 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     setContactActionsOpen(true);
   };
 
+  const openApplicantProfile = (cv: CVEntry) => {
+    setSelectedCV(cv);
+    setProfileDrawerOpen(true);
+  };
+
+  const handleSaveApplicantNotes = async (id: string, nextNotes: string) => {
+    const target = cvEntries.find((c) => c.id === id);
+    if (!target) return;
+    const { error } = await supabase
+      .from(target.record_source)
+      .update({ notes: nextNotes } as any)
+      .eq('id', id);
+    if (error) throw error;
+    setCvEntries((prev) => prev.map((c) => (c.id === id ? { ...c, notes: nextNotes } as any : c)));
+  };
+
   const openEmailComposerFromContact = () => {
     setContactActionsOpen(false);
     setContactOpen(true);
