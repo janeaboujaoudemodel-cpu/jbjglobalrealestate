@@ -124,6 +124,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const [analyzingIds, setAnalyzingIds] = useState<Set<string>>(new Set());
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'score' | 'position'>('newest');
+  const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
   const autoAnalyzeRef = useRef(false);
 
   // --- Auto-save composer drafts to survive page reloads ---
