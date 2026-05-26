@@ -153,6 +153,81 @@ function StudioShell({
 
   // Save-as-Template state.
   const [savingTemplate, setSavingTemplate] = useState(false);
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [saveName, setSaveName] = useState("");
+  const [saveAsDefault, setSaveAsDefault] = useState(false);
+  type SavedTpl = { id: string; name: string; base_template_id: string; payload: any; is_default: boolean };
+  const [savedTemplates, setSavedTemplates] = useState<SavedTpl[]>([]);
+
+  // Load saved templates for current audience.
+  const reloadSavedTemplates = async () => {
+    const { data, error } = await (supabase as any)
+      .from("saved_document_templates")
+      .select("id,name,base_template_id,payload,is_default")
+      .eq("audience", catalog)
+      .order("updated_at", { ascending: false });
+    if (!error && Array.isArray(data)) setSavedTemplates(data as SavedTpl[]);
+  };
+  useEffect(() => { reloadSavedTemplates(); /* eslint-disable-next-line */ }, [catalog]);
+
+  const applySavedTemplate = (s: SavedTpl) => {
+    const p = s.payload || {};
+    setTemplateId(s.base_template_id);
+    if (p.fields) setFields(p.fields);
+    if (p.department) setDepartment(p.department);
+    if (p.commissionRows) setCommissionRows(p.commissionRows);
+    if (p.customFields) setCustomFields(p.customFields);
+    if (p.ownerName) setOwnerName(p.ownerName);
+    if (p.ownerTitle) setOwnerTitle(p.ownerTitle);
+    if (p.ownerDate) setOwnerDate(p.ownerDate);
+    if (p.hiddenFieldKeys) setHiddenFieldKeys(new Set(p.hiddenFieldKeys));
+    if (p.fieldLabelOverrides) setFieldLabelOverrides(p.fieldLabelOverrides);
+    if (p.hiddenSections) setHiddenSections(new Set(p.hiddenSections));
+    setStep(2);
+    toast.success(`Loaded "${s.name}"`);
+  };
+
+  const deleteSavedTemplate = async (id: string) => {
+    const { error } = await (supabase as any).from("saved_document_templates").delete().eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    setSavedTemplates((xs) => xs.filter((x) => x.id !== id));
+    toast.success("Template deleted");
+  };
+
+  const handleSaveTemplate = async () => {
+    if (!template) { toast.error("Pick a template first"); return; }
+    const name = (saveName || `${template.label} — Custom`).trim();
+    setSavingTemplate(true);
+    try {
+      const { data: u } = await supabase.auth.getUser();
+      if (!u?.user) throw new Error("Sign in required");
+      const payload = {
+        fields, department, commissionRows, customFields,
+        ownerName, ownerTitle, ownerDate,
+        hiddenFieldKeys: Array.from(hiddenFieldKeys),
+        fieldLabelOverrides,
+        hiddenSections: Array.from(hiddenSections),
+      };
+      const { error } = await (supabase as any).from("saved_document_templates").insert({
+        owner_id: u.user.id,
+        audience: catalog,
+        base_template_id: template.id,
+        name,
+        is_default: saveAsDefault,
+        payload,
+      });
+      if (error) throw error;
+      toast.success(`Saved "${name}"`);
+      setSaveDialogOpen(false);
+      setSaveName("");
+      setSaveAsDefault(false);
+      reloadSavedTemplates();
+    } catch (e: any) {
+      toast.error(e?.message || "Save failed");
+    } finally {
+      setSavingTemplate(false);
+    }
+  };
 
   // AI auto-fill from pasted details / attached document.
   const [autoFillText, setAutoFillText] = useState("");
