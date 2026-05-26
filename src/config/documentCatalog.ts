@@ -174,6 +174,26 @@ const STAFF: DocumentTemplate[] = [
     ],
   },
   {
+    id: "commission_invoice",
+    audience: "staff",
+    label: "Commission Invoice",
+    description: "Auto-calculated commission invoice (rate × deal value + VAT).",
+    icon: FileText,
+    emailSubject: "Commission Invoice — JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a formal commission invoice. Keep the language short and professional. The calculation table is auto-rendered — do not duplicate the numbers in prose.",
+    fields: [
+      { key: "invoiceNumber", label: "Invoice No.", type: "text", placeholder: "INV-2026-001" },
+      { key: "invoiceDate", label: "Invoice Date", type: "date" },
+      { key: "recipientName", label: "Bill To", type: "text", required: true },
+      { key: "propertyRef", label: "Property / Deal", type: "text", placeholder: "Villa 12, Palm Jumeirah" },
+      { key: "dealValue", label: "Deal Value (AED)", type: "text", required: true, placeholder: "5,000,000" },
+      { key: "commissionRate", label: "Commission Rate (%)", type: "text", required: true, placeholder: "2" },
+      { key: "vatRate", label: "VAT Rate (%)", type: "text", placeholder: "5" },
+      { key: "paymentTerms", label: "Payment Terms", type: "text", placeholder: "Net 7 days from transfer" },
+    ],
+  },
+  {
     id: "internship_agreement",
     audience: "staff",
     label: "Internship Agreement",
