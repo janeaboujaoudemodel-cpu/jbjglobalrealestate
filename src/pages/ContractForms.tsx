@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SEOHead } from "@/components/SEOHead";
+import DocumentStudioLauncher from "@/components/document-studio/DocumentStudioLauncher";
 
 interface ContractTemplate {
   id: string;
@@ -181,6 +182,9 @@ export default function ContractForms() {
       {/* Main Content */}
       <section className="py-12 md:py-16 jj-layer-2">
         <div className="container mx-auto px-4 md:px-8">
+          {/* Unified Document Studio — client catalog */}
+          <DocumentStudioLauncher catalog="client" />
+
           {/* Category Filter */}
           <div className="flex flex-wrap gap-2 mb-8">
             <Button

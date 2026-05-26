@@ -15,6 +15,7 @@ import CareersEmptyState from "@/components/careers-portal/EmptyState";
 // Lazy-load the heavy modules so the portal stays snappy. Each tab lazy-loads
 // exactly ONE canonical component — no duplicates mounted simultaneously.
 const EmployeeManagementHub      = lazy(() => import("@/pages/EmployeeManagementHub"));
+const DocumentStudioLauncher    = lazy(() => import("@/components/document-studio/DocumentStudioLauncher"));
 const HRAgentChat                = lazy(() => import("@/components/hr/HRAgentChat"));
 const EmployeeChatHub            = lazy(() => import("@/components/employee-chat/EmployeeChatHub"));
 const AdminOnboarding            = lazy(() => import("@/pages/AdminOnboarding"));
@@ -124,8 +125,12 @@ function CareersTabRow({
         className="pointer-events-none absolute inset-y-0 right-0 w-6 z-10"
         style={{ background: "linear-gradient(to left, #F7F2EA, rgba(247,242,234,0))" }}
       />
-      <nav ref={scrollerRef} className="-mx-1 overflow-x-auto scrollbar-thin">
-        <ul className="flex gap-1.5 min-w-max pb-2 px-1">
+      <nav
+        ref={scrollerRef}
+        className="-mx-1 overflow-x-auto scrollbar-thin"
+        style={{ WebkitOverflowScrolling: "touch", scrollSnapType: "x proximity" }}
+      >
+        <ul className="flex gap-1.5 min-w-max w-max pb-2 px-1">
           {sections.map((s) => {
             const isActive = s.key === activeKey;
             return (
@@ -222,7 +227,12 @@ export default function CareersPortal() {
           )}
           {active === "warnings"      && <WarningsPanel />}
           {active === "onboarding"    && <AdminOnboarding />}
-          {active === "contracts"     && <JobOfferManager />}
+          {active === "contracts"     && (
+            <div className="space-y-6">
+              <DocumentStudioLauncher catalog="staff" />
+              <JobOfferManager />
+            </div>
+          )}
           {active === "comms"         && <EmployeeChatHub />}
           {active === "ai-recruiting" && <HRAgentChat />}
           {active === "linkedin"      && <LinkedInInsightsPanel />}
