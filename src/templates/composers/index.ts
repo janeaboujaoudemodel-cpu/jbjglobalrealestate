@@ -42,6 +42,8 @@ export interface ComposerInput {
   ownerDate?: string;
   /** Applicant signing date — usually blank (filled on sign). */
   applicantDate?: string;
+  /** Additional signatories appended below the main two-column signature block. */
+  extraSignatories?: Array<{ name?: string; title?: string; date?: string; label?: string }>;
   /** Custom date for the top-right of the letter. Empty → today. */
   letterDate?: string;
   /** Hide the static letter date entirely (the draggable date chip is in use). */
@@ -137,6 +139,7 @@ export function signatureBlock(opts: {
   applicantId?: string;
   applicantDate?: string;
   applicantLabel?: string;
+  extraSignatories?: Array<{ name?: string; title?: string; date?: string; label?: string }>;
 }): string {
   const oName = esc(opts.ownerName || "Jameel Bou Jaoude");
   const oTitle = esc(opts.ownerTitle || "Founder & CEO");
@@ -172,6 +175,20 @@ export function signatureBlock(opts: {
     row("Date", aDate),
   ].join("");
 
+  const extras = (opts.extraSignatories || []).filter(
+    (s) => (s?.name || "").trim() || (s?.title || "").trim() || (s?.date || "").trim() || (s?.label || "").trim(),
+  );
+  const extraRows: string[] = [];
+  for (let i = 0; i < extras.length; i += 2) {
+    const a = extras[i];
+    const b = extras[i + 1];
+    const aLines = [row("Name", esc(a?.name || "")), row("Title", esc(a?.title || "")), row("Date", esc(formatHumanDate(a?.date)))].join("");
+    const bLines = b
+      ? [row("Name", esc(b?.name || "")), row("Title", esc(b?.title || "")), row("Date", esc(formatHumanDate(b?.date)))].join("")
+      : "";
+    extraRows.push(`<tr>${cell(esc(a?.label || "Additional Signatory"), aLines)}${b ? cell(esc(b?.label || "Additional Signatory"), bLines) : `<td style="width:50%;"></td>`}</tr>`);
+  }
+
   return `
     <div style="margin-top:28px;page-break-inside:avoid;">
       <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
@@ -180,6 +197,7 @@ export function signatureBlock(opts: {
             ${cell("JBJ GLOBAL REAL ESTATE", ownerLines)}
             ${cell(aLabel, applicantLines)}
           </tr>
+          ${extraRows.join("")}
         </tbody>
       </table>
     </div>`;
@@ -260,6 +278,7 @@ function composeJobOffer(input: ComposerInput): string {
       applicantId: f.idNumber,
       applicantDate: input.applicantDate,
       applicantLabel: "Accepted by Applicant",
+      extraSignatories: input.extraSignatories,
     }),
   ].join("");
 }
@@ -289,6 +308,7 @@ function composeGeneric(input: ComposerInput, subject: string): string {
       applicantId: f.idNumber,
       applicantDate: input.applicantDate,
       applicantLabel: "Counterparty Signature",
+      extraSignatories: input.extraSignatories,
     }),
   ].join("");
 }
@@ -365,6 +385,7 @@ function composeCommissionInvoice(input: ComposerInput): string {
       applicantId: f.idNumber,
       applicantDate: input.applicantDate,
       applicantLabel: "Acknowledged by Client",
+      extraSignatories: input.extraSignatories,
     }),
   ].join("");
 }

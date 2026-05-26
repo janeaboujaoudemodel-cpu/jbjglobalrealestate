@@ -90,6 +90,7 @@ export interface StandardBodyArgs {
   applicantDate?: string;
   letterDate?: string;
   hideLetterDate?: boolean;
+  extraSignatories?: Array<{ name?: string; title?: string; date?: string; label?: string }>;
 }
 
 export function renderStandardBody(args: StandardBodyArgs): string {
@@ -108,6 +109,7 @@ export function renderStandardBody(args: StandardBodyArgs): string {
     hideLetterDate: args.hideLetterDate,
     aiIntro,
     aiClosing,
+    extraSignatories: args.extraSignatories,
   };
   return compose(input);
 }
