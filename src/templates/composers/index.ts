@@ -395,41 +395,134 @@ function composeCommissionInvoice(input: ComposerInput): string {
 
 /* ───────────── Holiday Home Booking (premium, non-refundable) ───────────── */
 
+const fmtAED = (n: number) =>
+  new Intl.NumberFormat("en-AE", { maximumFractionDigits: 2 }).format(n);
+
+const parseNum = (v?: string) => {
+  if (!v) return 0;
+  const n = parseFloat(String(v).replace(/[^\d.\-]/g, ""));
+  return Number.isFinite(n) ? n : 0;
+};
+
+const generateBookingId = () => {
+  const d = new Date();
+  const ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
+  const rand = Array.from({ length: 4 }, () =>
+    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[Math.floor(Math.random() * 32)],
+  ).join("");
+  return `JBJ-HH-${ymd}-${rand}`;
+};
+
 function composeHolidayHome(input: ComposerInput): string {
   const f = input.fields;
-  const nights = f.nights || "";
-  const checkIn = formatHumanDate(f.checkIn) || f.checkIn;
-  const checkOut = formatHumanDate(f.checkOut) || f.checkOut;
+  const nights = parseNum(f.nights);
+  const checkIn = formatHumanDate(f.checkIn) || f.checkIn || "";
+  const checkOut = formatHumanDate(f.checkOut) || f.checkOut || "";
+  const bookingId = (f.bookingRef && f.bookingRef.trim()) || generateBookingId();
 
-  const reservation: Array<[string, string | undefined]> = [
-    ["Booking Reference", f.bookingRef],
-    ["Guest Name", f.recipientName],
-    ["Phone / WhatsApp", f.guestPhone],
+  // ── Booking Summary (compact 2-col)
+  const summaryRows: Array<[string, string | undefined]> = [
+    ["Booking ID", bookingId],
+    ["Booking Source", f.bookingSource],
+    ["External Reference", f.externalRef],
     ["Property", f.propertyName],
     ["Address", f.propertyAddress],
     ["Unit Type", f.roomType],
     ["Unit Size", f.unitSize ? `${f.unitSize} sq ft` : undefined],
-    ["Guests", f.guestsCount],
-    ["Check-in", checkIn],
-    ["Check-out", checkOut],
-    ["Nights", nights],
-    ["Nightly Rate", f.nightlyRate ? `AED ${f.nightlyRate}` : undefined],
-    ["Total Amount Paid", f.totalAmount ? `AED ${f.totalAmount}` : undefined],
-    ["Payment Method", f.paymentMethod],
-    ["Payment Date", formatHumanDate(f.paymentDate) || f.paymentDate],
+    ["Guest Name", f.recipientName],
+    ["Phone / WhatsApp", f.guestPhone],
+    ["Number of Guests", f.guestsCount],
   ];
+
+  // ── Stay & Quotation (5-col itemized)
+  const nightlyRate = parseNum(f.nightlyRate);
+  const accommodation = nightlyRate * nights;
+  const cleaning = parseNum(f.cleaningFee);
+  const deposit = parseNum(f.securityDeposit);
+  const subtotal = accommodation + cleaning + deposit;
+  const amountPaid = parseNum(f.amountPaid);
+  const balance = Math.max(0, subtotal - amountPaid);
+
+  const qRow = (item: string, dates: string, qty: string, rate: string, amount: string, opts?: { strong?: boolean; accent?: boolean }) => {
+    const bg = opts?.accent ? `${GOLD}1A` : "#FDFBF7";
+    const fw = opts?.strong ? "700" : "400";
+    return `
+      <tr style="background:${bg};">
+        <td style="padding:8px 10px;border:1px solid ${GOLD}33;font-size:11.5px;color:${INK};font-weight:${opts?.strong ? "700" : "600"};">${esc(item)}</td>
+        <td style="padding:8px 10px;border:1px solid ${GOLD}33;font-size:11px;color:${INK};">${esc(dates)}</td>
+        <td style="padding:8px 10px;border:1px solid ${GOLD}33;font-size:11px;color:${INK};text-align:center;">${esc(qty)}</td>
+        <td style="padding:8px 10px;border:1px solid ${GOLD}33;font-size:11px;color:${INK};text-align:right;">${esc(rate)}</td>
+        <td style="padding:8px 10px;border:1px solid ${GOLD}33;font-size:11.5px;color:${INK};text-align:right;font-weight:${fw};">${esc(amount)}</td>
+      </tr>`;
+  };
+
+  const quotation = `
+    <table style="border-collapse:collapse;width:100%;margin:6px 0 18px;font-family:Inter,system-ui,sans-serif;">
+      <thead>
+        <tr>
+          <th colspan="5" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
+            Stay &amp; Quotation
+          </th>
+        </tr>
+        <tr style="background:${CHAMPAGNE};">
+          <th style="padding:7px 10px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:${INK};text-align:left;">Item</th>
+          <th style="padding:7px 10px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:${INK};text-align:left;">Dates</th>
+          <th style="padding:7px 10px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:${INK};text-align:center;">Qty</th>
+          <th style="padding:7px 10px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:${INK};text-align:right;">Rate (AED)</th>
+          <th style="padding:7px 10px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:${INK};text-align:right;">Amount (AED)</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${qRow(
+          "Accommodation",
+          checkIn && checkOut ? `${checkIn} → ${checkOut}` : "—",
+          nights ? `${nights} ${nights === 1 ? "night" : "nights"}` : "—",
+          nightlyRate ? fmtAED(nightlyRate) : "—",
+          accommodation ? fmtAED(accommodation) : "—",
+        )}
+        ${cleaning ? qRow("Cleaning Fee", "—", "—", "—", fmtAED(cleaning)) : ""}
+        ${deposit ? qRow("Security Deposit (refundable)", "—", "—", "—", fmtAED(deposit)) : ""}
+        ${qRow("Subtotal", "", "", "", fmtAED(subtotal), { strong: true })}
+        ${qRow(
+          "Amount Paid",
+          [
+            formatHumanDate(f.paymentDate) || f.paymentDate || "",
+            f.paymentMethod ? `via ${f.paymentMethod}` : "",
+            f.paymentStatus || "",
+          ].filter(Boolean).join(" · ") || "—",
+          "",
+          "",
+          amountPaid ? `(${fmtAED(amountPaid)})` : "—",
+          { strong: true },
+        )}
+        ${qRow(
+          "Balance Due",
+          f.balanceDueDate ? `due ${formatHumanDate(f.balanceDueDate) || f.balanceDueDate}` : (balance ? "due on arrival" : "—"),
+          "",
+          "",
+          fmtAED(balance),
+          { strong: true, accent: true },
+        )}
+      </tbody>
+    </table>`;
 
   const guestName = esc(f.recipientName || "Valued Guest");
   const greeting = `
     <div style="margin:8px 0 16px;font-size:12.5px;color:${INK};line-height:1.7;">
       <p style="margin:0 0 10px;">Dear ${guestName},</p>
       <p style="margin:0 0 10px;"><strong>Greetings from JBJ GLOBAL REAL ESTATE.</strong> Thank you for choosing our residence for your stay — it is our privilege to host you.</p>
-      <p style="margin:0 0 10px;">We sincerely hope you enjoy your stay with us. Please find below the full reservation details and the binding terms of your booking.</p>
+      <p style="margin:0 0 10px;">We sincerely hope you enjoy your time with us. Please find your full booking details, itemised quotation and the binding terms of your reservation below.</p>
     </div>`;
 
-  // Pre-filled premium T&Cs — NON-refundable, JBJ liability fully waived.
+  const summaryHeading = `
+    <div style="margin:14px 0 6px;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;">
+      Booking Details
+    </div>`;
+
+  // Pre-filled premium T&Cs — NON-refundable, JBJ liability fully waived,
+  // strengthened damage / overstay / guest-conduct / policy-adherence clauses.
   const terms = `
-    <div style="margin:18px 0 8px;">
+    <div style="margin:18px 0 8px;page-break-inside:avoid;">
       <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;">
         Terms &amp; Conditions — Guest Declaration
       </div>
@@ -437,10 +530,12 @@ function composeHolidayHome(input: ComposerInput): string {
         <li style="margin-bottom:6px;"><strong>Non-Refundable Booking.</strong> The Guest acknowledges that the total amount paid above is <strong>strictly non-refundable</strong> under any circumstances, including but not limited to cancellation, no-show, early check-out, travel disruption, visa issues, illness, change of plans or force-majeure events. The unit has been reserved and removed from public availability solely for the Guest.</li>
         <li style="margin-bottom:6px;"><strong>No Refund · No Credit.</strong> No partial refund, monetary credit, date change, transfer, or substitution will be issued once payment is received. The Guest expressly waives any right to claim a refund.</li>
         <li style="margin-bottom:6px;"><strong>Full Release of Liability.</strong> The Guest hereby <strong>fully releases, indemnifies and holds harmless JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>, its owners, officers, employees, agents and affiliates from any and all liability, claims, damages, losses, theft, personal injury, property damage, illness, or any consequential loss arising before, during or after the stay. JBJ GLOBAL REAL ESTATE acts solely as a booking facilitator and assumes <strong>no responsibility</strong> for the condition, suitability, services, utilities, neighbours, building management, or any incident occurring on the premises.</li>
-        <li style="margin-bottom:6px;"><strong>Guest Responsibility.</strong> The Guest is fully responsible for: (a) their personal belongings and valuables; (b) the conduct of all occupants and visitors; (c) any damage caused to the unit, furniture, fixtures or common areas; (d) compliance with building rules, UAE laws, and community by-laws; (e) settling all utility overages, fines or municipality penalties incurred during the stay.</li>
+        <li style="margin-bottom:6px;"><strong>Damage &amp; Property Condition.</strong> The Guest is <strong>fully liable for the full cost of repair or replacement</strong> of any damage, breakage, loss or theft affecting the unit, furniture, appliances, fixtures, finishes or common areas — whether caused by the Guest, their co-occupants, their visitors, or any person admitted by the Guest. Damages are charged at full market / replacement cost <strong>plus a 15% handling fee</strong>, deducted from the security deposit and, where insufficient, invoiced separately and payable within seven (7) days.</li>
+        <li style="margin-bottom:6px;"><strong>Overstay &amp; Unauthorised Occupation.</strong> If the Guest fails to vacate at the agreed check-out time without prior written extension, the Guest shall pay (i) <strong>AED 1,500 per day or 2× the nightly rate, whichever is higher</strong>, as liquidated damages, and (ii) all legal, eviction, locksmith and enforcement costs. The Guest <strong>expressly consents to JBJ initiating eviction, police and Dubai Courts proceedings</strong>, and acknowledges that overstaying constitutes unlawful occupation under UAE law.</li>
+        <li style="margin-bottom:6px;"><strong>Conduct of Guests &amp; Visitors.</strong> The Guest is <strong>fully responsible for the conduct, safety and compliance of every co-occupant and visitor</strong> admitted to the property, and indemnifies JBJ against any claim arising from their actions. Maximum occupancy stated above may not be exceeded; subletting, re-listing or commercial use is strictly prohibited.</li>
+        <li style="margin-bottom:6px;"><strong>House Rules &amp; Policy Adherence.</strong> The Guest agrees to <strong>read, respect and abide by all house rules, building by-laws, community regulations and UAE laws</strong> at all times. No parties, no events, no smoking indoors, no unregistered guests, no pets unless explicitly approved in writing. Quiet hours 10:00 PM – 8:00 AM. Violations result in immediate eviction with no refund and full liability for any resulting damages.</li>
         <li style="margin-bottom:6px;"><strong>Check-in / Check-out.</strong> Check-in 3:00 PM · Check-out 12:00 PM. Late check-out is charged at one (1) additional night. Keys must be returned in person or via the secure key-box. Lost keys / access cards are charged at cost.</li>
-        <li style="margin-bottom:6px;"><strong>House Rules.</strong> No parties, no events, no smoking indoors, no unregistered guests, no pets unless explicitly approved in writing. Quiet hours 10:00 PM – 8:00 AM. Violations result in immediate eviction with no refund.</li>
-        <li style="margin-bottom:6px;"><strong>Security Deposit.</strong> A refundable security deposit (if collected separately) is returned within fourteen (14) days post check-out subject to inspection and deduction of any damages, missing items or cleaning fees.</li>
+        <li style="margin-bottom:6px;"><strong>Security Deposit.</strong> A refundable security deposit (where collected) is returned within fourteen (14) days post check-out subject to inspection and deduction of any damages, missing items, cleaning fees or unpaid charges.</li>
         <li style="margin-bottom:6px;"><strong>Governing Law.</strong> This Agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai. Any dispute is subject to the exclusive jurisdiction of Dubai Courts.</li>
         <li style="margin-bottom:6px;"><strong>Acknowledgement.</strong> By signing below, the Guest confirms they have <strong>read, understood and accepted</strong> all terms above, and that payment has been made <strong>voluntarily and irrevocably</strong>.</li>
       </ol>
@@ -448,9 +543,11 @@ function composeHolidayHome(input: ComposerInput): string {
 
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
-    subjectLine(`Holiday Home Booking Agreement${f.bookingRef ? ` — ${f.bookingRef}` : ""}`),
+    subjectLine(`Holiday Home Booking Agreement — ${bookingId}`),
     greeting,
-    termsTable(reservation),
+    summaryHeading,
+    termsTable(summaryRows),
+    quotation,
     terms,
     paragraphs(input.aiClosing),
     signatureBlock({
@@ -458,13 +555,14 @@ function composeHolidayHome(input: ComposerInput): string {
       ownerTitle: input.ownerTitle,
       ownerDate: input.ownerDate,
       applicantName: f.recipientName,
-      // ID/passport intentionally omitted for holiday home guests
       applicantDate: input.applicantDate,
       applicantLabel: "Client Signature",
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
 }
+
+
 
 /* ───────────── Facility Management Agreement ───────────── */
 
