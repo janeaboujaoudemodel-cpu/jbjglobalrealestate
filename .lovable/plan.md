@@ -1,42 +1,75 @@
+# Careers Portal — Full Restructure Plan
 
-I'll split this into 4 sequential batches. Each batch ships independently so you can QA before the next one starts. Tell me which batch to start with (or "all in order").
-
-## Batch 1 — Public /join wizard + branding sweep (FAST, ~1 pass)
-1. **Wizard step sync bug**: `ApplicationProgress` currently shows step 1 even when on step 5. Fix `activeStep` prop wiring in `JoinApplication.tsx` so clicking a pill jumps to that step, header reads "Step N of 5 — {label}", and progress % = max(validity, (activeStep+1)/5).
-2. **Active vs inactive contrast**: active pill = solid navy `#102540` + white text/icon (force via inline style, bypass contrast guard). Inactive = cream `#F7F2EA` + ink `#1A1A1A` + visible champagne border. Completed = navy check tick (not faded gold).
-3. **Brand sweep**: repo-wide replace `JBJ Global` → `JBJ GLOBAL REAL ESTATE` (job cards, footer, email templates, form labels, badges). Excludes code identifiers/URLs.
-4. **Copy fix**: "Every section above reflects current JBJ operations — not a robot." → "Every section above reflects current JBJ Global Real Estate operations — not a roadmap."
-5. **Fix runtime error**: `CareersPortal.tsx` fails to dynamically import — repair or stub the export so the route stops 500'ing.
-
-## Batch 2 — Job lifecycle states (public + admin)
-1. Extend `open_positions` with `status` enum: `open | urgent | paused | closed | hidden | featured` + `application_cap` + `applications_count`.
-2. Public `/careers` card: when status ≠ open/urgent/featured, replace "Apply" with disabled "Applications Closed" pill. Show "Urgent Hiring" / "Featured" ribbons.
-3. Owner Careers Portal → **Open Positions** tab: full CRUD with status dropdown, cap, featured toggle. (AI JD generation already in plan.md Part 2c — kept.)
-
-## Batch 3 — Applications + CV + Status pipeline backend
-1. **Applications Received** section in Careers Portal: list `hr_applications` (existing table) with filters (role, status, date, nationality, language, source). Drawer view + status changer.
-2. **CVs Received** section: list `hr_cv_submissions`, in-platform PDF preview, download, link to applicant, "AI Summarize CV" button (Lovable AI Gateway, `google/gemini-2.5-flash`).
-3. **Status enum** on `hr_applications`: `new | cv_received | pending_review | shortlisted | interview_scheduled | interview_completed | approved | rejected | kept_in_records | position_closed`. Status change writes `admin_edit_log` (Owner Provenance standard).
-4. **Email templates**: seed 10 templates in existing `email_template_library` (category `careers`, audience `candidate`) — one per status. Status-change drawer has "Send templated email" with AI rewrite (uses existing `send-transactional-email` infra). NO new email system.
-5. Hook public `/join` submit to write both `hr_applications` row + `hr_cv_submissions` row + uploaded CV to existing storage bucket, set status=`new`, fire `application-received` template.
-
-## Batch 4 — Jessica candidate interview product (largest)
-1. New public route `/careers/interview/:applicationId` (NOT `/hr-agent` which is owner-only).
-2. UI: video-call shell with Jessica avatar (left), candidate camera tile (right, opt-in via `getUserMedia`), live transcript pane, text input + push-to-talk mic.
-3. New edge function `careers-jessica-interview`: streams from Lovable AI Gateway (`google/gemini-2.5-pro`), system prompt loaded per-job (role, seniority, must-haves). Asks 6–10 role-specific questions, asks for CV if missing, scores 0–100, returns recommendation (`strong_yes | yes | maybe | no`).
-4. New table `hr_interview_sessions`: `application_id`, `transcript jsonb`, `score`, `recommendation`, `summary`, `started_at`, `ended_at`, `consent_camera`, `consent_mic`. RLS: candidate sees own (by application token), owner sees all.
-5. On finish: auto-update `hr_applications.status` → `interview_completed`, attach summary to applicant profile, notify owner inbox.
-6. "Start Conversation" buttons on `/careers` and the Jessica panel route here (NOT `/hr-agent`).
-
-## Out of scope (will refuse if mixed in)
-- Building a second careers admin, second CV store, or second email provider — all wiring goes through existing `hr_*` tables, `email_template_library`, and `send-transactional-email`.
-- Changing the global Champagne-Gold / Black-CTA-to-Navy standards.
+This work is too large for one batch. Below is a sequenced plan. Each phase ends with screenshots + your QA before the next starts. Nothing fake. Nothing duplicated. Everything wired into existing systems.
 
 ---
 
-**Please reply with one of:**
-- `batch 1` / `batch 2` / `batch 3` / `batch 4`
-- `all in order` (I'll ship 1 → 2 → 3 → 4 across separate turns, pausing for your QA between each)
-- specific edits to the plan
+## Phase 0 — Audit (READ-ONLY, no code changes)
 
-I will NOT start coding Batch 4 (Jessica interview) before Batches 1–3 are merged, because Jessica writes into the `hr_applications` row created in Batch 3.
+Before deleting or building anything, I produce a written audit you approve:
+
+1. **Inventory existing systems** — every table, edge function, component, route related to: CVs, applicants, employees, payroll, warnings, contracts, templates, email, chat, approvals, LinkedIn, DocuSign.
+2. **Duplication map** — which modules duplicate which (e.g. two CV pipelines, two offer systems, two payroll tables).
+3. **Fake-data inventory** — every hardcoded stat (AED 18,500, fake competitors, fake LinkedIn counts, fake InMail, etc.) with file + line.
+4. **Broken-wire map** — Jessica AI role detection, employee chat persona bug, approvals not syncing Abdulrahman, etc.
+5. **Reuse decisions** — for each of the 16 target tabs, which existing module is the canonical one and which get deleted/redirected.
+
+Deliverable: a single markdown audit document. You approve the "keep / merge / delete" decisions before Phase 1.
+
+---
+
+## Phase 1 — Shell + Deduplication
+
+- Collapse Careers Portal to the 16 approved top-level tabs.
+- Redirect/delete duplicate routes (no orphaned pages, all links preserved per No-Removal policy → redirected, not deleted).
+- Remove every piece of fabricated data identified in Phase 0; replace with luxury empty states ("No data yet", "Connect LinkedIn", "Awaiting synchronization").
+- No new features yet. Just structure + truth.
+
+---
+
+## Phase 2 — Fix the broken-but-existing systems
+
+In this order, one sub-batch at a time with QA pause between each:
+
+1. **Employee Chat persona bug** (selecting Richard shows Jane) — fix state/routing.
+2. **Jessica AI role detection** — owner never gets applicant flow; route by `crm_role`.
+3. **Approvals sync** — multi-stage flow (Recruiter → HR → Manager → Owner) wired to `hr_approval_requests`; Abdulrahman case verified.
+4. **CV Center consolidation** — single pipeline, 10 statuses already shipped in 3b-1.
+5. **Templates wiring** — connect existing branded email / offer / warning / contract templates into Offer + Warnings + Onboarding tabs (no new template engine).
+
+---
+
+## Phase 3 — New capabilities (only after Phase 2 is stable)
+
+Each is its own batch, scoped + approved separately:
+
+- **LinkedIn Recruiter integration** — requires real OAuth credentials from you. I will NOT build fake "Connect LinkedIn" UI. We need to decide: official LinkedIn Recruiter API (requires partnership approval from LinkedIn), or a Connector (Ashby/HubSpot have ATS integrations).
+- **AI Hunting engine** — Lovable AI Gateway, scoring rubric for UAE real estate roles (RERA, DLD, brokerage, languages, visa). Real candidates only; no scraping of competitor sites (legal risk + competitor-source-exclusion memory).
+- **Competitor Intelligence** — real data sources only. If none connected → empty state. No fake brokerage names.
+- **DocuSign contracts** — wire existing DocuSign integration (already in `src/pages/e-signature/`); no custom signature system.
+- **Payroll + Benchmark** — real records only; benchmark tab shows "Not connected" until a market data source is wired.
+- **Audit & Access Logs** — surface existing `admin_edit_log` + auth logs in one view.
+
+---
+
+## Decisions I need from you before Phase 0 starts
+
+1. **LinkedIn**: do you have LinkedIn Recruiter API partnership access, or should I plan around the Ashby/HubSpot connector route? (Without one of these, "one-click LinkedIn hunting" is not legally/technically possible — I won't fake it.)
+2. **Salary benchmark data source**: do you have a paid feed (Mercer, Hays, Cooper Fitch)? If not, that tab stays empty.
+3. **Competitor intelligence data source**: same question — any real feed, or empty state until one exists?
+4. **Scope of "delete duplicates"**: confirm I may redirect (not hard-delete) legacy routes like `/hr-agent`, `/owner/crm` HR sub-sections, standalone employee chat page, into the unified Careers Portal tabs.
+5. **Timeline**: this is realistically 8–12 sub-batches over multiple sessions. Confirm you want this sequenced, not crammed.
+
+---
+
+## What I will NOT do (and why)
+
+- **Will not** build any "scraper" for LinkedIn or competitor sites — violates LinkedIn ToS, competitor-source-exclusion memory, and exposes you to legal risk.
+- **Will not** build a custom e-signature system — DocuSign already integrated, memory mandates it.
+- **Will not** invent salary/benchmark/competitor numbers — your explicit instruction.
+- **Will not** rebuild existing email/template/CV/employee/approval tables — your explicit instruction.
+- **Will not** ship all 16 tabs in one batch — guaranteed to regress shipped work (3b-1, 3b-2).
+
+---
+
+Approve this plan (or tell me what to change) and answer the 5 decisions above. Then I start Phase 0 audit only — no code.
