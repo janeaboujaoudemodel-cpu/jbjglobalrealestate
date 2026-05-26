@@ -571,6 +571,17 @@ function StudioShell({
             <Stamp className="w-4 h-4 lg:mr-1.5" />
             <span className="hidden lg:inline">Stamp</span>
           </Button>
+          {template && userEdited && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={resetToTemplate}
+              title="Discard edits and re-render from template"
+            >
+              <X className="w-4 h-4 lg:mr-1.5" />
+              <span className="hidden lg:inline">Reset</span>
+            </Button>
+          )}
           {template && (
             <Button
               variant="outline"
@@ -786,18 +797,18 @@ function StudioShell({
                         <button
                           type="button"
                           onClick={() => setEditingFieldKey(isEditing ? null : f.key)}
-                          className="opacity-0 group-hover:opacity-100 text-[#1A1A1A]/55 hover:text-[#B89555]"
+                          className="text-[#1A1A1A]/60 hover:text-[#B89555] p-0.5"
                           title="Rename field"
                         >
-                          <PenLine className="w-3 h-3" />
+                          <PenLine className="w-3.5 h-3.5" />
                         </button>
                         <button
                           type="button"
                           onClick={() => hideField(f.key)}
-                          className="opacity-0 group-hover:opacity-100 text-[#1A1A1A]/55 hover:text-red-600"
+                          className="text-[#1A1A1A]/60 hover:text-red-600 p-0.5"
                           title="Remove this field from document"
                         >
-                          <Trash2 className="w-3 h-3" />
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                       {f.type === "textarea" ? (
@@ -1201,21 +1212,10 @@ function StudioShell({
                   }
                 >
                   {bodyHtml ? (
-                    <>
-                      <EditableBody
-                        html={bodyHtml}
-                        onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
-                      />
-                      {userEdited && (
-                        <button
-                          type="button"
-                          onClick={resetToTemplate}
-                          className="absolute top-2 right-2 z-20 text-[10px] uppercase tracking-[0.16em] bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] rounded-full px-2.5 py-1 hover:bg-[#EFE6D6]"
-                        >
-                          Reset to template
-                        </button>
-                      )}
-                    </>
+                    <EditableBody
+                      html={bodyHtml}
+                      onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
+                    />
                   ) : (
                     <div className="text-[12px] text-[#1A1A1A]/40 italic">
                       Empty document — type here or use the AI assistant on the right to draft the body.
@@ -1491,10 +1491,11 @@ function EditableBody({
         contentEditable
         suppressContentEditableWarning
         spellCheck
+        onInput={(e) => onChange(stripChromeArtifacts(e.currentTarget.innerHTML))}
         onBlur={(e) => onChange(stripChromeArtifacts(e.currentTarget.innerHTML))}
         onMouseUp={placeToolbar}
         onKeyUp={placeToolbar}
-        className="prose prose-sm max-w-none text-[#1A1A1A] focus:outline-none rounded-md min-h-[500px]"
+        className="prose prose-sm max-w-none text-[#1A1A1A] focus:outline-none rounded-md min-h-[500px] cursor-text"
         style={{
           fontFamily: "Inter, system-ui, sans-serif",
           lineHeight: 1.7,
