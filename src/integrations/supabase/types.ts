@@ -21816,6 +21816,50 @@ export type Database = {
           },
         ]
       }
+      market_data_runs: {
+        Row: {
+          details: Json | null
+          error_text: string | null
+          finished_at: string | null
+          id: string
+          rows_ingested: number
+          source_id: string | null
+          source_key: string
+          started_at: string
+          status: string
+        }
+        Insert: {
+          details?: Json | null
+          error_text?: string | null
+          finished_at?: string | null
+          id?: string
+          rows_ingested?: number
+          source_id?: string | null
+          source_key: string
+          started_at?: string
+          status?: string
+        }
+        Update: {
+          details?: Json | null
+          error_text?: string | null
+          finished_at?: string | null
+          id?: string
+          rows_ingested?: number
+          source_id?: string | null
+          source_key?: string
+          started_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_data_runs_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "market_data_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       market_data_sources: {
         Row: {
           api_endpoint: string | null
@@ -21861,10 +21905,13 @@ export type Database = {
       market_news: {
         Row: {
           ai_analysis: string | null
+          ai_draft: Json | null
           ai_generated: boolean | null
           category: string
           content: string | null
           created_at: string
+          edited_at: string | null
+          edited_by: string | null
           excerpt: string | null
           id: string
           image_url: string | null
@@ -21873,18 +21920,24 @@ export type Database = {
           key_stats: Json | null
           key_takeaways: Json | null
           published_date: string
+          redirect_to_source: boolean
+          slug: string | null
           source: string
           source_url: string | null
+          status: string
           tags: string[] | null
           title: string
           updated_at: string
         }
         Insert: {
           ai_analysis?: string | null
+          ai_draft?: Json | null
           ai_generated?: boolean | null
           category?: string
           content?: string | null
           created_at?: string
+          edited_at?: string | null
+          edited_by?: string | null
           excerpt?: string | null
           id?: string
           image_url?: string | null
@@ -21893,18 +21946,24 @@ export type Database = {
           key_stats?: Json | null
           key_takeaways?: Json | null
           published_date?: string
+          redirect_to_source?: boolean
+          slug?: string | null
           source: string
           source_url?: string | null
+          status?: string
           tags?: string[] | null
           title: string
           updated_at?: string
         }
         Update: {
           ai_analysis?: string | null
+          ai_draft?: Json | null
           ai_generated?: boolean | null
           category?: string
           content?: string | null
           created_at?: string
+          edited_at?: string | null
+          edited_by?: string | null
           excerpt?: string | null
           id?: string
           image_url?: string | null
@@ -21913,13 +21972,57 @@ export type Database = {
           key_stats?: Json | null
           key_takeaways?: Json | null
           published_date?: string
+          redirect_to_source?: boolean
+          slug?: string | null
           source?: string
           source_url?: string | null
+          status?: string
           tags?: string[] | null
           title?: string
           updated_at?: string
         }
         Relationships: []
+      }
+      market_news_revisions: {
+        Row: {
+          action: string
+          after_values: Json | null
+          article_id: string
+          before_values: Json | null
+          changed_fields: string[]
+          edited_at: string
+          edited_by: string | null
+          id: string
+        }
+        Insert: {
+          action: string
+          after_values?: Json | null
+          article_id: string
+          before_values?: Json | null
+          changed_fields?: string[]
+          edited_at?: string
+          edited_by?: string | null
+          id?: string
+        }
+        Update: {
+          action?: string
+          after_values?: Json | null
+          article_id?: string
+          before_values?: Json | null
+          changed_fields?: string[]
+          edited_at?: string
+          edited_by?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_news_revisions_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "market_news"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       market_opportunities: {
         Row: {
