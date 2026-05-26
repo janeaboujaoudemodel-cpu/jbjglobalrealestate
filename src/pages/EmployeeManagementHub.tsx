@@ -307,6 +307,9 @@ const EmployeeManagementHub: React.FC = () => {
                 <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
                   <Key className="w-4 h-4 mr-2" />IT Provisioning
                 </TabsTrigger>
+                <TabsTrigger value="assignments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                  <UserPlus className="w-4 h-4 mr-2" />Lead Assignments
+                </TabsTrigger>
                 <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
                   <Activity className="w-4 h-4 mr-2" />Employee Journey
                 </TabsTrigger>
