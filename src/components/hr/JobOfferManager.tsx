@@ -114,9 +114,9 @@ const JobOfferManager = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Job Offer Templates</h2>
+          <h2 className="text-2xl font-bold text-foreground">Contracts &amp; Templates</h2>
           <p className="text-muted-foreground text-sm mt-1">
-            Manage job offer templates by department for quick applicant onboarding
+            One unified template manager — job offers, employment contracts, NDAs, warning letters and more.
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={(open) => {
@@ -126,17 +126,50 @@ const JobOfferManager = () => {
           <DialogTrigger asChild>
             <Button variant="primary">
               <Plus className="w-4 h-4 mr-2" />
-              Add Job Offer
+              Add Template
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-2xl">
             <DialogHeader>
               <DialogTitle className="text-foreground">
-                {editingOffer ? 'Edit Job Offer' : 'Create Job Offer Template'}
+                {editingOffer ? 'Edit Template' : 'Create Template'}
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Template Type</Label>
+                  <Select
+                    value={formData.template_type}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, template_type: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {TEMPLATE_TYPES.map(t => (
+                        <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Department</Label>
+                  <Select
+                    value={formData.department || selectedDepartment}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, department: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {DEPARTMENTS.map(dept => (
+                        <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
                 <div className="space-y-2">
                   <Label>Department</Label>
                   <Select 
