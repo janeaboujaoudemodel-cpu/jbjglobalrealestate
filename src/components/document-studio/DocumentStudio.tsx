@@ -951,95 +951,123 @@ function StudioShell({
                 )}
 
 
-                {/* Applicant ID + Owner signature defaults */}
+                {/* Unified Signatories panel — mirrors what's rendered in the preview */}
                 <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 space-y-2">
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold mb-1">
-                    Signatories
-                  </div>
-                  <Field label="Applicant / Recipient ID No.">
-                    <Input
-                      value={fields.idNumber || ""}
-                      onChange={(e) => setField("idNumber", e.target.value)}
-                      placeholder="Emirates ID / Passport"
-                      className="bg-[#FDFBF7] h-8 text-[12px]"
-                    />
-                  </Field>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Field label="Owner Name">
-                      <Input value={ownerName} onChange={(e) => setOwnerName(e.target.value)} className="bg-[#FDFBF7] h-8 text-[12px]" />
-                    </Field>
-                    <Field label="Owner Title">
-                      <Input value={ownerTitle} onChange={(e) => setOwnerTitle(e.target.value)} className="bg-[#FDFBF7] h-8 text-[12px]" />
-                    </Field>
-                  </div>
-                  <Field label="Owner Sign Date">
-                    <Input type="date" value={ownerDate} onChange={(e) => setOwnerDate(e.target.value)} className="bg-[#FDFBF7] h-8 text-[12px]" />
-                  </Field>
-
-                  {/* Additional signatories — add / edit / delete / duplicate */}
-                  <div className="pt-2 mt-1 border-t border-[#B89555]/25 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
-                        Additional Signatories ({extraSignatories.length})
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setExtraSignatories((p) => [...p, newSig()])}
-                        className="text-[11px] text-[#1A1A1A]/70 hover:text-[#B89555] underline underline-offset-2"
-                      >
-                        + Add signatory
-                      </button>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
+                      Signatories ({2 + extraSignatories.length})
                     </div>
-                    {extraSignatories.map((s, idx) => (
-                      <div key={s.id} className="rounded border border-[#B89555]/25 bg-[#FDFBF7] p-2 space-y-1.5">
-                        <div className="flex items-center gap-1">
-                          <Input
-                            value={s.label}
-                            onChange={(e) => updateSig(s.id, { label: e.target.value })}
-                            placeholder="Label (e.g. Witness)"
-                            className="h-7 text-[11px] flex-1"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => duplicateSig(s.id)}
-                            className="text-[#1A1A1A]/60 hover:text-[#B89555] p-0.5"
-                            title="Duplicate"
-                          >
-                            <Copy className="w-3.5 h-3.5" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => removeSig(s.id)}
-                            className="text-[#1A1A1A]/60 hover:text-red-600 p-0.5"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-1.5">
-                          <Input
-                            value={s.name}
-                            onChange={(e) => updateSig(s.id, { name: e.target.value })}
-                            placeholder={`Name #${idx + 1}`}
-                            className="h-7 text-[11px]"
-                          />
-                          <Input
-                            value={s.title}
-                            onChange={(e) => updateSig(s.id, { title: e.target.value })}
-                            placeholder="Title"
-                            className="h-7 text-[11px]"
-                          />
-                        </div>
+                    <button
+                      type="button"
+                      onClick={() => setExtraSignatories((p) => [...p, newSig()])}
+                      className="text-[11px] text-[#1A1A1A]/70 hover:text-[#B89555] underline underline-offset-2"
+                    >
+                      + Add signatory
+                    </button>
+                  </div>
+
+                  {/* 1 — Company (locked) */}
+                  <div
+                    className="rounded border border-[#B89555]/25 bg-[#FDFBF7] p-2 space-y-1.5 cursor-pointer hover:ring-1 hover:ring-[#B89555]/40"
+                    onClick={() => highlightSig("owner")}
+                  >
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
+                      1 — JBJ GLOBAL REAL ESTATE <span className="text-[#1A1A1A]/40 normal-case tracking-normal">(locked)</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      <Input value={ownerName} onChange={(e) => setOwnerName(e.target.value)} placeholder="Owner Name" className="bg-[#FDFBF7] h-7 text-[11px]" />
+                      <Input value={ownerTitle} onChange={(e) => setOwnerTitle(e.target.value)} placeholder="Title" className="bg-[#FDFBF7] h-7 text-[11px]" />
+                    </div>
+                    <Input type="date" value={ownerDate} onChange={(e) => setOwnerDate(e.target.value)} className="bg-[#FDFBF7] h-7 text-[11px]" />
+                  </div>
+
+                  {/* 2 — Recipient (locked) */}
+                  <div
+                    className="rounded border border-[#B89555]/25 bg-[#FDFBF7] p-2 space-y-1.5 cursor-pointer hover:ring-1 hover:ring-[#B89555]/40"
+                    onClick={() => highlightSig("recipient")}
+                  >
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
+                      2 — Recipient / Counterparty <span className="text-[#1A1A1A]/40 normal-case tracking-normal">(locked)</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      <Input
+                        value={fields.recipientName || ""}
+                        onChange={(e) => setField("recipientName", e.target.value)}
+                        placeholder="Recipient Name"
+                        className="bg-[#FDFBF7] h-7 text-[11px]"
+                      />
+                      <Input
+                        value={fields.idNumber || ""}
+                        onChange={(e) => setField("idNumber", e.target.value)}
+                        placeholder="Emirates ID / Passport"
+                        className="bg-[#FDFBF7] h-7 text-[11px]"
+                      />
+                    </div>
+                    <Input type="date" value={applicantDate} onChange={(e) => setApplicantDate(e.target.value)} className="bg-[#FDFBF7] h-7 text-[11px]" />
+                  </div>
+
+                  {/* 3..N — Extras */}
+                  {extraSignatories.map((s, idx) => (
+                    <div
+                      key={s.id}
+                      className="rounded border border-[#B89555]/25 bg-[#FDFBF7] p-2 space-y-1.5 cursor-pointer hover:ring-1 hover:ring-[#B89555]/40"
+                      onClick={() => highlightSig(`extra-${idx}`)}
+                    >
+                      <div className="flex items-center gap-1">
+                        <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold whitespace-nowrap">
+                          {idx + 3} —
+                        </span>
                         <Input
-                          type="date"
-                          value={s.date}
-                          onChange={(e) => updateSig(s.id, { date: e.target.value })}
+                          value={s.label}
+                          onChange={(e) => updateSig(s.id, { label: e.target.value })}
+                          placeholder="Label (e.g. Witness)"
+                          className="h-7 text-[11px] flex-1"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); duplicateSig(s.id); }}
+                          className="text-[#1A1A1A]/60 hover:text-[#B89555] p-0.5"
+                          title="Duplicate"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); removeSig(s.id); }}
+                          className="text-[#1A1A1A]/60 hover:text-red-600 p-0.5"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        <Input
+                          value={s.name}
+                          onChange={(e) => updateSig(s.id, { name: e.target.value })}
+                          placeholder={`Name #${idx + 1}`}
                           className="h-7 text-[11px]"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <Input
+                          value={s.title}
+                          onChange={(e) => updateSig(s.id, { title: e.target.value })}
+                          placeholder="Title"
+                          className="h-7 text-[11px]"
+                          onClick={(e) => e.stopPropagation()}
                         />
                       </div>
-                    ))}
-                  </div>
+                      <Input
+                        type="date"
+                        value={s.date}
+                        onChange={(e) => updateSig(s.id, { date: e.target.value })}
+                        className="h-7 text-[11px]"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    </div>
+                  ))}
                 </div>
+
 
                 {/* AI auto-fill from pasted details / attached document */}
                 <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 space-y-2">
