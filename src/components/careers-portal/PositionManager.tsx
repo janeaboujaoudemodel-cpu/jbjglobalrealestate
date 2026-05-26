@@ -10,8 +10,19 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Sparkles, Plus, Pencil, Trash2, Archive, RefreshCw, Wand2, Eye, EyeOff, Loader2,
+  Star, Flame, Pause, XCircle, EyeOff as Hide, CircleDot,
 } from "lucide-react";
 import { toast } from "sonner";
+
+type JobStatus = "open" | "urgent" | "paused" | "closed" | "hidden";
+
+const STATUS_META: Record<JobStatus, { label: string; icon: any; pill: string }> = {
+  open:    { label: "Open",          icon: CircleDot, pill: "bg-[#E8F4EC] text-[#1F6B3A] border-[#1F6B3A]/40" },
+  urgent:  { label: "Urgent Hiring", icon: Flame,     pill: "bg-[#FEF3F2] text-[#C04A2B] border-[#C04A2B]/50" },
+  paused:  { label: "Paused",        icon: Pause,     pill: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60" },
+  closed:  { label: "Closed",        icon: XCircle,   pill: "bg-[#EFE6D6] text-[#1A1A1A] border-[#1A1A1A]/40" },
+  hidden:  { label: "Hidden",        icon: Hide,      pill: "bg-[#1A1A1A] text-white border-[#B89555]/40" },
+};
 
 interface Position {
   id: string;
@@ -28,6 +39,10 @@ interface Position {
   ai_generated: boolean | null;
   archived_at: string | null;
   created_at: string;
+  status: JobStatus | null;
+  is_featured: boolean | null;
+  application_cap: number | null;
+  applications_count: number | null;
 }
 
 interface FormState {
@@ -40,7 +55,9 @@ interface FormState {
   salary_band: string;
   description: string;
   requirements: string[];
-  is_active: boolean;
+  status: JobStatus;
+  is_featured: boolean;
+  application_cap: string;
   ai_generated: boolean;
 }
 
@@ -53,7 +70,9 @@ const EMPTY_FORM: FormState = {
   salary_band: "",
   description: "",
   requirements: [],
-  is_active: true,
+  status: "open",
+  is_featured: false,
+  application_cap: "",
   ai_generated: false,
 };
 
