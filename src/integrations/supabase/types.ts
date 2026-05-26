@@ -37929,7 +37929,17 @@ export type Database = {
         | "declined"
         | "awaiting_signed_return"
       event_approval_status: "draft" | "submitted" | "approved" | "rejected"
-      hr_application_status: "pending" | "approved" | "rejected"
+      hr_application_status:
+        | "pending"
+        | "approved"
+        | "rejected"
+        | "cv_received"
+        | "pending_review"
+        | "shortlisted"
+        | "interview_scheduled"
+        | "interview_completed"
+        | "kept_in_records"
+        | "position_closed"
       hr_module_track: "company_knowledge" | "real_estate_basics"
       hr_question_type: "mcq" | "true_false" | "short_answer"
       hr_role: "broker_candidate" | "broker_member"
@@ -38569,7 +38579,18 @@ export const Constants = {
         "awaiting_signed_return",
       ],
       event_approval_status: ["draft", "submitted", "approved", "rejected"],
-      hr_application_status: ["pending", "approved", "rejected"],
+      hr_application_status: [
+        "pending",
+        "approved",
+        "rejected",
+        "cv_received",
+        "pending_review",
+        "shortlisted",
+        "interview_scheduled",
+        "interview_completed",
+        "kept_in_records",
+        "position_closed",
+      ],
       hr_module_track: ["company_knowledge", "real_estate_basics"],
       hr_question_type: ["mcq", "true_false", "short_answer"],
       hr_role: ["broker_candidate", "broker_member"],
