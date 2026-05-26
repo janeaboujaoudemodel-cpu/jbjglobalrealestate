@@ -711,7 +711,14 @@ function StudioShell({
                 }}
               >
                 <LockedLetterhead />
-                <div className="relative px-12 py-10 bg-[#FDFBF7]" style={{ minHeight: bodyHtml ? 0 : 420 }}>
+                <div
+                  className="relative px-12 py-10 bg-[#FDFBF7]"
+                  style={
+                    pages === "auto"
+                      ? { minHeight: bodyHtml ? 600 : 420 }
+                      : { height: 1056 * (pages as number) - 220, minHeight: 420 }
+                  }
+                >
                   {bodyHtml ? (
                     <EditableBody html={bodyHtml} onChange={setBodyHtml} />
                   ) : (
