@@ -62,27 +62,21 @@ export function buildPrintableHtml(bodyHtml: string, marks: DocumentMarks): stri
 /* ───────────────────────── Shared HTML → Canvas render ───────────────────────── */
 
 /**
- * Capture the LIVE preview element so the exported PDF/PNG is a 1:1
- * pixel-perfect copy of what the user sees on screen. The element is
- * cloned, its CSS transform is stripped, and it is rendered off-screen
- * at the canonical 816px width so html2canvas captures the full A4 page
- * regardless of the current zoom / auto-fit scale.
+ * Capture the LIVE preview page in-place. The page is already a hard
+ * 816×N rectangle (where N = 1154 × pageCount), with header + body + footer
+ * laid out in a flex column. We strip ONLY the on-screen scale transform
+ * (so html2canvas captures the page at its true 816-px width) and restore
+ * everything in a try/finally so the preview is untouched.
  */
 async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> {
   const { default: html2canvas } = await import("html2canvas");
 
-  // Capture the LIVE element in-place so all computed Tailwind styles,
-  // flex layouts and inherited fonts render identically to the preview.
-  // We only neutralise the on-screen scale/transform around the capture,
-  // then restore everything afterwards.
   const prev = {
     transform: el.style.transform,
     transformOrigin: el.style.transformOrigin,
-    width: el.style.width,
     boxShadow: el.style.boxShadow,
     borderRadius: el.style.borderRadius,
   };
-  // Hide the drag chrome (× buttons + guide lines) during capture only.
   const hidden: { node: HTMLElement; prevDisplay: string }[] = [];
   el.querySelectorAll<HTMLElement>('[aria-label="Remove field"],[data-drag-guide="true"]').forEach((n) => {
     hidden.push({ node: n, prevDisplay: n.style.display });
@@ -91,9 +85,11 @@ async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> 
 
   el.style.transform = "none";
   el.style.transformOrigin = "top left";
-  el.style.width = "816px";
   el.style.boxShadow = "none";
   el.style.borderRadius = "0";
+
+  const widthPx = el.offsetWidth || 816;
+  const heightPx = el.offsetHeight || 1154;
 
   try {
     return await html2canvas(el, {
@@ -102,8 +98,10 @@ async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> 
       useCORS: true,
       allowTaint: false,
       logging: false,
-      width: 816,
-      windowWidth: 816,
+      width: widthPx,
+      height: heightPx,
+      windowWidth: widthPx,
+      windowHeight: heightPx,
       ignoreElements: (e) =>
         e.tagName === "SCRIPT" ||
         (e instanceof HTMLElement &&
@@ -113,7 +111,6 @@ async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> 
   } finally {
     el.style.transform = prev.transform;
     el.style.transformOrigin = prev.transformOrigin;
-    el.style.width = prev.width;
     el.style.boxShadow = prev.boxShadow;
     el.style.borderRadius = prev.borderRadius;
     hidden.forEach(({ node, prevDisplay }) => { node.style.display = prevDisplay; });
@@ -144,34 +141,20 @@ export async function exportPdf(
   const canvas = sourceElement
     ? await renderElementCanvas(sourceElement)
     : await renderHostCanvas(bodyHtml, marks);
-  const imgData = canvas.toDataURL("image/jpeg", 0.95);
 
-  // A4 in mm.
+  // Page geometry: A4 in mm, plus the captured canvas dimensions.
   const A4_W = 210;
   const A4_H = 297;
-  const imgW = A4_W;
-  const imgH = (canvas.height * imgW) / canvas.width;
-
-  // Single-page document: use a custom page size that matches the captured
-  // canvas EXACTLY so the export is pixel-identical to the preview with no
-  // blank strip above or below the footer. We never go narrower than A4 width
-  // and never go taller than A4 height (in which case we slice into multiple
-  // A4 pages below).
-  if (imgH <= A4_H + 0.5) {
-    const pageH = Math.max(imgH, 1); // never zero
-    const pdf = new jsPDF({ unit: "mm", format: [A4_W, pageH], compress: true });
-    pdf.addImage(imgData, "JPEG", 0, 0, A4_W, pageH);
-    pdf.save(fileName(template, "pdf"));
-    return;
-  }
-
-  // Multi-page: real A4 pages, slice the canvas at A4 height boundaries.
   const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
-  const pxPerMm = canvas.width / A4_W;
-  const sliceHpx = Math.floor(A4_H * pxPerMm);
+
+  // Slice the captured canvas into one or more A4 pages. Each page is
+  // a hard A4 rectangle in the source (816 × 1154 css px per page),
+  // so we slice on (canvas.width × canvas.width * A4_H / A4_W).
+  const sliceHpx = Math.round((canvas.width * A4_H) / A4_W);
   const sliceCanvas = document.createElement("canvas");
   const ctx = sliceCanvas.getContext("2d")!;
   sliceCanvas.width = canvas.width;
+
   let yOffset = 0;
   let first = true;
   while (yOffset < canvas.height) {
@@ -182,13 +165,16 @@ export async function exportPdf(
     ctx.drawImage(canvas, 0, yOffset, canvas.width, h, 0, 0, canvas.width, h);
     const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.95);
     if (!first) pdf.addPage();
-    const sH = (h * imgW) / canvas.width;
-    pdf.addImage(sliceData, "JPEG", 0, 0, imgW, sH);
+    // Map the slice height proportionally so the last (shorter) slice
+    // is not stretched to fill the A4 page.
+    const sH = (h * A4_W) / canvas.width;
+    pdf.addImage(sliceData, "JPEG", 0, 0, A4_W, sH);
     first = false;
     yOffset += h;
   }
   pdf.save(fileName(template, "pdf"));
 }
+
 
 /* ───────────────────────── PNG ───────────────────────── */
 
