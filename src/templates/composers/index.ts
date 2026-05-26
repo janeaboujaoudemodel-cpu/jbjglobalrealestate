@@ -177,7 +177,7 @@ export function signatureBlock(opts: {
   ].join("");
 
   const extras = (opts.extraSignatories || []).filter(
-    (s) => (s?.name || "").trim() || (s?.title || "").trim() || (s?.date || "").trim() || (s?.label || "").trim(),
+    (s) => (s?.name || "").trim() || (s?.title || "").trim() || (s?.date || "").trim(),
   );
   const extraRows: string[] = [];
   for (let i = 0; i < extras.length; i += 2) {

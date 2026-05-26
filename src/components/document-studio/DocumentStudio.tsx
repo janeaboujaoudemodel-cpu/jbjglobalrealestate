@@ -156,7 +156,7 @@ function StudioShell({
 
   // Additional signatories (beyond the default Owner + Counterparty).
   type ExtraSig = { id: string; name: string; title: string; date: string; label: string };
-  const newSig = (): ExtraSig => ({ id: Math.random().toString(36).slice(2, 9), name: "", title: "", date: "", label: "Additional Signatory" });
+  const newSig = (): ExtraSig => ({ id: Math.random().toString(36).slice(2, 9), name: "", title: "", date: "", label: "" });
   const [extraSignatories, setExtraSignatories] = useState<ExtraSig[]>([]);
   const updateSig = (id: string, patch: Partial<ExtraSig>) =>
     setExtraSignatories((p) => p.map((s) => (s.id === id ? { ...s, ...patch } : s)));
@@ -426,6 +426,7 @@ function StudioShell({
   const handleSelectTemplate = (id: string) => {
     setTemplateId(id);
     setFields({});
+    setExtraSignatories([]);
     autoBodyRef.current = "";
     userEditedRef.current = false;
     setUserEdited(false);
