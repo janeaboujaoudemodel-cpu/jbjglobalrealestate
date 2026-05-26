@@ -673,36 +673,111 @@ function StudioShell({
                   </Field>
                 )}
 
-                {template.fields.map((f) => (
-                  <Field key={f.key} label={f.label} required={f.required}>
-                    {f.type === "textarea" ? (
-                      <Textarea
-                        value={fields[f.key] || ""}
-                        onChange={(e) => setField(f.key, e.target.value)}
-                        placeholder={f.placeholder}
-                        rows={3}
-                        className="bg-[#FDFBF7] resize-none"
-                      />
-                    ) : f.type === "select" ? (
-                      <Select value={fields[f.key] || ""} onValueChange={(v) => setField(f.key, v)}>
-                        <SelectTrigger className="bg-[#FDFBF7]"><SelectValue placeholder="Select…" /></SelectTrigger>
-                        <SelectContent className="z-[2147483647] bg-[#FDFBF7]">
-                          {f.options?.map((o) => (
-                            <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    ) : (
-                      <Input
-                        type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"}
-                        value={fields[f.key] || ""}
-                        onChange={(e) => setField(f.key, e.target.value)}
-                        placeholder={f.placeholder}
-                        className="bg-[#FDFBF7]"
-                      />
-                    )}
-                  </Field>
-                ))}
+                {savedTemplates.filter((s) => s.base_template_id === template.id).length > 0 && (
+                  <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 space-y-1.5">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold mb-1">
+                      My Saved Versions
+                    </div>
+                    {savedTemplates.filter((s) => s.base_template_id === template.id).map((s) => (
+                      <div key={s.id} className="flex items-center gap-1.5 group">
+                        <button
+                          type="button"
+                          onClick={() => applySavedTemplate(s)}
+                          className="flex-1 text-left text-[12px] text-[#1A1A1A] hover:text-[#B89555] truncate"
+                        >
+                          {s.name}{s.is_default && <span className="text-[10px] text-[#B89555] ml-1">★ default</span>}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => deleteSavedTemplate(s.id)}
+                          className="opacity-0 group-hover:opacity-100 text-[#1A1A1A]/55 hover:text-red-600"
+                          title="Delete saved template"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {template.fields.filter((f) => !hiddenFieldKeys.has(f.key)).map((f) => {
+                  const label = fieldLabelOverrides[f.key] ?? f.label;
+                  const isEditing = editingFieldKey === f.key;
+                  return (
+                    <div key={f.key}>
+                      <div className="flex items-center gap-1 mb-1.5 group">
+                        {isEditing ? (
+                          <Input
+                            autoFocus
+                            value={label}
+                            onChange={(e) => setFieldLabelOverrides((p) => ({ ...p, [f.key]: e.target.value }))}
+                            onBlur={() => setEditingFieldKey(null)}
+                            onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") setEditingFieldKey(null); }}
+                            className="h-6 text-[10px] uppercase tracking-[0.18em] flex-1"
+                          />
+                        ) : (
+                          <Label className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 flex-1">
+                            {label}
+                            {f.required && <span className="text-red-600 ml-1">*</span>}
+                          </Label>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setEditingFieldKey(isEditing ? null : f.key)}
+                          className="opacity-0 group-hover:opacity-100 text-[#1A1A1A]/55 hover:text-[#B89555]"
+                          title="Rename field"
+                        >
+                          <PenLine className="w-3 h-3" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => hideField(f.key)}
+                          className="opacity-0 group-hover:opacity-100 text-[#1A1A1A]/55 hover:text-red-600"
+                          title="Remove this field from document"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                      {f.type === "textarea" ? (
+                        <Textarea
+                          value={fields[f.key] || ""}
+                          onChange={(e) => setField(f.key, e.target.value)}
+                          placeholder={f.placeholder}
+                          rows={3}
+                          className="bg-[#FDFBF7] resize-none"
+                        />
+                      ) : f.type === "select" ? (
+                        <Select value={fields[f.key] || ""} onValueChange={(v) => setField(f.key, v)}>
+                          <SelectTrigger className="bg-[#FDFBF7]"><SelectValue placeholder="Select…" /></SelectTrigger>
+                          <SelectContent className="z-[2147483647] bg-[#FDFBF7]">
+                            {f.options?.map((o) => (
+                              <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Input
+                          type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"}
+                          value={fields[f.key] || ""}
+                          onChange={(e) => setField(f.key, e.target.value)}
+                          placeholder={f.placeholder}
+                          className="bg-[#FDFBF7]"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+
+                {hiddenFieldKeys.size > 0 && (
+                  <button
+                    type="button"
+                    onClick={restoreAllFields}
+                    className="w-full text-[11px] text-[#1A1A1A]/70 hover:text-[#B89555] underline underline-offset-2"
+                  >
+                    + Restore hidden fields ({hiddenFieldKeys.size})
+                  </button>
+                )}
+
 
                 {/* Applicant ID + Owner signature defaults */}
                 <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 space-y-2">
