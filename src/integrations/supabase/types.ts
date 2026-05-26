@@ -23359,6 +23359,8 @@ export type Database = {
         Row: {
           ai_generated: boolean | null
           ai_last_prompt: string | null
+          application_cap: number | null
+          applications_count: number
           archived_at: string | null
           created_at: string | null
           created_by: string | null
@@ -23368,16 +23370,20 @@ export type Database = {
           id: string
           is_active: boolean | null
           is_broker_role: boolean | null
+          is_featured: boolean
           location: string | null
           requirements: Json | null
           salary_band: string | null
           seniority: string | null
           slug: string | null
+          status: string
           title: string
         }
         Insert: {
           ai_generated?: boolean | null
           ai_last_prompt?: string | null
+          application_cap?: number | null
+          applications_count?: number
           archived_at?: string | null
           created_at?: string | null
           created_by?: string | null
@@ -23387,16 +23393,20 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           is_broker_role?: boolean | null
+          is_featured?: boolean
           location?: string | null
           requirements?: Json | null
           salary_band?: string | null
           seniority?: string | null
           slug?: string | null
+          status?: string
           title: string
         }
         Update: {
           ai_generated?: boolean | null
           ai_last_prompt?: string | null
+          application_cap?: number | null
+          applications_count?: number
           archived_at?: string | null
           created_at?: string | null
           created_by?: string | null
@@ -23406,11 +23416,13 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           is_broker_role?: boolean | null
+          is_featured?: boolean
           location?: string | null
           requirements?: Json | null
           salary_band?: string | null
           seniority?: string | null
           slug?: string | null
+          status?: string
           title?: string
         }
         Relationships: []
