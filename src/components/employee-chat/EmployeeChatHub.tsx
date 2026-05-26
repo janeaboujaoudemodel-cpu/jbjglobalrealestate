@@ -52,7 +52,33 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
   const [alsoSendByEmail, setAlsoSendByEmail] = useState(false);
   const [showAttachPicker, setShowAttachPicker] = useState(false);
   const [pendingAttachments, setPendingAttachments] = useState<DocumentAttachment[]>([]);
+  // Persona of the *currently authenticated* sender — never hardcoded to "Jane".
+  const [me, setMe] = useState<{ id: string; name: string; email: string; title: string } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Resolve the real sender identity from auth + crm_users_profile.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      const u = auth?.user;
+      if (!u || cancelled) return;
+      const { data: profile } = await supabase
+        .from('crm_users_profile')
+        .select('display_name, job_title')
+        .eq('user_id', u.id)
+        .maybeSingle();
+      if (cancelled) return;
+      setMe({
+        id: u.id,
+        name: profile?.display_name || u.email?.split('@')[0] || 'Team member',
+        email: u.email || '',
+        title: profile?.job_title || '',
+      });
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
   
   const { 
     messages, 
