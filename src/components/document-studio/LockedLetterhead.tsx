@@ -39,8 +39,8 @@ export function LockedLetterhead() {
             {JBJ_BRAND.legalName}
           </div>
           <div
-            className="uppercase mt-1 font-medium"
-            style={{ fontSize: 10, letterSpacing: "0.22em", color: JBJ_INK }}
+            className="font-semibold whitespace-nowrap mt-0.5"
+            style={{ fontSize: 13, color: JBJ_INK, letterSpacing: "0.04em" }}
           >
             {JBJ_BRAND.legalSuffix}
           </div>
