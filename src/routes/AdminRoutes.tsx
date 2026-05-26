@@ -190,10 +190,14 @@ export const AdminRoutes = () => (
     <Route path="/security-console" element={<OwnerGuard><SecurityConsole /></OwnerGuard>} />
     <Route path="/it-department" element={<Navigate to="/owner/careers-portal?section=employees" replace />} />
     <Route path="/employee-management" element={<Navigate to="/owner/careers-portal?section=employees" replace />} />
-    <Route path="/hr-dashboard" element={<Navigate to="/owner/careers-portal?section=applications" replace />} />
+    <Route path="/employee-management-hub" element={<Navigate to="/owner/careers-portal?section=employees" replace />} />
+    <Route path="/hr-dashboard" element={<Navigate to="/owner/careers-portal?section=overview" replace />} />
     <Route path="/admin/onboarding" element={<Navigate to="/owner/careers-portal?section=onboarding" replace />} />
+    <Route path="/admin-onboarding" element={<Navigate to="/owner/careers-portal?section=onboarding" replace />} />
+    <Route path="/contract-forms" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
     <Route path="/owner/careers-portal" element={<OwnerGuard><CareersPortal /></OwnerGuard>} />
     <Route path="/careers-portal" element={<Navigate to="/owner/careers-portal" replace />} />
+
 
     {/* ── Communication & Productivity ── */}
     <Route path="/company-comm" element={<Navigate to="/owner/inbox" replace />} />
