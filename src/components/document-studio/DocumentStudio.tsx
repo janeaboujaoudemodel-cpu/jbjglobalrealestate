@@ -1491,10 +1491,11 @@ function EditableBody({
         contentEditable
         suppressContentEditableWarning
         spellCheck
+        onInput={(e) => onChange(stripChromeArtifacts(e.currentTarget.innerHTML))}
         onBlur={(e) => onChange(stripChromeArtifacts(e.currentTarget.innerHTML))}
         onMouseUp={placeToolbar}
         onKeyUp={placeToolbar}
-        className="prose prose-sm max-w-none text-[#1A1A1A] focus:outline-none rounded-md min-h-[500px]"
+        className="prose prose-sm max-w-none text-[#1A1A1A] focus:outline-none rounded-md min-h-[500px] cursor-text"
         style={{
           fontFamily: "Inter, system-ui, sans-serif",
           lineHeight: 1.7,
