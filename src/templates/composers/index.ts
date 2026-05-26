@@ -139,6 +139,7 @@ export function signatureBlock(opts: {
   applicantId?: string;
   applicantDate?: string;
   applicantLabel?: string;
+  extraSignatories?: Array<{ name?: string; title?: string; date?: string; label?: string }>;
 }): string {
   const oName = esc(opts.ownerName || "Jameel Bou Jaoude");
   const oTitle = esc(opts.ownerTitle || "Founder & CEO");
