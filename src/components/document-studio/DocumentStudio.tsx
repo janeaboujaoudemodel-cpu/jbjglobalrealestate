@@ -110,7 +110,21 @@ function StudioShell({
   const [templateId, setTemplateId] = useState<string>(initialId);
   const template = useMemo(() => getTemplateById(templateId), [templateId]);
 
+  // Custom departments (persisted locally so users can add/rename/delete their own).
+  const DEPT_STORAGE_KEY = "jbj:doc-studio:custom-departments";
+  const [customDepartments, setCustomDepartments] = useState<string[]>(() => {
+    try { return JSON.parse(localStorage.getItem(DEPT_STORAGE_KEY) || "[]"); } catch { return []; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem(DEPT_STORAGE_KEY, JSON.stringify(customDepartments)); } catch {}
+  }, [customDepartments]);
+  const allDepartments = useMemo(
+    () => Array.from(new Set([...(DEPARTMENTS as string[]), ...customDepartments])),
+    [customDepartments]
+  );
   const [department, setDepartment] = useState<string>(DEPARTMENTS[0]);
+  const [editingDept, setEditingDept] = useState<string | null>(null);
+  const [deptDraft, setDeptDraft] = useState("");
   const [fields, setFields] = useState<Record<string, string>>({});
   const [bodyHtml, setBodyHtml] = useState<string>("");
   const [generating, setGenerating] = useState(false);
