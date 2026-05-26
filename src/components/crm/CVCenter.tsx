@@ -966,7 +966,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                   key={cat.id}
                   variant={activeDeptCategory === cat.id ? 'default' : 'outline'}
                   className={`cursor-pointer px-3 py-2 ${
-                    activeDeptCategory === cat.id ? 'bg-[#EFE6D6] text-white border-[#B89555]' : 'hover:bg-[#EFE6D6]/10 border-crm-border text-crm-text'
+                    activeDeptCategory === cat.id ? 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]' : 'hover:bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]/80'
                   }`}
                   onClick={() => setActiveDeptCategory(cat.id)}
                 >
