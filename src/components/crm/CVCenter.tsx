@@ -374,13 +374,27 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     }
   }, [cvEntries, activeStatusTab, activeDeptCategory, searchQuery, sortBy]);
 
-  const stats = useMemo(() => ({
-    total: cvEntries.length,
-    pending: cvEntries.filter(cv => cv.status === 'pending').length,
-    approved: cvEntries.filter(cv => cv.status === 'approved').length,
-    rejected: cvEntries.filter(cv => cv.status === 'rejected').length,
-    flagged: cvEntries.filter(cv => cv.flag_reason !== null).length,
-  }), [cvEntries]);
+  const stats = useMemo(() => {
+    const byStatus: Record<string, number> = {};
+    for (const id of APPLICANT_STATUS_ORDER) byStatus[id] = 0;
+    for (const cv of cvEntries) {
+      const key = cv.status && byStatus.hasOwnProperty(cv.status)
+        ? cv.status
+        : cv.status === 'pending'
+        ? 'pending_review'
+        : null;
+      if (key) byStatus[key] = (byStatus[key] || 0) + 1;
+    }
+    return {
+      total: cvEntries.length,
+      flagged: cvEntries.filter((cv) => cv.flag_reason !== null).length,
+      byStatus,
+      // legacy fields retained for any in-file references
+      pending: cvEntries.filter((cv) => cv.status === 'pending' || cv.status === 'pending_review').length,
+      approved: byStatus.approved,
+      rejected: byStatus.rejected,
+    };
+  }, [cvEntries]);
 
   /**
    * Resolves a cv_url (either a storage path or full URL) into:
