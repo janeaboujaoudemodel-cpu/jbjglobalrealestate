@@ -40,7 +40,7 @@ export default function PhoneInputWithCountry({
   };
 
   return (
-    <div className={cn("flex w-full h-10 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] overflow-hidden focus-within:ring-2 focus-within:ring-[#B89555]/40", className)}>
+    <div className={cn("flex flex-row flex-nowrap items-stretch w-full h-10 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] overflow-hidden focus-within:ring-2 focus-within:ring-[#B89555]/40", className)}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
