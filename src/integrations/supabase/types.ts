@@ -24649,6 +24649,42 @@ export type Database = {
         }
         Relationships: []
       }
+      owner_document_assets: {
+        Row: {
+          created_at: string
+          id: string
+          is_default: boolean
+          kind: string
+          label: string
+          owner_id: string
+          storage_bucket: string
+          storage_path: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          kind: string
+          label?: string
+          owner_id: string
+          storage_bucket: string
+          storage_path: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          kind?: string
+          label?: string
+          owner_id?: string
+          storage_bucket?: string
+          storage_path?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       owner_signature_assets: {
         Row: {
           created_at: string
