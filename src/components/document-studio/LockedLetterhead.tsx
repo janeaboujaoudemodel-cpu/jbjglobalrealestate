@@ -1,10 +1,9 @@
 /**
  * Locked premium letterhead + footer rendered as React components.
  *
- * Header: JBJ monogram tile + black wordmark + gold "L.L.C · S.O.C" line.
- *         No address / email / phone (those live in the footer only).
- * Footer: All gold, centered, two short lines. No confidentiality
- *         boilerplate, no fake phone number.
+ * Header: transparent JBJ monogram (bigger, no box) + black wordmark
+ *         + BLACK "L.L.C · S.O.C" line. No address/email/phone here.
+ * Footer: All gold, centered, two short lines.
  */
 
 import { JBJ_BRAND, JBJ_GOLD, JBJ_INK, JBJ_CHAMPAGNE, jbjMonogramSrc } from "@/templates/jbjLockedChrome";
@@ -19,31 +18,27 @@ export function LockedLetterhead() {
         fontFamily: "Inter, system-ui, sans-serif",
       }}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-[18px]">
         <img
           src={jbjMonogramSrc}
           alt="JBJ"
           className="block shrink-0 object-contain"
           style={{
-            width: 44,
-            height: 44,
-            border: `1px solid ${JBJ_GOLD}`,
-            borderRadius: 6,
-            background: "#FDFBF7",
-            padding: 4,
-            boxSizing: "border-box",
+            width: 64,
+            height: 64,
+            background: "transparent",
           }}
         />
         <div className="leading-tight min-w-0">
           <div
             className="font-semibold whitespace-nowrap"
-            style={{ fontSize: 18, color: JBJ_INK, letterSpacing: "0.01em" }}
+            style={{ fontSize: 19, color: JBJ_INK, letterSpacing: "0.01em" }}
           >
             {JBJ_BRAND.legalName}
           </div>
           <div
-            className="uppercase mt-1"
-            style={{ fontSize: 10, letterSpacing: "0.22em", color: JBJ_GOLD }}
+            className="uppercase mt-1 font-medium"
+            style={{ fontSize: 10, letterSpacing: "0.22em", color: JBJ_INK }}
           >
             {JBJ_BRAND.legalSuffix}
           </div>

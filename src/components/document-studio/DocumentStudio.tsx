@@ -47,6 +47,7 @@ import AiEditChatPanel from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
 import { exportPdf, exportDocx, printDocument, DocumentMarks } from "./export/exporters";
+import { compose as composeDocument } from "@/templates/composers";
 
 interface Props {
   catalog: DocumentAudience;
@@ -221,10 +222,20 @@ function StudioShell({
       if (error) throw error;
       const text: string = (data?.body_text || "").trim();
       if (!text) throw new Error("Empty AI response");
-      const html = text
-        .split(/\n{2,}/)
-        .map((p) => `<p style="margin:0 0 14px;line-height:1.65;">${p.replace(/\n/g, "<br/>")}</p>`)
-        .join("");
+      // Split AI narrative into intro/closing halves and let the composer
+      // build the premium structure (terms table + signature block).
+      const parts = text.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
+      const mid = Math.max(1, Math.ceil(parts.length * 0.6));
+      const aiIntro = parts.slice(0, mid).join("\n\n");
+      const aiClosing = parts.slice(mid).join("\n\n");
+      const html = composeDocument({
+        templateId: template.id,
+        fields,
+        department: template.needsPosition ? department : undefined,
+        aiIntro,
+        aiClosing,
+        ownerTitle: "Director",
+      });
       setBodyHtml(html);
       toast.success("Document generated");
     } catch (e: any) {

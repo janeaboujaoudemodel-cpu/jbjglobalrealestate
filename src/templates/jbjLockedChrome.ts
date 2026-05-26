@@ -7,15 +7,12 @@
  * around the body whenever the document is printed, exported to PDF,
  * or attached to a branded email.
  *
- * Header  = JBJ monogram + black wordmark + gold "L.L.C · S.O.C" suffix.
- *           NO address / email / phone in the header.
+ * Header  = transparent JBJ monogram (bigger, no box) + black wordmark
+ *           + black "L.L.C · S.O.C" suffix.
  * Footer  = all gold, centered, single corporate line + contact line.
- *           NO confidentiality boilerplate, NO fake phone number.
  */
 
-// Embedded as a base64 data URI so the locked chrome is fully self-contained
-// in PDF / DOCX / print / email exports (no external asset hops).
-import monogramSrc from "@/assets/jbj-monogram-letterhead.png";
+import monogramSrc from "@/assets/jbj-monogram-transparent.png";
 
 export const JBJ_BRAND = {
   legalName: "JBJ GLOBAL REAL ESTATE",
@@ -39,16 +36,16 @@ export const jbjHeaderHtml = (): string => `
     border-bottom:1px solid ${JBJ_GOLD};
     padding:22px 40px;
     font-family:Inter, system-ui, sans-serif;
-    color:${JBJ_GOLD};
+    color:${JBJ_INK};
   ">
-    <div style="display:flex;align-items:center;gap:16px;">
+    <div style="display:flex;align-items:center;gap:18px;">
       <img src="${monogramSrc}" alt="JBJ"
-        style="width:44px;height:44px;display:block;border:1px solid ${JBJ_GOLD};border-radius:6px;background:#FDFBF7;padding:4px;box-sizing:border-box;object-fit:contain;" />
+        style="width:64px;height:64px;display:block;object-fit:contain;background:transparent;" />
       <div style="line-height:1.15;">
-        <div style="font-size:18px;font-weight:600;letter-spacing:0.01em;color:${JBJ_INK};">
+        <div style="font-size:19px;font-weight:600;letter-spacing:0.01em;color:${JBJ_INK};">
           ${JBJ_BRAND.legalName}
         </div>
-        <div style="font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:${JBJ_GOLD};margin-top:4px;">
+        <div style="font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:${JBJ_INK};margin-top:4px;font-weight:500;">
           ${JBJ_BRAND.legalSuffix}
         </div>
       </div>
@@ -81,22 +78,31 @@ export const jbjFooterHtml = (): string => `
  * Wrap an AI-generated body in the locked chrome. Used for print, PDF
  * export, and email attachments. The body itself remains the only
  * editable portion.
+ *
+ * A4 hard sizing: 794px × 1123px @ 96dpi.
  */
 export function wrapWithJbjChrome(bodyHtml: string): string {
-  return `<!doctype html><html><head><meta charset="utf-8" /><title>JBJ Document</title></head>
-<body style="margin:0;background:#FDFBF7;font-family:Inter,system-ui,sans-serif;color:${JBJ_INK};">
-  ${jbjHeaderHtml()}
-  <main style="max-width:780px;margin:0 auto;padding:40px;background:#FDFBF7;">
-    ${bodyHtml}
-  </main>
-  ${jbjFooterHtml()}
+  return `<!doctype html><html><head><meta charset="utf-8" /><title>JBJ Document</title>
+<style>
+  @page { size: A4; margin: 0; }
+  html, body { margin:0; padding:0; }
+  body { background:#FDFBF7; font-family:Inter,system-ui,sans-serif; color:${JBJ_INK}; }
+  .jbj-page { width:794px; min-height:1123px; margin:0 auto; background:#FDFBF7; display:flex; flex-direction:column; }
+  .jbj-page main { flex:1; padding:32px 56px; }
+  @media print { .jbj-page { box-shadow:none; } }
+</style>
+</head>
+<body>
+  <div class="jbj-page">
+    ${jbjHeaderHtml()}
+    <main>${bodyHtml}</main>
+    ${jbjFooterHtml()}
+  </div>
 </body></html>`;
 }
 
 /**
  * Strip any header/footer/signature artifacts the AI may have produced.
- * The locked chrome is the single source of truth — body content must
- * never duplicate company NAP or letterhead markup.
  */
 export function stripChromeArtifacts(html: string): string {
   return html
