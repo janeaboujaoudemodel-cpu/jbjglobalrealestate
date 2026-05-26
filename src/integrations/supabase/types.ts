@@ -28767,6 +28767,42 @@ export type Database = {
         }
         Relationships: []
       }
+      saved_document_templates: {
+        Row: {
+          audience: string
+          base_template_id: string
+          created_at: string
+          id: string
+          is_default: boolean
+          name: string
+          owner_id: string
+          payload: Json
+          updated_at: string
+        }
+        Insert: {
+          audience: string
+          base_template_id: string
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name: string
+          owner_id: string
+          payload?: Json
+          updated_at?: string
+        }
+        Update: {
+          audience?: string
+          base_template_id?: string
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name?: string
+          owner_id?: string
+          payload?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       scheduled_reports: {
         Row: {
           created_at: string
