@@ -125,36 +125,11 @@ export default function CareersPortal() {
             </Link>
           </div>
 
-          <nav className="mt-3 -mx-1 overflow-x-auto">
-            <ul className="flex gap-1.5 min-w-max pb-2">
-              {SECTIONS.map((s) => {
-                const Icon = s.icon;
-                const isActive = s.key === active;
-                return (
-                  <li key={s.key}>
-                    <button
-                      type="button"
-                      onClick={() => setSection(s.key)}
-                      aria-current={isActive ? "page" : undefined}
-                      className={cn(
-                        "px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5 transition-colors whitespace-nowrap border",
-                        isActive
-                          ? // Strong active state: navy fill + gold hairline + white text.
-                            "bg-[#102540] text-white border-[#B89555] shadow-sm"
-                          : // Idle: champagne-on-champagne with gold hairline; hover deepens.
-                            "bg-white/40 text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6] hover:border-[#B89555]",
-                      )}
-                      data-allow-dark-cta={isActive ? "" : undefined}
-                      data-no-contrast-guard={isActive ? "" : undefined}
-                    >
-                      <Icon className={cn("w-3.5 h-3.5", isActive ? "text-white" : "text-[#1A1A1A]")} />
-                      {s.label}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
+          <CareersTabRow
+            sections={SECTIONS}
+            activeKey={active}
+            onSelect={setSection}
+          />
         </div>
       </div>
 
