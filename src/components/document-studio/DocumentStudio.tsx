@@ -338,9 +338,14 @@ function StudioShell({
 
   useEffect(() => {
     if (!template) return;
+    // Drop hidden field keys before rendering body.
+    const visibleFields: Record<string, string> = {};
+    for (const [k, v] of Object.entries(fields)) {
+      if (!hiddenFieldKeys.has(k)) visibleFields[k] = v;
+    }
     const next = renderStandardBody({
       templateId: template.id,
-      fields,
+      fields: visibleFields,
       department: template.needsPosition ? department : undefined,
       commissionRows: usesCommission && !hiddenSections.has("commission") ? commissionRows : undefined,
       customFields: hiddenSections.has("custom") ? [] : customFields,
@@ -348,7 +353,7 @@ function StudioShell({
       ownerTitle,
       ownerDate,
       applicantDate,
-      hideLetterDate: true, // the draggable date chip is the visible date
+      hideLetterDate: true,
     });
     autoBodyRef.current = next;
     if (!userEditedRef.current) setBodyHtml(next);
@@ -360,6 +365,7 @@ function StudioShell({
     JSON.stringify(commissionRows),
     JSON.stringify(customFields),
     JSON.stringify(Array.from(hiddenSections)),
+    JSON.stringify(Array.from(hiddenFieldKeys)),
     ownerName, ownerTitle, ownerDate, applicantDate,
   ]);
 
