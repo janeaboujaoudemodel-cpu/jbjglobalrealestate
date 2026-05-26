@@ -13,9 +13,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { allTeamMembers } from '@/config/team-members';
-import { PhoneInputWithCountry } from '@/components/ui/phone-input-with-country';
-import { NationalitySelect } from '@/components/ui/nationality-select';
-import { LanguageMultiSelect } from '@/components/ui/language-multi-select';
+import PhoneInputWithCountry from '@/components/crm/pickers/PhoneInputWithCountry';
+import NationalityPicker from '@/components/crm/pickers/NationalityPicker';
+import LanguageMultiPicker from '@/components/crm/pickers/LanguageMultiPicker';
 import { SearchableSelectWithOther } from '@/components/ui/searchable-select-with-other';
 
 // List of departments
