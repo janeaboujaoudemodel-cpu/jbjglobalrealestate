@@ -37,7 +37,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useSellerListings } from "@/hooks/useSellerListings";
 import { useAuth } from "@/contexts/AuthContext";
-import { formatDate } from "@/utils/formatDate";
+import { formatDisplayDate as formatDate } from "@/utils/formatDate";
 
 const ManualWizard = lazy(() => import("@/pages/SellerListing"));
 const AIWizard = lazy(() => import("@/pages/ListingPortalSubmit"));
