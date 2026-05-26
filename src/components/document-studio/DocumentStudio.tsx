@@ -144,9 +144,15 @@ function StudioShell({
   const toggleSection = (id: string) =>
     setHiddenSections((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
-  // AI auto-fill from pasted details / attached document.
-  const [autoFillText, setAutoFillText] = useState("");
-  const [autoFillBusy, setAutoFillBusy] = useState(false);
+  // Per-field hide + rename for the template fields panel.
+  const [hiddenFieldKeys, setHiddenFieldKeys] = useState<Set<string>>(new Set());
+  const [fieldLabelOverrides, setFieldLabelOverrides] = useState<Record<string, string>>({});
+  const [editingFieldKey, setEditingFieldKey] = useState<string | null>(null);
+  const hideField = (k: string) => setHiddenFieldKeys((s) => { const n = new Set(s); n.add(k); return n; });
+  const restoreAllFields = () => setHiddenFieldKeys(new Set());
+
+  // Save-as-Template state.
+  const [savingTemplate, setSavingTemplate] = useState(false);
   const autoFillFileRef = useRef<HTMLInputElement>(null);
 
   // Document language (drives translation + AI replies + STT).
