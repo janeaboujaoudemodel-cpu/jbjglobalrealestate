@@ -278,6 +278,7 @@ function composeJobOffer(input: ComposerInput): string {
       applicantId: f.idNumber,
       applicantDate: input.applicantDate,
       applicantLabel: "Accepted by Applicant",
+      extraSignatories: input.extraSignatories,
     }),
   ].join("");
 }
@@ -307,6 +308,7 @@ function composeGeneric(input: ComposerInput, subject: string): string {
       applicantId: f.idNumber,
       applicantDate: input.applicantDate,
       applicantLabel: "Counterparty Signature",
+      extraSignatories: input.extraSignatories,
     }),
   ].join("");
 }
@@ -383,6 +385,7 @@ function composeCommissionInvoice(input: ComposerInput): string {
       applicantId: f.idNumber,
       applicantDate: input.applicantDate,
       applicantLabel: "Acknowledged by Client",
+      extraSignatories: input.extraSignatories,
     }),
   ].join("");
 }
