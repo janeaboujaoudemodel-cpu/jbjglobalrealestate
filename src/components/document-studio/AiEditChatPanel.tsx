@@ -30,7 +30,7 @@ interface Props {
   language?: string;
 }
 
-const LANGUAGES: Array<{ code: string; label: string; bcp47: string }> = [
+export const LANGUAGES: Array<{ code: string; label: string; bcp47: string }> = [
   { code: "English",    label: "English",    bcp47: "en-US" },
   { code: "Arabic",     label: "العربية",    bcp47: "ar-AE" },
   { code: "French",     label: "Français",   bcp47: "fr-FR" },
