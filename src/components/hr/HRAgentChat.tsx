@@ -111,6 +111,7 @@ export default function HRAgentChat() {
 
       const data = response.data;
       setStage(data.stage);
+      if (data.mode === 'owner') setMode('owner');
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: data.message,
