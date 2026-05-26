@@ -37,6 +37,10 @@ interface OpenPosition {
   employment_type: string;
   is_broker_role: boolean;
   location: string | null;
+  status?: "open" | "urgent" | "paused" | "closed" | "hidden" | null;
+  is_featured?: boolean | null;
+  application_cap?: number | null;
+  applications_count?: number | null;
 }
 
 const NATIONALITIES = [
