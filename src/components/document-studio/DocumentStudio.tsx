@@ -574,7 +574,7 @@ function StudioShell({
                 }}
               >
                 <LockedLetterhead />
-                <div className="relative px-12 py-10 min-h-[700px] bg-[#FDFBF7]">
+                <div className="relative px-12 py-10 bg-[#FDFBF7]" style={{ minHeight: bodyHtml ? 0 : 420 }}>
                   {bodyHtml ? (
                     <EditableBody html={bodyHtml} onChange={setBodyHtml} />
                   ) : (
