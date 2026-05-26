@@ -1,159 +1,105 @@
+# News Admin Hub + DLD Auto-Ingestion — Build Plan
 
-# List Your Property + Resale Properties Premium Rebuild
+Two systems built side-by-side, each fully testable on its own. Both follow the project's existing patterns: `requireOwnerAuth` for admin edge functions, RLS on every table, champagne/gold UI, `admin_edit_log` entries for every owner mutation.
 
-## Part 1 — Audit of existing listing pages
+---
 
-Routes today (from `src/routes/PublicRoutes.tsx`):
+## 1. News Admin Hub (Khaleej Times-style)
 
-```text
-/list-property          → ListProperty.tsx        (canonical hub – kept)
-/listing-portal         → redirect to /list-property?mode=browse
-/listing-portal/submit  → redirect to /list-property?mode=ai
-/sell                   → redirect to /list-property?purpose=sale&mode=manual
-/seller-listing         → redirect to /list-property?mode=manual
-/resale-properties      → ResaleProperties.tsx    (restyled, kept)
-```
+### Tables (migration)
 
-Standalone pages that still exist and overlap:
-- `src/pages/SellerListing.tsx` — the manual multi-step seller form (rendered inside `ListProperty.tsx` already, but also reachable on its own through legacy imports)
-- `src/pages/SellWithUs.tsx` — marketing intro page for sellers
-- `src/pages/ListingPortal.tsx` — older "browse listings" portal
-- `src/pages/LandlordListForm.tsx` / `LandlordRentalPortal.tsx` — rental-only flows
+- **`news_sources`** — id, name, slug, base_url, type (rss|html|api), fetch_config (jsonb), is_active, last_fetched_at, created_at, updated_at
+- **`news_articles`** — id, source_id (fk), source_url (unique), title, slug (unique), summary, body_html, hero_image_url, author, published_at, ingested_at, status (`draft|published|hidden|deleted`), redirect_to_source (bool, default true), edited_by, edited_at, ai_draft (jsonb — raw link-extract output), created_at, updated_at
+- **`news_article_revisions`** — id, article_id, before_values jsonb, after_values jsonb, changed_fields text[], edited_by, edited_at (audit trail; mirrors `admin_edit_log` pattern)
 
-Decision:
-- **Single user-facing entry point: `/list-property`.**
-- `SellWithUs`, `ListingPortal`, `LandlordListForm` routes redirect into `/list-property` with the right `?purpose=` / `?mode=` params; component files stay so deep links and any inline imports keep working but are no longer reachable directly.
-- `SellerListing.tsx` and `LandlordListForm.tsx` become **internal step components** mounted by `ListProperty` based on `purpose` (sale/rent). They are not removed (No-Removal policy).
+RLS: public read of `news_articles WHERE status='published'`; full CRUD owner-only via `has_role(auth.uid(),'admin')` or `requireOwnerAuth`. `news_sources` and revisions owner-only. GRANTs: `anon`+`authenticated` SELECT on published articles; `service_role` ALL.
 
-## Part 2 — `/list-property` page rebuild (premium blue accent)
+### Edge functions
 
-Top-to-bottom restructure:
+- **`news-extract-from-link`** — owner-only. Input: `{ url }`. Uses universal-link-extractor pattern + Firecrawl scrape (`formats:['markdown','summary',{type:'json',schema}]`) → returns draft `{ title, summary, body_html, hero_image_url, author, published_at, source_url }`. Never publishes; just returns the draft to the UI.
+- **`news-article-mutate`** — owner-only. Create / update / hide / delete / toggle-redirect. Writes `news_article_revisions` row on every change.
+- **`news-ingest-rss`** *(scheduled, hourly)* — iterates active `news_sources`, fetches RSS/HTML, dedupes on `source_url`, inserts as `status='draft'` for owner review. Pure backend, no auto-publish.
 
-1. **Hero band** (replaces current dark header)
-   - Background: blue fade `linear-gradient(135deg,#0B2E5C 0%,#102540 50%,#1A4A8A 100%)`
-   - Eyebrow chip: "JBJ Seller Portal" in champagne `#EFE6D6` on 1px gold hairline
-   - H1 "List Your Property" — white
-   - Subtitle — gold `#B89555` (replaces every faded white-on-blue text per the contrast rule)
-   - Primary CTA: **List Manually** (champagne pill, ink text) · Secondary: **List with AI** (blue outline, white text) · Tertiary link: **View my submissions** → scrolls to the new dashboard section
-   - Reduce the giant top padding (current `pt-32` style gap above title) to `pt-12 md:pt-16`
+### Admin UI — `/owner/news`
 
-2. **Purpose + Mode selector card** (single card, currently two)
-   - One rounded-2xl card on champagne `#FDFBF7` with a 1px gold hairline
-   - Row 1: Purpose segmented control — For Sale / For Rent (active = solid `#2563EB` + white text)
-   - Row 2: Mode segmented control — Manual / AI-Assisted (same active style)
-   - "Browse Listings" becomes a quiet ghost link bottom-right
+Single page under existing Owner shell, champagne-dominant, full-bleed band, gold hairline card. Sections:
 
-3. **Active form** (renders below based on Purpose+Mode)
-   - Sale + Manual → `<SellerListing />` (existing multi-step form, restyled: blue active step indicators, gold section headings, ink labels, champagne input surfaces)
-   - Sale + AI → `<SellerAssistant />` (existing AI assistant, restyled)
-   - Rent + Manual → `<LandlordListForm />`
-   - Rent + AI → reuse AI assistant with `purpose=rent`
-   - Step indicator bar gets blue active dot + gold connector hairline (kills any white-on-light text)
+1. **Quick-Add by Link** — single URL input → calls `news-extract-from-link` → renders editable draft form (title, summary, body, hero image, author, date, source URL, redirect-toggle) → Save as Draft / Publish.
+2. **Articles table** — columns: title, source, status pill, published_at, redirect, actions (Edit / Hide / Delete / Toggle redirect). Filter pills: All / Draft / Published / Hidden. Search by title.
+3. **Sources tab** — manage `news_sources` (add RSS feeds, toggle active, see last fetch time).
 
-4. **My Submissions section** (NEW, authenticated only)
-   - Title "My Listing Submissions" in gold
-   - Card list pulled from `seller_listings` table via existing `useSellerListings` hook
-   - Each row: thumbnail · title · purpose badge · status badge (Pending / Under Review / Approved / Declined / Live / Changes Requested) · submitted-at · "View details" expander · "Withdraw" / "Edit draft" actions
-   - Empty state: gold-bordered card "No submissions yet — start your first listing above"
-   - Anonymous users see a single navy CTA "Sign in to track your submissions" instead of the list
+Public surface (no UI work here in v1 — articles render through the existing public news route if present; if not, a follow-up adds `/news` and `/news/:slug`. Redirect-toggle on means clicking the public card opens `source_url` in a new tab instead of the in-app article view).
 
-5. **Status workflow + emails** (NEW)
-   - Statuses on `seller_listings.status`: `draft` · `submitted` · `under_review` · `approved` · `declined` · `changes_requested` · `live` · `withdrawn`
-   - DB trigger on status change → enqueues a transactional email per status using existing `send-transactional-email` infra
-   - New templates in `supabase/functions/_shared/transactional-email-templates/`:
-     - `seller-listing-submitted.tsx` (receipt)
-     - `seller-listing-approved.tsx`
-     - `seller-listing-declined.tsx` (with admin reason field)
-     - `seller-listing-changes-requested.tsx`
-     - `seller-listing-live.tsx`
-   - All templates branded JBJ champagne+gold, white body background, no unsubscribe link (system appends)
-   - Owner/admin already gets notified via existing approval queue — verified, not duplicated
+### Tests
 
-6. **Contrast pass on the whole page**
-   - Every `text-white` / `text-[#FFFFFF]` sitting on champagne or light blue is repainted gold `#B89555` or ink `#1A1A1A` per project standard
-   - Add `data-marketing-page` on the root so the band system applies
-   - All step indicators, "Previous" / "Next Step" buttons → blue active (`#2563EB`) with white text, navy hairline border
+- Deno test for `news-extract-from-link` (mocked Firecrawl response → asserts draft shape, never writes to DB).
+- Deno test for `news-article-mutate` (owner JWT required, revision row written, status transitions valid).
+- Vitest for the admin page: renders table, opens edit dialog, calls mutate function.
 
-## Part 3 — `/resale-properties` premium rebuild
+---
 
-Building on the prior pass:
+## 2. DLD / DXB Interact / RERA / Property Monitor Auto-Ingestion
 
-1. **Hero**
-   - Same blue-fade band as `/list-property` for visual continuity
-   - H1 white, subtitle gold, eyebrow chip champagne
-   - Remove the divider below the hero (already done in previous turn — verify still gone)
+### Tables (migration)
 
-2. **Filter bar**
-   - Reuse the **same shortcut-bar style** used on `/properties` (project filter): swap the current inline `<Select>` row for `<FilterShortcutBar variant="light" />` driven by URL params
-   - Sticky under the hero, champagne background, 1px gold hairline, no border-bottom rule (kills the divider)
-   - Sort dropdown via `<SortBySelect />`
+- **`market_data_sources`** — id, key (`dld|dxb_interact|rera|property_monitor`), label, endpoint_url, auth_mode (`none|api_key|scrape`), fetch_config jsonb, is_active, last_run_at, last_status, last_error, created_at, updated_at
+- **`market_data_snapshots`** — id, source_id (fk), snapshot_date (date), payload jsonb (raw normalized response), metrics jsonb (extracted KPIs: total_volume_aed, total_transactions, avg_price_sqft, top_areas, etc.), created_at. Unique on `(source_id, snapshot_date)`.
+- **`market_data_runs`** — id, source_id, started_at, finished_at, status (`success|partial|error`), rows_ingested, error_text. Operational log.
 
-3. **Results header**
-   - "{n} properties found" in gold `#B89555`
-   - Right-aligned: View toggle (Grid / Map) + Sort dropdown
+RLS: existing market-intel rule — admin/owner only on all three tables. GRANTs: `authenticated` SELECT (filtered by `has_role`); `service_role` ALL. No anon access.
 
-4. **Listing grid**
-   - 1/2/3 columns responsive, 6 visible per row group, gold-hairline cards
-   - PricePill + DeveloperLink primitives per the price/dev standard
-   - Static cover image (no card arrows)
-   - "Register Interest" button blue `#2563EB` with white text
+### Edge functions
 
-5. **Empty state** ("Recently Sold Out") — already restyled with blue wrap last turn; verify padding doesn't crush the inner Stay-in-the-Loop card on small screens, add `px-4 sm:px-8 md:px-12`
+- **`ingest-dld`** — pulls from DLD open-data endpoints (configurable per source row), normalizes to common `metrics` shape, upserts into `market_data_snapshots`, writes `market_data_runs`. Tolerates missing/changed fields (logs partial, never throws).
+- **`ingest-dxb-interact`** — Firecrawl scrape of public dashboards (no API), JSON-schema extraction → same upsert path.
+- **`ingest-rera`** — same pattern; scrape when no API.
+- **`ingest-property-monitor`** — requires API key (deferred until user adds `PROPERTY_MONITOR_API_KEY` secret; function exists and returns a clear "secret missing" status until then).
+- **`ingest-market-data-all`** — orchestrator; loops active sources, calls each child function, aggregates run log. This is the cron target.
 
-6. **List Your Resale CTA band** (NEW)
-   - Below the grid: full-bleed champagne band → blue-bordered card "Have a property to sell? List it on JBJ" → button routes to `/list-property?purpose=sale`
-   - Keeps both pages clearly linked
+All ingestion functions: `verify_jwt = false` (cron-callable), but require `INTERNAL_INGEST_SECRET` header to prevent random invocation. Owner UI calls them with the same header from the server side.
 
-## Part 4 — Backend wiring & data model
+### Scheduling
 
-Schema work (one migration):
+`pg_cron` + `pg_net` (enabled if not already), daily at 03:00 UTC (07:00 Dubai), invokes `ingest-market-data-all`. Scheduling SQL goes through `supabase--insert` (not migration) because it embeds the project URL + anon key.
 
-```text
-ALTER TABLE seller_listings
-  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'draft',
-  ADD COLUMN IF NOT EXISTS decline_reason text,
-  ADD COLUMN IF NOT EXISTS changes_requested_note text,
-  ADD COLUMN IF NOT EXISTS reviewed_by uuid,
-  ADD COLUMN IF NOT EXISTS reviewed_at timestamptz;
+### Admin UI — `/owner/market-intel` (extends existing if present)
 
--- status transition trigger -> calls pg_notify -> edge fn that invokes
--- send-transactional-email with the right template + idempotency key
-```
+- **Sources panel**: list of 4 sources with status pill (success/partial/error), last_run_at, "Run now" button (owner-only).
+- **Runs log**: last 50 `market_data_runs` rows, expandable to show error text.
+- **Latest snapshot preview**: per source, today's metrics rendered as IconTile KPI cards (Emerald/Red/Blue/Amber semantic tones per the data-viz standard).
 
-- RLS: owner of the row (`auth.uid() = user_id`) can SELECT/UPDATE draft; admin/owner role can update status. Public cannot read.
-- `useSellerListings` already exists — extend to filter by `user_id = auth.user.id` and expose status.
-- Documents in the seller form (passport, title deed, brochure, photos) upload to existing `seller-documents` storage bucket per user folder; verified policies allow user read/write of own folder only.
+Public-facing market intel pages already exist and read from existing tables — they continue to work; new snapshots can power them in a follow-up once the data shape is validated.
 
-## Part 5 — Mobile / device compatibility
+### Tests
 
-- All grids: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`
-- Hero text: `text-3xl sm:text-4xl md:text-5xl`
-- Filter bar collapses into "Filters" button + drawer below `md`
-- Step indicator on seller form becomes horizontal scroll on mobile
-- Form cards: `p-4 sm:p-6 md:p-8` to avoid edge bleed
-- Buttons stack `flex-col sm:flex-row` in CTA rows
+- Deno tests per ingestion function with mocked upstream responses: normalization correctness, dedupe on `(source_id, snapshot_date)`, partial-failure recorded as `partial` not `error`.
+- Deno test for `ingest-market-data-all` orchestrator: one child fails, others succeed → run log shows mixed statuses, function still returns 200.
 
-## Part 6 — Bugs & wiring sweep (during the rebuild)
+---
 
-While in these files, verify and fix:
-- `useSellerListings` actually scopes by `user_id` (current code may return all rows)
-- Draft "Save Draft" button persists every step's form state (not just step 1)
-- "Reset" clears uploaded file refs in storage, not just local state
-- AI seller assistant submit path writes to same `seller_listings` table so submissions appear in My Submissions regardless of mode
-- Resale filter URL params survive page refresh (already standard, verify on this page)
-- Mobile sticky filter bar doesn't overlap the GlobalHeader (top-[48px] offset)
+## Build order
 
-## Technical notes (for engineer reference)
+Both proceed in parallel since tables and functions are independent:
 
-- Blue accent: `#2563EB` solid, `#102540` for dark backgrounds, `#0B2E5C → #1A4A8A` for hero gradient. Mark all new blue CTAs with `data-allow-dark-cta` + `data-no-contrast-guard` so the global navy-CTA guard doesn't repaint them.
-- Gold heading helper: `style={{ color: "#B89555" }} data-no-contrast-guard`
-- All new transactional email templates follow the registry pattern (`_shared/transactional-email-templates/registry.ts`) and are deployed via `deploy_edge_functions`.
-- No new edge function for sending — all status emails go through existing `send-transactional-email` with template names listed in Part 2.
+1. Migration #1 — `news_*` tables + RLS + GRANTs.
+2. Migration #2 — `market_data_*` tables + RLS + GRANTs, enable `pg_cron` + `pg_net`.
+3. Edge functions (deploy in one batch): `news-extract-from-link`, `news-article-mutate`, `news-ingest-rss`, `ingest-dld`, `ingest-dxb-interact`, `ingest-rera`, `ingest-property-monitor`, `ingest-market-data-all`.
+4. Secrets check: prompt for `INTERNAL_INGEST_SECRET`, `FIRECRAWL_API_KEY` (already linked if connector active), `PROPERTY_MONITOR_API_KEY` (optional — function degrades gracefully).
+5. Schedule cron via `supabase--insert`.
+6. Admin UI: `/owner/news` and `/owner/market-intel` (extend if exists), wired to the new functions.
+7. Tests: run Deno test suite for all new functions; vitest for the two admin pages.
+8. Smoke check: invoke `ingest-market-data-all` manually once, confirm `market_data_runs` populated; invoke `news-extract-from-link` with a sample URL, confirm draft returns.
 
-## Out of scope (explicit)
+## Technical notes
 
-- Building a brand-new admin approval UI — the existing owner Listings Approval queue is kept; this plan only adds new status values + email triggers wired to it.
-- Replacing the AI Seller Assistant logic — only restyle.
-- Removing any legacy route — they all redirect into `/list-property` per No-Removal policy.
+- All owner mutations write `admin_edit_log` rows (existing project standard) in addition to `news_article_revisions`.
+- All scraping respects the competitor-source-exclusion rule (public-facing strips competitor names; internal admin views keep them for attribution).
+- News article body rendered through `contentSanitizer.ts` (raw-HTML rule).
+- No fake placeholder content — if extraction fails, draft is created empty with the source URL only, flagged for manual completion.
+- Champagne-dominant UI everywhere; KPI tiles via `<IconTile />` with semantic data-viz tones; no gray surfaces; section separation via band-tone alternation only.
 
-Reply **approve** to proceed, or tell me which parts to drop / adjust (e.g. skip the email templates, or skip the resale rebuild) and I'll start with the rest.
+## Out of scope (follow-ups)
+
+- Public `/news` index + `/news/:slug` reader page (current plan ships admin + ingestion only).
+- Charting historical market snapshots (current plan ships ingestion + latest-snapshot KPIs only).
+- AI summarization of news bodies beyond what link-extract returns.
