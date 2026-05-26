@@ -463,6 +463,7 @@ function StudioShell({
         ownerTitle: "Director",
         commissionRows: usesCommission ? commissionRows : undefined,
         customFields,
+        extraSignatories,
       });
       setBodyHtml(html);
       toast.success("Document generated");
