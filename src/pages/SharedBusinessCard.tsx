@@ -364,12 +364,10 @@ export default function SharedBusinessCard() {
 
     const fetchCard = async () => {
       try {
-        const { data, error: fetchErr } = await supabase
-          .from("shared_business_cards")
-          .select("card_data, view_count")
-          .eq("token", token)
-          .single();
+        const { data: rows, error: fetchErr } = await supabase
+          .rpc("get_shared_business_card", { card_token: token });
 
+        const data = Array.isArray(rows) ? rows[0] : rows;
         if (fetchErr || !data) throw new Error("Card not found.");
 
         setSnapshot(data.card_data as unknown as CardSnapshot);
