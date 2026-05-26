@@ -136,7 +136,6 @@ export function signatureBlock(opts: {
   ownerTitle?: string;
   ownerDate?: string;
   applicantName?: string;
-  applicantId?: string;
   applicantDate?: string;
   applicantLabel?: string;
   extraSignatories?: Array<{ name?: string; title?: string; date?: string; label?: string }>;
@@ -145,7 +144,6 @@ export function signatureBlock(opts: {
   const oTitle = esc(opts.ownerTitle || "Founder & CEO");
   const oDate = esc(formatHumanDate(opts.ownerDate) || todayLong());
   const aName = esc(opts.applicantName || "");
-  const aId = esc(opts.applicantId || "");
   const aDate = esc(formatHumanDate(opts.applicantDate));
   const aLabel = esc(opts.applicantLabel || "Accepted by Applicant");
 
@@ -155,11 +153,18 @@ export function signatureBlock(opts: {
       <span style="margin-left:4px;">${value || (fallbackDots ? "____________________" : "")}</span>
     </div>`;
 
-  const cell = (sigId: string, heading: string, lines: string) => `
-    <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 28px;">
+  const stampOverlay = `
+    <img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" aria-hidden="true"
+      style="position:absolute;right:-6px;bottom:-6px;width:118px;height:118px;
+             object-fit:contain;opacity:0.92;mix-blend-mode:multiply;
+             transform:rotate(-6deg);pointer-events:none;user-select:none;" />`;
+
+  const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
+    <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 28px;position:relative;">
       <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};margin-bottom:36px;font-weight:600;">${heading}</div>
-      <div style="border-top:1px solid ${INK};padding-top:10px;">
+      <div style="border-top:1px solid ${INK};padding-top:10px;position:relative;min-height:120px;">
         ${lines}
+        ${withStamp ? stampOverlay : ""}
       </div>
     </td>`;
   const gapCell = `<td style="width:12%;"></td>`;
@@ -172,7 +177,6 @@ export function signatureBlock(opts: {
 
   const applicantLines = [
     row("Name", aName),
-    aId ? row("ID / Passport", aId) : "",
     row("Date", aDate),
   ].join("");
 
@@ -195,7 +199,7 @@ export function signatureBlock(opts: {
       <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
         <tbody>
           <tr>
-            ${cell("owner", "JBJ GLOBAL REAL ESTATE", ownerLines)}
+            ${cell("owner", "JBJ GLOBAL REAL ESTATE", ownerLines, true)}
             ${gapCell}
             ${cell("recipient", aLabel, applicantLines)}
           </tr>
@@ -207,19 +211,16 @@ export function signatureBlock(opts: {
 
 export function recipientBlock(fields: Record<string, string>, opts?: { greeting?: boolean }): string {
   const name = esc(fields.recipientName);
-  const id = esc(fields.idNumber);
   if (opts?.greeting) {
     return `
       <div style="margin:6px 0 14px;font-size:12.5px;color:${INK};line-height:1.6;">
         <div style="font-weight:600;">Dear ${name || "Candidate"},</div>
-        ${id ? `<div style="color:${MUTED};font-size:11px;margin-top:2px;">ID / Passport: ${id}</div>` : ""}
       </div>`;
   }
   return `
     <div style="margin:8px 0 18px;font-size:12px;color:${INK};line-height:1.6;">
       <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};margin-bottom:3px;">To</div>
       <div style="font-weight:600;">${name || "—"}</div>
-      ${id ? `<div style="color:${MUTED};">ID / Passport: ${id}</div>` : ""}
     </div>`;
 }
 
