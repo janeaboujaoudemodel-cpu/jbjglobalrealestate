@@ -156,12 +156,13 @@ export function signatureBlock(opts: {
     </div>`;
 
   const cell = (heading: string, lines: string) => `
-    <td style="width:50%;vertical-align:top;padding:0 10px;">
-      <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};margin-bottom:30px;font-weight:600;">${heading}</div>
-      <div style="border-top:1px solid ${INK};padding-top:8px;">
+    <td style="width:44%;vertical-align:top;padding:0 28px;">
+      <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};margin-bottom:36px;font-weight:600;">${heading}</div>
+      <div style="border-top:1px solid ${INK};padding-top:10px;">
         ${lines}
       </div>
     </td>`;
+  const gapCell = `<td style="width:12%;"></td>`;
 
   const ownerLines = [
     row("Name", oName),
