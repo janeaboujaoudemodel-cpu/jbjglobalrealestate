@@ -594,7 +594,7 @@ const ResaleProperties = () => {
                     Browse Off-Plan Properties
                   </Button>
                 </Link>
-                <Link to="/listing-portal">
+                <Link to="/list-property?purpose=sale">
                   <Button variant="outline" className="text-[#1A1A1A] hover:bg-[#2563EB]/5" style={{ border: "2px solid #2563EB" }}>
                     List Your Property
                   </Button>
