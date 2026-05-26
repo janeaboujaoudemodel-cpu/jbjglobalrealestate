@@ -202,6 +202,12 @@ function StudioShell({
     });
   }, [defaultSignature?.signedUrl, defaultStamp?.signedUrl]);
 
+  // Owner-date in the left rail is the single source of truth for the
+  // preview date chip. Whenever it changes, propagate to marks.dateValue.
+  useEffect(() => {
+    setMarks((m) => ({ ...m, dateValue: ownerDate }));
+  }, [ownerDate]);
+
   const pickAsset = (asset: OwnerAsset) => {
     if (!asset.signedUrl) return;
     if (asset.kind === "signature") {
