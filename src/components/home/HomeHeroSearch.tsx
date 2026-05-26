@@ -107,8 +107,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         <div
           data-no-contrast-guard
           className="group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl
-            border border-[#B89555]/55 overflow-hidden bg-transparent
-            transition-all duration-300 focus-within:border-[#B89555] hover:border-[#B89555]/80"
+            overflow-hidden bg-transparent
+            transition-all duration-300"
           style={{
             boxShadow:
               "0 18px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10)",
