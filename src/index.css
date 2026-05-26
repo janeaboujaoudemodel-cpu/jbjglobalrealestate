@@ -4888,14 +4888,27 @@ a[class*="bg-red-"]:hover {
 /* 9. Sidebar nav — LOCKED active/hover system.
  *    Active/rest stays readable; hover uses brand navy.
  *    Never allow text bleach to white or black-on-black active state. */
-[data-surface="champagne"] nav button[data-no-contrast-guard],
-[data-surface="champagne"] nav button[data-no-contrast-guard] * {
+/* Scope: sidebar nav only. Active "dark-CTA" pills (Careers Portal tabs,
+ * HRPill segmented controls, etc.) opt out via [data-allow-dark-cta] so
+ * their white-on-navy active state survives. */
+[data-surface="champagne"] nav button[data-no-contrast-guard]:not([data-allow-dark-cta]):not([aria-current="page"]):not([aria-pressed="true"]),
+[data-surface="champagne"] nav button[data-no-contrast-guard]:not([data-allow-dark-cta]):not([aria-current="page"]):not([aria-pressed="true"]) * {
   color: #1A1A1A !important;
 }
-[data-surface="champagne"] nav button[data-no-contrast-guard]:hover,
-[data-surface="champagne"] nav button[data-no-contrast-guard]:hover * {
+[data-surface="champagne"] nav button[data-no-contrast-guard]:not([data-allow-dark-cta]):not([aria-current="page"]):not([aria-pressed="true"]):hover,
+[data-surface="champagne"] nav button[data-no-contrast-guard]:not([data-allow-dark-cta]):not([aria-current="page"]):not([aria-pressed="true"]):hover * {
   color: #102540 !important;
   stroke: #102540 !important;
+}
+
+/* Active navy pill / dark-CTA — preserve white text + white icons everywhere
+ * (including under champagne surfaces). Highest-specificity, last-wins. */
+:is(button, a, [role="button"], [role="tab"])[data-allow-dark-cta],
+:is(button, a, [role="button"], [role="tab"])[data-allow-dark-cta] *,
+:is(button, a, [role="button"], [role="tab"])[data-allow-dark-cta]:hover,
+:is(button, a, [role="button"], [role="tab"])[data-allow-dark-cta]:hover * {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
 }
 
 [data-surface="champagne"] nav button[data-sidebar-collapse-control],
