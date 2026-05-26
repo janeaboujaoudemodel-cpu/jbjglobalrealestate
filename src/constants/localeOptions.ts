@@ -10,18 +10,26 @@ export const PRIORITY_COUNTRIES = [
   "Thailand",
 ];
 
-// Language flags mapping
+// Language flags mapping — EVERY supported language MUST have a real country flag.
+// Never fall back to 🌐 globe: that disrespects national identity. If a language
+// is missing, add it here using the most widely recognised country of origin.
 export const LANGUAGE_FLAGS: Record<string, string> = {
   "Afrikaans": "🇿🇦",
   "Albanian": "🇦🇱",
   "Amharic": "🇪🇹",
   "Arabic": "🇦🇪",
   "Armenian": "🇦🇲",
+  "Assamese": "🇮🇳",
   "Azerbaijani": "🇦🇿",
+  "Basque": "🇪🇸",
+  "Belarusian": "🇧🇾",
   "Bengali": "🇧🇩",
   "Bosnian": "🇧🇦",
   "Bulgarian": "🇧🇬",
   "Burmese": "🇲🇲",
+  "Catalan": "🇪🇸",
+  "Cebuano": "🇵🇭",
+  "Chinese": "🇨🇳",
   "Chinese (Cantonese)": "🇭🇰",
   "Chinese (Mandarin)": "🇨🇳",
   "Chinese (Simplified)": "🇨🇳",
@@ -29,41 +37,52 @@ export const LANGUAGE_FLAGS: Record<string, string> = {
   "Croatian": "🇭🇷",
   "Czech": "🇨🇿",
   "Danish": "🇩🇰",
+  "Dari": "🇦🇫",
   "Dutch": "🇳🇱",
   "English": "🇬🇧",
   "Estonian": "🇪🇪",
   "Filipino": "🇵🇭",
   "Finnish": "🇫🇮",
   "French": "🇫🇷",
+  "Galician": "🇪🇸",
   "Georgian": "🇬🇪",
   "German": "🇩🇪",
   "Greek": "🇬🇷",
   "Gujarati": "🇮🇳",
+  "Haitian Creole": "🇭🇹",
+  "Hausa": "🇳🇬",
   "Hebrew": "🇮🇱",
   "Hindi": "🇮🇳",
   "Hungarian": "🇭🇺",
   "Icelandic": "🇮🇸",
+  "Igbo": "🇳🇬",
   "Indonesian": "🇮🇩",
   "Irish": "🇮🇪",
   "Italian": "🇮🇹",
   "Japanese": "🇯🇵",
+  "Javanese": "🇮🇩",
   "Kannada": "🇮🇳",
   "Kazakh": "🇰🇿",
   "Khmer": "🇰🇭",
+  "Kinyarwanda": "🇷🇼",
   "Korean": "🇰🇷",
   "Kurdish": "🇮🇶",
   "Kyrgyz": "🇰🇬",
   "Lao": "🇱🇦",
   "Latvian": "🇱🇻",
   "Lithuanian": "🇱🇹",
+  "Luxembourgish": "🇱🇺",
   "Macedonian": "🇲🇰",
+  "Malagasy": "🇲🇬",
   "Malay": "🇲🇾",
   "Malayalam": "🇮🇳",
   "Maltese": "🇲🇹",
+  "Maori": "🇳🇿",
   "Marathi": "🇮🇳",
   "Mongolian": "🇲🇳",
   "Nepali": "🇳🇵",
   "Norwegian": "🇳🇴",
+  "Odia": "🇮🇳",
   "Pashto": "🇦🇫",
   "Persian": "🇮🇷",
   "Polish": "🇵🇱",
@@ -71,27 +90,41 @@ export const LANGUAGE_FLAGS: Record<string, string> = {
   "Punjabi": "🇮🇳",
   "Romanian": "🇷🇴",
   "Russian": "🇷🇺",
+  "Samoan": "🇼🇸",
   "Serbian": "🇷🇸",
+  "Sesotho": "🇱🇸",
+  "Shona": "🇿🇼",
+  "Sindhi": "🇵🇰",
   "Sinhala": "🇱🇰",
   "Slovak": "🇸🇰",
   "Slovenian": "🇸🇮",
   "Somali": "🇸🇴",
   "Spanish": "🇪🇸",
+  "Sundanese": "🇮🇩",
   "Swahili": "🇹🇿",
   "Swedish": "🇸🇪",
   "Tagalog": "🇵🇭",
+  "Tajik": "🇹🇯",
   "Tamil": "🇮🇳",
+  "Tatar": "🇷🇺",
   "Telugu": "🇮🇳",
   "Thai": "🇹🇭",
+  "Tibetan": "🇨🇳",
+  "Tigrinya": "🇪🇷",
   "Turkish": "🇹🇷",
+  "Turkmen": "🇹🇲",
   "Ukrainian": "🇺🇦",
   "Urdu": "🇵🇰",
+  "Uyghur": "🇨🇳",
   "Uzbek": "🇺🇿",
   "Vietnamese": "🇻🇳",
   "Welsh": "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
+  "Xhosa": "🇿🇦",
+  "Yiddish": "🇮🇱",
   "Yoruba": "🇳🇬",
   "Zulu": "🇿🇦",
 };
+
 
 // Comprehensive global language list - all major world languages
 const ALL_LANGUAGES = [
@@ -310,8 +343,11 @@ export function getCountryFlagForName(country: string): string {
 
 export function getLanguageFlagForName(language: string): string {
   if (!language) return "";
-  return LANGUAGE_FLAGS[language] || "🌐";
+  // Never use 🌐 globe — every language must show a real national flag.
+  // Falls back to white-flag glyph (neutral, still a flag) only if mapping missing.
+  return LANGUAGE_FLAGS[language] || "🏳️";
 }
+
 
 export function getCountryList(locale: string = "en"): string[] {
   try {
