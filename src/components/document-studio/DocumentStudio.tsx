@@ -24,9 +24,13 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Sparkles, Loader2, Wand2, Printer, Mail, FlaskConical, X, ChevronRight,
   ChevronLeft, ZoomIn, ZoomOut, Bold, Italic, List, Heading2, Search,
-  PanelRightClose, PanelRightOpen, Check,
+  PanelRightClose, PanelRightOpen, Check, Download, FileText, Stamp,
+  PenLine, ChevronDown, Trash2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -37,9 +41,12 @@ import {
   DocumentAudience, DocumentTemplate,
 } from "@/config/documentCatalog";
 import { DEPARTMENTS } from "@/hooks/useHRJobOffers";
-import { wrapWithJbjChrome, stripChromeArtifacts } from "@/templates/jbjLockedChrome";
+import { stripChromeArtifacts } from "@/templates/jbjLockedChrome";
 import { LockedLetterhead, LockedFooter } from "./LockedLetterhead";
 import AiEditChatPanel from "./AiEditChatPanel";
+import AssetLibraryDialog from "./assets/AssetLibraryDialog";
+import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
+import { exportPdf, exportDocx, printDocument, DocumentMarks } from "./export/exporters";
 
 interface Props {
   catalog: DocumentAudience;
@@ -106,6 +113,37 @@ function StudioShell({
   const [zoom, setZoom] = useState(100);
   const [aiOpen, setAiOpen] = useState(true);
   const [search, setSearch] = useState("");
+
+  // Signature + stamp placement
+  const { defaultSignature, defaultStamp } = useOwnerAssets();
+  const [marks, setMarks] = useState<DocumentMarks>({});
+  const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
+  const [exporting, setExporting] = useState<null | "pdf" | "docx">(null);
+
+  // Auto-attach owner's default signature & stamp the first time they exist.
+  useEffect(() => {
+    setMarks((m) => {
+      const next = { ...m };
+      if (!next.signature && defaultSignature?.signedUrl) {
+        next.signature = { url: defaultSignature.signedUrl, width: 200 };
+      }
+      if (!next.stamp && defaultStamp?.signedUrl) {
+        next.stamp = { url: defaultStamp.signedUrl, width: 130, rotation: -8 };
+      }
+      return next;
+    });
+  }, [defaultSignature?.signedUrl, defaultStamp?.signedUrl]);
+
+  const pickAsset = (asset: OwnerAsset) => {
+    if (!asset.signedUrl) return;
+    if (asset.kind === "signature") {
+      setMarks((m) => ({ ...m, signature: { url: asset.signedUrl!, width: m.signature?.width || 200 } }));
+    } else {
+      setMarks((m) => ({ ...m, stamp: { url: asset.signedUrl!, width: m.stamp?.width || 130, rotation: m.stamp?.rotation ?? -8 } }));
+    }
+    toast.success(`${asset.kind === "signature" ? "Signature" : "Stamp"} placed`);
+  };
+  const removeMark = (kind: AssetKind) => setMarks((m) => ({ ...m, [kind]: undefined }));
 
   // Lock body scroll while overlay is open
   useEffect(() => {
@@ -177,11 +215,21 @@ function StudioShell({
 
   const handlePrint = () => {
     if (!bodyHtml) return;
-    const w = window.open("", "_blank");
-    if (!w) return;
-    w.document.write(wrapWithJbjChrome(DOMPurify.sanitize(bodyHtml)));
-    w.document.close();
-    w.print();
+    printDocument(bodyHtml, marks);
+  };
+
+  const handleExport = async (kind: "pdf" | "docx") => {
+    if (!bodyHtml || !template) return;
+    setExporting(kind);
+    try {
+      if (kind === "pdf") await exportPdf(bodyHtml, marks, template);
+      else await exportDocx(bodyHtml, marks, template);
+      toast.success(`${kind.toUpperCase()} downloaded`);
+    } catch (e: any) {
+      toast.error(e?.message || `${kind.toUpperCase()} export failed`);
+    } finally {
+      setExporting(null);
+    }
   };
 
   const handleSend = async (recipientOverride?: string) => {
@@ -190,7 +238,8 @@ function StudioShell({
     if (!to) { toast.error("Enter a recipient email"); return; }
     setSending(true);
     try {
-      const fullHtml = wrapWithJbjChrome(DOMPurify.sanitize(bodyHtml));
+      const { buildPrintableHtml } = await import("./export/exporters");
+      const fullHtml = buildPrintableHtml(bodyHtml, marks);
       const { error } = await supabase.functions.invoke("compose-branded-email", {
         body: {
           to, subject: template.emailSubject, body_html: fullHtml,
@@ -247,6 +296,12 @@ function StudioShell({
         }} hasTemplate={!!templateId} hasBody={!!bodyHtml} />
 
         <div className="ml-auto flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => setAssetDialog("signature")}>
+            <PenLine className="w-4 h-4 mr-1.5" /> Signature
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setAssetDialog("stamp")}>
+            <Stamp className="w-4 h-4 mr-1.5" /> Stamp
+          </Button>
           <Button variant="ghost" size="sm" onClick={() => setAiOpen((v) => !v)}>
             {aiOpen ? <PanelRightClose className="w-4 h-4 mr-1.5" /> : <PanelRightOpen className="w-4 h-4 mr-1.5" />}
             {aiOpen ? "Hide AI" : "Show AI"}
@@ -260,6 +315,13 @@ function StudioShell({
           </button>
         </div>
       </div>
+
+      <AssetLibraryDialog
+        open={assetDialog !== null}
+        onOpenChange={(v) => !v && setAssetDialog(null)}
+        initialTab={assetDialog || "signature"}
+        onPick={pickAsset}
+      />
 
       {/* ─── Body ─── */}
       <div className="flex-1 min-h-0 flex">
@@ -432,19 +494,33 @@ function StudioShell({
                   {sending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Mail className="w-4 h-4 mr-2" />}
                   Send via Branded Email
                 </Button>
-                <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline" size="sm" onClick={handlePrint}>
-                    <Printer className="w-4 h-4 mr-1.5" /> Print / PDF
-                  </Button>
-                  <Button
-                    variant="outline" size="sm"
-                    onClick={() => handleSend(OWNER_TEST_EMAIL)}
-                    disabled={sending}
-                    title={`Send a test copy to ${OWNER_TEST_EMAIL}`}
-                  >
-                    <FlaskConical className="w-4 h-4 mr-1.5" /> Send Test
-                  </Button>
-                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="w-full" disabled={!!exporting}>
+                      {exporting ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
+                      Export <ChevronDown className="w-3.5 h-3.5 ml-1" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="bg-[#FDFBF7]">
+                    <DropdownMenuItem onClick={() => handleExport("pdf")}>
+                      <FileText className="w-4 h-4 mr-2" /> Download PDF
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleExport("docx")}>
+                      <FileText className="w-4 h-4 mr-2" /> Download Word (.docx)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handlePrint}>
+                      <Printer className="w-4 h-4 mr-2" /> Print
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <Button
+                  variant="outline" size="sm" className="w-full"
+                  onClick={() => handleSend(OWNER_TEST_EMAIL)}
+                  disabled={sending}
+                  title={`Send a test copy to ${OWNER_TEST_EMAIL}`}
+                >
+                  <FlaskConical className="w-4 h-4 mr-1.5" /> Send Test to {OWNER_TEST_EMAIL}
+                </Button>
               </div>
             </>
           )}
@@ -463,11 +539,28 @@ function StudioShell({
                 }}
               >
                 <LockedLetterhead />
-                <div className="px-12 py-10 min-h-[700px] bg-[#FDFBF7]">
+                <div className="relative px-12 py-10 min-h-[700px] bg-[#FDFBF7]">
                   {bodyHtml ? (
                     <EditableBody html={bodyHtml} onChange={setBodyHtml} />
                   ) : (
                     <EmptyBody onGenerate={handleGenerate} canGenerate={requiredOk} generating={generating} />
+                  )}
+                  {marks.signature && (
+                    <div className="absolute left-12 bottom-12 group">
+                      <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 260 }} className="block" />
+                      <div className="border-t border-[#1A1A1A] mt-1 pt-1 text-[10px] text-[#1A1A1A]/70" style={{ width: 240 }}>Authorised signature</div>
+                      <button onClick={() => removeMark("signature")} className="absolute -top-2 -right-2 hidden group-hover:flex h-5 w-5 rounded-full bg-white border border-[#B89555]/40 items-center justify-center" title="Remove signature">
+                        <Trash2 className="w-3 h-3 text-red-600" />
+                      </button>
+                    </div>
+                  )}
+                  {marks.stamp && (
+                    <div className="absolute right-12 bottom-16 group">
+                      <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 180, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, opacity: 0.92 }} className="block" />
+                      <button onClick={() => removeMark("stamp")} className="absolute -top-2 -right-2 hidden group-hover:flex h-5 w-5 rounded-full bg-white border border-[#B89555]/40 items-center justify-center" title="Remove stamp">
+                        <Trash2 className="w-3 h-3 text-red-600" />
+                      </button>
+                    </div>
                   )}
                 </div>
                 <LockedFooter />
