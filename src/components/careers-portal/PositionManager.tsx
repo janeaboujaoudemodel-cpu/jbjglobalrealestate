@@ -101,17 +101,7 @@ export default function PositionManager() {
   };
 
   useEffect(() => { refresh(); }, []);
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("open_positions")
-      .select("*")
-      .order("created_at", { ascending: false });
-    if (error) toast.error(error.message);
-    setPositions((data as unknown as Position[]) ?? []);
-    setLoading(false);
-  };
 
-  useEffect(() => { refresh(); }, []);
 
   const openCreate = () => { setForm(EMPTY_FORM); setAiInstruction(""); setEditorOpen(true); };
   const openEdit = (p: Position) => {
