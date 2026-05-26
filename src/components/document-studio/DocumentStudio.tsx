@@ -44,7 +44,7 @@ import { DEPARTMENTS } from "@/hooks/useHRJobOffers";
 import { stripChromeArtifacts } from "@/templates/jbjLockedChrome";
 import { LockedLetterhead, LockedFooter } from "./LockedLetterhead";
 import DraggableMark from "./DraggableMark";
-import AiEditChatPanel from "./AiEditChatPanel";
+import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
 import { exportPdf, exportDocx, printDocument, DocumentMarks } from "./export/exporters";
