@@ -662,13 +662,11 @@ export default function JoinApplication() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     {visiblePositions.map((pos, idx) => {
                       const selected = formData.positionApplied === pos.id;
-                      // Heuristic auto-tags so badges feel curated without DB schema changes
                       const tags: JobCardTag[] = [];
-                      if (idx === 0) tags.push("top-opportunity");
+                      if (idx === 0 && pos.status !== "closed" && pos.status !== "paused") tags.push("top-opportunity");
                       if (pos.is_broker_role) tags.push("premium");
-                      if (idx === 1) tags.push("urgent");
-                      if (idx === 2) tags.push("most-applied");
-                      if (!tags.length) tags.push("partner");
+                      if ((pos.applications_count ?? 0) >= 10) tags.push("most-applied");
+                      if (!tags.length && !pos.is_featured) tags.push("partner");
                       return (
                         <PremiumJobCard
                           key={pos.id}
@@ -681,6 +679,10 @@ export default function JoinApplication() {
                           isBrokerRole={pos.is_broker_role}
                           isCommissionBased={pos.is_broker_role}
                           tags={tags}
+                          status={pos.status ?? "open"}
+                          isFeatured={!!pos.is_featured}
+                          applicationsCount={pos.applications_count ?? 0}
+                          applicationCap={pos.application_cap ?? null}
                           selected={selected}
                           onApply={handleApplyPosition}
                           onSelect={(id) => setFormData({ ...formData, positionApplied: id })}
