@@ -81,14 +81,14 @@ Deno.serve(async (req) => {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
       },
       body: JSON.stringify({
-        // Stronger reasoning model for contract-grade prose
-        model: "google/gemini-2.5-pro",
+        // Fast model — composer renders structure, AI only writes the narrative
+        model: "google/gemini-3.5-flash",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userMessage },
         ],
         response_format: { type: "json_object" },
-        temperature: 0.35,
+        temperature: 0.3,
       }),
     });
 
