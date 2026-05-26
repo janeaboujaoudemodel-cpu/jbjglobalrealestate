@@ -562,6 +562,17 @@ function StudioShell({
             <Stamp className="w-4 h-4 lg:mr-1.5" />
             <span className="hidden lg:inline">Stamp</span>
           </Button>
+          {template && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => { setSaveName(`${template.label} — Custom`); setSaveDialogOpen(true); }}
+              title="Save current edits as a reusable template"
+            >
+              <Check className="w-4 h-4 lg:mr-1.5" />
+              <span className="hidden lg:inline">Save Template</span>
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="sm"
