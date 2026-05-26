@@ -878,7 +878,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
             }}
           />
           <Button
-            className="gap-2 bg-[#EFE6D6] text-white hover:bg-[#EFE6D6]-dark font-semibold"
+            className="gap-2 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#F2EAD3] border border-[#B89555] font-semibold"
             onClick={() => document.getElementById('cv-upload-input')?.click()}
           >
             <Upload className="h-4 w-4" />
