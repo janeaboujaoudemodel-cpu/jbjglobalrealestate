@@ -789,19 +789,21 @@ function StudioShell({
                   }
                 >
                   {bodyHtml ? (
-                    <EditableBody
-                      html={bodyHtml}
-                      onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
-                    />
-                    {userEdited && (
-                      <button
-                        type="button"
-                        onClick={resetToTemplate}
-                        className="absolute top-2 right-2 z-20 text-[10px] uppercase tracking-[0.16em] bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] rounded-full px-2.5 py-1 hover:bg-[#EFE6D6]"
-                      >
-                        Reset to template
-                      </button>
-                    )}
+                    <>
+                      <EditableBody
+                        html={bodyHtml}
+                        onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
+                      />
+                      {userEdited && (
+                        <button
+                          type="button"
+                          onClick={resetToTemplate}
+                          className="absolute top-2 right-2 z-20 text-[10px] uppercase tracking-[0.16em] bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] rounded-full px-2.5 py-1 hover:bg-[#EFE6D6]"
+                        >
+                          Reset to template
+                        </button>
+                      )}
+                    </>
                   ) : (
                     <div className="text-[12px] text-[#1A1A1A]/40 italic">
                       Empty document — type here or use the AI assistant on the right to draft the body.
