@@ -749,14 +749,80 @@ function StudioShell({
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {template.needsPosition && (
                   <Field label="Department">
-                    <Select value={department} onValueChange={setDepartment}>
-                      <SelectTrigger className="bg-[#FDFBF7]"><SelectValue /></SelectTrigger>
-                      <SelectContent className="z-[2147483647] bg-[#FDFBF7]">
-                        {DEPARTMENTS.map((d) => (
-                          <SelectItem key={d} value={d}>{d}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="space-y-1.5">
+                      <Select value={department} onValueChange={setDepartment}>
+                        <SelectTrigger className="bg-[#FDFBF7]"><SelectValue /></SelectTrigger>
+                        <SelectContent className="z-[2147483647] bg-[#FDFBF7]">
+                          {allDepartments.map((d) => (
+                            <SelectItem key={d} value={d}>{d}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {/* Custom departments — rename / delete */}
+                      {customDepartments.length > 0 && (
+                        <div className="space-y-1 pt-1">
+                          {customDepartments.map((d) => (
+                            <div key={d} className="flex items-center gap-1.5 text-[11px]">
+                              {editingDept === d ? (
+                                <Input
+                                  autoFocus
+                                  value={deptDraft}
+                                  onChange={(e) => setDeptDraft(e.target.value)}
+                                  onBlur={() => {
+                                    const v = deptDraft.trim();
+                                    if (v && v !== d) {
+                                      setCustomDepartments((p) => p.map((x) => (x === d ? v : x)));
+                                      if (department === d) setDepartment(v);
+                                    }
+                                    setEditingDept(null);
+                                  }}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+                                    if (e.key === "Escape") setEditingDept(null);
+                                  }}
+                                  className="h-6 text-[11px] flex-1"
+                                />
+                              ) : (
+                                <span className="flex-1 text-[#1A1A1A]/80 truncate">• {d}</span>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => { setEditingDept(d); setDeptDraft(d); }}
+                                className="text-[#1A1A1A]/60 hover:text-[#B89555] p-0.5"
+                                title="Rename"
+                              >
+                                <PenLine className="w-3 h-3" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setCustomDepartments((p) => p.filter((x) => x !== d));
+                                  if (department === d) setDepartment(DEPARTMENTS[0]);
+                                }}
+                                className="text-[#1A1A1A]/60 hover:text-red-600 p-0.5"
+                                title="Delete"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const name = window.prompt("New department name");
+                          const v = (name || "").trim();
+                          if (!v) return;
+                          if (allDepartments.includes(v)) { toast.error("Department already exists"); return; }
+                          setCustomDepartments((p) => [...p, v]);
+                          setDepartment(v);
+                        }}
+                        className="text-[11px] text-[#1A1A1A]/70 hover:text-[#B89555] underline underline-offset-2"
+                      >
+                        + Add custom department
+                      </button>
+                    </div>
                   </Field>
                 )}
 
