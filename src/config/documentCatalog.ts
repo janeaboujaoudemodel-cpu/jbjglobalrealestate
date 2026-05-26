@@ -357,7 +357,7 @@ const CLIENT: DocumentTemplate[] = [
   },
   {
     id: "holiday_home_agreement",
-    audience: "client",
+    audience: "staff",
     label: "Holiday Home — Booking Agreement",
     description: "Short-stay holiday home booking with pre-filled non-refundable terms.",
     icon: Home,
@@ -400,7 +400,7 @@ const CLIENT: DocumentTemplate[] = [
   },
   {
     id: "facility_management_agreement",
-    audience: "client",
+    audience: "staff",
     label: "Facility Management Agreement",
     description: "Property facility management contract — scope, term and fees.",
     icon: Building2,
