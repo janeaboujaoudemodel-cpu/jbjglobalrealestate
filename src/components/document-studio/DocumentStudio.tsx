@@ -133,6 +133,22 @@ function StudioShell({
   const [search, setSearch] = useState("");
   const [pages, setPages] = useState<number | "auto">("auto");
 
+  // Owner-side signature defaults (editable from the left rail).
+  const [ownerName, setOwnerName] = useState<string>("Jane Bou Jaude");
+  const [ownerTitle, setOwnerTitle] = useState<string>("Founder & CEO");
+  const [ownerDate, setOwnerDate] = useState<string>(new Date().toISOString().slice(0, 10));
+  const [applicantDate, setApplicantDate] = useState<string>(""); // blank by design
+
+  // Hide / restore the "Commission" and "Custom fields" rail cards.
+  const [hiddenSections, setHiddenSections] = useState<Set<string>>(new Set());
+  const toggleSection = (id: string) =>
+    setHiddenSections((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
+
+  // AI auto-fill from pasted details / attached document.
+  const [autoFillText, setAutoFillText] = useState("");
+  const [autoFillBusy, setAutoFillBusy] = useState(false);
+  const autoFillFileRef = useRef<HTMLInputElement>(null);
+
   // Signature + stamp placement (with x/y positions for free dragging)
   const { defaultSignature, defaultStamp } = useOwnerAssets();
   const [marks, setMarks] = useState<DocumentMarks & {
@@ -140,10 +156,11 @@ function StudioShell({
     signatureBXY?: { x: number; y: number };
     stampXY?: { x: number; y: number };
     dateXY?: { x: number; y: number };
+    dateValue?: string;
     signatureB?: { url: string; width: number };
     showDate?: boolean;
     showSigB?: boolean;
-  }>({ showDate: true, showSigB: true });
+  }>({ showDate: true, showSigB: true, dateValue: new Date().toISOString().slice(0, 10) });
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
   const [exporting, setExporting] = useState<null | "pdf" | "docx">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
