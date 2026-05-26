@@ -202,7 +202,7 @@ export default function JoinApplication() {
           .order("is_featured", { ascending: false })
           .order("created_at", { ascending: false });
         if (error) throw error;
-        setOpenPositions(data || []);
+        setOpenPositions((data as unknown as OpenPosition[]) || []);
       } catch (err) {
         console.error("Error fetching positions:", err);
       } finally {
