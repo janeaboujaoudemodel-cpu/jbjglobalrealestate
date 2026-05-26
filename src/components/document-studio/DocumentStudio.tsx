@@ -153,6 +153,11 @@ function StudioShell({
 
   // Save-as-Template state.
   const [savingTemplate, setSavingTemplate] = useState(false);
+
+  // AI auto-fill from pasted details / attached document.
+  const [autoFillText, setAutoFillText] = useState("");
+  const [autoFillBusy, setAutoFillBusy] = useState(false);
+  const autoFillFileRef = useRef<HTMLInputElement>(null);
   const autoFillFileRef = useRef<HTMLInputElement>(null);
 
   // Document language (drives translation + AI replies + STT).
