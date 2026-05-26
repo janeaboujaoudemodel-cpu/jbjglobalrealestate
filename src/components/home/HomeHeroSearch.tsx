@@ -116,9 +116,12 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
           }}
         >
 
-          {/* LEFT: input — full white, edge-to-edge until the Search button */}
-          <form
-            onSubmit={onSubmit}
+          {/* LEFT: input — full white, edge-to-edge until the Search button.
+              NOTE: Intentionally NOT wrapped in a <form>. A global rule in
+              src/styles/theme-tokens.css forces a 2px blue border on every
+              input that lives inside any <form>. Using a div + Enter handler
+              keeps the pill clean. */}
+          <div
             role="search"
             data-no-contrast-guard
             className="flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0 bg-white"
@@ -127,19 +130,26 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               type="text"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  onSubmit(e as unknown as React.FormEvent);
+                }
+              }}
               placeholder="Search projects, developers, areas, tools…"
               aria-label="Search the JBJ website"
               data-no-contrast-guard
-              data-jbj-field
-              className="flex-1 min-w-0 h-full bg-transparent border-0 outline-none text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-normal"
+              className="flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-normal"
               style={{
                 color: "#1A1A1A",
                 WebkitTextFillColor: "#1A1A1A",
                 border: "none",
+                outline: "none",
                 boxShadow: "none",
+                background: "transparent",
               }}
             />
-          </form>
+          </div>
 
           {/* Search — white segment merged with input field */}
           <div className="relative flex flex-shrink-0 group/search">
