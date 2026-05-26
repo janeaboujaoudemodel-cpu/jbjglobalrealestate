@@ -11,21 +11,23 @@ import { JBJ_BRAND, JBJ_GOLD, JBJ_INK, JBJ_CHAMPAGNE, jbjMonogramSrc } from "@/t
 export function LockedLetterhead() {
   return (
     <header
-      className="relative w-full px-10 py-5"
+      className="relative w-full py-5"
       style={{
         background: JBJ_CHAMPAGNE,
         borderBottom: `1px solid ${JBJ_GOLD}`,
         fontFamily: "Inter, system-ui, sans-serif",
+        paddingLeft: 24,
+        paddingRight: 40,
       }}
     >
-      <div className="flex items-center gap-[18px]">
+      <div className="flex items-center gap-[20px]">
         <img
           src={jbjMonogramSrc}
           alt="JBJ"
           className="block shrink-0 object-contain"
           style={{
-            width: 64,
-            height: 64,
+            width: 96,
+            height: 96,
             background: "transparent",
           }}
         />

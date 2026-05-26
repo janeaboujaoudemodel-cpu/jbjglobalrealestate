@@ -43,6 +43,7 @@ import {
 import { DEPARTMENTS } from "@/hooks/useHRJobOffers";
 import { stripChromeArtifacts } from "@/templates/jbjLockedChrome";
 import { LockedLetterhead, LockedFooter } from "./LockedLetterhead";
+import DraggableMark from "./DraggableMark";
 import AiEditChatPanel from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
@@ -131,9 +132,17 @@ function StudioShell({
   const [search, setSearch] = useState("");
   const [pages, setPages] = useState<number | "auto">("auto");
 
-  // Signature + stamp placement
+  // Signature + stamp placement (with x/y positions for free dragging)
   const { defaultSignature, defaultStamp } = useOwnerAssets();
-  const [marks, setMarks] = useState<DocumentMarks>({});
+  const [marks, setMarks] = useState<DocumentMarks & {
+    signatureXY?: { x: number; y: number };
+    signatureBXY?: { x: number; y: number };
+    stampXY?: { x: number; y: number };
+    dateXY?: { x: number; y: number };
+    signatureB?: { url: string; width: number };
+    showDate?: boolean;
+    showSigB?: boolean;
+  }>({ showDate: true, showSigB: true });
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
   const [exporting, setExporting] = useState<null | "pdf" | "docx">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -181,7 +190,14 @@ function StudioShell({
     }
     toast.success(`${asset.kind === "signature" ? "Signature" : "Stamp"} placed`);
   };
-  const removeMark = (kind: AssetKind) => setMarks((m) => ({ ...m, [kind]: undefined }));
+  const removeMark = (kind: "signature" | "signatureB" | "stamp" | "date") =>
+    setMarks((m) => {
+      const n: any = { ...m };
+      if (kind === "date") n.showDate = false;
+      else if (kind === "signatureB") n.showSigB = false;
+      else n[kind] = undefined;
+      return n;
+    });
 
   // Lock body scroll while overlay is open
   useEffect(() => {
@@ -608,22 +624,12 @@ function StudioShell({
                 </div>
               </div>
               <div className="p-3 border-t border-[#B89555]/20 space-y-2">
-                <Button
-                  onClick={handleGenerate}
-                  disabled={generating || !requiredOk}
-                  className="w-full"
-                >
-                  {generating ? (
-                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating…</>
-                  ) : (
-                    <><Wand2 className="w-4 h-4 mr-2" /> {bodyHtml ? "Regenerate" : "Generate with AI"}</>
-                  )}
+                <Button variant="outline" className="w-full" onClick={() => setStep(3)}>
+                  Continue to Review & Send <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
-                {bodyHtml && (
-                  <Button variant="outline" className="w-full" onClick={() => setStep(3)}>
-                    Continue to Review & Send <ChevronRight className="w-4 h-4 ml-1" />
-                  </Button>
-                )}
+                <p className="text-[10px] text-[#1A1A1A]/55 text-center">
+                  Tip: use the AI assistant on the right to draft the body, or type directly into the page.
+                </p>
               </div>
             </>
           )}
@@ -715,31 +721,72 @@ function StudioShell({
                   className="relative px-12 py-10 bg-[#FDFBF7]"
                   style={
                     pages === "auto"
-                      ? { minHeight: bodyHtml ? 600 : 420 }
-                      : { height: 1056 * (pages as number) - 220, minHeight: 420 }
+                      ? { minHeight: 520 }
+                      : { minHeight: 1056 * (pages as number) - 260 }
                   }
                 >
                   {bodyHtml ? (
                     <EditableBody html={bodyHtml} onChange={setBodyHtml} />
                   ) : (
-                    <EmptyBody onGenerate={handleGenerate} canGenerate={requiredOk} generating={generating} />
+                    <div className="text-[12px] text-[#1A1A1A]/40 italic">
+                      Empty document — type here or use the AI assistant on the right to draft the body.
+                    </div>
                   )}
+
+                  {marks.showDate !== false && (
+                    <DraggableMark
+                      x={marks.dateXY?.x ?? 560}
+                      y={marks.dateXY?.y ?? 0}
+                      onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))}
+                      onRemove={() => removeMark("date")}
+                      ariaLabel="Date"
+                    >
+                      <div className="text-[12px] text-[#1A1A1A] font-medium border-b border-[#1A1A1A]/40 pb-1 pr-6">
+                        Date: {new Date().toLocaleDateString("en-GB")}
+                      </div>
+                    </DraggableMark>
+                  )}
+
                   {marks.signature && (
-                    <div className="absolute left-12 bottom-12 group">
-                      <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 260 }} className="block" />
-                      <div className="border-t border-[#1A1A1A] mt-1 pt-1 text-[10px] text-[#1A1A1A]/70" style={{ width: 240 }}>Authorised signature</div>
-                      <button onClick={() => removeMark("signature")} className="absolute -top-2 -right-2 hidden group-hover:flex h-5 w-5 rounded-full bg-white border border-[#B89555]/40 items-center justify-center" title="Remove signature">
-                        <Trash2 className="w-3 h-3 text-red-600" />
-                      </button>
-                    </div>
+                    <DraggableMark
+                      x={marks.signatureXY?.x ?? 0}
+                      y={marks.signatureXY?.y ?? 420}
+                      onChange={(x, y) => setMarks((m) => ({ ...m, signatureXY: { x, y } }))}
+                      onRemove={() => removeMark("signature")}
+                      ariaLabel="Party A signature"
+                    >
+                      <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 240 }} className="block pointer-events-none" />
+                      <div className="border-t border-[#1A1A1A] mt-1 pt-1 text-[10px] text-[#1A1A1A]/70" style={{ width: 220 }}>Authorised signature (Party A)</div>
+                    </DraggableMark>
                   )}
+
+                  {marks.showSigB !== false && (
+                    <DraggableMark
+                      x={marks.signatureBXY?.x ?? 460}
+                      y={marks.signatureBXY?.y ?? 420}
+                      onChange={(x, y) => setMarks((m) => ({ ...m, signatureBXY: { x, y } }))}
+                      onRemove={() => removeMark("signatureB")}
+                      ariaLabel="Party B signature"
+                    >
+                      {marks.signatureB ? (
+                        <img src={marks.signatureB.url} alt="Signature B" style={{ width: marks.signatureB.width, maxWidth: 240 }} className="block pointer-events-none" />
+                      ) : (
+                        <div style={{ width: 220, height: 40 }} />
+                      )}
+                      <div className="border-t border-[#1A1A1A] mt-1 pt-1 text-[10px] text-[#1A1A1A]/70" style={{ width: 220 }}>Applicant signature (Party B)</div>
+                    </DraggableMark>
+                  )}
+
                   {marks.stamp && (
-                    <div className="absolute right-12 bottom-16 group">
-                      <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 180, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, opacity: 0.92 }} className="block" />
-                      <button onClick={() => removeMark("stamp")} className="absolute -top-2 -right-2 hidden group-hover:flex h-5 w-5 rounded-full bg-white border border-[#B89555]/40 items-center justify-center" title="Remove stamp">
-                        <Trash2 className="w-3 h-3 text-red-600" />
-                      </button>
-                    </div>
+                    <DraggableMark
+                      x={marks.stampXY?.x ?? 260}
+                      y={marks.stampXY?.y ?? 440}
+                      onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
+                      onRemove={() => removeMark("stamp")}
+                      ariaLabel="Stamp"
+                    >
+                      <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 180, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, opacity: 0.92 }} className="block pointer-events-none" />
+                    </DraggableMark>
                   )}
                 </div>
                 <LockedFooter />
