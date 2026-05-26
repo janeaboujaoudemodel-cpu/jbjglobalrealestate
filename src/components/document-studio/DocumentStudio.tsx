@@ -328,6 +328,15 @@ function StudioShell({
           <Button variant="outline" size="sm" onClick={() => setAssetDialog("stamp")}>
             <Stamp className="w-4 h-4 mr-1.5" /> Stamp
           </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleFullscreen}
+            title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+          >
+            {isFullscreen ? <Minimize2 className="w-4 h-4 mr-1.5" /> : <Maximize2 className="w-4 h-4 mr-1.5" />}
+            {isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+          </Button>
           <Button variant="ghost" size="sm" onClick={() => setAiOpen((v) => !v)}>
             {aiOpen ? <PanelRightClose className="w-4 h-4 mr-1.5" /> : <PanelRightOpen className="w-4 h-4 mr-1.5" />}
             {aiOpen ? "Hide AI" : "Show AI"}
