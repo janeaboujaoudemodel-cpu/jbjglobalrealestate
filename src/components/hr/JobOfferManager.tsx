@@ -169,28 +169,9 @@ const JobOfferManager = () => {
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-                <div className="space-y-2">
-                  <Label>Department</Label>
-                  <Select 
-                    value={formData.department || selectedDepartment}
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, department: value }))}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {DEPARTMENTS.map(dept => (
-                        <SelectItem key={dept} value={dept}>
-                          {dept}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
                 <div className="space-y-2">
                   <Label>Position Title</Label>
-                  <Input 
+                  <Input
                     value={formData.position_title}
                     onChange={(e) => setFormData(prev => ({ ...prev, position_title: e.target.value }))}
                     placeholder="e.g., Senior Sales Agent"
