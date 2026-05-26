@@ -134,7 +134,7 @@ function StudioShell({
   const [pages, setPages] = useState<number | "auto">("auto");
 
   // Owner-side signature defaults (editable from the left rail).
-  const [ownerName, setOwnerName] = useState<string>("Jane Bou Jaude");
+  const [ownerName, setOwnerName] = useState<string>("Jameel Bou Jaoude");
   const [ownerTitle, setOwnerTitle] = useState<string>("Founder & CEO");
   const [ownerDate, setOwnerDate] = useState<string>(new Date().toISOString().slice(0, 10));
   const [applicantDate, setApplicantDate] = useState<string>(""); // blank by design
@@ -201,6 +201,12 @@ function StudioShell({
       return next;
     });
   }, [defaultSignature?.signedUrl, defaultStamp?.signedUrl]);
+
+  // Owner-date in the left rail is the single source of truth for the
+  // preview date chip. Whenever it changes, propagate to marks.dateValue.
+  useEffect(() => {
+    setMarks((m) => ({ ...m, dateValue: ownerDate }));
+  }, [ownerDate]);
 
   const pickAsset = (asset: OwnerAsset) => {
     if (!asset.signedUrl) return;
@@ -435,7 +441,6 @@ function StudioShell({
         <div className="ml-auto flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 border border-[#B89555]/30 bg-[#F7F2EA] rounded-md pl-2 pr-1 py-0.5">
             <Globe className="w-3.5 h-3.5" />
-            <span className="uppercase tracking-[0.14em]">Lang</span>
             <Select value={docLanguage} onValueChange={setDocLanguage}>
               <SelectTrigger className="h-6 w-[112px] border-0 bg-transparent px-1.5 text-[12px] font-semibold text-[#1A1A1A] focus:ring-0 focus:ring-offset-0 shadow-none">
                 <SelectValue />
@@ -1003,19 +1008,10 @@ function StudioShell({
                       onRemove={() => removeMark("date")}
                       ariaLabel="Date"
                     >
-                      <label className="block cursor-text">
-                        <span className="text-[12px] text-[#1A1A1A] font-medium border-b border-[#1A1A1A]/40 pb-1 pr-6 inline-block">
-                          {new Date(marks.dateValue || new Date().toISOString().slice(0,10))
-                            .toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
-                        </span>
-                        <input
-                          type="date"
-                          value={marks.dateValue || ""}
-                          onPointerDown={(e) => e.stopPropagation()}
-                          onChange={(e) => setMarks((m) => ({ ...m, dateValue: e.target.value }))}
-                          className="block mt-1 text-[10px] bg-transparent border-none p-0 outline-none text-[#1A1A1A]/60"
-                        />
-                      </label>
+                      <div className="text-[12px] text-[#1A1A1A] font-medium">
+                        {new Date(marks.dateValue || ownerDate || new Date().toISOString().slice(0,10))
+                          .toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
+                      </div>
                     </DraggableMark>
                   )}
 
