@@ -140,7 +140,7 @@ export function signatureBlock(opts: {
   applicantDate?: string;
   applicantLabel?: string;
 }): string {
-  const oName = esc(opts.ownerName || "Jane Bou Jaude");
+  const oName = esc(opts.ownerName || "Jameel Bou Jaoude");
   const oTitle = esc(opts.ownerTitle || "Founder & CEO");
   const oDate = esc(formatHumanDate(opts.ownerDate) || todayLong());
   const aName = esc(opts.applicantName || "");
