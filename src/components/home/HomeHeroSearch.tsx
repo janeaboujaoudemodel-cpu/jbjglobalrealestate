@@ -172,9 +172,6 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             </span>
           </div>
 
-          {/* Gold divider */}
-          <span aria-hidden className="hidden md:block self-stretch w-px bg-[#B89555]/55 flex-shrink-0" />
-
           {/* Free Consultation — text only, with instant hover tooltip */}
           <div className="relative hidden md:flex flex-shrink-0 group/book">
             <button
