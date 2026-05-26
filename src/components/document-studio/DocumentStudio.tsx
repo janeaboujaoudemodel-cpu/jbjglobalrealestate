@@ -781,50 +781,72 @@ function StudioShell({
                   </div>
                 )}
 
-                <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
-                      Custom Fields
+                {!hiddenSections.has("custom") && (
+                  <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
+                        Custom Fields
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setCustomFields((cs) => [...cs, { label: "", value: "" }])}
+                          className="text-[11px] text-[#1A1A1A] hover:text-[#B89555] inline-flex items-center gap-1"
+                        >
+                          <Plus className="w-3 h-3" /> Add field
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => toggleSection("custom")}
+                          className="text-[#1A1A1A]/55 hover:text-red-600"
+                          title="Hide this section from the document"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setCustomFields((cs) => [...cs, { label: "", value: "" }])}
-                      className="text-[11px] text-[#1A1A1A] hover:text-[#B89555] inline-flex items-center gap-1"
-                    >
-                      <Plus className="w-3 h-3" /> Add field
-                    </button>
+                    {customFields.length === 0 ? (
+                      <p className="text-[10px] text-[#1A1A1A]/55">Add any extra clause — e.g. "Sign-on bonus", "Car allowance".</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {customFields.map((c, i) => (
+                          <div key={i} className="grid grid-cols-12 gap-1.5">
+                            <Input
+                              placeholder="Field name"
+                              value={c.label}
+                              onChange={(e) => setCustomFields((cs) => cs.map((x, j) => j === i ? { ...x, label: e.target.value } : x))}
+                              className="col-span-5 h-8 text-[12px] bg-[#FDFBF7]"
+                            />
+                            <Input
+                              placeholder="Value"
+                              value={c.value}
+                              onChange={(e) => setCustomFields((cs) => cs.map((x, j) => j === i ? { ...x, value: e.target.value } : x))}
+                              className="col-span-6 h-8 text-[12px] bg-[#FDFBF7]"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setCustomFields((cs) => cs.filter((_, j) => j !== i))}
+                              className="col-span-1 h-8 flex items-center justify-center text-[#1A1A1A]/55 hover:text-red-600"
+                              title="Remove field"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  {customFields.length === 0 ? (
-                    <p className="text-[10px] text-[#1A1A1A]/55">Add any extra clause — e.g. "Sign-on bonus", "Car allowance".</p>
-                  ) : (
-                    <div className="space-y-2">
-                      {customFields.map((c, i) => (
-                        <div key={i} className="grid grid-cols-12 gap-1.5">
-                          <Input
-                            placeholder="Field name"
-                            value={c.label}
-                            onChange={(e) => setCustomFields((cs) => cs.map((x, j) => j === i ? { ...x, label: e.target.value } : x))}
-                            className="col-span-5 h-8 text-[12px] bg-[#FDFBF7]"
-                          />
-                          <Input
-                            placeholder="Value"
-                            value={c.value}
-                            onChange={(e) => setCustomFields((cs) => cs.map((x, j) => j === i ? { ...x, value: e.target.value } : x))}
-                            className="col-span-6 h-8 text-[12px] bg-[#FDFBF7]"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setCustomFields((cs) => cs.filter((_, j) => j !== i))}
-                            className="col-span-1 h-8 flex items-center justify-center text-[#1A1A1A]/55 hover:text-red-600"
-                            title="Remove field"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                )}
+
+                {hiddenSections.size > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setHiddenSections(new Set())}
+                    className="w-full text-[11px] text-[#1A1A1A]/70 hover:text-[#B89555] underline underline-offset-2"
+                  >
+                    + Restore hidden sections ({hiddenSections.size})
+                  </button>
+                )}
               </div>
               <div className="p-3 border-t border-[#B89555]/20 space-y-2">
                 <Button variant="outline" className="w-full" onClick={() => setStep(3)}>
