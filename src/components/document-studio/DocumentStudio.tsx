@@ -786,18 +786,18 @@ function StudioShell({
                         <button
                           type="button"
                           onClick={() => setEditingFieldKey(isEditing ? null : f.key)}
-                          className="opacity-0 group-hover:opacity-100 text-[#1A1A1A]/55 hover:text-[#B89555]"
+                          className="text-[#1A1A1A]/60 hover:text-[#B89555] p-0.5"
                           title="Rename field"
                         >
-                          <PenLine className="w-3 h-3" />
+                          <PenLine className="w-3.5 h-3.5" />
                         </button>
                         <button
                           type="button"
                           onClick={() => hideField(f.key)}
-                          className="opacity-0 group-hover:opacity-100 text-[#1A1A1A]/55 hover:text-red-600"
+                          className="text-[#1A1A1A]/60 hover:text-red-600 p-0.5"
                           title="Remove this field from document"
                         >
-                          <Trash2 className="w-3 h-3" />
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                       {f.type === "textarea" ? (
