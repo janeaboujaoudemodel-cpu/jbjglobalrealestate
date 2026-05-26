@@ -19,7 +19,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { stripChromeArtifacts } from "@/templates/jbjLockedChrome";
-import { useScribe } from "@elevenlabs/react";
+import { useScribe, CommitStrategy } from "@elevenlabs/react";
 
 interface Msg { role: "user" | "assistant"; content: string }
 interface Attachment { name: string; type: string; dataUrl: string }
@@ -62,7 +62,7 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply }
   const partialBase = useRef<string>("");
   const scribe = useScribe({
     modelId: "scribe_v2_realtime",
-    commitStrategy: "vad",
+    commitStrategy: CommitStrategy.VAD,
     onPartialTranscript: (d: any) => {
       setInput((partialBase.current + " " + (d?.text || "")).trim());
     },
