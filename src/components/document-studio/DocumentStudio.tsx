@@ -153,6 +153,81 @@ function StudioShell({
 
   // Save-as-Template state.
   const [savingTemplate, setSavingTemplate] = useState(false);
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [saveName, setSaveName] = useState("");
+  const [saveAsDefault, setSaveAsDefault] = useState(false);
+  type SavedTpl = { id: string; name: string; base_template_id: string; payload: any; is_default: boolean };
+  const [savedTemplates, setSavedTemplates] = useState<SavedTpl[]>([]);
+
+  // Load saved templates for current audience.
+  const reloadSavedTemplates = async () => {
+    const { data, error } = await (supabase as any)
+      .from("saved_document_templates")
+      .select("id,name,base_template_id,payload,is_default")
+      .eq("audience", catalog)
+      .order("updated_at", { ascending: false });
+    if (!error && Array.isArray(data)) setSavedTemplates(data as SavedTpl[]);
+  };
+  useEffect(() => { reloadSavedTemplates(); /* eslint-disable-next-line */ }, [catalog]);
+
+  const applySavedTemplate = (s: SavedTpl) => {
+    const p = s.payload || {};
+    setTemplateId(s.base_template_id);
+    if (p.fields) setFields(p.fields);
+    if (p.department) setDepartment(p.department);
+    if (p.commissionRows) setCommissionRows(p.commissionRows);
+    if (p.customFields) setCustomFields(p.customFields);
+    if (p.ownerName) setOwnerName(p.ownerName);
+    if (p.ownerTitle) setOwnerTitle(p.ownerTitle);
+    if (p.ownerDate) setOwnerDate(p.ownerDate);
+    if (p.hiddenFieldKeys) setHiddenFieldKeys(new Set(p.hiddenFieldKeys));
+    if (p.fieldLabelOverrides) setFieldLabelOverrides(p.fieldLabelOverrides);
+    if (p.hiddenSections) setHiddenSections(new Set(p.hiddenSections));
+    setStep(2);
+    toast.success(`Loaded "${s.name}"`);
+  };
+
+  const deleteSavedTemplate = async (id: string) => {
+    const { error } = await (supabase as any).from("saved_document_templates").delete().eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    setSavedTemplates((xs) => xs.filter((x) => x.id !== id));
+    toast.success("Template deleted");
+  };
+
+  const handleSaveTemplate = async () => {
+    if (!template) { toast.error("Pick a template first"); return; }
+    const name = (saveName || `${template.label} — Custom`).trim();
+    setSavingTemplate(true);
+    try {
+      const { data: u } = await supabase.auth.getUser();
+      if (!u?.user) throw new Error("Sign in required");
+      const payload = {
+        fields, department, commissionRows, customFields,
+        ownerName, ownerTitle, ownerDate,
+        hiddenFieldKeys: Array.from(hiddenFieldKeys),
+        fieldLabelOverrides,
+        hiddenSections: Array.from(hiddenSections),
+      };
+      const { error } = await (supabase as any).from("saved_document_templates").insert({
+        owner_id: u.user.id,
+        audience: catalog,
+        base_template_id: template.id,
+        name,
+        is_default: saveAsDefault,
+        payload,
+      });
+      if (error) throw error;
+      toast.success(`Saved "${name}"`);
+      setSaveDialogOpen(false);
+      setSaveName("");
+      setSaveAsDefault(false);
+      reloadSavedTemplates();
+    } catch (e: any) {
+      toast.error(e?.message || "Save failed");
+    } finally {
+      setSavingTemplate(false);
+    }
+  };
 
   // AI auto-fill from pasted details / attached document.
   const [autoFillText, setAutoFillText] = useState("");
@@ -263,9 +338,14 @@ function StudioShell({
 
   useEffect(() => {
     if (!template) return;
+    // Drop hidden field keys before rendering body.
+    const visibleFields: Record<string, string> = {};
+    for (const [k, v] of Object.entries(fields)) {
+      if (!hiddenFieldKeys.has(k)) visibleFields[k] = v;
+    }
     const next = renderStandardBody({
       templateId: template.id,
-      fields,
+      fields: visibleFields,
       department: template.needsPosition ? department : undefined,
       commissionRows: usesCommission && !hiddenSections.has("commission") ? commissionRows : undefined,
       customFields: hiddenSections.has("custom") ? [] : customFields,
@@ -273,7 +353,7 @@ function StudioShell({
       ownerTitle,
       ownerDate,
       applicantDate,
-      hideLetterDate: true, // the draggable date chip is the visible date
+      hideLetterDate: true,
     });
     autoBodyRef.current = next;
     if (!userEditedRef.current) setBodyHtml(next);
@@ -285,6 +365,7 @@ function StudioShell({
     JSON.stringify(commissionRows),
     JSON.stringify(customFields),
     JSON.stringify(Array.from(hiddenSections)),
+    JSON.stringify(Array.from(hiddenFieldKeys)),
     ownerName, ownerTitle, ownerDate, applicantDate,
   ]);
 
@@ -487,6 +568,17 @@ function StudioShell({
             <Stamp className="w-4 h-4 lg:mr-1.5" />
             <span className="hidden lg:inline">Stamp</span>
           </Button>
+          {template && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => { setSaveName(`${template.label} — Custom`); setSaveDialogOpen(true); }}
+              title="Save current edits as a reusable template"
+            >
+              <Check className="w-4 h-4 lg:mr-1.5" />
+              <span className="hidden lg:inline">Save Template</span>
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="sm"
@@ -516,6 +608,48 @@ function StudioShell({
         initialTab={assetDialog || "signature"}
         onPick={pickAsset}
       />
+
+      {saveDialogOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center"
+          style={{ zIndex: 2147483100 }}
+          onClick={() => setSaveDialogOpen(false)}
+        >
+          <div
+            className="bg-[#FDFBF7] rounded-xl border border-[#B89555]/40 p-5 w-[420px] shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-[14px] font-semibold text-[#1A1A1A] mb-1">Save as Template</div>
+            <div className="text-[11px] text-[#1A1A1A]/65 mb-4">
+              Saves all current edits, hidden fields and renames so you can reuse this layout later.
+            </div>
+            <Label className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 mb-1.5 block">Template name</Label>
+            <Input
+              autoFocus
+              value={saveName}
+              onChange={(e) => setSaveName(e.target.value)}
+              placeholder="My custom Job Offer"
+              className="bg-[#FDFBF7] mb-3"
+            />
+            <label className="flex items-center gap-2 text-[12px] text-[#1A1A1A] mb-4 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={saveAsDefault}
+                onChange={(e) => setSaveAsDefault(e.target.checked)}
+              />
+              Set as my default for {catalog === "staff" ? "staff" : "client"} documents
+            </label>
+            <div className="flex justify-end gap-2">
+              <Button variant="ghost" size="sm" onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
+              <Button size="sm" onClick={handleSaveTemplate} disabled={savingTemplate || !saveName.trim()}>
+                {savingTemplate ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Check className="w-4 h-4 mr-1.5" />}
+                Save Template
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {/* ─── Body ─── */}
       <div className="flex-1 min-h-0 flex">
@@ -598,36 +732,111 @@ function StudioShell({
                   </Field>
                 )}
 
-                {template.fields.map((f) => (
-                  <Field key={f.key} label={f.label} required={f.required}>
-                    {f.type === "textarea" ? (
-                      <Textarea
-                        value={fields[f.key] || ""}
-                        onChange={(e) => setField(f.key, e.target.value)}
-                        placeholder={f.placeholder}
-                        rows={3}
-                        className="bg-[#FDFBF7] resize-none"
-                      />
-                    ) : f.type === "select" ? (
-                      <Select value={fields[f.key] || ""} onValueChange={(v) => setField(f.key, v)}>
-                        <SelectTrigger className="bg-[#FDFBF7]"><SelectValue placeholder="Select…" /></SelectTrigger>
-                        <SelectContent className="z-[2147483647] bg-[#FDFBF7]">
-                          {f.options?.map((o) => (
-                            <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    ) : (
-                      <Input
-                        type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"}
-                        value={fields[f.key] || ""}
-                        onChange={(e) => setField(f.key, e.target.value)}
-                        placeholder={f.placeholder}
-                        className="bg-[#FDFBF7]"
-                      />
-                    )}
-                  </Field>
-                ))}
+                {savedTemplates.filter((s) => s.base_template_id === template.id).length > 0 && (
+                  <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 space-y-1.5">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold mb-1">
+                      My Saved Versions
+                    </div>
+                    {savedTemplates.filter((s) => s.base_template_id === template.id).map((s) => (
+                      <div key={s.id} className="flex items-center gap-1.5 group">
+                        <button
+                          type="button"
+                          onClick={() => applySavedTemplate(s)}
+                          className="flex-1 text-left text-[12px] text-[#1A1A1A] hover:text-[#B89555] truncate"
+                        >
+                          {s.name}{s.is_default && <span className="text-[10px] text-[#B89555] ml-1">★ default</span>}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => deleteSavedTemplate(s.id)}
+                          className="opacity-0 group-hover:opacity-100 text-[#1A1A1A]/55 hover:text-red-600"
+                          title="Delete saved template"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {template.fields.filter((f) => !hiddenFieldKeys.has(f.key)).map((f) => {
+                  const label = fieldLabelOverrides[f.key] ?? f.label;
+                  const isEditing = editingFieldKey === f.key;
+                  return (
+                    <div key={f.key}>
+                      <div className="flex items-center gap-1 mb-1.5 group">
+                        {isEditing ? (
+                          <Input
+                            autoFocus
+                            value={label}
+                            onChange={(e) => setFieldLabelOverrides((p) => ({ ...p, [f.key]: e.target.value }))}
+                            onBlur={() => setEditingFieldKey(null)}
+                            onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") setEditingFieldKey(null); }}
+                            className="h-6 text-[10px] uppercase tracking-[0.18em] flex-1"
+                          />
+                        ) : (
+                          <Label className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 flex-1">
+                            {label}
+                            {f.required && <span className="text-red-600 ml-1">*</span>}
+                          </Label>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setEditingFieldKey(isEditing ? null : f.key)}
+                          className="opacity-0 group-hover:opacity-100 text-[#1A1A1A]/55 hover:text-[#B89555]"
+                          title="Rename field"
+                        >
+                          <PenLine className="w-3 h-3" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => hideField(f.key)}
+                          className="opacity-0 group-hover:opacity-100 text-[#1A1A1A]/55 hover:text-red-600"
+                          title="Remove this field from document"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                      {f.type === "textarea" ? (
+                        <Textarea
+                          value={fields[f.key] || ""}
+                          onChange={(e) => setField(f.key, e.target.value)}
+                          placeholder={f.placeholder}
+                          rows={3}
+                          className="bg-[#FDFBF7] resize-none"
+                        />
+                      ) : f.type === "select" ? (
+                        <Select value={fields[f.key] || ""} onValueChange={(v) => setField(f.key, v)}>
+                          <SelectTrigger className="bg-[#FDFBF7]"><SelectValue placeholder="Select…" /></SelectTrigger>
+                          <SelectContent className="z-[2147483647] bg-[#FDFBF7]">
+                            {f.options?.map((o) => (
+                              <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Input
+                          type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"}
+                          value={fields[f.key] || ""}
+                          onChange={(e) => setField(f.key, e.target.value)}
+                          placeholder={f.placeholder}
+                          className="bg-[#FDFBF7]"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+
+                {hiddenFieldKeys.size > 0 && (
+                  <button
+                    type="button"
+                    onClick={restoreAllFields}
+                    className="w-full text-[11px] text-[#1A1A1A]/70 hover:text-[#B89555] underline underline-offset-2"
+                  >
+                    + Restore hidden fields ({hiddenFieldKeys.size})
+                  </button>
+                )}
+
 
                 {/* Applicant ID + Owner signature defaults */}
                 <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 space-y-2">
@@ -1041,7 +1250,7 @@ function StudioShell({
                   {marks.showSigB !== false && (
                     <DraggableMark
                       x={marks.signatureBXY?.x ?? 460}
-                      y={marks.signatureBXY?.y ?? 420}
+                      y={marks.signatureBXY?.y ?? 540}
                       onChange={(x, y) => setMarks((m) => ({ ...m, signatureBXY: { x, y } }))}
                       onRemove={() => removeMark("signatureB")}
                       ariaLabel="Party B signature"
