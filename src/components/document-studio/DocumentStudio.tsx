@@ -48,7 +48,7 @@ import DraggableMark from "./DraggableMark";
 import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
-import { exportPdf, exportDocx, printDocument, DocumentMarks } from "./export/exporters";
+import { exportPdf, exportDocx, exportPng, printDocument, DocumentMarks } from "./export/exporters";
 import {
   compose as composeDocument,
   DEFAULT_BROKER_COMMISSIONS,
@@ -296,7 +296,7 @@ function StudioShell({
     showSigB?: boolean;
   }>({ showDate: true, showSigB: true, dateValue: new Date().toISOString().slice(0, 10) });
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
-  const [exporting, setExporting] = useState<null | "pdf" | "docx">(null);
+  const [exporting, setExporting] = useState<null | "pdf" | "docx" | "png" | "both">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const toggleFullscreen = async () => {
@@ -496,14 +496,20 @@ function StudioShell({
     printDocument(bodyHtml, marks);
   };
 
-  const handleExport = async (kind: "pdf" | "docx") => {
-    if (!bodyHtml || !template) return;
+  const handleExport = async (kind: "pdf" | "docx" | "png" | "both") => {
+    if (!bodyHtml || !template) { toast.error("Nothing to export yet"); return; }
     setExporting(kind);
     try {
       if (kind === "pdf") await exportPdf(bodyHtml, marks, template);
-      else await exportDocx(bodyHtml, marks, template);
+      else if (kind === "docx") await exportDocx(bodyHtml, marks, template);
+      else if (kind === "png") await exportPng(bodyHtml, marks, template);
+      else if (kind === "both") {
+        await exportPdf(bodyHtml, marks, template);
+        await exportPng(bodyHtml, marks, template);
+      }
       toast.success(`${kind.toUpperCase()} downloaded`);
     } catch (e: any) {
+      console.error("[DocumentStudio] export failed", kind, e);
       toast.error(e?.message || `${kind.toUpperCase()} export failed`);
     } finally {
       setExporting(null);
@@ -1365,25 +1371,43 @@ function StudioShell({
                   {sending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Mail className="w-4 h-4 mr-2" />}
                   Send via Branded Email
                 </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="w-full" disabled={!!exporting}>
-                      {exporting ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
-                      Export <ChevronDown className="w-3.5 h-3.5 ml-1" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-[#FDFBF7]">
-                    <DropdownMenuItem onClick={() => handleExport("pdf")}>
-                      <FileText className="w-4 h-4 mr-2" /> Download PDF
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleExport("docx")}>
-                      <FileText className="w-4 h-4 mr-2" /> Download Word (.docx)
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handlePrint}>
-                      <Printer className="w-4 h-4 mr-2" /> Print
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex w-full">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 rounded-r-none border-r-0"
+                    disabled={!!exporting}
+                    onClick={() => handleExport("pdf")}
+                    title="Download PDF immediately"
+                  >
+                    {exporting === "pdf" ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
+                    Export PDF
+                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="rounded-l-none px-2" disabled={!!exporting} title="More export formats">
+                        <ChevronDown className="w-3.5 h-3.5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="bg-[#FDFBF7] z-[2147483647]">
+                      <DropdownMenuItem onClick={() => handleExport("pdf")}>
+                        <FileText className="w-4 h-4 mr-2" /> Download PDF
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleExport("png")}>
+                        <FileText className="w-4 h-4 mr-2" /> Download Image (PNG)
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleExport("docx")}>
+                        <FileText className="w-4 h-4 mr-2" /> Download Word (.docx)
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleExport("both")}>
+                        <FileText className="w-4 h-4 mr-2" /> Download PDF + PNG
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={handlePrint}>
+                        <Printer className="w-4 h-4 mr-2" /> Print
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
                 <Button
                   variant="outline" size="sm" className="w-full"
                   onClick={() => handleSend(OWNER_TEST_EMAIL)}
