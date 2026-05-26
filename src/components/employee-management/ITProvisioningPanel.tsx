@@ -358,6 +358,19 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
               </div>
             </div>
 
+            {/* Personal Email (invite delivery target) */}
+            <div className="space-y-2">
+              <Label className="text-[#1A1A1A]">Personal Email (invite recipient)</Label>
+              <Input
+                type="email"
+                value={personalEmail}
+                onChange={(e) => setPersonalEmail(e.target.value)}
+                placeholder="employee@personal.com"
+                className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
+              />
+              <p className="text-xs text-[#1A1A1A]/70">Credentials are sent here. Falls back to company email if empty.</p>
+            </div>
+
             {/* Password Generation */}
             <div className="space-y-2">
               <Label className="text-[#1A1A1A]">Temporary Password</Label>
