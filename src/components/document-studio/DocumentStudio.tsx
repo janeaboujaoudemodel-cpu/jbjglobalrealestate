@@ -119,7 +119,7 @@ function StudioShell({
     try { localStorage.setItem(DEPT_STORAGE_KEY, JSON.stringify(customDepartments)); } catch {}
   }, [customDepartments]);
   const allDepartments = useMemo(
-    () => Array.from(new Set([...(DEPARTMENTS as string[]), ...customDepartments])),
+    () => Array.from(new Set([...(DEPARTMENTS as readonly string[]), ...customDepartments])),
     [customDepartments]
   );
   const [department, setDepartment] = useState<string>(DEPARTMENTS[0]);
