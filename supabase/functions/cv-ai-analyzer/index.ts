@@ -646,7 +646,7 @@ serve(async (req) => {
     if (mode !== "auto") {
       const auth = await requireOwnerAuth(req, corsHeaders);
       if (auth.response) return auth.response;
-
+    } else {
       const internalKey = req.headers.get("x-internal-key");
       if (internalKey !== supabaseServiceKey) {
         return new Response(JSON.stringify({ error: "Forbidden" }), {
@@ -654,6 +654,7 @@ serve(async (req) => {
         });
       }
     }
+
 
     if (!applicationId || !source) {
       return new Response(JSON.stringify({ error: "applicationId and source required" }), {
