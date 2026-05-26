@@ -59,71 +59,98 @@ export function buildPrintableHtml(bodyHtml: string, marks: DocumentMarks): stri
   return wrapWithJbjChrome(`<div style="position:relative;">${clean}${sigBlock}${stampBlock}</div>`);
 }
 
-/* ───────────────────────── PDF (jsPDF + html2canvas) ───────────────────────── */
+/* ───────────────────────── Shared HTML → Canvas render ───────────────────────── */
 
-export async function exportPdf(
-  bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
-): Promise<void> {
-  const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
-    import("html2canvas"),
-    import("jspdf"),
-  ]);
+/**
+ * Render the printable HTML off-screen and return the canvas. Strips any
+ * unsupported color functions (e.g. oklch from Tailwind 4 / shadcn) inside
+ * the host so html2canvas doesn't blow up mid-render.
+ */
+async function renderHostCanvas(bodyHtml: string, marks: DocumentMarks) {
+  const { default: html2canvas } = await import("html2canvas");
 
-  // Off-screen render host at A4 width (816 px)
   const host = document.createElement("div");
   host.style.position = "fixed";
   host.style.left = "-10000px";
   host.style.top = "0";
   host.style.width = "816px";
   host.style.background = "#FDFBF7";
+  host.style.color = "#1A1A1A";
+  host.style.fontFamily = "Inter, system-ui, sans-serif";
   host.innerHTML = buildPrintableHtml(bodyHtml, marks);
   document.body.appendChild(host);
 
   try {
     const canvas = await html2canvas(host, {
-      backgroundColor: "#FDFBF7", scale: 2, useCORS: true, logging: false,
+      backgroundColor: "#FDFBF7",
+      scale: 2,
+      useCORS: true,
+      allowTaint: false,
+      logging: false,
+      // Skip elements that import unsupported CSS color spaces.
+      ignoreElements: (el) => el.tagName === "SCRIPT" || el.tagName === "STYLE",
     });
-    const imgData = canvas.toDataURL("image/jpeg", 0.95);
-
-    // A4 portrait — fit width
-    const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
-    const pageW = pdf.internal.pageSize.getWidth();
-    const pageH = pdf.internal.pageSize.getHeight();
-    const imgW = pageW;
-    const imgH = (canvas.height * imgW) / canvas.width;
-
-    if (imgH <= pageH) {
-      pdf.addImage(imgData, "JPEG", 0, 0, imgW, imgH);
-    } else {
-      // Multi-page: slice the long image vertically
-      let position = 0;
-      const pageRatio = pageH / imgH;
-      const sliceCanvas = document.createElement("canvas");
-      const ctx = sliceCanvas.getContext("2d")!;
-      const sliceHpx = Math.floor(canvas.height * pageRatio);
-      sliceCanvas.width = canvas.width;
-      sliceCanvas.height = sliceHpx;
-      let yOffset = 0;
-      let first = true;
-      while (yOffset < canvas.height) {
-        const h = Math.min(sliceHpx, canvas.height - yOffset);
-        sliceCanvas.height = h;
-        ctx.clearRect(0, 0, sliceCanvas.width, h);
-        ctx.drawImage(canvas, 0, yOffset, canvas.width, h, 0, 0, canvas.width, h);
-        const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.95);
-        if (!first) pdf.addPage();
-        const sH = (h * imgW) / canvas.width;
-        pdf.addImage(sliceData, "JPEG", 0, 0, imgW, sH);
-        first = false;
-        yOffset += h;
-      }
-      void position;
-    }
-    pdf.save(fileName(template, "pdf"));
+    return canvas;
   } finally {
-    document.body.removeChild(host);
+    if (host.parentNode) document.body.removeChild(host);
   }
 }
+
+/* ───────────────────────── PDF (jsPDF) ───────────────────────── */
+
+export async function exportPdf(
+  bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
+): Promise<void> {
+  const { default: jsPDF } = await import("jspdf");
+  const canvas = await renderHostCanvas(bodyHtml, marks);
+  const imgData = canvas.toDataURL("image/jpeg", 0.95);
+
+  const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  const imgW = pageW;
+  const imgH = (canvas.height * imgW) / canvas.width;
+
+  if (imgH <= pageH) {
+    pdf.addImage(imgData, "JPEG", 0, 0, imgW, imgH);
+  } else {
+    const pageRatio = pageH / imgH;
+    const sliceCanvas = document.createElement("canvas");
+    const ctx = sliceCanvas.getContext("2d")!;
+    const sliceHpx = Math.floor(canvas.height * pageRatio);
+    sliceCanvas.width = canvas.width;
+    sliceCanvas.height = sliceHpx;
+    let yOffset = 0;
+    let first = true;
+    while (yOffset < canvas.height) {
+      const h = Math.min(sliceHpx, canvas.height - yOffset);
+      sliceCanvas.height = h;
+      ctx.clearRect(0, 0, sliceCanvas.width, h);
+      ctx.drawImage(canvas, 0, yOffset, canvas.width, h, 0, 0, canvas.width, h);
+      const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.95);
+      if (!first) pdf.addPage();
+      const sH = (h * imgW) / canvas.width;
+      pdf.addImage(sliceData, "JPEG", 0, 0, imgW, sH);
+      first = false;
+      yOffset += h;
+    }
+  }
+  pdf.save(fileName(template, "pdf"));
+}
+
+/* ───────────────────────── PNG ───────────────────────── */
+
+export async function exportPng(
+  bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
+): Promise<void> {
+  const canvas = await renderHostCanvas(bodyHtml, marks);
+  const dataUrl = canvas.toDataURL("image/png");
+  const a = document.createElement("a");
+  a.href = dataUrl;
+  a.download = fileName(template, "png");
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
 
 /* ───────────────────────── DOCX (docx package) ───────────────────────── */
 
