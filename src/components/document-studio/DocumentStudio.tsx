@@ -233,34 +233,54 @@ function StudioShell({
 
   const setField = (k: string, v: string) => setFields((p) => ({ ...p, [k]: v }));
 
-  // Auto-render locked standard body whenever template / fields / commissions change.
-  // Only overwrites bodyHtml if (a) it's empty OR (b) it still equals the previously
-  // auto-rendered body (i.e. owner hasn't manually edited it).
+  // Auto-render locked standard body whenever template / fields / commissions /
+  // owner-signature state change. We force-rerender every time UNLESS the user
+  // has explicitly hand-edited the body via EditableBody (tracked by
+  // userEditedRef). When that flag is set, a "Reset to template" pill appears
+  // above the page so re-syncing is one click.
   const autoBodyRef = useRef<string>("");
+  const userEditedRef = useRef<boolean>(false);
+  const [userEdited, setUserEdited] = useState(false);
+
   useEffect(() => {
     if (!template) return;
     const next = renderStandardBody({
       templateId: template.id,
       fields,
       department: template.needsPosition ? department : undefined,
-      commissionRows: usesCommission ? commissionRows : undefined,
-      customFields,
-      ownerTitle: "Director",
+      commissionRows: usesCommission && !hiddenSections.has("commission") ? commissionRows : undefined,
+      customFields: hiddenSections.has("custom") ? [] : customFields,
+      ownerName,
+      ownerTitle,
+      ownerDate,
+      applicantDate,
+      hideLetterDate: true, // the draggable date chip is the visible date
     });
-    setBodyHtml((curr) => {
-      if (!curr || curr === autoBodyRef.current) {
-        autoBodyRef.current = next;
-        return next;
-      }
-      return curr;
-    });
+    autoBodyRef.current = next;
+    if (!userEditedRef.current) setBodyHtml(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [template?.id, JSON.stringify(fields), department, JSON.stringify(commissionRows), JSON.stringify(customFields)]);
+  }, [
+    template?.id,
+    JSON.stringify(fields),
+    department,
+    JSON.stringify(commissionRows),
+    JSON.stringify(customFields),
+    JSON.stringify(Array.from(hiddenSections)),
+    ownerName, ownerTitle, ownerDate, applicantDate,
+  ]);
+
+  const resetToTemplate = () => {
+    userEditedRef.current = false;
+    setUserEdited(false);
+    if (autoBodyRef.current) setBodyHtml(autoBodyRef.current);
+  };
 
   const handleSelectTemplate = (id: string) => {
     setTemplateId(id);
     setFields({});
     autoBodyRef.current = "";
+    userEditedRef.current = false;
+    setUserEdited(false);
     setBodyHtml("");
     setStep(2);
   };
