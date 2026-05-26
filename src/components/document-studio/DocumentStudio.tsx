@@ -603,6 +603,48 @@ function StudioShell({
         onPick={pickAsset}
       />
 
+      {saveDialogOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center"
+          style={{ zIndex: 2147483100 }}
+          onClick={() => setSaveDialogOpen(false)}
+        >
+          <div
+            className="bg-[#FDFBF7] rounded-xl border border-[#B89555]/40 p-5 w-[420px] shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-[14px] font-semibold text-[#1A1A1A] mb-1">Save as Template</div>
+            <div className="text-[11px] text-[#1A1A1A]/65 mb-4">
+              Saves all current edits, hidden fields and renames so you can reuse this layout later.
+            </div>
+            <Label className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 mb-1.5 block">Template name</Label>
+            <Input
+              autoFocus
+              value={saveName}
+              onChange={(e) => setSaveName(e.target.value)}
+              placeholder="My custom Job Offer"
+              className="bg-[#FDFBF7] mb-3"
+            />
+            <label className="flex items-center gap-2 text-[12px] text-[#1A1A1A] mb-4 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={saveAsDefault}
+                onChange={(e) => setSaveAsDefault(e.target.checked)}
+              />
+              Set as my default for {catalog === "staff" ? "staff" : "client"} documents
+            </label>
+            <div className="flex justify-end gap-2">
+              <Button variant="ghost" size="sm" onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
+              <Button size="sm" onClick={handleSaveTemplate} disabled={savingTemplate || !saveName.trim()}>
+                {savingTemplate ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Check className="w-4 h-4 mr-1.5" />}
+                Save Template
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
       {/* ─── Body ─── */}
       <div className="flex-1 min-h-0 flex">
         {/* LEFT RAIL */}
