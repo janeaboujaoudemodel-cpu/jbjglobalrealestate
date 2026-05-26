@@ -102,8 +102,10 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
   const handleStartProvisioning = (app: PendingApplication) => {
     setSelectedApp(app);
     setGeneratedEmail(generateEmail(app.full_name));
+    setPersonalEmail(app.email || '');
     setTempPassword(generatePassword());
     setEmailSignature(generateSignature(app.full_name, app.job_title, app.department));
+    setTestMode(true);
     setShowProvisionDialog(true);
   };
 
