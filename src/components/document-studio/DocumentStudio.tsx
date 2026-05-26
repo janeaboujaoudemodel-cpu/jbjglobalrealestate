@@ -456,6 +456,8 @@ function StudioShell({
   };
 
   const handleSelectTemplate = (id: string) => {
+    // No-op if the same template is re-selected — never wipe an in-progress body.
+    if (id === templateId) { setStep(2); return; }
     setTemplateId(id);
     setFields({});
     setExtraSignatories([]);
