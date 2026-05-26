@@ -1099,6 +1099,7 @@ function StudioShell({
           <aside className="w-[360px] shrink-0 border-l border-[#B89555]/25 bg-[#FDFBF7] p-3">
             <AiEditChatPanel
               currentBody={bodyHtml}
+              language={docLanguage}
               aiInstructions={template?.aiInstructions || ""}
               onApply={(next) => setBodyHtml(next)}
             />
