@@ -14,7 +14,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Sparkles, Loader2, Send, Mic, MicOff, Paperclip, X, Globe,
+  Sparkles, Loader2, Send, Mic, MicOff, Paperclip, X,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
