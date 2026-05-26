@@ -31,6 +31,7 @@ import {
   ChevronLeft, ZoomIn, ZoomOut, Bold, Italic, List, Heading2, Search,
   PanelRightClose, PanelRightOpen, Check, Download, FileText, Stamp,
   PenLine, ChevronDown, Trash2, Maximize2, Minimize2, Plus, Globe,
+  Copy,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -156,7 +157,7 @@ function StudioShell({
   // Additional signatories (beyond the default Owner + Counterparty).
   type ExtraSig = { id: string; name: string; title: string; date: string; label: string };
   const newSig = (): ExtraSig => ({ id: Math.random().toString(36).slice(2, 9), name: "", title: "", date: "", label: "Additional Signatory" });
-  const [extraSignatories, setExtraSignatories] = useState<ExtraSig[]>([newSig()]);
+  const [extraSignatories, setExtraSignatories] = useState<ExtraSig[]>([newSig(), newSig()]);
   const updateSig = (id: string, patch: Partial<ExtraSig>) =>
     setExtraSignatories((p) => p.map((s) => (s.id === id ? { ...s, ...patch } : s)));
   const removeSig = (id: string) => setExtraSignatories((p) => p.filter((s) => s.id !== id));
@@ -463,6 +464,7 @@ function StudioShell({
         ownerTitle: "Director",
         commissionRows: usesCommission ? commissionRows : undefined,
         customFields,
+        extraSignatories,
       });
       setBodyHtml(html);
       toast.success("Document generated");
@@ -973,6 +975,70 @@ function StudioShell({
                   <Field label="Owner Sign Date">
                     <Input type="date" value={ownerDate} onChange={(e) => setOwnerDate(e.target.value)} className="bg-[#FDFBF7] h-8 text-[12px]" />
                   </Field>
+
+                  {/* Additional signatories — add / edit / delete / duplicate */}
+                  <div className="pt-2 mt-1 border-t border-[#B89555]/25 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
+                        Additional Signatories ({extraSignatories.length})
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setExtraSignatories((p) => [...p, newSig()])}
+                        className="text-[11px] text-[#1A1A1A]/70 hover:text-[#B89555] underline underline-offset-2"
+                      >
+                        + Add signatory
+                      </button>
+                    </div>
+                    {extraSignatories.map((s, idx) => (
+                      <div key={s.id} className="rounded border border-[#B89555]/25 bg-[#FDFBF7] p-2 space-y-1.5">
+                        <div className="flex items-center gap-1">
+                          <Input
+                            value={s.label}
+                            onChange={(e) => updateSig(s.id, { label: e.target.value })}
+                            placeholder="Label (e.g. Witness)"
+                            className="h-7 text-[11px] flex-1"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => duplicateSig(s.id)}
+                            className="text-[#1A1A1A]/60 hover:text-[#B89555] p-0.5"
+                            title="Duplicate"
+                          >
+                            <Copy className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => removeSig(s.id)}
+                            className="text-[#1A1A1A]/60 hover:text-red-600 p-0.5"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-1.5">
+                          <Input
+                            value={s.name}
+                            onChange={(e) => updateSig(s.id, { name: e.target.value })}
+                            placeholder={`Name #${idx + 1}`}
+                            className="h-7 text-[11px]"
+                          />
+                          <Input
+                            value={s.title}
+                            onChange={(e) => updateSig(s.id, { title: e.target.value })}
+                            placeholder="Title"
+                            className="h-7 text-[11px]"
+                          />
+                        </div>
+                        <Input
+                          type="date"
+                          value={s.date}
+                          onChange={(e) => updateSig(s.id, { date: e.target.value })}
+                          className="h-7 text-[11px]"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {/* AI auto-fill from pasted details / attached document */}
