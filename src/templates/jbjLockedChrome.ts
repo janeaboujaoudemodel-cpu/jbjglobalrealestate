@@ -34,13 +34,13 @@ export const jbjHeaderHtml = (): string => `
     width:100%;
     background:${JBJ_CHAMPAGNE};
     border-bottom:1px solid ${JBJ_GOLD};
-    padding:22px 40px;
+    padding:22px 40px 22px 24px;
     font-family:Inter, system-ui, sans-serif;
     color:${JBJ_INK};
   ">
-    <div style="display:flex;align-items:center;gap:18px;">
+    <div style="display:flex;align-items:center;gap:20px;">
       <img src="${monogramSrc}" alt="JBJ"
-        style="width:64px;height:64px;display:block;object-fit:contain;background:transparent;" />
+        style="width:96px;height:96px;display:block;object-fit:contain;background:transparent;" />
       <div style="line-height:1.15;">
         <div style="font-size:19px;font-weight:600;letter-spacing:0.01em;color:${JBJ_INK};">
           ${JBJ_BRAND.legalName}
