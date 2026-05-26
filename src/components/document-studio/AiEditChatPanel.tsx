@@ -27,6 +27,7 @@ interface Props {
   currentBody: string;
   aiInstructions: string;
   onApply: (nextBody: string) => void;
+  language?: string;
 }
 
 const LANGUAGES: Array<{ code: string; label: string; bcp47: string }> = [
