@@ -1537,7 +1537,9 @@ function StudioShell({
                   )}
                 </div>
                 <LockedFooter />
+                </div>
               </div>
+
             ) : (
               <div className="self-center max-w-md text-center bg-[#FDFBF7] border border-[#B89555]/25 rounded-xl p-10 mt-20">
                 <Wand2 className="w-10 h-10 mx-auto mb-3 text-[#B89555]" />
