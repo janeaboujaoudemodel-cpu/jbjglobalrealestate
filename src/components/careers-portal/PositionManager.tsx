@@ -196,26 +196,6 @@ export default function PositionManager() {
     refresh();
   };
 
-  const archive = async (p: Position) => {
-    if (!confirm(`Archive "${p.title}"? It will be hidden from the public Careers page but kept for audit.`)) return;
-    const { error } = await supabase
-      .from("open_positions")
-      .update({ is_active: false, archived_at: new Date().toISOString() })
-      .eq("id", p.id);
-    if (error) return toast.error(error.message);
-    toast.success("Position archived");
-    refresh();
-  };
-
-  const unarchive = async (p: Position) => {
-    const { error } = await supabase
-      .from("open_positions")
-      .update({ is_active: true, archived_at: null })
-      .eq("id", p.id);
-    if (error) return toast.error(error.message);
-    toast.success("Position restored");
-    refresh();
-  };
 
   const remove = async (p: Position) => {
     if (!confirm(`Permanently delete "${p.title}"? This cannot be undone.`)) return;
