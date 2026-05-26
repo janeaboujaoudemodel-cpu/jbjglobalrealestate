@@ -175,6 +175,20 @@ export function signatureBlock(opts: {
     row("Date", aDate),
   ].join("");
 
+  const extras = (opts.extraSignatories || []).filter(
+    (s) => (s?.name || "").trim() || (s?.title || "").trim() || (s?.date || "").trim() || (s?.label || "").trim(),
+  );
+  const extraRows: string[] = [];
+  for (let i = 0; i < extras.length; i += 2) {
+    const a = extras[i];
+    const b = extras[i + 1];
+    const aLines = [row("Name", esc(a?.name || "")), row("Title", esc(a?.title || "")), row("Date", esc(formatHumanDate(a?.date)))].join("");
+    const bLines = b
+      ? [row("Name", esc(b?.name || "")), row("Title", esc(b?.title || "")), row("Date", esc(formatHumanDate(b?.date)))].join("")
+      : "";
+    extraRows.push(`<tr>${cell(esc(a?.label || "Additional Signatory"), aLines)}${b ? cell(esc(b?.label || "Additional Signatory"), bLines) : `<td style="width:50%;"></td>`}</tr>`);
+  }
+
   return `
     <div style="margin-top:28px;page-break-inside:avoid;">
       <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
@@ -183,6 +197,7 @@ export function signatureBlock(opts: {
             ${cell("JBJ GLOBAL REAL ESTATE", ownerLines)}
             ${cell(aLabel, applicantLines)}
           </tr>
+          ${extraRows.join("")}
         </tbody>
       </table>
     </div>`;
