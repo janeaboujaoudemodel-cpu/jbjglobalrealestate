@@ -62,35 +62,57 @@ export function buildPrintableHtml(bodyHtml: string, marks: DocumentMarks): stri
 /* ───────────────────────── Shared HTML → Canvas render ───────────────────────── */
 
 /**
- * Render the printable HTML off-screen and return the canvas. Strips any
- * unsupported color functions (e.g. oklch from Tailwind 4 / shadcn) inside
- * the host so html2canvas doesn't blow up mid-render.
+ * Capture the LIVE preview element so the exported PDF/PNG is a 1:1
+ * pixel-perfect copy of what the user sees on screen. The element is
+ * cloned, its CSS transform is stripped, and it is rendered off-screen
+ * at the canonical 816px width so html2canvas captures the full A4 page
+ * regardless of the current zoom / auto-fit scale.
  */
-async function renderHostCanvas(bodyHtml: string, marks: DocumentMarks) {
+async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> {
   const { default: html2canvas } = await import("html2canvas");
 
+  const clone = el.cloneNode(true) as HTMLElement;
+  clone.style.transform = "none";
+  clone.style.transformOrigin = "top left";
+  clone.style.width = "816px";
+  clone.style.maxWidth = "none";
+  clone.style.boxShadow = "none";
+  clone.style.borderRadius = "0";
+  clone.querySelectorAll('[aria-label="Remove field"]').forEach((n) => n.remove());
+  clone.querySelectorAll('[data-drag-guide]').forEach((n) => n.remove());
+
   const host = document.createElement("div");
-  host.style.position = "fixed";
-  host.style.left = "-10000px";
-  host.style.top = "0";
-  host.style.width = "816px";
-  host.style.background = "#FDFBF7";
-  host.style.color = "#1A1A1A";
-  host.style.fontFamily = "Inter, system-ui, sans-serif";
-  host.innerHTML = buildPrintableHtml(bodyHtml, marks);
+  host.style.cssText =
+    "position:fixed;left:-10000px;top:0;width:816px;background:#FDFBF7;z-index:-1;";
+  host.appendChild(clone);
   document.body.appendChild(host);
 
   try {
-    const canvas = await html2canvas(host, {
+    return await html2canvas(clone, {
       backgroundColor: "#FDFBF7",
       scale: 2,
       useCORS: true,
       allowTaint: false,
       logging: false,
-      // Skip elements that import unsupported CSS color spaces.
-      ignoreElements: (el) => el.tagName === "SCRIPT" || el.tagName === "STYLE",
+      windowWidth: 816,
+      ignoreElements: (e) =>
+        e.tagName === "SCRIPT" || e.tagName === "STYLE" ||
+        (e instanceof HTMLElement && (e.getAttribute("aria-label") === "Remove field" || e.getAttribute("data-drag-guide") === "true")),
     });
-    return canvas;
+  } finally {
+    if (host.parentNode) document.body.removeChild(host);
+  }
+}
+
+/** Off-screen chrome render (fallback when no live element is provided). */
+async function renderHostCanvas(bodyHtml: string, marks: DocumentMarks) {
+  const host = document.createElement("div");
+  host.style.cssText =
+    "position:fixed;left:-10000px;top:0;width:816px;background:#FDFBF7;color:#1A1A1A;font-family:Inter,system-ui,sans-serif;";
+  host.innerHTML = buildPrintableHtml(bodyHtml, marks);
+  document.body.appendChild(host);
+  try {
+    return await renderElementCanvas(host);
   } finally {
     if (host.parentNode) document.body.removeChild(host);
   }
@@ -100,9 +122,12 @@ async function renderHostCanvas(bodyHtml: string, marks: DocumentMarks) {
 
 export async function exportPdf(
   bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
+  sourceElement?: HTMLElement | null,
 ): Promise<void> {
   const { default: jsPDF } = await import("jspdf");
-  const canvas = await renderHostCanvas(bodyHtml, marks);
+  const canvas = sourceElement
+    ? await renderElementCanvas(sourceElement)
+    : await renderHostCanvas(bodyHtml, marks);
   const imgData = canvas.toDataURL("image/jpeg", 0.95);
 
   const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
@@ -114,18 +139,18 @@ export async function exportPdf(
   if (imgH <= pageH) {
     pdf.addImage(imgData, "JPEG", 0, 0, imgW, imgH);
   } else {
-    const pageRatio = pageH / imgH;
+    const pxPerMm = canvas.width / pageW;
+    const sliceHpx = Math.floor(pageH * pxPerMm);
     const sliceCanvas = document.createElement("canvas");
     const ctx = sliceCanvas.getContext("2d")!;
-    const sliceHpx = Math.floor(canvas.height * pageRatio);
     sliceCanvas.width = canvas.width;
-    sliceCanvas.height = sliceHpx;
     let yOffset = 0;
     let first = true;
     while (yOffset < canvas.height) {
       const h = Math.min(sliceHpx, canvas.height - yOffset);
       sliceCanvas.height = h;
-      ctx.clearRect(0, 0, sliceCanvas.width, h);
+      ctx.fillStyle = "#FDFBF7";
+      ctx.fillRect(0, 0, sliceCanvas.width, h);
       ctx.drawImage(canvas, 0, yOffset, canvas.width, h, 0, 0, canvas.width, h);
       const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.95);
       if (!first) pdf.addPage();
@@ -142,8 +167,11 @@ export async function exportPdf(
 
 export async function exportPng(
   bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
+  sourceElement?: HTMLElement | null,
 ): Promise<void> {
-  const canvas = await renderHostCanvas(bodyHtml, marks);
+  const canvas = sourceElement
+    ? await renderElementCanvas(sourceElement)
+    : await renderHostCanvas(bodyHtml, marks);
   const dataUrl = canvas.toDataURL("image/png");
   const a = document.createElement("a");
   a.href = dataUrl;
