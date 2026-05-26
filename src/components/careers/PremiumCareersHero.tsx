@@ -96,7 +96,11 @@ export default function PremiumCareersHero() {
 
         <div className="mx-auto mt-5 h-[2px] w-20 rounded-full bg-[#B89555]" />
 
-        <p className="mt-6 max-w-2xl mx-auto text-base md:text-lg text-[#1A1A1A]/75 leading-relaxed">
+        <p
+          data-no-contrast-guard
+          className="allow-white mt-6 max-w-2xl mx-auto text-base md:text-lg leading-relaxed rounded-xl px-5 py-3 bg-[#102540] border border-[#B89555]/60 shadow-[0_10px_30px_-18px_rgba(16,37,64,0.55)]"
+          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+        >
           Join an AI-powered brokerage ecosystem trusted by elite consultants,
           institutional developers, and global investors. Apply in minutes — our
           executive assistant Jessica handles the rest.
