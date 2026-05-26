@@ -156,7 +156,7 @@ function StudioShell({
   // Additional signatories (beyond the default Owner + Counterparty).
   type ExtraSig = { id: string; name: string; title: string; date: string; label: string };
   const newSig = (): ExtraSig => ({ id: Math.random().toString(36).slice(2, 9), name: "", title: "", date: "", label: "Additional Signatory" });
-  const [extraSignatories, setExtraSignatories] = useState<ExtraSig[]>([newSig()]);
+  const [extraSignatories, setExtraSignatories] = useState<ExtraSig[]>([newSig(), newSig()]);
   const updateSig = (id: string, patch: Partial<ExtraSig>) =>
     setExtraSignatories((p) => p.map((s) => (s.id === id ? { ...s, ...patch } : s)));
   const removeSig = (id: string) => setExtraSignatories((p) => p.filter((s) => s.id !== id));
