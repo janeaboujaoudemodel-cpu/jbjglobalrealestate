@@ -469,14 +469,17 @@ function StudioShell({
     try {
       const { buildPrintableHtml } = await import("./export/exporters");
       const fullHtml = buildPrintableHtml(bodyHtml, marks);
-      const { error } = await supabase.functions.invoke("compose-branded-email", {
+      const { data, error } = await supabase.functions.invoke("email-send-gateway", {
         body: {
-          to, subject: template.emailSubject, body_html: fullHtml,
-          send: true, source: "document-studio",
-          documentType: template.id, audience: catalog,
+          from: "JBJ Global Real Estate <contact@jbj.ae>",
+          to,
+          subject: template.emailSubject || template.label,
+          html: fullHtml,
+          reply_to: "contact@jbj.ae",
         },
       });
       if (error) throw error;
+      if (data && data.ok === false) throw new Error(data.error || "Send failed");
       toast.success(recipientOverride ? `Test sent to ${recipientOverride}` : `Sent to ${to}`);
     } catch (e: any) {
       toast.error(e?.message || "Send failed");
