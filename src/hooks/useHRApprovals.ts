@@ -167,7 +167,8 @@ export const useHRApprovals = () => {
       if (error) throw error;
 
       toast.success(approved ? 'Request approved' : 'Request rejected');
-      await fetchAllApprovals();
+      // Refresh BOTH lists — the same user can be both requester and approver.
+      await Promise.all([fetchAllApprovals(), fetchMyApprovals()]);
       return true;
     } catch (error) {
       console.error('Error processing approval:', error);
@@ -184,6 +185,25 @@ export const useHRApprovals = () => {
     };
     loadData();
   }, [fetchAllApprovals, fetchMyApprovals]);
+
+  // Realtime sync — any INSERT/UPDATE on hr_approval_requests triggers a refresh,
+  // so HR inbox, requester's "My requests", and the Approvals dashboard all stay
+  // in lockstep without a manual reload.
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel(`hr-approvals-${user.id}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'hr_approval_requests' },
+        () => {
+          fetchAllApprovals();
+          fetchMyApprovals();
+        }
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [user, fetchAllApprovals, fetchMyApprovals]);
 
   return {
     approvals,
