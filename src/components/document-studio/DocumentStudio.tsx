@@ -153,7 +153,7 @@ function StudioShell({
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
-  const [pageHeight, setPageHeight] = useState(1056);
+  const [pageHeight, setPageHeight] = useState(1154);
   useEffect(() => {
     const wrap = previewWrapRef.current;
     if (!wrap) return;
