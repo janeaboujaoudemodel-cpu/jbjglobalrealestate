@@ -45,7 +45,7 @@ export const jbjHeaderHtml = (): string => `
         <div style="font-size:19px;font-weight:600;letter-spacing:0.01em;color:${JBJ_INK};">
           ${JBJ_BRAND.legalName}
         </div>
-        <div style="font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:${JBJ_INK};margin-top:4px;font-weight:500;">
+        <div style="font-size:13px;letter-spacing:0.04em;color:${JBJ_INK};margin-top:2px;font-weight:600;">
           ${JBJ_BRAND.legalSuffix}
         </div>
       </div>
