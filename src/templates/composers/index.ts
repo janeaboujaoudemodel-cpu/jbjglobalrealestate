@@ -13,6 +13,9 @@
  * wraps that automatically.
  */
 
+import { jbjCompanyStampSrc } from "@/templates/jbjLockedChrome";
+
+
 export type CommissionRow = {
   label?: string;
   rate?: string;
