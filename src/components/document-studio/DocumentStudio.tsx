@@ -148,19 +148,22 @@ function StudioShell({
   const [search, setSearch] = useState("");
   const [pages, setPages] = useState<number | "auto">("auto");
 
-  // Auto-fit preview: scale the 816px A4 page down to whatever width the
-  // center pane has so it never overflows or gets clipped at the edges.
+  // Auto-fit preview: scale the fixed 816×1154 (A4 at 96dpi) page down
+  // to whatever width the center pane has so it never overflows.
+  // The page is a HARD A4 rectangle — header, body and footer share a
+  // single flex column so the footer is always pinned to the bottom.
+  const PAGE_W = 816;
+  const PAGE_H = 1154; // A4 ratio @ 96dpi
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
-  const [pageHeight, setPageHeight] = useState(1154);
   useEffect(() => {
     const wrap = previewWrapRef.current;
     if (!wrap) return;
     const update = () => {
       const w = wrap.clientWidth;
       const padding = 48; // breathing room on both sides
-      const fit = Math.min(1, Math.max(0.3, (w - padding) / 816));
+      const fit = Math.min(1, Math.max(0.3, (w - padding) / PAGE_W));
       setFitScale(fit);
     };
     update();
@@ -168,16 +171,8 @@ function StudioShell({
     ro.observe(wrap);
     return () => ro.disconnect();
   }, []);
-  useEffect(() => {
-    const page = pageRef.current;
-    if (!page) return;
-    const update = () => setPageHeight(page.offsetHeight);
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(page);
-    return () => ro.disconnect();
-  });
   const effectiveScale = (zoom / 100) * fitScale;
+
 
 
   // Owner-side signature defaults (editable from the left rail).
@@ -1469,96 +1464,101 @@ function StudioShell({
         <main ref={previewWrapRef} className="flex-1 min-w-0 bg-[#F0E8D8] overflow-auto relative">
           <div className="min-h-full flex justify-center py-10 px-4">
             {template ? (
-              <div
-                style={{
-                  width: 816 * effectiveScale,
-                  height: pageHeight * effectiveScale,
-                  flexShrink: 0,
-                }}
-              >
-                <div
-                  ref={pageRef}
-                  className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20"
-                  style={{
-                    width: 816,
-                    transform: `scale(${effectiveScale})`,
-                    transformOrigin: "top left",
-                  }}
-                >
-
-                <LockedLetterhead />
-                <div
-                  className="relative px-12 py-10 bg-[#FDFBF7]"
-                  style={
-                    pages === "auto"
-                      ? { minHeight: 1154 - 260 }
-                      : { minHeight: 1154 * (pages as number) - 260 }
-                  }
-                >
-                  {bodyHtml ? (
-                    <EditableBody
-                      html={bodyHtml}
-                      onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
-                    />
-                  ) : (
-                    <div className="text-[12px] text-[#1A1A1A]/40 italic">
-                      Empty document — type here or use the AI assistant on the right to draft the body.
-                    </div>
-                  )}
-
-                  {marks.showDate !== false && (
-                    <DraggableMark
-                      x={marks.dateXY?.x ?? 612}
-                      y={marks.dateXY?.y ?? 16}
-                      onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))}
-                      onRemove={() => removeMark("date")}
-                      ariaLabel="Date"
+              (() => {
+                const pageCount = pages === "auto" ? 1 : (pages as number);
+                const totalH = PAGE_H * pageCount;
+                return (
+                  <div
+                    style={{
+                      width: PAGE_W * effectiveScale,
+                      height: totalH * effectiveScale,
+                      flexShrink: 0,
+                    }}
+                  >
+                    <div
+                      ref={pageRef}
+                      className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20 flex flex-col"
+                      style={{
+                        width: PAGE_W,
+                        height: totalH,
+                        transform: `scale(${effectiveScale})`,
+                        transformOrigin: "top left",
+                        background: "#FDFBF7",
+                      }}
                     >
+                      <LockedLetterhead />
                       <div
-                        className="text-[11px] uppercase"
+                        className="relative flex-1 min-h-0 overflow-hidden"
                         style={{
-                          color: "#1A1A1A",
-                          opacity: 0.42,
-                          letterSpacing: "0.22em",
-                          fontVariantNumeric: "tabular-nums",
-                          textShadow: "0 1px 0 rgba(255,255,255,0.65)",
+                          background: "#FDFBF7",
+                          padding: "40px 56px",
                         }}
                       >
-                        {new Date(marks.dateValue || ownerDate || new Date().toISOString().slice(0,10))
-                          .toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
+                        {bodyHtml ? (
+                          <EditableBody
+                            html={bodyHtml}
+                            onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
+                          />
+                        ) : (
+                          <div className="text-[12px] text-[#1A1A1A]/40 italic">
+                            Empty document — type here or use the AI assistant on the right to draft the body.
+                          </div>
+                        )}
+
+                        {marks.showDate !== false && (
+                          <DraggableMark
+                            x={marks.dateXY?.x ?? 556}
+                            y={marks.dateXY?.y ?? 8}
+                            onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))}
+                            onRemove={() => removeMark("date")}
+                            ariaLabel="Date"
+                          >
+                            <div
+                              className="text-[11px] uppercase"
+                              style={{
+                                color: "#1A1A1A",
+                                opacity: 0.42,
+                                letterSpacing: "0.22em",
+                                fontVariantNumeric: "tabular-nums",
+                                textShadow: "0 1px 0 rgba(255,255,255,0.65)",
+                              }}
+                            >
+                              {new Date(marks.dateValue || ownerDate || new Date().toISOString().slice(0,10))
+                                .toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
+                            </div>
+                          </DraggableMark>
+                        )}
+
+                        {marks.signature && (
+                          <DraggableMark
+                            x={marks.signatureXY?.x ?? 0}
+                            y={marks.signatureXY?.y ?? 420}
+                            onChange={(x, y) => setMarks((m) => ({ ...m, signatureXY: { x, y } }))}
+                            onRemove={() => removeMark("signature")}
+                            ariaLabel="Authorised signature"
+                          >
+                            <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 240 }} className="block pointer-events-none" />
+                          </DraggableMark>
+                        )}
+
+                        {marks.stamp && (
+                          <DraggableMark
+                            x={marks.stampXY?.x ?? 260}
+                            y={marks.stampXY?.y ?? 440}
+                            onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
+                            onRemove={() => removeMark("stamp")}
+                            ariaLabel="Stamp"
+                          >
+                            <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 180, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, opacity: 0.92 }} className="block pointer-events-none" />
+                          </DraggableMark>
+                        )}
                       </div>
-                    </DraggableMark>
-                  )}
+                      <LockedFooter />
+                    </div>
+                  </div>
+                );
+              })()
 
-                  {marks.signature && (
-                    <DraggableMark
-                      x={marks.signatureXY?.x ?? 0}
-                      y={marks.signatureXY?.y ?? 420}
-                      onChange={(x, y) => setMarks((m) => ({ ...m, signatureXY: { x, y } }))}
-                      onRemove={() => removeMark("signature")}
-                      ariaLabel="Authorised signature"
-                    >
-                      <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 240 }} className="block pointer-events-none" />
-                    </DraggableMark>
-                  )}
-
-
-
-                  {marks.stamp && (
-                    <DraggableMark
-                      x={marks.stampXY?.x ?? 260}
-                      y={marks.stampXY?.y ?? 440}
-                      onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
-                      onRemove={() => removeMark("stamp")}
-                      ariaLabel="Stamp"
-                    >
-                      <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 180, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, opacity: 0.92 }} className="block pointer-events-none" />
-                    </DraggableMark>
-                  )}
-                </div>
-                <LockedFooter />
-                </div>
-              </div>
 
             ) : (
               <div className="self-center max-w-md text-center bg-[#FDFBF7] border border-[#B89555]/25 rounded-xl p-10 mt-20">
