@@ -201,9 +201,11 @@ export default function EmployeeAssignmentsPanel({ searchQuery = "" }: { searchQ
 
 function AssignmentDialog({
   employee,
+  employees: _employees,
   onClose,
 }: {
   employee: Employee;
+  employees: Employee[];
   onClose: (changed: boolean) => void;
 }) {
   const [tab, setTab] = useState<"leads" | "database">("leads");
