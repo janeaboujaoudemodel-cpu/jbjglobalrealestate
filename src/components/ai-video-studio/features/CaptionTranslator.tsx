@@ -709,7 +709,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                           : 'bg-[#1A1A1A]/50 text-[#1A1A1A]/70 hover:bg-[#1A1A1A] border border-transparent'
                       }`}
                     >
-                      <span>{FLAG_EMOJIS[lang.code] || '🌐'}</span>
+                      <span>{FLAG_EMOJIS[lang.code] || '🏳️'}</span>
                       <span className="truncate">{lang.name}</span>
                     </button>
                   ))}
@@ -812,7 +812,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                           : 'bg-[#1A1A1A]/50 text-[#1A1A1A]/70 hover:bg-[#1A1A1A] border border-transparent'
                       }`}
                     >
-                      <span className="flex-shrink-0">{FLAG_EMOJIS[lang.code] || '🌐'}</span>
+                      <span className="flex-shrink-0">{FLAG_EMOJIS[lang.code] || '🏳️'}</span>
                       <span className="truncate">{lang.name}</span>
                     </button>
                   ))}
@@ -822,7 +822,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
               {/* Selected language badge */}
               {selectedLang && (
                 <div className="flex items-center gap-2 bg-amber-500/10 rounded-lg px-3 py-2 border border-amber-500/30">
-                  <span className="text-lg">{FLAG_EMOJIS[selectedLang] || '🌐'}</span>
+                  <span className="text-lg">{FLAG_EMOJIS[selectedLang] || '🏳️'}</span>
                   <span className="text-sm font-medium text-[#1A1A1A]">{SUPPORTED_LANGUAGES.find(l => l.code === selectedLang)?.name}</span>
                   <button onClick={() => setSelectedLang('')} className="ml-auto text-[#1A1A1A]/70 hover:text-red-400"><X className="w-3 h-3" /></button>
                 </div>
@@ -859,7 +859,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 return (
                   <div key={lc} className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-3 space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-base">{FLAG_EMOJIS[lc] || '🌐'}</span>
+                      <span className="text-base">{FLAG_EMOJIS[lc] || '🏳️'}</span>
                       <div className="flex-1"><p className="text-xs text-purple-300 font-medium">{li?.name} Dubbed Track</p><p className="text-[10px] text-[#1A1A1A]/70">✓ Assembled — {segsForLang.length} segments, {fmtDuration(duration)}</p></div>
                     </div>
                     <div className="flex gap-1.5">
@@ -889,7 +889,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                           return (
                             <div key={lc} className="mt-1 bg-[#1A1A1A]/30 rounded p-2 space-y-1">
                               <div className="flex items-center justify-between">
-                                <span className="text-[10px] text-[#1A1A1A]/70">{FLAG_EMOJIS[lc] || '🌐'} {li?.name}</span>
+                                <span className="text-[10px] text-[#1A1A1A]/70">{FLAG_EMOJIS[lc] || '🏳️'} {li?.name}</span>
                                 <button onClick={() => handleDubSegment(sub.id, lc)} disabled={isDubbing === sub.id + lc} className="text-[10px] text-purple-400 hover:text-purple-300 flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-purple-500/10 hover:bg-purple-500/20 transition-colors">
                                   {isDubbing === sub.id + lc ? <Loader2 className="w-2.5 h-2.5 animate-spin" /> : <Volume2 className="w-2.5 h-2.5" />}Dub
                                 </button>
@@ -1147,7 +1147,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                           const li = SUPPORTED_LANGUAGES.find(l => l.code === lc);
                           return (
                             <div key={lc} className="flex items-center gap-2">
-                              <span className="text-sm">{FLAG_EMOJIS[lc] || '🌐'}</span>
+                              <span className="text-sm">{FLAG_EMOJIS[lc] || '🏳️'}</span>
                               <span className="text-xs text-[#1A1A1A]/70 flex-1">{li?.name}</span>
                               <Button size="sm" onClick={() => exportSRT(lc)} className="h-6 text-xs bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] px-2">SRT</Button>
                               <Button size="sm" onClick={() => exportVTT(lc)} className="h-6 text-xs bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] px-2">VTT</Button>
