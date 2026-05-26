@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
-  Sparkles, Plus, Pencil, Trash2, Archive, RefreshCw, Wand2, Eye, EyeOff, Loader2,
+  Sparkles, Plus, Pencil, Trash2, RefreshCw, Wand2, Eye, EyeOff, Loader2,
   Star, Flame, Pause, XCircle, EyeOff as Hide, CircleDot,
 } from "lucide-react";
 import { toast } from "sonner";
