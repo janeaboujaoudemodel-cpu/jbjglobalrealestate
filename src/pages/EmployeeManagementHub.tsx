@@ -450,6 +450,10 @@ const EmployeeManagementHub: React.FC = () => {
             <ITProvisioningPanel searchQuery={searchQuery} onRefresh={fetchStats} />
           </TabsContent>
 
+          <TabsContent value="assignments">
+            <EmployeeAssignmentsPanel searchQuery={searchQuery} />
+          </TabsContent>
+
           <TabsContent value="journey">
             <EmployeeJourneyTracker searchQuery={searchQuery} />
           </TabsContent>
