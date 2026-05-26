@@ -473,7 +473,7 @@ function composeFacilityManagement(input: ComposerInput): string {
 
   const contractRows: Array<[string, string | undefined]> = [
     ["Client / Owner", f.recipientName],
-    ["ID / Trade Licence", f.idNumber],
+    // ID / Trade Licence intentionally removed from body — captured in email only
     ["Property", f.propertyName],
     ["Address", f.propertyAddress],
     ["Units Under Management", f.unitsCount],
