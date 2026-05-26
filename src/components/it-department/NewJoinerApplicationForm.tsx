@@ -13,9 +13,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { allTeamMembers } from '@/config/team-members';
-import { PhoneInputWithCountry } from '@/components/ui/phone-input-with-country';
-import { NationalitySelect } from '@/components/ui/nationality-select';
-import { LanguageMultiSelect } from '@/components/ui/language-multi-select';
+import PhoneInputWithCountry from '@/components/crm/pickers/PhoneInputWithCountry';
+import NationalityPicker from '@/components/crm/pickers/NationalityPicker';
+import LanguageMultiPicker from '@/components/crm/pickers/LanguageMultiPicker';
 import { SearchableSelectWithOther } from '@/components/ui/searchable-select-with-other';
 
 // List of departments
@@ -351,10 +351,9 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 <Globe className="w-4 h-4 text-[#1A1A1A]" />
                 Nationality *
               </Label>
-              <NationalitySelect
+              <NationalityPicker
                 value={formData.nationality}
                 onChange={(value) => setFormData(prev => ({ ...prev, nationality: value }))}
-                allowOther={true}
               />
             </div>
           </div>
@@ -365,7 +364,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
               <Languages className="w-4 h-4 text-[#1A1A1A]" />
               Languages Spoken
             </Label>
-            <LanguageMultiSelect
+            <LanguageMultiPicker
               value={formData.languages}
               onChange={(value) => setFormData(prev => ({ ...prev, languages: value }))}
             />
