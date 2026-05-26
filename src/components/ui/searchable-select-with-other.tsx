@@ -100,7 +100,7 @@ export const SearchableSelectWithOther: React.FC<SearchableSelectWithOtherProps>
           {selectedOption?.label}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-h-[300px] z-[9999]">
+      <SelectContent position="popper" sideOffset={4} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-h-[300px] z-[10200]">
         {/* Fixed search header - NOT sticky, stays at top outside scroll area */}
         <div className="p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20">
           <div className="relative">
