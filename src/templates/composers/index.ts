@@ -141,7 +141,7 @@ export function signatureBlock(opts: {
   applicantLabel?: string;
   extraSignatories?: Array<{ name?: string; title?: string; date?: string; label?: string }>;
 }): string {
-  const oName = esc(opts.ownerName || "Jameel Bou Jaoude");
+  const oName = esc(opts.ownerName || "Jane Bou Jaoude");
   const oTitle = esc(opts.ownerTitle || "Founder & CEO");
   const oDate = esc(formatHumanDate(opts.ownerDate) || todayLong());
   const aName = esc(opts.applicantName || "");
@@ -172,7 +172,7 @@ export function signatureBlock(opts: {
 
   const applicantLines = [
     row("Name", aName),
-    row("ID / Passport", aId),
+    aId ? row("ID / Passport", aId) : "",
     row("Date", aDate),
   ].join("");
 
@@ -224,7 +224,7 @@ export function recipientBlock(fields: Record<string, string>, opts?: { greeting
 }
 
 export function dateLine(custom?: string): string {
-  return `<div style="text-align:right;font-size:11px;color:${MUTED};margin-bottom:6px;">${esc(formatHumanDate(custom) || todayLong())}</div>`;
+  return `<div style="text-align:right;font-size:11px;color:${MUTED};margin:24px 0 18px;">${esc(formatHumanDate(custom) || todayLong())}</div>`;
 }
 
 export function subjectLine(text: string): string {
@@ -403,7 +403,6 @@ function composeHolidayHome(input: ComposerInput): string {
   const reservation: Array<[string, string | undefined]> = [
     ["Booking Reference", f.bookingRef],
     ["Guest Name", f.recipientName],
-    ["Passport / Emirates ID", f.idNumber],
     ["Phone / WhatsApp", f.guestPhone],
     ["Property", f.propertyName],
     ["Address", f.propertyAddress],
@@ -418,6 +417,14 @@ function composeHolidayHome(input: ComposerInput): string {
     ["Payment Method", f.paymentMethod],
     ["Payment Date", formatHumanDate(f.paymentDate) || f.paymentDate],
   ];
+
+  const guestName = esc(f.recipientName || "Valued Guest");
+  const greeting = `
+    <div style="margin:8px 0 16px;font-size:12.5px;color:${INK};line-height:1.7;">
+      <p style="margin:0 0 10px;">Dear ${guestName},</p>
+      <p style="margin:0 0 10px;"><strong>Greetings from JBJ GLOBAL REAL ESTATE.</strong> Thank you for choosing our residence for your stay — it is our privilege to host you.</p>
+      <p style="margin:0 0 10px;">We sincerely hope you enjoy your stay with us. Please find below the full reservation details and the binding terms of your booking.</p>
+    </div>`;
 
   // Pre-filled premium T&Cs — NON-refundable, JBJ liability fully waived.
   const terms = `
@@ -441,7 +448,7 @@ function composeHolidayHome(input: ComposerInput): string {
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     subjectLine(`Holiday Home Booking Agreement${f.bookingRef ? ` — ${f.bookingRef}` : ""}`),
-    paragraphs(input.aiIntro || `We confirm your reservation at ${f.propertyName || "the property"} for ${nights || "—"} night(s). Please review the reservation details and the binding terms below.`),
+    greeting,
     termsTable(reservation),
     terms,
     paragraphs(input.aiClosing),
@@ -450,9 +457,9 @@ function composeHolidayHome(input: ComposerInput): string {
       ownerTitle: input.ownerTitle,
       ownerDate: input.ownerDate,
       applicantName: f.recipientName,
-      applicantId: f.idNumber,
+      // ID/passport intentionally omitted for holiday home guests
       applicantDate: input.applicantDate,
-      applicantLabel: "Read · Understood · Accepted by Guest",
+      applicantLabel: "Client Signature",
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
