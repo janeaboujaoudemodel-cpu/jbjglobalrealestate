@@ -1478,12 +1478,12 @@ function StudioShell({
             {template ? (
               (() => {
                 const pageCount = pages === "auto" ? 1 : (pages as number);
-                const totalH = PAGE_H * pageCount;
+                const minH = PAGE_H * pageCount;
                 return (
                   <div
                     style={{
                       width: PAGE_W * effectiveScale,
-                      height: totalH * effectiveScale,
+                      height: Math.max(minH, measuredPageH) * effectiveScale,
                       flexShrink: 0,
                     }}
                   >
@@ -1492,7 +1492,7 @@ function StudioShell({
                       className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20 flex flex-col"
                       style={{
                         width: PAGE_W,
-                        height: totalH,
+                        minHeight: minH,
                         transform: `scale(${effectiveScale})`,
                         transformOrigin: "top left",
                         background: "#FDFBF7",
@@ -1500,12 +1500,13 @@ function StudioShell({
                     >
                       <LockedLetterhead />
                       <div
-                        className="relative flex-1 min-h-0 overflow-hidden"
+                        className="relative flex-1"
                         style={{
                           background: "#FDFBF7",
                           padding: "40px 56px",
                         }}
                       >
+
                         {bodyHtml ? (
                           <EditableBody
                             html={bodyHtml}
