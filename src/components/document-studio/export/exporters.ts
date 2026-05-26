@@ -215,7 +215,12 @@ export async function exportDocx(
     title: template.label,
     styles: { default: { document: { run: { font: "Inter", size: 22, color: "1A1A1A" } } } },
     sections: [{
-      properties: { page: { margin: { top: 1080, right: 1080, bottom: 1080, left: 1080 } } },
+      properties: {
+        page: {
+          size: { width: 11906, height: 16838, orientation: "portrait" },
+          margin: { top: 1080, right: 1080, bottom: 1080, left: 1080 },
+        },
+      },
       headers: { default: header },
       footers: { default: footer },
       children: [...bodyParas, ...extraChildren],

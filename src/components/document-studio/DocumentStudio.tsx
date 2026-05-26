@@ -30,7 +30,7 @@ import {
   Sparkles, Loader2, Wand2, Printer, Mail, FlaskConical, X, ChevronRight,
   ChevronLeft, ZoomIn, ZoomOut, Bold, Italic, List, Heading2, Search,
   PanelRightClose, PanelRightOpen, Check, Download, FileText, Stamp,
-  PenLine, ChevronDown, Trash2, Maximize2, Minimize2,
+  PenLine, ChevronDown, Trash2, Maximize2, Minimize2, Plus,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -47,7 +47,12 @@ import AiEditChatPanel from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
 import { exportPdf, exportDocx, printDocument, DocumentMarks } from "./export/exporters";
-import { compose as composeDocument } from "@/templates/composers";
+import {
+  compose as composeDocument,
+  DEFAULT_BROKER_COMMISSIONS,
+  type CommissionRow,
+  type CustomField,
+} from "@/templates/composers";
 
 interface Props {
   catalog: DocumentAudience;
@@ -108,12 +113,23 @@ function StudioShell({
   const [bodyHtml, setBodyHtml] = useState<string>("");
   const [generating, setGenerating] = useState(false);
 
+  // Commission rows — pre-seeded for broker/HR templates
+  const usesCommission =
+    !!template &&
+    (template.id === "job_offer" ||
+      template.id === "commission_agreement" ||
+      template.id === "employment_contract" ||
+      template.id === "partnership_referral");
+  const [commissionRows, setCommissionRows] = useState<CommissionRow[]>(DEFAULT_BROKER_COMMISSIONS);
+  const [customFields, setCustomFields] = useState<CustomField[]>([]);
+
   const [emailTo, setEmailTo] = useState("");
   const [sending, setSending] = useState(false);
 
   const [zoom, setZoom] = useState(100);
   const [aiOpen, setAiOpen] = useState(true);
   const [search, setSearch] = useState("");
+  const [pages, setPages] = useState<number | "auto">("auto");
 
   // Signature + stamp placement
   const { defaultSignature, defaultStamp } = useOwnerAssets();
@@ -235,6 +251,8 @@ function StudioShell({
         aiIntro,
         aiClosing,
         ownerTitle: "Director",
+        commissionRows: usesCommission ? commissionRows : undefined,
+        customFields,
       });
       setBodyHtml(html);
       toast.success("Document generated");
@@ -480,6 +498,101 @@ function StudioShell({
                     )}
                   </Field>
                 ))}
+
+                {usesCommission && (
+                  <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
+                        Commission Structure
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setCommissionRows((rs) => [...rs, { label: "", rate: "", trigger: "", notes: "" }])}
+                        className="text-[11px] text-[#1A1A1A] hover:text-[#B89555] inline-flex items-center gap-1"
+                      >
+                        <Plus className="w-3 h-3" /> Add tier
+                      </button>
+                    </div>
+                    <div className="space-y-2">
+                      {commissionRows.map((r, i) => (
+                        <div key={i} className="grid grid-cols-12 gap-1.5 items-start">
+                          <Input
+                            placeholder="Tier (e.g. Direct deals)"
+                            value={r.label || ""}
+                            onChange={(e) => setCommissionRows((rs) => rs.map((x, j) => j === i ? { ...x, label: e.target.value } : x))}
+                            className="col-span-5 h-8 text-[12px] bg-[#FDFBF7]"
+                          />
+                          <Input
+                            placeholder="Rate"
+                            value={r.rate || ""}
+                            onChange={(e) => setCommissionRows((rs) => rs.map((x, j) => j === i ? { ...x, rate: e.target.value } : x))}
+                            className="col-span-3 h-8 text-[12px] bg-[#FDFBF7]"
+                          />
+                          <Input
+                            placeholder="Trigger"
+                            value={r.trigger || ""}
+                            onChange={(e) => setCommissionRows((rs) => rs.map((x, j) => j === i ? { ...x, trigger: e.target.value } : x))}
+                            className="col-span-3 h-8 text-[12px] bg-[#FDFBF7]"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setCommissionRows((rs) => rs.filter((_, j) => j !== i))}
+                            className="col-span-1 h-8 flex items-center justify-center text-[#1A1A1A]/55 hover:text-red-600"
+                            title="Remove tier"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-[#1A1A1A]/55 mt-2">Empty rows are skipped — only filled tiers appear in the document.</p>
+                  </div>
+                )}
+
+                <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
+                      Custom Fields
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setCustomFields((cs) => [...cs, { label: "", value: "" }])}
+                      className="text-[11px] text-[#1A1A1A] hover:text-[#B89555] inline-flex items-center gap-1"
+                    >
+                      <Plus className="w-3 h-3" /> Add field
+                    </button>
+                  </div>
+                  {customFields.length === 0 ? (
+                    <p className="text-[10px] text-[#1A1A1A]/55">Add any extra clause — e.g. "Sign-on bonus", "Car allowance".</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {customFields.map((c, i) => (
+                        <div key={i} className="grid grid-cols-12 gap-1.5">
+                          <Input
+                            placeholder="Field name"
+                            value={c.label}
+                            onChange={(e) => setCustomFields((cs) => cs.map((x, j) => j === i ? { ...x, label: e.target.value } : x))}
+                            className="col-span-5 h-8 text-[12px] bg-[#FDFBF7]"
+                          />
+                          <Input
+                            placeholder="Value"
+                            value={c.value}
+                            onChange={(e) => setCustomFields((cs) => cs.map((x, j) => j === i ? { ...x, value: e.target.value } : x))}
+                            className="col-span-6 h-8 text-[12px] bg-[#FDFBF7]"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setCustomFields((cs) => cs.filter((_, j) => j !== i))}
+                            className="col-span-1 h-8 flex items-center justify-center text-[#1A1A1A]/55 hover:text-red-600"
+                            title="Remove field"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="p-3 border-t border-[#B89555]/20 space-y-2">
                 <Button
