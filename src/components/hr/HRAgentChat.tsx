@@ -157,13 +157,21 @@ export default function HRAgentChat() {
             </div>
             <div>
               <CardTitle className="text-lg text-[#1A1A1A]">Jessica</CardTitle>
-              <p className="text-sm text-[#1A1A1A]/70">Available 24/7 to support you</p>
+              <p className="text-sm text-[#1A1A1A]/70">
+                {mode === 'owner' ? 'Executive HR assistant' : 'Available 24/7 to support you'}
+              </p>
             </div>
           </div>
-          <Badge className={`${currentStageBadge.color} text-white flex items-center gap-1`}>
-            {currentStageBadge.icon}
-            {currentStageBadge.label}
-          </Badge>
+          {mode === 'owner' ? (
+            <Badge className="bg-[#102540] text-white flex items-center gap-1 border border-[#B89555]/40">
+              <Sparkles className="w-3 h-3" /> Owner mode
+            </Badge>
+          ) : (
+            <Badge className={`${currentStageBadge.color} text-white flex items-center gap-1`}>
+              {currentStageBadge.icon}
+              {currentStageBadge.label}
+            </Badge>
+          )}
         </div>
       </CardHeader>
       
