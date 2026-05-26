@@ -178,7 +178,9 @@ export default function PositionManager() {
       salary_band: form.salary_band || null,
       description: form.description || null,
       requirements: form.requirements,
-      is_active: form.is_active,
+      status: form.status,
+      is_featured: form.is_featured,
+      application_cap: form.application_cap.trim() === "" ? null : Math.max(0, parseInt(form.application_cap, 10) || 0),
       ai_generated: form.ai_generated,
     };
     let error;
