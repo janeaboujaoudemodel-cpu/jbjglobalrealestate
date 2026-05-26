@@ -295,8 +295,12 @@ export default function PositionManager() {
                         {meta.label}
                       </span>
                       {p.is_featured && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-[#B89555] bg-[#102540] text-white px-2 py-0.5 text-[10px] font-semibold" data-no-contrast-guard>
-                          <Star className="w-3 h-3 allow-white" /> Featured
+                        <span
+                          className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold"
+                          style={{ backgroundColor: "#102540", color: "#FFFFFF", borderColor: "#B89555" }}
+                          data-no-contrast-guard
+                        >
+                          <Star className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} /> Featured
                         </span>
                       )}
                       {limitReached && (
