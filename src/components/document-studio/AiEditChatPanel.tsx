@@ -2,10 +2,10 @@
  * AiEditChatPanel — Live Document Editor (right rail)
  * ---------------------------------------------------
  * Owner-side AI co-editor with:
- *   • Live mic transcription (ElevenLabs Realtime Scribe, VAD)
- *   • Language selector (input + AI reply language)
+ *   • Native browser microphone dictation (Web Speech API — no API keys)
+ *   • Language selector (STT + AI reply language)
  *   • File attachments (paperclip → images / PDFs as base64 chips)
- *   • Free-text instruction box ("raise salary to AED 30k", …)
+ *   • Free-text instruction box
  * The locked premium chrome (header + footer) is never sent to the AI
  * and never returned — only the editable body changes.
  */
@@ -19,7 +19,6 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { stripChromeArtifacts } from "@/templates/jbjLockedChrome";
-import { useScribe, CommitStrategy } from "@elevenlabs/react";
 
 interface Msg { role: "user" | "assistant"; content: string }
 interface Attachment { name: string; type: string; dataUrl: string }
@@ -30,18 +29,18 @@ interface Props {
   onApply: (nextBody: string) => void;
 }
 
-const LANGUAGES: Array<{ code: string; label: string; stt: string }> = [
-  { code: "English",    label: "English",    stt: "eng" },
-  { code: "Arabic",     label: "العربية",    stt: "ara" },
-  { code: "French",     label: "Français",   stt: "fra" },
-  { code: "Spanish",    label: "Español",    stt: "spa" },
-  { code: "Hindi",      label: "हिन्दी",      stt: "hin" },
-  { code: "Urdu",       label: "اردو",       stt: "urd" },
-  { code: "Russian",    label: "Русский",    stt: "rus" },
-  { code: "German",     label: "Deutsch",    stt: "deu" },
-  { code: "Italian",    label: "Italiano",   stt: "ita" },
-  { code: "Portuguese", label: "Português",  stt: "por" },
-  { code: "Chinese",    label: "中文",        stt: "zho" },
+const LANGUAGES: Array<{ code: string; label: string; bcp47: string }> = [
+  { code: "English",    label: "English",    bcp47: "en-US" },
+  { code: "Arabic",     label: "العربية",    bcp47: "ar-AE" },
+  { code: "French",     label: "Français",   bcp47: "fr-FR" },
+  { code: "Spanish",    label: "Español",    bcp47: "es-ES" },
+  { code: "Hindi",      label: "हिन्दी",      bcp47: "hi-IN" },
+  { code: "Urdu",       label: "اردو",       bcp47: "ur-PK" },
+  { code: "Russian",    label: "Русский",    bcp47: "ru-RU" },
+  { code: "German",     label: "Deutsch",    bcp47: "de-DE" },
+  { code: "Italian",    label: "Italiano",   bcp47: "it-IT" },
+  { code: "Portuguese", label: "Português",  bcp47: "pt-PT" },
+  { code: "Chinese",    label: "中文",        bcp47: "zh-CN" },
 ];
 
 export default function AiEditChatPanel({ currentBody, aiInstructions, onApply }: Props) {
@@ -58,44 +57,65 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply }
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  /* ───── Mic / ElevenLabs Realtime Scribe ───── */
-  const partialBase = useRef<string>("");
-  const scribe = useScribe({
-    modelId: "scribe_v2_realtime",
-    commitStrategy: CommitStrategy.VAD,
-    onPartialTranscript: (d: any) => {
-      setInput((partialBase.current + " " + (d?.text || "")).trim());
-    },
-    onCommittedTranscript: (d: any) => {
-      const piece = (d?.text || "").trim();
-      if (!piece) return;
-      partialBase.current = (partialBase.current + " " + piece).trim();
-      setInput(partialBase.current);
-    },
-  });
+  /* ───── Native browser dictation (Web Speech API) ───── */
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const baseTextRef = useRef<string>("");
 
-  const startMic = useCallback(async () => {
+  const sttSupported = typeof window !== "undefined" &&
+    !!((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+
+  const startMic = useCallback(() => {
+    if (!sttSupported) {
+      toast.error("Your browser doesn't support voice dictation. Try Chrome or Edge.");
+      return;
+    }
     try {
-      await navigator.mediaDevices.getUserMedia({ audio: true });
-      const { data, error } = await supabase.functions.invoke("elevenlabs-scribe-token");
-      if (error) throw error;
-      if (!data?.token) throw new Error("No token received");
-      partialBase.current = input.trim();
-      await scribe.connect({
-        token: data.token,
-        microphone: { echoCancellation: true, noiseSuppression: true },
-      });
+      const Ctor = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const rec = new Ctor();
+      const lang = LANGUAGES.find((l) => l.code === language)?.bcp47 || "en-US";
+      rec.lang = lang;
+      rec.continuous = true;
+      rec.interimResults = true;
+      baseTextRef.current = input.trim();
+
+      rec.onresult = (e: any) => {
+        let interim = "";
+        let finalText = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          const t = e.results[i][0].transcript;
+          if (e.results[i].isFinal) finalText += t;
+          else interim += t;
+        }
+        if (finalText) {
+          baseTextRef.current = (baseTextRef.current + " " + finalText).trim();
+        }
+        setInput((baseTextRef.current + " " + interim).trim());
+      };
+      rec.onerror = (e: any) => {
+        const msg = e?.error === "not-allowed"
+          ? "Microphone permission denied"
+          : e?.error === "no-speech" ? "No speech detected" : `Mic error: ${e?.error || "unknown"}`;
+        toast.error(msg);
+        setListening(false);
+      };
+      rec.onend = () => setListening(false);
+
+      recognitionRef.current = rec;
+      rec.start();
+      setListening(true);
       toast.success("Listening…");
     } catch (e: any) {
       toast.error(e?.message || "Microphone unavailable");
     }
-  }, [scribe, input]);
+  }, [sttSupported, language, input]);
 
-  const stopMic = useCallback(async () => {
-    try { await scribe.disconnect(); } catch { /* noop */ }
-  }, [scribe]);
+  const stopMic = useCallback(() => {
+    try { recognitionRef.current?.stop(); } catch { /* noop */ }
+    setListening(false);
+  }, []);
 
-  useEffect(() => () => { try { scribe.disconnect(); } catch { /* noop */ } }, [scribe]);
+  useEffect(() => () => { try { recognitionRef.current?.stop(); } catch { /* noop */ } }, []);
 
   /* ───── Attachments ───── */
   const onPickFiles = () => fileRef.current?.click();
@@ -122,14 +142,14 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply }
   const send = async () => {
     const instruction = input.trim();
     if ((!instruction && attachments.length === 0) || busy) return;
-    if (scribe.isConnected) await stopMic();
+    if (listening) stopMic();
 
     setMessages((m) => [...m, {
       role: "user",
       content: instruction + (attachments.length ? `\n\n📎 ${attachments.map((a) => a.name).join(", ")}` : ""),
     }]);
     setInput("");
-    partialBase.current = "";
+    baseTextRef.current = "";
     setBusy(true);
 
     try {
@@ -245,7 +265,7 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply }
         <Textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder={scribe.isConnected ? "Listening… speak now" : "Tell the editor what to change…"}
+          placeholder={listening ? "Listening… speak now" : "Tell the editor what to change…"}
           rows={3}
           className="text-sm resize-none"
           onKeyDown={(e) => {
@@ -266,12 +286,12 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply }
           </Button>
           <Button
             type="button"
-            variant={scribe.isConnected ? "destructive" : "outline"}
+            variant={listening ? "destructive" : "outline"}
             size="sm"
-            onClick={scribe.isConnected ? stopMic : startMic}
-            title={scribe.isConnected ? "Stop dictation" : "Start dictation"}
+            onClick={listening ? stopMic : startMic}
+            title={listening ? "Stop dictation" : "Start dictation"}
           >
-            {scribe.isConnected ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+            {listening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </Button>
           <Button
             onClick={send}
