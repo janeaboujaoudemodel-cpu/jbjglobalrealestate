@@ -1,56 +1,84 @@
-## Document Studio — premium template engine + live editor upgrade
+## Document Studio — Job Offer & Live Editor Fixes
 
-### 1. Standard locked template bodies (auto-render on click)
-- Extend `DocumentTemplate` in `src/config/documentCatalog.ts` with a new `standardBody(ctx)` function returning the locked HTML body for that template, using `{{tokens}}` for every dynamic field (recipient, position, start date, salary, etc.) plus standard clauses.
-- Author one premium body per template (job offer, employment contract, NDA, warning letter, partnership, commission agreement, listing authorisation, etc.) — fixed structure, terms table, locked clauses, signature block — so styles are uniform.
-- In `DocumentStudio.tsx`, when a template is selected (and on every field change), call `renderStandardBody(template, fields, department, commissionRows, customFields)` and push the result into `bodyHtml` automatically. Result: the live A4 preview shows the standard template the moment a template is clicked, and updates token-by-token as the user types — no AI call required to see the document.
-- AI generation becomes an *optional enhancement* invoked only from the right-side editor ("Rewrite", "Translate", "Make warmer", etc.). It never replaces the locked structure — it only fills/edits the AI-tagged paragraphs inside `<section data-ai-zone>` blocks.
+Scope: `src/components/document-studio/DocumentStudio.tsx`, `src/templates/composers/index.ts`, `src/templates/composers/standardBody.ts`, and the left rail (Step 2 form). No backend changes.
 
-### 2. Locked template style
-- Move all body CSS (font, headings, table, signature block) into a single `documentStyles.ts` file injected once at the top of every preview/PDF/Docx/print output.
-- `data-locked="true"` on every structural block — the editor and AI sanitizer strip any inline style or class that tries to override it (already partially done via `stripChromeArtifacts`, extend to body).
+### 1. Live preview not reflecting field edits (recipient, position, etc.)
 
-### 3. LLC · SOC font fix
-- In `LockedLetterhead.tsx` line 41 (and matching HTML in `jbjLockedChrome.ts`): remove the `uppercase` modification & extra letter-spacing so it inherits the same Inter weight as the wordmark. Render as `L.L.C · S.O.C` at the same font-family / weight 500 / size 12 directly under the wordmark.
+Root cause: once the user (or `EditableBody`'s contentEditable) touches the body, the saved HTML no longer equals `autoBodyRef.current` (DOMPurify + browser normalisation), so the auto-rerender effect skips every subsequent field change.
 
-### 4. Remove white block under footer (completely)
-- In `DocumentStudio.tsx` preview wrapper, replace the `minHeight` math with `height: auto` and let the A4 page grow only to fit its content + footer. The page card uses `display:flex; flex-direction:column` and the footer is the last child, so there is no trailing white strip.
-- For fixed page counts, keep the page-break behaviour via `break-after:page` inside the body — not via padded heights.
+Fix:
+- Re-render the standard body on every change of `templateId / fields / department / commissionRows / customFields` unconditionally, UNLESS the user has explicitly hand-edited (track a `userEditedRef` flag flipped on real keystrokes inside `EditableBody`, not on programmatic `setBodyHtml`).
+- When `userEditedRef` is true, show a small "Reset to template" pill above the page so re-syncing is one click.
 
-### 5. Live Document Editor (right side, every page that hosts it)
-Upgrade `AiEditChatPanel.tsx`:
-- **Microphone with live transcription**: integrate ElevenLabs Realtime STT via `@elevenlabs/react`'s `useScribe` (model `scribe_v2_realtime`, VAD). Token endpoint: new edge function `elevenlabs-scribe-token` (server-side `xi-api-key`, single-use token).
-- **Language selector**: dropdown with English (default), Arabic, French, Spanish, Hindi, Urdu, Russian, German, Italian, Portuguese, Chinese. The selected language is passed to (a) the STT `language_code`, (b) the AI rewrite prompt ("Reply in <Language>"), and (c) the document template — re-rendering the standard body in that language via Lovable AI translate.
-- **Attach files**: paperclip button → file picker → attachments appear as chips above the input and are sent to the AI request as base64 (images via Gemini vision, PDFs via the existing parse path).
-- **Attach stamp / signature**: dedicated buttons that open the existing `AssetLibraryDialog`. Tell the AI *"place stamp here"* / *"place signature here"* and it inserts the appropriate `<DraggableMark>` into the preview at default coords.
-- The same upgraded panel is reused everywhere it is mounted (CV builder, cover letter, contracts, presentations — all import the same component).
+### 2. Subject line shows "Offer of Employment — Position" / "To: ___"
 
-### 6. Save stamp & signature defaults — auto-attach
-- Already partially in place via `useOwnerAssets().defaultSignature / defaultStamp`. Ensure every new document boot auto-places them (current effect already does this — keep). Add a small "Saved by default" toggle in `AssetLibraryDialog` so the owner explicitly chooses which uploaded asset becomes the default. Persists via existing assets table.
+- In `composeJobOffer`, change the subject template to `Offer of Employment${jobTitle ? " — " + jobTitle : ""}` (no stray "Position" placeholder).
+- In `recipientBlock`, render the recipient name inline (`Dear {name},`) instead of a `To` block when the template is `job_offer` — matches the UAE-style offer letter.
 
-### 7. Editable preview
-- `EditableBody` in `DocumentStudio.tsx` is already `contentEditable`. Add `data-locked="true"` guards around the signature block, terms table, and any AI-zone to prevent accidental destruction. The owner can still freely edit narrative paragraphs.
-- All draggable marks (signature/stamp/date) remain freely positionable with × remove (already shipped).
+### 3. Duplicated date + non-clickable date
 
-### 8. Header layout / Signature & Stamp upload clickability
-- Refactor the topbar in `DocumentStudio.tsx` so the right cluster is `shrink-0` and the Stepper is `min-w-0 flex-1`. At <1280px the Pages / Signature / Stamp / Fullscreen / Hide-AI buttons collapse to **icon-only** with tooltips (no labels), guaranteeing all 5 buttons stay visible and clickable next to the close (×).
-- Add `z-index: 30` to the topbar container, `z-index: 10` to the right AI panel, so the topbar always wins pointer events.
+- Remove the static `dateLine()` from `composeJobOffer` (and other letter-style templates) so the only date on the page is the draggable one.
+- Convert `DraggableMark` for the date into a **click-to-edit** field: clicking opens a small native `<input type="date">` popover; value is stored in `marks.dateValue` and rendered formatted (DD MMM YYYY). Keep the × to remove, drag handle on the chip body.
 
-### Files to touch
-- `src/config/documentCatalog.ts` — add `standardBody(ctx)` per template
-- `src/templates/composers/index.ts` — extend to merge tokens into `standardBody`
-- `src/components/document-studio/DocumentStudio.tsx` — auto-render on template select + on field change, topbar layout fix, drop forced page height
-- `src/components/document-studio/LockedLetterhead.tsx` + `src/templates/jbjLockedChrome.ts` — LLC · SOC font normalization
-- `src/components/document-studio/AiEditChatPanel.tsx` — microphone (ElevenLabs), language dropdown, attach files, attach stamp/signature, asset library hook
-- `src/components/document-studio/assets/AssetLibraryDialog.tsx` — default-asset toggle
-- **NEW** `supabase/functions/elevenlabs-scribe-token/index.ts` — single-use realtime STT token (uses `ELEVENLABS_API_KEY` secret)
-- `supabase/config.toml` — register the new function with `verify_jwt = true`
-- `bun add @elevenlabs/react`
+### 4. Department `<Select>` not clickable
 
-### Secret required
-- `ELEVENLABS_API_KEY` (will request via `add_secret` if not already present after checking `fetch_secrets`).
+The overlay uses `zIndex: 2147483000`. Radix `SelectContent` portals to `document.body` at a lower z-index, so it renders behind the overlay (and the page registers no clicks).
+- Pass an explicit container to the Select (`SelectContent` with `position="popper"` and a portal targeted at the overlay root via a `ref`), OR raise the portalled content with `style={{ zIndex: 2147483647 }}`. Apply the same fix to the `Pages` `<select>` and all other Selects inside the overlay (template field selects).
 
-### Out of scope
-- Wordmark text/colors/position
-- Footer content (only the empty white *gap* is removed; the gold footer stays)
-- Template catalog list (no new templates added)
+### 5. Commission column "Payout Trigger" wording
+
+- Rename column header `Payout Trigger` → `When Paid`.
+- Replace default row trigger text `"On collected commission"` → `"Paid after the firm receives cleared commission"`.
+- Add a small helper line under the table: "Commissions are released once the brokerage actually receives the funds."
+
+### 6. Signature block — remove "For", add defaults, tighter spacing
+
+In `signatureBlock`:
+- Header label `For JBJ GLOBAL REAL ESTATE` → `JBJ GLOBAL REAL ESTATE` (per premium standard).
+- Default Party A: Name `Jane Bou Jaude`, Title `Founder & CEO`, Date = today (auto-filled). Each value gets a × in the preview to clear it (mirrors how date works today via DraggableMark — we'll wrap the signature block cells in a thin client component `EditableSignatureCell` rendered as React DOM over the composed HTML).
+- Party B (Accepted by Applicant):
+  - Name auto-syncs from `fields.recipientName`.
+  - `ID` line auto-syncs from `fields.idNumber`.
+  - Date is intentionally LEFT BLANK (applicant fills on sign).
+- Tighten cell spacing: reduce `margin-bottom:46px` to `28px` and bump top spacing between the signature block and the preceding paragraph so the cells breathe but don't overlap.
+
+### 7. Left rail — new utilities
+
+Add three new items above Custom Fields on Step 2 for `job_offer` (and re-usable for other letters):
+
+a. **Applicant ID Number** input — bind to `fields.idNumber` (already used by `recipientBlock` + signature cell). Single text input.
+
+b. **Paste applicant details → AI auto-fill** (new card):
+   - Textarea: "Paste passport copy text, LinkedIn bio, or free-form notes…"
+   - Button: `Auto-fill fields with AI`. Calls existing `letter-ai-generate` edge function with a new prompt instructing it to return a JSON object keyed by the template's field keys, then `setFields(prev => ({ ...prev, ...parsed }))`. No backend changes — same function, prompt-only.
+
+c. **Attach a document → pre-fill** (new card):
+   - File input (accept `image/*,application/pdf`).
+   - Convert to base64 (8MB cap, mirrors AI chat panel), send to `letter-ai-generate` with attachment + same JSON-extraction prompt, then merge into `fields`.
+
+### 8. Remove sections from the rail (Notes column)
+
+- Add a × button on the Custom Fields card header, and on the Commission card header, to hide/remove the whole card (state: `hiddenSections: Set<string>`). Hidden cards reappear via a small "+ Restore sections" footer button.
+- The existing per-row trash (Custom Fields & Commission rows) already removes individual rows — no change needed there.
+
+### 9. UAE-law alignment for Job Offer body
+
+In `standardBody.ts` → `intros.job_offer` and `closings.job_offer`:
+- Intro: keep current phrasing; add reference to UAE Federal Decree-Law No. 33 of 2021 (Regulation of Labour Relations) governing the engagement.
+- Closing: explicit mention that probation, working hours, leave, end-of-service gratuity and notice period follow UAE Labour Law and DIFC/onshore regulations as applicable.
+- No structural change to the design — only the AI-free deterministic copy.
+
+### Technical Notes
+
+- All Select/Popover fixes funnel through a single helper `<OverlayPortalProps>` that returns `{ container, style: { zIndex } }`, applied to every Radix portal inside the studio so we never hit the z-index bug again.
+- `EditableSignatureCell` is a React overlay positioned absolutely over the composed HTML signature table (using the same approach as `DraggableMark`). The underlying HTML stays the source of truth for export/print so PDF/DOCX continue to receive the rendered values.
+- AI auto-fill prompt returns strict JSON; parse with a safe `JSON.parse(..)` inside a `try/catch` and only merge whitelisted keys present in `template.fields`.
+- Out of scope: header monogram size, footer chrome, AI panel, mic, language selector (already shipped).
+
+### Files Touched
+
+- `src/components/document-studio/DocumentStudio.tsx` — rerender logic, Select z-index, new sidebar cards, EditableSignatureCell wiring, date-mark popover, hide-section ×.
+- `src/templates/composers/index.ts` — `signatureBlock` labels/spacing, `composeJobOffer` (remove dateLine, subject wording, recipientBlock variant), commission column header.
+- `src/templates/composers/standardBody.ts` — UAE-law copy in `intros.job_offer` / `closings.job_offer`, default commission trigger text.
+- (new) `src/components/document-studio/EditableSignatureCell.tsx` — overlay editable cell with × clear.
+- (new) `src/components/document-studio/AutoFillFromDetails.tsx` — paste-text + attach-doc card calling `letter-ai-generate`.
