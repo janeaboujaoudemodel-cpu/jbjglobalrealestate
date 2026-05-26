@@ -22,6 +22,7 @@ import ITTasksList from '@/components/it-department/ITTasksList';
 import EmployeeJourneyTracker from '@/components/employee-management/EmployeeJourneyTracker';
 import EmployeeActivityAudit from '@/components/employee-management/EmployeeActivityAudit';
 import ITProvisioningPanel from '@/components/employee-management/ITProvisioningPanel';
+import EmployeeAssignmentsPanel from '@/components/employee-management/EmployeeAssignmentsPanel';
 import { Link } from 'react-router-dom';
 
 const EmployeeManagementHub: React.FC = () => {
