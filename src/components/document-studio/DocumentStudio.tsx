@@ -1371,25 +1371,43 @@ function StudioShell({
                   {sending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Mail className="w-4 h-4 mr-2" />}
                   Send via Branded Email
                 </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="w-full" disabled={!!exporting}>
-                      {exporting ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
-                      Export <ChevronDown className="w-3.5 h-3.5 ml-1" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-[#FDFBF7]">
-                    <DropdownMenuItem onClick={() => handleExport("pdf")}>
-                      <FileText className="w-4 h-4 mr-2" /> Download PDF
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleExport("docx")}>
-                      <FileText className="w-4 h-4 mr-2" /> Download Word (.docx)
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handlePrint}>
-                      <Printer className="w-4 h-4 mr-2" /> Print
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex w-full">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 rounded-r-none border-r-0"
+                    disabled={!!exporting}
+                    onClick={() => handleExport("pdf")}
+                    title="Download PDF immediately"
+                  >
+                    {exporting === "pdf" ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
+                    Export PDF
+                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="rounded-l-none px-2" disabled={!!exporting} title="More export formats">
+                        <ChevronDown className="w-3.5 h-3.5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="bg-[#FDFBF7] z-[2147483647]">
+                      <DropdownMenuItem onClick={() => handleExport("pdf")}>
+                        <FileText className="w-4 h-4 mr-2" /> Download PDF
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleExport("png")}>
+                        <FileText className="w-4 h-4 mr-2" /> Download Image (PNG)
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleExport("docx")}>
+                        <FileText className="w-4 h-4 mr-2" /> Download Word (.docx)
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleExport("both")}>
+                        <FileText className="w-4 h-4 mr-2" /> Download PDF + PNG
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={handlePrint}>
+                        <Printer className="w-4 h-4 mr-2" /> Print
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
                 <Button
                   variant="outline" size="sm" className="w-full"
                   onClick={() => handleSend(OWNER_TEST_EMAIL)}
