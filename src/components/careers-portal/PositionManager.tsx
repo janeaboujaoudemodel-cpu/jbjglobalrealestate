@@ -426,14 +426,45 @@ export default function PositionManager() {
               />
             </div>
 
-            <div className="md:col-span-2 flex items-center gap-2">
-              <input
-                id="is_active"
-                type="checkbox"
-                checked={form.is_active}
-                onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
-              />
-              <Label htmlFor="is_active">Active (visible on public Careers page)</Label>
+            <div className="md:col-span-2 grid gap-3 md:grid-cols-3 rounded-lg border border-[#B89555]/40 p-3 bg-[#F7F2EA]/40">
+              <div>
+                <Label>Status</Label>
+                <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v as JobStatus })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {(Object.keys(STATUS_META) as JobStatus[]).map((s) => (
+                      <SelectItem key={s} value={s}>{STATUS_META[s].label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-[11px] text-[#1A1A1A]/60 mt-1">
+                  Hidden removes the role from the public page entirely.
+                </p>
+              </div>
+              <div>
+                <Label>Application cap (optional)</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  value={form.application_cap}
+                  onChange={(e) => setForm({ ...form, application_cap: e.target.value })}
+                  placeholder="e.g. 50"
+                />
+                <p className="text-[11px] text-[#1A1A1A]/60 mt-1">
+                  Auto-shows "Application Limit Reached" when met.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 pt-6">
+                <input
+                  id="is_featured"
+                  type="checkbox"
+                  checked={form.is_featured}
+                  onChange={(e) => setForm({ ...form, is_featured: e.target.checked })}
+                />
+                <Label htmlFor="is_featured" className="flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 text-[#B89555]" /> Featured
+                </Label>
+              </div>
             </div>
           </div>
 
