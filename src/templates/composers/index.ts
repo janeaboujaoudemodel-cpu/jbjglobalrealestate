@@ -187,15 +187,16 @@ export function signatureBlock(opts: {
     const bLines = b
       ? [row("Name", esc(b?.name || "")), row("Title", esc(b?.title || "")), row("Date", esc(formatHumanDate(b?.date)))].join("")
       : "";
-    extraRows.push(`<tr>${cell(esc(a?.label || "Additional Signatory"), aLines)}${b ? cell(esc(b?.label || "Additional Signatory"), bLines) : `<td style="width:50%;"></td>`}</tr>`);
+    extraRows.push(`<tr><td colspan="3" style="height:32px;"></td></tr><tr>${cell(esc(a?.label || "Additional Signatory"), aLines)}${gapCell}${b ? cell(esc(b?.label || "Additional Signatory"), bLines) : `<td style="width:44%;"></td>`}</tr>`);
   }
 
   return `
-    <div style="margin-top:28px;page-break-inside:avoid;">
+    <div style="margin-top:36px;page-break-inside:avoid;">
       <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
         <tbody>
           <tr>
             ${cell("JBJ GLOBAL REAL ESTATE", ownerLines)}
+            ${gapCell}
             ${cell(aLabel, applicantLines)}
           </tr>
           ${extraRows.join("")}
