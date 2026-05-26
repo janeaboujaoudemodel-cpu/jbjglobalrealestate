@@ -17,7 +17,7 @@ import { CertificateGenerator } from "@/components/onboarding/CertificateGenerat
 
 interface Application {
   id: string;
-  status: "pending" | "approved" | "rejected";
+  status: "pending" | "approved" | "rejected" | "cv_received" | "pending_review" | "shortlisted" | "interview_scheduled" | "interview_completed" | "kept_in_records" | "position_closed";
   full_name: string;
   rejection_reason?: string;
   created_at: string;
