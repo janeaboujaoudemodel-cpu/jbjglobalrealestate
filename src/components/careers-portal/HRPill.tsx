@@ -56,14 +56,13 @@ export const HRPill = React.forwardRef<HTMLButtonElement, HRPillProps>(
         {...rest}
       >
         {Icon ? (
-          <Icon
+          <span
             data-no-contrast-guard
-            style={{ color: active ? "#FFFFFF" : "#1A1A1A", stroke: "currentColor" }}
-            className={cn(
-              "h-3.5 w-3.5 shrink-0",
-              active ? "allow-white" : "",
-            )}
-          />
+            style={{ color: active ? "#FFFFFF" : "#1A1A1A" }}
+            className={cn("inline-flex shrink-0", active ? "allow-white" : "")}
+          >
+            <Icon className="h-3.5 w-3.5" />
+          </span>
         ) : null}
         <span
           data-no-contrast-guard
