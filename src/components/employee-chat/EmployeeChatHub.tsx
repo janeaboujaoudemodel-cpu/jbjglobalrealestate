@@ -52,7 +52,33 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
   const [alsoSendByEmail, setAlsoSendByEmail] = useState(false);
   const [showAttachPicker, setShowAttachPicker] = useState(false);
   const [pendingAttachments, setPendingAttachments] = useState<DocumentAttachment[]>([]);
+  // Persona of the *currently authenticated* sender — never hardcoded to "Jane".
+  const [me, setMe] = useState<{ id: string; name: string; email: string; title: string } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Resolve the real sender identity from auth + crm_users_profile.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      const u = auth?.user;
+      if (!u || cancelled) return;
+      const { data: profile } = await supabase
+        .from('crm_users_profile')
+        .select('display_name, job_title')
+        .eq('user_id', u.id)
+        .maybeSingle();
+      if (cancelled) return;
+      setMe({
+        id: u.id,
+        name: profile?.display_name || u.email?.split('@')[0] || 'Team member',
+        email: u.email || '',
+        title: profile?.job_title || '',
+      });
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
   
   const { 
     messages, 
@@ -103,18 +129,28 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
       setMessageInput('');
       setPendingAttachments([]);
 
-      // Cross-channel: also send by email if toggle is ON
+      // Cross-channel: also send by email if toggle is ON.
+      // Use the REAL employee email from team-members config (never a guessed
+      // `${id}@jbj.ae` slug) and the REAL authenticated sender persona
+      // (never a hardcoded "Jane Bou Jaoude" fallback).
       if (alsoSendByEmail && selectedEmployeeData) {
-        const recipientEmail = `${selectedEmployee}@jbj.ae`;
+        const recipientEmail =
+          selectedEmployeeData.email ||
+          `${selectedEmployeeData.name.toLowerCase().replace(/\s+/g, '.')}@jbj.ae`;
         sendSecondaryEmail({
           primaryChannel: "chat",
           recipientEmail,
-          subject: `Chat message regarding ${selectedEmployeeData.name}`,
+          subject: `Message from ${me?.name || 'JBJ Global'} — ${new Date().toLocaleDateString()}`,
           body: msgContent,
           alsoSendSecondary: true,
           recipientName: selectedEmployeeData.name,
+          senderId: me?.id,
+          senderName: me?.name,
+          senderEmail: me?.email,
+          senderTitle: me?.title,
         });
       }
+
     }
   };
 

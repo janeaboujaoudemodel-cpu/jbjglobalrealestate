@@ -34,8 +34,10 @@ export default function HRAgentChat() {
   const [loading, setLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [stage, setStage] = useState<string>('greeting');
+  const [mode, setMode] = useState<'applicant' | 'owner'>('applicant');
   const [initializing, setInitializing] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     if (user) {
@@ -68,11 +70,13 @@ export default function HRAgentChat() {
       const data = response.data;
       setConversationId(data.conversationId);
       setStage(data.stage);
+      if (data.mode === 'owner') setMode('owner');
       setMessages([{
         role: 'assistant',
         content: data.message,
         timestamp: new Date().toISOString()
       }]);
+
     } catch (error) {
       console.error('Failed to start conversation:', error);
       toast.error('Failed to connect to Jessica');
@@ -107,6 +111,7 @@ export default function HRAgentChat() {
 
       const data = response.data;
       setStage(data.stage);
+      if (data.mode === 'owner') setMode('owner');
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: data.message,
@@ -152,13 +157,21 @@ export default function HRAgentChat() {
             </div>
             <div>
               <CardTitle className="text-lg text-[#1A1A1A]">Jessica</CardTitle>
-              <p className="text-sm text-[#1A1A1A]/70">Available 24/7 to support you</p>
+              <p className="text-sm text-[#1A1A1A]/70">
+                {mode === 'owner' ? 'Executive HR assistant' : 'Available 24/7 to support you'}
+              </p>
             </div>
           </div>
-          <Badge className={`${currentStageBadge.color} text-white flex items-center gap-1`}>
-            {currentStageBadge.icon}
-            {currentStageBadge.label}
-          </Badge>
+          {mode === 'owner' ? (
+            <Badge className="bg-[#102540] text-white flex items-center gap-1 border border-[#B89555]/40">
+              <Sparkles className="w-3 h-3" /> Owner mode
+            </Badge>
+          ) : (
+            <Badge className={`${currentStageBadge.color} text-white flex items-center gap-1`}>
+              {currentStageBadge.icon}
+              {currentStageBadge.label}
+            </Badge>
+          )}
         </div>
       </CardHeader>
       
