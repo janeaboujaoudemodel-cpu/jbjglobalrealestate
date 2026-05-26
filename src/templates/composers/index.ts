@@ -300,6 +300,75 @@ function unlabelize(label: string): string {
   return label.charAt(0).toLowerCase() + label.slice(1).replace(/\s+(.)/g, (_, c) => c.toUpperCase());
 }
 
+/* ───────────── Commission Invoice (auto-calc) ───────────── */
+
+function composeCommissionInvoice(input: ComposerInput): string {
+  const f = input.fields;
+  const parseNum = (v?: string) => {
+    if (!v) return 0;
+    const n = parseFloat(String(v).replace(/[^\d.\-]/g, ""));
+    return Number.isFinite(n) ? n : 0;
+  };
+  const aed = (n: number) =>
+    new Intl.NumberFormat("en-AE", { style: "currency", currency: "AED", maximumFractionDigits: 2 }).format(n);
+
+  const dealValue = parseNum(f.dealValue);
+  const ratePct = parseNum(f.commissionRate); // % e.g. 2
+  const vatPct = f.vatRate !== undefined && f.vatRate !== "" ? parseNum(f.vatRate) : 5;
+  const commission = +(dealValue * (ratePct / 100)).toFixed(2);
+  const vat = +(commission * (vatPct / 100)).toFixed(2);
+  const total = +(commission + vat).toFixed(2);
+
+  const calcRows = `
+    <table style="border-collapse:collapse;width:100%;margin:14px 0 18px;font-family:Inter,system-ui,sans-serif;">
+      <thead>
+        <tr><th colspan="2" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">Invoice Calculation</th></tr>
+      </thead>
+      <tbody>
+        ${[
+          ["Deal Value", aed(dealValue)],
+          [`Commission Rate`, `${ratePct}%`],
+          ["Commission (Net)", aed(commission)],
+          [`VAT (${vatPct}%)`, aed(vat)],
+        ].map(([k, v], i) => `
+          <tr style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
+            <td style="padding:9px 14px;border:1px solid ${GOLD}33;font-weight:600;color:${INK};width:60%;font-size:12px;">${k}</td>
+            <td style="padding:9px 14px;border:1px solid ${GOLD}33;color:${INK};font-size:12px;text-align:right;">${v}</td>
+          </tr>`).join("")}
+        <tr style="background:${GOLD}1A;">
+          <td style="padding:11px 14px;border:1px solid ${GOLD};font-weight:700;color:${INK};font-size:13px;">Total Due</td>
+          <td style="padding:11px 14px;border:1px solid ${GOLD};color:${INK};font-size:13px;text-align:right;font-weight:700;">${aed(total)}</td>
+        </tr>
+      </tbody>
+    </table>`;
+
+  const meta: Array<[string, string | undefined]> = [
+    ["Invoice No.", f.invoiceNumber],
+    ["Invoice Date", formatHumanDate(f.invoiceDate) || f.invoiceDate],
+    ["Bill To", f.recipientName],
+    ["Property / Deal", f.propertyRef],
+    ["Payment Terms", f.paymentTerms],
+  ];
+
+  return [
+    input.hideLetterDate ? "" : dateLine(input.letterDate),
+    subjectLine(`Commission Invoice${f.invoiceNumber ? ` — ${f.invoiceNumber}` : ""}`),
+    paragraphs(input.aiIntro),
+    termsTable(meta),
+    calcRows,
+    paragraphs(input.aiClosing || "Kindly remit the total due to the brokerage bank account on file. Thank you for your business."),
+    signatureBlock({
+      ownerName: input.ownerName,
+      ownerTitle: input.ownerTitle,
+      ownerDate: input.ownerDate,
+      applicantName: f.recipientName,
+      applicantId: f.idNumber,
+      applicantDate: input.applicantDate,
+      applicantLabel: "Acknowledged by Client",
+    }),
+  ].join("");
+}
+
 /* ───────────── Dispatcher ───────────── */
 
 export function compose(input: ComposerInput): string {
@@ -314,11 +383,14 @@ export function compose(input: ComposerInput): string {
       return composeGeneric(input, `Non-Disclosure Agreement`);
     case "commission_agreement":
       return composeGeneric(input, `Commission Agreement — ${input.fields.recipientName || ""}`);
+    case "commission_invoice":
+      return composeCommissionInvoice(input);
     case "internship_agreement":
       return composeGeneric(input, `Internship Agreement — ${input.fields.recipientName || ""}`);
     case "hr_letter":
       return composeGeneric(input, `HR Letter — ${input.fields.recipientName || ""}`);
     case "partnership_referral":
+    case "referral_agreement":
       return composeGeneric(input, `Partnership / Referral Agreement`);
     case "form_a":
       return composeGeneric(input, `Form A — Buyer Registration`);
