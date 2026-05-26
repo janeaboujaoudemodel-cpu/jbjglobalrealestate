@@ -86,6 +86,10 @@ export interface StandardBodyArgs {
   customFields?: CustomField[];
   ownerName?: string;
   ownerTitle?: string;
+  ownerDate?: string;
+  applicantDate?: string;
+  letterDate?: string;
+  hideLetterDate?: boolean;
 }
 
 export function renderStandardBody(args: StandardBodyArgs): string {
@@ -97,7 +101,11 @@ export function renderStandardBody(args: StandardBodyArgs): string {
     commissionRows: args.commissionRows,
     customFields: args.customFields,
     ownerName: args.ownerName,
-    ownerTitle: args.ownerTitle || "Director",
+    ownerTitle: args.ownerTitle,
+    ownerDate: args.ownerDate,
+    applicantDate: args.applicantDate,
+    letterDate: args.letterDate,
+    hideLetterDate: args.hideLetterDate,
     aiIntro,
     aiClosing,
   };
