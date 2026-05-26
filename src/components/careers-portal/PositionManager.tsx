@@ -111,7 +111,9 @@ export default function PositionManager() {
       salary_band: p.salary_band ?? "",
       description: p.description ?? "",
       requirements: p.requirements ?? [],
-      is_active: !!p.is_active,
+      status: (p.status as JobStatus) ?? (p.is_active ? "open" : "hidden"),
+      is_featured: !!p.is_featured,
+      application_cap: p.application_cap != null ? String(p.application_cap) : "",
       ai_generated: !!p.ai_generated,
     });
     setAiInstruction("");
