@@ -193,8 +193,9 @@ export default function JoinApplication() {
       try {
         const { data, error } = await supabase
           .from("open_positions")
-          .select("id, title, department, description, employment_type, is_broker_role, location")
-          .eq("is_active", true)
+          .select("id, title, department, description, employment_type, is_broker_role, location, status, is_featured, application_cap, applications_count")
+          .neq("status", "hidden")
+          .order("is_featured", { ascending: false })
           .order("created_at", { ascending: false });
         if (error) throw error;
         setOpenPositions(data || []);
