@@ -789,7 +789,19 @@ function StudioShell({
                   }
                 >
                   {bodyHtml ? (
-                    <EditableBody html={bodyHtml} onChange={setBodyHtml} />
+                    <EditableBody
+                      html={bodyHtml}
+                      onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
+                    />
+                    {userEdited && (
+                      <button
+                        type="button"
+                        onClick={resetToTemplate}
+                        className="absolute top-2 right-2 z-20 text-[10px] uppercase tracking-[0.16em] bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] rounded-full px-2.5 py-1 hover:bg-[#EFE6D6]"
+                      >
+                        Reset to template
+                      </button>
+                    )}
                   ) : (
                     <div className="text-[12px] text-[#1A1A1A]/40 italic">
                       Empty document — type here or use the AI assistant on the right to draft the body.
@@ -804,9 +816,19 @@ function StudioShell({
                       onRemove={() => removeMark("date")}
                       ariaLabel="Date"
                     >
-                      <div className="text-[12px] text-[#1A1A1A] font-medium border-b border-[#1A1A1A]/40 pb-1 pr-6">
-                        Date: {new Date().toLocaleDateString("en-GB")}
-                      </div>
+                      <label className="block cursor-text">
+                        <span className="text-[12px] text-[#1A1A1A] font-medium border-b border-[#1A1A1A]/40 pb-1 pr-6 inline-block">
+                          {new Date(marks.dateValue || new Date().toISOString().slice(0,10))
+                            .toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
+                        </span>
+                        <input
+                          type="date"
+                          value={marks.dateValue || ""}
+                          onPointerDown={(e) => e.stopPropagation()}
+                          onChange={(e) => setMarks((m) => ({ ...m, dateValue: e.target.value }))}
+                          className="block mt-1 text-[10px] bg-transparent border-none p-0 outline-none text-[#1A1A1A]/60"
+                        />
+                      </label>
                     </DraggableMark>
                   )}
 
