@@ -169,6 +169,22 @@ function StudioShell({
       return [...p.slice(0, i + 1), copy, ...p.slice(i + 1)];
     });
 
+  /** Scroll to and briefly highlight a signature cell in the preview. */
+  const highlightSig = (sigId: string) => {
+    const el = document.querySelector<HTMLElement>(`[data-sig-id="${sigId}"]`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.style.transition = "outline-color 200ms, background-color 200ms";
+    el.style.outline = "2px solid #B89555";
+    el.style.outlineOffset = "4px";
+    el.style.backgroundColor = "rgba(184,149,85,0.08)";
+    window.setTimeout(() => {
+      el.style.outline = "";
+      el.style.outlineOffset = "";
+      el.style.backgroundColor = "";
+    }, 1400);
+  };
+
   // Hide / restore the "Commission" and "Custom fields" rail cards.
   const [hiddenSections, setHiddenSections] = useState<Set<string>>(new Set());
   const toggleSection = (id: string) =>
