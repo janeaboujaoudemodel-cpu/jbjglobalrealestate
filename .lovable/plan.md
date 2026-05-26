@@ -1,123 +1,81 @@
-## Goal
+# Premium Document Studio Rebuild
 
-Restore and upgrade the "Generate Document" experience that used to live at `/owner/job-offer-template`, then promote it into a **single unified Document Studio engine** that powers two separate template catalogs:
+The current modal is broken — three narrow columns inside a small dialog crush the locked letterhead and AI panel into unreadable vertical text. Rebuild as a true full-screen workspace.
 
-- **Careers Portal → Contracts & Templates** — staff/employee docs (Job Offer, Employment Contract, Warning Letter, NDA, Commission Agreement, Internship, HR Letter, Partnership / Referral, Custom).
-- **Forms & Contracts (Client hub)** — client docs only (Form A / Form F / Form I, PAA, leasing addendums, etc.).
+## Layout
 
-Both catalogs use **the same engine, the same locked premium header/footer, the same branded-email send pipeline, the same test-email flow**. Only the *template list* and *recipient context* differ.
-
----
-
-## What's wrong today
-
-1. **Sub-header on `/owner/careers-portal` doesn't scroll horizontally** on this viewport — the active "Contracts & Templates" tab can be reached but the row clips. The previous "Generate Job Offer" CTA that used to sit in this section is also missing.
-2. The Contracts tab only shows `JobOfferManager` — an "Add Template" CRUD on `hr_job_offers` (upload a PDF + metadata). It cannot *generate* a document.
-3. The real generator (`src/pages/JobOfferTemplate.tsx`) still exists but is orphaned — `/owner/job-offer-template` now just redirects back into the contracts tab, so the feature appears lost.
-4. Client-side `ContractForms` page exists but isn't wired to the same engine, branded-email pipeline, or test-email flow used by the Careers/Relationship-Hub email composer.
-
----
-
-## Plan
-
-### 1. Fix the Contracts tab header (UI)
-
-- Make `CareersTabRow` reliably horizontally scrollable on narrow viewports (overflow-x scroller already exists; restore proper `min-w-max` on the inner list and ensure the active-tab `scrollIntoView` lands on the right column without clipping).
-- Add a primary action **"Generate Document"** (gold-hairline navy CTA) at the top of the Contracts tab, parallel to the existing "Add Template" button. "Add Template" stays (it's metadata/upload CRUD); the new button opens the Studio.
-
-### 2. Build the unified engine: `DocumentStudio`
-
-New shared component `src/components/document-studio/DocumentStudio.tsx` driven by a single prop `catalog: "staff" | "client"`.
-
-Layout (full-screen dialog or routed view, same look in both contexts):
+Replace the `Dialog` shell with a **full-screen overlay** (fixed inset-0, champagne page bg, gold hairline frame). Three zones:
 
 ```text
-┌──────────────────────────────────────────────────────────┐
-│  LOCKED PREMIUM HEADER (champagne band + gold hairline)  │  ← never editable
-├───────────────┬───────────────────────────┬──────────────┤
-│ 1. Template   │  2. Editable Body         │ 3. AI Chat   │
-│    picker     │     (AI-generated HTML,   │   "tell me   │
-│ + position    │      DOMPurified,         │   how to     │
-│   picker      │      contentEditable)     │   change it" │
-│ + dynamic     │                           │              │
-│   fields      │                           │              │
-├───────────────┴───────────────────────────┴──────────────┤
-│  LOCKED PREMIUM FOOTER (NAP, RERA, hairline)             │  ← never editable
-└──────────────────────────────────────────────────────────┘
-        [ Generate ] [ Preview ] [ Send via Branded Email ]
-                                  [ Send Test to me ]
+┌─────────────────────────────────────────────────────────────┐
+│  TopBar: ✦ Document Studio · Careers       [Save] [Close]  │
+│  Stepper:  1 Template ─ 2 Details ─ 3 Review & Send         │
+├──────────────┬──────────────────────────────┬───────────────┤
+│              │                              │               │
+│  LEFT 320px  │   CENTER (flex-1, max 880)   │  RIGHT 360px  │
+│  Templates   │   Live A4 Preview            │  AI Assistant │
+│  + Fields    │   (contentEditable body)     │  (chat)       │
+│              │                              │               │
+└──────────────┴──────────────────────────────┴───────────────┘
 ```
 
-Behavior:
+- Right AI panel is **collapsible** (toggle pinned right-edge tab) so preview can go full width.
+- Left rail switches between **Template picker** (step 1) and **Details form** (step 2) via the stepper — no more cramped 3-up grid.
 
-- **Step 1 — Pick template kind.** Pulled from a single registry `src/config/documentCatalog.ts`:
-  - `staff` catalog: Job Offer, Employment Contract, Warning Letter, NDA, Commission Agreement, Internship Agreement, HR Letter, Partnership/Referral Agreement, Custom Letter. Selecting "Job Offer" / "Warning Letter" / etc. **reveals the position picker** (departments + open positions from `hr_job_offers` + `open_positions`).
-  - `client` catalog: Form A, Form F, Form I, PAA (Property Advertising Agreement), Tenancy Addendum, Custom Client Letter. No position picker — instead a **client picker** (CRM contact lookup) appears.
-- **Step 2 — Dynamic fields.** Each catalog entry declares its required fields (recipient name, ID/passport, salary, start date, RERA #, property reference, etc.). Form is auto-rendered from the schema.
-- **Step 3 — Generate.** Calls the existing `letter-ai-generate` edge function (already wired for the Blank Letter Studio) with a `documentType` + `templateData` payload. Returns HTML, sanitized with DOMPurify, injected into the editable body. Header/footer come from a constant React chrome — the AI never sees or returns them.
-- **Live AI Chat (right panel).** Persistent thread that gets the current body HTML + the user's instruction (e.g., "make the salary AED 30k, add a 90-day probation clause"). Streams updated HTML via `ai-chat-stream`, diff is applied to the body. Header/footer remain locked.
-- **Premium chrome is locked.** Stored in `src/templates/jbjLockedChrome.ts` (header band + footer block). Rendered outside the editable region. Print/PDF/email exports always wrap the body with this chrome.
+## Center Preview (the hero)
 
-### 3. Wire to the branded email + auto-send pipeline
+- Render at a fixed A4 width (`max-w-[816px]`) on a soft champagne canvas with paper drop-shadow.
+- Locked premium header + footer rendered as real React (not raw HTML string) so they never wrap into vertical single-column text.
+- Body is a single `contentEditable` region with a floating mini-toolbar (Bold / Italic / H2 / List / Link) appearing on text selection — true inline live editing.
+- Click-to-edit field tokens: `{{recipient}}`, `{{salary}}` chips inline; clicking focuses the matching left-rail input.
+- Zoom controls (75/100/125%) bottom-right.
 
-Reuse what already exists — do not rebuild:
+## Left Rail
 
-- `BrandedEmailComposer` + `useEmailTemplateLibrary` for the email shell.
-- `compose-branded-email` edge function to render the email HTML with brand colors.
-- `documents-send` for attaching the generated document (PDF render of the chrome+body).
-- `send-application-status-email` for the staff "offer_sent" automated trigger that the CV Center / Approvals already fire.
+- Step 1: searchable template gallery grouped by department, each card with icon + 1-line description.
+- Step 2: clean stacked form (label above input, generous spacing, champagne inputs, gold focus ring). Uses existing `documentCatalog.ts` schema unchanged.
+- Sticky footer: `Generate with AI` primary button (gold-hairline navy CTA per project standard).
 
-From the Studio, "Send via Branded Email" opens the existing `BrandedEmailComposer` pre-filled with: recipient (from step 2), subject (from catalog entry), email body (branded shell + "Please find attached your {{documentType}}"), attachment (generated PDF). "Send Test to me" reuses the same composer with the test recipient (per project rule: `infoo.jane@gmail.com` for the owner's own tests).
+## Right AI Panel
 
-### 4. Mount the engine in both hubs
+- Header: avatar + "Document AI" + model chip.
+- Scrollable message list (user right, AI left, both in champagne bubbles, no purple).
+- Composer at bottom with quick-action chips: "Make more formal", "Shorten", "Add probation clause", "Translate to Arabic".
+- Each AI reply applies as a **diff preview** in the center (insert/delete highlights) with Accept / Reject — not a blind overwrite.
 
-- **Careers Portal → Contracts tab**: replace the current single `<JobOfferManager />` with a two-pane view:
-  - Top: `<DocumentStudioLauncher catalog="staff" />` (the "Generate Document" CTA + recently generated list)
-  - Below: existing `<JobOfferManager />` (Add Template CRUD — kept, not deleted, per the No-Removal policy)
-- **Client hub `/contract-forms`**: add the same launcher with `catalog="client"`. The existing form-A/F/I download flow stays as a quick-pick, but the "Generate" button opens the Studio with that template pre-selected.
+## Send & Export (Step 3)
 
-### 5. Catalog separation rule (locked)
+Collapses left rail into a recipient/send summary:
+- To / CC / Subject (prefilled from template)
+- Channel: Email (BrandedEmailComposer) · Download PDF · Send Test (→ `infoo.jane@gmail.com`)
+- Final lock chrome reapplied before send/export.
 
-`documentCatalog.ts` is the single source of truth. Each entry is tagged `audience: "staff" | "client"`. The Studio filters by its `catalog` prop. A staff entry can never appear in the client hub and vice versa. This is the only place future template types are added.
+## Technical
 
----
-
-## Files touched
-
-**New**
-- `src/config/documentCatalog.ts` — registry of all template kinds + their field schemas + audience.
-- `src/templates/jbjLockedChrome.ts` — locked premium header/footer HTML constants.
-- `src/components/document-studio/DocumentStudio.tsx` — engine (template picker, dynamic form, editable body, locked chrome wrapper, AI chat panel, generate/send buttons).
-- `src/components/document-studio/DocumentStudioLauncher.tsx` — small launcher card (CTA + recent docs) embedded into hubs.
-- `src/components/document-studio/AiEditChatPanel.tsx` — right-side live AI editor.
+**New files**
+- `src/components/document-studio/DocumentStudioShell.tsx` — full-screen frame, stepper, zone layout
+- `src/components/document-studio/TemplateGallery.tsx`
+- `src/components/document-studio/DetailsForm.tsx`
+- `src/components/document-studio/LivePreview.tsx` — contentEditable + floating toolbar + zoom + field chips
+- `src/components/document-studio/LockedLetterhead.tsx` / `LockedFooter.tsx` — replace raw HTML chrome
+- `src/components/document-studio/AiAssistantPanel.tsx` — chat + quick actions + diff apply
+- `src/components/document-studio/SendStep.tsx`
+- `src/hooks/useDocumentDraft.ts` — single state store (template, fields, body, history for undo)
 
 **Edited**
-- `src/pages/owner/CareersPortal.tsx` — wire launcher above `JobOfferManager` in the contracts section; fix `CareersTabRow` scroll on narrow viewports.
-- `src/pages/ContractForms.tsx` — mount `<DocumentStudioLauncher catalog="client" />`.
-- `src/routes/AdminRoutes.tsx` — keep `/owner/job-offer-template` redirect to the contracts tab (no change) but ensure the contracts tab actually shows the Studio launcher.
+- `src/components/document-studio/DocumentStudio.tsx` → becomes thin wrapper rendering `DocumentStudioShell` (no more Dialog)
+- `src/components/document-studio/DocumentStudioLauncher.tsx` → opens full-screen overlay instead of Dialog
+- `src/templates/jbjLockedChrome.ts` → export structured React components alongside the existing HTML string (kept for PDF export)
 
-**Reused as-is (no edits)**
-- `supabase/functions/letter-ai-generate` — generation.
-- `supabase/functions/ai-chat-stream` — live AI edit chat.
-- `supabase/functions/compose-branded-email`, `documents-send`, `send-application-status-email` — sending.
-- `src/components/crm/BrandedEmailComposer.tsx`, `src/hooks/useEmailTemplateLibrary.ts`, `src/components/hr/JobOfferManager.tsx` — kept.
+**Reused as-is**
+- `src/config/documentCatalog.ts` (schemas)
+- `letter-ai-generate` + `ai-chat-stream` edge functions
+- `BrandedEmailComposer` + `compose-branded-email`
+- Existing PricePill / IconTile / champagne tokens; no new colors
 
-No DB migrations. No new edge functions. Everything plugs into existing infrastructure.
+## Constraints honored
+- Champagne #FDFBF7 page, gold #B89555 hairlines only (no fills), Inter only, navy `#102540` CTAs with white text + gold hairline, no purple, no grays, no contrast-guard violations.
+- Same engine drives Careers (staff) and ContractForms (client) — only catalog filter differs.
+- Send Test always routes to `infoo.jane@gmail.com` per user preference.
 
----
-
-## Technical notes
-
-- **Locked chrome enforcement**: the editable body is a separate `contentEditable` div nested *inside* a non-editable wrapper containing the chrome. AI prompts include `Never include <header>, <footer>, company NAP, or signature blocks — those are appended by the system.` Any returned HTML containing forbidden tags is stripped server-side before being shown.
-- **PDF export**: client-side `html2canvas` + `jsPDF` (already used elsewhere in the project for CRM exports) wraps `chromeHeaderHtml + bodyHtml + chromeFooterHtml`.
-- **AI chat panel**: maintains its own message array, sends `{ currentHtml, instruction }` per turn; response replaces the body in-place. Header/footer never go over the wire.
-- **Audience guard**: `DocumentStudio` throws at mount if a template entry's `audience` doesn't match the `catalog` prop — prevents accidental cross-leak of staff docs into the client hub.
-- **Header scroll fix**: `CareersTabRow`'s inner flex needs `min-w-max` and the scroller needs `overflow-x: auto; scroll-snap-type: x proximity;` so all 16 tabs are reachable on 1159px viewports.
-
----
-
-## Out of scope (for this pass)
-
-- Versioning / approval workflow for generated documents (already partially covered by `ApprovalWorkflowPanel` — can be wired in a follow-up).
-- E-signature handoff (`esign-send-for-signature` exists; can be added to the Studio's action row in a follow-up).
-- Multi-language template variants.
+Approve to build.

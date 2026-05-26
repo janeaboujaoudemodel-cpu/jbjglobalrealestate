@@ -1,22 +1,21 @@
 /**
- * DocumentStudio
- * --------------
- * The unified document-generation engine used by both:
- *   - Careers Portal → Contracts & Templates (catalog="staff")
- *   - Forms & Contracts hub (catalog="client")
+ * DocumentStudio — Premium full-screen workspace
+ * -----------------------------------------------
+ * Replaces the previous cramped 3-column Dialog. Renders a true
+ * full-screen overlay with:
+ *   • Topbar (brand + close + step actions)
+ *   • Stepper (1 Template · 2 Details · 3 Review & Send)
+ *   • Left rail (template gallery on step 1, details form on step 2)
+ *   • Center A4 preview (locked letterhead + contentEditable body
+ *     with floating selection toolbar + zoom)
+ *   • Right collapsible AI assistant (reuses AiEditChatPanel)
  *
- * Premium header + footer are LOCKED (see `jbjLockedChrome.ts`) and
- * always wrap the editable body for preview, print, PDF export and
- * branded-email attachment.
- *
- * No new edge functions: reuses `letter-ai-generate` for generation
- * and the existing branded-email pipeline for sending.
+ * Public API (Props) is UNCHANGED so DocumentStudioLauncher continues
+ * to mount it without modification.
  */
 
-import { useMemo, useState } from "react";
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
-} from "@/components/ui/dialog";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,38 +23,76 @@ import { Label } from "@/components/ui/label";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { Sparkles, Loader2, Wand2, Printer, Mail, FlaskConical, Lock } from "lucide-react";
+import {
+  Sparkles, Loader2, Wand2, Printer, Mail, FlaskConical, X, ChevronRight,
+  ChevronLeft, ZoomIn, ZoomOut, Bold, Italic, List, Heading2, Search,
+  PanelRightClose, PanelRightOpen, Check,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import DOMPurify from "dompurify";
 
 import {
-  DOCUMENT_CATALOG, getCatalogByAudience, getTemplateById,
+  getCatalogByAudience, getTemplateById,
   DocumentAudience, DocumentTemplate,
 } from "@/config/documentCatalog";
 import { DEPARTMENTS } from "@/hooks/useHRJobOffers";
-import {
-  jbjHeaderHtml, jbjFooterHtml, wrapWithJbjChrome, stripChromeArtifacts,
-} from "@/templates/jbjLockedChrome";
+import { wrapWithJbjChrome, stripChromeArtifacts } from "@/templates/jbjLockedChrome";
+import { LockedLetterhead, LockedFooter } from "./LockedLetterhead";
 import AiEditChatPanel from "./AiEditChatPanel";
 
 interface Props {
   catalog: DocumentAudience;
   trigger?: React.ReactNode;
-  /** Pre-select a template (used by ContractForms quick-pick). */
   presetTemplateId?: string;
 }
 
+type Step = 1 | 2 | 3;
 const OWNER_TEST_EMAIL = "infoo.jane@gmail.com";
 
 export default function DocumentStudio({ catalog, trigger, presetTemplateId }: Props) {
   const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <span onClick={() => setOpen(true)} className="contents">
+        {trigger || (
+          <Button variant="primary">
+            <Wand2 className="w-4 h-4 mr-2" />
+            Generate Document
+          </Button>
+        )}
+      </span>
+      {open && (
+        <StudioShell
+          catalog={catalog}
+          presetTemplateId={presetTemplateId}
+          onClose={() => setOpen(false)}
+        />
+      )}
+    </>
+  );
+}
+
+/* ───────────────────────────── Shell ───────────────────────────── */
+
+function StudioShell({
+  catalog,
+  presetTemplateId,
+  onClose,
+}: {
+  catalog: DocumentAudience;
+  presetTemplateId?: string;
+  onClose: () => void;
+}) {
   const templates = useMemo(() => getCatalogByAudience(catalog), [catalog]);
-  const [templateId, setTemplateId] = useState<string>(
+  const initialId =
     presetTemplateId && getTemplateById(presetTemplateId)?.audience === catalog
       ? presetTemplateId
-      : templates[0]?.id || ""
-  );
+      : "";
+
+  const [step, setStep] = useState<Step>(initialId ? 2 : 1);
+  const [templateId, setTemplateId] = useState<string>(initialId);
   const template = useMemo(() => getTemplateById(templateId), [templateId]);
 
   const [department, setDepartment] = useState<string>(DEPARTMENTS[0]);
@@ -66,27 +103,48 @@ export default function DocumentStudio({ catalog, trigger, presetTemplateId }: P
   const [emailTo, setEmailTo] = useState("");
   const [sending, setSending] = useState(false);
 
-  const setField = (k: string, v: string) =>
-    setFields((p) => ({ ...p, [k]: v }));
+  const [zoom, setZoom] = useState(100);
+  const [aiOpen, setAiOpen] = useState(true);
+  const [search, setSearch] = useState("");
+
+  // Lock body scroll while overlay is open
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  // ESC to close
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const setField = (k: string, v: string) => setFields((p) => ({ ...p, [k]: v }));
+
+  const handleSelectTemplate = (id: string) => {
+    setTemplateId(id);
+    setBodyHtml("");
+    setFields({});
+    setStep(2);
+  };
 
   const buildPrompt = (t: DocumentTemplate): string => {
     const filled = t.fields
       .map((f) => `${f.label}: ${fields[f.key] || "(not provided)"}`)
       .join("\n");
-    const positionLine =
-      t.needsPosition ? `Department: ${department}` : "";
+    const positionLine = t.needsPosition ? `Department: ${department}` : "";
     return [
       t.aiInstructions,
       "",
       "Render the body as 2–6 short paragraphs separated by blank lines.",
-      "Do NOT include company letterhead, address, phone, signature block, or any header/footer — those are appended automatically.",
+      "Do NOT include letterhead, address, phone, signature block, or any header/footer — those are appended automatically.",
       "",
       "Details supplied by the owner:",
       positionLine,
       filled,
-    ]
-      .filter(Boolean)
-      .join("\n");
+    ].filter(Boolean).join("\n");
   };
 
   const handleGenerate = async () => {
@@ -104,7 +162,6 @@ export default function DocumentStudio({ catalog, trigger, presetTemplateId }: P
       if (error) throw error;
       const text: string = (data?.body_text || "").trim();
       if (!text) throw new Error("Empty AI response");
-
       const html = text
         .split(/\n{2,}/)
         .map((p) => `<p style="margin:0 0 14px;line-height:1.65;">${p.replace(/\n/g, "<br/>")}</p>`)
@@ -130,32 +187,19 @@ export default function DocumentStudio({ catalog, trigger, presetTemplateId }: P
   const handleSend = async (recipientOverride?: string) => {
     if (!bodyHtml || !template) return;
     const to = (recipientOverride || emailTo).trim();
-    if (!to) {
-      toast.error("Enter a recipient email");
-      return;
-    }
+    if (!to) { toast.error("Enter a recipient email"); return; }
     setSending(true);
     try {
       const fullHtml = wrapWithJbjChrome(DOMPurify.sanitize(bodyHtml));
-      // Reuse the existing branded-email pipeline.
       const { error } = await supabase.functions.invoke("compose-branded-email", {
         body: {
-          to,
-          subject: template.emailSubject,
-          body_html: fullHtml,
-          // Surface to the universal sender if available.
-          send: true,
-          source: "document-studio",
-          documentType: template.id,
-          audience: catalog,
+          to, subject: template.emailSubject, body_html: fullHtml,
+          send: true, source: "document-studio",
+          documentType: template.id, audience: catalog,
         },
       });
       if (error) throw error;
-      toast.success(
-        recipientOverride
-          ? `Test sent to ${recipientOverride}`
-          : `Sent to ${to}`
-      );
+      toast.success(recipientOverride ? `Test sent to ${recipientOverride}` : `Sent to ${to}`);
     } catch (e: any) {
       toast.error(e?.message || "Send failed");
     } finally {
@@ -163,185 +207,507 @@ export default function DocumentStudio({ catalog, trigger, presetTemplateId }: P
     }
   };
 
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger || (
-          <Button variant="primary">
-            <Wand2 className="w-4 h-4 mr-2" />
-            Generate Document
+  const filteredTemplates = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return templates;
+    return templates.filter(
+      (t) => t.label.toLowerCase().includes(q) || t.description.toLowerCase().includes(q),
+    );
+  }, [templates, search]);
+
+  const requiredOk = useMemo(() => {
+    if (!template) return false;
+    return template.fields.every((f) => !f.required || (fields[f.key] || "").trim());
+  }, [template, fields]);
+
+  const overlay = (
+    <div
+      data-no-contrast-guard
+      className="fixed inset-0 z-[100] bg-[#FDFBF7] flex flex-col"
+      style={{ fontFamily: "Inter, system-ui, sans-serif" }}
+    >
+      {/* ─── Topbar ─── */}
+      <div className="shrink-0 h-14 border-b border-[#B89555]/30 bg-[#FDFBF7] flex items-center px-4 gap-4">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
+            <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
+          </div>
+          <div className="leading-tight">
+            <div className="text-[13px] font-semibold text-[#1A1A1A]">Document Studio</div>
+            <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">
+              {catalog === "staff" ? "Careers · Staff" : "Client · Real Estate"}
+            </div>
+          </div>
+        </div>
+
+        <Stepper step={step} setStep={(s) => {
+          if (s === 2 && !templateId) return;
+          if (s === 3 && !bodyHtml) return;
+          setStep(s);
+        }} hasTemplate={!!templateId} hasBody={!!bodyHtml} />
+
+        <div className="ml-auto flex items-center gap-2">
+          <Button variant="ghost" size="sm" onClick={() => setAiOpen((v) => !v)}>
+            {aiOpen ? <PanelRightClose className="w-4 h-4 mr-1.5" /> : <PanelRightOpen className="w-4 h-4 mr-1.5" />}
+            {aiOpen ? "Hide AI" : "Show AI"}
           </Button>
-        )}
-      </DialogTrigger>
-      <DialogContent className="max-w-[1400px] w-[96vw] h-[92vh] p-0 overflow-hidden flex flex-col bg-[#FDFBF7]">
-        <DialogHeader className="px-6 py-3 border-b border-[#B89555]/25 shrink-0">
-          <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
-            <Sparkles className="w-4 h-4" />
-            Document Studio
-            <span className="text-xs font-normal text-[#1A1A1A]/60 ml-2">
-              {catalog === "staff" ? "Careers · staff documents" : "Client · real-estate documents"}
-            </span>
-          </DialogTitle>
-        </DialogHeader>
+          <button
+            onClick={onClose}
+            className="h-9 w-9 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A]"
+            aria-label="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-12 gap-4 p-4 flex-1 overflow-hidden">
-          {/* LEFT: Template + fields */}
-          <aside className="col-span-3 overflow-y-auto pr-2 space-y-4">
-            <div>
-              <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Template</Label>
-              <Select value={templateId} onValueChange={setTemplateId}>
-                <SelectTrigger className="mt-1">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="max-h-[320px]">
-                  {templates.map((t) => (
-                    <SelectItem key={t.id} value={t.id}>{t.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {template && (
-                <p className="text-xs text-[#1A1A1A]/65 mt-1.5">{template.description}</p>
-              )}
-            </div>
-
-            {template?.needsPosition && (
-              <div>
-                <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Department</Label>
-                <Select value={department} onValueChange={setDepartment}>
-                  <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {DEPARTMENTS.map((d) => (
-                      <SelectItem key={d} value={d}>{d}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-
-            {template?.fields.map((f) => (
-              <div key={f.key}>
-                <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">
-                  {f.label}{f.required && <span className="text-red-600 ml-1">*</span>}
-                </Label>
-                {f.type === "textarea" ? (
-                  <Textarea
-                    value={fields[f.key] || ""}
-                    onChange={(e) => setField(f.key, e.target.value)}
-                    placeholder={f.placeholder}
-                    rows={3}
-                    className="mt-1"
-                  />
-                ) : f.type === "select" ? (
-                  <Select value={fields[f.key] || ""} onValueChange={(v) => setField(f.key, v)}>
-                    <SelectTrigger className="mt-1"><SelectValue placeholder="Select…" /></SelectTrigger>
-                    <SelectContent>
-                      {f.options?.map((o) => (
-                        <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                ) : (
+      {/* ─── Body ─── */}
+      <div className="flex-1 min-h-0 flex">
+        {/* LEFT RAIL */}
+        <aside className="w-[340px] shrink-0 border-r border-[#B89555]/25 bg-[#FDFBF7] flex flex-col">
+          {step === 1 && (
+            <>
+              <div className="p-4 border-b border-[#B89555]/20">
+                <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 mb-2">
+                  Step 1 — Choose a template
+                </div>
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/50" />
                   <Input
-                    type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"}
-                    value={fields[f.key] || ""}
-                    onChange={(e) => setField(f.key, e.target.value)}
-                    placeholder={f.placeholder}
-                    className="mt-1"
-                  />
-                )}
-              </div>
-            ))}
-
-            <Button
-              onClick={handleGenerate}
-              disabled={generating || !template}
-              className="w-full"
-            >
-              {generating ? (
-                <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating…</>
-              ) : (
-                <><Wand2 className="w-4 h-4 mr-2" /> {bodyHtml ? "Regenerate" : "Generate"}</>
-              )}
-            </Button>
-          </aside>
-
-          {/* CENTER: Locked-chrome preview with editable body */}
-          <section className="col-span-6 overflow-y-auto bg-[#F7F2EA] rounded-xl border border-[#B89555]/25">
-            <div className="bg-white shadow-sm m-4 rounded-lg overflow-hidden">
-              {/* LOCKED HEADER */}
-              <div
-                className="relative"
-                dangerouslySetInnerHTML={{ __html: jbjHeaderHtml() }}
-              />
-              <div className="absolute mt-[-28px] ml-3 text-[10px] text-[#1A1A1A]/60 flex items-center gap-1 pointer-events-none">
-                <Lock className="w-3 h-3" /> Locked
-              </div>
-
-              {/* EDITABLE BODY */}
-              <div className="px-10 py-8 min-h-[420px] bg-[#FDFBF7]">
-                {bodyHtml ? (
-                  <div
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={(e) => setBodyHtml(stripChromeArtifacts(e.currentTarget.innerHTML))}
-                    className="prose prose-sm max-w-none text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#B89555]/30 rounded-md p-2 -m-2"
-                    style={{ fontFamily: "Inter, system-ui, sans-serif", lineHeight: 1.65 }}
-                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(bodyHtml) }}
-                  />
-                ) : (
-                  <div className="text-center py-16 text-[#1A1A1A]/55">
-                    <Wand2 className="w-10 h-10 mx-auto mb-3 opacity-40" />
-                    <p className="font-medium">Fill in the details on the left and click Generate.</p>
-                    <p className="text-xs mt-1">The locked premium header + footer are added automatically.</p>
-                  </div>
-                )}
-              </div>
-
-              {/* LOCKED FOOTER */}
-              <div dangerouslySetInnerHTML={{ __html: jbjFooterHtml() }} />
-            </div>
-
-            {/* Actions */}
-            {bodyHtml && (
-              <div className="px-4 pb-4 flex flex-wrap gap-2 items-center">
-                <Button variant="outline" size="sm" onClick={handlePrint}>
-                  <Printer className="w-4 h-4 mr-2" /> Print / PDF
-                </Button>
-                <div className="flex-1 min-w-[200px]">
-                  <Input
-                    type="email"
-                    placeholder="recipient@example.com"
-                    value={emailTo}
-                    onChange={(e) => setEmailTo(e.target.value)}
+                    placeholder="Search templates…"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="pl-9 bg-[#FDFBF7]"
                   />
                 </div>
-                <Button size="sm" onClick={() => handleSend()} disabled={sending || !emailTo}>
+              </div>
+              <div className="flex-1 overflow-y-auto p-3 space-y-2">
+                {filteredTemplates.map((t) => {
+                  const Icon = t.icon;
+                  const selected = t.id === templateId;
+                  return (
+                    <button
+                      key={t.id}
+                      onClick={() => handleSelectTemplate(t.id)}
+                      className={[
+                        "w-full text-left rounded-xl border px-3 py-3 transition-all flex gap-3 items-start",
+                        selected
+                          ? "border-[#B89555] bg-[#EFE6D6]"
+                          : "border-[#B89555]/25 bg-[#F7F2EA] hover:bg-[#EFE6D6]/60",
+                      ].join(" ")}
+                    >
+                      <div className="w-8 h-8 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] flex items-center justify-center shrink-0">
+                        <Icon className="w-4 h-4 text-[#1A1A1A]" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-[13px] font-semibold text-[#1A1A1A] leading-tight">{t.label}</div>
+                        <div className="text-[11px] text-[#1A1A1A]/65 mt-0.5 line-clamp-2">{t.description}</div>
+                      </div>
+                    </button>
+                  );
+                })}
+                {filteredTemplates.length === 0 && (
+                  <div className="text-center text-xs text-[#1A1A1A]/55 py-8">No templates match.</div>
+                )}
+              </div>
+            </>
+          )}
+
+          {step === 2 && template && (
+            <>
+              <div className="p-4 border-b border-[#B89555]/20 flex items-center gap-2">
+                <button
+                  onClick={() => setStep(1)}
+                  className="h-7 w-7 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center"
+                  aria-label="Back to templates"
+                >
+                  <ChevronLeft className="w-4 h-4 text-[#1A1A1A]" />
+                </button>
+                <div className="min-w-0">
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">Step 2 — Details</div>
+                  <div className="text-[13px] font-semibold text-[#1A1A1A] truncate">{template.label}</div>
+                </div>
+              </div>
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {template.needsPosition && (
+                  <Field label="Department">
+                    <Select value={department} onValueChange={setDepartment}>
+                      <SelectTrigger className="bg-[#FDFBF7]"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {DEPARTMENTS.map((d) => (
+                          <SelectItem key={d} value={d}>{d}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                )}
+
+                {template.fields.map((f) => (
+                  <Field key={f.key} label={f.label} required={f.required}>
+                    {f.type === "textarea" ? (
+                      <Textarea
+                        value={fields[f.key] || ""}
+                        onChange={(e) => setField(f.key, e.target.value)}
+                        placeholder={f.placeholder}
+                        rows={3}
+                        className="bg-[#FDFBF7] resize-none"
+                      />
+                    ) : f.type === "select" ? (
+                      <Select value={fields[f.key] || ""} onValueChange={(v) => setField(f.key, v)}>
+                        <SelectTrigger className="bg-[#FDFBF7]"><SelectValue placeholder="Select…" /></SelectTrigger>
+                        <SelectContent>
+                          {f.options?.map((o) => (
+                            <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Input
+                        type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"}
+                        value={fields[f.key] || ""}
+                        onChange={(e) => setField(f.key, e.target.value)}
+                        placeholder={f.placeholder}
+                        className="bg-[#FDFBF7]"
+                      />
+                    )}
+                  </Field>
+                ))}
+              </div>
+              <div className="p-3 border-t border-[#B89555]/20 space-y-2">
+                <Button
+                  onClick={handleGenerate}
+                  disabled={generating || !requiredOk}
+                  className="w-full"
+                >
+                  {generating ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating…</>
+                  ) : (
+                    <><Wand2 className="w-4 h-4 mr-2" /> {bodyHtml ? "Regenerate" : "Generate with AI"}</>
+                  )}
+                </Button>
+                {bodyHtml && (
+                  <Button variant="outline" className="w-full" onClick={() => setStep(3)}>
+                    Continue to Review & Send <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
+                )}
+              </div>
+            </>
+          )}
+
+          {step === 3 && template && (
+            <>
+              <div className="p-4 border-b border-[#B89555]/20 flex items-center gap-2">
+                <button
+                  onClick={() => setStep(2)}
+                  className="h-7 w-7 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center"
+                  aria-label="Back to details"
+                >
+                  <ChevronLeft className="w-4 h-4 text-[#1A1A1A]" />
+                </button>
+                <div>
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">Step 3 — Review & Send</div>
+                  <div className="text-[13px] font-semibold text-[#1A1A1A]">{template.label}</div>
+                </div>
+              </div>
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <Field label="Subject">
+                  <Input value={template.emailSubject} readOnly className="bg-[#F7F2EA]" />
+                </Field>
+                <Field label="Recipient email">
+                  <Input
+                    type="email"
+                    value={emailTo}
+                    onChange={(e) => setEmailTo(e.target.value)}
+                    placeholder="recipient@example.com"
+                    className="bg-[#FDFBF7]"
+                  />
+                </Field>
+                <div className="rounded-lg border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[11px] text-[#1A1A1A]/70 leading-relaxed">
+                  <Check className="w-3 h-3 inline-block mr-1 text-[#1A1A1A]" />
+                  Locked letterhead + footer are applied automatically before sending.
+                </div>
+              </div>
+              <div className="p-3 border-t border-[#B89555]/20 space-y-2">
+                <Button onClick={() => handleSend()} disabled={sending || !emailTo} className="w-full">
                   {sending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Mail className="w-4 h-4 mr-2" />}
                   Send via Branded Email
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleSend(OWNER_TEST_EMAIL)}
-                  disabled={sending}
-                  title={`Send a test copy to ${OWNER_TEST_EMAIL}`}
-                >
-                  <FlaskConical className="w-4 h-4 mr-2" /> Send Test
-                </Button>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="outline" size="sm" onClick={handlePrint}>
+                    <Printer className="w-4 h-4 mr-1.5" /> Print / PDF
+                  </Button>
+                  <Button
+                    variant="outline" size="sm"
+                    onClick={() => handleSend(OWNER_TEST_EMAIL)}
+                    disabled={sending}
+                    title={`Send a test copy to ${OWNER_TEST_EMAIL}`}
+                  >
+                    <FlaskConical className="w-4 h-4 mr-1.5" /> Send Test
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        </aside>
+
+        {/* CENTER — A4 PREVIEW */}
+        <main className="flex-1 min-w-0 bg-[#F0E8D8] overflow-auto relative">
+          <div className="min-h-full flex justify-center py-10 px-6">
+            {template ? (
+              <div
+                className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20"
+                style={{
+                  width: 816,
+                  transform: `scale(${zoom / 100})`,
+                  transformOrigin: "top center",
+                }}
+              >
+                <LockedLetterhead />
+                <div className="px-12 py-10 min-h-[700px] bg-[#FDFBF7]">
+                  {bodyHtml ? (
+                    <EditableBody html={bodyHtml} onChange={setBodyHtml} />
+                  ) : (
+                    <EmptyBody onGenerate={handleGenerate} canGenerate={requiredOk} generating={generating} />
+                  )}
+                </div>
+                <LockedFooter />
+              </div>
+            ) : (
+              <div className="self-center max-w-md text-center bg-[#FDFBF7] border border-[#B89555]/25 rounded-xl p-10 mt-20">
+                <Wand2 className="w-10 h-10 mx-auto mb-3 text-[#B89555]" />
+                <div className="text-base font-semibold text-[#1A1A1A]">Choose a template to begin</div>
+                <p className="text-sm text-[#1A1A1A]/65 mt-2">
+                  Pick from {templates.length} {catalog === "staff" ? "staff" : "client"} document templates in the left panel.
+                </p>
               </div>
             )}
-          </section>
+          </div>
 
-          {/* RIGHT: AI chat editor */}
-          <aside className="col-span-3 overflow-hidden">
+          {/* Zoom controls */}
+          {template && (
+            <div className="sticky bottom-4 float-right mr-4 -mt-12 inline-flex items-center gap-1 bg-[#FDFBF7] border border-[#B89555]/30 rounded-full px-2 py-1 shadow-sm">
+              <button
+                onClick={() => setZoom((z) => Math.max(60, z - 10))}
+                className="h-7 w-7 rounded-full hover:bg-[#EFE6D6] flex items-center justify-center"
+                aria-label="Zoom out"
+              >
+                <ZoomOut className="w-3.5 h-3.5 text-[#1A1A1A]" />
+              </button>
+              <div className="text-[11px] font-medium text-[#1A1A1A] w-10 text-center tabular-nums">{zoom}%</div>
+              <button
+                onClick={() => setZoom((z) => Math.min(150, z + 10))}
+                className="h-7 w-7 rounded-full hover:bg-[#EFE6D6] flex items-center justify-center"
+                aria-label="Zoom in"
+              >
+                <ZoomIn className="w-3.5 h-3.5 text-[#1A1A1A]" />
+              </button>
+            </div>
+          )}
+        </main>
+
+        {/* RIGHT — AI ASSISTANT */}
+        {aiOpen && (
+          <aside className="w-[360px] shrink-0 border-l border-[#B89555]/25 bg-[#FDFBF7] p-3">
             <AiEditChatPanel
               currentBody={bodyHtml}
               aiInstructions={template?.aiInstructions || ""}
               onApply={(next) => setBodyHtml(next)}
             />
           </aside>
+        )}
+      </div>
+    </div>
+  );
+
+  return createPortal(overlay, document.body);
+}
+
+/* ───────────────────────── Sub-components ───────────────────────── */
+
+function Stepper({
+  step, setStep, hasTemplate, hasBody,
+}: {
+  step: Step; setStep: (s: Step) => void;
+  hasTemplate: boolean; hasBody: boolean;
+}) {
+  const items: { n: Step; label: string; enabled: boolean }[] = [
+    { n: 1, label: "Template", enabled: true },
+    { n: 2, label: "Details", enabled: hasTemplate },
+    { n: 3, label: "Review & Send", enabled: hasBody },
+  ];
+  return (
+    <div className="hidden md:flex items-center gap-1 ml-6">
+      {items.map((it, i) => {
+        const active = step === it.n;
+        const done = step > it.n;
+        return (
+          <div key={it.n} className="flex items-center">
+            <button
+              disabled={!it.enabled}
+              onClick={() => setStep(it.n)}
+              className={[
+                "flex items-center gap-2 h-9 px-3 rounded-full text-[12px] font-medium border transition-colors",
+                active
+                  ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+                  : done
+                    ? "bg-[#F7F2EA] border-[#B89555]/40 text-[#1A1A1A]"
+                    : "bg-transparent border-[#B89555]/25 text-[#1A1A1A]/60 hover:text-[#1A1A1A]",
+                it.enabled ? "cursor-pointer" : "opacity-50 cursor-not-allowed",
+              ].join(" ")}
+            >
+              <span
+                className={[
+                  "w-5 h-5 rounded-full text-[10px] flex items-center justify-center border",
+                  active || done
+                    ? "bg-[#FDFBF7] border-[#B89555] text-[#1A1A1A]"
+                    : "border-[#B89555]/40 text-[#1A1A1A]/60",
+                ].join(" ")}
+              >
+                {done ? <Check className="w-3 h-3" /> : it.n}
+              </span>
+              {it.label}
+            </button>
+            {i < items.length - 1 && (
+              <ChevronRight className="w-3.5 h-3.5 mx-1 text-[#1A1A1A]/30" />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Field({
+  label, required, children,
+}: { label: string; required?: boolean; children: React.ReactNode }) {
+  return (
+    <div>
+      <Label className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 mb-1.5 block">
+        {label}
+        {required && <span className="text-red-600 ml-1">*</span>}
+      </Label>
+      {children}
+    </div>
+  );
+}
+
+function EmptyBody({
+  onGenerate, canGenerate, generating,
+}: { onGenerate: () => void; canGenerate: boolean; generating: boolean }) {
+  return (
+    <div className="text-center py-20 text-[#1A1A1A]/60">
+      <div className="w-14 h-14 mx-auto rounded-full bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center mb-4">
+        <Wand2 className="w-6 h-6 text-[#B89555]" />
+      </div>
+      <p className="font-medium text-[#1A1A1A]">Fill in the details on the left.</p>
+      <p className="text-xs mt-1 text-[#1A1A1A]/60">
+        Click <strong>Generate with AI</strong> to draft this document. The locked letterhead and footer are added automatically.
+      </p>
+      <Button
+        size="sm"
+        className="mt-5"
+        onClick={onGenerate}
+        disabled={!canGenerate || generating}
+      >
+        {generating ? (
+          <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating…</>
+        ) : (
+          <><Wand2 className="w-4 h-4 mr-2" /> Generate with AI</>
+        )}
+      </Button>
+    </div>
+  );
+}
+
+/**
+ * Editable preview body with a floating selection mini-toolbar.
+ * Uses execCommand for direct, predictable inline edits — same as
+ * Notion / Google Docs / Linear-style block editors.
+ */
+function EditableBody({
+  html, onChange,
+}: { html: string; onChange: (next: string) => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [toolbar, setToolbar] = useState<{ top: number; left: number } | null>(null);
+
+  // Initial paint
+  useEffect(() => {
+    if (ref.current && ref.current.innerHTML !== html) {
+      ref.current.innerHTML = DOMPurify.sanitize(html);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [html]);
+
+  const placeToolbar = () => {
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed || !ref.current) { setToolbar(null); return; }
+    const range = sel.getRangeAt(0);
+    if (!ref.current.contains(range.commonAncestorContainer)) { setToolbar(null); return; }
+    const rect = range.getBoundingClientRect();
+    const host = ref.current.getBoundingClientRect();
+    setToolbar({
+      top: rect.top - host.top - 44,
+      left: Math.max(0, rect.left - host.left + rect.width / 2 - 110),
+    });
+  };
+
+  useEffect(() => {
+    const onSel = () => placeToolbar();
+    document.addEventListener("selectionchange", onSel);
+    return () => document.removeEventListener("selectionchange", onSel);
+  }, []);
+
+  const cmd = (c: string, v?: string) => {
+    document.execCommand(c, false, v);
+    ref.current && onChange(stripChromeArtifacts(ref.current.innerHTML));
+    placeToolbar();
+  };
+
+  return (
+    <div className="relative">
+      {toolbar && (
+        <div
+          className="absolute z-10 inline-flex items-center gap-0.5 bg-[#1A1A1A] text-white rounded-md shadow-lg px-1 py-1"
+          style={{ top: toolbar.top, left: toolbar.left }}
+        >
+          <ToolBtn onClick={() => cmd("bold")} title="Bold"><Bold className="w-3.5 h-3.5" /></ToolBtn>
+          <ToolBtn onClick={() => cmd("italic")} title="Italic"><Italic className="w-3.5 h-3.5" /></ToolBtn>
+          <ToolBtn onClick={() => cmd("formatBlock", "<h2>")} title="Heading"><Heading2 className="w-3.5 h-3.5" /></ToolBtn>
+          <ToolBtn onClick={() => cmd("insertUnorderedList")} title="List"><List className="w-3.5 h-3.5" /></ToolBtn>
         </div>
-      </DialogContent>
-    </Dialog>
+      )}
+      <div
+        ref={ref}
+        contentEditable
+        suppressContentEditableWarning
+        spellCheck
+        onBlur={(e) => onChange(stripChromeArtifacts(e.currentTarget.innerHTML))}
+        onMouseUp={placeToolbar}
+        onKeyUp={placeToolbar}
+        className="prose prose-sm max-w-none text-[#1A1A1A] focus:outline-none rounded-md min-h-[500px]"
+        style={{
+          fontFamily: "Inter, system-ui, sans-serif",
+          lineHeight: 1.7,
+          fontSize: 14,
+        }}
+      />
+    </div>
+  );
+}
+
+function ToolBtn({
+  onClick, children, title,
+}: { onClick: () => void; children: React.ReactNode; title: string }) {
+  return (
+    <button
+      // mousedown to avoid losing the selection
+      onMouseDown={(e) => { e.preventDefault(); onClick(); }}
+      title={title}
+      className="h-7 w-7 rounded hover:bg-white/15 flex items-center justify-center text-white"
+      data-allow-dark-cta
+      data-no-contrast-guard
+    >
+      {children}
+    </button>
   );
 }
