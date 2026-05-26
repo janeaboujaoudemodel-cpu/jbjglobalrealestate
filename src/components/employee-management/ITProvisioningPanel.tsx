@@ -412,13 +412,25 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                 </label>
               </div>
               <div className="flex items-center gap-2">
-                <Checkbox 
-                  id="sendWelcome" 
-                  checked={sendWelcomeEmail} 
-                  onCheckedChange={(v) => setSendWelcomeEmail(v as boolean)} 
+                <Checkbox
+                  id="sendWelcome"
+                  checked={sendWelcomeEmail}
+                  onCheckedChange={(v) => setSendWelcomeEmail(v as boolean)}
                 />
                 <label htmlFor="sendWelcome" className="text-sm text-[#1A1A1A]/70">
                   Send welcome email with credentials
+                </label>
+              </div>
+              <div className="flex items-center gap-2 pt-2 mt-2 border-t border-[#B89555]/20">
+                <Checkbox
+                  id="testMode"
+                  checked={testMode}
+                  onCheckedChange={(v) => setTestMode(v as boolean)}
+                  disabled={!sendWelcomeEmail}
+                />
+                <label htmlFor="testMode" className="text-sm text-[#1A1A1A]">
+                  <span className="font-medium">Send first invite to me (test mode)</span>
+                  <span className="block text-xs text-[#1A1A1A]/60">Routes to infoo.jane@gmail.com so you can preview before the joiner receives it.</span>
                 </label>
               </div>
             </div>
