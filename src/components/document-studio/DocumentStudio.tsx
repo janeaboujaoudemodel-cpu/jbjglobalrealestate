@@ -153,6 +153,21 @@ function StudioShell({
   const [ownerDate, setOwnerDate] = useState<string>(new Date().toISOString().slice(0, 10));
   const [applicantDate, setApplicantDate] = useState<string>(""); // blank by design
 
+  // Additional signatories (beyond the default Owner + Counterparty).
+  type ExtraSig = { id: string; name: string; title: string; date: string; label: string };
+  const newSig = (): ExtraSig => ({ id: Math.random().toString(36).slice(2, 9), name: "", title: "", date: "", label: "Additional Signatory" });
+  const [extraSignatories, setExtraSignatories] = useState<ExtraSig[]>([newSig()]);
+  const updateSig = (id: string, patch: Partial<ExtraSig>) =>
+    setExtraSignatories((p) => p.map((s) => (s.id === id ? { ...s, ...patch } : s)));
+  const removeSig = (id: string) => setExtraSignatories((p) => p.filter((s) => s.id !== id));
+  const duplicateSig = (id: string) =>
+    setExtraSignatories((p) => {
+      const i = p.findIndex((s) => s.id === id);
+      if (i < 0) return p;
+      const copy = { ...p[i], id: Math.random().toString(36).slice(2, 9) };
+      return [...p.slice(0, i + 1), copy, ...p.slice(i + 1)];
+    });
+
   // Hide / restore the "Commission" and "Custom fields" rail cards.
   const [hiddenSections, setHiddenSections] = useState<Set<string>>(new Set());
   const toggleSection = (id: string) =>
