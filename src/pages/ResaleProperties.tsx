@@ -437,7 +437,7 @@ const ResaleProperties = () => {
         <div className="max-w-6xl mx-auto">
           {/* Results count */}
           <div className="flex items-center justify-between mb-6">
-            <p className="text-sm text-[#1A1A1A]/50">
+            <p className="text-sm font-semibold" style={{ color: "#B89555" }} data-no-contrast-guard>
               {filteredListings.length} {filteredListings.length === 1 ? "property" : "properties"} found
             </p>
           </div>
