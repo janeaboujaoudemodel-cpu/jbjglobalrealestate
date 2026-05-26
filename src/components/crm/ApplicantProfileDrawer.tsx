@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   ApplicantStatusPill,
   APPLICANT_STATUS_ORDER,
-  type ApplicantStatusId,
+  type ApplicantStatus,
 } from "@/components/crm/ApplicantStatusPill";
 import {
   X, Mail, Phone, MessageSquare, Video, Eye, CheckCircle2,
@@ -209,7 +209,7 @@ export default function ApplicantProfileDrawer({
   const statusForPill = (APPLICANT_STATUS_ORDER as readonly string[]).includes(
     candidate.status,
   )
-    ? (candidate.status as ApplicantStatusId)
+    ? (candidate.status as ApplicantStatus)
     : ((candidate.status === "pending"
         ? "pending_review"
         : candidate.status === "shortlisted"
@@ -218,7 +218,7 @@ export default function ApplicantProfileDrawer({
             ? "approved"
             : candidate.status === "rejected"
               ? "rejected"
-              : "new_application") as ApplicantStatusId);
+              : "new_application") as ApplicantStatus);
 
   const handleSaveNotes = async () => {
     if (!candidate) return;
