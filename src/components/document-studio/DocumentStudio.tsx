@@ -383,6 +383,7 @@ function StudioShell({
       ownerDate,
       applicantDate,
       hideLetterDate: true,
+      extraSignatories,
     });
     autoBodyRef.current = next;
     if (!userEditedRef.current) setBodyHtml(next);
