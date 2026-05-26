@@ -64,6 +64,7 @@ const JobOfferManager = () => {
     }
 
     const offerData = {
+      template_type: formData.template_type || 'job_offer',
       department: formData.department || selectedDepartment,
       position_title: formData.position_title,
       description: formData.description || null,
@@ -88,6 +89,7 @@ const JobOfferManager = () => {
   const handleEdit = (offer: JobOffer) => {
     setEditingOffer(offer);
     setFormData({
+      template_type: (offer as any).template_type || 'job_offer',
       department: offer.department,
       position_title: offer.position_title,
       description: offer.description || '',
