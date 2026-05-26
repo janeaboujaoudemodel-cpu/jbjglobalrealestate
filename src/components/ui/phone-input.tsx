@@ -528,16 +528,22 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     const popoverStyles = isLight
       ? "jbj-form-popover"
       : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50";
-    // Make the cmdk search row full-bleed (no inner px gutter) so the input visually fills
-    // the popover edge-to-edge instead of leaving a champagne strip on the right.
+    // Premium search header: champagne raised surface w/ 1px gold hairline,
+    // gold search icon, ink text. Sits flush inside the popover header.
     const commandStyles =
-      "bg-transparent " +
-      "[&_[cmdk-input-wrapper]]:px-4 [&_[cmdk-input-wrapper]]:py-1 " +
-      "[&_[cmdk-input-wrapper]]:border-b [&_[cmdk-input-wrapper]]:border-[#102540]/15 " +
-      "[&_[cmdk-input-wrapper]]:bg-[#FDFBF7]/70 " +
-      "[&_[cmdk-input-wrapper]_svg]:text-[#102540]/60";
+      "bg-transparent overflow-hidden rounded-t-lg " +
+      "[&_[cmdk-input-wrapper]]:px-4 [&_[cmdk-input-wrapper]]:py-2.5 " +
+      "[&_[cmdk-input-wrapper]]:border-0 [&_[cmdk-input-wrapper]]:border-b " +
+      "[&_[cmdk-input-wrapper]]:border-[#B89555]/40 " +
+      "[&_[cmdk-input-wrapper]]:bg-[#F7F2EA] " +
+      "[&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 " +
+      "[&_[cmdk-input-wrapper]_svg]:opacity-100 [&_[cmdk-input-wrapper]_svg]:text-[#B89555] " +
+      "[&_[cmdk-input-wrapper]_svg]:mr-3";
     const commandInputStyles =
-      "jbj-form-field w-full border-0 bg-transparent text-[#102540] placeholder:text-[#102540]/60";
+      "w-full border-0 bg-transparent text-[#1A1A1A] text-[15px] font-medium " +
+      "tracking-tight placeholder:text-[#1A1A1A]/50 placeholder:font-normal " +
+      "focus:ring-0 focus:outline-none";
+
 
     const commandItemStyles = isLight
       ? "jbj-form-option text-[#102540] hover:bg-[#102540]/5 data-[selected=true]:bg-[#102540]/8 data-[selected=true]:text-[#102540]"
