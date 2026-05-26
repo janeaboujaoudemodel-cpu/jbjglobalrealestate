@@ -90,6 +90,7 @@ export interface StandardBodyArgs {
   applicantDate?: string;
   letterDate?: string;
   hideLetterDate?: boolean;
+  extraSignatories?: Array<{ name?: string; title?: string; date?: string; label?: string }>;
 }
 
 export function renderStandardBody(args: StandardBodyArgs): string {
