@@ -1,7 +1,7 @@
-import { lazy, Suspense, useMemo } from "react";
+import { lazy, Suspense, useMemo, useRef, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { cn } from "@/lib/utils";
+import HRPill from "@/components/careers-portal/HRPill";
 import {
   LayoutDashboard, Briefcase, FileText, Users, Award,
   GraduationCap, Wallet, AlertTriangle, MessagesSquare, Bot, ShieldCheck,
@@ -83,6 +83,73 @@ function Loading() {
   );
 }
 
+/**
+ * CareersTabRow — horizontal rail of canonical HRPills.
+ *
+ * Behaviour:
+ *  - Active pill auto-scrolls into view (centered) on selection so it is
+ *    never clipped outside the viewport.
+ *  - Subtle champagne fade on left/right edges hints at more tabs without
+ *    rendering any floating arrow / debug-looking overlay.
+ */
+function CareersTabRow({
+  sections,
+  activeKey,
+  onSelect,
+}: {
+  sections: SectionDef[];
+  activeKey: SectionKey;
+  onSelect: (k: SectionKey) => void;
+}) {
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  useEffect(() => {
+    const el = itemRefs.current[activeKey];
+    if (el && typeof el.scrollIntoView === "function") {
+      el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+  }, [activeKey]);
+
+  return (
+    <div className="relative mt-3">
+      {/* Edge fades — purely decorative, no pointer events */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 left-0 w-6 z-10"
+        style={{ background: "linear-gradient(to right, #F7F2EA, rgba(247,242,234,0))" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 right-0 w-6 z-10"
+        style={{ background: "linear-gradient(to left, #F7F2EA, rgba(247,242,234,0))" }}
+      />
+      <nav ref={scrollerRef} className="-mx-1 overflow-x-auto scrollbar-thin">
+        <ul className="flex gap-1.5 min-w-max pb-2 px-1">
+          {sections.map((s) => {
+            const isActive = s.key === activeKey;
+            return (
+              <li key={s.key}>
+                <HRPill
+                  ref={(node) => {
+                    itemRefs.current[s.key] = node;
+                  }}
+                  active={isActive}
+                  icon={s.icon}
+                  onClick={() => onSelect(s.key)}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  {s.label}
+                </HRPill>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </div>
+  );
+}
+
 export default function CareersPortal() {
   const { user } = useAuth();
   const [params, setParams] = useSearchParams();
@@ -125,36 +192,11 @@ export default function CareersPortal() {
             </Link>
           </div>
 
-          <nav className="mt-3 -mx-1 overflow-x-auto">
-            <ul className="flex gap-1.5 min-w-max pb-2">
-              {SECTIONS.map((s) => {
-                const Icon = s.icon;
-                const isActive = s.key === active;
-                return (
-                  <li key={s.key}>
-                    <button
-                      type="button"
-                      onClick={() => setSection(s.key)}
-                      aria-current={isActive ? "page" : undefined}
-                      className={cn(
-                        "px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5 transition-colors whitespace-nowrap border",
-                        isActive
-                          ? // Strong active state: navy fill + gold hairline + white text.
-                            "bg-[#102540] text-white border-[#B89555] shadow-sm"
-                          : // Idle: champagne-on-champagne with gold hairline; hover deepens.
-                            "bg-white/40 text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6] hover:border-[#B89555]",
-                      )}
-                      data-allow-dark-cta={isActive ? "" : undefined}
-                      data-no-contrast-guard={isActive ? "" : undefined}
-                    >
-                      <Icon className={cn("w-3.5 h-3.5", isActive ? "text-white" : "text-[#1A1A1A]")} />
-                      {s.label}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
+          <CareersTabRow
+            sections={SECTIONS}
+            activeKey={active}
+            onSelect={setSection}
+          />
         </div>
       </div>
 

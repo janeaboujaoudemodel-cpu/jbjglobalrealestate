@@ -55,20 +55,20 @@ export const HRPill = React.forwardRef<HTMLButtonElement, HRPillProps>(
             )}
           />
         ) : null}
-        <span className={cn(active ? "text-white" : "text-[#1A1A1A]")}>{children}</span>
-        {typeof count === "number" && (
-          <span
-            data-no-contrast-guard
-            className={cn(
-              "ml-0.5 inline-flex items-center justify-center rounded-full text-[10px] font-bold min-w-[20px] h-[18px] px-1.5 border",
-              active
-                ? "bg-white/15 text-white border-white/40 allow-white"
-                : "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40",
-            )}
-          >
-            {count}
-          </span>
-        )}
+        <span className={cn("inline-flex items-baseline gap-1", active ? "text-white" : "text-[#1A1A1A]")}>
+          <span>{children}</span>
+          {typeof count === "number" && (
+            <span
+              data-no-contrast-guard
+              className={cn(
+                "tabular-nums text-[11px] font-semibold",
+                active ? "text-white/85 allow-white" : "text-[#1A1A1A]/65",
+              )}
+            >
+              ({count})
+            </span>
+          )}
+        </span>
       </button>
     );
   },

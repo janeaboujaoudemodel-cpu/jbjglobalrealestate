@@ -58,7 +58,8 @@ function useChannels(closeAfter: () => void): ChannelDef[] {
 }
 
 function useSuppressed() {
-  // Hide launcher whenever a major support drawer or modal is open.
+  // Hide launcher whenever a major support drawer or modal is open,
+  // and on all internal owner/admin workspaces (no consumer launcher there).
   const [hidden, setHidden] = useState(false);
   useEffect(() => {
     const check = () => {
@@ -66,12 +67,23 @@ function useSuppressed() {
       const conciergeOpen = !!document.querySelector("[data-jbj-concierge-open=\"true\"]");
       const chatOpen = !!document.querySelector("[data-jbj-chat-open=\"true\"]");
       const modalOpen = body.getAttribute("data-modal-open") === "true";
-      setHidden(conciergeOpen || chatOpen || modalOpen);
+      const path = window.location.pathname || "";
+      const internal =
+        path.startsWith("/owner") ||
+        path.startsWith("/admin") ||
+        path.startsWith("/broker") ||
+        path.startsWith("/developers-portal") ||
+        path.startsWith("/developer-hub");
+      setHidden(conciergeOpen || chatOpen || modalOpen || internal);
     };
     check();
     const obs = new MutationObserver(check);
     obs.observe(document.body, { attributes: true, subtree: true, attributeFilter: ["data-jbj-concierge-open", "data-jbj-chat-open", "data-modal-open"] });
-    return () => obs.disconnect();
+    window.addEventListener("popstate", check);
+    return () => {
+      obs.disconnect();
+      window.removeEventListener("popstate", check);
+    };
   }, []);
   return hidden;
 }

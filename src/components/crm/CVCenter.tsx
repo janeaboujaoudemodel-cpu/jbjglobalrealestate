@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -1138,85 +1139,103 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                             </div>
                           </div>
 
-                          {/* Action buttons */}
-                          <div className="flex flex-col gap-2 flex-shrink-0">
-                            {!isAnalyzed && !isAnalyzing && (
+                          {/* Action buttons — canonical 2-col grid, unified height/radius/spacing */}
+                          <div className="flex flex-col gap-2 flex-shrink-0 w-[260px]">
+                            <div className="grid grid-cols-2 gap-2">
+                              {/* PRIMARY — View CV (navy filled) */}
                               <Button
                                 size="sm"
-                                onClick={() => handleAnalyzeCV(cv)}
-                                className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold shadow-lg px-4 py-2 transition-all hover:scale-105"
+                                onClick={() => handleViewCV(cv)}
+                                data-allow-dark-cta
+                                data-no-contrast-guard
+                                className="h-9 rounded-lg bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555] font-semibold shadow-sm px-3"
                               >
-                                <Brain className="h-4 w-4 mr-1.5" /> Analyze
+                                <Eye className="h-4 w-4 mr-1.5 text-white allow-white" /> View CV
                               </Button>
-                            )}
-                            {isAnalyzed && (
-                              <Button
-                                size="sm" variant="outline"
-                                onClick={() => handleAnalyzeCV(cv, true)}
-                                disabled={isAnalyzing}
-                                className="text-purple-600 border-purple-200 hover:bg-purple-50 text-xs"
-                              >
-                                {isAnalyzing ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Brain className="h-3 w-3 mr-1" />}
-                                Re-Analyze
-                              </Button>
-                            )}
-                            <Button
-                              size="sm"
-                              onClick={() => openApplicantProfile(cv)}
-                              className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white font-semibold shadow-sm px-4 py-2"
-                              data-allow-dark-cta
-                            >
-                              <User className="h-4 w-4 mr-1.5" /> Profile
-                            </Button>
-                            <Button size="sm" variant="outline" onClick={() => handleViewCV(cv)} className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] font-semibold px-4 py-2">
-                              <Eye className="h-4 w-4 mr-1.5" /> View CV
-                            </Button>
-                            <Button size="sm" onClick={() => openContactActions(cv)} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-white font-bold px-4 py-2">
-                              <Mail className="h-4 w-4 mr-1.5" /> Contact
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => {
-                                setSelectedCV(cv);
-                                setCreateTaskForUser(true);
-                                setCandidateTaskTitle(`Follow up: ${cv.position_applied || 'Career application'}`);
-                                setCandidateTaskDescription(`Please review the latest update regarding your ${cv.position_applied || 'application'}.`);
-                                setContactOpen(true);
-                              }}
-                              className="text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]/10 font-semibold"
-                            >
-                              <Flag className="h-4 w-4 mr-1.5" /> Add Task
-                            </Button>
-                            <div className="flex gap-1.5 mt-1 flex-wrap">
-                              {cv.status !== 'approved' && (
+                              {/* SECONDARY — Contact (champagne outline) */}
                               <Button
                                 size="sm"
-                                onClick={() => handleUpdateStatus(cv.id, 'approved')}
-                                className="flex-1 rounded-xl border font-bold border-emerald-500 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                                onClick={() => openContactActions(cv)}
+                                className="h-9 rounded-lg bg-[#FDFBF7] hover:bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60 font-semibold px-3"
                               >
-                                <CheckCircle className="h-3.5 w-3.5 mr-1" /> Accept
+                                <Mail className="h-4 w-4 mr-1.5 text-[#1A1A1A]" /> Contact
                               </Button>
+                              {/* AI ACTION — Analyze / Re-Analyze (premium purple identity) */}
+                              {!isAnalyzed && !isAnalyzing && (
+                                <Button
+                                  size="sm"
+                                  onClick={() => handleAnalyzeCV(cv)}
+                                  data-allow-dark-cta
+                                  data-no-contrast-guard
+                                  className="h-9 rounded-lg col-span-2 bg-gradient-to-r from-[#6D28D9] to-[#4F46E5] hover:from-[#5B21B6] hover:to-[#4338CA] text-white border border-[#B89555]/40 font-semibold shadow-sm px-3"
+                                >
+                                  <Brain className="h-4 w-4 mr-1.5 text-white allow-white" /> Analyze with AI
+                                </Button>
                               )}
-                              {cv.status !== 'pending' && (
+                              {(isAnalyzed || isAnalyzing) && (
+                                <Button
+                                  size="sm"
+                                  disabled={isAnalyzing}
+                                  onClick={() => handleAnalyzeCV(cv, true)}
+                                  data-allow-dark-cta
+                                  data-no-contrast-guard
+                                  className="h-9 rounded-lg col-span-2 bg-[#1A1033] hover:bg-[#2A1A4A] text-white border border-[#7C3AED]/60 font-semibold px-3"
+                                >
+                                  {isAnalyzing
+                                    ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin text-white allow-white" />
+                                    : <Brain className="h-4 w-4 mr-1.5 text-white allow-white" />}
+                                  Re-Analyze
+                                </Button>
+                              )}
+                              {/* Profile (utility outline) */}
                               <Button
                                 size="sm"
-                                onClick={() => handleUpdateStatus(cv.id, 'pending')}
-                                className="flex-1 rounded-xl border font-bold border-amber-500 bg-amber-50 text-amber-700 hover:bg-amber-100"
+                                onClick={() => openApplicantProfile(cv)}
+                                className="h-9 rounded-lg col-span-2 bg-[#F7F2EA] hover:bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 font-semibold px-3"
                               >
-                                <Clock className="h-3.5 w-3.5 mr-1" /> Pending
+                                <User className="h-4 w-4 mr-1.5 text-[#1A1A1A]" /> Open Profile
                               </Button>
-                              )}
-                              {cv.status !== 'rejected' && (
-                              <Button
-                                size="sm"
-                                onClick={() => handleUpdateStatus(cv.id, 'rejected')}
-                                className="flex-1 rounded-xl border font-bold border-red-500 bg-red-50 text-red-700 hover:bg-red-100"
-                              >
-                                <XCircle className="h-3.5 w-3.5 mr-1" /> Reject
-                              </Button>
-                              )}
                             </div>
+
+                            {/* Decision row — only renders the available transitions, never an empty placeholder */}
+                            {(() => {
+                              const buttons: React.ReactNode[] = [];
+                              if (cv.status !== 'approved') {
+                                buttons.push(
+                                  <Button
+                                    key="accept"
+                                    size="sm"
+                                    onClick={() => handleUpdateStatus(cv.id, 'approved')}
+                                    className="h-9 rounded-lg bg-[#ECF6EF] hover:bg-[#DDEEE2] text-[#1F6B43] border border-[#3FA56A] font-semibold px-3"
+                                  >
+                                    <CheckCircle className="h-3.5 w-3.5 mr-1 text-[#1F6B43]" /> Accept
+                                  </Button>,
+                                );
+                              }
+                              if (cv.status !== 'rejected') {
+                                buttons.push(
+                                  <Button
+                                    key="reject"
+                                    size="sm"
+                                    onClick={() => handleUpdateStatus(cv.id, 'rejected')}
+                                    className="h-9 rounded-lg bg-[#FDFBF7] hover:bg-[#FBEDED] text-[#A6362E] border border-[#C25A52]/70 font-semibold px-3"
+                                  >
+                                    <XCircle className="h-3.5 w-3.5 mr-1 text-[#A6362E]" /> Reject
+                                  </Button>,
+                                );
+                              }
+                              if (buttons.length === 0) return null;
+                              return (
+                                <div
+                                  className={cn(
+                                    "grid gap-2",
+                                    buttons.length === 2 ? "grid-cols-2" : "grid-cols-1",
+                                  )}
+                                >
+                                  {buttons}
+                                </div>
+                              );
+                            })()}
                           </div>
                         </div>
 
