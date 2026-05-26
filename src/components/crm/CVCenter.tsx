@@ -880,32 +880,68 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         </div>
       </div>
 
-      {/* Status Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        {STATUS_TABS.map((tab) => {
-          const count = tab.id === 'all' ? stats.total :
-                       tab.id === 'flagged' ? stats.flagged :
-                       stats[tab.id as keyof typeof stats] || 0;
-          const IconComponent = tab.icon;
-          return (
-            <Card
-              key={tab.id}
-              className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all ${
-                activeStatusTab === tab.id ? 'border-[#B89555] ring-2 ring-gold/20' : 'border-crm-border'
-              }`}
-              onClick={() => setActiveStatusTab(tab.id)}
-            >
-              <CardContent className="p-4 text-center">
-                <IconComponent className={`h-5 w-5 mx-auto mb-2 ${
-                  tab.id === 'pending' ? 'text-amber-500' : tab.id === 'approved' ? 'text-green-500' :
-                  tab.id === 'rejected' ? 'text-red-500' : tab.id === 'flagged' ? 'text-yellow-500' : 'text-[#1A1A1A]'
-                }`} />
-                <p className="text-xl font-bold text-crm-text">{count}</p>
-                <p className="text-xs text-crm-text-muted font-medium">{tab.label}</p>
-              </CardContent>
-            </Card>
-          );
-        })}
+      {/* Lifecycle status rail — full 10-status pipeline */}
+      <div className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] shadow-[0_1px_0_rgba(184,149,85,0.08)]">
+        <div className="px-5 pt-4 pb-2 flex items-center justify-between">
+          <p className="text-[11px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 font-semibold">
+            Applicant Lifecycle
+          </p>
+          <p className="text-[11px] text-[#1A1A1A]/55">
+            {stats.total} total · {stats.flagged} flagged
+          </p>
+        </div>
+        <div className="px-3 pb-3 overflow-x-auto">
+          <div className="flex items-stretch gap-1.5 min-w-max">
+            {STATUS_TABS.map((tab) => {
+              const count =
+                tab.id === 'all'
+                  ? stats.total
+                  : tab.id === 'flagged'
+                  ? stats.flagged
+                  : stats.byStatus[tab.id] ?? 0;
+              const Icon = tab.icon;
+              const active = activeStatusTab === tab.id;
+              const meta = tab.id !== 'all' && tab.id !== 'flagged'
+                ? getApplicantStatusMeta(tab.id)
+                : null;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveStatusTab(tab.id)}
+                  className={[
+                    'group flex items-center gap-2 rounded-full border px-3 py-2 transition-all whitespace-nowrap',
+                    active
+                      ? 'bg-[#EFE6D6] border-[#B89555] shadow-[inset_0_0_0_1px_rgba(184,149,85,0.35)]'
+                      : 'bg-[#FDFBF7] border-[#B89555]/25 hover:bg-[#F7F2EA] hover:border-[#B89555]/55',
+                  ].join(' ')}
+                >
+                  <Icon
+                    className={[
+                      'h-3.5 w-3.5',
+                      active ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/65',
+                    ].join(' ')}
+                    strokeWidth={2.25}
+                  />
+                  <span className={['text-[12px] font-semibold tracking-[0.01em]', active ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/80'].join(' ')}>
+                    {tab.label}
+                  </span>
+                  <span
+                    className={[
+                      'inline-flex items-center justify-center rounded-full text-[10px] font-bold min-w-[20px] h-[18px] px-1.5 border',
+                      active
+                        ? 'bg-[#1A1A1A] text-[#FDFBF7] border-[#1A1A1A]'
+                        : 'bg-[#F2EAD3] text-[#1A1A1A] border-[#B89555]/30',
+                    ].join(' ')}
+                    data-no-contrast-guard
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* Department Categories */}
