@@ -25,6 +25,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { maybeProxyStorageUrl } from '@/utils/downloadProxy';
 import { SUPABASE_URL } from "@/config/backend";
+import {
+  ApplicantStatusPill,
+  APPLICANT_STATUS_META,
+  APPLICANT_STATUS_ORDER,
+  getApplicantStatusMeta,
+} from "@/components/crm/ApplicantStatusPill";
 
 // Department categories with icons
 const DEPARTMENT_CATEGORIES = [
