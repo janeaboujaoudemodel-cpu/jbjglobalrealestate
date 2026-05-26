@@ -229,17 +229,17 @@ const ResaleProperties = () => {
             Back to Properties
           </Link>
           <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40 mb-4 block w-fit mx-auto">Exclusive — JBJ Global Real Estate</Badge>
-          <h1 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
-            Exclusive Resale <span className="text-[#1A1A1A]">Properties</span>
+          <h1 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "#2563EB" }} data-no-contrast-guard>
+            Exclusive Resale <span style={{ color: "#2563EB" }} data-no-contrast-guard>Properties</span>
           </h1>
-          <p className="text-lg text-[#1A1A1A]/60 max-w-2xl mx-auto">
+          <p className="text-lg max-w-2xl mx-auto font-medium" style={{ color: "#B89555" }} data-no-contrast-guard>
             Exclusive investor resale portfolio curated by JBJ Global Real Estate — premium properties from verified investors at competitive prices, available for immediate purchase.
           </p>
         </div>
       </section>
 
       {/* Filters - Champagne bar connected to hero (no black gap) */}
-      <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 md:py-4 border-b border-[#B89555]/30 sticky top-0">
+      <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 md:py-4 sticky top-0">
         <div className="container mx-auto px-3 sm:px-4">
           <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl p-4 sm:p-5 shadow-lg backdrop-blur-sm">
             {/* Search Bar */}
@@ -437,7 +437,7 @@ const ResaleProperties = () => {
         <div className="max-w-6xl mx-auto">
           {/* Results count */}
           <div className="flex items-center justify-between mb-6">
-            <p className="text-sm text-[#1A1A1A]/50">
+            <p className="text-sm font-semibold" style={{ color: "#B89555" }} data-no-contrast-guard>
               {filteredListings.length} {filteredListings.length === 1 ? "property" : "properties"} found
             </p>
           </div>
@@ -524,28 +524,34 @@ const ResaleProperties = () => {
             </div>
           ) : (
             /* Empty State — Premium champagne design */
-            <div className="max-w-xl mx-auto text-center py-16">
-              <div className="w-20 h-20 rounded-2xl bg-[#EFE6D6]/15 border border-[#B89555]/30 flex items-center justify-center mx-auto mb-6">
-                <Building2 className="w-10 h-10 text-[#1A1A1A]" />
+            <div
+              className="max-w-2xl mx-auto text-center py-12 px-6 sm:px-10 md:px-12 rounded-2xl bg-[#FDFBF7]/80 backdrop-blur-sm"
+              style={{ border: "2px solid #2563EB" }}
+            >
+              <div
+                className="w-20 h-20 rounded-2xl bg-[#EFE6D6]/15 flex items-center justify-center mx-auto mb-6"
+                style={{ border: "1px solid #2563EB" }}
+              >
+                <Building2 className="w-10 h-10" style={{ color: "#2563EB" }} />
               </div>
-              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">
+              <h3 className="text-2xl font-bold mb-3" style={{ color: "#2563EB" }} data-no-contrast-guard>
                 Recently Sold Out
               </h3>
-              <p className="text-[#1A1A1A]/60 mb-2">
+              <p className="mb-2 font-medium" style={{ color: "#2563EB" }} data-no-contrast-guard>
                 The latest resale properties from our investor network have been snapped up.
                 Our verified investors regularly list new opportunities — don't miss the next one.
               </p>
-              <p className="text-[#1A1A1A]/40 text-sm mb-8">
+              <p className="text-sm mb-8 font-semibold" style={{ color: "#B89555" }} data-no-contrast-guard>
                 Subscribe below to get notified when new resale properties become available.
               </p>
 
               {/* Subscribe CTA */}
-              <div className="bg-[#FDFBF7]/80 border border-[#B89555]/30 rounded-2xl p-6 backdrop-blur-sm shadow-sm">
+              <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 backdrop-blur-sm shadow-sm" style={{ border: "1px solid #2563EB" }}>
                 <div className="flex items-center gap-2 justify-center mb-4">
-                  <Bell className="w-5 h-5 text-[#1A1A1A]" />
-                  <h4 className="font-semibold text-[#1A1A1A] text-lg">Stay in the Loop</h4>
+                  <Bell className="w-5 h-5" style={{ color: "#2563EB" }} />
+                  <h4 className="font-semibold text-lg" style={{ color: "#B89555" }} data-no-contrast-guard>Stay in the Loop</h4>
                 </div>
-                <p className="text-sm text-[#1A1A1A]/60 mb-4">
+                <p className="text-sm mb-4 text-[#1A1A1A]/70">
                   Get instant alerts when our investors list new resale properties. Be the first to know.
                 </p>
                 {subscribed ? (
@@ -560,11 +566,15 @@ const ResaleProperties = () => {
                       placeholder="Enter your email"
                       value={subscribeEmail}
                       onChange={(e) => setSubscribeEmail(e.target.value)}
-                      className="flex-1 h-11 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] text-[#1A1A1A]"
+                      className="flex-1 h-11 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] text-[#1A1A1A]"
+                      style={{ border: "2px solid #2563EB" }}
                     />
                     <Button
                       onClick={handleSubscribe}
-                      className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold h-11 px-6"
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                      className="font-semibold h-11 px-6 border-0"
+                      style={{ backgroundColor: "#2563EB", color: "#FFFFFF" }}
                     >
                       Subscribe
                     </Button>
@@ -575,12 +585,17 @@ const ResaleProperties = () => {
               {/* Links */}
               <div className="mt-8 flex items-center justify-center gap-4 flex-wrap">
                 <Link to="/properties">
-                  <Button variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
+                  <Button
+                    data-allow-dark-cta
+                    data-no-contrast-guard
+                    className="font-semibold border-0"
+                    style={{ backgroundColor: "#2563EB", color: "#FFFFFF" }}
+                  >
                     Browse Off-Plan Properties
                   </Button>
                 </Link>
                 <Link to="/listing-portal">
-                  <Button variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
+                  <Button variant="outline" className="text-[#1A1A1A] hover:bg-[#2563EB]/5" style={{ border: "2px solid #2563EB" }}>
                     List Your Property
                   </Button>
                 </Link>
