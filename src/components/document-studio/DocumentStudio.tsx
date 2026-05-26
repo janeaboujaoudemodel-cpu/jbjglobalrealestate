@@ -148,6 +148,38 @@ function StudioShell({
   const [search, setSearch] = useState("");
   const [pages, setPages] = useState<number | "auto">("auto");
 
+  // Auto-fit preview: scale the 816px A4 page down to whatever width the
+  // center pane has so it never overflows or gets clipped at the edges.
+  const previewWrapRef = useRef<HTMLDivElement>(null);
+  const pageRef = useRef<HTMLDivElement>(null);
+  const [fitScale, setFitScale] = useState(1);
+  const [pageHeight, setPageHeight] = useState(1056);
+  useEffect(() => {
+    const wrap = previewWrapRef.current;
+    if (!wrap) return;
+    const update = () => {
+      const w = wrap.clientWidth;
+      const padding = 48; // breathing room on both sides
+      const fit = Math.min(1, Math.max(0.3, (w - padding) / 816));
+      setFitScale(fit);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(wrap);
+    return () => ro.disconnect();
+  }, []);
+  useEffect(() => {
+    const page = pageRef.current;
+    if (!page) return;
+    const update = () => setPageHeight(page.offsetHeight);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(page);
+    return () => ro.disconnect();
+  });
+  const effectiveScale = (zoom / 100) * fitScale;
+
+
   // Owner-side signature defaults (editable from the left rail).
   const [ownerName, setOwnerName] = useState<string>("Jameel Bou Jaoude");
   const [ownerTitle, setOwnerTitle] = useState<string>("Founder & CEO");
