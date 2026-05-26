@@ -41,6 +41,7 @@ const EmployeeManagementHub: React.FC = () => {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [seeding, setSeeding] = useState(false);
 
   useEffect(() => {
     checkAuthorization();
@@ -77,25 +78,21 @@ const EmployeeManagementHub: React.FC = () => {
 
   const fetchStats = async () => {
     try {
-      // Pending HR Review
       const { count: pendingHR } = await supabase
         .from('new_joiner_applications')
         .select('*', { count: 'exact', head: true })
         .eq('status', 'pending_review');
 
-      // Pending IT Processing
       const { count: pendingIT } = await supabase
         .from('new_joiner_applications')
         .select('*', { count: 'exact', head: true })
-        .eq('status', 'it_processing');
+        .in('status', ['hr_approved', 'it_processing']);
 
-      // In Progress (HR approved, IT working)
       const { count: inProgress } = await supabase
         .from('new_joiner_applications')
         .select('*', { count: 'exact', head: true })
         .in('status', ['hr_approved', 'it_processing', 'webdev_processing']);
 
-      // Completed this month
       const monthStart = new Date();
       monthStart.setDate(1);
       monthStart.setHours(0, 0, 0, 0);
@@ -105,13 +102,11 @@ const EmployeeManagementHub: React.FC = () => {
         .eq('status', 'completed')
         .gte('completed_at', monthStart.toISOString());
 
-      // Active employees
       const { count: activeEmployees } = await supabase
         .from('crm_users_profile')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true);
 
-      // On probation (started within last 90 days)
       const ninetyDaysAgo = new Date();
       ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
       const { count: onProbation } = await supabase
@@ -127,7 +122,7 @@ const EmployeeManagementHub: React.FC = () => {
         completedThisMonth: completedThisMonth || 0,
         activeEmployees: activeEmployees || 0,
         onProbation: onProbation || 0,
-        avgOnboardingDays: 3 // Would calculate from actual data
+        avgOnboardingDays: 3
       });
     } catch (error) {
       console.error('Error fetching stats:', error);
@@ -141,10 +136,46 @@ const EmployeeManagementHub: React.FC = () => {
         .select('id, full_name, status, department, created_at, updated_at')
         .order('updated_at', { ascending: false })
         .limit(5);
-
       setRecentActivity(data || []);
     } catch (error) {
       console.error('Error fetching activity:', error);
+    }
+  };
+
+  /**
+   * Seed a fully HR-approved test joiner so the IT Provisioning queue
+   * has something to act on. Lets the owner exercise the end-to-end
+   * provisioning + branded email flow without HR sign-off paperwork.
+   */
+  const handleSeedTestJoiner = async () => {
+    setSeeding(true);
+    try {
+      const stamp = Date.now().toString().slice(-5);
+      const { error } = await supabase.from('new_joiner_applications').insert({
+        full_name: `Test Joiner ${stamp}`,
+        email: `test.joiner.${stamp}@example.com`,
+        phone: '+971500000000',
+        nationality: 'United Arab Emirates',
+        languages: ['English'],
+        job_title: 'Sales Broker',
+        department: 'Sales',
+        crm_role: 'broker_member',
+        contract_type: 'full_time',
+        status: 'hr_approved',
+        hr_approved_at: new Date().toISOString(),
+        approved_at: new Date().toISOString(),
+        hr_notes: 'Seeded test joiner for IT provisioning QA.',
+      });
+      if (error) throw error;
+      toast.success('Test joiner added to IT Provisioning queue');
+      setActiveTab('provisioning');
+      fetchStats();
+      fetchRecentActivity();
+    } catch (e: any) {
+      console.error('Seed test joiner failed:', e);
+      toast.error(e.message || 'Could not seed test joiner');
+    } finally {
+      setSeeding(false);
     }
   };
 
@@ -188,154 +219,110 @@ const EmployeeManagementHub: React.FC = () => {
     );
   }
 
+  // KPI cards — all clickable, jump to relevant tab
+  const kpiCards = [
+    { key: 'pendingHR', label: 'Pending HR', value: stats.pendingHR, Icon: Clock, ring: 'border-amber-500/40', tint: 'text-amber-700', tab: 'applications' },
+    { key: 'pendingIT', label: 'IT Queue', value: stats.pendingIT, Icon: Monitor, ring: 'border-purple-500/40', tint: 'text-purple-700', tab: 'provisioning' },
+    { key: 'inProgress', label: 'In Progress', value: stats.inProgress, Icon: Zap, ring: 'border-blue-500/40', tint: 'text-blue-700', tab: 'journey' },
+    { key: 'completedThisMonth', label: 'This Month', value: stats.completedThisMonth, Icon: CheckCircle, ring: 'border-green-500/40', tint: 'text-green-700', tab: 'audit' },
+    { key: 'activeEmployees', label: 'Active Staff', value: stats.activeEmployees, Icon: Users, ring: 'border-[#B89555]/40', tint: 'text-[#1A1A1A]', tab: 'journey' },
+    { key: 'onProbation', label: 'On Probation', value: stats.onProbation, Icon: AlertCircle, ring: 'border-orange-500/40', tint: 'text-orange-700', tab: 'journey' },
+    { key: 'avgOnboardingDays', label: 'Avg Onboard', value: `${stats.avgOnboardingDays}d`, Icon: TrendingUp, ring: 'border-cyan-500/40', tint: 'text-cyan-700', tab: 'audit' },
+  ];
+
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
-      {/* Header Section */}
+      {/* Header */}
       <section className="relative py-8 overflow-hidden border-b border-[#B89555]/20">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-4 min-w-0">
               <Link to="/crm">
                 <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-[#1A1A1A]">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to CRM
+                  <ArrowLeft className="h-4 w-4 mr-2" />Back to CRM
                 </Button>
               </Link>
               <div className="h-6 w-px bg-[#EFE6D6]/30" />
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 min-w-0">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                   <Users className="h-6 w-6 text-[#1A1A1A]" />
                 </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-[#1A1A1A]">Employee Management Hub</h1>
-                  <p className="text-sm text-[#1A1A1A]/70">HR + IT Unified Onboarding & Audit System</p>
+                <div className="min-w-0">
+                  <h1 className="text-2xl font-bold text-[#1A1A1A] truncate">Employee Management Hub</h1>
+                  <p className="text-sm text-[#1A1A1A]/70 truncate">HR + IT Unified Onboarding & Audit System</p>
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <Button variant="secondary" onClick={() => { fetchStats(); fetchRecentActivity(); }}>
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Refresh
+            <div className="flex flex-wrap items-center gap-2">
+              <Button variant="secondary" size="sm" onClick={handleSeedTestJoiner} disabled={seeding}>
+                {seeding ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />}
+                Seed Test Joiner
               </Button>
-              <Button variant="primary" onClick={() => setShowNewJoinerForm(true)}>
-                <UserPlus className="w-4 h-4 mr-2" />
-                New Joiner
+              <Button variant="secondary" size="sm" onClick={() => { fetchStats(); fetchRecentActivity(); }}>
+                <RefreshCw className="w-4 h-4 mr-2" />Refresh
+              </Button>
+              <Button variant="primary" size="sm" onClick={() => setShowNewJoinerForm(true)}>
+                <UserPlus className="w-4 h-4 mr-2" />New Joiner
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Cards */}
+      {/* Stats Cards — clickable */}
       <section className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-amber-500/40">
-            <CardContent className="pt-4 pb-3 px-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+          {kpiCards.map(({ key, label, value, Icon, ring, tint, tab }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setActiveTab(tab)}
+              className={`text-left rounded-xl border-2 ${ring} bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] px-4 pt-4 pb-3 transition-all hover:scale-[1.02] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#B89555]/60`}
+              aria-label={`${label}: ${value}`}
+            >
               <div className="flex items-center justify-between mb-2">
-                <Clock className="w-5 h-5 text-amber-600" />
-                <span className="text-2xl font-bold text-amber-700">{stats.pendingHR}</span>
+                <Icon className={`w-5 h-5 ${tint}`} />
+                <span className={`text-2xl font-bold ${tint}`}>{value}</span>
               </div>
-              <p className="text-xs text-[#1A1A1A]/70">Pending HR</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-purple-500/40">
-            <CardContent className="pt-4 pb-3 px-4">
-              <div className="flex items-center justify-between mb-2">
-                <Monitor className="w-5 h-5 text-purple-600" />
-                <span className="text-2xl font-bold text-purple-700">{stats.pendingIT}</span>
-              </div>
-              <p className="text-xs text-[#1A1A1A]/70">IT Queue</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-blue-500/40">
-            <CardContent className="pt-4 pb-3 px-4">
-              <div className="flex items-center justify-between mb-2">
-                <Zap className="w-5 h-5 text-blue-600" />
-                <span className="text-2xl font-bold text-blue-700">{stats.inProgress}</span>
-              </div>
-              <p className="text-xs text-[#1A1A1A]/70">In Progress</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-green-500/40">
-            <CardContent className="pt-4 pb-3 px-4">
-              <div className="flex items-center justify-between mb-2">
-                <CheckCircle className="w-5 h-5 text-green-600" />
-                <span className="text-2xl font-bold text-green-700">{stats.completedThisMonth}</span>
-              </div>
-              <p className="text-xs text-[#1A1A1A]/70">This Month</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
-            <CardContent className="pt-4 pb-3 px-4">
-              <div className="flex items-center justify-between mb-2">
-                <Users className="w-5 h-5 text-[#1A1A1A]" />
-                <span className="text-2xl font-bold text-[#1A1A1A]">{stats.activeEmployees}</span>
-              </div>
-              <p className="text-xs text-[#1A1A1A]/70">Active Staff</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-orange-500/40">
-            <CardContent className="pt-4 pb-3 px-4">
-              <div className="flex items-center justify-between mb-2">
-                <AlertCircle className="w-5 h-5 text-orange-600" />
-                <span className="text-2xl font-bold text-orange-700">{stats.onProbation}</span>
-              </div>
-              <p className="text-xs text-[#1A1A1A]/70">On Probation</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-cyan-500/40">
-            <CardContent className="pt-4 pb-3 px-4">
-              <div className="flex items-center justify-between mb-2">
-                <TrendingUp className="w-5 h-5 text-cyan-600" />
-                <span className="text-2xl font-bold text-cyan-700">{stats.avgOnboardingDays}d</span>
-              </div>
-              <p className="text-xs text-[#1A1A1A]/70">Avg Onboard</p>
-            </CardContent>
-          </Card>
+              <p className="text-xs text-[#1A1A1A]/70">{label}</p>
+            </button>
+          ))}
         </div>
       </section>
 
       {/* Main Content */}
       <section className="container mx-auto px-4 pb-12">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-            <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 p-1">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Overview
-              </TabsTrigger>
-              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
-                <UserPlus className="w-4 h-4 mr-2" />
-                Applications
-              </TabsTrigger>
-              <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
-                <Key className="w-4 h-4 mr-2" />
-                IT Provisioning
-              </TabsTrigger>
-              <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
-                <Activity className="w-4 h-4 mr-2" />
-                Employee Journey
-              </TabsTrigger>
-              <TabsTrigger value="audit" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
-                <Eye className="w-4 h-4 mr-2" />
-                Activity Audit
-              </TabsTrigger>
-            </TabsList>
+          <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
+            {/* Horizontally scrollable tab strip — never overflows when chat panel narrows the viewport */}
+            <div className="min-w-0 flex-1 -mx-1 px-1 overflow-x-auto">
+              <TabsList className="inline-flex w-max bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 p-1">
+                <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                  <BarChart3 className="w-4 h-4 mr-2" />Overview
+                </TabsTrigger>
+                <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                  <UserPlus className="w-4 h-4 mr-2" />Applications
+                </TabsTrigger>
+                <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                  <Key className="w-4 h-4 mr-2" />IT Provisioning
+                </TabsTrigger>
+                <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                  <Activity className="w-4 h-4 mr-2" />Employee Journey
+                </TabsTrigger>
+                <TabsTrigger value="audit" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                  <Eye className="w-4 h-4 mr-2" />Activity Audit
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
-            <div className="flex items-center gap-3">
-              <div className="relative">
+            <div className="flex items-center gap-3 lg:flex-none">
+              <div className="relative w-full lg:w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]" />
                 <Input
                   placeholder="Search employees..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] w-64 placeholder:text-[#1A1A1A]/70"
+                  className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] w-full placeholder:text-[#1A1A1A]/70"
                 />
               </div>
             </div>
@@ -394,37 +381,21 @@ const EmployeeManagementHub: React.FC = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button 
-                    variant="secondary" 
-                    className="w-full justify-start"
-                    onClick={() => setShowNewJoinerForm(true)}
-                  >
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Submit New Joiner
+                  <Button variant="secondary" className="w-full justify-start" onClick={() => setShowNewJoinerForm(true)}>
+                    <UserPlus className="w-4 h-4 mr-2" />Submit New Joiner
                   </Button>
-                  <Button 
-                    variant="secondary" 
-                    className="w-full justify-start"
-                    onClick={() => setActiveTab('provisioning')}
-                  >
-                    <Key className="w-4 h-4 mr-2" />
-                    IT Provisioning Queue
+                  <Button variant="secondary" className="w-full justify-start" onClick={handleSeedTestJoiner} disabled={seeding}>
+                    {seeding ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />}
+                    Seed Test Joiner (HR-approved)
                   </Button>
-                  <Button 
-                    variant="secondary" 
-                    className="w-full justify-start"
-                    onClick={() => setActiveTab('audit')}
-                  >
-                    <Eye className="w-4 h-4 mr-2" />
-                    View Activity Audit
+                  <Button variant="secondary" className="w-full justify-start" onClick={() => setActiveTab('provisioning')}>
+                    <Key className="w-4 h-4 mr-2" />IT Provisioning Queue
                   </Button>
-                  <Button 
-                    variant="secondary" 
-                    className="w-full justify-start"
-                    onClick={() => navigate('/crm/employees')}
-                  >
-                    <Users className="w-4 h-4 mr-2" />
-                    Employee Directory
+                  <Button variant="secondary" className="w-full justify-start" onClick={() => setActiveTab('audit')}>
+                    <Eye className="w-4 h-4 mr-2" />View Activity Audit
+                  </Button>
+                  <Button variant="secondary" className="w-full justify-start" onClick={() => navigate('/crm/employees')}>
+                    <Users className="w-4 h-4 mr-2" />Employee Directory
                   </Button>
                 </CardContent>
               </Card>
@@ -467,35 +438,24 @@ const EmployeeManagementHub: React.FC = () => {
             </div>
           </TabsContent>
 
-          {/* Applications Tab */}
           <TabsContent value="applications">
-            <NewJoinerApplicationsList 
-              searchQuery={searchQuery}
-              onRefresh={fetchStats}
-            />
+            <NewJoinerApplicationsList searchQuery={searchQuery} onRefresh={fetchStats} />
           </TabsContent>
 
-          {/* IT Provisioning Tab */}
           <TabsContent value="provisioning">
-            <ITProvisioningPanel 
-              searchQuery={searchQuery}
-              onRefresh={fetchStats}
-            />
+            <ITProvisioningPanel searchQuery={searchQuery} onRefresh={fetchStats} />
           </TabsContent>
 
-          {/* Employee Journey Tab */}
           <TabsContent value="journey">
             <EmployeeJourneyTracker searchQuery={searchQuery} />
           </TabsContent>
 
-          {/* Activity Audit Tab */}
           <TabsContent value="audit">
             <EmployeeActivityAudit searchQuery={searchQuery} />
           </TabsContent>
         </Tabs>
       </section>
 
-      {/* New Joiner Form Modal */}
       <NewJoinerApplicationForm
         isOpen={showNewJoinerForm}
         onClose={() => setShowNewJoinerForm(false)}
