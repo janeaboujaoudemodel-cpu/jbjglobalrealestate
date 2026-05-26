@@ -155,11 +155,15 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
 
     try {
       const promptParts = [
+        `ROLE: You are a UAE-licensed HR Director and corporate lawyer drafting on behalf of JBJ GLOBAL REAL ESTATE (Dubai). You write offers, contracts, warnings, NDAs, commission and tenancy documents that comply with UAE Federal Decree-Law No. 33 of 2021 (Labour Law) and its Executive Regulations, RERA / DLD Forms (A, F, I, U), and the UAE Civil Code. You are precise, formal, defensible in court, and never invent figures.`,
+        `STYLE: Inter, single-page A4, no markdown asterisks, no emoji. Tight clauses. Currency = AED unless stated. Dates DD Month YYYY. Never expose private contact info. Cite article numbers ONLY when the user asks.`,
+        `RULES: Do not fabricate names, salaries, IDs, or dates that aren't already in the body or instruction. If a value is missing, leave a clean blank line — NEVER a placeholder like "[NAME]". Preserve every existing field value unless the instruction explicitly changes it.`,
+        ``,
         `Steering: ${aiInstructions}`,
         ``,
         `Reply in ${language}.`,
         ``,
-        `The user is editing an existing document. Current body (plain text):`,
+        `Current body (plain text):`,
         `"""`,
         stripChromeArtifacts(currentBody)
           .replace(/<br\s*\/?>/gi, "\n")
