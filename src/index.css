@@ -5705,18 +5705,54 @@ section h1:not([data-no-navy-accent])::after {
 }
 
 /* 2. Active pills / tabs / segmented controls — swap gold border
-      for navy border + navy text, champagne fill preserved. */
-[aria-current="page"],
-[aria-current="true"],
-[data-state="active"]:not([data-no-navy-accent]),
-[data-active="true"]:not([data-no-navy-accent]) {
+      for navy border + navy text, champagne fill preserved.
+      EXCLUDES dark-CTA pills (HRPill active, navy-filled tabs) so their
+      white-on-navy text is never forced back to navy-on-navy. */
+[aria-current="page"]:not([data-allow-dark-cta]):not([data-no-contrast-guard]),
+[aria-current="true"]:not([data-allow-dark-cta]):not([data-no-contrast-guard]),
+[data-state="active"]:not([data-no-navy-accent]):not([data-allow-dark-cta]):not([data-no-contrast-guard]),
+[data-active="true"]:not([data-no-navy-accent]):not([data-allow-dark-cta]):not([data-no-contrast-guard]) {
   border-color: #102540 !important;
 }
-[aria-current="page"]:not([data-on-dark]):not(.allow-white),
-[aria-current="true"]:not([data-on-dark]):not(.allow-white),
-[data-state="active"]:not([data-no-navy-accent]):not([data-on-dark]):not(.allow-white),
-[data-active="true"]:not([data-no-navy-accent]):not([data-on-dark]):not(.allow-white) {
+[aria-current="page"]:not([data-on-dark]):not(.allow-white):not([data-allow-dark-cta]):not([data-no-contrast-guard]),
+[aria-current="true"]:not([data-on-dark]):not(.allow-white):not([data-allow-dark-cta]):not([data-no-contrast-guard]),
+[data-state="active"]:not([data-no-navy-accent]):not([data-on-dark]):not(.allow-white):not([data-allow-dark-cta]):not([data-no-contrast-guard]),
+[data-active="true"]:not([data-no-navy-accent]):not([data-on-dark]):not(.allow-white):not([data-allow-dark-cta]):not([data-no-contrast-guard]) {
   color: #102540 !important;
+}
+/* Active dark-CTA pills (HRPill etc.) — guarantee white text/icons on navy
+   at idle, hover, focus, and active-hover. No opacity fades, no overrides. */
+[data-allow-dark-cta][aria-pressed="true"],
+[data-allow-dark-cta][aria-current="page"],
+[data-allow-dark-cta][data-active="true"],
+[data-allow-dark-cta][aria-pressed="true"]:hover,
+[data-allow-dark-cta][aria-current="page"]:hover,
+[data-allow-dark-cta][data-active="true"]:hover,
+[data-allow-dark-cta][aria-pressed="true"]:focus,
+[data-allow-dark-cta][aria-pressed="true"]:focus-visible {
+  background-color: #102540 !important;
+  color: #FFFFFF !important;
+  border-color: #B89555 !important;
+  opacity: 1 !important;
+}
+[data-allow-dark-cta][aria-pressed="true"] *,
+[data-allow-dark-cta][aria-current="page"] *,
+[data-allow-dark-cta][data-active="true"] *,
+[data-allow-dark-cta][aria-pressed="true"]:hover *,
+[data-allow-dark-cta][aria-current="page"]:hover *,
+[data-allow-dark-cta][data-active="true"]:hover * {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+[data-allow-dark-cta][aria-pressed="true"] svg,
+[data-allow-dark-cta][aria-current="page"] svg,
+[data-allow-dark-cta][data-active="true"] svg,
+[data-allow-dark-cta][aria-pressed="true"]:hover svg,
+[data-allow-dark-cta][aria-current="page"]:hover svg,
+[data-allow-dark-cta][data-active="true"]:hover svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
 }
 
 /* 3. Hero/marketing eyebrow chips — any small uppercase tag with
