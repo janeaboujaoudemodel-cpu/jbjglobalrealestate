@@ -22,6 +22,7 @@ import ITTasksList from '@/components/it-department/ITTasksList';
 import EmployeeJourneyTracker from '@/components/employee-management/EmployeeJourneyTracker';
 import EmployeeActivityAudit from '@/components/employee-management/EmployeeActivityAudit';
 import ITProvisioningPanel from '@/components/employee-management/ITProvisioningPanel';
+import EmployeeAssignmentsPanel from '@/components/employee-management/EmployeeAssignmentsPanel';
 import { Link } from 'react-router-dom';
 
 const EmployeeManagementHub: React.FC = () => {
@@ -306,6 +307,9 @@ const EmployeeManagementHub: React.FC = () => {
                 <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
                   <Key className="w-4 h-4 mr-2" />IT Provisioning
                 </TabsTrigger>
+                <TabsTrigger value="assignments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                  <UserPlus className="w-4 h-4 mr-2" />Lead Assignments
+                </TabsTrigger>
                 <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
                   <Activity className="w-4 h-4 mr-2" />Employee Journey
                 </TabsTrigger>
@@ -444,6 +448,10 @@ const EmployeeManagementHub: React.FC = () => {
 
           <TabsContent value="provisioning">
             <ITProvisioningPanel searchQuery={searchQuery} onRefresh={fetchStats} />
+          </TabsContent>
+
+          <TabsContent value="assignments">
+            <EmployeeAssignmentsPanel searchQuery={searchQuery} />
           </TabsContent>
 
           <TabsContent value="journey">
