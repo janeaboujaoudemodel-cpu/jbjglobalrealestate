@@ -71,36 +71,52 @@ export function buildPrintableHtml(bodyHtml: string, marks: DocumentMarks): stri
 async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> {
   const { default: html2canvas } = await import("html2canvas");
 
-  const clone = el.cloneNode(true) as HTMLElement;
-  clone.style.transform = "none";
-  clone.style.transformOrigin = "top left";
-  clone.style.width = "816px";
-  clone.style.maxWidth = "none";
-  clone.style.boxShadow = "none";
-  clone.style.borderRadius = "0";
-  clone.querySelectorAll('[aria-label="Remove field"]').forEach((n) => n.remove());
-  clone.querySelectorAll('[data-drag-guide]').forEach((n) => n.remove());
+  // Capture the LIVE element in-place so all computed Tailwind styles,
+  // flex layouts and inherited fonts render identically to the preview.
+  // We only neutralise the on-screen scale/transform around the capture,
+  // then restore everything afterwards.
+  const prev = {
+    transform: el.style.transform,
+    transformOrigin: el.style.transformOrigin,
+    width: el.style.width,
+    boxShadow: el.style.boxShadow,
+    borderRadius: el.style.borderRadius,
+  };
+  // Hide the drag chrome (× buttons + guide lines) during capture only.
+  const hidden: { node: HTMLElement; prevDisplay: string }[] = [];
+  el.querySelectorAll<HTMLElement>('[aria-label="Remove field"],[data-drag-guide="true"]').forEach((n) => {
+    hidden.push({ node: n, prevDisplay: n.style.display });
+    n.style.display = "none";
+  });
 
-  const host = document.createElement("div");
-  host.style.cssText =
-    "position:fixed;left:-10000px;top:0;width:816px;background:#FDFBF7;z-index:-1;";
-  host.appendChild(clone);
-  document.body.appendChild(host);
+  el.style.transform = "none";
+  el.style.transformOrigin = "top left";
+  el.style.width = "816px";
+  el.style.boxShadow = "none";
+  el.style.borderRadius = "0";
 
   try {
-    return await html2canvas(clone, {
+    return await html2canvas(el, {
       backgroundColor: "#FDFBF7",
       scale: 2,
       useCORS: true,
       allowTaint: false,
       logging: false,
+      width: 816,
       windowWidth: 816,
       ignoreElements: (e) =>
-        e.tagName === "SCRIPT" || e.tagName === "STYLE" ||
-        (e instanceof HTMLElement && (e.getAttribute("aria-label") === "Remove field" || e.getAttribute("data-drag-guide") === "true")),
+        e.tagName === "SCRIPT" ||
+        (e instanceof HTMLElement &&
+          (e.getAttribute("aria-label") === "Remove field" ||
+            e.getAttribute("data-drag-guide") === "true")),
     });
   } finally {
-    if (host.parentNode) document.body.removeChild(host);
+    el.style.transform = prev.transform;
+    el.style.transformOrigin = prev.transformOrigin;
+    el.style.width = prev.width;
+    el.style.boxShadow = prev.boxShadow;
+    el.style.borderRadius = prev.borderRadius;
+    hidden.forEach(({ node, prevDisplay }) => { node.style.display = prevDisplay; });
   }
 }
 
