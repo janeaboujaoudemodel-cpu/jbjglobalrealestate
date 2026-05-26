@@ -392,6 +392,138 @@ function composeCommissionInvoice(input: ComposerInput): string {
   ].join("");
 }
 
+/* ───────────── Holiday Home Booking (premium, non-refundable) ───────────── */
+
+function composeHolidayHome(input: ComposerInput): string {
+  const f = input.fields;
+  const nights = f.nights || "";
+  const checkIn = formatHumanDate(f.checkIn) || f.checkIn;
+  const checkOut = formatHumanDate(f.checkOut) || f.checkOut;
+
+  const reservation: Array<[string, string | undefined]> = [
+    ["Booking Reference", f.bookingRef],
+    ["Guest Name", f.recipientName],
+    ["Passport / Emirates ID", f.idNumber],
+    ["Phone / WhatsApp", f.guestPhone],
+    ["Property", f.propertyName],
+    ["Address", f.propertyAddress],
+    ["Unit Type", f.roomType],
+    ["Unit Size", f.unitSize ? `${f.unitSize} sq ft` : undefined],
+    ["Guests", f.guestsCount],
+    ["Check-in", checkIn],
+    ["Check-out", checkOut],
+    ["Nights", nights],
+    ["Nightly Rate", f.nightlyRate ? `AED ${f.nightlyRate}` : undefined],
+    ["Total Amount Paid", f.totalAmount ? `AED ${f.totalAmount}` : undefined],
+    ["Payment Method", f.paymentMethod],
+    ["Payment Date", formatHumanDate(f.paymentDate) || f.paymentDate],
+  ];
+
+  // Pre-filled premium T&Cs — NON-refundable, JBJ liability fully waived.
+  const terms = `
+    <div style="margin:18px 0 8px;">
+      <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;">
+        Terms &amp; Conditions — Guest Declaration
+      </div>
+      <ol style="margin:0;padding-left:20px;font-size:11.5px;line-height:1.7;color:${INK};">
+        <li style="margin-bottom:6px;"><strong>Non-Refundable Booking.</strong> The Guest acknowledges that the total amount paid above is <strong>strictly non-refundable</strong> under any circumstances, including but not limited to cancellation, no-show, early check-out, travel disruption, visa issues, illness, change of plans or force-majeure events. The unit has been reserved and removed from public availability solely for the Guest.</li>
+        <li style="margin-bottom:6px;"><strong>No Refund · No Credit.</strong> No partial refund, monetary credit, date change, transfer, or substitution will be issued once payment is received. The Guest expressly waives any right to claim a refund.</li>
+        <li style="margin-bottom:6px;"><strong>Full Release of Liability.</strong> The Guest hereby <strong>fully releases, indemnifies and holds harmless JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>, its owners, officers, employees, agents and affiliates from any and all liability, claims, damages, losses, theft, personal injury, property damage, illness, or any consequential loss arising before, during or after the stay. JBJ GLOBAL REAL ESTATE acts solely as a booking facilitator and assumes <strong>no responsibility</strong> for the condition, suitability, services, utilities, neighbours, building management, or any incident occurring on the premises.</li>
+        <li style="margin-bottom:6px;"><strong>Guest Responsibility.</strong> The Guest is fully responsible for: (a) their personal belongings and valuables; (b) the conduct of all occupants and visitors; (c) any damage caused to the unit, furniture, fixtures or common areas; (d) compliance with building rules, UAE laws, and community by-laws; (e) settling all utility overages, fines or municipality penalties incurred during the stay.</li>
+        <li style="margin-bottom:6px;"><strong>Check-in / Check-out.</strong> Check-in 3:00 PM · Check-out 12:00 PM. Late check-out is charged at one (1) additional night. Keys must be returned in person or via the secure key-box. Lost keys / access cards are charged at cost.</li>
+        <li style="margin-bottom:6px;"><strong>House Rules.</strong> No parties, no events, no smoking indoors, no unregistered guests, no pets unless explicitly approved in writing. Quiet hours 10:00 PM – 8:00 AM. Violations result in immediate eviction with no refund.</li>
+        <li style="margin-bottom:6px;"><strong>Security Deposit.</strong> A refundable security deposit (if collected separately) is returned within fourteen (14) days post check-out subject to inspection and deduction of any damages, missing items or cleaning fees.</li>
+        <li style="margin-bottom:6px;"><strong>Governing Law.</strong> This Agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai. Any dispute is subject to the exclusive jurisdiction of Dubai Courts.</li>
+        <li style="margin-bottom:6px;"><strong>Acknowledgement.</strong> By signing below, the Guest confirms they have <strong>read, understood and accepted</strong> all terms above, and that payment has been made <strong>voluntarily and irrevocably</strong>.</li>
+      </ol>
+    </div>`;
+
+  return [
+    input.hideLetterDate ? "" : dateLine(input.letterDate),
+    subjectLine(`Holiday Home Booking Agreement${f.bookingRef ? ` — ${f.bookingRef}` : ""}`),
+    paragraphs(input.aiIntro || `We confirm your reservation at ${f.propertyName || "the property"} for ${nights || "—"} night(s). Please review the reservation details and the binding terms below.`),
+    termsTable(reservation),
+    terms,
+    paragraphs(input.aiClosing),
+    signatureBlock({
+      ownerName: input.ownerName,
+      ownerTitle: input.ownerTitle,
+      ownerDate: input.ownerDate,
+      applicantName: f.recipientName,
+      applicantId: f.idNumber,
+      applicantDate: input.applicantDate,
+      applicantLabel: "Read · Understood · Accepted by Guest",
+      extraSignatories: input.extraSignatories,
+    }),
+  ].join("");
+}
+
+/* ───────────── Facility Management Agreement ───────────── */
+
+function composeFacilityManagement(input: ComposerInput): string {
+  const f = input.fields;
+
+  const contractRows: Array<[string, string | undefined]> = [
+    ["Client / Owner", f.recipientName],
+    ["ID / Trade Licence", f.idNumber],
+    ["Property", f.propertyName],
+    ["Address", f.propertyAddress],
+    ["Units Under Management", f.unitsCount],
+    ["Total Managed Area", f.totalArea ? `${f.totalArea} sq ft` : undefined],
+    ["Start Date", formatHumanDate(f.startDate) || f.startDate],
+    ["End Date", formatHumanDate(f.endDate) || f.endDate],
+    ["Contract Term", f.term],
+    ["Monthly Management Fee", f.monthlyFee ? `AED ${f.monthlyFee}` : undefined],
+    ["Payment Terms", f.paymentTerms],
+    ["Emergency Response SLA", f.responseTime],
+  ];
+
+  const scope = (f.scope || "").trim()
+    ? `<div style="margin:14px 0 8px;">
+         <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;">Scope of Services</div>
+         <p style="margin:0;font-size:12px;line-height:1.65;color:${INK};">${esc(f.scope)}</p>
+       </div>`
+    : "";
+
+  const standardTerms = `
+    <div style="margin:18px 0 8px;">
+      <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;">
+        Standard Terms
+      </div>
+      <ol style="margin:0;padding-left:20px;font-size:11.5px;line-height:1.7;color:${INK};">
+        <li style="margin-bottom:6px;"><strong>Appointment.</strong> The Client appoints JBJ GLOBAL REAL ESTATE L.L.C — S.O.C as the exclusive facility manager of the Property for the term stated above.</li>
+        <li style="margin-bottom:6px;"><strong>Services.</strong> Services are delivered as per the Scope above, in accordance with industry best practices and UAE regulations.</li>
+        <li style="margin-bottom:6px;"><strong>Fees &amp; Payment.</strong> The monthly management fee is due in advance per the Payment Terms. Late payments accrue 2% per month. Out-of-scope works are quoted separately and require written approval before commencement.</li>
+        <li style="margin-bottom:6px;"><strong>Vendor Coordination.</strong> JBJ coordinates third-party vendors (cleaning, MEP, security) on the Client's behalf. The Client remains responsible for vendor fees at cost plus any agreed management margin.</li>
+        <li style="margin-bottom:6px;"><strong>Reporting.</strong> Monthly performance reports including financials, maintenance tickets and SLA compliance are issued within seven (7) business days of month-end.</li>
+        <li style="margin-bottom:6px;"><strong>Liability.</strong> JBJ's aggregate liability is capped at three (3) months' management fees. JBJ is not liable for force-majeure events, pre-existing defects, or acts of third-party vendors beyond reasonable supervision.</li>
+        <li style="margin-bottom:6px;"><strong>Term &amp; Termination.</strong> Either party may terminate with sixty (60) days' written notice. Outstanding fees and reimbursables remain payable upon termination.</li>
+        <li style="margin-bottom:6px;"><strong>Confidentiality.</strong> Both parties maintain strict confidentiality of commercial and tenant information shared during the engagement.</li>
+        <li style="margin-bottom:6px;"><strong>Governing Law.</strong> This Agreement is governed by the laws of the UAE and the Emirate of Dubai. Disputes fall under the exclusive jurisdiction of Dubai Courts.</li>
+      </ol>
+    </div>`;
+
+  return [
+    input.hideLetterDate ? "" : dateLine(input.letterDate),
+    subjectLine(`Facility Management Agreement${f.propertyName ? ` — ${f.propertyName}` : ""}`),
+    paragraphs(input.aiIntro),
+    termsTable(contractRows),
+    scope,
+    standardTerms,
+    paragraphs(input.aiClosing),
+    signatureBlock({
+      ownerName: input.ownerName,
+      ownerTitle: input.ownerTitle,
+      ownerDate: input.ownerDate,
+      applicantName: f.recipientName,
+      applicantId: f.idNumber,
+      applicantDate: input.applicantDate,
+      applicantLabel: "Accepted by Client",
+      extraSignatories: input.extraSignatories,
+    }),
+  ].join("");
+}
+
 /* ───────────── Dispatcher ───────────── */
 
 export function compose(input: ComposerInput): string {
@@ -425,10 +557,15 @@ export function compose(input: ComposerInput): string {
       return composeGeneric(input, `Property Advertising Agreement`);
     case "tenancy_addendum":
       return composeGeneric(input, `Tenancy Contract Addendum`);
+    case "holiday_home_agreement":
+      return composeHolidayHome(input);
+    case "facility_management_agreement":
+      return composeFacilityManagement(input);
     default:
       return composeGeneric(input, input.fields.subject || "Document");
   }
 }
+
 
 /** Pre-seeded commission rows for HR/broker offers. */
 export const DEFAULT_BROKER_COMMISSIONS: CommissionRow[] = [
