@@ -302,11 +302,9 @@ export default function PositionManager() {
                       </span>
                       {p.is_featured && (
                         <span
-                          className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold"
-                          style={{ backgroundColor: "#102540", color: "#FFFFFF", borderColor: "#B89555" }}
-                          data-no-contrast-guard
+                          className="inline-flex items-center gap-1 rounded-full border border-[#B89555] bg-[#EFE6D6] text-[#1A1A1A] px-2 py-0.5 text-[10px] font-semibold"
                         >
-                          <Star className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} /> Featured
+                          <Star className="w-3 h-3 text-[#B89555]" style={{ fill: "#B89555" }} /> Featured
                         </span>
                       )}
                       {limitReached && (
@@ -340,20 +338,15 @@ export default function PositionManager() {
                       variant="outline"
                       onClick={() => toggleFeatured(p)}
                       title={p.is_featured ? "Unfeature this role" : "Mark this role as Featured"}
-                      data-no-contrast-guard
-                      className="transition-none"
-                      style={
+                      className={
                         p.is_featured
-                          ? { backgroundColor: "#2563EB", color: "#FFFFFF", borderColor: "#2563EB" }
-                          : { backgroundColor: "transparent", color: "#2563EB", borderColor: "#2563EB" }
+                          ? "border-[#B89555] bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E5D9C2]"
+                          : "border-[#B89555] bg-transparent text-[#1A1A1A] hover:bg-[#F7F2EA]"
                       }
                     >
                       <Star
-                        className="w-3.5 h-3.5 mr-1"
-                        style={{
-                          color: p.is_featured ? "#FFFFFF" : "#2563EB",
-                          fill: p.is_featured ? "#FFFFFF" : "transparent",
-                        }}
+                        className="w-3.5 h-3.5 mr-1 text-[#B89555]"
+                        style={{ fill: p.is_featured ? "#B89555" : "transparent" }}
                       />
                       {p.is_featured ? "Featured" : "Feature"}
                     </Button>
