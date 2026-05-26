@@ -1,6 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import pako from "npm:pako@2.1.0";
+import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
+
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -642,29 +644,8 @@ serve(async (req) => {
     // MODE: "auto" = called internally from capture-lead, no owner check needed
     // MODE: undefined/manual = called from UI, requires owner auth
     if (mode !== "auto") {
-      const authHeader = req.headers.get("Authorization");
-      if (!authHeader) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY") ?? "", {
-        global: { headers: { Authorization: authHeader } },
-      });
-      const { data: { user }, error: authErr } = await userClient.auth.getUser();
-      if (authErr || !user) {
-        return new Response(JSON.stringify({ error: "Auth failed" }), {
-          status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      const ownerEmail = Deno.env.get("OWNER_EMAIL");
-      if (!ownerEmail || user.email?.toLowerCase() !== ownerEmail.toLowerCase()) {
-        return new Response(JSON.stringify({ error: "Owner access required" }), {
-          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
+      const auth = await requireOwnerAuth(req, corsHeaders);
+      if (auth.response) return auth.response;
     } else {
       const internalKey = req.headers.get("x-internal-key");
       if (internalKey !== supabaseServiceKey) {
@@ -673,6 +654,7 @@ serve(async (req) => {
         });
       }
     }
+
 
     if (!applicationId || !source) {
       return new Response(JSON.stringify({ error: "applicationId and source required" }), {
