@@ -32,6 +32,7 @@ import {
   getApplicantStatusMeta,
 } from "@/components/crm/ApplicantStatusPill";
 import ApplicantProfileDrawer from "@/components/crm/ApplicantProfileDrawer";
+import HRPill from "@/components/careers-portal/HRPill";
 
 // Department categories with icons
 const DEPARTMENT_CATEGORIES = [
