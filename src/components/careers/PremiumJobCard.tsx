@@ -1,4 +1,4 @@
-import { CheckCircle, MapPin, Star, Flame, TrendingUp, Award, Briefcase } from "lucide-react";
+import { CheckCircle, MapPin, Star, Flame, Award, Briefcase, Lock, Pause, XCircle, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export type JobCardTag =
@@ -6,7 +6,10 @@ export type JobCardTag =
   | "urgent"
   | "most-applied"
   | "premium"
-  | "partner";
+  | "partner"
+  | "featured";
+
+export type JobStatus = "open" | "urgent" | "paused" | "closed" | "hidden";
 
 interface PremiumJobCardProps {
   id: string;
@@ -20,6 +23,10 @@ interface PremiumJobCardProps {
   level?: string;
   category?: string;
   tags?: JobCardTag[];
+  status?: JobStatus;
+  isFeatured?: boolean;
+  applicationsCount?: number;
+  applicationCap?: number | null;
   selected: boolean;
   onApply: (id: string) => void;
   onSelect?: (id: string) => void;
@@ -31,7 +38,7 @@ const TAG_STYLES: Record<
 > = {
   "top-opportunity": {
     label: "Top Opportunity",
-    icon: TrendingUp,
+    icon: Award,
     bg: "bg-[#F7F2EA]",
     ring: "border-[#B89555]",
     text: "text-[#1A1A1A]",
@@ -64,15 +71,15 @@ const TAG_STYLES: Record<
     ring: "border-[#B89555]",
     text: "text-[#B89555]",
   },
+  featured: {
+    label: "Featured",
+    icon: Star,
+    bg: "bg-[#102540]",
+    ring: "border-[#B89555]",
+    text: "text-[#FFFFFF]",
+  },
 };
 
-/**
- * Premium luxury job card.
- * - Champagne raised surface, gold hairline border
- * - Hover: subtle lift + soft navy glow ring
- * - Optional status tags (Top, Urgent, Most Applied, Premium, Partner)
- * - Apply CTA: solid navy 3D button
- */
 export default function PremiumJobCard({
   id,
   title,
@@ -84,20 +91,48 @@ export default function PremiumJobCard({
   level,
   category,
   tags = [],
+  status = "open",
+  isFeatured = false,
+  applicationsCount = 0,
+  applicationCap = null,
   selected,
   onApply,
   onSelect,
 }: PremiumJobCardProps) {
+  const limitReached =
+    applicationCap !== null && applicationCap !== undefined && applicationsCount >= applicationCap;
+
+  // Derived applyability
+  const isOpenForApply =
+    (status === "open" || status === "urgent") && !limitReached;
+
+  // CTA copy + icon
+  let ctaLabel = selected ? "Selected" : "Apply";
+  let CtaIcon: any = selected ? CheckCircle : null;
+  if (!isOpenForApply) {
+    if (status === "closed") { ctaLabel = "Position Closed"; CtaIcon = XCircle; }
+    else if (status === "paused") { ctaLabel = "Hiring Paused"; CtaIcon = Pause; }
+    else if (limitReached) { ctaLabel = "Application Limit Reached"; CtaIcon = Lock; }
+  }
+
+  // Effective tag list — augment with real status / featured signals
+  const computedTags: JobCardTag[] = [...tags];
+  if (isFeatured && !computedTags.includes("featured")) computedTags.unshift("featured");
+  if (status === "urgent" && !computedTags.includes("urgent")) computedTags.unshift("urgent");
+
   return (
     <div
-      onClick={() => onSelect?.(id)}
-      className={`group careers-card-strong relative rounded-2xl border p-6 cursor-pointer transition-all overflow-hidden ${
+      onClick={() => isOpenForApply && onSelect?.(id)}
+      className={`group careers-card-strong relative rounded-2xl border p-6 transition-all overflow-hidden ${
+        isOpenForApply ? "cursor-pointer" : "cursor-default"
+      } ${
         selected
           ? "border-[#071B33] shadow-[0_0_0_3px_rgba(7,27,51,0.16),0_30px_54px_-32px_rgba(7,27,51,0.55)]"
-          : "hover:-translate-y-[3px]"
+          : isOpenForApply
+            ? "hover:-translate-y-[3px]"
+            : ""
       }`}
     >
-      {/* Hover glow accent */}
       <div
         aria-hidden
         className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"
@@ -107,13 +142,17 @@ export default function PremiumJobCard({
         }}
       />
 
+      {/* Closed/paused/limit overlay strip */}
+      {!isOpenForApply && (
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[#1A1A1A]/70" aria-hidden />
+      )}
+
       <div className="relative">
-        {/* Title row + selected check */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <h4 className="font-semibold text-lg md:text-[1.22rem] leading-snug text-[#071B33] tracking-tight">
             {title}
           </h4>
-          {selected && (
+          {selected && isOpenForApply && (
             <span
               data-no-contrast-guard
               className="flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#102540] border border-[#B89555]/60"
@@ -124,27 +163,41 @@ export default function PremiumJobCard({
           )}
         </div>
 
-        {/* Tag row */}
-        {tags.length > 0 && (
+        {(computedTags.length > 0 || limitReached) && (
           <div className="flex flex-wrap gap-1.5 mb-4">
-            {tags.map((t) => {
+            {computedTags.map((t) => {
               const cfg = TAG_STYLES[t];
               const Icon = cfg.icon;
               return (
                 <span
                   key={t}
+                  data-no-contrast-guard={t === "featured" ? "" : undefined}
                   className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text}`}
                 >
-                  <Icon className="w-3 h-3" />
+                  <Icon className={`w-3 h-3 ${t === "featured" ? "allow-white" : ""}`} />
                   {cfg.label}
                 </span>
               );
             })}
+            {limitReached && (
+              <span className="inline-flex items-center gap-1 rounded-full border border-[#1A1A1A]/40 bg-[#EFE6D6] px-2.5 py-1 text-[10px] font-semibold text-[#1A1A1A]">
+                <Users className="w-3 h-3" /> Application Limit Reached
+              </span>
+            )}
+            {status === "paused" && (
+              <span className="inline-flex items-center gap-1 rounded-full border border-[#1A1A1A]/40 bg-[#EFE6D6] px-2.5 py-1 text-[10px] font-semibold text-[#1A1A1A]">
+                <Pause className="w-3 h-3" /> Paused
+              </span>
+            )}
+            {status === "closed" && (
+              <span className="inline-flex items-center gap-1 rounded-full border border-[#1A1A1A]/40 bg-[#EFE6D6] px-2.5 py-1 text-[10px] font-semibold text-[#1A1A1A]">
+                <XCircle className="w-3 h-3" /> Closed
+              </span>
+            )}
           </div>
         )}
 
-        {/* Meta row */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] mb-4">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] mb-4">
           <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
             <Briefcase className="w-3.5 h-3.5 text-[#102540]" />
             {department}
@@ -158,16 +211,13 @@ export default function PremiumJobCard({
           {isCommissionBased || isBrokerRole ? (
             <span className="rounded-full border border-[#BFA46A] bg-[#EDE1CD] px-2.5 py-1 font-semibold text-[#5E4314] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">Commission Basis</span>
           ) : null}
-          {level && (
+          {applicationCap ? (
             <span className="inline-flex items-center text-[#1A1A1A]/86">
-              · {level}
+              · {applicationsCount}/{applicationCap} applicants
             </span>
-          )}
-          {category && (
-            <span className="inline-flex items-center text-[#1A1A1A]/86">
-              · {category}
-            </span>
-          )}
+          ) : null}
+          {level && <span className="inline-flex items-center text-[#1A1A1A]/86">· {level}</span>}
+          {category && <span className="inline-flex items-center text-[#1A1A1A]/86">· {category}</span>}
         </div>
 
         {description && (
@@ -180,26 +230,35 @@ export default function PremiumJobCard({
           <span className="text-[10px] tracking-[0.12em] uppercase font-semibold text-[#071B33] pt-3">
             JBJ GLOBAL REAL ESTATE · Dubai
           </span>
-          <Button
-            type="button"
-            size="sm"
-            data-allow-dark-cta
-            data-no-contrast-guard
-            className="careers-navy-cta h-10 rounded-xl px-5 font-semibold active:translate-y-[1px] transition-all"
-            onClick={(e) => {
-              e.stopPropagation();
-              onApply(id);
-            }}
-          >
-            {selected ? (
-              <>
-                <CheckCircle className="w-3.5 h-3.5 mr-1.5 allow-white" style={{ color: "#FFFFFF" }} />
-                <span className="allow-white" style={{ color: "#FFFFFF" }}>Selected</span>
-              </>
-            ) : (
-              <span className="allow-white" style={{ color: "#FFFFFF" }}>Apply</span>
-            )}
-          </Button>
+          {isOpenForApply ? (
+            <Button
+              type="button"
+              size="sm"
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="careers-navy-cta h-10 rounded-xl px-5 font-semibold active:translate-y-[1px] transition-all"
+              onClick={(e) => {
+                e.stopPropagation();
+                onApply(id);
+              }}
+            >
+              {CtaIcon ? (
+                <CtaIcon className="w-3.5 h-3.5 mr-1.5 allow-white" style={{ color: "#FFFFFF" }} />
+              ) : null}
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>{ctaLabel}</span>
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              size="sm"
+              disabled
+              aria-disabled="true"
+              className="h-10 rounded-xl px-5 font-semibold bg-[#EFE6D6] text-[#1A1A1A]/70 border border-[#B89555]/60 cursor-not-allowed hover:bg-[#EFE6D6]"
+            >
+              {CtaIcon ? <CtaIcon className="w-3.5 h-3.5 mr-1.5" /> : null}
+              {ctaLabel}
+            </Button>
+          )}
         </div>
       </div>
     </div>
