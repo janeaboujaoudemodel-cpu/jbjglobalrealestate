@@ -1048,9 +1048,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                     {score.final}/10 · {score.level}
                                   </Badge>
                                 ) : null}
-                                {cv.status === 'approved' && <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Accepted</Badge>}
-                                {cv.status === 'rejected' && <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Rejected</Badge>}
-                                {cv.status === 'pending' && <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Pending Review</Badge>}
+                                {cv.status && <ApplicantStatusPill status={cv.status} size="sm" />}
                               </div>
 
                               {/* Quick info pills */}
