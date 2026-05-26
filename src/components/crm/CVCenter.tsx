@@ -1373,6 +1373,18 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         </CardContent>
       </Card>
 
+      <ApplicantProfileDrawer
+        open={profileDrawerOpen}
+        onOpenChange={setProfileDrawerOpen}
+        candidate={selectedCV as any}
+        onUpdateStatus={(id, status) => handleUpdateStatus(id, status)}
+        onViewCV={() => { if (selectedCV) handleViewCV(selectedCV); }}
+        onContact={() => { setProfileDrawerOpen(false); if (selectedCV) openContactActions(selectedCV); }}
+        onSchedule={() => { setProfileDrawerOpen(false); setScheduleOpen(true); }}
+        onSaveNotes={handleSaveApplicantNotes}
+      />
+
+
       <Dialog open={cvPreviewOpen} onOpenChange={setCvPreviewOpen}>
         <DialogContent className="max-w-6xl h-[85vh]" aria-describedby="cv-preview-desc">
           <DialogHeader>
