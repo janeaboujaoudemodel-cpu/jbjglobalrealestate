@@ -351,10 +351,9 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 <Globe className="w-4 h-4 text-[#1A1A1A]" />
                 Nationality *
               </Label>
-              <NationalitySelect
+              <NationalityPicker
                 value={formData.nationality}
                 onChange={(value) => setFormData(prev => ({ ...prev, nationality: value }))}
-                allowOther={true}
               />
             </div>
           </div>
@@ -365,7 +364,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
               <Languages className="w-4 h-4 text-[#1A1A1A]" />
               Languages Spoken
             </Label>
-            <LanguageMultiSelect
+            <LanguageMultiPicker
               value={formData.languages}
               onChange={(value) => setFormData(prev => ({ ...prev, languages: value }))}
             />
