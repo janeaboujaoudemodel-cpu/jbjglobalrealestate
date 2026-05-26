@@ -109,6 +109,7 @@ export function renderStandardBody(args: StandardBodyArgs): string {
     hideLetterDate: args.hideLetterDate,
     aiIntro,
     aiClosing,
+    extraSignatories: args.extraSignatories,
   };
   return compose(input);
 }
