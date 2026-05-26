@@ -91,13 +91,17 @@ export default function PositionManager() {
     const { data, error } = await supabase
       .from("open_positions")
       .select("*")
+      // Featured roles first, then newest. Toggling Feature reorders the list
+      // visibly so the action never feels like a "blink".
+      .order("is_featured", { ascending: false })
       .order("created_at", { ascending: false });
     if (error) toast.error(error.message);
-    setPositions((data as unknown as Position[]) ?? []);
+    setPositions((data as Position[]) ?? []);
     setLoading(false);
   };
 
   useEffect(() => { refresh(); }, []);
+
 
   const openCreate = () => { setForm(EMPTY_FORM); setAiInstruction(""); setEditorOpen(true); };
   const openEdit = (p: Position) => {

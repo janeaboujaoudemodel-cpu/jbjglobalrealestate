@@ -18460,6 +18460,7 @@ export type Database = {
           position_title: string
           salary_range_max: number | null
           salary_range_min: number | null
+          template_type: string
           updated_at: string | null
         }
         Insert: {
@@ -18476,6 +18477,7 @@ export type Database = {
           position_title: string
           salary_range_max?: number | null
           salary_range_min?: number | null
+          template_type?: string
           updated_at?: string | null
         }
         Update: {
@@ -18492,6 +18494,7 @@ export type Database = {
           position_title?: string
           salary_range_max?: number | null
           salary_range_min?: number | null
+          template_type?: string
           updated_at?: string | null
         }
         Relationships: []

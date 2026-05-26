@@ -3,8 +3,22 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
+export const TEMPLATE_TYPES = [
+  { value: 'job_offer', label: 'Job Offer' },
+  { value: 'employment_contract', label: 'Employment Contract' },
+  { value: 'warning_letter', label: 'Warning Letter' },
+  { value: 'nda', label: 'NDA' },
+  { value: 'commission_agreement', label: 'Commission Agreement' },
+  { value: 'internship_agreement', label: 'Internship Agreement' },
+  { value: 'hr_letter', label: 'HR Letter' },
+  { value: 'custom', label: 'Custom Template' },
+] as const;
+
+export type TemplateType = typeof TEMPLATE_TYPES[number]['value'];
+
 export interface JobOffer {
   id: string;
+  template_type: TemplateType | string;
   department: string;
   position_title: string;
   document_url: string | null;

@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useHRJobOffers, DEPARTMENTS, JobOffer } from '@/hooks/useHRJobOffers';
+import { useHRJobOffers, DEPARTMENTS, TEMPLATE_TYPES, JobOffer } from '@/hooks/useHRJobOffers';
 import { 
   Plus, Upload, FileText, Trash2, Edit2, Eye, 
   Briefcase, DollarSign, CheckCircle2 
@@ -30,6 +30,7 @@ const JobOfferManager = () => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingOffer, setEditingOffer] = useState<JobOffer | null>(null);
   const [formData, setFormData] = useState({
+    template_type: 'job_offer' as string,
     department: '',
     position_title: '',
     description: '',
@@ -42,6 +43,7 @@ const JobOfferManager = () => {
 
   const resetForm = () => {
     setFormData({
+      template_type: 'job_offer',
       department: '',
       position_title: '',
       description: '',
@@ -62,6 +64,7 @@ const JobOfferManager = () => {
     }
 
     const offerData = {
+      template_type: formData.template_type || 'job_offer',
       department: formData.department || selectedDepartment,
       position_title: formData.position_title,
       description: formData.description || null,
@@ -86,6 +89,7 @@ const JobOfferManager = () => {
   const handleEdit = (offer: JobOffer) => {
     setEditingOffer(offer);
     setFormData({
+      template_type: (offer as any).template_type || 'job_offer',
       department: offer.department,
       position_title: offer.position_title,
       description: offer.description || '',
@@ -98,7 +102,7 @@ const JobOfferManager = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm('Are you sure you want to delete this job offer?')) {
+    if (confirm('Are you sure you want to delete this template?')) {
       await deleteJobOffer(id);
     }
   };
@@ -110,9 +114,9 @@ const JobOfferManager = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Job Offer Templates</h2>
+          <h2 className="text-2xl font-bold text-foreground">Contracts &amp; Templates</h2>
           <p className="text-muted-foreground text-sm mt-1">
-            Manage job offer templates by department for quick applicant onboarding
+            One unified template manager — job offers, employment contracts, NDAs, warning letters and more.
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={(open) => {
@@ -122,20 +126,36 @@ const JobOfferManager = () => {
           <DialogTrigger asChild>
             <Button variant="primary">
               <Plus className="w-4 h-4 mr-2" />
-              Add Job Offer
+              Add Template
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-2xl">
             <DialogHeader>
               <DialogTitle className="text-foreground">
-                {editingOffer ? 'Edit Job Offer' : 'Create Job Offer Template'}
+                {editingOffer ? 'Edit Template' : 'Create Template'}
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
+                  <Label>Template Type</Label>
+                  <Select
+                    value={formData.template_type}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, template_type: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {TEMPLATE_TYPES.map(t => (
+                        <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
                   <Label>Department</Label>
-                  <Select 
+                  <Select
                     value={formData.department || selectedDepartment}
                     onValueChange={(value) => setFormData(prev => ({ ...prev, department: value }))}
                   >
@@ -144,16 +164,14 @@ const JobOfferManager = () => {
                     </SelectTrigger>
                     <SelectContent>
                       {DEPARTMENTS.map(dept => (
-                        <SelectItem key={dept} value={dept}>
-                          {dept}
-                        </SelectItem>
+                        <SelectItem key={dept} value={dept}>{dept}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
                   <Label>Position Title</Label>
-                  <Input 
+                  <Input
                     value={formData.position_title}
                     onChange={(e) => setFormData(prev => ({ ...prev, position_title: e.target.value }))}
                     placeholder="e.g., Senior Sales Agent"
@@ -211,7 +229,7 @@ const JobOfferManager = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>Upload Job Offer Document (PDF/DOCX)</Label>
+                <Label>Upload Template Document (PDF/DOCX)</Label>
                 <div className="flex items-center gap-3">
                   <Input 
                     type="file"
@@ -242,7 +260,7 @@ const JobOfferManager = () => {
                   variant="primary"
                   disabled={!formData.position_title}
                 >
-                  {editingOffer ? 'Update' : 'Create'} Job Offer
+                  {editingOffer ? 'Update' : 'Create'} Template
                 </Button>
               </div>
             </div>
@@ -282,10 +300,10 @@ const JobOfferManager = () => {
                 <CardContent className="py-12 text-center">
                   <Briefcase className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-foreground mb-2">
-                    No job offers for {dept}
+                    No templates found for {dept}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Create your first job offer template for this department
+                    Create your first template for this department
                   </p>
                   <Button 
                     onClick={() => {
@@ -295,7 +313,7 @@ const JobOfferManager = () => {
                     variant="primary"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Add Job Offer
+                    Add Template
                   </Button>
                 </CardContent>
               </Card>
