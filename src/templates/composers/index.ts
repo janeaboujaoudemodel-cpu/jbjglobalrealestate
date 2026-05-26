@@ -38,6 +38,14 @@ export interface ComposerInput {
   /** Owner identity for signature block. */
   ownerName?: string;
   ownerTitle?: string;
+  /** Owner signing date (string, ISO or human). Empty → blank line. */
+  ownerDate?: string;
+  /** Applicant signing date — usually blank (filled on sign). */
+  applicantDate?: string;
+  /** Custom date for the top-right of the letter. Empty → today. */
+  letterDate?: string;
+  /** Hide the static letter date entirely (the draggable date chip is in use). */
+  hideLetterDate?: boolean;
 }
 
 const GOLD = "#B89555";
@@ -47,6 +55,13 @@ const MUTED = "rgba(26,26,26,0.65)";
 
 const todayLong = () =>
   new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+
+const formatHumanDate = (raw?: string): string => {
+  if (!raw) return "";
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) return raw;
+  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+};
 
 const esc = (s?: string) =>
   (s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
@@ -95,7 +110,7 @@ export function commissionTable(rows: CommissionRow[]): string {
     )
     .join("");
   return `
-    <table style="border-collapse:collapse;width:100%;margin:6px 0 18px;font-family:Inter,system-ui,sans-serif;">
+    <table style="border-collapse:collapse;width:100%;margin:6px 0 8px;font-family:Inter,system-ui,sans-serif;">
       <thead>
         <tr>
           <th colspan="4" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
@@ -105,53 +120,83 @@ export function commissionTable(rows: CommissionRow[]): string {
         <tr style="background:${CHAMPAGNE};">
           <th style="padding:7px 12px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};text-align:left;">Tier</th>
           <th style="padding:7px 12px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};text-align:left;">Rate</th>
-          <th style="padding:7px 12px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};text-align:left;">Payout Trigger</th>
+          <th style="padding:7px 12px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};text-align:left;">When Paid</th>
           <th style="padding:7px 12px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};text-align:left;">Notes</th>
         </tr>
       </thead>
       <tbody>${body}</tbody>
-    </table>`;
+    </table>
+    <div style="font-size:10.5px;color:${MUTED};margin:0 0 18px;font-style:italic;">
+      Commissions are released once the brokerage has actually received the cleared funds from the buyer or developer.
+    </div>`;
 }
 
 export function signatureBlock(opts: {
   ownerName?: string;
   ownerTitle?: string;
+  ownerDate?: string;
   applicantName?: string;
+  applicantId?: string;
+  applicantDate?: string;
   applicantLabel?: string;
 }): string {
-  const oName = esc(opts.ownerName || "");
-  const oTitle = esc(opts.ownerTitle || "Director");
+  const oName = esc(opts.ownerName || "Jane Bou Jaude");
+  const oTitle = esc(opts.ownerTitle || "Founder & CEO");
+  const oDate = esc(formatHumanDate(opts.ownerDate) || todayLong());
   const aName = esc(opts.applicantName || "");
+  const aId = esc(opts.applicantId || "");
+  const aDate = esc(formatHumanDate(opts.applicantDate));
   const aLabel = esc(opts.applicantLabel || "Accepted by Applicant");
-  const date = todayLong();
 
-  const cell = (heading: string, name: string, secondLabel: string, secondValue: string) => `
-    <td style="width:50%;vertical-align:top;padding:0 8px;">
-      <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};margin-bottom:46px;font-weight:600;">${heading}</div>
-      <div style="border-top:1px solid ${INK};padding-top:6px;">
-        <div style="font-size:11px;color:${INK};"><strong>Name:</strong> ${name || "________________________"}</div>
-        <div style="font-size:11px;color:${INK};margin-top:3px;"><strong>${secondLabel}:</strong> ${secondValue}</div>
-        <div style="font-size:11px;color:${INK};margin-top:3px;"><strong>Date:</strong> ____________________</div>
+  const row = (label: string, value: string, fallbackDots = true) => `
+    <div style="font-size:11px;color:${INK};margin-top:4px;">
+      <strong style="font-weight:600;">${label}:</strong>
+      <span style="margin-left:4px;">${value || (fallbackDots ? "____________________" : "")}</span>
+    </div>`;
+
+  const cell = (heading: string, lines: string) => `
+    <td style="width:50%;vertical-align:top;padding:0 10px;">
+      <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};margin-bottom:30px;font-weight:600;">${heading}</div>
+      <div style="border-top:1px solid ${INK};padding-top:8px;">
+        ${lines}
       </div>
     </td>`;
 
+  const ownerLines = [
+    row("Name", oName),
+    row("Title", oTitle),
+    row("Date", oDate),
+  ].join("");
+
+  const applicantLines = [
+    row("Name", aName),
+    row("ID / Passport", aId),
+    row("Date", aDate),
+  ].join("");
+
   return `
-    <div style="margin-top:36px;page-break-inside:avoid;">
+    <div style="margin-top:28px;page-break-inside:avoid;">
       <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
         <tbody>
           <tr>
-            ${cell("For JBJ GLOBAL REAL ESTATE", oName, "Title", oTitle)}
-            ${cell(aLabel, aName, "ID", "____________________")}
+            ${cell("JBJ GLOBAL REAL ESTATE", ownerLines)}
+            ${cell(aLabel, applicantLines)}
           </tr>
         </tbody>
       </table>
-      <div style="margin-top:10px;font-size:10px;color:${MUTED};text-align:right;">Issued: ${date}</div>
     </div>`;
 }
 
-export function recipientBlock(fields: Record<string, string>): string {
+export function recipientBlock(fields: Record<string, string>, opts?: { greeting?: boolean }): string {
   const name = esc(fields.recipientName);
   const id = esc(fields.idNumber);
+  if (opts?.greeting) {
+    return `
+      <div style="margin:6px 0 14px;font-size:12.5px;color:${INK};line-height:1.6;">
+        <div style="font-weight:600;">Dear ${name || "Candidate"},</div>
+        ${id ? `<div style="color:${MUTED};font-size:11px;margin-top:2px;">ID / Passport: ${id}</div>` : ""}
+      </div>`;
+  }
   return `
     <div style="margin:8px 0 18px;font-size:12px;color:${INK};line-height:1.6;">
       <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};margin-bottom:3px;">To</div>
@@ -160,8 +205,8 @@ export function recipientBlock(fields: Record<string, string>): string {
     </div>`;
 }
 
-export function dateLine(): string {
-  return `<div style="text-align:right;font-size:11px;color:${MUTED};margin-bottom:6px;">${todayLong()}</div>`;
+export function dateLine(custom?: string): string {
+  return `<div style="text-align:right;font-size:11px;color:${MUTED};margin-bottom:6px;">${esc(formatHumanDate(custom) || todayLong())}</div>`;
 }
 
 export function subjectLine(text: string): string {
@@ -190,7 +235,7 @@ function composeJobOffer(input: ComposerInput): string {
     ["Position", f.jobTitle],
     ["Department", input.department],
     ["Reporting To", f.reportingTo],
-    ["Start Date", f.startDate],
+    ["Start Date", formatHumanDate(f.startDate) || f.startDate],
     ["Probation Period", f.probation],
     ["Working Hours", f.workingHours],
     ["Annual Leave", f.annualLeave],
@@ -202,17 +247,20 @@ function composeJobOffer(input: ComposerInput): string {
   ];
 
   return [
-    dateLine(),
-    recipientBlock(f),
-    subjectLine(`Offer of Employment — ${f.jobTitle || "Position"}`),
+    input.hideLetterDate ? "" : dateLine(input.letterDate),
+    recipientBlock(f, { greeting: true }),
+    subjectLine(`Offer of Employment${f.jobTitle ? ` — ${f.jobTitle}` : ""}`),
     paragraphs(input.aiIntro),
     termsTable(termsRows),
     commissionTable(input.commissionRows || []),
     paragraphs(input.aiClosing),
     signatureBlock({
       ownerName: input.ownerName,
-      ownerTitle: input.ownerTitle || "Director",
+      ownerTitle: input.ownerTitle,
+      ownerDate: input.ownerDate,
       applicantName: f.recipientName,
+      applicantId: f.idNumber,
+      applicantDate: input.applicantDate,
       applicantLabel: "Accepted by Applicant",
     }),
   ].join("");
@@ -228,7 +276,7 @@ function composeGeneric(input: ComposerInput, subject: string): string {
   ].filter(([k]) => !["recipientName", "idNumber", "notes"].includes(unlabelize(k)));
 
   return [
-    dateLine(),
+    input.hideLetterDate ? "" : dateLine(input.letterDate),
     recipientBlock(f),
     subjectLine(subject),
     paragraphs(input.aiIntro),
@@ -237,8 +285,11 @@ function composeGeneric(input: ComposerInput, subject: string): string {
     paragraphs(input.aiClosing),
     signatureBlock({
       ownerName: input.ownerName,
-      ownerTitle: input.ownerTitle || "Director",
+      ownerTitle: input.ownerTitle,
+      ownerDate: input.ownerDate,
       applicantName: f.recipientName,
+      applicantId: f.idNumber,
+      applicantDate: input.applicantDate,
       applicantLabel: "Counterparty Signature",
     }),
   ].join("");
@@ -288,6 +339,6 @@ export function compose(input: ComposerInput): string {
 
 /** Pre-seeded commission rows for HR/broker offers. */
 export const DEFAULT_BROKER_COMMISSIONS: CommissionRow[] = [
-  { label: "Direct deals", rate: "", trigger: "On collected commission", notes: "" },
-  { label: "Company-sourced leads", rate: "", trigger: "On collected commission", notes: "" },
+  { label: "Direct deals", rate: "", trigger: "Paid after the firm receives cleared commission", notes: "" },
+  { label: "Company-sourced leads", rate: "", trigger: "Paid after the firm receives cleared commission", notes: "" },
 ];

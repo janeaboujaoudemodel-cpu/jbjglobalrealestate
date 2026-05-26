@@ -133,6 +133,22 @@ function StudioShell({
   const [search, setSearch] = useState("");
   const [pages, setPages] = useState<number | "auto">("auto");
 
+  // Owner-side signature defaults (editable from the left rail).
+  const [ownerName, setOwnerName] = useState<string>("Jane Bou Jaude");
+  const [ownerTitle, setOwnerTitle] = useState<string>("Founder & CEO");
+  const [ownerDate, setOwnerDate] = useState<string>(new Date().toISOString().slice(0, 10));
+  const [applicantDate, setApplicantDate] = useState<string>(""); // blank by design
+
+  // Hide / restore the "Commission" and "Custom fields" rail cards.
+  const [hiddenSections, setHiddenSections] = useState<Set<string>>(new Set());
+  const toggleSection = (id: string) =>
+    setHiddenSections((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
+
+  // AI auto-fill from pasted details / attached document.
+  const [autoFillText, setAutoFillText] = useState("");
+  const [autoFillBusy, setAutoFillBusy] = useState(false);
+  const autoFillFileRef = useRef<HTMLInputElement>(null);
+
   // Signature + stamp placement (with x/y positions for free dragging)
   const { defaultSignature, defaultStamp } = useOwnerAssets();
   const [marks, setMarks] = useState<DocumentMarks & {
@@ -140,10 +156,11 @@ function StudioShell({
     signatureBXY?: { x: number; y: number };
     stampXY?: { x: number; y: number };
     dateXY?: { x: number; y: number };
+    dateValue?: string;
     signatureB?: { url: string; width: number };
     showDate?: boolean;
     showSigB?: boolean;
-  }>({ showDate: true, showSigB: true });
+  }>({ showDate: true, showSigB: true, dateValue: new Date().toISOString().slice(0, 10) });
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
   const [exporting, setExporting] = useState<null | "pdf" | "docx">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -216,34 +233,54 @@ function StudioShell({
 
   const setField = (k: string, v: string) => setFields((p) => ({ ...p, [k]: v }));
 
-  // Auto-render locked standard body whenever template / fields / commissions change.
-  // Only overwrites bodyHtml if (a) it's empty OR (b) it still equals the previously
-  // auto-rendered body (i.e. owner hasn't manually edited it).
+  // Auto-render locked standard body whenever template / fields / commissions /
+  // owner-signature state change. We force-rerender every time UNLESS the user
+  // has explicitly hand-edited the body via EditableBody (tracked by
+  // userEditedRef). When that flag is set, a "Reset to template" pill appears
+  // above the page so re-syncing is one click.
   const autoBodyRef = useRef<string>("");
+  const userEditedRef = useRef<boolean>(false);
+  const [userEdited, setUserEdited] = useState(false);
+
   useEffect(() => {
     if (!template) return;
     const next = renderStandardBody({
       templateId: template.id,
       fields,
       department: template.needsPosition ? department : undefined,
-      commissionRows: usesCommission ? commissionRows : undefined,
-      customFields,
-      ownerTitle: "Director",
+      commissionRows: usesCommission && !hiddenSections.has("commission") ? commissionRows : undefined,
+      customFields: hiddenSections.has("custom") ? [] : customFields,
+      ownerName,
+      ownerTitle,
+      ownerDate,
+      applicantDate,
+      hideLetterDate: true, // the draggable date chip is the visible date
     });
-    setBodyHtml((curr) => {
-      if (!curr || curr === autoBodyRef.current) {
-        autoBodyRef.current = next;
-        return next;
-      }
-      return curr;
-    });
+    autoBodyRef.current = next;
+    if (!userEditedRef.current) setBodyHtml(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [template?.id, JSON.stringify(fields), department, JSON.stringify(commissionRows), JSON.stringify(customFields)]);
+  }, [
+    template?.id,
+    JSON.stringify(fields),
+    department,
+    JSON.stringify(commissionRows),
+    JSON.stringify(customFields),
+    JSON.stringify(Array.from(hiddenSections)),
+    ownerName, ownerTitle, ownerDate, applicantDate,
+  ]);
+
+  const resetToTemplate = () => {
+    userEditedRef.current = false;
+    setUserEdited(false);
+    if (autoBodyRef.current) setBodyHtml(autoBodyRef.current);
+  };
 
   const handleSelectTemplate = (id: string) => {
     setTemplateId(id);
     setFields({});
     autoBodyRef.current = "";
+    userEditedRef.current = false;
+    setUserEdited(false);
     setBodyHtml("");
     setStep(2);
   };
@@ -514,7 +551,7 @@ function StudioShell({
                   <Field label="Department">
                     <Select value={department} onValueChange={setDepartment}>
                       <SelectTrigger className="bg-[#FDFBF7]"><SelectValue /></SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="z-[2147483647] bg-[#FDFBF7]">
                         {DEPARTMENTS.map((d) => (
                           <SelectItem key={d} value={d}>{d}</SelectItem>
                         ))}
@@ -536,7 +573,7 @@ function StudioShell({
                     ) : f.type === "select" ? (
                       <Select value={fields[f.key] || ""} onValueChange={(v) => setField(f.key, v)}>
                         <SelectTrigger className="bg-[#FDFBF7]"><SelectValue placeholder="Select…" /></SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="z-[2147483647] bg-[#FDFBF7]">
                           {f.options?.map((o) => (
                             <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
                           ))}
@@ -752,7 +789,19 @@ function StudioShell({
                   }
                 >
                   {bodyHtml ? (
-                    <EditableBody html={bodyHtml} onChange={setBodyHtml} />
+                    <EditableBody
+                      html={bodyHtml}
+                      onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
+                    />
+                    {userEdited && (
+                      <button
+                        type="button"
+                        onClick={resetToTemplate}
+                        className="absolute top-2 right-2 z-20 text-[10px] uppercase tracking-[0.16em] bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] rounded-full px-2.5 py-1 hover:bg-[#EFE6D6]"
+                      >
+                        Reset to template
+                      </button>
+                    )}
                   ) : (
                     <div className="text-[12px] text-[#1A1A1A]/40 italic">
                       Empty document — type here or use the AI assistant on the right to draft the body.
@@ -767,9 +816,19 @@ function StudioShell({
                       onRemove={() => removeMark("date")}
                       ariaLabel="Date"
                     >
-                      <div className="text-[12px] text-[#1A1A1A] font-medium border-b border-[#1A1A1A]/40 pb-1 pr-6">
-                        Date: {new Date().toLocaleDateString("en-GB")}
-                      </div>
+                      <label className="block cursor-text">
+                        <span className="text-[12px] text-[#1A1A1A] font-medium border-b border-[#1A1A1A]/40 pb-1 pr-6 inline-block">
+                          {new Date(marks.dateValue || new Date().toISOString().slice(0,10))
+                            .toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
+                        </span>
+                        <input
+                          type="date"
+                          value={marks.dateValue || ""}
+                          onPointerDown={(e) => e.stopPropagation()}
+                          onChange={(e) => setMarks((m) => ({ ...m, dateValue: e.target.value }))}
+                          className="block mt-1 text-[10px] bg-transparent border-none p-0 outline-none text-[#1A1A1A]/60"
+                        />
+                      </label>
                     </DraggableMark>
                   )}
 

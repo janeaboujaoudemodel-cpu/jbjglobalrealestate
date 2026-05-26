@@ -16,7 +16,7 @@ const MUTED = "rgba(26,26,26,0.65)";
 
 const intros: Record<string, (f: Record<string, string>, dept?: string) => string> = {
   job_offer: (f) =>
-    `Dear ${f.recipientName || "Candidate"},\n\nWe are delighted to extend a formal offer of employment for the position of ${f.jobTitle || "[Position]"} at JBJ GLOBAL REAL ESTATE. This letter sets out the principal terms of your engagement; the full Employment Contract will follow upon your acceptance.`,
+    `We are delighted to extend a formal offer of employment for the position of ${f.jobTitle || "[Position]"} at JBJ GLOBAL REAL ESTATE. This letter sets out the principal terms of your engagement, which shall be governed by UAE Federal Decree-Law No. 33 of 2021 on the Regulation of Labour Relations and its Executive Regulations. The full Employment Contract will follow upon your acceptance.`,
   employment_contract: (f) =>
     `This Employment Contract (the "Agreement") is entered into between JBJ GLOBAL REAL ESTATE (the "Employer") and ${f.recipientName || "[Employee]"} (the "Employee"), governing the terms of the Employee's appointment to the role of ${f.jobTitle || "[Position]"}.`,
   warning_letter: (f) =>
@@ -45,7 +45,7 @@ const intros: Record<string, (f: Record<string, string>, dept?: string) => strin
 
 const closings: Record<string, (f: Record<string, string>) => string> = {
   job_offer: (f) =>
-    `Please confirm your acceptance of this offer by countersigning a copy of this letter and returning it to JBJ GLOBAL REAL ESTATE no later than seven (7) calendar days from the date of issue. We look forward to welcoming you to the firm.${f.notes ? `\n\n${f.notes}` : ""}`,
+    `Probation, working hours, annual leave, end-of-service gratuity and notice period shall apply in accordance with UAE Labour Law and, where relevant, the applicable free-zone authority regulations. Please confirm your acceptance of this offer by countersigning a copy of this letter and returning it to JBJ GLOBAL REAL ESTATE no later than seven (7) calendar days from the date of issue. We look forward to welcoming you to the firm.${f.notes ? `\n\n${f.notes}` : ""}`,
   employment_contract: (f) =>
     `Both parties confirm that they have read and understood every clause of this Agreement and accept its terms in full. This Agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai.${f.notes ? `\n\n${f.notes}` : ""}`,
   warning_letter: (f) =>
@@ -86,6 +86,10 @@ export interface StandardBodyArgs {
   customFields?: CustomField[];
   ownerName?: string;
   ownerTitle?: string;
+  ownerDate?: string;
+  applicantDate?: string;
+  letterDate?: string;
+  hideLetterDate?: boolean;
 }
 
 export function renderStandardBody(args: StandardBodyArgs): string {
@@ -97,7 +101,11 @@ export function renderStandardBody(args: StandardBodyArgs): string {
     commissionRows: args.commissionRows,
     customFields: args.customFields,
     ownerName: args.ownerName,
-    ownerTitle: args.ownerTitle || "Director",
+    ownerTitle: args.ownerTitle,
+    ownerDate: args.ownerDate,
+    applicantDate: args.applicantDate,
+    letterDate: args.letterDate,
+    hideLetterDate: args.hideLetterDate,
     aiIntro,
     aiClosing,
   };
