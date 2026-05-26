@@ -1454,19 +1454,27 @@ function StudioShell({
           )}
         </aside>
 
-        {/* CENTER — A4 PREVIEW */}
-        <main className="flex-1 min-w-0 bg-[#F0E8D8] overflow-auto relative">
-          <div className="min-h-full flex justify-center py-10 px-6">
+        {/* CENTER — A4 PREVIEW (auto-fit) */}
+        <main ref={previewWrapRef} className="flex-1 min-w-0 bg-[#F0E8D8] overflow-auto relative">
+          <div className="min-h-full flex justify-center py-10 px-4">
             {template ? (
               <div
-                className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20 shrink-0"
                 style={{
-                  width: 816,
-                  minWidth: 816,
-                  transform: `scale(${zoom / 100})`,
-                  transformOrigin: "top center",
+                  width: 816 * effectiveScale,
+                  height: pageHeight * effectiveScale,
+                  flexShrink: 0,
                 }}
               >
+                <div
+                  ref={pageRef}
+                  className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20"
+                  style={{
+                    width: 816,
+                    transform: `scale(${effectiveScale})`,
+                    transformOrigin: "top left",
+                  }}
+                >
+
                 <LockedLetterhead />
                 <div
                   className="relative px-12 py-10 bg-[#FDFBF7]"
