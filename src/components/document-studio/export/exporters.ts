@@ -146,35 +146,46 @@ export async function exportPdf(
     : await renderHostCanvas(bodyHtml, marks);
   const imgData = canvas.toDataURL("image/jpeg", 0.95);
 
-  const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
-  const pageW = pdf.internal.pageSize.getWidth();
-  const pageH = pdf.internal.pageSize.getHeight();
-  const imgW = pageW;
+  // A4 in mm.
+  const A4_W = 210;
+  const A4_H = 297;
+  const imgW = A4_W;
   const imgH = (canvas.height * imgW) / canvas.width;
 
-  if (imgH <= pageH) {
-    pdf.addImage(imgData, "JPEG", 0, 0, imgW, imgH);
-  } else {
-    const pxPerMm = canvas.width / pageW;
-    const sliceHpx = Math.floor(pageH * pxPerMm);
-    const sliceCanvas = document.createElement("canvas");
-    const ctx = sliceCanvas.getContext("2d")!;
-    sliceCanvas.width = canvas.width;
-    let yOffset = 0;
-    let first = true;
-    while (yOffset < canvas.height) {
-      const h = Math.min(sliceHpx, canvas.height - yOffset);
-      sliceCanvas.height = h;
-      ctx.fillStyle = "#FDFBF7";
-      ctx.fillRect(0, 0, sliceCanvas.width, h);
-      ctx.drawImage(canvas, 0, yOffset, canvas.width, h, 0, 0, canvas.width, h);
-      const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.95);
-      if (!first) pdf.addPage();
-      const sH = (h * imgW) / canvas.width;
-      pdf.addImage(sliceData, "JPEG", 0, 0, imgW, sH);
-      first = false;
-      yOffset += h;
-    }
+  // Single-page document: use a custom page size that matches the captured
+  // canvas EXACTLY so the export is pixel-identical to the preview with no
+  // blank strip above or below the footer. We never go narrower than A4 width
+  // and never go taller than A4 height (in which case we slice into multiple
+  // A4 pages below).
+  if (imgH <= A4_H + 0.5) {
+    const pageH = Math.max(imgH, 1); // never zero
+    const pdf = new jsPDF({ unit: "mm", format: [A4_W, pageH], compress: true });
+    pdf.addImage(imgData, "JPEG", 0, 0, A4_W, pageH);
+    pdf.save(fileName(template, "pdf"));
+    return;
+  }
+
+  // Multi-page: real A4 pages, slice the canvas at A4 height boundaries.
+  const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
+  const pxPerMm = canvas.width / A4_W;
+  const sliceHpx = Math.floor(A4_H * pxPerMm);
+  const sliceCanvas = document.createElement("canvas");
+  const ctx = sliceCanvas.getContext("2d")!;
+  sliceCanvas.width = canvas.width;
+  let yOffset = 0;
+  let first = true;
+  while (yOffset < canvas.height) {
+    const h = Math.min(sliceHpx, canvas.height - yOffset);
+    sliceCanvas.height = h;
+    ctx.fillStyle = "#FDFBF7";
+    ctx.fillRect(0, 0, sliceCanvas.width, h);
+    ctx.drawImage(canvas, 0, yOffset, canvas.width, h, 0, 0, canvas.width, h);
+    const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.95);
+    if (!first) pdf.addPage();
+    const sH = (h * imgW) / canvas.width;
+    pdf.addImage(sliceData, "JPEG", 0, 0, imgW, sH);
+    first = false;
+    yOffset += h;
   }
   pdf.save(fileName(template, "pdf"));
 }
