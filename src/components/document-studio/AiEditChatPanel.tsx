@@ -1,58 +1,142 @@
 /**
- * AiEditChatPanel
- * ---------------
- * Right-side live AI editor for the Document Studio. The owner types
- * an instruction ("make salary AED 30k", "add 90-day probation clause")
- * and the chat reissues the document via the existing
- * `letter-ai-generate` edge function, replacing the body in-place.
- *
+ * AiEditChatPanel — Live Document Editor (right rail)
+ * ---------------------------------------------------
+ * Owner-side AI co-editor with:
+ *   • Live mic transcription (ElevenLabs Realtime Scribe, VAD)
+ *   • Language selector (input + AI reply language)
+ *   • File attachments (paperclip → images / PDFs as base64 chips)
+ *   • Free-text instruction box ("raise salary to AED 30k", …)
  * The locked premium chrome (header + footer) is never sent to the AI
- * and never returned by it — only the editable body changes.
+ * and never returned — only the editable body changes.
  */
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Sparkles, Loader2, Send } from "lucide-react";
+import {
+  Sparkles, Loader2, Send, Mic, MicOff, Paperclip, X, Globe,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { stripChromeArtifacts } from "@/templates/jbjLockedChrome";
+import { useScribe } from "@elevenlabs/react";
 
-interface Msg {
-  role: "user" | "assistant";
-  content: string;
-}
+interface Msg { role: "user" | "assistant"; content: string }
+interface Attachment { name: string; type: string; dataUrl: string }
 
 interface Props {
-  /** Current editable HTML body — sent to the AI so it can edit in place. */
   currentBody: string;
-  /** The catalog template's AI instructions (steering). */
   aiInstructions: string;
-  /** Apply the AI's revised body back to the editor. */
   onApply: (nextBody: string) => void;
 }
+
+const LANGUAGES: Array<{ code: string; label: string; stt: string }> = [
+  { code: "English",    label: "English",    stt: "eng" },
+  { code: "Arabic",     label: "العربية",    stt: "ara" },
+  { code: "French",     label: "Français",   stt: "fra" },
+  { code: "Spanish",    label: "Español",    stt: "spa" },
+  { code: "Hindi",      label: "हिन्दी",      stt: "hin" },
+  { code: "Urdu",       label: "اردو",       stt: "urd" },
+  { code: "Russian",    label: "Русский",    stt: "rus" },
+  { code: "German",     label: "Deutsch",    stt: "deu" },
+  { code: "Italian",    label: "Italiano",   stt: "ita" },
+  { code: "Portuguese", label: "Português",  stt: "por" },
+  { code: "Chinese",    label: "中文",        stt: "zho" },
+];
 
 export default function AiEditChatPanel({ currentBody, aiInstructions, onApply }: Props) {
   const [messages, setMessages] = useState<Msg[]>([
     {
       role: "assistant",
       content:
-        "I'm your document editor. Tell me what to change — e.g., \"raise the salary to AED 30,000\", \"add a 90-day probation clause\", \"make the tone warmer\".",
+        'I\'m your document editor. Type, dictate (mic), or attach a file — e.g. "raise the salary to AED 30,000", "add a 90-day probation clause", "make the tone warmer".',
     },
   ]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [language, setLanguage] = useState("English");
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
+  const fileRef = useRef<HTMLInputElement>(null);
 
+  /* ───── Mic / ElevenLabs Realtime Scribe ───── */
+  const partialBase = useRef<string>("");
+  const scribe = useScribe({
+    modelId: "scribe_v2_realtime",
+    commitStrategy: "vad",
+    onPartialTranscript: (d: any) => {
+      setInput((partialBase.current + " " + (d?.text || "")).trim());
+    },
+    onCommittedTranscript: (d: any) => {
+      const piece = (d?.text || "").trim();
+      if (!piece) return;
+      partialBase.current = (partialBase.current + " " + piece).trim();
+      setInput(partialBase.current);
+    },
+  });
+
+  const startMic = useCallback(async () => {
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      const { data, error } = await supabase.functions.invoke("elevenlabs-scribe-token");
+      if (error) throw error;
+      if (!data?.token) throw new Error("No token received");
+      partialBase.current = input.trim();
+      await scribe.connect({
+        token: data.token,
+        microphone: { echoCancellation: true, noiseSuppression: true },
+      });
+      toast.success("Listening…");
+    } catch (e: any) {
+      toast.error(e?.message || "Microphone unavailable");
+    }
+  }, [scribe, input]);
+
+  const stopMic = useCallback(async () => {
+    try { await scribe.disconnect(); } catch { /* noop */ }
+  }, [scribe]);
+
+  useEffect(() => () => { try { scribe.disconnect(); } catch { /* noop */ } }, [scribe]);
+
+  /* ───── Attachments ───── */
+  const onPickFiles = () => fileRef.current?.click();
+  const onFilesSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    e.target.value = "";
+    const next: Attachment[] = [];
+    for (const f of files) {
+      if (f.size > 8 * 1024 * 1024) { toast.error(`${f.name} too large (max 8MB)`); continue; }
+      const dataUrl: string = await new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(String(r.result));
+        r.onerror = () => rej(r.error);
+        r.readAsDataURL(f);
+      });
+      next.push({ name: f.name, type: f.type, dataUrl });
+    }
+    if (next.length) setAttachments((a) => [...a, ...next]);
+  };
+  const removeAttachment = (i: number) =>
+    setAttachments((a) => a.filter((_, idx) => idx !== i));
+
+  /* ───── Send ───── */
   const send = async () => {
     const instruction = input.trim();
-    if (!instruction || busy) return;
-    setMessages((m) => [...m, { role: "user", content: instruction }]);
+    if ((!instruction && attachments.length === 0) || busy) return;
+    if (scribe.isConnected) await stopMic();
+
+    setMessages((m) => [...m, {
+      role: "user",
+      content: instruction + (attachments.length ? `\n\n📎 ${attachments.map((a) => a.name).join(", ")}` : ""),
+    }]);
     setInput("");
+    partialBase.current = "";
     setBusy(true);
 
     try {
-      const prompt = [
+      const promptParts = [
         `Steering: ${aiInstructions}`,
+        ``,
+        `Reply in ${language}.`,
         ``,
         `The user is editing an existing document. Current body (plain text):`,
         `"""`,
@@ -64,37 +148,38 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply }
           .trim(),
         `"""`,
         ``,
+        attachments.length
+          ? `Attached files (consider their content): ${attachments.map((a) => `${a.name} (${a.type || "file"})`).join(", ")}`
+          : ``,
+        ``,
         `Apply this instruction and return the FULL revised body:`,
-        instruction,
-      ].join("\n");
+        instruction || "(use attachments to fill the document)",
+      ].filter(Boolean).join("\n");
 
       const { data, error } = await supabase.functions.invoke("letter-ai-generate", {
-        body: { prompt, tone: "formal", language: "English" },
+        body: {
+          prompt: promptParts,
+          tone: "formal",
+          language,
+          attachments: attachments.map((a) => ({ name: a.name, type: a.type, dataUrl: a.dataUrl })),
+        },
       });
       if (error) throw error;
 
-      const newBodyText: string =
-        (data?.body_text || data?.bodyText || "").toString().trim();
-
+      const newBodyText: string = (data?.body_text || data?.bodyText || "").toString().trim();
       if (!newBodyText) throw new Error("No content returned");
 
-      // Convert paragraph-separated text → simple HTML paragraphs
       const html = newBodyText
         .split(/\n{2,}/)
         .map((p) => `<p style="margin:0 0 14px;line-height:1.65;">${p.replace(/\n/g, "<br/>")}</p>`)
         .join("");
 
       onApply(html);
-      setMessages((m) => [
-        ...m,
-        { role: "assistant", content: "Done — the document has been updated. Anything else?" },
-      ]);
+      setAttachments([]);
+      setMessages((m) => [...m, { role: "assistant", content: "Done — the document has been updated. Anything else?" }]);
     } catch (e: any) {
       toast.error(e?.message || "AI edit failed");
-      setMessages((m) => [
-        ...m,
-        { role: "assistant", content: "I couldn't apply that change. Try rephrasing the instruction." },
-      ]);
+      setMessages((m) => [...m, { role: "assistant", content: "I couldn't apply that change. Try rephrasing." }]);
     } finally {
       setBusy(false);
     }
@@ -102,17 +187,29 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply }
 
   return (
     <div className="flex flex-col h-full bg-[#FDFBF7] border border-[#B89555]/25 rounded-xl">
-      <div className="px-4 py-3 border-b border-[#B89555]/20 flex items-center gap-2">
+      <div className="px-3 py-2.5 border-b border-[#B89555]/20 flex items-center gap-2">
         <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
         <span className="text-sm font-semibold text-[#1A1A1A]">Live Document Editor</span>
+        <div className="ml-auto flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70">
+          <Globe className="w-3.5 h-3.5" />
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="bg-[#F7F2EA] border border-[#B89555]/30 rounded px-1.5 py-0.5 text-[11px] text-[#1A1A1A] outline-none cursor-pointer"
+          >
+            {LANGUAGES.map((l) => (
+              <option key={l.code} value={l.code}>{l.label}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 min-h-[280px]">
+      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3 min-h-[240px]">
         {messages.map((m, i) => (
           <div
             key={i}
             className={[
-              "text-sm rounded-lg px-3 py-2 max-w-[92%]",
+              "text-sm rounded-lg px-3 py-2 max-w-[92%] whitespace-pre-wrap",
               m.role === "assistant"
                 ? "bg-[#F7F2EA] border border-[#B89555]/20 text-[#1A1A1A] mr-auto"
                 : "bg-[#EFE6D6] border border-[#B89555]/30 text-[#1A1A1A] ml-auto",
@@ -128,23 +225,63 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply }
         )}
       </div>
 
+      {attachments.length > 0 && (
+        <div className="px-3 pt-2 flex flex-wrap gap-1.5">
+          {attachments.map((a, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center gap-1 text-[11px] bg-[#F7F2EA] border border-[#B89555]/30 text-[#1A1A1A] rounded-full px-2 py-0.5"
+            >
+              📎 {a.name.length > 22 ? a.name.slice(0, 20) + "…" : a.name}
+              <button onClick={() => removeAttachment(i)} className="ml-0.5 hover:text-red-600" aria-label="Remove">
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+
       <div className="p-3 border-t border-[#B89555]/20 space-y-2">
         <Textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Tell the editor what to change…"
+          placeholder={scribe.isConnected ? "Listening… speak now" : "Tell the editor what to change…"}
           rows={3}
           className="text-sm resize-none"
           onKeyDown={(e) => {
-            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-              e.preventDefault();
-              send();
-            }
+            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); send(); }
           }}
         />
-        <Button onClick={send} disabled={busy || !input.trim()} className="w-full" size="sm">
-          <Send className="w-4 h-4 mr-2" /> Apply with AI
-        </Button>
+        <div className="flex items-center gap-1.5">
+          <input
+            ref={fileRef}
+            type="file"
+            multiple
+            accept="image/*,application/pdf,.doc,.docx,.txt"
+            onChange={onFilesSelected}
+            className="hidden"
+          />
+          <Button type="button" variant="outline" size="sm" onClick={onPickFiles} title="Attach files">
+            <Paperclip className="w-4 h-4" />
+          </Button>
+          <Button
+            type="button"
+            variant={scribe.isConnected ? "destructive" : "outline"}
+            size="sm"
+            onClick={scribe.isConnected ? stopMic : startMic}
+            title={scribe.isConnected ? "Stop dictation" : "Start dictation"}
+          >
+            {scribe.isConnected ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+          </Button>
+          <Button
+            onClick={send}
+            disabled={busy || (!input.trim() && attachments.length === 0)}
+            className="flex-1"
+            size="sm"
+          >
+            <Send className="w-4 h-4 mr-2" /> Apply with AI
+          </Button>
+        </div>
       </div>
     </div>
   );
