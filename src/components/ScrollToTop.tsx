@@ -14,16 +14,22 @@ export const ScrollToTopOnMount = () => {
   return null;
 };
 
-// Floating "Back to Top" button
+// Floating "Back to Top" button — hidden on internal owner/admin workspaces
 export const ScrollToTopButton = () => {
+  const { pathname } = useLocation();
   const [isVisible, setIsVisible] = useState(false);
+
+  const internal =
+    pathname.startsWith("/owner") ||
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/broker") ||
+    pathname.startsWith("/developers-portal") ||
+    pathname.startsWith("/developer-hub");
 
   useEffect(() => {
     const toggleVisibility = () => {
-      // Show button when page is scrolled down 400px
       setIsVisible(window.scrollY > 400);
     };
-
     window.addEventListener("scroll", toggleVisibility);
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
@@ -34,6 +40,8 @@ export const ScrollToTopButton = () => {
       behavior: "smooth",
     });
   };
+
+  if (internal) return null;
 
   return (
     <AnimatePresence>
