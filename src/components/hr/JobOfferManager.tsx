@@ -102,7 +102,7 @@ const JobOfferManager = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm('Are you sure you want to delete this job offer?')) {
+    if (confirm('Are you sure you want to delete this template?')) {
       await deleteJobOffer(id);
     }
   };
@@ -229,7 +229,7 @@ const JobOfferManager = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>Upload Job Offer Document (PDF/DOCX)</Label>
+                <Label>Upload Template Document (PDF/DOCX)</Label>
                 <div className="flex items-center gap-3">
                   <Input 
                     type="file"
@@ -260,7 +260,7 @@ const JobOfferManager = () => {
                   variant="primary"
                   disabled={!formData.position_title}
                 >
-                  {editingOffer ? 'Update' : 'Create'} Job Offer
+                  {editingOffer ? 'Update' : 'Create'} Template
                 </Button>
               </div>
             </div>
@@ -300,10 +300,10 @@ const JobOfferManager = () => {
                 <CardContent className="py-12 text-center">
                   <Briefcase className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-foreground mb-2">
-                    No job offers for {dept}
+                    No templates found for {dept}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Create your first job offer template for this department
+                    Create your first template for this department
                   </p>
                   <Button 
                     onClick={() => {
@@ -313,7 +313,7 @@ const JobOfferManager = () => {
                     variant="primary"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Add Job Offer
+                    Add Template
                   </Button>
                 </CardContent>
               </Card>
