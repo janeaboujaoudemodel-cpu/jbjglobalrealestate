@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useHRJobOffers, DEPARTMENTS, JobOffer } from '@/hooks/useHRJobOffers';
+import { useHRJobOffers, DEPARTMENTS, TEMPLATE_TYPES, JobOffer } from '@/hooks/useHRJobOffers';
 import { 
   Plus, Upload, FileText, Trash2, Edit2, Eye, 
   Briefcase, DollarSign, CheckCircle2 
