@@ -488,22 +488,27 @@ function StudioShell({
       }
     } catch {}
 
-    // ── One-shot prefill from an external bridge (CV Center → candidate_cv, etc.)
-    // Overrides snapshot fields with applicant data and forces step 2.
+    // ── One-shot prefill from an external bridge.
+    // Only valid, current templates may open Document Studio. Removed templates
+    // are cleared so they cannot leave the left sidebar empty.
     try {
       const PREFILL_KEY = `jbj:doc-studio:prefill:${catalog}`;
       const raw = sessionStorage.getItem(PREFILL_KEY);
       if (raw) {
         const p = JSON.parse(raw);
-        if (p?.templateId && getTemplateById(p.templateId)?.audience === catalog) {
+        const validPrefillTemplate = p?.templateId && getTemplateById(p.templateId)?.audience === catalog;
+        if (validPrefillTemplate) {
           setTemplateId(p.templateId);
+          if (p?.fields && typeof p.fields === "object") {
+            setFields((cur) => ({ ...cur, ...p.fields }));
+          }
+          setStep(2);
+          toast.success("Applicant loaded", { description: "Details pre-filled in the Studio." });
+        } else {
+          setTemplateId("");
+          setStep(1);
         }
-        if (p?.fields && typeof p.fields === "object") {
-          setFields((cur) => ({ ...cur, ...p.fields }));
-        }
-        setStep(2);
         sessionStorage.removeItem(PREFILL_KEY);
-        toast.success("Applicant loaded", { description: "CV pre-filled in the Studio." });
       }
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
