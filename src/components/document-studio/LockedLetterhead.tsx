@@ -20,13 +20,13 @@ export function LockedLetterhead() {
     >
       <div
         className="grid items-center min-w-0"
-        style={{ gridTemplateColumns: "160px 1px minmax(0,1fr)", columnGap: 24, minHeight: 132 }}
+        style={{ gridTemplateColumns: "184px 1px minmax(0,1fr)", columnGap: 26, minHeight: 152 }}
       >
         <img
           src={jbjMonogramSrc}
           alt="JBJ"
           className="block object-contain mx-auto"
-          style={{ width: 132, height: 132, background: "transparent" }}
+          style={{ width: 160, height: 160, background: "transparent" }}
         />
         {/* Vertical gold hairline divider between monogram and wordmark */}
         <div
