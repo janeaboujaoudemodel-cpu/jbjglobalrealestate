@@ -57,6 +57,7 @@ import {
   type CustomField,
 } from "@/templates/composers";
 import { renderStandardBody } from "@/templates/composers/standardBody";
+import { useCrmDocuments, useSaveDocument } from "@/hooks/useCrmDocuments";
 
 interface Props {
   catalog: DocumentAudience;
@@ -409,6 +410,62 @@ function StudioShell({
       setSavingTemplate(false);
     }
   };
+
+  /* ── Generated Documents library (crm_documents) ─────────────────── */
+  const { data: allDocs = [] } = useCrmDocuments("all");
+  const saveDocMutation = useSaveDocument();
+  const [currentDocId, setCurrentDocId] = useState<string | undefined>(undefined);
+  const docsForTemplate = useMemo(
+    () => (template ? allDocs.filter((d) => d.template_id === template.id) : []),
+    [allDocs, template],
+  );
+
+  const handleSaveDocument = async () => {
+    if (!template) { toast.error("Pick a template first"); return; }
+    // Derive booking id (chained, server-side) if not already in field_values.
+    let booking_id = (fields.booking_id || fields.bookingRef || "").trim();
+    if (!booking_id) {
+      const prefix =
+        template.id === "holiday_home_agreement" ? "JBJ-HH" :
+        template.id === "commission_agreement"   ? "JBJ-CA" :
+        template.id === "property_advertising_agreement" ? "JBJ-PAA" :
+        "JBJ-DOC";
+      try {
+        const { data, error } = await (supabase as any).rpc("next_booking_id", { prefix });
+        if (!error && data) booking_id = String(data);
+      } catch { /* fall back to client gen below */ }
+      if (!booking_id) booking_id = `${"JBJ-DOC"}-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+    }
+    const nextFields = { ...fields, booking_id };
+    setFields(nextFields);
+    const title =
+      (fields.guest_name || fields.client_name || fields.full_name || "Untitled") +
+      ` — ${template.label} (${booking_id})`;
+    try {
+      const saved = await saveDocMutation.mutateAsync({
+        id: currentDocId,
+        template_id: template.id,
+        title,
+        field_values: nextFields,
+        client_name: fields.guest_name || fields.client_name || null,
+        client_email: fields.guest_email || fields.client_email || null,
+        client_phone: fields.guest_phone || fields.client_phone || null,
+      });
+      setCurrentDocId(saved.id);
+    } catch (e: any) {
+      // toast already shown by hook
+    }
+  };
+
+  const loadCrmDocument = (d: { id: string; field_values: Record<string, string>; template_id: string; title: string }) => {
+    setTemplateId(d.template_id);
+    setFields(d.field_values || {});
+    setCurrentDocId(d.id);
+    setStep(2);
+    toast.success(`Loaded "${d.title}"`);
+  };
+
+
 
   // AI auto-fill from pasted details / attached document.
   const [autoFillText, setAutoFillText] = useState("");
@@ -881,6 +938,20 @@ function StudioShell({
               <span className="hidden lg:inline">Save Template</span>
             </Button>
           )}
+          {template && (
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={handleSaveDocument}
+              disabled={saveDocMutation.isPending}
+              title="Save this filled document to My Documents"
+            >
+              {saveDocMutation.isPending
+                ? <Loader2 className="w-4 h-4 lg:mr-1.5 animate-spin" />
+                : <FileText className="w-4 h-4 lg:mr-1.5" />}
+              <span className="hidden lg:inline">{currentDocId ? "Update" : "Save Document"}</span>
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="sm"
@@ -1099,6 +1170,32 @@ function StudioShell({
                     </div>
                   </Field>
                 )}
+
+                {docsForTemplate.length > 0 && (
+                  <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 space-y-1.5">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold mb-1 flex items-center justify-between">
+                      <span>My Documents · {template.label}</span>
+                      <span className="text-[#B89555]">{docsForTemplate.length}</span>
+                    </div>
+                    {docsForTemplate.slice(0, 12).map((d) => {
+                      const bid = (d.field_values as any)?.booking_id;
+                      const isCurrent = d.id === currentDocId;
+                      return (
+                        <button
+                          key={d.id}
+                          type="button"
+                          onClick={() => loadCrmDocument(d as any)}
+                          className={`w-full text-left text-[12px] truncate px-1.5 py-1 rounded ${isCurrent ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-[#EFE6D6]/60"}`}
+                          title={d.title}
+                        >
+                          <div className="truncate">{d.client_name || d.title}</div>
+                          {bid && <div className="text-[10px] text-[#1A1A1A]/55 font-mono tracking-tight">{bid}</div>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
 
                 {savedTemplates.filter((s) => s.base_template_id === template.id).length > 0 && (
                   <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 space-y-1.5">
