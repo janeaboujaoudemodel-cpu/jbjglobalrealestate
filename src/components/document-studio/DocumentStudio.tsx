@@ -1990,9 +1990,7 @@ function StudioShell({
                 const BODY_PAD_X = 64;
                 // DocuSign stamps the envelope ID in the top ~0.4in of every
                 // page when the document is processed for signature. Reserve a
-                // 42px safe band on every page so the stamp never overlays the
-                // letterhead, date, or body content.
-                const DOCUSIGN_TOP_RESERVE = 42;
+                // safe band on every page so the stamp never overlays content.
                 const FIRST_TOP = 46;
                 // GLOBAL: equal interior top/bottom on inner pages. Safe band
                 // and footer reserve are handled separately.
@@ -2011,8 +2009,8 @@ function StudioShell({
                   tpl.innerHTML = html;
                   const groups = Array.from(
                     tpl.content.querySelectorAll<HTMLElement>("[data-pdf-page]"),
-                  ).map((el) => el.innerHTML);
-                  return groups.length ? groups : [html];
+                  ).map((el) => stripGeneratedPageArtifacts(el.innerHTML));
+                  return groups.length ? groups : [stripGeneratedPageArtifacts(html)];
                 };
 
                 // Prefer measured auto-pagination (global rule). Fall back
@@ -2037,7 +2035,9 @@ function StudioShell({
                         const isLast = pageIndex === pageCount - 1;
                         const topPad = isFirst ? FIRST_TOP : NEXT_TOP;
                         const bottomPad = isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD;
-                        const groupHtml = pageGroups[pageIndex] ?? "";
+                        const userSignatureName = fields.recipientName || fields.full_name || fields.client_name || fields.guest_name || "";
+                        const groupHtml = stripGeneratedPageArtifacts(pageGroups[pageIndex] ?? "");
+                        const groupHtmlWithSignature = `${groupHtml}${renderPerPageUserSignature(userSignatureName)}`;
 
                         return (
                           <div key={`page-${pageIndex}`} className="flex flex-col items-center gap-2" style={{ width: PAGE_W * effectiveScale }}>
@@ -2098,7 +2098,7 @@ function StudioShell({
                                   justifyContent: "flex-start",
                                 }}
                               >
-                                {groupHtml ? (
+                                {groupHtmlWithSignature ? (
                                   <div
                                     className="prose prose-base max-w-none text-[#1A1A1A] jbj-doc-body"
                                     data-page-index={pageIndex}
@@ -2125,7 +2125,7 @@ function StudioShell({
                                       setUserEdited(true);
                                       setBodyHtml(`<section data-pdf-page="1">${next}</section>${others}`);
                                     }}
-                                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(groupHtml) }}
+                                      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(groupHtmlWithSignature) }}
                                   />
                                 ) : (
                                   <div className="text-[12px] text-[#1A1A1A]/40 italic">
