@@ -476,6 +476,33 @@ function StudioShell({
     toast.success(`Loaded "${d.title}"`);
   };
 
+  /* ── Global document action picker (Preview / Edit / Delete) ─────── */
+  const { data: deletedDocs = [] } = useCrmDocumentsDeleted();
+  const softDeleteDoc = useSoftDeleteDocument();
+  const restoreDoc = useRestoreDocument();
+  const hardDeleteDoc = useHardDeleteDocument();
+  const [pickerDoc, setPickerDoc] = useState<CrmDocument | null>(null);
+  const [previewDoc, setPreviewDoc] = useState<CrmDocument | null>(null);
+  const [showDeleted, setShowDeleted] = useState(false);
+
+  const openActionSheet = (d: CrmDocument) => setPickerDoc(d);
+  const handlePreview = (id: string) => {
+    const d = allDocs.find((x) => x.id === id);
+    if (d) setPreviewDoc(d);
+  };
+  const handleEditFromPicker = (id: string) => {
+    const d = allDocs.find((x) => x.id === id);
+    if (d) loadCrmDocument(d as any);
+  };
+  const handleSoftDelete = async (id: string) => {
+    await softDeleteDoc.mutateAsync(id);
+    toast.success("Moved to Recently Deleted", {
+      action: { label: "Undo", onClick: () => restoreDoc.mutate(id) },
+      duration: 5000,
+    });
+  };
+
+
 
 
   // AI auto-fill from pasted details / attached document.
