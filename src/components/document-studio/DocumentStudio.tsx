@@ -363,10 +363,8 @@ function StudioShell({
           } else {
             current.push(it.html);
           }
-          if (pages.length + 1 >= MAX_PAGES) {
-            for (let j = i + 1; j < items.length; j++) current.push(items[j].html);
-            break;
-          }
+          // No page cap — document grows to as many pages as content needs.
+
         }
         if (current.length) pages.push(current);
         const groups = pages.map((p) => p.join(""));
