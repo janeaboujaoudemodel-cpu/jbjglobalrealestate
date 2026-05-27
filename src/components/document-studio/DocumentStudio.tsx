@@ -186,15 +186,17 @@ function StudioShell({
 
   // Auto-fit preview: scale the fixed 816-wide A4 page down to whatever
   // width the center pane has so it never overflows horizontally.
-  // The page MIN-height is A4 (1154 × pageCount), but it can grow taller
-  // when the body content needs more space — the PDF exporter slices the
-  // resulting tall canvas into A4 pages so the export still paginates.
+  // Pagination is driven by the BODY content's natural scrollHeight only —
+  // never by the outer page height — otherwise minHeight feeds back into
+  // the measurement and pageCount explodes (the old "Page X of 20410" bug).
   const PAGE_W = 816;
   const PAGE_H = 1154; // A4 ratio @ 96dpi (one page)
+  const MAX_PAGES = 20; // hard safety cap so a measurement glitch can never run away
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
-  const [measuredPageH, setMeasuredPageH] = useState(PAGE_H);
+  const [measuredBodyH, setMeasuredBodyH] = useState(0);
   useEffect(() => {
     const wrap = previewWrapRef.current;
     if (!wrap) return;
@@ -210,14 +212,14 @@ function StudioShell({
     return () => ro.disconnect();
   }, []);
   useEffect(() => {
-    const page = pageRef.current;
-    if (!page) return;
-    const update = () => setMeasuredPageH(page.offsetHeight || PAGE_H);
+    const body = bodyRef.current;
+    if (!body) return;
+    const update = () => setMeasuredBodyH(body.scrollHeight || 0);
     update();
     const ro = new ResizeObserver(update);
-    ro.observe(page);
+    ro.observe(body);
     return () => ro.disconnect();
-  });
+  }, []);
   const effectiveScale = (zoom / 100) * fitScale;
 
 
@@ -1592,18 +1594,19 @@ function StudioShell({
           <div className="min-h-full flex justify-center py-10 px-4">
             {template ? (
               (() => {
-                // Visual A4 pagination — pageCount = 1 unless content TRULY
-                // overflows the first A4 sheet. The previous formula always
-                // produced 2+ pages even on an empty body because the
-                // numerator counted body padding that the denominator had
-                // already subtracted. We now compare ACTUAL content against
-                // the per-page content budget.
+                // Visual A4 pagination — driven by the body's natural
+                // scrollHeight (measuredBodyH) so the outer page minHeight
+                // can never feed back into the page count.
                 const HEADER_H = 132 + 24; // letterhead block + padding
                 const FOOTER_H = 96;       // locked footer band
-                const BODY_PAD = 80;       // 40px top + 40px bottom inside body
-                const contentPerPage = Math.max(200, PAGE_H - HEADER_H - FOOTER_H - BODY_PAD);
-                const usedBody = Math.max(0, measuredPageH - HEADER_H - FOOTER_H - BODY_PAD);
-                const pageCount = Math.max(1, Math.ceil(usedBody / contentPerPage) || 1);
+                const BODY_PAD_TOP = 40;
+                const BODY_PAD_BOTTOM = 56; // generous bottom padding so nothing looks cropped
+                const contentPerPage = Math.max(
+                  200,
+                  PAGE_H - HEADER_H - FOOTER_H - BODY_PAD_TOP - BODY_PAD_BOTTOM,
+                );
+                const rawCount = Math.max(1, Math.ceil(measuredBodyH / contentPerPage) || 1);
+                const pageCount = Math.min(MAX_PAGES, rawCount);
                 // Sheet height grows in whole A4 multiples ONLY when needed.
                 const minH = PAGE_H * pageCount;
 
@@ -1629,10 +1632,11 @@ function StudioShell({
                     >
                       <LockedLetterhead />
                       <div
+                        ref={bodyRef}
                         className="relative flex-1"
                         style={{
                           background: "#FDFBF7",
-                          padding: "40px 56px",
+                          padding: "40px 56px 56px 56px",
                         }}
                       >
 
@@ -1700,10 +1704,10 @@ function StudioShell({
 
                     {/* Page-break overlays — SIBLING of pageRef so they are NEVER captured
                         into the exported PDF (html2canvas only sees pageRef). Rendered
-                        as scaled gap-bands that visually separate one canvas into A4 sheets. */}
+                        as thin gap-bands that visually separate one canvas into A4 sheets. */}
                     {pageCount > 1 && Array.from({ length: pageCount - 1 }).map((_, i) => {
-                      const y = (HEADER_H + contentPerPage * (i + 1)) * effectiveScale;
-                      const bandH = 22; // visual gap between sheets in screen px
+                      const y = PAGE_H * (i + 1) * effectiveScale;
+                      const bandH = 12; // thinner, cleaner gap
                       return (
                         <div
                           key={`pb-${i}`}
@@ -1713,12 +1717,12 @@ function StudioShell({
                             top: y - bandH / 2,
                             height: bandH,
                             background: "#F0E8D8",
-                            boxShadow:
-                              "inset 0 8px 10px -8px rgba(0,0,0,0.25), inset 0 -8px 10px -8px rgba(0,0,0,0.25)",
+                            borderTop: "1px solid rgba(184,149,85,0.35)",
+                            borderBottom: "1px solid rgba(184,149,85,0.35)",
                           }}
                         >
                           <div
-                            className="text-[10px] font-semibold uppercase px-2 py-[2px] rounded-sm"
+                            className="text-[9px] font-semibold uppercase px-1.5 py-[1px] rounded-sm"
                             style={{
                               background: "#FDFBF7",
                               color: "#1A1A1A",
@@ -1726,7 +1730,7 @@ function StudioShell({
                               letterSpacing: "0.18em",
                             }}
                           >
-                            Page {i + 2} of {pageCount}
+                            Page {i + 2} / {pageCount}
                           </div>
                         </div>
                       );
@@ -1743,7 +1747,7 @@ function StudioShell({
                           letterSpacing: "0.18em",
                         }}
                       >
-                        Page 1 of {pageCount}
+                        Page 1 / {pageCount}
                       </div>
                     )}
                   </div>

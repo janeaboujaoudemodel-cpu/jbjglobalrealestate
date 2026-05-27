@@ -68,6 +68,7 @@ const staticEntries: SitemapEntry[] = [
   { path: "/golden-visa-guide", changefreq: "monthly", priority: "0.78" },
   { path: "/faq", changefreq: "monthly", priority: "0.75" },
   { path: "/quiz", changefreq: "monthly", priority: "0.72" },
+  { path: "/cv-builder", changefreq: "monthly", priority: "0.70" },
   // Hubs
   { path: "/investor-hub", changefreq: "weekly", priority: "0.82" },
   { path: "/developer-hub", changefreq: "weekly", priority: "0.80" },
