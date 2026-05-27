@@ -1171,6 +1171,32 @@ function StudioShell({
                   </Field>
                 )}
 
+                {docsForTemplate.length > 0 && (
+                  <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 space-y-1.5">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold mb-1 flex items-center justify-between">
+                      <span>My Documents · {template.label}</span>
+                      <span className="text-[#B89555]">{docsForTemplate.length}</span>
+                    </div>
+                    {docsForTemplate.slice(0, 12).map((d) => {
+                      const bid = (d.field_values as any)?.booking_id;
+                      const isCurrent = d.id === currentDocId;
+                      return (
+                        <button
+                          key={d.id}
+                          type="button"
+                          onClick={() => loadCrmDocument(d as any)}
+                          className={`w-full text-left text-[12px] truncate px-1.5 py-1 rounded ${isCurrent ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-[#EFE6D6]/60"}`}
+                          title={d.title}
+                        >
+                          <div className="truncate">{d.client_name || d.title}</div>
+                          {bid && <div className="text-[10px] text-[#1A1A1A]/55 font-mono tracking-tight">{bid}</div>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+
                 {savedTemplates.filter((s) => s.base_template_id === template.id).length > 0 && (
                   <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 space-y-1.5">
                     <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold mb-1">
