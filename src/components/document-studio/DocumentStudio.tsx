@@ -1005,6 +1005,20 @@ function StudioShell({
         isolation: "isolate",
       }}
     >
+      <style>{`
+        [data-document-studio-overlay] .border,
+        [data-document-studio-overlay] [class*="border-"] {
+          border-color: rgba(184, 149, 85, 0.58) !important;
+        }
+        [data-document-studio-overlay] input,
+        [data-document-studio-overlay] textarea,
+        [data-document-studio-overlay] button[role="combobox"] {
+          border-color: rgba(184, 149, 85, 0.72) !important;
+        }
+        [data-document-studio-overlay] [data-document-page="true"] {
+          border-color: rgba(184, 149, 85, 0.42) !important;
+        }
+      `}</style>
       {/* ─── Topbar ─── */}
       <div className="shrink-0 min-h-16 border-b border-[#B89555]/55 bg-[#FDFBF7] flex items-center px-5 gap-4">
         <div className="flex items-center gap-2">
