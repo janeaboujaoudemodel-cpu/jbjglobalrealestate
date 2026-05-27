@@ -1629,156 +1629,121 @@ function StudioShell({
           )}
         </aside>
 
-        {/* CENTER — A4 PREVIEW (auto-fit, paginated) */}
+        {/* CENTER — A4 PREVIEW (fixed A4 sheets, smart-cropped) */}
         <main ref={previewWrapRef} className="flex-1 min-w-0 bg-[#F0E8D8] overflow-auto relative">
           <div className="min-h-full flex justify-center py-10 px-4">
             {template ? (
               (() => {
-                // Natural-height document: header + body + footer stay in normal
-                // flow, so the footer sits directly after the signature instead
-                // of being pushed to the bottom of a fake long page.
-                const autoPages = Math.max(1, Math.ceil(sheetH / PAGE_H) || 1);
-                const pageCount = Math.min(MAX_PAGES, autoPages + manualPages);
-                const canvasH = Math.max(sheetH, PAGE_H * pageCount);
-                const snapBreak = (target: number) => {
+                const BODY_PAD_X = 56;
+                const FIRST_TOP = 48;
+                const NEXT_TOP = 64;
+                const BOTTOM_PAD = 72;
+                const FOOTER_GAP = 18;
+                const footerReserve = chromeHeights.footer + FOOTER_GAP;
+                const bodyWidth = PAGE_W - BODY_PAD_X * 2;
+                const firstCapacity = Math.max(160, PAGE_H - chromeHeights.header - FIRST_TOP - BOTTOM_PAD - footerReserve);
+                const nextCapacity = Math.max(160, PAGE_H - NEXT_TOP - BOTTOM_PAD - footerReserve);
+                const bodyHeight = Math.max(1, sheetH || 1);
+                const snapBreak = (start: number, target: number, capacity: number) => {
+                  if (target >= bodyHeight) return bodyHeight;
                   const safeTarget = target - SAFE_GUTTER;
-                  const candidate = [...smartBreaks].reverse().find((y) => y <= safeTarget && y >= target - 220);
-                  return candidate ?? target;
+                  const minProgress = start + capacity * 0.42;
+                  const candidate = [...smartBreaks].reverse().find((y) => y <= safeTarget && y >= minProgress);
+                  return candidate && candidate > start + 24 ? candidate : Math.min(target, bodyHeight);
                 };
+                const starts = [0];
+                const ends: number[] = [];
+                let cursor = 0;
+                for (let i = 0; i < MAX_PAGES && cursor < bodyHeight; i += 1) {
+                  const capacity = i === 0 ? firstCapacity : nextCapacity;
+                  const end = i === MAX_PAGES - 1 ? bodyHeight : snapBreak(cursor, cursor + capacity, capacity);
+                  ends.push(end);
+                  cursor = end;
+                  if (cursor < bodyHeight) starts.push(cursor);
+                }
+                const autoPages = Math.max(1, Math.min(MAX_PAGES, ends.length || 1));
+                const pageCount = Math.min(MAX_PAGES, autoPages + manualPages);
 
                 return (
                   <div className="flex flex-col items-center gap-4" style={{ width: PAGE_W * effectiveScale, flexShrink: 0 }}>
-                    <div style={{ width: PAGE_W * effectiveScale, height: canvasH * effectiveScale, position: "relative" }}>
-                      <div
-                        ref={pageRef}
-                        className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20 relative"
-                        style={{
-                          width: PAGE_W,
-                          minHeight: canvasH,
-                          transform: `scale(${effectiveScale})`,
-                          transformOrigin: "top left",
-                          background: "#FDFBF7",
-                        }}
-                      >
+                    <div ref={pageRef} className="flex flex-col gap-7" data-document-pages="true">
+                      <div aria-hidden className="fixed left-[-10000px] top-0 pointer-events-none opacity-0" style={{ width: PAGE_W }}>
                         <div ref={headerRef}><LockedLetterhead /></div>
-                        <div
-                          ref={bodyRef}
-                          className="relative"
-                          style={{
-                            background: "#FDFBF7",
-                            padding: "48px 56px 72px 56px",
-                            minHeight: Math.max(420, canvasH - 252),
-                          }}
-                        >
-
-                          {bodyHtml ? (
-                            <EditableBody
-                              html={bodyHtml}
-                              onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
-                            />
-                          ) : (
-                            <div className="text-[12px] text-[#1A1A1A]/40 italic">
-                              Empty document — type here or use the AI assistant on the right to draft the body.
-                            </div>
-                          )}
-
-                        {marks.showDate !== false && (
-                          <DraggableMark
-                            x={marks.dateXY?.x ?? 556}
-                            y={marks.dateXY?.y ?? 8}
-                            onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))}
-                            onRemove={() => removeMark("date")}
-                            ariaLabel="Date"
-                          >
-                            <div
-                              className="text-[11px] uppercase"
-                              style={{
-                                color: "#1A1A1A",
-                                opacity: 0.42,
-                                letterSpacing: "0.22em",
-                                fontVariantNumeric: "tabular-nums",
-                                textShadow: "0 1px 0 rgba(255,255,255,0.65)",
-                              }}
-                            >
-                              {new Date(marks.dateValue || ownerDate || new Date().toISOString().slice(0,10))
-                                .toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
-                            </div>
-                          </DraggableMark>
-                        )}
-
-                        {marks.signature && (
-                          <DraggableMark
-                            x={marks.signatureXY?.x ?? 0}
-                            y={marks.signatureXY?.y ?? 420}
-                            onChange={(x, y) => setMarks((m) => ({ ...m, signatureXY: { x, y } }))}
-                            onRemove={() => removeMark("signature")}
-                            ariaLabel="Authorised signature"
-                          >
-                            <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 240 }} className="block pointer-events-none" />
-                          </DraggableMark>
-                        )}
-
-                        {marks.stamp && (
-                          <DraggableMark
-                            x={marks.stampXY?.x ?? 260}
-                            y={marks.stampXY?.y ?? 440}
-                            onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
-                            onRemove={() => removeMark("stamp")}
-                            ariaLabel="Stamp"
-                          >
-                            <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 180, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, opacity: 0.92 }} className="block pointer-events-none" />
-                          </DraggableMark>
-                        )}
-                        </div>
+                        <div ref={bodyRef} className="prose prose-sm max-w-none text-[#1A1A1A]" style={{ width: bodyWidth, fontFamily: "Inter, system-ui, sans-serif", lineHeight: 1.7, fontSize: 14 }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(bodyHtml || "") }} />
                         <div ref={footerRef}><LockedFooter /></div>
                       </div>
 
-                      {/* Page-break overlays — sibling of pageRef, so export captures only the document. */}
-                      {pageCount > 1 && Array.from({ length: pageCount - 1 }).map((_, i) => {
-                      const y = snapBreak(PAGE_H * (i + 1)) * effectiveScale;
-                      const bandH = 12; // thinner, cleaner gap
-                      return (
-                        <div
-                          key={`pb-${i}`}
-                          aria-hidden
-                          className="absolute left-0 right-0 pointer-events-none select-none flex items-center justify-center"
-                          style={{
-                            top: y - bandH / 2,
-                            height: bandH,
-                            background: "#F0E8D8",
-                            borderTop: "1px solid rgba(184,149,85,0.35)",
-                            borderBottom: "1px solid rgba(184,149,85,0.35)",
-                          }}
-                        >
-                          <div
-                            className="text-[9px] font-semibold uppercase px-1.5 py-[1px] rounded-sm"
-                            style={{
-                              background: "#FDFBF7",
-                              color: "#1A1A1A",
-                              border: "1px solid #B89555",
-                              letterSpacing: "0.18em",
-                            }}
-                          >
-                            Page {i + 2} / {pageCount}
-                          </div>
-                        </div>
-                      );
-                      })}
+                      {Array.from({ length: pageCount }).map((_, pageIndex) => {
+                        const isManualBlank = pageIndex >= autoPages;
+                        const isFirst = pageIndex === 0;
+                        const isLastContentPage = !isManualBlank && pageIndex === autoPages - 1;
+                        const pageStart = starts[pageIndex] ?? 0;
+                        const pageEnd = ends[pageIndex] ?? pageStart;
+                        const topPad = isFirst ? FIRST_TOP : NEXT_TOP;
+                        const contentLimit = Math.max(120, PAGE_H - (isFirst ? chromeHeights.header : 0) - topPad - BOTTOM_PAD - (isLastContentPage ? footerReserve : 0));
+                        const sliceH = Math.max(0, Math.min(pageEnd - pageStart, contentLimit));
 
-                      {pageCount > 1 && (
-                        <div
-                          aria-hidden
-                          className="absolute right-2 top-2 px-2 py-[2px] rounded-sm text-[10px] font-semibold uppercase pointer-events-none"
-                          style={{
-                            background: "#FDFBF7",
-                            color: "#1A1A1A",
-                            border: "1px solid #B89555",
-                            letterSpacing: "0.18em",
-                          }}
-                        >
-                          Page 1 / {pageCount}
-                        </div>
-                      )}
+                        return (
+                          <div key={`page-${pageIndex}`} style={{ width: PAGE_W * effectiveScale, height: PAGE_H * effectiveScale, position: "relative" }}>
+                            <div
+                              data-document-page="true"
+                              data-page-number={pageIndex + 1}
+                              className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20 relative"
+                              style={{
+                                width: PAGE_W,
+                                height: PAGE_H,
+                                transform: `scale(${effectiveScale})`,
+                                transformOrigin: "top left",
+                                background: "#FDFBF7",
+                              }}
+                            >
+                              {isFirst && <LockedLetterhead />}
+                              <div style={{ padding: `${topPad}px ${BODY_PAD_X}px ${BOTTOM_PAD}px ${BODY_PAD_X}px`, background: "#FDFBF7" }}>
+                                {!isManualBlank && sliceH > 0 ? (
+                                  <div style={{ width: bodyWidth, height: sliceH, overflow: "hidden", position: "relative" }}>
+                                    <div style={{ transform: `translateY(${-pageStart}px)`, transformOrigin: "top left", position: "relative", minHeight: bodyHeight }}>
+                                      {bodyHtml ? (
+                                        <EditableBody
+                                          html={bodyHtml}
+                                          onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
+                                        />
+                                      ) : (
+                                        <div className="text-[12px] text-[#1A1A1A]/40 italic">
+                                          Empty document — type here or use the AI assistant on the right to draft the body.
+                                        </div>
+                                      )}
+
+                                      {marks.showDate !== false && (
+                                        <DraggableMark x={marks.dateXY?.x ?? 556} y={marks.dateXY?.y ?? 8} onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))} onRemove={() => removeMark("date")} ariaLabel="Date">
+                                          <div className="text-[11px] uppercase" style={{ color: "#1A1A1A", opacity: 0.42, letterSpacing: "0.22em", fontVariantNumeric: "tabular-nums", textShadow: "0 1px 0 rgba(255,255,255,0.65)" }}>
+                                            {new Date(marks.dateValue || ownerDate || new Date().toISOString().slice(0,10)).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
+                                          </div>
+                                        </DraggableMark>
+                                      )}
+                                      {marks.signature && (
+                                        <DraggableMark x={marks.signatureXY?.x ?? 0} y={marks.signatureXY?.y ?? 420} onChange={(x, y) => setMarks((m) => ({ ...m, signatureXY: { x, y } }))} onRemove={() => removeMark("signature")} ariaLabel="Authorised signature">
+                                          <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 240 }} className="block pointer-events-none" />
+                                        </DraggableMark>
+                                      )}
+                                      {marks.stamp && (
+                                        <DraggableMark x={marks.stampXY?.x ?? 260} y={marks.stampXY?.y ?? 440} onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))} onRemove={() => removeMark("stamp")} ariaLabel="Stamp">
+                                          <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 180, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, opacity: 0.92 }} className="block pointer-events-none" />
+                                        </DraggableMark>
+                                      )}
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div style={{ width: bodyWidth, height: Math.max(120, contentLimit), border: "1px dashed rgba(184,149,85,0.35)", background: "rgba(247,242,234,0.35)" }} />
+                                )}
+                                {isLastContentPage && <div style={{ marginTop: FOOTER_GAP }}><LockedFooter /></div>}
+                              </div>
+                              <div aria-hidden className="absolute right-3 top-3 px-2 py-[2px] rounded-sm text-[10px] font-semibold uppercase pointer-events-none" style={{ background: "#FDFBF7", color: "#1A1A1A", border: "1px solid #B89555", letterSpacing: "0.18em" }}>
+                                Page {pageIndex + 1} / {pageCount}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                     <Button
                       type="button"
