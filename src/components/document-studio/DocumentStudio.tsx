@@ -328,10 +328,13 @@ function StudioShell({
         // Reserve a 42px safe band on every page so it never overlays content.
         const DOCUSIGN_TOP_RESERVE = 42;
         const FIRST_TOP = 46;
-        const NEXT_TOP = 54 + DOCUSIGN_TOP_RESERVE;
-        const BOTTOM_PAD = 40;
+        // GLOBAL RULE: inner pages must have EQUAL top/bottom interior padding
+        // (the DocuSign safe band + footer reserve are fixed/locked, applied
+        // separately). NEXT_TOP is the interior top padding only.
+        const NEXT_TOP = 54;
+        const BOTTOM_PAD = 54;
         const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD);
-        const otherCap = Math.max(200, PAGE_H - NEXT_TOP - BOTTOM_PAD);
+        const otherCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - NEXT_TOP - BOTTOM_PAD);
 
         // Flatten: if composer wrapped content in <section data-pdf-page>,
         // unwrap those so we re-split based on real measured heights.
