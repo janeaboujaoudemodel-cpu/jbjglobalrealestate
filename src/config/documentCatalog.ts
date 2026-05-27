@@ -247,31 +247,10 @@ const STAFF: DocumentTemplate[] = [
       START_DATE,
     ],
   },
-  {
-    id: "candidate_cv",
-    audience: "staff",
-    label: "Candidate CV",
-    description: "Locked JBJ-branded candidate CV, generated from an applicant record or composed from scratch.",
-    icon: UserSquare2,
-    emailSubject: "Candidate CV — JBJ GLOBAL REAL ESTATE",
-    aiInstructions:
-      "Write a concise 2-4 sentence executive summary for the candidate based on their experience, skills and target role. Do NOT repeat the structured fields (those are auto-rendered in the CV). Tone: professional, third-person, no fluff.",
-    fields: [
-      { key: "candidateName", label: "Candidate Full Name", type: "text", required: true, placeholder: "e.g., Sarah Khan" },
-      { key: "positionApplied", label: "Position Applied For", type: "text", required: true, placeholder: "e.g., Senior Sales Consultant" },
-      { key: "email", label: "Email", type: "text" },
-      { key: "phoneE164", label: "Phone (E.164)", type: "text", placeholder: "+9715XXXXXXXX" },
-      { key: "nationality", label: "Nationality", type: "text" },
-      { key: "location", label: "Current Location", type: "text", placeholder: "Dubai, UAE" },
-      { key: "experienceYears", label: "Years of Experience", type: "text", placeholder: "e.g., 5" },
-      { key: "languages", label: "Languages (comma-separated)", type: "text", placeholder: "English, Arabic, French" },
-      { key: "skills", label: "Key Skills (comma-separated)", type: "textarea", placeholder: "Off-plan sales, CRM, negotiation, Arabic-speaking clientele…" },
-      { key: "aiSummary", label: "Executive Summary", type: "textarea", placeholder: "AI-generated or paste your own…" },
-      { key: "experienceHistory", label: "Experience History", type: "textarea", placeholder: "One role per paragraph: Company — Title (dates)\\nKey wins / metrics…" },
-      { key: "education", label: "Education", type: "textarea", placeholder: "Degree — Institution (year)" },
-      { key: "referenceCvUrl", label: "Original CV URL (reference)", type: "text", placeholder: "https://…  (signed URL from applicant upload)" },
-    ],
-  },
+  // NOTE: Candidate CV intentionally removed from the contracts catalog.
+  // CVs are NOT contracts — they live in the standalone CV Builder under
+  // /owner/careers-portal?section=cv-builder. See src/components/careers-portal/CVBuilder.tsx
+
   {
     id: "custom_staff",
     audience: "staff",
