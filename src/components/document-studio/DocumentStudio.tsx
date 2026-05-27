@@ -1837,10 +1837,10 @@ function StudioShell({
           <div className="min-h-full flex justify-center py-10 px-4">
             {template ? (
               (() => {
-                const BODY_PAD_X = 56;
-                const FIRST_TOP = 28;
-                const NEXT_TOP = 56;
-                const BOTTOM_PAD = 28;
+                const BODY_PAD_X = 64;
+                const FIRST_TOP = 56;
+                const NEXT_TOP = 72;
+                const BOTTOM_PAD = 64;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
 
                 // Parse the bodyHtml into [data-pdf-page] groups. If the
