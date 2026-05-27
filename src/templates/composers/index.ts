@@ -22,6 +22,15 @@ import {
   composeFormU,
   composeBrokerReferral,
 } from "./reraForms";
+import {
+  composePartnerReferral,
+  composePartnerMarketing,
+  composePartnerInvestor,
+  composePartnerStrategic,
+  composePartnerCustom,
+} from "./partnersForms";
+
+
 
 
 export type CommissionRow = {
@@ -928,10 +937,21 @@ export function compose(input: ComposerInput): string {
       return composeHolidayHome(input);
     case "facility_management_agreement":
       return composeFacilityManagement(input);
+    case "partner_referral":
+      return composePartnerReferral(input);
+    case "partner_marketing":
+      return composePartnerMarketing(input);
+    case "partner_investor":
+      return composePartnerInvestor(input);
+    case "partner_strategic":
+      return composePartnerStrategic(input);
+    case "partner_custom":
+      return composePartnerCustom(input);
     default:
       return composeGeneric(input, input.fields.subject || "Document");
   }
 }
+
 
 
 /** Pre-seeded commission rows for HR/broker offers. */
