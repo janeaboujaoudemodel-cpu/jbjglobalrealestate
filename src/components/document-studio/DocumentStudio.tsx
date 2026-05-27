@@ -205,7 +205,9 @@ function StudioShell({
   const SAFE_GUTTER = 48; // top/bottom breathing room on every visual page
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
   const [sheetH, setSheetH] = useState(PAGE_H);
   const [smartBreaks, setSmartBreaks] = useState<number[]>([]);
@@ -225,6 +227,56 @@ function StudioShell({
     return () => ro.disconnect();
   }, []);
   const effectiveScale = (zoom / 100) * fitScale;
+
+  useEffect(() => {
+    if (!open || !template) return;
+    let frame = 0;
+    const measure = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const page = pageRef.current;
+        const body = bodyRef.current;
+        if (!page || !body) return;
+
+        const headerH = headerRef.current?.offsetHeight ?? 0;
+        const footerH = footerRef.current?.offsetHeight ?? 0;
+        const nextSheetH = Math.max(PAGE_H, Math.ceil(headerH + body.scrollHeight + footerH));
+        setSheetH((current) => (Math.abs(current - nextSheetH) > 1 ? nextSheetH : current));
+
+        const pageTop = page.getBoundingClientRect().top;
+        const boundarySelector = [
+          "[data-pdf-section]",
+          "[data-signature-block]",
+          "p",
+          "li",
+          "table",
+          "h1",
+          "h2",
+          "h3",
+        ].join(",");
+        const boundaries = Array.from(body.querySelectorAll<HTMLElement>(boundarySelector))
+          .map((el) => {
+            const r = el.getBoundingClientRect();
+            return Math.round(r.bottom - pageTop);
+          })
+          .filter((y) => y > SAFE_GUTTER && y < nextSheetH - SAFE_GUTTER)
+          .sort((a, b) => a - b);
+        const unique = boundaries.filter((y, index, arr) => index === 0 || Math.abs(y - arr[index - 1]) > 4);
+        setSmartBreaks(unique);
+      });
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (pageRef.current) ro.observe(pageRef.current);
+    if (bodyRef.current) ro.observe(bodyRef.current);
+    if (headerRef.current) ro.observe(headerRef.current);
+    if (footerRef.current) ro.observe(footerRef.current);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      ro.disconnect();
+    };
+  }, [open, template, bodyHtml, marks, manualPages]);
 
 
 
