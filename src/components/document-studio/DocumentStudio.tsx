@@ -1632,10 +1632,11 @@ function StudioShell({
                     >
                       <LockedLetterhead />
                       <div
+                        ref={bodyRef}
                         className="relative flex-1"
                         style={{
                           background: "#FDFBF7",
-                          padding: "40px 56px",
+                          padding: "40px 56px 56px 56px",
                         }}
                       >
 
