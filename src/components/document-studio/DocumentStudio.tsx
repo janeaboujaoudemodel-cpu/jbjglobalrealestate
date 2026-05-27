@@ -57,7 +57,18 @@ import {
   type CustomField,
 } from "@/templates/composers";
 import { renderStandardBody } from "@/templates/composers/standardBody";
-import { useCrmDocuments, useSaveDocument } from "@/hooks/useCrmDocuments";
+import {
+  useCrmDocuments,
+  useSaveDocument,
+  useCrmDocumentsDeleted,
+  useSoftDeleteDocument,
+  useRestoreDocument,
+  useHardDeleteDocument,
+  type CrmDocument,
+} from "@/hooks/useCrmDocuments";
+import DocumentActionSheet from "./DocumentActionSheet";
+import DocumentPreviewDialog from "./DocumentPreviewDialog";
+import { RotateCcw, Trash2 } from "lucide-react";
 
 interface Props {
   catalog: DocumentAudience;
