@@ -31,6 +31,38 @@ export const JBJ_CHAMPAGNE = "#F7F2EA";
 export const jbjMonogramSrc = monogramSrc;
 export const jbjCompanyStampSrc = companyStampSrc;
 
+/**
+ * Canonical JBJ party block (Name of Establishment / Address / Contact /
+ * Registered Agent). Re-used by every RERA + Partner composer to prefill
+ * whichever side JBJ sits on. Returns inline HTML rows for a 2-column
+ * RERA-style table cell. `agentLabel` is "A" or "B".
+ */
+export function jbjPartyBlockHtml(agentLabel: "A" | "B" = "A"): string {
+  return `
+    <div style="font-size:11px;line-height:1.55;color:${JBJ_INK};">
+      <div style="margin:0 0 6px;"><strong>NAME OF ESTABLISHMENT:</strong> ${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}</div>
+      <div style="margin:0 0 6px;"><strong>ADDRESS:</strong> ${JBJ_BRAND.address}</div>
+      <div style="margin:6px 0 0;font-weight:700;letter-spacing:.06em;font-size:10.5px;text-transform:uppercase;">Official Contact Details</div>
+      <div>PH: ${JBJ_BRAND.phone} &nbsp; FAX: —</div>
+      <div>EMAIL: ${JBJ_BRAND.email.toLowerCase()}</div>
+      <div>ORN: 41486 &nbsp; DED LISC: ${JBJ_BRAND.tradeLicense}</div>
+      <div>P.O. BOX: —</div>
+      <div style="margin:10px 0 4px;font-weight:700;letter-spacing:.06em;font-size:10.5px;text-transform:uppercase;">The Registered Agent &ldquo;${agentLabel}&rdquo;</div>
+      <div>NAME: Jane Bou Jaoude</div>
+      <div>BRN: 44750 &nbsp; DATE ISSUED: 24 / 05 / 2024</div>
+      <div>MOBILE: ${JBJ_BRAND.phone}</div>
+      <div>EMAIL: ${JBJ_BRAND.email.toLowerCase()}</div>
+    </div>`;
+}
+
+/** Inline JBJ company stamp overlay for a RERA signature cell. */
+export function jbjStampOverlayHtml(): string {
+  return `<img src="${companyStampSrc}" alt="JBJ Company Stamp" aria-hidden="true"
+    style="position:absolute;right:8px;bottom:4px;width:140px;height:140px;
+           object-fit:contain;opacity:0.94;mix-blend-mode:multiply;
+           transform:rotate(-8deg);pointer-events:none;user-select:none;" />`;
+}
+
 export const jbjHeaderHtml = (): string => `
   <header style="
     width:100%;
