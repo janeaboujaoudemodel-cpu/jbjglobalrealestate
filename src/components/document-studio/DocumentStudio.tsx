@@ -938,6 +938,20 @@ function StudioShell({
               <span className="hidden lg:inline">Save Template</span>
             </Button>
           )}
+          {template && (
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={handleSaveDocument}
+              disabled={saveDocMutation.isPending}
+              title="Save this filled document to My Documents"
+            >
+              {saveDocMutation.isPending
+                ? <Loader2 className="w-4 h-4 lg:mr-1.5 animate-spin" />
+                : <FileText className="w-4 h-4 lg:mr-1.5" />}
+              <span className="hidden lg:inline">{currentDocId ? "Update" : "Save Document"}</span>
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="sm"
