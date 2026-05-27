@@ -263,7 +263,6 @@ export function clientSignatureStrip(opts: {
 
 // Back-compat alias — old composers import `clientInitialsStrip`.
 export const clientInitialsStrip = clientSignatureStrip;
-}
 
 
 
