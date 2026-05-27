@@ -296,11 +296,11 @@ export function composeFormI(input: ComposerInput): string {
     return labels.map((l) => `${l} [ ${normalized === l.toLowerCase() ? "✓" : ""} ]`).join(" &nbsp;&nbsp;&nbsp; ");
   };
   const line = (value?: string, min = 60, center = false) => `
-    <span style="display:inline-block;min-width:${min}px;border-bottom:1px solid ${INK};padding:0 4px 1px;line-height:1.05;text-align:${center ? "center" : "left"};vertical-align:baseline;">${esc(value || "") || "&nbsp;"}</span>`;
+    <span style="display:inline-block;min-width:${min}px;border-bottom:1px solid ${INK};padding:0 3px 1px;line-height:1.02;text-align:${center ? "center" : "left"};vertical-align:baseline;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(value || "") || "&nbsp;"}</span>`;
   const row = (label: string, value?: string, _min = 0, center = false) => `
-    <div style="display:flex;align-items:flex-end;gap:4px;margin:0 0 4px;min-height:14px;font-size:10px;">
-      <strong style="white-space:nowrap;font-size:10px;">${label}</strong>
-      <span style="flex:1;min-width:0;border-bottom:1px solid ${INK};padding:0 4px 1px;line-height:1.05;text-align:${center ? "center" : "left"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(value || "") || "&nbsp;"}</span>
+    <div style="display:flex;align-items:flex-end;gap:3px;margin:0 0 2px;min-height:12px;font-size:8.8px;">
+      <strong style="white-space:nowrap;font-size:8.8px;">${label}</strong>
+      <span style="flex:1;min-width:0;border-bottom:1px solid ${INK};padding:0 3px 1px;line-height:1.02;text-align:${center ? "center" : "left"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(value || "") || "&nbsp;"}</span>
     </div>`;
 
   const partyDefaults = (label: "A" | "B") => {
@@ -363,28 +363,28 @@ export function composeFormI(input: ComposerInput): string {
     const p = partyDefaults(label);
     return `
       <td style="width:50%;border:1px solid ${GOLD};vertical-align:top;padding:0;">
-        <div style="font-size:10.8px;line-height:1.12;color:${INK};">
-          <div style="display:grid;grid-template-columns:46px 1fr;align-items:center;border-bottom:1px solid ${GOLD};background:${CHAMPAGNE};min-height:21px;">
-            <div style="font-size:14px;font-weight:800;text-align:center;">${label})</div>
-            <div style="font-size:12px;font-weight:800;letter-spacing:.02em;">THE AGENT/ BROKER <span style="font-weight:500;">(${role})</span></div>
+        <div style="font-size:9px;line-height:1.05;color:${INK};">
+          <div style="display:grid;grid-template-columns:36px 1fr;align-items:center;border-bottom:1px solid ${GOLD};background:${CHAMPAGNE};min-height:17px;">
+            <div style="font-size:12px;font-weight:800;text-align:center;">${label})</div>
+            <div style="font-size:10px;font-weight:800;letter-spacing:.02em;">THE AGENT/ BROKER <span style="font-weight:500;">(${role})</span></div>
           </div>
-          <div style="padding:6px 8px 7px;">
+          <div style="padding:4px 6px 5px;">
             ${row("NAME OF ESTABLISHMENT:", p.establishment, 200, true)}
             ${row("ADDRESS:", p.address, 235, true)}
-            <div style="height:6px;"></div>
-            <div style="font-weight:800;font-size:12px;margin:0 0 4px;letter-spacing:.02em;">OFFICIAL CONTACT DETAILS</div>
-            <div style="display:flex;align-items:flex-end;gap:6px;margin:0 0 4px;">
-              <strong>PH:</strong>${line(p.phone, 112, true)}<strong>FAX:</strong><span style="flex:1;border-bottom:1px solid ${INK};padding:0 6px 1px;">${esc(p.fax) || "&nbsp;"}</span>
+            <div style="height:3px;"></div>
+            <div style="font-weight:800;font-size:10px;margin:0 0 2px;letter-spacing:.02em;">OFFICIAL CONTACT DETAILS</div>
+            <div style="display:flex;align-items:flex-end;gap:4px;margin:0 0 2px;font-size:8.8px;">
+              <strong>Phone:</strong>${line(p.phone, 92, true)}<strong>FAX:</strong><span style="flex:1;min-width:0;border-bottom:1px solid ${INK};padding:0 3px 1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(p.fax) || "&nbsp;"}</span>
             </div>
             ${row("EMAIL:", p.email, 280, false)}
-            <div style="display:flex;align-items:flex-end;gap:6px;margin:0 0 4px;">
-              <strong>ORN:</strong>${line(p.orn, 105, true)}<strong>DED LISC:</strong><span style="flex:1;border-bottom:1px solid ${INK};padding:0 6px 1px;text-align:center;">${esc(p.ded) || "&nbsp;"}</span>
+            <div style="display:flex;align-items:flex-end;gap:4px;margin:0 0 2px;font-size:8.8px;">
+              <strong>ORN:</strong>${line(p.orn, 84, true)}<strong>DED LISC:</strong><span style="flex:1;min-width:0;border-bottom:1px solid ${INK};padding:0 3px 1px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(p.ded) || "&nbsp;"}</span>
             </div>
             ${row("P.O. BOX:", p.poBox, 260, true)}
-            <div style="font-weight:800;font-size:12px;margin:4px 0 4px;letter-spacing:.02em;">THE REGISTERED AGENT “${label}”</div>
+            <div style="font-weight:800;font-size:10px;margin:3px 0 2px;letter-spacing:.02em;">THE REGISTERED AGENT “${label}”</div>
             ${row("NAME:", p.agentName, 310, false)}
-            <div style="display:flex;align-items:flex-end;gap:6px;margin:0 0 4px;">
-              <strong>BRN:</strong>${line(p.brn, 105, true)}<strong>DATE ISSUED:</strong><span style="flex:1;border-bottom:1px solid ${INK};padding:0 6px 1px;text-align:center;">${esc(p.issued) || "&nbsp;"}</span>
+            <div style="display:flex;align-items:flex-end;gap:4px;margin:0 0 2px;font-size:8.8px;">
+              <strong>BRN:</strong>${line(p.brn, 84, true)}<strong>DATE ISSUED:</strong><span style="flex:1;min-width:0;border-bottom:1px solid ${INK};padding:0 3px 1px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(p.issued) || "&nbsp;"}</span>
             </div>
             ${row("MOBILE:", p.mobile, 282, false)}
             ${row("EMAIL:", p.agentEmail, 292, false)}
