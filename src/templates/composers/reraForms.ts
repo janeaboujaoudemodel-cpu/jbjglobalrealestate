@@ -429,10 +429,12 @@ export function composeFormI(input: ComposerInput): string {
       </div>
 
       <table style="width:100%;border-collapse:collapse;table-layout:fixed;border:1px solid ${GOLD};">
+        <colgroup><col style="width:50%;" /><col style="width:50%;" /></colgroup>
         <tbody>
           <tr style="background:${CHAMPAGNE};height:18px;">
-            <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;width:18%;">PART 1.</td>
-            <td colspan="3" style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;text-align:center;padding:2px 6px;">THE PARTIES</td>
+            <td colspan="2" style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;">
+              <span style="display:inline-block;width:86px;">PART 1.</span><span style="display:inline-block;width:calc(100% - 172px);text-align:center;">THE PARTIES</span>
+            </td>
           </tr>
           <tr>${partyBlock("A", "SELLER / LANDLORD")}${partyBlock("B", "BUYER /TENANT")}</tr>
           <tr>
