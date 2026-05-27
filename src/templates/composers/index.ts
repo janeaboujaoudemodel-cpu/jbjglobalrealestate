@@ -691,7 +691,7 @@ function composeFacilityManagement(input: ComposerInput): string {
       <div data-pdf-section="std-terms-heading" style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;page-break-after:avoid;break-after:avoid;">
         Standard Terms
       </div>
-      <ol style="margin:0;padding-left:20px;font-size:11.5px;line-height:1.7;color:${INK};">
+      <ol style="margin:0;padding-left:20px;font-size:12.6px;line-height:1.68;color:${INK};">
         <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Appointment.</strong> The Client appoints JBJ GLOBAL REAL ESTATE L.L.C — S.O.C as the exclusive facility manager of the Property for the term stated above.</li>
         <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Services.</strong> Services are delivered as per the Scope above, in accordance with industry best practices and UAE regulations.</li>
         <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Fees &amp; Payment.</strong> The monthly management fee is due in advance per the Payment Terms. Late payments accrue 2% per month. Out-of-scope works are quoted separately and require written approval before commencement.</li>
