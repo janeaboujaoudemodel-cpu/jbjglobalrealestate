@@ -32,7 +32,7 @@ const PDFSuite = lazy(() => import("@/pages/toolkit/PDFSuite"));
 const PropertySuite = lazy(() => import("@/pages/toolkit/PropertySuite"));
 const CorporateSuite = lazy(() => import("@/pages/toolkit/CorporateSuite"));
 const BusinessCardDesigner = lazy(() => import("@/components/corporate-suite/BusinessCardDesigner"));
-const CVResumeBuilder = lazy(() => import("@/components/corporate-suite/CVResumeBuilder"));
+
 const CoverLetterGenerator = lazy(() => import("@/components/corporate-suite/CoverLetterGenerator"));
 const LandingPageBuilder = lazy(() => import("@/components/corporate-suite/LandingPageBuilder"));
 const LogoCreator = lazy(() => import("@/components/corporate-suite/LogoCreator"));
@@ -76,7 +76,7 @@ export const ToolkitRoutes = () => (
     {/* Corporate Suite */}
     <Route path="/toolkit/corporate-suite" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/toolkit/corporate-suite/business-card" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/toolkit/corporate-suite/cv-resume" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/corporate-suite/cv-resume" element={<Navigate to="/owner/careers-portal?section=contracts&tpl=candidate_cv" replace />} />
     <Route path="/toolkit/corporate-suite/cover-letter" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/toolkit/corporate-suite/landing-page" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/toolkit/corporate-suite/logo-creator" element={<Navigate to="/ai-hub" replace />} />
