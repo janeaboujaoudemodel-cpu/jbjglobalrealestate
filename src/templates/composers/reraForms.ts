@@ -24,6 +24,10 @@ const INK = "#1A1A1A";
 const CHAMPAGNE = "#F7F2EA";
 const MUTED = "rgba(26,26,26,0.65)";
 
+/** Wrap content as an explicit A4 page group the renderer can split on. */
+const page = (n: number, content: string) =>
+  `<section data-pdf-page="${n}" style="display:block;">${content}</section>`;
+
 const esc = (s?: string) =>
   (s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 
@@ -87,7 +91,7 @@ export function composeFormA(input: ComposerInput): string {
     "Any dispute arising out of or in connection with this agreement shall be governed by the laws of the Emirate of Dubai and the United Arab Emirates, and shall be referred to the Rental Disputes Settlement Centre or the competent Dubai Courts.",
   ];
 
-  return [
+  const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     headerBlock("Form A", "Contract Between Real Estate Brokers and Owner", "Property Listing Authorisation — Secondary Market Sale"),
     section(1, "Property Details"),
@@ -110,6 +114,9 @@ export function composeFormA(input: ComposerInput): string {
     </div>`,
     section(3, "Broker Details"),
     brokerBlock(f),
+  ].join("");
+
+  const pageTwo = [
     section(4, "Terms & Conditions"),
     clauseList(clauses),
     paragraphs(input.aiClosing),
@@ -123,6 +130,8 @@ export function composeFormA(input: ComposerInput): string {
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
+
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM B — Contract Between Buyer & Broker ───────────── */
@@ -139,7 +148,7 @@ export function composeFormB(input: ComposerInput): string {
     "This agreement is governed by the laws of the Emirate of Dubai and the United Arab Emirates. Disputes shall be referred to the competent Dubai Courts.",
   ];
 
-  return [
+  const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     headerBlock("Form B", "Contract Between Real Estate Brokers and Buyer", "Buyer Representation Agreement — Secondary Market"),
     section(1, "Buyer Details"),
@@ -162,6 +171,9 @@ export function composeFormB(input: ComposerInput): string {
     </div>`,
     section(3, "Broker Details"),
     brokerBlock(f),
+  ].join("");
+
+  const pageTwo = [
     section(4, "Terms & Conditions"),
     clauseList(clauses),
     paragraphs(input.aiClosing),
@@ -175,6 +187,8 @@ export function composeFormB(input: ComposerInput): string {
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
+
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM F — Memorandum of Understanding (Buyer ↔ Seller) ───────────── */
@@ -196,7 +210,7 @@ export function composeFormF(input: ComposerInput): string {
     "This MoU is governed by the laws of the Emirate of Dubai and the United Arab Emirates, including UAE Federal Law No. 5 of 1985 (Civil Transactions) and Dubai Law No. 7 of 2006 (Real Estate Registration). Any dispute shall be referred to the competent Dubai Courts.",
   ];
 
-  return [
+  const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     headerBlock("Form F", "Memorandum of Understanding (Contract F)", "Sale Contract Between Buyer & Seller — Secondary Market"),
     section(1, "Parties"),
@@ -229,6 +243,9 @@ export function composeFormF(input: ComposerInput): string {
       ${field("Transfer / Completion Date", fmtDate(f.completionDate))}
       ${field("Mortgage (Yes / No)", f.mortgage)}
     </div>`,
+  ].join("");
+
+  const pageTwo = [
     section(4, "Terms & Conditions"),
     clauseList(clauses),
     paragraphs(input.aiClosing),
@@ -245,6 +262,8 @@ export function composeFormF(input: ComposerInput): string {
       ],
     }),
   ].join("");
+
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM I — Brokers Notification (Co-Broking A↔B) ───────────── */
@@ -260,7 +279,7 @@ export function composeFormI(input: ComposerInput): string {
     "This arrangement is governed by the laws of the Emirate of Dubai. Disputes shall be referred to RERA for mediation prior to escalation to the Dubai Courts.",
   ];
 
-  return [
+  const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     headerBlock("Form I", "Property Brokers Notification", "Co-Broking Registration Between Two RERA Brokerages"),
     section(1, "Property"),
@@ -281,6 +300,9 @@ export function composeFormI(input: ComposerInput): string {
       ${field("Agent Mobile", f.counterpartyPhone)}
       ${field("Agent Email", f.counterpartyEmail)}
     </div>`,
+  ].join("");
+
+  const pageTwo = [
     section(4, "Terms & Conditions"),
     clauseList(clauses),
     paragraphs(input.aiClosing),
@@ -294,6 +316,8 @@ export function composeFormI(input: ComposerInput): string {
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
+
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM U — Cancellation of Form A / Form B ───────────── */
@@ -309,7 +333,7 @@ export function composeFormU(input: ComposerInput): string {
     "This cancellation is governed by the laws of the Emirate of Dubai and the United Arab Emirates.",
   ];
 
-  return [
+  const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     headerBlock("Form U", "Cancellation of Agency Agreement", "Mutual Termination of Form A or Form B"),
     section(1, "Reference"),
@@ -328,6 +352,9 @@ export function composeFormU(input: ComposerInput): string {
     </div>`,
     section(3, "Reason for Cancellation"),
     `<div style="font-size:12px;line-height:1.6;color:${INK};border:1px solid ${GOLD}55;background:${CHAMPAGNE};padding:10px 14px;min-height:48px;">${esc(f.reason || "Mutually agreed termination.")}</div>`,
+  ].join("");
+
+  const pageTwo = [
     section(4, "Terms"),
     clauseList(clauses),
     paragraphs(input.aiClosing),
@@ -341,6 +368,8 @@ export function composeFormU(input: ComposerInput): string {
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
+
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── Broker-to-Broker Referral (NOT a RERA form) ───────────── */
@@ -354,7 +383,7 @@ export function composeBrokerReferral(input: ComposerInput): string {
     "This arrangement is governed by the laws of the Emirate of Dubai.",
   ];
 
-  return [
+  const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     subjectLine("Broker-to-Broker Referral Letter (Non-RERA · Internal Commercial Agreement)"),
     section(1, "Parties"),
@@ -371,6 +400,9 @@ export function composeBrokerReferral(input: ComposerInput): string {
       ${field("Referral Fee", f.referralFee)}
       ${field("Date of Referral", fmtDate(f.startDate))}
     </div>`,
+  ].join("");
+
+  const pageTwo = [
     section(3, "Terms"),
     clauseList(clauses),
     paragraphs(input.aiClosing),
@@ -384,4 +416,6 @@ export function composeBrokerReferral(input: ComposerInput): string {
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
+
+  return page(1, pageOne) + page(2, pageTwo);
 }
