@@ -1635,34 +1635,27 @@ function StudioShell({
             {template ? (
               (() => {
                 const BODY_PAD_X = 56;
-                const FIRST_TOP = 48;
-                const NEXT_TOP = 64;
-                const BOTTOM_PAD = 72;
-                const FOOTER_GAP = 18;
-                const footerReserve = chromeHeights.footer + FOOTER_GAP;
+                const FIRST_TOP = 28;
+                const NEXT_TOP = 56;
+                const BOTTOM_PAD = 28;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
-                const firstCapacity = Math.max(160, PAGE_H - chromeHeights.header - FIRST_TOP - BOTTOM_PAD - footerReserve);
-                const nextCapacity = Math.max(160, PAGE_H - NEXT_TOP - BOTTOM_PAD - footerReserve);
-                const bodyHeight = Math.max(1, sheetH || 1);
-                const snapBreak = (start: number, target: number, capacity: number) => {
-                  if (target >= bodyHeight) return bodyHeight;
-                  const safeTarget = target - SAFE_GUTTER;
-                  const minProgress = start + capacity * 0.42;
-                  const candidate = [...smartBreaks].reverse().find((y) => y <= safeTarget && y >= minProgress);
-                  return candidate && candidate > start + 24 ? candidate : Math.min(target, bodyHeight);
+
+                // Parse the bodyHtml into [data-pdf-page] groups. If the
+                // composer didn't emit explicit groups, fall back to a
+                // single full-content page.
+                const parsePageGroups = (html: string): string[] => {
+                  if (!html) return [""];
+                  if (typeof window === "undefined") return [html];
+                  const tpl = document.createElement("template");
+                  tpl.innerHTML = html;
+                  const groups = Array.from(
+                    tpl.content.querySelectorAll<HTMLElement>("[data-pdf-page]"),
+                  ).map((el) => el.innerHTML);
+                  return groups.length ? groups : [html];
                 };
-                const starts = [0];
-                const ends: number[] = [];
-                let cursor = 0;
-                for (let i = 0; i < MAX_PAGES && cursor < bodyHeight; i += 1) {
-                  const capacity = i === 0 ? firstCapacity : nextCapacity;
-                  const end = i === MAX_PAGES - 1 ? bodyHeight : snapBreak(cursor, cursor + capacity, capacity);
-                  ends.push(end);
-                  cursor = end;
-                  if (cursor < bodyHeight) starts.push(cursor);
-                }
-                const autoPages = Math.max(1, Math.min(MAX_PAGES, ends.length || 1));
-                const pageCount = Math.min(MAX_PAGES, autoPages + manualPages);
+
+                const pageGroups = parsePageGroups(bodyHtml);
+                const pageCount = Math.min(MAX_PAGES, Math.max(1, pageGroups.length));
 
                 return (
                   <div className="flex flex-col items-center gap-4" style={{ width: PAGE_W * effectiveScale, flexShrink: 0 }}>
@@ -1674,14 +1667,10 @@ function StudioShell({
                       </div>
 
                       {Array.from({ length: pageCount }).map((_, pageIndex) => {
-                        const isManualBlank = pageIndex >= autoPages;
                         const isFirst = pageIndex === 0;
-                        const isLastContentPage = !isManualBlank && pageIndex === autoPages - 1;
-                        const pageStart = starts[pageIndex] ?? 0;
-                        const pageEnd = ends[pageIndex] ?? pageStart;
+                        const isLast = pageIndex === pageCount - 1;
                         const topPad = isFirst ? FIRST_TOP : NEXT_TOP;
-                        const contentLimit = Math.max(120, PAGE_H - (isFirst ? chromeHeights.header : 0) - topPad - BOTTOM_PAD - (isLastContentPage ? footerReserve : 0));
-                        const sliceH = Math.max(0, Math.min(pageEnd - pageStart, contentLimit));
+                        const groupHtml = pageGroups[pageIndex] ?? "";
 
                         return (
                           <div key={`page-${pageIndex}`} style={{ width: PAGE_W * effectiveScale, height: PAGE_H * effectiveScale, position: "relative" }}>
@@ -1697,45 +1686,81 @@ function StudioShell({
                                 background: "#FDFBF7",
                               }}
                             >
+                              {/* Header — only on page 1 */}
                               {isFirst && <LockedLetterhead />}
-                              <div style={{ padding: `${topPad}px ${BODY_PAD_X}px ${BOTTOM_PAD}px ${BODY_PAD_X}px`, background: "#FDFBF7", height: PAGE_H - (isFirst ? chromeHeights.header : 0), display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
-                                {!isManualBlank && sliceH > 0 ? (
-                                  <div style={{ width: bodyWidth, height: sliceH, overflow: "hidden", position: "relative" }}>
-                                    <div style={{ transform: `translateY(${-pageStart}px)`, transformOrigin: "top left", position: "relative", minHeight: bodyHeight }}>
-                                      {bodyHtml ? (
-                                        <EditableBody
-                                          html={bodyHtml}
-                                          onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
-                                        />
-                                      ) : (
-                                        <div className="text-[12px] text-[#1A1A1A]/40 italic">
-                                          Empty document — type here or use the AI assistant on the right to draft the body.
-                                        </div>
-                                      )}
 
-                                      {marks.showDate !== false && (
-                                        <DraggableMark x={marks.dateXY?.x ?? 556} y={marks.dateXY?.y ?? 8} onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))} onRemove={() => removeMark("date")} ariaLabel="Date">
-                                          <div className="text-[11px] uppercase" style={{ color: "#1A1A1A", opacity: 0.42, letterSpacing: "0.22em", fontVariantNumeric: "tabular-nums", textShadow: "0 1px 0 rgba(255,255,255,0.65)" }}>
-                                            {new Date(marks.dateValue || ownerDate || new Date().toISOString().slice(0,10)).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
-                                          </div>
-                                        </DraggableMark>
-                                      )}
-                                      {marks.signature && (
-                                        <DraggableMark x={marks.signatureXY?.x ?? 0} y={marks.signatureXY?.y ?? 420} onChange={(x, y) => setMarks((m) => ({ ...m, signatureXY: { x, y } }))} onRemove={() => removeMark("signature")} ariaLabel="Authorised signature">
-                                          <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 240 }} className="block pointer-events-none" />
-                                        </DraggableMark>
-                                      )}
-                                      {marks.stamp && (
-                                        <DraggableMark x={marks.stampXY?.x ?? 260} y={marks.stampXY?.y ?? 440} onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))} onRemove={() => removeMark("stamp")} ariaLabel="Stamp">
-                                          <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 180, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, opacity: 0.92 }} className="block pointer-events-none" />
-                                        </DraggableMark>
-                                      )}
-                                    </div>
-                                  </div>
+                              {/* Body region — fills the remaining vertical space
+                                  ABOVE the absolute-bottom footer */}
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  top: isFirst ? chromeHeights.header : 0,
+                                  left: 0,
+                                  right: 0,
+                                  bottom: chromeHeights.footer,
+                                  padding: `${topPad}px ${BODY_PAD_X}px ${BOTTOM_PAD}px`,
+                                  boxSizing: "border-box",
+                                  overflow: "hidden",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  justifyContent: isLast && pageIndex === 2 ? "center" : "flex-start",
+                                }}
+                              >
+                                {groupHtml ? (
+                                  <div
+                                    className="prose prose-sm max-w-none text-[#1A1A1A]"
+                                    style={{
+                                      width: bodyWidth,
+                                      fontFamily: "Inter, system-ui, sans-serif",
+                                      lineHeight: 1.7,
+                                      fontSize: 13,
+                                      color: "#1A1A1A",
+                                    }}
+                                    contentEditable={isFirst}
+                                    suppressContentEditableWarning
+                                    onBlur={(e) => {
+                                      if (!isFirst) return;
+                                      // Sync first-page edits back into the master bodyHtml,
+                                      // wrapping with the original page1 marker.
+                                      const next = e.currentTarget.innerHTML;
+                                      const others = pageGroups.slice(1)
+                                        .map((g, i) => `<section data-pdf-page="${i + 2}">${g}</section>`)
+                                        .join("");
+                                      userEditedRef.current = true;
+                                      setUserEdited(true);
+                                      setBodyHtml(`<section data-pdf-page="1">${next}</section>${others}`);
+                                    }}
+                                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(groupHtml) }}
+                                  />
                                 ) : (
-                                  <div style={{ width: bodyWidth, flex: 1, border: "1px dashed rgba(184,149,85,0.35)", background: "rgba(247,242,234,0.35)" }} />
+                                  <div className="text-[12px] text-[#1A1A1A]/40 italic">
+                                    Empty — generate a document to populate this page.
+                                  </div>
                                 )}
-                                {isLastContentPage && <div style={{ marginTop: "auto", paddingTop: FOOTER_GAP }}><LockedFooter /></div>}
+
+                                {/* Signature/stamp/date marks only on the LAST page */}
+                                {isLast && marks.showDate !== false && (
+                                  <DraggableMark x={marks.dateXY?.x ?? 556} y={marks.dateXY?.y ?? 8} onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))} onRemove={() => removeMark("date")} ariaLabel="Date">
+                                    <div className="text-[11px] uppercase" style={{ color: "#1A1A1A", opacity: 0.42, letterSpacing: "0.22em", fontVariantNumeric: "tabular-nums", textShadow: "0 1px 0 rgba(255,255,255,0.65)" }}>
+                                      {new Date(marks.dateValue || ownerDate || new Date().toISOString().slice(0,10)).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
+                                    </div>
+                                  </DraggableMark>
+                                )}
+                                {isLast && marks.signature && (
+                                  <DraggableMark x={marks.signatureXY?.x ?? 40} y={marks.signatureXY?.y ?? 320} onChange={(x, y) => setMarks((m) => ({ ...m, signatureXY: { x, y } }))} onRemove={() => removeMark("signature")} ariaLabel="Authorised signature">
+                                    <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 240 }} className="block pointer-events-none" />
+                                  </DraggableMark>
+                                )}
+                                {isLast && marks.stamp && (
+                                  <DraggableMark x={marks.stampXY?.x ?? 320} y={marks.stampXY?.y ?? 320} onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))} onRemove={() => removeMark("stamp")} ariaLabel="Stamp">
+                                    <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 220, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, background: "transparent" }} className="block pointer-events-none" />
+                                  </DraggableMark>
+                                )}
+                              </div>
+
+                              {/* Footer — absolute flush-bottom on EVERY page, edge-to-edge, no gap */}
+                              <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+                                <LockedFooter />
                               </div>
                               <div aria-hidden className="absolute right-3 top-3 px-2 py-[2px] rounded-sm text-[10px] font-semibold uppercase pointer-events-none" style={{ background: "#FDFBF7", color: "#1A1A1A", border: "1px solid #B89555", letterSpacing: "0.18em" }}>
                                 Page {pageIndex + 1} / {pageCount}
@@ -1745,18 +1770,11 @@ function StudioShell({
                         );
                       })}
                     </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setManualPages((n) => Math.min(MAX_PAGES - autoPages, n + 1))}
-                      disabled={pageCount >= MAX_PAGES}
-                    >
-                      <Plus className="w-4 h-4 mr-1.5" /> Add page
-                    </Button>
                   </div>
                 );
               })()
+
+
 
 
 
