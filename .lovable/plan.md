@@ -1,55 +1,88 @@
-## Goal
-Make the locked chrome (footer, stamp, owner name, signature styling) truly global across every template, paginate the preview into real A4 pages, auto-calculate money fields, and tighten the Holiday Home declaration.
+## Goals
+1. **Stop tables/sections from being cropped across PDF pages** — slice on logical block boundaries, not fixed pixel intervals.
+2. **Never lose form work** — persist Document Studio session (template, fields, owner info, signatories, etc.) to localStorage and restore automatically on reopen / refresh / accidental close.
 
-## 1. Owner name — fix globally
-- `src/components/document-studio/DocumentStudio.tsx` line 191: change initial state `useState<string>("Jameel Bou Jaoude")` → `"Jane Bou Jaoude"`. This is the only remaining "Jameel" string in the codebase; the composer default is already correct.
+## 1. Smart PDF page-breaks (no mid-table cuts)
 
-## 2. Lock chrome/stamp/footer to ALL templates (no per-template work)
-The footer + stamp + signature block are already injected through `signatureBlock()` and `jbjLockedChrome.ts`, which every composer uses. Verify no composer renders its own footer/signature and that the `composeGeneric` fallback (Form A/F/I, PAA, Tenancy, NDA, HR Letter, Employment Contract, etc.) routes through the same `signatureBlock` — it already does. No code change needed beyond confirming all branches in the `compose()` dispatcher use `signatureBlock`. Add a guard comment at the top of `composers/index.ts` documenting the lock so it isn't bypassed.
+### Mark every block that must stay together
+In `src/templates/composers/index.ts` add `data-pdf-section` AND inline `page-break-inside:avoid; break-inside:avoid;` to every unbreakable block:
+- `termsTable()` `<table>` wrapper
+- `commissionTable()` `<table>` wrapper
+- `quotation` table in Holiday Home (already has the style — add the attribute)
+- `terms` `<ol>` block + each `<li>` gets `break-inside:avoid`
+- Holiday Home `acknowledgement` box
+- `signatureBlock()` outer `div` (already has `page-break-inside:avoid` — add `data-pdf-section`)
+- Facility Management `standardTerms` + `scope` blocks
+- `subjectLine`, `recipientBlock`, `dateLine`
 
-## 3. Remove duplicate templates
-Audit `documentCatalog.ts`:
-- `partnership_referral` and the dispatcher alias `referral_agreement` — collapse to one (`partnership_referral`), remove the alias case from the `compose()` switch.
-- Holiday Home + Facility Management are tagged `audience:"staff"` but currently sit in the CLIENT array — move them physically into the `STAFF` array so they appear in only one hub (Careers Portal · Contracts & Templates).
-- Spot-check for any other catalog entries that share fields/intent.
+### Replace the dumb pixel slicer in `src/components/document-studio/export/exporters.ts`
+Rewrite `exportPdf` so that after `renderElementCanvas(page)` produces the full-height canvas, we:
+1. Collect Y-coordinates of every `[data-pdf-section]` element relative to the captured page (using `getBoundingClientRect()` against the page root, multiplied by the canvas scale of 2).
+2. Walk pages: target `sliceHpx = canvas.width * 297 / 210` per A4 page. For each page boundary, find the **largest section-end Y that is ≤ targetBoundary**. If no section fits before the boundary, fall back to the raw boundary (single block taller than a page — unavoidable). Always ensure progress (>0 px per page).
+3. Draw each slice on a fresh A4-sized canvas with champagne background; remaining empty space at the bottom is intentional whitespace, not a cut row.
+4. Re-add the locked footer onto every slice **except** the last (the captured page already has the footer at its bottom). Simpler: skip this and accept that the footer only appears on the last page — same as today. *(Keep it simple this pass.)*
 
-## 4. Auto-calculate amounts (remove "Amount Paid" manual input where derivable)
-Holiday Home form:
-- Drop `amountPaid` input. Always derive `subtotal = nightlyRate × nights + cleaningFee + securityDeposit`.
-- The "Amount Paid" row in the quotation table is computed from `paymentStatus`:
-  - `Paid in Full` → amountPaid = subtotal, balance = 0
-  - `Partial Payment` → keep one numeric input `paidNow` (renamed)
-  - `Pending` → amountPaid = 0, balance = subtotal
-- Keep `paymentMethod`, `paymentDate`, `paymentStatus` (status already in form).
-- Show Total / Paid / Balance rows auto-rendered.
+Code skeleton:
+```ts
+const sectionBottoms = Array.from(page.querySelectorAll<HTMLElement>('[data-pdf-section]'))
+  .map(el => (el.offsetTop + el.offsetHeight) * scale)
+  .sort((a,b) => a - b);
 
-Commission Invoice already auto-calculates — leave as is.
+let y = 0;
+while (y < canvas.height) {
+  const target = y + sliceHpx;
+  let cut = target >= canvas.height
+    ? canvas.height
+    : (sectionBottoms.filter(b => b > y && b <= target).pop() ?? target);
+  if (cut <= y) cut = Math.min(target, canvas.height); // single oversized block
+  // draw slice [y, cut] onto an A4-sized canvas with champagne fill
+  y = cut;
+}
+```
 
-## 5. Real A4 pagination in preview
-Today the page grows tall and the PDF exporter slices it. Make the preview show that pagination live:
-- In `DocumentStudio.tsx` replace the single tall `<div ref={pageRef}>` with a paginator:
-  - After body renders, measure body height.
-  - Compute `pageCount = ceil(bodyHeight / contentArea)` where `contentArea = PAGE_H − headerH − footerH`.
-  - Render N stacked `<article class="a4-page">` cards (each exactly 816×1154), each containing the locked letterhead, a slice of the body via CSS `column`/transform-translate offset, and the locked footer.
-  - Add `page-break-inside:avoid` style hints to `signatureBlock`, `termsTable`, `quotation` (already partially set) so logical blocks don't get cut.
-- Switch `pages` state default from `"auto"` to derived `pageCount` and show "Page X of N" between page cards.
-- Exporter (`exporters.ts`) already slices on 1154 boundaries — no change required, but verify the new DOM still feeds it a contiguous canvas (use a hidden export-only single-page wrapper if needed).
+### Mirror in preview page-break overlays
+Update the dashed-gold "Page X of N" overlays in `DocumentStudio.tsx` to use the same `sectionBottoms` computation so the visible breaks match what the PDF will produce. Computed in a `useEffect` watching `bodyHtml` + `measuredPageH`.
 
-## 6. Holiday Home — final acknowledgement clause
-Append a single bold block immediately above the signature block in `composeHolidayHome`:
+## 2. Persistent Document Studio session
 
-> I, **{{guestName}}**, hereby agree to all the terms and conditions provided by **JBJ GLOBAL REAL ESTATE L.L.C — S.O.C**. I confirm that I have fully read and understood every clause above, that I am solely responsible for reading and understanding them, and that I sign below with my full and free decision and consent.
+### Storage shape
+Key: `jbj:doc-studio:session:<catalog>` (separate keys for `staff` and `client`).
 
-`{{guestName}}` is replaced live from `fields.recipientName` (the left-rail "Guest Full Name" input). Also pipe the same value into the signature block's applicant name (already done) and into the Acknowledgement clause's existing #11 entry so both stay in sync.
+Payload:
+```ts
+{
+  v: 2,
+  templateId, fields, department, commissionRows, customFields,
+  ownerName, ownerTitle, ownerDate, applicantDate,
+  extraSignatories,
+  hiddenFieldKeys: string[], fieldLabelOverrides, hiddenSections: string[],
+  bodyHtml, userEdited,
+  marks, // signature/stamp positions
+  docLanguage,
+  step,
+  savedAt: ISO timestamp,
+}
+```
 
-## 7. Placeholder sync (left rail → body)
-Confirm every composer that references `recipientName` re-renders on every keystroke (currently driven by the `useEffect` that recomputes `autoBodyRef` on field changes). No code change expected — just ensure the new acknowledgement clause uses `f.recipientName` directly, not a one-time captured value.
+### Hooks in `src/components/document-studio/DocumentStudio.tsx`
+- **On mount** (inside `StudioShell`): read the localStorage key for `catalog`; if present and `savedAt` < 30 days old, restore all state setters before any render that would overwrite. Show a single dismissable toast "Restored your last draft · [Discard]" so the user knows.
+- **On every state change**: debounced (400 ms) writer using `useEffect` watching the persisted slice. Don't write while the initial restore is still hydrating (guarded by a `hydratedRef`).
+- **On `beforeunload`**: flush a synchronous final write so closing the tab never loses the last keystroke.
+- **On successful Send**: clear the key (the draft has shipped).
+- **On user clicking "Discard draft"** in the restored toast: clear the key and reset state.
+- **Cross-tab sync**: subscribe to the `storage` event; if another tab writes a newer `savedAt`, ignore (don't auto-clobber what the user is currently editing).
+
+### Edge cases
+- Quota / disabled storage → wrap reads/writes in try/catch; silently no-op.
+- Template change resets fields (existing behavior) → still persist the new state.
+- `marks` may contain blob URLs that don't survive reload; for signature/stamp, persist only the asset reference fields the user picked (URL strings from `useOwnerAssets` are signed URLs — they re-validate; OK to keep).
 
 ## Files touched
-- `src/components/document-studio/DocumentStudio.tsx` (owner name default, A4 paginator UI)
-- `src/templates/composers/index.ts` (auto-calc, acknowledgement clause, remove `referral_agreement` alias)
-- `src/config/documentCatalog.ts` (drop `amountPaid` field, move Holiday/Facility into STAFF array, dedupe)
+- `src/templates/composers/index.ts` — add `data-pdf-section` + `break-inside:avoid` to every unbreakable block (termsTable, commissionTable, quotation, terms, acknowledgement, signatureBlock, facility standardTerms, scope, subjectLine, recipientBlock).
+- `src/components/document-studio/export/exporters.ts` — rewrite `exportPdf` slicing loop with section-aware cuts; expose helper used by preview.
+- `src/components/document-studio/DocumentStudio.tsx` — add session persistence (load on mount, debounced save on change, beforeunload flush, restored-draft toast, cross-tab guard, sync preview page-breaks with the same section-bottom math).
 
 ## Out of scope
-- Footer/stamp visual redesign (already shipped last turn — only auditing reach here).
-- Translations / marketing pages mentioning the founder name (already correct).
+- DOCX page breaks (Word already paginates on its own).
+- Re-rendering the footer on every PDF page (kept as last-page footer).
+- Server-side draft sync (localStorage only — survives refresh, tab close, laptop sleep).
