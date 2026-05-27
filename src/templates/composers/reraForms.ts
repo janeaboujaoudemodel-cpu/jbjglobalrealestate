@@ -383,7 +383,7 @@ export function composeBrokerReferral(input: ComposerInput): string {
     "This arrangement is governed by the laws of the Emirate of Dubai.",
   ];
 
-  return [
+  const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     subjectLine("Broker-to-Broker Referral Letter (Non-RERA · Internal Commercial Agreement)"),
     section(1, "Parties"),
@@ -400,6 +400,9 @@ export function composeBrokerReferral(input: ComposerInput): string {
       ${field("Referral Fee", f.referralFee)}
       ${field("Date of Referral", fmtDate(f.startDate))}
     </div>`,
+  ].join("");
+
+  const pageTwo = [
     section(3, "Terms"),
     clauseList(clauses),
     paragraphs(input.aiClosing),
@@ -413,4 +416,6 @@ export function composeBrokerReferral(input: ComposerInput): string {
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
+
+  return page(1, pageOne) + page(2, pageTwo);
 }
