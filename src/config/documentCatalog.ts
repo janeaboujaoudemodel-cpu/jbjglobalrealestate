@@ -464,6 +464,129 @@ STAFF.push(
 );
 
 // ─────────────────────────────────────────────────────────────────────
+// PARTNERS — Premium partnership agreement family
+// Shown under a "Partners" group in the catalog dropdown. AI-assisted
+// drafting for bespoke clauses; structure + JBJ prefill + stamp locked.
+// ─────────────────────────────────────────────────────────────────────
+const PARTNER_PARTY_B_FIELDS: DocumentField[] = [
+  { key: "partnerName", label: "Partner — Full Name", type: "text", required: true, placeholder: "Authorised signatory / individual" },
+  { key: "partnerCompany", label: "Partner — Company / Entity", type: "text", placeholder: "Legal entity name" },
+  { key: "partnerLicence", label: "Partner — Jurisdiction / Licence #", type: "text", placeholder: "e.g., Dubai DED, RERA ORN, foreign" },
+  { key: "partnerPhone", label: "Partner — Phone", type: "text" },
+  { key: "partnerEmail", label: "Partner — Email", type: "text" },
+  { key: "partnerAddress", label: "Partner — Address", type: "text" },
+  { key: "partnerSignatory", label: "Partner — Authorised Signatory", type: "text", placeholder: "If different from above" },
+  { key: "partnerSignatoryTitle", label: "Signatory Title", type: "text", placeholder: "e.g., Managing Director" },
+];
+
+STAFF.push(
+  {
+    id: "partner_referral",
+    audience: "staff",
+    label: "Partner — Referral Partner",
+    description: "Commission share on closed real-estate transactions referred by Party B.",
+    icon: Handshake,
+    needsClient: true,
+    emailSubject: "Referral Partnership Agreement · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a 1–2 sentence cover paragraph only. The clauses, commercial terms and signature block are auto-rendered.",
+    fields: [
+      ...PARTNER_PARTY_B_FIELDS,
+      { key: "referralFee", label: "Referral Fee", type: "text", required: true, placeholder: "25% of net commission" },
+      { key: "scope", label: "Scope / Geography", type: "text", placeholder: "UAE-wide · Resale · Off-plan" },
+      { key: "term", label: "Term", type: "text", placeholder: "12 months, auto-renew" },
+      START_DATE,
+    ],
+  },
+  {
+    id: "partner_marketing",
+    audience: "staff",
+    label: "Partner — Marketing / Co-Branding",
+    description: "Joint campaigns, shared leads, mutual logo-usage rights.",
+    icon: Handshake,
+    needsClient: true,
+    emailSubject: "Marketing & Co-Branding Partnership · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a 1–2 sentence cover paragraph only. The brand-usage clauses, lead-share split and signatures are auto-rendered.",
+    fields: [
+      ...PARTNER_PARTY_B_FIELDS,
+      { key: "scope", label: "Campaign Scope", type: "textarea", placeholder: "e.g., Q2 luxury Palm campaign, joint webinar series…" },
+      { key: "channels", label: "Channels", type: "text", placeholder: "Instagram, LinkedIn, email, events" },
+      { key: "leadSplit", label: "Lead-Share Split", type: "text", placeholder: "50 / 50 on co-branded leads" },
+      { key: "term", label: "Term", type: "text", placeholder: "12 months" },
+      START_DATE,
+    ],
+  },
+  {
+    id: "partner_investor",
+    audience: "staff",
+    label: "Partner — Investor / Capital",
+    description: "Profit share on a specific project or fund vehicle.",
+    icon: Handshake,
+    needsClient: true,
+    emailSubject: "Investor / Capital Partnership · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a 1–2 sentence cover paragraph only. Profit-share, capital protection, reporting and exit clauses are auto-rendered.",
+    fields: [
+      ...PARTNER_PARTY_B_FIELDS,
+      { key: "projectName", label: "Project / Vehicle", type: "text", required: true },
+      { key: "capitalAmount", label: "Capital Contribution (AED)", type: "text", required: true },
+      { key: "fundingSchedule", label: "Funding Schedule", type: "text", placeholder: "e.g., 50% on signing, 50% on milestone" },
+      { key: "profitShare", label: "Profit Share", type: "text", required: true, placeholder: "e.g., 70 / 30 after capital return" },
+      { key: "exitHorizon", label: "Exit Horizon", type: "text", placeholder: "e.g., 24 months / on sale" },
+      { key: "term", label: "Term", type: "text", placeholder: "Until exit event" },
+      START_DATE,
+    ],
+  },
+  {
+    id: "partner_strategic",
+    audience: "staff",
+    label: "Partner — Strategic Brokerage (Cross-Market)",
+    description: "Reciprocal listings, white-label rights, geographic split.",
+    icon: Handshake,
+    needsClient: true,
+    emailSubject: "Strategic Brokerage Partnership · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a 1–2 sentence cover paragraph only. Reciprocity, white-label, non-circumvention and split clauses are auto-rendered.",
+    fields: [
+      ...PARTNER_PARTY_B_FIELDS,
+      { key: "territoryA", label: "Party A Territory (JBJ)", type: "text", placeholder: "United Arab Emirates" },
+      { key: "territoryB", label: "Party B Territory", type: "text", required: true, placeholder: "e.g., KSA · UK · India" },
+      { key: "brandingMode", label: "Branding Mode", type: "select", options: [
+        { value: "Co-branded", label: "Co-branded (default)" },
+        { value: "White-label", label: "White-label" },
+        { value: "Full disclosure", label: "Full disclosure" },
+      ]},
+      { key: "commissionSplit", label: "Commission Split", type: "text", required: true, placeholder: "50 / 50 of net commission" },
+      { key: "term", label: "Term", type: "text", placeholder: "12 months, auto-renew" },
+      START_DATE,
+    ],
+  },
+  {
+    id: "partner_custom",
+    audience: "staff",
+    label: "Partner — Other / Custom",
+    description: "Bespoke partnership — AI drafts tailored clauses from your brief.",
+    icon: Handshake,
+    needsClient: true,
+    emailSubject: "Partnership Agreement · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft the bespoke partnership clauses ONLY based on the user's brief. Do NOT restate parties, header, or signatures — those are auto-rendered. Use numbered clauses, UAE governing law, clear obligations.",
+    fields: [
+      ...PARTNER_PARTY_B_FIELDS,
+      { key: "customTitle", label: "Agreement Title", type: "text", placeholder: "e.g., Joint Venture · Service Partnership" },
+      { key: "customSubtitle", label: "Subtitle", type: "text", placeholder: "e.g., Bespoke commercial collaboration" },
+      { key: "scope", label: "Scope", type: "textarea", required: true, placeholder: "Describe what each party does…" },
+      { key: "mechanism", label: "Commercial Mechanism", type: "text", placeholder: "How value flows between the parties" },
+      { key: "term", label: "Term", type: "text", placeholder: "12 months" },
+      START_DATE,
+    ],
+  },
+);
+
+
+
+// ─────────────────────────────────────────────────────────────────────
 // CLIENT catalog — Forms & Contracts hub (real-estate clients)
 // ─────────────────────────────────────────────────────────────────────
 const CLIENT: DocumentTemplate[] = [
