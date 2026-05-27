@@ -279,7 +279,7 @@ export function composeFormI(input: ComposerInput): string {
     "This arrangement is governed by the laws of the Emirate of Dubai. Disputes shall be referred to RERA for mediation prior to escalation to the Dubai Courts.",
   ];
 
-  return [
+  const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     headerBlock("Form I", "Property Brokers Notification", "Co-Broking Registration Between Two RERA Brokerages"),
     section(1, "Property"),
@@ -300,6 +300,9 @@ export function composeFormI(input: ComposerInput): string {
       ${field("Agent Mobile", f.counterpartyPhone)}
       ${field("Agent Email", f.counterpartyEmail)}
     </div>`,
+  ].join("");
+
+  const pageTwo = [
     section(4, "Terms & Conditions"),
     clauseList(clauses),
     paragraphs(input.aiClosing),
@@ -313,6 +316,8 @@ export function composeFormI(input: ComposerInput): string {
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
+
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM U — Cancellation of Form A / Form B ───────────── */
