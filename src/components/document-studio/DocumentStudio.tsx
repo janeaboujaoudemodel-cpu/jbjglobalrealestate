@@ -2047,7 +2047,8 @@ function StudioShell({
                         const bottomPad = isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD;
                         const userSignatureName = fields.recipientName || fields.fullName || fields.full_name || fields.client_name || fields.guest_name || "Michael Anderson";
                         const groupHtml = stripGeneratedPageArtifacts(pageGroups[pageIndex] ?? "");
-                        const groupHtmlWithSignature = `${groupHtml}${renderPerPageUserSignature(userSignatureName)}`;
+                        const hasFinalSignatureBlock = /data-signature-block=["']1["']/.test(groupHtml);
+                        const groupHtmlWithSignature = `${groupHtml}${isLast && hasFinalSignatureBlock ? "" : renderPerPageUserSignature(userSignatureName)}`;
 
                         return (
                           <div key={`page-${pageIndex}`} className="flex flex-col items-center gap-2" style={{ width: PAGE_W * effectiveScale }}>
