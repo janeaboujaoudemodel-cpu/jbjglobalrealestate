@@ -201,11 +201,13 @@ function StudioShell({
   //     button below the preview.
   const PAGE_W = 816;
   const PAGE_H = 1154; // A4 ratio @ 96dpi (one page)
-  const MAX_PAGES = 20; // hard safety cap
+  const MAX_PAGES = 3; // locked template pages: 1, 2, 3 only
   const SAFE_GUTTER = 48; // top/bottom breathing room on every visual page
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
   const [sheetH, setSheetH] = useState(PAGE_H);
   const [smartBreaks, setSmartBreaks] = useState<number[]>([]);
@@ -225,6 +227,56 @@ function StudioShell({
     return () => ro.disconnect();
   }, []);
   const effectiveScale = (zoom / 100) * fitScale;
+
+  useEffect(() => {
+    if (!open || !template) return;
+    let frame = 0;
+    const measure = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const page = pageRef.current;
+        const body = bodyRef.current;
+        if (!page || !body) return;
+
+        const headerH = headerRef.current?.offsetHeight ?? 0;
+        const footerH = footerRef.current?.offsetHeight ?? 0;
+        const nextSheetH = Math.max(PAGE_H, Math.ceil(headerH + body.scrollHeight + footerH));
+        setSheetH((current) => (Math.abs(current - nextSheetH) > 1 ? nextSheetH : current));
+
+        const pageTop = page.getBoundingClientRect().top;
+        const boundarySelector = [
+          "[data-pdf-section]",
+          "[data-signature-block]",
+          "p",
+          "li",
+          "table",
+          "h1",
+          "h2",
+          "h3",
+        ].join(",");
+        const boundaries = Array.from(body.querySelectorAll<HTMLElement>(boundarySelector))
+          .map((el) => {
+            const r = el.getBoundingClientRect();
+            return Math.round(r.bottom - pageTop);
+          })
+          .filter((y) => y > SAFE_GUTTER && y < nextSheetH - SAFE_GUTTER)
+          .sort((a, b) => a - b);
+        const unique = boundaries.filter((y, index, arr) => index === 0 || Math.abs(y - arr[index - 1]) > 4);
+        setSmartBreaks(unique);
+      });
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (pageRef.current) ro.observe(pageRef.current);
+    if (bodyRef.current) ro.observe(bodyRef.current);
+    if (headerRef.current) ro.observe(headerRef.current);
+    if (footerRef.current) ro.observe(footerRef.current);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      ro.disconnect();
+    };
+  }, [open, template, bodyHtml, manualPages]);
 
 
 
@@ -1581,62 +1633,53 @@ function StudioShell({
           <div className="min-h-full flex justify-center py-10 px-4">
             {template ? (
               (() => {
-                // Visual A4 pagination — driven by the body's natural
-                // scrollHeight (measuredBodyH) so the outer page minHeight
-                // can never feed back into the page count.
-                const HEADER_H = 132 + 24; // letterhead block + padding
-                const FOOTER_H = 96;       // locked footer band
-                const BODY_PAD_TOP = 40;
-                const BODY_PAD_BOTTOM = 56; // generous bottom padding so nothing looks cropped
-                const contentPerPage = Math.max(
-                  200,
-                  PAGE_H - HEADER_H - FOOTER_H - BODY_PAD_TOP - BODY_PAD_BOTTOM,
-                );
-                const rawCount = Math.max(1, Math.ceil((sheetH - HEADER_H - FOOTER_H - BODY_PAD_TOP - BODY_PAD_BOTTOM) / contentPerPage) || 1);
-                const pageCount = Math.min(MAX_PAGES, rawCount);
-                // Sheet height grows in whole A4 multiples ONLY when needed.
-                const minH = PAGE_H * pageCount;
+                // Natural-height document: header + body + footer stay in normal
+                // flow, so the footer sits directly after the signature instead
+                // of being pushed to the bottom of a fake long page.
+                const autoPages = Math.max(1, Math.ceil(sheetH / PAGE_H) || 1);
+                const pageCount = Math.min(MAX_PAGES, autoPages + manualPages);
+                const canvasH = Math.max(sheetH, PAGE_H * pageCount);
+                const snapBreak = (target: number) => {
+                  const safeTarget = target - SAFE_GUTTER;
+                  const candidate = [...smartBreaks].reverse().find((y) => y <= safeTarget && y >= target - 220);
+                  return candidate ?? target;
+                };
 
                 return (
-                  <div
-                    style={{
-                      width: PAGE_W * effectiveScale,
-                      height: minH * effectiveScale,
-                      flexShrink: 0,
-                      position: "relative",
-                    }}
-                  >
-                    <div
-                      ref={pageRef}
-                      className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20 flex flex-col relative"
-                      style={{
-                        width: PAGE_W,
-                        minHeight: minH,
-                        transform: `scale(${effectiveScale})`,
-                        transformOrigin: "top left",
-                        background: "#FDFBF7",
-                      }}
-                    >
-                      <LockedLetterhead />
+                  <div className="flex flex-col items-center gap-4" style={{ width: PAGE_W * effectiveScale, flexShrink: 0 }}>
+                    <div style={{ width: PAGE_W * effectiveScale, height: canvasH * effectiveScale, position: "relative" }}>
                       <div
-                        ref={bodyRef}
-                        className="relative flex-1"
+                        ref={pageRef}
+                        className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20 relative"
                         style={{
+                          width: PAGE_W,
+                          minHeight: canvasH,
+                          transform: `scale(${effectiveScale})`,
+                          transformOrigin: "top left",
                           background: "#FDFBF7",
-                          padding: "40px 56px 56px 56px",
                         }}
                       >
+                        <div ref={headerRef}><LockedLetterhead /></div>
+                        <div
+                          ref={bodyRef}
+                          className="relative"
+                          style={{
+                            background: "#FDFBF7",
+                            padding: "48px 56px 72px 56px",
+                            minHeight: Math.max(420, canvasH - 252),
+                          }}
+                        >
 
-                        {bodyHtml ? (
-                          <EditableBody
-                            html={bodyHtml}
-                            onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
-                          />
-                        ) : (
-                          <div className="text-[12px] text-[#1A1A1A]/40 italic">
-                            Empty document — type here or use the AI assistant on the right to draft the body.
-                          </div>
-                        )}
+                          {bodyHtml ? (
+                            <EditableBody
+                              html={bodyHtml}
+                              onChange={(next) => { userEditedRef.current = true; setUserEdited(true); setBodyHtml(next); }}
+                            />
+                          ) : (
+                            <div className="text-[12px] text-[#1A1A1A]/40 italic">
+                              Empty document — type here or use the AI assistant on the right to draft the body.
+                            </div>
+                          )}
 
                         {marks.showDate !== false && (
                           <DraggableMark
@@ -1685,15 +1728,13 @@ function StudioShell({
                             <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 180, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, opacity: 0.92 }} className="block pointer-events-none" />
                           </DraggableMark>
                         )}
+                        </div>
+                        <div ref={footerRef}><LockedFooter /></div>
                       </div>
-                      <LockedFooter />
-                    </div>
 
-                    {/* Page-break overlays — SIBLING of pageRef so they are NEVER captured
-                        into the exported PDF (html2canvas only sees pageRef). Rendered
-                        as thin gap-bands that visually separate one canvas into A4 sheets. */}
-                    {pageCount > 1 && Array.from({ length: pageCount - 1 }).map((_, i) => {
-                      const y = PAGE_H * (i + 1) * effectiveScale;
+                      {/* Page-break overlays — sibling of pageRef, so export captures only the document. */}
+                      {pageCount > 1 && Array.from({ length: pageCount - 1 }).map((_, i) => {
+                      const y = snapBreak(PAGE_H * (i + 1)) * effectiveScale;
                       const bandH = 12; // thinner, cleaner gap
                       return (
                         <div
@@ -1721,22 +1762,32 @@ function StudioShell({
                           </div>
                         </div>
                       );
-                    })}
+                      })}
 
-                    {pageCount > 1 && (
-                      <div
-                        aria-hidden
-                        className="absolute right-2 top-2 px-2 py-[2px] rounded-sm text-[10px] font-semibold uppercase pointer-events-none"
-                        style={{
-                          background: "#FDFBF7",
-                          color: "#1A1A1A",
-                          border: "1px solid #B89555",
-                          letterSpacing: "0.18em",
-                        }}
-                      >
-                        Page 1 / {pageCount}
-                      </div>
-                    )}
+                      {pageCount > 1 && (
+                        <div
+                          aria-hidden
+                          className="absolute right-2 top-2 px-2 py-[2px] rounded-sm text-[10px] font-semibold uppercase pointer-events-none"
+                          style={{
+                            background: "#FDFBF7",
+                            color: "#1A1A1A",
+                            border: "1px solid #B89555",
+                            letterSpacing: "0.18em",
+                          }}
+                        >
+                          Page 1 / {pageCount}
+                        </div>
+                      )}
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setManualPages((n) => Math.min(MAX_PAGES - autoPages, n + 1))}
+                      disabled={pageCount >= MAX_PAGES}
+                    >
+                      <Plus className="w-4 h-4 mr-1.5" /> Add page
+                    </Button>
                   </div>
                 );
               })()
