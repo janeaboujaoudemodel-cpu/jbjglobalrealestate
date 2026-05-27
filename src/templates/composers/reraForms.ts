@@ -414,7 +414,7 @@ export function composeFormI(input: ComposerInput): string {
 
   const html = `
     <div data-form-i-page="1" data-signature-block="1" style="font-family:Inter,Arial,sans-serif;color:${INK};font-size:9px;line-height:1.08;width:100%;">
-      <div style="position:relative;min-height:74px;margin-bottom:3px;">
+      <div style="position:relative;min-height:80px;margin-bottom:4px;">
         <div style="position:absolute;right:0;top:0;width:162px;font-size:9.5px;line-height:1.22;">
           <div style="text-align:right;font-weight:800;font-size:11.5px;margin-bottom:1px;">FORM I</div>
           <div style="display:grid;grid-template-columns:42px 1fr;gap:6px;align-items:end;"><span>Brn:</span>${line(val("brn", "partyABrn") || "44750", 70, true)}</div>
@@ -442,15 +442,15 @@ export function composeFormI(input: ComposerInput): string {
             <td style="border:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;font-weight:900;text-align:center;padding:2px 6px;">DECLARATION BY AGENT “B”</td>
           </tr>
           <tr>
-            <td style="border:1px solid ${GOLD};height:58px;vertical-align:top;text-align:center;padding:4px 8px;font-style:italic;font-size:7.8px;line-height:1.12;">${declarationA}</td>
-            <td style="border:1px solid ${GOLD};height:58px;vertical-align:top;text-align:center;padding:4px 8px;font-style:italic;font-size:7.8px;line-height:1.12;">${declarationB}</td>
+            <td style="border:1px solid ${GOLD};height:84px;vertical-align:top;text-align:center;padding:6px 10px;font-style:italic;font-size:8.4px;line-height:1.18;">${declarationA}</td>
+            <td style="border:1px solid ${GOLD};height:84px;vertical-align:top;text-align:center;padding:6px 10px;font-style:italic;font-size:8.4px;line-height:1.18;">${declarationB}</td>
           </tr>
           <tr style="background:${CHAMPAGNE};height:18px;">
             <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;">PART2. <span style="float:right;margin-right:118px;">THE PROPERTY</span></td>
             <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;">PART3. <span style="float:right;margin-right:86px;">THE COMMISSION (split)</span></td>
           </tr>
           <tr>
-            <td style="border:1px solid ${GOLD};height:236px;vertical-align:top;padding:5px 6px;font-size:9px;line-height:1.08;">
+            <td style="border:1px solid ${GOLD};height:318px;vertical-align:top;padding:7px 8px;font-size:9.4px;line-height:1.14;">
               ${row("PROPERTY ADDRESS:", val("propertyRef"), 240, true)}
               ${row("MASTER DEVELOPER:", val("masterDeveloper"), 250, false)}
               ${row("MASTER PROJECT NAME:", val("masterProject"), 220, false)}
@@ -466,7 +466,7 @@ export function composeFormI(input: ComposerInput): string {
               <div style="text-align:center;margin-bottom:8px;">${yesNo(val("propertyTenanted"), ["YES", "NO"])}</div>
               <div style="display:flex;align-items:flex-end;gap:3px;"><strong style="font-weight:500;">MAINTENANCE FEE P.A:</strong>${line(val("maintenanceFee"), 95, false)}<strong>per sq. ft</strong></div>
             </td>
-            <td style="border:1px solid ${GOLD};height:236px;vertical-align:top;padding:5px 6px;text-align:center;font-size:9px;line-height:1.12;">
+            <td style="border:1px solid ${GOLD};height:318px;vertical-align:top;padding:7px 8px;text-align:center;font-size:9.4px;line-height:1.16;">
               <div style="font-weight:800;margin:3px auto 8px;max-width:430px;">The following additional commission split is agreed between the Seller/Landlord's Agent &amp; Buyer/Tenant's Agent.</div>
               <div style="font-weight:900;font-size:10.5px;margin-bottom:9px;">Commission in total is: AED ${esc(val("commissionTotal")) || "__________"}/-</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;align-items:start;">
