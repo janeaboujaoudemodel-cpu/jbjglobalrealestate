@@ -212,7 +212,7 @@ function StudioShell({
   //     button below the preview.
   const PAGE_W = 816;
   const PAGE_H = 1154; // A4 ratio @ 96dpi (one page)
-  const MAX_PAGES = 3; // locked template pages: 1, 2, 3 only
+  const MAX_PAGES = 12; // auto-paginated; cap is a safety bound only
   const SAFE_GUTTER = 48; // top/bottom breathing room on every visual page
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
@@ -224,6 +224,10 @@ function StudioShell({
   const [chromeHeights, setChromeHeights] = useState({ header: 180, footer: 86 });
   const [smartBreaks, setSmartBreaks] = useState<number[]>([]);
   const [manualPages, setManualPages] = useState<number>(0);
+  // GLOBAL pagination rule: any composed document body is auto-split into
+  // as many A4 pages as needed so content (esp. signatures) never collides
+  // with the footer. Footer renders ONLY on the last page.
+  const [autoPageGroups, setAutoPageGroups] = useState<string[] | null>(null);
   useEffect(() => {
     const wrap = previewWrapRef.current;
     if (!wrap) return;
@@ -291,6 +295,95 @@ function StudioShell({
       ro.disconnect();
     };
   }, [open, template, bodyHtml, manualPages]);
+
+  // ──────────────────────────────────────────────────────────────────
+  // GLOBAL AUTO-PAGINATION
+  // Measure the off-screen body, walk its top-level children, and split
+  // them across A4 pages based on each page's available height. The
+  // footer is reserved on every page (worst case) so signatures cannot
+  // collide with it on the last page.
+  // ──────────────────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!open || !template) return;
+    const body = bodyRef.current;
+    if (!body || !bodyHtml) {
+      setAutoPageGroups(null);
+      return;
+    }
+    let frame = 0;
+    const run = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const b = bodyRef.current;
+        if (!b) return;
+        const headerH = chromeHeights.header;
+        const footerH = chromeHeights.footer;
+        const FIRST_TOP = 46;
+        const NEXT_TOP = 54;
+        const BOTTOM_PAD = 40;
+        const page0Cap = Math.max(200, PAGE_H - headerH - FIRST_TOP - footerH - BOTTOM_PAD);
+        const otherCap = Math.max(200, PAGE_H - NEXT_TOP - footerH - BOTTOM_PAD);
+
+        // Flatten: if composer wrapped content in <section data-pdf-page>,
+        // unwrap those so we re-split based on real measured heights.
+        const sourceChildren: HTMLElement[] = [];
+        Array.from(b.children).forEach((child) => {
+          const el = child as HTMLElement;
+          if (el.matches?.("[data-pdf-page]")) {
+            Array.from(el.children).forEach((g) => sourceChildren.push(g as HTMLElement));
+          } else {
+            sourceChildren.push(el);
+          }
+        });
+        if (!sourceChildren.length) {
+          setAutoPageGroups(null);
+          return;
+        }
+
+        const bodyTop = b.getBoundingClientRect().top;
+        const items = sourceChildren.map((el) => {
+          const r = el.getBoundingClientRect();
+          return { html: el.outerHTML, top: r.top - bodyTop, height: r.height };
+        });
+
+        const pages: string[][] = [];
+        let current: string[] = [];
+        let pageStartTop = items[0].top;
+        let cap = page0Cap;
+        for (let i = 0; i < items.length; i++) {
+          const it = items[i];
+          const relBottom = it.top + it.height - pageStartTop;
+          if (relBottom > cap && current.length > 0) {
+            pages.push(current);
+            current = [it.html];
+            pageStartTop = it.top;
+            cap = otherCap;
+          } else {
+            current.push(it.html);
+          }
+          if (pages.length + 1 >= MAX_PAGES) {
+            for (let j = i + 1; j < items.length; j++) current.push(items[j].html);
+            break;
+          }
+        }
+        if (current.length) pages.push(current);
+        const groups = pages.map((p) => p.join(""));
+        setAutoPageGroups((prev) => {
+          if (prev && prev.length === groups.length && prev.every((g, i) => g === groups[i])) return prev;
+          return groups;
+        });
+      });
+    };
+    run();
+    const ro = new ResizeObserver(run);
+    ro.observe(body);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      ro.disconnect();
+    };
+  }, [open, template, bodyHtml, chromeHeights.header, chromeHeights.footer]);
+
+
 
 
 
@@ -1858,7 +1951,12 @@ function StudioShell({
                   return groups.length ? groups : [html];
                 };
 
-                const pageGroups = parsePageGroups(bodyHtml);
+                // Prefer measured auto-pagination (global rule). Fall back
+                // to composer-emitted [data-pdf-page] groups before the
+                // measurement runs, so first paint is still sensible.
+                const pageGroups = (autoPageGroups && autoPageGroups.length)
+                  ? autoPageGroups
+                  : parsePageGroups(bodyHtml);
                 const pageCount = Math.min(MAX_PAGES, Math.max(1, pageGroups.length));
 
                 return (
