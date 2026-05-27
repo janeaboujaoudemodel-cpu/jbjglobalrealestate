@@ -211,8 +211,8 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#FDFBF7] border border-[#B89555]/25 rounded-xl">
-      <div className="px-3 py-2.5 border-b border-[#B89555]/20 flex items-center gap-2">
+    <div className="flex flex-col h-full bg-[#FDFBF7] border border-[#B89555]/55 rounded-xl overflow-hidden">
+      <div className="px-4 py-3 border-b border-[#B89555]/45 flex items-center gap-2 bg-[#F7F2EA]">
         <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
         <span className="text-sm font-semibold text-[#1A1A1A]">Live Document Editor</span>
         <span className="ml-auto text-[10px] uppercase tracking-[0.14em] text-[#1A1A1A]/50">
@@ -220,15 +220,15 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
         </span>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3 min-h-[240px]">
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-[240px]">
         {messages.map((m, i) => (
           <div
             key={i}
             className={[
               "text-sm rounded-lg px-3 py-2 max-w-[92%] whitespace-pre-wrap",
               m.role === "assistant"
-                ? "bg-[#F7F2EA] border border-[#B89555]/20 text-[#1A1A1A] mr-auto"
-                : "bg-[#EFE6D6] border border-[#B89555]/30 text-[#1A1A1A] ml-auto",
+                ? "bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] mr-auto"
+                : "bg-[#EFE6D6] border border-[#B89555]/55 text-[#1A1A1A] ml-auto",
             ].join(" ")}
           >
             {m.content}
@@ -257,13 +257,13 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
         </div>
       )}
 
-      <div className="p-3 border-t border-[#B89555]/20 space-y-2">
+      <div className="p-4 border-t border-[#B89555]/45 space-y-2 bg-[#F7F2EA]">
         <Textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={listening ? "Listening… speak now" : "Tell the editor what to change…"}
           rows={3}
-          className="text-sm resize-none"
+          className="text-sm resize-none bg-[#FDFBF7] border-[#B89555]/60 focus-visible:ring-[#B89555]"
           onKeyDown={(e) => {
             if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); send(); }
           }}
