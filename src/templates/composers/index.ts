@@ -115,7 +115,7 @@ export function commissionTable(rows: CommissionRow[]): string {
     )
     .join("");
   return `
-    <table style="border-collapse:collapse;width:100%;margin:6px 0 8px;font-family:Inter,system-ui,sans-serif;">
+    <table data-pdf-section="commission" style="border-collapse:collapse;width:100%;margin:6px 0 8px;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
       <thead>
         <tr>
           <th colspan="3" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
@@ -130,9 +130,10 @@ export function commissionTable(rows: CommissionRow[]): string {
       </thead>
       <tbody>${body}</tbody>
     </table>
-    <div style="font-size:10.5px;color:${MUTED};margin:0 0 18px;font-style:italic;">
+    <div data-pdf-section="commission-note" style="font-size:10.5px;color:${MUTED};margin:0 0 18px;font-style:italic;page-break-inside:avoid;break-inside:avoid;">
       Commissions are released once the brokerage has actually received the cleared funds from the buyer or developer.
     </div>`;
+
 }
 
 export function signatureBlock(opts: {
