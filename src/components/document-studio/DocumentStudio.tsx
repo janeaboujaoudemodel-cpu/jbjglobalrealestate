@@ -2021,9 +2021,25 @@ function StudioShell({
                                 background: "#FDFBF7",
                               }}
                             >
-                              {/* Header — only on page 1, shifted below DocuSign envelope-ID safe band */}
+                              {/* DocuSign envelope-ID safe band — colored
+                                  champagne (same as header/footer) on EVERY
+                                  page so it never reads as a white crop above
+                                  the colored chrome. Global rule. */}
+                              <div
+                                aria-hidden
+                                style={{
+                                  position: "absolute",
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  height: DOCUSIGN_TOP_RESERVE,
+                                  background: "#F7F2EA",
+                                  zIndex: 1,
+                                }}
+                              />
+                              {/* Header — only on page 1, sits directly under the safe band */}
                               {isFirst && (
-                                <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE }}>
+                                <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE, position: "relative", zIndex: 0 }}>
                                   <LockedLetterhead />
                                 </div>
                               )}
