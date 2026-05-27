@@ -1990,7 +1990,8 @@ function StudioShell({
                         const groupHtml = pageGroups[pageIndex] ?? "";
 
                         return (
-                          <div key={`page-${pageIndex}`} style={{ width: PAGE_W * effectiveScale, height: PAGE_H * effectiveScale, position: "relative" }}>
+                          <div key={`page-${pageIndex}`} className="flex flex-col items-center gap-2" style={{ width: PAGE_W * effectiveScale }}>
+                          <div style={{ width: PAGE_W * effectiveScale, height: PAGE_H * effectiveScale, position: "relative" }}>
                             <div
                               data-document-page="true"
                               data-page-number={pageIndex + 1}
