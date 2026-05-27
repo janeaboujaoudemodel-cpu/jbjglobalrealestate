@@ -157,8 +157,9 @@ export function signatureBlock(opts: {
   const oTitle = esc(opts.ownerTitle || "Founder & CEO");
   const oDate = esc(formatHumanDate(opts.ownerDate) || todayLong());
   const aName = esc(opts.applicantName || "");
+  const aNameUpper = aName ? aName.toUpperCase() : "";
   const aDate = esc(formatHumanDate(opts.applicantDate));
-  const aLabel = esc(opts.applicantLabel || "Accepted by Applicant");
+  const aLabel = aName || "Recipient";
 
   const row = (label: string, value: string, fallbackDots = true) => `
     <div style="font-size:11px;color:${INK};margin-top:4px;">
@@ -170,8 +171,8 @@ export function signatureBlock(opts: {
   // overlaps any heading/label text above (e.g. "Referring Brokerage").
   const stampOverlay = `
     <img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" aria-hidden="true"
-      style="position:absolute;right:-28px;bottom:-12px;width:120px;height:120px;
-             object-fit:contain;opacity:0.9;mix-blend-mode:multiply;
+      style="position:absolute;right:-46px;bottom:-22px;width:150px;height:150px;
+             object-fit:contain;opacity:0.94;mix-blend-mode:multiply;
              transform:rotate(-8deg);pointer-events:none;user-select:none;" />`;
 
   const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
@@ -190,10 +191,12 @@ export function signatureBlock(opts: {
     row("Date", oDate),
   ].join("");
 
-  const applicantLines = [
-    row("Name", aName),
-    row("Date", aDate),
-  ].join("");
+  const applicantLines = `
+    <div style="font-size:22px;color:${INK};font-weight:500;letter-spacing:.01em;font-family:'Dancing Script','Brush Script MT',cursive;line-height:1.1;min-height:28px;text-align:center;margin-bottom:8px;">${aName || "&nbsp;"}</div>
+    <div style="border-top:1px solid ${INK};width:72%;margin:0 auto 9px;height:1px;"></div>
+    <div style="font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;text-align:center;margin-bottom:10px;">${aNameUpper || "&nbsp;"}</div>
+    ${row("Date", aDate)}
+  `;
 
   const extras = (opts.extraSignatories || []).filter(
     (s) => (s?.name || "").trim() || (s?.title || "").trim() || (s?.date || "").trim(),
