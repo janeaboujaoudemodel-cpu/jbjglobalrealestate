@@ -1,88 +1,78 @@
-## Goals
-1. **Stop tables/sections from being cropped across PDF pages** — slice on logical block boundaries, not fixed pixel intervals.
-2. **Never lose form work** — persist Document Studio session (template, fields, owner info, signatories, etc.) to localStorage and restore automatically on reopen / refresh / accidental close.
+# Production Merge: Careers / CV Flow → Document Studio
 
-## 1. Smart PDF page-breaks (no mid-table cuts)
+Audit complete. There are 3 ingestion surfaces (public form, chat widget, manual upload), 2 tables (`hr_applications`, `hr_cv_submissions`), 2 buckets (`hr-documents`, `documents`), and **no CV template in the Studio yet**. The standalone `/toolkit/corporate-suite/cv-resume` builder is dead-routed. We will execute in 3 sequential phases.
 
-### Mark every block that must stay together
-In `src/templates/composers/index.ts` add `data-pdf-section` AND inline `page-break-inside:avoid; break-inside:avoid;` to every unbreakable block:
-- `termsTable()` `<table>` wrapper
-- `commissionTable()` `<table>` wrapper
-- `quotation` table in Holiday Home (already has the style — add the attribute)
-- `terms` `<ol>` block + each `<li>` gets `break-inside:avoid`
-- Holiday Home `acknowledgement` box
-- `signatureBlock()` outer `div` (already has `page-break-inside:avoid` — add `data-pdf-section`)
-- Facility Management `standardTerms` + `scope` blocks
-- `subjectLine`, `recipientBlock`, `dateLine`
+---
 
-### Replace the dumb pixel slicer in `src/components/document-studio/export/exporters.ts`
-Rewrite `exportPdf` so that after `renderElementCanvas(page)` produces the full-height canvas, we:
-1. Collect Y-coordinates of every `[data-pdf-section]` element relative to the captured page (using `getBoundingClientRect()` against the page root, multiplied by the canvas scale of 2).
-2. Walk pages: target `sliceHpx = canvas.width * 297 / 210` per A4 page. For each page boundary, find the **largest section-end Y that is ≤ targetBoundary**. If no section fits before the boundary, fall back to the raw boundary (single block taller than a page — unavoidable). Always ensure progress (>0 px per page).
-3. Draw each slice on a fresh A4-sized canvas with champagne background; remaining empty space at the bottom is intentional whitespace, not a cut row.
-4. Re-add the locked footer onto every slice **except** the last (the captured page already has the footer at its bottom). Simpler: skip this and accept that the footer only appears on the last page — same as today. *(Keep it simple this pass.)*
+## Phase 1 — Audit Report (delivered)
 
-Code skeleton:
-```ts
-const sectionBottoms = Array.from(page.querySelectorAll<HTMLElement>('[data-pdf-section]'))
-  .map(el => (el.offsetTop + el.offsetHeight) * scale)
-  .sort((a,b) => a - b);
+Findings (full report already on screen above). Headline gaps:
+- Studio has **zero CV template** in `documentCatalog.ts` / `composers/index.ts`.
+- No bridge from `CVCenter` → Studio (cannot open an applicant inside the editor).
+- `hr_applications` and `hr_cv_submissions` only merged in UI; FK chain to `hr_job_offers` is broken for chat-widget applicants.
+- AI scoring runs post-hoc from admin UI, not on insert.
+- HR Inbox queries the wrong table for applicant pings.
 
-let y = 0;
-while (y < canvas.height) {
-  const target = y + sliceHpx;
-  let cut = target >= canvas.height
-    ? canvas.height
-    : (sectionBottoms.filter(b => b > y && b <= target).pop() ?? target);
-  if (cut <= y) cut = Math.min(target, canvas.height); // single oversized block
-  // draw slice [y, cut] onto an A4-sized canvas with champagne fill
-  y = cut;
-}
-```
+---
 
-### Mirror in preview page-break overlays
-Update the dashed-gold "Page X of N" overlays in `DocumentStudio.tsx` to use the same `sectionBottoms` computation so the visible breaks match what the PDF will produce. Computed in a `useEffect` watching `bodyHtml` + `measuredPageH`.
+## Phase 2 — Wire incoming CVs into the Studio
 
-## 2. Persistent Document Studio session
+**A. Add the locked CV template to the Studio.**
+- `src/config/documentCatalog.ts` — add one new entry:
+  - `id: "candidate_cv"`, `audience: "staff"`, `category: "Recruiting"`, `label: "Candidate CV"`.
+  - Fields: `candidateName`, `positionApplied`, `email`, `phoneE164`, `nationality`, `location`, `experienceYears`, `languages`, `skills`, `aiSummary`, `referenceCvUrl`.
+- `src/templates/composers/index.ts` — add `composeCandidateCv(fields)` producing a one/two-page CV body wrapped in `[data-pdf-section]` blocks (Header / Summary / Experience / Skills / Languages / References) so the new section-aware exporter never splits a block.
+- Uses the existing locked letterhead + footer (already standardized across all templates).
 
-### Storage shape
-Key: `jbj:doc-studio:session:<catalog>` (separate keys for `staff` and `client`).
+**B. Open-in-Studio bridge from CV Center.**
+- `src/components/crm/CVCenter.tsx` + `ApplicantProfileDrawer.tsx` — add **"Open in Document Studio"** button on each applicant row that navigates to `/owner/careers-portal?section=contracts&tpl=candidate_cv&applicantId={id}`.
+- `DocumentStudio.tsx` reads `applicantId` from search params, fetches the row from `hr_applications` (falling back to `hr_cv_submissions`), and pre-fills the new CV template fields. The existing session-persistence layer keeps draft state.
 
-Payload:
-```ts
-{
-  v: 2,
-  templateId, fields, department, commissionRows, customFields,
-  ownerName, ownerTitle, ownerDate, applicantDate,
-  extraSignatories,
-  hiddenFieldKeys: string[], fieldLabelOverrides, hiddenSections: string[],
-  bodyHtml, userEdited,
-  marks, // signature/stamp positions
-  docLanguage,
-  step,
-  savedAt: ISO timestamp,
-}
-```
+**C. Unified inbox correctness.**
+- `src/components/hr/HRInboxTab.tsx` — switch the failing `owner_comm_threads` filter to `user_notifications WHERE type = 'cv_application'` so both intake surfaces appear.
+- One small DB migration: add FK column `hr_cv_submissions.candidate_id → hr_candidates(id)` so job offers can later link to chat-widget applicants too. **GRANTs included in same migration.**
 
-### Hooks in `src/components/document-studio/DocumentStudio.tsx`
-- **On mount** (inside `StudioShell`): read the localStorage key for `catalog`; if present and `savedAt` < 30 days old, restore all state setters before any render that would overwrite. Show a single dismissable toast "Restored your last draft · [Discard]" so the user knows.
-- **On every state change**: debounced (400 ms) writer using `useEffect` watching the persisted slice. Don't write while the initial restore is still hydrating (guarded by a `hydratedRef`).
-- **On `beforeunload`**: flush a synchronous final write so closing the tab never loses the last keystroke.
-- **On successful Send**: clear the key (the draft has shipped).
-- **On user clicking "Discard draft"** in the restored toast: clear the key and reset state.
-- **Cross-tab sync**: subscribe to the `storage` event; if another tab writes a newer `savedAt`, ignore (don't auto-clobber what the user is currently editing).
+**D. AI scoring on insert (no more post-hoc).**
+- Add a DB trigger on `hr_applications` + `hr_cv_submissions` inserts that invokes the existing `cv-ai-analyzer` edge function via `pg_net`, populating `ai_ranking`, `ai_summary`, `skills[]`, `languages[]`, `experience_years` before the owner opens the portal.
 
-### Edge cases
-- Quota / disabled storage → wrap reads/writes in try/catch; silently no-op.
-- Template change resets fields (existing behavior) → still persist the new state.
-- `marks` may contain blob URLs that don't survive reload; for signature/stamp, persist only the asset reference fields the user picked (URL strings from `useOwnerAssets` are signed URLs — they re-validate; OK to keep).
+---
 
-## Files touched
-- `src/templates/composers/index.ts` — add `data-pdf-section` + `break-inside:avoid` to every unbreakable block (termsTable, commissionTable, quotation, terms, acknowledgement, signatureBlock, facility standardTerms, scope, subjectLine, recipientBlock).
-- `src/components/document-studio/export/exporters.ts` — rewrite `exportPdf` slicing loop with section-aware cuts; expose helper used by preview.
-- `src/components/document-studio/DocumentStudio.tsx` — add session persistence (load on mount, debounced save on change, beforeunload flush, restored-draft toast, cross-tab guard, sync preview page-breaks with the same section-bottom math).
+## Phase 3 — Public Careers form emits Studio-templated CVs
+
+- `src/pages/JoinApplication.tsx` — after the row is inserted and the raw CV uploaded, call a new edge function `render-candidate-cv-studio` that:
+  1. Runs `cv-ai-analyzer` synchronously.
+  2. Calls `composeCandidateCv(fields)` server-side to build the locked HTML.
+  3. Renders it to PDF using the existing chrome (`wrapWithJbjChrome`) and stores it at `hr-documents/{userId}/cv-studio-{ts}.pdf`.
+  4. Writes the new path back as `hr_applications.studio_cv_url`.
+- The CV Center then shows **both** the applicant's original upload and the Studio-rendered version (same chrome, same letterhead, same footer as all other JBJ docs).
+- Kill the dead `/toolkit/corporate-suite/cv-resume` redirect: route it to `/owner/careers-portal?section=contracts&tpl=candidate_cv` so the single Studio template is the only CV builder in the codebase. `CVResumeBuilder.tsx` and its 3 dedicated AI edge functions (`cv-summary-generator`, `cv-experience-writer`, `cv-skills-suggest`) are removed.
+
+---
+
+## Files touched (summary)
+
+**New:** `supabase/functions/render-candidate-cv-studio/index.ts`, one migration (FK + trigger + GRANTs).
+
+**Edited:**
+- `src/config/documentCatalog.ts`
+- `src/templates/composers/index.ts`
+- `src/components/document-studio/DocumentStudio.tsx` (applicantId prefill only)
+- `src/components/crm/CVCenter.tsx`
+- `src/components/crm/ApplicantProfileDrawer.tsx`
+- `src/components/hr/HRInboxTab.tsx`
+- `src/pages/JoinApplication.tsx`
+- `src/routes/ToolkitRoutes.tsx` (redirect target)
+
+**Deleted:**
+- `src/components/corporate-suite/CVResumeBuilder.tsx` + `cvResumeExport.ts`
+- 3 edge functions: `cv-summary-generator`, `cv-experience-writer`, `cv-skills-suggest`
+
+---
 
 ## Out of scope
-- DOCX page breaks (Word already paginates on its own).
-- Re-rendering the footer on every PDF page (kept as last-page footer).
-- Server-side draft sync (localStorage only — survives refresh, tab close, laptop sleep).
+
+- Migrating historical `hr_cv_submissions` rows backwards into `hr_applications` (we keep both tables; the new FK + UI bridge makes them functionally one).
+- Bucket RLS hardening — flagged in audit, not done here unless you want it bundled.
+- DOCX re-render of the Studio CV (PDF only for now, matches every other template).
+
+Reply **approve** to execute Phases 2 + 3 in order, or tell me which sub-step to drop/defer.
