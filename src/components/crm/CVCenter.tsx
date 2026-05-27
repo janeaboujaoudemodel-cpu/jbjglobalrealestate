@@ -1195,6 +1195,37 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                               >
                                 <User className="h-4 w-4 mr-1.5 text-[#1A1A1A]" /> Open Profile
                               </Button>
+                              {/* Open in Document Studio — bridges into the locked candidate_cv template */}
+                              <Button
+                                size="sm"
+                                onClick={() => {
+                                  try {
+                                    sessionStorage.setItem(
+                                      "jbj:doc-studio:prefill:staff",
+                                      JSON.stringify({
+                                        templateId: "candidate_cv",
+                                        fields: {
+                                          candidateName: cv.full_name || "",
+                                          positionApplied: (cv as any).position_applied || "",
+                                          email: cv.email || "",
+                                          phoneE164: cv.phone_e164 || "",
+                                          nationality: cv.nationality || "",
+                                          location: [cv.current_location_city, cv.current_location_country].filter(Boolean).join(", "),
+                                          experienceYears: cv.experience_years ? String(cv.experience_years) : "",
+                                          languages: (cv.languages || []).join(", "),
+                                          skills: ((cv as any).skills || []).join(", "),
+                                          aiSummary: cv.ai_summary || "",
+                                          referenceCvUrl: cv.cv_url || "",
+                                        },
+                                      })
+                                    );
+                                  } catch {}
+                                  window.location.href = "/owner/careers-portal?section=contracts&tpl=candidate_cv";
+                                }}
+                                className="h-9 rounded-lg col-span-2 bg-[#FDFBF7] hover:bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60 font-semibold px-3"
+                              >
+                                <FileText className="h-4 w-4 mr-1.5 text-[#1A1A1A]" /> Open in Document Studio
+                              </Button>
                             </div>
 
                             {/* Decision row — only renders the available transitions, never an empty placeholder */}
