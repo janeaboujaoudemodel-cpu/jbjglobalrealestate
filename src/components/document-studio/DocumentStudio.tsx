@@ -107,9 +107,26 @@ function StudioShell({
       ? presetTemplateId
       : "";
 
-  const [step, setStep] = useState<Step>(initialId ? 2 : 1);
-  const [templateId, setTemplateId] = useState<string>(initialId);
+  // ── Session persistence: survive refresh / tab-close / accidental logout.
+  const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
+  const hydratedRef = useRef(false);
+  const restoredOnce = useRef(false);
+  const readSnapshot = (): any => {
+    try {
+      const raw = localStorage.getItem(SESSION_KEY);
+      if (!raw) return null;
+      const j = JSON.parse(raw);
+      // Expire after 30 days.
+      if (!j?.savedAt || (Date.now() - new Date(j.savedAt).getTime()) > 30 * 86400_000) return null;
+      return j;
+    } catch { return null; }
+  };
+  const snap = readSnapshot();
+
+  const [step, setStep] = useState<Step>(snap?.step ?? (initialId ? 2 : 1));
+  const [templateId, setTemplateId] = useState<string>(snap?.templateId ?? initialId);
   const template = useMemo(() => getTemplateById(templateId), [templateId]);
+
 
   // Custom departments (persisted locally so users can add/rename/delete their own).
   const DEPT_STORAGE_KEY = "jbj:doc-studio:custom-departments";
