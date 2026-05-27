@@ -34,6 +34,7 @@ import {
   Copy,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { removeWhiteBackground } from "@/lib/removeWhiteBackground";
 import { toast } from "sonner";
 import DOMPurify from "dompurify";
 
@@ -456,17 +457,35 @@ function StudioShell({
   }, []);
 
   // Auto-attach owner's default signature & stamp the first time they exist.
+  // Stamp is stripped of any white background so it overlays cleanly.
   useEffect(() => {
-    setMarks((m) => {
-      const next = { ...m };
-      if (!next.signature && defaultSignature?.signedUrl) {
-        next.signature = { url: defaultSignature.signedUrl, width: 200 };
+    (async () => {
+      let stampUrl = defaultStamp?.signedUrl;
+      if (stampUrl) {
+        try {
+          // Fetch → dataURL → strip white → use stripped version
+          const res = await fetch(stampUrl);
+          const blob = await res.blob();
+          const dataUrl = await new Promise<string>((resolve) => {
+            const fr = new FileReader();
+            fr.onload = () => resolve(String(fr.result || ""));
+            fr.readAsDataURL(blob);
+          });
+          const { result } = await removeWhiteBackground(dataUrl, 235);
+          stampUrl = result;
+        } catch { /* fall back to original signed URL */ }
       }
-      if (!next.stamp && defaultStamp?.signedUrl) {
-        next.stamp = { url: defaultStamp.signedUrl, width: 130, rotation: -8 };
-      }
-      return next;
-    });
+      setMarks((m) => {
+        const next = { ...m };
+        if (!next.signature && defaultSignature?.signedUrl) {
+          next.signature = { url: defaultSignature.signedUrl, width: 200 };
+        }
+        if (!next.stamp && stampUrl) {
+          next.stamp = { url: stampUrl, width: 180, rotation: -8 };
+        }
+        return next;
+      });
+    })();
   }, [defaultSignature?.signedUrl, defaultStamp?.signedUrl]);
 
   // Owner-date in the left rail is the single source of truth for the
@@ -819,10 +838,10 @@ function StudioShell({
         }} hasTemplate={!!templateId} hasBody={!!bodyHtml} />
 
         <div className="ml-auto flex items-center gap-2">
-          <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 border border-[#B89555]/30 bg-[#F7F2EA] rounded-md pl-2 pr-1 py-0.5">
-            <Globe className="w-3.5 h-3.5" />
+          <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 border border-[#B89555] bg-[#F7F2EA] rounded-md pl-2 pr-1 py-0.5 focus-within:ring-1 focus-within:ring-[#B89555]">
+            <Globe className="w-3.5 h-3.5 text-[#B89555]" />
             <Select value={docLanguage} onValueChange={setDocLanguage}>
-              <SelectTrigger className="h-6 w-[112px] border-0 bg-transparent px-1.5 text-[12px] font-semibold text-[#1A1A1A] focus:ring-0 focus:ring-offset-0 shadow-none">
+              <SelectTrigger className="h-6 w-[112px] border-0 bg-transparent px-1.5 text-[12px] font-semibold text-[#1A1A1A] focus:ring-0 focus:ring-offset-0 focus:border-transparent shadow-none">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="z-[2147483647]">
