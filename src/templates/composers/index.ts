@@ -230,8 +230,10 @@ export function signatureBlock(opts: {
 }
 
 /**
- * GLOBAL MULTI-PAGE SIGNATURE RULE (locked):
- * On every page EXCEPT the last, render a slim signature strip whose layout is:
+ * GLOBAL PAGE SIGNATURE RULE (locked):
+ * DocumentStudio injects a slim user signature field on EVERY exported page.
+ * Legacy composer strips use the same layout and are stripped before render so
+ * they never duplicate the global per-page field:
  *   1. Cursive live name (Dancing Script) — the visible signature mark.
  *   2. 1px ink signature line directly underneath.
  *   3. Uppercase legal name (as per ID/passport) under the line as the caption.
@@ -245,8 +247,9 @@ export function signatureBlock(opts: {
  * "Page X of Y" indicator is NOT rendered inside the page — DocumentStudio
  * prints it in the champagne gap between sheets.
  *
- * Use `clientSignatureStrip` (alias `clientInitialsStrip` kept for back-compat)
- * from any multi-page composer.
+ * `clientSignatureStrip` (alias `clientInitialsStrip` kept for back-compat) is
+ * retained for old explicit-page composers; DocumentStudio is the global source
+ * of truth for every current/future template.
  */
 export function clientSignatureStrip(opts: {
   applicantName?: string;
