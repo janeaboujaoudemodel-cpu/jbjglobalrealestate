@@ -26,6 +26,7 @@ import {
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import {
   Sparkles, Loader2, Wand2, Printer, Mail, FlaskConical, X, ChevronRight,
   ChevronLeft, ZoomIn, ZoomOut, Bold, Italic, List, Heading2, Search,
@@ -1047,6 +1048,50 @@ function StudioShell({
     if (!template) return false;
     return template.fields.every((f) => !f.required || (fields[f.key] || "").trim());
   }, [template, fields]);
+
+  const renderTemplateField = (f: DocumentTemplate["fields"][number]) => {
+    const label = fieldLabelOverrides[f.key] ?? f.label;
+    const isEditing = editingFieldKey === f.key;
+    return (
+      <div key={f.key}>
+        <div className="flex items-center gap-1 mb-1.5 group">
+          {isEditing ? (
+            <Input
+              autoFocus
+              value={label}
+              onChange={(e) => setFieldLabelOverrides((p) => ({ ...p, [f.key]: e.target.value }))}
+              onBlur={() => setEditingFieldKey(null)}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") setEditingFieldKey(null); }}
+              className="h-6 text-[10px] uppercase tracking-[0.18em] flex-1"
+            />
+          ) : (
+            <Label className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 flex-1">
+              {label}
+              {f.required && <span className="text-red-600 ml-1">*</span>}
+            </Label>
+          )}
+          <button type="button" onClick={() => setEditingFieldKey(isEditing ? null : f.key)} className="text-[#1A1A1A]/60 hover:text-[#B89555] p-0.5" title="Rename field">
+            <PenLine className="w-3.5 h-3.5" />
+          </button>
+          <button type="button" onClick={() => hideField(f.key)} className="text-[#1A1A1A]/60 hover:text-red-600 p-0.5" title="Remove this field from document">
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
+        </div>
+        {f.type === "textarea" ? (
+          <Textarea value={fields[f.key] || ""} onChange={(e) => setField(f.key, e.target.value)} placeholder={f.placeholder} rows={3} className="bg-[#FDFBF7] resize-none" />
+        ) : f.type === "select" ? (
+          <Select value={fields[f.key] || ""} onValueChange={(v) => setField(f.key, v)}>
+            <SelectTrigger className="bg-[#FDFBF7]"><SelectValue placeholder="Select…" /></SelectTrigger>
+            <SelectContent className="z-[2147483647] bg-[#FDFBF7]">
+              {f.options?.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        ) : (
+          <Input type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"} value={fields[f.key] || ""} onChange={(e) => setField(f.key, e.target.value)} placeholder={f.placeholder} className="bg-[#FDFBF7]" />
+        )}
+      </div>
+    );
+  };
 
   const overlay = (
     <div
