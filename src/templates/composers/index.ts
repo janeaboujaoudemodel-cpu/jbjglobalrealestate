@@ -553,7 +553,7 @@ function composeHolidayHome(input: ComposerInput): string {
   // Final guest acknowledgement — name synced live from the left-rail input.
   const guestLegalName = esc((f.recipientName || "").trim() || "[Guest Full Name]");
   const acknowledgement = `
-    <div style="margin:18px 0 6px;padding:14px 16px;border:1px solid ${GOLD};background:${CHAMPAGNE};page-break-inside:avoid;">
+    <div data-pdf-section="acknowledgement" style="margin:18px 0 6px;padding:14px 16px;border:1px solid ${GOLD};background:${CHAMPAGNE};page-break-inside:avoid;break-inside:avoid;">
       <p style="margin:0;font-size:12px;line-height:1.7;color:${INK};">
         I, <strong>${guestLegalName}</strong>, hereby agree to all the terms and conditions provided by
         <strong>JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>. I confirm that I have fully read and understood
