@@ -2079,41 +2079,45 @@ function StudioShell({
                                   champagne (same as header/footer) on EVERY
                                   page so it never reads as a white crop above
                                   the colored chrome. Global rule. */}
-                              <div
-                                aria-hidden
-                                style={{
-                                  position: "absolute",
-                                  top: 0,
-                                  left: 0,
-                                  right: 0,
-                                  height: DOCUSIGN_TOP_RESERVE,
-                                  background: "#F7F2EA",
-                                  zIndex: 1,
-                                }}
-                              />
+                              {!noChrome && (
+                                <div
+                                  aria-hidden
+                                  style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: DOCUSIGN_TOP_RESERVE,
+                                    background: "#F7F2EA",
+                                    zIndex: 1,
+                                  }}
+                                />
+                              )}
                               {/* Document generation date — top-right corner of EVERY page (above
                                   letterhead on page 1, above body on pages 2+). Distinct from the
                                   per-page signature date, which sits next to the signature below. */}
-                              <div
-                                aria-hidden
-                                style={{
-                                  position: "absolute",
-                                  top: DOCUSIGN_TOP_RESERVE + 6,
-                                  right: 18,
-                                  fontFamily: "Inter, system-ui, sans-serif",
-                                  fontSize: 9.5,
-                                  letterSpacing: "0.16em",
-                                  textTransform: "uppercase",
-                                  color: "#1A1A1A",
-                                  opacity: 0.55,
-                                  zIndex: 2,
-                                  pointerEvents: "none",
-                                }}
-                              >
-                                {renderPageGeneratedDate()}
-                              </div>
+                              {!noChrome && (
+                                <div
+                                  aria-hidden
+                                  style={{
+                                    position: "absolute",
+                                    top: DOCUSIGN_TOP_RESERVE + 6,
+                                    right: 18,
+                                    fontFamily: "Inter, system-ui, sans-serif",
+                                    fontSize: 9.5,
+                                    letterSpacing: "0.16em",
+                                    textTransform: "uppercase",
+                                    color: "#1A1A1A",
+                                    opacity: 0.55,
+                                    zIndex: 2,
+                                    pointerEvents: "none",
+                                  }}
+                                >
+                                  {renderPageGeneratedDate()}
+                                </div>
+                              )}
                               {/* Header — only on page 1, sits directly under the safe band */}
-                              {isFirst && (
+                              {isFirst && !noChrome && (
                                 <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE, position: "relative", zIndex: 0 }}>
                                   <LockedLetterhead />
                                 </div>
@@ -2128,10 +2132,10 @@ function StudioShell({
                               <div
                                 style={{
                                   position: "absolute",
-                                  top: isFirst ? (chromeHeights.header + DOCUSIGN_TOP_RESERVE) : DOCUSIGN_TOP_RESERVE,
+                                  top: noChrome ? 0 : (isFirst ? (chromeHeights.header + DOCUSIGN_TOP_RESERVE) : DOCUSIGN_TOP_RESERVE),
                                   left: 0,
                                   right: 0,
-                                  bottom: isLast ? chromeHeights.footer : 0,
+                                  bottom: noChrome ? 0 : (isLast ? chromeHeights.footer : 0),
                                   padding: `${topPad}px ${BODY_PAD_X}px ${bottomPad}px`,
                                   boxSizing: "border-box",
                                   overflow: "hidden",
