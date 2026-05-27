@@ -86,6 +86,33 @@ export default function CVBuilder() {
   const [exporting, setExporting] = useState(false);
   const pagesHostRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("jbj:cv-builder:prefill");
+      if (!raw) return;
+      const prefill = JSON.parse(raw);
+      sessionStorage.removeItem("jbj:cv-builder:prefill");
+      setData((current) => ({
+        ...current,
+        fullName: prefill.fullName || current.fullName,
+        headline: prefill.targetRole || current.headline,
+        email: prefill.email || current.email,
+        phone: prefill.phone || current.phone,
+        location: prefill.location || current.location,
+        linkedin: prefill.linkedin || current.linkedin,
+        website: prefill.sourceCvUrl || current.website,
+        summary: prefill.summary || current.summary,
+        skills: typeof prefill.skills === "string" && prefill.skills.trim()
+          ? prefill.skills.split(",").map((name: string) => ({ id: uid(), name: name.trim() })).filter((s: Skill) => s.name)
+          : current.skills,
+        languages: typeof prefill.languages === "string" && prefill.languages.trim()
+          ? prefill.languages.split(",").map((name: string) => ({ id: uid(), name: name.trim() })).filter((l: Language) => l.name)
+          : current.languages,
+      }));
+      toast.success("Applicant details loaded into CV Builder");
+    } catch {}
+  }, []);
+
   // Auto-save draft
   useEffect(() => {
     const t = setTimeout(() => {
