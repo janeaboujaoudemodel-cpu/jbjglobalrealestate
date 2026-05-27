@@ -2012,17 +2012,23 @@ function StudioShell({
                                 background: "#FDFBF7",
                               }}
                             >
-                              {/* Header — only on page 1 */}
-                              {isFirst && <LockedLetterhead />}
+                              {/* Header — only on page 1, shifted below DocuSign envelope-ID safe band */}
+                              {isFirst && (
+                                <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE }}>
+                                  <LockedLetterhead />
+                                </div>
+                              )}
 
                               {/* Body region — fills the remaining vertical space.
                                   Footer ONLY exists on the last page, so on
                                   earlier pages the body extends edge-to-edge
-                                  to the bottom (no reserved footer slot). */}
+                                  to the bottom (no reserved footer slot).
+                                  Non-first pages start below the DocuSign
+                                  envelope-ID safe band. */}
                               <div
                                 style={{
                                   position: "absolute",
-                                  top: isFirst ? chromeHeights.header : 0,
+                                  top: isFirst ? (chromeHeights.header + DOCUSIGN_TOP_RESERVE) : DOCUSIGN_TOP_RESERVE,
                                   left: 0,
                                   right: 0,
                                   bottom: isLast ? chromeHeights.footer : 0,
