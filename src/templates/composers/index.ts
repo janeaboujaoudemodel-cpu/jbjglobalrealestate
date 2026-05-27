@@ -226,6 +226,41 @@ export function signatureBlock(opts: {
     </div>`;
 }
 
+/**
+ * GLOBAL MULTI-PAGE SIGNATURE RULE (locked):
+ * On every page EXCEPT the last, render a slim client-initials strip at the
+ * bottom-left with "Page X of Y" on the right. The authorised signatory +
+ * stamp block appears ONLY on the last page. This prevents post-signing
+ * page insertion / tampering disputes ("they added a page in between").
+ *
+ * Use `clientInitialsStrip` from any multi-page composer.
+ */
+export function clientInitialsStrip(opts: {
+  applicantName?: string;
+  page: number;
+  totalPages: number;
+  label?: string;
+}): string {
+  if (opts.page >= opts.totalPages) return "";
+  const name = esc((opts.applicantName || "").trim());
+  const label = esc(opts.label || "Client Initials");
+  return `
+    <div data-pdf-section="client-initials" data-client-initials-strip="1"
+         style="margin-top:auto;padding-top:10px;border-top:1px solid ${GOLD}66;
+                display:flex;justify-content:space-between;align-items:flex-end;
+                font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
+      <div style="display:flex;align-items:flex-end;gap:14px;">
+        <div style="font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;">${label}</div>
+        <div style="min-width:140px;border-bottom:1px solid ${INK};height:22px;"></div>
+        ${name ? `<div style="font-size:10.5px;color:${MUTED};padding-bottom:3px;">${name}</div>` : ""}
+      </div>
+      <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:${MUTED};">
+        Page ${opts.page} of ${opts.totalPages}
+      </div>
+    </div>`;
+}
+
+
 
 export function recipientBlock(fields: Record<string, string>, opts?: { greeting?: boolean }): string {
   const name = esc(fields.recipientName);
