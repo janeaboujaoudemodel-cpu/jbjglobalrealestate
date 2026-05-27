@@ -816,11 +816,17 @@ export function compose(input: ComposerInput): string {
     case "candidate_cv":
       return composeCandidateCv(input);
     case "form_a":
-      return composeGeneric(input, `Form A — Buyer Registration`);
+      return composeGeneric(input, `Form A — Listing Agreement`);
+    case "form_b":
+      return composeGeneric(input, `Form B — Buyer Representation Agreement`);
     case "form_f":
-      return composeGeneric(input, `Form F — MoU`);
+      return composeGeneric(input, `Form F — Sale MoU`);
     case "form_i":
-      return composeGeneric(input, `Form I — Cancellation`);
+      return composeGeneric(input, `Form I — Multiple Listing / Brokers Network`);
+    case "form_u":
+      return composeGeneric(input, `Form U — Termination of Agency Agreement`);
+    case "form_r":
+      return composeGeneric(input, `Form R — Broker-to-Broker Referral`);
     case "paa":
       return composeGeneric(input, `Property Advertising Agreement`);
     case "tenancy_addendum":
