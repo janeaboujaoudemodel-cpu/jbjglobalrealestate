@@ -577,7 +577,7 @@ function composeHolidayHome(input: ComposerInput): string {
       </tbody>
     </table>`;
 
-  const guestName = esc(f.recipientName || "Valued Guest");
+  const guestName = esc(f.recipientName || "");
   const idType = esc(f.idType || "Emirates ID Holder");
   const idNumber = esc(f.idNumber || "784-XXXX-XXXXXXX-X");
   const nationality = esc(f.nationality || "—");
@@ -591,7 +591,7 @@ function composeHolidayHome(input: ComposerInput): string {
 
   const welcome = `
     <div data-pdf-section="welcome" style="margin:0;font-size:13.5px;color:${INK};line-height:1.72;">
-      <p style="margin:0 0 13px;font-size:14.5px;"><strong>Dear ${guestName},</strong></p>
+      <p style="margin:0 0 13px;font-size:14.5px;"><strong>Dear ${guestName || "Recipient"},</strong></p>
       <p style="margin:0 0 13px;">It is our distinct privilege to welcome you to <strong>JBJ GLOBAL REAL ESTATE</strong>. We are deeply honoured by your trust in selecting our residence for your stay, and we are committed to ensuring that every detail of your experience reflects the discreet excellence our guests expect.</p>
       <p style="margin:0;">This agreement records your booking profile, payment summary, guest obligations, and signing declaration in a clear three-page format prepared for review and execution.</p>
     </div>`;
@@ -666,7 +666,7 @@ function composeHolidayHome(input: ComposerInput): string {
 
 
   // Final guest acknowledgement — name synced live from the left-rail input.
-  const guestLegalName = esc((f.recipientName || "").trim() || "[Guest Full Name]");
+  const guestLegalName = esc((f.recipientName || "").trim() || "[FULL NAME AS PER ID / PASSPORT]");
   const acknowledgement = `
     <div data-pdf-section="acknowledgement" style="margin:0;padding:15px 20px;border:1px solid ${GOLD};background:${CHAMPAGNE};">
       <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;margin-bottom:10px;">Disclaimer &amp; Guest Declaration</div>
