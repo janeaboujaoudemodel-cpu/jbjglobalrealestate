@@ -166,16 +166,18 @@ export function signatureBlock(opts: {
       <span style="margin-left:4px;">${value || (fallbackDots ? "____________________" : "")}</span>
     </div>`;
 
+  // Stamp anchored well below + right of the signature box so it never
+  // overlaps any heading/label text above (e.g. "Referring Brokerage").
   const stampOverlay = `
     <img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" aria-hidden="true"
-      style="position:absolute;right:-6px;bottom:-6px;width:118px;height:118px;
-             object-fit:contain;opacity:0.92;mix-blend-mode:multiply;
-             transform:rotate(-6deg);pointer-events:none;user-select:none;" />`;
+      style="position:absolute;right:-44px;bottom:-58px;width:128px;height:128px;
+             object-fit:contain;opacity:0.9;mix-blend-mode:multiply;
+             transform:rotate(-8deg);pointer-events:none;user-select:none;" />`;
 
   const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
     <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 28px;position:relative;">
       <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};margin-bottom:36px;font-weight:600;">${heading}</div>
-      <div style="border-top:1px solid ${INK};padding-top:10px;position:relative;min-height:120px;">
+      <div style="border-top:1px solid ${INK};padding-top:10px;position:relative;min-height:120px;overflow:visible;">
         ${lines}
         ${withStamp ? stampOverlay : ""}
       </div>
@@ -207,12 +209,14 @@ export function signatureBlock(opts: {
     extraRows.push(`<tr><td colspan="3" style="height:32px;"></td></tr><tr>${cell(`extra-${i}`, esc(a?.label || "Additional Signatory"), aLines)}${gapCell}${b ? cell(`extra-${i + 1}`, esc(b?.label || "Additional Signatory"), bLines) : `<td style="width:44%;"></td>`}</tr>`);
   }
 
+  // Owner heading is the signatory ROLE (e.g. "Authorised Signatory"),
+  // NEVER the company name — the company is already in the header/footer.
   return `
     <div data-signature-block="1" data-pdf-section="signature" style="margin-top:36px;page-break-inside:avoid;break-inside:avoid;">
       <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
         <tbody>
           <tr>
-            ${cell("owner", "JBJ GLOBAL REAL ESTATE", ownerLines, true)}
+            ${cell("owner", "Authorised Signatory", ownerLines, true)}
             ${gapCell}
             ${cell("recipient", aLabel, applicantLines)}
           </tr>
@@ -221,6 +225,7 @@ export function signatureBlock(opts: {
       </table>
     </div>`;
 }
+
 
 export function recipientBlock(fields: Record<string, string>, opts?: { greeting?: boolean }): string {
   const name = esc(fields.recipientName);

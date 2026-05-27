@@ -17,28 +17,35 @@ export function LockedLetterhead() {
         paddingRight: 48,
       }}
     >
-      <div className="flex items-center gap-[28px]">
+      <div className="flex items-center gap-[24px]">
         <img
           src={jbjMonogramSrc}
           alt="JBJ"
           className="block shrink-0 object-contain"
-          style={{ width: 132, height: 132, background: "transparent" }}
+          style={{ width: 160, height: 160, background: "transparent" }}
+        />
+        {/* Vertical gold hairline divider between monogram and wordmark */}
+        <div
+          aria-hidden
+          style={{ width: 1, alignSelf: "stretch", background: JBJ_GOLD, opacity: 0.55, margin: "8px 0" }}
         />
         <div className="leading-tight min-w-0 flex-1">
           <div
             className="font-semibold whitespace-nowrap"
-            style={{ fontSize: 30, color: JBJ_INK, letterSpacing: "0.015em", lineHeight: 1.1 }}
+            style={{
+              fontSize: 26,
+              color: JBJ_INK,
+              letterSpacing: "0.06em",
+              lineHeight: 1.1,
+            }}
           >
             {JBJ_BRAND.legalName}
-          </div>
-          <div
-            className="font-semibold whitespace-nowrap"
-            style={{ fontSize: 17, color: JBJ_INK, letterSpacing: "0.18em", marginTop: 6 }}
-          >
-            {JBJ_BRAND.legalSuffix}
+            <span style={{ color: JBJ_GOLD, margin: "0 10px", fontWeight: 400 }}>·</span>
+            <span style={{ letterSpacing: "0.16em" }}>{JBJ_BRAND.legalSuffix}</span>
           </div>
         </div>
       </div>
+
     </header>
   );
 }
