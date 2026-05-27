@@ -119,6 +119,19 @@ const stripGeneratedPageArtifacts = (html: string): string => {
   return tpl.innerHTML;
 };
 
+const anchorSignatureArtifacts = (html: string): string => {
+  if (!html || typeof window === "undefined") return html;
+  const tpl = document.createElement("template");
+  tpl.innerHTML = html;
+  const movable = Array.from(
+    tpl.content.querySelectorAll<HTMLElement>(
+      '[data-signature-block="1"],[data-rendered-page-signature="1"],[data-rendered-page-divider="1"]',
+    ),
+  ).filter((el) => !el.closest('[data-form-i-page="1"]'));
+  movable.forEach((el) => tpl.content.appendChild(el));
+  return tpl.innerHTML;
+};
+
 export default function DocumentStudio({ catalog, trigger, presetTemplateId }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -2065,9 +2078,10 @@ function StudioShell({
                         const userSignatureName = fields.recipientName || fields.fullName || fields.full_name || fields.client_name || fields.guest_name || "";
                         const groupHtml = stripGeneratedPageArtifacts(pageGroups[pageIndex] ?? "");
                         const hasFinalSignatureBlock = /data-signature-block=["']1["']/.test(groupHtml);
-                        const groupHtmlWithSignature = noChrome
+                        const groupHtmlWithSignatureRaw = noChrome
                           ? groupHtml
                           : `${groupHtml}${isLast && hasFinalSignatureBlock ? "" : renderPerPageUserSignature(userSignatureName)}`;
+                        const groupHtmlWithSignature = noChrome ? groupHtmlWithSignatureRaw : anchorSignatureArtifacts(groupHtmlWithSignatureRaw);
 
                         return (
                           <div key={`page-${pageIndex}`} className="flex flex-col items-center gap-2" style={{ width: PAGE_W * effectiveScale }}>
