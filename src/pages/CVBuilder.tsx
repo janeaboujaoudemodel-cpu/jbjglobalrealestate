@@ -440,7 +440,7 @@ export default function CVBuilder() {
                 <PrintSection title="Languages" accent={data.accent}>
                   <div style={{ fontSize: 12, lineHeight: 1.7 }}>
                     {data.languages.filter((l) => l.name).map((l) => (
-                      <div key={l.id}><strong>{l.name}</strong>{l.level && <span style={{ opacity: 0.7 }}> — {l.level}</span></div>
+                      <div key={l.id}><strong>{l.name}</strong>{l.level ? <span style={{ opacity: 0.7 }}>{" — "}{l.level}</span> : null}</div>
                     ))}
                   </div>
                 </PrintSection>
