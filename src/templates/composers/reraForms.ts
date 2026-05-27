@@ -18,6 +18,7 @@
 
 import type { ComposerInput } from "./index";
 import { signatureBlock, dateLine, subjectLine, paragraphs } from "./index";
+import { jbjPartyBlockHtml, jbjStampOverlayHtml } from "@/templates/jbjLockedChrome";
 
 const GOLD = "#B89555";
 const INK = "#1A1A1A";
