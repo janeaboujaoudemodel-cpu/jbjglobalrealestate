@@ -132,7 +132,7 @@ export function composeFormA(input: ComposerInput): string {
     }),
   ].join("");
 
-  return page(1, pageOne) + page(2, pageTwo);
+  return pageOne + pageTwo;
 }
 
 /* ───────────── FORM B — Contract Between Buyer & Broker ───────────── */
@@ -189,7 +189,7 @@ export function composeFormB(input: ComposerInput): string {
     }),
   ].join("");
 
-  return pageOne + pageTwo;
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM F — Memorandum of Understanding (Buyer ↔ Seller) ───────────── */
