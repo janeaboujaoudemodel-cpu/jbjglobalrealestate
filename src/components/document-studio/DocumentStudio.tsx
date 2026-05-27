@@ -182,42 +182,46 @@ function StudioShell({
   const [zoom, setZoom] = useState(100);
   const [aiOpen, setAiOpen] = useState(true);
   const [search, setSearch] = useState("");
-  const [pages, setPages] = useState<number | "auto">("auto");
 
   // Auto-fit preview: scale the fixed 816-wide A4 page down to whatever
   // width the center pane has so it never overflows horizontally.
-  // Pagination is driven by the BODY content's natural scrollHeight only —
-  // never by the outer page height — otherwise minHeight feeds back into
-  // the measurement and pageCount explodes (the old "Page X of 20410" bug).
+  //
+  // Pagination model:
+  //   • The sheet renders in NATURAL height: letterhead + body + footer in
+  //     flow, no flex-1 padding-out, no PAGE_H * pageCount stretch. The
+  //     footer therefore always sits directly under the signature block.
+  //   • pageCount is derived from the sheet's actual scrollHeight and is
+  //     hard-capped at MAX_PAGES so any measurement glitch can never run
+  //     away (the old "Page X of 20,410" bug).
+  //   • Page-break overlays snap UP to the nearest block bottom inside the
+  //     body (paragraphs, tables, signature block) so a break never slices
+  //     through content. SAFE_GUTTER also keeps content off the very top
+  //     and bottom edges of each visual A4 page.
+  //   • Owner can manually add extra blank A4 pages via the "+ Add page"
+  //     button below the preview.
   const PAGE_W = 816;
   const PAGE_H = 1154; // A4 ratio @ 96dpi (one page)
-  const MAX_PAGES = 20; // hard safety cap so a measurement glitch can never run away
+  const MAX_PAGES = 20; // hard safety cap
+  const SAFE_GUTTER = 48; // top/bottom breathing room on every visual page
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
-  const [measuredBodyH, setMeasuredBodyH] = useState(0);
+  const [sheetH, setSheetH] = useState(PAGE_H);
+  const [smartBreaks, setSmartBreaks] = useState<number[]>([]);
+  const [manualPages, setManualPages] = useState<number>(0);
   useEffect(() => {
     const wrap = previewWrapRef.current;
     if (!wrap) return;
     const update = () => {
       const w = wrap.clientWidth;
-      const padding = 48; // breathing room on both sides
+      const padding = 48;
       const fit = Math.min(1, Math.max(0.3, (w - padding) / PAGE_W));
       setFitScale(fit);
     };
     update();
     const ro = new ResizeObserver(update);
     ro.observe(wrap);
-    return () => ro.disconnect();
-  }, []);
-  useEffect(() => {
-    const body = bodyRef.current;
-    if (!body) return;
-    const update = () => setMeasuredBodyH(body.scrollHeight || 0);
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(body);
     return () => ro.disconnect();
   }, []);
   const effectiveScale = (zoom / 100) * fitScale;
