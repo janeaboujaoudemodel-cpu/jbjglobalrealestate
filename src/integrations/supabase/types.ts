@@ -8080,6 +8080,7 @@ export type Database = {
           client_signature_data_url: string | null
           completed_at: string | null
           created_at: string
+          deleted_at: string | null
           expires_at: string | null
           field_values: Json
           filled_at: string | null
@@ -8107,6 +8108,7 @@ export type Database = {
           client_signature_data_url?: string | null
           completed_at?: string | null
           created_at?: string
+          deleted_at?: string | null
           expires_at?: string | null
           field_values?: Json
           filled_at?: string | null
@@ -8134,6 +8136,7 @@ export type Database = {
           client_signature_data_url?: string | null
           completed_at?: string | null
           created_at?: string
+          deleted_at?: string | null
           expires_at?: string | null
           field_values?: Json
           filled_at?: string | null
@@ -13720,6 +13723,7 @@ export type Database = {
         Row: {
           completed_at: string | null
           created_at: string | null
+          deleted_at: string | null
           document_name: string | null
           envelope_id: string
           id: string
@@ -13737,6 +13741,7 @@ export type Database = {
         Insert: {
           completed_at?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           document_name?: string | null
           envelope_id: string
           id?: string
@@ -13754,6 +13759,7 @@ export type Database = {
         Update: {
           completed_at?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           document_name?: string | null
           envelope_id?: string
           id?: string
@@ -15499,6 +15505,7 @@ export type Database = {
       esign_documents: {
         Row: {
           created_at: string | null
+          deleted_at: string | null
           file_name: string | null
           file_url: string | null
           id: string
@@ -15509,6 +15516,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          deleted_at?: string | null
           file_name?: string | null
           file_url?: string | null
           id?: string
@@ -15519,6 +15527,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          deleted_at?: string | null
           file_name?: string | null
           file_url?: string | null
           id?: string
@@ -15873,6 +15882,7 @@ export type Database = {
           certificate_data: Json | null
           certificate_url: string | null
           created_at: string
+          deleted_at: string | null
           document_filename: string
           document_hash: string | null
           document_size_bytes: number | null
@@ -15884,6 +15894,7 @@ export type Database = {
           certificate_data?: Json | null
           certificate_url?: string | null
           created_at?: string
+          deleted_at?: string | null
           document_filename: string
           document_hash?: string | null
           document_size_bytes?: number | null
@@ -15895,6 +15906,7 @@ export type Database = {
           certificate_data?: Json | null
           certificate_url?: string | null
           created_at?: string
+          deleted_at?: string | null
           document_filename?: string
           document_hash?: string | null
           document_size_bytes?: number | null
@@ -17974,6 +17986,7 @@ export type Database = {
           cover_letter: string | null
           created_at: string
           cv_url: string | null
+          deleted_at: string | null
           email: string
           full_name: string
           id: string
@@ -17996,6 +18009,7 @@ export type Database = {
           cover_letter?: string | null
           created_at?: string
           cv_url?: string | null
+          deleted_at?: string | null
           email: string
           full_name: string
           id?: string
@@ -18018,6 +18032,7 @@ export type Database = {
           cover_letter?: string | null
           created_at?: string
           cv_url?: string | null
+          deleted_at?: string | null
           email?: string
           full_name?: string
           id?: string
@@ -28778,6 +28793,7 @@ export type Database = {
           audience: string
           base_template_id: string
           created_at: string
+          deleted_at: string | null
           id: string
           is_default: boolean
           name: string
@@ -28789,6 +28805,7 @@ export type Database = {
           audience: string
           base_template_id: string
           created_at?: string
+          deleted_at?: string | null
           id?: string
           is_default?: boolean
           name: string
@@ -28800,6 +28817,7 @@ export type Database = {
           audience?: string
           base_template_id?: string
           created_at?: string
+          deleted_at?: string | null
           id?: string
           is_default?: boolean
           name?: string
@@ -37829,6 +37847,7 @@ export type Database = {
         Returns: string[]
       }
       purge_deleted_esign_envelopes: { Args: never; Returns: Json }
+      purge_soft_deleted_documents: { Args: never; Returns: undefined }
       redact_expired_vapi_recordings: { Args: never; Returns: number }
       redact_sensitive_transcript: {
         Args: { p_transcript: string }

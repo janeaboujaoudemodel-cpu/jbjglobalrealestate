@@ -57,7 +57,18 @@ import {
   type CustomField,
 } from "@/templates/composers";
 import { renderStandardBody } from "@/templates/composers/standardBody";
-import { useCrmDocuments, useSaveDocument } from "@/hooks/useCrmDocuments";
+import {
+  useCrmDocuments,
+  useSaveDocument,
+  useCrmDocumentsDeleted,
+  useSoftDeleteDocument,
+  useRestoreDocument,
+  useHardDeleteDocument,
+  type CrmDocument,
+} from "@/hooks/useCrmDocuments";
+import DocumentActionSheet from "./DocumentActionSheet";
+import DocumentPreviewDialog from "./DocumentPreviewDialog";
+import { RotateCcw } from "lucide-react";
 
 interface Props {
   catalog: DocumentAudience;
@@ -464,6 +475,33 @@ function StudioShell({
     setStep(2);
     toast.success(`Loaded "${d.title}"`);
   };
+
+  /* ── Global document action picker (Preview / Edit / Delete) ─────── */
+  const { data: deletedDocs = [] } = useCrmDocumentsDeleted();
+  const softDeleteDoc = useSoftDeleteDocument();
+  const restoreDoc = useRestoreDocument();
+  const hardDeleteDoc = useHardDeleteDocument();
+  const [pickerDoc, setPickerDoc] = useState<CrmDocument | null>(null);
+  const [previewDoc, setPreviewDoc] = useState<CrmDocument | null>(null);
+  const [showDeleted, setShowDeleted] = useState(false);
+
+  const openActionSheet = (d: CrmDocument) => setPickerDoc(d);
+  const handlePreview = (id: string) => {
+    const d = allDocs.find((x) => x.id === id);
+    if (d) setPreviewDoc(d);
+  };
+  const handleEditFromPicker = (id: string) => {
+    const d = allDocs.find((x) => x.id === id);
+    if (d) loadCrmDocument(d as any);
+  };
+  const handleSoftDelete = async (id: string) => {
+    await softDeleteDoc.mutateAsync(id);
+    toast.success("Moved to Recently Deleted", {
+      action: { label: "Undo", onClick: () => restoreDoc.mutate(id) },
+      duration: 5000,
+    });
+  };
+
 
 
 
@@ -1184,9 +1222,9 @@ function StudioShell({
                         <button
                           key={d.id}
                           type="button"
-                          onClick={() => loadCrmDocument(d as any)}
+                          onClick={() => openActionSheet(d as CrmDocument)}
                           className={`w-full text-left text-[12px] truncate px-1.5 py-1 rounded ${isCurrent ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-[#EFE6D6]/60"}`}
-                          title={d.title}
+                          title={`${d.title} — click for Preview / Edit / Delete`}
                         >
                           <div className="truncate">{d.client_name || d.title}</div>
                           {bid && <div className="text-[10px] text-[#1A1A1A]/55 font-mono tracking-tight">{bid}</div>}
@@ -1195,6 +1233,55 @@ function StudioShell({
                     })}
                   </div>
                 )}
+
+                {/* Recently Deleted (30-day restore window) */}
+                {deletedDocs.length > 0 && (
+                  <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 space-y-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setShowDeleted((v) => !v)}
+                      className="w-full text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold flex items-center justify-between"
+                    >
+                      <span>Recently Deleted · 30 days</span>
+                      <span className="text-[#B89555]">{deletedDocs.length} {showDeleted ? "▾" : "▸"}</span>
+                    </button>
+                    {showDeleted && deletedDocs.map((d) => {
+                      const deletedAt = d.deleted_at ? new Date(d.deleted_at) : null;
+                      const daysLeft = deletedAt
+                        ? Math.max(0, 30 - Math.floor((Date.now() - deletedAt.getTime()) / 86400000))
+                        : 30;
+                      return (
+                        <div key={d.id} className="flex items-center gap-1.5 group text-[12px]">
+                          <div className="flex-1 truncate text-[#1A1A1A]/75" title={d.title}>
+                            {d.client_name || d.title}
+                            <span className="ml-1 text-[10px] text-[#1A1A1A]/50">· {daysLeft}d left</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => restoreDoc.mutate(d.id)}
+                            className="p-1 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+                            title="Restore"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (confirm("Permanently delete this document? This cannot be undone.")) {
+                                hardDeleteDoc.mutate(d.id);
+                              }
+                            }}
+                            className="p-1 rounded hover:bg-[#fbe9e9] text-[#7a1f1f]/80 hover:text-[#7a1f1f]"
+                            title="Delete permanently"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
 
 
                 {savedTemplates.filter((s) => s.base_template_id === template.id).length > 0 && (
@@ -1939,8 +2026,23 @@ function StudioShell({
           </aside>
         )}
       </div>
+
+      <DocumentActionSheet
+        open={!!pickerDoc}
+        onOpenChange={(o) => { if (!o) setPickerDoc(null); }}
+        item={pickerDoc ? { id: pickerDoc.id, title: pickerDoc.client_name || pickerDoc.title, subtitle: (pickerDoc.field_values as any)?.booking_id } : null}
+        onPreview={handlePreview}
+        onEdit={handleEditFromPicker}
+        onDelete={handleSoftDelete}
+      />
+      <DocumentPreviewDialog
+        open={!!previewDoc}
+        onOpenChange={(o) => { if (!o) setPreviewDoc(null); }}
+        doc={previewDoc}
+      />
     </div>
   );
+
 
   return createPortal(overlay, document.body);
 }
