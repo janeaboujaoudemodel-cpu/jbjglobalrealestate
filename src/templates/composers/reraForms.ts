@@ -24,6 +24,10 @@ const INK = "#1A1A1A";
 const CHAMPAGNE = "#F7F2EA";
 const MUTED = "rgba(26,26,26,0.65)";
 
+/** Wrap content as an explicit A4 page group the renderer can split on. */
+const page = (n: number, content: string) =>
+  `<section data-pdf-page="${n}" style="display:block;">${content}</section>`;
+
 const esc = (s?: string) =>
   (s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 
