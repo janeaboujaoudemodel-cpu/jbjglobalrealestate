@@ -276,7 +276,7 @@ function StudioShell({
       window.cancelAnimationFrame(frame);
       ro.disconnect();
     };
-  }, [open, template, bodyHtml, marks, manualPages]);
+  }, [open, template, bodyHtml, manualPages]);
 
 
 
