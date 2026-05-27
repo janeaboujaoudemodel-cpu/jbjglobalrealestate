@@ -122,7 +122,7 @@ export function composeFormA(input: ComposerInput): string {
     paragraphs(input.aiClosing),
     signatureBlock({
       ownerName: f.brokerName || input.ownerName,
-      ownerTitle: "Registered Broker — JBJ Global Real Estate",
+      ownerTitle: "Founder & CEO",
       ownerDate: input.ownerDate,
       applicantName: f.recipientName,
       applicantDate: input.applicantDate,
@@ -131,7 +131,7 @@ export function composeFormA(input: ComposerInput): string {
     }),
   ].join("");
 
-  return page(1, pageOne) + page(2, pageTwo);
+  return pageOne + pageTwo;
 }
 
 /* ───────────── FORM B — Contract Between Buyer & Broker ───────────── */
@@ -179,7 +179,7 @@ export function composeFormB(input: ComposerInput): string {
     paragraphs(input.aiClosing),
     signatureBlock({
       ownerName: f.brokerName || input.ownerName,
-      ownerTitle: "Registered Broker — JBJ Global Real Estate",
+      ownerTitle: "Founder & CEO",
       ownerDate: input.ownerDate,
       applicantName: f.recipientName,
       applicantDate: input.applicantDate,
@@ -188,7 +188,7 @@ export function composeFormB(input: ComposerInput): string {
     }),
   ].join("");
 
-  return page(1, pageOne) + page(2, pageTwo);
+  return pageOne + pageTwo;
 }
 
 /* ───────────── FORM F — Memorandum of Understanding (Buyer ↔ Seller) ───────────── */
@@ -251,7 +251,7 @@ export function composeFormF(input: ComposerInput): string {
     paragraphs(input.aiClosing),
     signatureBlock({
       ownerName: f.sellerName,
-      ownerTitle: "Seller — Party “A”",
+      ownerTitle: "Founder & CEO",
       ownerDate: input.ownerDate,
       applicantName: f.recipientName,
       applicantDate: input.applicantDate,
@@ -263,7 +263,7 @@ export function composeFormF(input: ComposerInput): string {
     }),
   ].join("");
 
-  return page(1, pageOne) + page(2, pageTwo);
+  return pageOne + pageTwo;
 }
 
 /* ───────────── FORM I — Brokers Notification (Co-Broking A↔B) ───────────── */
@@ -308,7 +308,7 @@ export function composeFormI(input: ComposerInput): string {
     paragraphs(input.aiClosing),
     signatureBlock({
       ownerName: f.brokerName || input.ownerName,
-      ownerTitle: "Broker A — JBJ Global Real Estate",
+      ownerTitle: "Founder & CEO",
       ownerDate: input.ownerDate,
       applicantName: f.counterpartyAgent || f.recipientName,
       applicantDate: input.applicantDate,
@@ -317,7 +317,7 @@ export function composeFormI(input: ComposerInput): string {
     }),
   ].join("");
 
-  return page(1, pageOne) + page(2, pageTwo);
+  return pageOne + pageTwo;
 }
 
 /* ───────────── FORM U — Cancellation of Form A / Form B ───────────── */
@@ -360,7 +360,7 @@ export function composeFormU(input: ComposerInput): string {
     paragraphs(input.aiClosing),
     signatureBlock({
       ownerName: f.brokerName || input.ownerName,
-      ownerTitle: "Registered Broker — JBJ Global Real Estate",
+      ownerTitle: "Founder & CEO",
       ownerDate: input.ownerDate,
       applicantName: f.recipientName,
       applicantDate: input.applicantDate,
@@ -369,7 +369,7 @@ export function composeFormU(input: ComposerInput): string {
     }),
   ].join("");
 
-  return page(1, pageOne) + page(2, pageTwo);
+  return pageOne + pageTwo;
 }
 
 /* ───────────── Broker-to-Broker Referral (NOT a RERA form) ───────────── */
@@ -408,7 +408,7 @@ export function composeBrokerReferral(input: ComposerInput): string {
     paragraphs(input.aiClosing),
     signatureBlock({
       ownerName: f.brokerName || input.ownerName,
-      ownerTitle: "JBJ Global Real Estate — Referring Broker",
+      ownerTitle: "Founder & CEO",
       ownerDate: input.ownerDate,
       applicantName: f.counterpartyAgent || f.recipientName,
       applicantDate: input.applicantDate,
@@ -417,5 +417,5 @@ export function composeBrokerReferral(input: ComposerInput): string {
     }),
   ].join("");
 
-  return page(1, pageOne) + page(2, pageTwo);
+  return pageOne + pageTwo;
 }
