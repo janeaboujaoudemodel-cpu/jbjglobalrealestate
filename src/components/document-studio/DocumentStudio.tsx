@@ -1892,31 +1892,34 @@ function StudioShell({
                               {/* Header — only on page 1 */}
                               {isFirst && <LockedLetterhead />}
 
-                              {/* Body region — fills the remaining vertical space
-                                  ABOVE the absolute-bottom footer */}
+                              {/* Body region — fills the remaining vertical space.
+                                  Footer ONLY exists on the last page, so on
+                                  earlier pages the body extends edge-to-edge
+                                  to the bottom (no reserved footer slot). */}
                               <div
                                 style={{
                                   position: "absolute",
                                   top: isFirst ? chromeHeights.header : 0,
                                   left: 0,
                                   right: 0,
-                                  bottom: chromeHeights.footer,
+                                  bottom: isLast ? chromeHeights.footer : 0,
                                   padding: `${topPad}px ${BODY_PAD_X}px ${BOTTOM_PAD}px`,
                                   boxSizing: "border-box",
                                   overflow: "hidden",
                                   display: "flex",
                                   flexDirection: "column",
-                                  justifyContent: isLast && pageIndex === 2 ? "center" : "flex-start",
+                                  justifyContent: "flex-start",
                                 }}
                               >
                                 {groupHtml ? (
                                   <div
-                                    className="prose prose-sm max-w-none text-[#1A1A1A]"
+                                    className="prose prose-base max-w-none text-[#1A1A1A] jbj-doc-body"
+                                    data-page-index={pageIndex}
                                     style={{
                                       width: bodyWidth,
                                       fontFamily: "Inter, system-ui, sans-serif",
-                                      lineHeight: 1.7,
-                                      fontSize: 13,
+                                      lineHeight: 1.75,
+                                      fontSize: pageIndex === 1 ? 14.5 : 13.5,
                                       color: "#1A1A1A",
                                     }}
                                     contentEditable={isFirst}
@@ -1961,10 +1964,12 @@ function StudioShell({
                                 )}
                               </div>
 
-                              {/* Footer — absolute flush-bottom on EVERY page, edge-to-edge, no gap */}
-                              <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-                                <LockedFooter />
-                              </div>
+                              {/* Footer — ONLY on the last page, absolute flush-bottom, edge-to-edge */}
+                              {isLast && (
+                                <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+                                  <LockedFooter />
+                                </div>
+                              )}
                               <div aria-hidden className="absolute right-3 top-3 px-2 py-[2px] rounded-sm text-[10px] font-semibold uppercase pointer-events-none" style={{ background: "#FDFBF7", color: "#1A1A1A", border: "1px solid #B89555", letterSpacing: "0.18em" }}>
                                 Page {pageIndex + 1} / {pageCount}
                               </div>
