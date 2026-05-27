@@ -37813,6 +37813,7 @@ export type Database = {
       mask_email: { Args: { email: string }; Returns: string }
       mask_iban: { Args: { iban: string }; Returns: string }
       mask_phone: { Args: { phone: string }; Returns: string }
+      next_booking_id: { Args: { prefix?: string }; Returns: string }
       next_doc_number: { Args: { _template_key: string }; Returns: string }
       portal_rep_owns: {
         Args: { _rep_id: string; _uid: string }
