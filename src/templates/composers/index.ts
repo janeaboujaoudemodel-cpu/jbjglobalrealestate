@@ -600,16 +600,18 @@ function composeHolidayHome(input: ComposerInput): string {
     `<strong>Governing Law.</strong> This Agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai. Any dispute is subject to the exclusive jurisdiction of Dubai Courts.`,
     `<strong>Acknowledgement.</strong> By signing below, the Guest confirms they have <strong>read, understood and accepted</strong> all terms above, and that payment has been made <strong>voluntarily and irrevocably</strong>.`,
   ];
-  const termsList = (items: string[], start: number, title: string, compact = false) => `
+  // GLOBAL READABILITY RULE: body terms ≥ 12.5px, line-height ≥ 1.65, clause spacing ≥ 9px.
+  // Never compress terms below this floor to "fit" a page — add a page instead.
+  const termsList = (items: string[], start: number, title: string) => `
     <div data-pdf-section="terms" style="margin:0;">
-      <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:7px;margin-bottom:${compact ? 9 : 12}px;">
+      <div style="font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:8px;margin-bottom:14px;">
         ${title}
       </div>
-      <ol start="${start}" style="margin:0;padding-left:22px;font-size:${compact ? 10.9 : 11.15}px;line-height:${compact ? 1.48 : 1.55};color:${INK};">
-        ${items.map((clause, i) => `<li style="margin-bottom:${i === items.length - 1 ? 0 : compact ? 6 : 8}px;">${clause}</li>`).join("")}
+      <ol start="${start}" style="margin:0;padding-left:22px;font-size:12.6px;line-height:1.68;color:${INK};">
+        ${items.map((clause, i) => `<li style="margin-bottom:${i === items.length - 1 ? 0 : 10}px;">${clause}</li>`).join("")}
       </ol>
     </div>`;
-  const allTerms = termsList(termClauses, 1, "Terms & Conditions — Booking, Payment, Liability & Stay Rules", true);
+  const allTerms = termsList(termClauses, 1, "Terms & Conditions — Booking, Payment, Liability & Stay Rules");
 
 
   // Final guest acknowledgement — name synced live from the left-rail input.
