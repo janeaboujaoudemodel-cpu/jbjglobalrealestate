@@ -411,6 +411,62 @@ function StudioShell({
     }
   };
 
+  /* ── Generated Documents library (crm_documents) ─────────────────── */
+  const { data: allDocs = [] } = useCrmDocuments("all");
+  const saveDocMutation = useSaveDocument();
+  const [currentDocId, setCurrentDocId] = useState<string | undefined>(undefined);
+  const docsForTemplate = useMemo(
+    () => (template ? allDocs.filter((d) => d.template_id === template.id) : []),
+    [allDocs, template],
+  );
+
+  const handleSaveDocument = async () => {
+    if (!template) { toast.error("Pick a template first"); return; }
+    // Derive booking id (chained, server-side) if not already in field_values.
+    let booking_id = (fields.booking_id || fields.bookingRef || "").trim();
+    if (!booking_id) {
+      const prefix =
+        template.id === "holiday_home_agreement" ? "JBJ-HH" :
+        template.id === "commission_agreement"   ? "JBJ-CA" :
+        template.id === "property_advertising_agreement" ? "JBJ-PAA" :
+        "JBJ-DOC";
+      try {
+        const { data, error } = await (supabase as any).rpc("next_booking_id", { prefix });
+        if (!error && data) booking_id = String(data);
+      } catch { /* fall back to client gen below */ }
+      if (!booking_id) booking_id = `${"JBJ-DOC"}-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+    }
+    const nextFields = { ...fields, booking_id };
+    setFields(nextFields);
+    const title =
+      (fields.guest_name || fields.client_name || fields.full_name || "Untitled") +
+      ` — ${template.label} (${booking_id})`;
+    try {
+      const saved = await saveDocMutation.mutateAsync({
+        id: currentDocId,
+        template_id: template.id,
+        title,
+        field_values: nextFields,
+        client_name: fields.guest_name || fields.client_name || null,
+        client_email: fields.guest_email || fields.client_email || null,
+        client_phone: fields.guest_phone || fields.client_phone || null,
+      });
+      setCurrentDocId(saved.id);
+    } catch (e: any) {
+      // toast already shown by hook
+    }
+  };
+
+  const loadCrmDocument = (d: { id: string; field_values: Record<string, string>; template_id: string; title: string }) => {
+    setTemplateId(d.template_id);
+    setFields(d.field_values || {});
+    setCurrentDocId(d.id);
+    setStep(2);
+    toast.success(`Loaded "${d.title}"`);
+  };
+
+
+
   // AI auto-fill from pasted details / attached document.
   const [autoFillText, setAutoFillText] = useState("");
   const [autoFillBusy, setAutoFillBusy] = useState(false);
