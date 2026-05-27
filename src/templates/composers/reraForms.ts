@@ -132,7 +132,7 @@ export function composeFormA(input: ComposerInput): string {
     }),
   ].join("");
 
-  return pageOne + pageTwo;
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM B — Contract Between Buyer & Broker ───────────── */
@@ -264,7 +264,7 @@ export function composeFormF(input: ComposerInput): string {
     }),
   ].join("");
 
-  return pageOne + pageTwo;
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM I — Agent-to-Agent Agreement (RERA 4-part) ─────────────
@@ -282,81 +282,109 @@ export function composeFormI(input: ComposerInput): string {
   const jbjSide = (f.jbjSide === "A" || f.jbjSide === "B") ? f.jbjSide : "";
 
   const blankParty = (label: "A" | "B") => `
-    <div style="font-size:10.6px;line-height:1.52;color:${INK};min-height:188px;">
+    <div style="font-size:10.2px;line-height:1.45;color:${INK};">
       <div><strong>NAME OF ESTABLISHMENT:</strong> ___________________________</div>
       <div><strong>ADDRESS:</strong> ___________________________</div>
-      <div style="margin:6px 0 2px;font-weight:700;letter-spacing:.06em;font-size:10px;text-transform:uppercase;">Official Contact Details</div>
+      <div style="margin:5px 0 1px;font-weight:700;letter-spacing:.06em;font-size:9.5px;text-transform:uppercase;">Official Contact Details</div>
       <div>PH: __________ &nbsp; FAX: __________</div>
       <div>EMAIL: __________</div>
       <div>ORN: __________ &nbsp; DED LISC: __________</div>
       <div>P.O. BOX: __________</div>
-      <div style="margin:6px 0 2px;font-weight:700;letter-spacing:.06em;font-size:10px;text-transform:uppercase;">The Registered Agent &ldquo;${label}&rdquo;</div>
+      <div style="margin:5px 0 1px;font-weight:700;letter-spacing:.06em;font-size:9.5px;text-transform:uppercase;">The Registered Agent &ldquo;${label}&rdquo;</div>
       <div>NAME: __________</div>
       <div>BRN: __________ &nbsp; DATE ISSUED: __ / __ / ____</div>
       <div>MOBILE: __________</div>
       <div>EMAIL: __________</div>
     </div>`;
 
-  const partyA = jbjSide === "A" ? jbjPartyBlockHtml("A") : blankParty("A");
-  const partyB = jbjSide === "B" ? jbjPartyBlockHtml("B") : blankParty("B");
+  const compactJbjParty = (label: "A" | "B") => `
+    <div style="font-size:10.2px;line-height:1.45;color:${INK};">
+      <div><strong>NAME OF ESTABLISHMENT:</strong> JBJ GLOBAL REAL ESTATE L.L.C S.O.C</div>
+      <div><strong>ADDRESS:</strong> Dubai, UAE</div>
+      <div style="margin:5px 0 1px;font-weight:700;letter-spacing:.06em;font-size:9.5px;text-transform:uppercase;">Official Contact Details</div>
+      <div>PH: +971 50 000 0000 &nbsp; FAX: —</div>
+      <div>EMAIL: info@jbj.ae</div>
+      <div>ORN: 41486 &nbsp; DED LISC: —</div>
+      <div>P.O. BOX: —</div>
+      <div style="margin:5px 0 1px;font-weight:700;letter-spacing:.06em;font-size:9.5px;text-transform:uppercase;">The Registered Agent &ldquo;${label}&rdquo;</div>
+      <div>NAME: Jane Bou Jaoude</div>
+      <div>BRN: 44750 &nbsp; DATE ISSUED: 24 / 05 / 2024</div>
+      <div>MOBILE: +971 50 000 0000</div>
+      <div>EMAIL: info@jbj.ae</div>
+    </div>`;
 
-  const declarationA = `<em style="font-size:10.1px;line-height:1.45;color:${INK};">I hereby declare, I have read and understood the Real Estate Brokers Code of Ethics, I have a current signed Seller's/Landlord's Agreement FORM A, I shall respond to a reasonable offer to purchase/lease the listed property from Agent B, and shall not contact Agent B's Buyer/Tenant nor confer with their client under no circumstances unless the nominated Buyer/Tenant herein has already discussed the stated listed property with our Office.</em>`;
+  const partyA = jbjSide === "A" ? compactJbjParty("A") : blankParty("A");
+  const partyB = jbjSide === "B" ? compactJbjParty("B") : blankParty("B");
 
-  const declarationB = `<em style="font-size:10.1px;line-height:1.45;color:${INK};">I hereby declare, I have read and understood the Real Estate Brokers Code of Ethics, I have a current signed Buyer's/Tenant's Agreement FORM B, I shall encourage my Buyer/Tenant as named herein to submit a reasonable offer for the stated property and not contact Agent A's Seller/Landlord nor confer with their client under no circumstances unless the Agent A has delayed our proposal on the prescribed FORM with a reasonable reply within 24 hours.</em>`;
+  const declarationA = `<em style="font-size:9.8px;line-height:1.42;color:${INK};">I hereby declare, I have read and understood the Real Estate Brokers Code of Ethics, I have a current signed Seller's/Landlord's Agreement FORM A, I shall respond to a reasonable offer to purchase/lease the listed property from Agent B, and shall not contact Agent B's Buyer/Tenant nor confer with their client under no circumstances unless the nominated Buyer/Tenant herein has already discussed the stated listed property with our Office.</em>`;
+
+  const declarationB = `<em style="font-size:9.8px;line-height:1.42;color:${INK};">I hereby declare, I have read and understood the Real Estate Brokers Code of Ethics, I have a current signed Buyer's/Tenant's Agreement FORM B, I shall encourage my Buyer/Tenant as named herein to submit a reasonable offer for the stated property and not contact Agent A's Seller/Landlord nor confer with their client under no circumstances unless the Agent A has delayed our proposal on the prescribed FORM with a reasonable reply within 24 hours.</em>`;
 
   const partsTable = `
-    <table data-pdf-section="form-i-parties" style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 8px;">
+    <table data-pdf-section="form-i-parties" style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 6px;">
       <colgroup><col style="width:50%;" /><col style="width:50%;" /></colgroup>
       <thead>
         <tr>
-          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:6px 8px;text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 1A — THE AGENT / BROKER (Seller / Landlord)</th>
-          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:6px 8px;text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 1B — THE AGENT / BROKER (Buyer / Tenant)</th>
+          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:5px 8px;text-align:left;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 1A — THE AGENT / BROKER (Seller / Landlord)</th>
+          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:5px 8px;text-align:left;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 1B — THE AGENT / BROKER (Buyer / Tenant)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td style="border:1px solid ${GOLD};padding:8px 10px;vertical-align:top;">${partyA}</td>
-          <td style="border:1px solid ${GOLD};padding:8px 10px;vertical-align:top;">${partyB}</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid ${GOLD};padding:8px 10px;vertical-align:top;background:${CHAMPAGNE};"><strong style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;">Declaration by Agent A</strong><div style="margin-top:4px;">${declarationA}</div></td>
-          <td style="border:1px solid ${GOLD};padding:8px 10px;vertical-align:top;background:${CHAMPAGNE};"><strong style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;">Declaration by Agent B</strong><div style="margin-top:4px;">${declarationB}</div></td>
+          <td style="border:1px solid ${GOLD};padding:7px 9px;vertical-align:top;">${partyA}</td>
+          <td style="border:1px solid ${GOLD};padding:7px 9px;vertical-align:top;">${partyB}</td>
         </tr>
       </tbody>
     </table>`;
 
   const propertyAndCommission = `
-    <table data-pdf-section="form-i-property-commission" style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 10px;">
+    <table data-pdf-section="form-i-property-commission" style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 6px;">
       <colgroup><col style="width:50%;" /><col style="width:50%;" /></colgroup>
       <thead>
         <tr>
-          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:6px 8px;text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 2 — THE PROPERTY</th>
-          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:6px 8px;text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 3 — THE COMMISSION (SPLIT)</th>
+          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:5px 8px;text-align:left;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 2 — THE PROPERTY</th>
+          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:5px 8px;text-align:left;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 3 — THE COMMISSION (SPLIT)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td style="border:1px solid ${GOLD};padding:8px 10px;vertical-align:top;font-size:10.6px;line-height:1.5;color:${INK};">
-            <div><strong>PROPERTY ADDRESS:</strong> ${esc(f.propertyRef) || "___________________________"}</div>
+          <td style="border:1px solid ${GOLD};padding:7px 9px;vertical-align:top;font-size:10.2px;line-height:1.45;color:${INK};">
+            <div><strong>PROPERTY ADDRESS:</strong> ${esc(f.propertyRef) || "__________"}</div>
             <div><strong>MASTER DEVELOPER:</strong> ${esc(f.masterDeveloper) || "__________"}</div>
             <div><strong>MASTER PROJECT NAME:</strong> ${esc(f.masterProject) || "__________"}</div>
             <div><strong>BUILDING NAME:</strong> ${esc(f.buildingName) || "__________"}</div>
             <div><strong>LISTED PRICE:</strong> ${f.listingPrice ? "AED " + esc(f.listingPrice) : "AED __________"}</div>
             <div><strong>DESCRIPTION:</strong> ${esc(f.propertyDescription) || "__________"}</div>
-            <div style="margin-top:6px;"><strong>DOES MOU EXIST ON THIS PROPERTY?</strong> YES [ ] NO [ ] N/A [ ]</div>
-            <div><strong>IS THE PROPERTY TENANTED?</strong> YES [ ] NO [ ]</div>
+            <div style="margin-top:4px;"><strong>MOU EXISTS?</strong> YES [ ] NO [ ] N/A [ ] &nbsp; <strong>TENANTED?</strong> YES [ ] NO [ ]</div>
             <div><strong>MAINTENANCE FEE P.A:</strong> ${esc(f.maintenanceFee) || "__________"} per sq. ft</div>
           </td>
-          <td style="border:1px solid ${GOLD};padding:8px 10px;vertical-align:top;font-size:10.6px;line-height:1.5;color:${INK};">
-            <div style="font-style:italic;color:${MUTED};margin-bottom:5px;">The following additional commission split is agreed between the Seller/Landlord's Agent &amp; the Buyer/Tenant's Agent.</div>
-            <div><strong>COMMISSION IN TOTAL IS: AED ${esc(f.commissionTotal) || "__________"}</strong></div>
-            <div style="margin-top:6px;"><strong>AGENT &ldquo;A&rdquo; [ ${esc(f.commissionPctA) || "__"} % ]</strong> (Seller/Landlord's Agent)</div>
+          <td style="border:1px solid ${GOLD};padding:7px 9px;vertical-align:top;font-size:10.2px;line-height:1.45;color:${INK};">
+            <div style="font-style:italic;color:${MUTED};margin-bottom:4px;">Additional commission split agreed between the Seller/Landlord's Agent &amp; the Buyer/Tenant's Agent.</div>
+            <div><strong>COMMISSION TOTAL:</strong> AED ${esc(f.commissionTotal) || "__________"}</div>
+            <div style="margin-top:4px;"><strong>AGENT &ldquo;A&rdquo; [ ${esc(f.commissionPctA) || "__"} % ]</strong> (Seller/Landlord's Agent)</div>
             <div><strong>AGENT &ldquo;B&rdquo; [ ${esc(f.commissionPctB) || "__"} % ]</strong> (Buyer/Tenant's Agent)</div>
-            <div style="margin-top:8px;"><strong>BUYER'S / TENANT'S NAME:</strong> ${esc(f.buyerFamilyName) || "__________"} <span style="color:${MUTED};">(family name only)</span></div>
+            <div style="margin-top:5px;"><strong>BUYER'S / TENANT'S NAME:</strong> ${esc(f.buyerFamilyName) || "__________"} <span style="color:${MUTED};">(family name only)</span></div>
             <div><strong>BUDGET:</strong> ${esc(f.buyerBudget) || "__________"}</div>
-            <div><strong>TRANSFER FEE PAID BY:</strong> SELLER [ ] BUYER [ ] NEGOTIABLE [ ]</div>
-            <div><strong>DOES THE BUYER HAVE APPROVED PRE-FINANCE?</strong> YES [ ] NO [ ] N/A [ ]</div>
-            <div><strong>HAS THIS BUYER/TENANT CONTACTED THE AGENT &ldquo;A&rdquo;?</strong> YES [ ] NO [ ] N/A [ ]</div>
+            <div><strong>TRANSFER FEE BY:</strong> SELLER [ ] BUYER [ ] NEGOTIABLE [ ]</div>
+            <div><strong>BUYER PRE-FINANCE APPROVED?</strong> YES [ ] NO [ ] N/A [ ]</div>
+            <div><strong>HAS BUYER/TENANT CONTACTED AGENT A?</strong> YES [ ] NO [ ] N/A [ ]</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>`;
+
+  const declarationsTable = `
+    <table data-pdf-section="form-i-declarations" style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 8px;">
+      <colgroup><col style="width:50%;" /><col style="width:50%;" /></colgroup>
+      <tbody>
+        <tr>
+          <td style="border:1px solid ${GOLD};padding:7px 9px;vertical-align:top;background:${CHAMPAGNE};">
+            <strong style="font-size:9.8px;letter-spacing:.08em;text-transform:uppercase;">Declaration by Agent A</strong>
+            <div style="margin-top:3px;">${declarationA}</div>
+          </td>
+          <td style="border:1px solid ${GOLD};padding:7px 9px;vertical-align:top;background:${CHAMPAGNE};">
+            <strong style="font-size:9.8px;letter-spacing:.08em;text-transform:uppercase;">Declaration by Agent B</strong>
+            <div style="margin-top:3px;">${declarationB}</div>
           </td>
         </tr>
       </tbody>
@@ -374,13 +402,16 @@ export function composeFormI(input: ComposerInput): string {
       </td>`;
   };
 
+  // data-signature-block="1" suppresses the GLOBAL per-page signature
+  // strip on this (last) page — avoiding a duplicate Name/Signature/Date
+  // row appearing under the official RERA signatures.
   const signatures = `
-    <div data-pdf-section="form-i-signatures" style="margin-top:auto;padding-top:12px;page-break-inside:avoid;break-inside:avoid;">
-    <div style="font-size:10.5px;color:${INK};margin:4px 0 8px;line-height:1.45;">Both Agents are required to cooperate fully, complete this FORM, and BOTH retain a fully signed &amp; stamped copy on file. RERA DRS is available to both Parties.</div>
-    <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 8px;">
-      <tbody><tr>${signatureCell("A")}${signatureCell("B")}</tr></tbody>
-    </table>
-    <div style="font-size:10.3px;color:${MUTED};line-height:1.45;font-style:italic;">The Agent &ldquo;B&rdquo; is confirming to view the above mentioned property through Agent &ldquo;A&rdquo;. In the event that Agent &ldquo;A&rdquo; did not respond within 24 hours, Agent &ldquo;B&rdquo; must contact RERA.</div>
+    <div data-signature-block="1" data-pdf-section="signature" style="margin-top:auto;padding-top:12px;page-break-inside:avoid;break-inside:avoid;">
+      <div style="font-size:10.3px;color:${INK};margin:0 0 8px;line-height:1.45;">Both Agents are required to cooperate fully, complete this FORM, and BOTH retain a fully signed &amp; stamped copy on file. RERA DRS is available to both Parties.</div>
+      <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 8px;">
+        <tbody><tr>${signatureCell("A")}${signatureCell("B")}</tr></tbody>
+      </table>
+      <div style="font-size:10.2px;color:${MUTED};line-height:1.45;font-style:italic;">The Agent &ldquo;B&rdquo; is confirming to view the above mentioned property through Agent &ldquo;A&rdquo;. In the event that Agent &ldquo;A&rdquo; did not respond within 24 hours, Agent &ldquo;B&rdquo; must contact RERA.</div>
     </div>`;
 
   const eyebrow = `
@@ -388,9 +419,13 @@ export function composeFormI(input: ComposerInput): string {
       <div>FORM I &nbsp;·&nbsp; BRN: 44750</div>
       <div>Str #: __________</div>
     </div>
-    <div style="text-align:center;font-size:20px;font-weight:800;letter-spacing:.06em;color:${INK};margin:4px 0 2px;text-transform:uppercase;">Agent to Agent Agreement</div>
-    <div style="text-align:center;font-style:italic;font-size:11px;color:${MUTED};margin:0 0 8px;">As per the Real Estate Brokers By-Law No. (85) of 2006</div>`;
+    <div style="text-align:center;font-size:19px;font-weight:800;letter-spacing:.06em;color:${INK};margin:3px 0 1px;text-transform:uppercase;">Agent to Agent Agreement</div>
+    <div style="text-align:center;font-style:italic;font-size:10.5px;color:${MUTED};margin:0 0 8px;">As per the Real Estate Brokers By-Law No. (85) of 2006</div>`;
 
+  // Page 1: eyebrow + Parties + Property/Commission.
+  // Page 2: Declarations + RERA Signatures.
+  // Explicit <section data-pdf-page> wrappers — DocumentStudio honours
+  // these and disables auto-re-splitting (see DocumentStudio.tsx L375).
   const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     eyebrow,
@@ -399,11 +434,11 @@ export function composeFormI(input: ComposerInput): string {
   ].join("");
 
   const pageTwo = [
+    declarationsTable,
     signatures,
-    paragraphs(input.aiClosing),
   ].join("");
 
-  return pageOne + pageTwo;
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM U — Cancellation of Form A / Form B ───────────── */
@@ -455,7 +490,7 @@ export function composeFormU(input: ComposerInput): string {
     }),
   ].join("");
 
-  return pageOne + pageTwo;
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── Broker-to-Broker Referral (NOT a RERA form) ───────────── */
@@ -503,5 +538,5 @@ export function composeBrokerReferral(input: ComposerInput): string {
     }),
   ].join("");
 
-  return pageOne + pageTwo;
+  return page(1, pageOne) + page(2, pageTwo);
 }
