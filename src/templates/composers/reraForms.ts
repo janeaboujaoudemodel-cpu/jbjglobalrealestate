@@ -282,15 +282,15 @@ export function composeFormI(input: ComposerInput): string {
   const jbjSide = (f.jbjSide === "A" || f.jbjSide === "B") ? f.jbjSide : "";
 
   const blankParty = (label: "A" | "B") => `
-    <div style="font-size:11px;line-height:1.7;color:${INK};min-height:240px;">
+    <div style="font-size:10.6px;line-height:1.52;color:${INK};min-height:188px;">
       <div><strong>NAME OF ESTABLISHMENT:</strong> ___________________________</div>
       <div><strong>ADDRESS:</strong> ___________________________</div>
-      <div style="margin:8px 0 2px;font-weight:700;letter-spacing:.06em;font-size:10.5px;text-transform:uppercase;">Official Contact Details</div>
+      <div style="margin:6px 0 2px;font-weight:700;letter-spacing:.06em;font-size:10px;text-transform:uppercase;">Official Contact Details</div>
       <div>PH: __________ &nbsp; FAX: __________</div>
       <div>EMAIL: __________</div>
       <div>ORN: __________ &nbsp; DED LISC: __________</div>
       <div>P.O. BOX: __________</div>
-      <div style="margin:8px 0 2px;font-weight:700;letter-spacing:.06em;font-size:10.5px;text-transform:uppercase;">The Registered Agent &ldquo;${label}&rdquo;</div>
+      <div style="margin:6px 0 2px;font-weight:700;letter-spacing:.06em;font-size:10px;text-transform:uppercase;">The Registered Agent &ldquo;${label}&rdquo;</div>
       <div>NAME: __________</div>
       <div>BRN: __________ &nbsp; DATE ISSUED: __ / __ / ____</div>
       <div>MOBILE: __________</div>
@@ -300,27 +300,27 @@ export function composeFormI(input: ComposerInput): string {
   const partyA = jbjSide === "A" ? jbjPartyBlockHtml("A") : blankParty("A");
   const partyB = jbjSide === "B" ? jbjPartyBlockHtml("B") : blankParty("B");
 
-  const declarationA = `<em style="font-size:10.5px;line-height:1.55;color:${INK};">I hereby declare, I have read and understood the Real Estate Brokers Code of Ethics, I have a current signed Seller's/Landlord's Agreement FORM A, I shall respond to a reasonable offer to purchase/lease the listed property from Agent B, and shall not contact Agent B's Buyer/Tenant nor confer with their client under no circumstances unless the nominated Buyer/Tenant herein has already discussed the stated listed property with our Office.</em>`;
+  const declarationA = `<em style="font-size:10.1px;line-height:1.45;color:${INK};">I hereby declare, I have read and understood the Real Estate Brokers Code of Ethics, I have a current signed Seller's/Landlord's Agreement FORM A, I shall respond to a reasonable offer to purchase/lease the listed property from Agent B, and shall not contact Agent B's Buyer/Tenant nor confer with their client under no circumstances unless the nominated Buyer/Tenant herein has already discussed the stated listed property with our Office.</em>`;
 
-  const declarationB = `<em style="font-size:10.5px;line-height:1.55;color:${INK};">I hereby declare, I have read and understood the Real Estate Brokers Code of Ethics, I have a current signed Buyer's/Tenant's Agreement FORM B, I shall encourage my Buyer/Tenant as named herein to submit a reasonable offer for the stated property and not contact Agent A's Seller/Landlord nor confer with their client under no circumstances unless the Agent A has delayed our proposal on the prescribed FORM with a reasonable reply within 24 hours.</em>`;
+  const declarationB = `<em style="font-size:10.1px;line-height:1.45;color:${INK};">I hereby declare, I have read and understood the Real Estate Brokers Code of Ethics, I have a current signed Buyer's/Tenant's Agreement FORM B, I shall encourage my Buyer/Tenant as named herein to submit a reasonable offer for the stated property and not contact Agent A's Seller/Landlord nor confer with their client under no circumstances unless the Agent A has delayed our proposal on the prescribed FORM with a reasonable reply within 24 hours.</em>`;
 
   const partsTable = `
-    <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 14px;">
+    <table data-pdf-section="form-i-parties" style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 8px;">
       <colgroup><col style="width:50%;" /><col style="width:50%;" /></colgroup>
       <thead>
         <tr>
-          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:8px 10px;text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">A) THE AGENT / BROKER (Seller / Landlord)</th>
-          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:8px 10px;text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">B) THE AGENT / BROKER (Buyer / Tenant)</th>
+          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:6px 8px;text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 1A — THE AGENT / BROKER (Seller / Landlord)</th>
+          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:6px 8px;text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 1B — THE AGENT / BROKER (Buyer / Tenant)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td style="border:1px solid ${GOLD};padding:10px 12px;vertical-align:top;">${partyA}</td>
-          <td style="border:1px solid ${GOLD};padding:10px 12px;vertical-align:top;">${partyB}</td>
+          <td style="border:1px solid ${GOLD};padding:8px 10px;vertical-align:top;">${partyA}</td>
+          <td style="border:1px solid ${GOLD};padding:8px 10px;vertical-align:top;">${partyB}</td>
         </tr>
         <tr>
-          <td style="border:1px solid ${GOLD};padding:10px 12px;vertical-align:top;background:${CHAMPAGNE};"><strong style="font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;">Declaration by Agent A</strong><div style="margin-top:6px;">${declarationA}</div></td>
-          <td style="border:1px solid ${GOLD};padding:10px 12px;vertical-align:top;background:${CHAMPAGNE};"><strong style="font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;">Declaration by Agent B</strong><div style="margin-top:6px;">${declarationB}</div></td>
+          <td style="border:1px solid ${GOLD};padding:8px 10px;vertical-align:top;background:${CHAMPAGNE};"><strong style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;">Declaration by Agent A</strong><div style="margin-top:4px;">${declarationA}</div></td>
+          <td style="border:1px solid ${GOLD};padding:8px 10px;vertical-align:top;background:${CHAMPAGNE};"><strong style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;">Declaration by Agent B</strong><div style="margin-top:4px;">${declarationB}</div></td>
         </tr>
       </tbody>
     </table>`;
