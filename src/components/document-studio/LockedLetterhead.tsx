@@ -14,7 +14,7 @@ export function LockedLetterhead() {
         borderBottom: `1px solid ${JBJ_GOLD}`,
         fontFamily: "Inter, system-ui, sans-serif",
         paddingLeft: 32,
-        paddingRight: 48,
+        paddingRight: 72,
       }}
     >
       <div className="flex items-center gap-[24px]">
