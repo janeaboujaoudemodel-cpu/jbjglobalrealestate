@@ -638,7 +638,7 @@ function composeHolidayHome(input: ComposerInput): string {
   });
 
   // ── Locked 3-page layout. Page 1 = letter + guest profile + quotation.
-  //    Page 2 = all terms from the top. Page 3 = disclaimer + signature.
+  //    Page 2 = terms + disclaimer/guest declaration at bottom. Page 3 = signature + closing.
   const page1 = `
     <section data-pdf-page="1">
       ${pageFrame(`${input.hideLetterDate ? "" : dateLine(input.letterDate)}${subjectLine(`Holiday Home Booking Agreement — ${bookingId}`)}${welcome}${guestCard}${quotation}`, 1)}
@@ -646,12 +646,12 @@ function composeHolidayHome(input: ComposerInput): string {
 
   const page2 = `
     <section data-pdf-page="2">
-      ${pageFrame(allTerms, 2)}
+      ${pageFrame(`<div style="display:flex;flex-direction:column;gap:18px;">${allTerms}${acknowledgement}</div>`, 2)}
     </section>`;
 
   const page3 = `
     <section data-pdf-page="3">
-      ${pageFrame(`<div style="display:flex;flex-direction:column;gap:18px;">${acknowledgement}${signature}${paragraphs(input.aiClosing)}</div>`, 3)}
+      ${pageFrame(`<div style="display:flex;flex-direction:column;gap:18px;">${signature}${paragraphs(input.aiClosing)}</div>`, 3)}
     </section>`;
 
   return [page1, page2, page3].join("");
