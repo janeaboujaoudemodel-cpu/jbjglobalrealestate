@@ -1577,17 +1577,20 @@ function StudioShell({
           <div className="min-h-full flex justify-center py-10 px-4">
             {template ? (
               (() => {
-                // Visual A4 pagination — the body grows tall on a single
-                // editable canvas; we overlay page-break rules + "Page X of N"
-                // badges at every A4 boundary so the user sees real sheets
-                // in the preview, matching what the PDF exporter slices.
+                // Visual A4 pagination — pageCount = 1 unless content TRULY
+                // overflows the first A4 sheet. The previous formula always
+                // produced 2+ pages even on an empty body because the
+                // numerator counted body padding that the denominator had
+                // already subtracted. We now compare ACTUAL content against
+                // the per-page content budget.
                 const HEADER_H = 132 + 24; // letterhead block + padding
                 const FOOTER_H = 96;       // locked footer band
                 const BODY_PAD = 80;       // 40px top + 40px bottom inside body
                 const contentPerPage = Math.max(200, PAGE_H - HEADER_H - FOOTER_H - BODY_PAD);
-                const totalH = Math.max(PAGE_H, measuredPageH);
-                const pageCount = Math.max(1, Math.ceil((totalH - HEADER_H - FOOTER_H) / contentPerPage));
-                const minH = Math.max(PAGE_H, totalH);
+                const usedBody = Math.max(0, measuredPageH - HEADER_H - FOOTER_H - BODY_PAD);
+                const pageCount = Math.max(1, Math.ceil(usedBody / contentPerPage) || 1);
+                // Sheet height grows in whole A4 multiples ONLY when needed.
+                const minH = PAGE_H * pageCount;
 
                 return (
                   <div
