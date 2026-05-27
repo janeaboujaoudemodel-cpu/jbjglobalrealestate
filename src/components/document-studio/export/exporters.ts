@@ -138,42 +138,69 @@ export async function exportPdf(
   sourceElement?: HTMLElement | null,
 ): Promise<void> {
   const { default: jsPDF } = await import("jspdf");
+
+  // Collect logical block boundaries from the live DOM BEFORE rasterising,
+  // so we can avoid slicing through tables / signatures / terms items.
+  const SCALE = 2; // matches renderElementCanvas
+  const sectionBottomsCss: number[] = [];
+  if (sourceElement) {
+    const rootTop = sourceElement.getBoundingClientRect().top;
+    sourceElement.querySelectorAll<HTMLElement>("[data-pdf-section]").forEach((el) => {
+      const r = el.getBoundingClientRect();
+      sectionBottomsCss.push(r.bottom - rootTop);
+    });
+    sectionBottomsCss.sort((a, b) => a - b);
+  }
+
   const canvas = sourceElement
     ? await renderElementCanvas(sourceElement)
     : await renderHostCanvas(bodyHtml, marks);
 
-  // Page geometry: A4 in mm, plus the captured canvas dimensions.
+  const sectionBottoms = sectionBottomsCss.map((y) => Math.round(y * SCALE));
+
   const A4_W = 210;
   const A4_H = 297;
   const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
 
-  // Slice the captured canvas into one or more A4 pages. Each page is
-  // a hard A4 rectangle in the source (816 × 1154 css px per page),
-  // so we slice on (canvas.width × canvas.width * A4_H / A4_W).
   const sliceHpx = Math.round((canvas.width * A4_H) / A4_W);
   const sliceCanvas = document.createElement("canvas");
   const ctx = sliceCanvas.getContext("2d")!;
   sliceCanvas.width = canvas.width;
+  // Always render onto a FULL A4 page (whitespace fills any gap left by an
+  // early break). This is what stops tables from being cropped mid-row.
+  sliceCanvas.height = sliceHpx;
 
+  const MIN_PROGRESS = Math.round(sliceHpx * 0.25);
   let yOffset = 0;
   let first = true;
+
   while (yOffset < canvas.height) {
-    const h = Math.min(sliceHpx, canvas.height - yOffset);
-    sliceCanvas.height = h;
+    const naturalEnd = Math.min(yOffset + sliceHpx, canvas.height);
+    let cut = naturalEnd;
+    if (naturalEnd < canvas.height) {
+      // Find the largest section-bottom that fits inside this page.
+      let best = -1;
+      for (const b of sectionBottoms) {
+        if (b > yOffset + MIN_PROGRESS && b <= naturalEnd) best = b;
+        else if (b > naturalEnd) break;
+      }
+      if (best > 0) cut = best;
+    }
+    const h = cut - yOffset;
+
     ctx.fillStyle = "#FDFBF7";
-    ctx.fillRect(0, 0, sliceCanvas.width, h);
+    ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
     ctx.drawImage(canvas, 0, yOffset, canvas.width, h, 0, 0, canvas.width, h);
+
     const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.95);
     if (!first) pdf.addPage();
-    // Map the slice height proportionally so the last (shorter) slice
-    // is not stretched to fill the A4 page.
-    const sH = (h * A4_W) / canvas.width;
-    pdf.addImage(sliceData, "JPEG", 0, 0, A4_W, sH);
+    pdf.addImage(sliceData, "JPEG", 0, 0, A4_W, A4_H);
     first = false;
-    yOffset += h;
+    yOffset = cut;
   }
   pdf.save(fileName(template, "pdf"));
 }
+
 
 
 /* ───────────────────────── PNG ───────────────────────── */
