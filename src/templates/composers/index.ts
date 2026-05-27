@@ -86,7 +86,7 @@ export function termsTable(rows: Array<[string, string | undefined]>): string {
     )
     .join("");
   return `
-    <table style="border-collapse:collapse;width:100%;margin:14px 0 18px;font-family:Inter,system-ui,sans-serif;">
+    <table data-pdf-section="terms" style="border-collapse:collapse;width:100%;margin:14px 0 18px;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
       <thead>
         <tr>
           <th colspan="2" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
@@ -96,6 +96,7 @@ export function termsTable(rows: Array<[string, string | undefined]>): string {
       </thead>
       <tbody>${body}</tbody>
     </table>`;
+
 }
 
 export function commissionTable(rows: CommissionRow[]): string {
