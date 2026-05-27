@@ -158,10 +158,13 @@ export function signatureBlock(opts: {
   const oDate = esc(formatHumanDate(opts.ownerDate) || todayLong());
   const aName = esc(opts.applicantName || "");
   const aDate = esc(formatHumanDate(opts.applicantDate));
-  const aLabel = aName || "Recipient";
-  const shortLine = (value?: string, opts?: { cursive?: boolean }) => `
+  // Recipient cell title is template-aware (Second Party / Client / Guest /
+  // Counterparty …) — NEVER the literal word "Recipient" and NEVER the
+  // recipient's own name (the name already prints inside the cell).
+  const aLabel = esc(opts.applicantLabel || "Second Party");
+  const shortLine = (value?: string) => `
     <span style="display:inline-block;vertical-align:baseline;width:168px;border-bottom:1px solid ${INK};min-height:18px;position:relative;margin-left:6px;">
-      ${value ? `<span style="position:absolute;left:6px;bottom:2px;font-size:${opts?.cursive ? "15px" : "11px"};font-family:${opts?.cursive ? "'Dancing Script','Brush Script MT',cursive" : "Inter,system-ui,sans-serif"};font-weight:${opts?.cursive ? "500" : "400"};letter-spacing:0;color:${INK};white-space:nowrap;max-width:156px;overflow:hidden;text-overflow:ellipsis;">${value}</span>` : ""}
+      ${value ? `<span style="position:absolute;left:6px;bottom:1px;font-size:11px;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:156px;overflow:hidden;text-overflow:ellipsis;">${value}</span>` : ""}
     </span>`;
 
   const row = (label: string, value: string, fallbackDots = true) => `
@@ -170,11 +173,12 @@ export function signatureBlock(opts: {
       ${value ? `<span style="margin-left:4px;">${value}</span>` : (fallbackDots ? shortLine() : "")}
     </div>`;
 
-  // Stamp anchored well below + right of the signature box so it never
-  // overlaps any heading/label text above (e.g. "Referring Brokerage").
+  // Stamp — stretched larger (was 150×150, now 180×180) so seal text reads
+  // clearly without looking squeezed. Anchored well below + right of the
+  // signature box so it never overlaps any heading/label text above.
   const stampOverlay = `
     <img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" aria-hidden="true"
-      style="position:absolute;right:-46px;bottom:-22px;width:150px;height:150px;
+      style="position:absolute;right:-58px;bottom:-30px;width:180px;height:180px;
              object-fit:contain;opacity:0.94;mix-blend-mode:multiply;
              transform:rotate(-8deg);pointer-events:none;user-select:none;" />`;
 
@@ -194,9 +198,12 @@ export function signatureBlock(opts: {
     row("Date", oDate),
   ].join("");
 
+  // Recipient cell: the cell's top border IS the signature line (user signs
+  // ON it). Below it we only print Name (typed legal name) and Date — the
+  // literal "Signature:" row was removed to avoid a duplicate signature
+  // request inside the cell.
   const applicantLines = `
-    <div style="font-size:11px;color:${INK};margin-top:4px;"><strong style="font-weight:600;">Signature:</strong>${shortLine()}</div>
-    <div style="font-size:11px;color:${INK};margin-top:8px;"><strong style="font-weight:600;">Name:</strong>${shortLine(aName, { cursive: true })}</div>
+    <div style="font-size:11px;color:${INK};margin-top:4px;"><strong style="font-weight:600;">Name:</strong>${shortLine(aName)}</div>
     <div style="font-size:11px;color:${INK};margin-top:8px;"><strong style="font-weight:600;">Date:</strong>${shortLine(aDate)}</div>
   `;
 
@@ -261,16 +268,16 @@ export function clientSignatureStrip(opts: {
   label?: string;
 }): string {
   if (opts.page >= opts.totalPages) return "";
-  const legalName = esc((opts.applicantName || "Michael Anderson").trim());
+  const legalName = esc((opts.applicantName || "").trim());
   return `
     <div data-pdf-section="client-signature" data-client-signature-strip="1"
          style="margin-top:auto;padding:12px 8px 14px;
                 display:flex;justify-content:flex-end;align-items:flex-end;
                 font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
-      <div style="width:290px;margin-right:18px;color:${INK};">
-        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Signature:</div><div style="height:18px;border-bottom:1px solid ${INK};"></div></div>
-        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Name:</div><div style="height:20px;border-bottom:1px solid ${INK};position:relative;"><span style="position:absolute;left:6px;bottom:3px;font-size:15px;font-family:'Dancing Script','Brush Script MT',cursive;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis;">${legalName}</span></div></div>
-        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Date:</div><div style="height:18px;border-bottom:1px solid ${INK};"></div></div>
+      <div style="width:310px;margin-right:18px;color:${INK};">
+        <div style="display:grid;grid-template-columns:96px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;">Name:</div><div style="height:20px;border-bottom:1px solid ${INK};position:relative;"><span style="position:absolute;left:6px;bottom:1px;font-size:12px;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0.01em;color:${INK};white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis;">${legalName}</span></div></div>
+        <div style="display:grid;grid-template-columns:96px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;">Signature:</div><div style="height:22px;border-bottom:1px solid ${INK};"></div></div>
+        <div style="display:grid;grid-template-columns:96px 1fr;align-items:end;gap:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;">Date:</div><div style="height:18px;border-bottom:1px solid ${INK};"></div></div>
       </div>
     </div>
     <div data-page-divider="1" style="border-top:1px solid ${GOLD}B3;height:0;margin:0 8px;page-break-inside:avoid;break-inside:avoid;"></div>`;
