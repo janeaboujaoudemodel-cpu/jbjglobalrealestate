@@ -1704,10 +1704,10 @@ function StudioShell({
 
                     {/* Page-break overlays — SIBLING of pageRef so they are NEVER captured
                         into the exported PDF (html2canvas only sees pageRef). Rendered
-                        as scaled gap-bands that visually separate one canvas into A4 sheets. */}
+                        as thin gap-bands that visually separate one canvas into A4 sheets. */}
                     {pageCount > 1 && Array.from({ length: pageCount - 1 }).map((_, i) => {
-                      const y = (HEADER_H + contentPerPage * (i + 1)) * effectiveScale;
-                      const bandH = 22; // visual gap between sheets in screen px
+                      const y = PAGE_H * (i + 1) * effectiveScale;
+                      const bandH = 12; // thinner, cleaner gap
                       return (
                         <div
                           key={`pb-${i}`}
@@ -1717,12 +1717,12 @@ function StudioShell({
                             top: y - bandH / 2,
                             height: bandH,
                             background: "#F0E8D8",
-                            boxShadow:
-                              "inset 0 8px 10px -8px rgba(0,0,0,0.25), inset 0 -8px 10px -8px rgba(0,0,0,0.25)",
+                            borderTop: "1px solid rgba(184,149,85,0.35)",
+                            borderBottom: "1px solid rgba(184,149,85,0.35)",
                           }}
                         >
                           <div
-                            className="text-[10px] font-semibold uppercase px-2 py-[2px] rounded-sm"
+                            className="text-[9px] font-semibold uppercase px-1.5 py-[1px] rounded-sm"
                             style={{
                               background: "#FDFBF7",
                               color: "#1A1A1A",
@@ -1730,7 +1730,7 @@ function StudioShell({
                               letterSpacing: "0.18em",
                             }}
                           >
-                            Page {i + 2} of {pageCount}
+                            Page {i + 2} / {pageCount}
                           </div>
                         </div>
                       );
@@ -1747,7 +1747,7 @@ function StudioShell({
                           letterSpacing: "0.18em",
                         }}
                       >
-                        Page 1 of {pageCount}
+                        Page 1 / {pageCount}
                       </div>
                     )}
                   </div>
