@@ -43,6 +43,11 @@ export function LockedLetterhead() {
   );
 }
 
+/**
+ * Full-bleed premium footer — edge-to-edge, same vertical rhythm as the
+ * header. Company legal name on a single centered line; second row
+ * redistributes office / phone / email+website across the full width.
+ */
 export function LockedFooter() {
   return (
     <footer
@@ -52,39 +57,96 @@ export function LockedFooter() {
         borderTop: `1px solid ${JBJ_GOLD}`,
         color: JBJ_INK,
         fontFamily: "Inter, system-ui, sans-serif",
-        fontSize: 10,
-        lineHeight: 1.6,
-        padding: "14px 36px",
+        padding: "18px 32px 20px",
+        boxSizing: "border-box",
       }}
     >
+      {/* Row 1 — Company full legal name, single centered line */}
+      <div
+        style={{
+          textAlign: "center",
+          fontSize: 13,
+          fontWeight: 700,
+          letterSpacing: "0.22em",
+          textTransform: "uppercase",
+          color: JBJ_INK,
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
+        {JBJ_BRAND.legalName} · {JBJ_BRAND.legalSuffix}
+      </div>
+
+      {/* Hairline gold separator */}
+      <div
+        aria-hidden
+        style={{
+          height: 1,
+          background: JBJ_GOLD,
+          opacity: 0.45,
+          margin: "10px 0 12px",
+        }}
+      />
+
+      {/* Row 2 — Office · Phone · Email + Website redistributed full width */}
       <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
         <tbody>
           <tr>
-            <td style={{ verticalAlign: "top", width: "34%", paddingRight: 14 }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.20em", textTransform: "uppercase", color: JBJ_INK }}>
-                {JBJ_BRAND.legalName}
-              </div>
-              <div style={{ fontSize: 9.5, letterSpacing: "0.10em", color: JBJ_INK, opacity: 0.75, marginTop: 2 }}>
-                {JBJ_BRAND.legalSuffix}
-              </div>
-              <div style={{ fontSize: 9.5, color: JBJ_INK, opacity: 0.7, marginTop: 4 }}>
-                Trade Licence {JBJ_BRAND.tradeLicense}
-              </div>
-            </td>
-            <td style={{ verticalAlign: "top", width: "36%", textAlign: "center", padding: "0 10px", color: JBJ_INK, opacity: 0.85 }}>
+            <td
+              style={{
+                verticalAlign: "top",
+                width: "44%",
+                fontSize: 10.5,
+                lineHeight: 1.55,
+                color: JBJ_INK,
+                opacity: 0.88,
+                paddingRight: 14,
+              }}
+            >
+              <div style={{ fontSize: 9.5, letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.65, marginBottom: 2 }}>Office</div>
               {JBJ_BRAND.address}
             </td>
-            <td style={{ verticalAlign: "top", width: "30%", textAlign: "right", paddingLeft: 14 }}>
-              <div style={{ color: JBJ_INK, fontWeight: 600 }}>{JBJ_BRAND.phone}</div>
-              <div style={{ marginTop: 2 }}>
-                <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: JBJ_GOLD, textDecoration: "none", fontWeight: 600 }}>
-                  {JBJ_BRAND.email}
-                </a>
-              </div>
-              <div style={{ marginTop: 2 }}>
-                <a href={`https://${JBJ_BRAND.website}`} style={{ color: JBJ_GOLD, textDecoration: "none", fontWeight: 600, letterSpacing: "0.04em" }}>
-                  {JBJ_BRAND.website}
-                </a>
+            <td
+              style={{
+                verticalAlign: "top",
+                width: "22%",
+                fontSize: 11,
+                color: JBJ_INK,
+                textAlign: "center",
+                paddingLeft: 8,
+                paddingRight: 8,
+              }}
+            >
+              <div style={{ fontSize: 9.5, letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.65, marginBottom: 2 }}>Phone</div>
+              <div style={{ fontWeight: 700 }}>{JBJ_BRAND.phone}</div>
+            </td>
+            <td
+              style={{
+                verticalAlign: "top",
+                width: "34%",
+                fontSize: 11,
+                color: JBJ_INK,
+                textAlign: "right",
+                paddingLeft: 14,
+              }}
+            >
+              <div style={{ fontSize: 9.5, letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.65, marginBottom: 2 }}>Contact</div>
+              <a
+                href={`mailto:${JBJ_BRAND.email}`}
+                style={{ color: JBJ_GOLD, textDecoration: "none", fontWeight: 700 }}
+              >
+                {JBJ_BRAND.email}
+              </a>
+              <span style={{ color: JBJ_INK, opacity: 0.4, margin: "0 6px" }}>·</span>
+              <a
+                href={`https://${JBJ_BRAND.website}`}
+                style={{ color: JBJ_GOLD, textDecoration: "none", fontWeight: 700, letterSpacing: "0.04em" }}
+              >
+                {JBJ_BRAND.website}
+              </a>
+              <div style={{ fontSize: 9.5, color: JBJ_INK, opacity: 0.6, marginTop: 3 }}>
+                Trade Licence {JBJ_BRAND.tradeLicense}
               </div>
             </td>
           </tr>
