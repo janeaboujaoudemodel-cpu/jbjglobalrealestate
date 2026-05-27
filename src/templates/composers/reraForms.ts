@@ -91,7 +91,7 @@ export function composeFormA(input: ComposerInput): string {
     "Any dispute arising out of or in connection with this agreement shall be governed by the laws of the Emirate of Dubai and the United Arab Emirates, and shall be referred to the Rental Disputes Settlement Centre or the competent Dubai Courts.",
   ];
 
-  return [
+  const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     headerBlock("Form A", "Contract Between Real Estate Brokers and Owner", "Property Listing Authorisation — Secondary Market Sale"),
     section(1, "Property Details"),
@@ -114,6 +114,9 @@ export function composeFormA(input: ComposerInput): string {
     </div>`,
     section(3, "Broker Details"),
     brokerBlock(f),
+  ].join("");
+
+  const pageTwo = [
     section(4, "Terms & Conditions"),
     clauseList(clauses),
     paragraphs(input.aiClosing),
@@ -127,6 +130,8 @@ export function composeFormA(input: ComposerInput): string {
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
+
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM B — Contract Between Buyer & Broker ───────────── */
