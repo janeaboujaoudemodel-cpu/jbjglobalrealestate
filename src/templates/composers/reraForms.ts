@@ -148,7 +148,7 @@ export function composeFormB(input: ComposerInput): string {
     "This agreement is governed by the laws of the Emirate of Dubai and the United Arab Emirates. Disputes shall be referred to the competent Dubai Courts.",
   ];
 
-  return [
+  const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     headerBlock("Form B", "Contract Between Real Estate Brokers and Buyer", "Buyer Representation Agreement — Secondary Market"),
     section(1, "Buyer Details"),
@@ -171,6 +171,9 @@ export function composeFormB(input: ComposerInput): string {
     </div>`,
     section(3, "Broker Details"),
     brokerBlock(f),
+  ].join("");
+
+  const pageTwo = [
     section(4, "Terms & Conditions"),
     clauseList(clauses),
     paragraphs(input.aiClosing),
@@ -184,6 +187,8 @@ export function composeFormB(input: ComposerInput): string {
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
+
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM F — Memorandum of Understanding (Buyer ↔ Seller) ───────────── */
