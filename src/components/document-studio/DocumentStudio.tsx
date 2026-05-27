@@ -2144,19 +2144,21 @@ function StudioShell({
                                       fontSize: pageIndex === 1 ? 13.6 : 13.2,
                                       color: "#1A1A1A",
                                     }}
-                                    contentEditable={isFirst}
+                                    contentEditable
                                     suppressContentEditableWarning
                                     onBlur={(e) => {
-                                      if (!isFirst) return;
-                                      // Sync first-page edits back into the master bodyHtml,
-                                      // wrapping with the original page1 marker.
+                                      // WYSIWYG: every page is editable. On blur, reassemble
+                                      // the full bodyHtml by replacing this page group only.
                                       const next = stripGeneratedPageArtifacts(e.currentTarget.innerHTML);
-                                      const others = pageGroups.slice(1)
-                                        .map((g, i) => `<section data-pdf-page="${i + 2}">${g}</section>`)
+                                      const rebuilt = pageGroups
+                                        .map((g, i) => {
+                                          const html = i === pageIndex ? next : g;
+                                          return `<section data-pdf-page="${i + 1}">${html}</section>`;
+                                        })
                                         .join("");
                                       userEditedRef.current = true;
                                       setUserEdited(true);
-                                      setBodyHtml(`<section data-pdf-page="1">${next}</section>${others}`);
+                                      setBodyHtml(rebuilt);
                                     }}
                                       dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(groupHtmlWithSignature) }}
                                   />
