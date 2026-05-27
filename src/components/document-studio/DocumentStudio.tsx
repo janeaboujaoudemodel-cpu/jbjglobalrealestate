@@ -1957,7 +1957,7 @@ function StudioShell({
                 const pageGroups = (autoPageGroups && autoPageGroups.length)
                   ? autoPageGroups
                   : parsePageGroups(bodyHtml);
-                const pageCount = Math.min(MAX_PAGES, Math.max(1, pageGroups.length));
+                const pageCount = Math.max(1, pageGroups.length);
 
                 return (
                   <div className="flex flex-col items-center gap-4" style={{ width: PAGE_W * effectiveScale, flexShrink: 0 }}>
