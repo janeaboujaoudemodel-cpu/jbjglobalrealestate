@@ -268,16 +268,16 @@ export function clientSignatureStrip(opts: {
   label?: string;
 }): string {
   if (opts.page >= opts.totalPages) return "";
-  const legalName = esc((opts.applicantName || "Michael Anderson").trim());
+  const legalName = esc((opts.applicantName || "").trim());
   return `
     <div data-pdf-section="client-signature" data-client-signature-strip="1"
          style="margin-top:auto;padding:12px 8px 14px;
                 display:flex;justify-content:flex-end;align-items:flex-end;
                 font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
-      <div style="width:290px;margin-right:18px;color:${INK};">
-        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Signature:</div><div style="height:18px;border-bottom:1px solid ${INK};"></div></div>
-        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Name:</div><div style="height:20px;border-bottom:1px solid ${INK};position:relative;"><span style="position:absolute;left:6px;bottom:3px;font-size:15px;font-family:'Dancing Script','Brush Script MT',cursive;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis;">${legalName}</span></div></div>
-        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Date:</div><div style="height:18px;border-bottom:1px solid ${INK};"></div></div>
+      <div style="width:310px;margin-right:18px;color:${INK};">
+        <div style="display:grid;grid-template-columns:96px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;">Name:</div><div style="height:20px;border-bottom:1px solid ${INK};position:relative;"><span style="position:absolute;left:6px;bottom:1px;font-size:12px;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0.01em;color:${INK};white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis;">${legalName}</span></div></div>
+        <div style="display:grid;grid-template-columns:96px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;">Signature:</div><div style="height:22px;border-bottom:1px solid ${INK};"></div></div>
+        <div style="display:grid;grid-template-columns:96px 1fr;align-items:end;gap:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;">Date:</div><div style="height:18px;border-bottom:1px solid ${INK};"></div></div>
       </div>
     </div>
     <div data-page-divider="1" style="border-top:1px solid ${GOLD}B3;height:0;margin:0 8px;page-break-inside:avoid;break-inside:avoid;"></div>`;
