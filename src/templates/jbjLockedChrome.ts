@@ -41,10 +41,10 @@ export const jbjHeaderHtml = (): string => `
     color:${JBJ_INK};
     box-sizing:border-box;
   ">
-    <div style="display:grid;grid-template-columns:160px 1px 1fr;align-items:center;gap:24px;min-height:132px;">
+    <div style="display:grid;grid-template-columns:184px 1px 1fr;align-items:center;gap:26px;min-height:152px;">
       <img src="${monogramSrc}" alt="JBJ"
-        style="width:132px;height:132px;display:block;object-fit:contain;background:transparent;margin:0 auto;" />
-      <div aria-hidden="true" style="width:1px;height:112px;background:${JBJ_GOLD};opacity:.55;"></div>
+        style="width:160px;height:160px;display:block;object-fit:contain;background:transparent;margin:0 auto;" />
+      <div aria-hidden="true" style="width:1px;height:128px;background:${JBJ_GOLD};opacity:.55;"></div>
       <div style="line-height:1.1;text-align:center;min-width:0;">
         <div style="font-size:24px;font-weight:700;letter-spacing:0.045em;color:${JBJ_INK};white-space:nowrap;">
           ${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}
