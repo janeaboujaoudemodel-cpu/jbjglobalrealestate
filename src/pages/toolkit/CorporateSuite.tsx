@@ -34,7 +34,7 @@ const tools = [
     subtitle: "AI resume builder + extract",
     description: "Build a professional CV with AI-generated summary, 12 executive templates, upload-to-extract mode and PDF export.",
     icon: FileText,
-    href: "/toolkit/corporate-suite/cv-resume",
+    href: "/cv-builder",
     badge: "AI",
     accentColor: "#34D399",
   },

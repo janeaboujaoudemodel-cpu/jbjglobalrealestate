@@ -83,6 +83,10 @@ Disallow: /*?utm_*
 Disallow: /*?ref=*
 Disallow: /*?session=*
 
+# Removed legacy CV builder URL — replaced by /cv-builder
+Disallow: /toolkit/corporate-suite/cv-resume
+Disallow: /toolkit/corporate-suite/cv-builder
+
 # Digital Business Card - Private/Unlisted (noindex)
 Disallow: /card
 

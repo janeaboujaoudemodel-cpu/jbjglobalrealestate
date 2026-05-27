@@ -81,7 +81,7 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
     {
       icon: FileText,
       title: 'Resume / CV',
-      href: '/toolkit/corporate-suite/cv-builder',
+      href: '/cv-builder',
       description: '12 templates · AI summary',
       isNew: true,
     },

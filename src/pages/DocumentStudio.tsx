@@ -25,7 +25,7 @@ const TOOL_LINKS = [
     label: "CV & Resume",
     icon: Briefcase,
     description: "Build a professional CV tailored for real estate careers",
-    path: "/toolkit/corporate-suite/cv-resume",
+    path: "/cv-builder",
   },
   {
     id: "cover-letter",

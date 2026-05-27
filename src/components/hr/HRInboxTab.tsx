@@ -49,9 +49,9 @@ export function HRInboxTab() {
   const openItem = (row: NotificationRow) => {
     const applicantId = (row.metadata as any)?.applicantId;
     if (applicantId) {
-      navigate(`/owner/careers-portal?section=contracts&tpl=candidate_cv&applicantId=${applicantId}`);
+      navigate(`/owner/careers-portal?section=cv-center&applicantId=${applicantId}`);
     } else {
-      navigate('/owner/careers-portal');
+      navigate('/owner/careers-portal?section=cv-center');
     }
   };
 

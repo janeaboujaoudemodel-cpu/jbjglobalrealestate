@@ -373,7 +373,7 @@ const Footer = () => {
     { href: "/toolkit/pdf-suite", label: "PDF & Documents Suite" },
     { href: "/toolkit/stamp-generator", label: "Smart Stamp Generator" },
     { href: "/toolkit/corporate-suite/business-card", label: "Business Card" },
-    { href: "/toolkit/corporate-suite/cv-resume", label: "CV Builder" },
+    { href: "/cv-builder", label: "CV Builder" },
     { href: "/toolkit/corporate-suite/cover-letter", label: "Cover Letter" },
     { href: "/toolkit/corporate-suite/company-profile", label: "Company Profile Builder" },
     { href: "/toolkit/corporate-suite/landing-page", label: "Landing Page Builder" },

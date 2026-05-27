@@ -50,7 +50,7 @@ const tools = [
     icon: UserRound,
     title: "CV / Resume Builder",
     description: "Build professional CVs with photo, QR code, accent colors, and multiple templates.",
-    href: "/toolkit/corporate-suite/cv-builder",
+    href: "/cv-builder",
     color: "from-cyan-600 to-sky-600",
     badge: "Career",
   },

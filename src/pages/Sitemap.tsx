@@ -260,7 +260,7 @@ const hubSections: HubSection[] = [
       { href: "/toolkit/corporate-suite/business-card", label: "Business Card Designer" },
       { href: "/toolkit/corporate-suite/logo-creator", label: "Logo Creator" },
       { href: "/toolkit/corporate-suite/cover-letter", label: "Cover Letter Generator" },
-      { href: "/toolkit/corporate-suite/cv-resume", label: "CV & Resume Builder" },
+      { href: "/cv-builder", label: "CV & Resume Builder" },
       { href: "/toolkit/corporate-suite/company-profile", label: "Company Profile Builder" },
       { href: "/brand-palette", label: "Brand Color Palette" },
       

@@ -5,7 +5,7 @@ import HRPill from "@/components/careers-portal/HRPill";
 import {
   LayoutDashboard, Briefcase, FileText, Users, Award,
   GraduationCap, Wallet, AlertTriangle, MessagesSquare, Bot, ShieldCheck,
-  Loader2, ClipboardCheck, TrendingUp, Linkedin, Building2, Crosshair,
+  Loader2, ClipboardCheck, TrendingUp, Linkedin, Building2, Crosshair, Inbox,
 } from "lucide-react";
 
 import PositionManager from "@/components/careers-portal/PositionManager";
@@ -35,6 +35,7 @@ export type SectionKey =
   | "overview"
   | "recruitment"
   | "cv-center"
+  | "hr-inbox"
   | "positions"
   | "employees"
   | "performance"
@@ -61,6 +62,7 @@ const SECTIONS: SectionDef[] = [
   { key: "overview",      label: "Overview",                 icon: LayoutDashboard, description: "Live counts pulled from real tables — never invented." },
   { key: "recruitment",   label: "Recruitment",              icon: Crosshair,       description: "Hunt engine: prospects, campaigns, outreach." },
   { key: "cv-center",     label: "CV Center",                icon: FileText,        description: "Inbound applications and full applicant profile drawer." },
+  { key: "hr-inbox",      label: "HR Inbox",                 icon: Inbox,           description: "Inbound applicant notifications — every new CV lands here." },
   { key: "positions",     label: "Open Positions",           icon: Briefcase,       description: "Create, edit, archive job postings." },
   { key: "employees",     label: "Employees",                icon: Users,           description: "Roster, journey, IT provisioning, activity." },
   { key: "performance",   label: "Performance",              icon: TrendingUp,      description: "Reviews, KPIs and employee performance summary." },
@@ -215,6 +217,7 @@ export default function CareersPortal() {
           {active === "overview"      && <CareersPortalOverview onJump={setSection} />}
           {active === "recruitment"   && <HuntingDashboard />}
           {active === "cv-center"     && <CVCenter userId={user?.id || ""} />}
+          {active === "hr-inbox"      && <HRInboxTab />}
           {active === "positions"     && <PositionManager />}
           {active === "employees"     && <EmployeeManagementHub />}
           {active === "performance"   && <EmployeePerformanceDashboard />}
