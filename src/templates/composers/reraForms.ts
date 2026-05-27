@@ -295,12 +295,12 @@ export function composeFormI(input: ComposerInput): string {
     const normalized = (value || "").toLowerCase();
     return labels.map((l) => `${l} [ ${normalized === l.toLowerCase() ? "✓" : ""} ]`).join(" &nbsp;&nbsp;&nbsp; ");
   };
-  const line = (value?: string, min = 80, center = false) => `
-    <span style="display:inline-block;min-width:${min}px;border-bottom:1px solid ${INK};padding:0 6px 1px;line-height:1.05;text-align:${center ? "center" : "left"};vertical-align:baseline;">${esc(value || "") || "&nbsp;"}</span>`;
-  const row = (label: string, value?: string, min = 250, center = false) => `
-    <div style="display:flex;align-items:flex-end;gap:5px;margin:0 0 5px;min-height:16px;">
-      <strong style="white-space:nowrap;">${label}</strong>
-      <span style="flex:1;border-bottom:1px solid ${INK};padding:0 6px 1px;line-height:1.05;text-align:${center ? "center" : "left"};min-width:${min}px;">${esc(value || "") || "&nbsp;"}</span>
+  const line = (value?: string, min = 60, center = false) => `
+    <span style="display:inline-block;min-width:${min}px;border-bottom:1px solid ${INK};padding:0 4px 1px;line-height:1.05;text-align:${center ? "center" : "left"};vertical-align:baseline;">${esc(value || "") || "&nbsp;"}</span>`;
+  const row = (label: string, value?: string, _min = 0, center = false) => `
+    <div style="display:flex;align-items:flex-end;gap:4px;margin:0 0 4px;min-height:14px;font-size:10px;">
+      <strong style="white-space:nowrap;font-size:10px;">${label}</strong>
+      <span style="flex:1;min-width:0;border-bottom:1px solid ${INK};padding:0 4px 1px;line-height:1.05;text-align:${center ? "center" : "left"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(value || "") || "&nbsp;"}</span>
     </div>`;
 
   const partyDefaults = (label: "A" | "B") => {
