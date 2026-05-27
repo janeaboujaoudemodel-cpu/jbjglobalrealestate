@@ -650,7 +650,6 @@ export function compose(input: ComposerInput): string {
     case "hr_letter":
       return composeGeneric(input, `HR Letter — ${input.fields.recipientName || ""}`);
     case "partnership_referral":
-    case "referral_agreement":
       return composeGeneric(input, `Partnership / Referral Agreement`);
     case "form_a":
       return composeGeneric(input, `Form A — Buyer Registration`);
