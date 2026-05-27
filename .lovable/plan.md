@@ -1,58 +1,51 @@
-# Fix Document Studio pagination + finish pending CV cleanup
+## Plan
 
-## 1. Root cause of "Page 10 of 20410"
+### 1) Replace the current “one long page” preview with real A4 pages
+- Stop rendering `pageRef` as one tall `PAGE_H * pageCount` document.
+- Render separate A4 sheet containers, each exactly `816 × 1154` px.
+- Page 1 keeps the locked letterhead at the top.
+- Later pages start with a fixed safe top padding, never at the absolute top.
+- Every page gets fixed bottom padding, so content moves before touching the bottom.
 
-In `src/components/document-studio/DocumentStudio.tsx`:
+### 2) Add smart page cutting
+- Measure logical document blocks from the rendered body (`[data-pdf-section]`, paragraphs, tables, signature block, custom fields).
+- Pack blocks into pages using a safe content height, with reserved top/bottom padding.
+- Never split protected blocks such as tables, signature blocks, stamp/signature areas, and footer.
+- If a block does not fit in the remaining safe area, move the whole block to the next A4 page.
+- Keep the hard cap as a safety guard only, but derive the visible page count from actual packed pages, not from a tall container height.
 
-- `pageRef` has `minHeight: PAGE_H * pageCount`.
-- `measuredPageH = pageRef.offsetHeight`.
-- `pageCount = ceil((measuredPageH - chrome) / contentPerPage)`.
+### 3) Put the footer directly under the signature content
+- Remove the flex behavior that pushes the footer to the bottom of a huge final page.
+- Treat the locked footer as a protected block that follows the signature block.
+- If the signature plus footer does not fit together, move the signature/footer group to the next page.
+- The footer will appear immediately after the signature area on the final used page, not after 17 empty pages.
 
-This is a feedback loop: every time `pageCount` grows, `minHeight` grows, which makes `measuredPageH` grow, which grows `pageCount` again — runaway until it hits 20,410.
+### 4) Lock automatic vs manual pages
+- Default to automatic pagination: start with 1 page, add pages only when content needs them.
+- Add an “Add page” button at the bottom of the preview to manually add blank A4 pages when needed.
+- Manual pages will be appended only after the real content pages and will not affect automatic page cutting.
+- Remove or replace the existing confusing top “Pages Auto/1/2/3” control.
 
-## 2. Smart A4 pagination (replaces current formula)
+### 5) Fix PDF export to match the preview
+- Update `exportPdf` so it exports the rendered A4 pages individually, not slices of one tall screenshot.
+- Preserve smart block boundaries, safe margins, letterhead, signature/stamp, and footer placement.
+- Prevent blank pages from being exported unless the user explicitly added them manually.
 
-- Add a dedicated `bodyRef` on the inner body wrapper (the `padding: 40px 56px` div) and measure ONLY its `scrollHeight` — never the outer page (no feedback loop).
-- Compute:
-  - `contentPerPage = PAGE_H - HEADER_H - FOOTER_H - BODY_PAD_TOP - BODY_PAD_BOTTOM` (keep generous bottom padding so nothing looks cropped).
-  - `pageCount = max(1, ceil(bodyScrollHeight / contentPerPage))`, hard-capped at 20 as a safety net so a measurement glitch can never explode again.
-- Smart break for stamp / signature / footer: before finalising `pageCount`, walk the floating marks (`marks.stamp`, `marks.signature`, locked footer band) and any element flagged `[data-pdf-keep-together]`. If a mark would straddle a page boundary, snap its Y to the next page's top (and bump `pageCount` only if it now overflows). The locked footer is always reserved at the bottom of the last page; if the last-page body would push into it, add one more A4.
-- Always start at 1 page. New A4 sheets only appear when content actually overflows.
+### 6) Clean legacy CV URLs fully
+- Remove redirects from `/toolkit/corporate-suite/cv-resume` and `/toolkit/corporate-suite/cv-builder` to `/cv-builder`; they should no longer lead anywhere.
+- Remove the Careers Portal `?tpl=candidate_cv` redirect to `/cv-builder`; instead it will clear the invalid `tpl` parameter and remain in the contracts area.
+- Keep `/cv-builder` as the only clean CV Builder URL.
+- Keep old paths disallowed from robots and ensure sitemap only lists `/cv-builder`.
 
-## 3. Visual page-break polish
-
-- Keep the sibling gap-band overlays so they're not captured in the PDF.
-- Cleaner styling: thinner band (12px), subtle hairline top/bottom, centred small chip `Page N / Total` in champagne tones.
-- Hide the "Page 1 of N" chip when `pageCount === 1`.
-
-## 4. Clean up the 20,410 stale "pages"
-
-There are no extra DB rows — the number is purely the computed `pageCount`. The fix above eliminates it. No data migration needed; reloading the Holiday Home contract after the fix will render the correct 2–3 A4 pages.
-
-I'll also clear any persisted `measuredPageH`-like values from `sessionStorage`/`localStorage` keys used by Document Studio at mount (defensive reset on this version bump).
-
-## 5. Finish remaining CV cleanup
-
-- `DocumentStudio` safety guard: confirm `readSnapshot` already drops stale `candidate_cv` template IDs; add the same guard to URL `?tpl=` parsing so a bookmarked `?tpl=candidate_cv` cannot reintroduce the broken state, and toast "This template moved to CV Builder" + redirect to `/cv-builder`.
-- `scripts/generate-sitemap.ts`: add `/cv-builder` entry (weekly, 0.7); ensure no old `cv-resume` or `candidate_cv` paths are present (currently none — will keep it that way). Regenerate `public/sitemap.xml`.
-- `public/robots.txt`: keep existing `Disallow` for the old CV builder paths (already added previously).
-
-## 6. End-to-end QA pass
-
-I'll manually walk through in the preview:
-
-1. Open `/owner/careers-portal?section=contracts` → pick **Holiday Home Rental** → confirm preview shows correct page count (expected 2–3 A4), no "of 20410", stamp/signature/footer never split.
-2. Type extra paragraphs until overflow → confirm a 2nd A4 appears smoothly, bottom padding preserved, stamp jumps to next page intact.
-3. Export PDF → open the file, verify same page count, no clipped footer/stamp, A4 dimensions.
-4. Verify HR Inbox tab is visible at the top of Careers Portal.
-5. Visit `/cv-builder` directly → add experience/education/skills, live preview updates, export PDF (no JBJ branding).
-6. Visit legacy `/toolkit/corporate-suite/cv-resume` → confirms redirect to `/cv-builder`.
-7. Visit `/owner/careers-portal?section=contracts&tpl=candidate_cv` → confirms redirect/toast to `/cv-builder`, Document Studio sidebar stays intact (no empty state).
-8. Check `public/sitemap.xml` after `predev` regen → `/cv-builder` present, no old CV URLs.
-
-## Files to touch
-
-- `src/components/document-studio/DocumentStudio.tsx` (pagination rewrite + URL guard + storage reset)
-- `scripts/generate-sitemap.ts` (+ regenerated `public/sitemap.xml`)
-
-No backend / RLS / schema changes.
+### 7) QA after implementation
+- Open Careers Portal → Contracts → Document Studio.
+- Use the Holiday Home / contract flow and confirm:
+  - starts at 1 A4 page,
+  - no “3 of 20” empty-page state,
+  - page 1 bottom padding is safe,
+  - page 2 top padding is safe,
+  - signature/stamp/footer are not split,
+  - footer sits under the signature on the final content page,
+  - manual Add Page appends one real blank A4 page,
+  - PDF export matches the on-screen pages.
+- Check legacy CV paths no longer redirect to `/cv-builder` and `/cv-builder` still loads directly.
