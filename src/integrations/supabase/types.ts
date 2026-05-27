@@ -17550,6 +17550,7 @@ export type Database = {
           skills: string[] | null
           source: string | null
           status: Database["public"]["Enums"]["hr_application_status"]
+          studio_cv_url: string | null
           updated_at: string
           user_id: string
         }
@@ -17580,6 +17581,7 @@ export type Database = {
           skills?: string[] | null
           source?: string | null
           status?: Database["public"]["Enums"]["hr_application_status"]
+          studio_cv_url?: string | null
           updated_at?: string
           user_id: string
         }
@@ -17610,6 +17612,7 @@ export type Database = {
           skills?: string[] | null
           source?: string | null
           status?: Database["public"]["Enums"]["hr_application_status"]
+          studio_cv_url?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -17982,6 +17985,7 @@ export type Database = {
           reviewed_by: string | null
           source: string | null
           status: string | null
+          studio_cv_url: string | null
           updated_at: string
           user_id: string | null
         }
@@ -18003,6 +18007,7 @@ export type Database = {
           reviewed_by?: string | null
           source?: string | null
           status?: string | null
+          studio_cv_url?: string | null
           updated_at?: string
           user_id?: string | null
         }
@@ -18024,6 +18029,7 @@ export type Database = {
           reviewed_by?: string | null
           source?: string | null
           status?: string | null
+          studio_cv_url?: string | null
           updated_at?: string
           user_id?: string | null
         }
