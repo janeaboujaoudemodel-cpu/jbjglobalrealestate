@@ -674,14 +674,20 @@ function composeHolidayHome(input: ComposerInput): string {
 
   // ── Locked 3-page layout. Page 1 = letter + guest profile + quotation.
   //    Page 2 = terms + disclaimer/guest declaration at bottom. Page 3 = signature + closing.
+  // GLOBAL MULTI-PAGE SIGNATURE RULE: pages 1 & 2 carry a client-initials strip
+  // at the bottom (Guest signs each non-final page). Authorised signatory +
+  // stamp appear ONLY on page 3.
+  const initialsPage1 = clientInitialsStrip({ applicantName: f.recipientName, page: 1, totalPages: 3, label: "Guest Initials" });
+  const initialsPage2 = clientInitialsStrip({ applicantName: f.recipientName, page: 2, totalPages: 3, label: "Guest Initials" });
+
   const page1 = `
     <section data-pdf-page="1">
-      ${pageFrame(`${input.hideLetterDate ? "" : dateLine(input.letterDate)}${subjectLine(`Holiday Home Booking Agreement — ${bookingId}`)}${welcome}${guestCard}${quotation}`, 1)}
+      ${pageFrame(`${input.hideLetterDate ? "" : dateLine(input.letterDate)}${subjectLine(`Holiday Home Booking Agreement — ${bookingId}`)}${welcome}${guestCard}${quotation}${initialsPage1}`, 1)}
     </section>`;
 
   const page2 = `
     <section data-pdf-page="2">
-      ${pageFrame(`<div style="display:flex;flex-direction:column;gap:18px;">${allTerms}${acknowledgement}</div>`, 2)}
+      ${pageFrame(`<div style="display:flex;flex-direction:column;gap:18px;">${allTerms}${acknowledgement}</div>${initialsPage2}`, 2)}
     </section>`;
 
   const page3 = `
@@ -691,6 +697,7 @@ function composeHolidayHome(input: ComposerInput): string {
 
   return [page1, page2, page3].join("");
 }
+
 
 
 
