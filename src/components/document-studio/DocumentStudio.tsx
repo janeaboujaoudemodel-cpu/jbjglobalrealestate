@@ -2026,8 +2026,23 @@ function StudioShell({
           </aside>
         )}
       </div>
+
+      <DocumentActionSheet
+        open={!!pickerDoc}
+        onOpenChange={(o) => { if (!o) setPickerDoc(null); }}
+        item={pickerDoc ? { id: pickerDoc.id, title: pickerDoc.client_name || pickerDoc.title, subtitle: (pickerDoc.field_values as any)?.booking_id } : null}
+        onPreview={handlePreview}
+        onEdit={handleEditFromPicker}
+        onDelete={handleSoftDelete}
+      />
+      <DocumentPreviewDialog
+        open={!!previewDoc}
+        onOpenChange={(o) => { if (!o) setPreviewDoc(null); }}
+        doc={previewDoc}
+      />
     </div>
   );
+
 
   return createPortal(overlay, document.body);
 }
