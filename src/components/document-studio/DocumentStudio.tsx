@@ -2088,12 +2088,13 @@ function StudioShell({
                                 </div>
                               )}
                             </div>
-                            {/* Page indicator — rendered in the champagne gap BETWEEN sheets, never on the paper */}
-                            {!isLast && (
-                              <div aria-hidden className="text-[10px] font-semibold uppercase pointer-events-none select-none" style={{ color: "#1A1A1A", opacity: 0.55, letterSpacing: "0.22em" }}>
-                                Page {pageIndex + 1} of {pageCount}
-                              </div>
-                            )}
+                          </div>
+                          {/* Page indicator — rendered in the champagne gap BETWEEN sheets, never on the paper */}
+                          {!isLast && (
+                            <div aria-hidden className="text-[10px] font-semibold uppercase pointer-events-none select-none" style={{ color: "#1A1A1A", opacity: 0.55, letterSpacing: "0.22em" }}>
+                              Page {pageIndex + 1} of {pageCount}
+                            </div>
+                          )}
                           </div>
                         );
                       })}
