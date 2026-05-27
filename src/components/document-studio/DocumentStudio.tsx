@@ -2097,6 +2097,27 @@ function StudioShell({
                                   zIndex: 1,
                                 }}
                               />
+                              {/* Document generation date — top-right corner of EVERY page (above
+                                  letterhead on page 1, above body on pages 2+). Distinct from the
+                                  per-page signature date, which sits next to the signature below. */}
+                              <div
+                                aria-hidden
+                                style={{
+                                  position: "absolute",
+                                  top: DOCUSIGN_TOP_RESERVE + 6,
+                                  right: 18,
+                                  fontFamily: "Inter, system-ui, sans-serif",
+                                  fontSize: 9.5,
+                                  letterSpacing: "0.16em",
+                                  textTransform: "uppercase",
+                                  color: "#1A1A1A",
+                                  opacity: 0.55,
+                                  zIndex: 2,
+                                  pointerEvents: "none",
+                                }}
+                              >
+                                {renderPageGeneratedDate()}
+                              </div>
                               {/* Header — only on page 1, sits directly under the safe band */}
                               {isFirst && (
                                 <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE, position: "relative", zIndex: 0 }}>
