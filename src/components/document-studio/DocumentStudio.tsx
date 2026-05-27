@@ -1838,9 +1838,10 @@ function StudioShell({
             {template ? (
               (() => {
                 const BODY_PAD_X = 64;
-                const FIRST_TOP = 56;
-                const NEXT_TOP = 72;
-                const BOTTOM_PAD = 64;
+                const FIRST_TOP = 46;
+                const NEXT_TOP = 54;
+                const STANDARD_BOTTOM_PAD = 54;
+                const LAST_BOTTOM_PAD = 24;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
 
                 // Parse the bodyHtml into [data-pdf-page] groups. If the
@@ -1873,6 +1874,7 @@ function StudioShell({
                         const isFirst = pageIndex === 0;
                         const isLast = pageIndex === pageCount - 1;
                         const topPad = isFirst ? FIRST_TOP : NEXT_TOP;
+                        const bottomPad = isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD;
                         const groupHtml = pageGroups[pageIndex] ?? "";
 
                         return (
@@ -1903,7 +1905,7 @@ function StudioShell({
                                   left: 0,
                                   right: 0,
                                   bottom: isLast ? chromeHeights.footer : 0,
-                                  padding: `${topPad}px ${BODY_PAD_X}px ${BOTTOM_PAD}px`,
+                                  padding: `${topPad}px ${BODY_PAD_X}px ${bottomPad}px`,
                                   boxSizing: "border-box",
                                   overflow: "hidden",
                                   display: "flex",
@@ -1917,9 +1919,11 @@ function StudioShell({
                                     data-page-index={pageIndex}
                                     style={{
                                       width: bodyWidth,
+                                      height: "100%",
+                                      flex: "1 1 auto",
                                       fontFamily: "Inter, system-ui, sans-serif",
-                                      lineHeight: 1.75,
-                                      fontSize: pageIndex === 1 ? 14.5 : 13.5,
+                                      lineHeight: pageIndex === 1 ? 1.58 : 1.66,
+                                      fontSize: pageIndex === 1 ? 13.6 : 13.2,
                                       color: "#1A1A1A",
                                     }}
                                     contentEditable={isFirst}
