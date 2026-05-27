@@ -2045,7 +2045,7 @@ function StudioShell({
                         const isLast = pageIndex === pageCount - 1;
                         const topPad = isFirst ? FIRST_TOP : NEXT_TOP;
                         const bottomPad = isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD;
-                        const userSignatureName = fields.recipientName || fields.full_name || fields.client_name || fields.guest_name || "";
+                        const userSignatureName = fields.recipientName || fields.fullName || fields.full_name || fields.client_name || fields.guest_name || "Michael Anderson";
                         const groupHtml = stripGeneratedPageArtifacts(pageGroups[pageIndex] ?? "");
                         const groupHtmlWithSignature = `${groupHtml}${renderPerPageUserSignature(userSignatureName)}`;
 
