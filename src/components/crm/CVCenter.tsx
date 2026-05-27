@@ -1195,36 +1195,33 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                               >
                                 <User className="h-4 w-4 mr-1.5 text-[#1A1A1A]" /> Open Profile
                               </Button>
-                              {/* Open in Document Studio — bridges into the locked candidate_cv template */}
+                              {/* CVs are no longer contracts; open the standalone CV Builder. */}
                               <Button
                                 size="sm"
                                 onClick={() => {
                                   try {
                                     sessionStorage.setItem(
-                                      "jbj:doc-studio:prefill:staff",
+                                      "jbj:cv-builder:prefill",
                                       JSON.stringify({
-                                        templateId: "candidate_cv",
-                                        fields: {
-                                          candidateName: cv.full_name || "",
-                                          positionApplied: (cv as any).position_applied || "",
-                                          email: cv.email || "",
-                                          phoneE164: cv.phone_e164 || "",
-                                          nationality: cv.nationality || "",
-                                          location: [cv.current_location_city, cv.current_location_country].filter(Boolean).join(", "),
-                                          experienceYears: cv.experience_years ? String(cv.experience_years) : "",
-                                          languages: (cv.languages || []).join(", "),
-                                          skills: ((cv as any).skills || []).join(", "),
-                                          aiSummary: cv.ai_summary || "",
-                                          referenceCvUrl: cv.cv_url || "",
-                                        },
+                                        fullName: cv.full_name || "",
+                                        targetRole: (cv as any).position_applied || "",
+                                        email: cv.email || "",
+                                        phone: cv.phone_e164 || "",
+                                        nationality: cv.nationality || "",
+                                        location: [cv.current_location_city, cv.current_location_country].filter(Boolean).join(", "),
+                                        experienceYears: cv.experience_years ? String(cv.experience_years) : "",
+                                        languages: (cv.languages || []).join(", "),
+                                        skills: ((cv as any).skills || []).join(", "),
+                                        summary: cv.ai_summary || "",
+                                        sourceCvUrl: cv.cv_url || "",
                                       })
                                     );
                                   } catch {}
-                                  window.location.href = "/owner/careers-portal?section=contracts&tpl=candidate_cv";
+                                  window.location.href = "/cv-builder";
                                 }}
                                 className="h-9 rounded-lg col-span-2 bg-[#FDFBF7] hover:bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60 font-semibold px-3"
                               >
-                                <FileText className="h-4 w-4 mr-1.5 text-[#1A1A1A]" /> Open in Document Studio
+                                <FileText className="h-4 w-4 mr-1.5 text-[#1A1A1A]" /> Open in CV Builder
                               </Button>
                             </div>
 
