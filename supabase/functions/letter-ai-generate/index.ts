@@ -81,8 +81,8 @@ Deno.serve(async (req) => {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
       },
       body: JSON.stringify({
-        // Fast model — composer renders structure, AI only writes the narrative
-        model: "google/gemini-3.5-flash",
+        // State-of-the-art reasoning + instruction following for legal/structured text
+        model: "openai/gpt-5.5",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userMessage },
