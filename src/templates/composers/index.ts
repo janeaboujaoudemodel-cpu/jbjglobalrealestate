@@ -170,7 +170,7 @@ export function signatureBlock(opts: {
   // overlaps any heading/label text above (e.g. "Referring Brokerage").
   const stampOverlay = `
     <img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" aria-hidden="true"
-      style="position:absolute;right:-44px;bottom:-58px;width:128px;height:128px;
+      style="position:absolute;right:-28px;bottom:-12px;width:120px;height:120px;
              object-fit:contain;opacity:0.9;mix-blend-mode:multiply;
              transform:rotate(-8deg);pointer-events:none;user-select:none;" />`;
 
