@@ -15,7 +15,7 @@ import {
 
 export const JBJ_BRAND = {
   legalName: "JBJ GLOBAL REAL ESTATE",
-  legalSuffix: "L.L.C · S.O.C",
+  legalSuffix: "L.L.C S.O.C",
   shortName: "JBJ GLOBAL REAL ESTATE",
   address: TRADE_LICENSE_OFFICE,
   phone: COMPANY_CONTACT.phone,
@@ -36,19 +36,18 @@ export const jbjHeaderHtml = (): string => `
     width:100%;
     background:${JBJ_CHAMPAGNE};
     border-bottom:1px solid ${JBJ_GOLD};
-    padding:22px 40px 22px 24px;
+    padding:20px 42px 20px 32px;
     font-family:Inter, system-ui, sans-serif;
     color:${JBJ_INK};
+    box-sizing:border-box;
   ">
-    <div style="display:flex;align-items:center;gap:20px;">
+    <div style="display:grid;grid-template-columns:160px 1px 1fr;align-items:center;gap:24px;min-height:132px;">
       <img src="${monogramSrc}" alt="JBJ"
-        style="width:96px;height:96px;display:block;object-fit:contain;background:transparent;" />
-      <div style="line-height:1.15;">
-        <div style="font-size:19px;font-weight:600;letter-spacing:0.01em;color:${JBJ_INK};">
-          ${JBJ_BRAND.legalName}
-        </div>
-        <div style="font-size:13px;letter-spacing:0.04em;color:${JBJ_INK};margin-top:2px;font-weight:600;">
-          ${JBJ_BRAND.legalSuffix}
+        style="width:132px;height:132px;display:block;object-fit:contain;background:transparent;margin:0 auto;" />
+      <div aria-hidden="true" style="width:1px;height:112px;background:${JBJ_GOLD};opacity:.55;"></div>
+      <div style="line-height:1.1;text-align:center;min-width:0;">
+        <div style="font-size:24px;font-weight:700;letter-spacing:0.045em;color:${JBJ_INK};white-space:nowrap;">
+          ${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}
         </div>
       </div>
     </div>
@@ -60,32 +59,33 @@ export const jbjFooterHtml = (): string => `
     width:100%;
     background:${JBJ_CHAMPAGNE};
     border-top:1px solid ${JBJ_GOLD};
-    padding:14px 36px;
+    padding:16px 32px 18px;
     font-family:Inter, system-ui, sans-serif;
     font-size:10px;
     line-height:1.6;
     color:${JBJ_INK};
+    box-sizing:border-box;
   ">
+    <div style="text-align:center;font-size:11.5px;line-height:1.35;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:${JBJ_INK};white-space:nowrap;">
+      ${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}
+    </div>
+    <div aria-hidden="true" style="height:1px;background:${JBJ_GOLD};opacity:.45;margin:10px 0 12px;"></div>
     <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
       <tr>
-        <td style="vertical-align:top;width:34%;padding-right:14px;">
-          <div style="font-size:10px;font-weight:700;letter-spacing:0.20em;text-transform:uppercase;color:${JBJ_INK};">
-            ${JBJ_BRAND.legalName}
-          </div>
-          <div style="font-size:9.5px;letter-spacing:0.10em;color:${JBJ_INK};opacity:.75;margin-top:2px;">
-            ${JBJ_BRAND.legalSuffix}
-          </div>
-          <div style="font-size:9.5px;color:${JBJ_INK};opacity:.7;margin-top:4px;">
-            Trade Licence ${JBJ_BRAND.tradeLicense}
-          </div>
-        </td>
-        <td style="vertical-align:top;width:36%;text-align:center;padding:0 10px;color:${JBJ_INK};opacity:.85;">
+        <td style="vertical-align:top;width:44%;padding-right:14px;color:${JBJ_INK};opacity:.88;">
+          <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;opacity:.65;margin-bottom:2px;">Office</div>
           ${JBJ_BRAND.address}
         </td>
-        <td style="vertical-align:top;width:30%;text-align:right;padding-left:14px;">
-          <div style="color:${JBJ_INK};font-weight:600;">${JBJ_BRAND.phone}</div>
-          <div style="margin-top:2px;"><a href="mailto:${JBJ_BRAND.email}" style="color:${JBJ_GOLD};text-decoration:none;font-weight:600;">${JBJ_BRAND.email}</a></div>
-          <div style="margin-top:2px;"><a href="https://${JBJ_BRAND.website}" style="color:${JBJ_GOLD};text-decoration:none;font-weight:600;letter-spacing:.04em;">${JBJ_BRAND.website}</a></div>
+        <td style="vertical-align:top;width:22%;text-align:center;padding:0 8px;color:${JBJ_INK};">
+          <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;opacity:.65;margin-bottom:2px;">Phone</div>
+          <div style="font-size:11px;font-weight:700;">${JBJ_BRAND.phone}</div>
+        </td>
+        <td style="vertical-align:top;width:34%;text-align:right;padding-left:14px;color:${JBJ_INK};">
+          <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;opacity:.65;margin-bottom:2px;">Contact</div>
+          <a href="mailto:${JBJ_BRAND.email}" style="color:${JBJ_GOLD};text-decoration:none;font-weight:700;">${JBJ_BRAND.email.toUpperCase()}</a>
+          <span style="color:${JBJ_INK};opacity:.4;margin:0 6px;">·</span>
+          <a href="https://${JBJ_BRAND.website}" style="color:${JBJ_GOLD};text-decoration:none;font-weight:700;letter-spacing:.04em;">${JBJ_BRAND.website.toUpperCase()}</a>
+          <div style="font-size:9.5px;color:${JBJ_INK};opacity:.6;margin-top:3px;">Trade Licence ${JBJ_BRAND.tradeLicense}</div>
         </td>
       </tr>
     </table>

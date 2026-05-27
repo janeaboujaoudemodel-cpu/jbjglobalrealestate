@@ -157,8 +157,9 @@ export function signatureBlock(opts: {
   const oTitle = esc(opts.ownerTitle || "Founder & CEO");
   const oDate = esc(formatHumanDate(opts.ownerDate) || todayLong());
   const aName = esc(opts.applicantName || "");
+  const aNameUpper = aName ? aName.toUpperCase() : "";
   const aDate = esc(formatHumanDate(opts.applicantDate));
-  const aLabel = esc(opts.applicantLabel || "Accepted by Applicant");
+  const aLabel = aName || "Recipient";
 
   const row = (label: string, value: string, fallbackDots = true) => `
     <div style="font-size:11px;color:${INK};margin-top:4px;">
@@ -170,8 +171,8 @@ export function signatureBlock(opts: {
   // overlaps any heading/label text above (e.g. "Referring Brokerage").
   const stampOverlay = `
     <img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" aria-hidden="true"
-      style="position:absolute;right:-28px;bottom:-12px;width:120px;height:120px;
-             object-fit:contain;opacity:0.9;mix-blend-mode:multiply;
+      style="position:absolute;right:-46px;bottom:-22px;width:150px;height:150px;
+             object-fit:contain;opacity:0.94;mix-blend-mode:multiply;
              transform:rotate(-8deg);pointer-events:none;user-select:none;" />`;
 
   const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
@@ -190,10 +191,12 @@ export function signatureBlock(opts: {
     row("Date", oDate),
   ].join("");
 
-  const applicantLines = [
-    row("Name", aName),
-    row("Date", aDate),
-  ].join("");
+  const applicantLines = `
+    <div style="font-size:22px;color:${INK};font-weight:500;letter-spacing:.01em;font-family:'Dancing Script','Brush Script MT',cursive;line-height:1.1;min-height:28px;text-align:center;margin-bottom:8px;">${aName || "&nbsp;"}</div>
+    <div style="border-top:1px solid ${INK};width:72%;margin:0 auto 9px;height:1px;"></div>
+    <div style="font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;text-align:center;margin-bottom:10px;">${aNameUpper || "&nbsp;"}</div>
+    ${row("Date", aDate)}
+  `;
 
   const extras = (opts.extraSignatories || []).filter(
     (s) => (s?.name || "").trim() || (s?.title || "").trim() || (s?.date || "").trim(),
@@ -574,7 +577,7 @@ function composeHolidayHome(input: ComposerInput): string {
       </tbody>
     </table>`;
 
-  const guestName = esc(f.recipientName || "Valued Guest");
+  const guestName = esc(f.recipientName || "");
   const idType = esc(f.idType || "Emirates ID Holder");
   const idNumber = esc(f.idNumber || "784-XXXX-XXXXXXX-X");
   const nationality = esc(f.nationality || "—");
@@ -588,7 +591,7 @@ function composeHolidayHome(input: ComposerInput): string {
 
   const welcome = `
     <div data-pdf-section="welcome" style="margin:0;font-size:13.5px;color:${INK};line-height:1.72;">
-      <p style="margin:0 0 13px;font-size:14.5px;"><strong>Dear ${guestName},</strong></p>
+      <p style="margin:0 0 13px;font-size:14.5px;"><strong>Dear ${guestName || "Recipient"},</strong></p>
       <p style="margin:0 0 13px;">It is our distinct privilege to welcome you to <strong>JBJ GLOBAL REAL ESTATE</strong>. We are deeply honoured by your trust in selecting our residence for your stay, and we are committed to ensuring that every detail of your experience reflects the discreet excellence our guests expect.</p>
       <p style="margin:0;">This agreement records your booking profile, payment summary, guest obligations, and signing declaration in a clear three-page format prepared for review and execution.</p>
     </div>`;
@@ -663,7 +666,7 @@ function composeHolidayHome(input: ComposerInput): string {
 
 
   // Final guest acknowledgement — name synced live from the left-rail input.
-  const guestLegalName = esc((f.recipientName || "").trim() || "[Guest Full Name]");
+  const guestLegalName = esc((f.recipientName || "").trim() || "[FULL NAME AS PER ID / PASSPORT]");
   const acknowledgement = `
     <div data-pdf-section="acknowledgement" style="margin:0;padding:15px 20px;border:1px solid ${GOLD};background:${CHAMPAGNE};">
       <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;margin-bottom:10px;">Disclaimer &amp; Guest Declaration</div>

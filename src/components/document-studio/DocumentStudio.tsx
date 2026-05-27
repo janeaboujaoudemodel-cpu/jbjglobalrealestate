@@ -318,6 +318,10 @@ function StudioShell({
       frame = window.requestAnimationFrame(() => {
         const b = bodyRef.current;
         if (!b) return;
+        if (b.querySelector("[data-pdf-page]")) {
+          setAutoPageGroups(null);
+          return;
+        }
         const headerH = chromeHeights.header;
         const footerH = chromeHeights.footer;
         // DocuSign auto-stamps the envelope ID in the top ~0.4in of every page.
@@ -326,8 +330,8 @@ function StudioShell({
         const FIRST_TOP = 46;
         const NEXT_TOP = 54 + DOCUSIGN_TOP_RESERVE;
         const BOTTOM_PAD = 40;
-        const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - footerH - BOTTOM_PAD);
-        const otherCap = Math.max(200, PAGE_H - NEXT_TOP - footerH - BOTTOM_PAD);
+        const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD);
+        const otherCap = Math.max(200, PAGE_H - NEXT_TOP - BOTTOM_PAD);
 
         // Flatten: if composer wrapped content in <section data-pdf-page>,
         // unwrap those so we re-split based on real measured heights.
