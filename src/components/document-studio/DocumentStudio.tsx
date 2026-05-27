@@ -224,6 +224,10 @@ function StudioShell({
   const [chromeHeights, setChromeHeights] = useState({ header: 180, footer: 86 });
   const [smartBreaks, setSmartBreaks] = useState<number[]>([]);
   const [manualPages, setManualPages] = useState<number>(0);
+  // GLOBAL pagination rule: any composed document body is auto-split into
+  // as many A4 pages as needed so content (esp. signatures) never collides
+  // with the footer. Footer renders ONLY on the last page.
+  const [autoPageGroups, setAutoPageGroups] = useState<string[] | null>(null);
   useEffect(() => {
     const wrap = previewWrapRef.current;
     if (!wrap) return;
