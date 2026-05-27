@@ -93,7 +93,7 @@ const escapeSignatureHtml = (value?: string) =>
  */
 const renderPerPageUserSignature = (_name?: string) => {
   return `
-    <div data-rendered-page-signature="1" style="margin-top:auto;padding:10px 8px 8px;display:flex;justify-content:flex-end;align-items:flex-end;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
+    <div data-rendered-page-signature="1" style="margin-top:auto;padding:10px 8px 0;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
       <div style="width:260px;color:#1A1A1A;">
         <div style="display:grid;grid-template-columns:80px 1fr;align-items:end;gap:8px;font-size:10px;line-height:1.2;">
           <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;">Signature:</div>
@@ -101,7 +101,7 @@ const renderPerPageUserSignature = (_name?: string) => {
         </div>
       </div>
     </div>
-    <div data-rendered-page-divider="1" style="border-top:1px solid rgba(184,149,85,.55);height:0;margin:0 24px 6px;page-break-inside:avoid;break-inside:avoid;"></div>`;
+    <div data-rendered-page-divider="1" style="border-top:1px solid rgba(184,149,85,.55);height:0;margin:0 24px;flex:0 0 auto;page-break-inside:avoid;break-inside:avoid;"></div>`;
 };
 
 const renderPageGeneratedDate = (): string => {
@@ -378,7 +378,7 @@ function StudioShell({
         // (the DocuSign safe band + footer reserve are fixed/locked, applied
         // separately). NEXT_TOP is the interior top padding only.
         const NEXT_TOP = 54;
-        const BOTTOM_PAD = 54;
+        const BOTTOM_PAD = 0;
         const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD - PAGE_SIGNATURE_RESERVE);
         const otherCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - NEXT_TOP - BOTTOM_PAD - Math.max(PAGE_SIGNATURE_RESERVE, footerH));
 
@@ -2017,8 +2017,8 @@ function StudioShell({
                 // GLOBAL: equal interior top/bottom on inner pages. Safe band
                 // and footer reserve are handled separately.
                 const NEXT_TOP = 54;
-                const STANDARD_BOTTOM_PAD = 54;
-                const LAST_BOTTOM_PAD = 24;
+                const STANDARD_BOTTOM_PAD = 0;
+                const LAST_BOTTOM_PAD = 0;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
 
                 // Parse the bodyHtml into [data-pdf-page] groups. If the
@@ -2161,6 +2161,9 @@ function StudioShell({
                                       width: bodyWidth,
                                       height: "100%",
                                       flex: "1 1 auto",
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      minHeight: 0,
                                       fontFamily: "Inter, system-ui, sans-serif",
                                       lineHeight: pageIndex === 1 ? 1.58 : 1.66,
                                       fontSize: pageIndex === 1 ? 13.6 : 13.2,
