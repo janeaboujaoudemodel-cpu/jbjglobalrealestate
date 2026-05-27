@@ -385,12 +385,12 @@ const CLIENT: DocumentTemplate[] = [
       { key: "nightlyRate", label: "Nightly Rate (AED)", type: "text", placeholder: "650" },
       { key: "cleaningFee", label: "Cleaning Fee (AED)", type: "text", placeholder: "Optional" },
       { key: "securityDeposit", label: "Security Deposit (AED)", type: "text", placeholder: "Optional · refundable" },
-      { key: "amountPaid", label: "Amount Paid (AED)", type: "text", required: true, placeholder: "4,550" },
-      { key: "paymentStatus", label: "Payment Status", type: "select", options: [
-        { value: "Paid in Full", label: "Paid in Full" },
+      { key: "paymentStatus", label: "Payment Status", type: "select", required: true, options: [
+        { value: "Paid in Full", label: "Paid in Full (auto-fills paid amount)" },
         { value: "Partial Payment", label: "Partial Payment" },
         { value: "Pending", label: "Pending" },
       ]},
+      { key: "paidNow", label: "Amount Paid So Far (AED) — partial only", type: "text", placeholder: "Only if Partial Payment" },
       { key: "balanceDueDate", label: "Balance Due Date", type: "date" },
       { key: "paymentMethod", label: "Payment Method", type: "select", options: [
         { value: "Bank Transfer", label: "Bank Transfer" },

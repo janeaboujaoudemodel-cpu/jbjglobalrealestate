@@ -434,13 +434,19 @@ function composeHolidayHome(input: ComposerInput): string {
     ["Number of Guests", f.guestsCount],
   ];
 
-  // ── Stay & Quotation (5-col itemized)
+  // ── Stay & Quotation (5-col itemized) — fully auto-calculated.
   const nightlyRate = parseNum(f.nightlyRate);
   const accommodation = nightlyRate * nights;
   const cleaning = parseNum(f.cleaningFee);
   const deposit = parseNum(f.securityDeposit);
   const subtotal = accommodation + cleaning + deposit;
-  const amountPaid = parseNum(f.amountPaid);
+
+  // Auto-compute amountPaid from paymentStatus — no manual entry needed.
+  const status = (f.paymentStatus || "").trim();
+  let amountPaid = 0;
+  if (status === "Paid in Full") amountPaid = subtotal;
+  else if (status === "Partial Payment") amountPaid = parseNum(f.paidNow);
+  else amountPaid = 0; // Pending / unset
   const balance = Math.max(0, subtotal - amountPaid);
 
   const qRow = (item: string, dates: string, qty: string, rate: string, amount: string, opts?: { strong?: boolean; accent?: boolean }) => {
@@ -457,7 +463,7 @@ function composeHolidayHome(input: ComposerInput): string {
   };
 
   const quotation = `
-    <table style="border-collapse:collapse;width:100%;margin:6px 0 18px;font-family:Inter,system-ui,sans-serif;">
+    <table style="border-collapse:collapse;width:100%;margin:6px 0 18px;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;">
       <thead>
         <tr>
           <th colspan="5" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
@@ -482,13 +488,13 @@ function composeHolidayHome(input: ComposerInput): string {
         )}
         ${cleaning ? qRow("Cleaning Fee", "—", "—", "—", fmtAED(cleaning)) : ""}
         ${deposit ? qRow("Security Deposit (refundable)", "—", "—", "—", fmtAED(deposit)) : ""}
-        ${qRow("Subtotal", "", "", "", fmtAED(subtotal), { strong: true })}
+        ${qRow("Total Invoice", "", "", "", fmtAED(subtotal), { strong: true })}
         ${qRow(
           "Amount Paid",
           [
             formatHumanDate(f.paymentDate) || f.paymentDate || "",
             f.paymentMethod ? `via ${f.paymentMethod}` : "",
-            f.paymentStatus || "",
+            status || "Pending",
           ].filter(Boolean).join(" · ") || "—",
           "",
           "",
@@ -541,6 +547,18 @@ function composeHolidayHome(input: ComposerInput): string {
       </ol>
     </div>`;
 
+  // Final guest acknowledgement — name synced live from the left-rail input.
+  const guestLegalName = esc((f.recipientName || "").trim() || "[Guest Full Name]");
+  const acknowledgement = `
+    <div style="margin:18px 0 6px;padding:14px 16px;border:1px solid ${GOLD};background:${CHAMPAGNE};page-break-inside:avoid;">
+      <p style="margin:0;font-size:12px;line-height:1.7;color:${INK};">
+        I, <strong>${guestLegalName}</strong>, hereby agree to all the terms and conditions provided by
+        <strong>JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>. I confirm that I have fully read and understood
+        every clause above, that I am <strong>solely responsible</strong> for reading and understanding them,
+        and that I sign below with my <strong>full, free and informed decision and consent</strong>.
+      </p>
+    </div>`;
+
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     subjectLine(`Holiday Home Booking Agreement — ${bookingId}`),
@@ -549,6 +567,7 @@ function composeHolidayHome(input: ComposerInput): string {
     termsTable(summaryRows),
     quotation,
     terms,
+    acknowledgement,
     paragraphs(input.aiClosing),
     signatureBlock({
       ownerName: input.ownerName,
@@ -650,7 +669,6 @@ export function compose(input: ComposerInput): string {
     case "hr_letter":
       return composeGeneric(input, `HR Letter — ${input.fields.recipientName || ""}`);
     case "partnership_referral":
-    case "referral_agreement":
       return composeGeneric(input, `Partnership / Referral Agreement`);
     case "form_a":
       return composeGeneric(input, `Form A — Buyer Registration`);

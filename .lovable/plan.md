@@ -1,109 +1,55 @@
-## 1. Footer — premium, distributed, with company location
+## Goal
+Make the locked chrome (footer, stamp, owner name, signature styling) truly global across every template, paginate the preview into real A4 pages, auto-calculate money fields, and tighten the Holiday Home declaration.
 
-Update both footer renderers so they share the same 3-column layout, with the trade-license office address front and center.
+## 1. Owner name — fix globally
+- `src/components/document-studio/DocumentStudio.tsx` line 191: change initial state `useState<string>("Jameel Bou Jaoude")` → `"Jane Bou Jaoude"`. This is the only remaining "Jameel" string in the codebase; the composer default is already correct.
 
-**Files:** `src/templates/jbjLockedChrome.ts` (`jbjFooterHtml`) and `src/components/document-studio/LockedLetterhead.tsx` (`LockedFooter`).
+## 2. Lock chrome/stamp/footer to ALL templates (no per-template work)
+The footer + stamp + signature block are already injected through `signatureBlock()` and `jbjLockedChrome.ts`, which every composer uses. Verify no composer renders its own footer/signature and that the `composeGeneric` fallback (Form A/F/I, PAA, Tenancy, NDA, HR Letter, Employment Contract, etc.) routes through the same `signatureBlock` — it already does. No code change needed beyond confirming all branches in the `compose()` dispatcher use `signatureBlock`. Add a guard comment at the top of `composers/index.ts` documenting the lock so it isn't bypassed.
 
-Layout (single full-width band, champagne bg, 1px gold top hairline):
+## 3. Remove duplicate templates
+Audit `documentCatalog.ts`:
+- `partnership_referral` and the dispatcher alias `referral_agreement` — collapse to one (`partnership_referral`), remove the alias case from the `compose()` switch.
+- Holiday Home + Facility Management are tagged `audience:"staff"` but currently sit in the CLIENT array — move them physically into the `STAFF` array so they appear in only one hub (Careers Portal · Contracts & Templates).
+- Spot-check for any other catalog entries that share fields/intent.
 
-```
-┌──────────────────────────┬──────────────────────────┬──────────────────────────┐
-│ JBJ GLOBAL REAL ESTATE   │ Office SM1-195, Port     │ +971 54 716 7107         │
-│ L.L.C · S.O.C            │ Saeed, Deira, Dubai, UAE │ contact@jbj.ae           │
-│ Trade Lic. 1591031       │                          │ www.jbj.ae               │
-└──────────────────────────┴──────────────────────────┴──────────────────────────┘
-```
+## 4. Auto-calculate amounts (remove "Amount Paid" manual input where derivable)
+Holiday Home form:
+- Drop `amountPaid` input. Always derive `subtotal = nightlyRate × nights + cleaningFee + securityDeposit`.
+- The "Amount Paid" row in the quotation table is computed from `paymentStatus`:
+  - `Paid in Full` → amountPaid = subtotal, balance = 0
+  - `Partial Payment` → keep one numeric input `paidNow` (renamed)
+  - `Pending` → amountPaid = 0, balance = subtotal
+- Keep `paymentMethod`, `paymentDate`, `paymentStatus` (status already in form).
+- Show Total / Paid / Balance rows auto-rendered.
 
-- Left cell: legal name + suffix (uppercase, tracked) + trade-license number small line
-- Center cell: full office address from `TRADE_LICENSE_OFFICE`
-- Right cell: phone / email / website stacked (gold accents, ink for primary)
-- Ink color for body text (not all-gold) — gold reserved as hairline + link accent so it reads as a premium footer, not a gold ribbon
-- Mobile: collapses to a single centered column
+Commission Invoice already auto-calculates — leave as is.
 
-## 2. Global removal of ID / Passport from every signature & body block
+## 5. Real A4 pagination in preview
+Today the page grows tall and the PDF exporter slices it. Make the preview show that pagination live:
+- In `DocumentStudio.tsx` replace the single tall `<div ref={pageRef}>` with a paginator:
+  - After body renders, measure body height.
+  - Compute `pageCount = ceil(bodyHeight / contentArea)` where `contentArea = PAGE_H − headerH − footerH`.
+  - Render N stacked `<article class="a4-page">` cards (each exactly 816×1154), each containing the locked letterhead, a slice of the body via CSS `column`/transform-translate offset, and the locked footer.
+  - Add `page-break-inside:avoid` style hints to `signatureBlock`, `termsTable`, `quotation` (already partially set) so logical blocks don't get cut.
+- Switch `pages` state default from `"auto"` to derived `pageCount` and show "Page X of N" between page cards.
+- Exporter (`exporters.ts`) already slices on 1154 boundaries — no change required, but verify the new DOM still feeds it a contiguous canvas (use a hidden export-only single-page wrapper if needed).
 
-Owner has asked that ID/Passport disappear from every template — signature side and recipient block — and live only in the outbound email body. Effect must be universal, not just Holiday Home.
+## 6. Holiday Home — final acknowledgement clause
+Append a single bold block immediately above the signature block in `composeHolidayHome`:
 
-**Files:** `src/templates/composers/index.ts`, `src/config/documentCatalog.ts`, `src/components/document-studio/DocumentStudio.tsx`.
+> I, **{{guestName}}**, hereby agree to all the terms and conditions provided by **JBJ GLOBAL REAL ESTATE L.L.C — S.O.C**. I confirm that I have fully read and understood every clause above, that I am solely responsible for reading and understanding them, and that I sign below with my full and free decision and consent.
 
-- `signatureBlock`: drop the `ID / Passport` row entirely; keep only Name / Date on the recipient side. Stop accepting `applicantId`.
-- `recipientBlock`: drop the `ID / Passport` line in both greeting and address variants.
-- Remove every `applicantId: f.idNumber` in the composers (job offer, generic, commission invoice, facility management).
-- Remove the standalone `idNumber` text input in `DocumentStudio.tsx` from the client-info side panel.
-- Drop the `idNumber` field definition from `documentCatalog.ts` (and any per-template repeat such as Facility Management's "Owner ID / Trade Licence #").
-- Recipient/client name continues to auto-sync into the signature block from `f.recipientName` everywhere — already the behaviour, but verified template by template.
+`{{guestName}}` is replaced live from `fields.recipientName` (the left-rail "Guest Full Name" input). Also pipe the same value into the signature block's applicant name (already done) and into the Acknowledgement clause's existing #11 entry so both stay in sync.
 
-## 3. Holiday Home — premium booking-details quote table + stronger T&Cs
-
-**File:** `src/templates/composers/index.ts` → `composeHolidayHome`.
-
-### 3a. Replace the flat 2-column reservation list with a true quotation table
-
-Two stacked tables, gold hairline, alternating champagne rows:
-
-**Booking Summary** (compact 2-col)
-- Booking ID (auto-generated `JBJ-HH-YYYYMMDD-XXXX` if blank)
-- Booking Source (e.g. Booking.com, Airbnb, Direct, WhatsApp)
-- External Reference (booking.com confirmation #, if any)
-- Property · Unit Type · Unit Size · Address
-- Guest Name · Phone / WhatsApp · Number of Guests
-
-**Stay & Quotation** (5-col itemised table)
-| Item | Dates | Nights | Rate (AED) | Amount (AED) |
-| Accommodation | check-in → check-out | nights | nightly rate | nightly × nights |
-| Cleaning fee (optional) | — | — | — | f.cleaningFee |
-| Security deposit (refundable) | — | — | — | f.securityDeposit |
-| **Subtotal** | | | | computed |
-| **Amount Paid** | payment date · via {paymentMethod} · {paid/pending} | | | f.amountPaid |
-| **Balance Due** | due {f.balanceDueDate} | | | subtotal − amountPaid |
-
-All currency rendered with `AED` prefix and thousands separators. Hide any row whose value is empty so the table stays clean.
-
-### 3b. New form fields in `documentCatalog.ts` (Holiday Home only)
-
-Add: `bookingSource` (select: Direct, Booking.com, Airbnb, Agoda, WhatsApp, Other), `externalRef`, `cleaningFee`, `securityDeposit`, `amountPaid`, `paymentStatus` (select: Paid in Full / Partial / Pending), `balanceDueDate`. Keep existing `bookingRef` but auto-fill it if blank using the `JBJ-HH-…` generator at compose time.
-
-### 3c. Tougher Guest Declaration clauses
-
-Inside the existing "Terms & Conditions — Guest Declaration" ordered list, replace the current `Guest Responsibility` clause with an expanded version and add two new clauses. Final clause set:
-
-1. Non-Refundable Booking *(unchanged)*
-2. No Refund · No Credit *(unchanged)*
-3. Full Release of Liability *(unchanged)*
-4. **Damage & Property Condition (expanded).** Guest is fully liable for the cost of repair or replacement of any damage, breakage, loss or theft affecting the unit, furniture, appliances, fixtures, finishes or common areas — whether caused by the Guest, their co-occupants, their visitors, or any person admitted by the Guest. Damages are charged at full market/replacement cost plus a 15% handling fee, deducted from the security deposit and, where insufficient, invoiced separately and payable within seven (7) days.
-5. **Overstay & Unauthorised Occupation (new).** If the Guest fails to vacate at the agreed check-out time without prior written extension, the Guest shall pay (i) AED 1,500 per day or 2× the nightly rate (whichever is higher) as liquidated damages, and (ii) all legal, eviction, locksmith and enforcement costs. The Guest expressly consents to JBJ initiating eviction, police and Dubai Courts proceedings, and acknowledges that overstaying constitutes unlawful occupation under UAE law.
-6. **Conduct of Guests & Visitors (new).** The Guest is fully responsible for the conduct, safety and compliance of every co-occupant and visitor admitted to the property, and indemnifies JBJ against any claim arising from their actions. Maximum occupancy stated above may not be exceeded; subletting, re-listing or commercial use is strictly prohibited.
-7. **House Rules & Policy Adherence.** Guest agrees to read, respect and abide by all house rules, building by-laws, community regulations and UAE laws at all times. Violations result in immediate eviction with no refund and full liability for resulting damages.
-8. Check-in / Check-out *(kept)*
-9. Security Deposit *(kept)*
-10. Governing Law — Dubai Courts *(kept)*
-11. Acknowledgement *(kept)*
-
-Multi-page is acceptable; the composer already lets content flow.
-
-## 4. Company stamp — bundled and rendered on every template
-
-The user-uploaded JPG (blue circular trade-license stamp, License No. 1591031, DUBAI - UAE) becomes the default JBJ corporate stamp shown on every generated document, regardless of whether the owner has uploaded a personal stamp.
-
-**Steps:**
-- Save the upload as `src/assets/jbj-company-stamp.png` (saved as PNG; background already white — render with `mix-blend-mode: multiply` to drop the white on champagne).
-- In `signatureBlock`, render the stamp as an `<img>` overlapped on the **owner (left) side**, anchored to the bottom-right of the owner signature cell, ~110px wide, rotated −6°, opacity 0.92, `mix-blend-mode: multiply`. This sits naturally where the owner's wet signature would land — matching standard UAE corporate practice (stamp + signature together, owner side only; client side stays clean for the counter-signature).
-- Use a data-URI (`?inline`) import like the monogram so it survives html2canvas PDF export and srcDoc previews without network fetches.
-- If the user has uploaded a personal company stamp via the asset library (`defaultStamp` in `useOwnerAssets`), prefer that one instead — the bundled stamp is the **fallback** so every template is always stamped.
-
-## Technical notes
-
-- All currency formatting uses a single helper `fmtAED(n)` (locale `en-AE`, no decimals unless fractional).
-- Booking-ID auto-generator: `JBJ-HH-${yyyymmdd}-${4 random uppercase alphanumerics}` computed at compose time when `f.bookingRef` is blank.
-- Stamp rendering is HTML inside `signatureBlock`, so it appears identically in preview, print, and PDF export — no extra wiring needed in `DocumentStudio.tsx`.
-- Footer changes apply to every template (every doc uses the locked chrome via `wrapWithJbjChrome` and `LockedFooter`).
-- No DB changes required.
+## 7. Placeholder sync (left rail → body)
+Confirm every composer that references `recipientName` re-renders on every keystroke (currently driven by the `useEffect` that recomputes `autoBodyRef` on field changes). No code change expected — just ensure the new acknowledgement clause uses `f.recipientName` directly, not a one-time captured value.
 
 ## Files touched
+- `src/components/document-studio/DocumentStudio.tsx` (owner name default, A4 paginator UI)
+- `src/templates/composers/index.ts` (auto-calc, acknowledgement clause, remove `referral_agreement` alias)
+- `src/config/documentCatalog.ts` (drop `amountPaid` field, move Holiday/Facility into STAFF array, dedupe)
 
-- `src/templates/jbjLockedChrome.ts` — premium 3-col footer with office address
-- `src/components/document-studio/LockedLetterhead.tsx` — matching preview footer
-- `src/templates/composers/index.ts` — signature block (no ID), recipient block (no ID), Holiday Home rewrite, bundled stamp injection
-- `src/config/documentCatalog.ts` — remove `idNumber` field everywhere, add Holiday Home booking/quotation fields
-- `src/components/document-studio/DocumentStudio.tsx` — remove ID/Passport client-info input
-- `src/assets/jbj-company-stamp.png` — new bundled stamp asset
+## Out of scope
+- Footer/stamp visual redesign (already shipped last turn — only auditing reach here).
+- Translations / marketing pages mentioning the founder name (already correct).
