@@ -1951,7 +1951,12 @@ function StudioShell({
                   return groups.length ? groups : [html];
                 };
 
-                const pageGroups = parsePageGroups(bodyHtml);
+                // Prefer measured auto-pagination (global rule). Fall back
+                // to composer-emitted [data-pdf-page] groups before the
+                // measurement runs, so first paint is still sensible.
+                const pageGroups = (autoPageGroups && autoPageGroups.length)
+                  ? autoPageGroups
+                  : parsePageGroups(bodyHtml);
                 const pageCount = Math.min(MAX_PAGES, Math.max(1, pageGroups.length));
 
                 return (
