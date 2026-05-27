@@ -201,7 +201,7 @@ function StudioShell({
   //     button below the preview.
   const PAGE_W = 816;
   const PAGE_H = 1154; // A4 ratio @ 96dpi (one page)
-  const MAX_PAGES = 20; // hard safety cap
+  const MAX_PAGES = 3; // locked template pages: 1, 2, 3 only
   const SAFE_GUTTER = 48; // top/bottom breathing room on every visual page
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
