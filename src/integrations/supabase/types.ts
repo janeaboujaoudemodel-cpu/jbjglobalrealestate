@@ -35533,6 +35533,47 @@ export type Database = {
           },
         ]
       }
+      hr_quiz_questions_public: {
+        Row: {
+          created_at: string | null
+          display_order: number | null
+          id: string | null
+          is_active: boolean | null
+          module_id: string | null
+          options: Json | null
+          question: string | null
+          question_type: Database["public"]["Enums"]["hr_question_type"] | null
+        }
+        Insert: {
+          created_at?: string | null
+          display_order?: number | null
+          id?: string | null
+          is_active?: boolean | null
+          module_id?: string | null
+          options?: Json | null
+          question?: string | null
+          question_type?: Database["public"]["Enums"]["hr_question_type"] | null
+        }
+        Update: {
+          created_at?: string | null
+          display_order?: number | null
+          id?: string | null
+          is_active?: boolean | null
+          module_id?: string | null
+          options?: Json | null
+          question?: string | null
+          question_type?: Database["public"]["Enums"]["hr_question_type"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_quiz_questions_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "hr_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       jbj_leads_secure: {
         Row: {
           assigned_broker_id: string | null
@@ -35597,6 +35638,41 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      module_questions_public: {
+        Row: {
+          created_at: string | null
+          id: string | null
+          is_active: boolean | null
+          module_id: string | null
+          options: Json | null
+          question_text: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          module_id?: string | null
+          options?: Json | null
+          question_text?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          module_id?: string | null
+          options?: Json | null
+          question_text?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_questions_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_modules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       owner_comm_channel_audit_summary: {
         Row: {
@@ -37676,6 +37752,14 @@ export type Database = {
           transcript: string
         }[]
       }
+      grade_hr_quiz: {
+        Args: { p_answers: Json; p_module_id: string }
+        Returns: Json
+      }
+      grade_module_quiz: {
+        Args: { p_answers: Json; p_module_id: string; p_question_ids: string[] }
+        Returns: Json
+      }
       has_database_grant: {
         Args: { _database_id: string; _min_level?: string; _user_id: string }
         Returns: boolean
@@ -37866,6 +37950,7 @@ export type Database = {
         Returns: undefined
       }
       restore_esign_envelopes: { Args: { p_ids: string[] }; Returns: Json }
+      reveal_module_answers: { Args: { p_attempt_id: string }; Returns: Json }
       seed_crm_developer_registry: {
         Args: { p_owner_id: string }
         Returns: number
