@@ -320,10 +320,13 @@ function StudioShell({
         if (!b) return;
         const headerH = chromeHeights.header;
         const footerH = chromeHeights.footer;
+        // DocuSign auto-stamps the envelope ID in the top ~0.4in of every page.
+        // Reserve a 42px safe band on every page so it never overlays content.
+        const DOCUSIGN_TOP_RESERVE = 42;
         const FIRST_TOP = 46;
-        const NEXT_TOP = 54;
+        const NEXT_TOP = 54 + DOCUSIGN_TOP_RESERVE;
         const BOTTOM_PAD = 40;
-        const page0Cap = Math.max(200, PAGE_H - headerH - FIRST_TOP - footerH - BOTTOM_PAD);
+        const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - footerH - BOTTOM_PAD);
         const otherCap = Math.max(200, PAGE_H - NEXT_TOP - footerH - BOTTOM_PAD);
 
         // Flatten: if composer wrapped content in <section data-pdf-page>,
@@ -1945,8 +1948,13 @@ function StudioShell({
             {template ? (
               (() => {
                 const BODY_PAD_X = 64;
+                // DocuSign stamps the envelope ID in the top ~0.4in of every
+                // page when the document is processed for signature. Reserve a
+                // 42px safe band on every page so the stamp never overlays the
+                // letterhead, date, or body content.
+                const DOCUSIGN_TOP_RESERVE = 42;
                 const FIRST_TOP = 46;
-                const NEXT_TOP = 54;
+                const NEXT_TOP = 54 + DOCUSIGN_TOP_RESERVE;
                 const STANDARD_BOTTOM_PAD = 54;
                 const LAST_BOTTOM_PAD = 24;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
@@ -2004,17 +2012,23 @@ function StudioShell({
                                 background: "#FDFBF7",
                               }}
                             >
-                              {/* Header — only on page 1 */}
-                              {isFirst && <LockedLetterhead />}
+                              {/* Header — only on page 1, shifted below DocuSign envelope-ID safe band */}
+                              {isFirst && (
+                                <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE }}>
+                                  <LockedLetterhead />
+                                </div>
+                              )}
 
                               {/* Body region — fills the remaining vertical space.
                                   Footer ONLY exists on the last page, so on
                                   earlier pages the body extends edge-to-edge
-                                  to the bottom (no reserved footer slot). */}
+                                  to the bottom (no reserved footer slot).
+                                  Non-first pages start below the DocuSign
+                                  envelope-ID safe band. */}
                               <div
                                 style={{
                                   position: "absolute",
-                                  top: isFirst ? chromeHeights.header : 0,
+                                  top: isFirst ? (chromeHeights.header + DOCUSIGN_TOP_RESERVE) : DOCUSIGN_TOP_RESERVE,
                                   left: 0,
                                   right: 0,
                                   bottom: isLast ? chromeHeights.footer : 0,

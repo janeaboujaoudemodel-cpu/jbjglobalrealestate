@@ -228,13 +228,19 @@ export function signatureBlock(opts: {
 
 /**
  * GLOBAL MULTI-PAGE SIGNATURE RULE (locked):
- * On every page EXCEPT the last, render a slim client-signature strip ABOVE
- * the page's bottom hairline divider. The strip shows the live client/guest
- * full name (synced from the form input, written as per ID/passport) sitting
- * on top of a signature line — never "initials". The authorised signatory +
- * stamp appears ONLY on the last page. The "Page X of Y" indicator is NOT
- * rendered inside the page — DocumentStudio prints it on the champagne gap
- * between sheets so it never lives on the paper itself.
+ * On every page EXCEPT the last, render a slim signature strip whose layout is:
+ *   1. Cursive live name (Dancing Script) — the visible signature mark.
+ *   2. 1px ink signature line directly underneath.
+ *   3. Uppercase legal name (as per ID/passport) under the line as the caption.
+ *   4. A SEPARATE 1px gold hairline page-divider rendered AFTER the strip — so
+ *      the divider closes the page and nothing can be appended below.
+ *
+ * The literal words "Client" / "Guest" / "Initials" / "Signature" NEVER appear
+ * as the label — the applicant's legal name IS the identity caption.
+ *
+ * The authorised signatory + stamp appear ONLY on the last page. The
+ * "Page X of Y" indicator is NOT rendered inside the page — DocumentStudio
+ * prints it in the champagne gap between sheets.
  *
  * Use `clientSignatureStrip` (alias `clientInitialsStrip` kept for back-compat)
  * from any multi-page composer.
@@ -243,22 +249,24 @@ export function clientSignatureStrip(opts: {
   applicantName?: string;
   page: number;
   totalPages: number;
+  /** @deprecated label is ignored — the applicant's legal name is the caption. */
   label?: string;
 }): string {
   if (opts.page >= opts.totalPages) return "";
-  const name = esc((opts.applicantName || "").trim());
-  const label = esc(opts.label || "Client Signature");
+  const legalName = esc((opts.applicantName || "").trim());
+  const legalNameUpper = legalName ? legalName.toUpperCase() : "";
   return `
     <div data-pdf-section="client-signature" data-client-signature-strip="1"
-         style="margin-top:auto;padding:0 0 10px;border-bottom:1px solid ${GOLD}66;
-                display:flex;justify-content:flex-end;align-items:flex-end;gap:24px;
+         style="margin-top:auto;padding:18px 8px 14px;
+                display:flex;justify-content:flex-end;align-items:flex-end;
                 font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
-      <div style="font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;padding-bottom:6px;">${label}</div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:260px;">
-        <div style="font-size:13px;color:${INK};font-weight:600;letter-spacing:.01em;font-family:'Dancing Script','Brush Script MT',cursive;line-height:1;">${name || "&nbsp;"}</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:280px;margin-right:28px;">
+        <div style="font-size:22px;color:${INK};font-weight:500;letter-spacing:.01em;font-family:'Dancing Script','Brush Script MT',cursive;line-height:1.1;min-height:24px;">${legalName || "&nbsp;"}</div>
         <div style="width:100%;border-bottom:1px solid ${INK};height:1px;"></div>
+        <div style="font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;padding-top:4px;">${legalNameUpper || "&nbsp;"}</div>
       </div>
-    </div>`;
+    </div>
+    <div data-page-divider="1" style="margin-top:10px;border-top:1px solid ${GOLD}66;height:0;page-break-inside:avoid;break-inside:avoid;"></div>`;
 }
 
 // Back-compat alias — old composers import `clientInitialsStrip`.
@@ -682,8 +690,8 @@ function composeHolidayHome(input: ComposerInput): string {
   // GLOBAL MULTI-PAGE SIGNATURE RULE: pages 1 & 2 carry a client-initials strip
   // at the bottom (Guest signs each non-final page). Authorised signatory +
   // stamp appear ONLY on page 3.
-  const initialsPage1 = clientInitialsStrip({ applicantName: f.recipientName, page: 1, totalPages: 3, label: "Guest Signature" });
-  const initialsPage2 = clientInitialsStrip({ applicantName: f.recipientName, page: 2, totalPages: 3, label: "Guest Signature" });
+  const initialsPage1 = clientInitialsStrip({ applicantName: f.recipientName, page: 1, totalPages: 3 });
+  const initialsPage2 = clientInitialsStrip({ applicantName: f.recipientName, page: 2, totalPages: 3 });
 
   const page1 = `
     <section data-pdf-page="1">
