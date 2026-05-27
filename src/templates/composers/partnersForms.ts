@@ -95,15 +95,22 @@ const clauseList = (clauses: string[]) => `
     ${clauses.map((c) => `<li style="margin:0 0 9px;">${c}</li>`).join("")}
   </ol>`;
 
+const partyIntroLine = (partnerName?: string) => `
+  <div style="margin:0 0 12px;font-size:11.5px;line-height:1.7;color:${INK};border:1px solid ${GOLD}55;background:${CHAMPAGNE};padding:9px 12px;">
+    <div><strong>Party A:</strong> JBJ Global Real Estate L.L.C S.O.C</div>
+    <div><strong>Party B:</strong> ${esc(partnerName) || "___________________________"}</div>
+    <div style="margin-top:4px;font-size:10.5px;color:${MUTED};font-style:italic;">All subsequent references to &ldquo;Party A&rdquo; and &ldquo;Party B&rdquo; in this agreement refer to the parties named above.</div>
+  </div>`;
+
 const signaturesBlock = (input: ComposerInput, partnerLabel: string) => {
   const f = input.fields;
   return signatureBlock({
     ownerName: "Jane Bou Jaoude",
-    ownerTitle: "Founder & CEO — JBJ Global Real Estate (Party A)",
+    ownerTitle: "Founder & CEO",
     ownerDate: input.ownerDate,
     applicantName: f.partnerSignatory || f.partnerName,
     applicantDate: input.applicantDate,
-    applicantLabel: `${partnerLabel} (Party B)`,
+    applicantLabel: partnerLabel,
     extraSignatories: input.extraSignatories,
   });
 };
@@ -273,6 +280,6 @@ export function composePartnerCustom(input: ComposerInput): string {
     </div>`,
     paragraphs(input.aiClosing),
     section(4, "Signatures"),
-    signaturesBlock(input, "Partner (Party B)"),
+    signaturesBlock(input, "Partner"),
   ].join("");
 }

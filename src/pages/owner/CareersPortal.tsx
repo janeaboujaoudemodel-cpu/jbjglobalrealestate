@@ -190,9 +190,9 @@ export default function CareersPortal() {
               <p className="text-[10px] tracking-[0.22em] uppercase text-[#1A1A1A]/60">
                 JBJ GLOBAL REAL ESTATE
               </p>
-              <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A]">Careers Portal</h1>
+              <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A]">Document Studio</h1>
               <p className="text-sm text-[#1A1A1A]/70">
-                Single canonical HR system. The public Careers page reads from here.
+                Owner-only workspace for HR, contracts, employees and document templates.
               </p>
             </div>
             <Link
