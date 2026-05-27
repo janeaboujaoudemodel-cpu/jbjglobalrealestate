@@ -268,60 +268,132 @@ const STAFF: DocumentTemplate[] = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────
-// CLIENT catalog — Forms & Contracts hub (real-estate clients)
+// SECONDARY-MARKET RERA FORMS — appended to STAFF so they appear in
+// Careers Portal · Contracts & Templates alongside HR docs.
+// These are the standard Dubai Land Department / RERA brokerage forms
+// used for resale, listing, buyer representation and cancellation.
 // ─────────────────────────────────────────────────────────────────────
-const CLIENT: DocumentTemplate[] = [
+STAFF.push(
   {
     id: "form_a",
-    audience: "client",
-    label: "Form A — Buyer Registration",
-    description: "Developer registration for off-plan purchases.",
+    audience: "staff",
+    label: "Form A — Listing Agreement (Seller ↔ Broker)",
+    description: "RERA single-agency listing authorisation between the seller and JBJ as the broker.",
     icon: Building2,
     needsClient: true,
-    emailSubject: "Form A — Buyer Registration · JBJ GLOBAL REAL ESTATE",
+    emailSubject: "Form A — Listing Agreement · JBJ GLOBAL REAL ESTATE",
     aiInstructions:
-      "Draft a Form A buyer registration cover letter referencing the project, unit, buyer details, and developer. Refer to RERA Form A standard.",
+      "Draft a Form A listing agreement cover (1–2 short paragraphs). Reference seller, property, listing price and term. DO NOT restate the RERA clauses — they are auto-rendered.",
     fields: [
-      RECIPIENT_NAME,
-      { key: "projectName", label: "Project Name", type: "text", required: true },
-      { key: "unitRef", label: "Unit Reference", type: "text" },
-      { key: "developer", label: "Developer", type: "text" },
+      { key: "recipientName", label: "Seller Full Name", type: "text", required: true },
+      { key: "propertyRef", label: "Property Address / DLD Ref", type: "text", required: true },
+      { key: "listingPrice", label: "Listing Price (AED)", type: "text" },
+      { key: "commissionRate", label: "Commission Rate (%)", type: "text", placeholder: "2" },
+      { key: "term", label: "Listing Term", type: "text", placeholder: "e.g., 90 days exclusive" },
+      START_DATE,
+    ],
+  },
+  {
+    id: "form_b",
+    audience: "staff",
+    label: "Form B — Buyer Representation Agreement",
+    description: "RERA agreement authorising JBJ to represent the buyer in a resale transaction.",
+    icon: UserSquare2,
+    needsClient: true,
+    emailSubject: "Form B — Buyer Representation · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a short Form B buyer representation cover (1–2 paragraphs). Confirm scope, search criteria and commission. DO NOT restate clauses.",
+    fields: [
+      { key: "recipientName", label: "Buyer Full Name", type: "text", required: true },
+      { key: "searchCriteria", label: "Search Criteria / Preferred Areas", type: "textarea" },
+      { key: "budget", label: "Budget (AED)", type: "text" },
+      { key: "commissionRate", label: "Commission Rate (%)", type: "text", placeholder: "2" },
+      { key: "term", label: "Representation Term", type: "text", placeholder: "e.g., 90 days" },
+      START_DATE,
     ],
   },
   {
     id: "form_f",
-    audience: "client",
-    label: "Form F — Listing / MoU",
-    description: "RERA Memorandum of Understanding between buyer and seller.",
+    audience: "staff",
+    label: "Form F — Sale MoU (Buyer ↔ Seller)",
+    description: "RERA Memorandum of Understanding for a secondary-market property sale.",
     icon: ClipboardCheck,
     needsClient: true,
-    emailSubject: "Form F — MoU · JBJ GLOBAL REAL ESTATE",
+    emailSubject: "Form F — Sale MoU · JBJ GLOBAL REAL ESTATE",
     aiInstructions:
-      "Draft a Form F MoU cover with parties, property, agreed price, deposit, completion date and broker commission.",
+      "Draft a Form F MoU cover. Reference parties, property, agreed price, deposit, completion date and brokerage commission. DO NOT restate full clauses.",
     fields: [
       { key: "recipientName", label: "Buyer Name", type: "text", required: true },
       { key: "sellerName", label: "Seller Name", type: "text", required: true },
       { key: "propertyRef", label: "Property Address / DLD Ref", type: "text", required: true },
-      { key: "price", label: "Agreed Price (AED)", type: "text" },
+      { key: "price", label: "Agreed Price (AED)", type: "text", required: true },
       { key: "deposit", label: "Deposit (AED)", type: "text" },
-      { key: "completionDate", label: "Completion Date", type: "date" },
+      { key: "completionDate", label: "Completion / Transfer Date", type: "date" },
+      { key: "commissionRate", label: "Brokerage Commission (%)", type: "text", placeholder: "2" },
     ],
   },
   {
     id: "form_i",
-    audience: "client",
-    label: "Form I — Cancellation",
-    description: "Listing cancellation form.",
-    icon: FileText,
+    audience: "staff",
+    label: "Form I — Multiple Listing / Brokers Network",
+    description: "RERA Form I co-broking / multiple listing registration between agencies.",
+    icon: Handshake,
     needsClient: true,
-    emailSubject: "Form I — Cancellation · JBJ GLOBAL REAL ESTATE",
-    aiInstructions: "Draft a Form I listing cancellation referencing the original Form A/F and the reason for cancellation.",
+    emailSubject: "Form I — Multiple Listing · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a short Form I co-broking cover (1–2 paragraphs). Reference both brokerages, the listing, and the agreed commission split.",
     fields: [
-      RECIPIENT_NAME,
-      { key: "propertyRef", label: "Property Reference", type: "text", required: true },
-      { key: "reason", label: "Reason for Cancellation", type: "textarea" },
+      { key: "recipientName", label: "Counterpart Brokerage", type: "text", required: true },
+      { key: "counterpartyAgent", label: "Counterpart Agent", type: "text" },
+      { key: "propertyRef", label: "Property Address / DLD Ref", type: "text", required: true },
+      { key: "listingPrice", label: "Listing Price (AED)", type: "text" },
+      { key: "commissionSplit", label: "Commission Split", type: "text", placeholder: "50 / 50" },
+      START_DATE,
     ],
   },
+  {
+    id: "form_u",
+    audience: "staff",
+    label: "Form U — Termination of Agency Agreement",
+    description: "RERA Form U cancellation of a Form A / Form B agency relationship.",
+    icon: FileText,
+    needsClient: true,
+    emailSubject: "Form U — Termination · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a Form U termination cover referencing the original Form A or Form B and the effective termination date. Keep it brief and procedural.",
+    fields: [
+      { key: "recipientName", label: "Counterparty Name", type: "text", required: true },
+      { key: "originalForm", label: "Original Form Reference", type: "text", placeholder: "Form A · ref…" },
+      { key: "propertyRef", label: "Property Reference", type: "text", required: true },
+      { key: "effectiveDate", label: "Effective Termination Date", type: "date", required: true },
+      { key: "reason", label: "Reason", type: "textarea" },
+    ],
+  },
+  {
+    id: "form_r",
+    audience: "staff",
+    label: "Form R — Broker-to-Broker Referral",
+    description: "RERA Form R referral agreement between two registered brokerages.",
+    icon: Handshake,
+    needsClient: true,
+    emailSubject: "Form R — Referral · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a Form R referral cover. Reference referring brokerage, receiving brokerage, the lead/property and the referral fee.",
+    fields: [
+      { key: "recipientName", label: "Receiving Brokerage", type: "text", required: true },
+      { key: "leadName", label: "Referred Lead / Client", type: "text" },
+      { key: "propertyRef", label: "Property / Project (if any)", type: "text" },
+      { key: "referralFee", label: "Referral Fee", type: "text", placeholder: "e.g., 25% of net commission" },
+      START_DATE,
+    ],
+  },
+);
+
+// ─────────────────────────────────────────────────────────────────────
+// CLIENT catalog — Forms & Contracts hub (real-estate clients)
+// ─────────────────────────────────────────────────────────────────────
+const CLIENT: DocumentTemplate[] = [
+
   {
     id: "paa",
     audience: "client",
