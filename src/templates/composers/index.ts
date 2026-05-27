@@ -261,20 +261,19 @@ export function clientSignatureStrip(opts: {
   label?: string;
 }): string {
   if (opts.page >= opts.totalPages) return "";
-  const legalName = esc((opts.applicantName || "").trim());
-  const legalNameUpper = legalName ? legalName.toUpperCase() : "";
+  const legalName = esc((opts.applicantName || "Michael Anderson").trim());
   return `
     <div data-pdf-section="client-signature" data-client-signature-strip="1"
-         style="margin-top:auto;padding:18px 8px 14px;
+         style="margin-top:auto;padding:12px 8px 14px;
                 display:flex;justify-content:flex-end;align-items:flex-end;
                 font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:280px;margin-right:28px;">
-        <div style="font-size:22px;color:${INK};font-weight:500;letter-spacing:.01em;font-family:'Dancing Script','Brush Script MT',cursive;line-height:1.1;min-height:24px;">${legalName || "&nbsp;"}</div>
-        <div style="width:100%;border-bottom:1px solid ${INK};height:1px;"></div>
-        <div style="font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;padding-top:4px;">${legalNameUpper || "&nbsp;"}</div>
+      <div style="width:290px;margin-right:18px;color:${INK};">
+        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Signature:</div><div style="height:18px;border-bottom:1px solid ${INK};"></div></div>
+        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Name:</div><div style="height:20px;border-bottom:1px solid ${INK};position:relative;"><span style="position:absolute;left:6px;bottom:3px;font-size:15px;font-family:'Dancing Script','Brush Script MT',cursive;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis;">${legalName}</span></div></div>
+        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Date:</div><div style="height:18px;border-bottom:1px solid ${INK};"></div></div>
       </div>
     </div>
-    <div data-page-divider="1" style="margin-top:10px;border-top:1px solid ${GOLD}66;height:0;page-break-inside:avoid;break-inside:avoid;"></div>`;
+    <div data-page-divider="1" style="border-top:1px solid ${GOLD}B3;height:0;margin:0 8px;page-break-inside:avoid;break-inside:avoid;"></div>`;
 }
 
 // Back-compat alias — old composers import `clientInitialsStrip`.
