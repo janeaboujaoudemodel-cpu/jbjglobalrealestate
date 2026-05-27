@@ -326,17 +326,17 @@ export function composeFormI(input: ComposerInput): string {
     </table>`;
 
   const propertyAndCommission = `
-    <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 14px;">
+    <table data-pdf-section="form-i-property-commission" style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 10px;">
       <colgroup><col style="width:50%;" /><col style="width:50%;" /></colgroup>
       <thead>
         <tr>
-          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:8px 10px;text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 2 — THE PROPERTY</th>
-          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:8px 10px;text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 3 — THE COMMISSION (SPLIT)</th>
+          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:6px 8px;text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 2 — THE PROPERTY</th>
+          <th style="border:1px solid ${GOLD};background:${CHAMPAGNE};padding:6px 8px;text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:${INK};">PART 3 — THE COMMISSION (SPLIT)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td style="border:1px solid ${GOLD};padding:10px 12px;vertical-align:top;font-size:11px;line-height:1.7;color:${INK};">
+          <td style="border:1px solid ${GOLD};padding:8px 10px;vertical-align:top;font-size:10.6px;line-height:1.5;color:${INK};">
             <div><strong>PROPERTY ADDRESS:</strong> ${esc(f.propertyRef) || "___________________________"}</div>
             <div><strong>MASTER DEVELOPER:</strong> ${esc(f.masterDeveloper) || "__________"}</div>
             <div><strong>MASTER PROJECT NAME:</strong> ${esc(f.masterProject) || "__________"}</div>
@@ -347,8 +347,8 @@ export function composeFormI(input: ComposerInput): string {
             <div><strong>IS THE PROPERTY TENANTED?</strong> YES [ ] NO [ ]</div>
             <div><strong>MAINTENANCE FEE P.A:</strong> ${esc(f.maintenanceFee) || "__________"} per sq. ft</div>
           </td>
-          <td style="border:1px solid ${GOLD};padding:10px 12px;vertical-align:top;font-size:11px;line-height:1.7;color:${INK};">
-            <div style="font-style:italic;color:${MUTED};margin-bottom:6px;">The following additional commission split is agreed between the Seller/Landlord's Agent &amp; the Buyer/Tenant's Agent.</div>
+          <td style="border:1px solid ${GOLD};padding:8px 10px;vertical-align:top;font-size:10.6px;line-height:1.5;color:${INK};">
+            <div style="font-style:italic;color:${MUTED};margin-bottom:5px;">The following additional commission split is agreed between the Seller/Landlord's Agent &amp; the Buyer/Tenant's Agent.</div>
             <div><strong>COMMISSION IN TOTAL IS: AED ${esc(f.commissionTotal) || "__________"}</strong></div>
             <div style="margin-top:6px;"><strong>AGENT &ldquo;A&rdquo; [ ${esc(f.commissionPctA) || "__"} % ]</strong> (Seller/Landlord's Agent)</div>
             <div><strong>AGENT &ldquo;B&rdquo; [ ${esc(f.commissionPctB) || "__"} % ]</strong> (Buyer/Tenant's Agent)</div>
@@ -365,9 +365,9 @@ export function composeFormI(input: ComposerInput): string {
   const signatureCell = (label: "A" | "B") => {
     const isJbj = jbjSide === label;
     return `
-      <td style="border:1px solid ${GOLD};padding:14px 14px 80px;vertical-align:top;width:50%;position:relative;min-height:170px;">
+      <td style="border:1px solid ${GOLD};padding:12px 14px 74px;vertical-align:top;width:50%;position:relative;min-height:168px;">
         <div style="font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:${INK};font-weight:700;margin-bottom:10px;">SIGNATURE &amp; COMPANY STAMP OF AGENT &ldquo;${label}&rdquo;</div>
-        <div style="border-top:1px solid ${INK};margin-top:54px;padding-top:6px;font-size:10.5px;color:${MUTED};">Signature</div>
+        <div style="border-top:1px solid ${INK};margin-top:52px;padding-top:6px;font-size:10.5px;color:${MUTED};">Signature</div>
         <div style="margin-top:10px;font-size:10.5px;color:${INK};"><strong>Name:</strong> ${isJbj ? "Jane Bou Jaoude" : "__________"}</div>
         <div style="margin-top:4px;font-size:10.5px;color:${INK};"><strong>Date:</strong> __ / __ / ____</div>
         ${isJbj ? jbjStampOverlayHtml() : ""}
@@ -375,31 +375,30 @@ export function composeFormI(input: ComposerInput): string {
   };
 
   const signatures = `
-    <div style="font-size:10.5px;color:${INK};margin:6px 0 8px;line-height:1.55;">Both Agents are required to cooperate fully, complete this FORM, and BOTH retain a fully signed &amp; stamped copy on file. RERA DRS is available to both Parties.</div>
-    <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 10px;">
+    <div data-pdf-section="form-i-signatures" style="margin-top:auto;padding-top:12px;page-break-inside:avoid;break-inside:avoid;">
+    <div style="font-size:10.5px;color:${INK};margin:4px 0 8px;line-height:1.45;">Both Agents are required to cooperate fully, complete this FORM, and BOTH retain a fully signed &amp; stamped copy on file. RERA DRS is available to both Parties.</div>
+    <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Inter,system-ui,sans-serif;margin:0 0 8px;">
       <tbody><tr>${signatureCell("A")}${signatureCell("B")}</tr></tbody>
     </table>
-    <div style="font-size:10.5px;color:${MUTED};line-height:1.55;font-style:italic;">The Agent &ldquo;B&rdquo; is confirming to view the above mentioned property through Agent &ldquo;A&rdquo;. In the event that Agent &ldquo;A&rdquo; did not respond within 24 hours, Agent &ldquo;B&rdquo; must contact RERA.</div>`;
+    <div style="font-size:10.3px;color:${MUTED};line-height:1.45;font-style:italic;">The Agent &ldquo;B&rdquo; is confirming to view the above mentioned property through Agent &ldquo;A&rdquo;. In the event that Agent &ldquo;A&rdquo; did not respond within 24 hours, Agent &ldquo;B&rdquo; must contact RERA.</div>
+    </div>`;
 
   const eyebrow = `
-    <div style="display:flex;justify-content:space-between;align-items:baseline;margin:6px 0 4px;font-size:10.5px;color:${MUTED};letter-spacing:.10em;text-transform:uppercase;font-weight:600;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin:0 0 3px;font-size:10px;color:${MUTED};letter-spacing:.10em;text-transform:uppercase;font-weight:600;">
       <div>FORM I &nbsp;·&nbsp; BRN: 44750</div>
       <div>Str #: __________</div>
     </div>
-    <div style="text-align:center;font-size:22px;font-weight:800;letter-spacing:.06em;color:${INK};margin:6px 0 2px;text-transform:uppercase;">Agent to Agent Agreement</div>
-    <div style="text-align:center;font-style:italic;font-size:11.5px;color:${MUTED};margin:0 0 14px;">As per the Real Estate Brokers By-Law No. (85) of 2006</div>`;
+    <div style="text-align:center;font-size:20px;font-weight:800;letter-spacing:.06em;color:${INK};margin:4px 0 2px;text-transform:uppercase;">Agent to Agent Agreement</div>
+    <div style="text-align:center;font-style:italic;font-size:11px;color:${MUTED};margin:0 0 8px;">As per the Real Estate Brokers By-Law No. (85) of 2006</div>`;
 
   const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     eyebrow,
-    section(1, "The Parties"),
     partsTable,
+    propertyAndCommission,
   ].join("");
 
   const pageTwo = [
-    section(2, "The Property &amp; Commission Split"),
-    propertyAndCommission,
-    section(4, "The Signatures"),
     signatures,
     paragraphs(input.aiClosing),
   ].join("");
