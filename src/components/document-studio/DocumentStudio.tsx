@@ -664,6 +664,7 @@ function StudioShell({
       if (error) throw error;
       if (data && data.ok === false) throw new Error(data.error || "Send failed");
       toast.success(recipientOverride ? `Test sent to ${recipientOverride}` : `Sent to ${to}`);
+      if (!recipientOverride) clearSession();
     } catch (e: any) {
       toast.error(e?.message || "Send failed");
     } finally {
