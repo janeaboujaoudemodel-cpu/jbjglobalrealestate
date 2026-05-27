@@ -1,76 +1,70 @@
-Here is the correction plan.
+What is happening now:
 
-First, to answer your direct question: **HR Inbox is currently inside Careers Portal > Approvals**, below the approval workflow. You are on **Contracts & Templates**, so you will not see it there. That placement is confusing and I will fix it.
+- **HR Inbox is currently inside:** `/owner/careers-portal?section=approvals`
+- It is not a visible top-level Careers Portal tab. It is mounted under **Approvals**, below the approval workflow, which is why you cannot find it easily.
+- The old CV URL is still wired in several places. Worse, it still redirects to `/owner/careers-portal?section=contracts&tpl=candidate_cv`, which is exactly what you asked not to happen.
+- `candidate_cv` was removed from the Document Studio catalog, but old saved/session state can still force Document Studio into an invalid template state. That is why the left vertical sidebar can look empty.
+- The current Document Studio page preview is still one tall canvas with visual page-break overlays. That is causing the broken/cropped “Page 2 / Page 3” feeling and can affect export.
 
-## What I will change
+Plan to build/fix:
 
-### 1. Make HR Inbox visible where you expect it
-- Add a clear **HR Inbox** tab/section in the Careers Portal navigation.
-- Keep CV/application notifications there, not hidden inside Approvals.
-- When you click an applicant, it will open the applicant/CV workflow, not the contract document area.
+1. **Make HR Inbox obvious**
+   - Add a separate **HR Inbox** tab in Careers Portal navigation.
+   - Keep the current HR Inbox component, but move access from hidden-inside-Approvals to its own section.
+   - Update HR Inbox item clicks so they do **not** open the removed `candidate_cv` contract template.
 
-### 2. Remove the old CV builder URL from public/SEO paths
-- Remove `/toolkit/corporate-suite/cv-resume` from public sitemap links, footer links, AI Hub cards, side navigation, and visible tool lists.
-- Stop sending users from that old URL into Contracts.
-- Replace visible links with the new CV Builder route only.
-- Keep the old route as a safe hidden fallback only if needed, but it will not be advertised or indexed.
+2. **Restore Document Studio career templates without touching the templates**
+   - Keep all existing staff templates in Document Studio exactly as they are.
+   - Add a safety guard: if Document Studio receives an invalid old template ID like `candidate_cv`, it resets to normal template selection instead of showing an empty sidebar.
+   - Clear/ignore stale saved session state that points to removed templates.
 
-### 3. Move Candidate CV out of Contracts
-- Remove **Candidate CV** from **Contracts & Templates**.
-- Create a separate **CV Builder** area/tool.
-- It will not use JBJ letterhead, footer, stamps, signatures, or contract send/sign flow.
-- The right panel becomes **Live CV Editor**, not “Live Document Editor”.
+3. **Remove the old CV URL from SEO and public discovery**
+   - Remove `/toolkit/corporate-suite/cv-resume` from sitemap/page sitemap/footer/navigation/AI Hub/corporate suite/tool lists.
+   - Add robots `Disallow` for the old URL so search engines stop discovering it.
+   - Keep only a hidden safety redirect or replace route behavior so old visitors are not sent into Document Studio contracts.
 
-### 4. Build a real CV Builder, not a contract template
-The CV Builder will include proper CV sections:
-- Personal details
-- Professional headline
-- Summary/profile
-- Work experience
-- Education
-- Skills
-- Languages
-- Certifications/licenses
-- Portfolio/LinkedIn/links
-- Achievements
-- References optional
-- Upload/import existing CV
-- AI improve/rewrite per section
-- Add/delete/edit fields and repeated entries, especially experience, education, skills, certifications
+4. **Create a separate real CV Builder tool**
+   - Build a standalone CV Builder section/page, separate from Document Studio and Contracts.
+   - It will not use JBJ letterhead, JBJ footer, stamps, signatures, or contract send/sign flow.
+   - It will use a proper CV workflow: personal details, headline, summary, experience, education, skills, languages, certifications, portfolio links, achievements, references, upload/import area, add/delete/edit section items.
+   - The right side becomes **Live CV Editor / Preview**, not “document review”.
 
-### 5. CV design and colors
-- The CV will have its own visual style, separate from JBJ corporate documents.
-- It will look like a modern professional CV builder, similar in purpose to My CV Builder / My Resume / My Perfect CV.
-- It will still respect the project’s premium style, but it will not look like a JBJ contract or letterhead.
+5. **Make the CV Builder visible on the frontend but controllable**
+   - Register the new CV Builder as the existing controllable tool ID `cv-resume` in the tools control panel.
+   - When visibility is **Public**, it appears on the frontend tools/home/AI Hub areas.
+   - When visibility is **Hidden**, it disappears from frontend discovery so you can hide it while testing.
 
-### 6. Fix A4 page rendering globally
-The current preview is wrong because it visually slices one long document and overlays “Page 2 / Page 3” labels. I will replace that behavior.
+6. **Fix A4 rendering and export behavior**
+   - For Document Studio: remove the fake page-label overlay system from exported/visible pages and ensure one true A4 page appears unless content needs more pages.
+   - For CV Builder: render real A4 pages and create a new A4 page only when content overflows.
+   - Export PDF using section-aware pagination so content is not randomly cropped and every PDF page remains true A4.
 
-New behavior:
-- Each page is a true A4 sheet.
-- Page 1 appears as one full A4 page.
-- Page 2 only appears when content actually needs a second page.
-- Page 3 only appears when content actually needs a third page.
-- No fake page labels, date labels, divider bands, or broken cropped page overlays in preview or export.
-- Exported PDF will match the A4 pages exactly.
+7. **Clarify the PDF types in the UI text**
+   - Applicant CV export = clean personal CV, no JBJ branding.
+   - Internal recruiter dossier, if added later, would be a separate branded HR file for your team only — not the applicant’s CV.
 
-### 7. Fix exports for all Document Studio templates
-This is not only a CV issue, so I will fix the shared export/page system:
-- Contracts/documents keep JBJ letterhead/footer only where appropriate.
-- CV Builder exports unbranded CV PDFs.
-- No broken third page.
-- No preview-only dividers exported into the PDF.
-- No cropped/non-A4 pages.
+Files to update:
 
-### 8. About the “branded PDF” I mentioned before
-That was badly explained.
+- `src/pages/owner/CareersPortal.tsx`
+- `src/components/hr/HRInboxTab.tsx`
+- `src/components/document-studio/DocumentStudio.tsx`
+- `src/components/document-studio/export/exporters.ts`
+- `src/routes/ToolkitRoutes.tsx`
+- `src/pages/AIHub.tsx`
+- `src/pages/toolkit/CorporateSuite.tsx`
+- `src/pages/owner/AIToolsControlPanel.tsx`
+- `src/config/publicToolAccess.ts`
+- `src/pages/Sitemap.tsx`
+- `src/components/Footer.tsx`
+- `src/components/navigation/GlobalVerticalNav.tsx`
+- `scripts/generate-sitemap.ts`
+- `public/robots.txt`
+- plus a new standalone CV Builder component/page.
 
-There are two different things:
+Expected result:
 
-1. **Employee/applicant CV PDF**  
-   This should be the person’s own CV. It should **not** have JBJ header/footer/signature/stamp.
-
-2. **Internal branded candidate dossier**  
-   This could be useful later for JBJ recruiters: a clean internal PDF summary of an applicant with score, skills, notes, role fit, and original CV link. The benefit is consistency for screening and agency sharing. It is not the applicant’s personal CV.
-
-For this fix, I will focus on the real CV Builder and correct A4 export. I will not force an internal branded applicant dossier into the CV builder.
+- HR Inbox has its own clear place in Careers Portal.
+- Document Studio career templates show again and are not damaged by the removed CV template.
+- CV Builder becomes a separate proper tool, not a contract/document template.
+- The old CV URL is removed from SEO/public links.
+- A4 pages and PDF exports stop showing broken cropped third pages.
