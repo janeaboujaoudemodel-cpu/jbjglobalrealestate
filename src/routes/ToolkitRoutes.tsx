@@ -76,8 +76,6 @@ export const ToolkitRoutes = () => (
     {/* Corporate Suite */}
     <Route path="/toolkit/corporate-suite" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/toolkit/corporate-suite/business-card" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/toolkit/corporate-suite/cv-resume" element={<Navigate to="/cv-builder" replace />} />
-    <Route path="/toolkit/corporate-suite/cv-builder" element={<Navigate to="/cv-builder" replace />} />
     <Route path="/toolkit/corporate-suite/cover-letter" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/toolkit/corporate-suite/landing-page" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/toolkit/corporate-suite/logo-creator" element={<Navigate to="/ai-hub" replace />} />
