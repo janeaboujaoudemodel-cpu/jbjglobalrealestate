@@ -333,7 +333,7 @@ export function composeFormU(input: ComposerInput): string {
     "This cancellation is governed by the laws of the Emirate of Dubai and the United Arab Emirates.",
   ];
 
-  return [
+  const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     headerBlock("Form U", "Cancellation of Agency Agreement", "Mutual Termination of Form A or Form B"),
     section(1, "Reference"),
@@ -352,6 +352,9 @@ export function composeFormU(input: ComposerInput): string {
     </div>`,
     section(3, "Reason for Cancellation"),
     `<div style="font-size:12px;line-height:1.6;color:${INK};border:1px solid ${GOLD}55;background:${CHAMPAGNE};padding:10px 14px;min-height:48px;">${esc(f.reason || "Mutually agreed termination.")}</div>`,
+  ].join("");
+
+  const pageTwo = [
     section(4, "Terms"),
     clauseList(clauses),
     paragraphs(input.aiClosing),
@@ -365,6 +368,8 @@ export function composeFormU(input: ComposerInput): string {
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
+
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── Broker-to-Broker Referral (NOT a RERA form) ───────────── */
