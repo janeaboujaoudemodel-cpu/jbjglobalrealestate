@@ -296,11 +296,11 @@ export function composeFormI(input: ComposerInput): string {
     return labels.map((l) => `${l} [ ${normalized === l.toLowerCase() ? "✓" : ""} ]`).join(" &nbsp;&nbsp;&nbsp; ");
   };
   const line = (value?: string, min = 60, center = false) => `
-    <span style="display:inline-block;min-width:${min}px;border-bottom:1px solid ${INK};padding:0 4px 1px;line-height:1.05;text-align:${center ? "center" : "left"};vertical-align:baseline;">${esc(value || "") || "&nbsp;"}</span>`;
+    <span style="display:inline-block;min-width:${min}px;border-bottom:1px solid ${INK};padding:0 3px 1px;line-height:1.02;text-align:${center ? "center" : "left"};vertical-align:baseline;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(value || "") || "&nbsp;"}</span>`;
   const row = (label: string, value?: string, _min = 0, center = false) => `
-    <div style="display:flex;align-items:flex-end;gap:4px;margin:0 0 4px;min-height:14px;font-size:10px;">
-      <strong style="white-space:nowrap;font-size:10px;">${label}</strong>
-      <span style="flex:1;min-width:0;border-bottom:1px solid ${INK};padding:0 4px 1px;line-height:1.05;text-align:${center ? "center" : "left"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(value || "") || "&nbsp;"}</span>
+    <div style="display:flex;align-items:flex-end;gap:3px;margin:0 0 2px;min-height:12px;font-size:8.8px;">
+      <strong style="white-space:nowrap;font-size:8.8px;">${label}</strong>
+      <span style="flex:1;min-width:0;border-bottom:1px solid ${INK};padding:0 3px 1px;line-height:1.02;text-align:${center ? "center" : "left"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(value || "") || "&nbsp;"}</span>
     </div>`;
 
   const partyDefaults = (label: "A" | "B") => {
@@ -363,28 +363,28 @@ export function composeFormI(input: ComposerInput): string {
     const p = partyDefaults(label);
     return `
       <td style="width:50%;border:1px solid ${GOLD};vertical-align:top;padding:0;">
-        <div style="font-size:10.8px;line-height:1.12;color:${INK};">
-          <div style="display:grid;grid-template-columns:46px 1fr;align-items:center;border-bottom:1px solid ${GOLD};background:${CHAMPAGNE};min-height:21px;">
-            <div style="font-size:14px;font-weight:800;text-align:center;">${label})</div>
-            <div style="font-size:12px;font-weight:800;letter-spacing:.02em;">THE AGENT/ BROKER <span style="font-weight:500;">(${role})</span></div>
+        <div style="font-size:9px;line-height:1.05;color:${INK};">
+          <div style="display:grid;grid-template-columns:36px 1fr;align-items:center;border-bottom:1px solid ${GOLD};background:${CHAMPAGNE};min-height:17px;">
+            <div style="font-size:12px;font-weight:800;text-align:center;">${label})</div>
+            <div style="font-size:10px;font-weight:800;letter-spacing:.02em;">THE AGENT/ BROKER <span style="font-weight:500;">(${role})</span></div>
           </div>
-          <div style="padding:6px 8px 7px;">
+          <div style="padding:4px 6px 5px;">
             ${row("NAME OF ESTABLISHMENT:", p.establishment, 200, true)}
             ${row("ADDRESS:", p.address, 235, true)}
-            <div style="height:6px;"></div>
-            <div style="font-weight:800;font-size:12px;margin:0 0 4px;letter-spacing:.02em;">OFFICIAL CONTACT DETAILS</div>
-            <div style="display:flex;align-items:flex-end;gap:6px;margin:0 0 4px;">
-              <strong>PH:</strong>${line(p.phone, 112, true)}<strong>FAX:</strong><span style="flex:1;border-bottom:1px solid ${INK};padding:0 6px 1px;">${esc(p.fax) || "&nbsp;"}</span>
+            <div style="height:3px;"></div>
+            <div style="font-weight:800;font-size:10px;margin:0 0 2px;letter-spacing:.02em;">OFFICIAL CONTACT DETAILS</div>
+            <div style="display:flex;align-items:flex-end;gap:4px;margin:0 0 2px;font-size:8.8px;">
+              <strong>Phone:</strong>${line(p.phone, 92, true)}<strong>FAX:</strong><span style="flex:1;min-width:0;border-bottom:1px solid ${INK};padding:0 3px 1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(p.fax) || "&nbsp;"}</span>
             </div>
             ${row("EMAIL:", p.email, 280, false)}
-            <div style="display:flex;align-items:flex-end;gap:6px;margin:0 0 4px;">
-              <strong>ORN:</strong>${line(p.orn, 105, true)}<strong>DED LISC:</strong><span style="flex:1;border-bottom:1px solid ${INK};padding:0 6px 1px;text-align:center;">${esc(p.ded) || "&nbsp;"}</span>
+            <div style="display:flex;align-items:flex-end;gap:4px;margin:0 0 2px;font-size:8.8px;">
+              <strong>ORN:</strong>${line(p.orn, 84, true)}<strong>DED LISC:</strong><span style="flex:1;min-width:0;border-bottom:1px solid ${INK};padding:0 3px 1px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(p.ded) || "&nbsp;"}</span>
             </div>
             ${row("P.O. BOX:", p.poBox, 260, true)}
-            <div style="font-weight:800;font-size:12px;margin:4px 0 4px;letter-spacing:.02em;">THE REGISTERED AGENT “${label}”</div>
+            <div style="font-weight:800;font-size:10px;margin:3px 0 2px;letter-spacing:.02em;">THE REGISTERED AGENT “${label}”</div>
             ${row("NAME:", p.agentName, 310, false)}
-            <div style="display:flex;align-items:flex-end;gap:6px;margin:0 0 4px;">
-              <strong>BRN:</strong>${line(p.brn, 105, true)}<strong>DATE ISSUED:</strong><span style="flex:1;border-bottom:1px solid ${INK};padding:0 6px 1px;text-align:center;">${esc(p.issued) || "&nbsp;"}</span>
+            <div style="display:flex;align-items:flex-end;gap:4px;margin:0 0 2px;font-size:8.8px;">
+              <strong>BRN:</strong>${line(p.brn, 84, true)}<strong>DATE ISSUED:</strong><span style="flex:1;min-width:0;border-bottom:1px solid ${INK};padding:0 3px 1px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(p.issued) || "&nbsp;"}</span>
             </div>
             ${row("MOBILE:", p.mobile, 282, false)}
             ${row("EMAIL:", p.agentEmail, 292, false)}
@@ -399,98 +399,100 @@ export function composeFormI(input: ComposerInput): string {
 
   const isJbjSignature = (label: "A" | "B") => jbjSide === label;
   const signatureCell = (label: "A" | "B") => `
-    <td style="width:50%;height:106px;border:1px solid ${GOLD};vertical-align:top;position:relative;padding:5px 8px;overflow:hidden;">
-      <div style="font-size:11px;font-weight:800;line-height:1.1;">SIGNATURE &amp; COMPANY STAMP OF AGENT "${label}":</div>
-      ${isJbjSignature(label) ? `<img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" style="position:absolute;left:200px;top:17px;width:92px;height:92px;object-fit:contain;opacity:.92;mix-blend-mode:multiply;transform:rotate(-8deg);" />` : ""}
+    <td style="width:50%;height:74px;border:1px solid ${GOLD};vertical-align:top;position:relative;padding:4px 7px;overflow:hidden;">
+      <div style="font-size:9.5px;font-weight:800;line-height:1.05;">SIGNATURE &amp; COMPANY STAMP OF AGENT "${label}":</div>
+      ${isJbjSignature(label) ? `<img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" style="position:absolute;left:218px;top:10px;width:62px;height:62px;object-fit:contain;opacity:.9;mix-blend-mode:multiply;transform:rotate(-8deg);" />` : ""}
     </td>`;
 
   const companyFooter = `
-    <div style="text-align:center;color:${INK};font-size:10px;line-height:1.5;margin-top:12px;">
-      <div style="font-weight:800;letter-spacing:.04em;margin-bottom:5px;">${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}</div>
+    <div style="text-align:center;color:${INK};font-size:8.4px;line-height:1.18;margin-top:5px;">
+      <div style="font-weight:800;letter-spacing:.04em;margin-bottom:2px;">${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}</div>
       <div>Tel Number : ${JBJ_BRAND.phone}</div>
       <div>${JBJ_BRAND.address}</div>
       <div>${JBJ_BRAND.website} | ${JBJ_BRAND.email.toLowerCase()} | ORN : 41486</div>
     </div>`;
 
   const html = `
-    <div data-form-i-page="1" data-signature-block="1" style="font-family:Inter,Arial,sans-serif;color:${INK};font-size:10px;line-height:1.18;width:100%;">
-      <div style="position:relative;min-height:96px;margin-bottom:4px;">
-        <div style="position:absolute;right:0;top:0;width:170px;font-size:11px;line-height:1.4;">
-          <div style="text-align:right;font-weight:800;font-size:13px;margin-bottom:2px;">FORM I</div>
+    <div data-form-i-page="1" data-signature-block="1" style="font-family:Inter,Arial,sans-serif;color:${INK};font-size:9px;line-height:1.08;width:100%;">
+      <div style="position:relative;min-height:80px;margin-bottom:4px;">
+        <div style="position:absolute;right:0;top:0;width:162px;font-size:9.5px;line-height:1.22;">
+          <div style="text-align:right;font-weight:800;font-size:11.5px;margin-bottom:1px;">FORM I</div>
           <div style="display:grid;grid-template-columns:42px 1fr;gap:6px;align-items:end;"><span>Brn:</span>${line(val("brn", "partyABrn") || "44750", 70, true)}</div>
           <div style="display:grid;grid-template-columns:42px 1fr;gap:6px;align-items:end;"><span>Str#:</span>${line(val("strNumber"), 70, true)}</div>
-          <div style="height:16px;"></div>
-          <div style="display:flex;align-items:flex-end;gap:6px;font-weight:800;"><span>DATE:</span>${line(day, 26, true)}<span>/</span>${line(month, 26, true)}<span>/</span>${line(year, 46, true)}</div>
+          <div style="height:9px;"></div>
+          <div style="display:flex;align-items:flex-end;gap:4px;font-weight:800;"><span>DATE:</span>${line(day, 22, true)}<span>/</span>${line(month, 22, true)}<span>/</span>${line(year, 38, true)}</div>
         </div>
-        <div style="margin-right:185px;text-align:center;padding-top:18px;">
-          <div style="font-size:18px;font-weight:900;letter-spacing:.02em;">AGENT to AGENT AGREEMENT</div>
-          <div style="font-style:italic;font-size:10.5px;margin-top:10px;">As per the Real estate Brokers By-Law No. (85) of 2006</div>
+        <div style="margin-right:180px;text-align:center;padding-top:16px;">
+          <div style="font-size:17px;font-weight:900;letter-spacing:.02em;">AGENT to AGENT AGREEMENT</div>
+          <div style="font-style:italic;font-size:9px;margin-top:7px;">As per the Real estate Brokers By-Law No. (85) of 2006</div>
         </div>
       </div>
 
       <table style="width:100%;border-collapse:collapse;table-layout:fixed;border:1px solid ${GOLD};">
+        <colgroup><col style="width:50%;" /><col style="width:50%;" /></colgroup>
         <tbody>
-          <tr style="background:${CHAMPAGNE};height:20px;">
-            <td style="border:1px solid ${GOLD};font-size:12px;font-weight:900;padding:2px 7px;width:18%;">PART 1.</td>
-            <td colspan="3" style="border:1px solid ${GOLD};font-size:12px;font-weight:900;text-align:center;padding:2px 7px;">THE PARTIES</td>
+          <tr style="background:${CHAMPAGNE};height:18px;">
+            <td colspan="2" style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;">
+              <span style="display:inline-block;width:86px;">PART 1.</span><span style="display:inline-block;width:calc(100% - 172px);text-align:center;">THE PARTIES</span>
+            </td>
           </tr>
           <tr>${partyBlock("A", "SELLER / LANDLORD")}${partyBlock("B", "BUYER /TENANT")}</tr>
           <tr>
-            <td style="border:1px solid ${GOLD};background:${CHAMPAGNE};font-size:12px;font-weight:900;text-align:center;padding:3px 7px;">DECLARATION BY AGENT “A”</td>
-            <td style="border:1px solid ${GOLD};background:${CHAMPAGNE};font-size:12px;font-weight:900;text-align:center;padding:3px 7px;">DECLARATION BY AGENT “B”</td>
+            <td style="border:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;font-weight:900;text-align:center;padding:2px 6px;">DECLARATION BY AGENT “A”</td>
+            <td style="border:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;font-weight:900;text-align:center;padding:2px 6px;">DECLARATION BY AGENT “B”</td>
           </tr>
           <tr>
-            <td style="border:1px solid ${GOLD};height:76px;vertical-align:top;text-align:center;padding:5px 11px;font-style:italic;font-size:9.3px;line-height:1.22;">${declarationA}</td>
-            <td style="border:1px solid ${GOLD};height:76px;vertical-align:top;text-align:center;padding:5px 11px;font-style:italic;font-size:9.3px;line-height:1.22;">${declarationB}</td>
+            <td style="border:1px solid ${GOLD};height:84px;vertical-align:top;text-align:center;padding:6px 10px;font-style:italic;font-size:8.4px;line-height:1.18;">${declarationA}</td>
+            <td style="border:1px solid ${GOLD};height:84px;vertical-align:top;text-align:center;padding:6px 10px;font-style:italic;font-size:8.4px;line-height:1.18;">${declarationB}</td>
           </tr>
-          <tr style="background:${CHAMPAGNE};height:20px;">
-            <td style="border:1px solid ${GOLD};font-size:12px;font-weight:900;padding:2px 7px;">PART2. <span style="float:right;margin-right:145px;">THE PROPERTY</span></td>
-            <td style="border:1px solid ${GOLD};font-size:12px;font-weight:900;padding:2px 7px;">PART3. <span style="float:right;margin-right:110px;">THE COMMISSION (split)</span></td>
+          <tr style="background:${CHAMPAGNE};height:18px;">
+            <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;">PART2. <span style="float:right;margin-right:118px;">THE PROPERTY</span></td>
+            <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;">PART3. <span style="float:right;margin-right:86px;">THE COMMISSION (split)</span></td>
           </tr>
           <tr>
-            <td style="border:1px solid ${GOLD};height:300px;vertical-align:top;padding:7px 8px;font-size:11.4px;line-height:1.2;">
+            <td style="border:1px solid ${GOLD};height:318px;vertical-align:top;padding:7px 8px;font-size:9.4px;line-height:1.14;">
               ${row("PROPERTY ADDRESS:", val("propertyRef"), 240, true)}
               ${row("MASTER DEVELOPER:", val("masterDeveloper"), 250, false)}
               ${row("MASTER PROJECT NAME:", val("masterProject"), 220, false)}
-              <div style="height:7px;"></div>
-              <div style="font-weight:400;margin-bottom:8px;"><strong>PROPERTY DETAILS</strong> (to be completed by Agent "A")</div>
+              <div style="height:4px;"></div>
+              <div style="font-weight:400;margin-bottom:5px;"><strong>PROPERTY DETAILS</strong> (to be completed by Agent "A")</div>
               ${row("BUILDING NAME:", val("buildingName"), 236, true)}
               ${row("LISTED PRICE:", val("listingPrice") ? `AED ${val("listingPrice")}` : "", 260, true)}
               ${row("DESCRIPTION:", val("propertyDescription"), 270, false)}
-              <div style="height:10px;"></div>
-              <div style="margin-bottom:4px;">DOES MOU EXIST ON THIS PROPERTY?</div>
-              <div style="text-align:center;margin-bottom:8px;">${yesNo(val("mouExists"))}</div>
-              <div style="margin-bottom:4px;">IS THE PROPERTY TENANTED</div>
-              <div style="text-align:center;margin-bottom:15px;">${yesNo(val("propertyTenanted"), ["YES", "NO"])}</div>
-              <div style="display:flex;align-items:flex-end;gap:4px;"><strong style="font-weight:500;">MAINTENANCE FEE P.A:</strong>${line(val("maintenanceFee"), 125, false)}<strong>per sq. ft</strong></div>
+              <div style="height:6px;"></div>
+              <div style="margin-bottom:3px;">DOES MOU EXIST ON THIS PROPERTY?</div>
+              <div style="text-align:center;margin-bottom:5px;">${yesNo(val("mouExists"))}</div>
+              <div style="margin-bottom:3px;">IS THE PROPERTY TENANTED</div>
+              <div style="text-align:center;margin-bottom:8px;">${yesNo(val("propertyTenanted"), ["YES", "NO"])}</div>
+              <div style="display:flex;align-items:flex-end;gap:3px;"><strong style="font-weight:500;">MAINTENANCE FEE P.A:</strong>${line(val("maintenanceFee"), 95, false)}<strong>per sq. ft</strong></div>
             </td>
-            <td style="border:1px solid ${GOLD};height:300px;vertical-align:top;padding:7px 8px;text-align:center;font-size:11.2px;line-height:1.24;">
-              <div style="font-weight:800;margin:4px auto 14px;max-width:430px;">The following additional commission split is agreed between the Seller/Landlord's Agent &amp; Buyer/Tenant's Agent.</div>
-              <div style="font-weight:900;font-size:13px;margin-bottom:16px;">Commission in total is: AED ${esc(val("commissionTotal")) || "__________"}/-</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;align-items:start;">
-                <div><div style="font-weight:900;font-size:18px;">AGENT "A" [ ${esc(val("commissionPctA")) || "__"}%]</div><div>(Seller/Landlord's Agent)</div></div>
-                <div><div style="font-weight:900;font-size:18px;">AGENT "B" [ ${esc(val("commissionPctB")) || "__"}%]</div><div>(Buyer/Tenant's Agent)</div></div>
+            <td style="border:1px solid ${GOLD};height:318px;vertical-align:top;padding:7px 8px;text-align:center;font-size:9.4px;line-height:1.16;">
+              <div style="font-weight:800;margin:3px auto 8px;max-width:430px;">The following additional commission split is agreed between the Seller/Landlord's Agent &amp; Buyer/Tenant's Agent.</div>
+              <div style="font-weight:900;font-size:10.5px;margin-bottom:9px;">Commission in total is: AED ${esc(val("commissionTotal")) || "__________"}/-</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;align-items:start;">
+                <div><div style="font-weight:900;font-size:13px;">AGENT "A" [ ${esc(val("commissionPctA")) || "__"}%]</div><div>(Seller/Landlord's Agent)</div></div>
+                <div><div style="font-weight:900;font-size:13px;">AGENT "B" [ ${esc(val("commissionPctB")) || "__"}%]</div><div>(Buyer/Tenant's Agent)</div></div>
               </div>
-              <div style="text-align:left;">${row("BUYER’S/TENANT’S NAME:", val("buyerFamilyName"), 205, false)}<div style="margin:-3px 0 8px;">(family name ONLY)</div></div>
+              <div style="text-align:left;">${row("BUYER’S/TENANT’S NAME:", val("buyerFamilyName"), 205, false)}<div style="margin:-2px 0 5px;">(family name ONLY)</div></div>
               <div style="text-align:left;">${row("BUDGET:", val("buyerBudget"), 324, false)}</div>
-              <div style="margin:12px 0 5px;text-align:left;">TRANSFER FEE PAID BY:</div>
-              <div style="margin-bottom:14px;">SELLER [ ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BUYER [ ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NEGOTIABLE [ ]</div>
-              <div style="margin-bottom:4px;text-align:left;">DOES THE BUYER HAVE APPROVED PRE-FINANCE?</div>
-              <div style="margin-bottom:16px;">${yesNo(val("buyerPreFinance"))}</div>
-              <div style="margin-bottom:4px;text-align:left;">HAS THIS BUYER/TENANT CONTACTED THE AGENT "A"?</div>
+              <div style="margin:7px 0 3px;text-align:left;">TRANSFER FEE PAID BY:</div>
+              <div style="margin-bottom:8px;">SELLER [ ] &nbsp;&nbsp;&nbsp;&nbsp; BUYER [ ] &nbsp;&nbsp;&nbsp;&nbsp; NEGOTIABLE [ ]</div>
+              <div style="margin-bottom:3px;text-align:left;">DOES THE BUYER HAVE APPROVED PRE-FINANCE?</div>
+              <div style="margin-bottom:8px;">${yesNo(val("buyerPreFinance"))}</div>
+              <div style="margin-bottom:3px;text-align:left;">HAS THIS BUYER/TENANT CONTACTED THE AGENT "A"?</div>
               <div>${yesNo(val("buyerContactedAgentA"))}</div>
             </td>
           </tr>
-          <tr style="background:${CHAMPAGNE};height:20px;">
-            <td style="border:1px solid ${GOLD};font-size:12px;font-weight:900;padding:2px 7px;">PART 4.</td>
-            <td style="border:1px solid ${GOLD};font-size:12px;font-weight:900;text-align:center;padding:2px 7px;">THE SIGNATURES</td>
+          <tr style="background:${CHAMPAGNE};height:18px;">
+            <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;">PART 4.</td>
+            <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;text-align:center;padding:2px 6px;">THE SIGNATURES</td>
           </tr>
           <tr>
-            <td colspan="2" style="border:1px solid ${GOLD};padding:4px 7px;font-size:10.6px;font-style:italic;font-weight:800;line-height:1.18;">Both Agents are required to cooperate fully, complete this FORM, and BOTH retain a fully signed &amp; stamped copy on file. RERA DRS is available to both Parties.</td>
+            <td colspan="2" style="border:1px solid ${GOLD};padding:3px 6px;font-size:8.8px;font-style:italic;font-weight:800;line-height:1.08;">Both Agents are required to cooperate fully, complete this FORM, and BOTH retain a fully signed &amp; stamped copy on file. RERA DRS is available to both Parties.</td>
           </tr>
           <tr>${signatureCell("A")}${signatureCell("B")}</tr>
           <tr>
-            <td colspan="2" style="border:1px solid ${GOLD};background:${CHAMPAGNE};text-align:center;font-weight:900;font-size:10px;line-height:1.25;padding:4px 8px;">
+            <td colspan="2" style="border:1px solid ${GOLD};background:${CHAMPAGNE};text-align:center;font-weight:900;font-size:8.4px;line-height:1.12;padding:3px 6px;">
               The Agent "B" is confirming to view the above mentioned property through Agent "A".<br />
               In the event that Agent "A" did not respond within 24 hours, Agent "B" must contact RERA
             </td>

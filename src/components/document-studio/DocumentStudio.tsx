@@ -2008,7 +2008,8 @@ function StudioShell({
           <div className="min-h-full flex justify-center py-10 px-4">
             {template ? (
               (() => {
-                const BODY_PAD_X = 64;
+                const noChrome = /data-no-chrome=["']1["']/.test(bodyHtml || "");
+                const BODY_PAD_X = noChrome ? 24 : 64;
                 // DocuSign stamps the envelope ID in the top ~0.4in of every
                 // page when the document is processed for signature. Reserve a
                 // safe band on every page so the stamp never overlays content.
@@ -2047,8 +2048,6 @@ function StudioShell({
                 // suppress header, footer, DocuSign safe band, generated-date
                 // pill, and the per-page signature strip; render a single page
                 // with the body using the full A4 height.
-                const noChrome = /data-no-chrome=["']1["']/.test(bodyHtml || "");
-
                 return (
                   <div className="flex flex-col items-center gap-4" style={{ width: PAGE_W * effectiveScale, flexShrink: 0 }}>
                     <div ref={pageRef} className="flex flex-col gap-7" data-document-pages="true">
@@ -2061,8 +2060,8 @@ function StudioShell({
                       {Array.from({ length: pageCount }).map((_, pageIndex) => {
                         const isFirst = pageIndex === 0;
                         const isLast = pageIndex === pageCount - 1;
-                        const topPad = noChrome ? 28 : (isFirst ? FIRST_TOP : NEXT_TOP);
-                        const bottomPad = noChrome ? 24 : (isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD);
+                        const topPad = noChrome ? 12 : (isFirst ? FIRST_TOP : NEXT_TOP);
+                        const bottomPad = noChrome ? 12 : (isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD);
                         const userSignatureName = fields.recipientName || fields.fullName || fields.full_name || fields.client_name || fields.guest_name || "";
                         const groupHtml = stripGeneratedPageArtifacts(pageGroups[pageIndex] ?? "");
                         const hasFinalSignatureBlock = /data-signature-block=["']1["']/.test(groupHtml);
