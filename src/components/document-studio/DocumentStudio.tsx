@@ -210,9 +210,11 @@ function StudioShell({
   //     and bottom edges of each visual A4 page.
   //   • Owner can manually add extra blank A4 pages via the "+ Add page"
   //     button below the preview.
+  //   • No hard cap on page count — documents grow to as many A4 sheets
+  //     as their content needs.
   const PAGE_W = 816;
   const PAGE_H = 1154; // A4 ratio @ 96dpi (one page)
-  const MAX_PAGES = 12; // auto-paginated; cap is a safety bound only
+
   const SAFE_GUTTER = 48; // top/bottom breathing room on every visual page
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
@@ -361,10 +363,8 @@ function StudioShell({
           } else {
             current.push(it.html);
           }
-          if (pages.length + 1 >= MAX_PAGES) {
-            for (let j = i + 1; j < items.length; j++) current.push(items[j].html);
-            break;
-          }
+          // No page cap — document grows to as many pages as content needs.
+
         }
         if (current.length) pages.push(current);
         const groups = pages.map((p) => p.join(""));
@@ -1957,7 +1957,7 @@ function StudioShell({
                 const pageGroups = (autoPageGroups && autoPageGroups.length)
                   ? autoPageGroups
                   : parsePageGroups(bodyHtml);
-                const pageCount = Math.min(MAX_PAGES, Math.max(1, pageGroups.length));
+                const pageCount = Math.max(1, pageGroups.length);
 
                 return (
                   <div className="flex flex-col items-center gap-4" style={{ width: PAGE_W * effectiveScale, flexShrink: 0 }}>
