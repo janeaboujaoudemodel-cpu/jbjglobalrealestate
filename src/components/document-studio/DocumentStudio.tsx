@@ -210,9 +210,11 @@ function StudioShell({
   //     and bottom edges of each visual A4 page.
   //   • Owner can manually add extra blank A4 pages via the "+ Add page"
   //     button below the preview.
+  //   • No hard cap on page count — documents grow to as many A4 sheets
+  //     as their content needs.
   const PAGE_W = 816;
   const PAGE_H = 1154; // A4 ratio @ 96dpi (one page)
-  const MAX_PAGES = 12; // auto-paginated; cap is a safety bound only
+
   const SAFE_GUTTER = 48; // top/bottom breathing room on every visual page
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
