@@ -162,12 +162,8 @@ export default function CareersPortal() {
   const [params, setParams] = useSearchParams();
   const active = ((params.get("section") as SectionKey) || "overview") as SectionKey;
 
-  // Legacy redirect: candidate_cv lives at /cv-builder now.
-  useEffect(() => {
-    if (params.get("tpl") === "candidate_cv") {
-      window.location.replace("/cv-builder");
-    }
-  }, [params]);
+
+
 
 
   const setSection = (k: SectionKey) => {
