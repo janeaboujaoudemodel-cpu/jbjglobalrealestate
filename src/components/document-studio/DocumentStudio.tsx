@@ -78,6 +78,34 @@ interface Props {
 
 type Step = 1 | 2 | 3;
 const OWNER_TEST_EMAIL = "infoo.jane@gmail.com";
+const DOCUSIGN_TOP_RESERVE = 42;
+const PAGE_SIGNATURE_RESERVE = 112;
+const escapeSignatureHtml = (value?: string) =>
+  (value || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
+
+const renderPerPageUserSignature = (name?: string) => {
+  const legalName = escapeSignatureHtml((name || "").trim());
+  const legalNameUpper = legalName ? legalName.toUpperCase() : "";
+  return `
+    <div data-rendered-page-signature="1" style="margin-top:auto;padding:16px 8px 10px;display:flex;justify-content:flex-end;align-items:flex-end;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:238px;margin-right:28px;">
+        <div style="font-size:21px;color:#1A1A1A;font-weight:500;letter-spacing:.01em;font-family:'Dancing Script','Brush Script MT',cursive;line-height:1.1;min-height:24px;">${legalName || "&nbsp;"}</div>
+        <div style="width:100%;border-bottom:1px solid #1A1A1A;height:1px;"></div>
+        <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#1A1A1A;font-weight:600;padding-top:3px;text-align:center;max-width:100%;overflow-wrap:anywhere;">${legalNameUpper || "&nbsp;"}</div>
+      </div>
+    </div>
+    <div data-rendered-page-divider="1" style="border-top:1px solid rgba(184,149,85,.4);height:0;page-break-inside:avoid;break-inside:avoid;"></div>`;
+};
+
+const stripGeneratedPageArtifacts = (html: string): string => {
+  if (!html || typeof window === "undefined") return html;
+  const tpl = document.createElement("template");
+  tpl.innerHTML = html;
+  tpl.content
+    .querySelectorAll("[data-client-signature-strip],[data-page-divider],[data-rendered-page-signature],[data-rendered-page-divider]")
+    .forEach((el) => el.remove());
+  return tpl.innerHTML;
+};
 
 export default function DocumentStudio({ catalog, trigger, presetTemplateId }: Props) {
   const [open, setOpen] = useState(false);
@@ -326,23 +354,28 @@ function StudioShell({
         const footerH = chromeHeights.footer;
         // DocuSign auto-stamps the envelope ID in the top ~0.4in of every page.
         // Reserve a 42px safe band on every page so it never overlays content.
-        const DOCUSIGN_TOP_RESERVE = 42;
         const FIRST_TOP = 46;
         // GLOBAL RULE: inner pages must have EQUAL top/bottom interior padding
         // (the DocuSign safe band + footer reserve are fixed/locked, applied
         // separately). NEXT_TOP is the interior top padding only.
         const NEXT_TOP = 54;
         const BOTTOM_PAD = 54;
-        const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD);
-        const otherCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - NEXT_TOP - BOTTOM_PAD);
+        const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD - PAGE_SIGNATURE_RESERVE);
+        const otherCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - NEXT_TOP - BOTTOM_PAD - Math.max(PAGE_SIGNATURE_RESERVE, footerH));
 
         // Flatten: if composer wrapped content in <section data-pdf-page>,
         // unwrap those so we re-split based on real measured heights.
         const sourceChildren: HTMLElement[] = [];
         Array.from(b.children).forEach((child) => {
           const el = child as HTMLElement;
+          if (el.matches?.("[data-client-signature-strip],[data-page-divider],[data-rendered-page-signature],[data-rendered-page-divider]")) return;
           if (el.matches?.("[data-pdf-page]")) {
-            Array.from(el.children).forEach((g) => sourceChildren.push(g as HTMLElement));
+            Array.from(el.children).forEach((g) => {
+              const groupChild = g as HTMLElement;
+              if (!groupChild.matches?.("[data-client-signature-strip],[data-page-divider],[data-rendered-page-signature],[data-rendered-page-divider]")) {
+                sourceChildren.push(groupChild);
+              }
+            });
           } else {
             sourceChildren.push(el);
           }
@@ -1957,9 +1990,7 @@ function StudioShell({
                 const BODY_PAD_X = 64;
                 // DocuSign stamps the envelope ID in the top ~0.4in of every
                 // page when the document is processed for signature. Reserve a
-                // 42px safe band on every page so the stamp never overlays the
-                // letterhead, date, or body content.
-                const DOCUSIGN_TOP_RESERVE = 42;
+                // safe band on every page so the stamp never overlays content.
                 const FIRST_TOP = 46;
                 // GLOBAL: equal interior top/bottom on inner pages. Safe band
                 // and footer reserve are handled separately.
@@ -1978,8 +2009,8 @@ function StudioShell({
                   tpl.innerHTML = html;
                   const groups = Array.from(
                     tpl.content.querySelectorAll<HTMLElement>("[data-pdf-page]"),
-                  ).map((el) => el.innerHTML);
-                  return groups.length ? groups : [html];
+                  ).map((el) => stripGeneratedPageArtifacts(el.innerHTML));
+                  return groups.length ? groups : [stripGeneratedPageArtifacts(html)];
                 };
 
                 // Prefer measured auto-pagination (global rule). Fall back
@@ -2004,7 +2035,9 @@ function StudioShell({
                         const isLast = pageIndex === pageCount - 1;
                         const topPad = isFirst ? FIRST_TOP : NEXT_TOP;
                         const bottomPad = isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD;
-                        const groupHtml = pageGroups[pageIndex] ?? "";
+                        const userSignatureName = fields.recipientName || fields.full_name || fields.client_name || fields.guest_name || "";
+                        const groupHtml = stripGeneratedPageArtifacts(pageGroups[pageIndex] ?? "");
+                        const groupHtmlWithSignature = `${groupHtml}${renderPerPageUserSignature(userSignatureName)}`;
 
                         return (
                           <div key={`page-${pageIndex}`} className="flex flex-col items-center gap-2" style={{ width: PAGE_W * effectiveScale }}>
@@ -2065,7 +2098,7 @@ function StudioShell({
                                   justifyContent: "flex-start",
                                 }}
                               >
-                                {groupHtml ? (
+                                {groupHtmlWithSignature ? (
                                   <div
                                     className="prose prose-base max-w-none text-[#1A1A1A] jbj-doc-body"
                                     data-page-index={pageIndex}
@@ -2084,7 +2117,7 @@ function StudioShell({
                                       if (!isFirst) return;
                                       // Sync first-page edits back into the master bodyHtml,
                                       // wrapping with the original page1 marker.
-                                      const next = e.currentTarget.innerHTML;
+                                      const next = stripGeneratedPageArtifacts(e.currentTarget.innerHTML);
                                       const others = pageGroups.slice(1)
                                         .map((g, i) => `<section data-pdf-page="${i + 2}">${g}</section>`)
                                         .join("");
@@ -2092,7 +2125,7 @@ function StudioShell({
                                       setUserEdited(true);
                                       setBodyHtml(`<section data-pdf-page="1">${next}</section>${others}`);
                                     }}
-                                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(groupHtml) }}
+                                      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(groupHtmlWithSignature) }}
                                   />
                                 ) : (
                                   <div className="text-[12px] text-[#1A1A1A]/40 italic">
