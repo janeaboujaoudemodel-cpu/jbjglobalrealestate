@@ -69,6 +69,15 @@ const OWNER_TEST_EMAIL = "infoo.jane@gmail.com";
 export default function DocumentStudio({ catalog, trigger, presetTemplateId }: Props) {
   const [open, setOpen] = useState(false);
 
+  // Auto-open when a one-shot prefill payload was dropped in sessionStorage
+  // by an external bridge (e.g. CV Center "Open in Document Studio").
+  useEffect(() => {
+    try {
+      const key = `jbj:doc-studio:prefill:${catalog}`;
+      if (sessionStorage.getItem(key)) setOpen(true);
+    } catch {}
+  }, [catalog]);
+
   return (
     <>
       <span onClick={() => setOpen(true)} className="contents">
@@ -466,6 +475,25 @@ function StudioShell({
       if (!restoredOnce.current) {
         restoredOnce.current = true;
         toast.success("Draft restored", { description: "Your previous work was recovered." });
+      }
+    } catch {}
+
+    // ── One-shot prefill from an external bridge (CV Center → candidate_cv, etc.)
+    // Overrides snapshot fields with applicant data and forces step 2.
+    try {
+      const PREFILL_KEY = `jbj:doc-studio:prefill:${catalog}`;
+      const raw = sessionStorage.getItem(PREFILL_KEY);
+      if (raw) {
+        const p = JSON.parse(raw);
+        if (p?.templateId && getTemplateById(p.templateId)?.audience === catalog) {
+          setTemplateId(p.templateId);
+        }
+        if (p?.fields && typeof p.fields === "object") {
+          setFields((cur) => ({ ...cur, ...p.fields }));
+        }
+        setStep(2);
+        sessionStorage.removeItem(PREFILL_KEY);
+        toast.success("Applicant loaded", { description: "CV pre-filled in the Studio." });
       }
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
