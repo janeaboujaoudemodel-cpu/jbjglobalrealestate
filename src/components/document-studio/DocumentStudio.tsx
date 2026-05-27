@@ -328,10 +328,13 @@ function StudioShell({
         // Reserve a 42px safe band on every page so it never overlays content.
         const DOCUSIGN_TOP_RESERVE = 42;
         const FIRST_TOP = 46;
-        const NEXT_TOP = 54 + DOCUSIGN_TOP_RESERVE;
-        const BOTTOM_PAD = 40;
+        // GLOBAL RULE: inner pages must have EQUAL top/bottom interior padding
+        // (the DocuSign safe band + footer reserve are fixed/locked, applied
+        // separately). NEXT_TOP is the interior top padding only.
+        const NEXT_TOP = 54;
+        const BOTTOM_PAD = 54;
         const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD);
-        const otherCap = Math.max(200, PAGE_H - NEXT_TOP - BOTTOM_PAD);
+        const otherCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - NEXT_TOP - BOTTOM_PAD);
 
         // Flatten: if composer wrapped content in <section data-pdf-page>,
         // unwrap those so we re-split based on real measured heights.
@@ -1958,7 +1961,9 @@ function StudioShell({
                 // letterhead, date, or body content.
                 const DOCUSIGN_TOP_RESERVE = 42;
                 const FIRST_TOP = 46;
-                const NEXT_TOP = 54 + DOCUSIGN_TOP_RESERVE;
+                // GLOBAL: equal interior top/bottom on inner pages. Safe band
+                // and footer reserve are handled separately.
+                const NEXT_TOP = 54;
                 const STANDARD_BOTTOM_PAD = 54;
                 const LAST_BOTTOM_PAD = 24;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
@@ -2016,9 +2021,25 @@ function StudioShell({
                                 background: "#FDFBF7",
                               }}
                             >
-                              {/* Header — only on page 1, shifted below DocuSign envelope-ID safe band */}
+                              {/* DocuSign envelope-ID safe band — colored
+                                  champagne (same as header/footer) on EVERY
+                                  page so it never reads as a white crop above
+                                  the colored chrome. Global rule. */}
+                              <div
+                                aria-hidden
+                                style={{
+                                  position: "absolute",
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  height: DOCUSIGN_TOP_RESERVE,
+                                  background: "#F7F2EA",
+                                  zIndex: 1,
+                                }}
+                              />
+                              {/* Header — only on page 1, sits directly under the safe band */}
                               {isFirst && (
-                                <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE }}>
+                                <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE, position: "relative", zIndex: 0 }}>
                                   <LockedLetterhead />
                                 </div>
                               )}

@@ -669,7 +669,7 @@ function composeHolidayHome(input: ComposerInput): string {
   const guestLegalName = esc((f.recipientName || "").trim() || "[FULL NAME AS PER ID / PASSPORT]");
   const acknowledgement = `
     <div data-pdf-section="acknowledgement" style="margin:0;padding:15px 20px;border:1px solid ${GOLD};background:${CHAMPAGNE};">
-      <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;margin-bottom:10px;">Disclaimer &amp; Guest Declaration</div>
+      <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;margin-bottom:10px;">Acknowledgement &amp; Declaration</div>
       <p style="margin:0;font-size:12.1px;line-height:1.62;color:${INK};">
         I, <strong>${guestLegalName}</strong>, hereby agree to all the terms and conditions provided by
         <strong>JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>. I confirm that I have fully read and understood
