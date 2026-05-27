@@ -111,8 +111,12 @@ function StudioShell({
   onClose: () => void;
 }) {
   const templates = useMemo(() => getCatalogByAudience(catalog), [catalog]);
+  const isValidCatalogTemplate = (id?: string | null) => {
+    if (!id) return false;
+    return getTemplateById(id)?.audience === catalog;
+  };
   const initialId =
-    presetTemplateId && getTemplateById(presetTemplateId)?.audience === catalog
+    presetTemplateId && isValidCatalogTemplate(presetTemplateId)
       ? presetTemplateId
       : "";
 
@@ -127,13 +131,19 @@ function StudioShell({
       const j = JSON.parse(raw);
       // Expire after 30 days.
       if (!j?.savedAt || (Date.now() - new Date(j.savedAt).getTime()) > 30 * 86400_000) return null;
+      // If an old removed template (for example candidate_cv) was saved,
+      // ignore that snapshot so the template sidebar opens normally.
+      if (j.templateId && !isValidCatalogTemplate(j.templateId)) {
+        localStorage.removeItem(SESSION_KEY);
+        return null;
+      }
       return j;
     } catch { return null; }
   };
   const snap = readSnapshot();
 
-  const [step, setStep] = useState<Step>(snap?.step ?? (initialId ? 2 : 1));
-  const [templateId, setTemplateId] = useState<string>(snap?.templateId ?? initialId);
+  const [step, setStep] = useState<Step>(snap?.templateId ? (snap.step ?? 2) : (initialId ? 2 : 1));
+  const [templateId, setTemplateId] = useState<string>(snap?.templateId || initialId);
   const template = useMemo(() => getTemplateById(templateId), [templateId]);
 
 
