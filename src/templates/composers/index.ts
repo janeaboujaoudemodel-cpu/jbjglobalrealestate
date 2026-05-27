@@ -14,6 +14,14 @@
  */
 
 import { jbjCompanyStampSrc } from "@/templates/jbjLockedChrome";
+import {
+  composeFormA,
+  composeFormB,
+  composeFormF,
+  composeFormI,
+  composeFormU,
+  composeBrokerReferral,
+} from "./reraForms";
 
 
 export type CommissionRow = {
@@ -816,17 +824,17 @@ export function compose(input: ComposerInput): string {
     case "candidate_cv":
       return composeCandidateCv(input);
     case "form_a":
-      return composeGeneric(input, `Form A — Listing Agreement`);
+      return composeFormA(input);
     case "form_b":
-      return composeGeneric(input, `Form B — Buyer Representation Agreement`);
+      return composeFormB(input);
     case "form_f":
-      return composeGeneric(input, `Form F — Sale MoU`);
+      return composeFormF(input);
     case "form_i":
-      return composeGeneric(input, `Form I — Multiple Listing / Brokers Network`);
+      return composeFormI(input);
     case "form_u":
-      return composeGeneric(input, `Form U — Termination of Agency Agreement`);
-    case "form_r":
-      return composeGeneric(input, `Form R — Broker-to-Broker Referral`);
+      return composeFormU(input);
+    case "broker_referral":
+      return composeBrokerReferral(input);
     case "paa":
       return composeGeneric(input, `Property Advertising Agreement`);
     case "tenancy_addendum":
