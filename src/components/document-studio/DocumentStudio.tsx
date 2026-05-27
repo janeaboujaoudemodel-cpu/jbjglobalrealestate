@@ -1466,24 +1466,34 @@ function StudioShell({
           )}
         </aside>
 
-        {/* CENTER — A4 PREVIEW (auto-fit) */}
+        {/* CENTER — A4 PREVIEW (auto-fit, paginated) */}
         <main ref={previewWrapRef} className="flex-1 min-w-0 bg-[#F0E8D8] overflow-auto relative">
           <div className="min-h-full flex justify-center py-10 px-4">
             {template ? (
               (() => {
-                const pageCount = pages === "auto" ? 1 : (pages as number);
-                const minH = PAGE_H * pageCount;
+                // Visual A4 pagination — the body grows tall on a single
+                // editable canvas; we overlay page-break rules + "Page X of N"
+                // badges at every A4 boundary so the user sees real sheets
+                // in the preview, matching what the PDF exporter slices.
+                const HEADER_H = 132 + 24; // letterhead block + padding
+                const FOOTER_H = 96;       // locked footer band
+                const BODY_PAD = 80;       // 40px top + 40px bottom inside body
+                const contentPerPage = Math.max(200, PAGE_H - HEADER_H - FOOTER_H - BODY_PAD);
+                const totalH = Math.max(PAGE_H, measuredPageH);
+                const pageCount = Math.max(1, Math.ceil((totalH - HEADER_H - FOOTER_H) / contentPerPage));
+                const minH = Math.max(PAGE_H, totalH);
+
                 return (
                   <div
                     style={{
                       width: PAGE_W * effectiveScale,
-                      height: Math.max(minH, measuredPageH) * effectiveScale,
+                      height: minH * effectiveScale,
                       flexShrink: 0,
                     }}
                   >
                     <div
                       ref={pageRef}
-                      className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20 flex flex-col"
+                      className="bg-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] rounded-md overflow-hidden border border-[#B89555]/20 flex flex-col relative"
                       style={{
                         width: PAGE_W,
                         minHeight: minH,
@@ -1561,6 +1571,56 @@ function StudioShell({
                         )}
                       </div>
                       <LockedFooter />
+
+                      {/* A4 page-break overlays — visual only, never exported */}
+                      {pageCount > 1 && Array.from({ length: pageCount - 1 }).map((_, i) => {
+                        const y = HEADER_H + contentPerPage * (i + 1);
+                        return (
+                          <div
+                            key={`pb-${i}`}
+                            aria-hidden
+                            data-page-break
+                            className="absolute left-0 right-0 pointer-events-none select-none"
+                            style={{ top: y, height: 0 }}
+                          >
+                            <div
+                              style={{
+                                borderTop: "1px dashed #B89555",
+                                opacity: 0.55,
+                                marginTop: -1,
+                              }}
+                            />
+                            <div
+                              className="absolute right-3 -top-2 px-2 py-0.5 rounded-sm text-[10px] font-semibold tracking-wider uppercase"
+                              style={{
+                                background: "#FDFBF7",
+                                color: "#1A1A1A",
+                                border: "1px solid #B89555",
+                                letterSpacing: "0.16em",
+                              }}
+                            >
+                              Page {i + 2} of {pageCount}
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                      {/* "Page 1 of N" badge top-right of first page */}
+                      {pageCount > 1 && (
+                        <div
+                          aria-hidden
+                          className="absolute right-3 px-2 py-0.5 rounded-sm text-[10px] font-semibold uppercase pointer-events-none"
+                          style={{
+                            top: HEADER_H - 14,
+                            background: "#FDFBF7",
+                            color: "#1A1A1A",
+                            border: "1px solid #B89555",
+                            letterSpacing: "0.16em",
+                          }}
+                        >
+                          Page 1 of {pageCount}
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
