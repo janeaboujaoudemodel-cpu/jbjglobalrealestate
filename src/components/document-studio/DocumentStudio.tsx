@@ -186,15 +186,17 @@ function StudioShell({
 
   // Auto-fit preview: scale the fixed 816-wide A4 page down to whatever
   // width the center pane has so it never overflows horizontally.
-  // The page MIN-height is A4 (1154 × pageCount), but it can grow taller
-  // when the body content needs more space — the PDF exporter slices the
-  // resulting tall canvas into A4 pages so the export still paginates.
+  // Pagination is driven by the BODY content's natural scrollHeight only —
+  // never by the outer page height — otherwise minHeight feeds back into
+  // the measurement and pageCount explodes (the old "Page X of 20410" bug).
   const PAGE_W = 816;
   const PAGE_H = 1154; // A4 ratio @ 96dpi (one page)
+  const MAX_PAGES = 20; // hard safety cap so a measurement glitch can never run away
   const previewWrapRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
-  const [measuredPageH, setMeasuredPageH] = useState(PAGE_H);
+  const [measuredBodyH, setMeasuredBodyH] = useState(0);
   useEffect(() => {
     const wrap = previewWrapRef.current;
     if (!wrap) return;
@@ -210,14 +212,14 @@ function StudioShell({
     return () => ro.disconnect();
   }, []);
   useEffect(() => {
-    const page = pageRef.current;
-    if (!page) return;
-    const update = () => setMeasuredPageH(page.offsetHeight || PAGE_H);
+    const body = bodyRef.current;
+    if (!body) return;
+    const update = () => setMeasuredBodyH(body.scrollHeight || 0);
     update();
     const ro = new ResizeObserver(update);
-    ro.observe(page);
+    ro.observe(body);
     return () => ro.disconnect();
-  });
+  }, []);
   const effectiveScale = (zoom / 100) * fitScale;
 
 
