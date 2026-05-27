@@ -229,7 +229,10 @@ export default function CareersPortal() {
           {active === "onboarding"    && <AdminOnboarding />}
           {active === "contracts"     && (
             <div className="space-y-6">
-              <DocumentStudioLauncher catalog="staff" />
+              <DocumentStudioLauncher
+                catalog="staff"
+                presetTemplateId={params.get("tpl") || undefined}
+              />
               <JobOfferManager />
             </div>
           )}
