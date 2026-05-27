@@ -569,9 +569,10 @@ function composeHolidayHome(input: ComposerInput): string {
   const bookingDateStr = formatHumanDate(f.bookingDate) || formatHumanDate(new Date().toISOString()) || "—";
 
   const pageFrame = (children: string, page: 1 | 2 | 3) => `
-    <div data-holiday-page="${page}" style="height:100%;display:flex;flex-direction:column;justify-content:${page === 3 ? "space-between" : "flex-start"};gap:${page === 1 ? 16 : 14}px;">
+    <div data-holiday-page="${page}" style="height:100%;display:flex;flex-direction:column;justify-content:space-between;gap:${page === 1 ? 16 : 14}px;">
       ${children}
     </div>`;
+
 
   const welcome = `
     <div data-pdf-section="welcome" style="margin:0;font-size:13.5px;color:${INK};line-height:1.72;">
