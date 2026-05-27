@@ -69,6 +69,15 @@ const OWNER_TEST_EMAIL = "infoo.jane@gmail.com";
 export default function DocumentStudio({ catalog, trigger, presetTemplateId }: Props) {
   const [open, setOpen] = useState(false);
 
+  // Auto-open when a one-shot prefill payload was dropped in sessionStorage
+  // by an external bridge (e.g. CV Center "Open in Document Studio").
+  useEffect(() => {
+    try {
+      const key = `jbj:doc-studio:prefill:${catalog}`;
+      if (sessionStorage.getItem(key)) setOpen(true);
+    } catch {}
+  }, [catalog]);
+
   return (
     <>
       <span onClick={() => setOpen(true)} className="contents">
