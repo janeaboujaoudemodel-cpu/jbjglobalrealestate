@@ -39,7 +39,7 @@ const corporateTools = [
     icon: FileText,
     title: "Resume Builder",
     description: "Build professional CVs with 12 international templates and AI-powered summary generation.",
-    href: "/toolkit/corporate-suite/cv-builder",
+    href: "/cv-builder",
     colorClass: "text-emerald-700",
     borderColorClass: "border-emerald-400/40",
     gradientFrom: "from-emerald-600",

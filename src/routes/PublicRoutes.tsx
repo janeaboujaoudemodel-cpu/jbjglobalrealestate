@@ -201,6 +201,9 @@ const NotFound = lazy(() => import("@/pages/NotFound"));
 const RegisterInvestor = lazy(() => import("@/pages/register/RegisterInvestor"));
 const RegisterBroker = lazy(() => import("@/pages/register/RegisterBroker"));
 const RegisterDeveloper = lazy(() => import("@/pages/register/RegisterDeveloper"));
+const CVBuilder = lazy(() => import("@/pages/CVBuilder"));
+
+
 
 export const PublicRoutes = () => (
   <>
@@ -436,6 +439,7 @@ export const PublicRoutes = () => (
     <Route path="/sitemap" element={<Sitemap />} />
     <Route path="/pricing" element={<Pricing />} />
     <Route path="/api-access" element={<ApiAccess />} />
+    <Route path="/cv-builder" element={<CVBuilder />} />
 
     {/* ── 404 ── */}
     <Route path="*" element={<NotFound />} />

@@ -92,7 +92,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Stamp Generator", href: "/toolkit/stamp-generator", icon: Stamp },
   { label: "Business Card", href: "/toolkit/corporate-suite/business-card", icon: CreditCard },
   { label: "Logo Maker", href: "/toolkit/corporate-suite/logo-creator", icon: Palette },
-  { label: "CV Builder", href: "/toolkit/corporate-suite/cv-resume", icon: FileSearch },
+  { label: "CV Builder", href: "/cv-builder", icon: FileSearch },
   { label: "Cover Letter", href: "/toolkit/corporate-suite/cover-letter", icon: Pen },
   { label: "Company Profile Builder", href: "/toolkit/corporate-suite/company-profile", icon: Award },
   { label: "Landing Page Builder", href: "/toolkit/corporate-suite/landing-page", icon: Globe },

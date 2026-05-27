@@ -50,7 +50,7 @@ const DESIGN_TYPE_ROUTES: Record<string, string> = {
   stamp: "/toolkit/stamp-generator",
   business_card: "/toolkit/business-card",
   letterhead: "/toolkit/letterhead",
-  cv: "/toolkit/cv-builder",
+  cv: "/cv-builder",
   logo: "/toolkit/logo-maker",
 };
 

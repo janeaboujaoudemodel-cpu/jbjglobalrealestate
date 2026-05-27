@@ -79,7 +79,7 @@ const creativeTools = [
     icon: UserRound,
     title: "CV / Resume Builder",
     description: "Build professional CVs and resumes with multiple templates and accent color options.",
-    href: "/toolkit/corporate-suite/cv-builder",
+    href: "/cv-builder",
     colorClass: "text-cyan-700",
     borderColorClass: "border-cyan-500/40",
     gradientFrom: "from-cyan-600",

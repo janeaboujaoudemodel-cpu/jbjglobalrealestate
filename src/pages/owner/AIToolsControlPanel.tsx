@@ -78,7 +78,7 @@ const ALL_TOOLS: ToolDef[] = [
   // Corporate
   { id: "stamp-generator", title: "JBJ Smart Stamp Generator", description: "Generate professional company stamps.", link: "/toolkit/stamp-generator", category: "corporate" },
   { id: "business-card", title: "JBJ Business Card Designer", description: "Design stunning business cards.", link: "/toolkit/corporate-suite/business-card", category: "corporate" },
-  { id: "cv-resume", title: "JBJ CV / Resume Builder", description: "Build a professional CV.", link: "/toolkit/corporate-suite/cv-resume", category: "corporate" },
+  { id: "cv-resume", title: "JBJ CV / Resume Builder", description: "Build a professional CV.", link: "/cv-builder", category: "corporate" },
   { id: "cover-letter", title: "JBJ Cover Letter Generator", description: "Generate tailored cover letters.", link: "/toolkit/corporate-suite/cover-letter", category: "corporate" },
   { id: "logo-creator", title: "JBJ AI Logo Creator", description: "Generate professional logos.", link: "/toolkit/corporate-suite/logo-creator", category: "corporate" },
   { id: "company-profile", title: "JBJ Company Profile Builder", description: "Build company profile PDFs.", link: "/toolkit/corporate-suite/company-profile", category: "corporate" },

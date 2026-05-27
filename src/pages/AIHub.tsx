@@ -318,9 +318,9 @@ const productivityTools = [
   {
     id: "cv-resume",
     title: "JBJ CV / Resume Builder",
-    description: "Build a professional CV with AI-generated summary, 12 templates and PDF export.",
+    description: "Build a professional CV with AI-generated summary, multiple templates and PDF export.",
     icon: User,
-    link: "/toolkit/corporate-suite/cv-resume",
+    link: "/cv-builder",
     category: "corporate" as ToolCategory,
   },
   {
