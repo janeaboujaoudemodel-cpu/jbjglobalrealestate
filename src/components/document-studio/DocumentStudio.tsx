@@ -320,10 +320,13 @@ function StudioShell({
         if (!b) return;
         const headerH = chromeHeights.header;
         const footerH = chromeHeights.footer;
+        // DocuSign auto-stamps the envelope ID in the top ~0.4in of every page.
+        // Reserve a 42px safe band on every page so it never overlays content.
+        const DOCUSIGN_TOP_RESERVE = 42;
         const FIRST_TOP = 46;
-        const NEXT_TOP = 54;
+        const NEXT_TOP = 54 + DOCUSIGN_TOP_RESERVE;
         const BOTTOM_PAD = 40;
-        const page0Cap = Math.max(200, PAGE_H - headerH - FIRST_TOP - footerH - BOTTOM_PAD);
+        const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - footerH - BOTTOM_PAD);
         const otherCap = Math.max(200, PAGE_H - NEXT_TOP - footerH - BOTTOM_PAD);
 
         // Flatten: if composer wrapped content in <section data-pdf-page>,
