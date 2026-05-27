@@ -600,16 +600,18 @@ function composeHolidayHome(input: ComposerInput): string {
     `<strong>Governing Law.</strong> This Agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai. Any dispute is subject to the exclusive jurisdiction of Dubai Courts.`,
     `<strong>Acknowledgement.</strong> By signing below, the Guest confirms they have <strong>read, understood and accepted</strong> all terms above, and that payment has been made <strong>voluntarily and irrevocably</strong>.`,
   ];
-  const termsList = (items: string[], start: number, title: string, compact = false) => `
+  // GLOBAL READABILITY RULE: body terms ≥ 12.5px, line-height ≥ 1.65, clause spacing ≥ 9px.
+  // Never compress terms below this floor to "fit" a page — add a page instead.
+  const termsList = (items: string[], start: number, title: string) => `
     <div data-pdf-section="terms" style="margin:0;">
-      <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:7px;margin-bottom:${compact ? 9 : 12}px;">
+      <div style="font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:8px;margin-bottom:14px;">
         ${title}
       </div>
-      <ol start="${start}" style="margin:0;padding-left:22px;font-size:${compact ? 10.9 : 11.15}px;line-height:${compact ? 1.48 : 1.55};color:${INK};">
-        ${items.map((clause, i) => `<li style="margin-bottom:${i === items.length - 1 ? 0 : compact ? 6 : 8}px;">${clause}</li>`).join("")}
+      <ol start="${start}" style="margin:0;padding-left:22px;font-size:12.6px;line-height:1.68;color:${INK};">
+        ${items.map((clause, i) => `<li style="margin-bottom:${i === items.length - 1 ? 0 : 10}px;">${clause}</li>`).join("")}
       </ol>
     </div>`;
-  const allTerms = termsList(termClauses, 1, "Terms & Conditions — Booking, Payment, Liability & Stay Rules", true);
+  const allTerms = termsList(termClauses, 1, "Terms & Conditions — Booking, Payment, Liability & Stay Rules");
 
 
   // Final guest acknowledgement — name synced live from the left-rail input.
@@ -689,16 +691,16 @@ function composeFacilityManagement(input: ComposerInput): string {
       <div data-pdf-section="std-terms-heading" style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;page-break-after:avoid;break-after:avoid;">
         Standard Terms
       </div>
-      <ol style="margin:0;padding-left:20px;font-size:11.5px;line-height:1.7;color:${INK};">
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Appointment.</strong> The Client appoints JBJ GLOBAL REAL ESTATE L.L.C — S.O.C as the exclusive facility manager of the Property for the term stated above.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Services.</strong> Services are delivered as per the Scope above, in accordance with industry best practices and UAE regulations.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Fees &amp; Payment.</strong> The monthly management fee is due in advance per the Payment Terms. Late payments accrue 2% per month. Out-of-scope works are quoted separately and require written approval before commencement.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Vendor Coordination.</strong> JBJ coordinates third-party vendors (cleaning, MEP, security) on the Client's behalf. The Client remains responsible for vendor fees at cost plus any agreed management margin.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Reporting.</strong> Monthly performance reports including financials, maintenance tickets and SLA compliance are issued within seven (7) business days of month-end.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Liability.</strong> JBJ's aggregate liability is capped at three (3) months' management fees. JBJ is not liable for force-majeure events, pre-existing defects, or acts of third-party vendors beyond reasonable supervision.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Term &amp; Termination.</strong> Either party may terminate with sixty (60) days' written notice. Outstanding fees and reimbursables remain payable upon termination.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Confidentiality.</strong> Both parties maintain strict confidentiality of commercial and tenant information shared during the engagement.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Governing Law.</strong> This Agreement is governed by the laws of the UAE and the Emirate of Dubai. Disputes fall under the exclusive jurisdiction of Dubai Courts.</li>
+      <ol style="margin:0;padding-left:20px;font-size:12.6px;line-height:1.68;color:${INK};">
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Appointment.</strong> The Client appoints JBJ GLOBAL REAL ESTATE L.L.C — S.O.C as the exclusive facility manager of the Property for the term stated above.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Services.</strong> Services are delivered as per the Scope above, in accordance with industry best practices and UAE regulations.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Fees &amp; Payment.</strong> The monthly management fee is due in advance per the Payment Terms. Late payments accrue 2% per month. Out-of-scope works are quoted separately and require written approval before commencement.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Vendor Coordination.</strong> JBJ coordinates third-party vendors (cleaning, MEP, security) on the Client's behalf. The Client remains responsible for vendor fees at cost plus any agreed management margin.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Reporting.</strong> Monthly performance reports including financials, maintenance tickets and SLA compliance are issued within seven (7) business days of month-end.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Liability.</strong> JBJ's aggregate liability is capped at three (3) months' management fees. JBJ is not liable for force-majeure events, pre-existing defects, or acts of third-party vendors beyond reasonable supervision.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Term &amp; Termination.</strong> Either party may terminate with sixty (60) days' written notice. Outstanding fees and reimbursables remain payable upon termination.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Confidentiality.</strong> Both parties maintain strict confidentiality of commercial and tenant information shared during the engagement.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Governing Law.</strong> This Agreement is governed by the laws of the UAE and the Emirate of Dubai. Disputes fall under the exclusive jurisdiction of Dubai Courts.</li>
       </ol>
     </div>`;
 
