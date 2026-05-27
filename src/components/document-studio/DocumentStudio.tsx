@@ -440,6 +440,64 @@ function StudioShell({
   const userEditedRef = useRef<boolean>(false);
   const [userEdited, setUserEdited] = useState(false);
 
+  // ── Hydrate full session snapshot on mount (fields, body, signatories, marks, etc.)
+  useEffect(() => {
+    if (hydratedRef.current) return;
+    hydratedRef.current = true;
+    if (!snap) return;
+    try {
+      if (snap.fields && typeof snap.fields === "object") setFields(snap.fields);
+      if (typeof snap.bodyHtml === "string" && snap.bodyHtml) {
+        setBodyHtml(snap.bodyHtml);
+        if (snap.userEdited) { userEditedRef.current = true; setUserEdited(true); }
+      }
+      if (typeof snap.ownerName === "string") setOwnerName(snap.ownerName);
+      if (typeof snap.ownerTitle === "string") setOwnerTitle(snap.ownerTitle);
+      if (typeof snap.applicantDate === "string") setApplicantDate(snap.applicantDate);
+      if (Array.isArray(snap.extraSignatories)) setExtraSignatories(snap.extraSignatories);
+      if (Array.isArray(snap.hiddenFieldKeys)) setHiddenFieldKeys(new Set(snap.hiddenFieldKeys));
+      if (snap.fieldLabelOverrides && typeof snap.fieldLabelOverrides === "object") setFieldLabelOverrides(snap.fieldLabelOverrides);
+      if (Array.isArray(snap.hiddenSections)) setHiddenSections(new Set(snap.hiddenSections));
+      if (Array.isArray(snap.customFields)) setCustomFields(snap.customFields);
+      if (Array.isArray(snap.commissionRows)) setCommissionRows(snap.commissionRows);
+      if (typeof snap.docLanguage === "string") setDocLanguage(snap.docLanguage);
+      if (snap.marks && typeof snap.marks === "object") setMarks((m) => ({ ...m, ...snap.marks }));
+      if (typeof snap.emailTo === "string") setEmailTo(snap.emailTo);
+      if (!restoredOnce.current) {
+        restoredOnce.current = true;
+        toast.success("Draft restored", { description: "Your previous work was recovered." });
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── Auto-save snapshot (debounced) to survive refresh / accidental close / logout.
+  useEffect(() => {
+    if (!hydratedRef.current) return;
+    const payload = {
+      savedAt: new Date().toISOString(),
+      step, templateId, fields, bodyHtml, userEdited,
+      ownerName, ownerTitle, applicantDate,
+      extraSignatories,
+      hiddenFieldKeys: Array.from(hiddenFieldKeys),
+      fieldLabelOverrides,
+      hiddenSections: Array.from(hiddenSections),
+      customFields, commissionRows, docLanguage,
+      marks, emailTo,
+    };
+    const handle = setTimeout(() => {
+      try { localStorage.setItem(SESSION_KEY, JSON.stringify(payload)); } catch {}
+    }, 400);
+    const flush = () => {
+      try { localStorage.setItem(SESSION_KEY, JSON.stringify(payload)); } catch {}
+    };
+    window.addEventListener("beforeunload", flush);
+    return () => { clearTimeout(handle); window.removeEventListener("beforeunload", flush); };
+  }, [step, templateId, fields, bodyHtml, userEdited, ownerName, ownerTitle, applicantDate,
+      extraSignatories, hiddenFieldKeys, fieldLabelOverrides, hiddenSections,
+      customFields, commissionRows, docLanguage, marks, emailTo, SESSION_KEY]);
+
+
   useEffect(() => {
     if (!template) return;
     // Drop hidden field keys before rendering body.
