@@ -1567,6 +1567,7 @@ function StudioShell({
                       width: PAGE_W * effectiveScale,
                       height: minH * effectiveScale,
                       flexShrink: 0,
+                      position: "relative",
                     }}
                   >
                     <div
@@ -1649,60 +1650,60 @@ function StudioShell({
                         )}
                       </div>
                       <LockedFooter />
+                    </div>
 
-                      {/* A4 page-break overlays — visual only, never exported */}
-                      {pageCount > 1 && Array.from({ length: pageCount - 1 }).map((_, i) => {
-                        const y = HEADER_H + contentPerPage * (i + 1);
-                        return (
-                          <div
-                            key={`pb-${i}`}
-                            aria-hidden
-                            data-page-break
-                            className="absolute left-0 right-0 pointer-events-none select-none"
-                            style={{ top: y, height: 0 }}
-                          >
-                            <div
-                              style={{
-                                borderTop: "1px dashed #B89555",
-                                opacity: 0.55,
-                                marginTop: -1,
-                              }}
-                            />
-                            <div
-                              className="absolute right-3 -top-2 px-2 py-0.5 rounded-sm text-[10px] font-semibold tracking-wider uppercase"
-                              style={{
-                                background: "#FDFBF7",
-                                color: "#1A1A1A",
-                                border: "1px solid #B89555",
-                                letterSpacing: "0.16em",
-                              }}
-                            >
-                              Page {i + 2} of {pageCount}
-                            </div>
-                          </div>
-                        );
-                      })}
-
-                      {/* "Page 1 of N" badge top-right of first page */}
-                      {pageCount > 1 && (
+                    {/* Page-break overlays — SIBLING of pageRef so they are NEVER captured
+                        into the exported PDF (html2canvas only sees pageRef). Rendered
+                        as scaled gap-bands that visually separate one canvas into A4 sheets. */}
+                    {pageCount > 1 && Array.from({ length: pageCount - 1 }).map((_, i) => {
+                      const y = (HEADER_H + contentPerPage * (i + 1)) * effectiveScale;
+                      const bandH = 22; // visual gap between sheets in screen px
+                      return (
                         <div
+                          key={`pb-${i}`}
                           aria-hidden
-                          className="absolute right-3 px-2 py-0.5 rounded-sm text-[10px] font-semibold uppercase pointer-events-none"
+                          className="absolute left-0 right-0 pointer-events-none select-none flex items-center justify-center"
                           style={{
-                            top: HEADER_H - 14,
-                            background: "#FDFBF7",
-                            color: "#1A1A1A",
-                            border: "1px solid #B89555",
-                            letterSpacing: "0.16em",
+                            top: y - bandH / 2,
+                            height: bandH,
+                            background: "#F0E8D8",
+                            boxShadow:
+                              "inset 0 8px 10px -8px rgba(0,0,0,0.25), inset 0 -8px 10px -8px rgba(0,0,0,0.25)",
                           }}
                         >
-                          Page 1 of {pageCount}
+                          <div
+                            className="text-[10px] font-semibold uppercase px-2 py-[2px] rounded-sm"
+                            style={{
+                              background: "#FDFBF7",
+                              color: "#1A1A1A",
+                              border: "1px solid #B89555",
+                              letterSpacing: "0.18em",
+                            }}
+                          >
+                            Page {i + 2} of {pageCount}
+                          </div>
                         </div>
-                      )}
-                    </div>
+                      );
+                    })}
+
+                    {pageCount > 1 && (
+                      <div
+                        aria-hidden
+                        className="absolute right-2 top-2 px-2 py-[2px] rounded-sm text-[10px] font-semibold uppercase pointer-events-none"
+                        style={{
+                          background: "#FDFBF7",
+                          color: "#1A1A1A",
+                          border: "1px solid #B89555",
+                          letterSpacing: "0.18em",
+                        }}
+                      >
+                        Page 1 of {pageCount}
+                      </div>
+                    )}
                   </div>
                 );
               })()
+
 
 
             ) : (
