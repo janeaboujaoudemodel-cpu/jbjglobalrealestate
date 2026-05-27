@@ -1062,17 +1062,11 @@ function StudioShell({
                     <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 font-semibold">
                       2 — Recipient / Counterparty <span className="text-[#1A1A1A]/40 normal-case tracking-normal">(locked)</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-1.5">
+                    <div className="grid grid-cols-1 gap-1.5">
                       <Input
                         value={fields.recipientName || ""}
                         onChange={(e) => setField("recipientName", e.target.value)}
                         placeholder="Recipient Name"
-                        className="bg-[#FDFBF7] h-7 text-[11px]"
-                      />
-                      <Input
-                        value={fields.idNumber || ""}
-                        onChange={(e) => setField("idNumber", e.target.value)}
-                        placeholder="Emirates ID / Passport"
                         className="bg-[#FDFBF7] h-7 text-[11px]"
                       />
                     </div>

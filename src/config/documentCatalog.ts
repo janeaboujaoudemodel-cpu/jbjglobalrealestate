@@ -386,7 +386,15 @@ const CLIENT: DocumentTemplate[] = [
       { key: "checkOut", label: "Check-out Date", type: "date", required: true },
       { key: "nights", label: "Number of Nights", type: "number", required: true, placeholder: "7" },
       { key: "nightlyRate", label: "Nightly Rate (AED)", type: "text", placeholder: "650" },
-      { key: "totalAmount", label: "Total Amount Paid (AED)", type: "text", required: true, placeholder: "4,550" },
+      { key: "cleaningFee", label: "Cleaning Fee (AED)", type: "text", placeholder: "Optional" },
+      { key: "securityDeposit", label: "Security Deposit (AED)", type: "text", placeholder: "Optional · refundable" },
+      { key: "amountPaid", label: "Amount Paid (AED)", type: "text", required: true, placeholder: "4,550" },
+      { key: "paymentStatus", label: "Payment Status", type: "select", options: [
+        { value: "Paid in Full", label: "Paid in Full" },
+        { value: "Partial Payment", label: "Partial Payment" },
+        { value: "Pending", label: "Pending" },
+      ]},
+      { key: "balanceDueDate", label: "Balance Due Date", type: "date" },
       { key: "paymentMethod", label: "Payment Method", type: "select", options: [
         { value: "Bank Transfer", label: "Bank Transfer" },
         { value: "Credit Card", label: "Credit Card" },
@@ -394,7 +402,16 @@ const CLIENT: DocumentTemplate[] = [
         { value: "Online (Stripe/Link)", label: "Online (Stripe / Link)" },
       ]},
       { key: "paymentDate", label: "Payment Date", type: "date" },
-      { key: "bookingRef", label: "Booking Reference", type: "text", placeholder: "HH-2026-001" },
+      { key: "bookingSource", label: "Booking Source", type: "select", options: [
+        { value: "Direct", label: "Direct (JBJ)" },
+        { value: "Booking.com", label: "Booking.com" },
+        { value: "Airbnb", label: "Airbnb" },
+        { value: "Agoda", label: "Agoda" },
+        { value: "WhatsApp", label: "WhatsApp" },
+        { value: "Other", label: "Other" },
+      ]},
+      { key: "externalRef", label: "External Reference #", type: "text", placeholder: "e.g., Booking.com confirmation #" },
+      { key: "bookingRef", label: "Booking ID (auto if blank)", type: "text", placeholder: "auto: JBJ-HH-…" },
     ],
   },
   {
@@ -409,7 +426,6 @@ const CLIENT: DocumentTemplate[] = [
       "Draft a formal facility management agreement introduction (1-2 short paragraphs). DO NOT restate the scope table or terms — they are auto-rendered. Cover purpose only.",
     fields: [
       { key: "recipientName", label: "Owner / Client Name", type: "text", required: true },
-      { key: "idNumber", label: "Owner ID / Trade Licence #", type: "text" },
       { key: "propertyName", label: "Property / Building Name", type: "text", required: true },
       { key: "propertyAddress", label: "Property Address", type: "text", required: true },
       { key: "unitsCount", label: "Number of Units", type: "text", placeholder: "e.g., 24" },
