@@ -430,67 +430,67 @@ export function composeFormI(input: ComposerInput): string {
 
       <table style="width:100%;border-collapse:collapse;table-layout:fixed;border:1px solid ${GOLD};">
         <tbody>
-          <tr style="background:${CHAMPAGNE};height:20px;">
-            <td style="border:1px solid ${GOLD};font-size:12px;font-weight:900;padding:2px 7px;width:18%;">PART 1.</td>
-            <td colspan="3" style="border:1px solid ${GOLD};font-size:12px;font-weight:900;text-align:center;padding:2px 7px;">THE PARTIES</td>
+          <tr style="background:${CHAMPAGNE};height:18px;">
+            <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;width:18%;">PART 1.</td>
+            <td colspan="3" style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;text-align:center;padding:2px 6px;">THE PARTIES</td>
           </tr>
           <tr>${partyBlock("A", "SELLER / LANDLORD")}${partyBlock("B", "BUYER /TENANT")}</tr>
           <tr>
-            <td style="border:1px solid ${GOLD};background:${CHAMPAGNE};font-size:12px;font-weight:900;text-align:center;padding:3px 7px;">DECLARATION BY AGENT “A”</td>
-            <td style="border:1px solid ${GOLD};background:${CHAMPAGNE};font-size:12px;font-weight:900;text-align:center;padding:3px 7px;">DECLARATION BY AGENT “B”</td>
+            <td style="border:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;font-weight:900;text-align:center;padding:2px 6px;">DECLARATION BY AGENT “A”</td>
+            <td style="border:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;font-weight:900;text-align:center;padding:2px 6px;">DECLARATION BY AGENT “B”</td>
           </tr>
           <tr>
-            <td style="border:1px solid ${GOLD};height:76px;vertical-align:top;text-align:center;padding:5px 11px;font-style:italic;font-size:9.3px;line-height:1.22;">${declarationA}</td>
-            <td style="border:1px solid ${GOLD};height:76px;vertical-align:top;text-align:center;padding:5px 11px;font-style:italic;font-size:9.3px;line-height:1.22;">${declarationB}</td>
+            <td style="border:1px solid ${GOLD};height:58px;vertical-align:top;text-align:center;padding:4px 8px;font-style:italic;font-size:7.8px;line-height:1.12;">${declarationA}</td>
+            <td style="border:1px solid ${GOLD};height:58px;vertical-align:top;text-align:center;padding:4px 8px;font-style:italic;font-size:7.8px;line-height:1.12;">${declarationB}</td>
           </tr>
-          <tr style="background:${CHAMPAGNE};height:20px;">
-            <td style="border:1px solid ${GOLD};font-size:12px;font-weight:900;padding:2px 7px;">PART2. <span style="float:right;margin-right:145px;">THE PROPERTY</span></td>
-            <td style="border:1px solid ${GOLD};font-size:12px;font-weight:900;padding:2px 7px;">PART3. <span style="float:right;margin-right:110px;">THE COMMISSION (split)</span></td>
+          <tr style="background:${CHAMPAGNE};height:18px;">
+            <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;">PART2. <span style="float:right;margin-right:118px;">THE PROPERTY</span></td>
+            <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;">PART3. <span style="float:right;margin-right:86px;">THE COMMISSION (split)</span></td>
           </tr>
           <tr>
-            <td style="border:1px solid ${GOLD};height:300px;vertical-align:top;padding:7px 8px;font-size:11.4px;line-height:1.2;">
+            <td style="border:1px solid ${GOLD};height:236px;vertical-align:top;padding:5px 6px;font-size:9px;line-height:1.08;">
               ${row("PROPERTY ADDRESS:", val("propertyRef"), 240, true)}
               ${row("MASTER DEVELOPER:", val("masterDeveloper"), 250, false)}
               ${row("MASTER PROJECT NAME:", val("masterProject"), 220, false)}
-              <div style="height:7px;"></div>
-              <div style="font-weight:400;margin-bottom:8px;"><strong>PROPERTY DETAILS</strong> (to be completed by Agent "A")</div>
+              <div style="height:4px;"></div>
+              <div style="font-weight:400;margin-bottom:5px;"><strong>PROPERTY DETAILS</strong> (to be completed by Agent "A")</div>
               ${row("BUILDING NAME:", val("buildingName"), 236, true)}
               ${row("LISTED PRICE:", val("listingPrice") ? `AED ${val("listingPrice")}` : "", 260, true)}
               ${row("DESCRIPTION:", val("propertyDescription"), 270, false)}
-              <div style="height:10px;"></div>
-              <div style="margin-bottom:4px;">DOES MOU EXIST ON THIS PROPERTY?</div>
-              <div style="text-align:center;margin-bottom:8px;">${yesNo(val("mouExists"))}</div>
-              <div style="margin-bottom:4px;">IS THE PROPERTY TENANTED</div>
-              <div style="text-align:center;margin-bottom:15px;">${yesNo(val("propertyTenanted"), ["YES", "NO"])}</div>
-              <div style="display:flex;align-items:flex-end;gap:4px;"><strong style="font-weight:500;">MAINTENANCE FEE P.A:</strong>${line(val("maintenanceFee"), 125, false)}<strong>per sq. ft</strong></div>
+              <div style="height:6px;"></div>
+              <div style="margin-bottom:3px;">DOES MOU EXIST ON THIS PROPERTY?</div>
+              <div style="text-align:center;margin-bottom:5px;">${yesNo(val("mouExists"))}</div>
+              <div style="margin-bottom:3px;">IS THE PROPERTY TENANTED</div>
+              <div style="text-align:center;margin-bottom:8px;">${yesNo(val("propertyTenanted"), ["YES", "NO"])}</div>
+              <div style="display:flex;align-items:flex-end;gap:3px;"><strong style="font-weight:500;">MAINTENANCE FEE P.A:</strong>${line(val("maintenanceFee"), 95, false)}<strong>per sq. ft</strong></div>
             </td>
-            <td style="border:1px solid ${GOLD};height:300px;vertical-align:top;padding:7px 8px;text-align:center;font-size:11.2px;line-height:1.24;">
-              <div style="font-weight:800;margin:4px auto 14px;max-width:430px;">The following additional commission split is agreed between the Seller/Landlord's Agent &amp; Buyer/Tenant's Agent.</div>
-              <div style="font-weight:900;font-size:13px;margin-bottom:16px;">Commission in total is: AED ${esc(val("commissionTotal")) || "__________"}/-</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;align-items:start;">
-                <div><div style="font-weight:900;font-size:18px;">AGENT "A" [ ${esc(val("commissionPctA")) || "__"}%]</div><div>(Seller/Landlord's Agent)</div></div>
-                <div><div style="font-weight:900;font-size:18px;">AGENT "B" [ ${esc(val("commissionPctB")) || "__"}%]</div><div>(Buyer/Tenant's Agent)</div></div>
+            <td style="border:1px solid ${GOLD};height:236px;vertical-align:top;padding:5px 6px;text-align:center;font-size:9px;line-height:1.12;">
+              <div style="font-weight:800;margin:3px auto 8px;max-width:430px;">The following additional commission split is agreed between the Seller/Landlord's Agent &amp; Buyer/Tenant's Agent.</div>
+              <div style="font-weight:900;font-size:10.5px;margin-bottom:9px;">Commission in total is: AED ${esc(val("commissionTotal")) || "__________"}/-</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;align-items:start;">
+                <div><div style="font-weight:900;font-size:13px;">AGENT "A" [ ${esc(val("commissionPctA")) || "__"}%]</div><div>(Seller/Landlord's Agent)</div></div>
+                <div><div style="font-weight:900;font-size:13px;">AGENT "B" [ ${esc(val("commissionPctB")) || "__"}%]</div><div>(Buyer/Tenant's Agent)</div></div>
               </div>
-              <div style="text-align:left;">${row("BUYER’S/TENANT’S NAME:", val("buyerFamilyName"), 205, false)}<div style="margin:-3px 0 8px;">(family name ONLY)</div></div>
+              <div style="text-align:left;">${row("BUYER’S/TENANT’S NAME:", val("buyerFamilyName"), 205, false)}<div style="margin:-2px 0 5px;">(family name ONLY)</div></div>
               <div style="text-align:left;">${row("BUDGET:", val("buyerBudget"), 324, false)}</div>
-              <div style="margin:12px 0 5px;text-align:left;">TRANSFER FEE PAID BY:</div>
-              <div style="margin-bottom:14px;">SELLER [ ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BUYER [ ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NEGOTIABLE [ ]</div>
-              <div style="margin-bottom:4px;text-align:left;">DOES THE BUYER HAVE APPROVED PRE-FINANCE?</div>
-              <div style="margin-bottom:16px;">${yesNo(val("buyerPreFinance"))}</div>
-              <div style="margin-bottom:4px;text-align:left;">HAS THIS BUYER/TENANT CONTACTED THE AGENT "A"?</div>
+              <div style="margin:7px 0 3px;text-align:left;">TRANSFER FEE PAID BY:</div>
+              <div style="margin-bottom:8px;">SELLER [ ] &nbsp;&nbsp;&nbsp;&nbsp; BUYER [ ] &nbsp;&nbsp;&nbsp;&nbsp; NEGOTIABLE [ ]</div>
+              <div style="margin-bottom:3px;text-align:left;">DOES THE BUYER HAVE APPROVED PRE-FINANCE?</div>
+              <div style="margin-bottom:8px;">${yesNo(val("buyerPreFinance"))}</div>
+              <div style="margin-bottom:3px;text-align:left;">HAS THIS BUYER/TENANT CONTACTED THE AGENT "A"?</div>
               <div>${yesNo(val("buyerContactedAgentA"))}</div>
             </td>
           </tr>
-          <tr style="background:${CHAMPAGNE};height:20px;">
-            <td style="border:1px solid ${GOLD};font-size:12px;font-weight:900;padding:2px 7px;">PART 4.</td>
-            <td style="border:1px solid ${GOLD};font-size:12px;font-weight:900;text-align:center;padding:2px 7px;">THE SIGNATURES</td>
+          <tr style="background:${CHAMPAGNE};height:18px;">
+            <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;">PART 4.</td>
+            <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;text-align:center;padding:2px 6px;">THE SIGNATURES</td>
           </tr>
           <tr>
-            <td colspan="2" style="border:1px solid ${GOLD};padding:4px 7px;font-size:10.6px;font-style:italic;font-weight:800;line-height:1.18;">Both Agents are required to cooperate fully, complete this FORM, and BOTH retain a fully signed &amp; stamped copy on file. RERA DRS is available to both Parties.</td>
+            <td colspan="2" style="border:1px solid ${GOLD};padding:3px 6px;font-size:8.8px;font-style:italic;font-weight:800;line-height:1.08;">Both Agents are required to cooperate fully, complete this FORM, and BOTH retain a fully signed &amp; stamped copy on file. RERA DRS is available to both Parties.</td>
           </tr>
           <tr>${signatureCell("A")}${signatureCell("B")}</tr>
           <tr>
-            <td colspan="2" style="border:1px solid ${GOLD};background:${CHAMPAGNE};text-align:center;font-weight:900;font-size:10px;line-height:1.25;padding:4px 8px;">
+            <td colspan="2" style="border:1px solid ${GOLD};background:${CHAMPAGNE};text-align:center;font-weight:900;font-size:8.4px;line-height:1.12;padding:3px 6px;">
               The Agent "B" is confirming to view the above mentioned property through Agent "A".<br />
               In the event that Agent "A" did not respond within 24 hours, Agent "B" must contact RERA
             </td>
