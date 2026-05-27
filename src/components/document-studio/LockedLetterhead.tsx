@@ -14,23 +14,26 @@ export function LockedLetterhead() {
         borderBottom: `1px solid ${JBJ_GOLD}`,
         fontFamily: "Inter, system-ui, sans-serif",
         paddingLeft: 32,
-        paddingRight: 96,
+        paddingRight: 42,
         boxSizing: "border-box",
       }}
     >
-      <div className="flex items-center gap-[20px] min-w-0">
+      <div
+        className="grid items-center min-w-0"
+        style={{ gridTemplateColumns: "160px 1px minmax(0,1fr)", columnGap: 24, minHeight: 132 }}
+      >
         <img
           src={jbjMonogramSrc}
           alt="JBJ"
-          className="block shrink-0 object-contain"
-          style={{ width: 148, height: 148, background: "transparent" }}
+          className="block object-contain mx-auto"
+          style={{ width: 132, height: 132, background: "transparent" }}
         />
         {/* Vertical gold hairline divider between monogram and wordmark */}
         <div
           aria-hidden
-          style={{ width: 1, alignSelf: "stretch", background: JBJ_GOLD, opacity: 0.55, margin: "8px 0" }}
+          style={{ width: 1, height: 112, background: JBJ_GOLD, opacity: 0.55 }}
         />
-        <div className="leading-tight min-w-0 flex-1">
+        <div className="leading-tight min-w-0 text-center">
           <div
             className="font-semibold whitespace-nowrap"
             style={{
@@ -40,9 +43,7 @@ export function LockedLetterhead() {
               lineHeight: 1.1,
             }}
           >
-            {JBJ_BRAND.legalName}
-            <span style={{ color: JBJ_GOLD, margin: "0 10px", fontWeight: 400 }}>·</span>
-            <span style={{ letterSpacing: "0.12em" }}>{JBJ_BRAND.legalSuffix}</span>
+            {JBJ_BRAND.legalName} <span style={{ letterSpacing: "0.12em" }}>{JBJ_BRAND.legalSuffix}</span>
           </div>
         </div>
       </div>
@@ -79,11 +80,10 @@ export function LockedFooter() {
           textTransform: "uppercase",
           color: JBJ_INK,
           whiteSpace: "nowrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
+          overflow: "visible",
         }}
       >
-        {JBJ_BRAND.legalName} · {JBJ_BRAND.legalSuffix}
+        {JBJ_BRAND.legalName} {JBJ_BRAND.legalSuffix}
       </div>
 
       {/* Hairline gold separator */}
@@ -144,14 +144,14 @@ export function LockedFooter() {
                 href={`mailto:${JBJ_BRAND.email}`}
                 style={{ color: JBJ_GOLD, textDecoration: "none", fontWeight: 700 }}
               >
-                {JBJ_BRAND.email}
+                {JBJ_BRAND.email.toUpperCase()}
               </a>
               <span style={{ color: JBJ_INK, opacity: 0.4, margin: "0 6px" }}>·</span>
               <a
                 href={`https://${JBJ_BRAND.website}`}
                 style={{ color: JBJ_GOLD, textDecoration: "none", fontWeight: 700, letterSpacing: "0.04em" }}
               >
-                {JBJ_BRAND.website}
+                {JBJ_BRAND.website.toUpperCase()}
               </a>
               <div style={{ fontSize: 9.5, color: JBJ_INK, opacity: 0.6, marginTop: 3 }}>
                 Trade Licence {JBJ_BRAND.tradeLicense}
