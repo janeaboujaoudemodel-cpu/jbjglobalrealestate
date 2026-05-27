@@ -157,14 +157,17 @@ export function signatureBlock(opts: {
   const oTitle = esc(opts.ownerTitle || "Founder & CEO");
   const oDate = esc(formatHumanDate(opts.ownerDate) || todayLong());
   const aName = esc(opts.applicantName || "");
-  const aNameUpper = aName ? aName.toUpperCase() : "";
   const aDate = esc(formatHumanDate(opts.applicantDate));
   const aLabel = aName || "Recipient";
+  const shortLine = (value?: string, opts?: { cursive?: boolean }) => `
+    <span style="display:inline-block;vertical-align:baseline;width:168px;border-bottom:1px solid ${INK};min-height:18px;position:relative;margin-left:6px;">
+      ${value ? `<span style="position:absolute;left:6px;bottom:2px;font-size:${opts?.cursive ? "15px" : "11px"};font-family:${opts?.cursive ? "'Dancing Script','Brush Script MT',cursive" : "Inter,system-ui,sans-serif"};font-weight:${opts?.cursive ? "500" : "400"};letter-spacing:0;color:${INK};white-space:nowrap;max-width:156px;overflow:hidden;text-overflow:ellipsis;">${value}</span>` : ""}
+    </span>`;
 
   const row = (label: string, value: string, fallbackDots = true) => `
     <div style="font-size:11px;color:${INK};margin-top:4px;">
       <strong style="font-weight:600;">${label}:</strong>
-      <span style="margin-left:4px;">${value || (fallbackDots ? "____________________" : "")}</span>
+      ${value ? `<span style="margin-left:4px;">${value}</span>` : (fallbackDots ? shortLine() : "")}
     </div>`;
 
   // Stamp anchored well below + right of the signature box so it never
@@ -192,10 +195,9 @@ export function signatureBlock(opts: {
   ].join("");
 
   const applicantLines = `
-    <div style="font-size:22px;color:${INK};font-weight:500;letter-spacing:.01em;font-family:'Dancing Script','Brush Script MT',cursive;line-height:1.1;min-height:28px;text-align:center;margin-bottom:8px;">${aName || "&nbsp;"}</div>
-    <div style="border-top:1px solid ${INK};width:72%;margin:0 auto 9px;height:1px;"></div>
-    <div style="font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;text-align:center;margin-bottom:10px;">${aNameUpper || "&nbsp;"}</div>
-    ${row("Date", aDate)}
+    <div style="font-size:11px;color:${INK};margin-top:4px;"><strong style="font-weight:600;">Signature:</strong>${shortLine()}</div>
+    <div style="font-size:11px;color:${INK};margin-top:8px;"><strong style="font-weight:600;">Name:</strong>${shortLine(aName, { cursive: true })}</div>
+    <div style="font-size:11px;color:${INK};margin-top:8px;"><strong style="font-weight:600;">Date:</strong>${shortLine(aDate)}</div>
   `;
 
   const extras = (opts.extraSignatories || []).filter(
@@ -259,20 +261,19 @@ export function clientSignatureStrip(opts: {
   label?: string;
 }): string {
   if (opts.page >= opts.totalPages) return "";
-  const legalName = esc((opts.applicantName || "").trim());
-  const legalNameUpper = legalName ? legalName.toUpperCase() : "";
+  const legalName = esc((opts.applicantName || "Michael Anderson").trim());
   return `
     <div data-pdf-section="client-signature" data-client-signature-strip="1"
-         style="margin-top:auto;padding:18px 8px 14px;
+         style="margin-top:auto;padding:12px 8px 14px;
                 display:flex;justify-content:flex-end;align-items:flex-end;
                 font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:280px;margin-right:28px;">
-        <div style="font-size:22px;color:${INK};font-weight:500;letter-spacing:.01em;font-family:'Dancing Script','Brush Script MT',cursive;line-height:1.1;min-height:24px;">${legalName || "&nbsp;"}</div>
-        <div style="width:100%;border-bottom:1px solid ${INK};height:1px;"></div>
-        <div style="font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;padding-top:4px;">${legalNameUpper || "&nbsp;"}</div>
+      <div style="width:290px;margin-right:18px;color:${INK};">
+        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Signature:</div><div style="height:18px;border-bottom:1px solid ${INK};"></div></div>
+        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Name:</div><div style="height:20px;border-bottom:1px solid ${INK};position:relative;"><span style="position:absolute;left:6px;bottom:3px;font-size:15px;font-family:'Dancing Script','Brush Script MT',cursive;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis;">${legalName}</span></div></div>
+        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;font-size:10px;line-height:1.2;"><div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Date:</div><div style="height:18px;border-bottom:1px solid ${INK};"></div></div>
       </div>
     </div>
-    <div data-page-divider="1" style="margin-top:10px;border-top:1px solid ${GOLD}66;height:0;page-break-inside:avoid;break-inside:avoid;"></div>`;
+    <div data-page-divider="1" style="border-top:1px solid ${GOLD}B3;height:0;margin:0 8px;page-break-inside:avoid;break-inside:avoid;"></div>`;
 }
 
 // Back-compat alias — old composers import `clientInitialsStrip`.

@@ -79,22 +79,32 @@ interface Props {
 type Step = 1 | 2 | 3;
 const OWNER_TEST_EMAIL = "infoo.jane@gmail.com";
 const DOCUSIGN_TOP_RESERVE = 42;
-const PAGE_SIGNATURE_RESERVE = 112;
+const PAGE_SIGNATURE_RESERVE = 132;
 const escapeSignatureHtml = (value?: string) =>
   (value || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 
 const renderPerPageUserSignature = (name?: string) => {
-  const legalName = escapeSignatureHtml((name || "").trim());
-  const legalNameUpper = legalName ? legalName.toUpperCase() : "";
+  const legalName = escapeSignatureHtml((name || "Michael Anderson").trim());
   return `
-    <div data-rendered-page-signature="1" style="margin-top:auto;padding:16px 8px 10px;display:flex;justify-content:flex-end;align-items:flex-end;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:238px;margin-right:28px;">
-        <div style="font-size:21px;color:#1A1A1A;font-weight:500;letter-spacing:.01em;font-family:'Dancing Script','Brush Script MT',cursive;line-height:1.1;min-height:24px;">${legalName || "&nbsp;"}</div>
-        <div style="width:100%;border-bottom:1px solid #1A1A1A;height:1px;"></div>
-        <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#1A1A1A;font-weight:600;padding-top:3px;text-align:center;max-width:100%;overflow-wrap:anywhere;">${legalNameUpper || "&nbsp;"}</div>
+    <div data-rendered-page-signature="1" style="margin-top:auto;padding:12px 8px 14px;display:flex;justify-content:flex-end;align-items:flex-end;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
+      <div style="width:290px;margin-right:18px;color:#1A1A1A;">
+        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;">
+          <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Signature:</div>
+          <div style="height:18px;border-bottom:1px solid #1A1A1A;"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;margin-bottom:8px;font-size:10px;line-height:1.2;">
+          <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Name:</div>
+          <div style="height:20px;border-bottom:1px solid #1A1A1A;position:relative;">
+            <span style="position:absolute;left:6px;bottom:3px;font-size:15px;font-family:'Dancing Script','Brush Script MT',cursive;font-weight:500;letter-spacing:0;color:#1A1A1A;white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis;">${legalName}</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:70px 1fr;align-items:end;gap:8px;font-size:10px;line-height:1.2;">
+          <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Date:</div>
+          <div style="height:18px;border-bottom:1px solid #1A1A1A;"></div>
+        </div>
       </div>
     </div>
-    <div data-rendered-page-divider="1" style="border-top:1px solid rgba(184,149,85,.4);height:0;page-break-inside:avoid;break-inside:avoid;"></div>`;
+    <div data-rendered-page-divider="1" style="border-top:1px solid rgba(184,149,85,.7);height:0;margin:0 8px;page-break-inside:avoid;break-inside:avoid;"></div>`;
 };
 
 const stripGeneratedPageArtifacts = (html: string): string => {
@@ -2035,9 +2045,10 @@ function StudioShell({
                         const isLast = pageIndex === pageCount - 1;
                         const topPad = isFirst ? FIRST_TOP : NEXT_TOP;
                         const bottomPad = isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD;
-                        const userSignatureName = fields.recipientName || fields.full_name || fields.client_name || fields.guest_name || "";
+                        const userSignatureName = fields.recipientName || fields.fullName || fields.full_name || fields.client_name || fields.guest_name || "Michael Anderson";
                         const groupHtml = stripGeneratedPageArtifacts(pageGroups[pageIndex] ?? "");
-                        const groupHtmlWithSignature = `${groupHtml}${renderPerPageUserSignature(userSignatureName)}`;
+                        const hasFinalSignatureBlock = /data-signature-block=["']1["']/.test(groupHtml);
+                        const groupHtmlWithSignature = `${groupHtml}${isLast && hasFinalSignatureBlock ? "" : renderPerPageUserSignature(userSignatureName)}`;
 
                         return (
                           <div key={`page-${pageIndex}`} className="flex flex-col items-center gap-2" style={{ width: PAGE_W * effectiveScale }}>
