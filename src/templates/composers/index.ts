@@ -233,7 +233,7 @@ export function signatureBlock(opts: {
   // Owner heading is the signatory ROLE (e.g. "Authorised Signatory"),
   // NEVER the company name — the company is already in the header/footer.
   return `
-    <div data-signature-block="1" data-pdf-section="signature" style="margin-top:36px;page-break-inside:avoid;break-inside:avoid;">
+    <div data-signature-block="1" data-pdf-section="signature" style="margin-top:auto;padding-top:36px;page-break-inside:avoid;break-inside:avoid;">
       <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
         <tbody>
           <tr>
