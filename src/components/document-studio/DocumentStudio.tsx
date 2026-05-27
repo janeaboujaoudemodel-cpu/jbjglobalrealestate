@@ -68,7 +68,7 @@ import {
 } from "@/hooks/useCrmDocuments";
 import DocumentActionSheet from "./DocumentActionSheet";
 import DocumentPreviewDialog from "./DocumentPreviewDialog";
-import { RotateCcw, Trash2 } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 
 interface Props {
   catalog: DocumentAudience;
