@@ -2032,6 +2032,13 @@ function StudioShell({
                   : parsePageGroups(bodyHtml);
                 const pageCount = Math.max(1, pageGroups.length);
 
+                // FORM I (and any composer that opts out of letterhead chrome)
+                // emits a top-level <section data-no-chrome="1">. When present,
+                // suppress header, footer, DocuSign safe band, generated-date
+                // pill, and the per-page signature strip; render a single page
+                // with the body using the full A4 height.
+                const noChrome = /data-no-chrome=["']1["']/.test(bodyHtml || "");
+
                 return (
                   <div className="flex flex-col items-center gap-4" style={{ width: PAGE_W * effectiveScale, flexShrink: 0 }}>
                     <div ref={pageRef} className="flex flex-col gap-7" data-document-pages="true">
@@ -2044,12 +2051,14 @@ function StudioShell({
                       {Array.from({ length: pageCount }).map((_, pageIndex) => {
                         const isFirst = pageIndex === 0;
                         const isLast = pageIndex === pageCount - 1;
-                        const topPad = isFirst ? FIRST_TOP : NEXT_TOP;
-                        const bottomPad = isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD;
+                        const topPad = noChrome ? 28 : (isFirst ? FIRST_TOP : NEXT_TOP);
+                        const bottomPad = noChrome ? 24 : (isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD);
                         const userSignatureName = fields.recipientName || fields.fullName || fields.full_name || fields.client_name || fields.guest_name || "";
                         const groupHtml = stripGeneratedPageArtifacts(pageGroups[pageIndex] ?? "");
                         const hasFinalSignatureBlock = /data-signature-block=["']1["']/.test(groupHtml);
-                        const groupHtmlWithSignature = `${groupHtml}${isLast && hasFinalSignatureBlock ? "" : renderPerPageUserSignature(userSignatureName)}`;
+                        const groupHtmlWithSignature = noChrome
+                          ? groupHtml
+                          : `${groupHtml}${isLast && hasFinalSignatureBlock ? "" : renderPerPageUserSignature(userSignatureName)}`;
 
                         return (
                           <div key={`page-${pageIndex}`} className="flex flex-col items-center gap-2" style={{ width: PAGE_W * effectiveScale }}>
@@ -2070,41 +2079,45 @@ function StudioShell({
                                   champagne (same as header/footer) on EVERY
                                   page so it never reads as a white crop above
                                   the colored chrome. Global rule. */}
-                              <div
-                                aria-hidden
-                                style={{
-                                  position: "absolute",
-                                  top: 0,
-                                  left: 0,
-                                  right: 0,
-                                  height: DOCUSIGN_TOP_RESERVE,
-                                  background: "#F7F2EA",
-                                  zIndex: 1,
-                                }}
-                              />
+                              {!noChrome && (
+                                <div
+                                  aria-hidden
+                                  style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: DOCUSIGN_TOP_RESERVE,
+                                    background: "#F7F2EA",
+                                    zIndex: 1,
+                                  }}
+                                />
+                              )}
                               {/* Document generation date — top-right corner of EVERY page (above
                                   letterhead on page 1, above body on pages 2+). Distinct from the
                                   per-page signature date, which sits next to the signature below. */}
-                              <div
-                                aria-hidden
-                                style={{
-                                  position: "absolute",
-                                  top: DOCUSIGN_TOP_RESERVE + 6,
-                                  right: 18,
-                                  fontFamily: "Inter, system-ui, sans-serif",
-                                  fontSize: 9.5,
-                                  letterSpacing: "0.16em",
-                                  textTransform: "uppercase",
-                                  color: "#1A1A1A",
-                                  opacity: 0.55,
-                                  zIndex: 2,
-                                  pointerEvents: "none",
-                                }}
-                              >
-                                {renderPageGeneratedDate()}
-                              </div>
+                              {!noChrome && (
+                                <div
+                                  aria-hidden
+                                  style={{
+                                    position: "absolute",
+                                    top: DOCUSIGN_TOP_RESERVE + 6,
+                                    right: 18,
+                                    fontFamily: "Inter, system-ui, sans-serif",
+                                    fontSize: 9.5,
+                                    letterSpacing: "0.16em",
+                                    textTransform: "uppercase",
+                                    color: "#1A1A1A",
+                                    opacity: 0.55,
+                                    zIndex: 2,
+                                    pointerEvents: "none",
+                                  }}
+                                >
+                                  {renderPageGeneratedDate()}
+                                </div>
+                              )}
                               {/* Header — only on page 1, sits directly under the safe band */}
-                              {isFirst && (
+                              {isFirst && !noChrome && (
                                 <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE, position: "relative", zIndex: 0 }}>
                                   <LockedLetterhead />
                                 </div>
@@ -2119,10 +2132,10 @@ function StudioShell({
                               <div
                                 style={{
                                   position: "absolute",
-                                  top: isFirst ? (chromeHeights.header + DOCUSIGN_TOP_RESERVE) : DOCUSIGN_TOP_RESERVE,
+                                  top: noChrome ? 0 : (isFirst ? (chromeHeights.header + DOCUSIGN_TOP_RESERVE) : DOCUSIGN_TOP_RESERVE),
                                   left: 0,
                                   right: 0,
-                                  bottom: isLast ? chromeHeights.footer : 0,
+                                  bottom: noChrome ? 0 : (isLast ? chromeHeights.footer : 0),
                                   padding: `${topPad}px ${BODY_PAD_X}px ${bottomPad}px`,
                                   boxSizing: "border-box",
                                   overflow: "hidden",
@@ -2189,7 +2202,7 @@ function StudioShell({
                               </div>
 
                               {/* Footer — ONLY on the last page, absolute flush-bottom, edge-to-edge */}
-                              {isLast && (
+                              {isLast && !noChrome && (
                                 <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
                                   <LockedFooter />
                                 </div>

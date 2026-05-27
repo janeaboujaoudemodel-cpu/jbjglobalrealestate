@@ -422,23 +422,20 @@ export function composeFormI(input: ComposerInput): string {
     <div style="text-align:center;font-size:19px;font-weight:800;letter-spacing:.06em;color:${INK};margin:3px 0 1px;text-transform:uppercase;">Agent to Agent Agreement</div>
     <div style="text-align:center;font-style:italic;font-size:10.5px;color:${MUTED};margin:0 0 8px;">As per the Real Estate Brokers By-Law No. (85) of 2006</div>`;
 
-  // Page 1: eyebrow + Parties + Property/Commission.
-  // Page 2: Declarations + RERA Signatures.
-  // Explicit <section data-pdf-page> wrappers — DocumentStudio honours
-  // these and disables auto-re-splitting (see DocumentStudio.tsx L375).
-  const pageOne = [
+  // FORM I — Single page, NO header/NO footer (DocumentStudio detects
+  // data-no-chrome="1" and suppresses letterhead, footer, DocuSign safe
+  // band, generated-date pill, and per-page signature strip). The
+  // composer's own company/party blocks carry all RERA metadata.
+  const singlePage = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     eyebrow,
     partsTable,
     propertyAndCommission,
-  ].join("");
-
-  const pageTwo = [
     declarationsTable,
     signatures,
   ].join("");
 
-  return page(1, pageOne) + page(2, pageTwo);
+  return `<section data-pdf-page="1" data-no-chrome="1" data-single-page="1" style="display:block;">${singlePage}</section>`;
 }
 
 /* ───────────── FORM U — Cancellation of Form A / Form B ───────────── */
