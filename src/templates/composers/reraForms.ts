@@ -282,35 +282,35 @@ export function composeFormI(input: ComposerInput): string {
   const jbjSide = (f.jbjSide === "A" || f.jbjSide === "B") ? f.jbjSide : "";
 
   const blankParty = (label: "A" | "B") => `
-    <div style="font-size:10.2px;line-height:1.45;color:${INK};">
-      <div><strong>NAME OF ESTABLISHMENT:</strong> ___________________________</div>
-      <div><strong>ADDRESS:</strong> ___________________________</div>
-      <div style="margin:5px 0 1px;font-weight:700;letter-spacing:.06em;font-size:9.5px;text-transform:uppercase;">Official Contact Details</div>
-      <div>PH: __________ &nbsp; FAX: __________</div>
-      <div>EMAIL: __________</div>
-      <div>ORN: __________ &nbsp; DED LISC: __________</div>
-      <div>P.O. BOX: __________</div>
-      <div style="margin:5px 0 1px;font-weight:700;letter-spacing:.06em;font-size:9.5px;text-transform:uppercase;">The Registered Agent &ldquo;${label}&rdquo;</div>
-      <div>NAME: __________</div>
-      <div>BRN: __________ &nbsp; DATE ISSUED: __ / __ / ____</div>
-      <div>MOBILE: __________</div>
-      <div>EMAIL: __________</div>
+    <div style="font-size:11px;line-height:1.6;color:${INK};">
+      <div style="margin:0 0 4px;"><strong>Name of Establishment:</strong> ___________________________</div>
+      <div style="margin:0 0 4px;"><strong>Address:</strong> ___________________________</div>
+      <div style="margin:8px 0 3px;font-weight:700;letter-spacing:.06em;font-size:10px;text-transform:uppercase;color:${MUTED};">Official Contact Details</div>
+      <div style="margin:0 0 3px;"><strong>Phone:</strong> __________ &nbsp; <strong>Fax:</strong> __________</div>
+      <div style="margin:0 0 3px;"><strong>Email:</strong> __________</div>
+      <div style="margin:0 0 3px;"><strong>ORN:</strong> __________ &nbsp; <strong>DED Licence:</strong> __________</div>
+      <div style="margin:0 0 3px;"><strong>P.O. Box:</strong> __________</div>
+      <div style="margin:8px 0 3px;font-weight:700;letter-spacing:.06em;font-size:10px;text-transform:uppercase;color:${MUTED};">The Registered Agent &ldquo;${label}&rdquo;</div>
+      <div style="margin:0 0 3px;"><strong>Name:</strong> __________</div>
+      <div style="margin:0 0 3px;"><strong>Broker Reg. No. (BRN):</strong> __________ &nbsp; <strong>Date Issued:</strong> __ / __ / ____</div>
+      <div style="margin:0 0 3px;"><strong>Mobile:</strong> __________</div>
+      <div style="margin:0 0 3px;"><strong>Email:</strong> __________</div>
     </div>`;
 
   const compactJbjParty = (label: "A" | "B") => `
-    <div style="font-size:10.2px;line-height:1.45;color:${INK};">
-      <div><strong>NAME OF ESTABLISHMENT:</strong> JBJ GLOBAL REAL ESTATE L.L.C S.O.C</div>
-      <div><strong>ADDRESS:</strong> Dubai, UAE</div>
-      <div style="margin:5px 0 1px;font-weight:700;letter-spacing:.06em;font-size:9.5px;text-transform:uppercase;">Official Contact Details</div>
-      <div>PH: +971 50 000 0000 &nbsp; FAX: —</div>
-      <div>EMAIL: info@jbj.ae</div>
-      <div>ORN: 41486 &nbsp; DED LISC: —</div>
-      <div>P.O. BOX: —</div>
-      <div style="margin:5px 0 1px;font-weight:700;letter-spacing:.06em;font-size:9.5px;text-transform:uppercase;">The Registered Agent &ldquo;${label}&rdquo;</div>
-      <div>NAME: Jane Bou Jaoude</div>
-      <div>BRN: 44750 &nbsp; DATE ISSUED: 24 / 05 / 2024</div>
-      <div>MOBILE: +971 50 000 0000</div>
-      <div>EMAIL: info@jbj.ae</div>
+    <div style="font-size:11px;line-height:1.6;color:${INK};">
+      <div style="margin:0 0 4px;"><strong>Name of Establishment:</strong> JBJ GLOBAL REAL ESTATE L.L.C S.O.C</div>
+      <div style="margin:0 0 4px;"><strong>Address:</strong> Dubai, United Arab Emirates</div>
+      <div style="margin:8px 0 3px;font-weight:700;letter-spacing:.06em;font-size:10px;text-transform:uppercase;color:${MUTED};">Official Contact Details</div>
+      <div style="margin:0 0 3px;"><strong>Phone:</strong> +971 50 000 0000 &nbsp; <strong>Fax:</strong> —</div>
+      <div style="margin:0 0 3px;"><strong>Email:</strong> info@jbj.ae</div>
+      <div style="margin:0 0 3px;"><strong>ORN:</strong> 41486 &nbsp; <strong>DED Licence:</strong> —</div>
+      <div style="margin:0 0 3px;"><strong>P.O. Box:</strong> —</div>
+      <div style="margin:8px 0 3px;font-weight:700;letter-spacing:.06em;font-size:10px;text-transform:uppercase;color:${MUTED};">The Registered Agent &ldquo;${label}&rdquo;</div>
+      <div style="margin:0 0 3px;"><strong>Name:</strong> Jane Bou Jaoude</div>
+      <div style="margin:0 0 3px;"><strong>Broker Reg. No. (BRN):</strong> 44750 &nbsp; <strong>Date Issued:</strong> 24 / 05 / 2024</div>
+      <div style="margin:0 0 3px;"><strong>Mobile:</strong> +971 50 000 0000</div>
+      <div style="margin:0 0 3px;"><strong>Email:</strong> info@jbj.ae</div>
     </div>`;
 
   const partyA = jbjSide === "A" ? compactJbjParty("A") : blankParty("A");
@@ -348,26 +348,26 @@ export function composeFormI(input: ComposerInput): string {
       </thead>
       <tbody>
         <tr>
-          <td style="border:1px solid ${GOLD};padding:7px 9px;vertical-align:top;font-size:10.2px;line-height:1.45;color:${INK};">
-            <div><strong>PROPERTY ADDRESS:</strong> ${esc(f.propertyRef) || "__________"}</div>
-            <div><strong>MASTER DEVELOPER:</strong> ${esc(f.masterDeveloper) || "__________"}</div>
-            <div><strong>MASTER PROJECT NAME:</strong> ${esc(f.masterProject) || "__________"}</div>
-            <div><strong>BUILDING NAME:</strong> ${esc(f.buildingName) || "__________"}</div>
-            <div><strong>LISTED PRICE:</strong> ${f.listingPrice ? "AED " + esc(f.listingPrice) : "AED __________"}</div>
-            <div><strong>DESCRIPTION:</strong> ${esc(f.propertyDescription) || "__________"}</div>
-            <div style="margin-top:4px;"><strong>MOU EXISTS?</strong> YES [ ] NO [ ] N/A [ ] &nbsp; <strong>TENANTED?</strong> YES [ ] NO [ ]</div>
-            <div><strong>MAINTENANCE FEE P.A:</strong> ${esc(f.maintenanceFee) || "__________"} per sq. ft</div>
+          <td style="border:1px solid ${GOLD};padding:12px 14px;vertical-align:top;font-size:11px;line-height:1.65;color:${INK};">
+            <div style="margin:0 0 4px;"><strong>Property Address:</strong> ${esc(f.propertyRef) || "__________"}</div>
+            <div style="margin:0 0 4px;"><strong>Master Developer:</strong> ${esc(f.masterDeveloper) || "__________"}</div>
+            <div style="margin:0 0 4px;"><strong>Master Project Name:</strong> ${esc(f.masterProject) || "__________"}</div>
+            <div style="margin:0 0 4px;"><strong>Building Name:</strong> ${esc(f.buildingName) || "__________"}</div>
+            <div style="margin:0 0 4px;"><strong>Listed Price:</strong> ${f.listingPrice ? "AED " + esc(f.listingPrice) : "AED __________"}</div>
+            <div style="margin:0 0 4px;"><strong>Description:</strong> ${esc(f.propertyDescription) || "__________"}</div>
+            <div style="margin:8px 0 4px;"><strong>MoU Exists?</strong> Yes [ ] &nbsp; No [ ] &nbsp; N/A [ ] &nbsp; <strong>Tenanted?</strong> Yes [ ] &nbsp; No [ ]</div>
+            <div><strong>Maintenance Fee p.a.:</strong> ${esc(f.maintenanceFee) || "__________"} per sq. ft</div>
           </td>
-          <td style="border:1px solid ${GOLD};padding:7px 9px;vertical-align:top;font-size:10.2px;line-height:1.45;color:${INK};">
-            <div style="font-style:italic;color:${MUTED};margin-bottom:4px;">Additional commission split agreed between the Seller/Landlord's Agent &amp; the Buyer/Tenant's Agent.</div>
-            <div><strong>COMMISSION TOTAL:</strong> AED ${esc(f.commissionTotal) || "__________"}</div>
-            <div style="margin-top:4px;"><strong>AGENT &ldquo;A&rdquo; [ ${esc(f.commissionPctA) || "__"} % ]</strong> (Seller/Landlord's Agent)</div>
-            <div><strong>AGENT &ldquo;B&rdquo; [ ${esc(f.commissionPctB) || "__"} % ]</strong> (Buyer/Tenant's Agent)</div>
-            <div style="margin-top:5px;"><strong>BUYER'S / TENANT'S NAME:</strong> ${esc(f.buyerFamilyName) || "__________"} <span style="color:${MUTED};">(family name only)</span></div>
-            <div><strong>BUDGET:</strong> ${esc(f.buyerBudget) || "__________"}</div>
-            <div><strong>TRANSFER FEE BY:</strong> SELLER [ ] BUYER [ ] NEGOTIABLE [ ]</div>
-            <div><strong>BUYER PRE-FINANCE APPROVED?</strong> YES [ ] NO [ ] N/A [ ]</div>
-            <div><strong>HAS BUYER/TENANT CONTACTED AGENT A?</strong> YES [ ] NO [ ] N/A [ ]</div>
+          <td style="border:1px solid ${GOLD};padding:12px 14px;vertical-align:top;font-size:11px;line-height:1.65;color:${INK};">
+            <div style="font-style:italic;color:${MUTED};margin:0 0 6px;font-size:10.5px;">Additional commission split agreed between the Seller/Landlord's Agent &amp; the Buyer/Tenant's Agent.</div>
+            <div style="margin:0 0 4px;"><strong>Commission Total:</strong> AED ${esc(f.commissionTotal) || "__________"}</div>
+            <div style="margin:6px 0 4px;"><strong>Agent &ldquo;A&rdquo; [ ${esc(f.commissionPctA) || "__"} % ]</strong> (Seller/Landlord's Agent)</div>
+            <div style="margin:0 0 4px;"><strong>Agent &ldquo;B&rdquo; [ ${esc(f.commissionPctB) || "__"} % ]</strong> (Buyer/Tenant's Agent)</div>
+            <div style="margin:8px 0 4px;"><strong>Buyer's / Tenant's Name:</strong> ${esc(f.buyerFamilyName) || "__________"} <span style="color:${MUTED};font-size:10.5px;">(family name only)</span></div>
+            <div style="margin:0 0 4px;"><strong>Budget:</strong> ${esc(f.buyerBudget) || "__________"}</div>
+            <div style="margin:0 0 4px;"><strong>Transfer Fee By:</strong> Seller [ ] &nbsp; Buyer [ ] &nbsp; Negotiable [ ]</div>
+            <div style="margin:0 0 4px;"><strong>Buyer Pre-Finance Approved?</strong> Yes [ ] &nbsp; No [ ] &nbsp; N/A [ ]</div>
+            <div><strong>Has Buyer/Tenant Contacted Agent A?</strong> Yes [ ] &nbsp; No [ ] &nbsp; N/A [ ]</div>
           </td>
         </tr>
       </tbody>
