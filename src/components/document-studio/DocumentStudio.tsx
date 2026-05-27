@@ -1163,7 +1163,7 @@ function StudioShell({
                             body: {
                               mode: "extract-fields",
                               templateId: template.id,
-                              fieldKeys: template.fields.map((f) => f.key).concat(["idNumber"]),
+                              fieldKeys: template.fields.map((f) => f.key),
                               source: autoFillText,
                             },
                           });
@@ -1217,7 +1217,7 @@ function StudioShell({
                             body: {
                               mode: "extract-fields",
                               templateId: template.id,
-                              fieldKeys: template.fields.map((f) => f.key).concat(["idNumber"]),
+                              fieldKeys: template.fields.map((f) => f.key),
                               attachment: { name: file.name, type: file.type, dataUrl: b64 },
                             },
                           });

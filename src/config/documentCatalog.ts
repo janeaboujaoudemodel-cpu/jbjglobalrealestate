@@ -91,7 +91,6 @@ const STAFF: DocumentTemplate[] = [
       START_DATE,
       { key: "salary", label: "Salary / Package", type: "text", placeholder: "AED 25,000 per month" },
       { key: "commission", label: "Commission Structure", type: "text", placeholder: "e.g., 30% of net commission" },
-      ID_NUMBER,
       { key: "notes", label: "Additional Instructions", type: "textarea", placeholder: "Relocation, benefits, probation length…" },
     ],
   },
@@ -111,7 +110,6 @@ const STAFF: DocumentTemplate[] = [
       START_DATE,
       { key: "salary", label: "Monthly Compensation", type: "text" },
       { key: "duration", label: "Contract Duration", type: "text", placeholder: "2 years / Unlimited" },
-      ID_NUMBER,
       { key: "notes", label: "Special Clauses", type: "textarea" },
     ],
   },
@@ -284,7 +282,6 @@ const CLIENT: DocumentTemplate[] = [
       { key: "projectName", label: "Project Name", type: "text", required: true },
       { key: "unitRef", label: "Unit Reference", type: "text" },
       { key: "developer", label: "Developer", type: "text" },
-      ID_NUMBER,
     ],
   },
   {
