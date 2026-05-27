@@ -187,12 +187,10 @@ function StudioShell({
   // width the center pane has so it never overflows horizontally.
   //
   // Pagination model:
-  //   • The sheet renders in NATURAL height: letterhead + body + footer in
-  //     flow, no flex-1 padding-out, no PAGE_H * pageCount stretch. The
-  //     footer therefore always sits directly under the signature block.
-  //   • pageCount is derived from the sheet's actual scrollHeight and is
-  //     hard-capped at MAX_PAGES so any measurement glitch can never run
-  //     away (the old "Page X of 20,410" bug).
+  //   • Preview renders separate fixed 816×1154 A4 sheets only — never one
+  //     stretched PAGE_H * pageCount / natural-height canvas.
+  //   • pageCount is derived from measured body content and is hard-capped at
+  //     MAX_PAGES so any measurement glitch can never run away.
   //   • Page-break overlays snap UP to the nearest block bottom inside the
   //     body (paragraphs, tables, signature block) so a break never slices
   //     through content. SAFE_GUTTER also keeps content off the very top
@@ -209,7 +207,8 @@ function StudioShell({
   const bodyRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
-  const [sheetH, setSheetH] = useState(PAGE_H);
+  const [sheetH, setSheetH] = useState(0);
+  const [chromeHeights, setChromeHeights] = useState({ header: 180, footer: 86 });
   const [smartBreaks, setSmartBreaks] = useState<number[]>([]);
   const [manualPages, setManualPages] = useState<number>(0);
   useEffect(() => {
@@ -234,16 +233,19 @@ function StudioShell({
     const measure = () => {
       window.cancelAnimationFrame(frame);
       frame = window.requestAnimationFrame(() => {
-        const page = pageRef.current;
         const body = bodyRef.current;
-        if (!page || !body) return;
+        if (!body) return;
 
         const headerH = headerRef.current?.offsetHeight ?? 0;
         const footerH = footerRef.current?.offsetHeight ?? 0;
-        const nextSheetH = Math.max(PAGE_H, Math.ceil(headerH + body.scrollHeight + footerH));
+        const nextSheetH = Math.max(0, Math.ceil(body.scrollHeight));
         setSheetH((current) => (Math.abs(current - nextSheetH) > 1 ? nextSheetH : current));
+        setChromeHeights((current) => {
+          const next = { header: Math.max(1, Math.ceil(headerH)), footer: Math.max(1, Math.ceil(footerH)) };
+          return Math.abs(current.header - next.header) > 1 || Math.abs(current.footer - next.footer) > 1 ? next : current;
+        });
 
-        const pageTop = page.getBoundingClientRect().top;
+        const bodyTop = body.getBoundingClientRect().top;
         const boundarySelector = [
           "[data-pdf-section]",
           "[data-signature-block]",
@@ -257,7 +259,7 @@ function StudioShell({
         const boundaries = Array.from(body.querySelectorAll<HTMLElement>(boundarySelector))
           .map((el) => {
             const r = el.getBoundingClientRect();
-            return Math.round(r.bottom - pageTop);
+            return Math.round(r.bottom - bodyTop);
           })
           .filter((y) => y > SAFE_GUTTER && y < nextSheetH - SAFE_GUTTER)
           .sort((a, b) => a - b);
@@ -268,7 +270,6 @@ function StudioShell({
 
     measure();
     const ro = new ResizeObserver(measure);
-    if (pageRef.current) ro.observe(pageRef.current);
     if (bodyRef.current) ro.observe(bodyRef.current);
     if (headerRef.current) ro.observe(headerRef.current);
     if (footerRef.current) ro.observe(footerRef.current);
