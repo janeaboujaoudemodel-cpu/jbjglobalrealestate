@@ -30,6 +30,7 @@ export interface DocumentField {
   options?: { value: string; label: string }[];
   required?: boolean;
   helpText?: string;
+  group?: string;
 }
 
 export interface DocumentTemplate {
@@ -397,24 +398,57 @@ STAFF.push(
     aiInstructions:
       "Draft a 1–2 sentence cover paragraph only. RERA co-broking clauses are auto-rendered.",
     fields: [
-      // Counterpart (Broker B)
-      { key: "recipientName", label: "Counterpart Brokerage Company", type: "text", required: true },
-      { key: "counterpartyOrn", label: "Counterpart ORN", type: "text", required: true },
-      { key: "counterpartyAgent", label: "Counterpart Agent Name", type: "text", required: true },
-      { key: "counterpartyBrn", label: "Counterpart Agent BRN", type: "text", required: true },
-      { key: "counterpartyPhone", label: "Counterpart Mobile", type: "text" },
-      { key: "counterpartyEmail", label: "Counterpart Email", type: "text" },
-      // Property
-      { key: "propertyRef", label: "Property Address", type: "text", required: true },
-      { key: "titleDeedNo", label: "DLD Title Deed No.", type: "text" },
-      { key: "listingPrice", label: "Listing Price (AED)", type: "text" },
-      { key: "formAReference", label: "Underlying Form A Ref.", type: "text" },
-      { key: "commissionSplit", label: "Commission Split", type: "text", placeholder: "50 / 50" },
+      { key: "jbjSide", label: "JBJ side", type: "select", group: "Party A", options: [
+        { value: "A", label: "Party A / Agent A" },
+        { value: "B", label: "Party B / Agent B" },
+        { value: "none", label: "Manual — no JBJ prefill" },
+      ]},
+      { key: "partyAEstablishment", label: "Party A — Name of Establishment", type: "text", group: "Party A" },
+      { key: "partyAAddress", label: "Party A — Address", type: "text", group: "Party A" },
+      { key: "partyAPhone", label: "Party A — Phone", type: "text", group: "Party A" },
+      { key: "partyAFax", label: "Party A — Fax", type: "text", group: "Party A" },
+      { key: "partyAEmail", label: "Party A — Email", type: "text", group: "Party A" },
+      { key: "partyAOrn", label: "Party A — ORN", type: "text", group: "Party A" },
+      { key: "partyADedLicence", label: "Party A — DED Licence", type: "text", group: "Party A" },
+      { key: "partyAPoBox", label: "Party A — P.O. Box", type: "text", group: "Party A" },
+      { key: "partyAAgentName", label: "Party A — Registered Agent Name", type: "text", group: "Party A" },
+      { key: "partyABrn", label: "Party A — Broker Reg. No. (BRN)", type: "text", group: "Party A" },
+      { key: "partyADateIssued", label: "Party A — BRN Date Issued", type: "text", group: "Party A", placeholder: "24 / 05 / 2024" },
+      { key: "partyAMobile", label: "Party A — Mobile", type: "text", group: "Party A" },
+      { key: "partyAAgentEmail", label: "Party A — Agent Email", type: "text", group: "Party A" },
+      { key: "partyAFormStr", label: "Party A — Sellers/Landlords Form A STR#", type: "text", group: "Party A" },
+      { key: "partyBEstablishment", label: "Party B — Name of Establishment", type: "text", group: "Party B" },
+      { key: "partyBAddress", label: "Party B — Address", type: "text", group: "Party B" },
+      { key: "partyBPhone", label: "Party B — Phone", type: "text", group: "Party B" },
+      { key: "partyBFax", label: "Party B — Fax", type: "text", group: "Party B" },
+      { key: "partyBEmail", label: "Party B — Email", type: "text", group: "Party B" },
+      { key: "partyBOrn", label: "Party B — ORN", type: "text", group: "Party B" },
+      { key: "partyBDedLicence", label: "Party B — DED Licence", type: "text", group: "Party B" },
+      { key: "partyBPoBox", label: "Party B — P.O. Box", type: "text", group: "Party B" },
+      { key: "partyBAgentName", label: "Party B — Registered Agent Name", type: "text", group: "Party B" },
+      { key: "partyBBrn", label: "Party B — Broker Reg. No. (BRN)", type: "text", group: "Party B" },
+      { key: "partyBDateIssued", label: "Party B — BRN Date Issued", type: "text", group: "Party B", placeholder: "__ / __ / ____" },
+      { key: "partyBMobile", label: "Party B — Mobile", type: "text", group: "Party B" },
+      { key: "partyBAgentEmail", label: "Party B — Agent Email", type: "text", group: "Party B" },
+      { key: "partyBFormStr", label: "Party B — Buyers/Tenants Form B STR#", type: "text", group: "Party B" },
+      { key: "strNumber", label: "STR#", type: "text", group: "Property & Commission" },
       START_DATE,
-      // Broker A (JBJ)
-      { key: "brokerName", label: "JBJ Registered Broker Name", type: "text", required: true },
-      { key: "brn", label: "JBJ Broker BRN", type: "text", required: true },
-      { key: "orn", label: "JBJ Office ORN", type: "text", required: true },
+      { key: "propertyRef", label: "Property Address", type: "text", required: true, group: "Property & Commission" },
+      { key: "masterDeveloper", label: "Master Developer", type: "text", group: "Property & Commission" },
+      { key: "masterProject", label: "Master Project Name", type: "text", group: "Property & Commission" },
+      { key: "buildingName", label: "Building Name", type: "text", group: "Property & Commission" },
+      { key: "listingPrice", label: "Listed Price (AED)", type: "text", group: "Property & Commission" },
+      { key: "propertyDescription", label: "Description", type: "text", group: "Property & Commission" },
+      { key: "mouExists", label: "Does MOU exist?", type: "select", group: "Property & Commission", options: [{ value: "YES", label: "YES" }, { value: "NO", label: "NO" }, { value: "N/A", label: "N/A" }] },
+      { key: "propertyTenanted", label: "Is the property tenanted?", type: "select", group: "Property & Commission", options: [{ value: "YES", label: "YES" }, { value: "NO", label: "NO" }] },
+      { key: "maintenanceFee", label: "Maintenance Fee p.a. / sq.ft", type: "text", group: "Property & Commission" },
+      { key: "commissionTotal", label: "Commission Total (AED)", type: "text", group: "Property & Commission" },
+      { key: "commissionPctA", label: "Agent A Commission %", type: "text", group: "Property & Commission" },
+      { key: "commissionPctB", label: "Agent B Commission %", type: "text", group: "Property & Commission" },
+      { key: "buyerFamilyName", label: "Buyer’s/Tenant’s Name (family name only)", type: "text", group: "Property & Commission" },
+      { key: "buyerBudget", label: "Budget", type: "text", group: "Property & Commission" },
+      { key: "buyerPreFinance", label: "Buyer Pre-Finance Approved?", type: "select", group: "Property & Commission", options: [{ value: "YES", label: "YES" }, { value: "NO", label: "NO" }, { value: "N/A", label: "N/A" }] },
+      { key: "buyerContactedAgentA", label: "Buyer/Tenant contacted Agent A?", type: "select", group: "Property & Commission", options: [{ value: "YES", label: "YES" }, { value: "NO", label: "NO" }, { value: "N/A", label: "N/A" }] },
     ],
   },
   {
@@ -468,15 +502,25 @@ STAFF.push(
 // Shown under a "Partners" group in the catalog dropdown. AI-assisted
 // drafting for bespoke clauses; structure + JBJ prefill + stamp locked.
 // ─────────────────────────────────────────────────────────────────────
+const PARTNER_PARTY_A_FIELDS: DocumentField[] = [
+  { key: "partyAEstablishment", label: "Party A — Company / Entity", type: "text", placeholder: "JBJ GLOBAL REAL ESTATE L.L.C S.O.C", group: "Party A" },
+  { key: "partyAAddress", label: "Party A — Address", type: "text", placeholder: "Office SM1-195, Port Saeed, Deira, Dubai, UAE", group: "Party A" },
+  { key: "partyAPhone", label: "Party A — Phone", type: "text", placeholder: "+971 54 716 7107", group: "Party A" },
+  { key: "partyAEmail", label: "Party A — Email", type: "text", placeholder: "contact@jbj.ae", group: "Party A" },
+  { key: "partyALicence", label: "Party A — Licence / ORN", type: "text", placeholder: "Trade Licence 1591031 · ORN 41486", group: "Party A" },
+  { key: "partyASignatory", label: "Party A — Authorised Signatory", type: "text", placeholder: "Jane Bou Jaoude", group: "Party A" },
+  { key: "partyASignatoryTitle", label: "Party A — Signatory Title", type: "text", placeholder: "Founder & CEO", group: "Party A" },
+];
+
 const PARTNER_PARTY_B_FIELDS: DocumentField[] = [
-  { key: "partnerName", label: "Partner — Full Name", type: "text", required: true, placeholder: "Authorised signatory / individual" },
-  { key: "partnerCompany", label: "Partner — Company / Entity", type: "text", placeholder: "Legal entity name" },
-  { key: "partnerLicence", label: "Partner — Jurisdiction / Licence #", type: "text", placeholder: "e.g., Dubai DED, RERA ORN, foreign" },
-  { key: "partnerPhone", label: "Partner — Phone", type: "text" },
-  { key: "partnerEmail", label: "Partner — Email", type: "text" },
-  { key: "partnerAddress", label: "Partner — Address", type: "text" },
-  { key: "partnerSignatory", label: "Partner — Authorised Signatory", type: "text", placeholder: "If different from above" },
-  { key: "partnerSignatoryTitle", label: "Signatory Title", type: "text", placeholder: "e.g., Managing Director" },
+  { key: "partnerName", label: "Party B — Full Name", type: "text", required: true, placeholder: "Authorised signatory / individual", group: "Party B" },
+  { key: "partnerCompany", label: "Party B — Company / Entity", type: "text", placeholder: "Legal entity name", group: "Party B" },
+  { key: "partnerLicence", label: "Party B — Jurisdiction / Licence #", type: "text", placeholder: "e.g., Dubai DED, RERA ORN, foreign", group: "Party B" },
+  { key: "partnerPhone", label: "Party B — Phone", type: "text", group: "Party B" },
+  { key: "partnerEmail", label: "Party B — Email", type: "text", group: "Party B" },
+  { key: "partnerAddress", label: "Party B — Address", type: "text", group: "Party B" },
+  { key: "partnerSignatory", label: "Party B — Authorised Signatory", type: "text", placeholder: "If different from above", group: "Party B" },
+  { key: "partnerSignatoryTitle", label: "Party B — Signatory Title", type: "text", placeholder: "e.g., Managing Director", group: "Party B" },
 ];
 
 STAFF.push(
@@ -491,6 +535,7 @@ STAFF.push(
     aiInstructions:
       "Draft a 1–2 sentence cover paragraph only. The clauses, commercial terms and signature block are auto-rendered.",
     fields: [
+      ...PARTNER_PARTY_A_FIELDS,
       ...PARTNER_PARTY_B_FIELDS,
       { key: "referralFee", label: "Referral Fee", type: "text", required: true, placeholder: "25% of net commission" },
       { key: "scope", label: "Scope / Geography", type: "text", placeholder: "UAE-wide · Resale · Off-plan" },
@@ -509,6 +554,7 @@ STAFF.push(
     aiInstructions:
       "Draft a 1–2 sentence cover paragraph only. The brand-usage clauses, lead-share split and signatures are auto-rendered.",
     fields: [
+      ...PARTNER_PARTY_A_FIELDS,
       ...PARTNER_PARTY_B_FIELDS,
       { key: "scope", label: "Campaign Scope", type: "textarea", placeholder: "e.g., Q2 luxury Palm campaign, joint webinar series…" },
       { key: "channels", label: "Channels", type: "text", placeholder: "Instagram, LinkedIn, email, events" },
@@ -528,6 +574,7 @@ STAFF.push(
     aiInstructions:
       "Draft a 1–2 sentence cover paragraph only. Profit-share, capital protection, reporting and exit clauses are auto-rendered.",
     fields: [
+      ...PARTNER_PARTY_A_FIELDS,
       ...PARTNER_PARTY_B_FIELDS,
       { key: "projectName", label: "Project / Vehicle", type: "text", required: true },
       { key: "capitalAmount", label: "Capital Contribution (AED)", type: "text", required: true },
@@ -549,6 +596,7 @@ STAFF.push(
     aiInstructions:
       "Draft a 1–2 sentence cover paragraph only. Reciprocity, white-label, non-circumvention and split clauses are auto-rendered.",
     fields: [
+      ...PARTNER_PARTY_A_FIELDS,
       ...PARTNER_PARTY_B_FIELDS,
       { key: "territoryA", label: "Party A Territory (JBJ)", type: "text", placeholder: "United Arab Emirates" },
       { key: "territoryB", label: "Party B Territory", type: "text", required: true, placeholder: "e.g., KSA · UK · India" },
@@ -573,6 +621,7 @@ STAFF.push(
     aiInstructions:
       "Draft the bespoke partnership clauses ONLY based on the user's brief. Do NOT restate parties, header, or signatures — those are auto-rendered. Use numbered clauses, UAE governing law, clear obligations.",
     fields: [
+      ...PARTNER_PARTY_A_FIELDS,
       ...PARTNER_PARTY_B_FIELDS,
       { key: "customTitle", label: "Agreement Title", type: "text", placeholder: "e.g., Joint Venture · Service Partnership" },
       { key: "customSubtitle", label: "Subtitle", type: "text", placeholder: "e.g., Bespoke commercial collaboration" },
