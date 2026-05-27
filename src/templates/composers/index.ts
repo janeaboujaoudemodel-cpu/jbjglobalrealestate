@@ -86,7 +86,7 @@ export function termsTable(rows: Array<[string, string | undefined]>): string {
     )
     .join("");
   return `
-    <table style="border-collapse:collapse;width:100%;margin:14px 0 18px;font-family:Inter,system-ui,sans-serif;">
+    <table data-pdf-section="terms" style="border-collapse:collapse;width:100%;margin:14px 0 18px;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
       <thead>
         <tr>
           <th colspan="2" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
@@ -96,6 +96,7 @@ export function termsTable(rows: Array<[string, string | undefined]>): string {
       </thead>
       <tbody>${body}</tbody>
     </table>`;
+
 }
 
 export function commissionTable(rows: CommissionRow[]): string {
@@ -114,7 +115,7 @@ export function commissionTable(rows: CommissionRow[]): string {
     )
     .join("");
   return `
-    <table style="border-collapse:collapse;width:100%;margin:6px 0 8px;font-family:Inter,system-ui,sans-serif;">
+    <table data-pdf-section="commission" style="border-collapse:collapse;width:100%;margin:6px 0 8px;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
       <thead>
         <tr>
           <th colspan="3" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
@@ -129,9 +130,10 @@ export function commissionTable(rows: CommissionRow[]): string {
       </thead>
       <tbody>${body}</tbody>
     </table>
-    <div style="font-size:10.5px;color:${MUTED};margin:0 0 18px;font-style:italic;">
+    <div data-pdf-section="commission-note" style="font-size:10.5px;color:${MUTED};margin:0 0 18px;font-style:italic;page-break-inside:avoid;break-inside:avoid;">
       Commissions are released once the brokerage has actually received the cleared funds from the buyer or developer.
     </div>`;
+
 }
 
 export function signatureBlock(opts: {
@@ -198,7 +200,7 @@ export function signatureBlock(opts: {
   }
 
   return `
-    <div data-signature-block="1" style="margin-top:36px;page-break-inside:avoid;">
+    <div data-signature-block="1" data-pdf-section="signature" style="margin-top:36px;page-break-inside:avoid;break-inside:avoid;">
       <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
         <tbody>
           <tr>
@@ -463,7 +465,7 @@ function composeHolidayHome(input: ComposerInput): string {
   };
 
   const quotation = `
-    <table style="border-collapse:collapse;width:100%;margin:6px 0 18px;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;">
+    <table data-pdf-section="quotation" style="border-collapse:collapse;width:100%;margin:6px 0 18px;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
       <thead>
         <tr>
           <th colspan="5" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
@@ -528,29 +530,30 @@ function composeHolidayHome(input: ComposerInput): string {
   // Pre-filled premium T&Cs — NON-refundable, JBJ liability fully waived,
   // strengthened damage / overstay / guest-conduct / policy-adherence clauses.
   const terms = `
-    <div style="margin:18px 0 8px;page-break-inside:avoid;">
-      <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;">
+    <div style="margin:18px 0 8px;">
+      <div data-pdf-section="terms-heading" style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;page-break-after:avoid;break-after:avoid;">
         Terms &amp; Conditions — Guest Declaration
       </div>
       <ol style="margin:0;padding-left:20px;font-size:11.5px;line-height:1.7;color:${INK};">
-        <li style="margin-bottom:6px;"><strong>Non-Refundable Booking.</strong> The Guest acknowledges that the total amount paid above is <strong>strictly non-refundable</strong> under any circumstances, including but not limited to cancellation, no-show, early check-out, travel disruption, visa issues, illness, change of plans or force-majeure events. The unit has been reserved and removed from public availability solely for the Guest.</li>
-        <li style="margin-bottom:6px;"><strong>No Refund · No Credit.</strong> No partial refund, monetary credit, date change, transfer, or substitution will be issued once payment is received. The Guest expressly waives any right to claim a refund.</li>
-        <li style="margin-bottom:6px;"><strong>Full Release of Liability.</strong> The Guest hereby <strong>fully releases, indemnifies and holds harmless JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>, its owners, officers, employees, agents and affiliates from any and all liability, claims, damages, losses, theft, personal injury, property damage, illness, or any consequential loss arising before, during or after the stay. JBJ GLOBAL REAL ESTATE acts solely as a booking facilitator and assumes <strong>no responsibility</strong> for the condition, suitability, services, utilities, neighbours, building management, or any incident occurring on the premises.</li>
-        <li style="margin-bottom:6px;"><strong>Damage &amp; Property Condition.</strong> The Guest is <strong>fully liable for the full cost of repair or replacement</strong> of any damage, breakage, loss or theft affecting the unit, furniture, appliances, fixtures, finishes or common areas — whether caused by the Guest, their co-occupants, their visitors, or any person admitted by the Guest. Damages are charged at full market / replacement cost <strong>plus a 15% handling fee</strong>, deducted from the security deposit and, where insufficient, invoiced separately and payable within seven (7) days.</li>
-        <li style="margin-bottom:6px;"><strong>Overstay &amp; Unauthorised Occupation.</strong> If the Guest fails to vacate at the agreed check-out time without prior written extension, the Guest shall pay (i) <strong>AED 1,500 per day or 2× the nightly rate, whichever is higher</strong>, as liquidated damages, and (ii) all legal, eviction, locksmith and enforcement costs. The Guest <strong>expressly consents to JBJ initiating eviction, police and Dubai Courts proceedings</strong>, and acknowledges that overstaying constitutes unlawful occupation under UAE law.</li>
-        <li style="margin-bottom:6px;"><strong>Conduct of Guests &amp; Visitors.</strong> The Guest is <strong>fully responsible for the conduct, safety and compliance of every co-occupant and visitor</strong> admitted to the property, and indemnifies JBJ against any claim arising from their actions. Maximum occupancy stated above may not be exceeded; subletting, re-listing or commercial use is strictly prohibited.</li>
-        <li style="margin-bottom:6px;"><strong>House Rules &amp; Policy Adherence.</strong> The Guest agrees to <strong>read, respect and abide by all house rules, building by-laws, community regulations and UAE laws</strong> at all times. No parties, no events, no smoking indoors, no unregistered guests, no pets unless explicitly approved in writing. Quiet hours 10:00 PM – 8:00 AM. Violations result in immediate eviction with no refund and full liability for any resulting damages.</li>
-        <li style="margin-bottom:6px;"><strong>Check-in / Check-out.</strong> Check-in 3:00 PM · Check-out 12:00 PM. Late check-out is charged at one (1) additional night. Keys must be returned in person or via the secure key-box. Lost keys / access cards are charged at cost.</li>
-        <li style="margin-bottom:6px;"><strong>Security Deposit.</strong> A refundable security deposit (where collected) is returned within fourteen (14) days post check-out subject to inspection and deduction of any damages, missing items, cleaning fees or unpaid charges.</li>
-        <li style="margin-bottom:6px;"><strong>Governing Law.</strong> This Agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai. Any dispute is subject to the exclusive jurisdiction of Dubai Courts.</li>
-        <li style="margin-bottom:6px;"><strong>Acknowledgement.</strong> By signing below, the Guest confirms they have <strong>read, understood and accepted</strong> all terms above, and that payment has been made <strong>voluntarily and irrevocably</strong>.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Non-Refundable Booking.</strong> The Guest acknowledges that the total amount paid above is <strong>strictly non-refundable</strong> under any circumstances, including but not limited to cancellation, no-show, early check-out, travel disruption, visa issues, illness, change of plans or force-majeure events. The unit has been reserved and removed from public availability solely for the Guest.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>No Refund · No Credit.</strong> No partial refund, monetary credit, date change, transfer, or substitution will be issued once payment is received. The Guest expressly waives any right to claim a refund.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Full Release of Liability.</strong> The Guest hereby <strong>fully releases, indemnifies and holds harmless JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>, its owners, officers, employees, agents and affiliates from any and all liability, claims, damages, losses, theft, personal injury, property damage, illness, or any consequential loss arising before, during or after the stay. JBJ GLOBAL REAL ESTATE acts solely as a booking facilitator and assumes <strong>no responsibility</strong> for the condition, suitability, services, utilities, neighbours, building management, or any incident occurring on the premises.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Damage &amp; Property Condition.</strong> The Guest is <strong>fully liable for the full cost of repair or replacement</strong> of any damage, breakage, loss or theft affecting the unit, furniture, appliances, fixtures, finishes or common areas — whether caused by the Guest, their co-occupants, their visitors, or any person admitted by the Guest. Damages are charged at full market / replacement cost <strong>plus a 15% handling fee</strong>, deducted from the security deposit and, where insufficient, invoiced separately and payable within seven (7) days.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Overstay &amp; Unauthorised Occupation.</strong> If the Guest fails to vacate at the agreed check-out time without prior written extension, the Guest shall pay (i) <strong>AED 1,500 per day or 2× the nightly rate, whichever is higher</strong>, as liquidated damages, and (ii) all legal, eviction, locksmith and enforcement costs. The Guest <strong>expressly consents to JBJ initiating eviction, police and Dubai Courts proceedings</strong>, and acknowledges that overstaying constitutes unlawful occupation under UAE law.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Conduct of Guests &amp; Visitors.</strong> The Guest is <strong>fully responsible for the conduct, safety and compliance of every co-occupant and visitor</strong> admitted to the property, and indemnifies JBJ against any claim arising from their actions. Maximum occupancy stated above may not be exceeded; subletting, re-listing or commercial use is strictly prohibited.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>House Rules &amp; Policy Adherence.</strong> The Guest agrees to <strong>read, respect and abide by all house rules, building by-laws, community regulations and UAE laws</strong> at all times. No parties, no events, no smoking indoors, no unregistered guests, no pets unless explicitly approved in writing. Quiet hours 10:00 PM – 8:00 AM. Violations result in immediate eviction with no refund and full liability for any resulting damages.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Check-in / Check-out.</strong> Check-in 3:00 PM · Check-out 12:00 PM. Late check-out is charged at one (1) additional night. Keys must be returned in person or via the secure key-box. Lost keys / access cards are charged at cost.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Security Deposit.</strong> A refundable security deposit (where collected) is returned within fourteen (14) days post check-out subject to inspection and deduction of any damages, missing items, cleaning fees or unpaid charges.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Governing Law.</strong> This Agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai. Any dispute is subject to the exclusive jurisdiction of Dubai Courts.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Acknowledgement.</strong> By signing below, the Guest confirms they have <strong>read, understood and accepted</strong> all terms above, and that payment has been made <strong>voluntarily and irrevocably</strong>.</li>
       </ol>
     </div>`;
+
 
   // Final guest acknowledgement — name synced live from the left-rail input.
   const guestLegalName = esc((f.recipientName || "").trim() || "[Guest Full Name]");
   const acknowledgement = `
-    <div style="margin:18px 0 6px;padding:14px 16px;border:1px solid ${GOLD};background:${CHAMPAGNE};page-break-inside:avoid;">
+    <div data-pdf-section="acknowledgement" style="margin:18px 0 6px;padding:14px 16px;border:1px solid ${GOLD};background:${CHAMPAGNE};page-break-inside:avoid;break-inside:avoid;">
       <p style="margin:0;font-size:12px;line-height:1.7;color:${INK};">
         I, <strong>${guestLegalName}</strong>, hereby agree to all the terms and conditions provided by
         <strong>JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>. I confirm that I have fully read and understood
@@ -604,7 +607,7 @@ function composeFacilityManagement(input: ComposerInput): string {
   ];
 
   const scope = (f.scope || "").trim()
-    ? `<div style="margin:14px 0 8px;">
+    ? `<div data-pdf-section="scope" style="margin:14px 0 8px;page-break-inside:avoid;break-inside:avoid;">
          <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;">Scope of Services</div>
          <p style="margin:0;font-size:12px;line-height:1.65;color:${INK};">${esc(f.scope)}</p>
        </div>`
@@ -612,21 +615,23 @@ function composeFacilityManagement(input: ComposerInput): string {
 
   const standardTerms = `
     <div style="margin:18px 0 8px;">
-      <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;">
+      <div data-pdf-section="std-terms-heading" style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;page-break-after:avoid;break-after:avoid;">
         Standard Terms
       </div>
       <ol style="margin:0;padding-left:20px;font-size:11.5px;line-height:1.7;color:${INK};">
-        <li style="margin-bottom:6px;"><strong>Appointment.</strong> The Client appoints JBJ GLOBAL REAL ESTATE L.L.C — S.O.C as the exclusive facility manager of the Property for the term stated above.</li>
-        <li style="margin-bottom:6px;"><strong>Services.</strong> Services are delivered as per the Scope above, in accordance with industry best practices and UAE regulations.</li>
-        <li style="margin-bottom:6px;"><strong>Fees &amp; Payment.</strong> The monthly management fee is due in advance per the Payment Terms. Late payments accrue 2% per month. Out-of-scope works are quoted separately and require written approval before commencement.</li>
-        <li style="margin-bottom:6px;"><strong>Vendor Coordination.</strong> JBJ coordinates third-party vendors (cleaning, MEP, security) on the Client's behalf. The Client remains responsible for vendor fees at cost plus any agreed management margin.</li>
-        <li style="margin-bottom:6px;"><strong>Reporting.</strong> Monthly performance reports including financials, maintenance tickets and SLA compliance are issued within seven (7) business days of month-end.</li>
-        <li style="margin-bottom:6px;"><strong>Liability.</strong> JBJ's aggregate liability is capped at three (3) months' management fees. JBJ is not liable for force-majeure events, pre-existing defects, or acts of third-party vendors beyond reasonable supervision.</li>
-        <li style="margin-bottom:6px;"><strong>Term &amp; Termination.</strong> Either party may terminate with sixty (60) days' written notice. Outstanding fees and reimbursables remain payable upon termination.</li>
-        <li style="margin-bottom:6px;"><strong>Confidentiality.</strong> Both parties maintain strict confidentiality of commercial and tenant information shared during the engagement.</li>
-        <li style="margin-bottom:6px;"><strong>Governing Law.</strong> This Agreement is governed by the laws of the UAE and the Emirate of Dubai. Disputes fall under the exclusive jurisdiction of Dubai Courts.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Appointment.</strong> The Client appoints JBJ GLOBAL REAL ESTATE L.L.C — S.O.C as the exclusive facility manager of the Property for the term stated above.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Services.</strong> Services are delivered as per the Scope above, in accordance with industry best practices and UAE regulations.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Fees &amp; Payment.</strong> The monthly management fee is due in advance per the Payment Terms. Late payments accrue 2% per month. Out-of-scope works are quoted separately and require written approval before commencement.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Vendor Coordination.</strong> JBJ coordinates third-party vendors (cleaning, MEP, security) on the Client's behalf. The Client remains responsible for vendor fees at cost plus any agreed management margin.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Reporting.</strong> Monthly performance reports including financials, maintenance tickets and SLA compliance are issued within seven (7) business days of month-end.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Liability.</strong> JBJ's aggregate liability is capped at three (3) months' management fees. JBJ is not liable for force-majeure events, pre-existing defects, or acts of third-party vendors beyond reasonable supervision.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Term &amp; Termination.</strong> Either party may terminate with sixty (60) days' written notice. Outstanding fees and reimbursables remain payable upon termination.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Confidentiality.</strong> Both parties maintain strict confidentiality of commercial and tenant information shared during the engagement.</li>
+        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Governing Law.</strong> This Agreement is governed by the laws of the UAE and the Emirate of Dubai. Disputes fall under the exclusive jurisdiction of Dubai Courts.</li>
       </ol>
     </div>`;
+
+
 
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
