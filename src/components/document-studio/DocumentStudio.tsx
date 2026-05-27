@@ -779,23 +779,6 @@ function StudioShell({
               </SelectContent>
             </Select>
           </div>
-          <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 border border-[#B89555]/30 bg-[#F7F2EA] rounded-md pl-2 pr-1 py-0.5">
-            <span className="uppercase tracking-[0.14em]">Pages</span>
-            <Select
-              value={String(pages)}
-              onValueChange={(v) => setPages(v === "auto" ? "auto" : Number(v))}
-            >
-              <SelectTrigger className="h-6 w-[72px] border-0 bg-transparent px-1.5 text-[12px] font-semibold text-[#1A1A1A] focus:ring-0 focus:ring-offset-0 shadow-none">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="z-[2147483647]">
-                <SelectItem value="auto">Auto</SelectItem>
-                <SelectItem value="1">1</SelectItem>
-                <SelectItem value="2">2</SelectItem>
-                <SelectItem value="3">3</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
           <Button variant="outline" size="sm" onClick={() => setAssetDialog("signature")} title="Signature">
             <PenLine className="w-4 h-4 lg:mr-1.5" />
             <span className="hidden lg:inline">Signature</span>
