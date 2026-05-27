@@ -200,7 +200,7 @@ export function signatureBlock(opts: {
   }
 
   return `
-    <div data-signature-block="1" style="margin-top:36px;page-break-inside:avoid;">
+    <div data-signature-block="1" data-pdf-section="signature" style="margin-top:36px;page-break-inside:avoid;break-inside:avoid;">
       <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
         <tbody>
           <tr>
