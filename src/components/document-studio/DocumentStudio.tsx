@@ -246,24 +246,24 @@ function StudioShell({
         });
 
         const bodyTop = body.getBoundingClientRect().top;
-        const boundarySelector = [
-          "[data-pdf-section]",
-          "[data-signature-block]",
-          "p",
-          "li",
-          "table",
-          "h1",
-          "h2",
-          "h3",
-        ].join(",");
-        const boundaries = Array.from(body.querySelectorAll<HTMLElement>(boundarySelector))
-          .map((el) => {
-            const r = el.getBoundingClientRect();
-            return Math.round(r.bottom - bodyTop);
-          })
+        // Atomic blocks: never break inside these — only their outer bottom is a candidate.
+        const atomicSelector = "[data-pdf-section],[data-signature-block]";
+        const atomicEls = Array.from(body.querySelectorAll<HTMLElement>(atomicSelector));
+        const atomicRanges = atomicEls.map((el) => {
+          const r = el.getBoundingClientRect();
+          return { top: Math.round(r.top - bodyTop), bottom: Math.round(r.bottom - bodyTop) };
+        });
+        const insideAtomic = (y: number) =>
+          atomicRanges.some((rg) => y > rg.top + 2 && y < rg.bottom - 2);
+
+        const childBoundaries = Array.from(body.querySelectorAll<HTMLElement>("p,li,table,h1,h2,h3"))
+          .map((el) => Math.round(el.getBoundingClientRect().bottom - bodyTop))
+          .filter((y) => !insideAtomic(y));
+        const atomicBoundaries = atomicRanges.map((rg) => rg.bottom);
+        const all = [...childBoundaries, ...atomicBoundaries]
           .filter((y) => y > SAFE_GUTTER && y < nextSheetH - SAFE_GUTTER)
           .sort((a, b) => a - b);
-        const unique = boundaries.filter((y, index, arr) => index === 0 || Math.abs(y - arr[index - 1]) > 4);
+        const unique = all.filter((y, index, arr) => index === 0 || Math.abs(y - arr[index - 1]) > 4);
         setSmartBreaks(unique);
       });
     };
