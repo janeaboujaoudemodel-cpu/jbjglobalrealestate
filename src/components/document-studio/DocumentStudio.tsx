@@ -1961,7 +1961,9 @@ function StudioShell({
                 // letterhead, date, or body content.
                 const DOCUSIGN_TOP_RESERVE = 42;
                 const FIRST_TOP = 46;
-                const NEXT_TOP = 54 + DOCUSIGN_TOP_RESERVE;
+                // GLOBAL: equal interior top/bottom on inner pages. Safe band
+                // and footer reserve are handled separately.
+                const NEXT_TOP = 54;
                 const STANDARD_BOTTOM_PAD = 54;
                 const LAST_BOTTOM_PAD = 24;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
