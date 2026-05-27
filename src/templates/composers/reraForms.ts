@@ -264,7 +264,7 @@ export function composeFormF(input: ComposerInput): string {
     }),
   ].join("");
 
-  return pageOne + pageTwo;
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM I — Agent-to-Agent Agreement (RERA 4-part) ─────────────
@@ -490,7 +490,7 @@ export function composeFormU(input: ComposerInput): string {
     }),
   ].join("");
 
-  return pageOne + pageTwo;
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── Broker-to-Broker Referral (NOT a RERA form) ───────────── */
@@ -538,5 +538,5 @@ export function composeBrokerReferral(input: ComposerInput): string {
     }),
   ].join("");
 
-  return pageOne + pageTwo;
+  return page(1, pageOne) + page(2, pageTwo);
 }
