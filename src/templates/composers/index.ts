@@ -515,37 +515,71 @@ function composeHolidayHome(input: ComposerInput): string {
     </table>`;
 
   const guestName = esc(f.recipientName || "Valued Guest");
-  const greeting = `
-    <div style="margin:8px 0 16px;font-size:12.5px;color:${INK};line-height:1.7;">
-      <p style="margin:0 0 10px;">Dear ${guestName},</p>
-      <p style="margin:0 0 10px;"><strong>Greetings from JBJ GLOBAL REAL ESTATE.</strong> Thank you for choosing our residence for your stay — it is our privilege to host you.</p>
-      <p style="margin:0 0 10px;">We sincerely hope you enjoy your time with us. Please find your full booking details, itemised quotation and the binding terms of your reservation below.</p>
+  const idType = esc(f.idType || "Emirates ID Holder");
+  const idNumber = esc(f.idNumber || "784-XXXX-XXXXXXX-X");
+  const nationality = esc(f.nationality || "—");
+  const bookingDateStr = formatHumanDate(f.bookingDate) || formatHumanDate(new Date().toISOString()) || "—";
+
+  const welcome = `
+    <div style="margin:6px 0 18px;font-size:13px;color:${INK};line-height:1.75;">
+      <p style="margin:0 0 12px;font-size:14px;"><strong>Dear ${guestName},</strong></p>
+      <p style="margin:0 0 12px;">It is our distinct privilege to welcome you to <strong>JBJ GLOBAL REAL ESTATE</strong>. We are deeply honoured by your trust in selecting our residence for your stay, and we are committed to ensuring that every detail of your experience reflects the discreet excellence our guests expect.</p>
+      <p style="margin:0;">Kindly find below the full particulars of your reservation, including your guest profile, itemised quotation, and the binding terms governing your stay. Should you require any assistance, our team remains at your service throughout your visit.</p>
     </div>`;
 
-  const summaryHeading = `
-    <div style="margin:14px 0 6px;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;">
-      Booking Details
+  const guestCard = `
+    <div data-pdf-section="guest-card" style="margin:6px 0 14px;border:1px solid ${GOLD};background:${CHAMPAGNE};">
+      <div style="padding:10px 14px;border-bottom:1px solid ${GOLD}66;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;">
+        Guest &amp; Booking Profile
+      </div>
+      <table style="border-collapse:collapse;width:100%;font-family:Inter,system-ui,sans-serif;">
+        <tbody>
+          ${[
+            ["Booking ID", bookingId],
+            ["Guest Full Name", f.recipientName || "—"],
+            ["ID Type", idType],
+            ["ID Number", idNumber],
+            ["Nationality", nationality],
+            ["Phone / WhatsApp", f.guestPhone || "—"],
+            ["Date of Booking", bookingDateStr],
+            ["Property / Unit", [f.propertyName, f.roomType].filter(Boolean).join(" — ") || "—"],
+            ["Check-in", checkIn || "—"],
+            ["Check-out", checkOut || "—"],
+            ["Nights", nights ? String(nights) : "—"],
+            ["Guests", f.guestsCount || "—"],
+          ]
+            .map(
+              ([k, v], i) => `
+            <tr style="background:${i % 2 ? "#FDFBF7" : "transparent"};">
+              <td style="padding:7px 14px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};opacity:.7;width:38%;">${esc(k as string)}</td>
+              <td style="padding:7px 14px;font-size:12.5px;color:${INK};font-weight:600;">${esc(v as string)}</td>
+            </tr>`,
+            )
+            .join("")}
+        </tbody>
+      </table>
     </div>`;
 
   // Pre-filled premium T&Cs — NON-refundable, JBJ liability fully waived,
   // strengthened damage / overstay / guest-conduct / policy-adherence clauses.
+  // Tightened spacing so all 11 clauses fit one A4 page.
   const terms = `
-    <div style="margin:18px 0 8px;">
-      <div data-pdf-section="terms-heading" style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;page-break-after:avoid;break-after:avoid;">
+    <div style="margin:0;">
+      <div data-pdf-section="terms-heading" style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;">
         Terms &amp; Conditions — Guest Declaration
       </div>
-      <ol style="margin:0;padding-left:20px;font-size:11.5px;line-height:1.7;color:${INK};">
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Non-Refundable Booking.</strong> The Guest acknowledges that the total amount paid above is <strong>strictly non-refundable</strong> under any circumstances, including but not limited to cancellation, no-show, early check-out, travel disruption, visa issues, illness, change of plans or force-majeure events. The unit has been reserved and removed from public availability solely for the Guest.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>No Refund · No Credit.</strong> No partial refund, monetary credit, date change, transfer, or substitution will be issued once payment is received. The Guest expressly waives any right to claim a refund.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Full Release of Liability.</strong> The Guest hereby <strong>fully releases, indemnifies and holds harmless JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>, its owners, officers, employees, agents and affiliates from any and all liability, claims, damages, losses, theft, personal injury, property damage, illness, or any consequential loss arising before, during or after the stay. JBJ GLOBAL REAL ESTATE acts solely as a booking facilitator and assumes <strong>no responsibility</strong> for the condition, suitability, services, utilities, neighbours, building management, or any incident occurring on the premises.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Damage &amp; Property Condition.</strong> The Guest is <strong>fully liable for the full cost of repair or replacement</strong> of any damage, breakage, loss or theft affecting the unit, furniture, appliances, fixtures, finishes or common areas — whether caused by the Guest, their co-occupants, their visitors, or any person admitted by the Guest. Damages are charged at full market / replacement cost <strong>plus a 15% handling fee</strong>, deducted from the security deposit and, where insufficient, invoiced separately and payable within seven (7) days.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Overstay &amp; Unauthorised Occupation.</strong> If the Guest fails to vacate at the agreed check-out time without prior written extension, the Guest shall pay (i) <strong>AED 1,500 per day or 2× the nightly rate, whichever is higher</strong>, as liquidated damages, and (ii) all legal, eviction, locksmith and enforcement costs. The Guest <strong>expressly consents to JBJ initiating eviction, police and Dubai Courts proceedings</strong>, and acknowledges that overstaying constitutes unlawful occupation under UAE law.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Conduct of Guests &amp; Visitors.</strong> The Guest is <strong>fully responsible for the conduct, safety and compliance of every co-occupant and visitor</strong> admitted to the property, and indemnifies JBJ against any claim arising from their actions. Maximum occupancy stated above may not be exceeded; subletting, re-listing or commercial use is strictly prohibited.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>House Rules &amp; Policy Adherence.</strong> The Guest agrees to <strong>read, respect and abide by all house rules, building by-laws, community regulations and UAE laws</strong> at all times. No parties, no events, no smoking indoors, no unregistered guests, no pets unless explicitly approved in writing. Quiet hours 10:00 PM – 8:00 AM. Violations result in immediate eviction with no refund and full liability for any resulting damages.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Check-in / Check-out.</strong> Check-in 3:00 PM · Check-out 12:00 PM. Late check-out is charged at one (1) additional night. Keys must be returned in person or via the secure key-box. Lost keys / access cards are charged at cost.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Security Deposit.</strong> A refundable security deposit (where collected) is returned within fourteen (14) days post check-out subject to inspection and deduction of any damages, missing items, cleaning fees or unpaid charges.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Governing Law.</strong> This Agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai. Any dispute is subject to the exclusive jurisdiction of Dubai Courts.</li>
-        <li data-pdf-section="term" style="margin-bottom:6px;page-break-inside:avoid;break-inside:avoid;"><strong>Acknowledgement.</strong> By signing below, the Guest confirms they have <strong>read, understood and accepted</strong> all terms above, and that payment has been made <strong>voluntarily and irrevocably</strong>.</li>
+      <ol style="margin:0;padding-left:20px;font-size:10.5px;line-height:1.5;color:${INK};">
+        <li style="margin-bottom:5px;"><strong>Non-Refundable Booking.</strong> The Guest acknowledges that the total amount paid above is <strong>strictly non-refundable</strong> under any circumstances, including but not limited to cancellation, no-show, early check-out, travel disruption, visa issues, illness, change of plans or force-majeure events. The unit has been reserved and removed from public availability solely for the Guest.</li>
+        <li style="margin-bottom:5px;"><strong>No Refund · No Credit.</strong> No partial refund, monetary credit, date change, transfer, or substitution will be issued once payment is received. The Guest expressly waives any right to claim a refund.</li>
+        <li style="margin-bottom:5px;"><strong>Full Release of Liability.</strong> The Guest hereby <strong>fully releases, indemnifies and holds harmless JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>, its owners, officers, employees, agents and affiliates from any and all liability, claims, damages, losses, theft, personal injury, property damage, illness, or any consequential loss arising before, during or after the stay. JBJ GLOBAL REAL ESTATE acts solely as a booking facilitator and assumes <strong>no responsibility</strong> for the condition, suitability, services, utilities, neighbours, building management, or any incident occurring on the premises.</li>
+        <li style="margin-bottom:5px;"><strong>Damage &amp; Property Condition.</strong> The Guest is <strong>fully liable for the full cost of repair or replacement</strong> of any damage, breakage, loss or theft affecting the unit, furniture, appliances, fixtures, finishes or common areas — whether caused by the Guest, their co-occupants, their visitors, or any person admitted by the Guest. Damages are charged at full market / replacement cost <strong>plus a 15% handling fee</strong>, deducted from the security deposit and, where insufficient, invoiced separately and payable within seven (7) days.</li>
+        <li style="margin-bottom:5px;"><strong>Overstay &amp; Unauthorised Occupation.</strong> If the Guest fails to vacate at the agreed check-out time without prior written extension, the Guest shall pay (i) <strong>AED 1,500 per day or 2× the nightly rate, whichever is higher</strong>, as liquidated damages, and (ii) all legal, eviction, locksmith and enforcement costs. The Guest <strong>expressly consents to JBJ initiating eviction, police and Dubai Courts proceedings</strong>, and acknowledges that overstaying constitutes unlawful occupation under UAE law.</li>
+        <li style="margin-bottom:5px;"><strong>Conduct of Guests &amp; Visitors.</strong> The Guest is <strong>fully responsible for the conduct, safety and compliance of every co-occupant and visitor</strong> admitted to the property, and indemnifies JBJ against any claim arising from their actions. Maximum occupancy stated above may not be exceeded; subletting, re-listing or commercial use is strictly prohibited.</li>
+        <li style="margin-bottom:5px;"><strong>House Rules &amp; Policy Adherence.</strong> The Guest agrees to <strong>read, respect and abide by all house rules, building by-laws, community regulations and UAE laws</strong> at all times. No parties, no events, no smoking indoors, no unregistered guests, no pets unless explicitly approved in writing. Quiet hours 10:00 PM – 8:00 AM. Violations result in immediate eviction with no refund and full liability for any resulting damages.</li>
+        <li style="margin-bottom:5px;"><strong>Check-in / Check-out.</strong> Check-in 3:00 PM · Check-out 12:00 PM. Late check-out is charged at one (1) additional night. Keys must be returned in person or via the secure key-box. Lost keys / access cards are charged at cost.</li>
+        <li style="margin-bottom:5px;"><strong>Security Deposit.</strong> A refundable security deposit (where collected) is returned within fourteen (14) days post check-out subject to inspection and deduction of any damages, missing items, cleaning fees or unpaid charges.</li>
+        <li style="margin-bottom:5px;"><strong>Governing Law.</strong> This Agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai. Any dispute is subject to the exclusive jurisdiction of Dubai Courts.</li>
+        <li style="margin-bottom:0;"><strong>Acknowledgement.</strong> By signing below, the Guest confirms they have <strong>read, understood and accepted</strong> all terms above, and that payment has been made <strong>voluntarily and irrevocably</strong>.</li>
       </ol>
     </div>`;
 
@@ -553,8 +587,9 @@ function composeHolidayHome(input: ComposerInput): string {
   // Final guest acknowledgement — name synced live from the left-rail input.
   const guestLegalName = esc((f.recipientName || "").trim() || "[Guest Full Name]");
   const acknowledgement = `
-    <div data-pdf-section="acknowledgement" style="margin:18px 0 6px;padding:14px 16px;border:1px solid ${GOLD};background:${CHAMPAGNE};page-break-inside:avoid;break-inside:avoid;">
-      <p style="margin:0;font-size:12px;line-height:1.7;color:${INK};">
+    <div data-pdf-section="acknowledgement" style="margin:0 0 22px;padding:18px 22px;border:1px solid ${GOLD};background:${CHAMPAGNE};">
+      <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;margin-bottom:10px;">Disclaimer &amp; Guest Declaration</div>
+      <p style="margin:0;font-size:12.5px;line-height:1.75;color:${INK};">
         I, <strong>${guestLegalName}</strong>, hereby agree to all the terms and conditions provided by
         <strong>JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>. I confirm that I have fully read and understood
         every clause above, that I am <strong>solely responsible</strong> for reading and understanding them,
@@ -562,26 +597,40 @@ function composeHolidayHome(input: ComposerInput): string {
       </p>
     </div>`;
 
-  return [
-    input.hideLetterDate ? "" : dateLine(input.letterDate),
-    subjectLine(`Holiday Home Booking Agreement — ${bookingId}`),
-    greeting,
-    summaryHeading,
-    termsTable(summaryRows),
-    quotation,
-    terms,
-    acknowledgement,
-    paragraphs(input.aiClosing),
-    signatureBlock({
-      ownerName: input.ownerName,
-      ownerTitle: input.ownerTitle,
-      ownerDate: input.ownerDate,
-      applicantName: f.recipientName,
-      applicantDate: input.applicantDate,
-      applicantLabel: "Client Signature",
-      extraSignatories: input.extraSignatories,
-    }),
-  ].join("");
+  const signature = signatureBlock({
+    ownerName: input.ownerName,
+    ownerTitle: input.ownerTitle,
+    ownerDate: input.ownerDate,
+    applicantName: f.recipientName,
+    applicantDate: input.applicantDate,
+    applicantLabel: "Client Signature",
+    extraSignatories: input.extraSignatories,
+  });
+
+  // ── Locked 3-page layout. Each [data-pdf-page] is rendered as its own A4
+  //    sheet by DocumentStudio — never split, never merged.
+  const page1 = `
+    <section data-pdf-page="1">
+      ${input.hideLetterDate ? "" : dateLine(input.letterDate)}
+      ${subjectLine(`Holiday Home Booking Agreement — ${bookingId}`)}
+      ${welcome}
+      ${guestCard}
+      ${quotation}
+    </section>`;
+
+  const page2 = `
+    <section data-pdf-page="2">
+      ${terms}
+    </section>`;
+
+  const page3 = `
+    <section data-pdf-page="3">
+      ${acknowledgement}
+      ${signature}
+      ${paragraphs(input.aiClosing)}
+    </section>`;
+
+  return [page1, page2, page3].join("");
 }
 
 
