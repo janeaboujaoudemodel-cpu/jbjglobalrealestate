@@ -57,6 +57,7 @@ import {
   type CustomField,
 } from "@/templates/composers";
 import { renderStandardBody } from "@/templates/composers/standardBody";
+import { useCrmDocuments, useSaveDocument } from "@/hooks/useCrmDocuments";
 
 interface Props {
   catalog: DocumentAudience;
