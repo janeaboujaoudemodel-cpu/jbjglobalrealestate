@@ -32,7 +32,7 @@ const PDFSuite = lazy(() => import("@/pages/toolkit/PDFSuite"));
 const PropertySuite = lazy(() => import("@/pages/toolkit/PropertySuite"));
 const CorporateSuite = lazy(() => import("@/pages/toolkit/CorporateSuite"));
 const BusinessCardDesigner = lazy(() => import("@/components/corporate-suite/BusinessCardDesigner"));
-const CVResumeBuilder = lazy(() => import("@/components/corporate-suite/CVResumeBuilder"));
+
 const CoverLetterGenerator = lazy(() => import("@/components/corporate-suite/CoverLetterGenerator"));
 const LandingPageBuilder = lazy(() => import("@/components/corporate-suite/LandingPageBuilder"));
 const LogoCreator = lazy(() => import("@/components/corporate-suite/LogoCreator"));
