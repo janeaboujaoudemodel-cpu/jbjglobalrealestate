@@ -210,7 +210,7 @@ export function composeFormF(input: ComposerInput): string {
     "This MoU is governed by the laws of the Emirate of Dubai and the United Arab Emirates, including UAE Federal Law No. 5 of 1985 (Civil Transactions) and Dubai Law No. 7 of 2006 (Real Estate Registration). Any dispute shall be referred to the competent Dubai Courts.",
   ];
 
-  return [
+  const pageOne = [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     headerBlock("Form F", "Memorandum of Understanding (Contract F)", "Sale Contract Between Buyer & Seller — Secondary Market"),
     section(1, "Parties"),
@@ -243,6 +243,9 @@ export function composeFormF(input: ComposerInput): string {
       ${field("Transfer / Completion Date", fmtDate(f.completionDate))}
       ${field("Mortgage (Yes / No)", f.mortgage)}
     </div>`,
+  ].join("");
+
+  const pageTwo = [
     section(4, "Terms & Conditions"),
     clauseList(clauses),
     paragraphs(input.aiClosing),
@@ -259,6 +262,8 @@ export function composeFormF(input: ComposerInput): string {
       ],
     }),
   ].join("");
+
+  return page(1, pageOne) + page(2, pageTwo);
 }
 
 /* ───────────── FORM I — Brokers Notification (Co-Broking A↔B) ───────────── */
