@@ -1592,7 +1592,7 @@ function StudioShell({
                   200,
                   PAGE_H - HEADER_H - FOOTER_H - BODY_PAD_TOP - BODY_PAD_BOTTOM,
                 );
-                const rawCount = Math.max(1, Math.ceil(measuredBodyH / contentPerPage) || 1);
+                const rawCount = Math.max(1, Math.ceil((sheetH - HEADER_H - FOOTER_H - BODY_PAD_TOP - BODY_PAD_BOTTOM) / contentPerPage) || 1);
                 const pageCount = Math.min(MAX_PAGES, rawCount);
                 // Sheet height grows in whole A4 multiples ONLY when needed.
                 const minH = PAGE_H * pageCount;
