@@ -78,6 +78,34 @@ interface Props {
 
 type Step = 1 | 2 | 3;
 const OWNER_TEST_EMAIL = "infoo.jane@gmail.com";
+const DOCUSIGN_TOP_RESERVE = 42;
+const PAGE_SIGNATURE_RESERVE = 112;
+const escapeSignatureHtml = (value?: string) =>
+  (value || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
+
+const renderPerPageUserSignature = (name?: string) => {
+  const legalName = escapeSignatureHtml((name || "").trim());
+  const legalNameUpper = legalName ? legalName.toUpperCase() : "";
+  return `
+    <div data-rendered-page-signature="1" style="margin-top:auto;padding:16px 8px 10px;display:flex;justify-content:flex-end;align-items:flex-end;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:238px;margin-right:28px;">
+        <div style="font-size:21px;color:#1A1A1A;font-weight:500;letter-spacing:.01em;font-family:'Dancing Script','Brush Script MT',cursive;line-height:1.1;min-height:24px;">${legalName || "&nbsp;"}</div>
+        <div style="width:100%;border-bottom:1px solid #1A1A1A;height:1px;"></div>
+        <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#1A1A1A;font-weight:600;padding-top:3px;text-align:center;max-width:100%;overflow-wrap:anywhere;">${legalNameUpper || "&nbsp;"}</div>
+      </div>
+    </div>
+    <div data-rendered-page-divider="1" style="border-top:1px solid rgba(184,149,85,.4);height:0;page-break-inside:avoid;break-inside:avoid;"></div>`;
+};
+
+const stripGeneratedPageArtifacts = (html: string): string => {
+  if (!html || typeof window === "undefined") return html;
+  const tpl = document.createElement("template");
+  tpl.innerHTML = html;
+  tpl.content
+    .querySelectorAll("[data-client-signature-strip],[data-page-divider],[data-rendered-page-signature],[data-rendered-page-divider]")
+    .forEach((el) => el.remove());
+  return tpl.innerHTML;
+};
 
 export default function DocumentStudio({ catalog, trigger, presetTemplateId }: Props) {
   const [open, setOpen] = useState(false);
@@ -326,23 +354,28 @@ function StudioShell({
         const footerH = chromeHeights.footer;
         // DocuSign auto-stamps the envelope ID in the top ~0.4in of every page.
         // Reserve a 42px safe band on every page so it never overlays content.
-        const DOCUSIGN_TOP_RESERVE = 42;
         const FIRST_TOP = 46;
         // GLOBAL RULE: inner pages must have EQUAL top/bottom interior padding
         // (the DocuSign safe band + footer reserve are fixed/locked, applied
         // separately). NEXT_TOP is the interior top padding only.
         const NEXT_TOP = 54;
         const BOTTOM_PAD = 54;
-        const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD);
-        const otherCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - NEXT_TOP - BOTTOM_PAD);
+        const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD - PAGE_SIGNATURE_RESERVE);
+        const otherCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - NEXT_TOP - BOTTOM_PAD - Math.max(PAGE_SIGNATURE_RESERVE, footerH));
 
         // Flatten: if composer wrapped content in <section data-pdf-page>,
         // unwrap those so we re-split based on real measured heights.
         const sourceChildren: HTMLElement[] = [];
         Array.from(b.children).forEach((child) => {
           const el = child as HTMLElement;
+          if (el.matches?.("[data-client-signature-strip],[data-page-divider],[data-rendered-page-signature],[data-rendered-page-divider]")) return;
           if (el.matches?.("[data-pdf-page]")) {
-            Array.from(el.children).forEach((g) => sourceChildren.push(g as HTMLElement));
+            Array.from(el.children).forEach((g) => {
+              const groupChild = g as HTMLElement;
+              if (!groupChild.matches?.("[data-client-signature-strip],[data-page-divider],[data-rendered-page-signature],[data-rendered-page-divider]")) {
+                sourceChildren.push(groupChild);
+              }
+            });
           } else {
             sourceChildren.push(el);
           }
