@@ -1,70 +1,58 @@
-What is happening now:
+# Fix Document Studio pagination + finish pending CV cleanup
 
-- **HR Inbox is currently inside:** `/owner/careers-portal?section=approvals`
-- It is not a visible top-level Careers Portal tab. It is mounted under **Approvals**, below the approval workflow, which is why you cannot find it easily.
-- The old CV URL is still wired in several places. Worse, it still redirects to `/owner/careers-portal?section=contracts&tpl=candidate_cv`, which is exactly what you asked not to happen.
-- `candidate_cv` was removed from the Document Studio catalog, but old saved/session state can still force Document Studio into an invalid template state. That is why the left vertical sidebar can look empty.
-- The current Document Studio page preview is still one tall canvas with visual page-break overlays. That is causing the broken/cropped “Page 2 / Page 3” feeling and can affect export.
+## 1. Root cause of "Page 10 of 20410"
 
-Plan to build/fix:
+In `src/components/document-studio/DocumentStudio.tsx`:
 
-1. **Make HR Inbox obvious**
-   - Add a separate **HR Inbox** tab in Careers Portal navigation.
-   - Keep the current HR Inbox component, but move access from hidden-inside-Approvals to its own section.
-   - Update HR Inbox item clicks so they do **not** open the removed `candidate_cv` contract template.
+- `pageRef` has `minHeight: PAGE_H * pageCount`.
+- `measuredPageH = pageRef.offsetHeight`.
+- `pageCount = ceil((measuredPageH - chrome) / contentPerPage)`.
 
-2. **Restore Document Studio career templates without touching the templates**
-   - Keep all existing staff templates in Document Studio exactly as they are.
-   - Add a safety guard: if Document Studio receives an invalid old template ID like `candidate_cv`, it resets to normal template selection instead of showing an empty sidebar.
-   - Clear/ignore stale saved session state that points to removed templates.
+This is a feedback loop: every time `pageCount` grows, `minHeight` grows, which makes `measuredPageH` grow, which grows `pageCount` again — runaway until it hits 20,410.
 
-3. **Remove the old CV URL from SEO and public discovery**
-   - Remove `/toolkit/corporate-suite/cv-resume` from sitemap/page sitemap/footer/navigation/AI Hub/corporate suite/tool lists.
-   - Add robots `Disallow` for the old URL so search engines stop discovering it.
-   - Keep only a hidden safety redirect or replace route behavior so old visitors are not sent into Document Studio contracts.
+## 2. Smart A4 pagination (replaces current formula)
 
-4. **Create a separate real CV Builder tool**
-   - Build a standalone CV Builder section/page, separate from Document Studio and Contracts.
-   - It will not use JBJ letterhead, JBJ footer, stamps, signatures, or contract send/sign flow.
-   - It will use a proper CV workflow: personal details, headline, summary, experience, education, skills, languages, certifications, portfolio links, achievements, references, upload/import area, add/delete/edit section items.
-   - The right side becomes **Live CV Editor / Preview**, not “document review”.
+- Add a dedicated `bodyRef` on the inner body wrapper (the `padding: 40px 56px` div) and measure ONLY its `scrollHeight` — never the outer page (no feedback loop).
+- Compute:
+  - `contentPerPage = PAGE_H - HEADER_H - FOOTER_H - BODY_PAD_TOP - BODY_PAD_BOTTOM` (keep generous bottom padding so nothing looks cropped).
+  - `pageCount = max(1, ceil(bodyScrollHeight / contentPerPage))`, hard-capped at 20 as a safety net so a measurement glitch can never explode again.
+- Smart break for stamp / signature / footer: before finalising `pageCount`, walk the floating marks (`marks.stamp`, `marks.signature`, locked footer band) and any element flagged `[data-pdf-keep-together]`. If a mark would straddle a page boundary, snap its Y to the next page's top (and bump `pageCount` only if it now overflows). The locked footer is always reserved at the bottom of the last page; if the last-page body would push into it, add one more A4.
+- Always start at 1 page. New A4 sheets only appear when content actually overflows.
 
-5. **Make the CV Builder visible on the frontend but controllable**
-   - Register the new CV Builder as the existing controllable tool ID `cv-resume` in the tools control panel.
-   - When visibility is **Public**, it appears on the frontend tools/home/AI Hub areas.
-   - When visibility is **Hidden**, it disappears from frontend discovery so you can hide it while testing.
+## 3. Visual page-break polish
 
-6. **Fix A4 rendering and export behavior**
-   - For Document Studio: remove the fake page-label overlay system from exported/visible pages and ensure one true A4 page appears unless content needs more pages.
-   - For CV Builder: render real A4 pages and create a new A4 page only when content overflows.
-   - Export PDF using section-aware pagination so content is not randomly cropped and every PDF page remains true A4.
+- Keep the sibling gap-band overlays so they're not captured in the PDF.
+- Cleaner styling: thinner band (12px), subtle hairline top/bottom, centred small chip `Page N / Total` in champagne tones.
+- Hide the "Page 1 of N" chip when `pageCount === 1`.
 
-7. **Clarify the PDF types in the UI text**
-   - Applicant CV export = clean personal CV, no JBJ branding.
-   - Internal recruiter dossier, if added later, would be a separate branded HR file for your team only — not the applicant’s CV.
+## 4. Clean up the 20,410 stale "pages"
 
-Files to update:
+There are no extra DB rows — the number is purely the computed `pageCount`. The fix above eliminates it. No data migration needed; reloading the Holiday Home contract after the fix will render the correct 2–3 A4 pages.
 
-- `src/pages/owner/CareersPortal.tsx`
-- `src/components/hr/HRInboxTab.tsx`
-- `src/components/document-studio/DocumentStudio.tsx`
-- `src/components/document-studio/export/exporters.ts`
-- `src/routes/ToolkitRoutes.tsx`
-- `src/pages/AIHub.tsx`
-- `src/pages/toolkit/CorporateSuite.tsx`
-- `src/pages/owner/AIToolsControlPanel.tsx`
-- `src/config/publicToolAccess.ts`
-- `src/pages/Sitemap.tsx`
-- `src/components/Footer.tsx`
-- `src/components/navigation/GlobalVerticalNav.tsx`
-- `scripts/generate-sitemap.ts`
-- `public/robots.txt`
-- plus a new standalone CV Builder component/page.
+I'll also clear any persisted `measuredPageH`-like values from `sessionStorage`/`localStorage` keys used by Document Studio at mount (defensive reset on this version bump).
 
-Expected result:
+## 5. Finish remaining CV cleanup
 
-- HR Inbox has its own clear place in Careers Portal.
-- Document Studio career templates show again and are not damaged by the removed CV template.
-- CV Builder becomes a separate proper tool, not a contract/document template.
-- The old CV URL is removed from SEO/public links.
-- A4 pages and PDF exports stop showing broken cropped third pages.
+- `DocumentStudio` safety guard: confirm `readSnapshot` already drops stale `candidate_cv` template IDs; add the same guard to URL `?tpl=` parsing so a bookmarked `?tpl=candidate_cv` cannot reintroduce the broken state, and toast "This template moved to CV Builder" + redirect to `/cv-builder`.
+- `scripts/generate-sitemap.ts`: add `/cv-builder` entry (weekly, 0.7); ensure no old `cv-resume` or `candidate_cv` paths are present (currently none — will keep it that way). Regenerate `public/sitemap.xml`.
+- `public/robots.txt`: keep existing `Disallow` for the old CV builder paths (already added previously).
+
+## 6. End-to-end QA pass
+
+I'll manually walk through in the preview:
+
+1. Open `/owner/careers-portal?section=contracts` → pick **Holiday Home Rental** → confirm preview shows correct page count (expected 2–3 A4), no "of 20410", stamp/signature/footer never split.
+2. Type extra paragraphs until overflow → confirm a 2nd A4 appears smoothly, bottom padding preserved, stamp jumps to next page intact.
+3. Export PDF → open the file, verify same page count, no clipped footer/stamp, A4 dimensions.
+4. Verify HR Inbox tab is visible at the top of Careers Portal.
+5. Visit `/cv-builder` directly → add experience/education/skills, live preview updates, export PDF (no JBJ branding).
+6. Visit legacy `/toolkit/corporate-suite/cv-resume` → confirms redirect to `/cv-builder`.
+7. Visit `/owner/careers-portal?section=contracts&tpl=candidate_cv` → confirms redirect/toast to `/cv-builder`, Document Studio sidebar stays intact (no empty state).
+8. Check `public/sitemap.xml` after `predev` regen → `/cv-builder` present, no old CV URLs.
+
+## Files to touch
+
+- `src/components/document-studio/DocumentStudio.tsx` (pagination rewrite + URL guard + storage reset)
+- `scripts/generate-sitemap.ts` (+ regenerated `public/sitemap.xml`)
+
+No backend / RLS / schema changes.
