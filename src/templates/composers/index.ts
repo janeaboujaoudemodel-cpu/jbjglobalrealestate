@@ -690,8 +690,8 @@ function composeHolidayHome(input: ComposerInput): string {
   // GLOBAL MULTI-PAGE SIGNATURE RULE: pages 1 & 2 carry a client-initials strip
   // at the bottom (Guest signs each non-final page). Authorised signatory +
   // stamp appear ONLY on page 3.
-  const initialsPage1 = clientInitialsStrip({ applicantName: f.recipientName, page: 1, totalPages: 3, label: "Guest Signature" });
-  const initialsPage2 = clientInitialsStrip({ applicantName: f.recipientName, page: 2, totalPages: 3, label: "Guest Signature" });
+  const initialsPage1 = clientInitialsStrip({ applicantName: f.recipientName, page: 1, totalPages: 3 });
+  const initialsPage2 = clientInitialsStrip({ applicantName: f.recipientName, page: 2, totalPages: 3 });
 
   const page1 = `
     <section data-pdf-page="1">
