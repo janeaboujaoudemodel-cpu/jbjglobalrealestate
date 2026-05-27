@@ -653,6 +653,95 @@ function composeFacilityManagement(input: ComposerInput): string {
   ].join("");
 }
 
+/* ───────────── Candidate CV (locked recruiting template) ───────────── */
+
+function composeCandidateCv(input: ComposerInput): string {
+  const f = input.fields;
+  const name = esc(f.candidateName || f.recipientName || "Candidate");
+  const position = esc(f.positionApplied || "");
+  const contactBits = [
+    f.email && `<a href="mailto:${esc(f.email)}" style="color:${INK};text-decoration:none;">${esc(f.email)}</a>`,
+    f.phoneE164 && esc(f.phoneE164),
+    f.location && esc(f.location),
+    f.nationality && esc(f.nationality),
+  ].filter(Boolean).join(' &nbsp;·&nbsp; ');
+
+  const header = `
+    <div data-pdf-section="cv-header" style="margin:0 0 18px;padding:0 0 14px;border-bottom:1px solid ${GOLD};page-break-inside:avoid;break-inside:avoid;">
+      <div style="font-size:22px;font-weight:700;color:${INK};letter-spacing:0.02em;line-height:1.15;">${name}</div>
+      ${position ? `<div style="margin-top:4px;font-size:12px;color:${MUTED};letter-spacing:0.16em;text-transform:uppercase;">Applied for · ${position}</div>` : ""}
+      ${contactBits ? `<div style="margin-top:10px;font-size:11.5px;color:${INK};line-height:1.55;">${contactBits}</div>` : ""}
+    </div>`;
+
+  const sectionHeading = (label: string) => `
+    <div style="font-size:10.5px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD}55;padding-bottom:4px;margin:0 0 8px;">${esc(label)}</div>`;
+
+  const summary = (f.aiSummary || input.aiIntro || "").trim()
+    ? `<div data-pdf-section="cv-summary" style="margin:0 0 18px;page-break-inside:avoid;break-inside:avoid;">
+         ${sectionHeading("Executive Summary")}
+         <p style="margin:0;font-size:12px;line-height:1.65;color:${INK};">${esc(f.aiSummary || input.aiIntro || "").replace(/\n/g, "<br/>")}</p>
+       </div>`
+    : "";
+
+  const meta: Array<[string, string | undefined]> = [
+    ["Years of Experience", f.experienceYears],
+    ["Languages", f.languages],
+  ];
+  const metaRows = meta.filter(([, v]) => (v || "").trim());
+  const facts = metaRows.length > 0
+    ? `<div data-pdf-section="cv-facts" style="margin:0 0 18px;page-break-inside:avoid;break-inside:avoid;">
+         ${sectionHeading("Snapshot")}
+         <table style="border-collapse:collapse;width:100%;font-family:Inter,system-ui,sans-serif;">
+           <tbody>${metaRows.map(([k, v], i) => `
+             <tr style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
+               <td style="padding:7px 12px;border:1px solid ${GOLD}33;font-weight:600;color:${INK};width:38%;font-size:11.5px;">${esc(k)}</td>
+               <td style="padding:7px 12px;border:1px solid ${GOLD}33;color:${INK};font-size:11.5px;">${esc(v!)}</td>
+             </tr>`).join("")}</tbody>
+         </table>
+       </div>`
+    : "";
+
+  const renderSkills = (raw?: string) => {
+    if (!raw || !raw.trim()) return "";
+    const items = raw.split(/[,\n]/).map(s => s.trim()).filter(Boolean);
+    if (!items.length) return "";
+    return `<div data-pdf-section="cv-skills" style="margin:0 0 18px;page-break-inside:avoid;break-inside:avoid;">
+      ${sectionHeading("Key Skills")}
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${items.map(s => `<span style="display:inline-block;padding:4px 10px;border:1px solid ${GOLD}66;border-radius:999px;font-size:11px;color:${INK};background:${CHAMPAGNE};">${esc(s)}</span>`).join("")}
+      </div>
+    </div>`;
+  };
+
+  const renderParagraphs = (label: string, raw?: string, anchor = "cv-experience") => {
+    if (!raw || !raw.trim()) return "";
+    const blocks = raw.split(/\n{2,}/).map(s => s.trim()).filter(Boolean);
+    if (!blocks.length) return "";
+    return `<div data-pdf-section="${anchor}-wrap" style="margin:0 0 18px;page-break-inside:avoid;break-inside:avoid;">
+      ${sectionHeading(label)}
+      ${blocks.map(b => `<div data-pdf-section="${anchor}" style="margin:0 0 10px;padding:0;font-size:12px;line-height:1.6;color:${INK};page-break-inside:avoid;break-inside:avoid;">${esc(b).replace(/\n/g, "<br/>")}</div>`).join("")}
+    </div>`;
+  };
+
+  const refLink = (f.referenceCvUrl || "").trim()
+    ? `<div data-pdf-section="cv-source" style="margin:14px 0 0;padding:10px 14px;border:1px dashed ${GOLD}66;background:${CHAMPAGNE};font-size:11px;color:${MUTED};page-break-inside:avoid;break-inside:avoid;">
+         Source CV on file: <a href="${esc(f.referenceCvUrl)}" style="color:${INK};">${esc(f.referenceCvUrl)}</a>
+       </div>`
+    : "";
+
+  return [
+    input.hideLetterDate ? "" : dateLine(input.letterDate),
+    header,
+    summary,
+    facts,
+    renderParagraphs("Experience", f.experienceHistory, "cv-experience"),
+    renderSkills(f.skills),
+    renderParagraphs("Education", f.education, "cv-education"),
+    paragraphs(input.aiClosing),
+    refLink,
+  ].join("");
+}
+
 /* ───────────── Dispatcher ───────────── */
 
 export function compose(input: ComposerInput): string {
@@ -675,6 +764,8 @@ export function compose(input: ComposerInput): string {
       return composeGeneric(input, `HR Letter — ${input.fields.recipientName || ""}`);
     case "partnership_referral":
       return composeGeneric(input, `Partnership / Referral Agreement`);
+    case "candidate_cv":
+      return composeCandidateCv(input);
     case "form_a":
       return composeGeneric(input, `Form A — Buyer Registration`);
     case "form_f":
