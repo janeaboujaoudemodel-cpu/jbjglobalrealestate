@@ -2202,7 +2202,7 @@ function StudioShell({
                               </div>
 
                               {/* Footer — ONLY on the last page, absolute flush-bottom, edge-to-edge */}
-                              {isLast && (
+                              {isLast && !noChrome && (
                                 <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
                                   <LockedFooter />
                                 </div>
