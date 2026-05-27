@@ -1698,7 +1698,7 @@ function StudioShell({
                               }}
                             >
                               {isFirst && <LockedLetterhead />}
-                              <div style={{ padding: `${topPad}px ${BODY_PAD_X}px ${BOTTOM_PAD}px ${BODY_PAD_X}px`, background: "#FDFBF7" }}>
+                              <div style={{ padding: `${topPad}px ${BODY_PAD_X}px ${BOTTOM_PAD}px ${BODY_PAD_X}px`, background: "#FDFBF7", height: PAGE_H - (isFirst ? chromeHeights.header : 0), display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
                                 {!isManualBlank && sliceH > 0 ? (
                                   <div style={{ width: bodyWidth, height: sliceH, overflow: "hidden", position: "relative" }}>
                                     <div style={{ transform: `translateY(${-pageStart}px)`, transformOrigin: "top left", position: "relative", minHeight: bodyHeight }}>
@@ -1733,9 +1733,9 @@ function StudioShell({
                                     </div>
                                   </div>
                                 ) : (
-                                  <div style={{ width: bodyWidth, height: Math.max(120, contentLimit), border: "1px dashed rgba(184,149,85,0.35)", background: "rgba(247,242,234,0.35)" }} />
+                                  <div style={{ width: bodyWidth, flex: 1, border: "1px dashed rgba(184,149,85,0.35)", background: "rgba(247,242,234,0.35)" }} />
                                 )}
-                                {isLastContentPage && <div style={{ marginTop: FOOTER_GAP }}><LockedFooter /></div>}
+                                {isLastContentPage && <div style={{ marginTop: "auto", paddingTop: FOOTER_GAP }}><LockedFooter /></div>}
                               </div>
                               <div aria-hidden className="absolute right-3 top-3 px-2 py-[2px] rounded-sm text-[10px] font-semibold uppercase pointer-events-none" style={{ background: "#FDFBF7", color: "#1A1A1A", border: "1px solid #B89555", letterSpacing: "0.18em" }}>
                                 Page {pageIndex + 1} / {pageCount}
