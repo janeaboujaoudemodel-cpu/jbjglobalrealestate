@@ -609,8 +609,7 @@ function composeHolidayHome(input: ComposerInput): string {
         ${items.map((clause, i) => `<li style="margin-bottom:${i === items.length - 1 ? 0 : compact ? 6 : 8}px;">${clause}</li>`).join("")}
       </ol>
     </div>`;
-  const termsPage2 = termsList(termClauses.slice(0, 6), 1, "Terms & Conditions — Payment, Liability & Conduct");
-  const termsPage3 = termsList(termClauses.slice(6), 7, "Terms & Conditions — Stay Rules & Final Acknowledgement", true);
+  const allTerms = termsList(termClauses, 1, "Terms & Conditions — Booking, Payment, Liability & Stay Rules", true);
 
 
   // Final guest acknowledgement — name synced live from the left-rail input.
@@ -636,21 +635,21 @@ function composeHolidayHome(input: ComposerInput): string {
     extraSignatories: input.extraSignatories,
   });
 
-  // ── Locked 3-page layout. Each [data-pdf-page] is rendered as its own A4
-  //    sheet by DocumentStudio — never split, never merged.
+  // ── Locked 3-page layout. Page 1 = letter + guest profile + quotation.
+  //    Page 2 = all terms from the top. Page 3 = disclaimer + signature.
   const page1 = `
     <section data-pdf-page="1">
-      ${pageFrame(`${input.hideLetterDate ? "" : dateLine(input.letterDate)}${subjectLine(`Holiday Home Booking Agreement — ${bookingId}`)}${welcome}${guestCard}`, 1)}
+      ${pageFrame(`${input.hideLetterDate ? "" : dateLine(input.letterDate)}${subjectLine(`Holiday Home Booking Agreement — ${bookingId}`)}${welcome}${guestCard}${quotation}`, 1)}
     </section>`;
 
   const page2 = `
     <section data-pdf-page="2">
-      ${pageFrame(`${quotation}${termsPage2}`, 2)}
+      ${pageFrame(allTerms, 2)}
     </section>`;
 
   const page3 = `
     <section data-pdf-page="3">
-      ${pageFrame(`${termsPage3}<div style="display:flex;flex-direction:column;gap:16px;">${acknowledgement}${signature}${paragraphs(input.aiClosing)}</div>`, 3)}
+      ${pageFrame(`<div style="display:flex;flex-direction:column;gap:18px;">${acknowledgement}${signature}${paragraphs(input.aiClosing)}</div>`, 3)}
     </section>`;
 
   return [page1, page2, page3].join("");
