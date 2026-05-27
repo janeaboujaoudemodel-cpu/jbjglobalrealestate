@@ -2032,6 +2032,13 @@ function StudioShell({
                   : parsePageGroups(bodyHtml);
                 const pageCount = Math.max(1, pageGroups.length);
 
+                // FORM I (and any composer that opts out of letterhead chrome)
+                // emits a top-level <section data-no-chrome="1">. When present,
+                // suppress header, footer, DocuSign safe band, generated-date
+                // pill, and the per-page signature strip; render a single page
+                // with the body using the full A4 height.
+                const noChrome = /data-no-chrome=["']1["']/.test(bodyHtml || "");
+
                 return (
                   <div className="flex flex-col items-center gap-4" style={{ width: PAGE_W * effectiveScale, flexShrink: 0 }}>
                     <div ref={pageRef} className="flex flex-col gap-7" data-document-pages="true">
@@ -2044,12 +2051,14 @@ function StudioShell({
                       {Array.from({ length: pageCount }).map((_, pageIndex) => {
                         const isFirst = pageIndex === 0;
                         const isLast = pageIndex === pageCount - 1;
-                        const topPad = isFirst ? FIRST_TOP : NEXT_TOP;
-                        const bottomPad = isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD;
+                        const topPad = noChrome ? 28 : (isFirst ? FIRST_TOP : NEXT_TOP);
+                        const bottomPad = noChrome ? 24 : (isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD);
                         const userSignatureName = fields.recipientName || fields.fullName || fields.full_name || fields.client_name || fields.guest_name || "";
                         const groupHtml = stripGeneratedPageArtifacts(pageGroups[pageIndex] ?? "");
                         const hasFinalSignatureBlock = /data-signature-block=["']1["']/.test(groupHtml);
-                        const groupHtmlWithSignature = `${groupHtml}${isLast && hasFinalSignatureBlock ? "" : renderPerPageUserSignature(userSignatureName)}`;
+                        const groupHtmlWithSignature = noChrome
+                          ? groupHtml
+                          : `${groupHtml}${isLast && hasFinalSignatureBlock ? "" : renderPerPageUserSignature(userSignatureName)}`;
 
                         return (
                           <div key={`page-${pageIndex}`} className="flex flex-col items-center gap-2" style={{ width: PAGE_W * effectiveScale }}>
