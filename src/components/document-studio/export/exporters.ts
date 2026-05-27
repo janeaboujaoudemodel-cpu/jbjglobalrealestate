@@ -139,6 +139,26 @@ export async function exportPdf(
 ): Promise<void> {
   const { default: jsPDF } = await import("jspdf");
 
+  const livePages = sourceElement
+    ? Array.from(sourceElement.querySelectorAll<HTMLElement>('[data-document-page="true"]'))
+    : [];
+
+  if (livePages.length > 0) {
+    const A4_W = 210;
+    const A4_H = 297;
+    const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
+
+    for (let i = 0; i < livePages.length; i += 1) {
+      const canvas = await renderElementCanvas(livePages[i]);
+      const data = canvas.toDataURL("image/jpeg", 0.95);
+      if (i > 0) pdf.addPage();
+      pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H);
+    }
+
+    pdf.save(fileName(template, "pdf"));
+    return;
+  }
+
   // Collect logical block boundaries from the live DOM BEFORE rasterising,
   // so we can avoid slicing through tables / signatures / terms items.
   const SCALE = 2; // matches renderElementCanvas
