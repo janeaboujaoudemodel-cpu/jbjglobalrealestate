@@ -63,22 +63,29 @@ export function jbjStampOverlayHtml(): string {
            transform:rotate(-8deg);pointer-events:none;user-select:none;" />`;
 }
 
+/**
+ * Compact letterhead — half the previous height. Bigger monogram, gold
+ * hairline pulled closer (12px gap instead of 26px), single-line wordmark.
+ * The "Generated DD Month YYYY" date is rendered OUTSIDE this header by
+ * DocumentStudio (top-right corner under the DocuSign safe band) — never
+ * inside the chrome. Global rule, locked.
+ */
 export const jbjHeaderHtml = (): string => `
   <header style="
     width:100%;
     background:${JBJ_CHAMPAGNE};
     border-bottom:1px solid ${JBJ_GOLD};
-    padding:20px 42px 20px 32px;
+    padding:10px 32px 10px 24px;
     font-family:Inter, system-ui, sans-serif;
     color:${JBJ_INK};
     box-sizing:border-box;
   ">
-    <div style="display:grid;grid-template-columns:184px 1px 1fr;align-items:center;gap:26px;min-height:152px;">
+    <div style="display:grid;grid-template-columns:210px 1px 1fr;align-items:center;gap:12px;min-height:92px;">
       <img src="${monogramSrc}" alt="JBJ"
-        style="width:160px;height:160px;display:block;object-fit:contain;background:transparent;margin:0 auto;" />
-      <div aria-hidden="true" style="width:1px;height:128px;background:${JBJ_GOLD};opacity:.55;"></div>
-      <div style="line-height:1.1;text-align:center;min-width:0;">
-        <div style="font-size:24px;font-weight:700;letter-spacing:0.045em;color:${JBJ_INK};white-space:nowrap;">
+        style="width:200px;height:200px;display:block;object-fit:contain;background:transparent;margin:0;" />
+      <div aria-hidden="true" style="width:1px;height:68px;background:${JBJ_GOLD};opacity:.55;"></div>
+      <div style="line-height:1.1;text-align:center;min-width:0;padding-right:24px;">
+        <div style="font-size:20px;font-weight:700;letter-spacing:0.045em;color:${JBJ_INK};white-space:nowrap;">
           ${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}
         </div>
       </div>

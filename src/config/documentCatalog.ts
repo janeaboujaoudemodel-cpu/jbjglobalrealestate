@@ -593,7 +593,7 @@ const CLIENT: DocumentTemplate[] = [
 
   {
     id: "paa",
-    audience: "client",
+    audience: "staff",
     label: "Property Advertising Agreement (PAA)",
     description: "Owner consent to advertise a leasing property.",
     icon: Stamp,
