@@ -1005,8 +1005,22 @@ function StudioShell({
         isolation: "isolate",
       }}
     >
+      <style>{`
+        [data-document-studio-overlay] .border,
+        [data-document-studio-overlay] [class*="border-"] {
+          border-color: rgba(184, 149, 85, 0.58) !important;
+        }
+        [data-document-studio-overlay] input,
+        [data-document-studio-overlay] textarea,
+        [data-document-studio-overlay] button[role="combobox"] {
+          border-color: rgba(184, 149, 85, 0.72) !important;
+        }
+        [data-document-studio-overlay] [data-document-page="true"] {
+          border-color: rgba(184, 149, 85, 0.42) !important;
+        }
+      `}</style>
       {/* ─── Topbar ─── */}
-      <div className="shrink-0 h-14 border-b border-[#B89555]/30 bg-[#FDFBF7] flex items-center px-4 gap-4">
+      <div className="shrink-0 min-h-16 border-b border-[#B89555]/55 bg-[#FDFBF7] flex items-center px-5 gap-4">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
             <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
@@ -1025,14 +1039,14 @@ function StudioShell({
           setStep(s);
         }} hasTemplate={!!templateId} hasBody={!!bodyHtml} />
 
-        <div className="ml-auto flex items-center gap-2">
-          <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 border border-[#B89555] bg-[#F7F2EA] rounded-md pl-2 pr-1 py-0.5 focus-within:ring-1 focus-within:ring-[#B89555]">
+        <div className="ml-auto flex min-w-0 items-center justify-end gap-2 flex-wrap py-2">
+          <div className="flex h-10 items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md pl-2.5 pr-1.5 focus-within:ring-1 focus-within:ring-[#B89555] shrink-0">
             <Globe className="w-3.5 h-3.5 text-[#B89555]" />
             <Select value={docLanguage} onValueChange={setDocLanguage}>
-              <SelectTrigger className="h-6 w-[112px] border-0 bg-transparent px-1.5 text-[12px] font-semibold text-[#1A1A1A] focus:ring-0 focus:ring-offset-0 focus:border-transparent shadow-none">
+              <SelectTrigger className="h-7 w-[116px] border-0 bg-transparent px-1.5 text-[12px] font-semibold text-[#1A1A1A] focus:ring-0 focus:ring-offset-0 focus:border-transparent shadow-none">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="z-[2147483647]">
+              <SelectContent className="z-[2147483647] bg-[#FDFBF7] border-[#B89555]/50">
                 {AI_LANGUAGES.map((l) => (
                   <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>
                 ))}
@@ -1158,7 +1172,7 @@ function StudioShell({
       {/* ─── Body ─── */}
       <div className="flex-1 min-h-0 flex">
         {/* LEFT RAIL */}
-        <aside className="w-[340px] shrink-0 border-r border-[#B89555]/25 bg-[#FDFBF7] flex flex-col">
+        <aside className="w-[360px] shrink-0 border-r border-[#B89555]/55 bg-[#FDFBF7] flex flex-col">
           {step === 1 && (
             <>
               <div className="p-4 border-b border-[#B89555]/20">
@@ -1926,7 +1940,7 @@ function StudioShell({
         </aside>
 
         {/* CENTER — A4 PREVIEW (fixed A4 sheets, smart-cropped) */}
-        <main ref={previewWrapRef} className="flex-1 min-w-0 bg-[#F0E8D8] overflow-auto relative">
+        <main ref={previewWrapRef} className="flex-1 min-w-0 bg-[#EFE6D6] overflow-auto relative border-x border-[#B89555]/35">
           <div className="min-h-full flex justify-center py-10 px-4">
             {template ? (
               (() => {
@@ -2123,7 +2137,7 @@ function StudioShell({
 
         {/* RIGHT — AI ASSISTANT */}
         {aiOpen && (
-          <aside className="w-[360px] shrink-0 border-l border-[#B89555]/25 bg-[#FDFBF7] p-3">
+          <aside className="w-[392px] shrink-0 border-l border-[#B89555]/55 bg-[#FDFBF7] p-4">
             <AiEditChatPanel
               currentBody={bodyHtml}
               language={docLanguage}
