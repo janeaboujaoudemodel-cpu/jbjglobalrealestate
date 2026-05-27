@@ -2117,7 +2117,7 @@ function StudioShell({
                                       if (!isFirst) return;
                                       // Sync first-page edits back into the master bodyHtml,
                                       // wrapping with the original page1 marker.
-                                      const next = e.currentTarget.innerHTML;
+                                      const next = stripGeneratedPageArtifacts(e.currentTarget.innerHTML);
                                       const others = pageGroups.slice(1)
                                         .map((g, i) => `<section data-pdf-page="${i + 2}">${g}</section>`)
                                         .join("");
