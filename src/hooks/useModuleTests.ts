@@ -47,20 +47,21 @@ export function useModuleTests(moduleId: string | null) {
     setError(null);
 
     try {
-      // Load questions for this module
+      // Load questions (sanitized view — no correct_index / explanation)
       const { data: questionsData, error: questionsError } = await supabase
-        .from('module_questions')
+        .from('module_questions_public' as any)
         .select('*')
         .eq('module_id', moduleId)
         .eq('is_active', true);
 
       if (questionsError) throw questionsError;
-      
-      const typedQuestions = (questionsData || []).map(q => ({
+
+      const typedQuestions = (questionsData || []).map((q: any) => ({
         ...q,
+        correct_index: -1, // never exposed; server-side grading only
         options: Array.isArray(q.options) ? q.options : JSON.parse(q.options as string || '[]')
       })) as ModuleQuestion[];
-      
+
       setQuestions(typedQuestions);
 
       // Load user's attempts if logged in
@@ -126,57 +127,44 @@ export function useModuleTests(moduleId: string | null) {
     }));
   };
 
-  const submitTest = async (): Promise<{ 
-    success: boolean; 
-    score?: number; 
+  const submitTest = async (): Promise<{
+    success: boolean;
+    score?: number;
     passed?: boolean;
     showAnswers?: boolean;
+    reveal?: Record<string, number>;
     error?: string;
   }> => {
     if (!user || !moduleId) return { success: false, error: 'Not logged in' };
     if (currentTest.length === 0) return { success: false, error: 'No test started' };
 
-    // Calculate score
-    let correct = 0;
-    currentTest.forEach(question => {
-      if (userAnswers[question.id] === question.correct_index) {
-        correct++;
-      }
-    });
-
-    const scorePercent = (correct / currentTest.length) * 100;
-    const passed = scorePercent >= PASS_THRESHOLD;
-    const attemptNumber = attempts.length + 1;
-    
-    // After 3 failures, show answers
-    const failedAttempts = attempts.filter(a => !a.passed).length;
-    const showAnswers = !passed && failedAttempts >= 2; // This will be the 3rd+ failure
-
     try {
-      const { error: insertError } = await supabase
-        .from('test_attempts')
-        .insert({
-          user_id: user.id,
-          module_id: moduleId,
-          attempt_number: attemptNumber,
-          questions_shown: currentTest.map(q => q.id),
-          answers_given: userAnswers,
-          score_percent: scorePercent,
-          passed,
-          show_answers: showAnswers,
-        });
+      // Server-side grading — answer keys never leave the database
+      const { data, error } = await supabase.rpc('grade_module_quiz' as any, {
+        p_module_id: moduleId,
+        p_question_ids: currentTest.map(q => q.id),
+        p_answers: userAnswers,
+      });
 
-      if (insertError) throw insertError;
+      if (error) throw error;
+      const result = (data ?? {}) as {
+        success?: boolean;
+        score?: number;
+        passed?: boolean;
+        show_answers?: boolean;
+        reveal?: Record<string, number>;
+      };
 
       await loadData();
       setCurrentTest([]);
       setUserAnswers({});
 
-      return { 
-        success: true, 
-        score: scorePercent, 
-        passed,
-        showAnswers,
+      return {
+        success: true,
+        score: Number(result.score ?? 0),
+        passed: Boolean(result.passed),
+        showAnswers: Boolean(result.show_answers),
+        reveal: result.reveal || {},
       };
     } catch (err) {
       console.error('Error submitting test:', err);

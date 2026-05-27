@@ -94,16 +94,17 @@ export default function OnboardingModule() {
         key_points: Array.isArray(moduleData.key_points) ? (moduleData.key_points as string[]) : []
       });
 
-      // Load questions
+      // Load questions (sanitized view — no correct_answer / explanation)
       const { data: questionsData } = await supabase
-        .from("hr_quiz_questions")
+        .from("hr_quiz_questions_public" as any)
         .select("*")
         .eq("module_id", moduleId)
         .eq("is_active", true)
         .order("display_order");
 
-      setQuestions((questionsData || []).map(q => ({
+      setQuestions((questionsData || []).map((q: any) => ({
         ...q,
+        correct_answer: "", // never exposed; server-side grading only
         options: Array.isArray(q.options) ? (q.options as string[]) : []
       })));
 
@@ -156,55 +157,23 @@ export default function OnboardingModule() {
     }
   };
 
-  const calculateScore = (): number => {
-    if (questions.length === 0) return 0;
-    
-    let correctCount = 0;
-    questions.forEach((q) => {
-      const userAnswer = answers[q.id]?.toLowerCase().trim();
-      const correctAnswer = q.correct_answer.toLowerCase().trim();
-      
-      if (q.question_type === "short_answer") {
-        // For short answer, check if user's answer contains key words from correct answer
-        const correctWords = correctAnswer.split(/\s+/);
-        const matchedWords = correctWords.filter((word) => 
-          userAnswer?.includes(word) || word.includes(userAnswer || "")
-        );
-        if (matchedWords.length >= correctWords.length * 0.5) {
-          correctCount++;
-        }
-      } else {
-        if (userAnswer === correctAnswer) {
-          correctCount++;
-        }
-      }
-    });
-
-    return (correctCount / questions.length) * 100;
-  };
-
   const handleSubmitQuiz = async () => {
     if (!user || !moduleId) return;
-    
+
     setSubmitting(true);
     try {
-      const score = calculateScore();
-      const passed = score >= passThreshold;
-      setQuizScore(score);
-
-      // Save attempt
-      const { error } = await supabase
-        .from("hr_quiz_attempts")
-        .insert({
-          user_id: user.id,
-          module_id: moduleId,
-          score,
-          passed,
-          answers_json: answers,
-        });
+      // Server-side grading — answer keys never leave the database
+      const { data, error } = await supabase.rpc("grade_hr_quiz" as any, {
+        p_module_id: moduleId,
+        p_answers: answers,
+      });
 
       if (error) throw error;
+      const result = (data ?? {}) as { score?: number; passed?: boolean };
+      const score = Number(result.score ?? 0);
+      const passed = Boolean(result.passed);
 
+      setQuizScore(score);
       setShowResults(true);
       toast.success(passed ? "Congratulations! You passed!" : "Quiz completed");
     } catch (error) {
