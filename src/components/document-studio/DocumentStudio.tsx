@@ -2087,10 +2087,13 @@ function StudioShell({
                                   <LockedFooter />
                                 </div>
                               )}
-                              <div aria-hidden className="absolute right-3 top-3 px-2 py-[2px] rounded-sm text-[10px] font-semibold uppercase pointer-events-none" style={{ background: "#FDFBF7", color: "#1A1A1A", border: "1px solid #B89555", letterSpacing: "0.18em" }}>
-                                Page {pageIndex + 1} / {pageCount}
-                              </div>
                             </div>
+                            {/* Page indicator — rendered in the champagne gap BETWEEN sheets, never on the paper */}
+                            {!isLast && (
+                              <div aria-hidden className="text-[10px] font-semibold uppercase pointer-events-none select-none" style={{ color: "#1A1A1A", opacity: 0.55, letterSpacing: "0.22em" }}>
+                                Page {pageIndex + 1} of {pageCount}
+                              </div>
+                            )}
                           </div>
                         );
                       })}
