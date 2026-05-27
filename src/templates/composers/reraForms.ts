@@ -413,18 +413,18 @@ export function composeFormI(input: ComposerInput): string {
     </div>`;
 
   const html = `
-    <div data-form-i-page="1" style="font-family:Inter,Arial,sans-serif;color:${INK};font-size:10.6px;line-height:1.14;width:100%;height:100%;overflow:hidden;">
-      <div style="position:relative;height:112px;">
-        <div style="position:absolute;right:0;top:0;width:165px;text-align:left;font-size:13px;line-height:1.55;">
+    <div data-form-i-page="1" data-signature-block="1" style="font-family:Inter,Arial,sans-serif;color:${INK};font-size:10px;line-height:1.18;width:100%;">
+      <div style="position:relative;min-height:96px;margin-bottom:4px;">
+        <div style="position:absolute;right:0;top:0;width:170px;font-size:11px;line-height:1.4;">
           <div style="text-align:right;font-weight:800;font-size:13px;margin-bottom:2px;">FORM I</div>
-          <div style="display:grid;grid-template-columns:48px 1fr;gap:8px;align-items:end;"><span>Brn:</span>${line(val("brn", "partyABrn") || "44750", 86, true)}</div>
-          <div style="display:grid;grid-template-columns:48px 1fr;gap:8px;align-items:end;"><span>Str#:</span>${line(val("strNumber"), 86, true)}</div>
-          <div style="height:22px;"></div>
-          <div style="display:flex;align-items:flex-end;gap:8px;font-weight:800;"><span>DATE:</span>${line(day, 32, true)}<span>/</span>${line(month, 32, true)}<span>/</span>${line(year, 58, true)}</div>
+          <div style="display:grid;grid-template-columns:42px 1fr;gap:6px;align-items:end;"><span>Brn:</span>${line(val("brn", "partyABrn") || "44750", 70, true)}</div>
+          <div style="display:grid;grid-template-columns:42px 1fr;gap:6px;align-items:end;"><span>Str#:</span>${line(val("strNumber"), 70, true)}</div>
+          <div style="height:16px;"></div>
+          <div style="display:flex;align-items:flex-end;gap:6px;font-weight:800;"><span>DATE:</span>${line(day, 26, true)}<span>/</span>${line(month, 26, true)}<span>/</span>${line(year, 46, true)}</div>
         </div>
-        <div style="position:absolute;left:0;right:185px;top:54px;text-align:center;">
-          <div style="font-size:19px;font-weight:900;letter-spacing:.02em;">AGENT to AGENT AGREEMENT</div>
-          <div style="font-style:italic;font-size:11px;margin-top:14px;">As per the Real estate Brokers By-Law No. (85) of 2006</div>
+        <div style="margin-right:185px;text-align:center;padding-top:18px;">
+          <div style="font-size:18px;font-weight:900;letter-spacing:.02em;">AGENT to AGENT AGREEMENT</div>
+          <div style="font-style:italic;font-size:10.5px;margin-top:10px;">As per the Real estate Brokers By-Law No. (85) of 2006</div>
         </div>
       </div>
 
