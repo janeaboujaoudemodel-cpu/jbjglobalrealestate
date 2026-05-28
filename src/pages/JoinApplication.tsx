@@ -530,13 +530,14 @@ export default function JoinApplication() {
       return;
     }
 
-    if (!formData.consentAccurate || !formData.consentTerms) {
-      toast.error("Please accept both consent checkboxes");
+    if (!validateStep(4)) {
+      goToStep(4);
       return;
     }
-
     if (!cvFile) {
+      setErrors((p) => ({ ...p, cvFile: "Please upload your CV (PDF, Word, or photo)" }));
       toast.error("Please upload your CV (PDF, Word, or photo)");
+      goToStep(3);
       return;
     }
 
