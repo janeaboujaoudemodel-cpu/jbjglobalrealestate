@@ -303,7 +303,7 @@ function KpiCard({ icon, label, value, progress }: {
 
 function TrainingCard({ m }: { m: TModule }) {
   return (
-    <Card className="bg-[#F7F2EA] border-[#B89555]/30 hover:border-[#B89555]/55 transition-colors" data-gold-hairline>
+    <Card className="bg-[#F7F2EA] border-[#B89555]/30 hover:border-[#B89555]/55 transition-colors min-h-[240px]" data-gold-hairline>
       <CardContent className="p-5 md:p-6 flex flex-col h-full">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3 min-w-0">
