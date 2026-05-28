@@ -500,11 +500,106 @@
   font-weight: 400 !important;
 }
 
+/* ---- "21 open" badge: locked navy + white in every state ---- */
 [data-careers-page] .careers-open-badge,
-[data-careers-page] .careers-open-badge * {
+[data-careers-page] .careers-open-badge:hover,
+[data-careers-page] .careers-open-badge:focus,
+[data-careers-page] .careers-open-badge:focus-visible,
+[data-careers-page] .careers-open-badge:active,
+[data-careers-page] .careers-open-badge[data-state],
+[data-careers-page] .careers-open-badge[data-state="open"],
+[data-careers-page] .careers-open-badge[data-state="closed"] {
+  background: #102540 !important;
+  background-color: #102540 !important;
+  border: 1px solid #B89555 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-radius: 9999px !important;
+}
+[data-careers-page] .careers-open-badge,
+[data-careers-page] .careers-open-badge *,
+[data-careers-page] .careers-open-badge:hover *,
+[data-careers-page] .careers-open-badge:focus * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+}
+[data-careers-page] .careers-open-badge .bg-emerald-400,
+[data-careers-page] .careers-open-badge [class*="bg-emerald"] {
+  background-color: #34d399 !important;
+}
+
+/* ---- Open Positions card: navy surface + animated linear sheen on hover ---- */
+[data-careers-page] .careers-card-navy {
+  position: relative;
+  background: linear-gradient(180deg, #143052 0%, #102540 100%) !important;
+  border: 1px solid #B89555 !important;
+  box-shadow:
+    0 28px 60px -34px rgba(7, 27, 51, 0.65),
+    0 0 0 1px rgba(184, 149, 85, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  color: #FFFFFF !important;
+  overflow: hidden;
+  isolation: isolate;
+}
+[data-careers-page] .careers-card-navy,
+[data-careers-page] .careers-card-navy * {
+  --tw-prose-body: #FFFFFF;
+}
+[data-careers-page] .careers-card-navy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 35%,
+    rgba(255, 255, 255, 0.14) 50%,
+    transparent 65%,
+    transparent 100%
+  );
+  transform: translateX(-110%);
+  transition: transform 0s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+[data-careers-page] .careers-card-navy:hover {
+  border-color: #d4b87a !important;
+  box-shadow:
+    0 32px 70px -34px rgba(7, 27, 51, 0.75),
+    0 0 0 1px rgba(184, 149, 85, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+  background: linear-gradient(180deg, #1a3d63 0%, #143052 100%) !important;
+}
+[data-careers-page] .careers-card-navy:hover::before {
+  transform: translateX(110%);
+  transition: transform 1.2s ease;
+}
+/* Force white text inside the navy card regardless of nested utilities */
+[data-careers-page] .careers-card-navy :is(h1,h2,h3,h4,h5,h6,p,span,strong,em,small,a,li,div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+[data-careers-page] .careers-card-navy svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* Keep the inner search input readable (white surface, navy text) */
+[data-careers-page] .careers-card-navy input.careers-blue-field {
+  background-color: #FDFBF7 !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: #B89555 !important;
+}
+[data-careers-page] .careers-card-navy input.careers-blue-field::placeholder {
+  color: rgba(26, 26, 26, 0.55) !important;
+  -webkit-text-fill-color: rgba(26, 26, 26, 0.55) !important;
+}
+/* Re-allow the "21 open" badge children to stay white (already handled above) */
+[data-careers-page] .careers-card-navy .careers-open-badge,
+[data-careers-page] .careers-card-navy .careers-open-badge * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 /* ============================================================
