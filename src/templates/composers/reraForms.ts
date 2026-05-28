@@ -399,13 +399,19 @@ export function composeFormI(input: ComposerInput): string {
 
   const isJbjSignature = (label: "A" | "B") => jbjSide === label;
   const signatureCell = (label: "A" | "B") => `
-    <td style="width:50%;height:74px;border:1px solid ${GOLD};vertical-align:top;position:relative;padding:4px 7px;overflow:hidden;">
-      <div style="font-size:9.5px;font-weight:800;line-height:1.05;">SIGNATURE &amp; COMPANY STAMP OF AGENT "${label}":</div>
-      ${isJbjSignature(label) ? `<img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" style="position:absolute;left:218px;top:10px;width:62px;height:62px;object-fit:contain;opacity:.9;mix-blend-mode:multiply;transform:rotate(-8deg);" />` : ""}
+    <td style="width:50%;height:170px;border:1px solid ${GOLD};vertical-align:top;position:relative;padding:8px 10px;overflow:hidden;">
+      <div style="font-size:9.5px;font-weight:800;line-height:1.05;margin-bottom:8px;">SIGNATURE &amp; COMPANY STAMP OF AGENT "${label}":</div>
+      <div style="font-size:8.6px;line-height:1.5;color:${INK};">
+        <div style="margin-bottom:10px;">Name: ____________________________________</div>
+        <div style="margin-bottom:10px;">Designation: ______________________________</div>
+        <div style="margin-bottom:10px;">Date: ____ / ____ / __________</div>
+        <div>Signature: ________________________________</div>
+      </div>
+      ${isJbjSignature(label) ? `<img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" style="position:absolute;right:14px;bottom:14px;width:80px;height:80px;object-fit:contain;opacity:.9;mix-blend-mode:multiply;transform:rotate(-8deg);" />` : ""}
     </td>`;
 
   const companyFooter = `
-    <div style="text-align:center;color:${INK};font-size:8.4px;line-height:1.18;margin-top:5px;">
+    <div style="text-align:center;color:${INK};font-size:8.6px;line-height:1.25;margin-top:auto;padding-top:10px;border-top:1px solid ${GOLD}55;">
       <div style="font-weight:800;letter-spacing:.04em;margin-bottom:2px;">${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}</div>
       <div>Tel Number : ${JBJ_BRAND.phone}</div>
       <div>${JBJ_BRAND.address}</div>
