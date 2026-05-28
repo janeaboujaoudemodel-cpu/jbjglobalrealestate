@@ -76,7 +76,7 @@ const TAG_STYLES: Record<
     icon: Star,
     bg: "bg-[#102540]",
     ring: "border-[#B89555]",
-    text: "text-[#FFFFFF]",
+    text: "!text-white",
   },
 };
 
