@@ -112,7 +112,7 @@ export function PremiumCVUpload({
           <div className="relative flex flex-col items-center gap-3">
             <div className="relative">
               <div className="absolute inset-0 rounded-2xl bg-[#102540]/10 blur-lg group-hover:bg-[#102540]/20 transition" />
-              <div className="relative grid h-16 w-16 place-items-center rounded-2xl border-2 border-[#102540] bg-[#FDFBF7]">
+              <div className="relative grid h-16 w-16 place-items-center rounded-2xl border-2 border-[#B89555] bg-[#FDFBF7]">
                 <Upload className="h-7 w-7 text-[#102540]" />
               </div>
             </div>
