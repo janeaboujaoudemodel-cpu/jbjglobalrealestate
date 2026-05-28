@@ -79,6 +79,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   // Track page visits on route change
   useEffect(() => { trackPageVisit(); }, [location.pathname, trackPageVisit]);
   const isBackOfficeRoute = isBackOfficePath(location.pathname);
+  const isBrokerPortalRoute = location.pathname === "/broker" || location.pathname.startsWith("/broker/");
+  const usesStandalonePortalChrome = isBackOfficeRoute || isBrokerPortalRoute;
   const isServiceRoute = location.pathname.startsWith("/services/");
   const isHomePage = location.pathname === "/";
   const isDetailPage =
@@ -198,9 +200,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     setShowAttentionPulse(false);
   };
 
-  const effectiveCollapsed = isBackOfficeRoute ? true : isChatCollapsed;
+  const effectiveCollapsed = usesStandalonePortalChrome ? true : isChatCollapsed;
   const hasDarkHero = hasTransparentHeader(location.pathname);
-  const needsHeaderSpacing = shouldAddHeaderSpacing(location.pathname);
+  const needsHeaderSpacing = usesStandalonePortalChrome ? false : shouldAddHeaderSpacing(location.pathname);
 
   useEffect(() => {
     if (isBackOfficeRoute || !isServiceRoute) {
