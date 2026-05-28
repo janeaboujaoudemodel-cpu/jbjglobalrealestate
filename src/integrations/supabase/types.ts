@@ -14651,6 +14651,7 @@ export type Database = {
         Row: {
           approved_at: string | null
           approved_by: string | null
+          broker_id: string | null
           commission_amount: number
           commission_rate: number
           created_at: string | null
@@ -14667,11 +14668,12 @@ export type Database = {
           property_type: string | null
           status: string
           updated_at: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           approved_at?: string | null
           approved_by?: string | null
+          broker_id?: string | null
           commission_amount?: number
           commission_rate?: number
           created_at?: string | null
@@ -14688,11 +14690,12 @@ export type Database = {
           property_type?: string | null
           status?: string
           updated_at?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           approved_at?: string | null
           approved_by?: string | null
+          broker_id?: string | null
           commission_amount?: number
           commission_rate?: number
           created_at?: string | null
@@ -14709,9 +14712,45 @@ export type Database = {
           property_type?: string | null
           status?: string
           updated_at?: string | null
-          user_id?: string
+          user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "employee_commissions_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_commissions_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "employee_commissions_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_profile"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "employee_commissions_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "employee_commissions_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
+            referencedColumns: ["broker_id"]
+          },
+        ]
       }
       employee_daily_metrics: {
         Row: {
@@ -15200,6 +15239,7 @@ export type Database = {
           bank_name: string | null
           bank_name_encrypted: string | null
           base_salary: number
+          broker_id: string | null
           created_at: string | null
           created_by: string | null
           currency: string
@@ -15211,7 +15251,7 @@ export type Database = {
           notes: string | null
           salary_type: string
           updated_at: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           bank_account_encrypted?: string | null
@@ -15219,6 +15259,7 @@ export type Database = {
           bank_name?: string | null
           bank_name_encrypted?: string | null
           base_salary?: number
+          broker_id?: string | null
           created_at?: string | null
           created_by?: string | null
           currency?: string
@@ -15230,7 +15271,7 @@ export type Database = {
           notes?: string | null
           salary_type?: string
           updated_at?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           bank_account_encrypted?: string | null
@@ -15238,6 +15279,7 @@ export type Database = {
           bank_name?: string | null
           bank_name_encrypted?: string | null
           base_salary?: number
+          broker_id?: string | null
           created_at?: string | null
           created_by?: string | null
           currency?: string
@@ -15249,9 +15291,45 @@ export type Database = {
           notes?: string | null
           salary_type?: string
           updated_at?: string | null
-          user_id?: string
+          user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "employee_salaries_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_salaries_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "employee_salaries_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_profile"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "employee_salaries_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "employee_salaries_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
+            referencedColumns: ["broker_id"]
+          },
+        ]
       }
       employee_salary_access_audit: {
         Row: {
