@@ -20,7 +20,9 @@ import { ModeSwitcher } from "@/components/ModeSwitcher";
 import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
 import { cn } from "@/lib/utils";
 
-const ACCENT = "#B89555";
+import { BRAND } from "@/lib/brand-tokens";
+const ACCENT = BRAND.gold;
+
 // Visible on dark bg but soft — not harsh. ~14% white reads as a clean hairline.
 const HAIRLINE = "rgba(255,255,255,0.14)";
 // Champagne accent hairline — faded edges, gentle peak in the middle

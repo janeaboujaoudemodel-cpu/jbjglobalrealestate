@@ -1,56 +1,94 @@
 ## Goal
 
-Give every field in `/careers` JoinApplication (and the parallel `CareersIntake` page) a single, consistent "required" visual language in gold, and enforce real required validation on each field — not just the basic 7-field guard that exists today.
+Make the navy `#102540` and gold `#B89555` palette (plus their hover/soft/ring variants) a single source of truth so forms, buttons, footers, and checkboxes everywhere stay in lockstep — change one token, the whole app updates.
 
-## What changes (visual)
+Today these hexes are inlined ~10k times across ~1.1k files. We won't rewrite all 10k call sites in one pass — that's churn-prone. Instead we lock the tokens, expose them through Tailwind, ship shared primitives for the four element classes the user named, and migrate the high-traffic surfaces.
 
-1. **Gold required indicator on every required label**
-   - Replace the inconsistent `<span className="text-red-600">*</span>` (and missing asterisks) with a shared `<RequiredMark />` rendered as a `★` / `*` glyph in champagne-gold `#B89555`, with `aria-hidden` + visually-hidden "required" text for a11y.
-   - Promote `.jbj-form-label` to always render the asterisk via a `data-required` attribute — so every required label across all JBJ forms gets the same gold mark.
+## What's already in place
 
-2. **Gold focus + invalid ring on identity & preference fields**
-   - Extend the existing `.careers-blue-field` / `.careers-gold-field` (and `.jbj-blue-field` / `.jbj-gold-field`) tokens in `src/styles/theme-tokens.css`:
-     - `:focus-visible` → 2px gold ring `#B89555` + 1px navy border kept.
-     - `[aria-invalid="true"]` → border flips to gold `#B89555` with a soft gold halo `0 0 0 3px rgba(184,149,85,0.22)` (no red — matches champagne system; red is reserved for destructive only).
-   - Same treatment for `careers-phone-input` country trigger and `SearchableSelect` trigger via `triggerClassName`.
+`src/styles/theme-tokens.css` already defines `--t-form-blue`, `--t-form-blue-soft/muted/ring/tint`, `--t-gold`, `--t-gold-soft/faint/ring`, plus careers navy/cream. `src/index.css` defines HSL `--gold*` and champagne tokens. Tailwind exposes `gold.*` only. Most components still hard-code `#102540` / `#B89555` / `#1a3d63` / `#143052` in `className` strings.
 
-3. **Inline gold error message under each field**
-   - New `<FieldError />` primitive: `text-[12px] font-medium text-[#B89555] flex items-center gap-1` with a tiny gold `AlertCircle` icon. Replaces today's toast-only feedback for per-field errors. Toast stays as the summary.
+## Plan
 
-## What changes (validation)
+### 1. Canonical token layer (no new colors)
 
-4. **Zod schema for the full application** (`src/pages/JoinApplication.tsx`)
-   - Single `applicationSchema` covering every visible field per step:
-     - Step 0 Personal: firstName, lastName, phone (E.164 via libphonenumber check already imported), email (account-bound, so skipped from schema).
-     - Step 1 Location & Language: nationality, preferredLanguage, country, city.
-     - Step 2 Role & Experience: positionApplied **always required** (covers both DB-positions and fallback paths). Role-aware qualification blocks become required when visible:
-       - `sales` → dealsClosed, totalDealValue, projectsSold, developerWorkedWith, reasonForLeaving, reference1{Name,Title,Email,Phone}, reference2{Name,Title,Email,Phone}.
-       - `marketing` → marketingCampaigns, marketingBudget, marketingTools, portfolioLink (URL).
-       - `hr_ops` → yearsExperience, systemsUsed, certifications.
-       - `tech` → mirror existing fields in that block.
-     - Step 3 CV: cvFile required (PDF/Word/image, ≤10 MB — existing rule).
-     - Step 4 Consent: consentAccurate `=== true`, consentTerms `=== true`.
-   - Mirror the same schema (smaller subset) in `CareersIntake.tsx`.
+In `src/styles/theme-tokens.css`, consolidate the brand pair under one block and add the missing hover/active aliases the codebase already inlines:
 
-5. **Per-step gating + per-field errors**
-   - Replace the current "Basic required-field guard" with `schema.safeParse(formData)` scoped to the current step.
-   - Store `errors: Partial<Record<keyof FormData, string>>` in state. Pass `aria-invalid` + `aria-describedby` to each field and render `<FieldError>` under it.
-   - "Next" button on each step runs the step-scoped parse; "Submit" on Step 4 runs the full parse. Toast shows a single "Please complete the highlighted fields" message; the gold rings + inline messages do the actual pointing.
+```
+--brand-blue:        #102540;   /* alias of --t-form-blue */
+--brand-blue-hover:  #1a3d63;
+--brand-blue-deep:   #143052;
+--brand-blue-soft:   rgba(16,37,64,0.22);
+--brand-blue-ring:   rgba(16,37,64,0.18);
+--brand-blue-tint:   rgba(16,37,64,0.06);
+--brand-gold:        #B89555;   /* alias of --t-gold */
+--brand-gold-hover:  #C9A66B;
+--brand-gold-soft:   rgba(184,149,85,0.40);
+--brand-gold-faint:  rgba(184,149,85,0.25);
+--brand-gold-ring:   rgba(184,149,85,0.55);
+```
 
-6. **HTML-level enforcement**
-   - Add `aria-required="true"` and `required` (where the native control supports it) to every required `<Input>` / select trigger. Keeps screen-reader + browser autofill semantics correct.
+Old `--t-*` and `--gold` HSL tokens stay as aliases pointing at the same value, so existing CSS keeps working.
 
-## Files
+### 2. Tailwind exposure
 
-- `src/styles/theme-tokens.css` — extend `.careers-blue-field`, `.careers-gold-field`, `.jbj-blue-field`, `.jbj-gold-field`, `.careers-phone-input` with gold focus/invalid rings; add `.jbj-form-label[data-required]::after` gold asterisk.
-- `src/components/forms/RequiredMark.tsx` (new) — shared marker, used internally by the label rule + standalone where needed.
-- `src/components/forms/FieldError.tsx` (new) — inline gold error row.
-- `src/pages/JoinApplication.tsx` — add `applicationSchema` (zod), `errors` state, per-step parsing in `goNext` and `handleSubmit`, wire `aria-invalid` + `<FieldError>` to every field, replace ad-hoc `*` spans with `data-required` on labels.
-- `src/pages/CareersIntake.tsx` — same treatment, smaller schema.
+In `tailwind.config.ts`, extend `colors` with a `brand` namespace driven by the CSS vars:
+
+```
+brand: {
+  blue:        'var(--brand-blue)',
+  'blue-hover':'var(--brand-blue-hover)',
+  'blue-deep': 'var(--brand-blue-deep)',
+  gold:        'var(--brand-gold)',
+  'gold-hover':'var(--brand-gold-hover)',
+  'gold-soft': 'var(--brand-gold-soft)',
+  'gold-ring': 'var(--brand-gold-ring)',
+}
+```
+
+That unlocks `bg-brand-blue`, `text-brand-gold`, `border-brand-gold`, `ring-brand-gold-ring`, etc., so new code never needs a raw hex again.
+
+### 3. Shared primitives for the four element classes
+
+- `src/components/ui/brand-button.tsx` — three variants (`navy`, `gold-outline`, `navy-on-gold`) wrapping shadcn `Button` with `bg-brand-blue hover:bg-brand-blue-hover` + 1px `border-brand-gold` per memory rules.
+- `src/components/ui/brand-checkbox.tsx` — wraps shadcn `Checkbox`, applies the gold-tick treatment via class instead of relying on the global CSS override (override stays as a safety net).
+- `src/components/forms/JBJFormField.tsx` (lightweight) — re-exports the existing `.jbj-blue-field` / `.jbj-gold-field` classes through `cn` helpers `identityFieldClass()` / `preferenceFieldClass()` so forms stop string-concatenating hexes.
+- `src/components/layout/FooterBrandTokens.tsx` (or just refactor `src/components/Footer.tsx` in place) — swap hex literals for `text-brand-gold`, `border-brand-gold/40`, `bg-brand-blue`.
+
+No element types change; this is pure styling + token swap.
+
+### 4. Targeted migration (not a global sweep)
+
+Migrate only the canonical surfaces in this pass so the user sees the consistency goal land without a 1k-file diff:
+
+1. `src/components/Footer.tsx` — all blue/gold hexes → `brand-*` classes.
+2. `src/components/ui/button.tsx` variants that mention `#102540`/`#B89555` → token classes.
+3. Form-adjacent files already in scope from last turn: `InquiryFormModal.tsx`, `ChatLeadForm.tsx`, `ConciergeGate.tsx`, `PreJoinForm.tsx`, `JoinApplication.tsx`, `CareersIntake.tsx` — swap stray hexes to `brand-*` / shared field classes.
+4. `src/components/forms/JBJContactBlock.tsx`, `RequiredMark.tsx`, `FieldError.tsx` — switch to tokens.
+5. Global checkbox override in `theme-tokens.css` switches its hardcoded `#B89555` to `var(--brand-gold)`.
+
+Everything else continues to render correctly because the raw hexes still equal the token values; future edits can migrate file-by-file with confidence.
+
+### 5. Guardrail
+
+Add `scripts/lint/check-brand-hex.mjs` (advisory, not CI-blocking): greps `src/**` for `#102540|#B89555|#1a3d63|#143052` and prints offenders with the suggested `brand-*` replacement. Lets future work chip away at the remaining ~10k inlined hexes without another planning round.
 
 ## Out of scope
 
-- No backend / RLS / edge-function changes.
-- No copy rewrites beyond error messages.
-- No layout/step restructuring; the existing 5-step wizard stays.
-- Other JBJ forms (Inquiry, Chat, Concierge, PreJoin) are not touched in this pass — the token changes make them ready, but retrofitting is a separate task.
+- Rewriting all ~1.1k files that still inline the hexes (would be done incrementally via the lint script).
+- Introducing new colors, gradients, or changing any visual value.
+- Touching the champagne/ink palette, the contrast guard, or any AI-purple / price-orange tokens.
+- Backend, validation, or copy changes.
+
+## Files touched
+
+- `src/styles/theme-tokens.css` (add `--brand-*` aliases, swap one `#B89555` literal in the checkbox override)
+- `tailwind.config.ts` (extend `colors.brand`)
+- `src/components/ui/brand-button.tsx` (new)
+- `src/components/ui/brand-checkbox.tsx` (new)
+- `src/components/forms/JBJFormField.tsx` (new helper module)
+- `src/components/Footer.tsx`
+- `src/components/ui/button.tsx`
+- `src/components/InquiryFormModal.tsx`, `src/components/chat/ChatLeadForm.tsx`, `src/components/concierge/ConciergeGate.tsx`, `src/components/video-meet/PreJoinForm.tsx`, `src/pages/JoinApplication.tsx`, `src/pages/CareersIntake.tsx`
+- `src/components/forms/JBJContactBlock.tsx`, `src/components/forms/RequiredMark.tsx`, `src/components/forms/FieldError.tsx`
+- `scripts/lint/check-brand-hex.mjs` (new)

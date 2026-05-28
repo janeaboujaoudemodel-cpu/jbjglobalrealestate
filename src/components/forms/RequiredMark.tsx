@@ -7,7 +7,7 @@
 export function RequiredMark({ className = "" }: { className?: string }) {
   return (
     <span className={`inline-flex items-baseline ${className}`}>
-      <span aria-hidden="true" className="ml-0.5 text-[#B89555] font-semibold">
+      <span aria-hidden="true" className="ml-0.5 text-brand-gold font-semibold">
         *
       </span>
       <span className="sr-only"> (required)</span>
