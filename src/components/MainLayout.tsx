@@ -60,7 +60,9 @@ const hasDailyShown = (): boolean => {
 const markDailyShown = () => {
   try {
     localStorage.setItem(CHAT_DAILY_KEY, new Date().toDateString());
-  } catch {}
+  } catch {
+    // localStorage can be unavailable in restricted browser contexts.
+  }
 };
 
 interface MainLayoutProps {
@@ -124,7 +126,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       markDailyShown();
       setShowAttentionPulse(false);
     }
-  }, [location.pathname]);
+  }, [isDetailPage, location.pathname]);
 
   useEffect(() => {
     const handleRecPopup = () => {
