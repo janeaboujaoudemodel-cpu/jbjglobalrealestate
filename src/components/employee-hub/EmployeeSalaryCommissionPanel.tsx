@@ -59,47 +59,72 @@ export function EmployeeSalaryCommissionPanel() {
 
   return (
     <div className="space-y-6">
-      {/* Summary Cards */}
+      {/* Action toolbar */}
+      <div className="flex flex-wrap items-center gap-2">
+        <Button onClick={() => setAddOpen("salary")} variant="gold">
+          <Plus className="h-4 w-4 mr-1.5" /> Add Salary
+        </Button>
+        <Button onClick={() => setAddOpen("commission")} variant="gold">
+          <Plus className="h-4 w-4 mr-1.5" /> Add Commission
+        </Button>
+        <span className="text-xs text-[#1A1A1A]/60 ml-1">
+          Pulls from CRM brokers (company / external / by source) — or add a new broker inline.
+        </span>
+      </div>
+
+      {/* Summary Cards — clickable, jump to the matching tab */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-[#FDFBF7] border-[#B89555]/30">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[#1A1A1A]/70 text-sm">Monthly Payroll</p>
-                <p className="text-2xl font-bold text-[#1A1A1A]">{formatCurrency(totalSalaries)}</p>
+        <button type="button" onClick={() => setActiveTab("salaries")}
+          className="text-left rounded-xl group">
+          <Card className="bg-[#FDFBF7] border-[#B89555]/30 group-hover:bg-[#F7F2EA] transition-colors">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[#1A1A1A]/70 text-sm">Monthly Payroll</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{formatCurrency(totalSalaries)}</p>
+                  <p className="text-[10px] text-[#1A1A1A]/50 mt-1">View salaries →</p>
+                </div>
+                <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
+                  <Wallet className="h-6 w-6 text-emerald-600" />
+                </div>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
-                <Wallet className="h-6 w-6 text-emerald-600" />
+            </CardContent>
+          </Card>
+        </button>
+        <button type="button" onClick={() => { setStatusFilter("pending"); setActiveTab("commissions"); }}
+          className="text-left rounded-xl group">
+          <Card className="bg-[#FDFBF7] border-[#B89555]/30 group-hover:bg-[#F7F2EA] transition-colors">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[#1A1A1A]/70 text-sm">Pending Commissions</p>
+                  <p className="text-2xl font-bold text-amber-600">{formatCurrency(totalPending)}</p>
+                  <p className="text-[10px] text-[#1A1A1A]/50 mt-1">View pending →</p>
+                </div>
+                <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                  <Clock className="h-6 w-6 text-amber-600" />
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-[#FDFBF7] border-[#B89555]/30">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[#1A1A1A]/70 text-sm">Pending Commissions</p>
-                <p className="text-2xl font-bold text-amber-600">{formatCurrency(totalPending)}</p>
+            </CardContent>
+          </Card>
+        </button>
+        <button type="button" onClick={() => { setStatusFilter("paid"); setActiveTab("commissions"); }}
+          className="text-left rounded-xl group">
+          <Card className="bg-[#FDFBF7] border-[#B89555]/30 group-hover:bg-[#F7F2EA] transition-colors">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[#1A1A1A]/70 text-sm">Commissions Paid</p>
+                  <p className="text-2xl font-bold text-emerald-600">{formatCurrency(totalPaid)}</p>
+                  <p className="text-[10px] text-[#1A1A1A]/50 mt-1">View paid →</p>
+                </div>
+                <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
+                  <TrendingUp className="h-6 w-6 text-emerald-600" />
+                </div>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
-                <Clock className="h-6 w-6 text-amber-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-[#FDFBF7] border-[#B89555]/30">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[#1A1A1A]/70 text-sm">Commissions Paid</p>
-                <p className="text-2xl font-bold text-emerald-600">{formatCurrency(totalPaid)}</p>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
-                <TrendingUp className="h-6 w-6 text-emerald-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </button>
       </div>
 
       {/* Filters */}
@@ -118,13 +143,21 @@ export function EmployeeSalaryCommissionPanel() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="commissions" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">
           <TabsTrigger value="commissions" className="data-[state=active]:bg-[#FDFBF7]"><TrendingUp className="h-4 w-4 mr-2" />Commissions</TabsTrigger>
           <TabsTrigger value="salaries" className="data-[state=active]:bg-[#FDFBF7]"><Wallet className="h-4 w-4 mr-2" />Salaries</TabsTrigger>
           <TabsTrigger value="payments" className="data-[state=active]:bg-[#FDFBF7]"><CreditCard className="h-4 w-4 mr-2" />Payments</TabsTrigger>
           <TabsTrigger value="summary" className="data-[state=active]:bg-[#FDFBF7]"><BarChart3 className="h-4 w-4 mr-2" />Summary</TabsTrigger>
         </TabsList>
+
+        <AddPayrollEntryDialog
+          open={addOpen !== null}
+          onOpenChange={(v) => !v && setAddOpen(null)}
+          mode={addOpen ?? "salary"}
+          onSaved={() => { fetchSalaries(); fetchCommissions(); }}
+        />
+
 
         <TabsContent value="commissions">
           <Card className="bg-[#FDFBF7] border-[#B89555]/30">
