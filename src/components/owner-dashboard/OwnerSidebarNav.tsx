@@ -261,8 +261,8 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
           className={cn(
             "w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 border-l-2 border-y border-r relative",
             active
-              ? "bg-[#EFE6D6] !text-[#1A1A1A] border-l-[#B89555] border-y-[#B89555]/30 border-r-[#B89555]/30 font-semibold"
-              : "bg-transparent !text-[#1A1A1A] border-transparent hover:bg-[#EFE6D6]/60 hover:border-l-[#B89555]/60 hover:!text-[#1A1A1A]",
+              ? "bg-transparent !text-[#1A1A1A] border-l-[#B89555] border-y-transparent border-r-transparent font-semibold"
+              : "bg-transparent !text-[#1A1A1A] border-transparent hover:border-l-[#B89555]/60 hover:!text-[#1A1A1A]",
           )}
           style={depth > 0 ? { paddingLeft: `${12 + depth * 14}px` } : undefined}
           title={collapsed ? item.label : undefined}
@@ -278,11 +278,9 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
               </span>
               {item.badge && (
                 <span className={cn(
-                  "text-xs px-1.5 py-0.5 rounded-full font-semibold border",
-                  active ? "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]" : "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/50"
+                  "text-xs px-1.5 py-0.5 rounded-md font-semibold border",
+                  active ? "bg-transparent text-[#1A1A1A] border-[#B89555]" : "bg-transparent text-[#1A1A1A] border-[#B89555]/50"
                 )}>
-                  {item.badge}
-                </span>
               )}
               {hasChildren && (
                 <ChevronRight
