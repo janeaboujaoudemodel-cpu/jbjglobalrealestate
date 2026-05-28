@@ -211,13 +211,13 @@ serve(async (req) => {
         broker_id: user.id,
         lead_id: callRow.lead_id,
         role: "assistant",
-        content: `Call summary: ${structured.summary || ""}\n\nNext step: ${structured.next_step || ""}`,
+        content: `Call summary: ${finalSummary || ""}\n\nNext step: ${structured.next_step || ""}`,
         structured: {
           score: structured.score,
           score_reason: "Derived from latest recorded call.",
-          matches: structured.matches,
+          matches: finalMatches,
           next_step: structured.next_step,
-          reply: structured.summary,
+          reply: finalSummary,
         },
       });
     }
