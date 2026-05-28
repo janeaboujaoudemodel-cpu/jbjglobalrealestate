@@ -356,7 +356,7 @@ const DeveloperPortalCTA = () => {
         title="Your Broker Portal"
         description="Everything you need to close — CRM, listings, JBJ Academy and AI sales tools, in one professional command center."
         cta="Visit Your Broker Portal"
-        href="/broker/crm"
+        href="/broker/portal"
         Icon={Briefcase}
         features={[
           { label: "CRM & Pipeline", icon: Briefcase },
