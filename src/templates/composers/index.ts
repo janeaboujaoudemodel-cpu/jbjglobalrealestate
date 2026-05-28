@@ -380,6 +380,72 @@ function composeJobOffer(input: ComposerInput): string {
   ].join("");
 }
 
+/* ───────────── Termination Letter ───────────── */
+
+function composeTerminationLetter(input: ComposerInput): string {
+  const f = input.fields;
+
+  const termRows: Array<[string, string | undefined]> = [
+    ["Employee Name", f.recipientName],
+    ["Employee ID", f.employeeId],
+    ["Position", f.jobTitle],
+    ["Termination Effective Date", formatHumanDate(f.terminationDate) || f.terminationDate],
+    ["Last Working Day", formatHumanDate(f.lastWorkingDay) || f.lastWorkingDay],
+    ["Notice Period", f.noticePeriod],
+    ["Reason for Termination", f.reason ? f.reason.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase()) : undefined],
+  ];
+
+  const standardClauses = `
+    <div style="margin:18px 0 8px;">
+      <div data-pdf-section="std-terms-heading" style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;page-break-after:avoid;break-after:avoid;">
+        Standard Terms
+      </div>
+      <ol style="margin:0;padding-left:20px;font-size:12.6px;line-height:1.68;color:${INK};">
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Notice &amp; Effective Date.</strong> The termination takes effect on the date stated above. Where notice period is served, the Employee shall continue duties until the last working day. Where payment in lieu of notice is made, the equivalent salary shall be included in the final settlement.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Final Settlement.</strong> Within fourteen (14) calendar days of the last working day, JBJ GLOBAL REAL ESTATE shall settle all outstanding remuneration, end-of-service gratuity (if applicable under UAE Labour Law), and accrued leave balance, subject to lawful deductions.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Return of Property.</strong> The Employee must return all company property — including but not limited to access cards, keys, laptops, mobile devices, vehicles, and confidential documents — before the final settlement is released.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Confidentiality.</strong> All confidentiality, non-disclosure and non-compete obligations under the Employment Contract and any separate NDA remain in full force and effect notwithstanding termination.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>References.</strong> JBJ GLOBAL REAL ESTATE will provide factual employment verification upon written request. No detailed reference will be issued without the Employee's prior consent.</li>
+        <li data-pdf-section="term" style="margin-bottom:9px;page-break-inside:avoid;break-inside:avoid;"><strong>Governing Law.</strong> This notice is issued under UAE Federal Decree-Law No. 33 of 2021 on the Regulation of Labour Relations and the relevant Executive Regulations.</li>
+      </ol>
+    </div>`;
+
+  const propertySection = (f.returnOfProperty || "").trim()
+    ? `<div data-pdf-section="return-property" style="margin:14px 0 8px;page-break-inside:avoid;break-inside:avoid;">
+         <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;">Return of Company Property</div>
+         <p style="margin:0;font-size:12px;line-height:1.65;color:${INK};">${esc(f.returnOfProperty)}</p>
+       </div>`
+    : "";
+
+  const settlementSection = (f.finalSettlement || "").trim()
+    ? `<div data-pdf-section="final-settlement" style="margin:14px 0 8px;page-break-inside:avoid;break-inside:avoid;">
+         <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:6px;margin-bottom:10px;">Final Settlement Notes</div>
+         <p style="margin:0;font-size:12px;line-height:1.65;color:${INK};">${esc(f.finalSettlement)}</p>
+       </div>`
+    : "";
+
+  return [
+    input.hideLetterDate ? "" : dateLine(input.letterDate),
+    recipientBlock(f),
+    subjectLine(`Notice of Termination${f.recipientName ? ` — ${f.recipientName}` : ""}`),
+    paragraphs(input.aiIntro),
+    termsTable(termRows),
+    settlementSection,
+    propertySection,
+    standardClauses,
+    paragraphs(input.aiClosing),
+    signatureBlock({
+      ownerName: input.ownerName,
+      ownerTitle: input.ownerTitle,
+      ownerDate: input.ownerDate,
+      applicantName: f.recipientName,
+      applicantDate: input.applicantDate,
+      applicantLabel: "Acknowledged by Employee",
+      extraSignatories: input.extraSignatories,
+    }),
+  ].join("");
+}
+
 function composeGeneric(input: ComposerInput, subject: string): string {
   const f = input.fields;
   const rows: Array<[string, string | undefined]> = [
@@ -910,6 +976,8 @@ export function compose(input: ComposerInput): string {
       return composeGeneric(input, `Employment Contract — ${input.fields.jobTitle || ""}`);
     case "warning_letter":
       return composeGeneric(input, `Formal Notice — ${input.fields.recipientName || ""}`);
+    case "termination_letter":
+      return composeTerminationLetter(input);
     case "nda":
       return composeGeneric(input, `Non-Disclosure Agreement`);
     case "commission_agreement":

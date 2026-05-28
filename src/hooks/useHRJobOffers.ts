@@ -7,6 +7,7 @@ export const TEMPLATE_TYPES = [
   { value: 'job_offer', label: 'Job Offer' },
   { value: 'employment_contract', label: 'Employment Contract' },
   { value: 'warning_letter', label: 'Warning Letter' },
+  { value: 'termination_letter', label: 'Termination Letter' },
   { value: 'nda', label: 'NDA' },
   { value: 'commission_agreement', label: 'Commission Agreement' },
   { value: 'internship_agreement', label: 'Internship Agreement' },
