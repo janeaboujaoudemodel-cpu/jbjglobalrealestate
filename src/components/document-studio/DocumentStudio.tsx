@@ -2183,16 +2183,16 @@ function StudioShell({
             {template ? (
               (() => {
                 const noChrome = /data-no-chrome=["']1["']/.test(bodyHtml || "");
-                const BODY_PAD_X = noChrome ? 24 : 64;
+                const BODY_PAD_X = noChrome ? 24 : 70;
                 // DocuSign stamps the envelope ID in the top ~0.4in of every
                 // page when the document is processed for signature. Reserve a
                 // safe band on every page so the stamp never overlays content.
                 const FIRST_TOP = 46;
                 // GLOBAL: equal interior top/bottom on inner pages. Safe band
                 // and footer reserve are handled separately.
-                const NEXT_TOP = 54;
-                const STANDARD_BOTTOM_PAD = 32;
-                const LAST_BOTTOM_PAD = 40;
+                const NEXT_TOP = 64;
+                const STANDARD_BOTTOM_PAD = 40;
+                const LAST_BOTTOM_PAD = 48;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
 
                 // Prefer measured auto-pagination (global rule). Fall back
@@ -2308,7 +2308,7 @@ function StudioShell({
                                   bottom: noChrome ? 0 : (isLast ? chromeHeights.footer : 0),
                                   padding: `${topPad}px ${BODY_PAD_X}px ${bottomPad}px`,
                                   boxSizing: "border-box",
-                                  overflow: "hidden",
+                                  overflow: "visible",
                                   display: "flex",
                                   flexDirection: "column",
                                   justifyContent: "flex-start",
@@ -2326,8 +2326,8 @@ function StudioShell({
                                       flexDirection: "column",
                                       minHeight: 0,
                                       fontFamily: "Inter, system-ui, sans-serif",
-                                      lineHeight: pageIndex === 1 ? 1.58 : 1.66,
-                                      fontSize: pageIndex === 1 ? 13.6 : 13.2,
+                                      lineHeight: 1.68,
+                                      fontSize: 13.2,
                                       color: "#1A1A1A",
                                     }}
                                     contentEditable
