@@ -41,7 +41,7 @@ import DOMPurify from "dompurify";
 
 import {
   getCatalogByAudience, getTemplateById,
-  DocumentAudience, DocumentTemplate,
+ DocumentAudience, DocumentScope, DocumentTemplate,
 } from "@/config/documentCatalog";
 import { DEPARTMENTS } from "@/hooks/useHRJobOffers";
 import { stripChromeArtifacts } from "@/templates/jbjLockedChrome";
@@ -72,7 +72,7 @@ import DocumentPreviewDialog from "./DocumentPreviewDialog";
 import { RotateCcw } from "lucide-react";
 
 interface Props {
-  catalog: DocumentAudience;
+  catalog: DocumentScope;
   trigger?: React.ReactNode;
   presetTemplateId?: string;
 }
@@ -217,14 +217,16 @@ function StudioShell({
   presetTemplateId,
   onClose,
 }: {
-  catalog: DocumentAudience;
+  catalog: DocumentScope;
   presetTemplateId?: string;
   onClose: () => void;
 }) {
   const templates = useMemo(() => getCatalogByAudience(catalog), [catalog]);
   const isValidCatalogTemplate = (id?: string | null) => {
     if (!id) return false;
-    return getTemplateById(id)?.audience === catalog;
+    const t = getTemplateById(id);
+    if (!t) return false;
+    return catalog === "all" ? true : t.audience === catalog;
   };
   const initialId =
     presetTemplateId && isValidCatalogTemplate(presetTemplateId)
@@ -610,11 +612,11 @@ function StudioShell({
 
   // Load saved templates for current audience.
   const reloadSavedTemplates = async () => {
-    const { data, error } = await (supabase as any)
+    let q: any = (supabase as any)
       .from("saved_document_templates")
-      .select("id,name,base_template_id,payload,is_default")
-      .eq("audience", catalog)
-      .order("updated_at", { ascending: false });
+      .select("id,name,base_template_id,payload,is_default");
+    if (catalog !== "all") q = q.eq("audience", catalog);
+    const { data, error } = await q.order("updated_at", { ascending: false });
     if (!error && Array.isArray(data)) setSavedTemplates(data as SavedTpl[]);
   };
   useEffect(() => { reloadSavedTemplates(); /* eslint-disable-next-line */ }, [catalog]);
@@ -659,7 +661,7 @@ function StudioShell({
       };
       const { error } = await (supabase as any).from("saved_document_templates").insert({
         owner_id: u.user.id,
-        audience: catalog,
+        audience: catalog === "all" ? (template.audience as DocumentAudience) : catalog,
         base_template_id: template.id,
         name,
         is_default: saveAsDefault,
@@ -954,7 +956,7 @@ function StudioShell({
       const raw = sessionStorage.getItem(PREFILL_KEY);
       if (raw) {
         const p = JSON.parse(raw);
-        const validPrefillTemplate = p?.templateId && getTemplateById(p.templateId)?.audience === catalog;
+        const validPrefillTemplate = !!p?.templateId && !!getTemplateById(p.templateId) && (catalog === "all" || getTemplateById(p.templateId)?.audience === catalog);
         if (validPrefillTemplate) {
           setTemplateId(p.templateId);
           if (p?.fields && typeof p.fields === "object") {
@@ -1333,7 +1335,7 @@ function StudioShell({
           <div className="leading-tight">
             <div className="text-[13px] font-semibold text-[#1A1A1A]">Document Studio</div>
             <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">
-              {catalog === "staff" ? "Careers · Staff" : "Client · Real Estate"}
+              {catalog === "staff" ? "Careers · Staff" : catalog === "client" ? "Client · Real Estate" : "All templates"}
             </div>
           </div>
         </div>
@@ -1460,7 +1462,7 @@ function StudioShell({
                 checked={saveAsDefault}
                 onChange={(e) => setSaveAsDefault(e.target.checked)}
               />
-              Set as my default for {catalog === "staff" ? "staff" : "client"} documents
+              Set as my default for {catalog === "staff" ? "staff" : catalog === "client" ? "client" : "all"} documents
             </label>
             <div className="flex justify-end gap-2">
               <Button variant="ghost" size="sm" onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
@@ -2663,7 +2665,7 @@ function StudioShell({
                 <Wand2 className="w-10 h-10 mx-auto mb-3 text-[#B89555]" />
                 <div className="text-base font-semibold text-[#1A1A1A]">Choose a template to begin</div>
                 <p className="text-sm text-[#1A1A1A]/65 mt-2">
-                  Pick from {templates.length} {catalog === "staff" ? "staff" : "client"} document templates in the left panel.
+                  Pick from {templates.length} {catalog === "staff" ? "staff" : catalog === "client" ? "client" : "JBJ"} document templates in the left panel.
                 </p>
               </div>
             )}

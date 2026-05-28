@@ -227,7 +227,7 @@ export default function CareersPortal() {
           {active === "contracts"     && (
             <div className="space-y-6">
               <DocumentStudioLauncher
-                catalog="staff"
+                catalog="all"
                 presetTemplateId={params.get("tpl") || undefined}
               />
               <JobOfferManager />

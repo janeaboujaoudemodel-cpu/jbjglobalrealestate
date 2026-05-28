@@ -1,18 +1,19 @@
 /**
  * DocumentStudioLauncher
  * ----------------------
- * Compact champagne card embedded into hubs (Careers Portal contracts
- * tab, ContractForms client hub) that surfaces the unified generator
- * without removing the existing per-hub functionality below it.
+ * Compact champagne card embedded into hubs that surfaces the unified
+ * generator. Catalog "all" merges staff + client templates into a single
+ * Document Studio (the standard going forward); "staff" / "client" remain
+ * supported for backwards-compatible hub embeds.
  */
 
 import { Wand2, Sparkles, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DocumentStudio from "./DocumentStudio";
-import { DocumentAudience, getCatalogByAudience } from "@/config/documentCatalog";
+import { DocumentScope, getCatalogByAudience } from "@/config/documentCatalog";
 
 interface Props {
-  catalog: DocumentAudience;
+  catalog: DocumentScope;
   /** Optional preset template ID (used when a hub card opens the studio). */
   presetTemplateId?: string;
   /** Override the card title/subtitle for the hosting context. */
@@ -28,14 +29,26 @@ export default function DocumentStudioLauncher({
 }: Props) {
   const templates = getCatalogByAudience(catalog);
 
+  const eyebrow =
+    catalog === "staff"
+      ? "Careers · Document Studio"
+      : catalog === "client"
+        ? "Client · Document Studio"
+        : "Document Studio";
+
   const defaultTitle =
     catalog === "staff"
       ? "Generate a staff document with AI"
-      : "Generate a client document with AI";
+      : catalog === "client"
+        ? "Generate a client document with AI"
+        : "Generate a document with AI";
+
   const defaultSubtitle =
     catalog === "staff"
       ? "Job offers, employment contracts, NDAs, warning letters, partnership agreements — one unified engine, locked premium letterhead, live AI editing, branded-email send."
-      : "Form A, Form F (MoU), Form I, PAA, tenancy addenda — same engine, same locked premium letterhead, same branded-email send.";
+      : catalog === "client"
+        ? "Form A, Form F (MoU), Form I, PAA, tenancy addenda — same engine, same locked premium letterhead, same branded-email send."
+        : "Every JBJ template — staff (offers, contracts, NDAs, partnerships) and client (Form A/B/F/I/U, MoU, PAA, tenancy, holiday-home) — in one unified engine with locked premium letterhead, live AI editing and branded-email send.";
 
   return (
     <div
@@ -46,7 +59,7 @@ export default function DocumentStudioLauncher({
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
             <span className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/70">
-              {catalog === "staff" ? "Careers · Document Studio" : "Client · Document Studio"}
+              {eyebrow}
             </span>
             <span className="inline-flex items-center gap-1 text-[10px] text-[#1A1A1A]/60 ml-1">
               <Lock className="w-3 h-3" /> Locked letterhead
