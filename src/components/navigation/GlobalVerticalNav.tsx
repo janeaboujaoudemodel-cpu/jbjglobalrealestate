@@ -1182,7 +1182,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#102540' }} />
+              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B91C1C' }} />
               <span style={{ color: 'inherit' }}>Contact</span>
             </Link>
             <Link
