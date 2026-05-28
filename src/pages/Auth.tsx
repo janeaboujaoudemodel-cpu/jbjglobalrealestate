@@ -235,9 +235,17 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 pendingPreselect = stashed;
               }
             } catch {}
-            // If the user picked a category before signing in (from "Tell us
-            // who you are"), apply it now so the modal doesn't force-open
-            // post-login and a CRM lead is auto-created.
+            // Infer mode from returnTo when the user is heading into a role
+            // portal — this lets a logged-out broker click "Visit Your Broker
+            // Portal" and land directly inside it post-login (no auth loop).
+            if (!isValidPreselect(pendingPreselect) && returnTo) {
+              if (returnTo.startsWith('/broker')) pendingPreselect = 'broker';
+              else if (returnTo.startsWith('/investor')) pendingPreselect = 'investor';
+              else if (returnTo.startsWith('/developer')) pendingPreselect = 'developer';
+            }
+            // If the user picked (or implied) a category before signing in,
+            // apply it now so the modal doesn't force-open post-login and a
+            // CRM lead is auto-created.
             let preselectedApplied = false;
             if (isValidPreselect(pendingPreselect)) {
               try {
@@ -248,16 +256,21 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 console.warn('Failed to apply preselected mode:', err);
               }
             }
+            // Safe same-origin returnTo check (rejects protocol-relative //evil.com).
+            const isSafeReturnTo = (p: string | null): p is string =>
+              !!p && p.startsWith('/') && !p.startsWith('//');
             const modeSelected = preselectedApplied || localStorage.getItem('jj_mode_selected') === 'true';
-            if (modeSelected && returnTo) {
-              navigate(returnTo);
+            if (isSafeReturnTo(returnTo)) {
+              // Always honor returnTo — this is what kills the post-login loop
+              // for "/broker/portal", "/investor-dashboard", etc.
+              navigate(returnTo, { replace: true });
             } else if (modeSelected) {
-              navigate("/");
+              navigate("/", { replace: true });
             } else {
               // No preselection and no prior selection → land on home, where
               // the "Tell us who you are" CategorySelectorSection lets the
               // user pick their role on their own terms (no forced modal).
-              navigate("/");
+              navigate("/", { replace: true });
             }
           }
           break;
