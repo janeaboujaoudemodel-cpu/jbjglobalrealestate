@@ -151,7 +151,7 @@ export const useVisitorTracking = () => {
         element_id: eventData.element_id || null,
         element_class: eventData.element_class || null,
         element_text: eventData.element_text || null,
-        event_data: eventData,
+        event_data: eventData as Record<string, unknown>,
       });
     } catch (error) {
       console.error('Error tracking event:', error);
