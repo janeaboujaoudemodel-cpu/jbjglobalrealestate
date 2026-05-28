@@ -556,8 +556,12 @@ export default function BrokerCRM() {
         open={callDialogOpen}
         onOpenChange={setCallDialogOpen}
         leads={leadsData}
+        userId={user?.id}
         submitting={createCallLog.isPending}
-        onSubmit={(input) => createCallLog.mutate(input)}
+        onSubmit={async (input) => {
+          const row = await createCallLog.mutateAsync(input);
+          return { callLogId: (row as any)?.id };
+        }}
       />
       <RequestDatabaseDialog open={requestOpen} onOpenChange={setRequestOpen} />
     </div>
