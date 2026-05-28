@@ -224,7 +224,7 @@ export default function LogCallDialog({
       const { data: tx } = await supabase.functions.invoke("video-transcribe", {
         body: { audio: b64, mimeType: lastChunk.type || "audio/webm", language: "en" },
       });
-      const text = (tx?.text || tx?.segments?.map((s: any) => s.text).join(" ") || "").trim();
+      const text = (tx?.fullText || tx?.text || tx?.segments?.map((s: any) => s.text).join(" ") || "").trim();
       if (text) liveTextRef.current = `${liveTextRef.current} ${text}`.trim();
       if (!liveTextRef.current) return;
       const { data, error } = await supabase.functions.invoke("broker-call-live-coach", {
@@ -266,12 +266,16 @@ export default function LogCallDialog({
       // If we got a callLogId AND have audio, upload + trigger transcription
       const callLogId = (result as any)?.callLogId as string | undefined;
       if (callLogId && finalAudioBlob && userId) {
-        const ext = finalAudioBlob.type.includes("ogg") ? "ogg" : finalAudioBlob.type.includes("mp4") ? "mp4" : "webm";
+        const normalizedMime = finalAudioBlob.type.includes("ogg") ? "audio/ogg" : finalAudioBlob.type.includes("mp4") ? "audio/mp4" : "audio/webm";
+        const uploadBlob = finalAudioBlob.type === normalizedMime
+          ? finalAudioBlob
+          : new Blob([await finalAudioBlob.arrayBuffer()], { type: normalizedMime });
+        const ext = normalizedMime.includes("ogg") ? "ogg" : normalizedMime.includes("mp4") ? "mp4" : "webm";
         const path = `${userId}/${callLogId}.${ext}`;
         const { error: upErr } = await supabase
           .storage
           .from("call-recordings")
-          .upload(path, finalAudioBlob, { contentType: finalAudioBlob.type || "audio/webm", upsert: true });
+          .upload(path, uploadBlob, { contentType: normalizedMime, upsert: true });
         if (upErr) throw upErr;
         const { error: updateErr } = await supabase
           .from("broker_call_logs")
@@ -285,7 +289,8 @@ export default function LogCallDialog({
           if (error) console.warn("call process error", error);
           else toast.success("Call transcript & AI summary ready");
         });
-        toast.success("Recording uploaded — AI is processing it");
+        toast.success("Recording saved — AI is processing it");
+        await supabase.from("broker_call_logs").select("id").eq("id", callLogId).maybeSingle();
       }
       onOpenChange(false);
     } catch (e: any) {
@@ -490,24 +495,24 @@ export default function LogCallDialog({
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              disabled={submitting}
+              disabled={submitting || savingRecording}
               className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || savingRecording}
               className="bg-[#102540] text-white hover:bg-[#1a3d63]"
               data-allow-dark-cta
               data-no-contrast-guard
             >
-              {submitting ? (
+              {submitting || savingRecording ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin text-white" />
               ) : (
                 <CheckCircle2 className="h-4 w-4 mr-2 text-white" />
               )}
-              <span className="text-white">Save call log</span>
+              <span className="text-white">{savingRecording ? "Saving recording…" : "Save call log"}</span>
             </Button>
           </DialogFooter>
         </form>
