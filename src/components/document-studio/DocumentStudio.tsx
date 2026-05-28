@@ -1481,8 +1481,91 @@ function StudioShell({
       )}
 
 
+      {/* ─── Top toolbar (visible on step ≥ 2) — Reset / Print / Export / Send ─── */}
+      {step === 2 && template && (
+        <div
+          className="sticky top-0 z-30 flex items-center justify-between gap-3 px-4 py-2 bg-[#FDFBF7] border-b border-[#B89555]/30"
+          data-document-studio-toolbar="1"
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            <button
+              onClick={() => setStep(1)}
+              className="h-8 px-2 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center gap-1.5 text-[12px] text-[#1A1A1A]"
+              aria-label="Back to templates"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Templates
+            </button>
+            <div className="hidden sm:block min-w-0">
+              <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 leading-none">Template</div>
+              <div className="text-[12px] font-semibold text-[#1A1A1A] truncate leading-tight">{template.label}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={resetToTemplate}
+              disabled={!bodyHtml}
+              title="Reset edits to template"
+              className="h-8"
+            >
+              <Wand2 className="w-3.5 h-3.5 mr-1.5" /> Reset
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handlePrint}
+              disabled={!bodyHtml}
+              title="Print"
+              className="h-8"
+            >
+              <Printer className="w-3.5 h-3.5 mr-1.5" /> Print
+            </Button>
+            <div className="flex">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={!bodyHtml || !!exporting}
+                onClick={() => handleExport("pdf")}
+                title="Download PDF"
+                className="h-8 rounded-r-none border-r-0"
+              >
+                {exporting === "pdf" ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Download className="w-3.5 h-3.5 mr-1.5" />}
+                Export PDF
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="h-8 rounded-l-none px-2" disabled={!bodyHtml || !!exporting} title="More export formats">
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-[#FDFBF7] z-[2147483647]">
+                  <DropdownMenuItem onClick={() => handleExport("pdf")}>
+                    <FileText className="w-4 h-4 mr-2" /> Download PDF
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleExport("png")}>
+                    <FileText className="w-4 h-4 mr-2" /> Download Image (PNG)
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleExport("docx")}>
+                    <FileText className="w-4 h-4 mr-2" /> Download Word (.docx)
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleExport("both")}>
+                    <FileText className="w-4 h-4 mr-2" /> Download PDF + PNG
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handlePrint}>
+                    <Printer className="w-4 h-4 mr-2" /> Print
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ─── Body ─── */}
       <div className="flex-1 min-h-0 flex">
+
         {/* LEFT RAIL */}
         <aside className="w-[360px] shrink-0 border-r border-[#B89555]/55 bg-[#FDFBF7] flex flex-col">
           {step === 1 && (
