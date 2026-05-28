@@ -1330,9 +1330,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
+                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[#B91C1C]/[0.06] border-[#B91C1C]/45 hover:bg-[#B91C1C]/12 hover:border-[#B91C1C]/70"
                   >
-                    <Headphones className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" strokeWidth={2} />
+                    <Headphones className="w-3.5 h-3.5 text-[#B91C1C] group-hover:text-[#B91C1C]" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1343,9 +1343,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
+                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[#B91C1C]/[0.06] border-[#B91C1C]/45 hover:bg-[#B91C1C]/12 hover:border-[#B91C1C]/70"
                   >
-                    <Ticket className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" strokeWidth={2} />
+                    <Ticket className="w-3.5 h-3.5 text-[#B91C1C] group-hover:text-[#B91C1C]" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
