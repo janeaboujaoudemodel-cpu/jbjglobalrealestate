@@ -148,6 +148,7 @@ const NAV_SECTIONS: NavSection[] = [
       { label: "Analytics", icon: BarChart3, path: "/owner/analytics" },
       { label: "Users", icon: Users, path: "/owner/users" },
       { label: "Research Users", icon: Users, path: "/owner/research-users" },
+      { label: "Preview Broker Portal", icon: Eye, path: "/broker/portal?preview=1" },
 
       { label: "Documents & Forms", icon: FileText, path: "/owner/documents/forms" },
     ],

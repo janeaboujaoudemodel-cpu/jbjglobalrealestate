@@ -31,9 +31,10 @@ export default function BrokerPortalLayout() {
                 </span>
               </div>
               <Link
-                to="/owner/dashboard"
+                to="/owner/crm"
                 className="inline-flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-lg bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#2a2a2a] transition-colors"
                 data-allow-dark-cta
+                onClick={() => { try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {} }}
               >
                 Return to Owner Backend
                 <ArrowRight className="h-3.5 w-3.5" />

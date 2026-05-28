@@ -9,6 +9,7 @@ import { Route, Navigate } from "react-router-dom";
 import AuthRequiredRoute from "@/components/AuthRequiredRoute";
 import ModeRequiredRoute from "@/components/ModeRequiredRoute";
 import BrokerPortalLayout from "@/components/broker-portal/BrokerPortalLayout";
+import OwnerRedirectGuard from "@/components/broker-portal/OwnerRedirectGuard";
 
 const BrokerDashboardLanding = lazy(() => import("@/pages/broker/BrokerDashboardLanding"));
 const BrokerCRM              = lazy(() => import("@/pages/broker/BrokerCRM"));
@@ -25,9 +26,11 @@ const BrokerComingSoonSection= lazy(() => import("@/pages/broker/BrokerComingSoo
 
 const Wrap = (
   <AuthRequiredRoute>
-    <ModeRequiredRoute modes={["broker"]}>
-      <BrokerPortalLayout />
-    </ModeRequiredRoute>
+    <OwnerRedirectGuard>
+      <ModeRequiredRoute modes={["broker"]}>
+        <BrokerPortalLayout />
+      </ModeRequiredRoute>
+    </OwnerRedirectGuard>
   </AuthRequiredRoute>
 );
 
