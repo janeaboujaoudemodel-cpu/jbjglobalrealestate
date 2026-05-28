@@ -197,7 +197,7 @@ export default function BrokerDashboardLanding() {
                   <div className="min-w-0 flex-1">
                     <div className="text-sm text-[#1A1A1A] truncate">
                       {l.full_name || "Unnamed lead"}
-                      <span className="text-[#1A1A1A]/55"> · {l.status || "new"}</span>
+                      <span className="text-[#1A1A1A]/55"> · {l.pipeline_stage || "new"}</span>
                     </div>
                     <div className="text-[11px] text-[#1A1A1A]/55 truncate">
                       Updated {formatDisplayDate(l.updated_at)}
