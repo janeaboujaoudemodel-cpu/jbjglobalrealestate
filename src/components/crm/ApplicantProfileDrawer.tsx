@@ -14,7 +14,7 @@ import {
   X, Mail, Phone, MessageSquare, Video, Eye, CheckCircle2,
   XCircle, Clock, FileText, Briefcase, MapPin, Languages,
   Tag, User, Calendar, Sparkles, Bot, Save, Loader2, Link2,
-  History, Send, StickyNote, ShieldCheck,
+  History, Send, StickyNote, ShieldCheck, FileSignature, MailCheck,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
