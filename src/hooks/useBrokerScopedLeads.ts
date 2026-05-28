@@ -4,9 +4,10 @@ import { useAuth } from "@/contexts/AuthContext";
 
 /**
  * Returns crm_leads visible to the current broker.
- * RLS on crm_leads already enforces: owner OR assigned_broker_id matches the broker
- * OR a valid crm_database_grant covers the lead's source_database_id.
- * We simply SELECT — the policy filters server-side.
+ * RLS on crm_leads enforces visibility (owner/admin, assignment, or active
+ * crm_database_grant). We only select columns that actually exist on
+ * crm_leads — `status` is NOT a column, the pipeline column is
+ * `pipeline_stage`.
  */
 export function useBrokerScopedLeads(opts: { sourceDatabaseId?: string } = {}) {
   const { user } = useAuth();
@@ -18,7 +19,7 @@ export function useBrokerScopedLeads(opts: { sourceDatabaseId?: string } = {}) {
       let q = supabase
         .from("crm_leads")
         .select(
-          "id, full_name, email_lower, phone_e164, status, source, source_database_id, assigned_broker_id, created_at, updated_at"
+          "id, full_name, email_lower, phone_e164, pipeline_stage, lead_source_type, source, source_database_id, assigned_broker_id, created_by_user_id, owner_user_id, created_at, updated_at"
         )
         .order("updated_at", { ascending: false })
         .limit(500);

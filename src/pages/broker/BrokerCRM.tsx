@@ -89,9 +89,9 @@ export default function BrokerCRM() {
                 {leads.data!.map((l: any) => (
                   <div key={l.id} className="px-4 py-3 flex items-center gap-3">
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium truncate">{l.full_name || "Unnamed lead"}</div>
+                    <div className="text-sm font-medium truncate">{l.full_name || "Unnamed lead"}</div>
                       <div className="text-[11px] text-[#1A1A1A]/60 truncate">
-                        {l.status || "—"} · {l.source || "—"}
+                        {l.pipeline_stage || "new"} · {l.source || l.lead_source_type || "—"}
                       </div>
                     </div>
                     <div className="text-[11px] text-[#1A1A1A]/60 tabular-nums">
