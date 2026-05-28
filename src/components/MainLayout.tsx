@@ -60,7 +60,9 @@ const hasDailyShown = (): boolean => {
 const markDailyShown = () => {
   try {
     localStorage.setItem(CHAT_DAILY_KEY, new Date().toDateString());
-  } catch {}
+  } catch {
+    // localStorage can be unavailable in restricted browser contexts.
+  }
 };
 
 interface MainLayoutProps {
@@ -79,6 +81,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   // Track page visits on route change
   useEffect(() => { trackPageVisit(); }, [location.pathname, trackPageVisit]);
   const isBackOfficeRoute = isBackOfficePath(location.pathname);
+  const isBrokerPortalRoute = location.pathname === "/broker" || location.pathname.startsWith("/broker/");
+  const usesStandalonePortalChrome = isBackOfficeRoute || isBrokerPortalRoute;
   const isServiceRoute = location.pathname.startsWith("/services/");
   const isHomePage = location.pathname === "/";
   const isDetailPage =
@@ -122,7 +126,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       markDailyShown();
       setShowAttentionPulse(false);
     }
-  }, [location.pathname]);
+  }, [isDetailPage, location.pathname]);
 
   useEffect(() => {
     const handleRecPopup = () => {
@@ -198,9 +202,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     setShowAttentionPulse(false);
   };
 
-  const effectiveCollapsed = isBackOfficeRoute ? true : isChatCollapsed;
+  const effectiveCollapsed = usesStandalonePortalChrome ? true : isChatCollapsed;
   const hasDarkHero = hasTransparentHeader(location.pathname);
-  const needsHeaderSpacing = shouldAddHeaderSpacing(location.pathname);
+  const needsHeaderSpacing = usesStandalonePortalChrome ? false : shouldAddHeaderSpacing(location.pathname);
 
   useEffect(() => {
     if (isBackOfficeRoute || !isServiceRoute) {
@@ -250,18 +254,20 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <CommandPaletteRoot />
         </Suspense>
       )}
-      {/* Compact phone (<640): mobile header | Tablet/desktop (sm 640px+): reference L-shape sidebar + utility bar */}
-      <div data-chrome="header" className="sm:hidden">
-        <GlobalHeader forceSolid={needsHeaderSpacing} />
-      </div>
-      <>
-        <div data-chrome="sidebar" className="hidden sm:block fixed left-0 top-0 h-screen z-[9997]">
-          <GlobalVerticalNav />
-        </div>
-        <div data-chrome="utility-bar" className="hidden sm:block">
-          <HorizontalUtilityBar />
-        </div>
-      </>
+       {/* Compact phone (<640): mobile header | Tablet/desktop (sm 640px+): reference L-shape sidebar + utility bar */}
+      {!usesStandalonePortalChrome && (
+        <>
+          <div data-chrome="header" className="sm:hidden">
+            <GlobalHeader forceSolid={needsHeaderSpacing} />
+          </div>
+          <div data-chrome="sidebar" className="hidden sm:block fixed left-0 top-0 h-screen z-[9997]">
+            <GlobalVerticalNav />
+          </div>
+          <div data-chrome="utility-bar" className="hidden sm:block">
+            <HorizontalUtilityBar />
+          </div>
+        </>
+      )}
       <GlobalContactGating>
         {/*
           Header spacing rules:
@@ -271,7 +277,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             header via .jj-hero-fullscreen). This removes the champagne band that was visible
             between the header and the hero on desktop.
         */}
-        <main className={`w-full max-w-full overflow-x-hidden bg-[#FDFBF7] min-h-screen transition-[padding-left,padding-top] duration-100 ease-out [body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px] ${needsHeaderSpacing ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
+        <main className={`w-full max-w-full overflow-x-hidden bg-[#FDFBF7] min-h-screen transition-[padding-left,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "pl-0" : "[body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]"} ${needsHeaderSpacing ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
 
 
           {layoutGuardTriggered && isServiceRoute && (
@@ -290,17 +296,17 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           sidebar visually overlays the leftmost slice; footer inner content
           uses max-w-7xl mx-auto so it stays optically centered. */}
       <div data-chrome="footer" className="w-full">
-        {!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
+        {!usesStandalonePortalChrome && !isToolkitGeneratorRoute && <Footer />}
       </div>
 
-      {popupsReady && (
+      {!usesStandalonePortalChrome && popupsReady && (
         <Suspense fallback={null}>
           <PopupLayer />
         </Suspense>
       )}
       {/* Page navigation arrows — visible only when chat is closed */}
-      <PageNavigation isChatOpen={!effectiveCollapsed} isChatMedium={showAttentionPulse && effectiveCollapsed} />
-      {!isBackOfficeRoute && (!isHomePage || popupsReady) && (
+      {!usesStandalonePortalChrome && <PageNavigation isChatOpen={!effectiveCollapsed} isChatMedium={showAttentionPulse && effectiveCollapsed} />}
+      {!usesStandalonePortalChrome && (!isHomePage || popupsReady) && (
         <Suspense fallback={null}>
           <AIChatWidget
             isCollapsed={effectiveCollapsed}
@@ -335,12 +341,12 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           onClose={() => { completeTour(); setShowTour(false); }}
         />
       </Suspense>
-      {!isBackOfficeRoute && (
+      {!usesStandalonePortalChrome && (
         <Suspense fallback={null}>
           <CompleteProfilePrompt />
         </Suspense>
       )}
-      {!isBackOfficeRoute && (
+      {!usesStandalonePortalChrome && (
         <Suspense fallback={null}>
           <GlobalSupportMount />
         </Suspense>

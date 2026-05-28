@@ -14,8 +14,12 @@ interface TrackEventData {
   form_name?: string;
   tool_name?: string;
   search_query?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
+
+type NavigatorWithConnection = Navigator & {
+  connection?: { effectiveType?: string };
+};
 
 const getDeviceType = (): string => {
   const width = window.innerWidth;
@@ -56,6 +60,7 @@ const getSessionId = (): string => {
 export const useVisitorTracking = () => {
   const location = useLocation();
   const { user } = useAuth();
+  const disabled = location.pathname === '/broker' || location.pathname.startsWith('/broker/');
   const sessionStartTime = useRef(Date.now());
   const pageStartTime = useRef(Date.now());
   const lastPath = useRef(location.pathname);
@@ -64,11 +69,12 @@ export const useVisitorTracking = () => {
 
   // Initialize session
   const initSession = useCallback(async () => {
+    if (disabled) return;
     if (hasInitialized.current) return;
     hasInitialized.current = true;
 
     const sessionId = getSessionId();
-    const connectionInfo = (navigator as any).connection;
+    const connectionInfo = (navigator as NavigatorWithConnection).connection;
     
     try {
       const { error } = await supabase
@@ -86,7 +92,7 @@ export const useVisitorTracking = () => {
           viewport_size: `${window.innerWidth}x${window.innerHeight}`,
           language: navigator.language || null,
           network_type: connectionInfo?.effectiveType || null,
-        } as any, {
+        } as never, {
           onConflict: 'session_id',
         });
 
@@ -96,10 +102,11 @@ export const useVisitorTracking = () => {
     } catch (error) {
       console.error('Error initializing session:', error);
     }
-  }, [location.pathname, user]);
+  }, [disabled, location.pathname, user]);
 
   // Track page view
   const trackPageView = useCallback(async () => {
+    if (disabled) return;
     const sessionId = getSessionId();
     const path = location.pathname;
 
@@ -128,10 +135,11 @@ export const useVisitorTracking = () => {
     } catch (error) {
       console.error('Error tracking page view:', error);
     }
-  }, [location.pathname]);
+  }, [disabled, location.pathname]);
 
   // Track general event
   const trackEvent = useCallback(async (eventType: string, eventName: string, eventData: TrackEventData = {}) => {
+    if (disabled) return;
     const sessionId = getSessionId();
 
     try {
@@ -148,7 +156,7 @@ export const useVisitorTracking = () => {
     } catch (error) {
       console.error('Error tracking event:', error);
     }
-  }, [location.pathname]);
+  }, [disabled, location.pathname]);
 
   // Track click
   const trackClick = useCallback((element: string, additionalData?: TrackEventData) => {
@@ -171,7 +179,7 @@ export const useVisitorTracking = () => {
         document_url: documentUrl || null,
         action: 'download',
         user_id: user?.id || null,
-      } as any);
+      } as never);
     } catch (error) {
       console.error('Error tracking download:', error);
     }
@@ -194,14 +202,14 @@ export const useVisitorTracking = () => {
         storage_path: storagePath || null,
         action: 'upload',
         user_id: user?.id || null,
-      } as any);
+      } as never);
     } catch (error) {
       console.error('Error tracking upload:', error);
     }
   }, [trackEvent, user]);
 
   // Track form submission
-  const trackFormSubmission = useCallback((formName: string, formData?: Record<string, any>) => {
+  const trackFormSubmission = useCallback((formName: string, formData?: Record<string, unknown>) => {
     trackEvent('form_submit', `Submitted ${formName}`, { form_name: formName, ...formData });
   }, [trackEvent]);
 
@@ -217,6 +225,7 @@ export const useVisitorTracking = () => {
 
   // Update time spent on exit
   const updateTimeSpent = useCallback(async () => {
+    if (disabled) return;
     const sessionId = getSessionId();
     const timeSpent = Math.floor((Date.now() - sessionStartTime.current) / 1000);
 
@@ -231,7 +240,7 @@ export const useVisitorTracking = () => {
     } catch (error) {
       console.error('Error updating time spent:', error);
     }
-  }, []);
+  }, [disabled]);
 
   // Initialize on mount
   useEffect(() => {
@@ -240,6 +249,11 @@ export const useVisitorTracking = () => {
 
   // Track page views on route change + per-page time tracking
   useEffect(() => {
+    if (disabled) {
+      lastPath.current = location.pathname;
+      pageStartTime.current = Date.now();
+      return;
+    }
     // Fire time_on_page for previous page
     if (lastPath.current !== location.pathname) {
       const durationSec = Math.round((Date.now() - pageStartTime.current) / 1000);
@@ -257,7 +271,7 @@ export const useVisitorTracking = () => {
       pageStartTime.current = Date.now();
     }
     trackPageView();
-  }, [trackPageView, location.pathname]);
+  }, [disabled, trackPageView, location.pathname]);
 
   // Update time spent on page unload
   useEffect(() => {
