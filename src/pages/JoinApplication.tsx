@@ -932,26 +932,34 @@ export default function JoinApplication() {
                 {/* Names */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="firstName" className="jbj-form-label text-sm font-semibold">First Name</Label>
+                    <Label htmlFor="firstName" data-required className="jbj-form-label text-sm font-semibold">First Name</Label>
                     <Input
                       id="firstName"
                       value={formData.firstName}
-                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                      onChange={(e) => { setFormData({ ...formData, firstName: e.target.value }); clearFieldError("firstName"); }}
                       placeholder="e.g. Sarah"
                       disabled={loading}
+                      required
+                      aria-required="true"
+                      {...invalidProps("firstName")}
                       className="careers-blue-field h-12 rounded-lg text-base"
                     />
+                    <FieldError id="firstName-err" message={fieldErr("firstName")} />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="lastName" className="jbj-form-label text-sm font-semibold">Last Name</Label>
+                    <Label htmlFor="lastName" data-required className="jbj-form-label text-sm font-semibold">Last Name</Label>
                     <Input
                       id="lastName"
                       value={formData.lastName}
-                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                      onChange={(e) => { setFormData({ ...formData, lastName: e.target.value }); clearFieldError("lastName"); }}
                       placeholder="e.g. Khan"
                       disabled={loading}
+                      required
+                      aria-required="true"
+                      {...invalidProps("lastName")}
                       className="careers-blue-field h-12 rounded-lg text-base"
                     />
+                    <FieldError id="lastName-err" message={fieldErr("lastName")} />
                   </div>
                 </div>
 
@@ -971,15 +979,18 @@ export default function JoinApplication() {
 
                 {/* Phone */}
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="jbj-form-label text-sm font-semibold">Phone Number</Label>
-                  <PhoneInput
-                    value={formData.phone}
-                    onChange={(value) => setFormData({ ...formData, phone: value || "" })}
-                    disabled={loading}
-                    placeholder="Phone number"
-                    variant="light"
-                    className="careers-phone-input"
-                  />
+                  <Label htmlFor="phone" data-required className="jbj-form-label text-sm font-semibold">Phone Number</Label>
+                  <div aria-invalid={!!fieldErr("phone")}>
+                    <PhoneInput
+                      value={formData.phone}
+                      onChange={(value) => { setFormData({ ...formData, phone: value || "" }); clearFieldError("phone"); }}
+                      disabled={loading}
+                      placeholder="Phone number"
+                      variant="light"
+                      className="careers-phone-input"
+                    />
+                  </div>
+                  <FieldError id="phone-err" message={fieldErr("phone")} />
                 </div>
 
                 </div>
