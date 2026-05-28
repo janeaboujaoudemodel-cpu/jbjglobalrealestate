@@ -538,14 +538,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button 
-          className={`flex items-center gap-0.5 lg:gap-1 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
+          className={`flex items-center gap-0.5 lg:gap-1 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-md ${
             isFullyTransparent
               ? isActiveCheck?.() 
                 ? 'text-[#1A1A1A] bg-transparent' 
                 : 'text-white hover:text-[#1A1A1A] bg-transparent'
               : isActiveCheck?.() 
-                ? 'text-[#1A1A1A] bg-[#EFE6D6]' 
-                : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
+                ? 'text-[#1A1A1A] bg-transparent underline decoration-[#B89555] decoration-1 underline-offset-[6px]' 
+                : 'text-[#1A1A1A] hover:text-[#1A1A1A] bg-transparent hover:underline hover:decoration-[#B89555] hover:decoration-1 hover:underline-offset-[6px]'
           }`}
           style={{ letterSpacing: '0.01em' }}
         >
