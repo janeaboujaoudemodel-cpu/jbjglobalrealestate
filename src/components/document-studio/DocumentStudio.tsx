@@ -147,9 +147,22 @@ const anchorSignatureArtifacts = (html: string): string => {
       '[data-signature-block="1"],[data-rendered-page-signature="1"],[data-rendered-page-divider="1"]',
     ),
   ).filter((el) => !el.closest('[data-form-i-page="1"]'));
+  if (movable.length === 0) return tpl.innerHTML;
+  // Insert a flex spacer BEFORE the signature artifacts so they reliably
+  // pin to the bottom of the page even when prose CSS or other parent
+  // styles defeat `margin-top:auto` on the sig elements. The spacer grows
+  // to fill remaining vertical space inside the flex-column body region.
+  const spacer = document.createElement("div");
+  spacer.setAttribute("data-signature-spacer", "1");
+  spacer.setAttribute(
+    "style",
+    "flex:1 1 auto;min-height:0;align-self:stretch;",
+  );
+  tpl.content.appendChild(spacer);
   movable.forEach((el) => tpl.content.appendChild(el));
   return tpl.innerHTML;
 };
+
 
 export default function DocumentStudio({ catalog, trigger, presetTemplateId }: Props) {
   const [open, setOpen] = useState(false);

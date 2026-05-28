@@ -312,9 +312,16 @@ export function recipientBlock(fields: Record<string, string>, opts?: { greeting
     </div>`;
 }
 
-export function dateLine(custom?: string): string {
-  return `<div style="text-align:right;font-size:11px;color:${MUTED};margin:24px 0 18px;">${esc(formatHumanDate(custom) || todayLong())}</div>`;
+export function dateLine(_custom?: string): string {
+  // 🔒 LOCKED — intentionally returns empty string.
+  // DocumentStudio chrome already prints "Generated DD Month YYYY" in the
+  // top-right corner of EVERY page (see renderPageGeneratedDate). Emitting
+  // a second date in the body caused two dates to overlap at the top of
+  // page 2+ (owner complaint 2026-05-28). Keep the export for backward
+  // compatibility with composers that still call it.
+  return "";
 }
+
 
 export function subjectLine(text: string): string {
   return `<div style="margin:14px 0 14px;font-size:13px;font-weight:600;color:${INK};border-bottom:1px solid ${GOLD};padding-bottom:6px;">${esc(text)}</div>`;
