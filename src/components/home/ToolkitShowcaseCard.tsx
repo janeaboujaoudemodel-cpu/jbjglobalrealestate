@@ -77,24 +77,40 @@ export function ToolkitShowcaseCard() {
 
         <div className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)]">
           {/* Header */}
-          <div className="px-5 md:px-7 pt-5 md:pt-6 pb-4">
-            <div
+          <div className="px-5 md:px-7 pt-5 md:pt-6 pb-4 flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <div
+                data-surface="dark"
+                data-on-dark
+                data-no-contrast-guard
+                data-allow-dark-cta
+                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/50 text-[10px] font-semibold uppercase tracking-[0.2em] mb-3 transition-colors"
+                style={{ color: "#FFFFFF" }}
+              >
+                <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <span className="allow-white" style={{ color: "#FFFFFF" }}>Free Professional Tools</span>
+              </div>
+              <h2 className="text-xl md:text-2xl font-bold text-[#102540] hover:text-[#B89555] tracking-tight transition-colors cursor-default">
+                JBJ Royal Tools Hub
+              </h2>
+              <p className="mt-1 text-sm text-[#1A1A1A]/70">
+                Powerful real estate tools — valuation, comparison, mortgage and AI utilities, all free.
+              </p>
+            </div>
+            <Link
+              to="/ai-hub"
               data-surface="dark"
               data-on-dark
               data-no-contrast-guard
               data-allow-dark-cta
-              className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/50 text-[10px] font-semibold uppercase tracking-[0.2em] mb-3 transition-colors"
+              className="allow-white shrink-0 self-center inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 text-white text-xs md:text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)]"
               style={{ color: "#FFFFFF" }}
             >
-              <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              <span className="allow-white" style={{ color: "#FFFFFF" }}>Free Professional Tools</span>
-            </div>
-            <h2 className="text-xl md:text-2xl font-bold text-[#102540] hover:text-[#B89555] tracking-tight transition-colors cursor-default">
-              JBJ Royal Tools Hub
-            </h2>
-            <p className="mt-1 text-sm text-[#1A1A1A]/70">
-              Powerful real estate tools — valuation, comparison, mortgage and AI utilities, all free.
-            </p>
+              <Crown className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
+              <span className="allow-white hidden sm:inline" style={{ color: "#FFFFFF" }}>Explore JBJ Tools</span>
+              <span className="allow-white sm:hidden" style={{ color: "#FFFFFF" }}>Explore</span>
+              <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
+            </Link>
           </div>
 
           {/* Unified segmented header — rectangular pill band, dividers between categories */}
@@ -137,7 +153,7 @@ export function ToolkitShowcaseCard() {
 
           {/* Active tool hero panel — image fills card; soft bottom fade
               only; frosted-glass CTA so the image shows through. */}
-          <div key={active.id} className="relative h-[280px] md:h-[340px] overflow-hidden">
+          <div key={active.id} className="relative h-[420px] md:h-[520px] overflow-hidden">
             <div
               className="absolute inset-0 bg-cover bg-center animate-fade-in"
               style={{ backgroundImage: `url(${active.image})` }}
@@ -168,24 +184,6 @@ export function ToolkitShowcaseCard() {
                 </Link>
               </div>
             </div>
-          </div>
-
-
-          {/* Footer — Explore JBJ Tools CTA in navy blue */}
-          <div className="px-5 md:px-7 py-6 text-center bg-[#FDFBF7]">
-            <Link
-              to="/ai-hub"
-              data-surface="dark"
-              data-on-dark
-              data-no-contrast-guard
-              data-allow-dark-cta
-              className="allow-white inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 text-white text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)]"
-              style={{ color: "#FFFFFF" }}
-            >
-              <Crown className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
-              <span className="allow-white" style={{ color: "#FFFFFF" }}>Explore JBJ Tools</span>
-              <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
-            </Link>
           </div>
         </div>
       </div>
