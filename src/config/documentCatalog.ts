@@ -15,7 +15,7 @@
 import {
   Briefcase, FileText, AlertTriangle, ShieldCheck, Handshake,
   GraduationCap, Mail, Users, FileSignature, Home, Key, ClipboardCheck,
-  Building2, Stamp, UserSquare2,
+  Building2, Stamp, UserSquare2, UserX,
 } from "lucide-react";
 
 export type DocumentAudience = "staff" | "client";
