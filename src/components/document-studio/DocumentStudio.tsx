@@ -418,7 +418,7 @@ function StudioShell({
     // GLOBAL: composers that opt out of chrome (Form I and other single-
     // page form-style templates) must NEVER be re-paginated. They are
     // self-contained A4 layouts and any split corrupts the table.
-    if (/data-no-chrome=["']1["']/.test(bodyHtml) || /data-single-page=["']1["']/.test(bodyHtml)) {
+    if (/data-no-chrome=["']1["']/.test(bodyHtml) || /data-single-page=["']1["']/.test(bodyHtml) || /data-locked-pages=["']1["']/.test(bodyHtml)) {
       setAutoPageGroups(null);
       return;
     }
