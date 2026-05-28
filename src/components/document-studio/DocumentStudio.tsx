@@ -2213,7 +2213,8 @@ function StudioShell({
             {template ? (
               (() => {
                 const noChrome = /data-no-chrome=["']1["']/.test(bodyHtml || "");
-                const BODY_PAD_X = noChrome ? 24 : 70;
+                const isFormI = /data-form-i-page=["']1["']/.test(bodyHtml || "");
+                const BODY_PAD_X = isFormI ? 14 : noChrome ? 24 : 70;
                 // DocuSign stamps the envelope ID in the top ~0.4in of every
                 // page when the document is processed for signature. Reserve a
                 // safe band on every page so the stamp never overlays content.
@@ -2250,8 +2251,8 @@ function StudioShell({
                       {Array.from({ length: pageCount }).map((_, pageIndex) => {
                         const isFirst = pageIndex === 0;
                         const isLast = pageIndex === pageCount - 1;
-                        const topPad = noChrome ? 12 : (isFirst ? FIRST_TOP : NEXT_TOP);
-                        const bottomPad = noChrome ? 12 : (isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD);
+                        const topPad = isFormI ? 10 : noChrome ? 12 : (isFirst ? FIRST_TOP : NEXT_TOP);
+                        const bottomPad = isFormI ? 10 : noChrome ? 12 : (isLast ? LAST_BOTTOM_PAD : STANDARD_BOTTOM_PAD);
                         const userSignatureName = fields.recipientName || fields.fullName || fields.full_name || fields.client_name || fields.guest_name || "";
                         const groupHtml = stripGeneratedPageArtifacts(pageGroups[pageIndex] ?? "");
                         const hasFinalSignatureBlock = /data-signature-block=["']1["']/.test(groupHtml);
