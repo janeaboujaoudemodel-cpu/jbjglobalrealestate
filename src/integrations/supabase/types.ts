@@ -15570,6 +15570,13 @@ export type Database = {
             referencedColumns: ["envelope_id"]
           },
           {
+            foreignKeyName: "esign_audit_log_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["envelope_id"]
+          },
+          {
             foreignKeyName: "esign_audit_log_recipient_id_fkey"
             columns: ["recipient_id"]
             isOneToOne: false
@@ -15855,6 +15862,13 @@ export type Database = {
             referencedColumns: ["envelope_id"]
           },
           {
+            foreignKeyName: "esign_fields_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["envelope_id"]
+          },
+          {
             foreignKeyName: "esign_fields_recipient_id_fkey"
             columns: ["recipient_id"]
             isOneToOne: false
@@ -15972,6 +15986,13 @@ export type Database = {
             referencedRelation: "signed_contracts_index"
             referencedColumns: ["envelope_id"]
           },
+          {
+            foreignKeyName: "esign_recipients_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["envelope_id"]
+          },
         ]
       }
       esign_signed_documents: {
@@ -16024,6 +16045,13 @@ export type Database = {
             columns: ["envelope_id"]
             isOneToOne: false
             referencedRelation: "signed_contracts_index"
+            referencedColumns: ["envelope_id"]
+          },
+          {
+            foreignKeyName: "esign_signed_documents_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
             referencedColumns: ["envelope_id"]
           },
         ]
@@ -17635,6 +17663,7 @@ export type Database = {
         Row: {
           ai_ranking: number | null
           ai_summary: string | null
+          candidate_id: string | null
           consent_accurate: boolean
           consent_terms: boolean
           created_at: string
@@ -17666,6 +17695,7 @@ export type Database = {
         Insert: {
           ai_ranking?: number | null
           ai_summary?: string | null
+          candidate_id?: string | null
           consent_accurate?: boolean
           consent_terms?: boolean
           created_at?: string
@@ -17697,6 +17727,7 @@ export type Database = {
         Update: {
           ai_ranking?: number | null
           ai_summary?: string | null
+          candidate_id?: string | null
           consent_accurate?: boolean
           consent_terms?: boolean
           created_at?: string
@@ -17725,7 +17756,22 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "hr_applications_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "hr_candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_applications_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["candidate_id"]
+          },
+        ]
       }
       hr_approval_requests: {
         Row: {
@@ -17871,10 +17917,14 @@ export type Database = {
           certifications: string[] | null
           cover_letter_url: string | null
           created_at: string
+          current_envelope_id: string | null
+          current_job_offer_id: string | null
           cv_file_name: string | null
           cv_file_url: string | null
+          department_category: string | null
           education_level: string | null
           email: string
+          employee_id: string | null
           experience_years: number | null
           final_decision: string | null
           final_decision_by: string | null
@@ -17885,6 +17935,10 @@ export type Database = {
           first_interview_recording_url: string | null
           first_interviewer_decision: string | null
           id: string
+          intake_payload: Json | null
+          intake_submitted_at: string | null
+          intake_token: string | null
+          intake_token_expires_at: string | null
           interview_stage: string | null
           phone: string | null
           position_applied: string
@@ -17906,10 +17960,14 @@ export type Database = {
           certifications?: string[] | null
           cover_letter_url?: string | null
           created_at?: string
+          current_envelope_id?: string | null
+          current_job_offer_id?: string | null
           cv_file_name?: string | null
           cv_file_url?: string | null
+          department_category?: string | null
           education_level?: string | null
           email: string
+          employee_id?: string | null
           experience_years?: number | null
           final_decision?: string | null
           final_decision_by?: string | null
@@ -17920,6 +17978,10 @@ export type Database = {
           first_interview_recording_url?: string | null
           first_interviewer_decision?: string | null
           id?: string
+          intake_payload?: Json | null
+          intake_submitted_at?: string | null
+          intake_token?: string | null
+          intake_token_expires_at?: string | null
           interview_stage?: string | null
           phone?: string | null
           position_applied: string
@@ -17941,10 +18003,14 @@ export type Database = {
           certifications?: string[] | null
           cover_letter_url?: string | null
           created_at?: string
+          current_envelope_id?: string | null
+          current_job_offer_id?: string | null
           cv_file_name?: string | null
           cv_file_url?: string | null
+          department_category?: string | null
           education_level?: string | null
           email?: string
+          employee_id?: string | null
           experience_years?: number | null
           final_decision?: string | null
           final_decision_by?: string | null
@@ -17955,6 +18021,10 @@ export type Database = {
           first_interview_recording_url?: string | null
           first_interviewer_decision?: string | null
           id?: string
+          intake_payload?: Json | null
+          intake_submitted_at?: string | null
+          intake_token?: string | null
+          intake_token_expires_at?: string | null
           interview_stage?: string | null
           phone?: string | null
           position_applied?: string
@@ -18079,6 +18149,7 @@ export type Database = {
         Row: {
           ai_ranking: number | null
           ai_summary: string | null
+          candidate_id: string | null
           chat_session_id: string | null
           cover_letter: string | null
           created_at: string
@@ -18102,6 +18173,7 @@ export type Database = {
         Insert: {
           ai_ranking?: number | null
           ai_summary?: string | null
+          candidate_id?: string | null
           chat_session_id?: string | null
           cover_letter?: string | null
           created_at?: string
@@ -18125,6 +18197,7 @@ export type Database = {
         Update: {
           ai_ranking?: number | null
           ai_summary?: string | null
+          candidate_id?: string | null
           chat_session_id?: string | null
           cover_letter?: string | null
           created_at?: string
@@ -18146,6 +18219,20 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "hr_cv_submissions_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "hr_candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_cv_submissions_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["candidate_id"]
+          },
           {
             foreignKeyName: "hr_cv_submissions_chat_session_id_fkey"
             columns: ["chat_session_id"]
@@ -18206,6 +18293,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "hr_employees_secure"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_employee_onboarding_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["employee_record_id"]
           },
           {
             foreignKeyName: "hr_employee_onboarding_task_id_fkey"
@@ -18284,6 +18378,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "hr_candidates"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_employees_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["candidate_id"]
           },
         ]
       }
@@ -18431,6 +18532,13 @@ export type Database = {
             referencedRelation: "hr_candidates"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "hr_interview_invitations_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["candidate_id"]
+          },
         ]
       }
       hr_interviews: {
@@ -18483,6 +18591,7 @@ export type Database = {
       hr_job_applicants: {
         Row: {
           assigned_hr_user_id: string | null
+          candidate_id: string | null
           cover_letter: string | null
           created_at: string | null
           current_salary: number | null
@@ -18507,6 +18616,7 @@ export type Database = {
         }
         Insert: {
           assigned_hr_user_id?: string | null
+          candidate_id?: string | null
           cover_letter?: string | null
           created_at?: string | null
           current_salary?: number | null
@@ -18531,6 +18641,7 @@ export type Database = {
         }
         Update: {
           assigned_hr_user_id?: string | null
+          candidate_id?: string | null
           cover_letter?: string | null
           created_at?: string | null
           current_salary?: number | null
@@ -18554,6 +18665,20 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "hr_job_applicants_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "hr_candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_job_applicants_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["candidate_id"]
+          },
           {
             foreignKeyName: "hr_job_applicants_job_offer_id_fkey"
             columns: ["job_offer_id"]
@@ -18677,6 +18802,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "hr_employees_secure"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_leave_balance_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["employee_record_id"]
           },
         ]
       }
@@ -18836,6 +18968,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "hr_employees_secure"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_leave_requests_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["employee_record_id"]
           },
         ]
       }
@@ -19323,6 +19462,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "hr_employees_secure"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_warnings_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["employee_record_id"]
           },
         ]
       }
@@ -23258,6 +23404,7 @@ export type Database = {
           approved_at: string | null
           assigned_to_it: string | null
           assigned_to_webdev: string | null
+          candidate_id: string | null
           completed_at: string | null
           contract_type: string | null
           created_at: string
@@ -23296,6 +23443,7 @@ export type Database = {
           approved_at?: string | null
           assigned_to_it?: string | null
           assigned_to_webdev?: string | null
+          candidate_id?: string | null
           completed_at?: string | null
           contract_type?: string | null
           created_at?: string
@@ -23334,6 +23482,7 @@ export type Database = {
           approved_at?: string | null
           assigned_to_it?: string | null
           assigned_to_webdev?: string | null
+          candidate_id?: string | null
           completed_at?: string | null
           contract_type?: string | null
           created_at?: string
@@ -23368,7 +23517,22 @@ export type Database = {
           updated_at?: string
           webdev_notes?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "new_joiner_applications_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "hr_candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "new_joiner_applications_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["candidate_id"]
+          },
+        ]
       }
       new_joiner_status_history: {
         Row: {
@@ -35631,6 +35795,13 @@ export type Database = {
             referencedRelation: "hr_candidates"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "hr_employees_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "vw_hr_candidate_360"
+            referencedColumns: ["candidate_id"]
+          },
         ]
       }
       hr_quiz_questions_public: {
@@ -37091,6 +37262,53 @@ export type Database = {
           user_id: string | null
         }
         Relationships: []
+      }
+      vw_hr_candidate_360: {
+        Row: {
+          candidate_id: string | null
+          candidate_name: string | null
+          certificate_id: string | null
+          certificate_issued_at: string | null
+          certificate_number: string | null
+          created_at: string | null
+          current_envelope_id: string | null
+          current_job_offer_id: string | null
+          department_category: string | null
+          email: string | null
+          employee_id: string | null
+          employee_record_id: string | null
+          employee_status: string | null
+          envelope_completed_at: string | null
+          envelope_id: string | null
+          envelope_status:
+            | Database["public"]["Enums"]["esign_envelope_status"]
+            | null
+          intake_payload: Json | null
+          intake_submitted_at: string | null
+          job_offer_sent_at: string | null
+          job_offer_signed_at: string | null
+          latest_applicant_id: string | null
+          latest_job_offer_template_id: string | null
+          onboarding_complete: boolean | null
+          onboarding_step: number | null
+          phone: string | null
+          points_earned: number | null
+          position_applied: string | null
+          signed_document_url: string | null
+          start_date: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_job_applicants_job_offer_id_fkey"
+            columns: ["latest_job_offer_template_id"]
+            isOneToOne: false
+            referencedRelation: "hr_job_offers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vw_resale_with_source: {
         Row: {
