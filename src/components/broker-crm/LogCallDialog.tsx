@@ -203,7 +203,7 @@ export default function LogCallDialog({
         pendingStopRef.current?.({ blob, seconds: finalSeconds });
         pendingStopRef.current = null;
       };
-      mr.start(6000); // emit chunks every 6s for live-ish coach
+      mr.start(1000); // 1s timeslice so short recordings still flush data
       recRef.current = mr;
       setRecState("recording");
       setSeconds(0);
@@ -225,14 +225,15 @@ export default function LogCallDialog({
 
   const stopRecording = () => {
     const recorder = recRef.current;
-    if (recorder && recorder.state !== "inactive") {
-      try { recorder.requestData(); } catch { /* recorder may not support requestData in this state */ }
-      recorder.stop();
-    }
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
-    if (!recorder || recorder.state === "inactive") {
+    if (recorder && recorder.state !== "inactive") {
+      try { recorder.stop(); } catch (err) { console.warn("recorder.stop failed", err); }
+    } else {
+      // already inactive — finalize manually
       stopTracks();
       setRecState("stopped");
+      pendingStopRef.current?.(audioBlob ? { blob: audioBlob, seconds: secondsRef.current } : null);
+      pendingStopRef.current = null;
     }
   };
 
@@ -299,7 +300,7 @@ export default function LogCallDialog({
 
       // If we got a callLogId AND have audio, upload + trigger transcription
       const callLogId = (result as any)?.callLogId as string | undefined;
-      if (callLogId && finalAudioBlob && userId) {
+      if (callLogId && finalAudioBlob && finalAudioBlob.size > 0 && userId) {
         const normalizedMime = finalAudioBlob.type.includes("ogg") ? "audio/ogg" : finalAudioBlob.type.includes("mp4") ? "audio/mp4" : "audio/webm";
         const uploadBlob = finalAudioBlob.type === normalizedMime
           ? finalAudioBlob
@@ -455,19 +456,17 @@ export default function LogCallDialog({
                   Captured · {(audioBlob.size / 1024).toFixed(0)} KB · will be transcribed on save
                 </span>
               )}
-              {audioBlob && recState === "stopped" && (
-                <Button
-                  type="submit"
-                  disabled={isSaving || audioBlob.size === 0}
-                  className="ml-auto [background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
-                  data-surface="dark"
-                  data-allow-dark-cta
-                  data-no-contrast-guard
-                >
-                  {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin text-white" /> : <CheckCircle2 className="h-4 w-4 mr-2 text-white" />}
-                  <span className="text-white">{isSaving ? "Saving…" : "Save recording"}</span>
-                </Button>
-              )}
+              <Button
+                type="submit"
+                disabled={isSaving}
+                className="ml-auto [background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
+                data-surface="dark"
+                data-allow-dark-cta
+                data-no-contrast-guard
+              >
+                {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin text-white" /> : <CheckCircle2 className="h-4 w-4 mr-2 text-white" />}
+                <span className="text-white">{isSaving ? "Saving…" : "Save call log"}</span>
+              </Button>
             </div>
             {(coachTips.length > 0 || coachLoading) && (
               <div className="mt-2 rounded-md bg-[#FDFBF7] border border-[#B89555]/30 p-2.5">
