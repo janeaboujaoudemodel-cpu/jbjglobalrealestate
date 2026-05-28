@@ -501,17 +501,17 @@ export default function JoinApplication() {
       return;
     }
 
-    // Basic required-field guard (so we never silently bail to another route)
-    const missing: string[] = [];
-    if (!formData.firstName.trim()) missing.push("First name");
-    if (!formData.lastName.trim()) missing.push("Last name");
-    if (!formData.phone.trim()) missing.push("Phone number");
-    if (!formData.nationality) missing.push("Nationality");
-    if (!formData.country) missing.push("Country");
-    if (!formData.city.trim()) missing.push("City");
-    if (!formData.positionApplied) missing.push("Position");
-    if (missing.length) {
-      toast.error(`Please complete: ${missing.join(", ")}`);
+    // Full zod-driven validation across all steps
+    const allOk =
+      validateStep(0) && validateStep(1) && validateStep(2) && validateStep(3);
+    if (!allOk) {
+      // Jump to first failing step for the user
+      for (let i = 0; i < 4; i++) {
+        if (!validateStep(i)) {
+          goToStep(i);
+          break;
+        }
+      }
       return;
     }
 
