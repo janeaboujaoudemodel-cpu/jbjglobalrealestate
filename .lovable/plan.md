@@ -1,90 +1,45 @@
+## Scope
+Pure CSS/markup fixes on `/careers` (`src/pages/JoinApplication.tsx` + `src/styles/theme-tokens.css`). No logic, no backend.
 
-## Goal
+## 1. "Open Positions" header — white text, no beige flip
+`Card#open-positions` is using `careers-card-strong` which on hover/active was switching surface to champagne (the beige flip you saw).
 
-Replace the flat champagne-gold treatment on the tool pages with a **premium, differentiated, per-tool look**:
-one big outer card per tool, animated ombré border in that tool's signature color fading into ink black (matching the header), centered hero, and all CTAs / status chips / focus rings color-matched to the same accent.
+- Force the card surface to **navy `#102540`** in idle AND hover (no beige) and keep all foreground text white.
+- Repaint inside that card scope:
+  - `CardTitle` "Open Positions" → `text-white`
+  - `CardDescription` paragraph → `text-white/80`
+  - The "Live Roles" eyebrow chip → white text + white hairline border + transparent fill (currently navy text on cream)
+  - The `<strong>Apply</strong>` inside description → white
+- Add a one-shot hover sheen: a pseudo-element on the card with a 1.2s diagonal `linear-gradient(115deg, transparent 0%, rgba(255,255,255,.14) 50%, transparent 100%)` translateX sweep on `:hover`. Pure CSS, no JS.
 
-## Tools in scope (each gets its own color)
+## 2. "21 open" badge — white in every state
+`careers-open-badge` rules in `theme-tokens.css` currently get overridden on hover (becomes black-on-cream).
 
-| Tool | Route | Accent |
-|---|---|---|
-| AI Home Finder | `/quiz` | Violet → ink |
-| Property Evaluator | `/property-evaluator` | Navy → ink (existing) |
-| Property Comparison | `/compare` | Burgundy → ink (existing) |
-| Rental Index | `/rental-index` | Emerald → ink (existing) |
-| Property Measurement | `/property-measurement` | Teal → ink (new) |
-| Interior Design AI | `/interior-design-ai` | Rose → ink (new) |
-| Business Card Scanner | `/business-card-scanner` | Amber → ink (new) |
+- Lock the badge: `background:#102540 !important`, `color:#FFFFFF !important`, `border:1px solid #B89555 !important` for `:hover`, `:focus`, `:focus-visible`, `:active`, `[data-state]` — and force the inner `<span>` (`{filteredPositions.length} open`) to inherit white.
+- Keep the pulsing emerald dot unchanged.
 
-Champagne/gold stays only as the page background tint so the tool clearly "sits" on the JBJ site, but **no gold card fills, no gold buttons** inside the tool shell.
+## 3. Field borders — blue for personal block, gold for city
+Step 0 (Personal) inputs already carry `careers-blue-field` (First Name, Last Name, Email) and the phone uses `careers-phone-input`. Audit shows:
 
-## Visual system
+- ✅ First Name / Last Name / Email — already wired to `careers-blue-field` (blue border via theme-tokens). Will tighten the rule to a solid **2px navy `#102540`** border in idle + hover + focus so the blue is unmistakable (not the faint version you saw).
+- ✅ Phone — confirm `careers-phone-input` outer wrapper paints the same 2px navy border around the country-code trigger AND the tel input as one unified control.
+- 🆕 **City** (line 914, `SearchableSelect`) — add `className="careers-gold-field"` and create the matching rule in `theme-tokens.css`: 2px gold `#B89555` border, champagne `#FDFBF7` surface, ink text, gold focus ring. (Mirrors `careers-blue-field` but in gold.)
 
-```text
-┌──────────────────────────────────────────────────────────┐
-│  page bg: champagne #FDFBF7                              │
-│                                                          │
-│   ┌─ animated ombré border (accent → ink, 2px) ───────┐ │
-│   │                                                   │ │
-│   │   ┌─ Centered Hero ─────────────────────────────┐ │ │
-│   │   │  icon tile (accent)                         │ │ │
-│   │   │  H1 (ink)   accent word in accent color     │ │ │
-│   │   │  subtitle (ink/70)                          │ │ │
-│   │   └─────────────────────────────────────────────┘ │ │
-│   │                                                   │ │
-│   │   ┌─ Form / Content section ─────────────────────┐│ │
-│   │   │  inputs, selects, CTA (accent → ink gradient)││ │
-│   │   └──────────────────────────────────────────────┘│ │
-│   │                                                   │ │
-│   │   ┌─ How it works · Data sources · Disclaimer ──┐ │ │
-│   │   └──────────────────────────────────────────────┘ │ │
-│   └───────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────┘
-```
+## 4. "Questions? Contact us at contact@JBJ.ae" footer line
+Currently a bare `<p>` with a plain link — out of place vs. the rest of the careers theme.
 
-All sub-sections share **one** outer card. Internal blocks are separated by a thin accent-tinted hairline, not by another card.
+Wrap it in a small premium contact strip directly under the form card:
 
-## Build steps
+- Rounded-2xl champagne surface, 1px gold hairline, soft navy glow shadow.
+- Left: small navy icon tile (Mail icon) + "Questions?" eyebrow (navy uppercase tracked) on top of "Contact us at **contact@JBJ.ae**" (ink, email in navy semibold with gold underline on hover).
+- Right: a secondary "Chat with Jessica" pill (navy text, gold hairline) linking to `/hr-agent`.
+- Mobile: stacks vertically, centered.
 
-1. **Extend the theme registry** `src/components/tools/toolThemes.ts`
-   - Add `violet`, `teal`, `rose`, `amber` themes following the same shape as `emerald`/`navy`/`burgundy` (heroGradient, accent, accentSoft, accentBorder, ctaGradient, ctaHover, chipBg, chipBorder).
-   - Add `borderGradient` (animated conic/linear gradient from accent → ink → accent) used by the new shell.
+All text uses already-defined careers tokens — no new colours.
 
-2. **New `PremiumToolShell` component** `src/components/tools/PremiumToolShell.tsx`
-   - Single outer rounded-2xl card.
-   - Animated 2px ombré border using a masked gradient div (`@keyframes tool-border-spin` rotating a conic gradient `accent → #000 → accent`) — pure CSS, no JS.
-   - Centered hero slot (icon tile + title + subtitle).
-   - Children slot for body sections, separated by `<ToolDivider tone={theme} />` (thin accent-fade hairline, replaces gold one inside the shell).
-   - Accepts `theme: ToolTheme`.
-
-3. **New `ToolCTA` button** `src/components/tools/ToolCTA.tsx`
-   - Uses `theme.ctaGradient` / `theme.ctaHover`, white text, subtle accent glow on hover, no gold.
-   - Replaces every primary CTA inside the 7 tools.
-
-4. **Status chips / badges inside tools**
-   - Helper `ToolChip` styled with `theme.chipBg` + `theme.chipBorder` + accent text. Used for "AI Powered", market trend, demand level, etc. (currently violet/gold mix).
-
-5. **Refactor each tool page** to:
-   - Import its theme (`toolThemes.violet` etc.).
-   - Wrap entire page content in `<PremiumToolShell theme={...} title subtitle icon>`.
-   - Remove inner `ToolCard` champagne tiles where they create the "boring gold" double-card effect; keep `ToolCard` only for the legal disclaimer block (re-skinned to accent hairline).
-   - Replace `PrimaryCTA` with `ToolCTA`.
-   - Center the hero header content (currently left-aligned in `RentalIndex`, `PropertyEvaluator`, etc.).
-   - Color all icons, focus rings, asterisks, and section headings with `theme.accent`.
-
-6. **PropertySuite tab bar** `src/pages/toolkit/PropertySuite.tsx`
-   - Map each tab to its tool's accent (already partially done) and switch the suite outer background to a soft accent tint that follows the active tab, so the shell feels coherent when switching tabs.
-
-7. **Add missing tools to the suite / hub**
-   - Property Measurement, Interior Design AI, Business Card Scanner are not currently inside `PropertySuite`. Add them to the AR / utility tools section of `RoyalToolsHub` with the same `PremiumToolShell` treatment on their own pages (no tab change required unless desired).
+## Files touched
+- `src/pages/JoinApplication.tsx` — open-positions card colour classes, "21 open" wrapper, city field className, new contact strip JSX.
+- `src/styles/theme-tokens.css` — strengthen `careers-open-badge` + `careers-blue-field` rules, add `.careers-gold-field`, add `.careers-card-navy` (replaces `careers-card-strong` only on this card) with hover-sheen keyframes.
 
 ## Out of scope
-
-- No backend, data, or copy changes.
-- Champagne/gold global theme stays intact for the rest of the site (footer, marketing, listings) — only the 7 tool pages are restyled.
-- No new animations beyond the border shimmer and existing fade-in.
-
-## Risk / guardrails
-
-- Memory rule "No gold fills / champagne-gold standard" is **site-wide**. These tool pages are an explicit, named exception (matches the prior pattern where `emerald/navy/burgundy` themes already exist). Will document this as a memory update after build: "Tool pages use `PremiumToolShell` with per-tool ombré accent; gold remains only as page background tint."
-- Contrast guard: CTA gradients end in `#000`, white text — passes WCAG. Accent-on-champagne headings use full-saturation accents (not faded), so the faded-gold prohibition still holds.
+No changes to form submission, validation, schema, or any other page. No removal of existing features.

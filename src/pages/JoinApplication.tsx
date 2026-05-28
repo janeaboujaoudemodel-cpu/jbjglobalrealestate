@@ -624,26 +624,30 @@ export default function JoinApplication() {
 
           {/* Open Positions */}
           {!positionsLoading && openPositions.length > 0 && (
-            <Card id="open-positions" className="careers-card-strong mb-8 rounded-2xl scroll-mt-24 overflow-hidden">
+            <Card
+              id="open-positions"
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="careers-card-navy mb-8 rounded-2xl scroll-mt-24 overflow-hidden"
+            >
               <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
-              <CardHeader className="pt-9 pb-5">
+              <CardHeader className="pt-9 pb-5 relative z-[1]">
                 <div className="flex items-end justify-between flex-wrap gap-4">
                   <div className="min-w-0">
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#102540] mb-2">
-                      <Briefcase className="w-3 h-3" /> Live Roles
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/40 bg-white/5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white mb-2">
+                      <Briefcase className="w-3 h-3 text-white" /> Live Roles
                     </span>
-                    <CardTitle className="text-3xl md:text-4xl font-semibold text-[#1A1A1A] tracking-tight leading-tight">
+                    <CardTitle className="text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
                       Open Positions
                     </CardTitle>
-                    <CardDescription className="text-[#1A1A1A]/75 font-medium mt-1.5">
-                      Tap <strong className="text-[#102540] font-semibold">Apply</strong> on any role to auto-select it in the form below.
+                    <CardDescription className="text-white/80 font-medium mt-1.5">
+                      Tap <strong className="text-white font-semibold">Apply</strong> on any role to auto-select it in the form below.
                     </CardDescription>
                   </div>
                   <Badge
                     data-allow-dark-cta
                     data-no-contrast-guard
-                    className="careers-open-badge bg-[#102540] border border-[#B89555] inline-flex items-center gap-1.5 px-3 py-1.5 self-start sm:self-end"
-                    style={{ color: "#FFFFFF" }}
+                    className="careers-open-badge inline-flex items-center gap-1.5 px-3 py-1.5 self-start sm:self-end"
                   >
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     <span>{filteredPositions.length} open</span>
@@ -918,7 +922,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search UAE city..."
                       showFlags={false}
                       disabled={loading}
-                      triggerClassName="careers-blue-field h-12 rounded-lg"
+                      triggerClassName="careers-gold-field h-12 rounded-lg"
                     />
                   </div>
                 </div>
