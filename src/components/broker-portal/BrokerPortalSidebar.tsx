@@ -1,7 +1,7 @@
 import { NavLink, useLocation, useNavigate, Link } from "react-router-dom";
 import {
-  LayoutDashboard, Users, Briefcase, Database, ListChecks, Calendar, ListTodo,
-  Handshake, BadgeDollarSign, FilePen, GraduationCap, Megaphone,
+  LayoutDashboard, Briefcase, ListChecks, Calendar, ListTodo,
+  Handshake, FilePen, GraduationCap,
   Brain, Bell, Settings, ChevronLeft, ChevronRight, ArrowLeft, Crown, Home, LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -13,17 +13,13 @@ type Item = { to: string; label: string; icon: any };
 
 const ITEMS: Item[] = [
   { to: "/broker/portal",        label: "Dashboard",          icon: LayoutDashboard },
-  { to: "/broker/leads",         label: "My Leads",           icon: Users },
   { to: "/broker/crm",           label: "CRM Pipeline",       icon: Briefcase },
-  { to: "/broker/databases",     label: "Assigned Databases", icon: Database },
   { to: "/broker/listings",      label: "Listings",           icon: ListChecks },
   { to: "/broker/calendar",      label: "Calendar",           icon: Calendar },
   { to: "/broker/tasks",         label: "Tasks",              icon: ListTodo },
-  { to: "/broker/deals",         label: "Deals",              icon: Handshake },
-  { to: "/broker/commissions",   label: "Commissions",        icon: BadgeDollarSign },
+  { to: "/broker/deals",         label: "Deals & Commissions",icon: Handshake },
   { to: "/broker/forms",         label: "Request a Form",     icon: FilePen },
   { to: "/broker/learning",      label: "JBJ Academy",        icon: GraduationCap },
-  { to: "/broker/marketing",     label: "Marketing Toolkit",  icon: Megaphone },
   { to: "/broker/ai",            label: "AI Sales Assistant", icon: Brain },
   { to: "/broker/notifications", label: "Notifications",      icon: Bell },
   { to: "/broker/settings",      label: "Settings",           icon: Settings },
