@@ -266,8 +266,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
     { id: 'staging' as DesignMode, label: 'Staging', icon: Sofa, desc: 'Furnish empty rooms' },
   ];
 
-  return (
-    <ToolAnimatedFrame theme={toolThemes.rose}>
+  const body = (
     <section className="relative w-full min-h-screen" style={{ background: "#0D0C08" }}>
       {/* Hero — suppressed when embedded inside a Suite tab */}
       {!embedded && (
