@@ -53,6 +53,9 @@ const closings: Record<string, (f: Record<string, string>) => string> = {
     `Both parties confirm that they have read and understood every clause of this Agreement and accept its terms in full. This Agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai.${f.notes ? `\n\n${f.notes}` : ""}`,
   warning_letter: (f) =>
     `You are required to take immediate corrective action${f.correctiveAction ? `: ${f.correctiveAction}` : ""}. A recurrence of this conduct may result in further disciplinary action up to and including termination of employment, in accordance with UAE Labour Law and the firm's internal policies.`,
+  termination_letter: (f) =>
+    `Your final settlement, including any end-of-service gratuity, accrued leave balance and outstanding salary, will be processed within fourteen (14) calendar days of your last working day, subject to the return of all company property${f.returnOfProperty ? ` (${f.returnOfProperty})` : ""} and clearance of any outstanding obligations. You are reminded that confidentiality obligations under your Employment Contract and any NDA remain in force notwithstanding the termination of your employment. If you require a reference or employment verification in the future, please contact the HR Department directly.${f.finalSettlement ? `\n\nSettlement notes: ${f.finalSettlement}` : ""}${f.notes ? `\n\n${f.notes}` : ""}`,
+
   nda: (f) =>
     `The obligations under this Agreement shall remain in force for the Term${f.term ? ` of ${f.term}` : ""} and shall survive the termination of any underlying relationship between the parties. The Agreement is governed by the laws of the United Arab Emirates.`,
   commission_agreement: () =>
