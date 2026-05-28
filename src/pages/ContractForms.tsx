@@ -182,8 +182,8 @@ export default function ContractForms() {
       {/* Main Content */}
       <section className="py-12 md:py-16 jj-layer-2">
         <div className="container mx-auto px-4 md:px-8">
-          {/* Unified Document Studio — client catalog */}
-          <DocumentStudioLauncher catalog="client" />
+          {/* Unified Document Studio — all templates (staff + client) in one engine */}
+          <DocumentStudioLauncher catalog="all" />
 
           {/* Category Filter */}
           <div className="flex flex-wrap gap-2 mb-8">
