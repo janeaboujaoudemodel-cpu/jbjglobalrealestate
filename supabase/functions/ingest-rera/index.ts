@@ -23,8 +23,10 @@ Deno.serve(async (req) => {
         escrow_accounts: { type: "number" },
       },
     };
-    const result = await firecrawlScrape("https://www.rera.gov.ae/", {
-      formats: ["markdown", { type: "json", schema }], waitFor: 1500,
+    // Government source: DXB Interact rental-yield page (RERA-derived index).
+    // rera.gov.ae times out via Firecrawl scrape; DXB Interact mirrors RERA's public stats.
+    const result = await firecrawlScrape("https://dxbinteract.com/dubai-rental-yield", {
+      formats: ["markdown", { type: "json", schema }], waitFor: 3000, onlyMainContent: true,
     });
     const doc = result?.data ?? result;
     const metrics = doc?.json ?? {};
