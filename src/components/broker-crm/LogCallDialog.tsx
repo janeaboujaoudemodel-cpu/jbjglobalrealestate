@@ -456,19 +456,17 @@ export default function LogCallDialog({
                   Captured · {(audioBlob.size / 1024).toFixed(0)} KB · will be transcribed on save
                 </span>
               )}
-              {audioBlob && recState === "stopped" && (
-                <Button
-                  type="submit"
-                  disabled={isSaving || audioBlob.size === 0}
-                  className="ml-auto [background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
-                  data-surface="dark"
-                  data-allow-dark-cta
-                  data-no-contrast-guard
-                >
-                  {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin text-white" /> : <CheckCircle2 className="h-4 w-4 mr-2 text-white" />}
-                  <span className="text-white">{isSaving ? "Saving…" : "Save recording"}</span>
-                </Button>
-              )}
+              <Button
+                type="submit"
+                disabled={isSaving}
+                className="ml-auto [background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
+                data-surface="dark"
+                data-allow-dark-cta
+                data-no-contrast-guard
+              >
+                {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin text-white" /> : <CheckCircle2 className="h-4 w-4 mr-2 text-white" />}
+                <span className="text-white">{isSaving ? "Saving…" : "Save call log"}</span>
+              </Button>
             </div>
             {(coachTips.length > 0 || coachLoading) && (
               <div className="mt-2 rounded-md bg-[#FDFBF7] border border-[#B89555]/30 p-2.5">
