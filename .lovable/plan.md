@@ -1,52 +1,41 @@
-## Goal
+## Fix plan
 
-Make the Broker Portal sidebar + top bar structurally identical to the Owner Dashboard Shell so:
-- No empty gap below the sidebar nav
-- Sidebar divider lines up with the top-bar bottom border
-- Bottom-pinned footer block (Return to Site / Sign Out) seals the sidebar
-- Same shell header height (uses global `--shell-header-h`, not a local 56px override)
-- Same content padding/max-width rhythm
+### 1. Broker portal sidebar gap
+- Replace the current footer-pinned sidebar behavior with a balanced full-height layout where the navigation list from Dashboard through Settings stretches to fill the available space.
+- Keep Return to Site and Sign Out locked at the bottom, but remove the large empty block above them.
+- Match the owner backend shell sizing: same header height, same footer treatment, same champagne/gold visual language.
 
-## Diff vs Owner shell (root causes)
+### 2. Training module cards contrast and Start hover
+- Fix the Start buttons so the text and play icon never turn white on champagne/gold backgrounds.
+- Remove any hover state that causes white-on-light or invisible icon/text.
+- Keep the cards in the highlighted champagne/gold style, but make all action states readable and consistent.
 
-1. **Header height mismatch.** Broker hard-codes `--shell-header-h: 56px` on the layout root. Owner reads the project-global value (≈64px). Result: the divider line under the sidebar logo doesn't sit on the same Y as the top-bar bottom border.
-2. **No pinned footer in sidebar.** Owner sidebar ends with a `flex-shrink-0` bottom block (Return to Site + Sign Out). Broker sidebar puts Return to Site at the *top*, so the nav scroll area runs to the very bottom and leaves visible dead space below the last item when the list is short.
-3. **`overflow-y-auto` on nav with no footer = visible gap.** With the pinned footer added, `flex-1` nav fills exactly the remaining height, eliminating the gap the user is complaining about.
-4. **Content frame drift.** Broker main uses `max-w-[1600px] py-6/10`; owner uses `max-w-[1800px] p-4/6/8`. Minor, but visible side-by-side.
-5. **Owner-preview banner placement.** Slim banner is fine but currently pushes the page down inside the column; keep it but make it `sticky` directly under the header so it doesn't break alignment when scrolling.
+### 3. Book cover standard everywhere
+- Stop using uploaded/static `/broker-covers/book-*.png` covers for the academy grid, because they are causing mixed book styles.
+- Force every library book card and every modal/reader preview to use the same locked Digital Marketing / No.14 master cover system from `PremiumBookCover`.
+- Ensure every book shows its real `No. X` label in the same placement/style, with no white frame and no different cover designs.
 
-## Changes
+### 4. Fix the broken modal mini-book
+- Replace the small broken black thumbnail with the same real book cover component.
+- Remove the plain circle number overlay shown on Book 3.
+- Make the modal preview look like a proper miniature of the actual academy book.
 
-**`src/components/broker-portal/BrokerPortalLayout.tsx`**
-- Remove the `style={{ "--shell-header-h": "56px" }}` override so the broker shell inherits the same global value the owner shell uses.
-- Tighten content wrapper to mirror owner: `p-4 md:p-6 lg:p-8 max-w-[1800px] mx-auto`.
-- Make the owner-preview banner `sticky top-[var(--shell-header-h)] z-20` so it never desyncs from the header.
-- Keep `h-screen` fixed aside (already correct).
+### 5. Make Start actually work
+- Convert Training Modules from dead buttons into wired onboarding actions.
+- Clicking Start opens a premium training/onboarding modal for that module.
+- The module shows: duration, number of lessons, lesson list, progress, points reward, and a clear Continue/Complete action.
 
-**`src/components/broker-portal/BrokerPortalSidebar.tsx`**
-- Restructure into 3 vertical regions like Owner:
-  1. Top: logo row (locked to `--shell-header-h`).
-  2. Middle: `<nav className="flex-1 overflow-y-auto …">` with the route items.
-  3. Bottom: pinned `flex-shrink-0` footer with **Return to Site** and (for owners) **Owner Backend** + a **Sign Out** button — same styling tokens as `OwnerDashboardShell`'s bottom block.
-- Drop the current top "Return to site / Owner backend" block (moved into the footer).
-- Add a top-of-footer `border-t border-[#B89555]/40` so the footer reads as a sealed section.
+### 6. Add real progress flow
+- Use the existing learning/progress tables where possible and add any missing safe backend fields/tables if needed.
+- Track broker/employee progress when they start and complete academy modules.
+- Lock later steps until the current one is completed, so the onboarding flow behaves like a real employee academy.
+- Award points on completion and show total academy progress.
 
-**No behaviour/route changes.** This is purely shell structure + tokens.
+### 7. Owner visibility and notifications
+- Connect completed/in-progress training events to the existing owner notification/CRM area, or add a small owner-visible academy progress surface if the current schema does not support it cleanly.
+- The owner should be able to see each employee/broker’s completed modules, scores/progress, time expectations, and points earned.
 
-## Verification (screenshot QA)
-
-After the edit, with the user signed in to the preview:
-1. Navigate `/broker/portal`, `/broker/crm`, `/broker/learning?tab=training` at 1280×900 and 1440×900.
-2. Capture full-page screenshots and crop the sidebar bottom edge + header/sidebar corner to confirm:
-   - No whitespace below the last sidebar item.
-   - Logo divider Y == top-bar bottom-border Y (pixel match).
-   - Pinned footer (Return to Site / Owner Backend / Sign Out) is visible without scrolling.
-3. Repeat in collapsed (72px) state.
-4. Compare side-by-side with an owner screenshot of `/owner/crm` to confirm visual parity.
-5. Report any remaining drift before claiming done.
-
-## Out of scope (will tackle next, per your priority list)
-
-- CRM Pipeline premium polish
-- Request-a-Form curated list + owner notification
-- Dashboard owner-redirect hardening (only if QA shows a regression)
+### 8. Visual QA after each fix
+- After implementation, run screenshot QA at the user’s current viewport size around `/broker/learning?tab=training`.
+- Check specifically: no sidebar gap, readable Start button idle/hover styling, uniform book covers, fixed modal thumbnail, and Start flow opening/working.
+- If browser auth blocks full QA, verify with code-level checks and clearly report what could not be visually accessed.

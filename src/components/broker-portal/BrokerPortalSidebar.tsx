@@ -80,8 +80,8 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
         )}
       </div>
 
-      {/* Nav — fills remaining height between header and footer */}
-      <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-2 space-y-0.5 jj-scrollbar-gold">
+      {/* Nav — sized to content; footer sits flush below the last item (no gap) */}
+      <nav className="overflow-y-auto py-3 px-2 space-y-0.5 jj-scrollbar-gold">
         {ITEMS.map(({ to, label, icon: Icon }) => {
           const active =
             to === "/broker/portal" ? pathname === to : pathname === to || pathname.startsWith(to + "/");
