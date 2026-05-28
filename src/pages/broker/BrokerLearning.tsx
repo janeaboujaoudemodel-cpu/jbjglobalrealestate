@@ -192,7 +192,7 @@ export default function BrokerLearning() {
               <div className="w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full animate-spin" />
             </div>
           ) : groupedBooks.length === 0 ? (
-            <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-6 py-10 text-center text-[#1A1A1A]/70" data-gold-hairline>
+            <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-6 py-10 text-center text-[#1A1A1A]/70">
               Your library is loading or empty. Check back shortly.
             </div>
           ) : (
@@ -239,7 +239,7 @@ export default function BrokerLearning() {
             />
           </div>
 
-          <Card className="bg-[#F7F2EA] border-[#B89555]/30" data-gold-hairline>
+          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
             <CardContent className="p-6 md:p-8">
               <h3 className="text-[#1A1A1A] text-lg font-bold mb-5 text-center">Golden Rules for Market Conversations</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -289,7 +289,7 @@ function KpiCard({ icon, label, value, progress }: {
   icon: React.ReactNode; label: string; value: React.ReactNode; progress?: number;
 }) {
   return (
-    <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-5 flex items-center gap-4" data-gold-hairline>
+    <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-5 flex items-center gap-4">
       <span className="shrink-0 w-12 h-12 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center text-[#1A1A1A]">
         {icon}
       </span>
@@ -305,7 +305,7 @@ function KpiCard({ icon, label, value, progress }: {
 
 function TrainingCard({ m }: { m: TModule }) {
   return (
-    <Card className="bg-[#F7F2EA] border-[#B89555]/30 hover:border-[#B89555]/55 transition-colors min-h-[240px]" data-gold-hairline>
+    <Card className="bg-[#F7F2EA] border-[#B89555]/30 hover:border-[#B89555]/55 transition-colors min-h-[240px]">
       <CardContent className="p-5 md:p-6 flex flex-col h-full">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3 min-w-0">
@@ -358,7 +358,7 @@ function ReferenceCard({ title, items, tone, icon }: {
     ? <span className="text-[#7A1F1F] font-bold">✕</span>
     : <span className="text-[#1F5132] font-bold">✓</span>;
   return (
-    <Card className="bg-[#F7F2EA] border-[#B89555]/30" data-gold-hairline>
+    <Card className="bg-[#F7F2EA] border-[#B89555]/30">
       <CardContent className="p-5 md:p-6">
         <h3 className="text-[#1A1A1A] font-semibold flex items-center gap-2 mb-3">
           {icon}{title}
@@ -378,7 +378,7 @@ function ReferenceCard({ title, items, tone, icon }: {
 
 function LockedTraining({ hasUser }: { hasUser: boolean }) {
   return (
-    <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-6 py-12 text-center" data-gold-hairline>
+    <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-6 py-12 text-center">
       <div className="w-14 h-14 mx-auto rounded-2xl bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center mb-4">
         <Lock className="w-6 h-6 text-[#1A1A1A]" />
       </div>
