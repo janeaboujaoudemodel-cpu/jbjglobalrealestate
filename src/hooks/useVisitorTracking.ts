@@ -14,8 +14,12 @@ interface TrackEventData {
   form_name?: string;
   tool_name?: string;
   search_query?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
+
+type NavigatorWithConnection = Navigator & {
+  connection?: { effectiveType?: string };
+};
 
 const getDeviceType = (): string => {
   const width = window.innerWidth;
@@ -70,7 +74,7 @@ export const useVisitorTracking = () => {
     hasInitialized.current = true;
 
     const sessionId = getSessionId();
-    const connectionInfo = (navigator as any).connection;
+    const connectionInfo = (navigator as NavigatorWithConnection).connection;
     
     try {
       const { error } = await supabase
@@ -88,7 +92,7 @@ export const useVisitorTracking = () => {
           viewport_size: `${window.innerWidth}x${window.innerHeight}`,
           language: navigator.language || null,
           network_type: connectionInfo?.effectiveType || null,
-        } as any, {
+        } as never, {
           onConflict: 'session_id',
         });
 
@@ -175,7 +179,7 @@ export const useVisitorTracking = () => {
         document_url: documentUrl || null,
         action: 'download',
         user_id: user?.id || null,
-      } as any);
+      } as never);
     } catch (error) {
       console.error('Error tracking download:', error);
     }
@@ -198,14 +202,14 @@ export const useVisitorTracking = () => {
         storage_path: storagePath || null,
         action: 'upload',
         user_id: user?.id || null,
-      } as any);
+      } as never);
     } catch (error) {
       console.error('Error tracking upload:', error);
     }
   }, [trackEvent, user]);
 
   // Track form submission
-  const trackFormSubmission = useCallback((formName: string, formData?: Record<string, any>) => {
+  const trackFormSubmission = useCallback((formName: string, formData?: Record<string, unknown>) => {
     trackEvent('form_submit', `Submitted ${formName}`, { form_name: formName, ...formData });
   }, [trackEvent]);
 
