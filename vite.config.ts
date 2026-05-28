@@ -47,7 +47,14 @@ export default defineConfig(({ mode }) => {
             'data-vendor': ['@tanstack/react-query', '@supabase/supabase-js'],
             'charts-vendor': ['recharts'],
             'maps-vendor': ['leaflet', 'react-leaflet', '@react-leaflet/core'],
-            'docs-vendor': ['exceljs', 'jspdf', 'pdf-lib', 'jszip', 'xlsx', 'papaparse', 'html2canvas', 'dompurify'],
+            // Split heavy document/export libs into their own chunks so they only
+            // load on demand (Document Studio, exports, PDF preview) — never on
+            // first paint of marketing pages.
+            'pdf-vendor': ['jspdf', 'pdf-lib'],
+            'excel-vendor': ['exceljs', 'xlsx'],
+            'zip-vendor': ['jszip'],
+            'canvas-vendor': ['html2canvas'],
+            'parse-vendor': ['papaparse', 'dompurify'],
             'voice-vendor': ['@elevenlabs/react'],
             'form-vendor': ['react-hook-form', 'zod', '@hookform/resolvers'],
             'date-vendor': ['date-fns'],
