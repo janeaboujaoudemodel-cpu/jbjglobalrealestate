@@ -976,6 +976,8 @@ export function compose(input: ComposerInput): string {
       return composeGeneric(input, `Employment Contract — ${input.fields.jobTitle || ""}`);
     case "warning_letter":
       return composeGeneric(input, `Formal Notice — ${input.fields.recipientName || ""}`);
+    case "termination_letter":
+      return composeTerminationLetter(input);
     case "nda":
       return composeGeneric(input, `Non-Disclosure Agreement`);
     case "commission_agreement":
