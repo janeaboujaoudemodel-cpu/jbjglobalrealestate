@@ -39,24 +39,28 @@ const AreasWeCover = () => {
   return (
     <section className="bg-[#FDFBF7] py-12 md:py-20">
       <div className="w-full">
-        {/* Premium navy frame — solid navy fill */}
-        <div className="relative w-full mx-auto rounded-[28px] border border-[#102540] bg-[#102540] p-6 md:p-10 lg:p-12 shadow-[0_30px_80px_-40px_rgba(16,37,64,0.45)]" data-no-contrast-guard>
+        {/* Premium champagne frame */}
+        <div className="relative w-full mx-auto rounded-[28px] border border-[#B89555]/45 bg-gradient-to-b from-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10 lg:p-12 shadow-[0_30px_80px_-40px_rgba(184,149,85,0.35)]">
 
           {/* Inner hairline (gold) for double-frame depth */}
-          <div className="pointer-events-none absolute inset-2 rounded-[22px] border border-[#B89555]/45" aria-hidden="true" />
-          {/* Corner accents */}
-          <span className="pointer-events-none absolute -top-px left-10 right-10 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" aria-hidden="true" />
+          <div className="pointer-events-none absolute inset-2 rounded-[22px] border border-[#B89555]/35" aria-hidden="true" />
+          {/* Top accent */}
+          <span className="pointer-events-none absolute -top-px left-10 right-10 h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" aria-hidden="true" />
 
           <div className="relative text-center mb-8 md:mb-10">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/[0.06] rounded-full text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 border border-[#B89555]/70 allow-white" data-no-contrast-guard>
-              <MapPin className="w-3 h-3 text-white" />
-              <span className="text-white">{t("areas.topLabel", "Top Areas")}</span>
+            <span
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 border border-[#B89555]/60 bg-[#102540] text-white shadow-sm"
+            >
+              <MapPin className="allow-white w-3 h-3 text-white" />
+              <span className="allow-white text-white">{t("areas.topLabel", "Top Areas")}</span>
             </span>
-            <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight allow-white" data-no-contrast-guard>
+            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight">
               {t("areas.topTitle", "Top Areas in Dubai")}
             </h2>
-            <div className="mx-auto mt-3 h-px w-16 bg-[#B89555]/60" />
-            <p className="mt-4 text-sm md:text-base text-white/80 max-w-xl mx-auto allow-white" data-no-contrast-guard>
+            <div className="mx-auto mt-3 h-px w-16 bg-[#B89555]/70" />
+            <p className="mt-4 text-sm md:text-base text-[#1A1A1A]/75 max-w-xl mx-auto">
               {t(
                 "areas.topSubtitle",
                 "The most trending and high-demand neighbourhoods our investors are watching right now."
