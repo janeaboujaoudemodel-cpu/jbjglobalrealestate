@@ -73,6 +73,7 @@ export default function BrokerCRM() {
   const [search, setSearch] = useState("");
   const [requestOpen, setRequestOpen] = useState(false);
   const [callDialogOpen, setCallDialogOpen] = useState(false);
+  const [openCallId, setOpenCallId] = useState<string | null>(null);
   const dbs = useBrokerScopedDatabases();
   const leads = useBrokerScopedLeads();
   const tasks = useBrokerPersonalTasks();
