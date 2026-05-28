@@ -63,11 +63,11 @@ export default function CareersContactBlock() {
                 target={href.startsWith("/") ? undefined : undefined}
                 className="group relative overflow-hidden rounded-2xl border border-[#B89555]/45
                            bg-[#FDFBF7]/85 backdrop-blur-md p-4 sm:p-5
-                           shadow-[0_10px_28px_-22px_rgba(16,37,64,0.45)]
+                           shadow-[0_10px_28px_-22px_rgba(184,149,85,0.45)]
                            transition-all duration-300
-                           hover:-translate-y-1 hover:border-[#102540]
-                           hover:shadow-[0_22px_46px_-22px_rgba(16,37,64,0.55)]
-                           focus:outline-none focus-visible:ring-2 focus-visible:ring-[#102540]/40"
+                           hover:-translate-y-1 hover:border-[#B89555]
+                           hover:shadow-[0_22px_46px_-22px_rgba(184,149,85,0.55)]
+                           focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/50"
               >
                 <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
                 <div className="flex items-start gap-3">
