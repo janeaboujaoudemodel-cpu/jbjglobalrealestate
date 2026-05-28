@@ -23,6 +23,8 @@ interface ProjectCardProps {
   showBadgeButton?: boolean;
   currency?: 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 'RUB' | 'CAD' | 'AUD';
   sizeUnit?: 'sqft' | 'sqm';
+  /** Mark as above-the-fold (LCP) — first 1–3 cards in a grid. */
+  priority?: boolean;
 }
 
 // Currency conversion rates - 10 unified currencies
