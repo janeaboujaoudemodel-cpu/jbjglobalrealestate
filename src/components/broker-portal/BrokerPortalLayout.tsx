@@ -1,53 +1,160 @@
-import { Outlet, Link } from "react-router-dom";
-import { Suspense } from "react";
-import { Crown, ArrowRight } from "lucide-react";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Suspense, useEffect, useState } from "react";
+import { Crown, ArrowLeft, Menu, X, Shield, Home } from "lucide-react";
 import BrokerPortalSidebar from "./BrokerPortalSidebar";
 import PageLoader from "@/components/PageLoader";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useAuth } from "@/contexts/AuthContext";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 /**
- * Premium Broker Portal shell.
- * Renders inside MainLayoutWrapper, so the global header (88px fixed) and
- * footer are already in place. We add a left sidebar + outlet area.
- *
- * If the current viewer is the platform owner, surface a return-to-owner
- * banner so they always have a one-click path back to their full backend.
+ * Broker Portal shell — mirrors the structural pattern of OwnerDashboardShell:
+ *  - Fixed full-height left sidebar (no gap below)
+ *  - Sticky top bar aligned pixel-for-pixel with the sidebar header divider
+ *  - Owner preview banner stays visible so the owner has a one-click path back
+ *  - No public-site chrome (header/footer hidden upstream by MainLayout)
  */
 export default function BrokerPortalLayout() {
+  const navigate = useNavigate();
   const { isOwner } = useUserRole();
+  const { user } = useAuth();
+  const isMobile = useIsMobile();
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // If an owner lands on /broker without explicit preview flag, the
+  // OwnerRedirectGuard already routes them away. Defensive: clear any
+  // stale preview flag on direct navigation to /owner.
+  useEffect(() => {
+    const handler = () => {
+      try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, []);
+
+  const sidebarWidth = collapsed ? "w-[72px]" : "w-[260px]";
+  const contentOffset = isMobile ? "ml-0" : (collapsed ? "ml-[72px]" : "ml-[260px]");
 
   return (
-    <div className="min-h-[calc(100vh-88px)] w-full bg-[#FDFBF7] flex">
-      <BrokerPortalSidebar />
-      <main className="flex-1 min-w-0">
-        {isOwner && (
-          <div className="bg-[#EFE6D6] border-b border-[#B89555]/40" data-gold-hairline>
-            <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-2.5 flex items-center justify-between gap-3 flex-wrap">
-              <div className="flex items-center gap-2 text-[#1A1A1A] text-sm">
-                <Crown className="h-4 w-4" />
-                <span className="font-semibold">Owner preview</span>
-                <span className="text-[#1A1A1A]/70">
-                  — you're viewing the Broker Portal exactly as your registered brokers see it.
-                </span>
-              </div>
-              <Link
-                to="/owner/crm"
-                className="inline-flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-lg bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#2a2a2a] transition-colors"
-                data-allow-dark-cta
-                onClick={() => { try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {} }}
+    <div
+      data-surface="champagne"
+      className="min-h-screen w-full bg-[#FDFBF7] relative"
+      style={{ ["--shell-header-h" as any]: "56px" }}
+    >
+      {/* Mobile sidebar */}
+      {isMobile && (
+        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+          <SheetContent
+            side="left"
+            data-surface="champagne"
+            className="w-[260px] p-0 bg-[#F7F2EA] border-r border-[#B89555]/40"
+          >
+            <BrokerPortalSidebar
+              collapsed={false}
+              onToggle={() => {}}
+              onNavigate={() => setMobileOpen(false)}
+            />
+          </SheetContent>
+        </Sheet>
+      )}
+
+      {/* Desktop sidebar — fixed full-height */}
+      {!isMobile && (
+        <aside
+          data-surface="champagne"
+          data-no-contrast-guard
+          className={cn(
+            "fixed left-0 top-0 h-screen z-40 bg-[#F7F2EA] border-r border-[#B89555]/40 flex flex-col shadow-xl shadow-[#B89555]/5 transition-[width] duration-200",
+            sidebarWidth,
+          )}
+        >
+          <BrokerPortalSidebar
+            collapsed={collapsed}
+            onToggle={() => setCollapsed((c) => !c)}
+          />
+        </aside>
+      )}
+
+      {/* Main column */}
+      <div className={cn("transition-[margin] duration-200 min-h-screen flex flex-col", contentOffset)}>
+        {/* Top bar — aligned with sidebar header divider */}
+        <header
+          data-no-contrast-guard
+          className="bg-[#F7F2EA] border-b border-[#B89555]/40 sticky top-0 z-30 flex items-center justify-between px-3 md:px-6 shadow-sm"
+          style={{ height: "var(--shell-header-h)" }}
+        >
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+            {isMobile && (
+              <button
+                type="button"
+                aria-label="Open menu"
+                onClick={() => setMobileOpen(true)}
+                className="h-9 w-9 grid place-items-center rounded-md hover:bg-[#EFE6D6] text-[#1A1A1A]"
               >
-                Return to Owner Backend
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
+                <Menu className="h-5 w-5" />
+              </button>
+            )}
+            <div className="min-w-0 leading-tight">
+              <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">
+                JBJ GLOBAL REAL ESTATE
+              </div>
+              <h1 className="text-[#1A1A1A] font-semibold text-sm md:text-base tracking-wide truncate">
+                Broker Workspace
+              </h1>
             </div>
           </div>
+          <div className="flex items-center gap-2 md:gap-3">
+            <Link
+              to="/"
+              className="hidden md:inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md text-[#1A1A1A] hover:bg-[#EFE6D6] border border-transparent hover:border-[#B89555]/40 transition-colors"
+            >
+              <Home className="h-3.5 w-3.5" /> Site
+            </Link>
+            {isOwner && (
+              <button
+                type="button"
+                onClick={() => {
+                  try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
+                  navigate("/owner/crm");
+                }}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md bg-[#102540] text-white hover:bg-[#1a3d63] transition-colors"
+                data-allow-dark-cta
+              >
+                <ArrowLeft className="h-3.5 w-3.5" /> Owner Backend
+                <Crown className="h-3 w-3 opacity-80" />
+              </button>
+            )}
+            <div className="hidden sm:flex items-center gap-1.5 bg-[#EFE6D6] border border-[#B89555] rounded-md px-2.5 py-1 text-xs font-bold text-[#1A1A1A] tracking-wide">
+              <Shield className="h-3.5 w-3.5" /> Broker
+            </div>
+            {user?.email && (
+              <span className="hidden lg:inline text-xs text-[#1A1A1A]/70 truncate max-w-[180px]">
+                {user.email.split("@")[0]}
+              </span>
+            )}
+          </div>
+        </header>
+
+        {/* Owner preview banner (slim, inside the column) */}
+        {isOwner && (
+          <div className="bg-[#EFE6D6] border-b border-[#B89555]/40 px-4 md:px-8 py-2 text-xs text-[#1A1A1A]/85 flex items-center gap-2">
+            <Crown className="h-3.5 w-3.5" />
+            <span className="font-semibold">Owner preview</span>
+            <span className="text-[#1A1A1A]/70">— you're viewing the broker portal exactly as your registered brokers see it.</span>
+          </div>
         )}
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-6 md:py-10">
-          <Suspense fallback={<PageLoader />}>
-            <Outlet />
-          </Suspense>
-        </div>
-      </main>
+
+        <main className="flex-1 min-w-0">
+          <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-6 md:py-10">
+            <Suspense fallback={<PageLoader />}>
+              <Outlet />
+            </Suspense>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
