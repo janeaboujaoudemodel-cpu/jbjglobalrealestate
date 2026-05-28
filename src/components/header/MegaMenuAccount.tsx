@@ -750,8 +750,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       className={cn(
                         "flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs transition-colors",
                         language === lang.code
-                          ? "bg-[#F7F2EA] text-[#1A1A1A] font-semibold border border-[#B89555]/30"
-                          : "text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
+                          ? "bg-transparent text-[#1A1A1A] font-semibold border border-[#B89555]"
+                          : "text-[#1A1A1A] border border-transparent hover:border-[#B89555]/40 hover:text-[#1A1A1A]"
                       )}
                     >
                       <span className="text-base">{lang.flag}</span>
