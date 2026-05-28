@@ -4,6 +4,7 @@
  */
 
 import { JBJ_BRAND, type PAAFieldKey, PAA_DEFAULT_VALUES } from "./jbjPropertyAdvertisingAgreement";
+import { jbjCompanyStampSrc } from "./jbjLockedChrome";
 
 export type SellingFieldKey = PAAFieldKey;
 
@@ -89,13 +90,14 @@ export function buildSellingHtml(values: Partial<Record<SellingFieldKey, string>
         ${fill("Date", "landlord_signature_date")}
       </div>
     </div>
-    <div>
+    <div style="position:relative;">
       <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;">JBJ Global Real Estate — Authorised Representative</div>
-      <div style="height:64px;border-bottom:1px solid #B89555;margin:6px 0 4px;"></div>
+      <div style="height:64px;border-bottom:1px solid #B89555;margin:6px 0 4px;font-family:'Cormorant Garamond','Apple Chancery','Brush Script MT',Georgia,cursive;font-style:italic;font-size:26px;color:#1A1A1A;display:flex;align-items:flex-end;padding-bottom:4px;">{{jbj_signature_name}}</div>
       <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;">
         ${fill("Name", "jbj_signature_name")}
         ${fill("Date", "jbj_signature_date")}
       </div>
+      <img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" style="position:absolute;right:-18px;bottom:-12px;width:140px;height:140px;object-fit:contain;transform:rotate(-8deg);opacity:.94;mix-blend-mode:multiply;pointer-events:none;" />
     </div>
   </div>
 
