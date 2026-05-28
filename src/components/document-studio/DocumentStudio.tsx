@@ -14,7 +14,7 @@
  * to mount it without modification.
  */
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -886,34 +886,63 @@ function StudioShell({
   const userEditedRef = useRef<boolean>(false);
   const [userEdited, setUserEdited] = useState(false);
 
-  // ── Hydrate full session snapshot on mount (fields, body, signatories, marks, etc.)
+  // ── Apply a previously saved snapshot — only when the user explicitly resumes.
+  const applySnapshot = useCallback((s: any) => {
+    try {
+      if (s.fields && typeof s.fields === "object") setFields(s.fields);
+      if (typeof s.bodyHtml === "string" && s.bodyHtml) {
+        setBodyHtml(s.bodyHtml);
+        if (s.userEdited) { userEditedRef.current = true; setUserEdited(true); }
+      }
+      if (typeof s.templateId === "string" && s.templateId) setTemplateId(s.templateId);
+      if (typeof s.step === "number") setStep(s.step as Step);
+      if (typeof s.ownerName === "string") setOwnerName(s.ownerName);
+      if (typeof s.ownerTitle === "string") setOwnerTitle(s.ownerTitle);
+      if (typeof s.applicantDate === "string") setApplicantDate(s.applicantDate);
+      if (Array.isArray(s.extraSignatories)) setExtraSignatories(s.extraSignatories);
+      if (Array.isArray(s.hiddenFieldKeys)) setHiddenFieldKeys(new Set(s.hiddenFieldKeys));
+      if (s.fieldLabelOverrides && typeof s.fieldLabelOverrides === "object") setFieldLabelOverrides(s.fieldLabelOverrides);
+      if (Array.isArray(s.hiddenSections)) setHiddenSections(new Set(s.hiddenSections));
+      if (Array.isArray(s.customFields)) setCustomFields(s.customFields);
+      if (Array.isArray(s.commissionRows)) setCommissionRows(s.commissionRows);
+      if (typeof s.docLanguage === "string") setDocLanguage(s.docLanguage);
+      if (s.marks && typeof s.marks === "object") setMarks((m) => ({ ...m, ...s.marks }));
+      if (typeof s.emailTo === "string") setEmailTo(s.emailTo);
+      toast.success("Draft restored", {
+        description: s.savedAt
+          ? `Recovered from ${new Date(s.savedAt).toLocaleString()}`
+          : "Your previous work was recovered.",
+      });
+    } catch {
+      toast.error("Could not restore draft");
+    }
+  }, []);
+
   useEffect(() => {
     if (hydratedRef.current) return;
     hydratedRef.current = true;
-    if (!snap) return;
-    try {
-      if (snap.fields && typeof snap.fields === "object") setFields(snap.fields);
-      if (typeof snap.bodyHtml === "string" && snap.bodyHtml) {
-        setBodyHtml(snap.bodyHtml);
-        if (snap.userEdited) { userEditedRef.current = true; setUserEdited(true); }
-      }
-      if (typeof snap.ownerName === "string") setOwnerName(snap.ownerName);
-      if (typeof snap.ownerTitle === "string") setOwnerTitle(snap.ownerTitle);
-      if (typeof snap.applicantDate === "string") setApplicantDate(snap.applicantDate);
-      if (Array.isArray(snap.extraSignatories)) setExtraSignatories(snap.extraSignatories);
-      if (Array.isArray(snap.hiddenFieldKeys)) setHiddenFieldKeys(new Set(snap.hiddenFieldKeys));
-      if (snap.fieldLabelOverrides && typeof snap.fieldLabelOverrides === "object") setFieldLabelOverrides(snap.fieldLabelOverrides);
-      if (Array.isArray(snap.hiddenSections)) setHiddenSections(new Set(snap.hiddenSections));
-      if (Array.isArray(snap.customFields)) setCustomFields(snap.customFields);
-      if (Array.isArray(snap.commissionRows)) setCommissionRows(snap.commissionRows);
-      if (typeof snap.docLanguage === "string") setDocLanguage(snap.docLanguage);
-      if (snap.marks && typeof snap.marks === "object") setMarks((m) => ({ ...m, ...snap.marks }));
-      if (typeof snap.emailTo === "string") setEmailTo(snap.emailTo);
-      if (!restoredOnce.current) {
-        restoredOnce.current = true;
-        toast.success("Draft restored", { description: "Your previous work was recovered." });
-      }
-    } catch {}
+
+    // Offer (don't auto-apply) the previous draft when a snapshot exists.
+    if (snap && !restoredOnce.current) {
+      restoredOnce.current = true;
+      const tplName = (snap.templateId && getTemplateById(snap.templateId)?.label) || "previous document";
+      const when = snap.savedAt ? new Date(snap.savedAt).toLocaleString() : "earlier";
+      toast(`Resume previous draft?`, {
+        description: `${tplName} — last saved ${when}`,
+        duration: 12000,
+        action: {
+          label: "Resume",
+          onClick: () => applySnapshot(snap),
+        },
+        cancel: {
+          label: "Discard",
+          onClick: () => {
+            try { localStorage.removeItem(SESSION_KEY); } catch {}
+            toast.success("Draft discarded");
+          },
+        },
+      });
+    }
 
     // ── One-shot prefill from an external bridge.
     // Only valid, current templates may open Document Studio. Removed templates
