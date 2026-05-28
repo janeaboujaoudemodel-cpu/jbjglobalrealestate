@@ -661,7 +661,7 @@ function StudioShell({
       };
       const { error } = await (supabase as any).from("saved_document_templates").insert({
         owner_id: u.user.id,
-        audience: catalog,
+        audience: catalog === "all" ? (template.audience as DocumentAudience) : catalog,
         base_template_id: template.id,
         name,
         is_default: saveAsDefault,
