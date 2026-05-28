@@ -308,17 +308,17 @@ function KpiCard({ icon, label, value, progress }: {
 
 function TrainingCard({ m }: { m: TModule }) {
   return (
-    <Card className="bg-[#F7F2EA] border-[#B89555]/30 hover:border-[#B89555]/55 transition-colors min-h-[240px]">
+    <Card className="bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-[#B89555]/55 hover:border-[#B89555]/80 transition-all min-h-[240px] shadow-[0_4px_14px_rgba(184,149,85,0.10)] hover:shadow-[0_14px_30px_rgba(184,149,85,0.20)]">
       <CardContent className="p-5 md:p-6 flex flex-col h-full">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3 min-w-0">
-            <div className="shrink-0 w-11 h-11 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center text-[#1A1A1A]">
+            <div className="shrink-0 w-11 h-11 rounded-xl bg-[#1A1A1A] border border-[#B89555]/70 grid place-items-center text-[#B89555] shadow-[0_4px_12px_rgba(26,26,26,0.25)]">
               {m.icon}
             </div>
             <div className="min-w-0">
               <h3 className="text-[#1A1A1A] font-bold text-lg leading-tight">{m.title}</h3>
               <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-[#1A1A1A]/70">
-                <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{CAT_LABEL[m.category]}</Badge>
+                <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 font-semibold">{CAT_LABEL[m.category]}</Badge>
                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{m.duration}</span>
                 <span>{m.lessons} lessons</span>
               </div>
@@ -331,7 +331,7 @@ function TrainingCard({ m }: { m: TModule }) {
 
         {!!m.progress && (
           <div className="mt-3">
-            <Progress value={m.progress} className="h-1.5" />
+            <Progress value={m.progress} className="h-1.5 bg-[#FDFBF7] [&>div]:bg-[#B89555]" />
             <p className="text-[10px] text-[#1A1A1A]/55 mt-1">{m.progress}% complete</p>
           </div>
         )}
@@ -339,13 +339,13 @@ function TrainingCard({ m }: { m: TModule }) {
         <div className="mt-5 flex items-center justify-between gap-3">
           <div className="flex flex-wrap gap-1.5">
             {m.topics.slice(0, 2).map((t, i) => (
-              <span key={i} className="text-[11px] bg-[#FDFBF7] text-[#1A1A1A]/80 px-2 py-0.5 rounded border border-[#B89555]/25">
+              <span key={i} className="text-[11px] bg-[#FDFBF7] text-[#1A1A1A]/85 px-2 py-0.5 rounded border border-[#B89555]/30">
                 {t}
               </span>
             ))}
             {m.topics.length > 2 && <span className="text-[11px] text-[#1A1A1A]/55">+{m.topics.length - 2} more</span>}
           </div>
-          <Button size="sm" className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E5D8BD] border border-[#B89555]/50">
+          <Button size="sm" className="bg-[#1A1A1A] text-[#B89555] hover:bg-[#2a2a2a] border border-[#B89555]/70 font-semibold shadow-[0_4px_12px_rgba(26,26,26,0.20)]" data-allow-dark-cta>
             <Play className="w-3 h-3 mr-1" /> Start
           </Button>
         </div>
