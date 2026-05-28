@@ -1,51 +1,37 @@
-# Document Studio — Header Toolbar, Auto-Compose Preview, Clickable Stamp/Signature
+# Restore "Generate with AI" Button in Document Studio Step 2
 
-Fix the three concrete gaps the user is hitting:
+## Problem
 
-1. **Export & Print are buried inside the right-side "Send via Branded Email" panel.** Promote them to a persistent top toolbar so they are visible the moment Document Studio opens.
-2. **The pre-composed structure (subject + AI intro + terms-of-employment table + commission table + signature block with owner sig/stamp + counterparty signature + date) is already produced by `renderStandardBody()` and wired to `setBodyHtml()`, but the user reports the preview is not showing it.** Audit and guarantee it renders on first template selection — even before "Generate" is clicked — for every template, and surface a clear "Composed template — body will follow selection" placeholder when an AI section is empty.
-3. **Signature & stamp marks in the preview are not clickable.** Today `DraggableMark` only handles drag + a hover-× remove button. Make them tap/click-actionable.
+In Document Studio's left sidebar at **Step 2 — Details**, the footer currently shows only one button:
 
-## What changes
-
-### A. Persistent top toolbar in Document Studio (`src/components/document-studio/DocumentStudio.tsx`)
-
-A single sticky toolbar across the top of the editor surface, visible on every step ≥ 2:
-
-```text
-[← Templates] [Template name]      [Reset]  [Print]  [Export ▾]   [Send ▾]
+```
+[ Continue to Review & Send  → ]
 ```
 
-- **Export ▾** dropdown: PDF, PNG, Word (.docx), PDF + PNG. Wired to existing `handleExport(...)`.
-- **Print** button: wired to existing `handlePrint()`.
-- **Send ▾** keeps the existing branded-email flow (Send via Branded Email, Send Test).
-- Disable Export/Print when `bodyHtml` is empty; show spinner when `exporting !== null`.
-- The right-side Email panel keeps its own Send button but loses the duplicated Export controls (single source of truth in the header).
-- Champagne surface, gold hairline, ink text. No new colors. No black-CTA regression (navy lives in body, header buttons are champagne outline + ink).
+The previous **"Generate with AI"** action (which calls `handleGenerate`, line 1081, to draft the AI intro/closing and run the composer) was removed from this rail. The user has to either click into Step 3 (which only exposes Subject + Recipient + Send) or hunt for the Generate button hidden inside the center preview's `EmptyBody` empty-state — and that empty state never appears once the auto-composed body is showing.
 
-### B. Guarantee auto-compose on template select
+Because the dedicated Generate control is gone, the user filled in the details on the left, saw a preview they consider empty (no AI-drafted intro/closing, just the deterministic skeleton), and has no obvious way to ask the AI to fill it in.
 
-- Audit the `useEffect` at line 1002 (`renderStandardBody → setBodyHtml`). Confirm that for every template id (job_offer, employment_contract, commission_agreement, NDA, partners, RERA forms, etc.) `compose()` returns: subject line → date line → recipient block → AI intro slot → terms table (when applicable) → commission table (when applicable) → AI closing slot → `signatureBlock()` with stamp + parallel counterparty cell.
-- For templates where `aiIntro`/`aiClosing` are deterministically built in `standardBody.ts`, leave as is. For templates where they currently fall back to empty, insert a neutral champagne placeholder block (`"Tap Generate with AI to draft this section, or type directly."`) so the structure never collapses into a blank page.
-- Ensure `userEditedRef.current` does NOT block the very first compose on template switch (already handled, but verify the reset path in `handleSelectTemplate`).
-- Verify the signature block appears in preview on the last page even when the body is short enough to fit on page 1 — the existing pagination logic in `DocumentStudio.tsx` ~line 372 marks it `[data-pdf-section][data-signature-block]` as atomic; ensure that marker survives composer output for every template id.
+## Fix
 
-### C. Clickable signature / stamp (`src/components/document-studio/DraggableMark.tsx` + `DocumentStudio.tsx`)
+In `src/components/document-studio/DocumentStudio.tsx`, in the Step 2 details panel footer (the block currently rendering "Continue to Review & Send" around lines 2257–2264), restore Generate with AI as the **primary** button, keep Continue as **secondary**.
 
-- Add an `onClick` prop to `DraggableMark`. Treat a pointer-down + pointer-up with < 6px movement as a click (so drag-vs-click is unambiguous).
-- In `DocumentStudio.tsx`, pass `onClick={() => setAssetDialog("signature")}` (or `"stamp"`) for each mark. This re-opens the existing `AssetLibraryDialog` so the user can swap, resize, or upload a new mark with one tap.
-- Add a hover hint chip ("Click to change · Drag to move") so the affordance is discoverable.
-- Add a small floating action bar attached to each mark on hover: `[ Change ] [ Resize ] [ Remove ]`. The Remove button already exists; Change reopens the asset picker; Resize cycles width presets (160 / 200 / 240 / 300).
+```text
+[ ✦ Generate with AI ]   ← primary, full width
+[ Continue to Review & Send → ]   ← outline, full width
+```
 
-## Files touched
+Behaviour:
 
-- `src/components/document-studio/DocumentStudio.tsx` — add top toolbar, prune duplicated Export from email panel, wire `onClick` on each `DraggableMark`, guarantee placeholder for empty AI sections.
-- `src/components/document-studio/DraggableMark.tsx` — add `onClick` + click-vs-drag discrimination + hover action bar.
-- `src/templates/composers/standardBody.ts` — only if any template id is missing an intro/closing entry; add a neutral placeholder so structure is always visible.
+- **Generate with AI** calls the existing `handleGenerate()`. Disabled while `generating` is true; shows the spinner and "Generating…" label inside the same button when busy (same pattern already used in `EmptyBody`).
+- Disabled when required fields for the current template are missing — reuse the existing `canGenerate`-style check (or fall back to `!template`).
+- **Continue to Review & Send** keeps its current behaviour (`setStep(3)`).
+- Tip caption below adjusts to: *"Tip: Generate drafts the AI body. You can also type directly into the page or use the AI assistant on the right."*
+
+No other panels, the top toolbar, the email panel, or the composer are touched. No new files. No design tokens introduced.
 
 ## Out of scope
 
-- No change to letterhead, locked footer, per-page signature strip, or signature+gold-divider lock (`renderPerPageUserSignature` stays byte-identical).
-- No change to the composer's signature block layout (owner cell + stamp + parallel counterparty cell on the same row — already correct).
-- No DB / edge function / SEO changes.
-- No new templates.
+- The Step 3 panel keeps Subject / Recipient / Send / Export / Test exactly as it is.
+- The center preview's empty-state Generate button stays as is (it's a fallback for when `bodyHtml` is empty).
+- No change to `handleGenerate`, the composer, the auto-render `useEffect`, signature block, or letterhead.
