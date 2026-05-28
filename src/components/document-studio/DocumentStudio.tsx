@@ -1462,7 +1462,7 @@ function StudioShell({
                 checked={saveAsDefault}
                 onChange={(e) => setSaveAsDefault(e.target.checked)}
               />
-              Set as my default for {catalog === "staff" ? "staff" : "client"} documents
+              Set as my default for {catalog === "staff" ? "staff" : catalog === "client" ? "client" : "all"} documents
             </label>
             <div className="flex justify-end gap-2">
               <Button variant="ghost" size="sm" onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
