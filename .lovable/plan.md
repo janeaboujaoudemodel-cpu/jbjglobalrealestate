@@ -1,64 +1,53 @@
-## Plan: full audit + fix batch
+## 1. Align "Ready to Get Started" with "Top Areas in Dubai"
 
-### 1) Broker portal data isolation and fake-data cleanup
-- Tighten broker lead queries so broker portal surfaces only leads assigned to the logged-in broker.
-- Apply the same broker scoping to the AI assistant lead list; it currently queries `crm_leads` broadly and can show owner/global leads.
-- Remove any fallback/sample/fake leads from broker-facing views; empty states must say no leads are available instead of fabricating data.
-- Verify technically with the lead query code and visually on `/broker/leads`, `/broker/crm`, and `/broker/ai`.
+In `src/pages/Index.tsx` the two sections use different width modes on `<PremiumSectionCard>`:
 
-### 2) Broker deals and commissions pages
-- Replace the current “Open CRM Pipeline” placeholder behavior.
-- Build broker-native read-only summary sections:
-  - `/broker/deals`: deal-stage pipeline insights from the broker’s assigned leads/deal records.
-  - `/broker/commissions`: commission/payout summary cards and empty states, not CRM redirects.
-- Keep them inside the broker portal shell and never redirect to frontend tools.
+- Top Areas: default `width="contained"` → centered `max-w-[1760px]` with `px-3 sm:px-5 lg:px-8`
+- Ready to Get Started (CTABand): `width="full"` → edge-to-edge, no gutter
 
-### 3) Request form dialog contrast
-- Fix the “Request a form” dialog buttons and select menus so text/icons remain readable on normal, disabled, hover, and active states.
-- Use navy only for primary action buttons with explicit white opt-out, and ink/gold/champagne for secondary buttons.
-- Verify visually in `/broker/forms`.
+Change the CTABand wrapper (and any other obvious misaligned "full" wrappers immediately around it) to `width="contained"` so its outer frame lines up exactly with Top Areas.
 
-### 4) JBJ Academy books and certificate
-- Audit `BrokerLearning`, `BookReader`, book cards, `useBrokerEducation`, and certification hooks.
-- Fix broken book opening/reading flow.
-- Add a visible certificate/progress area in JBJ Academy showing certificate status, points/training progress, and clear empty states when not eligible.
-- Keep Academy portal-native; no marketing-page chrome.
+## 2. Reduce vertical gap between sections
 
-### 5) Broker settings blinking and loader monogram contrast
-- Re-check `/broker/settings` for nested layout or redirect loops and remove any remaining causes of blinking.
-- Fix `BrandedLoader` so champagne/light backgrounds use the dark JBJ monogram/letters, not white letters.
-- Ensure any broker loading state uses the correct light variant or a non-blocking progress bar.
+Every section wrapper on the home page currently uses `wrapperClassName="cv-auto py-8"` (= 64px top + 64px bottom of empty space between cards). Tighten the rhythm globally:
 
-### 6) Broker AI assistant naming, scoring, and selected lead behavior
-- Rename “Your Head of Sales” to the approved assistant naming (`JBJ Sales Assistant` / portal assistant wording), removing prohibited “Head of Sales”.
-- Ensure clicking a lead in the AI assistant actually loads that lead in the assistant and keeps the selected lead visible.
-- Fix score rendering so values like `30` display as `30%`, not just `30` or unclear scoring.
-- Ensure the send button contrast remains readable in normal, hover, disabled, and loading states.
+- Replace `py-8` → `py-4` on all home `<PremiumSectionCard>` wrappers in `src/pages/Index.tsx` (Top Areas, Ready to Get Started, Mortgage Calculator, Toolkit, AI Comparison, Podcast, etc.).
+- Also reduce the `#category-selector` wrapper from `py-8` → `py-4`.
 
-### 7) Owner backend classic navigation styling
-- Remove the normal-state champagne “label/highlight” effect from owner backend navigation, header controls, and account dropdown triggers.
-- Keep the current hover state and active-section styling.
-- Preserve active section borders while making inactive buttons classic/clean with transparent backgrounds.
+Result: ~32px between cards instead of ~64–96px. Sections stay clearly separated but no longer feel "floating in space".
 
-### 8) Global pill edge standard
-- Replace over-rounded pill styling (`rounded-full`) in portal/navigation/filter/action pills with the same edge radius as the “Search databases” input/select style (`rounded-md`).
-- Scope carefully so true avatars, circular icons, progress rings, and loaders stay circular.
-- Prioritize owner CRM, broker portal, AI assistant filters, mode/account dropdown pills, and toolbar chips.
+## 3. Performance — fix slow / half-loading images
 
-### 9) Verification pass
-- Technical checks:
-  - Search for remaining banned labels: `Your Head of Sales`, fake/sample lead fallbacks, `Open CRM Pipeline` in broker deals/commission routes.
-  - Inspect dev-server logs after changes.
-  - Check permission/RLS-related insert paths only where needed.
-- Visual checks:
-  - `/broker/portal`
-  - `/broker/crm`
-  - `/broker/leads`
-  - `/broker/deals`
-  - `/broker/commissions`
-  - `/broker/forms`
-  - `/broker/learning`
-  - `/broker/settings`
-  - `/broker/ai`
-  - `/owner/crm?entity=databases&view=all`
-- Confirm no white-on-champagne/gold button regressions, no blinking settings page, no fake broker leads, no broken AI assistant lead panel, and cleaner owner backend chrome.
+Root causes found in the home page:
+
+a. **Top Areas uses CSS `background-image`** (`AreasWeCover.tsx` line 79). CSS backgrounds cannot be lazy-loaded, cannot get `decoding="async"` or `fetchpriority` hints, and the browser cannot pick a smaller variant. They block paint until fully decoded → that's the "half / half / half" effect.
+
+→ Replace the `<div style={{backgroundImage}}>` with an `<img>` element absolutely positioned to fill the card:
+   - `loading="lazy" decoding="async"`
+   - explicit `width`/`height` to prevent layout shift
+   - `object-cover` for the same visual result
+   - keep the existing zoom-on-hover by moving the transform to the `<img>`
+
+b. **Request images at display size, not full size**. Where Supabase Storage is the source, append the storage `?width=` transform (e.g. 800px wide for area cards, 200px for dev logos) so we stop pulling multi-MB originals into 260px cards. Audit and fix the obvious offenders on the home page only:
+   - `AreasWeCover` (cards ~520×260 → request width=800)
+   - `HeroSearchBar` dev logos (20×20 → request width=80)
+   - `ExploreServicesCard`, `ResalePropertiesSection` card images (request width=800)
+
+c. **Add `loading="lazy" decoding="async"`** to any `<img>` in those four home components that doesn't already have it.
+
+d. **Preconnect to the image host** in `index.html` (`<link rel="preconnect" href="https://mdafrewypkkrildjgtey.supabase.co" crossorigin>`) so DNS + TLS handshake happens once at page start instead of per-image.
+
+Scope is limited to home-page section spacing/alignment and the image-loading hot path the user reported. No backend, no copy, no other layout changes.
+
+## Files touched
+
+- `src/pages/Index.tsx` — width + spacing
+- `src/components/home/AreasWeCover.tsx` — bg-image → `<img>` + lazy + width transform
+- `src/components/home/HeroSearchBar.tsx` — width transform + lazy on dev logos
+- `src/components/home/ExploreServicesCard.tsx` — width transform + lazy
+- `src/components/home/ResalePropertiesSection.tsx` — width transform + lazy
+- `index.html` — `preconnect` to storage host
+
+## Validation
+
+After build: open `/`, confirm Top Areas and Ready to Get Started have matching left/right edges, confirm gaps between sections are visibly tighter (~32px), and confirm area-card images appear in a single paint instead of progressively filling.
