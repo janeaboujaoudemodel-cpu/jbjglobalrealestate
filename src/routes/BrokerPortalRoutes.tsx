@@ -19,7 +19,7 @@ const BrokerLeadsPage        = lazy(() => import("@/pages/broker/BrokerLeadsPage
 const BrokerCalendar         = lazy(() => import("@/pages/broker/BrokerCalendar"));
 const BrokerTasks            = lazy(() => import("@/pages/broker/BrokerTasks"));
 const BrokerInbox            = lazy(() => import("@/pages/broker/BrokerInbox"));
-const BrokerProjectsRedirect = lazy(() => import("@/pages/broker/BrokerProjectsRedirect"));
+const ListingPortalMyListings= lazy(() => import("@/pages/ListingPortalMyListings"));
 const BrokerAccount          = lazy(() => import("@/pages/BrokerAccount"));
 const AIBrokerWorkspace      = lazy(() => import("@/pages/AIBrokerWorkspace"));
 const BrokerComingSoonSection= lazy(() => import("@/pages/broker/BrokerComingSoonSection"));
@@ -49,7 +49,7 @@ export const BrokerPortalRoutes = () => (
     <Route path="crm" element={<BrokerCRM />} />
     <Route path="crm/database/:id" element={<BrokerDatabaseView />} />
     <Route path="databases" element={<BrokerDatabasesList />} />
-    <Route path="listings" element={<BrokerProjectsRedirect />} />
+    <Route path="listings" element={<ListingPortalMyListings />} />
     <Route path="calendar" element={<BrokerCalendar />} />
     <Route path="tasks" element={<BrokerTasks />} />
     <Route path="notifications" element={<BrokerInbox />} />

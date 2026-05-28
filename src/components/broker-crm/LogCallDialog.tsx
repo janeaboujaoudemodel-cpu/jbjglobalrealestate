@@ -67,7 +67,7 @@ function formatTimer(s: number) {
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
 
-const navyControlClass = "[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100 border border-[#B89555]/55 [&_svg]:!text-white [&_span]:!text-white";
+const navyControlClass = "bg-[#102540] !text-white hover:bg-[#1a3d63] hover:!text-white disabled:opacity-100 border border-[#B89555]/55 [&_svg]:!text-white [&_svg]:!stroke-white [&_span]:!text-white [&_span]:[-webkit-text-fill-color:#FFFFFF]";
 const creamControlClass = "border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A] [&_svg]:text-[#1A1A1A]";
 
 export default function LogCallDialog({
@@ -488,8 +488,8 @@ export default function LogCallDialog({
             <div className="flex flex-wrap items-center gap-2">
               {recState === "idle" && (
                 <Button type="button" onClick={startRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                  <Mic className="h-4 w-4 mr-2" />
-                  <span>Start recording</span>
+                  <Mic className="h-4 w-4 mr-2 text-white stroke-white allow-white" />
+                  <span className="text-white allow-white">Start recording</span>
                 </Button>
               )}
               {recState === "recording" && (
