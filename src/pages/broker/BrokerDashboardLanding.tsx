@@ -189,7 +189,7 @@ export default function BrokerDashboardLanding() {
             />
           ) : (
             <ul className="divide-y divide-[#B89555]/15">
-              {leads.data!.slice(0, 6).map((l: any) => (
+              {leadsData.slice(0, 6).map((l: any) => (
                 <li key={l.id} className="py-2.5 flex items-center gap-3">
                   <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/25 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
                     {(l.full_name || "?").slice(0, 1).toUpperCase()}
@@ -349,7 +349,7 @@ export default function BrokerDashboardLanding() {
                 </tr>
               </thead>
               <tbody>
-                {leads.data!.slice(0, 5).map((l: any) => (
+                {leadsData.slice(0, 5).map((l: any) => (
                   <tr key={l.id} className="border-b border-[#B89555]/10 last:border-0">
                     <td className="py-2.5 pr-3 text-[#1A1A1A] truncate max-w-[18ch]">
                       {l.full_name || "Unnamed"}
