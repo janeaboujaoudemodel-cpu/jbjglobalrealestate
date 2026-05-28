@@ -139,7 +139,7 @@ export function AddPayrollEntryDialog({ open, onOpenChange, mode, onSaved }: Pro
 
   // After the canonical AddBrokerSheet saves, reload the picker list and auto-select the newest broker.
   const handleBrokerAdded = async () => {
-    setBrokerReloadKey((k) => k + 1);
+    
     const { data } = await (supabase as any)
       .from("crm_brokers")
       .select("id, full_name, current_company, database_source, is_global_broker, department")
