@@ -244,35 +244,40 @@ export default function LogCallDialog({
     e.preventDefault();
     const phone = phoneNumber.trim();
     if (!phone) { toast.error("Add a phone number before saving the call"); return; }
+    setSavingRecording(true);
+    let finalAudioBlob = audioBlob;
+    let finalDuration = Math.max(0, Number(durationSeconds) || secondsRef.current || 0);
     if (recState === "recording") {
-      stopRecording();
-      await new Promise((r) => setTimeout(r, 200));
+      const stopped = await stopRecordingAndGetBlob();
+      finalAudioBlob = stopped?.blob ?? null;
+      finalDuration = stopped?.seconds ?? finalDuration;
     }
-    const result = await onSubmit({
-      leadId: leadId || null,
-      phoneNumber: phone,
-      callType,
-      callStatus,
-      durationSeconds: Math.max(0, Number(durationSeconds) || 0),
-      notes: notes.trim() || (selectedLead?.full_name ? `Call with ${selectedLead.full_name}` : null),
-      audioBlob,
-    });
+    try {
+      const result = await onSubmit({
+        leadId: leadId || null,
+        phoneNumber: phone,
+        callType,
+        callStatus,
+        durationSeconds: finalDuration,
+        notes: notes.trim() || (selectedLead?.full_name ? `Call with ${selectedLead.full_name}` : null),
+        audioBlob: finalAudioBlob,
+      });
 
-    // If we got a callLogId AND have audio, upload + trigger transcription
-    const callLogId = (result as any)?.callLogId as string | undefined;
-    if (callLogId && audioBlob && userId) {
-      try {
-        const ext = (audioBlob.type.includes("ogg") ? "ogg" : "webm");
+      // If we got a callLogId AND have audio, upload + trigger transcription
+      const callLogId = (result as any)?.callLogId as string | undefined;
+      if (callLogId && finalAudioBlob && userId) {
+        const ext = finalAudioBlob.type.includes("ogg") ? "ogg" : finalAudioBlob.type.includes("mp4") ? "mp4" : "webm";
         const path = `${userId}/${callLogId}.${ext}`;
         const { error: upErr } = await supabase
           .storage
           .from("call-recordings")
-          .upload(path, audioBlob, { contentType: audioBlob.type, upsert: true });
+          .upload(path, finalAudioBlob, { contentType: finalAudioBlob.type || "audio/webm", upsert: true });
         if (upErr) throw upErr;
-        await supabase
+        const { error: updateErr } = await supabase
           .from("broker_call_logs")
           .update({ recording_url: path })
           .eq("id", callLogId);
+        if (updateErr) throw updateErr;
         // Kick off transcription + AI evaluation (don't await — runs in background)
         supabase.functions.invoke("broker-call-process", {
           body: { callLogId, leadId: leadId || null },
@@ -281,10 +286,13 @@ export default function LogCallDialog({
           else toast.success("Call transcript & AI summary ready");
         });
         toast.success("Recording uploaded — AI is processing it");
-      } catch (e: any) {
-        console.error(e);
-        toast.error("Saved log, but recording upload failed");
       }
+      onOpenChange(false);
+    } catch (e: any) {
+      console.error(e);
+      toast.error(e?.message || "Could not save the call recording");
+    } finally {
+      setSavingRecording(false);
     }
   };
 
