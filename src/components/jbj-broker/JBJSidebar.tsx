@@ -104,7 +104,7 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
       )}
 
       {/* Navigation */}
-      <nav className="flex-1 p-3 space-y-1">
+      <nav className="flex-1 p-3 space-y-2">
         {navItems.map((item) => (
           <Button
             key={item.id}
@@ -123,7 +123,7 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
       </nav>
 
       {/* Footer Actions */}
-      <div className="p-3 border-t border-[#B89555]/30 space-y-1">
+      <div className="p-3 border-t border-[#B89555]/30 space-y-2">
         <Button
           variant="ghost"
           onClick={() => navigate("/jbj-broker-admin")}
