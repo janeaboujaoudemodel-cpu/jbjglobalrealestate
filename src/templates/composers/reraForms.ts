@@ -406,7 +406,7 @@ export function composeFormI(input: ComposerInput): string {
     </td>`;
 
   const companyFooter = `
-    <div style="text-align:center;color:${INK};font-size:8.6px;line-height:1.2;margin-top:8px;padding-top:7px;border-top:1px solid ${GOLD}55;">
+    <div style="text-align:center;color:${INK};font-size:8.6px;line-height:1.2;margin-top:8px;padding-top:7px;padding-bottom:18px;border-top:1px solid ${GOLD}55;">
       <div style="font-weight:800;letter-spacing:.04em;margin-bottom:2px;">${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}</div>
       <div>Tel Number : ${JBJ_BRAND.phone}</div>
       <div>${JBJ_BRAND.address}</div>
