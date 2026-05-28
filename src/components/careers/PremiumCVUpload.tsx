@@ -72,7 +72,7 @@ export function PremiumCVUpload({
               type="button"
               onClick={() => onFileChange(null)}
               disabled={disabled}
-              className="grid h-9 w-9 place-items-center rounded-full border border-[#102540]/30 text-[#102540] hover:bg-[#102540] hover:text-[#FDFBF7] transition disabled:opacity-50"
+              className="grid h-9 w-9 place-items-center rounded-full border border-[#B89555]/55 text-[#102540] hover:bg-[#102540] hover:text-[#FDFBF7] hover:border-[#B89555] transition disabled:opacity-50"
               aria-label="Remove CV"
             >
               <X className="h-4 w-4" />
