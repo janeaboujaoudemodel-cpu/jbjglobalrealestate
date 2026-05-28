@@ -591,7 +591,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           onClick={() => setSearchTab('search')}
                           className={cn(
                             "flex-1 py-2 text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1",
-                            searchTab === 'search' ? "text-[#1A1A1A] border-b-2 border-[#B89555]/30 bg-[#F7F2EA]" : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
+                            searchTab === 'search' ? "text-[#1A1A1A] border-b-2 border-[#B89555]" : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
                           )}
                         >
                           <Search className="w-3 h-3" /> Quick Search
