@@ -99,8 +99,8 @@ export function PremiumCVUpload({
           className={cn(
             "group relative block cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed p-8 text-center transition-all",
             dragOver
-              ? "border-[#102540] bg-[#102540]/5 scale-[1.01]"
-              : "border-[#102540]/45 bg-[#FDFBF7] hover:border-[#102540] hover:bg-[#F7F2EA]/60",
+              ? "border-[#B89555] bg-[#B89555]/5 scale-[1.01]"
+              : "border-[#B89555]/55 bg-[#FDFBF7] hover:border-[#B89555] hover:bg-[#F7F2EA]/60",
             disabled && "opacity-60 cursor-not-allowed"
           )}
         >
