@@ -173,7 +173,6 @@ const BrokerDashboard = lazy(() => import("@/pages/BrokerDashboard"));
 const BrokerResources = lazy(() => import("@/pages/BrokerResources"));
 const BrokerTraining = lazy(() => import("@/pages/broker/BrokerTraining"));
 const BrokerLearning = lazy(() => import("@/pages/broker/BrokerLearning"));
-const BookReader = lazy(() => import("@/pages/broker/BookReader"));
 const BrokerLearningVoiceAdmin = lazy(() => import("@/pages/owner/BrokerLearningVoiceAdmin"));
 const AIBrokerWorkspace = lazy(() => import("@/pages/AIBrokerWorkspace"));
 const AIHub = lazy(() => import("@/pages/AIHub"));
@@ -407,8 +406,7 @@ export const PublicRoutes = () => (
     <Route path="/broker-dashboard" element={<Navigate to="/broker/portal" replace />} />
     <Route path="/broker-resources" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerResources /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/broker/training" element={<Navigate to="/broker/learning?tab=training" replace />} />
-    {/* /broker/learning is mounted inside BrokerPortalRoutes so the portal sidebar wraps it */}
-    <Route path="/broker/learning/book/:bookId" element={<AuthRequiredRoute><BookReader /></AuthRequiredRoute>} />
+    {/* /broker/learning and /broker/learning/book/:bookId are mounted inside BrokerPortalRoutes so the portal sidebar wraps them */}
     <Route path="/owner/broker-learning/voice" element={<OwnerGuard><BrokerLearningVoiceAdmin /></OwnerGuard>} />
     <Route path="/ai-broker-workspace" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><AIBrokerWorkspace /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/ai-hub" element={<AuthRequiredRoute><AIHub /></AuthRequiredRoute>} />

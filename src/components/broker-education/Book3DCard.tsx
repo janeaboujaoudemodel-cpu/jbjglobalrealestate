@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Lock, CheckCircle, Clock, ArrowRight, Sparkles, BookOpen } from "lucide-react";
 import type { EducationBook, BookProgress } from "@/hooks/useBrokerEducation";
+import { PremiumBookCover } from "@/components/books/PremiumBookCover";
 
 interface Book3DCardProps {
   book: EducationBook;
@@ -19,6 +20,11 @@ interface Book3DCardProps {
  */
 export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: Book3DCardProps) {
   const effectivelyLocked = isLocked || book.is_restricted;
+  const coverTone = book.learning_path?.includes("Buyer") ? "emerald"
+    : book.learning_path?.includes("Seller") ? "espresso"
+    : book.learning_path?.includes("Market") ? "black"
+    : book.learning_path?.includes("Advanced") ? "burgundy"
+    : "navy";
 
   const statusBadge = (() => {
     if (!progress) return null;
@@ -48,42 +54,26 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
       className="group h-full"
     >
       <div
-        className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/40 overflow-hidden flex flex-col h-full shadow-[0_2px_8px_rgba(184,149,85,0.08)] hover:shadow-[0_14px_30px_rgba(184,149,85,0.22)] transition-shadow cursor-pointer"
+        className="flex h-full cursor-pointer flex-col overflow-visible rounded-2xl bg-transparent"
         onClick={() => !book.is_restricted && onOpen(book)}
       >
-        {/* ── Book cover — straight, full 3D cover, no white frame ─── */}
-        <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#15120d]">
+        <div className="relative aspect-[4/5] w-full overflow-visible px-2 pt-1">
+          <div className="absolute -bottom-3 left-[10%] right-[6%] h-8 rounded-full bg-[#1A1A1A]/25 blur-xl" />
+          <div className="relative h-full overflow-hidden rounded-r-xl rounded-l-[4px] shadow-[18px_22px_45px_rgba(26,26,26,.28),inset_0_0_0_1px_rgba(184,149,85,.35)] transition-transform duration-500 group-hover:-translate-y-1">
           {book.cover_image_url ? (
             <img
               src={book.cover_image_url}
               alt={`${book.title} cover`}
               loading="lazy"
               decoding="async"
-              className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.025]"
+              className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.015]"
             />
           ) : (
-            <div className="absolute inset-0 grid place-items-center text-center px-4 bg-gradient-to-br from-[#1c1812] via-[#2a2118] to-[#15110b]">
-              <div>
-                <BookOpen className="w-8 h-8 text-[#B89555] mx-auto mb-2" />
-                <div className="text-[10px] uppercase tracking-[0.18em] text-[#EFE6D6]/80">
-                  JBJ Library
-                </div>
-                <div className="text-[#EFE6D6] text-sm font-semibold mt-1 line-clamp-3">
-                  {book.title}
-                </div>
-                <div className="mt-2 text-[10px] text-[#B89555]">
-                  Book {book.book_number}
-                </div>
-              </div>
-            </div>
+            <PremiumBookCover title={book.title} number={book.book_number} subtitle={book.learning_path} tone={coverTone} />
           )}
-
-          {/* Gold spine — left edge */}
-          <div className="absolute inset-y-0 left-0 w-[8px] pointer-events-none bg-gradient-to-r from-[#15110B]/70 via-[#B89555]/45 to-transparent" />
-
-          {/* Hairline page edge — right */}
-          <div className="absolute inset-y-[3%] right-0 w-[4px] pointer-events-none bg-gradient-to-r from-[#15110B]/20 via-[#EFE6D6]/70 to-[#B89555]/70" />
-          <div className="absolute inset-x-0 bottom-0 h-10 pointer-events-none bg-gradient-to-t from-[#15110B]/35 to-transparent" />
+          <div className="absolute inset-y-0 left-0 w-[8%] pointer-events-none bg-gradient-to-r from-[#050505]/90 via-[#1A1A1A]/70 to-transparent" />
+          <div className="absolute inset-y-[3%] right-0 w-[4px] pointer-events-none bg-gradient-to-r from-transparent via-[#EFE6D6]/50 to-[#B89555]/70" />
+          <div className="absolute inset-x-0 bottom-0 h-14 pointer-events-none bg-gradient-to-t from-[#050505]/30 to-transparent" />
 
           {/* Status badge */}
           {statusBadge && <div className="absolute top-3 right-3 z-20">{statusBadge}</div>}
@@ -101,10 +91,11 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
               </div>
             </div>
           )}
+          </div>
         </div>
 
         {/* ── Content panel ───────────────────────────────────────── */}
-        <div className="flex-1 flex flex-col gap-3 p-5 min-h-[232px]">
+        <div className="flex min-h-[218px] flex-1 flex-col gap-3 px-2 pt-5">
           <div className="inline-flex max-w-full items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-[10px] uppercase tracking-[0.15em] self-start">
             <Sparkles className="w-3 h-3" />
             <span className="truncate">{book.learning_path}</span>
