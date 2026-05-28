@@ -7,7 +7,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Phone, CheckCircle2, Loader2, Mic, Square, Search, X, Sparkles, Pause, Play, RotateCcw,
+  Phone, CheckCircle2, Loader2, Mic, Search, X, Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
