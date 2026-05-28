@@ -252,18 +252,20 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <CommandPaletteRoot />
         </Suspense>
       )}
-      {/* Compact phone (<640): mobile header | Tablet/desktop (sm 640px+): reference L-shape sidebar + utility bar */}
-      <div data-chrome="header" className="sm:hidden">
-        <GlobalHeader forceSolid={needsHeaderSpacing} />
-      </div>
-      <>
-        <div data-chrome="sidebar" className="hidden sm:block fixed left-0 top-0 h-screen z-[9997]">
-          <GlobalVerticalNav />
-        </div>
-        <div data-chrome="utility-bar" className="hidden sm:block">
-          <HorizontalUtilityBar />
-        </div>
-      </>
+       {/* Compact phone (<640): mobile header | Tablet/desktop (sm 640px+): reference L-shape sidebar + utility bar */}
+      {!usesStandalonePortalChrome && (
+        <>
+          <div data-chrome="header" className="sm:hidden">
+            <GlobalHeader forceSolid={needsHeaderSpacing} />
+          </div>
+          <div data-chrome="sidebar" className="hidden sm:block fixed left-0 top-0 h-screen z-[9997]">
+            <GlobalVerticalNav />
+          </div>
+          <div data-chrome="utility-bar" className="hidden sm:block">
+            <HorizontalUtilityBar />
+          </div>
+        </>
+      )}
       <GlobalContactGating>
         {/*
           Header spacing rules:
@@ -273,7 +275,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             header via .jj-hero-fullscreen). This removes the champagne band that was visible
             between the header and the hero on desktop.
         */}
-        <main className={`w-full max-w-full overflow-x-hidden bg-[#FDFBF7] min-h-screen transition-[padding-left,padding-top] duration-100 ease-out [body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px] ${needsHeaderSpacing ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
+        <main className={`w-full max-w-full overflow-x-hidden bg-[#FDFBF7] min-h-screen transition-[padding-left,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "pl-0" : "[body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]"} ${needsHeaderSpacing ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
 
 
           {layoutGuardTriggered && isServiceRoute && (
