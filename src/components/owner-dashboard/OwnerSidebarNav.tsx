@@ -259,21 +259,29 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
             }
           }}
           className={cn(
-            "w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 border-l-2 border-y border-r relative",
+            "group w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 border-l-2 border-y border-r relative",
             active
-              ? "bg-transparent !text-[#1A1A1A] border-l-[#B89555] border-y-transparent border-r-transparent font-semibold"
-              : "bg-transparent !text-[#1A1A1A] border-transparent hover:border-l-[#B89555]/60 hover:!text-[#1A1A1A]",
+              ? "bg-transparent !text-[#B89555] border-l-[#B89555] border-y-transparent border-r-transparent font-semibold"
+              : "bg-transparent !text-[#1A1A1A] border-transparent hover:border-l-[#B89555]/60 hover:!text-[#B89555]",
           )}
           style={depth > 0 ? { paddingLeft: `${12 + depth * 14}px` } : undefined}
           title={collapsed ? item.label : undefined}
         >
           <item.icon
-            className={cn("w-4 h-4 flex-shrink-0", item.premium && !active && "drop-shadow-[0_0_4px_rgba(184,149,85,0.6)]")}
-            style={{ color: '#1A1A1A' }}
+            className={cn(
+              "w-4 h-4 flex-shrink-0 transition-colors duration-200 text-[#B89555]",
+              item.premium && !active && "drop-shadow-[0_0_4px_rgba(184,149,85,0.6)]"
+            )}
           />
           {!collapsed && (
             <>
-              <span className={cn("flex-1 text-left truncate", item.premium && "font-semibold")} style={{ color: '#1A1A1A' }}>
+              <span
+                className={cn(
+                  "flex-1 text-left truncate transition-colors duration-200",
+                  item.premium && "font-semibold",
+                  active ? "text-[#B89555]" : "text-[#1A1A1A] group-hover:text-[#B89555]"
+                )}
+              >
                 {item.label}
               </span>
               {item.badge && (
@@ -286,8 +294,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
               )}
               {hasChildren && (
                 <ChevronRight
-                  className={cn("w-3.5 h-3.5 flex-shrink-0 transition-transform", expanded && "rotate-90")}
-                  style={{ color: '#1A1A1A' }}
+                  className={cn("w-3.5 h-3.5 flex-shrink-0 transition-transform text-[#B89555]", expanded && "rotate-90")}
                   onClick={(e) => { e.stopPropagation(); toggleOpen(item.path); }}
                 />
               )}
