@@ -366,7 +366,7 @@ export const PremiumBadge: React.FC<PremiumBadgeProps> = ({
 
   return (
     <span className={cn(
-      'inline-flex items-center gap-1.5 rounded-full font-medium border',
+      'inline-flex items-center gap-1.5 rounded-md font-medium border',
       variants[variant],
       sizes[size],
       glow && variant === 'gold' && 'shadow-[0_0_10px_rgba(200,167,102,0.3)]',
@@ -487,7 +487,7 @@ export const AIIndicator: React.FC<{ active?: boolean; className?: string }> = (
 }) => {
   return (
     <div className={cn(
-      'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full',
+      'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md',
       'bg-gradient-to-r from-gold/15 to-gold/5 border border-[#B89555]/30',
       className
     )}>

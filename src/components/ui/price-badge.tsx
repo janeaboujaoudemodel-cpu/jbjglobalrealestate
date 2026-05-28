@@ -23,13 +23,13 @@ const priceBadgeVariants = cva(
         plain: "",
         // Soft pill — premium chip on light & dark surfaces
         soft:
-          "rounded-full border border-price-orange/25 bg-price-orange/10 px-2.5 py-1",
+          "rounded-md border border-price-orange/25 bg-price-orange/10 px-2.5 py-1",
         // Solid pill — emphatic CTA-adjacent placements
         solid:
-          "rounded-full bg-price-orange text-white px-2.5 py-1 [&]:!text-white",
+          "rounded-md bg-price-orange text-white px-2.5 py-1 [&]:!text-white",
         // Outline pill — quiet placements that still need the brand color
         outline:
-          "rounded-full border border-price-orange/40 px-2.5 py-1",
+          "rounded-md border border-price-orange/40 px-2.5 py-1",
       },
       size: {
         xs: "price-sm gap-1 [&>svg]:h-3 [&>svg]:w-3",
