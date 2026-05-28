@@ -798,7 +798,7 @@ export default function GlobalVerticalNav() {
     }
     return shouldHighlight
       ? "text-[#B89555] font-bold"
-      : "text-[#B89555]";
+      : (sectionKey ? "text-[#102540] font-medium" : "text-[#B89555]");
   };
 
   // Saturated colored rows where the row background is a vivid fill (not champagne).
