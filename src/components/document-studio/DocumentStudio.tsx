@@ -497,7 +497,7 @@ function StudioShell({
           return;
         }
 
-        const pages: typeof items[] = [];
+        const pages: Array<typeof items> = [];
         let current: typeof items = [];
         let pageStartTop = items[0].top;
         let cap = fitsSinglePage ? singlePageCap : page0Cap;
