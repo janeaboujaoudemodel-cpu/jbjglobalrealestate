@@ -158,8 +158,8 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
 
             {/* Cover Content */}
             <div className="p-5 relative flex-1 flex flex-col">
-              {/* Learning Path Badge */}
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EFE6D6]/15 border border-[#B89555]/30 text-[#1A1A1A] text-[10px] uppercase tracking-[0.15em] mb-3 self-start">
+            {/* Learning Path Badge */}
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 text-[#1A1A1A] text-[10px] uppercase tracking-[0.15em] mb-3 self-start" data-no-contrast-guard>
                 <Sparkles className="w-3 h-3" />
                 {book.learning_path}
               </div>
