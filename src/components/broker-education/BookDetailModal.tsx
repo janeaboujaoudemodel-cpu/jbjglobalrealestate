@@ -42,31 +42,15 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
         <DialogHeader>
           <div className="flex items-start gap-5">
-            {/* 3D Mini Book Cover */}
-            <div 
-              className="relative flex-shrink-0"
-              style={{ perspective: '500px' }}
-            >
-              <div 
-                className="w-28 h-36 rounded-lg bg-gradient-to-br from-zinc-900 via-black to-zinc-900 border border-[#B89555]/40 flex items-center justify-center relative overflow-hidden"
-                style={{
-                  transform: 'rotateY(-8deg) rotateX(3deg)',
-                  boxShadow: '8px 8px 25px rgba(0,0,0,0.4), -2px -2px 10px rgba(200,167,102,0.15)',
-                }}
-              >
-                {/* Spine effect */}
-                <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-gold/30 via-gold/15 to-transparent" />
-                
-                {/* Book number */}
-                <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
-                  <span className="text-[#1A1A1A] text-xl font-bold">{book.book_number}</span>
-                </div>
-                
-                {/* Page edges */}
-                <div className="absolute right-0 top-0 bottom-0 w-2">
-                  <div className="h-full bg-gradient-to-l from-zinc-200/15 to-transparent" />
-                </div>
-              </div>
+            {/* Mini book cover — same master style as the academy grid */}
+            <div className="relative flex-shrink-0 w-28 aspect-[3/4] overflow-hidden rounded-r-[4px] rounded-l-[2px] shadow-[8px_10px_22px_rgba(0,0,0,0.32),inset_0_0_0_1px_rgba(184,149,85,0.4)]">
+              <PremiumBookCover
+                title={book.title}
+                number={book.book_number}
+                subtitle={book.learning_path}
+                tone="black"
+              />
+              <div className="absolute inset-y-0 left-0 w-[6%] pointer-events-none bg-gradient-to-r from-[#030303]/90 via-[#1A1A1A]/60 to-transparent" />
             </div>
             
             <div className="flex-1 min-w-0">
