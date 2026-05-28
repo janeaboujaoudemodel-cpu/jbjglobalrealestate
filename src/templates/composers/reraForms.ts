@@ -399,15 +399,9 @@ export function composeFormI(input: ComposerInput): string {
 
   const isJbjSignature = (label: "A" | "B") => jbjSide === label;
   const signatureCell = (label: "A" | "B") => `
-    <td style="width:50%;height:198px;border:1px solid ${GOLD};vertical-align:top;position:relative;padding:9px 12px;overflow:hidden;">
-      <div style="font-size:9.5px;font-weight:800;line-height:1.05;margin-bottom:10px;">SIGNATURE &amp; COMPANY STAMP OF AGENT "${label}":</div>
-      <div style="font-size:8.6px;line-height:1.5;color:${INK};">
-        <div style="margin-bottom:10px;">Name: ____________________________________</div>
-        <div style="margin-bottom:10px;">Designation: ______________________________</div>
-        <div style="margin-bottom:10px;">Date: ____ / ____ / __________</div>
-        <div>Signature: ________________________________</div>
-      </div>
-      ${isJbjSignature(label) ? `<img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" style="position:absolute;right:14px;bottom:18px;width:84px;height:84px;object-fit:contain;opacity:.9;mix-blend-mode:multiply;transform:rotate(-8deg);" />` : ""}
+    <td style="width:50%;height:170px;border:1px solid ${GOLD};vertical-align:top;position:relative;padding:9px 12px;overflow:hidden;">
+      <div style="font-size:9.5px;font-weight:800;line-height:1.05;">SIGNATURE &amp; COMPANY STAMP OF AGENT "${label}":</div>
+      ${isJbjSignature(label) ? `<img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" style="position:absolute;right:18px;bottom:14px;width:96px;height:96px;object-fit:contain;opacity:.9;mix-blend-mode:multiply;transform:rotate(-8deg);" />` : ""}
     </td>`;
 
   const companyFooter = `
