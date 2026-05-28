@@ -279,7 +279,7 @@ export function AddPayrollEntryDialog({ open, onOpenChange, mode, onSaved }: Pro
                 <li key={b.id}>
                   <button
                     type="button"
-                    onClick={() => { setPickedBrokerId(b.id); setShowNewBroker(false); }}
+                    onClick={() => setPickedBrokerId(b.id)}
                     className={`w-full text-left px-3 py-2 hover:bg-[#EFE6D6] transition-colors ${
                       pickedBrokerId === b.id ? "bg-[#EFE6D6] ring-1 ring-[#B89555]/60" : ""
                     }`}
@@ -300,41 +300,27 @@ export function AddPayrollEntryDialog({ open, onOpenChange, mode, onSaved }: Pro
           )}
         </div>
 
-        {/* Inline "add new broker" */}
-        {!showNewBroker ? (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => { setShowNewBroker(true); setPickedBrokerId(null); }}
-            className="border-[#B89555]/40 text-[#1A1A1A]"
-          >
-            <UserPlus className="w-4 h-4 mr-1.5" /> Add a new broker instead
-          </Button>
-        ) : (
-          <div className="border border-[#B89555]/40 rounded-lg p-3 bg-[#F7F2EA] space-y-2">
-            <p className="text-xs font-medium text-[#1A1A1A] flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5" /> New broker
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <Input value={nbName} onChange={(e) => setNbName(e.target.value)}
-                placeholder="Full name *" className="bg-[#FDFBF7] border-[#B89555]/40" />
-              <Input value={nbCompany} onChange={(e) => setNbCompany(e.target.value)}
-                placeholder="Brokerage / company" className="bg-[#FDFBF7] border-[#B89555]/40" />
-              <Input value={nbPhone} onChange={(e) => setNbPhone(e.target.value)}
-                placeholder="Phone" className="bg-[#FDFBF7] border-[#B89555]/40" />
-            </div>
-            <p className="text-[10px] text-[#1A1A1A]/60">
-              Saved to CRM brokers on submit and attached to this payroll record.
-            </p>
-          </div>
-        )}
+        {/* Open the canonical Add Broker form (same one used in CRM → Brokers) */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setAddBrokerSheetOpen(true)}
+          className="border-[#B89555]/40 text-[#1A1A1A]"
+        >
+          <UserPlus className="w-4 h-4 mr-1.5" /> Add a new broker
+        </Button>
+        <AddBrokerSheet
+          open={addBrokerSheetOpen}
+          onOpenChange={setAddBrokerSheetOpen}
+          onAdded={handleBrokerAdded}
+        />
 
         {/* Mode-specific fields */}
         <div className="border-t border-[#B89555]/30 pt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <Label className="text-xs text-[#1A1A1A]/70">Employee display name (override)</Label>
             <Input value={employeeNameOverride} onChange={(e) => setEmployeeNameOverride(e.target.value)}
-              placeholder={pickedBroker?.full_name || nbName || "Auto from broker"}
+              placeholder={pickedBroker?.full_name || "Auto from broker"}
               className="bg-[#F7F2EA] border-[#B89555]/40" />
           </div>
           <div>
