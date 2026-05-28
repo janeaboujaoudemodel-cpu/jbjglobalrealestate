@@ -29,8 +29,11 @@ Deno.serve(async (req) => {
         },
       },
     };
-    const result = await firecrawlScrape("https://www.dubaipulse.gov.ae/data/dld-transactions", {
-      formats: ["markdown", { type: "json", schema }],
+    // Government source: DXB Interact (official public mirror of DLD transactions).
+    // Underlying data = Dubai Land Department; chosen because dubailand.gov.ae / dubaipulse.gov.ae
+    // time out via Firecrawl scrape (heavy JS / anti-bot).
+    const result = await firecrawlScrape("https://dxbinteract.com/", {
+      formats: ["markdown", { type: "json", schema }], waitFor: 3000, onlyMainContent: true,
     });
     const doc = result?.data ?? result;
     const metrics = doc?.json ?? {};
