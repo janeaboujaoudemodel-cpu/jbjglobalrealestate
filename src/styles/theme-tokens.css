@@ -52,6 +52,61 @@
   font-weight: 600 !important;
 }
 
+/* Gold required-asterisk on any label marked `data-required` */
+.jbj-form-label[data-required]::after,
+label[data-required]::after {
+  content: " *";
+  color: #B89555;
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+/* ----- Universal "required / invalid" state across JBJ forms ----- */
+/* Gold halo on invalid identity (blue) fields */
+[data-careers-page] .careers-blue-field[aria-invalid="true"],
+[data-careers-page] .careers-blue-field.is-invalid,
+[data-careers-page] input.careers-blue-field[aria-invalid="true"],
+[data-careers-page] button[role="combobox"].careers-blue-field[aria-invalid="true"],
+[data-careers-page] button[role="combobox"].careers-blue-field.is-invalid,
+[data-jbj-form] .jbj-blue-field[aria-invalid="true"],
+[data-jbj-form] input.jbj-blue-field[aria-invalid="true"] {
+  border-color: #B89555 !important;
+  box-shadow:
+    0 0 0 3px rgba(184, 149, 85, 0.22),
+    0 8px 24px -16px rgba(184, 149, 85, 0.35) !important;
+}
+
+/* Gold halo on invalid preference (gold) fields */
+[data-careers-page] .careers-gold-field[aria-invalid="true"],
+[data-careers-page] .careers-gold-field.is-invalid,
+[data-careers-page] input.careers-gold-field[aria-invalid="true"],
+[data-careers-page] button[role="combobox"].careers-gold-field[aria-invalid="true"],
+[data-careers-page] button[role="combobox"].careers-gold-field.is-invalid,
+[data-jbj-form] .jbj-gold-field[aria-invalid="true"],
+[data-jbj-form] input.jbj-gold-field[aria-invalid="true"] {
+  border-color: #B89555 !important;
+  box-shadow:
+    0 0 0 3px rgba(184, 149, 85, 0.28),
+    0 8px 24px -16px rgba(184, 149, 85, 0.45) !important;
+}
+
+/* Phone input invalid state */
+[data-careers-page] .careers-phone-input[aria-invalid="true"] input,
+[data-careers-page] .careers-phone-input[data-invalid="true"] input {
+  border-color: #B89555 !important;
+  box-shadow:
+    0 0 0 3px rgba(184, 149, 85, 0.22),
+    0 0 0 6px rgba(184, 149, 85, 0.10) !important;
+}
+
+/* Generic JBJ form: any input/textarea/select-trigger marked aria-invalid gets the gold halo */
+[data-jbj-form] [aria-invalid="true"]:where(input, textarea, button[role="combobox"], select) {
+  border-color: #B89555 !important;
+  box-shadow:
+    0 0 0 3px rgba(184, 149, 85, 0.22),
+    0 8px 24px -16px rgba(184, 149, 85, 0.35) !important;
+}
+
 .jbj-form-field,
 .jbj-form-field:hover,
 .jbj-form-field:focus,

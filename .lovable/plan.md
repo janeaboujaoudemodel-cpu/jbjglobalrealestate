@@ -1,95 +1,56 @@
 ## Goal
 
-Take the four rules that currently only fire on `/careers` and `/careers/intake/:token` and apply them to every **public lead-capture form** (anything an anonymous visitor can submit). Owner / CRM / admin / staff forms keep their existing champagne look — no change.
+Give every field in `/careers` JoinApplication (and the parallel `CareersIntake` page) a single, consistent "required" visual language in gold, and enforce real required validation on each field — not just the basic 7-field guard that exists today.
 
-The four rules being generalised:
+## What changes (visual)
 
-1. **Field colour rule** — identity fields get a 2px navy `#102540` border; preference fields get a 2px gold `#B89555` border.
-2. **White title on navy** — section headers / "Open positions"-style cards stay white text on navy `#102540`, no champagne flip on hover.
-3. **Premium "Questions / Contact us" block** — the 3-channel glass card (Email · Phone · Chat with Jessica) replaces every "Questions? Email us at…" plain-text line.
-4. **Gold-tick checkbox** — every checkbox renders as a white box with a 1.5px gold hairline and a gold `✓` when checked (no blue ticks anywhere).
+1. **Gold required indicator on every required label**
+   - Replace the inconsistent `<span className="text-red-600">*</span>` (and missing asterisks) with a shared `<RequiredMark />` rendered as a `★` / `*` glyph in champagne-gold `#B89555`, with `aria-hidden` + visually-hidden "required" text for a11y.
+   - Promote `.jbj-form-label` to always render the asterisk via a `data-required` attribute — so every required label across all JBJ forms gets the same gold mark.
 
-## Field colour rule — applied consistently
+2. **Gold focus + invalid ring on identity & preference fields**
+   - Extend the existing `.careers-blue-field` / `.careers-gold-field` (and `.jbj-blue-field` / `.jbj-gold-field`) tokens in `src/styles/theme-tokens.css`:
+     - `:focus-visible` → 2px gold ring `#B89555` + 1px navy border kept.
+     - `[aria-invalid="true"]` → border flips to gold `#B89555` with a soft gold halo `0 0 0 3px rgba(184,149,85,0.22)` (no red — matches champagne system; red is reserved for destructive only).
+   - Same treatment for `careers-phone-input` country trigger and `SearchableSelect` trigger via `triggerClassName`.
 
-| Class | Fields it goes on |
-|---|---|
-| `.jbj-blue-field` (navy 2px) | First name, Last name, Full name, Email, Phone (+ country trigger) |
-| `.jbj-gold-field` (gold 2px)  | City, Country, Nationality, Languages, Interests, Budget, Property type, Notes / Message, anything qualitative |
+3. **Inline gold error message under each field**
+   - New `<FieldError />` primitive: `text-[12px] font-medium text-[#B89555] flex items-center gap-1` with a tiny gold `AlertCircle` icon. Replaces today's toast-only feedback for per-field errors. Toast stays as the summary.
 
-Phone country-code combobox always inherits navy to match the tel input.
+## What changes (validation)
 
-## Public lead-capture forms in scope
+4. **Zod schema for the full application** (`src/pages/JoinApplication.tsx`)
+   - Single `applicationSchema` covering every visible field per step:
+     - Step 0 Personal: firstName, lastName, phone (E.164 via libphonenumber check already imported), email (account-bound, so skipped from schema).
+     - Step 1 Location & Language: nationality, preferredLanguage, country, city.
+     - Step 2 Role & Experience: positionApplied **always required** (covers both DB-positions and fallback paths). Role-aware qualification blocks become required when visible:
+       - `sales` → dealsClosed, totalDealValue, projectsSold, developerWorkedWith, reasonForLeaving, reference1{Name,Title,Email,Phone}, reference2{Name,Title,Email,Phone}.
+       - `marketing` → marketingCampaigns, marketingBudget, marketingTools, portfolioLink (URL).
+       - `hr_ops` → yearsExperience, systemsUsed, certifications.
+       - `tech` → mirror existing fields in that block.
+     - Step 3 CV: cvFile required (PDF/Word/image, ≤10 MB — existing rule).
+     - Step 4 Consent: consentAccurate `=== true`, consentTerms `=== true`.
+   - Mirror the same schema (smaller subset) in `CareersIntake.tsx`.
 
-Audited and confirmed as the entire public surface:
+5. **Per-step gating + per-field errors**
+   - Replace the current "Basic required-field guard" with `schema.safeParse(formData)` scoped to the current step.
+   - Store `errors: Partial<Record<keyof FormData, string>>` in state. Pass `aria-invalid` + `aria-describedby` to each field and render `<FieldError>` under it.
+   - "Next" button on each step runs the step-scoped parse; "Submit" on Step 4 runs the full parse. Toast shows a single "Please complete the highlighted fields" message; the gold rings + inline messages do the actual pointing.
 
-```text
-src/components/InquiryFormModal.tsx              property / project enquiry modal
-src/components/chat/ChatLeadForm.tsx             chat widget gate
-src/components/chat/ChatConversationalCollect.tsx  conversational lead capture
-src/components/chat/ChatCVSubmission.tsx         CV submission inside chat
-src/components/concierge/ConciergeGate.tsx       concierge name+phone gate
-src/components/home/AIConcierge.tsx              homepage concierge inline form
-src/components/video-meet/PreJoinForm.tsx        video-meet pre-join
-src/components/SupportTicketBox.tsx              support ticket form
-src/pages/JoinApplication.tsx                    careers apply (already done — verify)
-src/pages/CareersIntake.tsx                     candidate intake (already done — verify)
-src/pages/Index.tsx — public "Book a free consultation" + footer inquiry
-```
+6. **HTML-level enforcement**
+   - Add `aria-required="true"` and `required` (where the native control supports it) to every required `<Input>` / select trigger. Keeps screen-reader + browser autofill semantics correct.
 
-Anything under `src/pages/owner/**`, `src/pages/admin/**`, `src/components/crm/**`, `src/components/hr/**`, `src/components/owner-dashboard/**`, `src/components/employee-management/**` is **explicitly out of scope**.
+## Files
 
-## Implementation
-
-### 1 · Promote the tokens to global
-
-In `src/styles/theme-tokens.css`:
-
-- Duplicate every `[data-careers-page] .careers-blue-field` block into a `[data-jbj-form] .jbj-blue-field` block (and the corresponding `.jbj-gold-field`, `.jbj-card-navy`, `.jbj-open-badge`).
-- Keep the original `careers-*` selectors as aliases so the two careers pages keep working unchanged.
-- Update the existing global `:is(input,textarea,select)` champagne reset in `src/index.css` (lines 3536 + 3572) to also exclude `.jbj-blue-field` and `.jbj-gold-field` so they don't get re-skinned.
-
-### 2 · Gold-tick checkbox (global override)
-
-In `src/index.css`, add a single rule targeting the shadcn checkbox primitive — `[role="checkbox"]` / `button[data-state][data-radix-checkbox]`:
-
-- Idle: white background, 1.5px solid `#B89555`, rounded-md.
-- Checked: still white background, gold `✓` indicator (`color: #B89555`), gold border stays 1.5px.
-- Focus: 2px gold ring `rgba(184,149,85,.35)`.
-- No opt-out by default — every checkbox on the site flips to gold ticks. Documented in memory as a global rule.
-
-### 3 · `<JBJContactBlock />` primitive
-
-Create `src/components/forms/JBJContactBlock.tsx` — a generalised copy of `CareersContactBlock` where the three channels (icon · label · value · href · tag) are props with sensible JBJ defaults. `CareersContactBlock` becomes a thin wrapper that passes the careers-specific channels (`careers@JBJ.ae`, `Chat with Jessica`, `/hr-agent`).
-
-### 4 · `<JBJOpenCard />` primitive (white-on-navy)
-
-Extract the navy "Open positions" card pattern into `src/components/forms/JBJOpenCard.tsx` (`.jbj-card-navy` + sheen). Used by JoinApplication today; available for any future form header that needs the same treatment. No mandatory retrofit — only adopted where the form already has an "Open …" or "Active …" card.
-
-### 5 · Retrofit pass — one PR-shaped change per file
-
-For each file in the scope list:
-
-- Add `data-jbj-form` to the form root (so the scoped tokens activate).
-- Replace each `<Input />` / `<input />` className with `jbj-blue-field` or `jbj-gold-field` per the table above.
-- For combobox-style country pickers, mirror the `careers-phone-tel` pattern: navy combobox + navy phone input.
-- Replace any inline "Questions? Contact us at …" / "Need help? Email …" line with `<JBJContactBlock />`.
-- Leave labels, copy, layout, validation, submit handlers, RLS, edge-function calls, and accessibility attributes **completely untouched** — pure presentation swap.
-
-### 6 · Memory + CI
-
-- Add `mem://ui-ux/visual-standards/jbj-form-standard.md` describing the new `[data-jbj-form]` scope, the blue-vs-gold field map, the global gold-tick rule, and the contact block primitive.
-- Update `mem://index.md` Core (one line) so future work auto-applies the standard to any new public form.
-- No new CI scripts — the existing white-on-light + contrast guards already cover the navy / gold combinations.
+- `src/styles/theme-tokens.css` — extend `.careers-blue-field`, `.careers-gold-field`, `.jbj-blue-field`, `.jbj-gold-field`, `.careers-phone-input` with gold focus/invalid rings; add `.jbj-form-label[data-required]::after` gold asterisk.
+- `src/components/forms/RequiredMark.tsx` (new) — shared marker, used internally by the label rule + standalone where needed.
+- `src/components/forms/FieldError.tsx` (new) — inline gold error row.
+- `src/pages/JoinApplication.tsx` — add `applicationSchema` (zod), `errors` state, per-step parsing in `goNext` and `handleSubmit`, wire `aria-invalid` + `<FieldError>` to every field, replace ad-hoc `*` spans with `data-required` on labels.
+- `src/pages/CareersIntake.tsx` — same treatment, smaller schema.
 
 ## Out of scope
 
-- No backend / edge-function / RLS / schema changes.
-- No relayout of any form; only borders, ticks, and the contact footer change.
-- No change to owner / CRM / admin forms.
-- No change to the existing `<Button variant="gold">` or any non-input control.
-- No change to mobile/desktop breakpoints — the careers divider hidden-on-mobile rule already shipped and is unaffected.
-
-## QA after build
-
-- Manual pass on `/`, `/careers`, `/careers/intake/:token`, `/book`, `/contact`, any property page that opens `InquiryFormModal`, the chat launcher, the homepage Concierge, and a video-meet pre-join URL — confirm: navy borders on name/email/phone, gold borders on city/preferences/notes, gold ticks on every checkbox, premium contact block at the bottom of every form, no champagne / black flip on hover anywhere.
-- Verify owner CRM (`/owner/crm`) and admin (`/admin/*`) screens are visually unchanged.
+- No backend / RLS / edge-function changes.
+- No copy rewrites beyond error messages.
+- No layout/step restructuring; the existing 5-step wizard stays.
+- Other JBJ forms (Inquiry, Chat, Concierge, PreJoin) are not touched in this pass — the token changes make them ready, but retrofitting is a separate task.

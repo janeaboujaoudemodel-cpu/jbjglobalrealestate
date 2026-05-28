@@ -28,6 +28,8 @@ import CareersEcosystem from "@/components/careers/CareersEcosystem";
 import CareersWhyJBJ from "@/components/careers/CareersWhyJBJ";
 import CareersFAQ from "@/components/careers/CareersFAQ";
 import CareersContactBlock from "@/components/careers/CareersContactBlock";
+import FieldError from "@/components/forms/FieldError";
+import { z } from "zod";
 
 interface OpenPosition {
   id: string;
@@ -161,6 +163,18 @@ export default function JoinApplication() {
   });
 
   const [honeypot, setHoneypot] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const fieldErr = (k: string) => errors[k];
+  const invalidProps = (k: string) =>
+    errors[k]
+      ? { "aria-invalid": true as const, "aria-describedby": `${k}-err` }
+      : {};
+  const clearFieldError = (k: string) =>
+    setErrors((prev) => {
+      if (!prev[k]) return prev;
+      const { [k]: _omit, ...rest } = prev;
+      return rest;
+    });
   const [openPositions, setOpenPositions] = useState<OpenPosition[]>([]);
   const [positionsLoading, setPositionsLoading] = useState(true);
   const [positionSearch, setPositionSearch] = useState("");
@@ -307,23 +321,131 @@ export default function JoinApplication() {
     setTimeout(scrollToForm, 80);
   };
 
-  // ---- Wizard step validation ----
-  const stepValidity = useMemo(() => {
-    return [
-      // 0 Personal
-      !!formData.firstName.trim() && !!formData.lastName.trim() && !!formData.phone.trim(),
-      // 1 Location & Language
-      !!formData.nationality && !!formData.preferredLanguage && !!formData.country && !!formData.city,
-      // 2 Role & Experience
-      !!formData.positionApplied,
-      // 3 CV
-      !!cvFile,
-      // 4 Review & Consent
-      !!formData.consentAccurate && !!formData.consentTerms,
-    ];
-  }, [formData, cvFile]);
-
+  // ---- Wizard step validation (zod-driven, required-field enforced) ----
   const STEP_LABELS = ["Personal", "Location & Language", "Role & Experience", "CV", "Review & Consent"];
+
+  const REQ = (label: string) => z.string().trim().min(1, `${label} is required`);
+  const REQ_URL = (label: string) =>
+    z.string().trim().min(1, `${label} is required`).url(`${label} must be a valid URL`);
+  const REQ_EMAIL = (label: string) =>
+    z.string().trim().min(1, `${label} is required`).email("Enter a valid email address");
+
+  const step0Schema = z.object({
+    firstName: REQ("First name").max(60),
+    lastName: REQ("Last name").max(60),
+    phone: z
+      .string()
+      .trim()
+      .min(8, "Phone number is required")
+      .max(20, "Phone number is too long"),
+  });
+  const step1Schema = z.object({
+    nationality: REQ("Nationality"),
+    preferredLanguage: REQ("Preferred language"),
+    country: REQ("Country"),
+    city: REQ("City"),
+  });
+
+  const qualSchemaFor = (kind: QualKind) => {
+    if (kind === "sales") {
+      return z.object({
+        dealsClosed: REQ("Deals closed"),
+        totalDealValue: REQ("Total deal value"),
+        projectsSold: REQ("Projects sold in"),
+        developerWorkedWith: REQ("Developers worked with"),
+        reasonForLeaving: REQ("Reason for leaving"),
+        reference1Name: REQ("Reference 1 name"),
+        reference1Title: REQ("Reference 1 title & company"),
+        reference1Email: REQ_EMAIL("Reference 1 email"),
+        reference1Phone: REQ("Reference 1 phone"),
+        reference2Name: REQ("Reference 2 name"),
+        reference2Title: REQ("Reference 2 title & company"),
+        reference2Email: REQ_EMAIL("Reference 2 email"),
+        reference2Phone: REQ("Reference 2 phone"),
+      });
+    }
+    if (kind === "marketing") {
+      return z.object({
+        marketingCampaigns: REQ("Notable campaigns"),
+        marketingBudget: REQ("Largest budget managed"),
+        marketingTools: REQ("Tools / platforms"),
+        portfolioLink: REQ_URL("Portfolio link"),
+      });
+    }
+    if (kind === "hr_ops") {
+      return z.object({
+        yearsExperience: REQ("Years of experience"),
+        systemsUsed: REQ("Systems used"),
+        certifications: REQ("Certifications"),
+      });
+    }
+    if (kind === "tech") {
+      return z.object({
+        yearsExperience: REQ("Years of experience"),
+        techStack: REQ("Stack / specialties"),
+        githubLink: REQ_URL("GitHub / portfolio link"),
+      });
+    }
+    // general
+    return z.object({
+      yearsExperience: REQ("Years of experience"),
+      portfolioLink: REQ_URL("Portfolio / LinkedIn link"),
+      aboutYou: REQ("Tell us briefly about yourself"),
+    });
+  };
+
+  const step2Schema = () =>
+    z
+      .object({ positionApplied: REQ("Position") })
+      .and(qualSchemaFor(qualKind) as z.ZodTypeAny);
+
+  const step4Schema = z.object({
+    consentAccurate: z.literal(true, {
+      errorMap: () => ({ message: "Please confirm the information is accurate" }),
+    }),
+    consentTerms: z.literal(true, {
+      errorMap: () => ({ message: "Please accept the Terms and Privacy Policy" }),
+    }),
+  });
+
+  const validateStep = (idx: number): boolean => {
+    let schema: z.ZodTypeAny | null = null;
+    if (idx === 0) schema = step0Schema;
+    else if (idx === 1) schema = step1Schema;
+    else if (idx === 2) schema = step2Schema();
+    else if (idx === 3) {
+      if (!cvFile) {
+        setErrors((p) => ({ ...p, cvFile: "Please upload your CV (PDF, Word, or photo)" }));
+        toast.error("Please upload your CV");
+        return false;
+      }
+      setErrors((p) => {
+        const { cvFile: _x, ...rest } = p;
+        return rest;
+      });
+      return true;
+    } else if (idx === 4) schema = step4Schema;
+    if (!schema) return true;
+    const result = schema.safeParse(formData);
+    if (result.success) {
+      // clear any errors that belonged to this step
+      const keys = Object.keys((schema as any)._def?.shape?.() || {});
+      setErrors((prev) => {
+        const next = { ...prev };
+        keys.forEach((k) => delete next[k]);
+        return next;
+      });
+      return true;
+    }
+    const next: Record<string, string> = {};
+    result.error.issues.forEach((iss) => {
+      const k = String(iss.path[0] ?? "");
+      if (k && !next[k]) next[k] = iss.message;
+    });
+    setErrors((prev) => ({ ...prev, ...next }));
+    toast.error("Please complete the highlighted fields");
+    return false;
+  };
 
   const goToStep = (idx: number) => {
     const clamped = Math.max(0, Math.min(TOTAL_STEPS - 1, idx));
@@ -332,10 +454,7 @@ export default function JoinApplication() {
   };
 
   const handleNext = () => {
-    if (!stepValidity[currentStep]) {
-      toast.error(`Please complete: ${STEP_LABELS[currentStep]}`);
-      return;
-    }
+    if (!validateStep(currentStep)) return;
     goToStep(currentStep + 1);
   };
   const handleBack = () => goToStep(currentStep - 1);
@@ -382,17 +501,17 @@ export default function JoinApplication() {
       return;
     }
 
-    // Basic required-field guard (so we never silently bail to another route)
-    const missing: string[] = [];
-    if (!formData.firstName.trim()) missing.push("First name");
-    if (!formData.lastName.trim()) missing.push("Last name");
-    if (!formData.phone.trim()) missing.push("Phone number");
-    if (!formData.nationality) missing.push("Nationality");
-    if (!formData.country) missing.push("Country");
-    if (!formData.city.trim()) missing.push("City");
-    if (!formData.positionApplied) missing.push("Position");
-    if (missing.length) {
-      toast.error(`Please complete: ${missing.join(", ")}`);
+    // Full zod-driven validation across all steps
+    const allOk =
+      validateStep(0) && validateStep(1) && validateStep(2) && validateStep(3);
+    if (!allOk) {
+      // Jump to first failing step for the user
+      for (let i = 0; i < 4; i++) {
+        if (!validateStep(i)) {
+          goToStep(i);
+          break;
+        }
+      }
       return;
     }
 
@@ -411,13 +530,14 @@ export default function JoinApplication() {
       return;
     }
 
-    if (!formData.consentAccurate || !formData.consentTerms) {
-      toast.error("Please accept both consent checkboxes");
+    if (!validateStep(4)) {
+      goToStep(4);
       return;
     }
-
     if (!cvFile) {
+      setErrors((p) => ({ ...p, cvFile: "Please upload your CV (PDF, Word, or photo)" }));
       toast.error("Please upload your CV (PDF, Word, or photo)");
+      goToStep(3);
       return;
     }
 
@@ -581,6 +701,43 @@ export default function JoinApplication() {
       </div>
     );
   }
+
+  // ---- Reusable required-field input for qualification blocks ----
+  const QField = ({
+    k,
+    label,
+    placeholder,
+    type = "text",
+  }: {
+    k: string;
+    label: string;
+    placeholder: string;
+    type?: string;
+  }) => (
+    <div className="space-y-2">
+      <Label htmlFor={k} data-required className="jbj-form-label text-sm font-semibold">
+        {label}
+      </Label>
+      <Input
+        id={k}
+        type={type}
+        value={(formData as any)[k] ?? ""}
+        onChange={(e) => {
+          setFormData((prev) => ({ ...prev, [k]: e.target.value } as any));
+          clearFieldError(k);
+        }}
+        placeholder={placeholder}
+        disabled={loading}
+        required
+        aria-required="true"
+        {...invalidProps(k)}
+        className={`bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base ${
+          fieldErr(k) ? "is-invalid" : ""
+        }`}
+      />
+      <FieldError id={`${k}-err`} message={fieldErr(k)} />
+    </div>
+  );
 
   // ---- Render: full-width application form ----
   return (
@@ -812,26 +969,34 @@ export default function JoinApplication() {
                 {/* Names */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="firstName" className="jbj-form-label text-sm font-semibold">First Name</Label>
+                    <Label htmlFor="firstName" data-required className="jbj-form-label text-sm font-semibold">First Name</Label>
                     <Input
                       id="firstName"
                       value={formData.firstName}
-                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                      onChange={(e) => { setFormData({ ...formData, firstName: e.target.value }); clearFieldError("firstName"); }}
                       placeholder="e.g. Sarah"
                       disabled={loading}
+                      required
+                      aria-required="true"
+                      {...invalidProps("firstName")}
                       className="careers-blue-field h-12 rounded-lg text-base"
                     />
+                    <FieldError id="firstName-err" message={fieldErr("firstName")} />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="lastName" className="jbj-form-label text-sm font-semibold">Last Name</Label>
+                    <Label htmlFor="lastName" data-required className="jbj-form-label text-sm font-semibold">Last Name</Label>
                     <Input
                       id="lastName"
                       value={formData.lastName}
-                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                      onChange={(e) => { setFormData({ ...formData, lastName: e.target.value }); clearFieldError("lastName"); }}
                       placeholder="e.g. Khan"
                       disabled={loading}
+                      required
+                      aria-required="true"
+                      {...invalidProps("lastName")}
                       className="careers-blue-field h-12 rounded-lg text-base"
                     />
+                    <FieldError id="lastName-err" message={fieldErr("lastName")} />
                   </div>
                 </div>
 
@@ -851,15 +1016,18 @@ export default function JoinApplication() {
 
                 {/* Phone */}
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="jbj-form-label text-sm font-semibold">Phone Number</Label>
-                  <PhoneInput
-                    value={formData.phone}
-                    onChange={(value) => setFormData({ ...formData, phone: value || "" })}
-                    disabled={loading}
-                    placeholder="Phone number"
-                    variant="light"
-                    className="careers-phone-input"
-                  />
+                  <Label htmlFor="phone" data-required className="jbj-form-label text-sm font-semibold">Phone Number</Label>
+                  <div aria-invalid={!!fieldErr("phone")}>
+                    <PhoneInput
+                      value={formData.phone}
+                      onChange={(value) => { setFormData({ ...formData, phone: value || "" }); clearFieldError("phone"); }}
+                      disabled={loading}
+                      placeholder="Phone number"
+                      variant="light"
+                      className="careers-phone-input"
+                    />
+                  </div>
+                  <FieldError id="phone-err" message={fieldErr("phone")} />
                 </div>
 
                 </div>
@@ -870,60 +1038,64 @@ export default function JoinApplication() {
                 {/* Nationality + Language */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Nationality</Label>
+                    <Label data-required className="jbj-form-label text-sm font-semibold">Nationality</Label>
                     <SearchableSelect
                       value={formData.nationality}
-                      onChange={(v) => setFormData({ ...formData, nationality: v })}
+                      onChange={(v) => { setFormData({ ...formData, nationality: v }); clearFieldError("nationality"); }}
                       options={NATIONALITIES}
                       placeholder="Select nationality"
                       searchPlaceholder="Search nationality..."
                       flagType="nationality"
                       disabled={loading}
-                      triggerClassName="careers-blue-field h-12 rounded-lg"
+                      triggerClassName={`careers-blue-field h-12 rounded-lg ${fieldErr("nationality") ? "is-invalid" : ""}`}
                     />
+                    <FieldError id="nationality-err" message={fieldErr("nationality")} />
                   </div>
                   <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Preferred Language</Label>
+                    <Label data-required className="jbj-form-label text-sm font-semibold">Preferred Language</Label>
                     <SearchableSelect
                       value={formData.preferredLanguage}
-                      onChange={(v) => setFormData({ ...formData, preferredLanguage: v })}
+                      onChange={(v) => { setFormData({ ...formData, preferredLanguage: v }); clearFieldError("preferredLanguage"); }}
                       options={LANGUAGES}
                       placeholder="Select language"
                       searchPlaceholder="Search language..."
                       flagType="language"
                       disabled={loading}
-                      triggerClassName="careers-blue-field h-12 rounded-lg"
+                      triggerClassName={`careers-blue-field h-12 rounded-lg ${fieldErr("preferredLanguage") ? "is-invalid" : ""}`}
                     />
+                    <FieldError id="preferredLanguage-err" message={fieldErr("preferredLanguage")} />
                   </div>
                 </div>
 
                 {/* Country + City */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Country</Label>
+                    <Label data-required className="jbj-form-label text-sm font-semibold">Country</Label>
                     <SearchableSelect
                       value={formData.country}
-                      onChange={(v) => setFormData({ ...formData, country: v })}
+                      onChange={(v) => { setFormData({ ...formData, country: v }); clearFieldError("country"); }}
                       options={COUNTRIES}
                       placeholder="Select country"
                       searchPlaceholder="Search country..."
                       flagType="country"
                       disabled={loading}
-                      triggerClassName="careers-blue-field h-12 rounded-lg"
+                      triggerClassName={`careers-blue-field h-12 rounded-lg ${fieldErr("country") ? "is-invalid" : ""}`}
                     />
+                    <FieldError id="country-err" message={fieldErr("country")} />
                   </div>
                   <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">City</Label>
+                    <Label data-required className="jbj-form-label text-sm font-semibold">City</Label>
                     <SearchableSelect
                       value={formData.city}
-                      onChange={(v) => setFormData({ ...formData, city: v })}
+                      onChange={(v) => { setFormData({ ...formData, city: v }); clearFieldError("city"); }}
                       options={UAE_CITIES}
                       placeholder="Select city"
                       searchPlaceholder="Search UAE city..."
                       showFlags={false}
                       disabled={loading}
-                      triggerClassName="careers-gold-field h-12 rounded-lg"
+                      triggerClassName={`careers-gold-field h-12 rounded-lg ${fieldErr("city") ? "is-invalid" : ""}`}
                     />
+                    <FieldError id="city-err" message={fieldErr("city")} />
                   </div>
                 </div>
 
@@ -935,8 +1107,8 @@ export default function JoinApplication() {
                 {/* Position fallback (only when no DB positions) */}
                 {openPositions.length === 0 && (
                   <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">
-                      Position Applied For <span className="text-red-600">*</span>
+                    <Label data-required className="jbj-form-label text-sm font-semibold">
+                      Position Applied For
                     </Label>
                     <SearchableSelect
                       value={
@@ -945,14 +1117,20 @@ export default function JoinApplication() {
                       onChange={(label) => {
                         const fb = FALLBACK_POSITIONS.find((p) => p.label === label);
                         if (fb) setFormData({ ...formData, positionApplied: fb.value });
+                        clearFieldError("positionApplied");
                       }}
                       options={FALLBACK_POSITIONS.map((p) => p.label)}
                       placeholder="Select a position"
                       searchPlaceholder="Search positions..."
                       showFlags={false}
                       disabled={loading}
+                      triggerClassName={`careers-blue-field h-12 rounded-lg ${fieldErr("positionApplied") ? "is-invalid" : ""}`}
                     />
+                    <FieldError id="positionApplied-err" message={fieldErr("positionApplied")} />
                   </div>
+                )}
+                {fieldErr("positionApplied") && openPositions.length > 0 && (
+                  <FieldError id="positionApplied-err" message={fieldErr("positionApplied")} />
                 )}
 
                 {/* Role-aware Qualification */}
@@ -962,27 +1140,12 @@ export default function JoinApplication() {
                       <Briefcase className="h-5 w-5" /> Sales Qualification
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">How many deals have you closed?</Label>
-                        <Input value={formData.dealsClosed} onChange={(e) => setFormData({ ...formData, dealsClosed: e.target.value })} placeholder="e.g. 25" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Total value of deals closed (AED)</Label>
-                        <Input value={formData.totalDealValue} onChange={(e) => setFormData({ ...formData, totalDealValue: e.target.value })} placeholder="e.g. 50,000,000" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
+                      <QField k="dealsClosed" label="How many deals have you closed?" placeholder="e.g. 25" />
+                      <QField k="totalDealValue" label="Total value of deals closed (AED)" placeholder="e.g. 50,000,000" />
                     </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Which projects/areas have you sold in?</Label>
-                      <Input value={formData.projectsSold} onChange={(e) => setFormData({ ...formData, projectsSold: e.target.value })} placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Which developers have you worked with?</Label>
-                      <Input value={formData.developerWorkedWith} onChange={(e) => setFormData({ ...formData, developerWorkedWith: e.target.value })} placeholder="e.g. DAMAC, Emaar, Meraas" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Why are you leaving your current position?</Label>
-                      <Input value={formData.reasonForLeaving} onChange={(e) => setFormData({ ...formData, reasonForLeaving: e.target.value })} placeholder="Reason for seeking new opportunity" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
+                    <QField k="projectsSold" label="Which projects/areas have you sold in?" placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" />
+                    <QField k="developerWorkedWith" label="Which developers have you worked with?" placeholder="e.g. DAMAC, Emaar, Meraas" />
+                    <QField k="reasonForLeaving" label="Why are you leaving your current position?" placeholder="Reason for seeking new opportunity" />
 
                     <h3 className="text-lg font-semibold text-[#102540] mt-2 flex items-center gap-2">
                       <User className="h-5 w-5" /> Professional References (2 required)
@@ -992,35 +1155,10 @@ export default function JoinApplication() {
                       <div key={n} className="space-y-3 p-3 rounded-lg border-2 border-[#102540] bg-[#FDFBF7]">
                         <p className="jbj-form-label text-sm font-semibold">Reference {n}</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <Input
-                            value={(formData as any)[`reference${n}Name`]}
-                            onChange={(e) => setFormData({ ...formData, [`reference${n}Name`]: e.target.value } as any)}
-                            placeholder="Full name (e.g. Director / HR Manager)"
-                            disabled={loading}
-                            className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
-                          />
-                          <Input
-                            value={(formData as any)[`reference${n}Title`]}
-                            onChange={(e) => setFormData({ ...formData, [`reference${n}Title`]: e.target.value } as any)}
-                            placeholder="Title & Company"
-                            disabled={loading}
-                            className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
-                          />
-                          <Input
-                            type="email"
-                            value={(formData as any)[`reference${n}Email`]}
-                            onChange={(e) => setFormData({ ...formData, [`reference${n}Email`]: e.target.value } as any)}
-                            placeholder="Company email"
-                            disabled={loading}
-                            className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
-                          />
-                          <Input
-                            value={(formData as any)[`reference${n}Phone`]}
-                            onChange={(e) => setFormData({ ...formData, [`reference${n}Phone`]: e.target.value } as any)}
-                            placeholder="Phone number"
-                            disabled={loading}
-                            className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
-                          />
+                          <QField k={`reference${n}Name`} label="Full name" placeholder="Full name (e.g. Director / HR Manager)" />
+                          <QField k={`reference${n}Title`} label="Title & Company" placeholder="Title & Company" />
+                          <QField k={`reference${n}Email`} label="Company email" placeholder="Company email" type="email" />
+                          <QField k={`reference${n}Phone`} label="Phone number" placeholder="Phone number" />
                         </div>
                       </div>
                     ))}
@@ -1032,24 +1170,12 @@ export default function JoinApplication() {
                     <h3 className="text-lg font-semibold text-[#102540] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Marketing Qualification
                     </h3>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Notable campaigns you have led</Label>
-                      <Input value={formData.marketingCampaigns} onChange={(e) => setFormData({ ...formData, marketingCampaigns: e.target.value })} placeholder="e.g. Off-plan launch — 5M reach, 8% CTR" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
+                    <QField k="marketingCampaigns" label="Notable campaigns you have led" placeholder="e.g. Off-plan launch — 5M reach, 8% CTR" />
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Largest budget managed (AED)</Label>
-                        <Input value={formData.marketingBudget} onChange={(e) => setFormData({ ...formData, marketingBudget: e.target.value })} placeholder="e.g. 1,500,000" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Tools / platforms</Label>
-                        <Input value={formData.marketingTools} onChange={(e) => setFormData({ ...formData, marketingTools: e.target.value })} placeholder="e.g. Meta Ads, GA4, HubSpot, Figma" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
+                      <QField k="marketingBudget" label="Largest budget managed (AED)" placeholder="e.g. 1,500,000" />
+                      <QField k="marketingTools" label="Tools / platforms" placeholder="e.g. Meta Ads, GA4, HubSpot, Figma" />
                     </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Portfolio link</Label>
-                      <Input value={formData.portfolioLink} onChange={(e) => setFormData({ ...formData, portfolioLink: e.target.value })} placeholder="https://your-portfolio.com" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
+                    <QField k="portfolioLink" label="Portfolio link" placeholder="https://your-portfolio.com" />
                   </div>
                 )}
 
@@ -1059,19 +1185,10 @@ export default function JoinApplication() {
                       <Briefcase className="h-5 w-5" /> Role Qualification
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Years of experience</Label>
-                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 5" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Systems used</Label>
-                        <Input value={formData.systemsUsed} onChange={(e) => setFormData({ ...formData, systemsUsed: e.target.value })} placeholder="e.g. Bayut Pro, Property Finder, Salesforce" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
+                      <QField k="yearsExperience" label="Years of experience" placeholder="e.g. 5" />
+                      <QField k="systemsUsed" label="Systems used" placeholder="e.g. Bayut Pro, Property Finder, Salesforce" />
                     </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Certifications</Label>
-                      <Input value={formData.certifications} onChange={(e) => setFormData({ ...formData, certifications: e.target.value })} placeholder="e.g. RERA, CIPD, PMP" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
+                    <QField k="certifications" label="Certifications" placeholder="e.g. RERA, CIPD, PMP" />
                   </div>
                 )}
 
@@ -1081,19 +1198,10 @@ export default function JoinApplication() {
                       <Briefcase className="h-5 w-5" /> Technical Qualification
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Years of experience</Label>
-                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 7" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Stack / specialties</Label>
-                        <Input value={formData.techStack} onChange={(e) => setFormData({ ...formData, techStack: e.target.value })} placeholder="e.g. React, TypeScript, Supabase, AWS" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
+                      <QField k="yearsExperience" label="Years of experience" placeholder="e.g. 7" />
+                      <QField k="techStack" label="Stack / specialties" placeholder="e.g. React, TypeScript, Supabase, AWS" />
                     </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">GitHub / portfolio link</Label>
-                      <Input value={formData.githubLink} onChange={(e) => setFormData({ ...formData, githubLink: e.target.value })} placeholder="https://github.com/your-handle" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
+                    <QField k="githubLink" label="GitHub / portfolio link" placeholder="https://github.com/your-handle" />
                   </div>
                 )}
 
@@ -1103,19 +1211,10 @@ export default function JoinApplication() {
                       <Briefcase className="h-5 w-5" /> About You
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Years of experience</Label>
-                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 3" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Portfolio / LinkedIn link</Label>
-                        <Input value={formData.portfolioLink} onChange={(e) => setFormData({ ...formData, portfolioLink: e.target.value })} placeholder="https://linkedin.com/in/your-handle" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
+                      <QField k="yearsExperience" label="Years of experience" placeholder="e.g. 3" />
+                      <QField k="portfolioLink" label="Portfolio / LinkedIn link" placeholder="https://linkedin.com/in/your-handle" />
                     </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Tell us briefly about yourself</Label>
-                      <Input value={formData.aboutYou} onChange={(e) => setFormData({ ...formData, aboutYou: e.target.value })} placeholder="What makes you a strong fit for this role?" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
+                    <QField k="aboutYou" label="Tell us briefly about yourself" placeholder="What makes you a strong fit for this role?" />
                   </div>
                 )}
 
@@ -1127,10 +1226,11 @@ export default function JoinApplication() {
                 {/* CV / Resume — Premium upload */}
                 <PremiumCVUpload
                   file={cvFile}
-                  onFileChange={setCvFile}
+                  onFileChange={(f) => { setCvFile(f); clearFieldError("cvFile"); }}
                   disabled={loading}
                   uploadProgress={uploadProgress}
                 />
+                <FieldError id="cvFile-err" message={fieldErr("cvFile")} />
 
                 </div>
                 {/* End of step 3 (CV) */}
@@ -1143,27 +1243,33 @@ export default function JoinApplication() {
                     <Checkbox
                       id="consentAccurate"
                       checked={formData.consentAccurate}
-                      onCheckedChange={(checked) => setFormData({ ...formData, consentAccurate: checked as boolean })}
+                      onCheckedChange={(checked) => { setFormData({ ...formData, consentAccurate: checked as boolean }); clearFieldError("consentAccurate"); }}
                       disabled={loading}
+                      aria-required="true"
+                      aria-invalid={!!fieldErr("consentAccurate")}
                     />
-                    <Label htmlFor="consentAccurate" className="text-sm leading-relaxed cursor-pointer text-[#1A1A1A]">
+                    <Label htmlFor="consentAccurate" data-required className="text-sm leading-relaxed cursor-pointer text-[#1A1A1A]">
                       I confirm that the information provided is accurate and complete to the best of my knowledge.
                     </Label>
                   </div>
+                  <FieldError id="consentAccurate-err" message={fieldErr("consentAccurate")} />
                   <div className="flex items-start gap-3">
                     <Checkbox
                       id="consentTerms"
                       checked={formData.consentTerms}
-                      onCheckedChange={(checked) => setFormData({ ...formData, consentTerms: checked as boolean })}
+                      onCheckedChange={(checked) => { setFormData({ ...formData, consentTerms: checked as boolean }); clearFieldError("consentTerms"); }}
                       disabled={loading}
+                      aria-required="true"
+                      aria-invalid={!!fieldErr("consentTerms")}
                     />
-                    <Label htmlFor="consentTerms" className="text-sm leading-relaxed cursor-pointer text-[#1A1A1A]">
+                    <Label htmlFor="consentTerms" data-required className="text-sm leading-relaxed cursor-pointer text-[#1A1A1A]">
                       I agree to the{" "}
                       <Link to="/terms" className="text-[#1A1A1A] underline font-medium" target="_blank">Terms of Service</Link>
                       {" "}and{" "}
                       <Link to="/privacy" className="text-[#1A1A1A] underline font-medium" target="_blank">Privacy Policy</Link>.
                     </Label>
                   </div>
+                  <FieldError id="consentTerms-err" message={fieldErr("consentTerms")} />
                 </div>
 
                 {/* Progress */}
