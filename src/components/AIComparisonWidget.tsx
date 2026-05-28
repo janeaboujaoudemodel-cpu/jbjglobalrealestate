@@ -111,9 +111,9 @@ const AIComparisonWidget = () => {
             <button
               className="w-full relative inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-[#FDFBF7] border border-[#B89555]/60 hover:bg-[#2a2a2a] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] active:scale-[0.98] transition-all duration-300 group"
             >
-              <BarChart3 className="w-5 h-5 text-[#B89555]" />
+              <BarChart3 className="w-5 h-5 text-[#B89555] group-hover:text-white transition-colors" />
               <span>Start exploring</span>
-              <ArrowUpRight className="w-5 h-5 text-[#B89555] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <ArrowUpRight className="w-5 h-5 text-[#B89555] group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
             </button>
           </Link>
           <Link to="/compare-manual" className="flex-1">
