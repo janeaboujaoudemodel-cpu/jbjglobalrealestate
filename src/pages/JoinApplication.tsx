@@ -321,23 +321,131 @@ export default function JoinApplication() {
     setTimeout(scrollToForm, 80);
   };
 
-  // ---- Wizard step validation ----
-  const stepValidity = useMemo(() => {
-    return [
-      // 0 Personal
-      !!formData.firstName.trim() && !!formData.lastName.trim() && !!formData.phone.trim(),
-      // 1 Location & Language
-      !!formData.nationality && !!formData.preferredLanguage && !!formData.country && !!formData.city,
-      // 2 Role & Experience
-      !!formData.positionApplied,
-      // 3 CV
-      !!cvFile,
-      // 4 Review & Consent
-      !!formData.consentAccurate && !!formData.consentTerms,
-    ];
-  }, [formData, cvFile]);
-
+  // ---- Wizard step validation (zod-driven, required-field enforced) ----
   const STEP_LABELS = ["Personal", "Location & Language", "Role & Experience", "CV", "Review & Consent"];
+
+  const REQ = (label: string) => z.string().trim().min(1, `${label} is required`);
+  const REQ_URL = (label: string) =>
+    z.string().trim().min(1, `${label} is required`).url(`${label} must be a valid URL`);
+  const REQ_EMAIL = (label: string) =>
+    z.string().trim().min(1, `${label} is required`).email("Enter a valid email address");
+
+  const step0Schema = z.object({
+    firstName: REQ("First name").max(60),
+    lastName: REQ("Last name").max(60),
+    phone: z
+      .string()
+      .trim()
+      .min(8, "Phone number is required")
+      .max(20, "Phone number is too long"),
+  });
+  const step1Schema = z.object({
+    nationality: REQ("Nationality"),
+    preferredLanguage: REQ("Preferred language"),
+    country: REQ("Country"),
+    city: REQ("City"),
+  });
+
+  const qualSchemaFor = (kind: QualKind) => {
+    if (kind === "sales") {
+      return z.object({
+        dealsClosed: REQ("Deals closed"),
+        totalDealValue: REQ("Total deal value"),
+        projectsSold: REQ("Projects sold in"),
+        developerWorkedWith: REQ("Developers worked with"),
+        reasonForLeaving: REQ("Reason for leaving"),
+        reference1Name: REQ("Reference 1 name"),
+        reference1Title: REQ("Reference 1 title & company"),
+        reference1Email: REQ_EMAIL("Reference 1 email"),
+        reference1Phone: REQ("Reference 1 phone"),
+        reference2Name: REQ("Reference 2 name"),
+        reference2Title: REQ("Reference 2 title & company"),
+        reference2Email: REQ_EMAIL("Reference 2 email"),
+        reference2Phone: REQ("Reference 2 phone"),
+      });
+    }
+    if (kind === "marketing") {
+      return z.object({
+        marketingCampaigns: REQ("Notable campaigns"),
+        marketingBudget: REQ("Largest budget managed"),
+        marketingTools: REQ("Tools / platforms"),
+        portfolioLink: REQ_URL("Portfolio link"),
+      });
+    }
+    if (kind === "hr_ops") {
+      return z.object({
+        yearsExperience: REQ("Years of experience"),
+        systemsUsed: REQ("Systems used"),
+        certifications: REQ("Certifications"),
+      });
+    }
+    if (kind === "tech") {
+      return z.object({
+        yearsExperience: REQ("Years of experience"),
+        techStack: REQ("Stack / specialties"),
+        githubLink: REQ_URL("GitHub / portfolio link"),
+      });
+    }
+    // general
+    return z.object({
+      yearsExperience: REQ("Years of experience"),
+      portfolioLink: REQ_URL("Portfolio / LinkedIn link"),
+      aboutYou: REQ("Tell us briefly about yourself"),
+    });
+  };
+
+  const step2Schema = () =>
+    z
+      .object({ positionApplied: REQ("Position") })
+      .and(qualSchemaFor(qualKind) as z.ZodTypeAny);
+
+  const step4Schema = z.object({
+    consentAccurate: z.literal(true, {
+      errorMap: () => ({ message: "Please confirm the information is accurate" }),
+    }),
+    consentTerms: z.literal(true, {
+      errorMap: () => ({ message: "Please accept the Terms and Privacy Policy" }),
+    }),
+  });
+
+  const validateStep = (idx: number): boolean => {
+    let schema: z.ZodTypeAny | null = null;
+    if (idx === 0) schema = step0Schema;
+    else if (idx === 1) schema = step1Schema;
+    else if (idx === 2) schema = step2Schema();
+    else if (idx === 3) {
+      if (!cvFile) {
+        setErrors((p) => ({ ...p, cvFile: "Please upload your CV (PDF, Word, or photo)" }));
+        toast.error("Please upload your CV");
+        return false;
+      }
+      setErrors((p) => {
+        const { cvFile: _x, ...rest } = p;
+        return rest;
+      });
+      return true;
+    } else if (idx === 4) schema = step4Schema;
+    if (!schema) return true;
+    const result = schema.safeParse(formData);
+    if (result.success) {
+      // clear any errors that belonged to this step
+      const keys = Object.keys((schema as any)._def?.shape?.() || {});
+      setErrors((prev) => {
+        const next = { ...prev };
+        keys.forEach((k) => delete next[k]);
+        return next;
+      });
+      return true;
+    }
+    const next: Record<string, string> = {};
+    result.error.issues.forEach((iss) => {
+      const k = String(iss.path[0] ?? "");
+      if (k && !next[k]) next[k] = iss.message;
+    });
+    setErrors((prev) => ({ ...prev, ...next }));
+    toast.error("Please complete the highlighted fields");
+    return false;
+  };
 
   const goToStep = (idx: number) => {
     const clamped = Math.max(0, Math.min(TOTAL_STEPS - 1, idx));
@@ -346,10 +454,7 @@ export default function JoinApplication() {
   };
 
   const handleNext = () => {
-    if (!stepValidity[currentStep]) {
-      toast.error(`Please complete: ${STEP_LABELS[currentStep]}`);
-      return;
-    }
+    if (!validateStep(currentStep)) return;
     goToStep(currentStep + 1);
   };
   const handleBack = () => goToStep(currentStep - 1);
