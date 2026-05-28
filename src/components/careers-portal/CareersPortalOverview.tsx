@@ -3,8 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Briefcase, FileText, Users, ClipboardCheck, GraduationCap, Wallet,
-  UserPlus, Bot, MessagesSquare, ArrowRight,
+  UserPlus, Bot, MessagesSquare, ArrowRight, TrendingUp, ExternalLink,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { SectionKey } from "@/pages/owner/CareersPortal";
 
 interface Stats {
@@ -95,6 +96,65 @@ export default function CareersPortalOverview({ onJump }: { onJump: (s: SectionK
 
   return (
     <div className="space-y-6">
+      {/* Quick-action toolbar — real-number summary + one-click jumps to the
+          operational tabs. Lives only on the owner Careers Portal overview. */}
+      <div className="rounded-2xl border border-[#B89555]/40 bg-[#F7F2EA] p-4 flex flex-wrap items-center gap-3">
+        <div className="flex items-center gap-2 mr-auto">
+          <div className="w-10 h-10 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
+          </div>
+          <div className="leading-tight">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Live Snapshot</p>
+            <p className="text-sm text-[#1A1A1A]">
+              <span className="font-semibold">{loading ? "—" : stats.employees}</span> employees ·{" "}
+              <span className="font-semibold">{loading ? "—" : stats.payrollRecords}</span> payroll records ·{" "}
+              <span className="font-semibold">{loading ? "—" : stats.pendingApprovals}</span> pending approvals
+            </p>
+          </div>
+        </div>
+
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onJump("payroll")}
+          className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+        >
+          <Wallet className="w-4 h-4 mr-1.5" /> Open Payroll
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onJump("performance")}
+          className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+        >
+          <TrendingUp className="w-4 h-4 mr-1.5" /> Open Performance
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onJump("employees")}
+          className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+        >
+          <Users className="w-4 h-4 mr-1.5" /> Open Employees
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onJump("cv-center")}
+          className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+        >
+          <FileText className="w-4 h-4 mr-1.5" /> Open CV Center
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onJump("approvals")}
+          className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+        >
+          <ClipboardCheck className="w-4 h-4 mr-1.5" /> Open Approvals
+        </Button>
+      </div>
+
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {TILES.map((t, i) => {
           const Icon = t.icon;
