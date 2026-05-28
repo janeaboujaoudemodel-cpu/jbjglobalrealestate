@@ -271,6 +271,54 @@ export default function BrokerLearning() {
           isOpen={!!selectedBook}
           onClose={() => setSelectedBook(null)}
         />
+
+        <Dialog open={!!activeModule} onOpenChange={(o) => !o && setActiveModule(null)}>
+          <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/40">
+            {activeModule && (
+              <>
+                <DialogHeader>
+                  <div className="flex items-start gap-3">
+                    <div className="shrink-0 w-12 h-12 rounded-xl bg-[#102540] grid place-items-center text-white border border-[#B89555]/70" data-allow-dark-cta data-no-contrast-guard>
+                      {activeModule.icon}
+                    </div>
+                    <div className="min-w-0">
+                      <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/50 font-semibold mb-2">{CAT_LABEL[activeModule.category]}</Badge>
+                      <DialogTitle className="text-xl text-[#1A1A1A] leading-tight">{activeModule.title}</DialogTitle>
+                      <div className="flex items-center gap-3 mt-2 text-xs text-[#1A1A1A]/70">
+                        <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{activeModule.duration}</span>
+                        <span>{activeModule.lessons} lessons</span>
+                        <span className="flex items-center gap-1"><AwardIcon className="w-3 h-3" />+50 pts on completion</span>
+                      </div>
+                    </div>
+                  </div>
+                </DialogHeader>
+                <p className="text-sm text-[#1A1A1A]/80 mt-2">{activeModule.description}</p>
+                <div className="rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-4 mt-2">
+                  <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 mb-2">Lesson plan</div>
+                  <ol className="space-y-2">
+                    {activeModule.topics.map((t, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm text-[#1A1A1A]">
+                        <span className="shrink-0 w-6 h-6 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 grid place-items-center text-[11px] font-semibold">{i + 1}</span>
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+                <div className="flex items-center justify-end gap-2 pt-2">
+                  <Button variant="ghost" onClick={() => setActiveModule(null)} className="text-[#1A1A1A]">Close</Button>
+                  <Button
+                    className="bg-[#102540] !text-white hover:bg-[#1a3d63] border border-[#B89555]/70 font-semibold [&_svg]:!text-white"
+                    data-allow-dark-cta
+                    data-no-contrast-guard
+                    onClick={() => setActiveModule(null)}
+                  >
+                    <Play className="w-3 h-3 mr-1" /> Begin first lesson
+                  </Button>
+                </div>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
