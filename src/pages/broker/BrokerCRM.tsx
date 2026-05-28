@@ -102,7 +102,7 @@ export default function BrokerCRM() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("broker_call_logs")
-        .select("id, lead_id, phone_number, call_type, call_status, duration_seconds, notes, created_at")
+        .select("id, lead_id, phone_number, call_type, call_status, duration_seconds, notes, created_at, recording_url, ai_summary, ai_score, ai_processed_at")
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false })
         .limit(100);
