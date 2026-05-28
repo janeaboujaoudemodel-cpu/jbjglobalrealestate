@@ -187,9 +187,9 @@ export function signatureBlock(opts: {
   // signature box so it never overlaps any heading/label text above.
   const stampOverlay = `
     <img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" aria-hidden="true"
-      style="position:absolute;right:-58px;bottom:-30px;width:180px;height:180px;
-             object-fit:contain;opacity:0.94;mix-blend-mode:multiply;
-             transform:rotate(-8deg);pointer-events:none;user-select:none;" />`;
+      style="position:absolute;right:-70px;bottom:-32px;width:220px;height:185px;
+             object-fit:contain;opacity:0.95;mix-blend-mode:multiply;background:transparent;
+             transform:rotate(-7deg);pointer-events:none;user-select:none;" />`;
 
   const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
     <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 28px;position:relative;">
