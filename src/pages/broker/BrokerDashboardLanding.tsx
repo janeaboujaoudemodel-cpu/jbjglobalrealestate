@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Users, Database, Calendar, ListTodo, Handshake, BadgeDollarSign,
   ArrowRight, Plus, Phone, Brain, Sparkles, Activity, ChevronRight, Briefcase,
 } from "lucide-react";
+import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBrokerProfile } from "@/hooks/useBrokerProfile";
 import { useBrokerScopedDatabases } from "@/hooks/useBrokerScopedDatabases";
@@ -10,7 +13,9 @@ import { useBrokerScopedLeads } from "@/hooks/useBrokerScopedLeads";
 import { useBrokerPersonalTasks } from "@/hooks/useBrokerPersonalTasks";
 import { useBrokerPersonalCalendar } from "@/hooks/useBrokerPersonalCalendar";
 import BrokerEmptyState from "@/components/broker-portal/BrokerEmptyState";
+import LogCallDialog from "@/components/broker-crm/LogCallDialog";
 import { formatDisplayDate } from "@/utils/formatDate";
+import { supabase } from "@/integrations/supabase/client";
 
 function PremiumCard({
   children,
@@ -78,11 +83,46 @@ function daysAgo(iso?: string | null) {
 
 export default function BrokerDashboardLanding() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const [callDialogOpen, setCallDialogOpen] = useState(false);
   const { profile, loading: profileLoading } = useBrokerProfile();
   const dbs = useBrokerScopedDatabases();
   const leads = useBrokerScopedLeads();
   const tasks = useBrokerPersonalTasks();
   const cal = useBrokerPersonalCalendar({ from: new Date().toISOString() });
+
+  const createCallLog = useMutation({
+    mutationFn: async (input: {
+      leadId?: string | null;
+      phoneNumber: string;
+      callType: string;
+      callStatus: string;
+      durationSeconds: number;
+      notes?: string | null;
+    }) => {
+      if (!user?.id) throw new Error("Please sign in");
+      const { data, error } = await supabase
+        .from("broker_call_logs")
+        .insert({
+          user_id: user.id,
+          lead_id: input.leadId || null,
+          phone_number: input.phoneNumber,
+          call_type: input.callType,
+          call_status: input.callStatus,
+          duration_seconds: input.durationSeconds,
+          notes: input.notes || null,
+        })
+        .select("id")
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      toast.success("Call logged successfully");
+    },
+    onError: (e: any) => toast.error(e?.message || "Could not log call"),
+  });
 
   const firstName =
     profile?.display_name?.split(" ")[0] ||
@@ -143,12 +183,13 @@ export default function BrokerDashboardLanding() {
             >
               <Plus className="h-4 w-4" /> Add lead
             </Link>
-            <Link
-              to="/broker/crm?tab=calls&action=log-call"
+            <button
+              type="button"
+              onClick={() => setCallDialogOpen(true)}
               className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] text-sm font-medium hover:bg-[#EFE6D6] transition-colors"
             >
               <Phone className="h-4 w-4" /> Log a call
-            </Link>
+            </button>
           </div>
         </div>
       </PremiumCard>
@@ -366,6 +407,19 @@ export default function BrokerDashboardLanding() {
           </div>
         )}
       </PremiumCard>
+
+      <LogCallDialog
+        open={callDialogOpen}
+        onOpenChange={setCallDialogOpen}
+        leads={leadsData}
+        userId={user?.id}
+        submitting={createCallLog.isPending}
+        onSaved={() => queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] })}
+        onSubmit={async (input) => {
+          const row = await createCallLog.mutateAsync(input);
+          return { callLogId: (row as any)?.id };
+        }}
+      />
     </div>
   );
 }
