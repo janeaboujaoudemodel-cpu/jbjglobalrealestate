@@ -116,17 +116,7 @@ function CareersTabRow({
 
   return (
     <div className="relative mt-3">
-      {/* Edge fades — purely decorative, no pointer events */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-y-0 left-0 w-6 z-10"
-        style={{ background: "linear-gradient(to right, #F7F2EA, rgba(247,242,234,0))" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-y-0 right-0 w-6 z-10"
-        style={{ background: "linear-gradient(to left, #F7F2EA, rgba(247,242,234,0))" }}
-      />
+      {/* Edge fades removed — caused a flash highlight over the first pill */}
       <nav
         ref={scrollerRef}
         className="-mx-1 overflow-x-auto scrollbar-thin"
