@@ -140,7 +140,7 @@ export default function BrokerCRM() {
         const today = new Date().toISOString().slice(0, 10);
         const { data: existingStats } = await supabase
           .from("broker_activity_stats")
-          .select("id, calls_made, points_earned")
+          .select("id, calls_made")
           .eq("user_id", user.id)
           .eq("date", today)
           .maybeSingle();
@@ -150,7 +150,6 @@ export default function BrokerCRM() {
             .from("broker_activity_stats")
             .update({
               calls_made: (existingStats.calls_made ?? 0) + 1,
-              points_earned: (existingStats.points_earned ?? 0) + 10,
             })
             .eq("id", existingStats.id);
         } else {
@@ -158,20 +157,10 @@ export default function BrokerCRM() {
             user_id: user.id,
             date: today,
             calls_made: 1,
-            points_earned: 10,
           });
         }
-
-        await supabase.from("points_transactions").insert({
-          user_id: user.id,
-          points: 10,
-          transaction_type: "call_logged",
-          description: "Logged a broker CRM call",
-          reference_id: data.id,
-          reference_type: "broker_call_log",
-        });
       } catch (sideEffectError) {
-        console.warn("Call logged; points/stat update skipped", sideEffectError);
+        console.warn("Call logged; activity stat update skipped", sideEffectError);
       }
 
       return data;
@@ -179,7 +168,7 @@ export default function BrokerCRM() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
       queryClient.invalidateQueries({ queryKey: ["broker-personal-tasks"] });
-      toast.success("Call logged successfully — +10 points");
+      toast.success("Call logged successfully");
       setTab("calls");
     },
     onError: (e: any) => toast.error(e?.message || "Could not log call"),
