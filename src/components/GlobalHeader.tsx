@@ -1186,7 +1186,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('buy')}
                   onClick={() => handleMegaMenuClick('buy')}
-                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-md cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'buy' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
                       : activeMegaMenu === 'buy' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
@@ -1201,7 +1201,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('sell')}
                   onClick={() => handleMegaMenuClick('sell')}
-                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-md cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'sell' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
                       : activeMegaMenu === 'sell' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
@@ -1216,7 +1216,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('rent')}
                   onClick={() => handleMegaMenuClick('rent')}
-                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-md cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'rent' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
                       : activeMegaMenu === 'rent' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
@@ -1231,7 +1231,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('projects')}
                   onClick={() => handleMegaMenuClick('projects')}
-                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-md cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'projects' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
                       : activeMegaMenu === 'projects' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
@@ -1246,7 +1246,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('areas')}
                   onClick={() => handleMegaMenuClick('areas')}
-                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-md cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'areas' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
                       : activeMegaMenu === 'areas' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
@@ -1261,7 +1261,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('developers')}
                   onClick={() => handleMegaMenuClick('developers')}
-                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-md cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'developers' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
                       : activeMegaMenu === 'developers' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
@@ -1276,7 +1276,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('insights')}
                   onClick={() => handleMegaMenuClick('insights')}
-                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-md cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'insights' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
                       : activeMegaMenu === 'insights' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
