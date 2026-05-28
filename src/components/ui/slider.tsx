@@ -6,39 +6,56 @@ import { cn } from "@/lib/utils";
 const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <SliderPrimitive.Root
-    ref={ref}
-    className={cn(
-      "relative flex w-full select-none items-center touch-none min-h-[44px]",
-      className
-    )}
-    {...props}
-  >
-    <SliderPrimitive.Track
-      className="relative h-2 w-full grow overflow-hidden rounded-full cursor-pointer"
-      style={{ background: "#EFE6D6" }}
-    >
-      <SliderPrimitive.Range
-        className="absolute h-full rounded-full"
-        style={{
-          background: "linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%)",
-        }}
-      />
-    </SliderPrimitive.Track>
-    <SliderPrimitive.Thumb
+>(({ className, value, defaultValue, onValueChange, onValueCommit, min, max, step, disabled, ...props }, ref) => {
+  // Determine how many thumbs to render based on the controlled or default value length.
+  const thumbCount =
+    (Array.isArray(value) ? value.length : Array.isArray(defaultValue) ? defaultValue.length : 1) || 1;
+
+  return (
+    <SliderPrimitive.Root
+      ref={ref}
+      value={value}
+      defaultValue={defaultValue}
+      onValueChange={onValueChange}
+      onValueCommit={onValueCommit}
+      min={min}
+      max={max}
+      step={step}
+      disabled={disabled}
       className={cn(
-        "block h-6 w-6 rounded-full bg-white",
-        "ring-offset-background transition-all duration-150",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2",
-        "disabled:pointer-events-none disabled:opacity-50",
-        "touch-none cursor-grab active:cursor-grabbing",
-        "shadow-[0_2px_8px_rgba(184,149,85,0.45),0_0_0_2px_#B89555_inset]",
-        "hover:scale-110 active:scale-95"
+        "relative flex w-full select-none items-center touch-none min-h-[44px]",
+        className
       )}
-    />
-  </SliderPrimitive.Root>
-));
+      {...props}
+    >
+      <SliderPrimitive.Track
+        className="relative h-2 w-full grow overflow-hidden rounded-full cursor-pointer"
+        style={{ background: "#EFE6D6" }}
+      >
+        <SliderPrimitive.Range
+          className="absolute h-full rounded-full"
+          style={{
+            background: "linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%)",
+          }}
+        />
+      </SliderPrimitive.Track>
+      {Array.from({ length: thumbCount }).map((_, i) => (
+        <SliderPrimitive.Thumb
+          key={i}
+          className={cn(
+            "block h-6 w-6 rounded-full bg-white",
+            "ring-offset-background transition-all duration-150",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2",
+            "disabled:pointer-events-none disabled:opacity-50",
+            "touch-none cursor-grab active:cursor-grabbing",
+            "shadow-[0_2px_8px_rgba(184,149,85,0.45),0_0_0_2px_#B89555_inset]",
+            "hover:scale-110 active:scale-95"
+          )}
+        />
+      ))}
+    </SliderPrimitive.Root>
+  );
+});
 Slider.displayName = SliderPrimitive.Root.displayName;
 
 export { Slider };
