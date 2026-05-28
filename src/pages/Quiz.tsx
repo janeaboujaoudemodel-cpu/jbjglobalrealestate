@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
+import { toolThemes } from "@/components/tools/toolThemes";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { SearchableSelect } from "@/components/ui/searchable-select";
@@ -745,6 +747,7 @@ const Quiz = () => {
 
   // Quiz Questions Screen
   return (
+    <ToolAnimatedFrame theme={toolThemes.violet}>
     <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
       {/* Header */}
       <div className="border-b border-[#B89555]/20 bg-[#FDFBF7]/50 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
@@ -893,6 +896,7 @@ const Quiz = () => {
         </div>
       </div>
     </section>
+    </ToolAnimatedFrame>
   );
 };
 

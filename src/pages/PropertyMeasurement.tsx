@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
+import { toolThemes } from "@/components/tools/toolThemes";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -313,6 +315,7 @@ jbj.ae
   const currentRoom = roomUploads[currentRoomIndex];
 
   return (
+    <ToolAnimatedFrame theme={toolThemes.teal}>
     <section className="relative w-full min-h-screen bg-[#1A1A1A]">
       {/* Animated emerald border keyframes (page-local) */}
       <style>{`
@@ -929,6 +932,7 @@ jbj.ae
         )}
       </div>
     </section>
+    </ToolAnimatedFrame>
   );
 };
 
