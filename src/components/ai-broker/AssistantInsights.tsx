@@ -35,8 +35,8 @@ export default function AssistantInsights({ score, scoreReason, matches, nextSte
           <Sparkles className="h-3 w-3" /> Lead readiness
         </div>
         <div className="mt-3 flex items-center gap-4">
-          <div className={`h-20 w-20 rounded-full border-[6px] grid place-items-center font-bold text-2xl ${score != null ? scoreColor(score) : "border-[#1A1A1A]/15 text-[#1A1A1A]/30"}`}>
-            {score ?? "—"}
+          <div className={`h-20 w-20 rounded-md border-[6px] grid place-items-center font-bold text-xl tabular-nums ${score != null ? scoreColor(score) : "border-[#1A1A1A]/15 text-[#1A1A1A]/30"}`}>
+            {score != null ? `${score}%` : "—"}
           </div>
           <p className="text-sm text-[#1A1A1A]/80 leading-snug flex-1">
             {scoreReason || "Ask the assistant to score this lead."}

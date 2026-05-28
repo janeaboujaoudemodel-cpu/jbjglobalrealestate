@@ -456,7 +456,7 @@ export default function UnifiedCRM() {
             <button
               type="button"
               onClick={() => setAddLeadOpen(true)}
-              className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#1A1A1A] text-[#FDFBF7] border border-[#1A1A1A] hover:bg-[#1A1A1A]/90 transition-colors"
+              className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-[#1A1A1A] text-[#FDFBF7] border border-[#1A1A1A] hover:bg-[#1A1A1A]/90 transition-colors"
             >
               <Plus className="h-3.5 w-3.5" />
               Add Lead
@@ -464,7 +464,7 @@ export default function UnifiedCRM() {
             <button
               type="button"
               onClick={() => setAddBrokerOpen(true)}
-              className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60 hover:bg-[#EFE6D6]/80 transition-colors"
+              className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60 hover:bg-[#EFE6D6]/80 transition-colors"
             >
               <UserPlus className="h-3.5 w-3.5" />
               Add Broker
@@ -488,7 +488,7 @@ export default function UnifiedCRM() {
               onClick={() => setInsightsOpen(o => !o)}
               aria-expanded={insightsOpen}
               className={[
-                "shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors",
+                "shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold border transition-colors",
                 insightsOpen
                   ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
                   : "bg-transparent text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]/60",
@@ -580,7 +580,7 @@ export default function UnifiedCRM() {
                     aria-selected={active}
                     onClick={() => setView(t.id)}
                     className={[
-                      "shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors border",
+                      "shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors border",
                       active
                         ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
                         : "bg-transparent text-[#1A1A1A]/70 border-transparent hover:bg-[#EFE6D6]/70 hover:text-[#1A1A1A]",
@@ -590,7 +590,7 @@ export default function UnifiedCRM() {
                     {c !== null && c > 0 && (
                       <span
                         className={[
-                          "inline-flex items-center justify-center min-w-[1.125rem] h-[18px] px-1 rounded-full text-[10px] font-semibold tabular-nums",
+                          "inline-flex items-center justify-center min-w-[1.125rem] h-[18px] px-1 rounded-md text-[10px] font-semibold tabular-nums",
                           active
                             ? "bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40"
                             : "bg-[#EFE6D6] text-[#1A1A1A]/80 border border-[#B89555]/25",

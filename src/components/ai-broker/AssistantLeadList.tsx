@@ -71,8 +71,8 @@ export default function AssistantLeadList({ leads, selectedId, onSelect, search,
                     {l.pipeline_stage || "new"} {l.source ? `· ${l.source}` : ""}
                   </div>
                 </div>
-                <span className={`shrink-0 text-[10px] font-bold w-9 h-9 rounded-full border-2 grid place-items-center bg-transparent ${scoreClass(l.ai_score)}`}>
-                  {l.ai_score ?? "—"}
+                <span className={`shrink-0 text-[10px] font-bold min-w-[44px] h-9 px-1.5 rounded-md border-2 grid place-items-center bg-transparent tabular-nums ${scoreClass(l.ai_score)}`}>
+                  {l.ai_score != null ? `${l.ai_score}%` : "—"}
                 </span>
               </div>
             </button>

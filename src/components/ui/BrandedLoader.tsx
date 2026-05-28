@@ -12,7 +12,7 @@ interface BrandedLoaderProps {
  * variant='dark' (default): dark background → light monogram
  * variant='light': light background → dark monogram
  */
-export function BrandedLoader({ text = "Loading...", className = "", variant = "dark" }: BrandedLoaderProps) {
+export function BrandedLoader({ text = "Loading...", className = "", variant = "light" }: BrandedLoaderProps) {
   const logo = variant === 'light' ? jbjMonogramNobuffer : jbjMonogramLightTransparent;
   
   return (

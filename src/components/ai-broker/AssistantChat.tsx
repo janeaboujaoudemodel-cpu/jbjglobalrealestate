@@ -45,10 +45,10 @@ export default function AssistantChat({ turns, loading, onSend, leadName, leadPh
         {turns.length === 0 && !loading && (
           <div className="h-full grid place-items-center text-center px-6">
             <div>
-              <div className="mx-auto h-12 w-12 rounded-full grid place-items-center border-2 border-[#B89555] bg-transparent mb-3">
+              <div className="mx-auto h-12 w-12 rounded-md grid place-items-center border-2 border-[#B89555] bg-transparent mb-3">
                 <Sparkles className="h-5 w-5 text-[#B89555]" />
               </div>
-              <h3 className="text-base font-semibold text-[#1A1A1A]">Your Head of Sales</h3>
+              <h3 className="text-base font-semibold text-[#1A1A1A]">JBJ Sales Assistant</h3>
               <p className="text-sm text-[#1A1A1A]/65 mt-1 max-w-sm">
                 Ask me anything about this lead — I'll score them, pick matching properties from JBJ inventory,
                 draft a ready-to-send message, and tell you the next best step.
@@ -95,7 +95,7 @@ export default function AssistantChat({ turns, loading, onSend, leadName, leadPh
               key={q.label}
               onClick={() => submit(q.prompt, q.mode)}
               disabled={loading || disabled}
-              className="text-[11px] px-2.5 py-1 rounded-full border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-50"
+              className="text-[11px] px-2.5 py-1 rounded-md border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-50"
             >
               {q.label}
             </button>

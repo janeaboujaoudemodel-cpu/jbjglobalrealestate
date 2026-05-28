@@ -59,9 +59,8 @@ export const BrokerPortalRoutes = () => (
       path="deals"
       element={
         <BrokerComingSoonSection
-          title="Deals"
-          description="Track every deal from offer to commission. Pipeline view coming to your portal shell — meanwhile, manage deal-stage leads in CRM."
-          cta={{ to: "/broker/crm", label: "Open CRM Pipeline" }}
+          title="Deals & Commissions"
+          description="Live pipeline of every offer you've initiated, with commission projections per stage. Numbers populate the moment your first lead reaches the offer stage — nothing here is mocked."
         />
       }
     />
@@ -70,7 +69,7 @@ export const BrokerPortalRoutes = () => (
       element={
         <BrokerComingSoonSection
           title="Commissions"
-          description="Your commission pipeline and payout history will surface here once the first closed deal lands in your account."
+          description="Your commission ledger and payout history will surface here once the first closed deal lands in your account."
         />
       }
     />

@@ -259,11 +259,10 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
             }
           }}
           className={cn(
-            "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 border-l-2 border-y border-r relative",
+            "w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 border-l-2 border-y border-r relative",
             active
               ? "bg-[#EFE6D6] !text-[#1A1A1A] border-l-[#B89555] border-y-[#B89555]/30 border-r-[#B89555]/30 font-semibold"
               : "bg-transparent !text-[#1A1A1A] border-transparent hover:bg-[#EFE6D6]/60 hover:border-l-[#B89555]/60 hover:!text-[#1A1A1A]",
-            item.premium && !active && "bg-[#F7F2EA]/70 border-l-[#B89555]/40"
           )}
           style={depth > 0 ? { paddingLeft: `${12 + depth * 14}px` } : undefined}
           title={collapsed ? item.label : undefined}
