@@ -28,6 +28,8 @@ import CareersEcosystem from "@/components/careers/CareersEcosystem";
 import CareersWhyJBJ from "@/components/careers/CareersWhyJBJ";
 import CareersFAQ from "@/components/careers/CareersFAQ";
 import CareersContactBlock from "@/components/careers/CareersContactBlock";
+import FieldError from "@/components/forms/FieldError";
+import { z } from "zod";
 
 interface OpenPosition {
   id: string;
