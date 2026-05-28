@@ -41,7 +41,7 @@ import DOMPurify from "dompurify";
 
 import {
   getCatalogByAudience, getTemplateById,
-  DocumentAudience, DocumentTemplate,
+ DocumentAudience, DocumentScope, DocumentTemplate,
 } from "@/config/documentCatalog";
 import { DEPARTMENTS } from "@/hooks/useHRJobOffers";
 import { stripChromeArtifacts } from "@/templates/jbjLockedChrome";
