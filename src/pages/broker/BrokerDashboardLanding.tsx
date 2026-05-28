@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Users, Database, Calendar, ListTodo, Handshake, BadgeDollarSign,
   ArrowRight, Plus, Phone, Brain, Sparkles, Activity, ChevronRight, Briefcase,
@@ -77,6 +77,7 @@ function daysAgo(iso?: string | null) {
 }
 
 export default function BrokerDashboardLanding() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { profile, loading: profileLoading } = useBrokerProfile();
   const dbs = useBrokerScopedDatabases();
@@ -143,12 +144,13 @@ export default function BrokerDashboardLanding() {
             >
               <Plus className="h-4 w-4" /> Add lead
             </Link>
-            <Link
-              to="/broker/crm?tab=calls&action=log-call"
+            <button
+              type="button"
+              onClick={() => navigate("/broker/crm?tab=calls&action=log-call")}
               className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] text-sm font-medium hover:bg-[#EFE6D6] transition-colors"
             >
               <Phone className="h-4 w-4" /> Log a call
-            </Link>
+            </button>
           </div>
         </div>
       </PremiumCard>
