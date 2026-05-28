@@ -15,7 +15,7 @@ export function SelectedRoleChip({
 }: SelectedRoleChipProps) {
   if (!label) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[#102540]/40 bg-[#FDFBF7] px-4 py-3 text-sm font-semibold text-[#102540]/80">
+      <div className="flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[#B89555]/55 bg-[#FDFBF7] px-4 py-3 text-sm font-semibold text-[#102540]/80">
         <Briefcase className="h-4 w-4" />
         Select a role above to begin — your application will auto-sync here
       </div>
