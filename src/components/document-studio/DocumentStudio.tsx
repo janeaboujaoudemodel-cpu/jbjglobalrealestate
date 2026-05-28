@@ -2029,8 +2029,8 @@ function StudioShell({
                 // GLOBAL: equal interior top/bottom on inner pages. Safe band
                 // and footer reserve are handled separately.
                 const NEXT_TOP = 54;
-                const STANDARD_BOTTOM_PAD = 0;
-                const LAST_BOTTOM_PAD = 0;
+                const STANDARD_BOTTOM_PAD = 32;
+                const LAST_BOTTOM_PAD = 40;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
 
                 // Parse the bodyHtml into [data-pdf-page] groups. If the
