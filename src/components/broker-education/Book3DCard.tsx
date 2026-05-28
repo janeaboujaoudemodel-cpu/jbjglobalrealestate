@@ -20,11 +20,9 @@ interface Book3DCardProps {
  */
 export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: Book3DCardProps) {
   const effectivelyLocked = isLocked || book.is_restricted;
-  const coverTone = book.learning_path?.includes("Buyer") ? "emerald"
-    : book.learning_path?.includes("Seller") ? "espresso"
-    : book.learning_path?.includes("Market") ? "black"
-    : book.learning_path?.includes("Advanced") ? "burgundy"
-    : "navy";
+  // LOCKED: every book uses the same Digital-Marketing/No.14 master style.
+  // Cover tone is uniform black across all paths for one consistent collection.
+  const coverTone = "black" as const;
 
   const statusBadge = (() => {
     if (!progress) return null;
@@ -54,45 +52,48 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
       className="group h-full"
     >
       <div
-        className="flex h-full cursor-pointer flex-col overflow-visible rounded-2xl bg-transparent"
+        className="flex h-full cursor-pointer flex-col overflow-visible bg-transparent"
         onClick={() => !book.is_restricted && onOpen(book)}
       >
-        <div className="relative aspect-[4/5] w-full overflow-visible px-2 pt-1">
-          <div className="absolute -bottom-3 left-[10%] right-[6%] h-8 rounded-full bg-[#1A1A1A]/25 blur-xl" />
-          <div className="relative h-full overflow-hidden rounded-r-xl rounded-l-[4px] shadow-[18px_22px_45px_rgba(26,26,26,.28),inset_0_0_0_1px_rgba(184,149,85,.35)] transition-transform duration-500 group-hover:-translate-y-1">
-          {book.cover_image_url ? (
-            <img
-              src={book.cover_image_url}
-              alt={`${book.title} cover`}
-              loading="lazy"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.015]"
-            />
-          ) : (
-            <PremiumBookCover title={book.title} number={book.book_number} subtitle={book.learning_path} tone={coverTone} />
-          )}
-          <div className="absolute inset-y-0 left-0 w-[8%] pointer-events-none bg-gradient-to-r from-[#050505]/90 via-[#1A1A1A]/70 to-transparent" />
-          <div className="absolute inset-y-[3%] right-0 w-[4px] pointer-events-none bg-gradient-to-r from-transparent via-[#EFE6D6]/50 to-[#B89555]/70" />
-          <div className="absolute inset-x-0 bottom-0 h-14 pointer-events-none bg-gradient-to-t from-[#050505]/30 to-transparent" />
+        {/* Book cover — straight, full-bleed, no white frame */}
+        <div className="relative aspect-[3/4] w-full overflow-visible">
+          {/* Soft floor shadow under the book */}
+          <div className="absolute -bottom-3 left-[6%] right-[4%] h-8 rounded-full bg-[#1A1A1A]/30 blur-xl" />
+          <div className="relative h-full overflow-hidden rounded-r-[6px] rounded-l-[2px] shadow-[14px_18px_38px_rgba(26,26,26,.32),inset_0_0_0_1px_rgba(184,149,85,.45)] transition-transform duration-500 group-hover:-translate-y-1">
+            {book.cover_image_url ? (
+              <img
+                src={book.cover_image_url}
+                alt={`${book.title} cover`}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.015]"
+              />
+            ) : (
+              <PremiumBookCover title={book.title} number={book.book_number} subtitle={book.learning_path} tone={coverTone} />
+            )}
+            {/* 3D depth — left spine + right page edge */}
+            <div className="absolute inset-y-0 left-0 w-[6%] pointer-events-none bg-gradient-to-r from-[#030303]/90 via-[#1A1A1A]/60 to-transparent" />
+            <div className="absolute inset-y-[2%] right-0 w-[3px] pointer-events-none bg-gradient-to-r from-transparent via-[#EFE6D6]/55 to-[#B89555]/75" />
 
-          {/* Status badge */}
-          {statusBadge && <div className="absolute top-3 right-3 z-20">{statusBadge}</div>}
+            {/* Status badge */}
+            {statusBadge && <div className="absolute top-3 right-3 z-20">{statusBadge}</div>}
 
-          {/* Locked overlay */}
-          {effectivelyLocked && (
-            <div className="absolute inset-0 bg-[#1A1A1A]/70 grid place-items-center backdrop-blur-[1px]">
-              <div className="text-center">
-                <Lock className="w-7 h-7 text-white mx-auto" />
-                {isLocked && !book.is_restricted && (
-                  <div className="mt-1.5 text-white/85 text-[9px] uppercase tracking-widest">
-                    Join to Unlock
-                  </div>
-                )}
+            {/* Locked overlay */}
+            {effectivelyLocked && (
+              <div className="absolute inset-0 bg-[#1A1A1A]/70 grid place-items-center backdrop-blur-[1px]">
+                <div className="text-center">
+                  <Lock className="w-7 h-7 text-white mx-auto" />
+                  {isLocked && !book.is_restricted && (
+                    <div className="mt-1.5 text-white/85 text-[9px] uppercase tracking-widest">
+                      Join to Unlock
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
           </div>
         </div>
+
 
         {/* ── Content panel ───────────────────────────────────────── */}
         <div className="flex min-h-[218px] flex-1 flex-col gap-3 px-2 pt-5">
