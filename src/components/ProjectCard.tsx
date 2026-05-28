@@ -23,6 +23,8 @@ interface ProjectCardProps {
   showBadgeButton?: boolean;
   currency?: 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 'RUB' | 'CAD' | 'AUD';
   sizeUnit?: 'sqft' | 'sqm';
+  /** Mark as above-the-fold (LCP) — first 1–3 cards in a grid. */
+  priority?: boolean;
 }
 
 // Currency conversion rates - 10 unified currencies
@@ -92,7 +94,7 @@ const isPropertyTypeOnlyLabel = (value?: string | null) => {
 // Sale status label resolver — visual style is owned by <CardBadge variant="status" />.
 const getSaleStatusLabel = resolveSaleStatusLabel;
 
-const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
+const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft', priority = false }: ProjectCardProps) => {
   const { isOwner } = useUserRole();
   const { pathname } = useLocation();
   // Single static cover — carousel arrows are banned on cards (gallery only).
@@ -238,9 +240,15 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         <div className="aspect-[16/10] overflow-hidden relative" data-surface="ink">
           <VerifiedMedia
             src={primaryImageUrl}
-            alt={images[0]?.alt_text || project.name}
+            alt={
+              images[0]?.alt_text ||
+              [project.name, developerName ? `by ${developerName}` : null, project.area_name || null]
+                .filter(Boolean)
+                .join(' — ') || project.name
+            }
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             placeholderLabel=""
+            priority={priority}
             loggerComponent="ProjectCard"
             loggerContext={{
               projectId: project.id,

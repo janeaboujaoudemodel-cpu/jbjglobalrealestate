@@ -186,6 +186,23 @@ const Index = () => {
     return () => window.removeEventListener('focus', releaseScroll);
   }, []);
 
+  // LCP boost — preload the hero poster image immediately so it paints before
+  // React mounts the <video>. The poster is a hashed Vite asset URL, so we
+  // can't bake it into index.html — inject the preload link at module mount.
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const existing = document.querySelector(
+      `link[rel="preload"][as="image"][href="${heroFallbackDubai}"]`,
+    );
+    if (existing) return;
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = heroFallbackDubai;
+    (link as any).fetchPriority = 'high';
+    document.head.appendChild(link);
+  }, []);
+
   return (
     <section data-home-page className="relative w-full min-h-screen bg-[#FDFBF7]">
       {/* SEO Meta Tags */}
@@ -218,7 +235,7 @@ const Index = () => {
 
           <video 
             autoPlay loop muted playsInline
-            preload="auto"
+            preload="metadata"
             poster={heroFallbackDubai}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
