@@ -1107,8 +1107,8 @@ export default function JoinApplication() {
                 {/* Position fallback (only when no DB positions) */}
                 {openPositions.length === 0 && (
                   <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">
-                      Position Applied For <span className="text-red-600">*</span>
+                    <Label data-required className="jbj-form-label text-sm font-semibold">
+                      Position Applied For
                     </Label>
                     <SearchableSelect
                       value={
@@ -1117,14 +1117,20 @@ export default function JoinApplication() {
                       onChange={(label) => {
                         const fb = FALLBACK_POSITIONS.find((p) => p.label === label);
                         if (fb) setFormData({ ...formData, positionApplied: fb.value });
+                        clearFieldError("positionApplied");
                       }}
                       options={FALLBACK_POSITIONS.map((p) => p.label)}
                       placeholder="Select a position"
                       searchPlaceholder="Search positions..."
                       showFlags={false}
                       disabled={loading}
+                      triggerClassName={`careers-blue-field h-12 rounded-lg ${fieldErr("positionApplied") ? "is-invalid" : ""}`}
                     />
+                    <FieldError id="positionApplied-err" message={fieldErr("positionApplied")} />
                   </div>
+                )}
+                {fieldErr("positionApplied") && openPositions.length > 0 && (
+                  <FieldError id="positionApplied-err" message={fieldErr("positionApplied")} />
                 )}
 
                 {/* Role-aware Qualification */}
