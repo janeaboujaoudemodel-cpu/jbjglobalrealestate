@@ -821,6 +821,7 @@ export default function GlobalVerticalNav() {
   };
 
   const navHoverUnderline = "group-hover:!text-[#102540] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full after:bg-[#102540]";
+  const subNavHoverUnderline = "group-hover:!text-[#102540] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-[50%] after:bg-[#102540]";
 
   // Premium gold-bordered icon tile shared across nav rows.
   const getIconTileClass = (item: NavItem) => {
