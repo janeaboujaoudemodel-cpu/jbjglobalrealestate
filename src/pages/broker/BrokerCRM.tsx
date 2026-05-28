@@ -447,9 +447,9 @@ export default function BrokerCRM() {
           {callLogs.isLoading ? (
             <Loading />
           ) : (callLogs.data ?? []).length === 0 ? (
-            <Empty msg="No calls logged yet. Use Log a call to capture broker activity, duration, outcome, notes, and points." />
+            <Empty msg="No calls logged yet. Use Log a call to capture broker activity, duration, outcome, and notes." />
           ) : (
-            <ul className="divide-y divide-[#B89555]/15">
+            <ul className="space-y-2.5">
               {(callLogs.data ?? [])
                 .slice(0, 20)
                 .map((log: any) => {
@@ -459,24 +459,29 @@ export default function BrokerCRM() {
                     <button
                       type="button"
                       onClick={() => setOpenCallId(log.id)}
-                      className="w-full py-2.5 flex items-center gap-3 text-left hover:bg-[#EFE6D6]/40 rounded-md px-2 -mx-2 transition-colors"
+                      className="w-full p-3.5 flex items-center gap-3 text-left rounded-xl bg-[#FDFBF7] border border-[#B89555]/30 hover:border-[#B89555]/55 hover:bg-[#F7F2EA] transition-colors"
                     >
-                      <Phone className="h-4 w-4 text-[#1A1A1A]/60 shrink-0" />
+                      <div className="h-9 w-9 rounded-md bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center shrink-0">
+                        <Phone className="h-4 w-4 text-[#1A1A1A]" />
+                      </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm text-[#1A1A1A] truncate flex items-center gap-2">
+                        <div className="text-sm font-semibold text-[#1A1A1A] truncate flex items-center gap-2 flex-wrap">
                           {lead?.full_name ? `Call with ${lead.full_name}` : "Manual broker call"}
                           {log.recording_url && (
-                            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/70">Recording</span>
+                            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">Recording</span>
                           )}
                           {log.ai_processed_at && (
-                            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/70">AI</span>
+                            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">AI</span>
+                          )}
+                          {typeof log.ai_score === "number" && (
+                            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#EFE6D6] border border-[#B89555]/45 text-[#1A1A1A]">Score {log.ai_score}</span>
                           )}
                         </div>
-                        <div className="text-[11px] text-[#1A1A1A]/55 truncate">
+                        <div className="text-[11px] text-[#1A1A1A]/60 truncate mt-0.5">
                           {log.call_status || "completed"} · {log.call_type || "outbound"} · {formatDuration(log.duration_seconds)} · {formatDisplayDate(log.created_at)}
                         </div>
                         {(log.ai_summary || log.notes) && (
-                          <div className="text-xs text-[#1A1A1A]/70 mt-1 truncate">{log.ai_summary || log.notes}</div>
+                          <div className="text-xs text-[#1A1A1A]/75 mt-1 truncate">{log.ai_summary || log.notes}</div>
                         )}
                       </div>
                       <div className="text-xs text-[#1A1A1A]/65 tabular-nums shrink-0">{log.phone_number}</div>
