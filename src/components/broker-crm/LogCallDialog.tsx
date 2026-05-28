@@ -431,7 +431,7 @@ export default function LogCallDialog({
                 <Button
                   type="button"
                   onClick={startRecording}
-                  className="bg-[#102540] text-white hover:bg-[#1a3d63]"
+                  className="[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
                   data-allow-dark-cta
                   data-no-contrast-guard
                 >
@@ -458,7 +458,7 @@ export default function LogCallDialog({
                 <Button
                   type="submit"
                   disabled={isSaving || audioBlob.size === 0}
-                  className="ml-auto bg-[#102540] text-white hover:bg-[#1a3d63] disabled:opacity-70"
+                  className="ml-auto [background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
                   data-allow-dark-cta
                   data-no-contrast-guard
                 >
@@ -552,7 +552,7 @@ export default function LogCallDialog({
             <Button
               type="submit"
               disabled={isSaving}
-              className="bg-[#102540] text-white hover:bg-[#1a3d63]"
+              className="[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
               data-allow-dark-cta
               data-no-contrast-guard
             >
