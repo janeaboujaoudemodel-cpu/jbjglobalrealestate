@@ -399,13 +399,19 @@ export function composeFormI(input: ComposerInput): string {
 
   const isJbjSignature = (label: "A" | "B") => jbjSide === label;
   const signatureCell = (label: "A" | "B") => `
-    <td style="width:50%;height:74px;border:1px solid ${GOLD};vertical-align:top;position:relative;padding:4px 7px;overflow:hidden;">
-      <div style="font-size:9.5px;font-weight:800;line-height:1.05;">SIGNATURE &amp; COMPANY STAMP OF AGENT "${label}":</div>
-      ${isJbjSignature(label) ? `<img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" style="position:absolute;left:218px;top:10px;width:62px;height:62px;object-fit:contain;opacity:.9;mix-blend-mode:multiply;transform:rotate(-8deg);" />` : ""}
+    <td style="width:50%;height:170px;border:1px solid ${GOLD};vertical-align:top;position:relative;padding:8px 10px;overflow:hidden;">
+      <div style="font-size:9.5px;font-weight:800;line-height:1.05;margin-bottom:8px;">SIGNATURE &amp; COMPANY STAMP OF AGENT "${label}":</div>
+      <div style="font-size:8.6px;line-height:1.5;color:${INK};">
+        <div style="margin-bottom:10px;">Name: ____________________________________</div>
+        <div style="margin-bottom:10px;">Designation: ______________________________</div>
+        <div style="margin-bottom:10px;">Date: ____ / ____ / __________</div>
+        <div>Signature: ________________________________</div>
+      </div>
+      ${isJbjSignature(label) ? `<img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" style="position:absolute;right:14px;bottom:14px;width:80px;height:80px;object-fit:contain;opacity:.9;mix-blend-mode:multiply;transform:rotate(-8deg);" />` : ""}
     </td>`;
 
   const companyFooter = `
-    <div style="text-align:center;color:${INK};font-size:8.4px;line-height:1.18;margin-top:5px;">
+    <div style="text-align:center;color:${INK};font-size:8.6px;line-height:1.25;margin-top:auto;padding-top:10px;border-top:1px solid ${GOLD}55;">
       <div style="font-weight:800;letter-spacing:.04em;margin-bottom:2px;">${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}</div>
       <div>Tel Number : ${JBJ_BRAND.phone}</div>
       <div>${JBJ_BRAND.address}</div>
@@ -413,7 +419,7 @@ export function composeFormI(input: ComposerInput): string {
     </div>`;
 
   const html = `
-    <div data-form-i-page="1" data-signature-block="1" style="font-family:Inter,Arial,sans-serif;color:${INK};font-size:9px;line-height:1.08;width:100%;">
+    <div data-form-i-page="1" data-signature-block="1" style="font-family:Inter,Arial,sans-serif;color:${INK};font-size:9px;line-height:1.08;width:100%;height:100%;display:flex;flex-direction:column;">
       <div style="position:relative;min-height:80px;margin-bottom:4px;">
         <div style="position:absolute;right:0;top:0;width:162px;font-size:9.5px;line-height:1.22;">
           <div style="text-align:right;font-weight:800;font-size:11.5px;margin-bottom:1px;">FORM I</div>
