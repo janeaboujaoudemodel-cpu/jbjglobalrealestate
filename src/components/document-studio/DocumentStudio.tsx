@@ -418,7 +418,7 @@ function StudioShell({
     // GLOBAL: composers that opt out of chrome (Form I and other single-
     // page form-style templates) must NEVER be re-paginated. They are
     // self-contained A4 layouts and any split corrupts the table.
-    if (/data-no-chrome=["']1["']/.test(bodyHtml) || /data-single-page=["']1["']/.test(bodyHtml)) {
+    if (/data-no-chrome=["']1["']/.test(bodyHtml) || /data-single-page=["']1["']/.test(bodyHtml) || /data-locked-pages=["']1["']/.test(bodyHtml)) {
       setAutoPageGroups(null);
       return;
     }
@@ -1040,7 +1040,7 @@ function StudioShell({
     if (autoBodyRef.current) setBodyHtml(autoBodyRef.current);
   };
 
-  const handleSelectTemplate = (id: string) => {
+  const handleSelectTemplate = async (id: string) => {
     // No-op if the same template is re-selected — never wipe an in-progress body.
     if (id === templateId) { setStep(2); return; }
     setTemplateId(id);
@@ -1059,6 +1059,21 @@ function StudioShell({
       stampXY: undefined,
     }));
     setStep(2);
+
+    // Seed a stable chained booking ID from the server so the preview shows
+    // a real identifier (and Save persists the same ID). Falls back silently
+    // to the composer's client-generated random ID if the RPC is unreachable.
+    try {
+      const prefix =
+        id === "holiday_home_agreement" ? "JBJ-HH" :
+        id === "commission_agreement" ? "JBJ-CA" :
+        id === "property_advertising_agreement" ? "JBJ-PAA" :
+        "JBJ-DOC";
+      const { data, error } = await (supabase as any).rpc("next_booking_id", { prefix });
+      if (!error && data) {
+        setFields((p) => ({ ...p, bookingRef: String(data), booking_id: String(data) }));
+      }
+    } catch { /* ignore — composer will generate a local id */ }
   };
 
   const buildPrompt = (t: DocumentTemplate): string => {
@@ -1293,6 +1308,17 @@ function StudioShell({
         [data-document-studio-overlay] textarea,
         [data-document-studio-overlay] button[role="combobox"] {
           border-color: rgba(184, 149, 85, 0.72) !important;
+        }
+        [data-document-studio-overlay] input:focus,
+        [data-document-studio-overlay] textarea:focus,
+        [data-document-studio-overlay] button[role="combobox"]:focus,
+        [data-document-studio-overlay] button[role="combobox"]:focus-visible,
+        [data-document-studio-overlay] [data-state="open"][role="combobox"] {
+          border-color: #B89555 !important;
+          outline: none !important;
+          box-shadow: 0 0 0 1px rgba(184, 149, 85, 0.55) !important;
+          --tw-ring-color: rgba(184, 149, 85, 0.55) !important;
+          --tw-ring-shadow: 0 0 0 1px rgba(184, 149, 85, 0.55) !important;
         }
         [data-document-studio-overlay] [data-document-page="true"] {
           border-color: rgba(184, 149, 85, 0.42) !important;
