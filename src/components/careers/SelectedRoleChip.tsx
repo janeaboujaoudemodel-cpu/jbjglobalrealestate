@@ -15,7 +15,7 @@ export function SelectedRoleChip({
 }: SelectedRoleChipProps) {
   if (!label) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[#102540]/40 bg-[#FDFBF7] px-4 py-3 text-sm font-semibold text-[#102540]/80">
+      <div className="flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[#B89555]/55 bg-[#FDFBF7] px-4 py-3 text-sm font-semibold text-[#102540]/80">
         <Briefcase className="h-4 w-4" />
         Select a role above to begin — your application will auto-sync here
       </div>
@@ -23,7 +23,7 @@ export function SelectedRoleChip({
   }
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border-2 border-[#102540] bg-gradient-to-r from-[#102540] via-[#1a3d63] to-[#102540] p-[1px] shadow-[0_10px_30px_-12px_rgba(16,37,64,0.5)]">
+    <div className="relative overflow-hidden rounded-2xl border-2 border-[#B89555] bg-gradient-to-r from-[#102540] via-[#1a3d63] to-[#102540] p-[1px] shadow-[0_10px_30px_-12px_rgba(184,149,85,0.45)]">
       <div className="flex items-center gap-3 rounded-[15px] bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] px-5 py-3.5">
         <div className="relative shrink-0">
           <div className="absolute inset-0 rounded-xl bg-emerald-500/20 blur-lg" />
@@ -50,7 +50,7 @@ export function SelectedRoleChip({
         <button
           type="button"
           onClick={onClear}
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#102540]/30 text-[#102540] transition hover:bg-[#102540] hover:text-[#FDFBF7]"
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#B89555]/55 text-[#102540] transition hover:bg-[#102540] hover:text-[#FDFBF7] hover:border-[#B89555]"
           aria-label="Clear selected role"
         >
           <X className="h-4 w-4" />

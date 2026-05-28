@@ -55,12 +55,12 @@ export function CareersWhyJBJ() {
             return (
               <article
                 key={b.title}
-                className="group relative overflow-hidden rounded-2xl border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] p-6 transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_-25px_rgba(16,37,64,0.35)] hover:border-[#102540]"
+                className="group relative overflow-hidden rounded-2xl border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] p-6 transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_-25px_rgba(184,149,85,0.4)] hover:border-[#B89555]"
               >
                 <div className="pointer-events-none absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-[#B89555]/8 blur-3xl group-hover:bg-[#B89555]/15 transition" />
 
                 <div className="relative">
-                  <div className="grid h-14 w-14 place-items-center rounded-2xl border-2 border-[#102540] bg-[#FDFBF7]">
+                  <div className="grid h-14 w-14 place-items-center rounded-2xl border-2 border-[#B89555] bg-[#FDFBF7]">
                     <Icon className="h-7 w-7 text-[#102540]" strokeWidth={2} />
                   </div>
                   <h3 className="mt-4 text-xl font-bold text-[#1A1A1A] leading-snug">{b.title}</h3>

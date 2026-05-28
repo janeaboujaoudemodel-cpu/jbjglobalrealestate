@@ -74,8 +74,8 @@ export function CareersFAQ() {
                     className={cn(
                       "grid h-9 w-9 shrink-0 place-items-center rounded-full border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
                       open
-                        ? "border-[#071B33] bg-[#071B33] shadow-[0_12px_22px_-12px_rgba(7,27,51,0.62)]"
-                        : "border-[#BFA46A] bg-[#F7F2EA]"
+                        ? "border-[#B89555] bg-[#071B33] shadow-[0_12px_22px_-12px_rgba(184,149,85,0.5)]"
+                        : "border-[#B89555]/55 bg-[#F7F2EA]"
                     )}
                   >
                     <ChevronDown

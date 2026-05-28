@@ -47,7 +47,7 @@ export function PremiumCVUpload({
       </div>
 
       {file ? (
-        <div className="relative overflow-hidden rounded-2xl border-2 border-[#102540] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-5 shadow-[0_8px_24px_-12px_rgba(16,37,64,0.25)]">
+        <div className="relative overflow-hidden rounded-2xl border-2 border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-5 shadow-[0_8px_24px_-12px_rgba(184,149,85,0.3)]">
           <div className="flex items-center gap-4">
             <div className="relative">
               <div className="absolute inset-0 rounded-xl bg-emerald-500/15 blur-lg" />
@@ -72,7 +72,7 @@ export function PremiumCVUpload({
               type="button"
               onClick={() => onFileChange(null)}
               disabled={disabled}
-              className="grid h-9 w-9 place-items-center rounded-full border border-[#102540]/30 text-[#102540] hover:bg-[#102540] hover:text-[#FDFBF7] transition disabled:opacity-50"
+              className="grid h-9 w-9 place-items-center rounded-full border border-[#B89555]/55 text-[#102540] hover:bg-[#102540] hover:text-[#FDFBF7] hover:border-[#B89555] transition disabled:opacity-50"
               aria-label="Remove CV"
             >
               <X className="h-4 w-4" />
@@ -99,8 +99,8 @@ export function PremiumCVUpload({
           className={cn(
             "group relative block cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed p-8 text-center transition-all",
             dragOver
-              ? "border-[#102540] bg-[#102540]/5 scale-[1.01]"
-              : "border-[#102540]/45 bg-[#FDFBF7] hover:border-[#102540] hover:bg-[#F7F2EA]/60",
+              ? "border-[#B89555] bg-[#B89555]/5 scale-[1.01]"
+              : "border-[#B89555]/55 bg-[#FDFBF7] hover:border-[#B89555] hover:bg-[#F7F2EA]/60",
             disabled && "opacity-60 cursor-not-allowed"
           )}
         >
@@ -112,7 +112,7 @@ export function PremiumCVUpload({
           <div className="relative flex flex-col items-center gap-3">
             <div className="relative">
               <div className="absolute inset-0 rounded-2xl bg-[#102540]/10 blur-lg group-hover:bg-[#102540]/20 transition" />
-              <div className="relative grid h-16 w-16 place-items-center rounded-2xl border-2 border-[#102540] bg-[#FDFBF7]">
+              <div className="relative grid h-16 w-16 place-items-center rounded-2xl border-2 border-[#B89555] bg-[#FDFBF7]">
                 <Upload className="h-7 w-7 text-[#102540]" />
               </div>
             </div>
@@ -125,13 +125,13 @@ export function PremiumCVUpload({
               </p>
             </div>
             <div className="mt-1 flex flex-wrap items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-[#102540]/70">
-              <span className="rounded-full border border-[#102540]/25 bg-[#FDFBF7] px-2.5 py-0.5">
+              <span className="rounded-full border border-[#B89555]/45 bg-[#FDFBF7] px-2.5 py-0.5">
                 AI-parsed
               </span>
-              <span className="rounded-full border border-[#102540]/25 bg-[#FDFBF7] px-2.5 py-0.5">
+              <span className="rounded-full border border-[#B89555]/45 bg-[#FDFBF7] px-2.5 py-0.5">
                 Auto-fill enabled
               </span>
-              <span className="rounded-full border border-[#102540]/25 bg-[#FDFBF7] px-2.5 py-0.5">
+              <span className="rounded-full border border-[#B89555]/45 bg-[#FDFBF7] px-2.5 py-0.5">
                 Confidential
               </span>
             </div>

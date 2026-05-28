@@ -127,7 +127,7 @@ export default function PremiumJobCard({
         isOpenForApply ? "cursor-pointer" : "cursor-default"
       } ${
         selected
-          ? "border-[#071B33] shadow-[0_0_0_3px_rgba(7,27,51,0.16),0_30px_54px_-32px_rgba(7,27,51,0.55)]"
+          ? "border-[#B89555] shadow-[0_0_0_3px_rgba(184,149,85,0.18),0_30px_54px_-32px_rgba(184,149,85,0.45)]"
           : isOpenForApply
             ? "hover:-translate-y-[3px]"
             : ""
