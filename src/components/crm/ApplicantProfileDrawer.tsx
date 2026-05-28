@@ -156,6 +156,80 @@ export default function ApplicantProfileDrawer({
     };
   }, [open, candidate?.id, candidate?.email]);
 
+  // Look up the unified hr_candidates row (by email) so we can drive the pipeline.
+  useEffect(() => {
+    if (!open || !candidate?.email) {
+      setCandidateRow(null);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("hr_candidates")
+        .select("id, status, intake_token, intake_submitted_at, current_envelope_id")
+        .eq("email", candidate.email)
+        .maybeSingle();
+      if (!cancelled) setCandidateRow((data as any) || null);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [open, candidate?.email]);
+
+  const handleApproveAndRequestDocs = async () => {
+    if (!candidateRow?.id) {
+      toast.error("Unified candidate record not found for this applicant.");
+      return;
+    }
+    setPipelineBusy("approve");
+    try {
+      const { data, error } = await supabase.functions.invoke("hr-approve-and-request-docs", {
+        body: { candidate_id: candidateRow.id, department: candidate?.department_category },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      toast.success(
+        (data as any)?.email_sent ? "Approved · intake link emailed" : "Approved · intake link minted",
+      );
+      setCandidateRow((r) => (r ? { ...r, status: "approved_pending_docs", intake_token: (data as any).intake_token } : r));
+    } catch (e: any) {
+      toast.error(e?.message || "Approve & request docs failed");
+    } finally {
+      setPipelineBusy(null);
+    }
+  };
+
+  const handleSendOfferForSignature = async () => {
+    if (!candidateRow?.id) {
+      toast.error("Unified candidate record not found for this applicant.");
+      return;
+    }
+    const documentUrl = window.prompt(
+      "Paste the public URL of the generated Job Offer PDF to send for signature:",
+    );
+    if (!documentUrl) return;
+    setPipelineBusy("offer");
+    try {
+      const { data, error } = await supabase.functions.invoke("hr-send-offer-for-signature", {
+        body: {
+          candidate_id: candidateRow.id,
+          document_url: documentUrl,
+          document_filename: `Job-Offer-${candidate?.full_name || "candidate"}.pdf`,
+        },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      toast.success("Job offer envelope created — open it to send");
+      setCandidateRow((r) => (r ? { ...r, status: "offer_sent", current_envelope_id: (data as any).envelope_id } : r));
+      const next = (data as any)?.next;
+      if (next) window.open(next, "_blank", "noopener,noreferrer");
+    } catch (e: any) {
+      toast.error(e?.message || "Send for signature failed");
+    } finally {
+      setPipelineBusy(null);
+    }
+  };
+
   const timeline = useMemo(() => {
     if (!candidate) return [] as Array<{
       id: string;
