@@ -1,9 +1,9 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, Link } from "react-router-dom";
 import { useState } from "react";
 import {
   LayoutDashboard, Users, Briefcase, Database, ListChecks, Calendar, ListTodo,
   Handshake, BadgeDollarSign, FileText, FilePen, GraduationCap, Megaphone,
-  Brain, Bell, Settings, ChevronLeft, ChevronRight,
+  Brain, Bell, Settings, ChevronLeft, ChevronRight, UserPlus, Upload,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -60,6 +60,25 @@ export default function BrokerPortalSidebar() {
         </button>
       </div>
 
+      {!collapsed && (
+        <div className="px-3 pt-3 pb-2 space-y-1.5 border-b border-[#B89555]/15">
+          <Link
+            to="/broker/leads?action=new"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/45 hover:bg-[#E5D8BD] transition-colors"
+          >
+            <UserPlus className="h-4 w-4" />
+            Add Lead
+          </Link>
+          <Link
+            to="/broker/databases?action=import"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/35 hover:bg-[#F7F2EA] transition-colors"
+          >
+            <Upload className="h-4 w-4" />
+            Import Database
+          </Link>
+        </div>
+      )}
+
       <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
         {ITEMS.map(({ to, label, icon: Icon }) => {
           const active =
@@ -81,17 +100,6 @@ export default function BrokerPortalSidebar() {
           );
         })}
       </nav>
-
-      {!collapsed && (
-        <div className="px-4 py-3 border-t border-[#B89555]/20">
-          <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">
-            Secure workspace
-          </div>
-          <div className="text-[11px] text-[#1A1A1A]/65 mt-1 leading-relaxed">
-            Your assigned data only. Owner systems are not accessible.
-          </div>
-        </div>
-      )}
     </aside>
   );
 }
