@@ -23,6 +23,8 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
+type RecordingResult = { blob: Blob; seconds: number };
+
 export interface PickerLead {
   id: string;
   full_name?: string | null;
@@ -79,12 +81,16 @@ export default function LogCallDialog({
   const [recState, setRecState] = useState<"idle" | "recording" | "stopped">("idle");
   const [seconds, setSeconds] = useState(0);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [savingRecording, setSavingRecording] = useState(false);
   const [coachTips, setCoachTips] = useState<string[]>([]);
   const [coachLoading, setCoachLoading] = useState(false);
   const recRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
   const timerRef = useRef<number | null>(null);
+  const startedAtRef = useRef<number | null>(null);
+  const secondsRef = useRef(0);
+  const pendingStopRef = useRef<((value: RecordingResult) => void) | null>(null);
   const liveTextRef = useRef<string>("");
 
   const selectedLead = useMemo(
@@ -116,9 +122,13 @@ export default function LogCallDialog({
     setNotes("");
     setRecState("idle");
     setSeconds(0);
+    secondsRef.current = 0;
+    startedAtRef.current = null;
     setAudioBlob(null);
+    setSavingRecording(false);
     setCoachTips([]);
     liveTextRef.current = "";
+    pendingStopRef.current = null;
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
     if (streamRef.current) { streamRef.current.getTracks().forEach((t) => t.stop()); streamRef.current = null; }
     recRef.current = null;
@@ -154,14 +164,29 @@ export default function LogCallDialog({
       };
       mr.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: mime });
+        const finalSeconds = Math.max(
+          secondsRef.current,
+          startedAtRef.current ? Math.round((Date.now() - startedAtRef.current) / 1000) : 0,
+        );
         setAudioBlob(blob);
-        setDurationSeconds(String(seconds));
+        setDurationSeconds(String(finalSeconds));
+        setSeconds(finalSeconds);
+        pendingStopRef.current?.({ blob, seconds: finalSeconds });
+        pendingStopRef.current = null;
       };
       mr.start(6000); // emit chunks every 6s for live-ish coach
       recRef.current = mr;
       setRecState("recording");
       setSeconds(0);
-      timerRef.current = window.setInterval(() => setSeconds((s) => s + 1), 1000) as unknown as number;
+      secondsRef.current = 0;
+      startedAtRef.current = Date.now();
+      timerRef.current = window.setInterval(() => {
+        setSeconds((s) => {
+          const next = s + 1;
+          secondsRef.current = next;
+          return next;
+        });
+      }, 1000) as unknown as number;
       toast.success("Recording started — put your phone on speaker");
     } catch (e: any) {
       console.error(e);
@@ -170,11 +195,22 @@ export default function LogCallDialog({
   };
 
   const stopRecording = () => {
-    if (recRef.current && recRef.current.state !== "inactive") recRef.current.stop();
+    const recorder = recRef.current;
+    if (recorder && recorder.state !== "inactive") recorder.stop();
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
     if (streamRef.current) { streamRef.current.getTracks().forEach((t) => t.stop()); streamRef.current = null; }
     setRecState("stopped");
   };
+
+  const stopRecordingAndGetBlob = () => new Promise<RecordingResult | null>((resolve) => {
+    const recorder = recRef.current;
+    if (!recorder || recorder.state === "inactive") {
+      resolve(audioBlob ? { blob: audioBlob, seconds: Math.max(secondsRef.current, Number(durationSeconds) || 0) } : null);
+      return;
+    }
+    pendingStopRef.current = resolve;
+    stopRecording();
+  });
 
   const maybeAskCoach = async () => {
     if (coachLoading) return;
