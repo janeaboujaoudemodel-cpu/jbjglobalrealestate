@@ -47,7 +47,7 @@ export function PremiumCVUpload({
       </div>
 
       {file ? (
-        <div className="relative overflow-hidden rounded-2xl border-2 border-[#102540] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-5 shadow-[0_8px_24px_-12px_rgba(16,37,64,0.25)]">
+        <div className="relative overflow-hidden rounded-2xl border-2 border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-5 shadow-[0_8px_24px_-12px_rgba(184,149,85,0.3)]">
           <div className="flex items-center gap-4">
             <div className="relative">
               <div className="absolute inset-0 rounded-xl bg-emerald-500/15 blur-lg" />
