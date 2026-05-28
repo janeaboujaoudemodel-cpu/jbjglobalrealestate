@@ -7,7 +7,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Phone, CheckCircle2, Loader2, Mic, Square, Search, X, Sparkles,
+  Phone, CheckCircle2, Loader2, Mic, Square, Search, X, Sparkles, Pause, Play, RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -67,6 +67,9 @@ function formatTimer(s: number) {
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
 
+const navyControlClass = "[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100 border border-[#B89555]/55 [&_svg]:!text-white [&_span]:!text-white";
+const creamControlClass = "border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A] [&_svg]:text-[#1A1A1A]";
+
 export default function LogCallDialog({
   open, onOpenChange, leads, userId, initialLeadId, submitting, onSubmit, onSaved,
 }: Props) {
@@ -80,7 +83,7 @@ export default function LogCallDialog({
   const [notes, setNotes] = useState("");
 
   // Recorder state
-  const [recState, setRecState] = useState<"idle" | "recording" | "stopped">("idle");
+  const [recState, setRecState] = useState<"idle" | "recording" | "paused" | "stopped">("idle");
   const [seconds, setSeconds] = useState(0);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [savingRecording, setSavingRecording] = useState(false);
@@ -174,12 +177,19 @@ export default function LogCallDialog({
         toast.error("Recording is not supported in this browser preview");
         return;
       }
+      setAudioBlob(null);
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+        audio: {
+          channelCount: 1,
+          sampleRate: 48000,
+          echoCancellation: false,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
       });
       streamRef.current = stream;
       const mime = getSupportedAudioMime();
-      const mr = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+      const mr = mime ? new MediaRecorder(stream, { mimeType: mime, audioBitsPerSecond: 128000 }) : new MediaRecorder(stream, { audioBitsPerSecond: 128000 });
       chunksRef.current = [];
       mr.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) {
@@ -191,10 +201,7 @@ export default function LogCallDialog({
       mr.onstop = () => {
         const blobType = mime || chunksRef.current.find((part) => part instanceof Blob)?.type || "audio/webm";
         const blob = new Blob(chunksRef.current, { type: blobType });
-        const finalSeconds = Math.max(
-          secondsRef.current,
-          startedAtRef.current ? Math.round((Date.now() - startedAtRef.current) / 1000) : 0,
-        );
+        const finalSeconds = Math.max(secondsRef.current, chunksRef.current.length ? 1 : 0);
         setAudioBlob(blob);
         setDurationSeconds(String(finalSeconds));
         setSeconds(finalSeconds);
@@ -235,6 +242,57 @@ export default function LogCallDialog({
       pendingStopRef.current?.(audioBlob ? { blob: audioBlob, seconds: secondsRef.current } : null);
       pendingStopRef.current = null;
     }
+  };
+
+  const pauseRecording = () => {
+    const recorder = recRef.current;
+    if (!recorder || recorder.state !== "recording") return;
+    try {
+      recorder.pause();
+      if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
+      setRecState("paused");
+    } catch (err) {
+      console.warn("recorder.pause failed", err);
+    }
+  };
+
+  const resumeRecording = () => {
+    const recorder = recRef.current;
+    if (!recorder || recorder.state !== "paused") return;
+    try {
+      recorder.resume();
+      setRecState("recording");
+      timerRef.current = window.setInterval(() => {
+        setSeconds((s) => {
+          const next = s + 1;
+          secondsRef.current = next;
+          return next;
+        });
+      }, 1000) as unknown as number;
+    } catch (err) {
+      console.warn("recorder.resume failed", err);
+    }
+  };
+
+  const discardRecording = () => {
+    if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
+    try {
+      if (recRef.current && recRef.current.state !== "inactive") {
+        recRef.current.onstop = null;
+        recRef.current.stop();
+      }
+    } catch (err) {
+      console.warn("recorder discard stop failed", err);
+    }
+    stopTracks();
+    recRef.current = null;
+    chunksRef.current = [];
+    setAudioBlob(null);
+    setSeconds(0);
+    secondsRef.current = 0;
+    startedAtRef.current = null;
+    setDurationSeconds("0");
+    setRecState("idle");
   };
 
   const stopRecordingAndGetBlob = () => new Promise<RecordingResult | null>((resolve) => {
@@ -282,7 +340,7 @@ export default function LogCallDialog({
     setSavingRecording(true);
     let finalAudioBlob = audioBlob;
     let finalDuration = Math.max(0, Number(durationSeconds) || secondsRef.current || 0);
-    if (recState === "recording") {
+    if (recState === "recording" || recState === "paused") {
       const stopped = await stopRecordingAndGetBlob();
       finalAudioBlob = stopped?.blob ?? null;
       finalDuration = stopped?.seconds ?? finalDuration;
@@ -427,46 +485,58 @@ export default function LogCallDialog({
               </div>
               <div className="text-xs tabular-nums text-[#1A1A1A]/75">{formatTimer(seconds)}</div>
             </div>
-            <div className="flex items-center gap-2">
-              {recState !== "recording" ? (
-                <Button
-                  type="button"
-                  onClick={startRecording}
-                  className="[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
-                  data-surface="dark"
-                  data-allow-dark-cta
-                  data-no-contrast-guard
-                >
-                  <Mic className="h-4 w-4 mr-2 text-white" />
-                  <span className="text-white">{recState === "stopped" ? "Re-record" : "Start recording"}</span>
+            <div className="flex flex-wrap items-center gap-2">
+              {recState === "idle" && (
+                <Button type="button" onClick={startRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                  <Mic className="h-4 w-4 mr-2" />
+                  <span>Start recording</span>
                 </Button>
-              ) : (
-                <Button
-                  type="button"
-                  onClick={stopRecording}
-                  variant="outline"
-                  className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"
-                >
-                  <Square className="h-4 w-4 mr-2 text-[#1A1A1A]" />
-                  Stop recording
-                </Button>
+              )}
+              {recState === "recording" && (
+                <>
+                  <Button type="button" onClick={pauseRecording} variant="outline" className={creamControlClass}>
+                    <Pause className="h-4 w-4 mr-2" /> Pause
+                  </Button>
+                  <Button type="button" onClick={stopRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <Square className="h-4 w-4 mr-2" /> Stop
+                  </Button>
+                  <Button type="button" onClick={discardRecording} variant="outline" className={creamControlClass}>
+                    <X className="h-4 w-4 mr-2" /> Cancel
+                  </Button>
+                </>
+              )}
+              {recState === "paused" && (
+                <>
+                  <Button type="button" onClick={resumeRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <Play className="h-4 w-4 mr-2" /> Continue
+                  </Button>
+                  <Button type="button" onClick={stopRecording} variant="outline" className={creamControlClass}>
+                    <Square className="h-4 w-4 mr-2" /> Stop
+                  </Button>
+                  <Button type="button" onClick={discardRecording} variant="outline" className={creamControlClass}>
+                    <X className="h-4 w-4 mr-2" /> Cancel
+                  </Button>
+                </>
+              )}
+              {recState === "stopped" && (
+                <>
+                  <Button type="submit" disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-2" />}
+                    <span>{isSaving ? "Saving…" : "Save call log"}</span>
+                  </Button>
+                  <Button type="button" onClick={startRecording} variant="outline" className={creamControlClass}>
+                    <RotateCcw className="h-4 w-4 mr-2" /> Re-record
+                  </Button>
+                  <Button type="button" onClick={discardRecording} variant="outline" className={creamControlClass}>
+                    <X className="h-4 w-4 mr-2" /> Cancel
+                  </Button>
+                </>
               )}
               {audioBlob && recState === "stopped" && (
                 <span className="text-[11px] text-[#1A1A1A]/70">
                   Captured · {(audioBlob.size / 1024).toFixed(0)} KB · will be transcribed on save
                 </span>
               )}
-              <Button
-                type="submit"
-                disabled={isSaving}
-                className="ml-auto [background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
-                data-surface="dark"
-                data-allow-dark-cta
-                data-no-contrast-guard
-              >
-                {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin text-white" /> : <CheckCircle2 className="h-4 w-4 mr-2 text-white" />}
-                <span className="text-white">{isSaving ? "Saving…" : "Save call log"}</span>
-              </Button>
             </div>
             {(coachTips.length > 0 || coachLoading) && (
               <div className="mt-2 rounded-md bg-[#FDFBF7] border border-[#B89555]/30 p-2.5">
@@ -548,22 +618,7 @@ export default function LogCallDialog({
               disabled={isSaving}
               className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"
             >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              disabled={isSaving}
-              className="[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
-              data-surface="dark"
-              data-allow-dark-cta
-              data-no-contrast-guard
-            >
-              {isSaving ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin text-white" />
-              ) : (
-                <CheckCircle2 className="h-4 w-4 mr-2 text-white" />
-              )}
-              <span className="text-white">{savingRecording ? "Saving recording…" : "Save call log"}</span>
+              Close
             </Button>
           </DialogFooter>
         </form>
