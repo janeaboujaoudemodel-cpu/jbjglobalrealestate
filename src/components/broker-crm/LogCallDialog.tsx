@@ -52,6 +52,7 @@ interface Props {
   onOpenChange: (open: boolean) => void;
   leads: PickerLead[];
   userId?: string | null;
+  initialLeadId?: string | null;
   submitting: boolean;
   onSubmit: (input: LogCallSubmit) => Promise<{ callLogId?: string } | void>;
   onSaved?: () => void;
@@ -67,7 +68,7 @@ function formatTimer(s: number) {
 }
 
 export default function LogCallDialog({
-  open, onOpenChange, leads, userId, submitting, onSubmit, onSaved,
+  open, onOpenChange, leads, userId, initialLeadId, submitting, onSubmit, onSaved,
 }: Props) {
   // Form state
   const [leadId, setLeadId] = useState<string | null>(null);
@@ -93,6 +94,19 @@ export default function LogCallDialog({
   const secondsRef = useRef(0);
   const pendingStopRef = useRef<((value: RecordingResult | null) => void) | null>(null);
   const liveTextRef = useRef<string>("");
+
+  const stopTracks = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+  };
+
+  const getSupportedAudioMime = () => {
+    if (typeof MediaRecorder === "undefined") return undefined;
+    const options = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"];
+    return options.find((type) => MediaRecorder.isTypeSupported(type));
+  };
 
   const selectedLead = useMemo(
     () => leads.find((l) => l.id === leadId) || null,
@@ -131,12 +145,21 @@ export default function LogCallDialog({
     liveTextRef.current = "";
     pendingStopRef.current = null;
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
-    if (streamRef.current) { streamRef.current.getTracks().forEach((t) => t.stop()); streamRef.current = null; }
+    stopTracks();
     recRef.current = null;
     chunksRef.current = [];
   };
 
   useEffect(() => { if (!open) reset(); }, [open]);
+
+  useEffect(() => {
+    if (!open || !initialLeadId) return;
+    const lead = leads.find((l) => l.id === initialLeadId);
+    if (!lead) return;
+    setLeadId(lead.id);
+    setPhoneNumber(getPhone(lead));
+    setSearch("");
+  }, [open, initialLeadId, leads]);
 
   const handlePickLead = (l: PickerLead) => {
     setLeadId(l.id);
@@ -147,14 +170,16 @@ export default function LogCallDialog({
   // Recorder
   const startRecording = async () => {
     try {
+      if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
+        toast.error("Recording is not supported in this browser preview");
+        return;
+      }
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
       });
       streamRef.current = stream;
-      const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
-        ? "audio/webm;codecs=opus"
-        : "audio/webm";
-      const mr = new MediaRecorder(stream, { mimeType: mime });
+      const mime = getSupportedAudioMime();
+      const mr = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
       chunksRef.current = [];
       mr.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) {
@@ -164,7 +189,8 @@ export default function LogCallDialog({
         }
       };
       mr.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: mime });
+        const blobType = mime || chunksRef.current.find((part) => part instanceof Blob)?.type || "audio/webm";
+        const blob = new Blob(chunksRef.current, { type: blobType });
         const finalSeconds = Math.max(
           secondsRef.current,
           startedAtRef.current ? Math.round((Date.now() - startedAtRef.current) / 1000) : 0,
@@ -172,6 +198,8 @@ export default function LogCallDialog({
         setAudioBlob(blob);
         setDurationSeconds(String(finalSeconds));
         setSeconds(finalSeconds);
+        setRecState("stopped");
+        stopTracks();
         pendingStopRef.current?.({ blob, seconds: finalSeconds });
         pendingStopRef.current = null;
       };
@@ -197,10 +225,15 @@ export default function LogCallDialog({
 
   const stopRecording = () => {
     const recorder = recRef.current;
-    if (recorder && recorder.state !== "inactive") recorder.stop();
+    if (recorder && recorder.state !== "inactive") {
+      try { recorder.requestData(); } catch { /* recorder may not support requestData in this state */ }
+      recorder.stop();
+    }
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
-    if (streamRef.current) { streamRef.current.getTracks().forEach((t) => t.stop()); streamRef.current = null; }
-    setRecState("stopped");
+    if (!recorder || recorder.state === "inactive") {
+      stopTracks();
+      setRecState("stopped");
+    }
   };
 
   const stopRecordingAndGetBlob = () => new Promise<RecordingResult | null>((resolve) => {
@@ -289,7 +322,7 @@ export default function LogCallDialog({
         }).then(({ error }) => {
           if (error) console.warn("call process error", error);
           else toast.success("Call transcript & AI summary ready");
-        });
+        }).catch((err) => console.warn("call process error", err));
         toast.success("Recording saved — AI is processing it");
         await supabase.from("broker_call_logs").select("id").eq("id", callLogId).maybeSingle();
       }
@@ -303,8 +336,10 @@ export default function LogCallDialog({
     }
   };
 
+  const isSaving = submitting || savingRecording;
+
   return (
-    <Dialog open={open} onOpenChange={(o) => { onOpenChange(o); if (!o) reset(); }}>
+    <Dialog open={open} onOpenChange={(o) => { if (!o && isSaving) return; onOpenChange(o); if (!o) reset(); }}>
       <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/30 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
@@ -396,7 +431,8 @@ export default function LogCallDialog({
                 <Button
                   type="button"
                   onClick={startRecording}
-                  className="bg-[#102540] text-white hover:bg-[#1a3d63]"
+                  className="[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
+                  data-surface="dark"
                   data-allow-dark-cta
                   data-no-contrast-guard
                 >
@@ -418,6 +454,19 @@ export default function LogCallDialog({
                 <span className="text-[11px] text-[#1A1A1A]/70">
                   Captured · {(audioBlob.size / 1024).toFixed(0)} KB · will be transcribed on save
                 </span>
+              )}
+              {audioBlob && recState === "stopped" && (
+                <Button
+                  type="submit"
+                  disabled={isSaving || audioBlob.size === 0}
+                  className="ml-auto [background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
+                  data-surface="dark"
+                  data-allow-dark-cta
+                  data-no-contrast-guard
+                >
+                  {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin text-white" /> : <CheckCircle2 className="h-4 w-4 mr-2 text-white" />}
+                  <span className="text-white">{isSaving ? "Saving…" : "Save recording"}</span>
+                </Button>
               )}
             </div>
             {(coachTips.length > 0 || coachLoading) && (
@@ -492,24 +541,25 @@ export default function LogCallDialog({
             />
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="sticky bottom-0 -mx-6 -mb-6 mt-2 border-t border-[#B89555]/20 bg-[#FDFBF7]/95 px-6 py-4 backdrop-blur">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              disabled={submitting || savingRecording}
+              disabled={isSaving}
               className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              disabled={submitting || savingRecording}
-              className="bg-[#102540] text-white hover:bg-[#1a3d63]"
+              disabled={isSaving}
+              className="[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
+              data-surface="dark"
               data-allow-dark-cta
               data-no-contrast-guard
             >
-              {submitting || savingRecording ? (
+              {isSaving ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin text-white" />
               ) : (
                 <CheckCircle2 className="h-4 w-4 mr-2 text-white" />

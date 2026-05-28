@@ -31,6 +31,7 @@ import LeadAssignModal from "./LeadAssignModal";
 import DeleteLeadDialog from "./DeleteLeadDialog";
 import SendAgreementDialog from "./SendAgreementDialog";
 import LeadAccessDialog from "./LeadAccessDialog";
+import LogCallDialog from "@/components/broker-crm/LogCallDialog";
 import { isRealCRMLead } from "@/utils/crmFakeDataGuard";
 import LeadQuickActions from "./LeadQuickActions";
 import { BrokerCombobox } from "./BrokerCombobox";
@@ -93,6 +94,8 @@ export default function CRMLeadsTableV2({
   const [accessLead, setAccessLead] = useState<Lead | null>(null);
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
   const [agreementLead, setAgreementLead] = useState<Lead | null>(null);
+  const [callLead, setCallLead] = useState<Lead | null>(null);
+  const [savingCall, setSavingCall] = useState(false);
 
   // Inline filter dropdowns: Stage (multi) / Source / Assignee / Tag
   const [stageMulti, setStageMulti] = useState<string[]>([]);
@@ -295,7 +298,39 @@ export default function CRMLeadsTableV2({
   const handleCall = (lead: Lead) => {
     const phone = lead.phone_e164 || (lead as any).phone;
     if (!phone) { toast.error("No phone number available"); return; }
-    window.location.href = `tel:${phone}`;
+    setCallLead(lead);
+  };
+
+  const saveCallLog = async (input: {
+    leadId?: string | null;
+    phoneNumber: string;
+    callType: string;
+    callStatus: string;
+    durationSeconds: number;
+    notes?: string | null;
+  }) => {
+    if (!userId) throw new Error("Please sign in");
+    setSavingCall(true);
+    try {
+      const { data, error } = await supabase
+        .from("broker_call_logs")
+        .insert({
+          user_id: userId,
+          lead_id: input.leadId || null,
+          phone_number: input.phoneNumber,
+          call_type: input.callType,
+          call_status: input.callStatus,
+          duration_seconds: input.durationSeconds,
+          notes: input.notes || null,
+        })
+        .select("id")
+        .single();
+      if (error) throw error;
+      toast.success("Call log saved");
+      return { callLogId: data.id as string };
+    } finally {
+      setSavingCall(false);
+    }
   };
 
   const handleEmail = (lead: Lead) => {
@@ -923,6 +958,16 @@ export default function CRMLeadsTableV2({
         onOpenChange={(o) => { if (!o) setAccessLead(null); }}
         leadId={accessLead?.id || ""}
         leadName={accessLead?.full_name}
+      />
+      <LogCallDialog
+        open={!!callLead}
+        onOpenChange={(o) => { if (!o) setCallLead(null); }}
+        leads={leads as any}
+        userId={userId}
+        initialLeadId={callLead?.id || null}
+        submitting={savingCall}
+        onSubmit={saveCallLog}
+        onSaved={() => { fetchLeads(); onRefresh(); }}
       />
     </div>
   );
