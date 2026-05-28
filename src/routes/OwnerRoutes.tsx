@@ -14,6 +14,7 @@ const OwnerInbox = lazy(() => import("@/pages/OwnerInbox"));
 const CRMRelationships = lazy(() => import("@/pages/CRMRelationships"));
 const SecondaryMarketHub = lazy(() => import("@/pages/SecondaryMarketHub"));
 const UnifiedCRM = lazy(() => import("@/pages/owner/crm/UnifiedCRM"));
+const EmployeeProfile = lazy(() => import("@/pages/owner/EmployeeProfile"));
 
 const OwnerTemplates = lazy(() => import("@/pages/OwnerTemplates"));
 const OwnerCommSettings = lazy(() => import("@/pages/OwnerCommSettings"));
@@ -133,6 +134,7 @@ export const OwnerRoutes = () => (
     <Route path="settings" element={<OwnerCommSettings />} />
     {/* Unified CRM — single owner-only hub. All legacy sub-routes redirect into it. */}
     <Route path="crm" element={<UnifiedCRM />} />
+    <Route path="hr/employee/:userId" element={<EmployeeProfile />} />
     <Route path="crm/leads/:id" element={<CRMLeadDetail />} />
     <Route path="crm/leads" element={<Navigate to="/owner/crm?section=leads" replace />} />
     <Route path="crm/tasks" element={<Navigate to="/owner/crm?section=tasks" replace />} />
