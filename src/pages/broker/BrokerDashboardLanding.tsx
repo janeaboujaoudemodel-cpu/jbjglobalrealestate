@@ -90,13 +90,14 @@ export default function BrokerDashboardLanding() {
     user?.email?.split("@")[0] ||
     "there";
 
-  const totalLeads = leads.data?.length ?? 0;
+  const leadsData: any[] = (leads.data as any[]) ?? [];
+  const totalLeads = leadsData.length;
   const meetingsToday = (cal.data ?? []).filter((e) => isToday(e.starts_at)).length;
-  const newAssignments = (leads.data ?? []).filter((l) => daysAgo(l.created_at) <= 7).length;
+  const newAssignments = leadsData.filter((l: any) => daysAgo(l.created_at) <= 7).length;
   const followUps = (tasks.data ?? []).filter((t) => t.status !== "done").length;
-  const activeDeals = (leads.data ?? []).filter((l) =>
+  const activeDeals = leadsData.filter((l: any) =>
     ["negotiation", "qualified", "viewing_scheduled", "offer", "contract"].includes(
-      (l.status ?? "").toLowerCase(),
+      ((l.pipeline_stage ?? l.status) ?? "").toString().toLowerCase(),
     ),
   ).length;
 
