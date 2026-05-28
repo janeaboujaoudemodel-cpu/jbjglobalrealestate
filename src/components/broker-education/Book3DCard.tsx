@@ -1,9 +1,7 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Lock, CheckCircle, Clock, ArrowRight, Sparkles } from "lucide-react";
-import { toast } from "sonner";
+import { Lock, CheckCircle, Clock, ArrowRight, Sparkles, BookOpen } from "lucide-react";
 import type { EducationBook, BookProgress } from "@/hooks/useBrokerEducation";
 
 interface Book3DCardProps {
@@ -14,118 +12,77 @@ interface Book3DCardProps {
   isLocked?: boolean;
 }
 
-// Unified champagne/obsidian theme. No per-path color fills.
-// Gold survives only as 1px hairline borders.
-const CHAMPAGNE_STYLE = {
-  bg: 'from-[#1c1812] via-[#2a2118] to-[#15110b]',
-  text: 'text-[#EFE6D6]',
-  border: 'border-[#B89555]/40',
-  glow: 'rgba(184,149,85,0.18)',
-};
-
-const LEARNING_PATH_COLORS: Record<string, typeof CHAMPAGNE_STYLE> = {};
-const DEFAULT_PATH_COLOR = CHAMPAGNE_STYLE;
-
+/**
+ * Premium book card — clean champagne frame holding a 3D book cover.
+ *
+ * Layout:
+ *   [ champagne frame, gold hairline ]
+ *     ├── 3D Book cover (perspective tilt, soft right-edge "pages",
+ *     │   gold spine on the LEFT — visually contained, never pokes out)
+ *     └── Content panel (badge, title, description, CTA) — edge-to-edge
+ *
+ * No protruding white strips. No rotateY tricks that escape the bounds.
+ */
 export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: Book3DCardProps) {
-  const pathStyle = LEARNING_PATH_COLORS[book.learning_path] || DEFAULT_PATH_COLOR;
   const effectivelyLocked = isLocked || book.is_restricted;
-  
-  const getStatusBadge = () => {
+
+  const statusBadge = (() => {
     if (!progress) return null;
-    
-    switch (progress.status) {
-      case 'completed':
-        return (
-          <div className="absolute top-3 right-3 z-10">
-            <Badge className="bg-emerald-500/90 text-white border-0 shadow-lg">
-              <CheckCircle className="w-3 h-3 mr-1" />
-              Completed
-            </Badge>
-          </div>
-        );
-      case 'in_progress':
-        return (
-          <div className="absolute top-3 right-3 z-10">
-            <Badge className="bg-amber-500/90 text-white border-0 shadow-lg">
-              <Clock className="w-3 h-3 mr-1" />
-              {progress.completedModules}/{progress.totalModules}
-            </Badge>
-          </div>
-        );
-      default:
-        return null;
+    if (progress.status === "completed") {
+      return (
+        <Badge className="bg-emerald-600 text-white border-0 shadow-sm">
+          <CheckCircle className="w-3 h-3 mr-1" /> Completed
+        </Badge>
+      );
     }
-  };
+    if (progress.status === "in_progress") {
+      return (
+        <Badge className="bg-amber-500 text-white border-0 shadow-sm">
+          <Clock className="w-3 h-3 mr-1" /> {progress.completedModules}/{progress.totalModules}
+        </Badge>
+      );
+    }
+    return null;
+  })();
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: Math.min(index * 0.05, 0.3), duration: 0.35 }}
-      whileHover={{ y: -8 }}
+      whileHover={{ y: -4 }}
       className="group"
     >
       <div
-        className="relative cursor-pointer"
+        className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/40 overflow-hidden flex flex-col h-full shadow-[0_2px_8px_rgba(184,149,85,0.08)] hover:shadow-[0_12px_28px_rgba(184,149,85,0.18)] transition-shadow cursor-pointer"
+        data-gold-hairline
         onClick={() => !book.is_restricted && onOpen(book)}
-        onMouseMove={(e) => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const rotateY = (x / rect.width - 0.5) * 20;
-          const translateZ = 15;
-          const scale = 1.03;
-
-          e.currentTarget
-            .querySelector<HTMLDivElement>(".book-inner")
-            ?.style.setProperty(
-              "transform",
-              `rotateY(${rotateY}deg) rotateX(3deg) translateZ(${translateZ}px) scale(${scale})`
-            );
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget
-            .querySelector<HTMLDivElement>(".book-inner")
-            ?.style.setProperty("transform", "rotateY(-8deg) rotateX(4deg)");
-        }}
       >
+        {/* ── 3D Book Cover Stage ──────────────────────────────────── */}
         <div
-          className="book-inner relative transform-gpu transition-transform duration-500 ease-out"
-          style={{ transformStyle: "preserve-3d", transform: "rotateY(-8deg) rotateX(4deg)" }}
+          className="relative px-6 pt-7 pb-5 grid place-items-center bg-[#EFE6D6]"
+          style={{ perspective: "1200px" }}
         >
-          {/* Book Cover */}
-           <div
-            className={`relative bg-gradient-to-br ${pathStyle.bg} rounded-lg overflow-hidden shadow-2xl ${pathStyle.border} border min-h-[400px] max-h-[400px] h-[400px] flex flex-col`}
+          {/* Status badge (sits in the stage, top-right) */}
+          {statusBadge && <div className="absolute top-3 right-3 z-20">{statusBadge}</div>}
+
+          <div
+            className="relative transition-transform duration-500 ease-out group-hover:scale-[1.04]"
             style={{
-              boxShadow: `16px 16px 50px rgba(0,0,0,0.7), -4px -4px 15px ${pathStyle.glow}`,
+              transformStyle: "preserve-3d",
+              transform: "rotateY(-14deg) rotateX(2deg)",
             }}
           >
-            {/* Status Badge */}
-            {getStatusBadge()}
-
-            {/* Book Spine Effect - 3D */}
+            {/* Book body */}
             <div
-              className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-zinc-700 via-zinc-600 to-zinc-800 border-r border-[#B89555]/30"
+              className="relative w-[150px] h-[210px] rounded-r-md rounded-l-sm overflow-hidden"
               style={{
-                transformStyle: "preserve-3d",
-                transform: "rotateY(-90deg) translateX(-12px)",
-                transformOrigin: "left center",
+                background:
+                  "linear-gradient(135deg,#1c1812 0%,#2a2118 55%,#15110b 100%)",
+                boxShadow:
+                  "0 18px 36px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(184,149,85,0.35)",
               }}
             >
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span
-                  className="text-[#1A1A1A] text-[8px] font-bold tracking-[0.12em] uppercase whitespace-nowrap"
-                  style={{ transform: "rotate(-90deg)", textShadow: "0 0 8px rgba(200,167,102,0.5)" }}
-                >
-                  Book {book.book_number}
-                </span>
-              </div>
-            </div>
-
-            {/* Visible Spine on Cover */}
-            <div className="absolute left-0 top-0 bottom-0 w-5 bg-gradient-to-r from-gold/30 via-gold/15 to-transparent" />
-
-            {/* Top Section with Cover Image or Icon */}
-            <div className="relative h-40 flex items-center justify-center bg-[#1A1A1A]/20 flex-shrink-0 overflow-hidden">
               {book.cover_image_url ? (
                 <img
                   src={book.cover_image_url}
@@ -135,101 +92,117 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-14 h-14 rounded-full bg-[#EFE6D6]/90 border border-[#B89555]/60 flex items-center justify-center">
-                  <span className="text-[#1A1A1A] text-xl font-bold">{book.book_number}</span>
-                </div>
-              )}
-
-              {/* Subtle dark gradient for legibility when image present */}
-              {book.cover_image_url && (
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-              )}
-
-              {/* Locked Overlay (restricted or access-locked) */}
-              {effectivelyLocked && (
-                <div className="absolute inset-0 bg-[#1A1A1A]/70 flex flex-col items-center justify-center backdrop-blur-sm gap-2">
-                  <Lock className="w-10 h-10 text-white" />
-                  {isLocked && !book.is_restricted && (
-                    <span className="text-white/80 text-[10px] uppercase tracking-widest">Join to Unlock</span>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Cover Content */}
-            <div className="p-5 relative flex-1 flex flex-col">
-            {/* Learning Path Badge */}
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 text-[#1A1A1A] text-[10px] uppercase tracking-[0.15em] mb-3 self-start" data-no-contrast-guard>
-                <Sparkles className="w-3 h-3" />
-                {book.learning_path}
-              </div>
-
-              {/* Title */}
-              <h3
-                className="text-white text-base font-bold leading-tight mb-2 line-clamp-2"
-              >
-                {book.title}
-              </h3>
-
-              {/* Description */}
-              <p className="text-white/70 text-xs line-clamp-2 flex-1">
-                {book.description}
-              </p>
-
-              {/* Footer */}
-              <div className="pt-3 border-t border-[#B89555]/25 mt-auto">
-                {effectivelyLocked ? (
-                  <div className="space-y-2">
-                    <p className="text-white/70 text-[10px] leading-tight">
-                      {book.is_restricted 
-                        ? 'Available after completing all foundational books and manager approval.'
-                        : 'Join the JBJ Broker Circle to unlock this book.'}
-                    </p>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="w-full bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50 font-semibold"
-                      data-no-contrast-guard
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (!book.is_restricted) onOpen(book);
-                      }}
-                    >
-                      <Lock className="w-3 h-3 mr-2" />
-                      {book.is_restricted ? 'Restricted' : 'Preview Book'}
-                    </Button>
+                <div className="absolute inset-0 grid place-items-center text-center px-3">
+                  <div>
+                    <BookOpen className="w-7 h-7 text-[#B89555] mx-auto mb-2" />
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#EFE6D6]/80">
+                      JBJ Library
+                    </div>
+                    <div className="text-[#EFE6D6] text-sm font-semibold mt-1 line-clamp-3">
+                      {book.title}
+                    </div>
+                    <div className="mt-2 text-[10px] text-[#B89555]">
+                      Book {book.book_number}
+                    </div>
                   </div>
-                ) : (
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    className="w-full bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50 font-semibold transition-colors"
-                    data-no-contrast-guard
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onOpen(book);
-                    }}
-                  >
-                    {progress?.status === 'completed' ? 'Review Book' : progress?.status === 'in_progress' ? 'Continue Reading' : 'Open Book'}
-                    <ArrowRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                )}
-              </div>
+                </div>
+              )}
+
+              {/* Locked overlay */}
+              {effectivelyLocked && (
+                <div className="absolute inset-0 bg-[#1A1A1A]/70 grid place-items-center backdrop-blur-[1px]">
+                  <div className="text-center">
+                    <Lock className="w-7 h-7 text-white mx-auto" />
+                    {isLocked && !book.is_restricted && (
+                      <div className="mt-1.5 text-white/85 text-[9px] uppercase tracking-widest">
+                        Join to Unlock
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Book Pages Effect */}
-            <div className="absolute right-0 top-0 bottom-0 w-2.5">
-              <div
-                className="h-full bg-gradient-to-l from-zinc-100/10 via-zinc-200/12 to-transparent"
-                style={{ clipPath: "polygon(100% 0, 100% 100%, 0 96%, 0 4%)" }}
-              />
-              <div className="absolute right-0 top-[4%] bottom-[4%] w-[2px] bg-[#E5D9C4]/15" />
-              <div className="absolute right-[2px] top-[5%] bottom-[5%] w-[1px] bg-[#E5D9C4]/10" />
-            </div>
+            {/* Gold spine — sits flush to the LEFT edge of the book body */}
+            <div
+              className="absolute top-0 bottom-0 -left-[6px] w-[6px] rounded-l-sm"
+              style={{
+                background:
+                  "linear-gradient(to right,#7a5e2c 0%,#B89555 45%,#8c6a30 100%)",
+                boxShadow: "inset 1px 0 0 rgba(0,0,0,0.4)",
+                transform: "translateZ(-2px)",
+              }}
+            />
+
+            {/* Right-edge pages — thin, contained inside the book footprint */}
+            <div
+              className="absolute top-[3%] bottom-[3%] right-[-3px] w-[3px] rounded-r-sm"
+              style={{
+                background:
+                  "linear-gradient(to right,rgba(255,255,255,0.0) 0%,#f3ead8 50%,#d9c9a3 100%)",
+              }}
+            />
+
+            {/* Ground shadow */}
+            <div className="absolute -bottom-3 left-2 right-2 h-3 bg-black/35 blur-md rounded-full" />
+          </div>
+        </div>
+
+        {/* ── Content frame ────────────────────────────────────────── */}
+        <div className="flex-1 flex flex-col gap-3 p-5 border-t border-[#B89555]/25">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-[10px] uppercase tracking-[0.15em] self-start">
+            <Sparkles className="w-3 h-3" />
+            {book.learning_path}
           </div>
 
-          {/* Shadow */}
-          <div className="absolute -bottom-3 left-3 right-3 h-6 bg-[#1A1A1A]/50 blur-xl rounded-full transition-all duration-500 group-hover:blur-2xl group-hover:h-8" />
+          <h3 className="text-[#1A1A1A] text-base font-bold leading-tight line-clamp-2">
+            {book.title}
+          </h3>
+
+          {book.description && (
+            <p className="text-[#1A1A1A]/70 text-xs leading-relaxed line-clamp-3 flex-1">
+              {book.description}
+            </p>
+          )}
+
+          <div className="pt-3 mt-auto border-t border-[#B89555]/20">
+            {effectivelyLocked ? (
+              <div className="space-y-2">
+                <p className="text-[#1A1A1A]/65 text-[11px] leading-snug">
+                  {book.is_restricted
+                    ? "Available after completing all foundational books and manager approval."
+                    : "Join the JBJ Broker Circle to unlock this book."}
+                </p>
+                <Button
+                  size="sm"
+                  className="w-full bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50 font-semibold"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!book.is_restricted) onOpen(book);
+                  }}
+                >
+                  <Lock className="w-3 h-3 mr-2" />
+                  {book.is_restricted ? "Restricted" : "Preview Book"}
+                </Button>
+              </div>
+            ) : (
+              <Button
+                size="sm"
+                className="w-full bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50 font-semibold"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpen(book);
+                }}
+              >
+                {progress?.status === "completed"
+                  ? "Review Book"
+                  : progress?.status === "in_progress"
+                  ? "Continue Reading"
+                  : "Open Book"}
+                <ArrowRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
