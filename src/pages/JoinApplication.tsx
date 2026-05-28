@@ -163,6 +163,18 @@ export default function JoinApplication() {
   });
 
   const [honeypot, setHoneypot] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const fieldErr = (k: string) => errors[k];
+  const invalidProps = (k: string) =>
+    errors[k]
+      ? { "aria-invalid": true as const, "aria-describedby": `${k}-err` }
+      : {};
+  const clearFieldError = (k: string) =>
+    setErrors((prev) => {
+      if (!prev[k]) return prev;
+      const { [k]: _omit, ...rest } = prev;
+      return rest;
+    });
   const [openPositions, setOpenPositions] = useState<OpenPosition[]>([]);
   const [positionsLoading, setPositionsLoading] = useState(true);
   const [positionSearch, setPositionSearch] = useState("");
