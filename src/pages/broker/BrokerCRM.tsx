@@ -573,6 +573,7 @@ export default function BrokerCRM() {
         leads={leadsData}
         userId={user?.id}
         submitting={createCallLog.isPending}
+        onSaved={() => queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] })}
         onSubmit={async (input) => {
           const row = await createCallLog.mutateAsync(input);
           return { callLogId: (row as any)?.id };
