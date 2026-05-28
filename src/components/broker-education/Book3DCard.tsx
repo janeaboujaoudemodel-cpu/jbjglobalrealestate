@@ -59,10 +59,9 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1, duration: 0.5 }}
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: Math.min(index * 0.05, 0.3), duration: 0.35 }}
       whileHover={{ y: -8 }}
       className="group"
     >
