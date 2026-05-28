@@ -708,9 +708,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       onPointerDown={(e) => e.stopPropagation()}
                       className={cn(
                         "flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors tracking-wider",
-                        areaUnit === unit
-                          ? "bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 text-[#1A1A1A] border border-[#B89555]/30 shadow-sm"
-                          : "bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#F7F2EA]"
+                      areaUnit === unit
+                          ? "bg-transparent text-[#1A1A1A] border border-[#B89555]"
+                          : "bg-transparent text-[#1A1A1A] border border-transparent hover:border-[#B89555]/40"
                       )}
                     >
                       {unit}
