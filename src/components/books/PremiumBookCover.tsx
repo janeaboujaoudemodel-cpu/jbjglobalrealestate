@@ -70,21 +70,33 @@ export function PremiumBookCover({
         {subtitle && <p className="mt-[3%] text-[clamp(13px,2vw,26px)] font-semibold italic text-[#EFE6D6]/90">{subtitle}</p>}
       </div>
 
-      <div className="absolute inset-x-[10%] bottom-[13%] h-[18%] opacity-80">
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-[#B89555]/35" />
-        {Array.from({ length: 20 }).map((_, i) => (
-          <span
-            key={i}
-            className="absolute bottom-0 w-[2.4%] border border-[#EFE6D6]/18 bg-[#EFE6D6]/8"
-            style={{ left: `${i * 5}%`, height: `${22 + ((i * 17) % 48)}%` }}
-          />
-        ))}
+      {/* Skyline — Burj Khalifa & downtown silhouette, clearly visible (no fade) */}
+      <div className="absolute inset-x-[10%] bottom-[12%] h-[22%]">
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-[#B89555]/55" />
+        {Array.from({ length: 20 }).map((_, i) => {
+          const distFromCenter = Math.abs(i - 9.5);
+          const isBurj = distFromCenter < 1;
+          const h = isBurj ? 96 : Math.max(28, 70 - distFromCenter * 7 + ((i * 13) % 22));
+          return (
+            <span
+              key={i}
+              className="absolute bottom-0 w-[2.6%] border-t border-x border-[#B89555]/55 bg-[#EFE6D6]/22 shadow-[0_0_10px_rgba(184,149,85,0.18)]"
+              style={{ left: `${i * 5}%`, height: `${h}%` }}
+            />
+          );
+        })}
+        {/* Burj Khalifa spire */}
+        <span
+          className="absolute bottom-[96%] w-[0.5%] bg-[#EFE6D6]/75"
+          style={{ left: "49.7%", height: "9%" }}
+        />
       </div>
 
-      <div className="absolute inset-x-[12%] bottom-[7%] truncate text-center text-[clamp(8px,1.2vw,15px)] font-semibold uppercase tracking-[0.28em] text-[#B89555]">
+      <div className="absolute inset-x-[12%] bottom-[6%] truncate text-center text-[clamp(8px,1.2vw,15px)] font-semibold uppercase tracking-[0.28em] text-[#B89555]">
         {footer}
       </div>
-      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-[#FDFBF7]/[0.03] to-[#FDFBF7]/[0.08]" />
+      {/* Subtle top sheen ONLY — do not fade the bottom */}
+      <div className="absolute inset-x-0 top-0 h-[35%] bg-gradient-to-b from-[#FDFBF7]/[0.05] to-transparent pointer-events-none" />
     </div>
   );
 }

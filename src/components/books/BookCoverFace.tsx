@@ -14,11 +14,12 @@ interface BookCoverFaceProps {
   bare?: boolean;
 }
 
-const coverToneByCategory: Record<BookData["category"], "black" | "emerald" | "navy" | "espresso" | "burgundy"> = {
-  guide: "navy",
+// LOCKED: all books share the Digital-Marketing/No.14 master style — uniform black tone.
+const coverToneByCategory: Record<BookData["category"], "black"> = {
+  guide: "black",
   report: "black",
-  education: "espresso",
-  faq: "emerald",
+  education: "black",
+  faq: "black",
 };
 
 export function BookCoverFace({ book, size = "thumb", className, bare = false }: BookCoverFaceProps) {
