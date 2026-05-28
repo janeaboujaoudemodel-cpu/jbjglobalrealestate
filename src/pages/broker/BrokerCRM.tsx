@@ -242,26 +242,75 @@ export default function BrokerCRM() {
             {leads.isLoading ? (
               <Loading />
             ) : filteredLeads.length === 0 ? (
-              <Empty msg={search ? "No leads match your search." : "No leads visible to you yet."} />
-            ) : (
-              <div className="divide-y divide-[#B89555]/15">
-                {filteredLeads.map((l: any) => (
-                  <div key={l.id} className="px-4 py-3 flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/25 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
-                      {(l.full_name || "?").slice(0, 1).toUpperCase()}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium text-[#1A1A1A] truncate">{l.full_name || "Unnamed lead"}</div>
-                      <div className="text-[11px] text-[#1A1A1A]/65 truncate">
-                        {l.pipeline_stage || "new"} · {l.source || l.lead_source_type || "—"}
-                      </div>
-                    </div>
-                    <div className="text-[11px] text-[#1A1A1A]/60 tabular-nums">{formatDisplayDate(l.updated_at)}</div>
+              <div>
+                {/* Table header so the layout reads as a real table even when empty */}
+                <div className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 px-4 py-2.5 bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
+                  <div></div>
+                  <div>Lead</div>
+                  <div>Stage</div>
+                  <div>Source</div>
+                  <div className="text-right">Updated</div>
+                </div>
+                <div className="py-12 px-6 text-center">
+                  <Users className="h-8 w-8 mx-auto text-[#1A1A1A]/55 mb-3" />
+                  <div className="text-sm font-semibold text-[#1A1A1A]">
+                    {search ? "No leads match your search" : "You don't have any leads yet"}
                   </div>
-                ))}
+                  <p className="text-xs text-[#1A1A1A]/65 mt-1 max-w-md mx-auto">
+                    {search
+                      ? "Try a different name, email, phone or pipeline stage."
+                      : "Start building your pipeline by adding your first lead, or upload a database to import in bulk."}
+                  </p>
+                  {!search && (
+                    <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                      <Link
+                        to="/broker/leads"
+                        className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#102540] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1a3d63] shadow-sm transition-colors"
+                        data-allow-dark-cta
+                        data-no-contrast-guard
+                      >
+                        <Plus className="h-4 w-4" /> Add your first lead
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => setRequestOpen(true)}
+                        className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/55 hover:bg-[#E6DAC2] transition-colors"
+                      >
+                        <Upload className="h-4 w-4" /> Upload a database
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 px-4 py-2.5 bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
+                  <div></div>
+                  <div>Lead</div>
+                  <div>Stage</div>
+                  <div>Source</div>
+                  <div className="text-right">Updated</div>
+                </div>
+                <div className="divide-y divide-[#B89555]/15">
+                  {filteredLeads.map((l: any) => (
+                    <div key={l.id} className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 items-center px-4 py-3">
+                      <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/25 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
+                        {(l.full_name || "?").slice(0, 1).toUpperCase()}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-medium text-[#1A1A1A] truncate">{l.full_name || "Unnamed lead"}</div>
+                        <div className="text-[11px] text-[#1A1A1A]/65 truncate">{l.email || l.phone || "—"}</div>
+                      </div>
+                      <div className="text-xs text-[#1A1A1A]/75 truncate">{l.pipeline_stage || "new"}</div>
+                      <div className="text-xs text-[#1A1A1A]/75 truncate">{l.source || l.lead_source_type || "—"}</div>
+                      <div className="text-[11px] text-[#1A1A1A]/60 tabular-nums text-right">{formatDisplayDate(l.updated_at)}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </section>
+
         </div>
       )}
 
