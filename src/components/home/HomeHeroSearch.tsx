@@ -151,10 +151,10 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             />
           </div>
 
-          {/* Classic divider between input and Search button */}
+          {/* Classic divider between input and Search button — desktop only, elegant gold */}
           <div
             aria-hidden="true"
-            className="flex-shrink-0 self-stretch w-px bg-[#B89555]/40"
+            className="hidden lg:flex flex-shrink-0 self-stretch w-px bg-[#B89555]/60"
             style={{ marginTop: "10px", marginBottom: "10px" }}
           />
 
