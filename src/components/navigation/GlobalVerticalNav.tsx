@@ -1170,7 +1170,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               to="/contact"
               data-no-contrast-guard
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
-              style={{ color: '#102540', borderColor: '#B89555', backgroundColor: '#F7F2EA' }}
+              style={{ color: '#B89555', borderColor: '#B89555', backgroundColor: '#F7F2EA' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#FDFBF7';
                 e.currentTarget.style.borderColor = '#B89555';
@@ -1184,14 +1184,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B91C1C' }} />
+              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B89555' }} />
               <span style={{ color: 'inherit' }}>Contact</span>
             </Link>
             <Link
               to="/ticket-hub"
               data-no-contrast-guard
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
-              style={{ color: '#102540', borderColor: '#B89555', backgroundColor: '#F7F2EA' }}
+              style={{ color: '#B89555', borderColor: '#B89555', backgroundColor: '#F7F2EA' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#FDFBF7';
                 e.currentTarget.style.borderColor = '#B89555';
@@ -1205,7 +1205,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B91C1C' }} />
+              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B89555' }} />
               <span style={{ color: 'inherit' }}>Support</span>
             </Link>
           </div>
@@ -1214,11 +1214,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               data-no-contrast-guard
               onClick={() => { supabase.auth.signOut(); }}
               className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[4px] rounded-lg border w-full group"
-              style={{ color: '#B91C1C', borderColor: 'rgba(185,28,28,0.55)', backgroundColor: 'rgba(185,28,28,0.04)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(185,28,28,0.08)'; e.currentTarget.style.color = '#B91C1C'; e.currentTarget.style.borderColor = '#B91C1C'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(185,28,28,0.04)'; e.currentTarget.style.color = '#B91C1C'; e.currentTarget.style.borderColor = 'rgba(185,28,28,0.55)'; }}
+              style={{ color: '#1A1A1A', borderColor: '#1A1A1A', backgroundColor: '#FDFBF7' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(185,28,28,0.08)'; e.currentTarget.style.color = '#B91C1C'; e.currentTarget.style.borderColor = '#B91C1C'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#B91C1C'); }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.color = '#1A1A1A'; e.currentTarget.style.borderColor = '#1A1A1A'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#B91C1C'); }}
             >
-              <LogOut className="w-3 h-3" style={{ color: 'inherit' }} />
+              <LogOut data-signout-icon className="w-3 h-3" style={{ color: '#B91C1C' }} />
               <span style={{ color: 'inherit' }}>Sign Out</span>
             </button>
           ) : (
@@ -1334,7 +1334,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-no-contrast-guard
                     className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] hover:border-[#B89555] bg-[#F7F2EA] hover:bg-[#EFE6D6]"
                   >
-                    <Headphones className="w-3.5 h-3.5 text-[#102540] group-hover:text-[#102540]" strokeWidth={2} />
+                    <Headphones className="w-3.5 h-3.5 text-[#B89555] group-hover:text-[#B89555]" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1347,7 +1347,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-no-contrast-guard
                     className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] hover:border-[#B89555] bg-[#F7F2EA] hover:bg-[#EFE6D6]"
                   >
-                    <Ticket className="w-3.5 h-3.5 text-[#102540] group-hover:text-[#102540]" strokeWidth={2} />
+                    <Ticket className="w-3.5 h-3.5 text-[#B89555] group-hover:text-[#B89555]" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
@@ -1358,9 +1358,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     <button
                       onClick={() => { supabase.auth.signOut(); }}
                       data-no-contrast-guard
-                      className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border text-[#B91C1C] border-[#B91C1C]/45 bg-[#B91C1C]/[0.06] hover:bg-[#B91C1C]/12 hover:border-[#B91C1C]/70"
+                      className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#B91C1C]/[0.08] hover:border-[#B91C1C]"
                     >
-                      <LogOut className="w-3.5 h-3.5 text-[#B91C1C] group-hover:text-[#B91C1C]" strokeWidth={2.25} />
+                      <LogOut className="w-3.5 h-3.5 text-[#B91C1C]" strokeWidth={2.25} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign Out</TooltipContent>
