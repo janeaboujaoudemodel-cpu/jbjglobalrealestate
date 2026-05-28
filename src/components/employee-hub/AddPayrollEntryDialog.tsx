@@ -10,7 +10,8 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Search, UserPlus, Users } from "lucide-react";
+import { Loader2, Search, UserPlus } from "lucide-react";
+import { AddBrokerSheet } from "@/pages/owner/crm/BrokersRegistry";
 
 type Mode = "salary" | "commission";
 
@@ -47,11 +48,9 @@ export function AddPayrollEntryDialog({ open, onOpenChange, mode, onSaved }: Pro
   const [loadingList, setLoadingList] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // --- "Add new broker" inline form ---------------------------------------
-  const [showNewBroker, setShowNewBroker] = useState(false);
-  const [nbName, setNbName] = useState("");
-  const [nbCompany, setNbCompany] = useState("");
-  const [nbPhone, setNbPhone] = useState("");
+  // --- "Add new broker" -> opens canonical AddBrokerSheet ------------------
+  const [addBrokerSheetOpen, setAddBrokerSheetOpen] = useState(false);
+  const [brokerReloadKey, setBrokerReloadKey] = useState(0);
 
   // --- Payroll fields ----------------------------------------------------
   const [employeeNameOverride, setEmployeeNameOverride] = useState("");
@@ -71,8 +70,6 @@ export function AddPayrollEntryDialog({ open, onOpenChange, mode, onSaved }: Pro
   useEffect(() => {
     if (!open) return;
     setPickedBrokerId(null);
-    setShowNewBroker(false);
-    setNbName(""); setNbCompany(""); setNbPhone("");
     setEmployeeNameOverride("");
     setBaseSalary(""); setDealRef(""); setDealValue(""); setCommissionAmount(""); setNotes("");
   }, [open, mode]);
