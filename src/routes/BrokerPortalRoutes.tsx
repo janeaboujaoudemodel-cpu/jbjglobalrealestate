@@ -26,6 +26,7 @@ const BrokerComingSoonSection= lazy(() => import("@/pages/broker/BrokerComingSoo
 const BrokerFormRequests     = lazy(() => import("@/pages/broker/BrokerFormRequests"));
 const BrokerLearning         = lazy(() => import("@/pages/broker/BrokerLearning"));
 const BookReader             = lazy(() => import("@/pages/broker/BookReader"));
+const BrokerDealsPage        = lazy(() => import("@/pages/broker/BrokerDealsPage"));
 
 const Wrap = (
   <AuthRequiredRoute>
@@ -55,24 +56,8 @@ export const BrokerPortalRoutes = () => (
     <Route path="settings" element={<BrokerAccount />} />
     <Route path="ai" element={<AIBrokerWorkspace />} />
 
-    <Route
-      path="deals"
-      element={
-        <BrokerComingSoonSection
-          title="Deals & Commissions"
-          description="Live pipeline of every offer you've initiated, with commission projections per stage. Numbers populate the moment your first lead reaches the offer stage — nothing here is mocked."
-        />
-      }
-    />
-    <Route
-      path="commissions"
-      element={
-        <BrokerComingSoonSection
-          title="Commissions"
-          description="Your commission ledger and payout history will surface here once the first closed deal lands in your account."
-        />
-      }
-    />
+    <Route path="deals" element={<BrokerDealsPage variant="deals" />} />
+    <Route path="commissions" element={<BrokerDealsPage variant="commissions" />} />
     <Route
       path="documents"
       element={
