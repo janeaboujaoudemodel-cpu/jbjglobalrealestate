@@ -23,6 +23,8 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
+type RecordingResult = { blob: Blob; seconds: number };
+
 export interface PickerLead {
   id: string;
   full_name?: string | null;
@@ -52,6 +54,7 @@ interface Props {
   userId?: string | null;
   submitting: boolean;
   onSubmit: (input: LogCallSubmit) => Promise<{ callLogId?: string } | void>;
+  onSaved?: () => void;
 }
 
 const getPhone = (l: PickerLead) => (l.phone ?? l.phone_e164 ?? "").toString();
@@ -64,7 +67,7 @@ function formatTimer(s: number) {
 }
 
 export default function LogCallDialog({
-  open, onOpenChange, leads, userId, submitting, onSubmit,
+  open, onOpenChange, leads, userId, submitting, onSubmit, onSaved,
 }: Props) {
   // Form state
   const [leadId, setLeadId] = useState<string | null>(null);
@@ -79,12 +82,16 @@ export default function LogCallDialog({
   const [recState, setRecState] = useState<"idle" | "recording" | "stopped">("idle");
   const [seconds, setSeconds] = useState(0);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [savingRecording, setSavingRecording] = useState(false);
   const [coachTips, setCoachTips] = useState<string[]>([]);
   const [coachLoading, setCoachLoading] = useState(false);
   const recRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
   const timerRef = useRef<number | null>(null);
+  const startedAtRef = useRef<number | null>(null);
+  const secondsRef = useRef(0);
+  const pendingStopRef = useRef<((value: RecordingResult | null) => void) | null>(null);
   const liveTextRef = useRef<string>("");
 
   const selectedLead = useMemo(
@@ -116,9 +123,13 @@ export default function LogCallDialog({
     setNotes("");
     setRecState("idle");
     setSeconds(0);
+    secondsRef.current = 0;
+    startedAtRef.current = null;
     setAudioBlob(null);
+    setSavingRecording(false);
     setCoachTips([]);
     liveTextRef.current = "";
+    pendingStopRef.current = null;
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
     if (streamRef.current) { streamRef.current.getTracks().forEach((t) => t.stop()); streamRef.current = null; }
     recRef.current = null;
@@ -154,14 +165,29 @@ export default function LogCallDialog({
       };
       mr.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: mime });
+        const finalSeconds = Math.max(
+          secondsRef.current,
+          startedAtRef.current ? Math.round((Date.now() - startedAtRef.current) / 1000) : 0,
+        );
         setAudioBlob(blob);
-        setDurationSeconds(String(seconds));
+        setDurationSeconds(String(finalSeconds));
+        setSeconds(finalSeconds);
+        pendingStopRef.current?.({ blob, seconds: finalSeconds });
+        pendingStopRef.current = null;
       };
       mr.start(6000); // emit chunks every 6s for live-ish coach
       recRef.current = mr;
       setRecState("recording");
       setSeconds(0);
-      timerRef.current = window.setInterval(() => setSeconds((s) => s + 1), 1000) as unknown as number;
+      secondsRef.current = 0;
+      startedAtRef.current = Date.now();
+      timerRef.current = window.setInterval(() => {
+        setSeconds((s) => {
+          const next = s + 1;
+          secondsRef.current = next;
+          return next;
+        });
+      }, 1000) as unknown as number;
       toast.success("Recording started — put your phone on speaker");
     } catch (e: any) {
       console.error(e);
@@ -170,11 +196,22 @@ export default function LogCallDialog({
   };
 
   const stopRecording = () => {
-    if (recRef.current && recRef.current.state !== "inactive") recRef.current.stop();
+    const recorder = recRef.current;
+    if (recorder && recorder.state !== "inactive") recorder.stop();
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
     if (streamRef.current) { streamRef.current.getTracks().forEach((t) => t.stop()); streamRef.current = null; }
     setRecState("stopped");
   };
+
+  const stopRecordingAndGetBlob = () => new Promise<RecordingResult | null>((resolve) => {
+    const recorder = recRef.current;
+    if (!recorder || recorder.state === "inactive") {
+      resolve(audioBlob ? { blob: audioBlob, seconds: Math.max(secondsRef.current, Number(durationSeconds) || 0) } : null);
+      return;
+    }
+    pendingStopRef.current = resolve;
+    stopRecording();
+  });
 
   const maybeAskCoach = async () => {
     if (coachLoading) return;
@@ -188,7 +225,7 @@ export default function LogCallDialog({
       const { data: tx } = await supabase.functions.invoke("video-transcribe", {
         body: { audio: b64, mimeType: lastChunk.type || "audio/webm", language: "en" },
       });
-      const text = (tx?.text || tx?.segments?.map((s: any) => s.text).join(" ") || "").trim();
+      const text = (tx?.fullText || tx?.text || tx?.segments?.map((s: any) => s.text).join(" ") || "").trim();
       if (text) liveTextRef.current = `${liveTextRef.current} ${text}`.trim();
       if (!liveTextRef.current) return;
       const { data, error } = await supabase.functions.invoke("broker-call-live-coach", {
@@ -208,35 +245,44 @@ export default function LogCallDialog({
     e.preventDefault();
     const phone = phoneNumber.trim();
     if (!phone) { toast.error("Add a phone number before saving the call"); return; }
+    setSavingRecording(true);
+    let finalAudioBlob = audioBlob;
+    let finalDuration = Math.max(0, Number(durationSeconds) || secondsRef.current || 0);
     if (recState === "recording") {
-      stopRecording();
-      await new Promise((r) => setTimeout(r, 200));
+      const stopped = await stopRecordingAndGetBlob();
+      finalAudioBlob = stopped?.blob ?? null;
+      finalDuration = stopped?.seconds ?? finalDuration;
     }
-    const result = await onSubmit({
-      leadId: leadId || null,
-      phoneNumber: phone,
-      callType,
-      callStatus,
-      durationSeconds: Math.max(0, Number(durationSeconds) || 0),
-      notes: notes.trim() || (selectedLead?.full_name ? `Call with ${selectedLead.full_name}` : null),
-      audioBlob,
-    });
+    try {
+      const result = await onSubmit({
+        leadId: leadId || null,
+        phoneNumber: phone,
+        callType,
+        callStatus,
+        durationSeconds: finalDuration,
+        notes: notes.trim() || (selectedLead?.full_name ? `Call with ${selectedLead.full_name}` : null),
+        audioBlob: finalAudioBlob,
+      });
 
-    // If we got a callLogId AND have audio, upload + trigger transcription
-    const callLogId = (result as any)?.callLogId as string | undefined;
-    if (callLogId && audioBlob && userId) {
-      try {
-        const ext = (audioBlob.type.includes("ogg") ? "ogg" : "webm");
+      // If we got a callLogId AND have audio, upload + trigger transcription
+      const callLogId = (result as any)?.callLogId as string | undefined;
+      if (callLogId && finalAudioBlob && userId) {
+        const normalizedMime = finalAudioBlob.type.includes("ogg") ? "audio/ogg" : finalAudioBlob.type.includes("mp4") ? "audio/mp4" : "audio/webm";
+        const uploadBlob = finalAudioBlob.type === normalizedMime
+          ? finalAudioBlob
+          : new Blob([await finalAudioBlob.arrayBuffer()], { type: normalizedMime });
+        const ext = normalizedMime.includes("ogg") ? "ogg" : normalizedMime.includes("mp4") ? "mp4" : "webm";
         const path = `${userId}/${callLogId}.${ext}`;
         const { error: upErr } = await supabase
           .storage
           .from("call-recordings")
-          .upload(path, audioBlob, { contentType: audioBlob.type, upsert: true });
+          .upload(path, uploadBlob, { contentType: normalizedMime, upsert: true });
         if (upErr) throw upErr;
-        await supabase
+        const { error: updateErr } = await supabase
           .from("broker_call_logs")
           .update({ recording_url: path })
           .eq("id", callLogId);
+        if (updateErr) throw updateErr;
         // Kick off transcription + AI evaluation (don't await — runs in background)
         supabase.functions.invoke("broker-call-process", {
           body: { callLogId, leadId: leadId || null },
@@ -244,11 +290,16 @@ export default function LogCallDialog({
           if (error) console.warn("call process error", error);
           else toast.success("Call transcript & AI summary ready");
         });
-        toast.success("Recording uploaded — AI is processing it");
-      } catch (e: any) {
-        console.error(e);
-        toast.error("Saved log, but recording upload failed");
+        toast.success("Recording saved — AI is processing it");
+        await supabase.from("broker_call_logs").select("id").eq("id", callLogId).maybeSingle();
       }
+      onSaved?.();
+      onOpenChange(false);
+    } catch (e: any) {
+      console.error(e);
+      toast.error(e?.message || "Could not save the call recording");
+    } finally {
+      setSavingRecording(false);
     }
   };
 
@@ -446,24 +497,24 @@ export default function LogCallDialog({
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              disabled={submitting}
+              disabled={submitting || savingRecording}
               className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || savingRecording}
               className="bg-[#102540] text-white hover:bg-[#1a3d63]"
               data-allow-dark-cta
               data-no-contrast-guard
             >
-              {submitting ? (
+              {submitting || savingRecording ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin text-white" />
               ) : (
                 <CheckCircle2 className="h-4 w-4 mr-2 text-white" />
               )}
-              <span className="text-white">Save call log</span>
+              <span className="text-white">{savingRecording ? "Saving recording…" : "Save call log"}</span>
             </Button>
           </DialogFooter>
         </form>

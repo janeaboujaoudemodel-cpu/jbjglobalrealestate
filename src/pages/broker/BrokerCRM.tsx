@@ -136,39 +136,43 @@ export default function BrokerCRM() {
         .single();
       if (error) throw error;
 
-      const today = new Date().toISOString().slice(0, 10);
-      const { data: existingStats } = await supabase
-        .from("broker_activity_stats")
-        .select("id, calls_made, points_earned")
-        .eq("user_id", user.id)
-        .eq("date", today)
-        .maybeSingle();
-
-      if (existingStats?.id) {
-        await supabase
+      try {
+        const today = new Date().toISOString().slice(0, 10);
+        const { data: existingStats } = await supabase
           .from("broker_activity_stats")
-          .update({
-            calls_made: (existingStats.calls_made ?? 0) + 1,
-            points_earned: (existingStats.points_earned ?? 0) + 10,
-          })
-          .eq("id", existingStats.id);
-      } else {
-        await supabase.from("broker_activity_stats").insert({
-          user_id: user.id,
-          date: today,
-          calls_made: 1,
-          points_earned: 10,
-        });
-      }
+          .select("id, calls_made, points_earned")
+          .eq("user_id", user.id)
+          .eq("date", today)
+          .maybeSingle();
 
-      await supabase.from("points_transactions").insert({
-        user_id: user.id,
-        points: 10,
-        transaction_type: "call_logged",
-        description: "Logged a broker CRM call",
-        reference_id: data.id,
-        reference_type: "broker_call_log",
-      });
+        if (existingStats?.id) {
+          await supabase
+            .from("broker_activity_stats")
+            .update({
+              calls_made: (existingStats.calls_made ?? 0) + 1,
+              points_earned: (existingStats.points_earned ?? 0) + 10,
+            })
+            .eq("id", existingStats.id);
+        } else {
+          await supabase.from("broker_activity_stats").insert({
+            user_id: user.id,
+            date: today,
+            calls_made: 1,
+            points_earned: 10,
+          });
+        }
+
+        await supabase.from("points_transactions").insert({
+          user_id: user.id,
+          points: 10,
+          transaction_type: "call_logged",
+          description: "Logged a broker CRM call",
+          reference_id: data.id,
+          reference_type: "broker_call_log",
+        });
+      } catch (sideEffectError) {
+        console.warn("Call logged; points/stat update skipped", sideEffectError);
+      }
 
       return data;
     },
@@ -176,7 +180,6 @@ export default function BrokerCRM() {
       queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
       queryClient.invalidateQueries({ queryKey: ["broker-personal-tasks"] });
       toast.success("Call logged successfully — +10 points");
-      setCallDialogOpen(false);
       setTab("calls");
     },
     onError: (e: any) => toast.error(e?.message || "Could not log call"),
@@ -574,6 +577,7 @@ export default function BrokerCRM() {
         leads={leadsData}
         userId={user?.id}
         submitting={createCallLog.isPending}
+        onSaved={() => queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] })}
         onSubmit={async (input) => {
           const row = await createCallLog.mutateAsync(input);
           return { callLogId: (row as any)?.id };
