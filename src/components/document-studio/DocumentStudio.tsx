@@ -438,8 +438,8 @@ function StudioShell({
         // GLOBAL RULE: inner pages must have EQUAL top/bottom interior padding
         // (the DocuSign safe band + footer reserve are fixed/locked, applied
         // separately). NEXT_TOP is the interior top padding only.
-        const NEXT_TOP = 54;
-        const BOTTOM_PAD = 32;
+        const NEXT_TOP = 64;
+        const BOTTOM_PAD = 40;
         // Tentative single-page cap: assume page 1 IS the last page so the
         // footer height is reserved. If everything fits here, the official
         // signature block stays with the body on a single sheet (no orphan
