@@ -580,6 +580,16 @@ export default function BrokerCRM() {
         }}
       />
       <RequestDatabaseDialog open={requestOpen} onOpenChange={setRequestOpen} />
+      <CallDetailSheet
+        callId={openCallId}
+        leadName={(() => {
+          const log = (callLogs.data ?? []).find((l: any) => l.id === openCallId);
+          const lead = log ? leadsData.find((x: any) => x.id === log.lead_id) : null;
+          return lead?.full_name ?? null;
+        })()}
+        open={!!openCallId}
+        onOpenChange={(o) => { if (!o) setOpenCallId(null); }}
+      />
     </div>
   );
 }
