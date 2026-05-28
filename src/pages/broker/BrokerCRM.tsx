@@ -6,19 +6,16 @@ import { useBrokerScopedLeads } from "@/hooks/useBrokerScopedLeads";
 import { useBrokerPersonalTasks } from "@/hooks/useBrokerPersonalTasks";
 import {
   Database, Users, Activity, ArrowRight, Loader2, Plus, Phone, Upload,
-  TrendingUp, BarChart3, Inbox, ClipboardList, Sparkles, Search, CheckCircle2,
+  TrendingUp, BarChart3, Inbox, ClipboardList, Sparkles, Search,
 } from "lucide-react";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import RequestDatabaseDialog from "@/components/broker-portal/RequestDatabaseDialog";
+import LogCallDialog from "@/components/broker-crm/LogCallDialog";
 
 type Tab = "pipeline" | "databases" | "leads" | "calls" | "insights" | "activity";
 
