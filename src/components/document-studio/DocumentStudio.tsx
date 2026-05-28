@@ -956,7 +956,7 @@ function StudioShell({
       const raw = sessionStorage.getItem(PREFILL_KEY);
       if (raw) {
         const p = JSON.parse(raw);
-        const validPrefillTemplate = p?.templateId && getTemplateById(p.templateId)?.audience === catalog;
+        const validPrefillTemplate = !!p?.templateId && !!getTemplateById(p.templateId) && (catalog === "all" || getTemplateById(p.templateId)?.audience === catalog);
         if (validPrefillTemplate) {
           setTemplateId(p.templateId);
           if (p?.fields && typeof p.fields === "object") {
