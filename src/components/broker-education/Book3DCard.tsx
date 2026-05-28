@@ -177,10 +177,10 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
               </p>
 
               {/* Footer */}
-              <div className="pt-3 border-t border-[#1A1A1A] mt-auto">
+              <div className="pt-3 border-t border-[#B89555]/25 mt-auto">
                 {effectivelyLocked ? (
                   <div className="space-y-2">
-                    <p className="text-[#1A1A1A]/70 text-[10px] leading-tight">
+                    <p className="text-white/70 text-[10px] leading-tight">
                       {book.is_restricted 
                         ? 'Available after completing all foundational books and manager approval.'
                         : 'Join the JBJ Broker Circle to unlock this book.'}
@@ -188,7 +188,8 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="w-full bg-[#EFE6D6]/10 hover:bg-[#EFE6D6]/20 text-[#1A1A1A]/70 border border-[#B89555]/30"
+                      className="w-full bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50 font-semibold"
+                      data-no-contrast-guard
                       onClick={(e) => {
                         e.stopPropagation();
                         if (!book.is_restricted) onOpen(book);
@@ -202,7 +203,8 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="w-full bg-[#EFE6D6]/20 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] text-[#1A1A1A] border border-[#B89555]/40 font-semibold transition-colors"
+                    className="w-full bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50 font-semibold transition-colors"
+                    data-no-contrast-guard
                     onClick={(e) => {
                       e.stopPropagation();
                       onOpen(book);
