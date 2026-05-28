@@ -9,6 +9,7 @@ import { RedirectWithSearch } from "@/routes/RedirectWithSearch";
 import AuthRequiredRoute from "@/components/AuthRequiredRoute";
 import ModeRequiredRoute from "@/components/ModeRequiredRoute";
 import OwnerGuard from "@/components/OwnerGuard";
+import { BrokerPortalRoutes } from "@/routes/BrokerPortalRoutes";
 
 // ── Property & Listing Pages ──
 const Index = lazy(() => import("@/pages/Index"));
@@ -403,7 +404,7 @@ export const PublicRoutes = () => (
     {/* ── Broker Pages (Tier 2 — login required) ── */}
     <Route path="/broker-toolkit" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerToolkit /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/broker-toolkit/dashboard" element={<Navigate to="/broker-dashboard" replace />} />
-    <Route path="/broker-dashboard" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerDashboard /></ModeRequiredRoute></AuthRequiredRoute>} />
+    <Route path="/broker-dashboard" element={<Navigate to="/broker/portal" replace />} />
     <Route path="/broker-resources" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerResources /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/broker/training" element={<Navigate to="/broker/learning?tab=training" replace />} />
     <Route path="/broker/learning" element={<BrokerLearning />} />
@@ -415,10 +416,13 @@ export const PublicRoutes = () => (
     <Route path="/interior-design-ai" element={<AuthRequiredRoute><InteriorDesignAI /></AuthRequiredRoute>} />
     <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
     <Route path="/investor-hub" element={<AuthRequiredRoute><ModeRequiredRoute modes={['investor']}><InvestorHub /></ModeRequiredRoute></AuthRequiredRoute>} />
-    <Route path="/broker-hub" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerHub /></ModeRequiredRoute></AuthRequiredRoute>} />
+    <Route path="/broker-hub" element={<Navigate to="/broker/portal" replace />} />
     <Route path="/jbj-academy" element={<AuthRequiredRoute><JBJAcademy /></AuthRequiredRoute>} />
     <Route path="/academy/graduates" element={<AcademyGraduates />} />
-    <Route path="/broker-portal" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerPortal /></ModeRequiredRoute></AuthRequiredRoute>} />
+    <Route path="/broker-portal" element={<Navigate to="/broker/portal" replace />} />
+
+    {/* ── Canonical Broker Portal (nested /broker/* shell) ── */}
+    {BrokerPortalRoutes()}
     <Route path="/document-scanner" element={<AuthRequiredRoute><ScanSignDocuments /></AuthRequiredRoute>} />
     <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
     <Route path="/scan-sign-documents" element={<Navigate to="/document-scanner" replace />} />
