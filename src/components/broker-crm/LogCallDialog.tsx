@@ -7,7 +7,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Phone, CheckCircle2, Loader2, Mic, Square, Search, X, Sparkles, Pause, Play, RotateCcw,
+  Phone, CheckCircle2, Loader2, Mic, Search, X, Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -492,45 +492,19 @@ export default function LogCallDialog({
                   <span className="text-white allow-white">Start recording</span>
                 </Button>
               )}
-              {recState === "recording" && (
-                <>
-                  <Button type="button" onClick={pauseRecording} variant="outline" className={creamControlClass}>
-                    <Pause className="h-4 w-4 mr-2" /> Pause
-                  </Button>
-                  <Button type="button" onClick={stopRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                    <Square className="h-4 w-4 mr-2" /> Stop
-                  </Button>
-                  <Button type="button" onClick={discardRecording} variant="outline" className={creamControlClass}>
-                    <X className="h-4 w-4 mr-2" /> Cancel
-                  </Button>
-                </>
-              )}
-              {recState === "paused" && (
-                <>
-                  <Button type="button" onClick={resumeRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                    <Play className="h-4 w-4 mr-2" /> Continue
-                  </Button>
-                  <Button type="button" onClick={stopRecording} variant="outline" className={creamControlClass}>
-                    <Square className="h-4 w-4 mr-2" /> Stop
-                  </Button>
-                  <Button type="button" onClick={discardRecording} variant="outline" className={creamControlClass}>
-                    <X className="h-4 w-4 mr-2" /> Cancel
-                  </Button>
-                </>
+              {(recState === "recording" || recState === "paused") && (
+                <Button type="button" onClick={stopRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                  <CheckCircle2 className="h-4 w-4 mr-2 text-white stroke-white allow-white" />
+                  <span className="text-white allow-white">Done</span>
+                </Button>
               )}
               {recState === "stopped" && (
-                <>
-                  <Button type="submit" disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                    {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-2" />}
-                    <span>{isSaving ? "Saving…" : "Save call log"}</span>
-                  </Button>
-                  <Button type="button" onClick={startRecording} variant="outline" className={creamControlClass}>
-                    <RotateCcw className="h-4 w-4 mr-2" /> Re-record
-                  </Button>
-                  <Button type="button" onClick={discardRecording} variant="outline" className={creamControlClass}>
-                    <X className="h-4 w-4 mr-2" /> Cancel
-                  </Button>
-                </>
+                <Button type="submit" disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                  {isSaving
+                    ? <Loader2 className="h-4 w-4 mr-2 animate-spin text-white stroke-white allow-white" />
+                    : <CheckCircle2 className="h-4 w-4 mr-2 text-white stroke-white allow-white" />}
+                  <span className="text-white allow-white">{isSaving ? "Saving…" : "Save call log"}</span>
+                </Button>
               )}
               {audioBlob && recState === "stopped" && (
                 <span className="text-[11px] text-[#1A1A1A]/70">
