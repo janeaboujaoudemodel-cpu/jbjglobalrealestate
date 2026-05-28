@@ -87,7 +87,7 @@ export const PAA_DEFAULT_VALUES: Record<PAAFieldKey | "doc_number", string> = {
   poa_holder_name: "", poa_number: "",
   documents_attached: "",
   landlord_signature_name: "", landlord_signature_date: "",
-  jbj_signature_name: "", jbj_signature_date: "",
+  jbj_signature_name: "Jane Bou Jaoude", jbj_signature_date: "",
 };
 
 /* ----------------------------- formatting helpers ------------------------- */
