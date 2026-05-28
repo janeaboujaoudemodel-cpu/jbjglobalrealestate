@@ -80,8 +80,9 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
         )}
       </div>
 
-      {/* Nav — sized to content; footer sits flush below the last item (no gap) */}
-      <nav className="overflow-y-auto py-3 px-2 space-y-0.5 jj-scrollbar-gold">
+      {/* Nav — fills the space between header and pinned footer by spacing Dashboard → Settings */}
+      <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-2 jj-scrollbar-gold">
+        <div className="min-h-full flex flex-col justify-between gap-1">
         {ITEMS.map(({ to, label, icon: Icon }) => {
           const active =
             to === "/broker/portal" ? pathname === to : pathname === to || pathname.startsWith(to + "/");
@@ -92,7 +93,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
               onClick={onNavigate}
               title={collapsed ? label : undefined}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors border border-transparent",
+                "flex shrink-0 items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors border border-transparent",
                 "text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/60",
                 active && "bg-[#EFE6D6] text-[#1A1A1A] font-semibold border-[#B89555]/45",
               )}
@@ -102,6 +103,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
             </NavLink>
           );
         })}
+        </div>
       </nav>
 
       {/* Pinned footer — seals the sidebar (mirrors OwnerDashboardShell) */}
