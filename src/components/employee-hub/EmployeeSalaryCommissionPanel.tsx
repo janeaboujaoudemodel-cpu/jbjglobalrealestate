@@ -37,9 +37,11 @@ const StatusBadge = ({ status }: { status: string }) => {
 };
 
 export function EmployeeSalaryCommissionPanel() {
-  const { salaries, commissions, payments, summaries, loading, approveCommission, markCommissionPaid } = useEmployeeSalaries();
+  const { salaries, commissions, payments, summaries, loading, approveCommission, markCommissionPaid, fetchSalaries, fetchCommissions } = useEmployeeSalaries();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState<string>("commissions");
+  const [addOpen, setAddOpen] = useState<null | "salary" | "commission">(null);
 
   const totalSalaries = salaries.reduce((sum, s) => sum + (s.base_salary || 0), 0);
   const totalPending = commissions.filter(c => c.status === 'pending').reduce((sum, c) => sum + (c.commission_amount || 0), 0);
