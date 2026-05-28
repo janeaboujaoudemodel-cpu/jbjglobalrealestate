@@ -307,13 +307,13 @@ function KpiCard({ icon, label, value, progress }: {
 }
 
 
-function TrainingCard({ m }: { m: TModule }) {
+function TrainingCard({ m, onStart }: { m: TModule; onStart: () => void }) {
   return (
     <Card className="bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-[#B89555]/55 hover:border-[#B89555]/80 transition-all min-h-[240px] shadow-[0_4px_14px_rgba(184,149,85,0.10)] hover:shadow-[0_14px_30px_rgba(184,149,85,0.20)]">
       <CardContent className="p-5 md:p-6 flex flex-col h-full">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3 min-w-0">
-            <div className="shrink-0 w-11 h-11 rounded-xl bg-[#1A1A1A] border border-[#B89555]/70 grid place-items-center text-[#B89555] shadow-[0_4px_12px_rgba(26,26,26,0.25)]">
+            <div className="shrink-0 w-11 h-11 rounded-xl bg-[#1A1A1A] border border-[#B89555]/70 grid place-items-center text-[#B89555] shadow-[0_4px_12px_rgba(26,26,26,0.25)]" data-allow-dark-cta data-no-contrast-guard>
               {m.icon}
             </div>
             <div className="min-w-0">
@@ -346,7 +346,13 @@ function TrainingCard({ m }: { m: TModule }) {
             ))}
             {m.topics.length > 2 && <span className="text-[11px] text-[#1A1A1A]/55">+{m.topics.length - 2} more</span>}
           </div>
-          <Button size="sm" className="bg-[#1A1A1A] text-[#B89555] hover:bg-[#2a2a2a] border border-[#B89555]/70 font-semibold shadow-[0_4px_12px_rgba(26,26,26,0.20)]" data-allow-dark-cta>
+          <Button
+            size="sm"
+            onClick={onStart}
+            className="bg-[#102540] !text-white hover:bg-[#1a3d63] border border-[#B89555]/70 font-semibold shadow-[0_4px_12px_rgba(16,37,64,0.25)] [&_svg]:!text-white"
+            data-allow-dark-cta
+            data-no-contrast-guard
+          >
             <Play className="w-3 h-3 mr-1" /> Start
           </Button>
         </div>
@@ -354,6 +360,7 @@ function TrainingCard({ m }: { m: TModule }) {
     </Card>
   );
 }
+
 
 function ReferenceCard({ title, items, tone, icon }: {
   title: string; items: string[]; tone: "red" | "emerald"; icon: React.ReactNode;
