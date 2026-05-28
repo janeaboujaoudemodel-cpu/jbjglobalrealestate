@@ -60,17 +60,8 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
           {/* Soft floor shadow under the book */}
           <div className="absolute -bottom-3 left-[6%] right-[4%] h-8 rounded-full bg-[#1A1A1A]/30 blur-xl" />
           <div className="relative h-full overflow-hidden rounded-r-[6px] rounded-l-[2px] shadow-[14px_18px_38px_rgba(26,26,26,.32),inset_0_0_0_1px_rgba(184,149,85,.45)] transition-transform duration-500 group-hover:-translate-y-1">
-            {book.cover_image_url ? (
-              <img
-                src={book.cover_image_url}
-                alt={`${book.title} cover`}
-                loading="lazy"
-                decoding="async"
-                className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.015]"
-              />
-            ) : (
-              <PremiumBookCover title={book.title} number={book.book_number} subtitle={book.learning_path} tone={coverTone} />
-            )}
+            {/* LOCKED: every book renders via PremiumBookCover for one uniform style */}
+            <PremiumBookCover title={book.title} number={book.book_number} subtitle={book.learning_path} tone={coverTone} />
             {/* 3D depth — left spine + right page edge */}
             <div className="absolute inset-y-0 left-0 w-[6%] pointer-events-none bg-gradient-to-r from-[#030303]/90 via-[#1A1A1A]/60 to-transparent" />
             <div className="absolute inset-y-[2%] right-0 w-[3px] pointer-events-none bg-gradient-to-r from-transparent via-[#EFE6D6]/55 to-[#B89555]/75" />

@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
@@ -108,6 +109,7 @@ export default function BrokerLearning() {
 
   const { books, loading, progressMap } = useBrokerEducation();
   const [selectedBook, setSelectedBook] = useState<EducationBook | null>(null);
+  const [activeModule, setActiveModule] = useState<TModule | null>(null);
 
   const groupedBooks = useMemo(() => {
     const byPath = new Map<string, EducationBook[]>();
@@ -182,7 +184,7 @@ export default function BrokerLearning() {
             <LockedTraining hasUser={!!user} />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {TRAINING.map((m) => <TrainingCard key={m.id} m={m} />)}
+              {TRAINING.map((m) => <TrainingCard key={m.id} m={m} onStart={() => setActiveModule(m)} />)}
             </div>
           )}
         </section>
@@ -269,6 +271,54 @@ export default function BrokerLearning() {
           isOpen={!!selectedBook}
           onClose={() => setSelectedBook(null)}
         />
+
+        <Dialog open={!!activeModule} onOpenChange={(o) => !o && setActiveModule(null)}>
+          <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/40">
+            {activeModule && (
+              <>
+                <DialogHeader>
+                  <div className="flex items-start gap-3">
+                    <div className="shrink-0 w-12 h-12 rounded-xl bg-[#102540] grid place-items-center text-white border border-[#B89555]/70" data-allow-dark-cta data-no-contrast-guard>
+                      {activeModule.icon}
+                    </div>
+                    <div className="min-w-0">
+                      <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/50 font-semibold mb-2">{CAT_LABEL[activeModule.category]}</Badge>
+                      <DialogTitle className="text-xl text-[#1A1A1A] leading-tight">{activeModule.title}</DialogTitle>
+                      <div className="flex items-center gap-3 mt-2 text-xs text-[#1A1A1A]/70">
+                        <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{activeModule.duration}</span>
+                        <span>{activeModule.lessons} lessons</span>
+                        <span className="flex items-center gap-1"><Award className="w-3 h-3" />+50 pts on completion</span>
+                      </div>
+                    </div>
+                  </div>
+                </DialogHeader>
+                <p className="text-sm text-[#1A1A1A]/80 mt-2">{activeModule.description}</p>
+                <div className="rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-4 mt-2">
+                  <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 mb-2">Lesson plan</div>
+                  <ol className="space-y-2">
+                    {activeModule.topics.map((t, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm text-[#1A1A1A]">
+                        <span className="shrink-0 w-6 h-6 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 grid place-items-center text-[11px] font-semibold">{i + 1}</span>
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+                <div className="flex items-center justify-end gap-2 pt-2">
+                  <Button variant="ghost" onClick={() => setActiveModule(null)} className="text-[#1A1A1A]">Close</Button>
+                  <Button
+                    className="bg-[#102540] !text-white hover:bg-[#1a3d63] border border-[#B89555]/70 font-semibold [&_svg]:!text-white"
+                    data-allow-dark-cta
+                    data-no-contrast-guard
+                    onClick={() => setActiveModule(null)}
+                  >
+                    <Play className="w-3 h-3 mr-1" /> Begin first lesson
+                  </Button>
+                </div>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
@@ -306,13 +356,13 @@ function KpiCard({ icon, label, value, progress }: {
 }
 
 
-function TrainingCard({ m }: { m: TModule }) {
+function TrainingCard({ m, onStart }: { m: TModule; onStart: () => void }) {
   return (
     <Card className="bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-[#B89555]/55 hover:border-[#B89555]/80 transition-all min-h-[240px] shadow-[0_4px_14px_rgba(184,149,85,0.10)] hover:shadow-[0_14px_30px_rgba(184,149,85,0.20)]">
       <CardContent className="p-5 md:p-6 flex flex-col h-full">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3 min-w-0">
-            <div className="shrink-0 w-11 h-11 rounded-xl bg-[#1A1A1A] border border-[#B89555]/70 grid place-items-center text-[#B89555] shadow-[0_4px_12px_rgba(26,26,26,0.25)]">
+            <div className="shrink-0 w-11 h-11 rounded-xl bg-[#1A1A1A] border border-[#B89555]/70 grid place-items-center text-[#B89555] shadow-[0_4px_12px_rgba(26,26,26,0.25)]" data-allow-dark-cta data-no-contrast-guard>
               {m.icon}
             </div>
             <div className="min-w-0">
@@ -345,7 +395,13 @@ function TrainingCard({ m }: { m: TModule }) {
             ))}
             {m.topics.length > 2 && <span className="text-[11px] text-[#1A1A1A]/55">+{m.topics.length - 2} more</span>}
           </div>
-          <Button size="sm" className="bg-[#1A1A1A] text-[#B89555] hover:bg-[#2a2a2a] border border-[#B89555]/70 font-semibold shadow-[0_4px_12px_rgba(26,26,26,0.20)]" data-allow-dark-cta>
+          <Button
+            size="sm"
+            onClick={onStart}
+            className="bg-[#102540] !text-white hover:bg-[#1a3d63] border border-[#B89555]/70 font-semibold shadow-[0_4px_12px_rgba(16,37,64,0.25)] [&_svg]:!text-white"
+            data-allow-dark-cta
+            data-no-contrast-guard
+          >
             <Play className="w-3 h-3 mr-1" /> Start
           </Button>
         </div>
@@ -353,6 +409,7 @@ function TrainingCard({ m }: { m: TModule }) {
     </Card>
   );
 }
+
 
 function ReferenceCard({ title, items, tone, icon }: {
   title: string; items: string[]; tone: "red" | "emerald"; icon: React.ReactNode;
