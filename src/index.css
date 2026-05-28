@@ -3533,7 +3533,7 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"],
   [class*="from-[#F7F1E6]"], [class*="from-[#FEFAF3]"],
   [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"]
-):not([data-surface="dark"]) :is(input, textarea, select):not([class*="bg-black"]):not([class*="bg-green"]):not(.jbj-form-field):not(.careers-blue-field):not(.careers-phone-tel):not(.PhoneInputInput):not([data-jbj-field]) {
+):not([data-surface="dark"]) :is(input, textarea, select):not([class*="bg-black"]):not([class*="bg-green"]):not(.jbj-form-field):not(.careers-blue-field):not(.careers-phone-tel):not(.PhoneInputInput):not([data-jbj-field]):not(.jbj-blue-field):not(.jbj-gold-field):not([data-jbj-form] *) {
   color: #111111 !important;
   background-color: #FFFFFF !important;
   border-color: rgba(0, 0, 0, 0.18) !important;
@@ -3569,9 +3569,9 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
    ============================================================ */
 
 /* All form controls default to dark text on white unless explicitly dark-themed */
-input:not([type="checkbox"]):not([type="radio"]):not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([class*="bg-neutral-9"]):not([class*="bg-zinc-9"]):not([data-theme="dark"]):not(.jbj-form-field):not(.careers-blue-field):not(.careers-phone-tel):not(.PhoneInputInput):not([data-jbj-field]),
-textarea:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([class*="bg-neutral-9"]):not([class*="bg-zinc-9"]):not([data-theme="dark"]):not(.jbj-form-field):not([data-jbj-field]),
-select:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([data-theme="dark"]):not([data-jbj-field]) {
+input:not([type="checkbox"]):not([type="radio"]):not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([class*="bg-neutral-9"]):not([class*="bg-zinc-9"]):not([data-theme="dark"]):not(.jbj-form-field):not(.careers-blue-field):not(.careers-phone-tel):not(.PhoneInputInput):not([data-jbj-field]):not(.jbj-blue-field):not(.jbj-gold-field),
+textarea:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([class*="bg-neutral-9"]):not([class*="bg-zinc-9"]):not([data-theme="dark"]):not(.jbj-form-field):not([data-jbj-field]):not(.jbj-blue-field):not(.jbj-gold-field),
+select:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([data-theme="dark"]):not([data-jbj-field]):not(.jbj-blue-field):not(.jbj-gold-field) {
   color: #111111 !important;
   background-color: #FFFFFF !important;
 }

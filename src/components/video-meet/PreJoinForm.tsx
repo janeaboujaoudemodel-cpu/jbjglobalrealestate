@@ -176,7 +176,7 @@ const PreJoinForm = ({
               </CardTitle>
               <p className="text-xs text-white/70">Required to join the meeting</p>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4" data-jbj-form>
               {/* Name Row */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
