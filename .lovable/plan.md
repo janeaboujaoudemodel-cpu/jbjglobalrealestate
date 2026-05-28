@@ -1,33 +1,38 @@
-I will fix this in one focused pass without touching the Broker Academy book styling unless needed for layout conflicts.
+I will fix only the JBJ Broker Academy visual issues you called out.
 
-## Plan
+Plan:
+1. Restore the academy header KPI boxes
+   - Bring back the richer previous style for the three boxes: Library books, Training modules, Your training.
+   - Make them premium colored/highlighted panels again, not plain flat white boxes.
+   - Keep the current labels and data, but restore the stronger visual hierarchy.
 
-1. **Restore owner dashboard access**
-   - Fix owner routing so clicking Dashboard / My Dashboard cannot trap an owner inside `/broker/portal`.
-   - Make `/dashboard` and owner shortcuts reliably send verified owners to `/owner` or `/owner/crm`.
-   - Clear the broker-preview session flag whenever the owner returns to the owner backend.
+2. Restore the training modules visual style
+   - Rework the Training Modules cards back toward the earlier highlighted academy style.
+   - Remove the plain framed-card feeling and make the cards feel intentional, premium, and consistent with the academy page.
 
-2. **Rebuild the broker portal shell to match the owner backend layout**
-   - Change `BrokerPortalLayout` + `BrokerPortalSidebar` to the same structural model as the owner backend: fixed left sidebar, full-height column, aligned top header divider, connected vertical border, collapse behavior, and no empty gap below the sidebar.
-   - Add a broker top bar similar to the owner shell so the portal feels intentional, not like a broken public-page insert.
-   - Keep the owner-only “Back to Owner Backend” action visible and reliable inside broker preview.
+3. Lock one book-cover system for every broker academy book
+   - Use the Digital Marketing for Real Estate / No. 14 cover as the master style.
+   - Apply the exact same cover layout to every broker academy book: same black marble base, same gold border system, same straight 3D book shape, same left spine/page-depth effect, same number badge position/style, same JBJ mark/title/footer composition.
+   - Only change the book title, number, and subtitle/category text per book.
+   - Stop switching styles by learning path/category so all books look like one consistent collection.
 
-3. **Improve performance / perceived slowness**
-   - Remove extra public-page chrome and delayed global widgets from broker portal routes where they are not needed.
-   - Keep broker portal pages inside a lightweight dedicated shell and reduce layout nesting that causes slow painting.
-   - Keep data queries scoped and avoid unnecessary duplicate loading where the dashboard and CRM currently query the same broker data.
+4. Remove the unwanted white framed-book effect
+   - Make the book itself show as the full object, straight to the screen.
+   - Avoid a white outer picture-frame/card around the cover.
+   - Keep only realistic 3D page-edge/spine depth, matching the correct reference.
 
-4. **Upgrade broker CRM workspace**
-   - Move broker CRM-related actions into `/broker/crm`: assigned databases, leads, add/log lead action, upload/add database request affordance, calls made, tasks/follow-ups, insights, pipeline summary, and activity.
-   - Make the page premium and dense like a real broker workspace, not a simple three-tab placeholder.
-   - Keep database access scoped to what the owner grants; broker-facing “add/upload database” will be presented as broker workspace actions/request entry points, not owner-level unrestricted admin access.
+5. Apply the same book system everywhere it is reused
+   - Broker Academy library cards.
+   - Any shared library/guide book cover component using the current PremiumBookCover/BookCoverFace system, so future books do not drift into different styles again.
 
-5. **Fix Request a Form flow**
-   - Replace any “Open Forms Hub” style behavior for brokers with a broker-allowed form selector.
-   - Brokers choose from allowed forms, attach an optional lead, write notes, and submit a request.
-   - The existing owner notification/review path stays connected through `broker_form_requests`; I will also verify the owner page for these requests is reachable from the owner backend.
+6. Validate visually and technically after implementation
+   - Inspect the academy page at the current viewport.
+   - Confirm all visible books use the same Digital Marketing / No. 14 style.
+   - Confirm KPI boxes and Training Modules restored to premium highlighted styling.
+   - Run the relevant static/type validation signal available in the environment before reporting completion.
 
-6. **Validation**
-   - Validate routing: owner dashboard returns to owner backend; broker preview remains opt-in only.
-   - Validate visuals at the current desktop viewport: sidebar height/border alignment, no bottom gap, CRM premium layout, forms selector.
-   - Check TypeScript/static errors for the touched files through the available harness signal.
+Technical files to update:
+- `src/components/books/PremiumBookCover.tsx`
+- `src/components/broker-education/Book3DCard.tsx`
+- `src/components/books/BookCoverFace.tsx`
+- `src/pages/broker/BrokerLearning.tsx`
