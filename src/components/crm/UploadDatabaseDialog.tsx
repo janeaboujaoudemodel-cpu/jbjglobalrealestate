@@ -133,12 +133,14 @@ export default function UploadDatabaseDialog({ open, onOpenChange, onCreated }: 
       .upload(storagePath, file, { contentType: mime, upsert: false });
     if (upload.error) throw upload.error;
 
-    // 2. Insert source database row
+    // 2. Insert source database row. Also stamp broker_owner_user_id so the
+    // owner can attribute uploads back to the broker who imported them.
     const insert = await supabase
       .from("crm_source_databases" as any)
       .insert({
         owner_user_id: uid,
         uploaded_by: uid,
+        broker_owner_user_id: uid,
         name: dbName.trim() || file.name,
         original_filename: file.name,
         mime_type: mime,
