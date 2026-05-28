@@ -164,6 +164,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
     languages: [] as string[],
     jobTitle: '',
     department: '',
+    employmentType: '',
     crmRole: 'broker_member',
     reportsTo: '',
     notes: ''
@@ -214,6 +215,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
           languages: formData.languages,
           job_title: formData.jobTitle,
           department: formData.department,
+          employment_type: formData.employmentType || null,
           crm_role: formData.crmRole,
           reports_to: formData.reportsTo,
           photo_url: photoPreview,
@@ -254,6 +256,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
       languages: [],
       jobTitle: '',
       department: '',
+      employmentType: '',
       crmRole: 'broker_member',
       reportsTo: '',
       notes: ''
@@ -430,6 +433,34 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 allowOther={true}
                 otherPlaceholder="Type manager name..."
               />
+            </div>
+          </div>
+
+          {/* Employment Type */}
+          <div className="space-y-2">
+            <Label className="text-[#1A1A1A] font-medium">Employment Type</Label>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { v: 'full_time', l: 'Full-time' },
+                { v: 'part_time', l: 'Part-time' },
+                { v: 'freelancer', l: 'Freelancer' },
+                { v: 'referral', l: 'Referral' },
+                { v: 'intern', l: 'Intern' },
+                { v: 'contractor', l: 'Contractor' },
+              ].map(opt => (
+                <button
+                  key={opt.v}
+                  type="button"
+                  onClick={() => setFormData(prev => ({ ...prev, employmentType: prev.employmentType === opt.v ? '' : opt.v }))}
+                  className={`px-3 py-1.5 rounded-full text-sm border transition-all ${
+                    formData.employmentType === opt.v
+                      ? 'bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A] font-semibold'
+                      : 'bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]/80 hover:border-[#B89555]'
+                  }`}
+                >
+                  {opt.l}
+                </button>
+              ))}
             </div>
           </div>
 
