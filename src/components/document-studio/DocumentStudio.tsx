@@ -2178,26 +2178,12 @@ function StudioShell({
                 const LAST_BOTTOM_PAD = 40;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
 
-                // Parse the bodyHtml into [data-pdf-page] groups. If the
-                // composer didn't emit explicit groups, fall back to a
-                // single full-content page.
-                const parsePageGroups = (html: string): string[] => {
-                  if (!html) return [""];
-                  if (typeof window === "undefined") return [html];
-                  const tpl = document.createElement("template");
-                  tpl.innerHTML = html;
-                  const groups = Array.from(
-                    tpl.content.querySelectorAll<HTMLElement>("[data-pdf-page]"),
-                  ).map((el) => stripGeneratedPageArtifacts(el.innerHTML));
-                  return groups.length ? groups : [stripGeneratedPageArtifacts(html)];
-                };
-
                 // Prefer measured auto-pagination (global rule). Fall back
                 // to composer-emitted [data-pdf-page] groups before the
                 // measurement runs, so first paint is still sensible.
                 const pageGroups = (autoPageGroups && autoPageGroups.length)
                   ? autoPageGroups
-                  : parsePageGroups(bodyHtml);
+                  : parseDocumentPageGroups(bodyHtml);
                 const pageCount = Math.max(1, pageGroups.length);
 
                 // FORM I (and any composer that opts out of letterhead chrome)
@@ -2333,12 +2319,7 @@ function StudioShell({
                                       // WYSIWYG: every page is editable. On blur, reassemble
                                       // the full bodyHtml by replacing this page group only.
                                       const next = stripGeneratedPageArtifacts(e.currentTarget.innerHTML);
-                                      const rebuilt = pageGroups
-                                        .map((g, i) => {
-                                          const html = i === pageIndex ? next : g;
-                                          return `<section data-pdf-page="${i + 1}">${html}</section>`;
-                                        })
-                                        .join("");
+                                      const rebuilt = wrapDocumentPageGroups(pageGroups.map((g, i) => (i === pageIndex ? next : g)));
                                       userEditedRef.current = true;
                                       setUserEdited(true);
                                       setBodyHtml(rebuilt);
