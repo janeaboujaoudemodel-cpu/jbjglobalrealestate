@@ -702,6 +702,43 @@ export default function JoinApplication() {
     );
   }
 
+  // ---- Reusable required-field input for qualification blocks ----
+  const QField = ({
+    k,
+    label,
+    placeholder,
+    type = "text",
+  }: {
+    k: string;
+    label: string;
+    placeholder: string;
+    type?: string;
+  }) => (
+    <div className="space-y-2">
+      <Label htmlFor={k} data-required className="jbj-form-label text-sm font-semibold">
+        {label}
+      </Label>
+      <Input
+        id={k}
+        type={type}
+        value={(formData as any)[k] ?? ""}
+        onChange={(e) => {
+          setFormData((prev) => ({ ...prev, [k]: e.target.value } as any));
+          clearFieldError(k);
+        }}
+        placeholder={placeholder}
+        disabled={loading}
+        required
+        aria-required="true"
+        {...invalidProps(k)}
+        className={`bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base ${
+          fieldErr(k) ? "is-invalid" : ""
+        }`}
+      />
+      <FieldError id={`${k}-err`} message={fieldErr(k)} />
+    </div>
+  );
+
   // ---- Render: full-width application form ----
   return (
     <div data-premium data-careers-page className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
