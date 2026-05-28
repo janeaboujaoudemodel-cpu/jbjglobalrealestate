@@ -52,14 +52,85 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     return true;
   });
 
+  const trackRef = useRef<HTMLDivElement>(null);
+  const posRef = useRef(0);
+  const draggingRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragStartPosRef = useRef(0);
+  const hoverRef = useRef(false);
+
+  const enoughToLoop = uniqueItems.length >= 3;
+  const rendered = enoughToLoop ? [...uniqueItems, ...uniqueItems, ...uniqueItems] : uniqueItems;
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    if (!enoughToLoop) {
+      track.style.transform = `translateX(0px)`;
+      return;
+    }
+
+    let animId: number;
+    const speed = 0.6;
+
+    const tick = () => {
+      const singleSetWidth = track.scrollWidth / 3;
+      if (!hoverRef.current && !draggingRef.current) {
+        posRef.current += speed;
+      }
+      if (singleSetWidth > 0) {
+        if (posRef.current >= singleSetWidth * 2) posRef.current -= singleSetWidth;
+        if (posRef.current < 0) posRef.current += singleSetWidth;
+      }
+      track.style.transform = `translateX(-${posRef.current}px)`;
+      animId = requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(() => {
+      posRef.current = (track.scrollWidth / 3) || 0;
+      animId = requestAnimationFrame(tick);
+    });
+
+    return () => cancelAnimationFrame(animId);
+  }, [enoughToLoop, uniqueItems.length]);
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (!enoughToLoop) return;
+    draggingRef.current = true;
+    dragStartXRef.current = e.clientX;
+    dragStartPosRef.current = posRef.current;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!draggingRef.current) return;
+    const dx = e.clientX - dragStartXRef.current;
+    posRef.current = dragStartPosRef.current - dx;
+  };
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch {}
+  };
+  const onWheel = (e: React.WheelEvent) => {
+    if (!enoughToLoop) return;
+    if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+    posRef.current += e.deltaX;
+  };
+
   return (
     <div
-      className="no-scrollbar overflow-x-auto overscroll-x-contain snap-x snap-mandatory w-full"
-      style={{ WebkitOverflowScrolling: "touch" }}
+      className="overflow-hidden w-full select-none cursor-grab active:cursor-grabbing"
+      style={{ touchAction: "pan-y" }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onWheel={onWheel}
+      onMouseEnter={() => { hoverRef.current = true; }}
+      onMouseLeave={() => { hoverRef.current = false; }}
     >
-      <div className="flex gap-4 py-2 px-4 md:px-8 lg:px-12 justify-start min-w-max">
-        {uniqueItems.map((item, i) => (
-          <div key={`${item.type}-${item.id}-${i}`} className="snap-start shrink-0">
+      <div ref={trackRef} className="flex gap-4 py-2 will-change-transform" style={{ width: "max-content" }}>
+        {rendered.map((item, i) => (
+          <div key={`${item.type}-${item.id}-${i}`} className="shrink-0" onClickCapture={(e) => { if (draggingRef.current) { e.preventDefault(); e.stopPropagation(); } }}>
             <RecentCard3D
               item={item}
               index={i}
