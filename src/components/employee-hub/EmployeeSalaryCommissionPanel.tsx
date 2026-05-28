@@ -2,7 +2,7 @@ import { useState } from "react";
 import { 
   DollarSign, TrendingUp, Users, 
   CheckCircle, Clock, XCircle, Download,
-  Wallet, CreditCard, BarChart3
+  Wallet, CreditCard, BarChart3, Plus
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 import { useEmployeeSalaries } from "@/hooks/useEmployeeSalaries";
 import { format } from "date-fns";
+import AddPayrollEntryDialog from "./AddPayrollEntryDialog";
 
 const formatCurrency = (amount: number, currency: string = 'AED') => {
   return new Intl.NumberFormat('en-AE', {
