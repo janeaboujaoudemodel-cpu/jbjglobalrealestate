@@ -465,14 +465,30 @@
 [data-careers-page] #firstName,
 [data-careers-page] #lastName,
 [data-careers-page] #email,
-[data-careers-page] #city,
 [data-careers-page] input[type="tel"],
-[data-careers-page] .PhoneInputInput,
-[data-careers-page] input[placeholder="Search positions by title, department, or location"] {
-  background-color: rgba(253, 251, 247, 0.55) !important;
-  border: 1px solid var(--t-gold-soft) !important;
+[data-careers-page] .PhoneInputInput {
+  background-color: #FDFBF7 !important;
+  border: 2px solid var(--t-form-blue) !important;
   border-radius: 0.625rem !important;
-  box-shadow: 0 1px 2px rgba(16, 37, 64, 0.04) !important;
+  box-shadow: 0 1px 2px rgba(16, 37, 64, 0.06) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+[data-careers-page] #city {
+  background-color: #FDFBF7 !important;
+  border: 2px solid #B89555 !important;
+  border-radius: 0.625rem !important;
+  box-shadow: 0 1px 2px rgba(184, 149, 85, 0.10) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+[data-careers-page] input[placeholder="Search positions by title, department, or location"] {
+  background-color: #FDFBF7 !important;
+  border: 1px solid #B89555 !important;
+  border-radius: 0.625rem !important;
+  box-shadow: 0 1px 2px rgba(16, 37, 64, 0.06) !important;
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
