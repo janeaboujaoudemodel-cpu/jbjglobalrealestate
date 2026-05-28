@@ -2665,7 +2665,7 @@ function StudioShell({
                 <Wand2 className="w-10 h-10 mx-auto mb-3 text-[#B89555]" />
                 <div className="text-base font-semibold text-[#1A1A1A]">Choose a template to begin</div>
                 <p className="text-sm text-[#1A1A1A]/65 mt-2">
-                  Pick from {templates.length} {catalog === "staff" ? "staff" : "client"} document templates in the left panel.
+                  Pick from {templates.length} {catalog === "staff" ? "staff" : catalog === "client" ? "client" : "JBJ"} document templates in the left panel.
                 </p>
               </div>
             )}
