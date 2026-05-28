@@ -614,7 +614,7 @@ export function BrandedEmailComposer() {
                 className="bg-[#FDFBF7] border-[#B89555]/40 min-h-[70px]"
               />
               <div className="mt-2 flex flex-wrap items-center gap-2">
-                <Button type="button" variant="outline" onClick={draftWithAI} disabled={busy === "ai"} className="border-[#B89555]/40">
+                <Button type="button" variant="outline" onClick={draftWithAI} disabled={busy === "ai" || !brief.trim()} className="border-[#B89555]/40">
                   {busy === "ai" ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
                   Draft with AI
                 </Button>
