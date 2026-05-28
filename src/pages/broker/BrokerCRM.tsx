@@ -176,7 +176,6 @@ export default function BrokerCRM() {
       queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
       queryClient.invalidateQueries({ queryKey: ["broker-personal-tasks"] });
       toast.success("Call logged successfully — +10 points");
-      setCallDialogOpen(false);
       setTab("calls");
     },
     onError: (e: any) => toast.error(e?.message || "Could not log call"),
