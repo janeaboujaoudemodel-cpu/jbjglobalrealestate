@@ -135,8 +135,8 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-14 h-14 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
-                  <span className="text-white text-xl font-bold">{book.book_number}</span>
+                <div className="w-14 h-14 rounded-full bg-[#EFE6D6]/90 border border-[#B89555]/60 flex items-center justify-center">
+                  <span className="text-[#1A1A1A] text-xl font-bold">{book.book_number}</span>
                 </div>
               )}
 
