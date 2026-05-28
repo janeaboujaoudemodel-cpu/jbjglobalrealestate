@@ -56,6 +56,7 @@ const getSessionId = (): string => {
 export const useVisitorTracking = () => {
   const location = useLocation();
   const { user } = useAuth();
+  const disabled = location.pathname === '/broker' || location.pathname.startsWith('/broker/');
   const sessionStartTime = useRef(Date.now());
   const pageStartTime = useRef(Date.now());
   const lastPath = useRef(location.pathname);
@@ -64,6 +65,7 @@ export const useVisitorTracking = () => {
 
   // Initialize session
   const initSession = useCallback(async () => {
+    if (disabled) return;
     if (hasInitialized.current) return;
     hasInitialized.current = true;
 
@@ -96,10 +98,11 @@ export const useVisitorTracking = () => {
     } catch (error) {
       console.error('Error initializing session:', error);
     }
-  }, [location.pathname, user]);
+  }, [disabled, location.pathname, user]);
 
   // Track page view
   const trackPageView = useCallback(async () => {
+    if (disabled) return;
     const sessionId = getSessionId();
     const path = location.pathname;
 
@@ -128,10 +131,11 @@ export const useVisitorTracking = () => {
     } catch (error) {
       console.error('Error tracking page view:', error);
     }
-  }, [location.pathname]);
+  }, [disabled, location.pathname]);
 
   // Track general event
   const trackEvent = useCallback(async (eventType: string, eventName: string, eventData: TrackEventData = {}) => {
+    if (disabled) return;
     const sessionId = getSessionId();
 
     try {
@@ -148,7 +152,7 @@ export const useVisitorTracking = () => {
     } catch (error) {
       console.error('Error tracking event:', error);
     }
-  }, [location.pathname]);
+  }, [disabled, location.pathname]);
 
   // Track click
   const trackClick = useCallback((element: string, additionalData?: TrackEventData) => {
@@ -217,6 +221,7 @@ export const useVisitorTracking = () => {
 
   // Update time spent on exit
   const updateTimeSpent = useCallback(async () => {
+    if (disabled) return;
     const sessionId = getSessionId();
     const timeSpent = Math.floor((Date.now() - sessionStartTime.current) / 1000);
 
@@ -231,7 +236,7 @@ export const useVisitorTracking = () => {
     } catch (error) {
       console.error('Error updating time spent:', error);
     }
-  }, []);
+  }, [disabled]);
 
   // Initialize on mount
   useEffect(() => {
@@ -240,6 +245,11 @@ export const useVisitorTracking = () => {
 
   // Track page views on route change + per-page time tracking
   useEffect(() => {
+    if (disabled) {
+      lastPath.current = location.pathname;
+      pageStartTime.current = Date.now();
+      return;
+    }
     // Fire time_on_page for previous page
     if (lastPath.current !== location.pathname) {
       const durationSec = Math.round((Date.now() - pageStartTime.current) / 1000);
@@ -257,7 +267,7 @@ export const useVisitorTracking = () => {
       pageStartTime.current = Date.now();
     }
     trackPageView();
-  }, [trackPageView, location.pathname]);
+  }, [disabled, trackPageView, location.pathname]);
 
   // Update time spent on page unload
   useEffect(() => {
