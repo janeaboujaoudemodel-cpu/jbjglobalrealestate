@@ -391,6 +391,12 @@ function StudioShell({
         // separately). NEXT_TOP is the interior top padding only.
         const NEXT_TOP = 54;
         const BOTTOM_PAD = 0;
+        // Tentative single-page cap: assume page 1 IS the last page so the
+        // footer height is reserved. If everything fits here, the official
+        // signature block stays with the body on a single sheet (no orphan
+        // page 2). Otherwise we fall back to the multi-page caps that only
+        // reserve the per-page signature strip on page 1.
+        const singlePageCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD - Math.max(PAGE_SIGNATURE_RESERVE, footerH));
         const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD - PAGE_SIGNATURE_RESERVE);
         const otherCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - NEXT_TOP - BOTTOM_PAD - Math.max(PAGE_SIGNATURE_RESERVE, footerH));
 
@@ -422,10 +428,14 @@ function StudioShell({
           return { html: el.outerHTML, top: r.top - bodyTop, height: r.height };
         });
 
+        // Fast path: does everything fit on a single sheet (with footer reserve)?
+        const totalSpan = items[items.length - 1].top + items[items.length - 1].height - items[0].top;
+        const fitsSinglePage = totalSpan <= singlePageCap;
+
         const pages: string[][] = [];
         let current: string[] = [];
         let pageStartTop = items[0].top;
-        let cap = page0Cap;
+        let cap = fitsSinglePage ? singlePageCap : page0Cap;
         for (let i = 0; i < items.length; i++) {
           const it = items[i];
           const relBottom = it.top + it.height - pageStartTop;
