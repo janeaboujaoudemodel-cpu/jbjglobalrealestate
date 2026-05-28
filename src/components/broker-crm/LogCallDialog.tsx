@@ -300,7 +300,7 @@ export default function LogCallDialog({
 
       // If we got a callLogId AND have audio, upload + trigger transcription
       const callLogId = (result as any)?.callLogId as string | undefined;
-      if (callLogId && finalAudioBlob && userId) {
+      if (callLogId && finalAudioBlob && finalAudioBlob.size > 0 && userId) {
         const normalizedMime = finalAudioBlob.type.includes("ogg") ? "audio/ogg" : finalAudioBlob.type.includes("mp4") ? "audio/mp4" : "audio/webm";
         const uploadBlob = finalAudioBlob.type === normalizedMime
           ? finalAudioBlob
