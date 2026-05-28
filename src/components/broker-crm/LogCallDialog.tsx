@@ -177,12 +177,19 @@ export default function LogCallDialog({
         toast.error("Recording is not supported in this browser preview");
         return;
       }
+      setAudioBlob(null);
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+        audio: {
+          channelCount: 1,
+          sampleRate: 48000,
+          echoCancellation: false,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
       });
       streamRef.current = stream;
       const mime = getSupportedAudioMime();
-      const mr = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+      const mr = mime ? new MediaRecorder(stream, { mimeType: mime, audioBitsPerSecond: 128000 }) : new MediaRecorder(stream, { audioBitsPerSecond: 128000 });
       chunksRef.current = [];
       mr.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) {
