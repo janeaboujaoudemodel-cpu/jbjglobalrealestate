@@ -16,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import RequestDatabaseDialog from "@/components/broker-portal/RequestDatabaseDialog";
 import LogCallDialog from "@/components/broker-crm/LogCallDialog";
+import CallDetailSheet from "@/components/broker-crm/CallDetailSheet";
 
 type Tab = "pipeline" | "databases" | "leads" | "calls" | "insights" | "activity";
 
@@ -72,6 +73,7 @@ export default function BrokerCRM() {
   const [search, setSearch] = useState("");
   const [requestOpen, setRequestOpen] = useState(false);
   const [callDialogOpen, setCallDialogOpen] = useState(false);
+  const [openCallId, setOpenCallId] = useState<string | null>(null);
   const dbs = useBrokerScopedDatabases();
   const leads = useBrokerScopedLeads();
   const tasks = useBrokerPersonalTasks();
@@ -100,7 +102,7 @@ export default function BrokerCRM() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("broker_call_logs")
-        .select("id, lead_id, phone_number, call_type, call_status, duration_seconds, notes, created_at")
+        .select("id, lead_id, phone_number, call_type, call_status, duration_seconds, notes, created_at, recording_url, ai_summary, ai_score, ai_processed_at")
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false })
         .limit(100);
@@ -461,18 +463,32 @@ export default function BrokerCRM() {
                 .map((log: any) => {
                   const lead = leadsData.find((item) => item.id === log.lead_id);
                   return (
-                  <li key={log.id} className="py-2.5 flex items-center gap-3">
-                    <Phone className="h-4 w-4 text-[#1A1A1A]/60" />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm text-[#1A1A1A] truncate">
-                        {lead?.full_name ? `Call with ${lead.full_name}` : "Manual broker call"}
+                  <li key={log.id}>
+                    <button
+                      type="button"
+                      onClick={() => setOpenCallId(log.id)}
+                      className="w-full py-2.5 flex items-center gap-3 text-left hover:bg-[#EFE6D6]/40 rounded-md px-2 -mx-2 transition-colors"
+                    >
+                      <Phone className="h-4 w-4 text-[#1A1A1A]/60 shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm text-[#1A1A1A] truncate flex items-center gap-2">
+                          {lead?.full_name ? `Call with ${lead.full_name}` : "Manual broker call"}
+                          {log.recording_url && (
+                            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/70">Recording</span>
+                          )}
+                          {log.ai_processed_at && (
+                            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/70">AI</span>
+                          )}
+                        </div>
+                        <div className="text-[11px] text-[#1A1A1A]/55 truncate">
+                          {log.call_status || "completed"} · {log.call_type || "outbound"} · {formatDuration(log.duration_seconds)} · {formatDisplayDate(log.created_at)}
+                        </div>
+                        {(log.ai_summary || log.notes) && (
+                          <div className="text-xs text-[#1A1A1A]/70 mt-1 truncate">{log.ai_summary || log.notes}</div>
+                        )}
                       </div>
-                      <div className="text-[11px] text-[#1A1A1A]/55 truncate">
-                        {log.call_status || "completed"} · {log.call_type || "outbound"} · {formatDuration(log.duration_seconds)} · {formatDisplayDate(log.created_at)}
-                      </div>
-                      {log.notes && <div className="text-xs text-[#1A1A1A]/70 mt-1 truncate">{log.notes}</div>}
-                    </div>
-                    <div className="text-xs text-[#1A1A1A]/65 tabular-nums">{log.phone_number}</div>
+                      <div className="text-xs text-[#1A1A1A]/65 tabular-nums shrink-0">{log.phone_number}</div>
+                    </button>
                   </li>
                   );
                 })}
@@ -564,6 +580,16 @@ export default function BrokerCRM() {
         }}
       />
       <RequestDatabaseDialog open={requestOpen} onOpenChange={setRequestOpen} />
+      <CallDetailSheet
+        callId={openCallId}
+        leadName={(() => {
+          const log = (callLogs.data ?? []).find((l: any) => l.id === openCallId);
+          const lead = log ? leadsData.find((x: any) => x.id === log.lead_id) : null;
+          return lead?.full_name ?? null;
+        })()}
+        open={!!openCallId}
+        onOpenChange={(o) => { if (!o) setOpenCallId(null); }}
+      />
     </div>
   );
 }
