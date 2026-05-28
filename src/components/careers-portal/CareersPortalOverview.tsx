@@ -3,8 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Briefcase, FileText, Users, ClipboardCheck, GraduationCap, Wallet,
-  UserPlus, Bot, MessagesSquare, ArrowRight,
+  UserPlus, Bot, MessagesSquare, ArrowRight, TrendingUp, ExternalLink,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { SectionKey } from "@/pages/owner/CareersPortal";
 
 interface Stats {
