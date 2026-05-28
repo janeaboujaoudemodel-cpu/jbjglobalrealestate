@@ -1242,27 +1242,33 @@ export default function JoinApplication() {
                     <Checkbox
                       id="consentAccurate"
                       checked={formData.consentAccurate}
-                      onCheckedChange={(checked) => setFormData({ ...formData, consentAccurate: checked as boolean })}
+                      onCheckedChange={(checked) => { setFormData({ ...formData, consentAccurate: checked as boolean }); clearFieldError("consentAccurate"); }}
                       disabled={loading}
+                      aria-required="true"
+                      aria-invalid={!!fieldErr("consentAccurate")}
                     />
-                    <Label htmlFor="consentAccurate" className="text-sm leading-relaxed cursor-pointer text-[#1A1A1A]">
+                    <Label htmlFor="consentAccurate" data-required className="text-sm leading-relaxed cursor-pointer text-[#1A1A1A]">
                       I confirm that the information provided is accurate and complete to the best of my knowledge.
                     </Label>
                   </div>
+                  <FieldError id="consentAccurate-err" message={fieldErr("consentAccurate")} />
                   <div className="flex items-start gap-3">
                     <Checkbox
                       id="consentTerms"
                       checked={formData.consentTerms}
-                      onCheckedChange={(checked) => setFormData({ ...formData, consentTerms: checked as boolean })}
+                      onCheckedChange={(checked) => { setFormData({ ...formData, consentTerms: checked as boolean }); clearFieldError("consentTerms"); }}
                       disabled={loading}
+                      aria-required="true"
+                      aria-invalid={!!fieldErr("consentTerms")}
                     />
-                    <Label htmlFor="consentTerms" className="text-sm leading-relaxed cursor-pointer text-[#1A1A1A]">
+                    <Label htmlFor="consentTerms" data-required className="text-sm leading-relaxed cursor-pointer text-[#1A1A1A]">
                       I agree to the{" "}
                       <Link to="/terms" className="text-[#1A1A1A] underline font-medium" target="_blank">Terms of Service</Link>
                       {" "}and{" "}
                       <Link to="/privacy" className="text-[#1A1A1A] underline font-medium" target="_blank">Privacy Policy</Link>.
                     </Label>
                   </div>
+                  <FieldError id="consentTerms-err" message={fieldErr("consentTerms")} />
                 </div>
 
                 {/* Progress */}
