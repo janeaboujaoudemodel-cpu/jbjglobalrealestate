@@ -1226,10 +1226,11 @@ export default function JoinApplication() {
                 {/* CV / Resume — Premium upload */}
                 <PremiumCVUpload
                   file={cvFile}
-                  onFileChange={setCvFile}
+                  onFileChange={(f) => { setCvFile(f); clearFieldError("cvFile"); }}
                   disabled={loading}
                   uploadProgress={uploadProgress}
                 />
+                <FieldError id="cvFile-err" message={fieldErr("cvFile")} />
 
                 </div>
                 {/* End of step 3 (CV) */}
