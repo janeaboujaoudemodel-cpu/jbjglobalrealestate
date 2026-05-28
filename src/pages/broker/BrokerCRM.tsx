@@ -16,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import RequestDatabaseDialog from "@/components/broker-portal/RequestDatabaseDialog";
 import LogCallDialog from "@/components/broker-crm/LogCallDialog";
+import CallDetailSheet from "@/components/broker-crm/CallDetailSheet";
 
 type Tab = "pipeline" | "databases" | "leads" | "calls" | "insights" | "activity";
 
