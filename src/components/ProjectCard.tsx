@@ -240,9 +240,15 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         <div className="aspect-[16/10] overflow-hidden relative" data-surface="ink">
           <VerifiedMedia
             src={primaryImageUrl}
-            alt={images[0]?.alt_text || project.name}
+            alt={
+              images[0]?.alt_text ||
+              [project.name, developerName ? `by ${developerName}` : null, project.area_name || null]
+                .filter(Boolean)
+                .join(' — ') || project.name
+            }
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             placeholderLabel=""
+            priority={priority}
             loggerComponent="ProjectCard"
             loggerContext={{
               projectId: project.id,
