@@ -1140,27 +1140,12 @@ export default function JoinApplication() {
                       <Briefcase className="h-5 w-5" /> Sales Qualification
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">How many deals have you closed?</Label>
-                        <Input value={formData.dealsClosed} onChange={(e) => setFormData({ ...formData, dealsClosed: e.target.value })} placeholder="e.g. 25" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Total value of deals closed (AED)</Label>
-                        <Input value={formData.totalDealValue} onChange={(e) => setFormData({ ...formData, totalDealValue: e.target.value })} placeholder="e.g. 50,000,000" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
+                      <QField k="dealsClosed" label="How many deals have you closed?" placeholder="e.g. 25" />
+                      <QField k="totalDealValue" label="Total value of deals closed (AED)" placeholder="e.g. 50,000,000" />
                     </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Which projects/areas have you sold in?</Label>
-                      <Input value={formData.projectsSold} onChange={(e) => setFormData({ ...formData, projectsSold: e.target.value })} placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Which developers have you worked with?</Label>
-                      <Input value={formData.developerWorkedWith} onChange={(e) => setFormData({ ...formData, developerWorkedWith: e.target.value })} placeholder="e.g. DAMAC, Emaar, Meraas" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Why are you leaving your current position?</Label>
-                      <Input value={formData.reasonForLeaving} onChange={(e) => setFormData({ ...formData, reasonForLeaving: e.target.value })} placeholder="Reason for seeking new opportunity" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
+                    <QField k="projectsSold" label="Which projects/areas have you sold in?" placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" />
+                    <QField k="developerWorkedWith" label="Which developers have you worked with?" placeholder="e.g. DAMAC, Emaar, Meraas" />
+                    <QField k="reasonForLeaving" label="Why are you leaving your current position?" placeholder="Reason for seeking new opportunity" />
 
                     <h3 className="text-lg font-semibold text-[#102540] mt-2 flex items-center gap-2">
                       <User className="h-5 w-5" /> Professional References (2 required)
@@ -1170,35 +1155,10 @@ export default function JoinApplication() {
                       <div key={n} className="space-y-3 p-3 rounded-lg border-2 border-[#102540] bg-[#FDFBF7]">
                         <p className="jbj-form-label text-sm font-semibold">Reference {n}</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <Input
-                            value={(formData as any)[`reference${n}Name`]}
-                            onChange={(e) => setFormData({ ...formData, [`reference${n}Name`]: e.target.value } as any)}
-                            placeholder="Full name (e.g. Director / HR Manager)"
-                            disabled={loading}
-                            className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
-                          />
-                          <Input
-                            value={(formData as any)[`reference${n}Title`]}
-                            onChange={(e) => setFormData({ ...formData, [`reference${n}Title`]: e.target.value } as any)}
-                            placeholder="Title & Company"
-                            disabled={loading}
-                            className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
-                          />
-                          <Input
-                            type="email"
-                            value={(formData as any)[`reference${n}Email`]}
-                            onChange={(e) => setFormData({ ...formData, [`reference${n}Email`]: e.target.value } as any)}
-                            placeholder="Company email"
-                            disabled={loading}
-                            className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
-                          />
-                          <Input
-                            value={(formData as any)[`reference${n}Phone`]}
-                            onChange={(e) => setFormData({ ...formData, [`reference${n}Phone`]: e.target.value } as any)}
-                            placeholder="Phone number"
-                            disabled={loading}
-                            className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base"
-                          />
+                          <QField k={`reference${n}Name`} label="Full name" placeholder="Full name (e.g. Director / HR Manager)" />
+                          <QField k={`reference${n}Title`} label="Title & Company" placeholder="Title & Company" />
+                          <QField k={`reference${n}Email`} label="Company email" placeholder="Company email" type="email" />
+                          <QField k={`reference${n}Phone`} label="Phone number" placeholder="Phone number" />
                         </div>
                       </div>
                     ))}
@@ -1210,24 +1170,12 @@ export default function JoinApplication() {
                     <h3 className="text-lg font-semibold text-[#102540] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Marketing Qualification
                     </h3>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Notable campaigns you have led</Label>
-                      <Input value={formData.marketingCampaigns} onChange={(e) => setFormData({ ...formData, marketingCampaigns: e.target.value })} placeholder="e.g. Off-plan launch — 5M reach, 8% CTR" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
+                    <QField k="marketingCampaigns" label="Notable campaigns you have led" placeholder="e.g. Off-plan launch — 5M reach, 8% CTR" />
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Largest budget managed (AED)</Label>
-                        <Input value={formData.marketingBudget} onChange={(e) => setFormData({ ...formData, marketingBudget: e.target.value })} placeholder="e.g. 1,500,000" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Tools / platforms</Label>
-                        <Input value={formData.marketingTools} onChange={(e) => setFormData({ ...formData, marketingTools: e.target.value })} placeholder="e.g. Meta Ads, GA4, HubSpot, Figma" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
+                      <QField k="marketingBudget" label="Largest budget managed (AED)" placeholder="e.g. 1,500,000" />
+                      <QField k="marketingTools" label="Tools / platforms" placeholder="e.g. Meta Ads, GA4, HubSpot, Figma" />
                     </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Portfolio link</Label>
-                      <Input value={formData.portfolioLink} onChange={(e) => setFormData({ ...formData, portfolioLink: e.target.value })} placeholder="https://your-portfolio.com" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
+                    <QField k="portfolioLink" label="Portfolio link" placeholder="https://your-portfolio.com" />
                   </div>
                 )}
 
@@ -1237,19 +1185,10 @@ export default function JoinApplication() {
                       <Briefcase className="h-5 w-5" /> Role Qualification
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Years of experience</Label>
-                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 5" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Systems used</Label>
-                        <Input value={formData.systemsUsed} onChange={(e) => setFormData({ ...formData, systemsUsed: e.target.value })} placeholder="e.g. Bayut Pro, Property Finder, Salesforce" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
+                      <QField k="yearsExperience" label="Years of experience" placeholder="e.g. 5" />
+                      <QField k="systemsUsed" label="Systems used" placeholder="e.g. Bayut Pro, Property Finder, Salesforce" />
                     </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Certifications</Label>
-                      <Input value={formData.certifications} onChange={(e) => setFormData({ ...formData, certifications: e.target.value })} placeholder="e.g. RERA, CIPD, PMP" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
+                    <QField k="certifications" label="Certifications" placeholder="e.g. RERA, CIPD, PMP" />
                   </div>
                 )}
 
@@ -1259,19 +1198,10 @@ export default function JoinApplication() {
                       <Briefcase className="h-5 w-5" /> Technical Qualification
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Years of experience</Label>
-                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 7" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Stack / specialties</Label>
-                        <Input value={formData.techStack} onChange={(e) => setFormData({ ...formData, techStack: e.target.value })} placeholder="e.g. React, TypeScript, Supabase, AWS" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
+                      <QField k="yearsExperience" label="Years of experience" placeholder="e.g. 7" />
+                      <QField k="techStack" label="Stack / specialties" placeholder="e.g. React, TypeScript, Supabase, AWS" />
                     </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">GitHub / portfolio link</Label>
-                      <Input value={formData.githubLink} onChange={(e) => setFormData({ ...formData, githubLink: e.target.value })} placeholder="https://github.com/your-handle" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
+                    <QField k="githubLink" label="GitHub / portfolio link" placeholder="https://github.com/your-handle" />
                   </div>
                 )}
 
@@ -1281,19 +1211,10 @@ export default function JoinApplication() {
                       <Briefcase className="h-5 w-5" /> About You
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Years of experience</Label>
-                        <Input value={formData.yearsExperience} onChange={(e) => setFormData({ ...formData, yearsExperience: e.target.value })} placeholder="e.g. 3" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
-                      <div className="space-y-2">
-                      <Label className="jbj-form-label text-sm font-semibold">Portfolio / LinkedIn link</Label>
-                        <Input value={formData.portfolioLink} onChange={(e) => setFormData({ ...formData, portfolioLink: e.target.value })} placeholder="https://linkedin.com/in/your-handle" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                      </div>
+                      <QField k="yearsExperience" label="Years of experience" placeholder="e.g. 3" />
+                      <QField k="portfolioLink" label="Portfolio / LinkedIn link" placeholder="https://linkedin.com/in/your-handle" />
                     </div>
-                    <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Tell us briefly about yourself</Label>
-                      <Input value={formData.aboutYou} onChange={(e) => setFormData({ ...formData, aboutYou: e.target.value })} placeholder="What makes you a strong fit for this role?" disabled={loading} className="bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base" />
-                    </div>
+                    <QField k="aboutYou" label="Tell us briefly about yourself" placeholder="What makes you a strong fit for this role?" />
                   </div>
                 )}
 
