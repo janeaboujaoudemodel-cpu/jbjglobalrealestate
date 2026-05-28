@@ -319,6 +319,8 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Automations", href: "/owner/automations", icon: Workflow },
   { label: "Alerts Demo", href: "/alerts-demo", icon: BellRing },
   { label: "Internal MI Dashboard", href: "/internal/market-intelligence/dashboard", icon: Database },
+  { label: "News Admin Hub", href: "/owner/news", icon: Megaphone },
+  { label: "Market Data Ingestion", href: "/owner/market-intel", icon: Database },
   { label: "AI Governance", href: "/governance/ai", icon: Shield },
 ];
 
