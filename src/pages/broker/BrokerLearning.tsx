@@ -3,13 +3,14 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   GraduationCap, BookOpen, Lock, BarChart3, MessageSquare, Shield,
-  CheckCircle, Clock, Play, ChevronRight, Award,
+  CheckCircle, Clock, Play, ChevronRight, Award, Award as AwardIcon,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
