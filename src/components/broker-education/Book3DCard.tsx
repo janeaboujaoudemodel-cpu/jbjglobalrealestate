@@ -135,8 +135,8 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-14 h-14 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
-                  <span className="text-white text-xl font-bold">{book.book_number}</span>
+                <div className="w-14 h-14 rounded-full bg-[#EFE6D6]/90 border border-[#B89555]/60 flex items-center justify-center">
+                  <span className="text-[#1A1A1A] text-xl font-bold">{book.book_number}</span>
                 </div>
               )}
 
@@ -158,8 +158,8 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
 
             {/* Cover Content */}
             <div className="p-5 relative flex-1 flex flex-col">
-              {/* Learning Path Badge */}
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EFE6D6]/15 border border-[#B89555]/30 text-[#1A1A1A] text-[10px] uppercase tracking-[0.15em] mb-3 self-start">
+            {/* Learning Path Badge */}
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 text-[#1A1A1A] text-[10px] uppercase tracking-[0.15em] mb-3 self-start" data-no-contrast-guard>
                 <Sparkles className="w-3 h-3" />
                 {book.learning_path}
               </div>
@@ -177,10 +177,10 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
               </p>
 
               {/* Footer */}
-              <div className="pt-3 border-t border-[#1A1A1A] mt-auto">
+              <div className="pt-3 border-t border-[#B89555]/25 mt-auto">
                 {effectivelyLocked ? (
                   <div className="space-y-2">
-                    <p className="text-[#1A1A1A]/70 text-[10px] leading-tight">
+                    <p className="text-white/70 text-[10px] leading-tight">
                       {book.is_restricted 
                         ? 'Available after completing all foundational books and manager approval.'
                         : 'Join the JBJ Broker Circle to unlock this book.'}
@@ -188,7 +188,8 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="w-full bg-[#EFE6D6]/10 hover:bg-[#EFE6D6]/20 text-[#1A1A1A]/70 border border-[#B89555]/30"
+                      className="w-full bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50 font-semibold"
+                      data-no-contrast-guard
                       onClick={(e) => {
                         e.stopPropagation();
                         if (!book.is_restricted) onOpen(book);
@@ -202,7 +203,8 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="w-full bg-[#EFE6D6]/20 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] text-[#1A1A1A] border border-[#B89555]/40 font-semibold transition-colors"
+                    className="w-full bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50 font-semibold transition-colors"
+                    data-no-contrast-guard
                     onClick={(e) => {
                       e.stopPropagation();
                       onOpen(book);
