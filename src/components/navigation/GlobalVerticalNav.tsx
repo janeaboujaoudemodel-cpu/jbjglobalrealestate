@@ -798,7 +798,7 @@ export default function GlobalVerticalNav() {
     }
     return shouldHighlight
       ? "text-[#B89555] font-bold"
-      : "text-[#B89555]";
+      : (sectionKey ? "text-[#102540] font-medium" : "text-[#B89555]");
   };
 
   // Saturated colored rows where the row background is a vivid fill (not champagne).
@@ -821,6 +821,7 @@ export default function GlobalVerticalNav() {
   };
 
   const navHoverUnderline = "group-hover:!text-[#102540] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full after:bg-[#102540]";
+  const subNavHoverUnderline = "group-hover:!text-[#102540] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-[50%] after:bg-[#102540]";
 
   // Premium gold-bordered icon tile shared across nav rows.
   const getIconTileClass = (item: NavItem) => {
@@ -1144,7 +1145,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)} group-hover:bg-[#102540]/10 group-hover:border-[#102540]/70`}>
                               <Icon className={`w-3 h-3 ${getIconStyle(item, sectionKey)} group-hover:text-[#102540] transition-colors`} />
                             </span>
-                            <span className={`flex-1 relative transition-colors after:bottom-[-2px] after:h-[1.5px] group-hover:!text-[#102540] ${navHoverUnderline}`}>{item.label}</span>
+                            <span className={`flex-1 relative transition-colors after:bottom-[-2px] after:h-[1.5px] ${subNavHoverUnderline}`}>{item.label}</span>
                           </Link>
                         );
                       })}
@@ -1181,7 +1182,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#102540' }} />
+              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B91C1C' }} />
               <span style={{ color: 'inherit' }}>Contact</span>
             </Link>
             <Link
@@ -1202,7 +1203,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#102540' }} />
+              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B91C1C' }} />
               <span style={{ color: 'inherit' }}>Support</span>
             </Link>
           </div>
@@ -1211,9 +1212,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               data-no-contrast-guard
               onClick={() => { supabase.auth.signOut(); }}
               className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[4px] rounded-lg border w-full group"
-              style={{ color: '#102540', borderColor: 'rgba(16,37,64,0.55)', backgroundColor: 'rgba(16,37,64,0.04)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(16,37,64,0.08)'; e.currentTarget.style.color = '#102540'; e.currentTarget.style.borderColor = '#102540'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(16,37,64,0.04)'; e.currentTarget.style.color = '#102540'; e.currentTarget.style.borderColor = 'rgba(16,37,64,0.55)'; }}
+              style={{ color: '#B91C1C', borderColor: 'rgba(185,28,28,0.55)', backgroundColor: 'rgba(185,28,28,0.04)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(185,28,28,0.08)'; e.currentTarget.style.color = '#B91C1C'; e.currentTarget.style.borderColor = '#B91C1C'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(185,28,28,0.04)'; e.currentTarget.style.color = '#B91C1C'; e.currentTarget.style.borderColor = 'rgba(185,28,28,0.55)'; }}
             >
               <LogOut className="w-3 h-3" style={{ color: 'inherit' }} />
               <span style={{ color: 'inherit' }}>Sign Out</span>
@@ -1329,9 +1330,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
+                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[#B91C1C]/[0.06] border-[#B91C1C]/45 hover:bg-[#B91C1C]/12 hover:border-[#B91C1C]/70"
                   >
-                    <Headphones className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" strokeWidth={2} />
+                    <Headphones className="w-3.5 h-3.5 text-[#B91C1C] group-hover:text-[#B91C1C]" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1342,9 +1343,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
+                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[#B91C1C]/[0.06] border-[#B91C1C]/45 hover:bg-[#B91C1C]/12 hover:border-[#B91C1C]/70"
                   >
-                    <Ticket className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" strokeWidth={2} />
+                    <Ticket className="w-3.5 h-3.5 text-[#B91C1C] group-hover:text-[#B91C1C]" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
