@@ -55,7 +55,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
     >
       <div
         className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/40 overflow-hidden flex flex-col h-full shadow-[0_2px_8px_rgba(184,149,85,0.08)] hover:shadow-[0_12px_28px_rgba(184,149,85,0.18)] transition-shadow cursor-pointer"
-        data-gold-hairline
+       
         onClick={() => !book.is_restricted && onOpen(book)}
       >
         {/* ── 3D Book Cover Stage ──────────────────────────────────── */}
