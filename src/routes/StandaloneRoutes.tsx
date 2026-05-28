@@ -47,20 +47,8 @@ export const StandaloneRoutes = () => (
   <>
     <Route path="/auth" element={<RouteErrorBoundary routeName="Auth"><Auth /></RouteErrorBoundary>} />
     <Route path="/broker/activate" element={<RouteErrorBoundary routeName="BrokerActivate"><BrokerActivate /></RouteErrorBoundary>} />
-    <Route path="/broker/crm" element={
-      <RouteErrorBoundary routeName="BrokerCRM">
-        <Suspense fallback={<PageLoader />}>
-          <BrokerGuard><BrokerCRM /></BrokerGuard>
-        </Suspense>
-      </RouteErrorBoundary>
-    } />
-    <Route path="/broker/crm/database/:id" element={
-      <RouteErrorBoundary routeName="BrokerDatabaseView">
-        <Suspense fallback={<PageLoader />}>
-          <BrokerGuard><BrokerDatabaseView /></BrokerGuard>
-        </Suspense>
-      </RouteErrorBoundary>
-    } />
+    {/* /broker/crm and /broker/crm/database/:id moved into the nested
+        Broker Portal shell — see src/routes/BrokerPortalRoutes.tsx. */}
     <Route path="/broker/agreement/:id" element={
       <RouteErrorBoundary routeName="BrokerAgreementSign">
         <Suspense fallback={<PageLoader />}>
