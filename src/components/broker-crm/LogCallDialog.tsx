@@ -54,6 +54,7 @@ interface Props {
   userId?: string | null;
   submitting: boolean;
   onSubmit: (input: LogCallSubmit) => Promise<{ callLogId?: string } | void>;
+  onSaved?: () => void;
 }
 
 const getPhone = (l: PickerLead) => (l.phone ?? l.phone_e164 ?? "").toString();
@@ -66,7 +67,7 @@ function formatTimer(s: number) {
 }
 
 export default function LogCallDialog({
-  open, onOpenChange, leads, userId, submitting, onSubmit,
+  open, onOpenChange, leads, userId, submitting, onSubmit, onSaved,
 }: Props) {
   // Form state
   const [leadId, setLeadId] = useState<string | null>(null);
@@ -90,7 +91,7 @@ export default function LogCallDialog({
   const timerRef = useRef<number | null>(null);
   const startedAtRef = useRef<number | null>(null);
   const secondsRef = useRef(0);
-  const pendingStopRef = useRef<((value: RecordingResult) => void) | null>(null);
+  const pendingStopRef = useRef<((value: RecordingResult | null) => void) | null>(null);
   const liveTextRef = useRef<string>("");
 
   const selectedLead = useMemo(
@@ -292,6 +293,7 @@ export default function LogCallDialog({
         toast.success("Recording saved — AI is processing it");
         await supabase.from("broker_call_logs").select("id").eq("id", callLogId).maybeSingle();
       }
+      onSaved?.();
       onOpenChange(false);
     } catch (e: any) {
       console.error(e);
