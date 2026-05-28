@@ -2445,19 +2445,47 @@ function StudioShell({
 
                                 {/* Signature/stamp/date marks only on the LAST page */}
                                 {isLast && marks.showDate !== false && (
-                                  <DraggableMark x={marks.dateXY?.x ?? 556} y={marks.dateXY?.y ?? 8} onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))} onRemove={() => removeMark("date")} ariaLabel="Date">
+                                  <DraggableMark x={marks.dateXY?.x ?? 556} y={marks.dateXY?.y ?? 8} onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))} onRemove={() => removeMark("date")} ariaLabel="Date" hint="Drag to move">
                                     <div className="text-[11px] uppercase" style={{ color: "#1A1A1A", opacity: 0.42, letterSpacing: "0.22em", fontVariantNumeric: "tabular-nums", textShadow: "0 1px 0 rgba(255,255,255,0.65)" }}>
                                       {new Date(marks.dateValue || ownerDate || new Date().toISOString().slice(0,10)).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
                                     </div>
                                   </DraggableMark>
                                 )}
                                 {isLast && marks.signature && (
-                                  <DraggableMark x={marks.signatureXY?.x ?? 40} y={marks.signatureXY?.y ?? 320} onChange={(x, y) => setMarks((m) => ({ ...m, signatureXY: { x, y } }))} onRemove={() => removeMark("signature")} ariaLabel="Authorised signature">
+                                  <DraggableMark
+                                    x={marks.signatureXY?.x ?? 40}
+                                    y={marks.signatureXY?.y ?? 320}
+                                    onChange={(x, y) => setMarks((m) => ({ ...m, signatureXY: { x, y } }))}
+                                    onRemove={() => removeMark("signature")}
+                                    onClick={() => setAssetDialog("signature")}
+                                    onResize={() => setMarks((m) => {
+                                      const widths = [160, 200, 240, 300];
+                                      const cur = m.signature?.width ?? 200;
+                                      const next = widths[(widths.indexOf(cur) + 1 + widths.length) % widths.length] || widths[0];
+                                      return m.signature ? { ...m, signature: { ...m.signature, width: next } } : m;
+                                    })}
+                                    ariaLabel="Authorised signature"
+                                    hint="Click to change · Drag to move"
+                                  >
                                     <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 240 }} className="block pointer-events-none" />
                                   </DraggableMark>
                                 )}
                                 {isLast && marks.stamp && (
-                                  <DraggableMark x={marks.stampXY?.x ?? 320} y={marks.stampXY?.y ?? 320} onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))} onRemove={() => removeMark("stamp")} ariaLabel="Stamp">
+                                  <DraggableMark
+                                    x={marks.stampXY?.x ?? 320}
+                                    y={marks.stampXY?.y ?? 320}
+                                    onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
+                                    onRemove={() => removeMark("stamp")}
+                                    onClick={() => setAssetDialog("stamp")}
+                                    onResize={() => setMarks((m) => {
+                                      const widths = [160, 200, 240, 300];
+                                      const cur = m.stamp?.width ?? 200;
+                                      const next = widths[(widths.indexOf(cur) + 1 + widths.length) % widths.length] || widths[0];
+                                      return m.stamp ? { ...m, stamp: { ...m.stamp, width: next } } : m;
+                                    })}
+                                    ariaLabel="Stamp"
+                                    hint="Click to change · Drag to move"
+                                  >
                                     <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 220, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, background: "transparent" }} className="block pointer-events-none" />
                                   </DraggableMark>
                                 )}
