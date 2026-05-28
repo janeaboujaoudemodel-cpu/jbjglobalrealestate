@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { useNavigate } from "react-router-dom";
-import MainLayout from "@/components/MainLayout";
+// MainLayout intentionally NOT imported — this page is mounted inside BrokerPortalLayout (which already provides header/sidebar). Wrapping in MainLayout caused nested shells and a black loading flash on /broker/settings.
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
