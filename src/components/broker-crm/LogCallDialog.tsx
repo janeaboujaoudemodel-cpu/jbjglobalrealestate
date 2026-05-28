@@ -67,6 +67,9 @@ function formatTimer(s: number) {
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
 
+const navyControlClass = "[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100 border border-[#B89555]/55 [&_svg]:!text-white [&_span]:!text-white";
+const creamControlClass = "border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A] [&_svg]:text-[#1A1A1A]";
+
 export default function LogCallDialog({
   open, onOpenChange, leads, userId, initialLeadId, submitting, onSubmit, onSaved,
 }: Props) {
