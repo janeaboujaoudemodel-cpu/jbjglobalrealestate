@@ -218,7 +218,7 @@ const Index = () => {
 
           <video 
             autoPlay loop muted playsInline
-            preload="auto"
+            preload="metadata"
             poster={heroFallbackDubai}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
