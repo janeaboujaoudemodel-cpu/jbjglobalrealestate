@@ -96,6 +96,9 @@ const LEARNING_PATH_ORDER = [
   "Advanced (Restricted)",
 ] as const;
 
+const getLearningPathRank = (path: string) =>
+  LEARNING_PATH_ORDER.findIndex((item) => item === path);
+
 // ────────────────────────────────────────────────────────────────────────────
 
 export default function BrokerLearning() {
@@ -121,8 +124,8 @@ export default function BrokerLearning() {
       byPath.set(k, arr);
     }
     const keys = Array.from(byPath.keys()).sort((a, b) => {
-      const ai = LEARNING_PATH_ORDER.indexOf(a as any);
-      const bi = LEARNING_PATH_ORDER.indexOf(b as any);
+      const ai = getLearningPathRank(a);
+      const bi = getLearningPathRank(b);
       if (ai === -1 && bi === -1) return a.localeCompare(b);
       if (ai === -1) return 1;
       if (bi === -1) return -1;
