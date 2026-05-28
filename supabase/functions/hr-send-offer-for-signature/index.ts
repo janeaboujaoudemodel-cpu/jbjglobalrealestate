@@ -100,10 +100,11 @@ Deno.serve(async (req) => {
       .from("esign_recipients")
       .insert({
         envelope_id: envelope.id,
-        recipient_email: candidate.email,
-        recipient_name: candidate.candidate_name,
+        email: candidate.email,
+        name: candidate.candidate_name,
+        phone: candidate.phone,
         signing_order: 1,
-        role: "signer",
+        status: "pending",
       });
     if (recErr) console.warn("recipient insert warning", recErr);
 
