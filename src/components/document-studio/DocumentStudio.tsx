@@ -303,8 +303,8 @@ function StudioShell({
   // Pagination model:
   //   • Preview renders separate fixed 816×1154 A4 sheets only — never one
   //     stretched PAGE_H * pageCount / natural-height canvas.
-  //   • pageCount is derived from measured body content and is hard-capped at
-  //     MAX_PAGES so any measurement glitch can never run away.
+  //   • pageCount is derived from measured body content with NO upper cap —
+  //     it auto-grows to as many A4 sheets as the content requires.
   //   • Page-break overlays snap UP to the nearest block bottom inside the
   //     body (paragraphs, tables, signature block) so a break never slices
   //     through content. SAFE_GUTTER also keeps content off the very top
