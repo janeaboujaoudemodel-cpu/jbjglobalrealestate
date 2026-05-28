@@ -1,160 +1,394 @@
-import { lazy, Suspense, useMemo } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { GraduationCap, BookOpen, Lock } from "lucide-react";
+import { Link } from "react-router-dom";
+import {
+  GraduationCap, BookOpen, Lock, BarChart3, MessageSquare, Shield,
+  CheckCircle, Clock, Play, ChevronRight, Award,
+} from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
+import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
+import { Book3DCard, BookDetailModal } from "@/components/broker-education";
 
-// Reuse the existing, fully-featured screens as tab bodies.
-// They preserve every feature, modal, and CTA from the original pages.
-const BrokerEducation = lazy(() => import("@/pages/BrokerEducation"));
-const BrokerTraining = lazy(() => import("@/pages/broker/BrokerTraining"));
+// ────────────────────────────────────────────────────────────────────────────
+// Training modules (portal-native, no full-bleed marketing chrome)
+// ────────────────────────────────────────────────────────────────────────────
+type ModuleCat = "foundational" | "practical" | "advanced" | "compliance";
+interface TModule {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  lessons: number;
+  category: ModuleCat;
+  icon: React.ReactNode;
+  topics: string[];
+  progress?: number;
+}
 
-type TabKey = "library" | "training";
-
-const TABS: { key: TabKey; label: string; icon: React.ComponentType<{ className?: string }>; description: string }[] = [
-  { key: "library",  label: "Library",  icon: BookOpen,       description: "Books, learning paths & certification" },
-  { key: "training", label: "Training", icon: GraduationCap,  description: "Market Intelligence training modules" },
+const TRAINING: TModule[] = [
+  {
+    id: "reading-market",
+    title: "Reading the Market",
+    description: "Learn how to interpret market trends and explain data to clients confidently.",
+    duration: "45 min", lessons: 6, category: "foundational",
+    icon: <BarChart3 className="w-5 h-5" />,
+    topics: [
+      "How to interpret market trends",
+      "What data can and cannot say",
+      "How to explain trends to clients",
+      "Reading demand vs supply signals",
+    ],
+    progress: 0,
+  },
+  {
+    id: "rent-conversations",
+    title: "RENT Conversations",
+    description: "Master the art of discussing rent trends and handling tenant/landlord inquiries.",
+    duration: "35 min", lessons: 5, category: "practical",
+    icon: <MessageSquare className="w-5 h-5" />,
+    topics: ["Explaining rent trends clearly", "Handling client hesitation", "Area-specific narratives"],
+    progress: 0,
+  },
+  {
+    id: "buy-vs-rent",
+    title: "BUY vs RENT Context",
+    description: "Understand when to guide clients toward different transaction types.",
+    duration: "30 min", lessons: 4, category: "advanced",
+    icon: <BarChart3 className="w-5 h-5" />,
+    topics: ["When rent demand is stronger", "When sale demand is slower", "Market timing conversations"],
+    progress: 0,
+  },
+  {
+    id: "compliance-language",
+    title: "Compliance & Language Guardrails",
+    description: "Learn the critical difference between insight and advice to stay compliant.",
+    duration: "25 min", lessons: 4, category: "compliance",
+    icon: <Shield className="w-5 h-5" />,
+    topics: ["Words brokers must NOT use", "Difference between 'insight' and 'advice'", "Approved phrasing examples"],
+    progress: 0,
+  },
 ];
 
-const TabFallback = () => (
-  <div className="flex items-center justify-center py-24">
-    <div className="w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full animate-spin" />
-  </div>
-);
+const NEVER_SAY = [
+  "guaranteed returns", "sure investment", "prices will definitely",
+  "you should buy now", "this is the best time", "I predict", "I promise", "100% ROI",
+];
+const ALWAYS_USE = [
+  "Based on recent data…", "Historical trends indicate…", "Market activity suggests…",
+  "According to official Open Data…", "The data shows…", "This area has experienced…",
+];
+
+const CAT_LABEL: Record<ModuleCat, string> = {
+  foundational: "Foundational", practical: "Practical", advanced: "Advanced", compliance: "Compliance",
+};
+
+const LEARNING_PATH_ORDER = [
+  "Foundations",
+  "Buyer & Investor Advisory",
+  "Seller & Landlord Advisory",
+  "Market Intelligence",
+  "Advanced (Restricted)",
+] as const;
+
+// ────────────────────────────────────────────────────────────────────────────
 
 export default function BrokerLearning() {
-  const [params, setParams] = useSearchParams();
   const { user } = useAuth();
   const { mode } = useUserModeContext();
-
-  const requested = (params.get("tab") || "library").toLowerCase() as TabKey;
-  const active: TabKey = useMemo(
-    () => (TABS.some(t => t.key === requested) ? requested : "library"),
-    [requested]
-  );
-
   const trainingLocked = !user || mode !== "broker";
 
-  const setTab = (key: TabKey) => {
-    const next = new URLSearchParams(params);
-    next.set("tab", key);
-    setParams(next, { replace: true });
-  };
+  const { books, loading, progressMap } = useBrokerEducation();
+  const [selectedBook, setSelectedBook] = useState<EducationBook | null>(null);
+
+  const groupedBooks = useMemo(() => {
+    const byPath = new Map<string, EducationBook[]>();
+    for (const b of books) {
+      const key = b.learning_path || "Other";
+      const arr = byPath.get(key) ?? [];
+      arr.push(b);
+      byPath.set(key, arr);
+    }
+    for (const [k, arr] of byPath.entries()) {
+      arr.sort((a, b) =>
+        (a.sort_order ?? 0) - (b.sort_order ?? 0) || (a.book_number ?? 0) - (b.book_number ?? 0)
+      );
+      byPath.set(k, arr);
+    }
+    const keys = Array.from(byPath.keys()).sort((a, b) => {
+      const ai = LEARNING_PATH_ORDER.indexOf(a as any);
+      const bi = LEARNING_PATH_ORDER.indexOf(b as any);
+      if (ai === -1 && bi === -1) return a.localeCompare(b);
+      if (ai === -1) return 1;
+      if (bi === -1) return -1;
+      return ai - bi;
+    });
+    return keys.map((name) => ({ name, books: byPath.get(name) ?? [] }));
+  }, [books]);
+
+  const totalProgress =
+    TRAINING.reduce((acc, m) => acc + (m.progress || 0), 0) / TRAINING.length;
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <div className="space-y-12">
       <SEOHead
-        title="Broker Learning | Library & Training | JBJ GLOBAL REAL ESTATE"
-        description="JBJ Broker Learning hub — internal book library, certification, and Market Intelligence training modules in one place."
-        canonicalPath="/broker/learning"
+        title="Broker Academy | JBJ GLOBAL REAL ESTATE"
+        description="Internal JBJ Broker Academy — book library, training modules, certification and compliance reference."
+        noIndex
       />
 
-      {/* Page header */}
-      <section className="pt-24 pb-6 border-b border-[#B89555]/20" data-gold-hairline>
-        <div className="container mx-auto px-4 max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="flex flex-col gap-4"
-          >
-            <Badge className="self-start bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">
-              <GraduationCap className="w-3 h-3 mr-1" /> Broker Learning
-            </Badge>
-            <h1 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight">
-              Broker Learning
-            </h1>
-            <p className="text-[#1A1A1A]/70 max-w-2xl">
-              One home for everything JBJ brokers learn — the internal book library and
-              Market Intelligence training modules, with progress, certification and compliance built in.
-            </p>
+      {/* ── Header ───────────────────────────────────────────────── */}
+      <motion.header
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="space-y-3"
+      >
+        <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">
+          <GraduationCap className="w-3 h-3 mr-1" /> Internal use only · Broker Academy
+        </Badge>
+        <h1 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight">JBJ Broker Academy</h1>
+        <p className="text-[#1A1A1A]/70 max-w-2xl">
+          One home for everything JBJ brokers learn — the internal book library, market-intelligence training,
+          and the compliance reference, with progress tracked across the portal.
+        </p>
 
-            {/* Segmented tab control */}
-            <div
-              role="tablist"
-              aria-label="Broker Learning sections"
-              className="mt-2 inline-flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 self-start"
-              data-gold-hairline
-            >
-              {TABS.map((t) => {
-                const isActive = active === t.key;
-                const Icon = t.icon;
-                return (
-                  <button
-                    key={t.key}
-                    role="tab"
-                    aria-selected={isActive}
-                    aria-controls={`panel-${t.key}`}
-                    id={`tab-${t.key}`}
-                    onClick={() => setTab(t.key)}
-                    className={[
-                      "inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all",
-                      isActive
-                        ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/50 shadow-sm"
-                        : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/60 border border-transparent",
-                    ].join(" ")}
-                  >
-                    <Icon className="w-4 h-4" />
-                    {t.label}
-                    {t.key === "training" && trainingLocked && (
-                      <Lock className="w-3.5 h-3.5 text-[#1A1A1A]/60" aria-hidden />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </motion.div>
+        <div className="grid sm:grid-cols-3 gap-3 pt-4 max-w-3xl">
+          <KpiCard icon={<BookOpen className="w-4 h-4" />} label="Library books" value={books.length || "—"} />
+          <KpiCard icon={<GraduationCap className="w-4 h-4" />} label="Training modules" value={TRAINING.length} />
+          <KpiCard
+            icon={<Award className="w-4 h-4" />}
+            label="Your training"
+            value={`${Math.round(totalProgress)}%`}
+            progress={totalProgress}
+          />
         </div>
+      </motion.header>
+
+      {/* ── Training ─────────────────────────────────────────────── */}
+      <section className="space-y-5">
+        <SectionTitle eyebrow="Market Intelligence" title="Training Modules" />
+        {trainingLocked ? (
+          <LockedTraining hasUser={!!user} />
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {TRAINING.map((m) => <TrainingCard key={m.id} m={m} />)}
+          </div>
+        )}
       </section>
 
-      {/* Tab panels */}
-      <Suspense fallback={<TabFallback />}>
-        {active === "library" && (
-          <div role="tabpanel" id="panel-library" aria-labelledby="tab-library">
-            <BrokerEducation />
+      {/* ── Library ──────────────────────────────────────────────── */}
+      <section className="space-y-5">
+        <SectionTitle eyebrow="Internal Library" title="Books & Learning Paths" />
+        {loading ? (
+          <div className="py-10 grid place-items-center">
+            <div className="w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full animate-spin" />
           </div>
-        )}
-        {active === "training" && (
-          <div role="tabpanel" id="panel-training" aria-labelledby="tab-training">
-            {trainingLocked ? (
-              <section className="py-20">
-                <div className="container mx-auto px-4 max-w-2xl text-center">
-                  <div className="w-14 h-14 mx-auto rounded-2xl bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center mb-5">
-                    <Lock className="w-6 h-6 text-[#1A1A1A]" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">
-                    Training is for verified brokers
-                  </h2>
-                  <p className="text-[#1A1A1A]/70 mb-6">
-                    Sign in and switch your mode to Broker to unlock Market Intelligence training modules.
-                  </p>
-                  <div className="flex flex-wrap justify-center gap-3">
-                    {!user && (
-                      <Link
-                        to="/auth?redirect=/broker/learning?tab=training"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/50 hover:bg-[#E5D8BD] transition-colors"
-                      >
-                        Sign in
-                      </Link>
-                    )}
-                    <Link
-                      to="/broker/learning?tab=library"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-transparent text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/40 hover:bg-[#F7F2EA] transition-colors"
-                    >
-                      Browse Library instead
-                    </Link>
-                  </div>
+        ) : groupedBooks.length === 0 ? (
+          <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-6 py-10 text-center text-[#1A1A1A]/70" data-gold-hairline>
+            Your library is loading or empty. Check back shortly.
+          </div>
+        ) : (
+          <div className="space-y-8">
+            {groupedBooks.map((group) => (
+              <div key={group.name} className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-[#1A1A1A] font-semibold text-lg">{group.name}</h3>
+                  <span className="text-xs text-[#1A1A1A]/55">{group.books.length} books</span>
                 </div>
-              </section>
-            ) : (
-              <BrokerTraining />
-            )}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                  {group.books.map((book, i) => (
+                    <Book3DCard
+                      key={book.id}
+                      book={book}
+                      progress={progressMap[book.id]}
+                      onOpen={() => setSelectedBook(book)}
+                      index={i}
+                      isLocked={book.is_restricted}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         )}
-      </Suspense>
+      </section>
+
+      {/* ── Compliance reference ─────────────────────────────────── */}
+      <section className="space-y-5">
+        <SectionTitle eyebrow="Compliance" title="Quick Reference" />
+        <div className="grid md:grid-cols-2 gap-5">
+          <ReferenceCard
+            title="NEVER Say"
+            tone="red"
+            icon={<Shield className="w-4 h-4" />}
+            items={NEVER_SAY.map((p) => `"${p}"`)}
+          />
+          <ReferenceCard
+            title="ALWAYS Use"
+            tone="emerald"
+            icon={<CheckCircle className="w-4 h-4" />}
+            items={ALWAYS_USE.map((p) => `"${p}"`)}
+          />
+        </div>
+
+        <Card className="bg-[#F7F2EA] border-[#B89555]/30" data-gold-hairline>
+          <CardContent className="p-6 md:p-8">
+            <h3 className="text-[#1A1A1A] text-lg font-bold mb-5 text-center">Golden Rules for Market Conversations</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              {[
+                { n: 1, t: "Describe, Don't Predict", d: "Explain what data shows, never what will happen." },
+                { n: 2, t: "Insight, Not Advice",     d: "Share market context, let clients decide." },
+                { n: 3, t: "Cite Sources",            d: "Always reference Open Data origins." },
+              ].map(({ n, t, d }) => (
+                <div key={n} className="text-center">
+                  <div className="w-11 h-11 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 grid place-items-center mx-auto mb-3">
+                    <span className="text-[#1A1A1A] font-bold">{n}</span>
+                  </div>
+                  <p className="text-[#1A1A1A] font-semibold mb-1">{t}</p>
+                  <p className="text-[#1A1A1A]/70 text-sm">{d}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
+      <BookDetailModal
+        book={selectedBook}
+        isOpen={!!selectedBook}
+        onClose={() => setSelectedBook(null)}
+      />
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Sub-components
+// ────────────────────────────────────────────────────────────────────────────
+
+function SectionTitle({ eyebrow, title }: { eyebrow: string; title: string }) {
+  return (
+    <div className="space-y-1">
+      <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">{eyebrow}</div>
+      <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{title}</h2>
+    </div>
+  );
+}
+
+function KpiCard({ icon, label, value, progress }: {
+  icon: React.ReactNode; label: string; value: React.ReactNode; progress?: number;
+}) {
+  return (
+    <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-4 py-3" data-gold-hairline>
+      <div className="flex items-center gap-2 text-[#1A1A1A]/70 text-xs">
+        <span className="w-7 h-7 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center text-[#1A1A1A]">
+          {icon}
+        </span>
+        {label}
+      </div>
+      <div className="mt-1 text-xl font-bold text-[#1A1A1A]">{value}</div>
+      {typeof progress === "number" && <Progress value={progress} className="h-1.5 mt-2" />}
+    </div>
+  );
+}
+
+function TrainingCard({ m }: { m: TModule }) {
+  return (
+    <Card className="bg-[#F7F2EA] border-[#B89555]/30 hover:border-[#B89555]/55 transition-colors" data-gold-hairline>
+      <CardContent className="p-5 md:p-6 flex flex-col h-full">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start gap-3 min-w-0">
+            <div className="shrink-0 w-11 h-11 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center text-[#1A1A1A]">
+              {m.icon}
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-[#1A1A1A] font-bold text-lg leading-tight">{m.title}</h3>
+              <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-[#1A1A1A]/70">
+                <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{CAT_LABEL[m.category]}</Badge>
+                <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{m.duration}</span>
+                <span>{m.lessons} lessons</span>
+              </div>
+            </div>
+          </div>
+          <ChevronRight className="w-5 h-5 text-[#1A1A1A]/40 shrink-0" />
+        </div>
+
+        <p className="text-[#1A1A1A]/75 text-sm mt-4 line-clamp-2">{m.description}</p>
+
+        {!!m.progress && (
+          <div className="mt-3">
+            <Progress value={m.progress} className="h-1.5" />
+            <p className="text-[10px] text-[#1A1A1A]/55 mt-1">{m.progress}% complete</p>
+          </div>
+        )}
+
+        <div className="mt-5 flex items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-1.5">
+            {m.topics.slice(0, 2).map((t, i) => (
+              <span key={i} className="text-[11px] bg-[#FDFBF7] text-[#1A1A1A]/80 px-2 py-0.5 rounded border border-[#B89555]/25">
+                {t}
+              </span>
+            ))}
+            {m.topics.length > 2 && <span className="text-[11px] text-[#1A1A1A]/55">+{m.topics.length - 2} more</span>}
+          </div>
+          <Button size="sm" className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E5D8BD] border border-[#B89555]/50">
+            <Play className="w-3 h-3 mr-1" /> Start
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function ReferenceCard({ title, items, tone, icon }: {
+  title: string; items: string[]; tone: "red" | "emerald"; icon: React.ReactNode;
+}) {
+  const mark = tone === "red"
+    ? <span className="text-[#7A1F1F] font-bold">✕</span>
+    : <span className="text-[#1F5132] font-bold">✓</span>;
+  return (
+    <Card className="bg-[#F7F2EA] border-[#B89555]/30" data-gold-hairline>
+      <CardContent className="p-5 md:p-6">
+        <h3 className="text-[#1A1A1A] font-semibold flex items-center gap-2 mb-3">
+          {icon}{title}
+        </h3>
+        <ul className="space-y-1.5">
+          {items.map((p, i) => (
+            <li key={i} className="flex items-start gap-2 text-[#1A1A1A]/85 text-sm">
+              <span className="mt-0.5">{mark}</span>
+              <span>{p}</span>
+            </li>
+          ))}
+        </ul>
+      </CardContent>
+    </Card>
+  );
+}
+
+function LockedTraining({ hasUser }: { hasUser: boolean }) {
+  return (
+    <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-6 py-12 text-center" data-gold-hairline>
+      <div className="w-14 h-14 mx-auto rounded-2xl bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center mb-4">
+        <Lock className="w-6 h-6 text-[#1A1A1A]" />
+      </div>
+      <h3 className="text-xl font-bold text-[#1A1A1A] mb-1">Training is for verified brokers</h3>
+      <p className="text-[#1A1A1A]/70 mb-5 max-w-md mx-auto">
+        Sign in and switch your mode to Broker to unlock Market Intelligence training modules.
+      </p>
+      {!hasUser && (
+        <Link
+          to="/auth?redirect=/broker/learning"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/50 hover:bg-[#E5D8BD] transition-colors"
+        >
+          Sign in
+        </Link>
+      )}
     </div>
   );
 }

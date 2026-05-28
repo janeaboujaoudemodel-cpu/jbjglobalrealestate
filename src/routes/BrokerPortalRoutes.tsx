@@ -23,6 +23,7 @@ const BrokerProjectsRedirect = lazy(() => import("@/pages/broker/BrokerProjectsR
 const BrokerAccount          = lazy(() => import("@/pages/BrokerAccount"));
 const AIBrokerWorkspace      = lazy(() => import("@/pages/AIBrokerWorkspace"));
 const BrokerComingSoonSection= lazy(() => import("@/pages/broker/BrokerComingSoonSection"));
+const BrokerFormRequests     = lazy(() => import("@/pages/broker/BrokerFormRequests"));
 
 const Wrap = (
   <AuthRequiredRoute>

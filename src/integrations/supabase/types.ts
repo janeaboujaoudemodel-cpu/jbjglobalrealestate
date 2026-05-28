@@ -3247,6 +3247,48 @@ export type Database = {
         }
         Relationships: []
       }
+      broker_form_requests: {
+        Row: {
+          broker_user_id: string
+          created_at: string
+          delivered_file_url: string | null
+          form_type: string
+          id: string
+          lead_id: string | null
+          notes: string | null
+          owner_user_id: string | null
+          response_notes: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          broker_user_id: string
+          created_at?: string
+          delivered_file_url?: string | null
+          form_type: string
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          owner_user_id?: string | null
+          response_notes?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          broker_user_id?: string
+          created_at?: string
+          delivered_file_url?: string | null
+          form_type?: string
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          owner_user_id?: string | null
+          response_notes?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       broker_learning_settings: {
         Row: {
           id: string
