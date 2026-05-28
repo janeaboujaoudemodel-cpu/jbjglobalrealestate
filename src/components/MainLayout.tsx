@@ -297,13 +297,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         {!usesStandalonePortalChrome && !isToolkitGeneratorRoute && <Footer />}
       </div>
 
-      {popupsReady && (
+      {!usesStandalonePortalChrome && popupsReady && (
         <Suspense fallback={null}>
           <PopupLayer />
         </Suspense>
       )}
       {/* Page navigation arrows — visible only when chat is closed */}
-      <PageNavigation isChatOpen={!effectiveCollapsed} isChatMedium={showAttentionPulse && effectiveCollapsed} />
+      {!usesStandalonePortalChrome && <PageNavigation isChatOpen={!effectiveCollapsed} isChatMedium={showAttentionPulse && effectiveCollapsed} />}
       {!usesStandalonePortalChrome && (!isHomePage || popupsReady) && (
         <Suspense fallback={null}>
           <AIChatWidget
