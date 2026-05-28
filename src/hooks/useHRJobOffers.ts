@@ -53,7 +53,8 @@ export interface JobApplicant {
 
 // Department list for categorization
 export const DEPARTMENTS = [
-  'Leadership & Legal',
+  'Property Consultant',
+  'Legal',
   'Sales',
   'After Sales',
   'Marketing & Content',
