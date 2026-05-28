@@ -72,7 +72,7 @@ import DocumentPreviewDialog from "./DocumentPreviewDialog";
 import { RotateCcw } from "lucide-react";
 
 interface Props {
-  catalog: DocumentAudience;
+  catalog: DocumentScope;
   trigger?: React.ReactNode;
   presetTemplateId?: string;
 }
