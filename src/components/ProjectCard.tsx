@@ -94,7 +94,7 @@ const isPropertyTypeOnlyLabel = (value?: string | null) => {
 // Sale status label resolver — visual style is owned by <CardBadge variant="status" />.
 const getSaleStatusLabel = resolveSaleStatusLabel;
 
-const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
+const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft', priority = false }: ProjectCardProps) => {
   const { isOwner } = useUserRole();
   const { pathname } = useLocation();
   // Single static cover — carousel arrows are banned on cards (gallery only).
