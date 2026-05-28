@@ -273,6 +273,8 @@ function StudioShell({
   const [department, setDepartment] = useState<string>(DEPARTMENTS[0]);
   const [editingDept, setEditingDept] = useState<string | null>(null);
   const [deptDraft, setDeptDraft] = useState("");
+  const [addingOtherDept, setAddingOtherDept] = useState(false);
+  const [otherDeptDraft, setOtherDeptDraft] = useState("");
   const [fields, setFields] = useState<Record<string, string>>({});
   const [bodyHtml, setBodyHtml] = useState<string>("");
   const [generating, setGenerating] = useState(false);
