@@ -617,7 +617,10 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
       <ContactGatingModal isOpen={showGatingModal} onClose={closeGatingModal} onComplete={handleGatingComplete} triggerSource={triggerSource} />
       <InquiryFormModal isOpen={isInquiryOpen} onClose={() => setIsInquiryOpen(false)} propertyName={projectName || "Interior Design Revision"} source="interior_design" />
     </section>
-    </ToolAnimatedFrame>
+  );
+
+  return embedded ? body : (
+    <ToolAnimatedFrame theme={toolThemes.rose}>{body}</ToolAnimatedFrame>
   );
 };
 
