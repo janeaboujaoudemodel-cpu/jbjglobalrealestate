@@ -683,125 +683,32 @@ function composeHolidayHome(input: ComposerInput): string {
 
 
   const welcome = `
-    <div data-pdf-section="welcome" style="margin:0;font-size:13.5px;color:${INK};line-height:1.72;">
-      <p style="margin:0 0 13px;font-size:14.5px;"><strong>Dear ${guestName || "Recipient"},</strong></p>
-      <p style="margin:0 0 13px;">It is our distinct privilege to welcome you to <strong>JBJ GLOBAL REAL ESTATE</strong>. We are deeply honoured by your trust in selecting our residence for your stay, and we are committed to ensuring that every detail of your experience reflects the discreet excellence our guests expect.</p>
-      <p style="margin:0;">This agreement records your booking profile, payment summary, guest obligations, and signing declaration in a clear three-page format prepared for review and execution.</p>
+    <div data-pdf-section="welcome" style="margin:0;font-size:13.5px;color:${INK};line-height:1.78;">
+      <p style="margin:0 0 14px;font-size:15px;"><strong>Dear ${guestName || "Distinguished Guest"},</strong></p>
+      <p style="margin:0 0 13px;">On behalf of the entire team at <strong>JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>, it is our distinct privilege to welcome you to one of Dubai's most refined holiday residences. We are deeply honoured by the trust you have placed in us and remain wholeheartedly committed to ensuring that every detail of your stay reflects the quiet excellence, comfort and discretion our guests expect of the JBJ name.</p>
+      <p style="margin:0 0 13px;">The pages that follow set out, in full transparency, the profile of your reservation, the financial summary of your stay, the obligations applicable to your residency, and the formal declaration required to confirm your booking. Each page bears your signature so that nothing is left ambiguous and your peace of mind is fully preserved from arrival to departure.</p>
+      <p style="margin:0;">Should you require any assistance at any moment of your stay, our concierge team is at your full disposal — 24 hours a day — through the contact channels printed in the footer of this document.</p>
     </div>`;
 
-  const guestCard = `
-    <div data-pdf-section="guest-card" style="margin:0;border:1px solid ${GOLD};background:${CHAMPAGNE};">
-      <div style="padding:12px 16px;border-bottom:1px solid ${GOLD}66;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;">
-        Guest &amp; Booking Profile
-      </div>
-      <table style="border-collapse:collapse;width:100%;font-family:Inter,system-ui,sans-serif;">
-        <tbody>
-          ${(() => {
-            const rows = [
-            ["Booking ID", bookingId],
-            ["Guest Full Name", f.recipientName || "—"],
-            ["ID Type", idType],
-            ["ID Number", idNumber],
-            ["Nationality", nationality],
-            ["Phone / WhatsApp", f.guestPhone || "—"],
-            ["Date of Booking", bookingDateStr],
-            ["Property / Unit", [f.propertyName, f.roomType].filter(Boolean).join(" — ") || "—"],
-            ["Check-in", checkIn || "—"],
-            ["Check-out", checkOut || "—"],
-            ["Nights", nights ? String(nights) : "—"],
-            ["Guests", f.guestsCount || "—"],
-            ];
-            const pairs: string[] = [];
-            for (let i = 0; i < rows.length; i += 2) {
-              const a = rows[i];
-              const b = rows[i + 1];
-              pairs.push(`
-                <tr style="background:${(i / 2) % 2 ? "#FDFBF7" : "transparent"};">
-                  <td style="padding:7px 12px;font-size:9.2px;text-transform:uppercase;letter-spacing:0.13em;color:${INK};opacity:.68;width:20%;">${esc(a[0])}</td>
-                  <td style="padding:7px 12px;font-size:11.4px;color:${INK};font-weight:650;width:30%;">${esc(a[1])}</td>
-                  <td style="padding:7px 12px;font-size:9.2px;text-transform:uppercase;letter-spacing:0.13em;color:${INK};opacity:.68;width:20%;border-left:1px solid ${GOLD}33;">${b ? esc(b[0]) : ""}</td>
-                  <td style="padding:7px 12px;font-size:11.4px;color:${INK};font-weight:650;width:30%;">${b ? esc(b[1]) : ""}</td>
-                </tr>`);
-            }
-            return pairs.join("");
-          })()}
-        </tbody>
-      </table>
-    </div>`;
-
-  // Pre-filled premium T&Cs are split across pages 2 and 3 so the pages are
-  // balanced: no broken first page, no compressed second page, no dead footer gap.
-  const termClauses = [
-    `<strong>Non-Refundable Booking.</strong> The Guest acknowledges that the total amount paid above is <strong>strictly non-refundable</strong> under any circumstances, including cancellation, no-show, early check-out, travel disruption, visa issues, illness, change of plans or force-majeure events. The unit has been reserved and removed from public availability solely for the Guest.`,
-    `<strong>No Refund · No Credit.</strong> No partial refund, monetary credit, date change, transfer, or substitution will be issued once payment is received. The Guest expressly waives any right to claim a refund.`,
-    `<strong>Full Release of Liability.</strong> The Guest hereby <strong>fully releases, indemnifies and holds harmless JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>, its owners, officers, employees, agents and affiliates from any and all liability, claims, damages, losses, theft, personal injury, property damage, illness, or consequential loss arising before, during or after the stay. JBJ acts solely as booking facilitator and assumes <strong>no responsibility</strong> for the condition, suitability, services, utilities, neighbours, building management, or any incident occurring on the premises.`,
-    `<strong>Damage &amp; Property Condition.</strong> The Guest is <strong>fully liable for the full cost of repair or replacement</strong> of any damage, breakage, loss or theft affecting the unit, furniture, appliances, fixtures, finishes or common areas — whether caused by the Guest, co-occupants, visitors, or any person admitted by the Guest. Damages are charged at full market / replacement cost <strong>plus a 15% handling fee</strong>.`,
-    `<strong>Overstay &amp; Unauthorised Occupation.</strong> If the Guest fails to vacate at the agreed check-out time without prior written extension, the Guest shall pay <strong>AED 1,500 per day or 2× the nightly rate, whichever is higher</strong>, plus all legal, eviction, locksmith and enforcement costs.`,
-    `<strong>Conduct of Guests &amp; Visitors.</strong> The Guest is <strong>fully responsible for the conduct, safety and compliance of every co-occupant and visitor</strong> admitted to the property, and indemnifies JBJ against any claim arising from their actions. Maximum occupancy may not be exceeded; subletting, re-listing or commercial use is strictly prohibited.`,
-    `<strong>House Rules &amp; Policy Adherence.</strong> The Guest agrees to <strong>read, respect and abide by all house rules, building by-laws, community regulations and UAE laws</strong> at all times. No parties, no events, no smoking indoors, no unregistered guests, and no pets unless explicitly approved in writing. Quiet hours are 10:00 PM – 8:00 AM.`,
-    `<strong>Check-in / Check-out.</strong> Check-in 3:00 PM · Check-out 12:00 PM. Late check-out is charged at one (1) additional night. Keys must be returned in person or via the secure key-box. Lost keys / access cards are charged at cost.`,
-    `<strong>Security Deposit.</strong> A refundable security deposit, where collected, is returned within fourteen (14) days post check-out subject to inspection and deduction of any damages, missing items, cleaning fees or unpaid charges.`,
-    `<strong>Governing Law.</strong> This Agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai. Any dispute is subject to the exclusive jurisdiction of Dubai Courts.`,
-    `<strong>Acknowledgement.</strong> By signing below, the Guest confirms they have <strong>read, understood and accepted</strong> all terms above, and that payment has been made <strong>voluntarily and irrevocably</strong>.`,
-  ];
-  // GLOBAL READABILITY RULE: body terms ≥ 12.5px, line-height ≥ 1.65, clause spacing ≥ 9px.
-  // Never compress terms below this floor to "fit" a page — add a page instead.
-  const termsList = (items: string[], start: number, title: string) => `
-    <div data-pdf-section="terms" style="margin:0;">
-      <div style="font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;border-bottom:1px solid ${GOLD};padding-bottom:8px;margin-bottom:14px;">
-        ${title}
-      </div>
-      <ol start="${start}" style="margin:0;padding-left:22px;font-size:12.6px;line-height:1.68;color:${INK};">
-        ${items.map((clause, i) => `<li style="margin-bottom:${i === items.length - 1 ? 0 : 10}px;">${clause}</li>`).join("")}
-      </ol>
-    </div>`;
-  const allTerms = termsList(termClauses, 1, "Terms & Conditions — Booking, Payment, Liability & Stay Rules");
-
-
-  // Final guest acknowledgement — name synced live from the left-rail input.
-  const guestLegalName = esc((f.recipientName || "").trim() || "[FULL NAME AS PER ID / PASSPORT]");
-  const acknowledgement = `
-    <div data-pdf-section="acknowledgement" style="margin:0;padding:15px 20px;border:1px solid ${GOLD};background:${CHAMPAGNE};">
-      <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${INK};font-weight:600;margin-bottom:10px;">Acknowledgement &amp; Declaration</div>
-      <p style="margin:0;font-size:12.1px;line-height:1.62;color:${INK};">
-        I, <strong>${guestLegalName}</strong>, hereby agree to all the terms and conditions provided by
-        <strong>JBJ GLOBAL REAL ESTATE L.L.C — S.O.C</strong>. I confirm that I have fully read and understood
-        every clause above, that I am <strong>solely responsible</strong> for reading and understanding them,
-        and that I sign below with my <strong>full, free and informed decision and consent</strong>.
-      </p>
-    </div>`;
-
-  const signature = signatureBlock({
-    ownerName: input.ownerName,
-    ownerTitle: input.ownerTitle,
-    ownerDate: input.ownerDate,
-    applicantName: f.recipientName,
-    applicantDate: input.applicantDate,
-    applicantLabel: "Client Signature",
-    extraSignatories: input.extraSignatories,
-  });
-
-  // ── Locked 3-page layout. Page 1 = letter + guest profile + quotation.
-  //    Page 2 = terms + disclaimer/guest declaration at bottom. Page 3 = signature + closing.
-  // GLOBAL MULTI-PAGE SIGNATURE RULE: pages 1 & 2 carry a client-initials strip
-  // at the bottom (Guest signs each non-final page). Authorised signatory +
-  // stamp appear ONLY on page 3.
-  const initialsPage1 = clientInitialsStrip({ applicantName: f.recipientName, page: 1, totalPages: 3 });
-  const initialsPage2 = clientInitialsStrip({ applicantName: f.recipientName, page: 2, totalPages: 3 });
-
+  // ── Locked 3-page layout. Page 1 = letter + guest profile + quotation only.
+  //    Page 2 = full terms & conditions only. Page 3 = acknowledgement/disclaimer
+  //    centered, then aligned authorised-signatory + guest signature side-by-side
+  //    with company stamp. Footer renders on the final page only.
+  // The `data-locked-pages="1"` flag on the first section instructs the global
+  // Document Studio auto-paginator to honour these explicit pages verbatim.
   const page1 = `
-    <section data-pdf-page="1">
-      ${pageFrame(`${input.hideLetterDate ? "" : dateLine(input.letterDate)}${subjectLine(`Holiday Home Booking Agreement — ${bookingId}`)}${welcome}${guestCard}${quotation}${initialsPage1}`, 1)}
+    <section data-pdf-page="1" data-locked-pages="1">
+      ${pageFrame(`${input.hideLetterDate ? "" : dateLine(input.letterDate)}${subjectLine(`Holiday Home Booking Agreement — ${bookingId}`)}${welcome}${guestCard}${quotation}`, 1)}
     </section>`;
 
   const page2 = `
     <section data-pdf-page="2">
-      ${pageFrame(`<div style="display:flex;flex-direction:column;gap:18px;">${allTerms}${acknowledgement}</div>${initialsPage2}`, 2)}
+      ${pageFrame(`<div style="display:flex;flex-direction:column;gap:18px;">${allTerms}</div>`, 2)}
     </section>`;
 
   const page3 = `
     <section data-pdf-page="3">
-      ${pageFrame(`<div style="display:flex;flex-direction:column;gap:18px;">${signature}${paragraphs(input.aiClosing)}</div>`, 3)}
+      ${pageFrame(`<div style="display:flex;flex-direction:column;gap:26px;justify-content:center;flex:1;">${acknowledgement}${signature}${paragraphs(input.aiClosing)}</div>`, 3)}
     </section>`;
 
   return [page1, page2, page3].join("");
