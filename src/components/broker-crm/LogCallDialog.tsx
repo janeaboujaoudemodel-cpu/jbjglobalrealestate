@@ -2,7 +2,7 @@
 // - searchable lead picker (name / phone / email / nationality / source)
 // - browser microphone recorder
 // - upload of recording, AI transcription + evaluation
-// - auto duration, points awarded by parent
+// - auto duration, no points awarded for call logging
 // Designed to live inside BrokerCRM.tsx as the only call-logging surface.
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -82,7 +82,7 @@ export default function LogCallDialog({
   const [notes, setNotes] = useState("");
 
   // Recorder state
-  const [recState, setRecState] = useState<"idle" | "recording" | "paused" | "stopped">("idle");
+  const [recState, setRecState] = useState<"idle" | "recording" | "stopped">("idle");
   const [seconds, setSeconds] = useState(0);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [savingRecording, setSavingRecording] = useState(false);
@@ -288,7 +288,7 @@ export default function LogCallDialog({
     setSavingRecording(true);
     let finalAudioBlob = audioBlob;
     let finalDuration = Math.max(0, Number(durationSeconds) || secondsRef.current || 0);
-    if (recState === "recording" || recState === "paused") {
+    if (recState === "recording") {
       const stopped = await stopRecordingAndGetBlob();
       finalAudioBlob = stopped?.blob ?? null;
       finalDuration = stopped?.seconds ?? finalDuration;
@@ -440,7 +440,7 @@ export default function LogCallDialog({
                   <span>Start recording</span>
                 </button>
               )}
-              {(recState === "recording" || recState === "paused") && (
+              {recState === "recording" && (
                 <button type="button" onClick={stopRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
                   <CheckCircle2 className="h-4 w-4" />
                   <span>Done</span>
