@@ -76,9 +76,8 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
         )}
       </div>
 
-      {/* Nav — fills the space between header and pinned footer by spacing Dashboard → Settings */}
-      <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-2 jj-scrollbar-gold">
-        <div className="min-h-full flex flex-col justify-between gap-1">
+      {/* Nav — tight stack, scrolls if overflow */}
+      <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-2 jj-scrollbar-gold space-y-0.5">
         {ITEMS.map(({ to, label, icon: Icon }) => {
           const active =
             to === "/broker/portal" ? pathname === to : pathname === to || pathname.startsWith(to + "/");
@@ -89,7 +88,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
               onClick={onNavigate}
               title={collapsed ? label : undefined}
               className={cn(
-                "flex shrink-0 items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors border border-transparent outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors border border-transparent outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
                 "text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:border-[#B89555]/40",
                 active && "text-[#1A1A1A] font-semibold border-[#B89555] bg-transparent",
               )}
@@ -99,8 +98,8 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
             </NavLink>
           );
         })}
-        </div>
       </nav>
+
 
       {/* Pinned footer — seals the sidebar (mirrors OwnerDashboardShell) */}
       <div className="p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#F7F2EA]">
