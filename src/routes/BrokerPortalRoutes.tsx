@@ -88,15 +88,8 @@ export const BrokerPortalRoutes = () => (
     <Route path="learning" element={<BrokerLearning />} />
     <Route path="learning/book/:bookId" element={<BookReader />} />
     <Route path="academy" element={<Navigate to="/broker/learning?tab=training" replace />} />
-    <Route
-      path="marketing"
-      element={
-        <BrokerComingSoonSection
-          title="Marketing Toolkit"
-          description="Branded stamps, logos, e-signature kits and outreach templates."
-          cta={{ to: "/broker-toolkit", label: "Open Royal Tools" }}
-        />
-      }
-    />
+    {/* Marketing Toolkit removed from broker portal per owner directive — no front-end redirects from inside the portal. */}
+    <Route path="marketing" element={<Navigate to="/broker/portal" replace />} />
+
   </Route>
 );
