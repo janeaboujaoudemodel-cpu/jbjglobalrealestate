@@ -21,6 +21,9 @@ const intros: Record<string, (f: Record<string, string>, dept?: string) => strin
     `This Employment Contract (the "Agreement") is entered into between JBJ GLOBAL REAL ESTATE (the "Employer") and ${f.recipientName || "[Employee]"} (the "Employee"), governing the terms of the Employee's appointment to the role of ${f.jobTitle || "[Position]"}.`,
   warning_letter: (f) =>
     `This letter serves as a formal ${f.warningLevel || "first"} warning regarding the matter set out below. JBJ GLOBAL REAL ESTATE expects every member of staff to uphold the professional standards documented in the Employee Handbook.`,
+  termination_letter: (f) =>
+    `This letter serves as formal notice that your employment with JBJ GLOBAL REAL ESTATE${f.jobTitle ? ` in the position of ${f.jobTitle}` : ""} is terminated${f.reason ? ` on the grounds of ${f.reason.replace(/_/g, " ")}` : ""}. The decision has been made in accordance with UAE Federal Decree-Law No. 33 of 2021 on the Regulation of Labour Relations and the firm's internal policies.`,
+
   nda: (f) =>
     `This Non-Disclosure Agreement is entered into between JBJ GLOBAL REAL ESTATE and ${f.recipientName || "[Counterparty]"}${f.counterparty ? ` of ${f.counterparty}` : ""} to protect Confidential Information exchanged in connection with the Purpose stated below.`,
   commission_agreement: (f) =>
