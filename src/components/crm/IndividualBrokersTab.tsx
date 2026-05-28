@@ -491,6 +491,18 @@ export default function IndividualBrokersTab() {
         </DialogContent>
       </Dialog>
 
+      <AddPersonDialog
+        open={addOpen}
+        onOpenChange={setAddOpen}
+        mode="broker"
+        onAdded={() => {
+          qc.invalidateQueries({ queryKey: ["crm-brokers"] });
+          qc.invalidateQueries({ queryKey: ["crm-brokers-count"] });
+        }}
+      />
+
+
+
       <BrokerBulkUploadDialog
         open={bulkOpen}
         onOpenChange={setBulkOpen}
