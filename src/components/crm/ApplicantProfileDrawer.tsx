@@ -410,6 +410,54 @@ export default function ApplicantProfileDrawer({
               </Button>
             </div>
           </div>
+
+          {/* === HR PIPELINE STRIP === */}
+          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-[#102540]/15 bg-[#FDFBF7] px-3 py-2">
+            <span className="text-[10px] uppercase tracking-[0.18em] text-[#102540] font-semibold">
+              HR Pipeline
+            </span>
+            {candidateRow?.status && (
+              <Badge variant="outline" className="bg-white border-[#102540]/30 text-[#102540] font-normal">
+                {candidateRow.status.replace(/_/g, " ")}
+              </Badge>
+            )}
+            <div className="ml-auto flex flex-wrap gap-1.5">
+              <Button
+                size="sm"
+                onClick={handleApproveAndRequestDocs}
+                disabled={!candidateRow || pipelineBusy !== null || !!candidateRow?.intake_submitted_at}
+                className="bg-[#102540] hover:bg-[#1a3d63] text-white"
+                data-allow-dark-cta
+                title={candidateRow?.intake_submitted_at ? "Documents already submitted" : "Approve & email intake link"}
+              >
+                {pipelineBusy === "approve" ? (
+                  <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
+                ) : (
+                  <MailCheck className="h-3.5 w-3.5 mr-1.5" />
+                )}
+                Approve & request docs
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleSendOfferForSignature}
+                disabled={!candidateRow || pipelineBusy !== null || !candidateRow?.intake_submitted_at}
+                className="border-[#102540]/40 text-[#102540] hover:bg-[#EFE6D6]"
+                title={
+                  !candidateRow?.intake_submitted_at
+                    ? "Available after candidate submits documents"
+                    : "Create signable job-offer envelope"
+                }
+              >
+                {pipelineBusy === "offer" ? (
+                  <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
+                ) : (
+                  <FileSignature className="h-3.5 w-3.5 mr-1.5" />
+                )}
+                Send offer for signature
+              </Button>
+            </div>
+          </div>
         </div>
 
         {/* === SCROLLABLE BODY === */}
