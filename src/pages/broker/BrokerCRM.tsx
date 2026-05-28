@@ -598,22 +598,32 @@ export default function BrokerCRM() {
               <Phone className="w-3.5 h-3.5 mr-1.5" /> Log a call
             </Button>
           </div>
-          {(tasks.data ?? []).filter((t: any) => (t.type || "").toLowerCase().includes("call")).length === 0 ? (
-            <Empty msg="No calls logged yet. Calls captured on a lead will surface here." />
+          {callLogs.isLoading ? (
+            <Loading />
+          ) : (callLogs.data ?? []).length === 0 ? (
+            <Empty msg="No calls logged yet. Use Log a call to capture broker activity, duration, outcome, notes, and points." />
           ) : (
             <ul className="divide-y divide-[#B89555]/15">
-              {(tasks.data ?? [])
-                .filter((t: any) => (t.type || "").toLowerCase().includes("call"))
+              {(callLogs.data ?? [])
                 .slice(0, 20)
-                .map((t: any) => (
-                  <li key={t.id} className="py-2.5 flex items-center gap-3">
+                .map((log: any) => {
+                  const lead = leadsData.find((item) => item.id === log.lead_id);
+                  return (
+                  <li key={log.id} className="py-2.5 flex items-center gap-3">
                     <Phone className="h-4 w-4 text-[#1A1A1A]/60" />
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm text-[#1A1A1A] truncate">{t.title || "Call"}</div>
-                      <div className="text-[11px] text-[#1A1A1A]/55 truncate">{t.status} · {formatDisplayDate(t.updated_at || t.created_at)}</div>
+                      <div className="text-sm text-[#1A1A1A] truncate">
+                        {lead?.full_name ? `Call with ${lead.full_name}` : "Manual broker call"}
+                      </div>
+                      <div className="text-[11px] text-[#1A1A1A]/55 truncate">
+                        {log.call_status || "completed"} · {log.call_type || "outbound"} · {formatDuration(log.duration_seconds)} · {formatDisplayDate(log.created_at)}
+                      </div>
+                      {log.notes && <div className="text-xs text-[#1A1A1A]/70 mt-1 truncate">{log.notes}</div>}
                     </div>
+                    <div className="text-xs text-[#1A1A1A]/65 tabular-nums">{log.phone_number}</div>
                   </li>
-                ))}
+                  );
+                })}
             </ul>
           )}
         </PremiumCard>
@@ -690,6 +700,13 @@ export default function BrokerCRM() {
         </PremiumCard>
       )}
 
+      <LogCallDialog
+        open={callDialogOpen}
+        onOpenChange={setCallDialogOpen}
+        leads={leadsData}
+        submitting={createCallLog.isPending}
+        onSubmit={(input) => createCallLog.mutate(input)}
+      />
       <RequestDatabaseDialog open={requestOpen} onOpenChange={setRequestOpen} />
     </div>
   );
