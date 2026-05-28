@@ -963,6 +963,6 @@ export function compose(input: ComposerInput): string {
 
 /** Pre-seeded commission rows for HR/broker offers. */
 export const DEFAULT_BROKER_COMMISSIONS: CommissionRow[] = [
-  { label: "Direct deals", rate: "", trigger: "Paid after the firm receives cleared commission", notes: "" },
-  { label: "Company-sourced leads", rate: "", trigger: "Paid after the firm receives cleared commission", notes: "" },
+  { label: "Direct deals", rate: "", trigger: "Paid after JBJ Global Real Estate LLC SOC receives the cleared commission", notes: "" },
+  { label: "Company-sourced leads", rate: "", trigger: "Paid after JBJ Global Real Estate LLC SOC receives the cleared commission", notes: "" },
 ];
