@@ -201,10 +201,7 @@ export default function LogCallDialog({
       mr.onstop = () => {
         const blobType = mime || chunksRef.current.find((part) => part instanceof Blob)?.type || "audio/webm";
         const blob = new Blob(chunksRef.current, { type: blobType });
-        const finalSeconds = Math.max(
-          secondsRef.current,
-          startedAtRef.current ? Math.round((Date.now() - startedAtRef.current) / 1000) : 0,
-        );
+        const finalSeconds = Math.max(secondsRef.current, chunksRef.current.length ? 1 : 0);
         setAudioBlob(blob);
         setDurationSeconds(String(finalSeconds));
         setSeconds(finalSeconds);
