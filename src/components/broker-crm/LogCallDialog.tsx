@@ -67,8 +67,7 @@ function formatTimer(s: number) {
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
 
-const navyControlClass = "bg-[#102540] !text-white hover:bg-[#1a3d63] hover:!text-white disabled:opacity-100 border border-[#B89555]/55 [&_svg]:!text-white [&_svg]:!stroke-white [&_span]:!text-white [&_span]:[-webkit-text-fill-color:#FFFFFF]";
-const creamControlClass = "border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A] [&_svg]:text-[#1A1A1A]";
+const navyControlClass = "jj-navy-cta inline-flex h-10 items-center justify-center gap-2 rounded-md px-6 py-2 text-sm font-semibold transition-colors disabled:pointer-events-none disabled:opacity-70";
 
 export default function LogCallDialog({
   open, onOpenChange, leads, userId, initialLeadId, submitting, onSubmit, onSaved,
@@ -242,57 +241,6 @@ export default function LogCallDialog({
       pendingStopRef.current?.(audioBlob ? { blob: audioBlob, seconds: secondsRef.current } : null);
       pendingStopRef.current = null;
     }
-  };
-
-  const pauseRecording = () => {
-    const recorder = recRef.current;
-    if (!recorder || recorder.state !== "recording") return;
-    try {
-      recorder.pause();
-      if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
-      setRecState("paused");
-    } catch (err) {
-      console.warn("recorder.pause failed", err);
-    }
-  };
-
-  const resumeRecording = () => {
-    const recorder = recRef.current;
-    if (!recorder || recorder.state !== "paused") return;
-    try {
-      recorder.resume();
-      setRecState("recording");
-      timerRef.current = window.setInterval(() => {
-        setSeconds((s) => {
-          const next = s + 1;
-          secondsRef.current = next;
-          return next;
-        });
-      }, 1000) as unknown as number;
-    } catch (err) {
-      console.warn("recorder.resume failed", err);
-    }
-  };
-
-  const discardRecording = () => {
-    if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
-    try {
-      if (recRef.current && recRef.current.state !== "inactive") {
-        recRef.current.onstop = null;
-        recRef.current.stop();
-      }
-    } catch (err) {
-      console.warn("recorder discard stop failed", err);
-    }
-    stopTracks();
-    recRef.current = null;
-    chunksRef.current = [];
-    setAudioBlob(null);
-    setSeconds(0);
-    secondsRef.current = 0;
-    startedAtRef.current = null;
-    setDurationSeconds("0");
-    setRecState("idle");
   };
 
   const stopRecordingAndGetBlob = () => new Promise<RecordingResult | null>((resolve) => {
