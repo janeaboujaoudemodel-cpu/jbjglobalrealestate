@@ -1001,60 +1001,64 @@ export default function JoinApplication() {
                 {/* Nationality + Language */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Nationality</Label>
+                    <Label data-required className="jbj-form-label text-sm font-semibold">Nationality</Label>
                     <SearchableSelect
                       value={formData.nationality}
-                      onChange={(v) => setFormData({ ...formData, nationality: v })}
+                      onChange={(v) => { setFormData({ ...formData, nationality: v }); clearFieldError("nationality"); }}
                       options={NATIONALITIES}
                       placeholder="Select nationality"
                       searchPlaceholder="Search nationality..."
                       flagType="nationality"
                       disabled={loading}
-                      triggerClassName="careers-blue-field h-12 rounded-lg"
+                      triggerClassName={`careers-blue-field h-12 rounded-lg ${fieldErr("nationality") ? "is-invalid" : ""}`}
                     />
+                    <FieldError id="nationality-err" message={fieldErr("nationality")} />
                   </div>
                   <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Preferred Language</Label>
+                    <Label data-required className="jbj-form-label text-sm font-semibold">Preferred Language</Label>
                     <SearchableSelect
                       value={formData.preferredLanguage}
-                      onChange={(v) => setFormData({ ...formData, preferredLanguage: v })}
+                      onChange={(v) => { setFormData({ ...formData, preferredLanguage: v }); clearFieldError("preferredLanguage"); }}
                       options={LANGUAGES}
                       placeholder="Select language"
                       searchPlaceholder="Search language..."
                       flagType="language"
                       disabled={loading}
-                      triggerClassName="careers-blue-field h-12 rounded-lg"
+                      triggerClassName={`careers-blue-field h-12 rounded-lg ${fieldErr("preferredLanguage") ? "is-invalid" : ""}`}
                     />
+                    <FieldError id="preferredLanguage-err" message={fieldErr("preferredLanguage")} />
                   </div>
                 </div>
 
                 {/* Country + City */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">Country</Label>
+                    <Label data-required className="jbj-form-label text-sm font-semibold">Country</Label>
                     <SearchableSelect
                       value={formData.country}
-                      onChange={(v) => setFormData({ ...formData, country: v })}
+                      onChange={(v) => { setFormData({ ...formData, country: v }); clearFieldError("country"); }}
                       options={COUNTRIES}
                       placeholder="Select country"
                       searchPlaceholder="Search country..."
                       flagType="country"
                       disabled={loading}
-                      triggerClassName="careers-blue-field h-12 rounded-lg"
+                      triggerClassName={`careers-blue-field h-12 rounded-lg ${fieldErr("country") ? "is-invalid" : ""}`}
                     />
+                    <FieldError id="country-err" message={fieldErr("country")} />
                   </div>
                   <div className="space-y-2">
-                    <Label className="jbj-form-label text-sm font-semibold">City</Label>
+                    <Label data-required className="jbj-form-label text-sm font-semibold">City</Label>
                     <SearchableSelect
                       value={formData.city}
-                      onChange={(v) => setFormData({ ...formData, city: v })}
+                      onChange={(v) => { setFormData({ ...formData, city: v }); clearFieldError("city"); }}
                       options={UAE_CITIES}
                       placeholder="Select city"
                       searchPlaceholder="Search UAE city..."
                       showFlags={false}
                       disabled={loading}
-                      triggerClassName="careers-gold-field h-12 rounded-lg"
+                      triggerClassName={`careers-gold-field h-12 rounded-lg ${fieldErr("city") ? "is-invalid" : ""}`}
                     />
+                    <FieldError id="city-err" message={fieldErr("city")} />
                   </div>
                 </div>
 
