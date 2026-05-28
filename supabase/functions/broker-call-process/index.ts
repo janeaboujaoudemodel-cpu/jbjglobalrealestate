@@ -188,13 +188,20 @@ serve(async (req) => {
     let structured: any = null;
     try { structured = tc ? JSON.parse(tc.function.arguments) : null; } catch { structured = null; }
 
+    const suggestionText = Array.isArray(structured?.suggestions) && structured.suggestions.length
+      ? `\n\nSuggestions:\n${structured.suggestions.slice(0, 5).map((s: string) => `• ${s}`).join("\n")}`
+      : "";
+    const topicPrefix = structured?.topic ? `Topic: ${structured.topic}\n` : "";
+    const finalSummary = structured?.summary ? `${topicPrefix}${structured.summary}${suggestionText}` : null;
+    const finalMatches = structured?.related_to_real_estate === false ? [] : (structured?.matches ?? null);
+
     await admin.from("broker_call_logs").update({
       transcript_text: transcriptText,
       transcript_segments: segments,
-      ai_summary: structured?.summary ?? null,
+      ai_summary: finalSummary,
       ai_next_step: structured?.next_step ?? null,
       ai_score: structured?.score ?? null,
-      ai_matches: structured?.matches ?? null,
+      ai_matches: finalMatches,
       ai_processed_at: new Date().toISOString(),
     }).eq("id", callLogId);
 
@@ -226,4 +233,49 @@ function json(body: any, status = 200) {
   return new Response(JSON.stringify(body), {
     status, headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
+}
+
+function inferAudioMime(path?: string | null) {
+  if (!path) return null;
+  const lower = path.toLowerCase();
+  if (lower.endsWith(".ogg")) return "audio/ogg";
+  if (lower.endsWith(".mp4") || lower.endsWith(".m4a")) return "audio/mp4";
+  if (lower.endsWith(".wav")) return "audio/wav";
+  if (lower.endsWith(".mp3")) return "audio/mpeg";
+  return "audio/webm";
+}
+
+function mimeToExt(mime: string) {
+  if (mime.includes("ogg")) return "ogg";
+  if (mime.includes("mp4") || mime.includes("m4a")) return "mp4";
+  if (mime.includes("wav")) return "wav";
+  if (mime.includes("mpeg") || mime.includes("mp3")) return "mp3";
+  return "webm";
+}
+
+async function transcribeWithLovableAI(audioBytes: Uint8Array, mimeType: string, apiKey: string) {
+  let binary = "";
+  const chunkSize = 0x8000;
+  for (let i = 0; i < audioBytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...audioBytes.subarray(i, i + chunkSize));
+  }
+  const audioDataUrl = `data:${mimeType};base64,${btoa(binary)}`;
+  const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "google/gemini-2.5-flash",
+      messages: [{
+        role: "user",
+        content: [
+          { type: "text", text: "Transcribe this call audio as accurately as possible. Return only the transcript text. If no speech is audible, return an empty string." },
+          { type: "image_url", image_url: { url: audioDataUrl } },
+        ],
+      }],
+      max_tokens: 6000,
+    }),
+  });
+  if (!response.ok) throw new Error(`Lovable AI transcription failed: ${response.status}`);
+  const data = await response.json();
+  return (data?.choices?.[0]?.message?.content || "").toString().trim();
 }
