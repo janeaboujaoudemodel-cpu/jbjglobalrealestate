@@ -432,6 +432,7 @@ export default function LogCallDialog({
                   type="button"
                   onClick={startRecording}
                   className="[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
+                  data-surface="dark"
                   data-allow-dark-cta
                   data-no-contrast-guard
                 >
@@ -459,6 +460,7 @@ export default function LogCallDialog({
                   type="submit"
                   disabled={isSaving || audioBlob.size === 0}
                   className="ml-auto [background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
+                  data-surface="dark"
                   data-allow-dark-cta
                   data-no-contrast-guard
                 >
@@ -553,6 +555,7 @@ export default function LogCallDialog({
               type="submit"
               disabled={isSaving}
               className="[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
+              data-surface="dark"
               data-allow-dark-cta
               data-no-contrast-guard
             >
