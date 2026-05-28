@@ -648,7 +648,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         className="relative z-10 h-full flex items-center justify-between pl-2 sm:pl-3 lg:pl-4 xl:pl-6 2xl:pl-10 pr-2 sm:pr-3 lg:pr-4 xl:pr-4 2xl:pr-8"
       >
         {/* LEFT: Premium Brand Logo - LOCKED */}
-        <div className="shrink-0 min-w-0 flex-1">
+        <div className="shrink-0 min-w-0 flex-[2]">
           <Link 
             to="/" 
             className="flex items-center gap-2 sm:gap-3 xl:gap-4 shrink-0 group transition-all duration-300"
@@ -667,7 +667,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <img 
                 src={isFullyTransparent ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
                 alt="JBJ" 
-                className={`w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 xl:w-32 xl:h-32 object-contain relative z-10 transition-transform duration-300 ${
+                className={`w-14 h-14 sm:w-20 sm:h-20 md:w-28 md:h-28 xl:w-[160px] xl:h-[160px] object-contain relative z-10 transition-transform duration-300 ${
                   isFullyTransparent
                     ? "scale-100 md:scale-[1.3] xl:scale-[1.35]"
                     : "scale-100"
@@ -683,15 +683,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             <div className="flex flex-col shrink min-w-0 overflow-hidden">
               <span
                 className={cn(
-                  "font-bold text-xs sm:text-sm xl:text-base tracking-[0.12em] uppercase leading-tight transition-colors duration-300 truncate",
+                  "font-bold text-sm sm:text-base xl:text-2xl 2xl:text-[28px] tracking-[0.12em] uppercase leading-tight transition-colors duration-300",
                   isFullyTransparent ? "jj-transparent-header-wordmark" : "text-[#111111]"
                 )}
               >
-                JBJ Global Real Estate
+                JBJ Global Real Estate L.L.C S.O.C.
               </span>
               <span
                 className={cn(
-                  "hidden sm:block text-[9px] sm:text-[9px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300 truncate",
+                  "hidden sm:block text-[10px] sm:text-[11px] xl:text-[13px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300 truncate",
                   isFullyTransparent ? "jj-transparent-header-wordmark" : "text-[#1A1A1A]/70"
                 )}
               >
@@ -700,6 +700,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             </div>
           </Link>
         </div>
+
 
           {/* MOBILE HEADER: touch devices OR when desktop can't fit */}
           {shouldUseMobileHeader && (

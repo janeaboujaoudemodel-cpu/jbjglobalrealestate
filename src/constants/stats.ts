@@ -65,7 +65,11 @@ export const CONTACT_INFO = {
   founderArabic: 'جاين بو جودة',
   founderBilingual: 'Jane Bou Jaoude (جاين بو جودة)',
   domain: 'JBJ.AE',
+  website: 'https://jbj.ae',
+  websiteCapitalized: 'WWW.JBJ.AE',
 };
+
+export const getWebsiteUrl = () => 'https://jbj.ae';
 
 // Generate WhatsApp URL
 export const getWhatsAppUrl = (customMessage?: string) => {

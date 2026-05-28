@@ -273,6 +273,8 @@ function StudioShell({
   const [department, setDepartment] = useState<string>(DEPARTMENTS[0]);
   const [editingDept, setEditingDept] = useState<string | null>(null);
   const [deptDraft, setDeptDraft] = useState("");
+  const [addingOtherDept, setAddingOtherDept] = useState(false);
+  const [otherDeptDraft, setOtherDeptDraft] = useState("");
   const [fields, setFields] = useState<Record<string, string>>({});
   const [bodyHtml, setBodyHtml] = useState<string>("");
   const [generating, setGenerating] = useState(false);
@@ -1550,14 +1552,89 @@ function StudioShell({
                 {template.needsPosition && (
                   <Field label="Department">
                     <div className="space-y-1.5">
-                      <Select value={department} onValueChange={setDepartment}>
+                      <Select
+                        value={department}
+                        onValueChange={(v) => {
+                          if (v === "__other__") {
+                            setAddingOtherDept(true);
+                            setOtherDeptDraft("");
+                            return;
+                          }
+                          setDepartment(v);
+                        }}
+                      >
                         <SelectTrigger className="bg-[#FDFBF7]"><SelectValue /></SelectTrigger>
                         <SelectContent className="z-[2147483647] bg-[#FDFBF7]">
                           {allDepartments.map((d) => (
                             <SelectItem key={d} value={d}>{d}</SelectItem>
                           ))}
+                          <SelectItem
+                            key="__other__"
+                            value="__other__"
+                            className="text-[#B89555] font-semibold border-t border-[#B89555]/30 mt-1"
+                          >
+                            Other…
+                          </SelectItem>
                         </SelectContent>
                       </Select>
+
+                      {/* Inline premium "Other…" editor — replaces window.prompt */}
+                      {addingOtherDept && (
+                        <div className="flex items-center gap-1.5 pt-1">
+                          <Input
+                            autoFocus
+                            value={otherDeptDraft}
+                            onChange={(e) => setOtherDeptDraft(e.target.value)}
+                            placeholder="Type the exact title (e.g. Head of Acquisitions)"
+                            className="h-8 text-[12px] bg-[#FDFBF7] border-[#B89555]/40"
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                const v = otherDeptDraft.trim();
+                                if (!v) return;
+                                if (allDepartments.includes(v)) {
+                                  toast.error("Title already exists");
+                                  return;
+                                }
+                                setCustomDepartments((p) => [...p, v]);
+                                setDepartment(v);
+                                setAddingOtherDept(false);
+                                setOtherDeptDraft("");
+                              }
+                              if (e.key === "Escape") {
+                                setAddingOtherDept(false);
+                                setOtherDeptDraft("");
+                              }
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const v = otherDeptDraft.trim();
+                              if (!v) return;
+                              if (allDepartments.includes(v)) {
+                                toast.error("Title already exists");
+                                return;
+                              }
+                              setCustomDepartments((p) => [...p, v]);
+                              setDepartment(v);
+                              setAddingOtherDept(false);
+                              setOtherDeptDraft("");
+                            }}
+                            className="h-8 px-3 rounded-md border border-[#B89555]/40 bg-[#EFE6D6] hover:bg-[#E6D9C0] text-[11px] font-semibold text-[#1A1A1A]"
+                          >
+                            Add
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => { setAddingOtherDept(false); setOtherDeptDraft(""); }}
+                            className="h-8 px-2 text-[11px] text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      )}
+
                       {/* Custom departments — rename / delete */}
                       {customDepartments.length > 0 && (
                         <div className="space-y-1 pt-1">
@@ -1608,20 +1685,6 @@ function StudioShell({
                           ))}
                         </div>
                       )}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const name = window.prompt("New department name");
-                          const v = (name || "").trim();
-                          if (!v) return;
-                          if (allDepartments.includes(v)) { toast.error("Department already exists"); return; }
-                          setCustomDepartments((p) => [...p, v]);
-                          setDepartment(v);
-                        }}
-                        className="text-[11px] text-[#1A1A1A]/70 hover:text-[#B89555] underline underline-offset-2"
-                      >
-                        + Add custom department
-                      </button>
                     </div>
                   </Field>
                 )}
