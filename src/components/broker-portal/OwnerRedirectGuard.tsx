@@ -19,6 +19,15 @@ export default function OwnerRedirectGuard({ children }: { children: ReactNode }
   const params = new URLSearchParams(location.search);
   const previewQuery = params.get(BROKER_PREVIEW_PARAM);
 
+  // Set the preview flag synchronously during render, not only in useEffect.
+  // Otherwise a fast click from /broker/portal?preview=1 to /broker/crm can
+  // happen before the effect writes sessionStorage and owners get bounced back.
+  if (previewQuery === "1") {
+    try { sessionStorage.setItem(PREVIEW_KEY, "1"); } catch {}
+  } else if (previewQuery === "0") {
+    try { sessionStorage.removeItem(PREVIEW_KEY); } catch {}
+  }
+
   useEffect(() => {
     if (previewQuery === "1") {
       try { sessionStorage.setItem(PREVIEW_KEY, "1"); } catch {}
