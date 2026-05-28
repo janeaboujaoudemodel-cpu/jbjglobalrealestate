@@ -1,16 +1,22 @@
 /**
- * Tool Theme Registry
- * Single source of truth for the per-tool ombré accent used across
- * Rental Index, Property Evaluator and Property Comparison.
+ * Tool Theme Registry — Premium per-tool ombré system.
  *
- * Each theme defines a deep gradient that fades into ink black and
- * a matching accent for icons, hairlines, hover and CTAs.
- * Gold (#B89555) is the universal 1px hairline shared by all themes.
+ * Each theme renders as: accent → ink black ombré, full saturation accent
+ * used for the animated outer border, icons, focus rings, status chips and
+ * primary CTAs. Champagne/gold survives only as the page background tint —
+ * never as a card fill inside a tool.
  */
 
 export type ToolTheme = {
   /** Internal id */
-  id: "emerald" | "navy" | "burgundy";
+  id:
+    | "emerald"
+    | "navy"
+    | "burgundy"
+    | "violet"
+    | "teal"
+    | "rose"
+    | "amber";
   /** Display label */
   label: string;
   /** Tailwind/CSS values for the hero band gradient */
@@ -28,54 +34,40 @@ export type ToolTheme = {
   /** Eyebrow chip bg + border */
   chipBg: string;
   chipBorder: string;
+  /** Animated outer-shell conic border (accent → ink → accent) */
+  borderConic: string;
+  /** Soft page tint behind the shell (very subtle wash) */
+  pageWash: string;
 };
 
+const make = (
+  id: ToolTheme["id"],
+  label: string,
+  accent: string,
+  dark: string,
+): ToolTheme => ({
+  id,
+  label,
+  accent,
+  heroGradient: `linear-gradient(135deg, ${accent} 0%, ${dark} 55%, #000000 100%)`,
+  accentSoft: `${accent}1A`,
+  accentBorder: `${accent}73`,
+  ctaGradient: `linear-gradient(135deg, ${accent} 0%, ${dark} 60%, #000000 100%)`,
+  ctaHover: `linear-gradient(135deg, #000000 0%, ${dark} 40%, ${accent} 100%)`,
+  chipBg: `${accent}1F`,
+  chipBorder: `${accent}66`,
+  borderConic: `conic-gradient(from 0deg, ${accent}, #000000, ${accent}, #000000, ${accent})`,
+  pageWash: `radial-gradient(1200px 600px at 50% -10%, ${accent}14, transparent 60%), #FDFBF7`,
+});
+
 export const toolThemes: Record<ToolTheme["id"], ToolTheme> = {
-  emerald: {
-    id: "emerald",
-    label: "Emerald",
-    heroGradient:
-      "linear-gradient(135deg, #0F3D2E 0%, #082018 55%, #000000 100%)",
-    accent: "#0F3D2E",
-    accentSoft: "rgba(15,61,46,0.10)",
-    accentBorder: "rgba(15,61,46,0.45)",
-    ctaGradient:
-      "linear-gradient(135deg, #0F3D2E 0%, #082018 60%, #000000 100%)",
-    ctaHover:
-      "linear-gradient(135deg, #000000 0%, #082018 40%, #0F3D2E 100%)",
-    chipBg: "rgba(15,61,46,0.12)",
-    chipBorder: "rgba(15,61,46,0.40)",
-  },
-  navy: {
-    id: "navy",
-    label: "Navy",
-    heroGradient:
-      "linear-gradient(135deg, #102540 0%, #0A1830 55%, #000000 100%)",
-    accent: "#102540",
-    accentSoft: "rgba(16,37,64,0.10)",
-    accentBorder: "rgba(16,37,64,0.45)",
-    ctaGradient:
-      "linear-gradient(135deg, #102540 0%, #0A1830 60%, #000000 100%)",
-    ctaHover:
-      "linear-gradient(135deg, #000000 0%, #0A1830 40%, #102540 100%)",
-    chipBg: "rgba(16,37,64,0.12)",
-    chipBorder: "rgba(16,37,64,0.40)",
-  },
-  burgundy: {
-    id: "burgundy",
-    label: "Burgundy",
-    heroGradient:
-      "linear-gradient(135deg, #5A0F1A 0%, #2E0810 55%, #000000 100%)",
-    accent: "#5A0F1A",
-    accentSoft: "rgba(90,15,26,0.10)",
-    accentBorder: "rgba(90,15,26,0.45)",
-    ctaGradient:
-      "linear-gradient(135deg, #5A0F1A 0%, #2E0810 60%, #000000 100%)",
-    ctaHover:
-      "linear-gradient(135deg, #000000 0%, #2E0810 40%, #5A0F1A 100%)",
-    chipBg: "rgba(90,15,26,0.12)",
-    chipBorder: "rgba(90,15,26,0.40)",
-  },
+  emerald: make("emerald", "Emerald", "#0F7A4D", "#082018"),
+  navy: make("navy", "Navy", "#1E4E8C", "#0A1830"),
+  burgundy: make("burgundy", "Burgundy", "#8B1E2E", "#2E0810"),
+  violet: make("violet", "Violet", "#6D28D9", "#1E0F3A"),
+  teal: make("teal", "Teal", "#0E7490", "#062430"),
+  rose: make("rose", "Rose", "#BE185D", "#3A0820"),
+  amber: make("amber", "Amber", "#B45309", "#2A1505"),
 };
 
 /** Universal champagne page background + ink text */

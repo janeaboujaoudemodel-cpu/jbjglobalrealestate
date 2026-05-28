@@ -20,6 +20,8 @@ import Design3DViewer from "@/components/interior-design/Design3DViewer";
 import DesignHistoryList from "@/components/interior-design/DesignHistoryList";
 import { useInteriorDesignHistory, DesignInput, DesignResult, DesignHistoryItem } from "@/hooks/useInteriorDesignHistory";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
+import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
+import { toolThemes } from "@/components/tools/toolThemes";
 
 // Data arrays
 const designStyles = [
@@ -264,7 +266,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
     { id: 'staging' as DesignMode, label: 'Staging', icon: Sofa, desc: 'Furnish empty rooms' },
   ];
 
-  return (
+  const body = (
     <section className="relative w-full min-h-screen" style={{ background: "#0D0C08" }}>
       {/* Hero — suppressed when embedded inside a Suite tab */}
       {!embedded && (
@@ -615,6 +617,10 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
       <ContactGatingModal isOpen={showGatingModal} onClose={closeGatingModal} onComplete={handleGatingComplete} triggerSource={triggerSource} />
       <InquiryFormModal isOpen={isInquiryOpen} onClose={() => setIsInquiryOpen(false)} propertyName={projectName || "Interior Design Revision"} source="interior_design" />
     </section>
+  );
+
+  return embedded ? body : (
+    <ToolAnimatedFrame theme={toolThemes.rose}>{body}</ToolAnimatedFrame>
   );
 };
 

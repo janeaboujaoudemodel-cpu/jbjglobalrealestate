@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
+import { toolThemes } from "@/components/tools/toolThemes";
 import { 
   CreditCard, 
   Camera, 
@@ -365,6 +367,7 @@ const BusinessCardScanner = () => {
   }
 
   return (
+    <ToolAnimatedFrame theme={toolThemes.amber}>
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
@@ -583,6 +586,7 @@ const BusinessCardScanner = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </ToolAnimatedFrame>
   );
 };
 
