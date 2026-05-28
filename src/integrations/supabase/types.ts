@@ -2547,6 +2547,11 @@ export type Database = {
       }
       broker_call_logs: {
         Row: {
+          ai_matches: Json | null
+          ai_next_step: string | null
+          ai_processed_at: string | null
+          ai_score: number | null
+          ai_summary: string | null
           call_status: string | null
           call_type: string | null
           created_at: string | null
@@ -2556,9 +2561,16 @@ export type Database = {
           notes: string | null
           phone_number: string
           recording_url: string | null
+          transcript_segments: Json | null
+          transcript_text: string | null
           user_id: string
         }
         Insert: {
+          ai_matches?: Json | null
+          ai_next_step?: string | null
+          ai_processed_at?: string | null
+          ai_score?: number | null
+          ai_summary?: string | null
           call_status?: string | null
           call_type?: string | null
           created_at?: string | null
@@ -2568,9 +2580,16 @@ export type Database = {
           notes?: string | null
           phone_number: string
           recording_url?: string | null
+          transcript_segments?: Json | null
+          transcript_text?: string | null
           user_id: string
         }
         Update: {
+          ai_matches?: Json | null
+          ai_next_step?: string | null
+          ai_processed_at?: string | null
+          ai_score?: number | null
+          ai_summary?: string | null
           call_status?: string | null
           call_type?: string | null
           created_at?: string | null
@@ -2580,6 +2599,8 @@ export type Database = {
           notes?: string | null
           phone_number?: string
           recording_url?: string | null
+          transcript_segments?: Json | null
+          transcript_text?: string | null
           user_id?: string
         }
         Relationships: [
