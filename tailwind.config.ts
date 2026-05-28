@@ -87,6 +87,21 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Brand pair — single source of truth (see src/styles/theme-tokens.css)
+        brand: {
+          blue:         "var(--brand-blue)",
+          "blue-hover": "var(--brand-blue-hover)",
+          "blue-deep":  "var(--brand-blue-deep)",
+          "blue-soft":  "var(--brand-blue-soft)",
+          "blue-ring":  "var(--brand-blue-ring)",
+          "blue-tint":  "var(--brand-blue-tint)",
+          gold:         "var(--brand-gold)",
+          "gold-hover": "var(--brand-gold-hover)",
+          "gold-deep":  "var(--brand-gold-deep)",
+          "gold-soft":  "var(--brand-gold-soft)",
+          "gold-faint": "var(--brand-gold-faint)",
+          "gold-ring":  "var(--brand-gold-ring)",
+        },
         // Champagne-gold accent
         gold: {
           DEFAULT: "hsl(var(--gold))",
@@ -94,6 +109,7 @@ export default {
           dark: "hsl(var(--gold-dark))",
           foreground: "hsl(var(--gold-foreground))",
         },
+
         "price-orange": {
           DEFAULT: "hsl(var(--price-orange))",
           glow: "hsl(var(--price-orange-glow))",

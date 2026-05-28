@@ -23,20 +23,43 @@
  * ============================================================ */
 
 :root {
+  /* ── Canonical brand pair (navy + gold) ───────────────────
+   * One source of truth for every form, button, footer, and
+   * checkbox in the app. Also exposed as Tailwind `brand.*`
+   * and JS constants in `src/lib/brand-tokens.ts`.
+   * Old `--t-*` names below are aliases for back-compat. */
+  --brand-blue:        #102540;
+  --brand-blue-hover:  #1a3d63;
+  --brand-blue-deep:   #143052;
+  --brand-blue-soft:   rgba(16, 37, 64, 0.22);
+  --brand-blue-ring:   rgba(16, 37, 64, 0.18);
+  --brand-blue-tint:   rgba(16, 37, 64, 0.06);
+  --brand-blue-muted:  rgba(16, 37, 64, 0.58);
+
+  --brand-gold:        #B89555;
+  --brand-gold-hover:  #C9A66B;
+  --brand-gold-deep:   #A68444;
+  --brand-gold-soft:   rgba(184, 149, 85, 0.40);
+  --brand-gold-faint:  rgba(184, 149, 85, 0.25);
+  --brand-gold-ring:   rgba(184, 149, 85, 0.55);
+
   --t-page:       #FDFBF7;
   --t-surface:    #F7F2EA;
   --t-raised:     #EFE6D6;
   --t-ink:        #1A1A1A;
   --t-ink-soft:   rgba(26, 26, 26, 0.70);
-  --t-gold:       #B89555;
-  --t-gold-soft:  rgba(184, 149, 85, 0.40);
-  --t-gold-faint: rgba(184, 149, 85, 0.25);
-  --t-gold-ring:  rgba(184, 149, 85, 0.55);
-  --t-form-blue:  #102540;
-  --t-form-blue-soft: rgba(16, 37, 64, 0.22);
-  --t-form-blue-muted: rgba(16, 37, 64, 0.58);
-  --t-form-blue-ring: rgba(16, 37, 64, 0.18);
-  --t-form-blue-tint: rgba(16, 37, 64, 0.06);
+
+  /* Aliases — resolve to the canonical brand tokens above. */
+  --t-gold:           var(--brand-gold);
+  --t-gold-soft:      var(--brand-gold-soft);
+  --t-gold-faint:     var(--brand-gold-faint);
+  --t-gold-ring:      var(--brand-gold-ring);
+  --t-form-blue:      var(--brand-blue);
+  --t-form-blue-soft: var(--brand-blue-soft);
+  --t-form-blue-muted: var(--brand-blue-muted);
+  --t-form-blue-ring: var(--brand-blue-ring);
+  --t-form-blue-tint: var(--brand-blue-tint);
+
   --t-careers-navy: #071B33;
   --t-careers-navy-hover: #0E2848;
   --t-careers-cream: #F7F2EA;
@@ -45,6 +68,7 @@
   --t-careers-card-top: #FFFDF9;
   --t-careers-card-bottom: #F3EBDD;
 }
+
 
 .jbj-form-label {
   color: var(--t-form-blue) !important;
@@ -883,35 +907,36 @@ button[role="combobox"].jbj-gold-field {
  * ============================================================ */
 
 button[role="checkbox"][data-state]:not([data-no-gold-check]) {
-  background-color: #FDFBF7 !important;
-  border: 1.5px solid #B89555 !important;
+  background-color: var(--t-page) !important;
+  border: 1.5px solid var(--brand-gold) !important;
   border-radius: 0.375rem !important;
-  color: #B89555 !important;
+  color: var(--brand-gold) !important;
   transition: border-color 180ms ease, box-shadow 180ms ease,
               background-color 180ms ease !important;
 }
 
 button[role="checkbox"][data-state="checked"]:not([data-no-gold-check]) {
-  background-color: #FDFBF7 !important;
-  border-color: #B89555 !important;
-  color: #B89555 !important;
+  background-color: var(--t-page) !important;
+  border-color: var(--brand-gold) !important;
+  color: var(--brand-gold) !important;
   box-shadow: 0 0 0 3px rgba(184, 149, 85, 0.18) !important;
 }
 
 button[role="checkbox"][data-state]:not([data-no-gold-check]):focus-visible {
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(184, 149, 85, 0.35) !important;
+  box-shadow: 0 0 0 3px var(--brand-gold-ring) !important;
 }
 
 /* Radix Checkbox Indicator wraps an SVG — force the tick to gold */
 button[role="checkbox"][data-state="checked"]:not([data-no-gold-check]) > * {
-  color: #B89555 !important;
+  color: var(--brand-gold) !important;
 }
 button[role="checkbox"][data-state="checked"]:not([data-no-gold-check]) svg {
-  color: #B89555 !important;
-  stroke: #B89555 !important;
+  color: var(--brand-gold) !important;
+  stroke: var(--brand-gold) !important;
   fill: none !important;
 }
+
 
 /* ─────────────────────────────────────────────
    Careers page premium motion
