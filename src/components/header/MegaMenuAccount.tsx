@@ -591,7 +591,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           onClick={() => setSearchTab('search')}
                           className={cn(
                             "flex-1 py-2 text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1",
-                            searchTab === 'search' ? "text-[#1A1A1A] border-b-2 border-[#B89555]/30 bg-[#F7F2EA]" : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
+                            searchTab === 'search' ? "text-[#1A1A1A] border-b-2 border-[#B89555]" : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
                           )}
                         >
                           <Search className="w-3 h-3" /> Quick Search
@@ -600,7 +600,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           onClick={() => setSearchTab('recent')}
                           className={cn(
                             "flex-1 py-2 text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1",
-                            searchTab === 'recent' ? "text-[#1A1A1A] border-b-2 border-[#B89555]/30 bg-[#F7F2EA]" : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
+                            searchTab === 'recent' ? "text-[#1A1A1A] border-b-2 border-[#B89555]" : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
                           )}
                         >
                           <Clock className="w-3 h-3" /> Recent Activity
@@ -681,8 +681,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       className={cn(
                         "py-1.5 rounded-lg text-[10px] font-medium transition-colors text-center tracking-wide flex flex-col items-center gap-0.5",
                         activeCurrency === cur.code
-                          ? "bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 text-[#1A1A1A] border border-[#B89555]/30 shadow-sm"
-                          : "bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#F7F2EA]"
+                          ? "bg-transparent text-[#1A1A1A] border border-[#B89555]"
+                          : "bg-transparent text-[#1A1A1A] border border-transparent hover:border-[#B89555]/40"
                       )}
                     >
                       <span className="text-sm leading-none">{cur.flag}</span>
@@ -708,9 +708,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       onPointerDown={(e) => e.stopPropagation()}
                       className={cn(
                         "flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors tracking-wider",
-                        areaUnit === unit
-                          ? "bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 text-[#1A1A1A] border border-[#B89555]/30 shadow-sm"
-                          : "bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#F7F2EA]"
+                      areaUnit === unit
+                          ? "bg-transparent text-[#1A1A1A] border border-[#B89555]"
+                          : "bg-transparent text-[#1A1A1A] border border-transparent hover:border-[#B89555]/40"
                       )}
                     >
                       {unit}
@@ -750,8 +750,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       className={cn(
                         "flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs transition-colors",
                         language === lang.code
-                          ? "bg-[#F7F2EA] text-[#1A1A1A] font-semibold border border-[#B89555]/30"
-                          : "text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
+                          ? "bg-transparent text-[#1A1A1A] font-semibold border border-[#B89555]"
+                          : "text-[#1A1A1A] border border-transparent hover:border-[#B89555]/40 hover:text-[#1A1A1A]"
                       )}
                     >
                       <span className="text-base">{lang.flag}</span>
