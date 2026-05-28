@@ -93,16 +93,15 @@ const escapeSignatureHtml = (value?: string) =>
  */
 const renderPerPageUserSignature = (_name?: string) => {
   return `
-    <div data-rendered-page-signature="1" style="margin-top:auto;padding:10px 8px 0;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
-      <div style="width:260px;color:#1A1A1A;">
-        <div style="display:grid;grid-template-columns:80px 1fr;align-items:end;gap:8px;font-size:10px;line-height:1.2;">
-          <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;">Signature:</div>
-          <div style="height:22px;border-bottom:1px solid #1A1A1A;"></div>
-        </div>
+    <div data-rendered-page-signature="1" style="margin-top:auto;padding:14px 0 10px;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
+      <div style="display:flex;align-items:flex-end;gap:10px;color:#1A1A1A;min-width:300px;">
+        <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1;padding-bottom:2px;">Signature:</div>
+        <div style="flex:1;border-bottom:1px solid #1A1A1A;height:1px;"></div>
       </div>
     </div>
-    <div data-rendered-page-divider="1" style="border-top:1px solid rgba(184,149,85,.55);height:0;margin:0 24px;flex:0 0 auto;page-break-inside:avoid;break-inside:avoid;"></div>`;
+    <div data-rendered-page-divider="1" style="border-top:1px solid rgba(184,149,85,.55);height:0;margin:10px 0 0;flex:0 0 auto;page-break-inside:avoid;break-inside:avoid;"></div>`;
 };
+
 
 const renderPageGeneratedDate = (): string => {
   const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
@@ -392,6 +391,12 @@ function StudioShell({
         // separately). NEXT_TOP is the interior top padding only.
         const NEXT_TOP = 54;
         const BOTTOM_PAD = 0;
+        // Tentative single-page cap: assume page 1 IS the last page so the
+        // footer height is reserved. If everything fits here, the official
+        // signature block stays with the body on a single sheet (no orphan
+        // page 2). Otherwise we fall back to the multi-page caps that only
+        // reserve the per-page signature strip on page 1.
+        const singlePageCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD - Math.max(PAGE_SIGNATURE_RESERVE, footerH));
         const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD - PAGE_SIGNATURE_RESERVE);
         const otherCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - NEXT_TOP - BOTTOM_PAD - Math.max(PAGE_SIGNATURE_RESERVE, footerH));
 
@@ -423,10 +428,14 @@ function StudioShell({
           return { html: el.outerHTML, top: r.top - bodyTop, height: r.height };
         });
 
+        // Fast path: does everything fit on a single sheet (with footer reserve)?
+        const totalSpan = items[items.length - 1].top + items[items.length - 1].height - items[0].top;
+        const fitsSinglePage = totalSpan <= singlePageCap;
+
         const pages: string[][] = [];
         let current: string[] = [];
         let pageStartTop = items[0].top;
-        let cap = page0Cap;
+        let cap = fitsSinglePage ? singlePageCap : page0Cap;
         for (let i = 0; i < items.length; i++) {
           const it = items[i];
           const relBottom = it.top + it.height - pageStartTop;
@@ -2030,8 +2039,8 @@ function StudioShell({
                 // GLOBAL: equal interior top/bottom on inner pages. Safe band
                 // and footer reserve are handled separately.
                 const NEXT_TOP = 54;
-                const STANDARD_BOTTOM_PAD = 0;
-                const LAST_BOTTOM_PAD = 0;
+                const STANDARD_BOTTOM_PAD = 32;
+                const LAST_BOTTOM_PAD = 40;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
 
                 // Parse the bodyHtml into [data-pdf-page] groups. If the
