@@ -37,7 +37,7 @@ export default function LeadFiltersPopover({ value, onChange, sourceOptions }: P
           <Filter className="h-4 w-4" />
           Filter
           {active > 0 && (
-            <span className="ml-1 inline-flex items-center justify-center min-w-[18px] h-[18px] text-[10px] font-bold rounded-full border border-[#B89555] text-[#1A1A1A] px-1">
+            <span className="ml-1 inline-flex items-center justify-center min-w-[18px] h-[18px] text-[10px] font-bold rounded-md border border-[#B89555] text-[#1A1A1A] px-1">
               {active}
             </span>
           )}
@@ -52,7 +52,7 @@ export default function LeadFiltersPopover({ value, onChange, sourceOptions }: P
                 <button
                   key={s}
                   onClick={() => onChange({ ...value, stage: s === "all" ? undefined : s })}
-                  className={`text-[11px] px-2.5 py-1 rounded-full border transition-colors ${
+                  className={`text-[11px] px-2.5 py-1 rounded-md border transition-colors ${
                     (value.stage ?? "all") === s
                       ? "border-[#B89555] bg-[#EFE6D6] text-[#1A1A1A] font-semibold"
                       : "border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]/60"
@@ -83,7 +83,7 @@ export default function LeadFiltersPopover({ value, onChange, sourceOptions }: P
                 <button
                   key={p.value}
                   onClick={() => onChange({ ...value, period: p.value })}
-                  className={`text-[11px] px-2.5 py-1 rounded-full border transition-colors ${
+                  className={`text-[11px] px-2.5 py-1 rounded-md border transition-colors ${
                     (value.period ?? "all") === p.value
                       ? "border-[#B89555] bg-[#EFE6D6] text-[#1A1A1A] font-semibold"
                       : "border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]/60"

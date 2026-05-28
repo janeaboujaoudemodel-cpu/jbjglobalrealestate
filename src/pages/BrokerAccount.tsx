@@ -99,66 +99,74 @@ const BrokerAccount = () => {
   const [loading, setLoading] = useState(true);
   const [isEmployee, setIsEmployee] = useState(false);
   const [employeeProfile, setEmployeeProfile] = useState<{ display_name?: string; crm_role?: string; job_title?: string; photo_url?: string } | null>(null);
+  const [employeeChecked, setEmployeeChecked] = useState(false);
 
   // Check if user is a CRM employee (not just external broker)
   useEffect(() => {
+    let cancelled = false;
     const checkEmployeeStatus = async () => {
       if (!user?.id) {
-        setLoading(false);
+        if (!cancelled) {
+          setEmployeeChecked(true);
+          setLoading(false);
+        }
         return;
       }
-      
       const { data } = await supabase
         .from('crm_users_profile')
         .select('display_name, crm_role, job_title, is_active, photo_url')
         .eq('user_id', user.id)
         .maybeSingle();
-      
+      if (cancelled) return;
       if (data?.is_active && data?.crm_role) {
         setIsEmployee(true);
         setEmployeeProfile(data);
       }
-      setLoading(false);
+      setEmployeeChecked(true);
     };
-    
     if (!authLoading && !roleLoading) {
       checkEmployeeStatus();
     }
+    return () => { cancelled = true; };
   }, [user?.id, authLoading, roleLoading]);
 
-  // Fetch employee/broker data only if they are an employee or broker
+  // Fetch employee/broker data only after employee-status check completes.
+  // Important: do NOT toggle `loading` here — that re-triggered the BrandedLoader
+  // every render and produced a visible "blink" on /broker/settings.
   useEffect(() => {
-    if ((isBroker || isEmployee) && user && !loading) {
-      fetchData();
-    }
-  }, [isBroker, isEmployee, user, loading]);
+    let cancelled = false;
+    const run = async () => {
+      if (!user || !employeeChecked) return;
+      if (!(isBroker || isEmployee)) {
+        if (!cancelled) setLoading(false);
+        return;
+      }
+      try {
+        const [modulesRes, progressRes, pointsRes, statsRes, callsRes, chatsRes] = await Promise.allSettled([
+          supabase.from('hr_training_modules').select('id, title, category, duration_minutes').order('display_order'),
+          supabase.from('broker_training_progress').select('module_id, is_completed, completed_at').eq('user_id', user.id),
+          supabase.from('broker_points').select('*').eq('user_id', user.id).maybeSingle(),
+          supabase.from('broker_activity_stats').select('*').eq('user_id', user.id).order('date', { ascending: false }).limit(30),
+          supabase.from('broker_call_logs').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(50),
+          supabase.from('broker_chat_logs').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(50),
+        ]);
+        if (cancelled) return;
+        if (modulesRes.status === 'fulfilled' && modulesRes.value.data) setModules(modulesRes.value.data);
+        if (progressRes.status === 'fulfilled' && progressRes.value.data) setProgress(progressRes.value.data);
+        if (pointsRes.status === 'fulfilled' && pointsRes.value.data) setPoints(pointsRes.value.data);
+        if (statsRes.status === 'fulfilled' && statsRes.value.data) setActivityStats(statsRes.value.data);
+        if (callsRes.status === 'fulfilled' && callsRes.value.data) setCallLogs(callsRes.value.data);
+        if (chatsRes.status === 'fulfilled' && chatsRes.value.data) setChatLogs(chatsRes.value.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    run();
+    return () => { cancelled = true; };
+  }, [isBroker, isEmployee, employeeChecked, user]);
 
-  const fetchData = async () => {
-    if (!user) return;
-
-    setLoading(true);
-    try {
-      const [modulesRes, progressRes, pointsRes, statsRes, callsRes, chatsRes] = await Promise.allSettled([
-        supabase.from('hr_training_modules').select('id, title, category, duration_minutes').order('display_order'),
-        supabase.from('broker_training_progress').select('module_id, is_completed, completed_at').eq('user_id', user.id),
-        supabase.from('broker_points').select('*').eq('user_id', user.id).maybeSingle(),
-        supabase.from('broker_activity_stats').select('*').eq('user_id', user.id).order('date', { ascending: false }).limit(30),
-        supabase.from('broker_call_logs').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(50),
-        supabase.from('broker_chat_logs').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(50)
-      ]);
-
-      if (modulesRes.status === 'fulfilled' && modulesRes.value.data) setModules(modulesRes.value.data);
-      if (progressRes.status === 'fulfilled' && progressRes.value.data) setProgress(progressRes.value.data);
-      if (pointsRes.status === 'fulfilled' && pointsRes.value.data) setPoints(pointsRes.value.data);
-      if (statsRes.status === 'fulfilled' && statsRes.value.data) setActivityStats(statsRes.value.data);
-      if (callsRes.status === 'fulfilled' && callsRes.value.data) setCallLogs(callsRes.value.data);
-      if (chatsRes.status === 'fulfilled' && chatsRes.value.data) setChatLogs(chatsRes.value.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     if (!authLoading && !roleLoading && !loading && !user) {

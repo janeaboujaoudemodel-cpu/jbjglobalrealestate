@@ -128,7 +128,7 @@ export default function BrokerDashboardLanding() {
                   <span className="text-xs text-[#1A1A1A]/65">{profile.title}</span>
                 )}
                 {profile?.current_tier && (
-                  <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.16em] px-2 py-0.5 rounded-full bg-[#EFE6D6] border border-[#B89555]/35 text-[#1A1A1A]">
+                  <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.16em] px-2 py-0.5 rounded-md bg-[#EFE6D6] border border-[#B89555]/35 text-[#1A1A1A]">
                     {profile.current_tier}
                   </span>
                 )}

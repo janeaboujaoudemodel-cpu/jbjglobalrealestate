@@ -66,7 +66,7 @@ export default function AssistantInsights({ score, scoreReason, matches, nextSte
                       </div>
                     ) : null}
                   </div>
-                  <span className={`shrink-0 text-[11px] font-bold px-2 py-1 rounded-full border ${scoreColor(m.match_score)} bg-transparent`}>
+                  <span className={`shrink-0 text-[11px] font-bold px-2 py-1 rounded-md border ${scoreColor(m.match_score)} bg-transparent`}>
                     {m.match_score}%
                   </span>
                 </div>
