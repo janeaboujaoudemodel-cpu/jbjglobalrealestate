@@ -24,41 +24,32 @@ const CombinedContactNewsletter = ({
       label: "WhatsApp",
       value: CONTACT_INFO.phone,
       href: getWhatsAppUrl(),
-      iconBg: "bg-[#FDFBF7]",
-      iconColor: "text-[#1A1A1A]/70",
     },
     {
       icon: Phone,
       label: "Call Us",
       value: CONTACT_INFO.phone,
       href: getCallUrl(),
-      iconBg: "bg-[#FDFBF7]",
-      iconColor: "text-[#1A1A1A]/70",
     },
     {
       icon: Mail,
       label: "Email",
       value: CONTACT_INFO.email,
       href: `mailto:${CONTACT_INFO.email}`,
-      iconBg: "bg-[#FDFBF7]",
-      iconColor: "text-[#1A1A1A]/70",
     },
   ];
+
 
   return (
     <section id="ready-to-get-started" className={`py-8 sm:py-12 md:py-16 bg-[#FDFBF7] ${className}`}>
       <div className="max-w-4xl mx-auto px-4 md:px-6">
-        <div className="relative rounded-2xl border border-[#B89555]/45 bg-gradient-to-b from-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10 shadow-[0_30px_80px_-40px_rgba(184,149,85,0.35)]">
-          {/* Inner gold hairline for double-frame depth */}
-          <div className="pointer-events-none absolute inset-2 rounded-xl border border-[#B89555]/30" aria-hidden="true" />
+        <div className="relative rounded-2xl bg-gradient-to-b from-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10">
           {/* Header */}
           <div className="relative text-center mb-8">
             <span
-              data-allow-dark-cta
-              data-no-contrast-guard
-              className="allow-white inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 border border-[#B89555]/60 bg-[#102540] text-white shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 bg-white text-[#102540] shadow-sm"
             >
-              <span className="allow-white text-white">Get in touch</span>
+              <span className="text-[#102540]">Get in touch</span>
             </span>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.1em] text-[#1A1A1A]">
               {title}
@@ -69,7 +60,7 @@ const CombinedContactNewsletter = ({
             <div className="mx-auto mt-4 h-px w-16 bg-[#B89555]/70" />
           </div>
 
-          {/* Contact Cards — navy buttons */}
+          {/* Contact Cards — white surfaces, blue icons */}
           <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 md:gap-4 max-w-2xl mx-auto mb-6 sm:mb-8">
             {contactCards.map((card) => (
               <a
@@ -77,20 +68,19 @@ const CombinedContactNewsletter = ({
                 href={card.href}
                 target={card.label === "WhatsApp" ? "_blank" : undefined}
                 rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
-                data-allow-dark-cta
-                data-no-contrast-guard
-                className="allow-white group flex flex-row sm:flex-col items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl border border-[#B89555]/55 bg-[#102540] hover:bg-[#1a3d63] hover:border-[#B89555] transition-all duration-300"
+                className="group flex flex-row sm:flex-col items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white hover:bg-[#FDFBF7] transition-all duration-300"
               >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#FDFBF7] flex items-center justify-center flex-shrink-0 border border-[#B89555]/40">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#FDFBF7] flex items-center justify-center flex-shrink-0">
                   <card.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#102540]" />
                 </div>
                 <div className="text-left sm:text-center">
-                  <p className="allow-white text-xs uppercase tracking-wider text-white/80 font-medium mb-0.5">{card.label}</p>
-                  <p className="allow-white text-sm font-semibold text-white">{card.value}</p>
+                  <p className="text-xs uppercase tracking-wider text-[#102540]/70 font-medium mb-0.5">{card.label}</p>
+                  <p className="text-sm font-semibold text-[#102540]">{card.value}</p>
                 </div>
               </a>
             ))}
           </div>
+
 
           {/* Divider — gold */}
           <div className="relative flex items-center gap-4 max-w-2xl mx-auto mb-8">
