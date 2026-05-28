@@ -323,7 +323,7 @@ export default function JoinApplication() {
     ];
   }, [formData, cvFile]);
 
-  const STEP_LABELS = ["Personal", "Location & Language", "Role & Experience", "CV / Resume", "Review & Consent"];
+  const STEP_LABELS = ["Personal", "Location & Language", "Role & Experience", "CV", "Review & Consent"];
 
   const goToStep = (idx: number) => {
     const clamped = Math.max(0, Math.min(TOTAL_STEPS - 1, idx));

@@ -16,7 +16,7 @@ export default function CareersContactBlock() {
     },
     {
       icon: Phone,
-      label: "Speak to HR",
+      label: "Contact us",
       value: CONTACT_INFO.phone,
       href: `tel:${CONTACT_INFO.phoneRaw}`,
       tag: "Mon–Sat · 9:00–18:00 GST",

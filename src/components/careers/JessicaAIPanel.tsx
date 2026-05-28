@@ -101,9 +101,6 @@ export default function JessicaAIPanel() {
                 Start Conversation
               </span>
             </Link>
-            <span className="text-[10px] text-[#1A1A1A]/55 tracking-wide">
-              No waiting · 24/7
-            </span>
           </div>
         </div>
       </div>
