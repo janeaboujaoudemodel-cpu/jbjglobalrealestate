@@ -1,16 +1,23 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useBrokerScopedDatabases } from "@/hooks/useBrokerScopedDatabases";
 import { useBrokerScopedLeads } from "@/hooks/useBrokerScopedLeads";
 import { useBrokerPersonalTasks } from "@/hooks/useBrokerPersonalTasks";
 import {
   Database, Users, Activity, ArrowRight, Loader2, Plus, Phone, Upload,
-  TrendingUp, BarChart3, Inbox, ClipboardList, Sparkles, Search,
+  TrendingUp, BarChart3, Inbox, ClipboardList, Sparkles, Search, CheckCircle2,
 } from "lucide-react";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import RequestDatabaseDialog from "@/components/broker-portal/RequestDatabaseDialog";
 
 type Tab = "pipeline" | "databases" | "leads" | "calls" | "insights" | "activity";
@@ -47,13 +54,302 @@ const STAGE_GROUPS: Array<{ key: string; label: string; match: string[] }> = [
   { key: "won",         label: "Won",            match: ["won", "closed_won", "contract"] },
 ];
 
+const getLeadEmail = (lead: any) => (lead?.email ?? lead?.email_lower ?? "").toString();
+const getLeadPhone = (lead: any) => (lead?.phone ?? lead?.phone_e164 ?? "").toString();
+
+const formatDuration = (seconds?: number | null) => {
+  const safe = Math.max(0, Number(seconds ?? 0));
+  const mins = Math.floor(safe / 60);
+  const secs = safe % 60;
+  return `${mins}m ${secs.toString().padStart(2, "0")}s`;
+};
+
+function LogCallDialog({
+  open,
+  onOpenChange,
+  leads,
+  submitting,
+  onSubmit,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  leads: any[];
+  submitting: boolean;
+  onSubmit: (input: { leadId?: string | null; phoneNumber: string; callType: string; callStatus: string; durationSeconds: number; notes?: string | null }) => void;
+}) {
+  const [leadId, setLeadId] = useState("manual");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [callType, setCallType] = useState("outbound");
+  const [callStatus, setCallStatus] = useState("completed");
+  const [durationSeconds, setDurationSeconds] = useState("0");
+  const [notes, setNotes] = useState("");
+
+  const selectedLead = leads.find((lead) => lead.id === leadId);
+
+  const reset = () => {
+    setLeadId("manual");
+    setPhoneNumber("");
+    setCallType("outbound");
+    setCallStatus("completed");
+    setDurationSeconds("0");
+    setNotes("");
+  };
+
+  useEffect(() => {
+    if (!open) reset();
+  }, [open]);
+
+  const handleLeadChange = (value: string) => {
+    setLeadId(value);
+    const nextLead = leads.find((lead) => lead.id === value);
+    if (nextLead) setPhoneNumber(getLeadPhone(nextLead));
+  };
+
+  const submit = (event: any) => {
+    event.preventDefault();
+    const cleanPhone = phoneNumber.trim();
+    if (!cleanPhone) {
+      toast.error("Add a phone number before saving the call");
+      return;
+    }
+    onSubmit({
+      leadId: leadId === "manual" ? null : leadId,
+      phoneNumber: cleanPhone,
+      callType,
+      callStatus,
+      durationSeconds: Math.max(0, Number(durationSeconds) || 0),
+      notes: notes.trim() || (selectedLead?.full_name ? `Call with ${selectedLead.full_name}` : null),
+    });
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        onOpenChange(nextOpen);
+        if (!nextOpen) reset();
+      }}
+    >
+      <DialogContent className="max-w-lg bg-[#FDFBF7] border-[#B89555]/30">
+        <DialogHeader>
+          <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
+            <Phone className="h-5 w-5 text-[#1A1A1A]" /> Log a call
+          </DialogTitle>
+          <DialogDescription className="text-[#1A1A1A]/70">
+            Save call activity against an assigned lead, or log a manual broker call.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form onSubmit={submit} className="space-y-4 py-2">
+          <div className="space-y-1.5">
+            <Label className="text-[#1A1A1A]">Lead</Label>
+            <Select value={leadId} onValueChange={handleLeadChange}>
+              <SelectTrigger className="bg-[#F7F2EA] border-[#B89555]/35 text-[#1A1A1A]">
+                <SelectValue placeholder="Manual call" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#FDFBF7] border-[#B89555]/35">
+                <SelectItem value="manual">Manual call / no lead</SelectItem>
+                {leads.map((lead) => (
+                  <SelectItem key={lead.id} value={lead.id}>
+                    {lead.full_name || "Unnamed lead"}{getLeadPhone(lead) ? ` · ${getLeadPhone(lead)}` : ""}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-[#1A1A1A]">Phone number</Label>
+              <Input
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="+971 XX XXX XXXX"
+                className="bg-[#F7F2EA] border-[#B89555]/35 text-[#1A1A1A]"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[#1A1A1A]">Duration seconds</Label>
+              <Input
+                type="number"
+                min="0"
+                value={durationSeconds}
+                onChange={(e) => setDurationSeconds(e.target.value)}
+                className="bg-[#F7F2EA] border-[#B89555]/35 text-[#1A1A1A]"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-[#1A1A1A]">Call type</Label>
+              <Select value={callType} onValueChange={setCallType}>
+                <SelectTrigger className="bg-[#F7F2EA] border-[#B89555]/35 text-[#1A1A1A]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-[#FDFBF7] border-[#B89555]/35">
+                  <SelectItem value="outbound">Outbound</SelectItem>
+                  <SelectItem value="inbound">Inbound</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[#1A1A1A]">Outcome</Label>
+              <Select value={callStatus} onValueChange={setCallStatus}>
+                <SelectTrigger className="bg-[#F7F2EA] border-[#B89555]/35 text-[#1A1A1A]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-[#FDFBF7] border-[#B89555]/35">
+                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="no_answer">No answer</SelectItem>
+                  <SelectItem value="busy">Busy</SelectItem>
+                  <SelectItem value="voicemail">Voicemail</SelectItem>
+                  <SelectItem value="wrong_number">Wrong number</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label className="text-[#1A1A1A]">Notes</Label>
+            <Textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Call summary, next step, objection, or follow-up note…"
+              className="bg-[#F7F2EA] border-[#B89555]/35 text-[#1A1A1A] min-h-[110px]"
+            />
+          </div>
+
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={submitting}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={submitting} className="bg-[#102540] text-white hover:bg-[#1a3d63]" data-allow-dark-cta data-no-contrast-guard>
+              {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-2" />}
+              Save call log
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export default function BrokerCRM() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [tab, setTab] = useState<Tab>("pipeline");
   const [search, setSearch] = useState("");
   const [requestOpen, setRequestOpen] = useState(false);
+  const [callDialogOpen, setCallDialogOpen] = useState(false);
   const dbs = useBrokerScopedDatabases();
   const leads = useBrokerScopedLeads();
   const tasks = useBrokerPersonalTasks();
+
+  useEffect(() => {
+    const nextTab = searchParams.get("tab") as Tab | null;
+    const action = searchParams.get("action");
+    if (nextTab && ["pipeline", "databases", "leads", "calls", "insights", "activity"].includes(nextTab)) {
+      setTab(nextTab);
+    }
+    if (action === "log-call") {
+      setTab("calls");
+      setCallDialogOpen(true);
+    }
+    if (nextTab || action) {
+      const next = new URLSearchParams(searchParams);
+      next.delete("tab");
+      next.delete("action");
+      setSearchParams(next, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
+  const callLogs = useQuery({
+    queryKey: ["broker-call-logs", user?.id],
+    enabled: !!user?.id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("broker_call_logs")
+        .select("id, lead_id, phone_number, call_type, call_status, duration_seconds, notes, created_at")
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const createCallLog = useMutation({
+    mutationFn: async (input: {
+      leadId?: string | null;
+      phoneNumber: string;
+      callType: string;
+      callStatus: string;
+      durationSeconds: number;
+      notes?: string | null;
+    }) => {
+      if (!user?.id) throw new Error("Please sign in");
+      const { data, error } = await supabase
+        .from("broker_call_logs")
+        .insert({
+          user_id: user.id,
+          lead_id: input.leadId || null,
+          phone_number: input.phoneNumber,
+          call_type: input.callType,
+          call_status: input.callStatus,
+          duration_seconds: input.durationSeconds,
+          notes: input.notes || null,
+        })
+        .select("id")
+        .single();
+      if (error) throw error;
+
+      const today = new Date().toISOString().slice(0, 10);
+      const { data: existingStats } = await supabase
+        .from("broker_activity_stats")
+        .select("id, calls_made, points_earned")
+        .eq("user_id", user.id)
+        .eq("date", today)
+        .maybeSingle();
+
+      if (existingStats?.id) {
+        await supabase
+          .from("broker_activity_stats")
+          .update({
+            calls_made: (existingStats.calls_made ?? 0) + 1,
+            points_earned: (existingStats.points_earned ?? 0) + 10,
+          })
+          .eq("id", existingStats.id);
+      } else {
+        await supabase.from("broker_activity_stats").insert({
+          user_id: user.id,
+          date: today,
+          calls_made: 1,
+          points_earned: 10,
+        });
+      }
+
+      await supabase.from("points_transactions").insert({
+        user_id: user.id,
+        points: 10,
+        transaction_type: "call_logged",
+        description: "Logged a broker CRM call",
+        reference_id: data.id,
+        reference_type: "broker_call_log",
+      });
+
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-personal-tasks"] });
+      toast.success("Call logged successfully — +10 points");
+      setCallDialogOpen(false);
+      setTab("calls");
+    },
+    onError: (e: any) => toast.error(e?.message || "Could not log call"),
+  });
 
   const leadsData: any[] = (leads.data as any[]) ?? [];
   const filteredLeads = useMemo(() => {
@@ -61,14 +357,14 @@ export default function BrokerCRM() {
     const q = search.toLowerCase();
     return leadsData.filter((l: any) =>
       (l.full_name || "").toLowerCase().includes(q) ||
-      (l.email || "").toLowerCase().includes(q) ||
-      (l.phone || "").toLowerCase().includes(q) ||
+      getLeadEmail(l).toLowerCase().includes(q) ||
+      getLeadPhone(l).toLowerCase().includes(q) ||
       (l.pipeline_stage || "").toLowerCase().includes(q),
     );
   }, [leadsData, search]);
 
   const totalLeads = leadsData.length;
-  const callsLogged = (tasks.data ?? []).filter((t: any) => (t.type || "").toLowerCase().includes("call")).length;
+  const callsLogged = callLogs.data?.length ?? 0;
   const followUps = (tasks.data ?? []).filter((t: any) => t.status !== "done").length;
   const wonStage = leadsData.filter((l: any) =>
     ["won", "closed_won", "contract"].includes(((l.pipeline_stage ?? l.status) ?? "").toString().toLowerCase()),
@@ -113,9 +409,7 @@ export default function BrokerCRM() {
             <Button
               variant="outline"
               className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-              onClick={() => {
-                toast.success("Call logged — open a lead to capture full notes.");
-              }}
+              onClick={() => setCallDialogOpen(true)}
             >
               <Phone className="w-4 h-4 mr-1.5" /> Log a call
             </Button>
@@ -299,7 +593,7 @@ export default function BrokerCRM() {
                       </div>
                       <div className="min-w-0">
                         <div className="text-sm font-medium text-[#1A1A1A] truncate">{l.full_name || "Unnamed lead"}</div>
-                        <div className="text-[11px] text-[#1A1A1A]/65 truncate">{l.email || l.phone || "—"}</div>
+                        <div className="text-[11px] text-[#1A1A1A]/65 truncate">{getLeadEmail(l) || getLeadPhone(l) || "—"}</div>
                       </div>
                       <div className="text-xs text-[#1A1A1A]/75 truncate">{l.pipeline_stage || "new"}</div>
                       <div className="text-xs text-[#1A1A1A]/75 truncate">{l.source || l.lead_source_type || "—"}</div>
@@ -322,27 +616,37 @@ export default function BrokerCRM() {
               variant="outline"
               size="sm"
               className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-              onClick={() => toast.success("Open a lead to log a detailed call.")}
+              onClick={() => setCallDialogOpen(true)}
             >
               <Phone className="w-3.5 h-3.5 mr-1.5" /> Log a call
             </Button>
           </div>
-          {(tasks.data ?? []).filter((t: any) => (t.type || "").toLowerCase().includes("call")).length === 0 ? (
-            <Empty msg="No calls logged yet. Calls captured on a lead will surface here." />
+          {callLogs.isLoading ? (
+            <Loading />
+          ) : (callLogs.data ?? []).length === 0 ? (
+            <Empty msg="No calls logged yet. Use Log a call to capture broker activity, duration, outcome, notes, and points." />
           ) : (
             <ul className="divide-y divide-[#B89555]/15">
-              {(tasks.data ?? [])
-                .filter((t: any) => (t.type || "").toLowerCase().includes("call"))
+              {(callLogs.data ?? [])
                 .slice(0, 20)
-                .map((t: any) => (
-                  <li key={t.id} className="py-2.5 flex items-center gap-3">
+                .map((log: any) => {
+                  const lead = leadsData.find((item) => item.id === log.lead_id);
+                  return (
+                  <li key={log.id} className="py-2.5 flex items-center gap-3">
                     <Phone className="h-4 w-4 text-[#1A1A1A]/60" />
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm text-[#1A1A1A] truncate">{t.title || "Call"}</div>
-                      <div className="text-[11px] text-[#1A1A1A]/55 truncate">{t.status} · {formatDisplayDate(t.updated_at || t.created_at)}</div>
+                      <div className="text-sm text-[#1A1A1A] truncate">
+                        {lead?.full_name ? `Call with ${lead.full_name}` : "Manual broker call"}
+                      </div>
+                      <div className="text-[11px] text-[#1A1A1A]/55 truncate">
+                        {log.call_status || "completed"} · {log.call_type || "outbound"} · {formatDuration(log.duration_seconds)} · {formatDisplayDate(log.created_at)}
+                      </div>
+                      {log.notes && <div className="text-xs text-[#1A1A1A]/70 mt-1 truncate">{log.notes}</div>}
                     </div>
+                    <div className="text-xs text-[#1A1A1A]/65 tabular-nums">{log.phone_number}</div>
                   </li>
-                ))}
+                  );
+                })}
             </ul>
           )}
         </PremiumCard>
@@ -419,6 +723,13 @@ export default function BrokerCRM() {
         </PremiumCard>
       )}
 
+      <LogCallDialog
+        open={callDialogOpen}
+        onOpenChange={setCallDialogOpen}
+        leads={leadsData}
+        submitting={createCallLog.isPending}
+        onSubmit={(input) => createCallLog.mutate(input)}
+      />
       <RequestDatabaseDialog open={requestOpen} onOpenChange={setRequestOpen} />
     </div>
   );

@@ -144,7 +144,7 @@ export default function BrokerDashboardLanding() {
               <Plus className="h-4 w-4" /> Add lead
             </Link>
             <Link
-              to="/broker/tasks"
+              to="/broker/crm?tab=calls&action=log-call"
               className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] text-sm font-medium hover:bg-[#EFE6D6] transition-colors"
             >
               <Phone className="h-4 w-4" /> Log a call

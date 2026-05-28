@@ -109,16 +109,14 @@ export function AIBrokerCallDialog({
     setIsLogging(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke("broker-log-call", {
-        body: {
-          broker_id: brokerId,
-          lead_id: lead.id,
-          phone_number: lead.phone,
-          call_type: "outbound",
-          duration_seconds: callDuration,
-          call_status: callStatus,
-          notes: notes.trim() || undefined,
-        },
+      const { error } = await supabase.from("broker_call_logs").insert({
+        user_id: brokerId,
+        lead_id: lead.id,
+        phone_number: lead.phone,
+        call_type: "outbound",
+        duration_seconds: callDuration,
+        call_status: callStatus,
+        notes: notes.trim() || null,
       });
 
       if (error) throw error;
@@ -137,7 +135,7 @@ export function AIBrokerCallDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-white flex items-center gap-2">
+          <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
             <Phone className="h-5 w-5 text-purple-500" />
             Call {lead.full_name}
           </DialogTitle>
