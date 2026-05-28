@@ -50,7 +50,6 @@ export function AddPayrollEntryDialog({ open, onOpenChange, mode, onSaved }: Pro
 
   // --- "Add new broker" -> opens canonical AddBrokerSheet ------------------
   const [addBrokerSheetOpen, setAddBrokerSheetOpen] = useState(false);
-  const [brokerReloadKey, setBrokerReloadKey] = useState(0);
 
   // --- Payroll fields ----------------------------------------------------
   const [employeeNameOverride, setEmployeeNameOverride] = useState("");
