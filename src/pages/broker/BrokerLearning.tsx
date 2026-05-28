@@ -292,14 +292,14 @@ function KpiCard({ icon, label, value, progress }: {
   icon: React.ReactNode; label: string; value: React.ReactNode; progress?: number;
 }) {
   return (
-    <div className="min-h-[202px] rounded-2xl bg-[#FDFBF7] border border-[#B89555]/55 p-6 flex flex-col items-center text-center shadow-[0_2px_8px_rgba(184,149,85,0.06)] hover:shadow-[0_10px_24px_rgba(184,149,85,0.14)] transition-shadow">
-      <span className="w-14 h-14 rounded-2xl bg-[#EFE6D6] border border-[#B89555]/50 grid place-items-center text-[#1A1A1A] shrink-0">
+    <div className="min-h-[202px] rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/55 p-6 flex flex-col items-center text-center shadow-[0_4px_14px_rgba(184,149,85,0.12)] hover:shadow-[0_14px_30px_rgba(184,149,85,0.22)] transition-all">
+      <span className="w-14 h-14 rounded-2xl bg-[#1A1A1A] border border-[#B89555]/70 grid place-items-center text-[#B89555] shrink-0 shadow-[0_4px_12px_rgba(26,26,26,0.25)]">
         {icon}
       </span>
-      <div className="mt-4 h-4 flex items-center justify-center text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/70 whitespace-nowrap">{label}</div>
+      <div className="mt-4 h-4 flex items-center justify-center text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/75 whitespace-nowrap font-semibold">{label}</div>
       <div className="mt-3 h-10 flex items-center justify-center text-4xl font-bold text-[#1A1A1A] leading-none tabular-nums">{value}</div>
       {typeof progress === "number" && (
-        <Progress value={progress} className="h-1.5 w-full mt-5 bg-[#EFE6D6] [&>div]:bg-[#B89555]" />
+        <Progress value={progress} className="h-1.5 w-full mt-5 bg-[#FDFBF7] [&>div]:bg-[#B89555]" />
       )}
     </div>
   );
