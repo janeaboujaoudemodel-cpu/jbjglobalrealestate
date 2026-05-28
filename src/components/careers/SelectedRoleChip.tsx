@@ -50,7 +50,7 @@ export function SelectedRoleChip({
         <button
           type="button"
           onClick={onClear}
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#102540]/30 text-[#102540] transition hover:bg-[#102540] hover:text-[#FDFBF7]"
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#B89555]/55 text-[#102540] transition hover:bg-[#102540] hover:text-[#FDFBF7] hover:border-[#B89555]"
           aria-label="Clear selected role"
         >
           <X className="h-4 w-4" />
