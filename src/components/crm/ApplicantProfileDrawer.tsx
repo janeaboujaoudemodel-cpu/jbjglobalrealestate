@@ -109,6 +109,14 @@ export default function ApplicantProfileDrawer({
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [notes, setNotes] = useState("");
   const [savingNotes, setSavingNotes] = useState(false);
+  const [pipelineBusy, setPipelineBusy] = useState<null | "approve" | "offer">(null);
+  const [candidateRow, setCandidateRow] = useState<{
+    id: string;
+    status: string | null;
+    intake_token: string | null;
+    intake_submitted_at: string | null;
+    current_envelope_id: string | null;
+  } | null>(null);
 
   useEffect(() => {
     setNotes(candidate?.notes || "");
