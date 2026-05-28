@@ -438,8 +438,8 @@ function StudioShell({
         // GLOBAL RULE: inner pages must have EQUAL top/bottom interior padding
         // (the DocuSign safe band + footer reserve are fixed/locked, applied
         // separately). NEXT_TOP is the interior top padding only.
-        const NEXT_TOP = 54;
-        const BOTTOM_PAD = 32;
+        const NEXT_TOP = 64;
+        const BOTTOM_PAD = 40;
         // Tentative single-page cap: assume page 1 IS the last page so the
         // footer height is reserved. If everything fits here, the official
         // signature block stays with the body on a single sheet (no orphan
@@ -474,7 +474,12 @@ function StudioShell({
         const bodyTop = b.getBoundingClientRect().top;
         const items = sourceChildren.map((el) => {
           const r = el.getBoundingClientRect();
-          return { html: el.outerHTML, top: r.top - bodyTop, height: r.height };
+          return {
+            html: el.outerHTML,
+            top: r.top - bodyTop,
+            height: r.height,
+            isSignature: el.matches?.('[data-signature-block="1"]') || !!el.querySelector?.('[data-signature-block="1"]'),
+          };
         });
 
         // Fast path: does everything fit on a single sheet (with footer reserve)?
@@ -492,8 +497,8 @@ function StudioShell({
           return;
         }
 
-        const pages: string[][] = [];
-        let current: string[] = [];
+        const pages: Array<typeof items> = [];
+        let current: typeof items = [];
         let pageStartTop = items[0].top;
         let cap = fitsSinglePage ? singlePageCap : page0Cap;
         for (let i = 0; i < items.length; i++) {
@@ -501,17 +506,29 @@ function StudioShell({
           const relBottom = it.top + it.height - pageStartTop;
           if (relBottom > cap && current.length > 0) {
             pages.push(current);
-            current = [it.html];
+            current = [it];
             pageStartTop = it.top;
             cap = otherCap;
           } else {
-            current.push(it.html);
+            current.push(it);
           }
           // No page cap — document grows to as many pages as content needs.
 
         }
         if (current.length) pages.push(current);
-        const groups = pages.map((p) => p.join(""));
+        const pageHeight = (p: typeof items) => p.reduce((sum, it) => sum + it.height, 0);
+        const last = pages[pages.length - 1];
+        const beforeLast = pages[pages.length - 2];
+        if (pages.length > 1 && last && beforeLast && beforeLast.length > 1) {
+          const lastIsOrphan = last.length === 1 && last.some((it) => it.isSignature);
+          const lastTooSmall = pageHeight(last) < otherCap * 0.36;
+          while ((lastIsOrphan || lastTooSmall) && beforeLast.length > 1 && pageHeight(last) < otherCap * 0.55) {
+            const moved = beforeLast.pop();
+            if (!moved) break;
+            last.unshift(moved);
+          }
+        }
+        const groups = pages.map((p) => p.map((it) => it.html).join(""));
         setAutoPageGroups((prev) => {
           if (prev && prev.length === groups.length && prev.every((g, i) => g === groups[i])) return prev;
           return groups;
@@ -2166,16 +2183,16 @@ function StudioShell({
             {template ? (
               (() => {
                 const noChrome = /data-no-chrome=["']1["']/.test(bodyHtml || "");
-                const BODY_PAD_X = noChrome ? 24 : 64;
+                const BODY_PAD_X = noChrome ? 24 : 70;
                 // DocuSign stamps the envelope ID in the top ~0.4in of every
                 // page when the document is processed for signature. Reserve a
                 // safe band on every page so the stamp never overlays content.
                 const FIRST_TOP = 46;
                 // GLOBAL: equal interior top/bottom on inner pages. Safe band
                 // and footer reserve are handled separately.
-                const NEXT_TOP = 54;
-                const STANDARD_BOTTOM_PAD = 32;
-                const LAST_BOTTOM_PAD = 40;
+                const NEXT_TOP = 64;
+                const STANDARD_BOTTOM_PAD = 40;
+                const LAST_BOTTOM_PAD = 48;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
 
                 // Prefer measured auto-pagination (global rule). Fall back
@@ -2291,7 +2308,7 @@ function StudioShell({
                                   bottom: noChrome ? 0 : (isLast ? chromeHeights.footer : 0),
                                   padding: `${topPad}px ${BODY_PAD_X}px ${bottomPad}px`,
                                   boxSizing: "border-box",
-                                  overflow: "hidden",
+                                  overflow: "visible",
                                   display: "flex",
                                   flexDirection: "column",
                                   justifyContent: "flex-start",
@@ -2309,8 +2326,8 @@ function StudioShell({
                                       flexDirection: "column",
                                       minHeight: 0,
                                       fontFamily: "Inter, system-ui, sans-serif",
-                                      lineHeight: pageIndex === 1 ? 1.58 : 1.66,
-                                      fontSize: pageIndex === 1 ? 13.6 : 13.2,
+                                      lineHeight: 1.68,
+                                      fontSize: 13.2,
                                       color: "#1A1A1A",
                                     }}
                                     contentEditable
