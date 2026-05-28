@@ -11,6 +11,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { EmiratesMultiSelect } from "@/components/filters/EmiratesMultiSelect";
+import {
+  filterPillBase,
+  filterPillInactiveLight,
+  filterPillActive,
+  filterSearchPillWrapper,
+  filterSearchPillInput,
+  filterDivider,
+  resetAllPill,
+} from "@/components/filters/filterStyles";
+import { cn } from "@/lib/utils";
 
 const PROPERTY_TYPES = [
   { value: "all", label: "All Types" },
