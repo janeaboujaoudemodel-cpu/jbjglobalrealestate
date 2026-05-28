@@ -25,6 +25,8 @@ import { Badge } from "@/components/ui/badge";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
 import { useConsVisibility } from "@/contexts/ConsVisibilityContext";
+import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
+import { toolThemes } from "@/components/tools/toolThemes";
 
 const INQUIRY_FORM_URL = "https://JBJ.AE/contact";
 const COMPARE_FREE_KEY = "jbj_compare_free_used";
@@ -624,6 +626,7 @@ const Compare = () => {
   }
 
   return (
+    <ToolAnimatedFrame theme={toolThemes.burgundy}>
     <section className="min-h-screen bg-[#FDFBF7]">
       {/* Hero Section - Champagne/Gold Theme */}
       <div className="relative py-16 md:py-20 overflow-hidden">
@@ -1203,6 +1206,7 @@ const Compare = () => {
       {/* Active Lead Banner for CRM linking */}
       <ActiveLeadBanner showAddToShortlist={false} />
     </section>
+    </ToolAnimatedFrame>
   );
 };
 
