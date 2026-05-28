@@ -281,6 +281,8 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
                   "text-xs px-1.5 py-0.5 rounded-md font-semibold border",
                   active ? "bg-transparent text-[#1A1A1A] border-[#B89555]" : "bg-transparent text-[#1A1A1A] border-[#B89555]/50"
                 )}>
+                  {item.badge}
+                </span>
               )}
               {hasChildren && (
                 <ChevronRight
