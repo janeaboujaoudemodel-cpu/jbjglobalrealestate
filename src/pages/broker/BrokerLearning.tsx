@@ -142,7 +142,7 @@ export default function BrokerLearning() {
         noIndex
       />
 
-      <div className="w-full px-1 lg:px-2 py-2 flex flex-col gap-14">
+        <div className="w-full px-1 lg:px-2 py-2 flex flex-col gap-14">
         {/* ── Header ───────────────────────────────────────────────── */}
         <motion.header
           initial={{ opacity: 0, y: 10 }}
@@ -159,7 +159,7 @@ export default function BrokerLearning() {
             and the compliance reference, with progress tracked across the portal.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 items-stretch">
             <KpiCard icon={<BookOpen className="w-5 h-5" />} label="Library books" value={books.length || "—"} />
             <KpiCard icon={<GraduationCap className="w-5 h-5" />} label="Training modules" value={TRAINING.length} />
             <KpiCard
@@ -203,7 +203,7 @@ export default function BrokerLearning() {
                     <h3 className="text-[#1A1A1A] font-semibold text-lg">{group.name}</h3>
                     <span className="text-xs text-[#1A1A1A]/55">{group.books.length} {group.books.length === 1 ? "book" : "books"}</span>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch">
                     {group.books.map((book, i) => (
                       <Book3DCard
                         key={book.id}
@@ -289,14 +289,14 @@ function KpiCard({ icon, label, value, progress }: {
   icon: React.ReactNode; label: string; value: React.ReactNode; progress?: number;
 }) {
   return (
-    <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-6 flex flex-col items-center text-center gap-3 shadow-[0_2px_8px_rgba(184,149,85,0.06)] hover:shadow-[0_10px_24px_rgba(184,149,85,0.14)] transition-shadow">
-      <span className="w-14 h-14 rounded-2xl bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center text-[#1A1A1A]">
+    <div className="min-h-[202px] rounded-2xl bg-[#FDFBF7] border border-[#B89555]/55 p-6 flex flex-col items-center text-center shadow-[0_2px_8px_rgba(184,149,85,0.06)] hover:shadow-[0_10px_24px_rgba(184,149,85,0.14)] transition-shadow">
+      <span className="w-14 h-14 rounded-2xl bg-[#EFE6D6] border border-[#B89555]/50 grid place-items-center text-[#1A1A1A] shrink-0">
         {icon}
       </span>
-      <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">{label}</div>
-      <div className="text-4xl font-bold text-[#1A1A1A] leading-none">{value}</div>
+      <div className="mt-4 h-4 flex items-center justify-center text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/70 whitespace-nowrap">{label}</div>
+      <div className="mt-3 h-10 flex items-center justify-center text-4xl font-bold text-[#1A1A1A] leading-none tabular-nums">{value}</div>
       {typeof progress === "number" && (
-        <Progress value={progress} className="h-1.5 w-full mt-1" />
+        <Progress value={progress} className="h-1.5 w-full mt-5 bg-[#EFE6D6] [&>div]:bg-[#B89555]" />
       )}
     </div>
   );
