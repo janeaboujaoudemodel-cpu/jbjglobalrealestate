@@ -925,7 +925,7 @@ function StudioShell({
     // Offer (don't auto-apply) the previous draft when a snapshot exists.
     if (snap && !restoredOnce.current) {
       restoredOnce.current = true;
-      const tplName = (snap.templateId && getTemplateById(snap.templateId)?.title) || "previous document";
+      const tplName = (snap.templateId && getTemplateById(snap.templateId)?.label) || "previous document";
       const when = snap.savedAt ? new Date(snap.savedAt).toLocaleString() : "earlier";
       toast(`Resume previous draft?`, {
         description: `${tplName} — last saved ${when}`,
