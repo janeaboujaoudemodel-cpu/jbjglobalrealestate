@@ -53,17 +53,21 @@ serve(async (req) => {
     const ab = await audioFile.arrayBuffer();
     const audioBytes = new Uint8Array(ab);
 
-    // Transcribe with ElevenLabs Scribe.
+    const mimeType = audioFile.type || inferAudioMime(callRow.recording_url) || "audio/webm";
+
+    // Transcribe with ElevenLabs Scribe first, then Lovable AI fallback.
     const ELEVEN = Deno.env.get("ELEVENLABS_API_KEY");
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     let transcriptText = "";
     let segments: any[] = [];
     if (ELEVEN) {
       try {
         const fd = new FormData();
-        fd.append("file", new Blob([audioBytes], { type: audioFile.type || "audio/webm" }), "call.webm");
+        fd.append("file", new Blob([audioBytes], { type: mimeType }), `call.${mimeToExt(mimeType)}`);
         fd.append("model_id", "scribe_v2");
         fd.append("tag_audio_events", "true");
         fd.append("diarize", "true");
+        fd.append("timestamps_granularity", "word");
         const r = await fetch("https://api.elevenlabs.io/v1/speech-to-text", {
           method: "POST", headers: { "xi-api-key": ELEVEN }, body: fd,
         });
@@ -76,10 +80,13 @@ serve(async (req) => {
         }
       } catch (e) { console.warn("scribe error", e); }
     }
-    if (!transcriptText) {
-      // Fallback: skip transcript, still produce a summary placeholder from metadata.
-      transcriptText = `Call recorded (${callRow.duration_seconds || 0}s) — transcript unavailable.`;
+    if (!transcriptText && LOVABLE_API_KEY) {
+      try {
+        transcriptText = await transcribeWithLovableAI(audioBytes, mimeType, LOVABLE_API_KEY);
+      } catch (e) { console.warn("lovable ai transcription fallback error", e); }
     }
+    const transcriptUnavailable = !transcriptText;
+    if (transcriptUnavailable) transcriptText = `Call recorded (${callRow.duration_seconds || 0}s) — transcript unavailable.`;
 
     // Pull lead + inventory for the AI evaluation.
     let lead: any = null;
@@ -109,8 +116,6 @@ serve(async (req) => {
       price_from: p.price_from, currency: p.price_currency || "AED",
     })).slice(0, 25);
 
-    // AI evaluation via Lovable AI Gateway.
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) return json({ error: "AI gateway not configured" }, 500);
 
     const tools = [{
@@ -121,11 +126,14 @@ serve(async (req) => {
         parameters: {
           type: "object",
           additionalProperties: false,
-          required: ["summary", "next_step", "score", "matches"],
+          required: ["summary", "next_step", "score", "topic", "related_to_real_estate", "suggestions", "matches"],
           properties: {
             summary: { type: "string" },
             next_step: { type: "string" },
             score: { type: "integer", minimum: 0, maximum: 100 },
+            topic: { type: "string" },
+            related_to_real_estate: { type: "boolean" },
+            suggestions: { type: "array", items: { type: "string" } },
             matches: {
               type: "array",
               items: {
@@ -154,10 +162,10 @@ serve(async (req) => {
       method: "POST",
       headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "openai/gpt-5.5",
+        model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: "You are a senior Dubai real-estate sales director analysing a call between a JBJ broker and a client. Extract a concise 4-6 sentence summary, the single best next step, a 0-100 readiness score, and 1-3 inventory matches from the provided list (never invent properties)." },
-          { role: "user", content: `LEAD:\n${JSON.stringify(lead, null, 2)}\n\nINVENTORY (only choose from these):\n${JSON.stringify(inventory, null, 2)}\n\nCALL TRANSCRIPT:\n${transcriptText.slice(0, 18000)}` },
+          { role: "system", content: "You analyse broker call recordings. If the call is about Dubai real estate, act as a senior JBJ real-estate sales director: summarize, score readiness, choose only matching inventory provided, and give the single best next step. If the call is not about real estate, do not force property matches; identify the topic and give practical suggestions based on that topic. Never invent properties or facts." },
+          { role: "user", content: `TRANSCRIPTION_STATUS: ${transcriptUnavailable ? "unavailable" : "available"}\nLEAD:\n${JSON.stringify(lead, null, 2)}\n\nINVENTORY (only choose from these if related_to_real_estate is true):\n${JSON.stringify(inventory, null, 2)}\n\nCALL TRANSCRIPT:\n${transcriptText.slice(0, 18000)}` },
         ],
         tools,
         tool_choice: { type: "function", function: { name: "call_analysis" } },
