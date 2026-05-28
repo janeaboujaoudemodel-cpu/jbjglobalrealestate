@@ -920,6 +920,52 @@ All colors MUST be HSL.
   }
 }
 
+/* =====================================================================
+ * UNIVERSAL WHITE-ON-CHAMPAGNE/GOLD CONTRAST GUARD
+ * Catches `text-white` (and `text-white/NN` variants) used directly on
+ * champagne/gold hex backgrounds — even on pages without a [data-surface]
+ * wrapper. Opt-out via [data-no-contrast-guard], `.allow-white`, or
+ * [data-on-dark]. Same precedence rules as the dark-CTA guard.
+ * ===================================================================== */
+@layer utilities {
+  :is(
+    [class*="bg-[#FDFBF7]"],
+    [class*="bg-[#F7F2EA]"],
+    [class*="bg-[#EFE6D6]"],
+    [class*="bg-[#E6DAC2]"],
+    [class*="bg-[#B89555]"],
+    [class*="bg-[#C8A766]"],
+    [class*="bg-[#B8944A]"],
+    [class*="bg-[#A8843A]"]
+  ):is(.text-white, [class*="text-white/"], .text-\[\#FDFBF7\], .text-\[\#FFFFFF\], .text-\[\#fafafa\], .text-\[\#FFF\]):not([data-no-contrast-guard]):not([data-on-dark]):not(.allow-white) {
+    color: #1A1A1A !important;
+  }
+
+  /* Children carrying text-white inside the same champagne/gold container */
+  :is(
+    [class*="bg-[#FDFBF7]"],
+    [class*="bg-[#F7F2EA]"],
+    [class*="bg-[#EFE6D6]"],
+    [class*="bg-[#E6DAC2]"],
+    [class*="bg-[#B89555]"]
+  ):not([data-no-contrast-guard]):not([data-on-dark]):not(.allow-white)
+   :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]):not([data-on-dark]):not(.allow-white) {
+    color: #1A1A1A !important;
+  }
+
+  /* Hover state: never collapse to invisible white-on-cream */
+  :is(
+    [class*="hover:bg-[#FDFBF7]"],
+    [class*="hover:bg-[#F7F2EA]"],
+    [class*="hover:bg-[#EFE6D6]"],
+    [class*="hover:bg-[#E6DAC2]"],
+    [class*="hover:bg-[#B89555]"]
+  ):hover:is(.text-white, [class*="text-white/"], [class*="hover:text-white"]):not([data-no-contrast-guard]):not([data-on-dark]):not(.allow-white) {
+    color: #1A1A1A !important;
+  }
+}
+
+
 @media (max-width: 767px) {
   /* Minimum readable font-size floor — bump micro type to 11px */
   .text-\[8px\],
