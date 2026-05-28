@@ -450,36 +450,36 @@ export function composeFormI(input: ComposerInput): string {
             <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;">PART3. <span style="float:right;margin-right:86px;">THE COMMISSION (split)</span></td>
           </tr>
           <tr>
-            <td style="border:1px solid ${GOLD};height:340px;vertical-align:top;padding:9px 12px;font-size:9.6px;line-height:1.15;">
+            <td style="border:1px solid ${GOLD};height:340px;vertical-align:top;padding:12px 14px;font-size:11px;line-height:1.6;">
               ${row("PROPERTY ADDRESS:", val("propertyRef"), 240, true)}
               ${row("MASTER DEVELOPER:", val("masterDeveloper"), 250, false)}
               ${row("MASTER PROJECT NAME:", val("masterProject"), 220, false)}
-              <div style="height:4px;"></div>
-              <div style="font-weight:400;margin-bottom:5px;"><strong>PROPERTY DETAILS</strong> (to be completed by Agent "A")</div>
+              <div style="height:10px;"></div>
+              <div style="font-weight:400;margin-bottom:9px;"><strong>PROPERTY DETAILS</strong> (to be completed by Agent "A")</div>
               ${row("BUILDING NAME:", val("buildingName"), 236, true)}
               ${row("LISTED PRICE:", val("listingPrice") ? `AED ${val("listingPrice")}` : "", 260, true)}
               ${row("DESCRIPTION:", val("propertyDescription"), 270, false)}
-              <div style="height:6px;"></div>
-              <div style="margin-bottom:3px;">DOES MOU EXIST ON THIS PROPERTY?</div>
-              <div style="text-align:center;margin-bottom:5px;">${yesNo(val("mouExists"))}</div>
-              <div style="margin-bottom:3px;">IS THE PROPERTY TENANTED</div>
-              <div style="text-align:center;margin-bottom:8px;">${yesNo(val("propertyTenanted"), ["YES", "NO"])}</div>
-              <div style="display:flex;align-items:flex-end;gap:3px;"><strong style="font-weight:500;">MAINTENANCE FEE P.A:</strong>${line(val("maintenanceFee"), 95, false)}<strong>per sq. ft</strong></div>
+              <div style="height:12px;"></div>
+              <div style="margin-bottom:6px;">DOES MOU EXIST ON THIS PROPERTY?</div>
+              <div style="text-align:center;margin-bottom:14px;">${yesNo(val("mouExists"))}</div>
+              <div style="margin-bottom:6px;">IS THE PROPERTY TENANTED</div>
+              <div style="text-align:center;margin-bottom:18px;">${yesNo(val("propertyTenanted"), ["YES", "NO"])}</div>
+              <div style="display:flex;align-items:flex-end;gap:4px;"><strong style="font-weight:500;">MAINTENANCE FEE P.A:</strong>${line(val("maintenanceFee"), 110, false)}<strong>per sq. ft</strong></div>
             </td>
-            <td style="border:1px solid ${GOLD};height:340px;vertical-align:top;padding:9px 12px;text-align:center;font-size:9.6px;line-height:1.17;">
-              <div style="font-weight:800;margin:3px auto 8px;max-width:430px;">The following additional commission split is agreed between the Seller/Landlord's Agent &amp; Buyer/Tenant's Agent.</div>
-              <div style="font-weight:900;font-size:10.5px;margin-bottom:9px;">Commission in total is: AED ${esc(val("commissionTotal")) || "__________"}/-</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;align-items:start;">
-                <div><div style="font-weight:900;font-size:13px;">AGENT "A" [ ${esc(val("commissionPctA")) || "__"}%]</div><div>(Seller/Landlord's Agent)</div></div>
-                <div><div style="font-weight:900;font-size:13px;">AGENT "B" [ ${esc(val("commissionPctB")) || "__"}%]</div><div>(Buyer/Tenant's Agent)</div></div>
+            <td style="border:1px solid ${GOLD};height:340px;vertical-align:top;padding:12px 14px;text-align:center;font-size:11px;line-height:1.6;">
+              <div style="font-weight:800;margin:4px auto 14px;max-width:460px;">The following additional commission split is agreed between the Seller/Landlord's Agent &amp; Buyer/Tenant's Agent.</div>
+              <div style="font-weight:900;font-size:12.5px;margin-bottom:16px;">Commission in total is: AED ${esc(val("commissionTotal")) || "__________"}/-</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;align-items:start;">
+                <div><div style="font-weight:900;font-size:15px;">AGENT "A" [ ${esc(val("commissionPctA")) || "__"}%]</div><div>(Seller/Landlord's Agent)</div></div>
+                <div><div style="font-weight:900;font-size:15px;">AGENT "B" [ ${esc(val("commissionPctB")) || "__"}%]</div><div>(Buyer/Tenant's Agent)</div></div>
               </div>
-              <div style="text-align:left;">${row("BUYER’S/TENANT’S NAME:", val("buyerFamilyName"), 205, false)}<div style="margin:-2px 0 5px;">(family name ONLY)</div></div>
+              <div style="text-align:left;">${row("BUYER’S/TENANT’S NAME:", val("buyerFamilyName"), 205, false)}<div style="margin:-2px 0 10px;">(family name ONLY)</div></div>
               <div style="text-align:left;">${row("BUDGET:", val("buyerBudget"), 324, false)}</div>
-              <div style="margin:7px 0 3px;text-align:left;">TRANSFER FEE PAID BY:</div>
-              <div style="margin-bottom:8px;">SELLER [ ] &nbsp;&nbsp;&nbsp;&nbsp; BUYER [ ] &nbsp;&nbsp;&nbsp;&nbsp; NEGOTIABLE [ ]</div>
-              <div style="margin-bottom:3px;text-align:left;">DOES THE BUYER HAVE APPROVED PRE-FINANCE?</div>
-              <div style="margin-bottom:8px;">${yesNo(val("buyerPreFinance"))}</div>
-              <div style="margin-bottom:3px;text-align:left;">HAS THIS BUYER/TENANT CONTACTED THE AGENT "A"?</div>
+              <div style="margin:14px 0 6px;text-align:left;">TRANSFER FEE PAID BY:</div>
+              <div style="margin-bottom:16px;">SELLER [ ] &nbsp;&nbsp;&nbsp;&nbsp; BUYER [ ] &nbsp;&nbsp;&nbsp;&nbsp; NEGOTIABLE [ ]</div>
+              <div style="margin-bottom:6px;text-align:left;">DOES THE BUYER HAVE APPROVED PRE-FINANCE?</div>
+              <div style="margin-bottom:16px;">${yesNo(val("buyerPreFinance"))}</div>
+              <div style="margin-bottom:6px;text-align:left;">HAS THIS BUYER/TENANT CONTACTED THE AGENT "A"?</div>
               <div>${yesNo(val("buyerContactedAgentA"))}</div>
             </td>
           </tr>
