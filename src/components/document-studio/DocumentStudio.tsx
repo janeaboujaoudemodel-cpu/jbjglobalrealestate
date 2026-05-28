@@ -133,10 +133,23 @@ const stripGeneratedPageArtifacts = (html: string): string => {
   const tpl = document.createElement("template");
   tpl.innerHTML = html;
   tpl.content
-    .querySelectorAll("[data-client-signature-strip],[data-page-divider],[data-rendered-page-signature],[data-rendered-page-divider]")
+    .querySelectorAll("[data-client-signature-strip],[data-page-divider],[data-rendered-page-signature],[data-rendered-page-divider],[data-signature-spacer]")
     .forEach((el) => el.remove());
   return tpl.innerHTML;
 };
+
+const parseDocumentPageGroups = (html: string): string[] => {
+  if (!html) return [""];
+  if (typeof window === "undefined") return [stripGeneratedPageArtifacts(html)];
+  const tpl = document.createElement("template");
+  tpl.innerHTML = html;
+  const groups = Array.from(tpl.content.querySelectorAll<HTMLElement>("[data-pdf-page]"))
+    .map((el) => stripGeneratedPageArtifacts(el.innerHTML));
+  return groups.length ? groups : [stripGeneratedPageArtifacts(html)];
+};
+
+const wrapDocumentPageGroups = (groups: string[]): string =>
+  groups.map((group, index) => `<section data-pdf-page="${index + 1}">${group}</section>`).join("");
 
 const anchorSignatureArtifacts = (html: string): string => {
   if (!html || typeof window === "undefined") return html;
@@ -263,6 +276,9 @@ function StudioShell({
   const [fields, setFields] = useState<Record<string, string>>({});
   const [bodyHtml, setBodyHtml] = useState<string>("");
   const [generating, setGenerating] = useState(false);
+  const [addPagePrompt, setAddPagePrompt] = useState("");
+  const [addPageAfterIndex, setAddPageAfterIndex] = useState<number | null>(null);
+  const [aiPageBusy, setAiPageBusy] = useState(false);
 
   // Commission rows — pre-seeded for broker/HR templates
   const usesCommission =
@@ -410,7 +426,7 @@ function StudioShell({
       frame = window.requestAnimationFrame(() => {
         const b = bodyRef.current;
         if (!b) return;
-        if (b.querySelector("[data-pdf-page]")) {
+        if (b.querySelector("[data-pdf-page]") && /data-manual-added-page=["']1["']/.test(bodyHtml)) {
           setAutoPageGroups(null);
           return;
         }
@@ -423,7 +439,7 @@ function StudioShell({
         // (the DocuSign safe band + footer reserve are fixed/locked, applied
         // separately). NEXT_TOP is the interior top padding only.
         const NEXT_TOP = 54;
-        const BOTTOM_PAD = 0;
+        const BOTTOM_PAD = 32;
         // Tentative single-page cap: assume page 1 IS the last page so the
         // footer height is reserved. If everything fits here, the official
         // signature block stays with the body on a single sheet (no orphan
@@ -462,8 +478,19 @@ function StudioShell({
         });
 
         // Fast path: does everything fit on a single sheet (with footer reserve)?
-        const totalSpan = items[items.length - 1].top + items[items.length - 1].height - items[0].top;
-        const fitsSinglePage = totalSpan <= singlePageCap;
+        // Measure by summed block heights instead of absolute offsets so the
+        // bottom-anchoring spacer/signature never tricks a short contract into
+        // becoming two pages. Job Offer and similar compact documents must stay
+        // on page 1 unless their real content cannot fit.
+        const contentHeight = items.reduce((sum, it) => sum + it.height, 0);
+        const interBlockGaps = Math.max(0, items.length - 1) * 8;
+        const fitsSinglePage = contentHeight + interBlockGaps <= singlePageCap;
+
+        if (fitsSinglePage) {
+          const singleGroup = items.map((it) => it.html).join("");
+          setAutoPageGroups((prev) => (prev && prev.length === 1 && prev[0] === singleGroup ? prev : [singleGroup]));
+          return;
+        }
 
         const pages: string[][] = [];
         let current: string[] = [];
@@ -1044,6 +1071,48 @@ function StudioShell({
     }
   };
 
+  const insertPageAfter = (afterIndex: number, pageHtml: string) => {
+    const groups = parseDocumentPageGroups(bodyHtml || "");
+    const insertAt = Math.min(groups.length, Math.max(0, afterIndex + 1));
+    const markedPage = `<div data-manual-added-page="1" style="min-height:100%;display:flex;flex-direction:column;">${pageHtml}</div>`;
+    const nextGroups = [...groups.slice(0, insertAt), markedPage, ...groups.slice(insertAt)];
+    userEditedRef.current = true;
+    setUserEdited(true);
+    setBodyHtml(wrapDocumentPageGroups(nextGroups));
+    setManualPages((n) => n + 1);
+  };
+
+  const handleAddBlankPage = (afterIndex: number) => {
+    insertPageAfter(afterIndex, `<div style="min-height:560px;"></div>`);
+    toast.success("Blank page added");
+  };
+
+  const handleGenerateAiPage = async () => {
+    if (addPageAfterIndex === null || !addPagePrompt.trim()) return;
+    setAiPageBusy(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("letter-ai-generate", {
+        body: {
+          mode: "generate-page",
+          prompt: addPagePrompt,
+          language: docLanguage,
+          tone: "formal",
+        },
+      });
+      if (error) throw error;
+      const html = String((data as any)?.body_html || "").trim();
+      if (!html) throw new Error("Empty AI page");
+      insertPageAfter(addPageAfterIndex, html);
+      setAddPageAfterIndex(null);
+      setAddPagePrompt("");
+      toast.success("AI page added");
+    } catch (e: any) {
+      toast.error(e?.message || "AI page generation failed");
+    } finally {
+      setAiPageBusy(false);
+    }
+  };
+
   const handlePrint = () => {
     if (!bodyHtml) return;
     printDocument(bodyHtml, marks);
@@ -1323,6 +1392,39 @@ function StudioShell({
               <Button size="sm" onClick={handleSaveTemplate} disabled={savingTemplate || !saveName.trim()}>
                 {savingTemplate ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Check className="w-4 h-4 mr-1.5" />}
                 Save Template
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {addPageAfterIndex !== null && (
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center"
+          style={{ zIndex: 2147483100 }}
+          onClick={() => !aiPageBusy && setAddPageAfterIndex(null)}
+        >
+          <div
+            className="bg-[#FDFBF7] rounded-xl border border-[#B89555]/40 p-5 w-[520px] shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-[14px] font-semibold text-[#1A1A1A] mb-1">Start page with AI</div>
+            <div className="text-[11px] text-[#1A1A1A]/65 mb-4">
+              Describe the page content, layout, colors, or paste HTML/CSS instructions. It will be inserted as a new page.
+            </div>
+            <Textarea
+              autoFocus
+              value={addPagePrompt}
+              onChange={(e) => setAddPagePrompt(e.target.value)}
+              placeholder="Create a premium schedule page with a two-column terms table and champagne-gold styling…"
+              rows={6}
+              className="bg-[#FDFBF7] resize-none mb-4"
+            />
+            <div className="flex justify-end gap-2">
+              <Button variant="ghost" size="sm" onClick={() => setAddPageAfterIndex(null)} disabled={aiPageBusy}>Cancel</Button>
+              <Button size="sm" onClick={handleGenerateAiPage} disabled={aiPageBusy || !addPagePrompt.trim()}>
+                {aiPageBusy ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Sparkles className="w-4 h-4 mr-1.5" />}
+                Create Page
               </Button>
             </div>
           </div>
