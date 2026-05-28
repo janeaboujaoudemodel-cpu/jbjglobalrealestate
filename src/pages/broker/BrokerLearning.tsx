@@ -289,15 +289,15 @@ function KpiCard({ icon, label, value, progress }: {
   icon: React.ReactNode; label: string; value: React.ReactNode; progress?: number;
 }) {
   return (
-    <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-5 flex items-center gap-4">
-      <span className="shrink-0 w-12 h-12 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center text-[#1A1A1A]">
+    <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-6 flex flex-col items-center text-center gap-3 shadow-[0_2px_8px_rgba(184,149,85,0.06)] hover:shadow-[0_10px_24px_rgba(184,149,85,0.14)] transition-shadow">
+      <span className="w-14 h-14 rounded-2xl bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center text-[#1A1A1A]">
         {icon}
       </span>
-      <div className="min-w-0 flex-1">
-        <div className="text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/60">{label}</div>
-        <div className="mt-0.5 text-2xl font-bold text-[#1A1A1A] leading-none">{value}</div>
-        {typeof progress === "number" && <Progress value={progress} className="h-1.5 mt-2" />}
-      </div>
+      <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">{label}</div>
+      <div className="text-4xl font-bold text-[#1A1A1A] leading-none">{value}</div>
+      {typeof progress === "number" && (
+        <Progress value={progress} className="h-1.5 w-full mt-1" />
+      )}
     </div>
   );
 }
