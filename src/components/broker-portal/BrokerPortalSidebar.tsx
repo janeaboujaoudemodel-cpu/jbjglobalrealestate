@@ -1,11 +1,13 @@
-import { NavLink, useLocation, Link } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, Link } from "react-router-dom";
 import {
   LayoutDashboard, Users, Briefcase, Database, ListChecks, Calendar, ListTodo,
   Handshake, BadgeDollarSign, FilePen, GraduationCap, Megaphone,
-  Brain, Bell, Settings, ChevronLeft, ChevronRight, ArrowLeft, Crown,
+  Brain, Bell, Settings, ChevronLeft, ChevronRight, ArrowLeft, Crown, Home, LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 type Item = { to: string; label: string; icon: any };
 
@@ -35,14 +37,26 @@ interface Props {
 
 export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNavigate }: Props) {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { isOwner } = useUserRole();
+  const { signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success("Signed out successfully");
+      navigate("/");
+    } catch {
+      toast.error("Failed to sign out");
+    }
+  };
 
   return (
-    <div className="h-full flex flex-col" data-no-contrast-guard>
+    <div className="h-full flex flex-col min-h-0" data-no-contrast-guard>
       {/* Logo row — height locked to --shell-header-h so divider aligns with top bar */}
       <div
         className="border-b border-[#B89555]/40 flex items-center justify-between px-3 flex-shrink-0 bg-[#F7F2EA]"
-        style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)" }}
+        style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
       >
         {!collapsed ? (
           <div className="min-w-0">
@@ -66,44 +80,8 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
         )}
       </div>
 
-      {/* Return to site / owner backend */}
-      <div className="px-3 pt-3 pb-2 border-b border-[#B89555]/15 space-y-1.5">
-        <Link
-          to="/"
-          onClick={onNavigate}
-          title={collapsed ? "Return to Site" : undefined}
-          className={cn(
-            "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-            "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E6DAC2] border border-[#B89555]/40",
-          )}
-        >
-          <ArrowLeft className="h-4 w-4 shrink-0" />
-          {!collapsed && <span className="truncate">Return to Site</span>}
-        </Link>
-
-        {isOwner && (
-          <Link
-            to="/owner/crm"
-            onClick={() => {
-              try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
-              onNavigate?.();
-            }}
-            title={collapsed ? "Owner Backend" : undefined}
-            className={cn(
-              "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
-              "bg-[#102540] text-white hover:bg-[#1a3d63]",
-            )}
-            data-allow-dark-cta
-          >
-            <ArrowLeft className="h-4 w-4 shrink-0" />
-            {!collapsed && <span className="truncate">Owner Backend</span>}
-            {!collapsed && <Crown className="h-3.5 w-3.5 ml-auto opacity-80" />}
-          </Link>
-        )}
-      </div>
-
-      {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5 jj-scrollbar-gold">
+      {/* Nav — fills remaining height between header and footer */}
+      <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-2 space-y-0.5 jj-scrollbar-gold">
         {ITEMS.map(({ to, label, icon: Icon }) => {
           const active =
             to === "/broker/portal" ? pathname === to : pathname === to || pathname.startsWith(to + "/");
@@ -125,6 +103,44 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
           );
         })}
       </nav>
+
+      {/* Pinned footer — seals the sidebar (mirrors OwnerDashboardShell) */}
+      <div className="p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#F7F2EA]">
+        {isOwner && (
+          <Link
+            to="/owner/crm"
+            onClick={() => {
+              try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
+              onNavigate?.();
+            }}
+            title={collapsed ? "Owner Backend" : undefined}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-[#102540] text-white hover:bg-[#1a3d63]"
+            data-allow-dark-cta
+          >
+            <ArrowLeft className="h-5 w-5 shrink-0" />
+            {!collapsed && <span className="truncate">Owner Backend</span>}
+            {!collapsed && <Crown className="h-3.5 w-3.5 ml-auto opacity-80" />}
+          </Link>
+        )}
+        <Link
+          to="/"
+          onClick={onNavigate}
+          title={collapsed ? "Return to Site" : undefined}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-[#1A1A1A] bg-[#EFE6D6] hover:bg-[#E6DAC2] border border-[#B89555]/40"
+        >
+          <Home className="h-5 w-5 shrink-0 text-[#1A1A1A]" />
+          {!collapsed && <span className="truncate">Return to Site</span>}
+        </Link>
+        <button
+          type="button"
+          onClick={handleSignOut}
+          title={collapsed ? "Sign Out" : undefined}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-[#1A1A1A] hover:!text-red-700 hover:bg-red-50 transition-colors"
+        >
+          <LogOut className="h-5 w-5 shrink-0" />
+          {!collapsed && <span className="truncate">Sign Out</span>}
+        </button>
+      </div>
     </div>
   );
 }
