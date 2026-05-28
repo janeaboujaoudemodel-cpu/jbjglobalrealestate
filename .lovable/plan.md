@@ -1,45 +1,95 @@
-## Scope
-Pure CSS/markup fixes on `/careers` (`src/pages/JoinApplication.tsx` + `src/styles/theme-tokens.css`). No logic, no backend.
+## Goal
 
-## 1. "Open Positions" header — white text, no beige flip
-`Card#open-positions` is using `careers-card-strong` which on hover/active was switching surface to champagne (the beige flip you saw).
+Take the four rules that currently only fire on `/careers` and `/careers/intake/:token` and apply them to every **public lead-capture form** (anything an anonymous visitor can submit). Owner / CRM / admin / staff forms keep their existing champagne look — no change.
 
-- Force the card surface to **navy `#102540`** in idle AND hover (no beige) and keep all foreground text white.
-- Repaint inside that card scope:
-  - `CardTitle` "Open Positions" → `text-white`
-  - `CardDescription` paragraph → `text-white/80`
-  - The "Live Roles" eyebrow chip → white text + white hairline border + transparent fill (currently navy text on cream)
-  - The `<strong>Apply</strong>` inside description → white
-- Add a one-shot hover sheen: a pseudo-element on the card with a 1.2s diagonal `linear-gradient(115deg, transparent 0%, rgba(255,255,255,.14) 50%, transparent 100%)` translateX sweep on `:hover`. Pure CSS, no JS.
+The four rules being generalised:
 
-## 2. "21 open" badge — white in every state
-`careers-open-badge` rules in `theme-tokens.css` currently get overridden on hover (becomes black-on-cream).
+1. **Field colour rule** — identity fields get a 2px navy `#102540` border; preference fields get a 2px gold `#B89555` border.
+2. **White title on navy** — section headers / "Open positions"-style cards stay white text on navy `#102540`, no champagne flip on hover.
+3. **Premium "Questions / Contact us" block** — the 3-channel glass card (Email · Phone · Chat with Jessica) replaces every "Questions? Email us at…" plain-text line.
+4. **Gold-tick checkbox** — every checkbox renders as a white box with a 1.5px gold hairline and a gold `✓` when checked (no blue ticks anywhere).
 
-- Lock the badge: `background:#102540 !important`, `color:#FFFFFF !important`, `border:1px solid #B89555 !important` for `:hover`, `:focus`, `:focus-visible`, `:active`, `[data-state]` — and force the inner `<span>` (`{filteredPositions.length} open`) to inherit white.
-- Keep the pulsing emerald dot unchanged.
+## Field colour rule — applied consistently
 
-## 3. Field borders — blue for personal block, gold for city
-Step 0 (Personal) inputs already carry `careers-blue-field` (First Name, Last Name, Email) and the phone uses `careers-phone-input`. Audit shows:
+| Class | Fields it goes on |
+|---|---|
+| `.jbj-blue-field` (navy 2px) | First name, Last name, Full name, Email, Phone (+ country trigger) |
+| `.jbj-gold-field` (gold 2px)  | City, Country, Nationality, Languages, Interests, Budget, Property type, Notes / Message, anything qualitative |
 
-- ✅ First Name / Last Name / Email — already wired to `careers-blue-field` (blue border via theme-tokens). Will tighten the rule to a solid **2px navy `#102540`** border in idle + hover + focus so the blue is unmistakable (not the faint version you saw).
-- ✅ Phone — confirm `careers-phone-input` outer wrapper paints the same 2px navy border around the country-code trigger AND the tel input as one unified control.
-- 🆕 **City** (line 914, `SearchableSelect`) — add `className="careers-gold-field"` and create the matching rule in `theme-tokens.css`: 2px gold `#B89555` border, champagne `#FDFBF7` surface, ink text, gold focus ring. (Mirrors `careers-blue-field` but in gold.)
+Phone country-code combobox always inherits navy to match the tel input.
 
-## 4. "Questions? Contact us at contact@JBJ.ae" footer line
-Currently a bare `<p>` with a plain link — out of place vs. the rest of the careers theme.
+## Public lead-capture forms in scope
 
-Wrap it in a small premium contact strip directly under the form card:
+Audited and confirmed as the entire public surface:
 
-- Rounded-2xl champagne surface, 1px gold hairline, soft navy glow shadow.
-- Left: small navy icon tile (Mail icon) + "Questions?" eyebrow (navy uppercase tracked) on top of "Contact us at **contact@JBJ.ae**" (ink, email in navy semibold with gold underline on hover).
-- Right: a secondary "Chat with Jessica" pill (navy text, gold hairline) linking to `/hr-agent`.
-- Mobile: stacks vertically, centered.
+```text
+src/components/InquiryFormModal.tsx              property / project enquiry modal
+src/components/chat/ChatLeadForm.tsx             chat widget gate
+src/components/chat/ChatConversationalCollect.tsx  conversational lead capture
+src/components/chat/ChatCVSubmission.tsx         CV submission inside chat
+src/components/concierge/ConciergeGate.tsx       concierge name+phone gate
+src/components/home/AIConcierge.tsx              homepage concierge inline form
+src/components/video-meet/PreJoinForm.tsx        video-meet pre-join
+src/components/SupportTicketBox.tsx              support ticket form
+src/pages/JoinApplication.tsx                    careers apply (already done — verify)
+src/pages/CareersIntake.tsx                     candidate intake (already done — verify)
+src/pages/Index.tsx — public "Book a free consultation" + footer inquiry
+```
 
-All text uses already-defined careers tokens — no new colours.
+Anything under `src/pages/owner/**`, `src/pages/admin/**`, `src/components/crm/**`, `src/components/hr/**`, `src/components/owner-dashboard/**`, `src/components/employee-management/**` is **explicitly out of scope**.
 
-## Files touched
-- `src/pages/JoinApplication.tsx` — open-positions card colour classes, "21 open" wrapper, city field className, new contact strip JSX.
-- `src/styles/theme-tokens.css` — strengthen `careers-open-badge` + `careers-blue-field` rules, add `.careers-gold-field`, add `.careers-card-navy` (replaces `careers-card-strong` only on this card) with hover-sheen keyframes.
+## Implementation
+
+### 1 · Promote the tokens to global
+
+In `src/styles/theme-tokens.css`:
+
+- Duplicate every `[data-careers-page] .careers-blue-field` block into a `[data-jbj-form] .jbj-blue-field` block (and the corresponding `.jbj-gold-field`, `.jbj-card-navy`, `.jbj-open-badge`).
+- Keep the original `careers-*` selectors as aliases so the two careers pages keep working unchanged.
+- Update the existing global `:is(input,textarea,select)` champagne reset in `src/index.css` (lines 3536 + 3572) to also exclude `.jbj-blue-field` and `.jbj-gold-field` so they don't get re-skinned.
+
+### 2 · Gold-tick checkbox (global override)
+
+In `src/index.css`, add a single rule targeting the shadcn checkbox primitive — `[role="checkbox"]` / `button[data-state][data-radix-checkbox]`:
+
+- Idle: white background, 1.5px solid `#B89555`, rounded-md.
+- Checked: still white background, gold `✓` indicator (`color: #B89555`), gold border stays 1.5px.
+- Focus: 2px gold ring `rgba(184,149,85,.35)`.
+- No opt-out by default — every checkbox on the site flips to gold ticks. Documented in memory as a global rule.
+
+### 3 · `<JBJContactBlock />` primitive
+
+Create `src/components/forms/JBJContactBlock.tsx` — a generalised copy of `CareersContactBlock` where the three channels (icon · label · value · href · tag) are props with sensible JBJ defaults. `CareersContactBlock` becomes a thin wrapper that passes the careers-specific channels (`careers@JBJ.ae`, `Chat with Jessica`, `/hr-agent`).
+
+### 4 · `<JBJOpenCard />` primitive (white-on-navy)
+
+Extract the navy "Open positions" card pattern into `src/components/forms/JBJOpenCard.tsx` (`.jbj-card-navy` + sheen). Used by JoinApplication today; available for any future form header that needs the same treatment. No mandatory retrofit — only adopted where the form already has an "Open …" or "Active …" card.
+
+### 5 · Retrofit pass — one PR-shaped change per file
+
+For each file in the scope list:
+
+- Add `data-jbj-form` to the form root (so the scoped tokens activate).
+- Replace each `<Input />` / `<input />` className with `jbj-blue-field` or `jbj-gold-field` per the table above.
+- For combobox-style country pickers, mirror the `careers-phone-tel` pattern: navy combobox + navy phone input.
+- Replace any inline "Questions? Contact us at …" / "Need help? Email …" line with `<JBJContactBlock />`.
+- Leave labels, copy, layout, validation, submit handlers, RLS, edge-function calls, and accessibility attributes **completely untouched** — pure presentation swap.
+
+### 6 · Memory + CI
+
+- Add `mem://ui-ux/visual-standards/jbj-form-standard.md` describing the new `[data-jbj-form]` scope, the blue-vs-gold field map, the global gold-tick rule, and the contact block primitive.
+- Update `mem://index.md` Core (one line) so future work auto-applies the standard to any new public form.
+- No new CI scripts — the existing white-on-light + contrast guards already cover the navy / gold combinations.
 
 ## Out of scope
-No changes to form submission, validation, schema, or any other page. No removal of existing features.
+
+- No backend / edge-function / RLS / schema changes.
+- No relayout of any form; only borders, ticks, and the contact footer change.
+- No change to owner / CRM / admin forms.
+- No change to the existing `<Button variant="gold">` or any non-input control.
+- No change to mobile/desktop breakpoints — the careers divider hidden-on-mobile rule already shipped and is unaffected.
+
+## QA after build
+
+- Manual pass on `/`, `/careers`, `/careers/intake/:token`, `/book`, `/contact`, any property page that opens `InquiryFormModal`, the chat launcher, the homepage Concierge, and a video-meet pre-join URL — confirm: navy borders on name/email/phone, gold borders on city/preferences/notes, gold ticks on every checkbox, premium contact block at the bottom of every form, no champagne / black flip on hover anywhere.
+- Verify owner CRM (`/owner/crm`) and admin (`/admin/*`) screens are visually unchanged.
