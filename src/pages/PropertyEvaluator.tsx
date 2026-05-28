@@ -19,6 +19,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { ToolHero } from "@/components/tools/ToolHero";
+import { PremiumToolShell } from "@/components/tools/PremiumToolShell";
 import { PoweredByJBJ } from "@/components/tools/PoweredByJBJ";
 import { toolThemes, TOOL_GOLD, TOOL_PAGE_BG } from "@/components/tools/toolThemes";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
@@ -297,36 +298,34 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
   };
 
   return (
-    <section className="min-h-screen" style={{ background: TOOL_PAGE_BG }}>
-      <ToolHero
-        theme={toolThemes.navy}
-        eyebrowIcon={Sparkles}
-        eyebrow="AI-Powered Valuation"
-        title={
-          <>
-            Property <span style={{ color: TOOL_GOLD }}>Evaluator</span>
-          </>
-        }
-        subtitle="AI-powered valuation built on DLD transaction data, RERA Rental Index and institutional market analysis."
-      >
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <PoweredByJBJ onDark className="justify-start" />
-          <a
-            href="/sell/valuation"
-            data-allow-dark-cta
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-[0.14em] text-white transition-colors"
-            style={{
-              background: "rgba(255,255,255,0.06)",
-              border: `1px solid ${TOOL_GOLD}66`,
-            }}
-          >
-            <Info className="w-3.5 h-3.5" style={{ color: TOOL_GOLD }} />
-            Read more · Valuation & Strategic Pricing Advisory
-          </a>
-        </div>
-      </ToolHero>
+    <PremiumToolShell
+      theme={toolThemes.navy}
+      eyebrowIcon={Sparkles}
+      eyebrow="AI-Powered Valuation"
+      title={
+        <>
+          Property <span style={{ textShadow: `0 0 24px ${toolThemes.navy.accent}` }}>Evaluator</span>
+        </>
+      }
+      subtitle="AI-powered valuation built on DLD transaction data, RERA Rental Index and institutional market analysis."
+    >
+      <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+        <PoweredByJBJ />
+        <a
+          href="/sell/valuation"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition-colors"
+          style={{
+            background: toolThemes.navy.accentSoft,
+            border: `1px solid ${toolThemes.navy.accentBorder}`,
+            color: toolThemes.navy.accent,
+          }}
+        >
+          <Info className="w-3.5 h-3.5" />
+          Read more · Valuation & Strategic Pricing Advisory
+        </a>
+      </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto bg-[#FDFBF7] border border-blue-500/30 mb-8">
             <TabsTrigger value="property" className="data-[state=active]:bg-blue-500 data-[state=active]:text-[#1A1A1A] text-white/70">
@@ -982,7 +981,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
         <LegalDisclaimer variant="ai-tools" className="mt-8" />
         <LegalDisclaimer variant="investment" className="mt-4" />
       </div>
-    </section>
+    </PremiumToolShell>
   );
 };
 
