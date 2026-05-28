@@ -276,7 +276,7 @@ export default function StampManagerDialog({ open, onOpenChange, onUse }: StampM
                     {s.svg_content ? (
                       <div
                         className="w-full h-full flex items-center justify-center [&>svg]:max-w-full [&>svg]:max-h-full"
-                        dangerouslySetInnerHTML={{ __html: s.svg_content }}
+                        dangerouslySetInnerHTML={{ __html: sanitizeSvg(s.svg_content) }}
                       />
                     ) : s.thumbnail_url ? (
                       <img

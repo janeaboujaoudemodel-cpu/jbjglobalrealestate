@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS hr_quiz_questions_member_select_via_view ON public.hr_quiz_questions;
