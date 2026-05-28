@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useBrokerScopedDatabases } from "@/hooks/useBrokerScopedDatabases";
 import { useBrokerScopedLeads } from "@/hooks/useBrokerScopedLeads";
@@ -234,6 +234,7 @@ function LogCallDialog({
 export default function BrokerCRM() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [tab, setTab] = useState<Tab>("pipeline");
   const [search, setSearch] = useState("");
   const [requestOpen, setRequestOpen] = useState(false);
@@ -241,6 +242,24 @@ export default function BrokerCRM() {
   const dbs = useBrokerScopedDatabases();
   const leads = useBrokerScopedLeads();
   const tasks = useBrokerPersonalTasks();
+
+  useEffect(() => {
+    const nextTab = searchParams.get("tab") as Tab | null;
+    const action = searchParams.get("action");
+    if (nextTab && ["pipeline", "databases", "leads", "calls", "insights", "activity"].includes(nextTab)) {
+      setTab(nextTab);
+    }
+    if (action === "log-call") {
+      setTab("calls");
+      setCallDialogOpen(true);
+    }
+    if (nextTab || action) {
+      const next = new URLSearchParams(searchParams);
+      next.delete("tab");
+      next.delete("action");
+      setSearchParams(next, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const callLogs = useQuery({
     queryKey: ["broker-call-logs", user?.id],
