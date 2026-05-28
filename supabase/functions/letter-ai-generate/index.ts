@@ -55,6 +55,7 @@ Deno.serve(async (req) => {
 
     const body = await req.json().catch(() => ({}));
     const userPrompt: string = String(body?.prompt || "").trim();
+    const mode: string = String(body?.mode || "letter").trim();
     const tone: string = String(body?.tone || "formal");
     const recipientHint: string = String(body?.recipient || "").trim();
     const language: string = String(body?.language || "English");
@@ -62,6 +63,43 @@ Deno.serve(async (req) => {
     if (!userPrompt) {
       return new Response(JSON.stringify({ error: "prompt is required" }), {
         status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (mode === "generate-page") {
+      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-5.5",
+          messages: [
+            {
+              role: "system",
+              content: `Create one premium A4 document page section for JBJ GLOBAL REAL ESTATE. Return strict JSON only: {"body_html":"..."}. body_html must be safe inline HTML only, no scripts, no full html/body tags, no letterhead/footer/signature/stamp. Use Inter, ink #1A1A1A, champagne #F7F2EA/#FDFBF7, gold #B89555 only as 1px borders/dividers. Make it spacious, corporate, readable, and suitable for insertion into an existing contract page.`,
+            },
+            { role: "user", content: `Language: ${language}. Tone: ${tone}. Page request:\n${userPrompt}` },
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.25,
+        }),
+      });
+      if (!response.ok) {
+        const t = await response.text().catch(() => "");
+        return new Response(JSON.stringify({ error: `AI gateway ${response.status}: ${t.slice(0, 200)}` }), {
+          status: response.status === 429 || response.status === 402 ? response.status : 502,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const json = await response.json();
+      const content = json?.choices?.[0]?.message?.content || "{}";
+      let parsed: any = {};
+      try { parsed = JSON.parse(content); } catch { parsed = {}; }
+      return new Response(JSON.stringify({ body_html: String(parsed?.body_html || "").trim() }), {
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
