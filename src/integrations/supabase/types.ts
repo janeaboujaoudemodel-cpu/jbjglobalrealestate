@@ -2412,6 +2412,36 @@ export type Database = {
         }
         Relationships: []
       }
+      broker_ai_chats: {
+        Row: {
+          broker_id: string
+          content: string
+          created_at: string
+          id: string
+          lead_id: string
+          role: string
+          structured: Json | null
+        }
+        Insert: {
+          broker_id: string
+          content: string
+          created_at?: string
+          id?: string
+          lead_id: string
+          role: string
+          structured?: Json | null
+        }
+        Update: {
+          broker_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          lead_id?: string
+          role?: string
+          structured?: Json | null
+        }
+        Relationships: []
+      }
       broker_assignment_rules: {
         Row: {
           assigned_broker_id: string | null
