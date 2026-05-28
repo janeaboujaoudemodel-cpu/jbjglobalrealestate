@@ -93,16 +93,15 @@ const escapeSignatureHtml = (value?: string) =>
  */
 const renderPerPageUserSignature = (_name?: string) => {
   return `
-    <div data-rendered-page-signature="1" style="margin-top:auto;padding:10px 8px 0;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
-      <div style="width:260px;color:#1A1A1A;">
-        <div style="display:grid;grid-template-columns:80px 1fr;align-items:end;gap:8px;font-size:10px;line-height:1.2;">
-          <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;">Signature:</div>
-          <div style="height:22px;border-bottom:1px solid #1A1A1A;"></div>
-        </div>
+    <div data-rendered-page-signature="1" style="margin-top:auto;padding:14px 0 10px;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
+      <div style="display:flex;align-items:flex-end;gap:10px;color:#1A1A1A;min-width:300px;">
+        <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1;padding-bottom:2px;">Signature:</div>
+        <div style="flex:1;border-bottom:1px solid #1A1A1A;height:1px;"></div>
       </div>
     </div>
-    <div data-rendered-page-divider="1" style="border-top:1px solid rgba(184,149,85,.55);height:0;margin:0 24px;flex:0 0 auto;page-break-inside:avoid;break-inside:avoid;"></div>`;
+    <div data-rendered-page-divider="1" style="border-top:1px solid rgba(184,149,85,.55);height:0;margin:10px 0 0;flex:0 0 auto;page-break-inside:avoid;break-inside:avoid;"></div>`;
 };
+
 
 const renderPageGeneratedDate = (): string => {
   const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
