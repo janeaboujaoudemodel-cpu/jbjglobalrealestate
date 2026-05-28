@@ -1,37 +1,40 @@
-# Restore "Generate with AI" Button in Document Studio Step 2
+Plan to fix the Document Studio holiday-home contract end-to-end:
 
-## Problem
+1. Lock the Holiday Home document layout
+- Make Holiday Home Booking Agreement use an explicit locked page structure that Document Studio will not auto-repaginate.
+- Page 1: premium welcome introduction, guest identity/booking profile, quotation only. No terms/conditions on page 1.
+- Page 2: terms & conditions only, kept together on one page without the acknowledgement/disclaimer splitting into another page.
+- Page 3: acknowledgement/disclaimer centered, signature block pushed lower, authorised company signature/stamp and guest signature aligned parallel on the same row, footer fixed to the bottom.
+- If the final visual test proves disclaimer + signatures + footer can fit cleanly after page 2 terms without violating readability, I’ll keep it on page 2; otherwise the locked 3-page version will remain.
 
-In Document Studio's left sidebar at **Step 2 — Details**, the footer currently shows only one button:
+2. Improve the Holiday Home content and live fields
+- Rewrite the intro to sound more premium and welcoming.
+- Add missing left-side fields that the preview already expects: ID type, ID/passport number, nationality, booking date.
+- Use dummy defaults in preview until the left-side fields are filled, then reflect the real values live.
+- Generate and persist one system booking ID per document using the existing chained booking ID function, instead of random preview IDs changing during edits.
 
-```
-[ Continue to Review & Send  → ]
-```
+3. Fix saved-document persistence and library flow
+- Save generated documents into the existing `crm_documents` flow with template ID, booking ID, field values, and rendered HTML so saved documents do not disappear.
+- Keep the existing action-sheet flow: Preview / Edit / Delete.
+- Show saved documents grouped by the selected document type, so Holiday Home shows holiday-home contracts, Commission Agreement shows commission contracts, etc.
 
-The previous **"Generate with AI"** action (which calls `handleGenerate`, line 1081, to draft the AI intro/closing and run the composer) was removed from this rail. The user has to either click into Step 3 (which only exposes Subject + Recipient + Send) or hunt for the Generate button hidden inside the center preview's `EmptyBody` empty-state — and that empty state never appears once the auto-composed body is showing.
+4. Fix stamp/signature visuals
+- Remove the white background from the JBJ company stamp asset used inside the document.
+- Increase/stretch the stamp display so it is clearer and less compressed.
+- Keep signature/stamp controls clickable and make the final page signature area align cleanly: company side and other-party side parallel.
 
-Because the dedicated Generate control is gone, the user filled in the details on the left, saw a preview they consider empty (no AI-drafted intro/closing, just the deterministic skeleton), and has no obvious way to ask the AI to fill it in.
+5. Fix footer and header chrome
+- Make preview and export footer match exactly.
+- Footer will be full-width edge-to-edge, pinned flush to the page bottom with no white gap below it.
+- Keep the full company legal name on one line; distribute office, phone, email, website, and trade licence more spaciously below.
 
-## Fix
+6. Fix language selector border
+- Override the Document Studio language dropdown focus/active styles so it uses gold borders/rings only, never blue.
 
-In `src/components/document-studio/DocumentStudio.tsx`, in the Step 2 details panel footer (the block currently rendering "Continue to Review & Send" around lines 2257–2264), restore Generate with AI as the **primary** button, keep Continue as **secondary**.
-
-```text
-[ ✦ Generate with AI ]   ← primary, full width
-[ Continue to Review & Send → ]   ← outline, full width
-```
-
-Behaviour:
-
-- **Generate with AI** calls the existing `handleGenerate()`. Disabled while `generating` is true; shows the spinner and "Generating…" label inside the same button when busy (same pattern already used in `EmptyBody`).
-- Disabled when required fields for the current template are missing — reuse the existing `canGenerate`-style check (or fall back to `!template`).
-- **Continue to Review & Send** keeps its current behaviour (`setStep(3)`).
-- Tip caption below adjusts to: *"Tip: Generate drafts the AI body. You can also type directly into the page or use the AI assistant on the right."*
-
-No other panels, the top toolbar, the email panel, or the composer are touched. No new files. No design tokens introduced.
-
-## Out of scope
-
-- The Step 3 panel keeps Subject / Recipient / Send / Export / Test exactly as it is.
-- The center preview's empty-state Generate button stays as is (it's a fallback for when `bodyHtml` is empty).
-- No change to `handleGenerate`, the composer, the auto-render `useEffect`, signature block, or letterhead.
+7. Visual + technical E2E verification
+- Open the Careers Portal Document Studio, select Holiday Home, inspect pages 1–3 visually.
+- Fill guest/ID/booking fields and confirm live preview updates.
+- Save the document, reload/select the template, and confirm it appears under the saved Holiday Home documents with the booking ID.
+- Confirm Preview/Edit/Delete action sheet still works.
+- Confirm Export PDF and Print controls are visible and usable.
+- Check console/network for errors during the flow.
