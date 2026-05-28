@@ -147,6 +147,7 @@ const ClientPortal = lazy(() => import("@/pages/client/ClientPortal"));
 const MyTickets = lazy(() => import("@/pages/client/MyTickets"));
 const ReopenTicket = lazy(() => import("@/pages/ReopenTicket"));
 const JoinApplication = lazy(() => import("@/pages/JoinApplication"));
+const CareersIntake = lazy(() => import("@/pages/CareersIntake"));
 const CareersDeveloperRep = lazy(() => import("@/pages/CareersDeveloperRep"));
 const Onboarding = lazy(() => import("@/pages/Onboarding"));
 const OnboardingModule = lazy(() => import("@/pages/OnboardingModule"));
@@ -381,6 +382,7 @@ export const PublicRoutes = () => (
     <Route path="/join" element={<JoinApplication />} />
     <Route path="/careers" element={<JoinApplication />} />
     <Route path="/careers/apply" element={<JoinApplication />} />
+    <Route path="/careers/intake/:token" element={<CareersIntake />} />
     <Route path="/careers/developer-representative" element={<ModeRequiredRoute modes={['developer']}><CareersDeveloperRep /></ModeRequiredRoute>} />
     <Route path="/onboarding" element={<AuthRequiredRoute><Onboarding /></AuthRequiredRoute>} />
     <Route path="/onboarding/module/:moduleId" element={<AuthRequiredRoute><OnboardingModule /></AuthRequiredRoute>} />

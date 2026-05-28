@@ -14,7 +14,7 @@ import {
   X, Mail, Phone, MessageSquare, Video, Eye, CheckCircle2,
   XCircle, Clock, FileText, Briefcase, MapPin, Languages,
   Tag, User, Calendar, Sparkles, Bot, Save, Loader2, Link2,
-  History, Send, StickyNote, ShieldCheck,
+  History, Send, StickyNote, ShieldCheck, FileSignature, MailCheck,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
@@ -109,6 +109,14 @@ export default function ApplicantProfileDrawer({
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [notes, setNotes] = useState("");
   const [savingNotes, setSavingNotes] = useState(false);
+  const [pipelineBusy, setPipelineBusy] = useState<null | "approve" | "offer">(null);
+  const [candidateRow, setCandidateRow] = useState<{
+    id: string;
+    status: string | null;
+    intake_token: string | null;
+    intake_submitted_at: string | null;
+    current_envelope_id: string | null;
+  } | null>(null);
 
   useEffect(() => {
     setNotes(candidate?.notes || "");
@@ -147,6 +155,80 @@ export default function ApplicantProfileDrawer({
       cancelled = true;
     };
   }, [open, candidate?.id, candidate?.email]);
+
+  // Look up the unified hr_candidates row (by email) so we can drive the pipeline.
+  useEffect(() => {
+    if (!open || !candidate?.email) {
+      setCandidateRow(null);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("hr_candidates")
+        .select("id, status, intake_token, intake_submitted_at, current_envelope_id")
+        .eq("email", candidate.email)
+        .maybeSingle();
+      if (!cancelled) setCandidateRow((data as any) || null);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [open, candidate?.email]);
+
+  const handleApproveAndRequestDocs = async () => {
+    if (!candidateRow?.id) {
+      toast.error("Unified candidate record not found for this applicant.");
+      return;
+    }
+    setPipelineBusy("approve");
+    try {
+      const { data, error } = await supabase.functions.invoke("hr-approve-and-request-docs", {
+        body: { candidate_id: candidateRow.id, department: candidate?.department_category },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      toast.success(
+        (data as any)?.email_sent ? "Approved · intake link emailed" : "Approved · intake link minted",
+      );
+      setCandidateRow((r) => (r ? { ...r, status: "approved_pending_docs", intake_token: (data as any).intake_token } : r));
+    } catch (e: any) {
+      toast.error(e?.message || "Approve & request docs failed");
+    } finally {
+      setPipelineBusy(null);
+    }
+  };
+
+  const handleSendOfferForSignature = async () => {
+    if (!candidateRow?.id) {
+      toast.error("Unified candidate record not found for this applicant.");
+      return;
+    }
+    const documentUrl = window.prompt(
+      "Paste the public URL of the generated Job Offer PDF to send for signature:",
+    );
+    if (!documentUrl) return;
+    setPipelineBusy("offer");
+    try {
+      const { data, error } = await supabase.functions.invoke("hr-send-offer-for-signature", {
+        body: {
+          candidate_id: candidateRow.id,
+          document_url: documentUrl,
+          document_filename: `Job-Offer-${candidate?.full_name || "candidate"}.pdf`,
+        },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      toast.success("Job offer envelope created — open it to send");
+      setCandidateRow((r) => (r ? { ...r, status: "offer_sent", current_envelope_id: (data as any).envelope_id } : r));
+      const next = (data as any)?.next;
+      if (next) window.open(next, "_blank", "noopener,noreferrer");
+    } catch (e: any) {
+      toast.error(e?.message || "Send for signature failed");
+    } finally {
+      setPipelineBusy(null);
+    }
+  };
 
   const timeline = useMemo(() => {
     if (!candidate) return [] as Array<{
@@ -325,6 +407,54 @@ export default function ApplicantProfileDrawer({
                 className="border-rose-600/40 text-rose-700 hover:bg-rose-50"
               >
                 <XCircle className="h-3.5 w-3.5 mr-1" /> Reject
+              </Button>
+            </div>
+          </div>
+
+          {/* === HR PIPELINE STRIP === */}
+          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-[#102540]/15 bg-[#FDFBF7] px-3 py-2">
+            <span className="text-[10px] uppercase tracking-[0.18em] text-[#102540] font-semibold">
+              HR Pipeline
+            </span>
+            {candidateRow?.status && (
+              <Badge variant="outline" className="bg-white border-[#102540]/30 text-[#102540] font-normal">
+                {candidateRow.status.replace(/_/g, " ")}
+              </Badge>
+            )}
+            <div className="ml-auto flex flex-wrap gap-1.5">
+              <Button
+                size="sm"
+                onClick={handleApproveAndRequestDocs}
+                disabled={!candidateRow || pipelineBusy !== null || !!candidateRow?.intake_submitted_at}
+                className="bg-[#102540] hover:bg-[#1a3d63] text-white"
+                data-allow-dark-cta
+                title={candidateRow?.intake_submitted_at ? "Documents already submitted" : "Approve & email intake link"}
+              >
+                {pipelineBusy === "approve" ? (
+                  <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
+                ) : (
+                  <MailCheck className="h-3.5 w-3.5 mr-1.5" />
+                )}
+                Approve & request docs
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleSendOfferForSignature}
+                disabled={!candidateRow || pipelineBusy !== null || !candidateRow?.intake_submitted_at}
+                className="border-[#102540]/40 text-[#102540] hover:bg-[#EFE6D6]"
+                title={
+                  !candidateRow?.intake_submitted_at
+                    ? "Available after candidate submits documents"
+                    : "Create signable job-offer envelope"
+                }
+              >
+                {pipelineBusy === "offer" ? (
+                  <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
+                ) : (
+                  <FileSignature className="h-3.5 w-3.5 mr-1.5" />
+                )}
+                Send offer for signature
               </Button>
             </div>
           </div>
