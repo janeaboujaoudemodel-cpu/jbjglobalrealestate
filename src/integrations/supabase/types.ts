@@ -23188,6 +23188,7 @@ export type Database = {
           department: string
           documents: Json | null
           email: string
+          employment_type: string | null
           full_name: string
           generated_company_id: string | null
           generated_email: string | null
@@ -23225,6 +23226,7 @@ export type Database = {
           department: string
           documents?: Json | null
           email: string
+          employment_type?: string | null
           full_name: string
           generated_company_id?: string | null
           generated_email?: string | null
@@ -23262,6 +23264,7 @@ export type Database = {
           department?: string
           documents?: Json | null
           email?: string
+          employment_type?: string | null
           full_name?: string
           generated_company_id?: string | null
           generated_email?: string | null
