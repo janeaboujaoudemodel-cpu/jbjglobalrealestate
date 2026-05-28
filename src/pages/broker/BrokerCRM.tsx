@@ -95,6 +95,10 @@ function LogCallDialog({
     setNotes("");
   };
 
+  useEffect(() => {
+    if (!open) reset();
+  }, [open]);
+
   const handleLeadChange = (value: string) => {
     setLeadId(value);
     const nextLead = leads.find((lead) => lead.id === value);
