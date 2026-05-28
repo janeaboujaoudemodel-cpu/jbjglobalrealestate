@@ -716,7 +716,15 @@ const CLIENT: DocumentTemplate[] = [
     aiInstructions:
       "Draft a concise 1-paragraph confirmation introduction acknowledging the guest's booking. DO NOT restate the terms — the terms & conditions table and non-refund clauses are auto-rendered. Keep tone warm but firm and professional.",
     fields: [
-      { key: "recipientName", label: "Guest Full Name", type: "text", required: true, placeholder: "e.g., John Doe" },
+      { key: "recipientName", label: "Guest Full Name (as per ID)", type: "text", required: true, placeholder: "e.g., John Doe" },
+      { key: "idType", label: "ID Type", type: "select", options: [
+        { value: "Emirates ID Holder", label: "Emirates ID Holder" },
+        { value: "Passport Holder", label: "Passport Holder" },
+        { value: "GCC National ID Holder", label: "GCC National ID Holder" },
+      ]},
+      { key: "idNumber", label: "ID / Passport Number", type: "text", placeholder: "e.g., 784-XXXX-XXXXXXX-X" },
+      { key: "nationality", label: "Nationality", type: "text", placeholder: "e.g., French" },
+      { key: "bookingDate", label: "Date of Booking", type: "date" },
       { key: "guestPhone", label: "Guest Phone / WhatsApp", type: "text" },
       { key: "propertyName", label: "Property / Unit Name", type: "text", required: true, placeholder: "Marina Heights — Apt 1204" },
       { key: "propertyAddress", label: "Property Address", type: "text", required: true },
