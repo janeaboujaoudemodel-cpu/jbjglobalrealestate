@@ -77,7 +77,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
       </div>
 
       {/* Nav — tight stack, scrolls if overflow */}
-      <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-2 jj-scrollbar-gold space-y-0.5">
+      <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-2 jj-scrollbar-gold space-y-1">
         {ITEMS.map(({ to, label, icon: Icon }) => {
           const active =
             to === "/broker/portal" ? pathname === to : pathname === to || pathname.startsWith(to + "/");
