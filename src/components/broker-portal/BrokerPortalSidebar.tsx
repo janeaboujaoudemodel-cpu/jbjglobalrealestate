@@ -2,10 +2,11 @@ import { NavLink, useLocation, Link } from "react-router-dom";
 import { useState } from "react";
 import {
   LayoutDashboard, Users, Briefcase, Database, ListChecks, Calendar, ListTodo,
-  Handshake, BadgeDollarSign, FileText, FilePen, GraduationCap, Megaphone,
-  Brain, Bell, Settings, ChevronLeft, ChevronRight, UserPlus, Upload,
+  Handshake, BadgeDollarSign, FilePen, GraduationCap, Megaphone,
+  Brain, Bell, Settings, ChevronLeft, ChevronRight, UserPlus, Upload, ArrowLeft, Crown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useUserRole } from "@/hooks/useUserRole";
 
 type Item = { to: string; label: string; icon: any };
 
@@ -19,8 +20,7 @@ const ITEMS: Item[] = [
   { to: "/broker/tasks",         label: "Tasks",              icon: ListTodo },
   { to: "/broker/deals",         label: "Deals",              icon: Handshake },
   { to: "/broker/commissions",   label: "Commissions",        icon: BadgeDollarSign },
-  { to: "/broker/documents",     label: "Documents",          icon: FileText },
-  { to: "/broker/forms",         label: "Forms & Agreements", icon: FilePen },
+  { to: "/broker/forms",         label: "Request a Form",     icon: FilePen },
   { to: "/broker/academy",       label: "JBJ Academy",        icon: GraduationCap },
   { to: "/broker/marketing",     label: "Marketing Toolkit",  icon: Megaphone },
   { to: "/broker/ai",            label: "AI Sales Assistant", icon: Brain },
@@ -31,6 +31,7 @@ const ITEMS: Item[] = [
 export default function BrokerPortalSidebar() {
   const { pathname } = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const { isOwner } = useUserRole();
 
   return (
     <aside
@@ -60,21 +61,22 @@ export default function BrokerPortalSidebar() {
         </button>
       </div>
 
-      {!collapsed && (
-        <div className="px-3 pt-3 pb-2 space-y-1.5 border-b border-[#B89555]/15">
+      {/* Owner-only: always-visible Back to Owner Backend */}
+      {isOwner && (
+        <div className="px-3 pt-3 pb-2 border-b border-[#B89555]/15">
           <Link
-            to="/broker/leads?action=new"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/45 hover:bg-[#E5D8BD] transition-colors"
+            to="/owner/crm"
+            onClick={() => { try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {} }}
+            title={collapsed ? "Back to Owner Backend" : undefined}
+            className={cn(
+              "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
+              "bg-[#102540] text-white hover:bg-[#1a3d63]",
+            )}
+            data-allow-dark-cta
           >
-            <UserPlus className="h-4 w-4" />
-            Add Lead
-          </Link>
-          <Link
-            to="/broker/databases?action=import"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/35 hover:bg-[#F7F2EA] transition-colors"
-          >
-            <Upload className="h-4 w-4" />
-            Import Database
+            <ArrowLeft className="h-4 w-4 shrink-0" />
+            {!collapsed && <span className="truncate">Owner Backend</span>}
+            {!collapsed && <Crown className="h-3.5 w-3.5 ml-auto opacity-80" />}
           </Link>
         </div>
       )}
