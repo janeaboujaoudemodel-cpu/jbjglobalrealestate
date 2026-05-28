@@ -1294,6 +1294,17 @@ function StudioShell({
         [data-document-studio-overlay] button[role="combobox"] {
           border-color: rgba(184, 149, 85, 0.72) !important;
         }
+        [data-document-studio-overlay] input:focus,
+        [data-document-studio-overlay] textarea:focus,
+        [data-document-studio-overlay] button[role="combobox"]:focus,
+        [data-document-studio-overlay] button[role="combobox"]:focus-visible,
+        [data-document-studio-overlay] [data-state="open"][role="combobox"] {
+          border-color: #B89555 !important;
+          outline: none !important;
+          box-shadow: 0 0 0 1px rgba(184, 149, 85, 0.55) !important;
+          --tw-ring-color: rgba(184, 149, 85, 0.55) !important;
+          --tw-ring-shadow: 0 0 0 1px rgba(184, 149, 85, 0.55) !important;
+        }
         [data-document-studio-overlay] [data-document-page="true"] {
           border-color: rgba(184, 149, 85, 0.42) !important;
         }
