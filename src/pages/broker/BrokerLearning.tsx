@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   GraduationCap, BookOpen, Lock, BarChart3, MessageSquare, Shield,
-  CheckCircle, Clock, Play, ChevronRight, Award, Award as AwardIcon,
+  CheckCircle, Clock, Play, ChevronRight, Award,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
@@ -287,7 +287,7 @@ export default function BrokerLearning() {
                       <div className="flex items-center gap-3 mt-2 text-xs text-[#1A1A1A]/70">
                         <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{activeModule.duration}</span>
                         <span>{activeModule.lessons} lessons</span>
-                        <span className="flex items-center gap-1"><AwardIcon className="w-3 h-3" />+50 pts on completion</span>
+                        <span className="flex items-center gap-1"><Award className="w-3 h-3" />+50 pts on completion</span>
                       </div>
                     </div>
                   </div>
