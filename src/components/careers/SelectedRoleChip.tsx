@@ -23,7 +23,7 @@ export function SelectedRoleChip({
   }
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border-2 border-[#102540] bg-gradient-to-r from-[#102540] via-[#1a3d63] to-[#102540] p-[1px] shadow-[0_10px_30px_-12px_rgba(16,37,64,0.5)]">
+    <div className="relative overflow-hidden rounded-2xl border-2 border-[#B89555] bg-gradient-to-r from-[#102540] via-[#1a3d63] to-[#102540] p-[1px] shadow-[0_10px_30px_-12px_rgba(184,149,85,0.45)]">
       <div className="flex items-center gap-3 rounded-[15px] bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] px-5 py-3.5">
         <div className="relative shrink-0">
           <div className="absolute inset-0 rounded-xl bg-emerald-500/20 blur-lg" />
