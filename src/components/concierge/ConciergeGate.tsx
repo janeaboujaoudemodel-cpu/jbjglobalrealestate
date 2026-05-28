@@ -176,6 +176,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             sendOtp();
           }}
           className="mt-4 flex flex-col gap-2.5 pb-1"
+          data-jbj-form
         >
           <div className="grid grid-cols-2 gap-2">
             <div className="relative">

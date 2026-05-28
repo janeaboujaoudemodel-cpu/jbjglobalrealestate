@@ -61,7 +61,7 @@ const ChatLeadForm = ({
   };
 
   return (
-    <ScrollArea className="flex-1 p-4">
+    <ScrollArea className="flex-1 p-4" data-jbj-form>
       <div className="text-center mb-4">
         <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
           <UserCircle className="w-7 h-7 text-[#1A1A1A]" />

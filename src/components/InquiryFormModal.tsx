@@ -420,7 +420,7 @@ const InquiryFormModal = ({
               </DialogHeader>
 
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <form data-jbj-form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   {/* ROLE SELECTION - Mandatory */}
                   <FormField
                     control={form.control}
