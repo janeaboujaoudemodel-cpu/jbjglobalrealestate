@@ -481,46 +481,58 @@ export default function LogCallDialog({
               </div>
               <div className="text-xs tabular-nums text-[#1A1A1A]/75">{formatTimer(seconds)}</div>
             </div>
-            <div className="flex items-center gap-2">
-              {recState !== "recording" ? (
-                <Button
-                  type="button"
-                  onClick={startRecording}
-                  className="[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
-                  data-surface="dark"
-                  data-allow-dark-cta
-                  data-no-contrast-guard
-                >
-                  <Mic className="h-4 w-4 mr-2 text-white" />
-                  <span className="text-white">{recState === "stopped" ? "Re-record" : "Start recording"}</span>
+            <div className="flex flex-wrap items-center gap-2">
+              {recState === "idle" && (
+                <Button type="button" onClick={startRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                  <Mic className="h-4 w-4 mr-2" />
+                  <span>Start recording</span>
                 </Button>
-              ) : (
-                <Button
-                  type="button"
-                  onClick={stopRecording}
-                  variant="outline"
-                  className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"
-                >
-                  <Square className="h-4 w-4 mr-2 text-[#1A1A1A]" />
-                  Stop recording
-                </Button>
+              )}
+              {recState === "recording" && (
+                <>
+                  <Button type="button" onClick={pauseRecording} variant="outline" className={creamControlClass}>
+                    <Pause className="h-4 w-4 mr-2" /> Pause
+                  </Button>
+                  <Button type="button" onClick={stopRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <Square className="h-4 w-4 mr-2" /> Stop
+                  </Button>
+                  <Button type="button" onClick={discardRecording} variant="outline" className={creamControlClass}>
+                    <X className="h-4 w-4 mr-2" /> Cancel
+                  </Button>
+                </>
+              )}
+              {recState === "paused" && (
+                <>
+                  <Button type="button" onClick={resumeRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <Play className="h-4 w-4 mr-2" /> Resume
+                  </Button>
+                  <Button type="button" onClick={stopRecording} variant="outline" className={creamControlClass}>
+                    <Square className="h-4 w-4 mr-2" /> Stop
+                  </Button>
+                  <Button type="button" onClick={discardRecording} variant="outline" className={creamControlClass}>
+                    <X className="h-4 w-4 mr-2" /> Cancel
+                  </Button>
+                </>
+              )}
+              {recState === "stopped" && (
+                <>
+                  <Button type="submit" disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-2" />}
+                    <span>{isSaving ? "Saving…" : "Save call log"}</span>
+                  </Button>
+                  <Button type="button" onClick={startRecording} variant="outline" className={creamControlClass}>
+                    <RotateCcw className="h-4 w-4 mr-2" /> Re-record
+                  </Button>
+                  <Button type="button" onClick={discardRecording} variant="outline" className={creamControlClass}>
+                    <X className="h-4 w-4 mr-2" /> Cancel
+                  </Button>
+                </>
               )}
               {audioBlob && recState === "stopped" && (
                 <span className="text-[11px] text-[#1A1A1A]/70">
                   Captured · {(audioBlob.size / 1024).toFixed(0)} KB · will be transcribed on save
                 </span>
               )}
-              <Button
-                type="submit"
-                disabled={isSaving}
-                className="ml-auto [background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
-                data-surface="dark"
-                data-allow-dark-cta
-                data-no-contrast-guard
-              >
-                {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin text-white" /> : <CheckCircle2 className="h-4 w-4 mr-2 text-white" />}
-                <span className="text-white">{isSaving ? "Saving…" : "Save call log"}</span>
-              </Button>
             </div>
             {(coachTips.length > 0 || coachLoading) && (
               <div className="mt-2 rounded-md bg-[#FDFBF7] border border-[#B89555]/30 p-2.5">
