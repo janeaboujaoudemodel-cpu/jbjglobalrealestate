@@ -612,11 +612,11 @@ function StudioShell({
 
   // Load saved templates for current audience.
   const reloadSavedTemplates = async () => {
-    const { data, error } = await (supabase as any)
+    let q: any = (supabase as any)
       .from("saved_document_templates")
-      .select("id,name,base_template_id,payload,is_default")
-      .eq("audience", catalog)
-      .order("updated_at", { ascending: false });
+      .select("id,name,base_template_id,payload,is_default");
+    if (catalog !== "all") q = q.eq("audience", catalog);
+    const { data, error } = await q.order("updated_at", { ascending: false });
     if (!error && Array.isArray(data)) setSavedTemplates(data as SavedTpl[]);
   };
   useEffect(() => { reloadSavedTemplates(); /* eslint-disable-next-line */ }, [catalog]);
