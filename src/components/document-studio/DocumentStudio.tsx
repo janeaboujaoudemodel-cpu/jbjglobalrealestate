@@ -2255,11 +2255,22 @@ function StudioShell({
                 )}
               </div>
               <div className="p-3 border-t border-[#B89555]/20 space-y-2">
+                <Button
+                  className="w-full"
+                  onClick={handleGenerate}
+                  disabled={!template || generating}
+                >
+                  {generating ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating…</>
+                  ) : (
+                    <><Wand2 className="w-4 h-4 mr-2" /> Generate with AI</>
+                  )}
+                </Button>
                 <Button variant="outline" className="w-full" onClick={() => setStep(3)}>
                   Continue to Review & Send <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
                 <p className="text-[10px] text-[#1A1A1A]/55 text-center">
-                  Tip: use the AI assistant on the right to draft the body, or type directly into the page.
+                  Tip: Generate drafts the AI body. You can also type directly into the page or use the AI assistant on the right.
                 </p>
               </div>
             </>
