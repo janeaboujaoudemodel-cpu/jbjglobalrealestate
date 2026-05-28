@@ -1,18 +1,46 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useBrokerScopedDatabases } from "@/hooks/useBrokerScopedDatabases";
-import { Database, ArrowRight, Loader2, Lock } from "lucide-react";
+import { Database, ArrowRight, Loader2, Lock, Upload } from "lucide-react";
 import { formatDisplayDate } from "@/utils/formatDate";
+import UploadDatabaseDialog from "@/components/crm/UploadDatabaseDialog";
 
 export default function BrokerDatabasesList() {
   const dbs = useBrokerScopedDatabases();
+  const [params, setParams] = useSearchParams();
+  const [uploadOpen, setUploadOpen] = useState(false);
+
+  useEffect(() => {
+    if (params.get("action") === "import") {
+      setUploadOpen(true);
+    }
+  }, [params]);
+
+  const handleOpenChange = (next: boolean) => {
+    setUploadOpen(next);
+    if (!next && params.get("action")) {
+      params.delete("action");
+      setParams(params, { replace: true });
+    }
+  };
 
   return (
     <div>
-      <header className="mb-6">
-        <h1 className="text-2xl font-semibold">My databases</h1>
-        <p className="text-sm text-[#1A1A1A]/70 mt-1">
-          Databases shared with you. Click any to open the Excel-style editor.
-        </p>
+      <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold">My databases</h1>
+          <p className="text-sm text-[#1A1A1A]/70 mt-1">
+            Databases shared with you, plus databases you import. Click any to open the editor.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setUploadOpen(true)}
+          className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-[#102540] text-white text-sm font-semibold hover:bg-[#1a3d63] transition-colors"
+          data-allow-dark-cta
+        >
+          <Upload className="h-4 w-4" /> Import Database
+        </button>
       </header>
 
       {dbs.isLoading ? (
@@ -21,7 +49,7 @@ export default function BrokerDatabasesList() {
         </div>
       ) : (dbs.data?.length ?? 0) === 0 ? (
         <div className="p-12 text-center text-sm text-[#1A1A1A]/60 bg-[#F7F2EA] border border-[#B89555]/20 rounded-xl">
-          No databases have been shared with you yet.
+          No databases shared with you yet. Use <span className="font-semibold">Import Database</span> to upload your own CSV or Excel file.
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -47,6 +75,12 @@ export default function BrokerDatabasesList() {
           ))}
         </div>
       )}
+
+      <UploadDatabaseDialog
+        open={uploadOpen}
+        onOpenChange={handleOpenChange}
+        onCreated={() => dbs.refetch()}
+      />
     </div>
   );
 }
