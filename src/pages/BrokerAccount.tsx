@@ -205,8 +205,9 @@ const BrokerAccount = () => {
   if (!user) return null;
 
   return (
-    <MainLayout>
+    <div>
       <div className="min-h-screen bg-background">
+
         <div className="container mx-auto px-4 py-8">
           {/* Profile Header */}
           <Card className="mb-8 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent">
@@ -678,8 +679,9 @@ const BrokerAccount = () => {
           </Tabs>
         </div>
       </div>
-    </MainLayout>
+    </div>
   );
+
 };
 
 export default BrokerAccount;
