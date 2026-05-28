@@ -84,16 +84,7 @@ export const BrokerPortalRoutes = () => (
         />
       }
     />
-    <Route
-      path="forms"
-      element={
-        <BrokerComingSoonSection
-          title="Forms & Agreements"
-          description="JBJ RERA forms (Form A/B/F/I/U) and partner agreements."
-          cta={{ to: "/contract-forms", label: "Open Forms Hub" }}
-        />
-      }
-    />
+    <Route path="forms" element={<BrokerFormRequests />} />
     <Route path="learning" element={<BrokerLearning />} />
     <Route path="learning/book/:bookId" element={<BookReader />} />
     <Route path="academy" element={<Navigate to="/broker/learning?tab=training" replace />} />
