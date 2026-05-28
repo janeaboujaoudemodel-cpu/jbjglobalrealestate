@@ -217,14 +217,16 @@ function StudioShell({
   presetTemplateId,
   onClose,
 }: {
-  catalog: DocumentAudience;
+  catalog: DocumentScope;
   presetTemplateId?: string;
   onClose: () => void;
 }) {
   const templates = useMemo(() => getCatalogByAudience(catalog), [catalog]);
   const isValidCatalogTemplate = (id?: string | null) => {
     if (!id) return false;
-    return getTemplateById(id)?.audience === catalog;
+    const t = getTemplateById(id);
+    if (!t) return false;
+    return catalog === "all" ? true : t.audience === catalog;
   };
   const initialId =
     presetTemplateId && isValidCatalogTemplate(presetTemplateId)
