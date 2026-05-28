@@ -203,7 +203,7 @@ export default function LogCallDialog({
         pendingStopRef.current?.({ blob, seconds: finalSeconds });
         pendingStopRef.current = null;
       };
-      mr.start(6000); // emit chunks every 6s for live-ish coach
+      mr.start(1000); // 1s timeslice so short recordings still flush data
       recRef.current = mr;
       setRecState("recording");
       setSeconds(0);
@@ -225,14 +225,15 @@ export default function LogCallDialog({
 
   const stopRecording = () => {
     const recorder = recRef.current;
-    if (recorder && recorder.state !== "inactive") {
-      try { recorder.requestData(); } catch { /* recorder may not support requestData in this state */ }
-      recorder.stop();
-    }
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
-    if (!recorder || recorder.state === "inactive") {
+    if (recorder && recorder.state !== "inactive") {
+      try { recorder.stop(); } catch (err) { console.warn("recorder.stop failed", err); }
+    } else {
+      // already inactive — finalize manually
       stopTracks();
       setRecState("stopped");
+      pendingStopRef.current?.(audioBlob ? { blob: audioBlob, seconds: secondsRef.current } : null);
+      pendingStopRef.current = null;
     }
   };
 
