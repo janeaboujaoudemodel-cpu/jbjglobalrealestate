@@ -279,21 +279,23 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             const showEoi = !project.is_sold_out;
             if (!showEoi && !showHandover) return null;
             return (
-              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5" data-no-contrast-guard>
+              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 allow-white" data-no-contrast-guard>
                 {showEoi && (
                   <span
-                    className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-[0.12em] uppercase bg-white/95 backdrop-blur-sm text-[#1A1A1A] border border-[#B89555]/40 shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
-                    style={{ color: "#1A1A1A" }}
+                    data-no-contrast-guard
+                    className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-[0.12em] uppercase border border-[#B89555]/40 shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
+                    style={{ color: "#1A1A1A", backgroundColor: "#FFFFFF" }}
                   >
-                    EOI
+                    <span data-no-contrast-guard style={{ color: "#1A1A1A" }}>EOI</span>
                   </span>
                 )}
                 {showHandover && (
                   <span
-                    className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide bg-white/95 backdrop-blur-sm text-[#1A1A1A] border border-[#B89555]/40 shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
-                    style={{ color: "#1A1A1A" }}
+                    data-no-contrast-guard
+                    className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide border border-[#B89555]/40 shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
+                    style={{ color: "#1A1A1A", backgroundColor: "#FFFFFF" }}
                   >
-                    {handover}
+                    <span data-no-contrast-guard style={{ color: "#1A1A1A" }}>{handover}</span>
                   </span>
                 )}
               </div>
@@ -368,13 +370,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             )}
           </div>
 
-          {/* Description — fixed 3-line block (always reserves 3 lines) */}
-          <p className="text-[#1A1A1A] text-sm leading-relaxed line-clamp-3 overflow-hidden min-h-[3.9rem]">
-            {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-            <span className="text-[#B89555] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
-              ...more
-            </span>
-          </p>
+          {/* Description intentionally removed from card — shown only on project detail page */}
 
           {/* Bottom group — pinned to card bottom so price rows align across
               every card regardless of content length above. */}
