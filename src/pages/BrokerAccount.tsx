@@ -195,13 +195,12 @@ const BrokerAccount = () => {
 
   if (loading || authLoading || roleLoading) {
     return (
-      <MainLayout>
-        <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
-          <BrandedLoader text="Loading..." className="min-h-screen" />
-        </div>
-      </MainLayout>
+      <div className="min-h-[60vh] flex items-center justify-center bg-transparent">
+        <BrandedLoader text="Loading..." />
+      </div>
     );
   }
+
 
   if (!user) return null;
 
