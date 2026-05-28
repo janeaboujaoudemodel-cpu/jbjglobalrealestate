@@ -1168,16 +1168,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               to="/contact"
               data-no-contrast-guard
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
-              style={{ color: '#102540', borderColor: '#102540', backgroundColor: '#F7F2EA' }}
+              style={{ color: '#102540', borderColor: '#B89555', backgroundColor: '#F7F2EA' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#FDFBF7';
-                e.currentTarget.style.borderColor = '#102540';
+                e.currentTarget.style.borderColor = '#B89555';
                 e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(212,184,150,0.55), 0 0 0 1px rgba(226,201,160,0.50)';
                 e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#F7F2EA';
-                e.currentTarget.style.borderColor = '#102540';
+                e.currentTarget.style.borderColor = '#B89555';
                 e.currentTarget.style.boxShadow = 'none';
                 e.currentTarget.style.transform = 'none';
               }}
@@ -1189,16 +1189,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               to="/ticket-hub"
               data-no-contrast-guard
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
-              style={{ color: '#102540', borderColor: '#102540', backgroundColor: '#F7F2EA' }}
+              style={{ color: '#102540', borderColor: '#B89555', backgroundColor: '#F7F2EA' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#FDFBF7';
-                e.currentTarget.style.borderColor = '#102540';
+                e.currentTarget.style.borderColor = '#B89555';
                 e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(212,184,150,0.55), 0 0 0 1px rgba(226,201,160,0.50)';
                 e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#F7F2EA';
-                e.currentTarget.style.borderColor = '#102540';
+                e.currentTarget.style.borderColor = '#B89555';
                 e.currentTarget.style.boxShadow = 'none';
                 e.currentTarget.style.transform = 'none';
               }}
@@ -1277,7 +1277,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         <div className="hidden sm:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-[#FDFBF7] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
           {/* Logo header (88px) — collapsed: just icon */}
           {/* Logo header — MUST match expanded (88px) so the under-monogram divider lines up exactly with the horizontal header hairline */}
-          <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-[#FDFBF7] relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-[2px] after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[0_1px_0_rgba(184,149,85,0.35)] after:pointer-events-none">
+          <div className="h-[48px] w-full shrink-0 flex items-center justify-center bg-[#FDFBF7] relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-[2px] after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[0_1px_0_rgba(184,149,85,0.35)] after:pointer-events-none">
             <Link to="/">
               <img src={jbjMonogramLightBg} alt="JBJ" className="w-7 h-7 object-contain" />
             </Link>
@@ -1330,7 +1330,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[#B91C1C]/[0.06] border-[#B91C1C]/45 hover:bg-[#B91C1C]/12 hover:border-[#B91C1C]/70"
+                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] hover:border-[#B89555] bg-[#B91C1C]/[0.06] hover:bg-[#B91C1C]/12"
                   >
                     <Headphones className="w-3.5 h-3.5 text-[#B91C1C] group-hover:text-[#B91C1C]" strokeWidth={2} />
                   </Link>
@@ -1343,7 +1343,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[#B91C1C]/[0.06] border-[#B91C1C]/45 hover:bg-[#B91C1C]/12 hover:border-[#B91C1C]/70"
+                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] hover:border-[#B89555] bg-[#B91C1C]/[0.06] hover:bg-[#B91C1C]/12"
                   >
                     <Ticket className="w-3.5 h-3.5 text-[#B91C1C] group-hover:text-[#B91C1C]" strokeWidth={2} />
                   </Link>
