@@ -20,6 +20,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { ExcelGridView } from "@/components/crm/ExcelGridView";
 import BrokerBulkUploadDialog from "@/components/crm/BrokerBulkUploadDialog";
+import { AddPersonDialog } from "@/components/crm/AddPersonDialog";
 import BrokerLifecycleActionCenter from "@/components/crm/BrokerLifecycleActionCenter";
 import { exportRowsToXlsx } from "@/utils/exportXlsx";
 import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
@@ -89,6 +90,7 @@ export default function IndividualBrokersTab() {
   const [countryFilter, setCountryFilter] = useState<string>("all");
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
   const [bulkOpen, setBulkOpen] = useState(false);
   const [actionCenterOpen, setActionCenterOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
@@ -230,7 +232,9 @@ export default function IndividualBrokersTab() {
     },
   });
 
-  const openNew = () => { setEditing({}); setOpen(true); };
+  // Canonical add flow → unified AddPersonDialog (mode="broker").
+  // The inline Dialog below is now used exclusively for EDIT.
+  const openNew = () => setAddOpen(true);
 
   const exportExcel = () => {
     if (rows.length === 0) { toast.error("Nothing to export on this page"); return; }
