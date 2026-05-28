@@ -151,6 +151,13 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             />
           </div>
 
+          {/* Classic divider between input and Search button */}
+          <div
+            aria-hidden="true"
+            className="flex-shrink-0 self-stretch w-px bg-[#B89555]/40"
+            style={{ marginTop: "10px", marginBottom: "10px" }}
+          />
+
           {/* Search — white segment merged with input field */}
           <div className="relative flex flex-shrink-0 group/search">
             <button
