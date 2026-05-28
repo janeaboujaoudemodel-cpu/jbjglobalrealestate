@@ -87,19 +87,39 @@ const escapeSignatureHtml = (value?: string) =>
 /**
  * GLOBAL per-page signature strip (locked, v3):
  * Inner pages render ONLY a single short signature line — no Name, no Date
- * rows. A thin gold hairline closes every page at the very bottom so the
+  * rows. A thin gold hairline closes every page at the very bottom so the
  * page is visually sealed. The full official signatory block + JBJ stamp
  * appears ONLY on the last page (rendered via composer signatureBlock).
+ *
+ * ============================================================================
+ * 🔒 LOCKED — DO NOT MODIFY (approved by owner 2026-05-28)
+ * ----------------------------------------------------------------------------
+ * The per-page "Signature:" row + gold hairline below it is the approved,
+ * final visual standard. It applies globally to EVERY template and EVERY
+ * page where it renders (Job Offer, Form I, Form A/B/F/U, NDA, MOU,
+ * Partners family, CV, Cover Letter, Company Profile, etc.).
+ *
+ * Locked properties (do not change without explicit owner approval):
+ *   - Signature row: margin-top:auto, padding:14px 0 10px, right-aligned,
+ *     min-width 300px, label 10px uppercase tracked, 1px ink underline.
+ *   - Gold divider directly below: 1px rgba(184,149,85,.55), margin:10px 0 0.
+ *   - Both elements anchored to bottom of page via flex column + margin-top:auto
+ *     (see anchorSignatureArtifacts).
+ *
+ * Any future restyle MUST re-read this block and preserve it byte-for-byte.
+ * See mem://documents/signature-and-gold-divider-lock for the standard.
+ * ============================================================================
  */
 const renderPerPageUserSignature = (_name?: string) => {
+  // 🔒 LOCKED markup — see block comment above.
   return `
-    <div data-rendered-page-signature="1" style="margin-top:auto;padding:14px 0 10px;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
+    <div data-rendered-page-signature="1" data-locked-signature="1" style="margin-top:auto;padding:14px 0 10px;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
       <div style="display:flex;align-items:flex-end;gap:10px;color:#1A1A1A;min-width:300px;">
         <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1;padding-bottom:2px;">Signature:</div>
         <div style="flex:1;border-bottom:1px solid #1A1A1A;height:1px;"></div>
       </div>
     </div>
-    <div data-rendered-page-divider="1" style="border-top:1px solid rgba(184,149,85,.55);height:0;margin:10px 0 0;flex:0 0 auto;page-break-inside:avoid;break-inside:avoid;"></div>`;
+    <div data-rendered-page-divider="1" data-locked-divider="1" style="border-top:1px solid rgba(184,149,85,.55);height:0;margin:10px 0 0;flex:0 0 auto;page-break-inside:avoid;break-inside:avoid;"></div>`;
 };
 
 
