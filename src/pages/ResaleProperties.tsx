@@ -248,44 +248,52 @@ const ResaleProperties = () => {
         </div>
       </section>
 
-      {/* Filters - Champagne bar connected to hero (no black gap) */}
+      {/* Filters — Premium FilterShortcutBar style (matches /projects) */}
       <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 md:py-4 sticky top-0">
         <div className="container mx-auto px-3 sm:px-4">
-          <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl p-4 sm:p-5 shadow-lg backdrop-blur-sm">
-            {/* Search Bar */}
-            <div className="relative w-full mb-3">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]" />
-              <Input
-                placeholder="Search by property name, project, area..."
+          <div className="bg-[#FDFBF7]/70 border border-[#B89555]/30 rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 shadow-sm backdrop-blur-sm">
+            {/* Row 1: Search pill spans bar */}
+            <div className={cn(filterSearchPillWrapper, "h-10 w-full mb-2.5")}>
+              <Search className="w-4 h-4 mr-2 text-[#1A1A1A]/70 flex-shrink-0" />
+              <input
+                type="text"
+                placeholder="Search by property name, project, area…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] rounded-lg text-base shadow-sm w-full"
+                className={filterSearchPillInput}
               />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="ml-1 text-[11px] font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+                >
+                  Clear
+                </button>
+              )}
             </div>
 
-            {/* Filter Row */}
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            {/* Row 2: Filter pills (chips) */}
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               {/* Area */}
               <Select value={areaFilter} onValueChange={setAreaFilter}>
-                <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                  <MapPin className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                  <span className="truncate text-left flex-1">{areaFilter === "all" ? "All Areas" : areaFilter}</span>
+                <SelectTrigger className={cn(filterPillBase, areaFilter !== "all" ? filterPillActive : filterPillInactiveLight, "h-8 max-w-[200px] [&>svg:last-child]:hidden")}>
+                  <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{areaFilter === "all" ? "Area" : areaFilter}</span>
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
                   <SelectItem value="all">All Areas</SelectItem>
                   {areasSorted.map((area) => (
-                    <SelectItem key={area.id} value={area.name}>
-                      {area.name}
-                    </SelectItem>
+                    <SelectItem key={area.id} value={area.name}>{area.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
 
               {/* Property Type */}
               <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                  <Building2 className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                  <span className="truncate text-left flex-1">{typeFilter === "all" ? "All Types" : typeFilter}</span>
+                <SelectTrigger className={cn(filterPillBase, typeFilter !== "all" ? filterPillActive : filterPillInactiveLight, "h-8 [&>svg:last-child]:hidden")}>
+                  <Building2 className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{typeFilter === "all" ? "Type" : PROPERTY_TYPES.find(t => t.value === typeFilter)?.label}</span>
                 </SelectTrigger>
                 <SelectContent>
                   {PROPERTY_TYPES.map((t) => (
@@ -296,9 +304,9 @@ const ResaleProperties = () => {
 
               {/* Bedrooms */}
               <Select value={bedroomFilter} onValueChange={setBedroomFilter}>
-                <SelectTrigger className="w-[130px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                  <BedDouble className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                  <span className="truncate text-left flex-1">{BEDROOM_OPTIONS.find(b => b.value === bedroomFilter)?.label || "Any Beds"}</span>
+                <SelectTrigger className={cn(filterPillBase, bedroomFilter !== "all" ? filterPillActive : filterPillInactiveLight, "h-8 [&>svg:last-child]:hidden")}>
+                  <BedDouble className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{BEDROOM_OPTIONS.find(b => b.value === bedroomFilter)?.label || "Beds"}</span>
                 </SelectTrigger>
                 <SelectContent>
                   {BEDROOM_OPTIONS.map((b) => (
@@ -309,9 +317,9 @@ const ResaleProperties = () => {
 
               {/* Price */}
               <Select value={priceFilter} onValueChange={setPriceFilter}>
-                <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                  <DollarSign className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                  <span className="truncate text-left flex-1">{PRICE_RANGES.find(p => p.value === priceFilter)?.label || "Any Price"}</span>
+                <SelectTrigger className={cn(filterPillBase, priceFilter !== "all" ? filterPillActive : filterPillInactiveLight, "h-8 [&>svg:last-child]:hidden")}>
+                  <DollarSign className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{PRICE_RANGES.find(p => p.value === priceFilter)?.label || "Price"}</span>
                 </SelectTrigger>
                 <SelectContent>
                   {PRICE_RANGES.map((p) => (
@@ -322,9 +330,9 @@ const ResaleProperties = () => {
 
               {/* Handover */}
               <Select value={handoverFilter} onValueChange={setHandoverFilter}>
-                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                  <Calendar className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                  <span className="truncate text-left flex-1">{HANDOVER_OPTIONS.find(h => h.value === handoverFilter)?.label || "All Status"}</span>
+                <SelectTrigger className={cn(filterPillBase, handoverFilter !== "all" ? filterPillActive : filterPillInactiveLight, "h-8 [&>svg:last-child]:hidden")}>
+                  <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{HANDOVER_OPTIONS.find(h => h.value === handoverFilter)?.label || "Status"}</span>
                 </SelectTrigger>
                 <SelectContent>
                   {HANDOVER_OPTIONS.map((h) => (
@@ -335,9 +343,9 @@ const ResaleProperties = () => {
 
               {/* Furnishing */}
               <Select value={furnishingFilter} onValueChange={setFurnishingFilter}>
-                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                  <Sofa className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                  <span className="truncate text-left flex-1">{FURNISHING_OPTIONS.find(f => f.value === furnishingFilter)?.label || "Any Furnishing"}</span>
+                <SelectTrigger className={cn(filterPillBase, furnishingFilter !== "all" ? filterPillActive : filterPillInactiveLight, "h-8 [&>svg:last-child]:hidden")}>
+                  <Sofa className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{FURNISHING_OPTIONS.find(f => f.value === furnishingFilter)?.label || "Furnishing"}</span>
                 </SelectTrigger>
                 <SelectContent>
                   {FURNISHING_OPTIONS.map((f) => (
@@ -348,9 +356,9 @@ const ResaleProperties = () => {
 
               {/* Developer */}
               <Select value={developerFilter} onValueChange={setDeveloperFilter}>
-                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                  <Users className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                  <span className="truncate text-left flex-1">{developerFilter === "all" ? "All Developers" : developerFilter}</span>
+                <SelectTrigger className={cn(filterPillBase, developerFilter !== "all" ? filterPillActive : filterPillInactiveLight, "h-8 max-w-[200px] [&>svg:last-child]:hidden")}>
+                  <Users className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{developerFilter === "all" ? "Developer" : developerFilter}</span>
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
                   <SelectItem value="all">All Developers</SelectItem>
@@ -362,9 +370,9 @@ const ResaleProperties = () => {
 
               {/* View */}
               <Select value={viewFilter} onValueChange={setViewFilter}>
-                <SelectTrigger className="w-[140px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                  <MapPin className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                  <span className="truncate text-left flex-1">{VIEW_OPTIONS.find(v => v.value === viewFilter)?.label || "Any View"}</span>
+                <SelectTrigger className={cn(filterPillBase, viewFilter !== "all" ? filterPillActive : filterPillInactiveLight, "h-8 [&>svg:last-child]:hidden")}>
+                  <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{VIEW_OPTIONS.find(v => v.value === viewFilter)?.label || "View"}</span>
                 </SelectTrigger>
                 <SelectContent>
                   {VIEW_OPTIONS.map((v) => (
@@ -373,11 +381,36 @@ const ResaleProperties = () => {
                 </SelectContent>
               </Select>
 
+              {/* Emirates (multi) */}
+              <EmiratesMultiSelect value={emiratesFilter} onChange={setEmiratesFilter} variant="light" />
+
+              {/* Size Range */}
+              <div className={cn(filterPillBase, (sizeMin || sizeMax) ? filterPillActive : filterPillInactiveLight, "h-8 gap-1 px-2.5")}>
+                <Ruler className="w-3.5 h-3.5 flex-shrink-0" />
+                <input
+                  type="number"
+                  placeholder={`Min ${unitLabel}`}
+                  value={sizeMin}
+                  onChange={(e) => setSizeMin(e.target.value)}
+                  className="w-[68px] bg-transparent outline-none text-[12px] placeholder:text-current/70"
+                />
+                <span className="opacity-60">–</span>
+                <input
+                  type="number"
+                  placeholder={`Max`}
+                  value={sizeMax}
+                  onChange={(e) => setSizeMax(e.target.value)}
+                  className="w-[58px] bg-transparent outline-none text-[12px] placeholder:text-current/70"
+                />
+              </div>
+
+              <span className={filterDivider} />
+
               {/* Sort */}
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
-                  <ArrowUpDown className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                  <span className="truncate text-left flex-1">{SORT_OPTIONS.find(s => s.value === sortBy)?.label || "Sort"}</span>
+                <SelectTrigger className={cn(filterPillBase, sortBy !== "newest" ? filterPillActive : filterPillInactiveLight, "h-8 [&>svg:last-child]:hidden")}>
+                  <ArrowUpDown className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{SORT_OPTIONS.find(s => s.value === sortBy)?.label || "Sort"}</span>
                 </SelectTrigger>
                 <SelectContent>
                   {SORT_OPTIONS.map((s) => (
@@ -385,38 +418,11 @@ const ResaleProperties = () => {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
 
-            {/* Row 2: Emirates + Size Range */}
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-2">
-              {/* Emirates */}
-              <EmiratesMultiSelect value={emiratesFilter} onChange={setEmiratesFilter} variant="light" />
-
-              {/* Size Range */}
-              <div className="flex items-center gap-1.5">
-                <Ruler className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
-                <Input
-                  type="number"
-                  placeholder={`Min ${unitLabel}`}
-                  value={sizeMin}
-                  onChange={(e) => setSizeMin(e.target.value)}
-                  className="w-[110px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm"
-                />
-                <span className="text-[#1A1A1A]/40 text-xs">–</span>
-                <Input
-                  type="number"
-                  placeholder={`Max ${unitLabel}`}
-                  value={sizeMax}
-                  onChange={(e) => setSizeMax(e.target.value)}
-                  className="w-[110px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm"
-                />
-              </div>
-
-              {/* Clear */}
+              {/* Reset All */}
               {(areaFilter !== "all" || typeFilter !== "all" || bedroomFilter !== "all" || priceFilter !== "all" || handoverFilter !== "all" || furnishingFilter !== "all" || developerFilter !== "all" || viewFilter !== "all" || emiratesFilter.length > 0 || sizeMin || sizeMax || searchQuery || sortBy !== "newest") && (
-                <Button
-                  variant="outline"
-                  size="sm"
+                <button
+                  type="button"
                   onClick={() => {
                     setAreaFilter("all");
                     setTypeFilter("all");
@@ -432,15 +438,16 @@ const ResaleProperties = () => {
                     setSortBy("newest");
                     setSearchQuery("");
                   }}
-                  className="h-11 px-4 border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 rounded-xl"
+                  className={cn(resetAllPill, "h-8")}
                 >
-                  Clear All
-                </Button>
+                  Reset all
+                </button>
               )}
             </div>
           </div>
         </div>
       </section>
+
 
       {/* Listings Grid */}
       <section className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-10 px-4 min-h-[60vh]">
