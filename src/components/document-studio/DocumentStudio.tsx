@@ -1040,7 +1040,7 @@ function StudioShell({
     if (autoBodyRef.current) setBodyHtml(autoBodyRef.current);
   };
 
-  const handleSelectTemplate = (id: string) => {
+  const handleSelectTemplate = async (id: string) => {
     // No-op if the same template is re-selected — never wipe an in-progress body.
     if (id === templateId) { setStep(2); return; }
     setTemplateId(id);
@@ -1059,6 +1059,21 @@ function StudioShell({
       stampXY: undefined,
     }));
     setStep(2);
+
+    // Seed a stable chained booking ID from the server so the preview shows
+    // a real identifier (and Save persists the same ID). Falls back silently
+    // to the composer's client-generated random ID if the RPC is unreachable.
+    try {
+      const prefix =
+        id === "holiday_home_agreement" ? "JBJ-HH" :
+        id === "commission_agreement" ? "JBJ-CA" :
+        id === "property_advertising_agreement" ? "JBJ-PAA" :
+        "JBJ-DOC";
+      const { data, error } = await (supabase as any).rpc("next_booking_id", { prefix });
+      if (!error && data) {
+        setFields((p) => ({ ...p, bookingRef: String(data), booking_id: String(data) }));
+      }
+    } catch { /* ignore — composer will generate a local id */ }
   };
 
   const buildPrompt = (t: DocumentTemplate): string => {
