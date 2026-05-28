@@ -309,7 +309,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* CATEGORY SELECTOR — I'm an Investor / Broker / Developer */}
-      <div id="category-selector" className="py-8">
+      <div id="category-selector" className="py-4">
         <Suspense fallback={<SectionLoader />}>
           <CategorySelectorSection />
         </Suspense>
@@ -317,7 +317,7 @@ const Index = () => {
 
 
       {/* DEVELOPER PORTAL CTA */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={280}>
           <Suspense fallback={<SectionLoader />}>
             <DeveloperPortalCTA />
@@ -326,7 +326,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* FEATURED LISTINGS */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={500}>
           <Suspense fallback={<SectionLoader />}>
             <FeaturedListings />
@@ -335,7 +335,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* CONTINUE SEARCHING */}
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-4">
 
         <LazyVisible minHeight={400}>
           <Suspense fallback={<SectionLoader />}>
@@ -345,7 +345,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* RESALE PROPERTIES */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={500}>
           <Suspense fallback={<SectionLoader />}>
             <ResalePropertiesSection />
@@ -354,7 +354,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* OVERSEAS INVESTORS */}
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={300}>
           <Suspense fallback={<SectionLoader />}>
             <OverseasInvestorsBanner />
@@ -363,7 +363,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* EXPLORE OUR GUIDES & REPORTS */}
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={400}>
           <Suspense fallback={<SectionLoader />}>
             <HomepageBookMarquee />
@@ -372,7 +372,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* EXPLORE OUR SERVICES */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={500}>
           <Suspense fallback={<SectionLoader />}>
             <ExploreServicesCard />
@@ -381,7 +381,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* TOOLKIT SHOWCASE CARD */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={400}>
           <Suspense fallback={<SectionLoader />}>
             <ToolkitShowcaseCard />
@@ -390,7 +390,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={400}>
           <Suspense fallback={<SectionLoader />}>
             <AIComparisonWidget />
@@ -398,7 +398,7 @@ const Index = () => {
         </LazyVisible>
       </PremiumSectionCard>
 
-      <PremiumSectionCard tone="surface" padding="none" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard tone="surface" padding="none" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={500}>
           <div className="rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7]/70 p-5 md:p-8 shadow-[0_1px_0_rgba(184,149,85,0.25),0_10px_30px_-18px_rgba(184,149,85,0.35)]">
             <Suspense fallback={<SectionLoader />}>
@@ -433,7 +433,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       <PodcastVisibilityGate>
-        <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
+        <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
           <LazyVisible minHeight={400}>
             <Suspense fallback={<SectionLoader />}>
               <JBJPodcastSection />
@@ -443,7 +443,7 @@ const Index = () => {
       </PodcastVisibilityGate>
 
       {/* TOP AREAS IN DUBAI */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={400}>
           <Suspense fallback={<SectionLoader />}>
             <AreasWeCover />
@@ -452,7 +452,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* READY TO GET STARTED — restored under Top Areas */}
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-8">
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={300}>
           <Suspense fallback={<SectionLoader />}>
             <CTABand />

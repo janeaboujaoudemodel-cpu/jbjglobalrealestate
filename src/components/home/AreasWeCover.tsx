@@ -74,9 +74,14 @@ const AreasWeCover = () => {
               style={{ contain: "layout paint" }}
             >
               {area.imageUrl ? (
-                <div
-                  className="absolute inset-0 bg-cover bg-center transform-gpu will-change-transform transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-                  style={{ backgroundImage: `url(${area.imageUrl})` }}
+                <img
+                  src={area.imageUrl}
+                  alt={area.name || ""}
+                  loading="lazy"
+                  decoding="async"
+                  width={520}
+                  height={260}
+                  className="absolute inset-0 w-full h-full object-cover transform-gpu will-change-transform transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
