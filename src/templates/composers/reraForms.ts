@@ -399,19 +399,19 @@ export function composeFormI(input: ComposerInput): string {
 
   const isJbjSignature = (label: "A" | "B") => jbjSide === label;
   const signatureCell = (label: "A" | "B") => `
-    <td style="width:50%;height:170px;border:1px solid ${GOLD};vertical-align:top;position:relative;padding:8px 10px;overflow:hidden;">
-      <div style="font-size:9.5px;font-weight:800;line-height:1.05;margin-bottom:8px;">SIGNATURE &amp; COMPANY STAMP OF AGENT "${label}":</div>
+    <td style="width:50%;height:198px;border:1px solid ${GOLD};vertical-align:top;position:relative;padding:9px 12px;overflow:hidden;">
+      <div style="font-size:9.5px;font-weight:800;line-height:1.05;margin-bottom:10px;">SIGNATURE &amp; COMPANY STAMP OF AGENT "${label}":</div>
       <div style="font-size:8.6px;line-height:1.5;color:${INK};">
         <div style="margin-bottom:10px;">Name: ____________________________________</div>
         <div style="margin-bottom:10px;">Designation: ______________________________</div>
         <div style="margin-bottom:10px;">Date: ____ / ____ / __________</div>
         <div>Signature: ________________________________</div>
       </div>
-      ${isJbjSignature(label) ? `<img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" style="position:absolute;right:14px;bottom:14px;width:80px;height:80px;object-fit:contain;opacity:.9;mix-blend-mode:multiply;transform:rotate(-8deg);" />` : ""}
+      ${isJbjSignature(label) ? `<img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" style="position:absolute;right:14px;bottom:18px;width:84px;height:84px;object-fit:contain;opacity:.9;mix-blend-mode:multiply;transform:rotate(-8deg);" />` : ""}
     </td>`;
 
   const companyFooter = `
-    <div style="text-align:center;color:${INK};font-size:8.6px;line-height:1.25;margin-top:auto;padding-top:10px;border-top:1px solid ${GOLD}55;">
+    <div style="text-align:center;color:${INK};font-size:8.6px;line-height:1.2;margin-top:8px;padding-top:7px;border-top:1px solid ${GOLD}55;">
       <div style="font-weight:800;letter-spacing:.04em;margin-bottom:2px;">${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}</div>
       <div>Tel Number : ${JBJ_BRAND.phone}</div>
       <div>${JBJ_BRAND.address}</div>
@@ -434,7 +434,7 @@ export function composeFormI(input: ComposerInput): string {
         </div>
       </div>
 
-      <table style="width:100%;border-collapse:collapse;table-layout:fixed;border:1px solid ${GOLD};">
+      <table style="width:100%;border-collapse:collapse;table-layout:fixed;border:1px solid ${GOLD};flex:1 1 auto;">
         <colgroup><col style="width:50%;" /><col style="width:50%;" /></colgroup>
         <tbody>
           <tr style="background:${CHAMPAGNE};height:18px;">
@@ -456,7 +456,7 @@ export function composeFormI(input: ComposerInput): string {
             <td style="border:1px solid ${GOLD};font-size:10.5px;font-weight:900;padding:2px 6px;">PART3. <span style="float:right;margin-right:86px;">THE COMMISSION (split)</span></td>
           </tr>
           <tr>
-            <td style="border:1px solid ${GOLD};height:318px;vertical-align:top;padding:7px 8px;font-size:9.4px;line-height:1.14;">
+            <td style="border:1px solid ${GOLD};height:340px;vertical-align:top;padding:9px 12px;font-size:9.6px;line-height:1.15;">
               ${row("PROPERTY ADDRESS:", val("propertyRef"), 240, true)}
               ${row("MASTER DEVELOPER:", val("masterDeveloper"), 250, false)}
               ${row("MASTER PROJECT NAME:", val("masterProject"), 220, false)}
@@ -472,7 +472,7 @@ export function composeFormI(input: ComposerInput): string {
               <div style="text-align:center;margin-bottom:8px;">${yesNo(val("propertyTenanted"), ["YES", "NO"])}</div>
               <div style="display:flex;align-items:flex-end;gap:3px;"><strong style="font-weight:500;">MAINTENANCE FEE P.A:</strong>${line(val("maintenanceFee"), 95, false)}<strong>per sq. ft</strong></div>
             </td>
-            <td style="border:1px solid ${GOLD};height:318px;vertical-align:top;padding:7px 8px;text-align:center;font-size:9.4px;line-height:1.16;">
+            <td style="border:1px solid ${GOLD};height:340px;vertical-align:top;padding:9px 12px;text-align:center;font-size:9.6px;line-height:1.17;">
               <div style="font-weight:800;margin:3px auto 8px;max-width:430px;">The following additional commission split is agreed between the Seller/Landlord's Agent &amp; Buyer/Tenant's Agent.</div>
               <div style="font-weight:900;font-size:10.5px;margin-bottom:9px;">Commission in total is: AED ${esc(val("commissionTotal")) || "__________"}/-</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;align-items:start;">
