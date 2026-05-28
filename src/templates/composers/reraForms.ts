@@ -419,7 +419,7 @@ export function composeFormI(input: ComposerInput): string {
     </div>`;
 
   const html = `
-    <div data-form-i-page="1" data-signature-block="1" style="font-family:Inter,Arial,sans-serif;color:${INK};font-size:9px;line-height:1.08;width:100%;">
+    <div data-form-i-page="1" data-signature-block="1" style="font-family:Inter,Arial,sans-serif;color:${INK};font-size:9px;line-height:1.08;width:100%;height:100%;display:flex;flex-direction:column;">
       <div style="position:relative;min-height:80px;margin-bottom:4px;">
         <div style="position:absolute;right:0;top:0;width:162px;font-size:9.5px;line-height:1.22;">
           <div style="text-align:right;font-weight:800;font-size:11.5px;margin-bottom:1px;">FORM I</div>
