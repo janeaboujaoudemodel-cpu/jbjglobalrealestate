@@ -818,7 +818,9 @@ const CLIENT: DocumentTemplate[] = [
 
 export const DOCUMENT_CATALOG: DocumentTemplate[] = [...STAFF, ...CLIENT];
 
-export function getCatalogByAudience(audience: DocumentAudience): DocumentTemplate[] {
+export type DocumentScope = DocumentAudience | "all";
+export function getCatalogByAudience(audience: DocumentScope): DocumentTemplate[] {
+  if (audience === "all") return [...DOCUMENT_CATALOG];
   return DOCUMENT_CATALOG.filter((t) => t.audience === audience);
 }
 
