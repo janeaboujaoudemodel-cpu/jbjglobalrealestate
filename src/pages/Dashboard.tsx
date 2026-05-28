@@ -26,14 +26,16 @@ const Spinner = () => (
 const Dashboard = () => {
   const { user, loading: authLoading } = useAuth();
   const { mode, isLoading: modeLoading } = useUserModeContext();
-  const { isOwner } = useOwnerVerification();
+  const { isOwner, isLoading: ownerLoading } = useOwnerVerification();
 
-  if (authLoading || modeLoading) return <Spinner />;
+  if (authLoading || modeLoading || ownerLoading) return <Spinner />;
   if (!user) return <VisitorDashboard />;
 
-  // Owner cockpit lives at /owner; if owner lands on /dashboard, route them there.
+  // Owner cockpit lives at /owner — always send verified owner there, regardless
+  // of route. Also clear any stale broker-preview flag so the redirect sticks.
   if (isOwner) {
-    if (typeof window !== "undefined" && window.location.pathname === "/dashboard") {
+    if (typeof window !== "undefined") {
+      try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
       window.location.replace("/owner");
     }
     return <Spinner />;
