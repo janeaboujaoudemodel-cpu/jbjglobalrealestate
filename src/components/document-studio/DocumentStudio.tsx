@@ -1335,7 +1335,7 @@ function StudioShell({
           <div className="leading-tight">
             <div className="text-[13px] font-semibold text-[#1A1A1A]">Document Studio</div>
             <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">
-              {catalog === "staff" ? "Careers · Staff" : "Client · Real Estate"}
+              {catalog === "staff" ? "Careers · Staff" : catalog === "client" ? "Client · Real Estate" : "All templates"}
             </div>
           </div>
         </div>
