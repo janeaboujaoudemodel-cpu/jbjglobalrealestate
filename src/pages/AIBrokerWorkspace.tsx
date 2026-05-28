@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserRole } from "@/hooks/useUserRole";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -40,6 +41,7 @@ const KPI_CARDS: Array<{
 export default function AIBrokerWorkspace() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
+  const { isOwner } = useUserRole();
 
   const [leads, setLeads] = useState<Lead[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -57,19 +59,22 @@ export default function AIBrokerWorkspace() {
     if (!authLoading && !user) navigate("/auth?redirect=/broker/ai");
   }, [user, authLoading, navigate]);
 
-  useEffect(() => { if (user) bootstrap(); /* eslint-disable-next-line */ }, [user]);
+  useEffect(() => { if (user) bootstrap(); /* eslint-disable-next-line */ }, [user, isOwner]);
   useEffect(() => { if (selectedId) loadChat(selectedId); }, [selectedId]);
 
   const bootstrap = async () => {
     setLoading(true);
     try {
-      // Leads — owner sees all, broker sees own
-      const { data: leadRows } = await supabase
+      // Broker portal: scope to leads explicitly assigned to THIS broker.
+      // Owner gets full visibility for previews/QA.
+      let q = supabase
         .from("crm_leads")
         .select("id, full_name, notes, pipeline_stage, source, created_at, ai_score, phone_e164, whatsapp_e164, preferred_language")
         .is("deleted_at", null)
         .order("created_at", { ascending: false })
         .limit(200);
+      if (!isOwner && user?.id) q = q.eq("assigned_broker_id", user.id);
+      const { data: leadRows } = await q;
       const ls = (leadRows ?? []) as Lead[];
       setLeads(ls);
       if (ls.length && !selectedId) setSelectedId(ls[0].id);
@@ -195,7 +200,7 @@ export default function AIBrokerWorkspace() {
   const selected = leads.find(l => l.id === selectedId) || null;
 
   if (authLoading || loading) {
-    return <BrandedLoader text="Loading AI Sales Assistant…" className="min-h-screen" />;
+    return <BrandedLoader variant="light" text="Loading JBJ Sales Assistant…" className="min-h-screen" />;
   }
 
   return (
@@ -205,7 +210,7 @@ export default function AIBrokerWorkspace() {
           <div className="min-w-0">
             <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">JBJ GLOBAL REAL ESTATE</div>
             <h1 className="text-base sm:text-lg font-bold text-[#1A1A1A] flex items-center gap-2 mt-0.5">
-              <Sparkles className="h-4 w-4 text-[#B89555]" /> AI Sales Assistant
+              <Sparkles className="h-4 w-4 text-[#B89555]" /> JBJ Sales Assistant
             </h1>
           </div>
           <button
