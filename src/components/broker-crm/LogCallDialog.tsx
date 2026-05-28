@@ -435,24 +435,24 @@ export default function LogCallDialog({
             </div>
             <div className="flex flex-wrap items-center gap-2">
               {recState === "idle" && (
-                <Button type="button" onClick={startRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                  <Mic className="h-4 w-4 mr-2 text-white stroke-white allow-white" />
-                  <span className="text-white allow-white">Start recording</span>
-                </Button>
+                <button type="button" onClick={startRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                  <Mic className="h-4 w-4" />
+                  <span>Start recording</span>
+                </button>
               )}
               {(recState === "recording" || recState === "paused") && (
-                <Button type="button" onClick={stopRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                  <CheckCircle2 className="h-4 w-4 mr-2 text-white stroke-white allow-white" />
-                  <span className="text-white allow-white">Done</span>
-                </Button>
+                <button type="button" onClick={stopRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                  <CheckCircle2 className="h-4 w-4" />
+                  <span>Done</span>
+                </button>
               )}
               {recState === "stopped" && (
-                <Button type="submit" disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                <button type="submit" disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
                   {isSaving
-                    ? <Loader2 className="h-4 w-4 mr-2 animate-spin text-white stroke-white allow-white" />
-                    : <CheckCircle2 className="h-4 w-4 mr-2 text-white stroke-white allow-white" />}
-                  <span className="text-white allow-white">{isSaving ? "Saving…" : "Save call log"}</span>
-                </Button>
+                    ? <Loader2 className="h-4 w-4 animate-spin" />
+                    : <CheckCircle2 className="h-4 w-4" />}
+                  <span>{isSaving ? "Saving…" : "Save call log"}</span>
+                </button>
               )}
               {audioBlob && recState === "stopped" && (
                 <span className="text-[11px] text-[#1A1A1A]/70">
