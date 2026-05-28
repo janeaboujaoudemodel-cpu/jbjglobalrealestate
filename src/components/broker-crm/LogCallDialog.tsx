@@ -511,7 +511,7 @@ export default function LogCallDialog({
               {recState === "paused" && (
                 <>
                   <Button type="button" onClick={resumeRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                    <Play className="h-4 w-4 mr-2" /> Resume
+                    <Play className="h-4 w-4 mr-2" /> Continue
                   </Button>
                   <Button type="button" onClick={stopRecording} variant="outline" className={creamControlClass}>
                     <Square className="h-4 w-4 mr-2" /> Stop
@@ -621,22 +621,7 @@ export default function LogCallDialog({
               disabled={isSaving}
               className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"
             >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              disabled={isSaving}
-              className="[background:#102540] !text-white hover:[background:#1a3d63] hover:!text-white disabled:opacity-100"
-              data-surface="dark"
-              data-allow-dark-cta
-              data-no-contrast-guard
-            >
-              {isSaving ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin text-white" />
-              ) : (
-                <CheckCircle2 className="h-4 w-4 mr-2 text-white" />
-              )}
-              <span className="text-white">{savingRecording ? "Saving recording…" : "Save call log"}</span>
+              Close
             </Button>
           </DialogFooter>
         </form>
