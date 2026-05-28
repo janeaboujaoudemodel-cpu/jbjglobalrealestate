@@ -3569,9 +3569,9 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
    ============================================================ */
 
 /* All form controls default to dark text on white unless explicitly dark-themed */
-input:not([type="checkbox"]):not([type="radio"]):not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([class*="bg-neutral-9"]):not([class*="bg-zinc-9"]):not([data-theme="dark"]):not(.jbj-form-field):not(.careers-blue-field):not(.careers-phone-tel):not(.PhoneInputInput):not([data-jbj-field]),
-textarea:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([class*="bg-neutral-9"]):not([class*="bg-zinc-9"]):not([data-theme="dark"]):not(.jbj-form-field):not([data-jbj-field]),
-select:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([data-theme="dark"]):not([data-jbj-field]) {
+input:not([type="checkbox"]):not([type="radio"]):not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([class*="bg-neutral-9"]):not([class*="bg-zinc-9"]):not([data-theme="dark"]):not(.jbj-form-field):not(.careers-blue-field):not(.careers-phone-tel):not(.PhoneInputInput):not([data-jbj-field]):not(.jbj-blue-field):not(.jbj-gold-field),
+textarea:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([class*="bg-neutral-9"]):not([class*="bg-zinc-9"]):not([data-theme="dark"]):not(.jbj-form-field):not([data-jbj-field]):not(.jbj-blue-field):not(.jbj-gold-field),
+select:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([data-theme="dark"]):not([data-jbj-field]):not(.jbj-blue-field):not(.jbj-gold-field) {
   color: #111111 !important;
   background-color: #FFFFFF !important;
 }
