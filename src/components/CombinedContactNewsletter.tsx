@@ -24,26 +24,21 @@ const CombinedContactNewsletter = ({
       label: "WhatsApp",
       value: CONTACT_INFO.phone,
       href: getWhatsAppUrl(),
-      iconBg: "bg-[#FDFBF7]",
-      iconColor: "text-[#1A1A1A]/70",
     },
     {
       icon: Phone,
       label: "Call Us",
       value: CONTACT_INFO.phone,
       href: getCallUrl(),
-      iconBg: "bg-[#FDFBF7]",
-      iconColor: "text-[#1A1A1A]/70",
     },
     {
       icon: Mail,
       label: "Email",
       value: CONTACT_INFO.email,
       href: `mailto:${CONTACT_INFO.email}`,
-      iconBg: "bg-[#FDFBF7]",
-      iconColor: "text-[#1A1A1A]/70",
     },
   ];
+
 
   return (
     <section id="ready-to-get-started" className={`py-8 sm:py-12 md:py-16 bg-[#FDFBF7] ${className}`}>
