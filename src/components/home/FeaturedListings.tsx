@@ -76,7 +76,7 @@ const FeaturedListings = () => {
                   // On phone portrait, render only first 3 cards (idx 0..2); hidden on >=sm.
                   className={`h-full flex ${idx >= 3 ? 'hidden sm:flex' : ''} [&>*]:w-full [&>*]:h-full`}
                 >
-                  <ProjectCard project={project as any} />
+                  <ProjectCard project={project as any} priority={idx < 3} />
                 </div>
               ))}
           {!isLoading && allProjects.length === 0 && (
