@@ -10322,6 +10322,8 @@ export type Database = {
           department: string | null
           display_name: string | null
           email: string | null
+          employment_status: string
+          employment_type: string | null
           first_login_at: string | null
           force_password_change: boolean | null
           id: string
@@ -10329,6 +10331,8 @@ export type Database = {
           job_title: string | null
           languages: string[] | null
           last_password_change: string | null
+          left_at: string | null
+          left_reason: string | null
           login_count: number | null
           nationality: string | null
           password_changed_at: string | null
@@ -10346,6 +10350,8 @@ export type Database = {
           department?: string | null
           display_name?: string | null
           email?: string | null
+          employment_status?: string
+          employment_type?: string | null
           first_login_at?: string | null
           force_password_change?: boolean | null
           id?: string
@@ -10353,6 +10359,8 @@ export type Database = {
           job_title?: string | null
           languages?: string[] | null
           last_password_change?: string | null
+          left_at?: string | null
+          left_reason?: string | null
           login_count?: number | null
           nationality?: string | null
           password_changed_at?: string | null
@@ -10370,6 +10378,8 @@ export type Database = {
           department?: string | null
           display_name?: string | null
           email?: string | null
+          employment_status?: string
+          employment_type?: string | null
           first_login_at?: string | null
           force_password_change?: boolean | null
           id?: string
@@ -10377,6 +10387,8 @@ export type Database = {
           job_title?: string | null
           languages?: string[] | null
           last_password_change?: string | null
+          left_at?: string | null
+          left_reason?: string | null
           login_count?: number | null
           nationality?: string | null
           password_changed_at?: string | null
@@ -14901,6 +14913,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crm_users_profile"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_journey_logs_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "vw_employee_activity_30d"
+            referencedColumns: ["profile_id"]
           },
         ]
       }
@@ -36977,6 +36996,21 @@ export type Database = {
           },
         ]
       }
+      vw_employee_activity_30d: {
+        Row: {
+          calls_30d: number | null
+          chats_30d: number | null
+          leads_assigned: number | null
+          leads_contacted_30d: number | null
+          leads_updated_30d: number | null
+          pipeline_counts: Json | null
+          profile_id: string | null
+          tasks_assigned: number | null
+          tasks_completed: number | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
       vw_resale_with_source: {
         Row: {
           area_name: string | null
@@ -37666,6 +37700,28 @@ export type Database = {
           bank_iban: string
           bank_name: string
           employee_name: string
+        }[]
+      }
+      get_employee_lead_breakdown: {
+        Args: { _user_id: string }
+        Returns: {
+          budget_currency: string
+          budget_max: number
+          budget_min: number
+          created_at: string
+          flagged: boolean
+          full_name: string
+          id: string
+          last_contacted_at: string
+          next_followup_at: string
+          notes: string
+          pipeline_stage: string
+          preferred_location: string
+          priority: string
+          property_type: string
+          source: string
+          updated_at: string
+          vip: boolean
         }[]
       }
       get_full_payment_details: {
