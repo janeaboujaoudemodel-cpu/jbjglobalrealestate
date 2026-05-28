@@ -125,13 +125,13 @@ export function PremiumCVUpload({
               </p>
             </div>
             <div className="mt-1 flex flex-wrap items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-[#102540]/70">
-              <span className="rounded-full border border-[#102540]/25 bg-[#FDFBF7] px-2.5 py-0.5">
+              <span className="rounded-full border border-[#B89555]/45 bg-[#FDFBF7] px-2.5 py-0.5">
                 AI-parsed
               </span>
-              <span className="rounded-full border border-[#102540]/25 bg-[#FDFBF7] px-2.5 py-0.5">
+              <span className="rounded-full border border-[#B89555]/45 bg-[#FDFBF7] px-2.5 py-0.5">
                 Auto-fill enabled
               </span>
-              <span className="rounded-full border border-[#102540]/25 bg-[#FDFBF7] px-2.5 py-0.5">
+              <span className="rounded-full border border-[#B89555]/45 bg-[#FDFBF7] px-2.5 py-0.5">
                 Confidential
               </span>
             </div>
