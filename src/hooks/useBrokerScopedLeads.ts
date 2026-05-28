@@ -16,11 +16,15 @@ export function useBrokerScopedLeads(opts: { sourceDatabaseId?: string } = {}) {
     queryKey: ["broker-scoped-leads", user?.id, opts.sourceDatabaseId ?? "all"],
     enabled: !!user?.id,
     queryFn: async () => {
+      // Broker portal strictly shows leads explicitly assigned to THIS broker.
+      // Owner's leads must NEVER appear here, even when an owner previews the
+      // broker portal. We scope client-side by assigned_broker_id = current user.
       let q = supabase
         .from("crm_leads")
         .select(
           "id, full_name, email_lower, phone_e164, pipeline_stage, lead_source_type, source, source_database_id, assigned_broker_id, created_by_user_id, owner_user_id, created_at, updated_at"
         )
+        .eq("assigned_broker_id", user!.id)
         .order("updated_at", { ascending: false })
         .limit(500);
 
