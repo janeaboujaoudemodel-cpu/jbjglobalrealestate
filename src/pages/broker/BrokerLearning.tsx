@@ -266,6 +266,55 @@ export default function BrokerLearning() {
           </Card>
         </section>
 
+        {/* ── Certificates & Progress ──────────────────────────────── */}
+        <section className="flex flex-col gap-6">
+          <SectionTitle eyebrow="Your Record" title="Certificates & Progress" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-6" data-gold-hairline>
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
+                <span className="grid place-items-center w-6 h-6 rounded-md bg-[#EFE6D6] border border-[#B89555]/40">
+                  <Award className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                </span>
+                Certificates earned
+              </div>
+              <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">
+                {TRAINING.filter((m) => (m.progress || 0) >= 100).length}
+              </div>
+              <p className="mt-1 text-xs text-[#1A1A1A]/60">
+                Complete every lesson in a module to earn its certificate. Certificates appear here automatically and can be downloaded from your Account.
+              </p>
+            </div>
+            <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-6" data-gold-hairline>
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
+                <span className="grid place-items-center w-6 h-6 rounded-md bg-[#EFE6D6] border border-[#B89555]/40">
+                  <GraduationCap className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                </span>
+                Training progress
+              </div>
+              <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">{Math.round(totalProgress)}%</div>
+              <Progress value={totalProgress} className="h-1.5 w-full mt-3 bg-[#FDFBF7] [&>div]:bg-[#B89555]" />
+              <p className="mt-2 text-xs text-[#1A1A1A]/60">
+                Across {TRAINING.length} core modules. Resume any module above.
+              </p>
+            </div>
+            <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-6" data-gold-hairline>
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
+                <span className="grid place-items-center w-6 h-6 rounded-md bg-[#EFE6D6] border border-[#B89555]/40">
+                  <BookOpen className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                </span>
+                Books in progress
+              </div>
+              <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">
+                {Object.values(progressMap || {}).filter((p: any) => p && p.progress_pct > 0 && p.progress_pct < 100).length}
+              </div>
+              <p className="mt-1 text-xs text-[#1A1A1A]/60">
+                Pick any book back up — your last page is remembered.
+              </p>
+            </div>
+          </div>
+        </section>
+
+
         <BookDetailModal
           book={selectedBook}
           isOpen={!!selectedBook}
