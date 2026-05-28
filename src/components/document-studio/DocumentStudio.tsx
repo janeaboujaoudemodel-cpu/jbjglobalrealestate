@@ -2360,12 +2360,33 @@ function StudioShell({
                               )}
                             </div>
                           </div>
-                          {/* Page indicator — rendered in the champagne gap BETWEEN sheets, never on the paper */}
-                          {!isLast && (
-                            <div aria-hidden className="text-[10px] font-semibold uppercase pointer-events-none select-none" style={{ color: "#1A1A1A", opacity: 0.55, letterSpacing: "0.22em" }}>
-                              Page {pageIndex + 1} of {pageCount}
-                            </div>
-                          )}
+                          {/* Controls in the champagne gap BETWEEN sheets, never on the paper */}
+                          <div className="flex items-center justify-center gap-2">
+                            {!isLast && (
+                              <div aria-hidden className="text-[10px] font-semibold uppercase pointer-events-none select-none" style={{ color: "#1A1A1A", opacity: 0.55, letterSpacing: "0.22em" }}>
+                                Page {pageIndex + 1} of {pageCount}
+                              </div>
+                            )}
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <button
+                                  type="button"
+                                  className="h-8 px-3 rounded-full border border-[#B89555]/45 bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] text-[11px] font-semibold inline-flex items-center gap-1.5 shadow-sm"
+                                >
+                                  <Plus className="w-3.5 h-3.5 text-[#B89555]" />
+                                  Add page
+                                </button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="center" className="bg-[#FDFBF7] z-[2147483647] border-[#B89555]/50">
+                                <DropdownMenuItem onClick={() => handleAddBlankPage(pageIndex)}>
+                                  <FileText className="w-4 h-4 mr-2" /> Blank page
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setAddPageAfterIndex(pageIndex)}>
+                                  <Sparkles className="w-4 h-4 mr-2" /> Start with AI
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
                           </div>
                         );
                       })}
