@@ -1,233 +1,306 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Activity, Clock, Phone, MessageSquare, TrendingUp, Eye, Mail, Calendar, Target, BarChart3 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  Activity, Clock, Phone, MessageSquare, TrendingUp, Target,
+  Search, Trash2, UserCheck, Briefcase, ExternalLink, Download,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
+
+type EmploymentType =
+  | "full_time" | "part_time" | "freelancer" | "referral" | "intern" | "contractor";
+type EmploymentStatus =
+  | "active" | "on_leave" | "left_company" | "terminated" | "inactive";
 
 interface EmployeeProfile {
   id: string;
   user_id: string;
-  display_name: string;
+  display_name: string | null;
   email: string | null;
   job_title: string | null;
+  department: string | null;
   photo_url: string | null;
   is_active: boolean;
+  employment_type: EmploymentType | null;
+  employment_status: EmploymentStatus;
+  left_at: string | null;
+  left_reason: string | null;
 }
 
-interface DailyMetrics {
-  id: string;
-  employee_id: string | null;
-  user_id: string | null;
-  metric_date: string;
-  total_hours_worked: number;
-  calls_made: number;
-  emails_sent: number;
-  chats_handled: number;
-  leads_contacted: number;
-  tasks_completed: number;
-  meetings_attended: number;
-  documents_processed: number;
-  performance_score: number | null;
-}
-
-interface PerformanceSummary {
+interface ActivityRow {
   user_id: string;
-  month: string;
-  total_logins: number | null;
-  total_active_hours: number | null;
-  leads_handled: number | null;
-  leads_converted: number | null;
-  conversion_rate: number | null;
-  calls_made: number | null;
-  messages_sent: number | null;
-  deals_closed: number | null;
-  revenue_generated: number | null;
-  activity_score_avg: number | null;
+  calls_30d: number;
+  chats_30d: number;
+  leads_assigned: number;
+  leads_contacted_30d: number;
+  leads_updated_30d: number;
+  pipeline_counts: Record<string, number>;
+  tasks_assigned: number;
+  tasks_completed: number;
 }
 
-interface RealActivityData {
-  callsByUser: Record<string, number>;
-  chatsByUser: Record<string, number>;
-  leadUpdatesByUser: Record<string, number>;
+const TYPE_LABEL: Record<EmploymentType, string> = {
+  full_time: "Full-time",
+  part_time: "Part-time",
+  freelancer: "Freelancer",
+  referral: "Referral",
+  intern: "Intern",
+  contractor: "Contractor",
+};
+
+const STATUS_LABEL: Record<EmploymentStatus, string> = {
+  active: "Active",
+  on_leave: "On leave",
+  left_company: "Left company",
+  terminated: "Terminated",
+  inactive: "Inactive",
+};
+
+const PIPELINE_COLORS: Record<string, string> = {
+  interested: "border-emerald-500/40 text-emerald-700 bg-emerald-50",
+  not_interested: "border-red-500/40 text-red-700 bg-red-50",
+  junk: "border-amber-500/40 text-amber-700 bg-amber-50",
+  won: "border-emerald-600/40 text-emerald-800 bg-emerald-50",
+  lost: "border-red-600/40 text-red-800 bg-red-50",
+  contacted: "border-blue-500/40 text-blue-700 bg-blue-50",
+  new: "border-[#B89555]/40 text-[#1A1A1A] bg-[#EFE6D6]",
+};
+
+function fmtStageKey(k: string): string {
+  return k.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 export function EmployeePerformanceDashboard() {
-  const { user } = useAuth();
+  const [params, setParams] = useSearchParams();
   const [employees, setEmployees] = useState<EmployeeProfile[]>([]);
-  const [dailyMetrics, setDailyMetrics] = useState<DailyMetrics[]>([]);
-  const [summaries, setSummaries] = useState<PerformanceSummary[]>([]);
-  const [realActivity, setRealActivity] = useState<RealActivityData>({ callsByUser: {}, chatsByUser: {}, leadUpdatesByUser: {} });
+  const [activity, setActivity] = useState<Record<string, ActivityRow>>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // Filters
+  const [search, setSearch] = useState("");
+  const [department, setDepartment] = useState<string>(params.get("department") ?? "all");
+  const [empType, setEmpType] = useState<string>(params.get("type") ?? "all");
+  const [empStatus, setEmpStatus] = useState<string>(params.get("status") ?? "active");
+
+  // Bulk dialogs
+  const [statusDialog, setStatusDialog] = useState<EmploymentStatus | null>(null);
+  const [typeDialog, setTypeDialog] = useState<EmploymentType | null>(null);
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [reason, setReason] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const today = new Date().toISOString().split("T")[0];
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      const thirtyDaysAgoStr = thirtyDaysAgo.toISOString();
-
-      const [empRes, metricsRes, summaryRes, callsRes, chatsRes] = await Promise.all([
-        supabase.from("crm_users_profile").select("id, user_id, display_name, email, job_title, photo_url, is_active").eq("is_active", true),
-        supabase.from("employee_daily_metrics").select("*").order("metric_date", { ascending: false }).limit(500),
-        supabase.from("employee_performance_summary").select("*").order("month", { ascending: false }).limit(50),
-        // Real activity: calls from broker_call_logs
-        supabase.from("broker_call_logs").select("user_id, id").gte("created_at", thirtyDaysAgoStr),
-        // Real activity: chats from broker_chat_logs
-        supabase.from("broker_chat_logs").select("user_id, id, message_count").gte("created_at", thirtyDaysAgoStr),
+      const [empRes, actRes] = await Promise.all([
+        supabase
+          .from("crm_users_profile")
+          .select("id, user_id, display_name, email, job_title, department, photo_url, is_active, employment_type, employment_status, left_at, left_reason"),
+        supabase.from("vw_employee_activity_30d").select("*"),
       ]);
-
-      setEmployees(empRes.data || []);
-      setDailyMetrics(metricsRes.data || []);
-      setSummaries(summaryRes.data || []);
-
-      // Aggregate real activity data by user
-      const callsByUser: Record<string, number> = {};
-      (callsRes.data || []).forEach((c: any) => {
-        callsByUser[c.user_id] = (callsByUser[c.user_id] || 0) + 1;
-      });
-
-      const chatsByUser: Record<string, number> = {};
-      (chatsRes.data || []).forEach((c: any) => {
-        chatsByUser[c.user_id] = (chatsByUser[c.user_id] || 0) + (c.message_count || 1);
-      });
-
-      setRealActivity({ callsByUser, chatsByUser, leadUpdatesByUser: {} });
-    } catch (error) {
-      console.error("Error fetching performance data:", error);
+      setEmployees((empRes.data ?? []) as EmployeeProfile[]);
+      const map: Record<string, ActivityRow> = {};
+      (actRes.data ?? []).forEach((r: any) => { map[r.user_id] = r as ActivityRow; });
+      setActivity(map);
+    } catch (e) {
+      console.error("Error fetching performance data:", e);
+      toast.error("Could not load performance data");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Aggregate today's metrics
-  const today = new Date().toISOString().split("T")[0];
-  const todayMetrics = dailyMetrics.filter(m => m.metric_date === today);
-  
-  // Combine recorded metrics + real activity
-  const totalCallsAllUsers = Object.values(realActivity.callsByUser).reduce((s, v) => s + v, 0);
-  const totalChatsAllUsers = Object.values(realActivity.chatsByUser).reduce((s, v) => s + v, 0);
-  
-  const totalHoursToday = todayMetrics.reduce((s, m) => s + (m.total_hours_worked || 0), 0);
-  const totalCallsToday = todayMetrics.reduce((s, m) => s + (m.calls_made || 0), 0) || totalCallsAllUsers;
-  const totalMessagesToday = todayMetrics.reduce((s, m) => s + (m.emails_sent || 0) + (m.chats_handled || 0), 0) || totalChatsAllUsers;
-  const totalLeadsToday = todayMetrics.reduce((s, m) => s + (m.leads_contacted || 0), 0);
+  useEffect(() => { fetchData(); }, []);
 
-  const getEmployeeMetrics = (userId: string) => {
-    const empMetrics = dailyMetrics.filter(m => m.user_id === userId);
-    const empSummary = summaries.find(s => s.user_id === userId);
-    
-    // Merge real activity data
-    const realCalls = realActivity.callsByUser[userId] || 0;
-    const realChats = realActivity.chatsByUser[userId] || 0;
-    
-    const metricCalls = empMetrics.reduce((s, m) => s + (m.calls_made || 0), 0);
-    const metricEmails = empMetrics.reduce((s, m) => s + (m.emails_sent || 0), 0);
-    const metricChats = empMetrics.reduce((s, m) => s + (m.chats_handled || 0), 0);
-    
-    return {
-      totalHours: empMetrics.reduce((s, m) => s + (m.total_hours_worked || 0), 0),
-      totalCalls: Math.max(metricCalls, realCalls),
-      totalEmails: metricEmails,
-      totalChats: Math.max(metricChats, realChats),
-      totalLeads: empMetrics.reduce((s, m) => s + (m.leads_contacted || 0), 0),
-      totalTasks: empMetrics.reduce((s, m) => s + (m.tasks_completed || 0), 0),
-      totalMeetings: empMetrics.reduce((s, m) => s + (m.meetings_attended || 0), 0),
-      avgScore: empMetrics.filter(m => m.performance_score != null).reduce((s, m, _, a) => s + (m.performance_score || 0) / a.length, 0),
-      daysTracked: empMetrics.length,
-      summary: empSummary,
-      hasRealActivity: realCalls > 0 || realChats > 0,
-    };
+  // Persist filters in URL
+  useEffect(() => {
+    const next = new URLSearchParams(params);
+    department === "all" ? next.delete("department") : next.set("department", department);
+    empType === "all" ? next.delete("type") : next.set("type", empType);
+    empStatus === "active" ? next.delete("status") : next.set("status", empStatus);
+    setParams(next, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [department, empType, empStatus]);
+
+  const departments = useMemo(() => {
+    const s = new Set<string>();
+    employees.forEach((e) => e.department && s.add(e.department));
+    return Array.from(s).sort();
+  }, [employees]);
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return employees.filter((e) => {
+      if (department !== "all" && (e.department ?? "") !== department) return false;
+      if (empType !== "all" && (e.employment_type ?? "") !== empType) return false;
+      if (empStatus !== "all") {
+        if (empStatus === "active" && e.employment_status !== "active") return false;
+        if (empStatus === "left" && e.employment_status === "active") return false;
+      }
+      if (q && !(e.display_name ?? "").toLowerCase().includes(q)
+           && !(e.email ?? "").toLowerCase().includes(q)
+           && !(e.job_title ?? "").toLowerCase().includes(q)) return false;
+      return true;
+    });
+  }, [employees, department, empType, empStatus, search]);
+
+  // Aggregate KPIs over filtered set
+  const totals = useMemo(() => {
+    let calls = 0, chats = 0, leads = 0, tasks = 0;
+    filtered.forEach((e) => {
+      const a = activity[e.user_id];
+      if (!a) return;
+      calls += a.calls_30d;
+      chats += a.chats_30d;
+      leads += a.leads_contacted_30d;
+      tasks += a.tasks_completed;
+    });
+    return { calls, chats, leads, tasks };
+  }, [filtered, activity]);
+
+  const toggleOne = (uid: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      next.has(uid) ? next.delete(uid) : next.add(uid);
+      return next;
+    });
+  };
+  const toggleAll = () => {
+    if (selected.size === filtered.length) setSelected(new Set());
+    else setSelected(new Set(filtered.map((e) => e.user_id)));
   };
 
-  const getPerformanceColor = (score: number) => {
-    if (score >= 80) return "text-emerald-600";
-    if (score >= 60) return "text-yellow-600";
-    if (score >= 40) return "text-orange-500";
-    return "text-red-500";
+  const runBulk = async (
+    action: "set_status" | "set_employment_type" | "delete",
+    payload: Record<string, unknown>,
+  ) => {
+    if (selected.size === 0) return;
+    setSubmitting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("hr-bulk-employee-action", {
+        body: { action, user_ids: Array.from(selected), payload },
+      });
+      if (error) throw error;
+      toast.success((data as any)?.summary ?? "Updated");
+      setSelected(new Set());
+      setStatusDialog(null); setTypeDialog(null); setDeleteDialog(false); setReason("");
+      await fetchData();
+    } catch (e: any) {
+      toast.error(e?.message ?? "Bulk action failed");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const getPerformanceLabel = (score: number) => {
-    if (score >= 80) return "Excellent";
-    if (score >= 60) return "Good";
-    if (score >= 40) return "Average";
-    return "Needs Improvement";
+  const exportCsv = () => {
+    const rows = filtered.map((e) => {
+      const a = activity[e.user_id] ?? {} as ActivityRow;
+      return {
+        name: e.display_name ?? "",
+        email: e.email ?? "",
+        department: e.department ?? "",
+        type: e.employment_type ?? "",
+        status: e.employment_status,
+        calls_30d: a.calls_30d ?? 0,
+        chats_30d: a.chats_30d ?? 0,
+        leads_assigned: a.leads_assigned ?? 0,
+        leads_contacted_30d: a.leads_contacted_30d ?? 0,
+        leads_updated_30d: a.leads_updated_30d ?? 0,
+        tasks_completed: a.tasks_completed ?? 0,
+      };
+    });
+    const header = Object.keys(rows[0] ?? { name: "" }).join(",");
+    const csv = [header, ...rows.map((r) => Object.values(r).map((v) => `"${String(v).replace(/"/g, '""')}"`).join(","))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `employee-performance-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
     <div className="space-y-6">
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Total Hours Today</p>
-                <p className="text-2xl font-bold text-foreground">{totalHoursToday > 0 ? `${Math.floor(totalHoursToday)}h ${Math.round((totalHoursToday % 1) * 60)}m` : "0h 0m"}</p>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                <Clock className="h-6 w-6 text-blue-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Calls Made (30d)</p>
-                <p className="text-2xl font-bold text-foreground">{totalCallsToday}</p>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                <Phone className="h-6 w-6 text-emerald-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Messages Sent (30d)</p>
-                <p className="text-2xl font-bold text-foreground">{totalMessagesToday}</p>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                <MessageSquare className="h-6 w-6 text-purple-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Leads Contacted</p>
-                <p className="text-2xl font-bold text-foreground">{totalLeadsToday}</p>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center">
-                <TrendingUp className="h-6 w-6 text-[#1A1A1A]" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      {/* KPI cards (filtered) */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <KpiCard label="Calls (30d)" value={totals.calls} icon={<Phone className="h-6 w-6 text-emerald-600" />} />
+        <KpiCard label="Chats (30d)" value={totals.chats} icon={<MessageSquare className="h-6 w-6 text-blue-600" />} />
+        <KpiCard label="Leads Contacted (30d)" value={totals.leads} icon={<TrendingUp className="h-6 w-6 text-[#1A1A1A]" />} />
+        <KpiCard label="Tasks Completed" value={totals.tasks} icon={<Target className="h-6 w-6 text-amber-600" />} />
       </div>
 
-      {/* Employee Performance List */}
+      {/* Filters toolbar */}
+      <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-[#B89555]/30 shadow-sm">
+        <CardContent className="pt-6">
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="flex-1 min-w-[200px]">
+              <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Search</label>
+              <div className="relative">
+                <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/50" />
+                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Name, email, title…" className="pl-8" />
+              </div>
+            </div>
+            <FilterSelect label="Department" value={department} onChange={setDepartment} options={[
+              { v: "all", l: "All departments" }, ...departments.map((d) => ({ v: d, l: d })),
+            ]} />
+            <FilterSelect label="Type" value={empType} onChange={setEmpType} options={[
+              { v: "all", l: "All types" },
+              ...Object.entries(TYPE_LABEL).map(([v, l]) => ({ v, l })),
+            ]} />
+            <FilterSelect label="Status" value={empStatus} onChange={setEmpStatus} options={[
+              { v: "active", l: "Active" }, { v: "left", l: "Left / Inactive" }, { v: "all", l: "All" },
+            ]} />
+            <Button variant="outline" size="sm" onClick={exportCsv} className="gap-2">
+              <Download className="h-4 w-4" /> Export CSV
+            </Button>
+          </div>
+
+          {/* Bulk action bar */}
+          {selected.size > 0 && (
+            <div className="mt-4 flex flex-wrap items-center gap-2 p-3 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40">
+              <span className="font-semibold text-[#1A1A1A]">{selected.size} selected</span>
+              <div className="flex-1" />
+              <Button size="sm" variant="outline" onClick={() => setStatusDialog("left_company")} className="gap-1">
+                <UserCheck className="h-4 w-4" /> Mark as left
+              </Button>
+              <Button size="sm" variant="outline" onClick={() => setStatusDialog("on_leave")}>On leave</Button>
+              <Select onValueChange={(v) => setTypeDialog(v as EmploymentType)}>
+                <SelectTrigger className="w-[180px] h-9"><Briefcase className="h-4 w-4 mr-1" /><SelectValue placeholder="Set employment type" /></SelectTrigger>
+                <SelectContent>
+                  {Object.entries(TYPE_LABEL).map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              <Button size="sm" variant="destructive" onClick={() => setDeleteDialog(true)} className="gap-1">
+                <Trash2 className="h-4 w-4" /> Delete
+              </Button>
+              <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>Clear</Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Employee list */}
       <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-[#B89555]/30 shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-foreground">
             <Activity className="h-5 w-5 text-[#1A1A1A]" />
             Employee Performance Overview
-            <Badge className="ml-2 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">{employees.length} Active</Badge>
+            <Badge className="ml-2 bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">
+              {filtered.length} {filtered.length === 1 ? "employee" : "employees"}
+            </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -235,103 +308,81 @@ export function EmployeePerformanceDashboard() {
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89555]" />
             </div>
-          ) : employees.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">No active employees found</p>
+          ) : filtered.length === 0 ? (
+            <p className="text-[#1A1A1A]/70 text-center py-8">No employees match the current filters.</p>
           ) : (
-            <div className="space-y-4">
-              {employees.map((emp) => {
-                const metrics = getEmployeeMetrics(emp.user_id);
-                const score = metrics.avgScore || (metrics.summary?.activity_score_avg ?? 0);
-                const isExpanded = selectedEmployee === emp.id;
-
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 px-2 pb-2 text-xs text-[#1A1A1A]/70">
+                <Checkbox checked={selected.size === filtered.length && filtered.length > 0} onCheckedChange={toggleAll} />
+                <span>Select all visible</span>
+              </div>
+              {filtered.map((emp) => {
+                const a = activity[emp.user_id];
+                const isSelected = selected.has(emp.user_id);
+                const inactive = emp.employment_status !== "active";
                 return (
-                  <div key={emp.id} className="border border-[#B89555]/20 rounded-xl overflow-hidden bg-[#FDFBF7]/60 hover:bg-[#FDFBF7]/80 transition-all">
-                    <div
-                      className="flex items-center justify-between p-4 cursor-pointer"
-                      onClick={() => setSelectedEmployee(isExpanded ? null : emp.id)}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 flex items-center justify-center border-2 border-[#B89555]/40">
-                          {emp.photo_url ? (
-                            <img src={emp.photo_url} alt={emp.display_name} className="w-full h-full rounded-full object-cover" />
-                          ) : (
-                            <span className="font-bold text-[#1A1A1A] text-lg">{emp.display_name?.charAt(0) || "?"}</span>
+                  <div
+                    key={emp.id}
+                    className={`border rounded-xl p-4 transition-all ${
+                      isSelected ? "border-[#B89555] bg-[#FDFBF7]" : "border-[#B89555]/20 bg-[#FDFBF7]/60"
+                    } ${inactive ? "opacity-70" : ""}`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <Checkbox checked={isSelected} onCheckedChange={() => toggleOne(emp.user_id)} className="mt-2" />
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#EFE6D6] to-[#F7F1E6] flex items-center justify-center border border-[#B89555]/40 shrink-0">
+                        {emp.photo_url ? (
+                          <img src={emp.photo_url} alt="" className="w-full h-full rounded-full object-cover" />
+                        ) : (
+                          <span className="font-bold text-[#1A1A1A]">{(emp.display_name ?? "?").charAt(0)}</span>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="font-semibold text-[#1A1A1A]">{emp.display_name ?? "Unnamed"}</p>
+                          {emp.employment_type && (
+                            <Badge variant="outline" className="text-[10px] border-[#B89555]/40 text-[#1A1A1A]">
+                              {TYPE_LABEL[emp.employment_type]}
+                            </Badge>
+                          )}
+                          {inactive && (
+                            <Badge variant="outline" className="text-[10px] border-red-400/50 text-red-700 bg-red-50">
+                              {STATUS_LABEL[emp.employment_status]}
+                            </Badge>
                           )}
                         </div>
-                        <div>
-                          <p className="font-semibold text-foreground">{emp.display_name}</p>
-                          <p className="text-sm text-muted-foreground">{emp.job_title || "Employee"}</p>
-                          {metrics.hasRealActivity && (
-                            <Badge variant="outline" className="text-[10px] mt-1 border-emerald-500/40 text-emerald-600">Live Data</Badge>
-                          )}
-                        </div>
+                        <p className="text-sm text-[#1A1A1A]/70">
+                          {emp.job_title ?? "Employee"}
+                          {emp.department ? ` • ${emp.department}` : ""}
+                        </p>
+
+                        {/* Pipeline chips */}
+                        {a && Object.keys(a.pipeline_counts ?? {}).length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-2">
+                            {Object.entries(a.pipeline_counts).map(([k, v]) => (
+                              <span
+                                key={k}
+                                className={`text-[10px] px-2 py-0.5 rounded-full border ${PIPELINE_COLORS[k] ?? "border-[#B89555]/30 text-[#1A1A1A] bg-[#F7F1E6]"}`}
+                              >
+                                {fmtStageKey(k)}: {v}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
-                      <div className="flex items-center gap-6">
-                        <div className="hidden md:flex items-center gap-4 text-sm">
-                          <div className="text-center">
-                            <p className="text-muted-foreground text-xs">Calls</p>
-                            <p className="font-semibold text-foreground">{metrics.totalCalls}</p>
-                          </div>
-                          <div className="text-center">
-                            <p className="text-muted-foreground text-xs">Chats</p>
-                            <p className="font-semibold text-foreground">{metrics.totalChats}</p>
-                          </div>
-                          <div className="text-center">
-                            <p className="text-muted-foreground text-xs">Leads</p>
-                            <p className="font-semibold text-foreground">{metrics.totalLeads}</p>
-                          </div>
-                          <div className="text-center">
-                            <p className="text-muted-foreground text-xs">Tasks</p>
-                            <p className="font-semibold text-foreground">{metrics.totalTasks}</p>
-                          </div>
-                        </div>
-
-                        <div className="text-center min-w-[80px]">
-                          <div className={`text-xl font-bold ${score > 0 ? getPerformanceColor(score) : "text-muted-foreground"}`}>
-                            {score > 0 ? `${Math.round(score)}%` : "—"}
-                          </div>
-                          <p className="text-xs text-muted-foreground">{score > 0 ? getPerformanceLabel(score) : "No data"}</p>
-                        </div>
-
-                        <Eye className={`h-5 w-5 transition-transform ${isExpanded ? "rotate-90 text-[#1A1A1A]" : "text-muted-foreground"}`} />
+                      <div className="hidden md:grid grid-cols-4 gap-4 text-center text-sm">
+                        <Metric label="Calls" v={a?.calls_30d ?? 0} />
+                        <Metric label="Chats" v={a?.chats_30d ?? 0} />
+                        <Metric label="Leads" v={a?.leads_contacted_30d ?? 0} />
+                        <Metric label="Tasks" v={a?.tasks_completed ?? 0} />
                       </div>
+
+                      <Button asChild variant="outline" size="sm" className="gap-1 shrink-0">
+                        <Link to={`/owner/hr/employee/${emp.user_id}`}>
+                          Open <ExternalLink className="h-3 w-3" />
+                        </Link>
+                      </Button>
                     </div>
-
-                    {isExpanded && (
-                      <div className="border-t border-[#B89555]/20 p-4 bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6]/50">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          <MetricCard icon={<Clock className="h-4 w-4" />} label="Total Hours" value={`${metrics.totalHours.toFixed(1)}h`} />
-                          <MetricCard icon={<Phone className="h-4 w-4" />} label="Calls Made" value={String(metrics.totalCalls)} />
-                          <MetricCard icon={<MessageSquare className="h-4 w-4" />} label="Chats" value={String(metrics.totalChats)} />
-                          <MetricCard icon={<Mail className="h-4 w-4" />} label="Emails Sent" value={String(metrics.totalEmails)} />
-                          <MetricCard icon={<TrendingUp className="h-4 w-4" />} label="Leads Contacted" value={String(metrics.totalLeads)} />
-                          <MetricCard icon={<Target className="h-4 w-4" />} label="Tasks Completed" value={String(metrics.totalTasks)} />
-                          <MetricCard icon={<Calendar className="h-4 w-4" />} label="Meetings" value={String(metrics.totalMeetings)} />
-                          <MetricCard icon={<BarChart3 className="h-4 w-4" />} label="Days Tracked" value={String(metrics.daysTracked)} />
-                        </div>
-
-                        {metrics.summary && (
-                          <div className="mt-4 p-3 rounded-lg bg-[#FDFBF7]/60 border border-[#B89555]/20">
-                            <p className="text-xs font-semibold text-muted-foreground mb-2">Monthly Summary</p>
-                            <div className="grid grid-cols-3 md:grid-cols-6 gap-2 text-center text-xs">
-                              <div><p className="text-muted-foreground">Logins</p><p className="font-bold text-foreground">{metrics.summary.total_logins ?? 0}</p></div>
-                              <div><p className="text-muted-foreground">Active Hrs</p><p className="font-bold text-foreground">{metrics.summary.total_active_hours?.toFixed(1) ?? 0}</p></div>
-                              <div><p className="text-muted-foreground">Leads</p><p className="font-bold text-foreground">{metrics.summary.leads_handled ?? 0}</p></div>
-                              <div><p className="text-muted-foreground">Converted</p><p className="font-bold text-foreground">{metrics.summary.leads_converted ?? 0}</p></div>
-                              <div><p className="text-muted-foreground">Deals</p><p className="font-bold text-foreground">{metrics.summary.deals_closed ?? 0}</p></div>
-                              <div><p className="text-muted-foreground">Revenue</p><p className="font-bold text-foreground">{metrics.summary.revenue_generated ? `$${(metrics.summary.revenue_generated / 1000).toFixed(0)}K` : "—"}</p></div>
-                            </div>
-                          </div>
-                        )}
-
-                        {metrics.daysTracked === 0 && !metrics.summary && !metrics.hasRealActivity && (
-                          <p className="text-center text-sm text-muted-foreground mt-4 italic">
-                            No performance data recorded yet. Activity will appear as they make calls, chats, and update leads.
-                          </p>
-                        )}
-                      </div>
-                    )}
                   </div>
                 );
               })}
@@ -339,18 +390,125 @@ export function EmployeePerformanceDashboard() {
           )}
         </CardContent>
       </Card>
+
+      {/* Status confirm */}
+      <AlertDialog open={!!statusDialog} onOpenChange={(o) => !o && setStatusDialog(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Set status to {statusDialog ? STATUS_LABEL[statusDialog] : ""} for {selected.size} employee(s)?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Their account becomes inactive. They keep ownership of past leads/calls so history stays intact.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="space-y-2">
+            <label className="text-xs text-[#1A1A1A]/70">Reason (optional)</label>
+            <Input value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Left to join …" />
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={submitting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={submitting}
+              onClick={() => statusDialog && runBulk("set_status", {
+                employment_status: statusDialog,
+                left_reason: reason || undefined,
+              })}
+            >
+              Confirm
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Type confirm */}
+      <AlertDialog open={!!typeDialog} onOpenChange={(o) => !o && setTypeDialog(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Set employment type to {typeDialog ? TYPE_LABEL[typeDialog] : ""} for {selected.size} employee(s)?
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={submitting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={submitting}
+              onClick={() => typeDialog && runBulk("set_employment_type", { employment_type: typeDialog })}
+            >
+              Apply
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete confirm */}
+      <AlertDialog open={deleteDialog} onOpenChange={setDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove {selected.size} employee(s)?</AlertDialogTitle>
+            <AlertDialogDescription>
+              They are marked terminated and deactivated. Their leads, calls and historical activity remain in the system.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="space-y-2">
+            <label className="text-xs text-[#1A1A1A]/70">Reason (optional)</label>
+            <Input value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Departure reason" />
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={submitting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={submitting}
+              className="bg-red-600 hover:bg-red-700 text-white"
+              onClick={() => runBulk("delete", { left_reason: reason || undefined })}
+            >
+              Confirm remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
 
-function MetricCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+function KpiCard({ label, value, icon }: { label: string; value: number; icon: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-2 p-3 rounded-lg bg-[#FDFBF7]/80 border border-[#B89555]/20">
-      <div className="text-[#1A1A1A]">{icon}</div>
-      <div>
-        <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="font-semibold text-foreground text-sm">{value}</p>
-      </div>
+    <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
+      <CardContent className="pt-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm text-[#1A1A1A]/70">{label}</p>
+            <p className="text-2xl font-bold text-[#1A1A1A]">{value.toLocaleString()}</p>
+          </div>
+          <div className="w-12 h-12 rounded-xl bg-[#FDFBF7] border border-[#B89555]/30 flex items-center justify-center">
+            {icon}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function Metric({ label, v }: { label: string; v: number }) {
+  return (
+    <div>
+      <p className="text-[#1A1A1A]/70 text-xs">{label}</p>
+      <p className="font-semibold text-[#1A1A1A]">{v}</p>
+    </div>
+  );
+}
+
+function FilterSelect({
+  label, value, onChange, options,
+}: { label: string; value: string; onChange: (v: string) => void; options: { v: string; l: string }[] }) {
+  return (
+    <div className="min-w-[160px]">
+      <label className="text-xs text-[#1A1A1A]/70 mb-1 block">{label}</label>
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger><SelectValue /></SelectTrigger>
+        <SelectContent>
+          {options.map((o) => <SelectItem key={o.v} value={o.v}>{o.l}</SelectItem>)}
+        </SelectContent>
+      </Select>
     </div>
   );
 }
