@@ -1,7 +1,7 @@
 import { NavLink, useLocation, useNavigate, Link } from "react-router-dom";
 import {
-  LayoutDashboard, Users, Briefcase, Database, ListChecks, Calendar, ListTodo,
-  Handshake, BadgeDollarSign, FilePen, GraduationCap, Megaphone,
+  LayoutDashboard, Briefcase, ListChecks, Calendar, ListTodo,
+  Handshake, FilePen, GraduationCap,
   Brain, Bell, Settings, ChevronLeft, ChevronRight, ArrowLeft, Crown, Home, LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
