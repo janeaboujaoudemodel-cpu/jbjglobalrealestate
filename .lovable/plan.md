@@ -1,68 +1,121 @@
-Six bundled changes, all UI/template/config only.
 
-## 1. Departments — rename + add "Property Consultant" + premium "Other…"
-File: `src/hooks/useHRJobOffers.ts` (DEPARTMENTS array) and `src/components/document-studio/DocumentStudio.tsx` (department picker).
+# Unified HR Pipeline (Applicant → Signed Broker → Employee → Academy)
 
-- Rename `Leadership & Legal` → `Legal`.
-- Insert `Property Consultant` as the first option (premium label that is treated everywhere as broker; everything broker-related in the doc/contract output continues to flow through this department).
-- Replace the existing "+ Add custom department" plain prompt with a premium inline "Other…" item in the `<Select>`. Choosing "Other…" opens a champagne inline input directly under the select (no browser prompt) where the user types the exact title; on confirm the value becomes the active department, is appended to `customDepartments`, and is rendered verbatim into the contract body (the same `department` string is already what reaches `standardBody.ts` / `buildAi`, so the contract will restructure around whatever title is typed).
-- Keep existing rename/delete affordances for custom entries.
+## Goal
 
-## 2. Job Offer template — real UAE clauses instead of "shall apply in accordance with UAE…"
-File: `src/templates/composers/standardBody.ts` (job offer block ~line 51).
+One end-to-end workflow with no duplicate paths. The applicant logs in once, fills a single in-app intake form, and that one record drives the job offer, the e-signature, the employees hub, the academy, and the certificate — all kept in sync. Nothing existing is deleted; legacy tables become read-only mirrors of the canonical record.
 
-Replace the single fallback sentence with five explicit, plain-English clauses written to match standard Dubai real-estate company practice under UAE Federal Decree-Law No. 33 of 2021:
+## Canonical record
 
-- **Probation** — up to 6 months from the start date; either party may terminate with 14 days' written notice during probation; no end-of-service gratuity accrues during this period.
-- **Working hours** — 48 hours per week, Monday to Friday 9:00–18:00 with a 1-hour break, plus a half-day Saturday rotation as agreed; reduced hours during Ramadan in line with UAE law.
-- **Annual leave** — 30 calendar days of paid annual leave per completed year (2.5 days per month after probation), in addition to UAE public holidays.
-- **End-of-service gratuity** — calculated on last basic salary: 21 days' basic pay per year for the first 5 years and 30 days per year thereafter, capped at 2 years' total pay, payable on lawful termination after 1 year of continuous service.
-- **Notice period** — 30 calendar days' written notice by either party after probation (60 days for senior/managerial roles), with handover of all company property, leads, and confidential material as a condition of final settlement.
+`hr_candidates` becomes the single source of truth for a person moving through hiring. Every other table that today holds an applicant (`hr_applications`, `hr_cv_submissions`, `hr_job_applicants`, `new_joiner_applications`) gets a nullable `candidate_id` FK back to it. A DB function `upsert_candidate_from_legacy(...)` reconciles existing rows on first read so we never lose history.
 
-Wording remains overridable by `f.notes`. No schema or business-logic changes.
+New canonical status enum on `hr_candidates.status`:
 
-## 3. Signature & Stamp dialog — fix "stuck" + add Draw + AI polish + AI generate
-Files: `src/components/document-studio/assets/AssetLibraryDialog.tsx`, `SignatureCapture.tsx`, plus one new edge function.
+```text
+new → reviewing → approved_pending_docs → docs_submitted →
+offer_drafted → offer_pending_owner_approval → offer_sent →
+offer_signed → employee_active → (academy_in_progress →
+academy_completed → certificate_eligible → certified)
+```
 
-- Investigate the "stuck on open" symptom: the dialog already mounts `<SignatureCapture>` / `<StampUpload>` behind tabs. The most common stuck-state is the trigger button being intercepted by the toolbar. Verify in build mode by clicking; if `assetDialog` state isn't flipping, hoist the buttons out of any pointer-events:none parent and ensure `setAssetDialog("signature")` runs before any other handler.
-- `SignatureCapture` already exposes Draw / Type / Upload tabs — make **Draw** the default (it already is) and surface two extra actions in the Draw tab footer once the user has drawn at least one stroke:
-  1. **Polish with AI** — sends the drawn PNG to a new edge function `signature-polish` which calls Lovable AI (`google/gemini-3.1-flash-image-preview`, image edit) with prompt: "Refine this handwritten signature into a clean premium founder-style signature. Preserve the exact shape, slant, letterforms and proportions. Smooth the strokes, even line weight, remove paper noise. Transparent background." Returns transparent PNG, replaces canvas content; user can Save or Polish again.
-  2. **Generate with AI** — requires a "Full name" input (added below the canvas, defaults to the user's profile name). Sends the drawn PNG + name to `signature-generate` edge function which calls the same image model with prompt: "Using this handwritten sample as a style reference, generate 4 premium founder/CEO signature variants for the name '{fullName}'. Single-stroke, confident, elegant, transparent background, 1024x256." Returns 4 transparent PNGs displayed in a 2×2 chooser; clicking one drops it back into the canvas so the user can Save.
-- New edge function files: `supabase/functions/signature-polish/index.ts` and `supabase/functions/signature-generate/index.ts`, both auth-gated via `requireOwnerAuth` and using `LOVABLE_API_KEY`. Update `supabase/config.toml` with their blocks.
-- Stamp dialog stays upload-only as today; no functional changes.
+Plus terminal: `rejected`, `withdrawn`.
 
-## 4. Header — bigger monogram + larger, gap-filling wordmark
-File: `src/components/GlobalHeader.tsx` (lines ~667–700).
+## Flow
 
-- Increase monogram size: `w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 xl:w-32 xl:h-32` → `w-14 h-14 sm:w-20 sm:h-20 md:w-28 md:h-28 xl:w-[160px] xl:h-[160px]` (still capped by the 88 px header rule via internal scale, kept inside `overflow-hidden` parent).
-- Wordmark: bump from `text-xs sm:text-sm xl:text-base` to `text-sm sm:text-base xl:text-2xl 2xl:text-[28px]`, keep tracking, drop `truncate` on the xl+ breakpoints so the full string can extend toward the right.
-- Wordmark text becomes `JBJ Global Real Estate L.L.C S.O.C.` so the legal suffix sits inline next to the company name (eliminates the empty space on the right).
-- Tagline ("Excellence in Real Estate") size bumped to `text-[10px] sm:text-[11px] xl:text-[13px]`.
-- Allow the left brand block to grow: change parent from `min-w-0 flex-1` to `min-w-0 flex-[2]` so wordmark wins more of the row before nav.
+```text
+┌──────────────┐   Approve & Request Docs   ┌──────────────────────┐
+│ Applicants   │ ─────────────────────────► │ Intake (in-app)      │
+│ tab (owner)  │                            │ /careers/intake/:tok │
+└──────┬───────┘                            └──────────┬───────────┘
+       │                                               │ signup or
+       │                                               │ login required
+       │                                               ▼
+       │                                    ┌──────────────────────┐
+       │                                    │ Candidate uploads:   │
+       │                                    │ photo, Emirates ID,  │
+       │                                    │ passport(s), RERA,   │
+       │                                    │ languages, nat.,     │
+       │                                    │ experience, etc.     │
+       │                                    └──────────┬───────────┘
+       │                                               │ submit
+       │                                               ▼
+       │                              status = docs_submitted
+       │                              + auto-draft job offer
+       │                                               │
+       ▼                                               ▼
+┌──────────────────────────────────────────────────────────────────┐
+│ Owner: Offer card pre-filled (name, email, phone, all KYC)       │
+│ Click "Approve & Send for Signature"                             │
+│  → uses internal e-sign (PublicSignDocument + envelopes)         │
+└──────────┬───────────────────────────────────────────────────────┘
+           │ envelope completed webhook
+           ▼
+status = offer_signed; signed PDF filed under broker;
+candidate auto-enrolled into hr_employees + employees_hub;
+academy access flag flipped on.
+```
 
-## 5. Footer contact strip — capitalized + clickable + tighter address + phone added
-File: `src/components/Footer.tsx` (lines ~605–635), `src/constants/stats.ts`.
+## Database (one migration)
 
-- `CONTACT_INFO.address`: `Downtown Dubai, UAE` → keep (already abbreviated). Confirm no remaining `United Arab Emirates` string in Footer.
-- Add `websiteCapitalized: 'WWW.JBJ.AE'` to `CONTACT_INFO` and a helper `getWebsiteUrl = () => 'https://jbj.ae'`.
-- In the contact strip, render four equally-spaced chips in this order, each `inline-flex` clickable anchor with comfortable `gap-3`:
-  1. **Location** — `<MapPin>` `Dubai, UAE` (label only, plain `<span>`).
-  2. **Phone** — `<a href={getCallUrl()}>` showing `+971 54 716 7107` (already capitalized format).
-  3. **WhatsApp** — `<a href={getWhatsAppUrl()} target="_blank">` showing `WHATSAPP`.
-  4. **Email** — `<a href={getEmailUrl()}>` showing `CONTACT@JBJ.AE` (already uppercase via `emailCapitalized`).
-  5. **Website** — new `<a href={getWebsiteUrl()} target="_blank">` showing `WWW.JBJ.AE`.
-- All labels uppercased via `uppercase tracking-[0.12em]` class on the text span; chips keep current champagne/ink styling, just widen `gap-x-3` → `gap-x-4` on the row so the items breathe.
+1. Add `candidate_id uuid` to: `hr_applications`, `hr_cv_submissions`, `hr_job_applicants`, `new_joiner_applications`. Backfill via match on `(lower(email), phone_e164)`.
+2. Extend `hr_candidates`:
+   - `intake_token text unique`, `intake_token_expires_at timestamptz`
+   - `intake_submitted_at`, `intake_payload jsonb` (photo_url, emirates_id_url, emirates_id_number, passports jsonb[], rera_card_url, rera_number, languages text[], nationalities text[], current_company, total_years_experience, dob, gender)
+   - `current_job_offer_id uuid`, `current_envelope_id uuid`, `employee_id uuid`
+   - Tighten status enum (additive — old values kept).
+3. Create view `vw_hr_candidate_360` that LEFT JOINs candidate → latest application / offer / envelope / employee / academy progress / certificate. Powers the applicant drawer and the Owner Pipeline board.
+4. Trigger `trg_candidate_on_envelope_signed` on `signature_envelopes` UPDATE → when status='completed' and `metadata->>'candidate_id'` set, flip candidate to `offer_signed`, insert `hr_employees` row, copy intake data into the employee record, insert `broker_onboarding_progress` row, file signed PDF reference under `hr_certificates`/`employee documents` bucket.
+5. Storage bucket `candidate-intake` (private, RLS: candidate-self or HR/owner). Reused for KYC documents — never world-readable.
+6. RLS: candidate can read+update only their own row while token valid OR `auth.uid() = user_id`. HR/owner full access via `has_role(auth.uid(),'admin'|'owner'|'hr')`.
 
-## 6. Verification
-After build:
-- Open Document Studio → confirm "Legal" appears (not "Leadership & Legal"), "Property Consultant" is first, and selecting "Other…" reveals an inline input that writes back into the contract preview.
-- Open Job Offer template → confirm the 5 clauses render verbatim instead of the old sentence.
-- Click Signature → dialog opens; Draw → stroke → Polish/Generate buttons appear and produce transparent PNGs.
-- Stamp button opens dialog with upload tab.
-- Header monogram is visibly larger and the wordmark including `L.L.C S.O.C.` fills toward the nav.
-- Footer chips: phone/whatsapp/email/website all click through, all uppercase, address reads `Dubai, UAE`.
+## Backend (edge functions, all `requireOwnerAuth` except intake)
 
-## Out of scope
-- No DB schema changes.
-- No changes to Form I layout (already locked in prior turns).
-- No changes to CV builder borders (already gold from previous turn).
+- `hr-approve-and-request-docs` (owner) — sets status, mints `intake_token`, sends transactional email "Congratulations, your application has been approved…" with magic-link to `/careers/intake/:token`. Idempotent on `candidate_id+template`.
+- `hr-intake-submit` (auth required, candidate self) — validates with zod, writes `intake_payload`, marks `docs_submitted`, auto-drafts a `hr_job_applicants` row from the candidate, calls existing job-offer composer, sets `current_job_offer_id`, updates `profiles` with photo + name + phone so the candidate's account is also complete.
+- `hr-send-offer-for-signature` (owner) — wraps existing internal e-sign: creates `signature_envelopes` row with `metadata.candidate_id`, generates PDF via Document Studio composer, emails recipient the `PublicSignDocument` link.
+- The existing envelope-completed webhook already runs — we just attach trigger #4 to it.
+
+No new "send email" function — all email goes through the existing `send-transactional-email` with two new React Email templates: `candidate-docs-requested` and `candidate-offer-ready-to-sign`.
+
+## Frontend (no duplicates)
+
+- `src/components/crm/ApplicantProfileDrawer.tsx` — replace the current scattered action buttons with one ordered action strip driven by `vw_hr_candidate_360.status`:
+  - new/reviewing → `Approve & Request Documents`
+  - docs_submitted → `Review Documents` + `Draft Job Offer` (auto-jumps to offer pre-filled)
+  - offer_drafted → `Open in Document Studio` then `Approve & Send for Signature`
+  - offer_sent → `Resend link` / `View envelope`
+  - offer_signed → `Open Employee Profile`
+- `src/components/hr/JobOfferManager.tsx` — when opened from a candidate, pre-fill recipient name, email, phone, department, intake fields. Read-only banner: "Linked to candidate · status: …". Remove the duplicate manual recipient entry path when `candidate_id` is present.
+- New page `src/pages/careers/CandidateIntake.tsx` at `/careers/intake/:token`:
+  1. If not logged in → forced signup/login (token survives across auth) and links the new `auth.users` to `hr_candidates.user_id`.
+  2. Single-page form (photo, Emirates ID + number, passports list, RERA optional, languages, nationalities, current company, total YOE).
+  3. On submit → `hr-intake-submit` → success screen "We've received your documents. JBJ will be in touch shortly."
+- `src/pages/EmployeeManagementHub.tsx` — Employees grid already reads `hr_employees`. Add the `Registration completed` chip (driven by `candidate_id` + `intake_payload not null`) and a "View intake" tab inside the employee drawer (photo, KYC docs, passports, languages, experience).
+- Signed Job Offers section in CRM gets a real filter bar (name / date / department / language) backed by `vw_hr_candidate_360` so it stops being a static list.
+- Academy/certificate eligibility chip on the employee drawer is wired to `hr_quiz_attempts` + `broker_onboarding_progress` already present; we add the "Eligible — Approve Certificate" action that flips `hr_certificates.is_approved`.
+
+### Things deleted: none
+
+Legacy components/pages keep working. We only redirect their primary CTAs through the canonical pipeline. The old applicant tables remain — they now mirror via `candidate_id`.
+
+## E2E smoke test
+
+`scripts/e2e/hr-pipeline.mjs` — runnable via `code--exec`. Uses service role key (sandbox env) and the public anon key to simulate both sides.
+
+Steps walked and asserted:
+
+1. Seed `hr_candidate` (status `new`, fake email `e2e+<ts>@jbj.local`).
+2. Call `hr-approve-and-request-docs` → assert status `approved_pending_docs`, `intake_token` present, `email_send_log` row with template `candidate-docs-requested`.
+3. Simulate candidate signup with the email, exchange `intake_token`, POST `hr-intake-submit` with fake doc URLs uploaded to `candidate-intake`. Assert status `docs_submitted`, `intake_payload` populated, `hr_job_applicants` row created, profile updated.
+4. Call `hr-send-offer-for-signature` → assert `signature_envelopes` row created with `metadata.candidate_id`, status `offer_sent`.
+5. Directly update envelope to `completed` (simulating signing) → assert trigger fired: candidate `offer_signed`, `hr_employees` row created, `broker_onboarding_progress` row, employee_id set on candidate.
+6. Cleanup: delete employee, candidate, envelope, applicant, profile, storage objects, auth user.
+
+Script prints a green check per step; exits non-zero on any assertion. No browser, no Playwright, runs in <15s. Re-runnable.
+
+## Out of scope (explicit)
+
+- No DocuSign path (internal e-sign only, per your choice).
+- No changes to the AI chat applicant intake other than back-filling `candidate_id` so it joins the same pipeline.
+- No automated certificate issuance — owner still clicks "Approve Certificate"; the eligibility flag is the only new automation.
+- No new design tokens — uses existing champagne/gold + IconTile/PricePill primitives.
