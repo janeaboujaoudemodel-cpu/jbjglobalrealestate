@@ -45,21 +45,21 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: Math.min(index * 0.05, 0.3), duration: 0.35 }}
       whileHover={{ y: -4 }}
-      className="group"
+      className="group h-full"
     >
       <div
         className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/40 overflow-hidden flex flex-col h-full shadow-[0_2px_8px_rgba(184,149,85,0.08)] hover:shadow-[0_14px_30px_rgba(184,149,85,0.22)] transition-shadow cursor-pointer"
         onClick={() => !book.is_restricted && onOpen(book)}
       >
-        {/* ── Book cover — flush, straight, full-bleed ────────────── */}
-        <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#1c1812]">
+        {/* ── Book cover — straight, full 3D cover, no white frame ─── */}
+        <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#15120d]">
           {book.cover_image_url ? (
             <img
               src={book.cover_image_url}
               alt={`${book.title} cover`}
               loading="lazy"
               decoding="async"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+              className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.025]"
             />
           ) : (
             <div className="absolute inset-0 grid place-items-center text-center px-4 bg-gradient-to-br from-[#1c1812] via-[#2a2118] to-[#15110b]">
@@ -79,23 +79,11 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
           )}
 
           {/* Gold spine — left edge */}
-          <div
-            className="absolute left-0 top-0 bottom-0 w-[10px] pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(to right,#7a5e2c 0%,#B89555 40%,#8c6a30 80%,rgba(0,0,0,0.25) 100%)",
-              boxShadow: "inset 1px 0 0 rgba(0,0,0,0.4)",
-            }}
-          />
+          <div className="absolute inset-y-0 left-0 w-[8px] pointer-events-none bg-gradient-to-r from-[#15110B]/70 via-[#B89555]/45 to-transparent" />
 
           {/* Hairline page edge — right */}
-          <div
-            className="absolute right-0 top-[2%] bottom-[2%] w-[3px] pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(to right,rgba(0,0,0,0.25) 0%,#f3ead8 50%,#d9c9a3 100%)",
-            }}
-          />
+          <div className="absolute inset-y-[3%] right-0 w-[4px] pointer-events-none bg-gradient-to-r from-[#15110B]/20 via-[#EFE6D6]/70 to-[#B89555]/70" />
+          <div className="absolute inset-x-0 bottom-0 h-10 pointer-events-none bg-gradient-to-t from-[#15110B]/35 to-transparent" />
 
           {/* Status badge */}
           {statusBadge && <div className="absolute top-3 right-3 z-20">{statusBadge}</div>}
@@ -116,18 +104,18 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
         </div>
 
         {/* ── Content panel ───────────────────────────────────────── */}
-        <div className="flex-1 flex flex-col gap-3 p-5">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-[10px] uppercase tracking-[0.15em] self-start">
+        <div className="flex-1 flex flex-col gap-3 p-5 min-h-[232px]">
+          <div className="inline-flex max-w-full items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-[10px] uppercase tracking-[0.15em] self-start">
             <Sparkles className="w-3 h-3" />
-            {book.learning_path}
+            <span className="truncate">{book.learning_path}</span>
           </div>
 
-          <h3 className="text-[#1A1A1A] text-base font-bold leading-tight line-clamp-2">
+          <h3 className="text-[#1A1A1A] text-base font-bold leading-tight line-clamp-2 min-h-[40px]">
             {book.title}
           </h3>
 
           {book.description && (
-            <p className="text-[#1A1A1A]/70 text-xs leading-relaxed line-clamp-3 flex-1">
+            <p className="text-[#1A1A1A]/70 text-xs leading-relaxed line-clamp-3 min-h-[54px]">
               {book.description}
             </p>
           )}
