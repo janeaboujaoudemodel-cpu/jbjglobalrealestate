@@ -157,8 +157,8 @@ export default function BrokerCRM() {
     const q = search.toLowerCase();
     return leadsData.filter((l: any) =>
       (l.full_name || "").toLowerCase().includes(q) ||
-      (l.email || "").toLowerCase().includes(q) ||
-      (l.phone || "").toLowerCase().includes(q) ||
+      getLeadEmail(l).toLowerCase().includes(q) ||
+      getLeadPhone(l).toLowerCase().includes(q) ||
       (l.pipeline_stage || "").toLowerCase().includes(q),
     );
   }, [leadsData, search]);
@@ -209,9 +209,7 @@ export default function BrokerCRM() {
             <Button
               variant="outline"
               className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-              onClick={() => {
-                toast.success("Call logged — open a lead to capture full notes.");
-              }}
+              onClick={() => setCallDialogOpen(true)}
             >
               <Phone className="w-4 h-4 mr-1.5" /> Log a call
             </Button>
@@ -395,7 +393,7 @@ export default function BrokerCRM() {
                       </div>
                       <div className="min-w-0">
                         <div className="text-sm font-medium text-[#1A1A1A] truncate">{l.full_name || "Unnamed lead"}</div>
-                        <div className="text-[11px] text-[#1A1A1A]/65 truncate">{l.email || l.phone || "—"}</div>
+                        <div className="text-[11px] text-[#1A1A1A]/65 truncate">{getLeadEmail(l) || getLeadPhone(l) || "—"}</div>
                       </div>
                       <div className="text-xs text-[#1A1A1A]/75 truncate">{l.pipeline_stage || "new"}</div>
                       <div className="text-xs text-[#1A1A1A]/75 truncate">{l.source || l.lead_source_type || "—"}</div>
@@ -418,7 +416,7 @@ export default function BrokerCRM() {
               variant="outline"
               size="sm"
               className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-              onClick={() => toast.success("Open a lead to log a detailed call.")}
+              onClick={() => setCallDialogOpen(true)}
             >
               <Phone className="w-3.5 h-3.5 mr-1.5" /> Log a call
             </Button>
