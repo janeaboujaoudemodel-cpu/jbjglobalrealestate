@@ -323,9 +323,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             Every row below reserves a fixed min-height so cards stay
             pixel-identical even when properties have missing/short
             location, unit-types, size, developer, or description. */}
-        <div className="p-5 pt-7 flex-1 flex flex-col gap-3">
+        <div className="p-5 pt-4 flex-1 flex flex-col gap-2">
           {/* Header block — title (always 2 lines) + location (always 1 line) */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1">
             <h4 className="text-[#1A1A1A] text-lg font-bold break-words leading-tight line-clamp-2 min-h-[2.75rem] group-hover:text-[#B89555] transition-colors">
               {project.name}
             </h4>
@@ -339,21 +339,24 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           </div>
 
-          {/* Premium gold divider — between header and developer/meta */}
-          <div className="h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
-
-          {/* Detail metadata above developer name — strict 1-line slot
-              (truncate, no wrap) so cards with long unit-type or size
-              strings stay the same height as cards with short ones. */}
-          <div className="flex items-center gap-2 text-[#1A1A1A] text-xs font-medium min-h-[1.1rem] whitespace-nowrap overflow-hidden">
-            {getUnitTypesText() && (
-              <span className="font-semibold truncate">{getUnitTypesText()}</span>
-            )}
-            {getUnitTypesText() && getSizeText() && (
-              <span className="text-[#B89555] flex-shrink-0" aria-hidden="true">|</span>
-            )}
-            {getSizeText() && <span className="truncate">{getSizeText()}</span>}
-          </div>
+          {/* Detail metadata above developer name — only render when there is
+              actual unit/size content, so cards without it don't reserve a
+              blank slot. Ink text on champagne — never white. */}
+          {(getUnitTypesText() || getSizeText()) && (
+            <div
+              data-no-contrast-guard
+              style={{ color: '#1A1A1A' }}
+              className="flex items-center gap-2 !text-[#1A1A1A] text-xs font-medium whitespace-nowrap overflow-hidden"
+            >
+              {getUnitTypesText() && (
+                <span className="font-semibold truncate !text-[#1A1A1A]">{getUnitTypesText()}</span>
+              )}
+              {getUnitTypesText() && getSizeText() && (
+                <span className="text-[#B89555] flex-shrink-0" aria-hidden="true">|</span>
+              )}
+              {getSizeText() && <span className="truncate !text-[#1A1A1A]">{getSizeText()}</span>}
+            </div>
+          )}
 
 
           {/* Developer link — reserved 1-line slot so cards without a
