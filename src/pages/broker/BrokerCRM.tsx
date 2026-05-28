@@ -190,14 +190,17 @@ export default function BrokerCRM() {
                 When your manager grants access to a CRM database, it will appear here. You can also request a new
                 database be uploaded to your scope.
               </p>
-              <Button
+              <button
+                type="button"
                 onClick={() => setRequestOpen(true)}
-                className="mt-4 bg-[#102540] text-white hover:bg-[#1a3d63]"
+                className="mt-5 inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#102540] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1a3d63] shadow-sm transition-colors"
                 data-allow-dark-cta
+                data-no-contrast-guard
               >
-                <Upload className="w-4 h-4 mr-1.5" /> Request a database
-              </Button>
+                <Upload className="w-4 h-4" /> Request a database
+              </button>
             </PremiumCard>
+
           ) : (
             dbs.data!.map((d) => (
               <Link
