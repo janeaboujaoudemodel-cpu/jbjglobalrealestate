@@ -142,7 +142,7 @@ export default function BrokerLearning() {
         noIndex
       />
 
-      <div className="max-w-[1240px] mx-auto px-4 lg:px-6 py-10 flex flex-col gap-16">
+      <div className="w-full px-1 lg:px-2 py-2 flex flex-col gap-14">
         {/* ── Header ───────────────────────────────────────────────── */}
         <motion.header
           initial={{ opacity: 0, y: 10 }}
@@ -154,22 +154,23 @@ export default function BrokerLearning() {
             <GraduationCap className="w-3 h-3 mr-1" /> Internal use only · Broker Academy
           </Badge>
           <h1 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight">JBJ Broker Academy</h1>
-          <p className="text-[#1A1A1A]/70 max-w-2xl">
+          <p className="text-[#1A1A1A]/70 max-w-3xl">
             One home for everything JBJ brokers learn — the internal book library, market-intelligence training,
             and the compliance reference, with progress tracked across the portal.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 max-w-3xl">
-            <KpiCard icon={<BookOpen className="w-4 h-4" />} label="Library books" value={books.length || "—"} />
-            <KpiCard icon={<GraduationCap className="w-4 h-4" />} label="Training modules" value={TRAINING.length} />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+            <KpiCard icon={<BookOpen className="w-5 h-5" />} label="Library books" value={books.length || "—"} />
+            <KpiCard icon={<GraduationCap className="w-5 h-5" />} label="Training modules" value={TRAINING.length} />
             <KpiCard
-              icon={<Award className="w-4 h-4" />}
+              icon={<Award className="w-5 h-5" />}
               label="Your training"
               value={`${Math.round(totalProgress)}%`}
               progress={totalProgress}
             />
           </div>
         </motion.header>
+
 
         {/* ── Training ─────────────────────────────────────────────── */}
         <section className="flex flex-col gap-6">
@@ -288,18 +289,19 @@ function KpiCard({ icon, label, value, progress }: {
   icon: React.ReactNode; label: string; value: React.ReactNode; progress?: number;
 }) {
   return (
-    <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-4 py-3" data-gold-hairline>
-      <div className="flex items-center gap-2 text-[#1A1A1A]/70 text-xs">
-        <span className="w-7 h-7 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center text-[#1A1A1A]">
-          {icon}
-        </span>
-        {label}
+    <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-5 flex items-center gap-4" data-gold-hairline>
+      <span className="shrink-0 w-12 h-12 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center text-[#1A1A1A]">
+        {icon}
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/60">{label}</div>
+        <div className="mt-0.5 text-2xl font-bold text-[#1A1A1A] leading-none">{value}</div>
+        {typeof progress === "number" && <Progress value={progress} className="h-1.5 mt-2" />}
       </div>
-      <div className="mt-1 text-xl font-bold text-[#1A1A1A]">{value}</div>
-      {typeof progress === "number" && <Progress value={progress} className="h-1.5 mt-2" />}
     </div>
   );
 }
+
 
 function TrainingCard({ m }: { m: TModule }) {
   return (
