@@ -508,7 +508,7 @@ export function composeFormI(input: ComposerInput): string {
       ${companyFooter}
     </div>`;
 
-  return `<section data-pdf-page="1" data-no-chrome="1" data-single-page="1" style="display:block;">${html}</section>`;
+  return `<section data-pdf-page="1" data-no-chrome="1" data-single-page="1" style="display:flex;flex-direction:column;height:100%;min-height:0;">${html}</section>`;
 }
 /* ───────────── FORM U — Cancellation of Form A / Form B ───────────── */
 
