@@ -4603,6 +4603,25 @@ a[class*="bg-red-"]:hover {
   opacity: 1 !important;
 }
 
+/* IDLE state: any button/link with a navy/black own background must
+   render white text + white icons at rest. This complements the hover
+   rule above and stops "Stop / Save call log / Start recording" style
+   buttons from inheriting ink-on-ink from the contrast guards. */
+:where(a, button, [role="button"]):is(
+  [class*="bg-[#102540]"], [class*="bg-[#1a3d63]"],
+  [class*="bg-[#1A1A1A]"], [class*="bg-black"]
+):not(.allow-ink),
+:where(a, button, [role="button"]):is(
+  [class*="bg-[#102540]"], [class*="bg-[#1a3d63]"],
+  [class*="bg-[#1A1A1A]"], [class*="bg-black"]
+):not(.allow-ink)
+  :where(span, p, svg, [class*="lucide"]):not([data-decorative="true"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
 /* Red action exception: keep red icons/text red at rest, white on hover
    (Sign Out / Contact / Support icons in nav). Only when explicitly set. */
 :where(a, button)[style*="#DC2626"] :where(svg, span),
