@@ -1,16 +1,23 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useBrokerScopedDatabases } from "@/hooks/useBrokerScopedDatabases";
 import { useBrokerScopedLeads } from "@/hooks/useBrokerScopedLeads";
 import { useBrokerPersonalTasks } from "@/hooks/useBrokerPersonalTasks";
 import {
   Database, Users, Activity, ArrowRight, Loader2, Plus, Phone, Upload,
-  TrendingUp, BarChart3, Inbox, ClipboardList, Sparkles, Search,
+  TrendingUp, BarChart3, Inbox, ClipboardList, Sparkles, Search, CheckCircle2,
 } from "lucide-react";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import RequestDatabaseDialog from "@/components/broker-portal/RequestDatabaseDialog";
 
 type Tab = "pipeline" | "databases" | "leads" | "calls" | "insights" | "activity";
@@ -48,12 +55,101 @@ const STAGE_GROUPS: Array<{ key: string; label: string; match: string[] }> = [
 ];
 
 export default function BrokerCRM() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [tab, setTab] = useState<Tab>("pipeline");
   const [search, setSearch] = useState("");
   const [requestOpen, setRequestOpen] = useState(false);
+  const [callDialogOpen, setCallDialogOpen] = useState(false);
   const dbs = useBrokerScopedDatabases();
   const leads = useBrokerScopedLeads();
   const tasks = useBrokerPersonalTasks();
+
+  const callLogs = useQuery({
+    queryKey: ["broker-call-logs", user?.id],
+    enabled: !!user?.id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("broker_call_logs")
+        .select("id, lead_id, phone_number, call_type, call_status, duration_seconds, notes, created_at")
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const createCallLog = useMutation({
+    mutationFn: async (input: {
+      leadId?: string | null;
+      phoneNumber: string;
+      callType: string;
+      callStatus: string;
+      durationSeconds: number;
+      notes?: string | null;
+    }) => {
+      if (!user?.id) throw new Error("Please sign in");
+      const { data, error } = await supabase
+        .from("broker_call_logs")
+        .insert({
+          user_id: user.id,
+          lead_id: input.leadId || null,
+          phone_number: input.phoneNumber,
+          call_type: input.callType,
+          call_status: input.callStatus,
+          duration_seconds: input.durationSeconds,
+          notes: input.notes || null,
+        })
+        .select("id")
+        .single();
+      if (error) throw error;
+
+      const today = new Date().toISOString().slice(0, 10);
+      const { data: existingStats } = await supabase
+        .from("broker_activity_stats")
+        .select("id, calls_made, points_earned")
+        .eq("user_id", user.id)
+        .eq("date", today)
+        .maybeSingle();
+
+      if (existingStats?.id) {
+        await supabase
+          .from("broker_activity_stats")
+          .update({
+            calls_made: (existingStats.calls_made ?? 0) + 1,
+            points_earned: (existingStats.points_earned ?? 0) + 10,
+          })
+          .eq("id", existingStats.id);
+      } else {
+        await supabase.from("broker_activity_stats").insert({
+          user_id: user.id,
+          date: today,
+          calls_made: 1,
+          points_earned: 10,
+        });
+      }
+
+      await supabase.from("points_transactions").insert({
+        user_id: user.id,
+        points: 10,
+        transaction_type: "call_logged",
+        description: "Logged a broker CRM call",
+        reference_id: data.id,
+        reference_type: "broker_call_log",
+      });
+
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-personal-tasks"] });
+      toast.success("Call logged successfully — +10 points");
+      setCallDialogOpen(false);
+      setTab("calls");
+    },
+    onError: (e: any) => toast.error(e?.message || "Could not log call"),
+  });
 
   const leadsData: any[] = (leads.data as any[]) ?? [];
   const filteredLeads = useMemo(() => {
@@ -68,7 +164,7 @@ export default function BrokerCRM() {
   }, [leadsData, search]);
 
   const totalLeads = leadsData.length;
-  const callsLogged = (tasks.data ?? []).filter((t: any) => (t.type || "").toLowerCase().includes("call")).length;
+  const callsLogged = callLogs.data?.length ?? 0;
   const followUps = (tasks.data ?? []).filter((t: any) => t.status !== "done").length;
   const wonStage = leadsData.filter((l: any) =>
     ["won", "closed_won", "contract"].includes(((l.pipeline_stage ?? l.status) ?? "").toString().toLowerCase()),
