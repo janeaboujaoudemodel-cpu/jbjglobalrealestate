@@ -135,138 +135,141 @@ export default function BrokerLearning() {
     TRAINING.reduce((acc, m) => acc + (m.progress || 0), 0) / TRAINING.length;
 
   return (
-    <div className="space-y-12">
+    <div className="w-full bg-[#FDFBF7]">
       <SEOHead
         title="Broker Academy | JBJ GLOBAL REAL ESTATE"
         description="Internal JBJ Broker Academy — book library, training modules, certification and compliance reference."
         noIndex
       />
 
-      {/* ── Header ───────────────────────────────────────────────── */}
-      <motion.header
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35 }}
-        className="space-y-3"
-      >
-        <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">
-          <GraduationCap className="w-3 h-3 mr-1" /> Internal use only · Broker Academy
-        </Badge>
-        <h1 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight">JBJ Broker Academy</h1>
-        <p className="text-[#1A1A1A]/70 max-w-2xl">
-          One home for everything JBJ brokers learn — the internal book library, market-intelligence training,
-          and the compliance reference, with progress tracked across the portal.
-        </p>
+      <div className="max-w-[1240px] mx-auto px-4 lg:px-6 py-10 flex flex-col gap-16">
+        {/* ── Header ───────────────────────────────────────────────── */}
+        <motion.header
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35 }}
+          className="flex flex-col gap-4"
+        >
+          <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 self-start">
+            <GraduationCap className="w-3 h-3 mr-1" /> Internal use only · Broker Academy
+          </Badge>
+          <h1 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight">JBJ Broker Academy</h1>
+          <p className="text-[#1A1A1A]/70 max-w-2xl">
+            One home for everything JBJ brokers learn — the internal book library, market-intelligence training,
+            and the compliance reference, with progress tracked across the portal.
+          </p>
 
-        <div className="grid sm:grid-cols-3 gap-3 pt-4 max-w-3xl">
-          <KpiCard icon={<BookOpen className="w-4 h-4" />} label="Library books" value={books.length || "—"} />
-          <KpiCard icon={<GraduationCap className="w-4 h-4" />} label="Training modules" value={TRAINING.length} />
-          <KpiCard
-            icon={<Award className="w-4 h-4" />}
-            label="Your training"
-            value={`${Math.round(totalProgress)}%`}
-            progress={totalProgress}
-          />
-        </div>
-      </motion.header>
-
-      {/* ── Training ─────────────────────────────────────────────── */}
-      <section className="space-y-5">
-        <SectionTitle eyebrow="Market Intelligence" title="Training Modules" />
-        {trainingLocked ? (
-          <LockedTraining hasUser={!!user} />
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            {TRAINING.map((m) => <TrainingCard key={m.id} m={m} />)}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 max-w-3xl">
+            <KpiCard icon={<BookOpen className="w-4 h-4" />} label="Library books" value={books.length || "—"} />
+            <KpiCard icon={<GraduationCap className="w-4 h-4" />} label="Training modules" value={TRAINING.length} />
+            <KpiCard
+              icon={<Award className="w-4 h-4" />}
+              label="Your training"
+              value={`${Math.round(totalProgress)}%`}
+              progress={totalProgress}
+            />
           </div>
-        )}
-      </section>
+        </motion.header>
 
-      {/* ── Library ──────────────────────────────────────────────── */}
-      <section className="space-y-5">
-        <SectionTitle eyebrow="Internal Library" title="Books & Learning Paths" />
-        {loading ? (
-          <div className="py-10 grid place-items-center">
-            <div className="w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full animate-spin" />
-          </div>
-        ) : groupedBooks.length === 0 ? (
-          <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-6 py-10 text-center text-[#1A1A1A]/70" data-gold-hairline>
-            Your library is loading or empty. Check back shortly.
-          </div>
-        ) : (
-          <div className="space-y-8">
-            {groupedBooks.map((group) => (
-              <div key={group.name} className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-[#1A1A1A] font-semibold text-lg">{group.name}</h3>
-                  <span className="text-xs text-[#1A1A1A]/55">{group.books.length} books</span>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                  {group.books.map((book, i) => (
-                    <Book3DCard
-                      key={book.id}
-                      book={book}
-                      progress={progressMap[book.id]}
-                      onOpen={() => setSelectedBook(book)}
-                      index={i}
-                      isLocked={book.is_restricted}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+        {/* ── Training ─────────────────────────────────────────────── */}
+        <section className="flex flex-col gap-6">
+          <SectionTitle eyebrow="Market Intelligence" title="Training Modules" />
+          {trainingLocked ? (
+            <LockedTraining hasUser={!!user} />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {TRAINING.map((m) => <TrainingCard key={m.id} m={m} />)}
+            </div>
+          )}
+        </section>
 
-      {/* ── Compliance reference ─────────────────────────────────── */}
-      <section className="space-y-5">
-        <SectionTitle eyebrow="Compliance" title="Quick Reference" />
-        <div className="grid md:grid-cols-2 gap-5">
-          <ReferenceCard
-            title="NEVER Say"
-            tone="red"
-            icon={<Shield className="w-4 h-4" />}
-            items={NEVER_SAY.map((p) => `"${p}"`)}
-          />
-          <ReferenceCard
-            title="ALWAYS Use"
-            tone="emerald"
-            icon={<CheckCircle className="w-4 h-4" />}
-            items={ALWAYS_USE.map((p) => `"${p}"`)}
-          />
-        </div>
-
-        <Card className="bg-[#F7F2EA] border-[#B89555]/30" data-gold-hairline>
-          <CardContent className="p-6 md:p-8">
-            <h3 className="text-[#1A1A1A] text-lg font-bold mb-5 text-center">Golden Rules for Market Conversations</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              {[
-                { n: 1, t: "Describe, Don't Predict", d: "Explain what data shows, never what will happen." },
-                { n: 2, t: "Insight, Not Advice",     d: "Share market context, let clients decide." },
-                { n: 3, t: "Cite Sources",            d: "Always reference Open Data origins." },
-              ].map(({ n, t, d }) => (
-                <div key={n} className="text-center">
-                  <div className="w-11 h-11 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 grid place-items-center mx-auto mb-3">
-                    <span className="text-[#1A1A1A] font-bold">{n}</span>
+        {/* ── Library ──────────────────────────────────────────────── */}
+        <section className="flex flex-col gap-6">
+          <SectionTitle eyebrow="Internal Library" title="Books & Learning Paths" />
+          {loading ? (
+            <div className="py-10 grid place-items-center">
+              <div className="w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : groupedBooks.length === 0 ? (
+            <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-6 py-10 text-center text-[#1A1A1A]/70" data-gold-hairline>
+              Your library is loading or empty. Check back shortly.
+            </div>
+          ) : (
+            <div className="flex flex-col gap-10">
+              {groupedBooks.map((group) => (
+                <div key={group.name} className="flex flex-col gap-4">
+                  <div className="flex items-baseline gap-2">
+                    <h3 className="text-[#1A1A1A] font-semibold text-lg">{group.name}</h3>
+                    <span className="text-xs text-[#1A1A1A]/55">{group.books.length} {group.books.length === 1 ? "book" : "books"}</span>
                   </div>
-                  <p className="text-[#1A1A1A] font-semibold mb-1">{t}</p>
-                  <p className="text-[#1A1A1A]/70 text-sm">{d}</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                    {group.books.map((book, i) => (
+                      <Book3DCard
+                        key={book.id}
+                        book={book}
+                        progress={progressMap[book.id]}
+                        onOpen={() => setSelectedBook(book)}
+                        index={i}
+                        isLocked={book.is_restricted}
+                      />
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
-      </section>
+          )}
+        </section>
 
-      <BookDetailModal
-        book={selectedBook}
-        isOpen={!!selectedBook}
-        onClose={() => setSelectedBook(null)}
-      />
+        {/* ── Compliance reference ─────────────────────────────────── */}
+        <section className="flex flex-col gap-6">
+          <SectionTitle eyebrow="Compliance" title="Quick Reference" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <ReferenceCard
+              title="NEVER Say"
+              tone="red"
+              icon={<Shield className="w-4 h-4" />}
+              items={NEVER_SAY.map((p) => `"${p}"`)}
+            />
+            <ReferenceCard
+              title="ALWAYS Use"
+              tone="emerald"
+              icon={<CheckCircle className="w-4 h-4" />}
+              items={ALWAYS_USE.map((p) => `"${p}"`)}
+            />
+          </div>
+
+          <Card className="bg-[#F7F2EA] border-[#B89555]/30" data-gold-hairline>
+            <CardContent className="p-6 md:p-8">
+              <h3 className="text-[#1A1A1A] text-lg font-bold mb-5 text-center">Golden Rules for Market Conversations</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[
+                  { n: 1, t: "Describe, Don't Predict", d: "Explain what data shows, never what will happen." },
+                  { n: 2, t: "Insight, Not Advice",     d: "Share market context, let clients decide." },
+                  { n: 3, t: "Cite Sources",            d: "Always reference Open Data origins." },
+                ].map(({ n, t, d }) => (
+                  <div key={n} className="text-center">
+                    <div className="w-11 h-11 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 grid place-items-center mx-auto mb-3">
+                      <span className="text-[#1A1A1A] font-bold">{n}</span>
+                    </div>
+                    <p className="text-[#1A1A1A] font-semibold mb-1">{t}</p>
+                    <p className="text-[#1A1A1A]/70 text-sm">{d}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        <BookDetailModal
+          book={selectedBook}
+          isOpen={!!selectedBook}
+          onClose={() => setSelectedBook(null)}
+        />
+      </div>
     </div>
   );
 }
+
 
 // ────────────────────────────────────────────────────────────────────────────
 // Sub-components
