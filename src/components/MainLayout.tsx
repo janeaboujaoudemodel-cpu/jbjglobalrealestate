@@ -294,7 +294,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           sidebar visually overlays the leftmost slice; footer inner content
           uses max-w-7xl mx-auto so it stays optically centered. */}
       <div data-chrome="footer" className="w-full">
-        {!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
+        {!usesStandalonePortalChrome && !isToolkitGeneratorRoute && <Footer />}
       </div>
 
       {popupsReady && (
@@ -304,7 +304,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       )}
       {/* Page navigation arrows — visible only when chat is closed */}
       <PageNavigation isChatOpen={!effectiveCollapsed} isChatMedium={showAttentionPulse && effectiveCollapsed} />
-      {!isBackOfficeRoute && (!isHomePage || popupsReady) && (
+      {!usesStandalonePortalChrome && (!isHomePage || popupsReady) && (
         <Suspense fallback={null}>
           <AIChatWidget
             isCollapsed={effectiveCollapsed}
@@ -339,12 +339,12 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           onClose={() => { completeTour(); setShowTour(false); }}
         />
       </Suspense>
-      {!isBackOfficeRoute && (
+      {!usesStandalonePortalChrome && (
         <Suspense fallback={null}>
           <CompleteProfilePrompt />
         </Suspense>
       )}
-      {!isBackOfficeRoute && (
+      {!usesStandalonePortalChrome && (
         <Suspense fallback={null}>
           <GlobalSupportMount />
         </Suspense>
