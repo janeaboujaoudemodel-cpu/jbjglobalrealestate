@@ -95,7 +95,7 @@ const FeaturedListings = () => {
             data-on-dark
             data-no-contrast-guard
             data-allow-dark-cta
-            className="allow-white inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 text-white text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)]"
+            className="allow-white inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 text-white text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)]"
             style={{ color: "#FFFFFF" }}
           >
             <span className="allow-white" style={{ color: "#FFFFFF" }}>
