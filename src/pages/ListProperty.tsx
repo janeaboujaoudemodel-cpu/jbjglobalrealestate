@@ -43,7 +43,7 @@ const ManualWizard = lazy(() => import("@/pages/SellerListing"));
 const AIWizard = lazy(() => import("@/pages/ListingPortalSubmit"));
 const BrowseListings = lazy(() => import("@/pages/ListingPortal"));
 
-type Mode = "manual" | "ai" | "browse";
+type Mode = "pick" | "manual" | "ai" | "browse";
 type Purpose = "sale" | "rent";
 
 /* ────────────────────────────── theme tokens ────────────────────────────── */
@@ -58,14 +58,13 @@ const INK = "#1A1A1A";
 
 const ListProperty = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const mode = (searchParams.get("mode") as Mode) || "ai";
+  const mode = (searchParams.get("mode") as Mode) || "pick";
   const purpose = (searchParams.get("purpose") as Purpose) || "sale";
 
   useEffect(() => {
-    if (!searchParams.get("mode") || !searchParams.get("purpose")) {
+    if (!searchParams.get("purpose")) {
       const next = new URLSearchParams(searchParams);
-      if (!next.get("mode")) next.set("mode", "ai");
-      if (!next.get("purpose")) next.set("purpose", "sale");
+      next.set("purpose", "sale");
       setSearchParams(next, { replace: true });
     }
   }, [searchParams, setSearchParams]);
@@ -91,8 +90,9 @@ const ListProperty = () => {
       case "browse":
         return BrowseListings;
       case "ai":
-      default:
         return AIWizard;
+      default:
+        return null;
     }
   }, [mode]);
 
@@ -271,17 +271,21 @@ const ListProperty = () => {
         </div>
       </section>
 
-      {/* ─────────────────── Active form / browser ─────────────────── */}
+      {/* ─────────────────── Active form / browser / picker ─────────────────── */}
       <section className="px-2 sm:px-4 md:px-6 pt-8 pb-12">
-        <Suspense
-          fallback={
-            <div className="py-24">
-              <BrandedLoader />
-            </div>
-          }
-        >
-          <ActiveTab key={`${mode}-${purpose}`} />
-        </Suspense>
+        {mode === "pick" || !ActiveTab ? (
+          <PremiumModePicker onPick={setMode} />
+        ) : (
+          <Suspense
+            fallback={
+              <div className="py-24">
+                <BrandedLoader />
+              </div>
+            }
+          >
+            <ActiveTab key={`${mode}-${purpose}`} />
+          </Suspense>
+        )}
       </section>
 
       {/* ───────────────── My Submissions section ───────────────── */}
@@ -329,6 +333,142 @@ function SegmentedPill({
     </button>
   );
 }
+
+/* ───────────────── Premium two-card mode picker ───────────────── */
+function PremiumModePicker({ onPick }: { onPick: (m: Mode) => void }) {
+  return (
+    <div className="max-w-5xl mx-auto px-2 sm:px-0">
+      <div className="text-center mb-7">
+        <span
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold"
+          style={{
+            backgroundColor: CHAMPAGNE_RAISED,
+            color: INK,
+            border: `1px solid ${GOLD}`,
+          }}
+        >
+          <ShieldCheck className="w-3.5 h-3.5" style={{ color: INK }} />
+          Choose how to list
+        </span>
+        <h2
+          className="mt-4 text-2xl md:text-3xl font-bold tracking-tight"
+          style={{ color: INK }}
+        >
+          How would you like to add your property?
+        </h2>
+        <p className="mt-2 text-sm md:text-base max-w-2xl mx-auto" style={{ color: INK + "B3" }}>
+          Both options stay inside JBJ — your draft is auto-saved and you can come
+          back to it at any time.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <PickerCard
+          onClick={() => onPick("manual")}
+          icon={<ClipboardCheck className="w-6 h-6" style={{ color: INK }} />}
+          eyebrow="Full Control"
+          title="List Manually"
+          description="Fill in every field yourself — price, location, photos, amenities and contact preferences. Best when you already have the full property details ready."
+          tag="≈ 4–6 minutes"
+        />
+        <PickerCard
+          onClick={() => onPick("ai")}
+          icon={<Wand2 className="w-6 h-6" style={{ color: GOLD }} />}
+          eyebrow="AI-Assisted"
+          title="List with AI"
+          description="Paste any portal link, brochure or short description. Our AI auto-fills the listing in seconds — you only review and confirm before submitting."
+          tag="≈ 60 seconds"
+          accent
+        />
+      </div>
+
+      <div className="text-center mt-6">
+        <button
+          type="button"
+          onClick={() => onPick("browse")}
+          className="text-sm font-medium underline-offset-4 hover:underline"
+          style={{ color: INK + "B3" }}
+        >
+          Or browse existing listings →
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function PickerCard({
+  onClick,
+  icon,
+  eyebrow,
+  title,
+  description,
+  tag,
+  accent,
+}: {
+  onClick: () => void;
+  icon: React.ReactNode;
+  eyebrow: string;
+  title: string;
+  description: string;
+  tag: string;
+  accent?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="group relative flex flex-col text-left rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/55 hover:border-[#B89555] p-6 md:p-7 transition-all hover:shadow-[0_14px_30px_rgba(184,149,85,0.22)]"
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div
+          className="w-12 h-12 rounded-xl grid place-items-center shadow-[0_4px_10px_rgba(184,149,85,0.18)]"
+          style={{ backgroundColor: CHAMPAGNE, border: `1px solid ${GOLD}` }}
+        >
+          {icon}
+        </div>
+        {accent && (
+          <span
+            className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] font-bold px-2 py-0.5 rounded-full"
+            style={{ backgroundColor: CHAMPAGNE, color: GOLD, border: `1px solid ${GOLD}` }}
+          >
+            <Sparkles className="w-3 h-3" /> Recommended
+          </span>
+        )}
+      </div>
+
+      <div className="mt-5">
+        <div className="text-[10px] uppercase tracking-[0.22em] font-semibold" style={{ color: INK + "8C" }}>
+          {eyebrow}
+        </div>
+        <h3 className="mt-1 text-xl md:text-2xl font-bold leading-tight" style={{ color: INK }}>
+          {title}
+        </h3>
+        <p className="mt-2 text-sm leading-relaxed" style={{ color: INK + "BF" }}>
+          {description}
+        </p>
+      </div>
+
+      <div className="mt-6 flex items-center justify-between">
+        <span
+          className="text-[11px] font-semibold rounded-md px-2 py-1"
+          style={{ backgroundColor: CHAMPAGNE, color: INK + "A6", border: `1px solid ${GOLD}66` }}
+        >
+          {tag}
+        </span>
+        <span
+          className="inline-flex items-center gap-1.5 text-sm font-semibold group-hover:gap-2 transition-all"
+          style={{ color: INK }}
+          data-no-contrast-guard
+        >
+          Start
+          <ArrowRight className="w-4 h-4" style={{ color: INK }} />
+        </span>
+      </div>
+    </button>
+  );
+}
+
+
 
 /* ───────────────── My Submissions Section ───────────────── */
 function MySubmissionsSection() {
