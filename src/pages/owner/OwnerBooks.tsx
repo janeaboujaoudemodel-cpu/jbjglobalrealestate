@@ -50,6 +50,64 @@ const BOOK_PALETTES = [
   { spine: "#6a1e3a", cover: "#8c2a4f", cover2: "#6a1e3a", foil: "#e8c878" }, // burgundy
 ];
 
+const BOOK_3D_CSS = `
+.book-3d-wrap { perspective: 1600px; padding: 8px 0 18px; display:flex; justify-content:center; }
+.book-3d {
+  position: relative;
+  width: 78%;
+  aspect-ratio: 5 / 7;
+  transform-style: preserve-3d;
+  transform: rotateY(-22deg) rotateX(4deg);
+  transition: transform .55s cubic-bezier(.2,.7,.2,1);
+  filter: drop-shadow(22px 28px 28px rgba(20,12,4,.32)) drop-shadow(2px 4px 6px rgba(20,12,4,.18));
+}
+.book-3d-wrap:hover .book-3d { transform: rotateY(-8deg) rotateX(2deg) translateY(-3px); }
+.book-3d__cover {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(120% 80% at 30% 20%, rgba(255,255,255,.10), transparent 55%),
+    linear-gradient(135deg, var(--cover) 0%, var(--cover2) 100%);
+  border-radius: 3px 8px 8px 3px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.35), inset 0 0 22px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+.book-3d__pages {
+  position:absolute; top:2%; right:-1.2%; bottom:2%; width: 12px;
+  background: repeating-linear-gradient(to bottom, #f5ecd8 0 1px, #e6d8b6 1px 2px);
+  transform: translateZ(-12px) rotateY(8deg);
+  border-radius: 1px;
+  box-shadow: inset -2px 0 4px rgba(0,0,0,.18);
+}
+.book-3d__spineEdge {
+  position:absolute; top:0; left:0; bottom:0; width: 14px;
+  background: linear-gradient(90deg, rgba(0,0,0,.55), rgba(0,0,0,.18) 60%, transparent);
+  border-right: 1px solid rgba(0,0,0,.4);
+}
+.book-3d__gloss {
+  position:absolute; inset:0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.16) 42%, transparent 55%);
+  pointer-events:none;
+}
+.book-3d__frame {
+  position:absolute; inset: 9% 8% 9% 11%;
+  border: 1px solid color-mix(in srgb, var(--foil) 70%, transparent);
+  border-radius: 2px;
+  padding: 14px 12px;
+  display:flex; flex-direction:column;
+  color: var(--foil);
+  text-shadow: 0 1px 0 rgba(0,0,0,.45);
+  font-family: 'Inter', sans-serif;
+}
+.book-3d__eyebrow { font-size: 9px; letter-spacing: .28em; text-transform: uppercase; opacity:.9; }
+.book-3d__title {
+  margin-top: 12px; font-size: 17px; line-height: 1.18; font-weight: 700;
+  letter-spacing: .01em;
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;
+}
+.book-3d__rule { margin-top:auto; height:1px; background: currentColor; opacity:.7; }
+.book-3d__author { margin-top: 8px; font-size: 10px; letter-spacing:.22em; text-transform:uppercase; opacity:.9; }
+`;
+
 
 
 async function fileToText(file: File): Promise<string> {
