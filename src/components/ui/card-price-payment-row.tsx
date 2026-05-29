@@ -21,7 +21,25 @@ import {
   formatPaymentPlanSummary,
   PAYMENT_PLAN_NA,
 } from "@/utils/paymentPlanSummary";
+import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { cn } from "@/lib/utils";
+
+const formatHandoverDisplay = (v: string | null): string | null => {
+  if (!v) return null;
+  const s = v.trim();
+  if (/^ready$/i.test(s)) return "Ready";
+  const qm = s.match(/Q\s?([1-4])\s*[\/\-\s]?\s*(20\d{2})/i);
+  if (qm) return `Q${qm[1]} ${qm[2]}`;
+  const d = new Date(s);
+  if (!Number.isNaN(d.getTime())) {
+    const q = Math.floor(d.getMonth() / 3) + 1;
+    return `Q${q} ${d.getFullYear()}`;
+  }
+  const ym = s.match(/^(20\d{2})$/);
+  if (ym) return ym[1];
+  return s;
+};
+
 
 const SYMBOLS: Record<string, string> = {
   AED: "AED", USD: "$", EUR: "€", GBP: "£", INR: "₹",
@@ -123,6 +141,10 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
   const summary = formatPaymentPlanSummary(project);
   const breakdown = getBreakdownRows(project);
   const hasPlan = Boolean(summary);
+  const handoverRaw = deriveHandover(project as any);
+  const handoverLabel = formatHandoverDisplay(handoverRaw) ?? HANDOVER_FALLBACK;
+  const isReady = /^ready$/i.test(handoverLabel);
+
 
   return (
     <div
@@ -148,81 +170,82 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
         </span>
       </div>
 
-      {/* RIGHT — Payment plan + info popover.
-          Hidden entirely when the plan is unknown — never render "N/A".
-          The price column simply sits alone on the row in that case. */}
-      {hasPlan && (
-        <div className="flex flex-col items-end min-w-0">
-          <span className="text-[10px] uppercase tracking-[0.14em] font-medium text-[#1A1A1A]/65 leading-none">
-            Payment plan
-          </span>
-          <div className="mt-1 flex items-center gap-1.5">
-            <span
-              className={cn(
-                "font-semibold tabular-nums leading-tight text-[#1A1A1A]",
-                "text-[15px] sm:text-base",
-              )}
-            >
-              {summary}
-            </span>
-            {breakdown && breakdown.length > 0 && (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                    aria-label="View payment plan breakdown"
-                    className={cn(
-                      "inline-flex h-5 w-5 items-center justify-center rounded-full",
-                      "text-[#1A1A1A]/70 hover:text-[#1A1A1A]",
-                      "hover:bg-[#EFE6D6] transition-colors",
-                      "focus:outline-none focus-visible:ring-1 focus-visible:ring-[#B89555]/60",
-                    )}
-                    data-no-contrast-guard
-                  >
-                    <Info className="h-3.5 w-3.5" aria-hidden="true" />
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent
-                  align="end"
-                  side="top"
-                  sideOffset={6}
-                  className={cn(
-                    "w-60 p-0 overflow-hidden",
-                    "bg-[#FDFBF7] border border-[#B89555]/45",
-                    "shadow-[0_18px_50px_rgba(0,0,0,0.18)] rounded-xl",
-                  )}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className="px-3.5 py-2.5 border-b border-[#B89555]/30 bg-[#F7F2EA]">
-                    <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[#1A1A1A]">
-                      Payment plan breakdown
-                    </span>
-                  </div>
-                  <ul className="divide-y divide-[#B89555]/15">
-                    {breakdown.map((row, i) => (
-                      <li
-                        key={`${row.label}-${i}`}
-                        className="flex items-center justify-between gap-3 px-3.5 py-2.5"
-                      >
-                        <span className="text-[13px] text-[#1A1A1A]/85 truncate">
-                          {row.label}
-                        </span>
-                        <span className="text-[13px] font-semibold tabular-nums text-[#1A1A1A]">
-                          {row.value}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </PopoverContent>
-              </Popover>
+      {/* RIGHT — Handover (or "Ready" for completed projects), parallel to
+          the price pill. Per the locked listing-card layout standard, the
+          bottom row is always Price LEFT / Handover RIGHT. An optional
+          payment-plan info icon sits next to the handover value when a
+          breakdown is available, so payment data stays accessible. */}
+      <div className="flex flex-col items-end min-w-0">
+        <span className="text-[10px] uppercase tracking-[0.14em] font-medium text-[#1A1A1A]/65 leading-none">
+          {isReady ? "Status" : "Handover"}
+        </span>
+        <div className="mt-1 flex items-center gap-1.5">
+          <span
+            className={cn(
+              "font-semibold tabular-nums leading-tight text-[#1A1A1A]",
+              "text-[15px] sm:text-base",
             )}
-          </div>
+          >
+            {handoverLabel}
+          </span>
+          {hasPlan && breakdown && breakdown.length > 0 && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  aria-label="View payment plan breakdown"
+                  className={cn(
+                    "inline-flex h-5 w-5 items-center justify-center rounded-full",
+                    "text-[#1A1A1A]/70 hover:text-[#1A1A1A]",
+                    "hover:bg-[#EFE6D6] transition-colors",
+                    "focus:outline-none focus-visible:ring-1 focus-visible:ring-[#B89555]/60",
+                  )}
+                  data-no-contrast-guard
+                >
+                  <Info className="h-3.5 w-3.5" aria-hidden="true" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent
+                align="end"
+                side="top"
+                sideOffset={6}
+                className={cn(
+                  "w-60 p-0 overflow-hidden",
+                  "bg-[#FDFBF7] border border-[#B89555]/45",
+                  "shadow-[0_18px_50px_rgba(0,0,0,0.18)] rounded-xl",
+                )}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="px-3.5 py-2.5 border-b border-[#B89555]/30 bg-[#F7F2EA]">
+                  <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[#1A1A1A]">
+                    Payment plan {summary ? `· ${summary}` : ""}
+                  </span>
+                </div>
+                <ul className="divide-y divide-[#B89555]/15">
+                  {breakdown.map((row, i) => (
+                    <li
+                      key={`${row.label}-${i}`}
+                      className="flex items-center justify-between gap-3 px-3.5 py-2.5"
+                    >
+                      <span className="text-[13px] text-[#1A1A1A]/85 truncate">
+                        {row.label}
+                      </span>
+                      <span className="text-[13px] font-semibold tabular-nums text-[#1A1A1A]">
+                        {row.value}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
-      )}
+      </div>
+
     </div>
   );
 };
