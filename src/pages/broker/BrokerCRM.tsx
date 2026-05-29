@@ -96,18 +96,24 @@ export default function BrokerCRM() {
     }
   }, [searchParams, setSearchParams]);
 
+  const [callsView, setCallsView] = useState<"active" | "deleted">("active");
+
   const callLogs = useQuery({
-    queryKey: ["broker-call-logs", user?.id],
+    queryKey: ["broker-call-logs", user?.id, callsView],
     enabled: !!user?.id,
     queryFn: async () => {
-      const { data, error } = await supabase
+      const q = supabase
         .from("broker_call_logs")
-        .select("id, lead_id, phone_number, call_type, call_status, duration_seconds, notes, created_at, recording_url, ai_summary, ai_score, ai_processed_at")
+        .select("id, lead_id, phone_number, call_type, call_status, duration_seconds, notes, created_at, recording_url, ai_summary, ai_score, ai_processed_at, deleted_at")
         .eq("user_id", user!.id)
-        .order("created_at", { ascending: false })
+        .order(callsView === "deleted" ? "deleted_at" : "created_at", { ascending: false })
         .limit(100);
+      const { data, error } = callsView === "deleted"
+        ? await q.not("deleted_at", "is", null)
+        : await q.is("deleted_at", null);
       if (error) throw error;
       return data ?? [];
+
     },
   });
 
