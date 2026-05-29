@@ -104,6 +104,17 @@ export default function BrokerCRM() {
   }, [searchParams, setSearchParams]);
 
   const [callsView, setCallsView] = useState<"active" | "deleted">("active");
+  const [selectedCallIds, setSelectedCallIds] = useState<Set<string>>(new Set());
+
+  // Clear selection when toggling view
+  useEffect(() => { setSelectedCallIds(new Set()); }, [callsView]);
+
+  const toggleSelectCall = (id: string) =>
+    setSelectedCallIds((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
 
   const callLogs = useQuery({
     queryKey: ["broker-call-logs", user?.id, callsView],
