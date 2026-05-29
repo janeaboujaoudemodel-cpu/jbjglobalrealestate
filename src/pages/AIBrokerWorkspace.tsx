@@ -81,7 +81,10 @@ export default function AIBrokerWorkspace() {
         .is("deleted_at", null)
         .order("created_at", { ascending: false })
         .limit(200);
-      if (!isOwner && user?.id) q = q.eq("assigned_broker_id", user.id);
+      // Always scope broker portal to leads explicitly assigned to THIS user.
+      // Owner has their own assistant under /owner/ai — their personal lead
+      // book must NEVER leak into the broker portal.
+      if (user?.id) q = q.eq("assigned_broker_id", user.id);
       const { data: leadRows } = await q;
       const ls = (leadRows ?? []) as Lead[];
       setLeads(ls);
