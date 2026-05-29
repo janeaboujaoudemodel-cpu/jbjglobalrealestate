@@ -43,21 +43,33 @@ const CombinedContactNewsletter = ({
   return (
     <section id="ready-to-get-started" className={`py-8 sm:py-12 md:py-16 bg-[#FDFBF7] ${className}`}>
       <div className="max-w-4xl mx-auto px-4 md:px-6">
-        <div className="relative rounded-2xl bg-gradient-to-b from-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10">
+        <div className="relative rounded-2xl bg-gradient-to-b from-[#FFFDF8] via-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10 border border-[#B89555]/45 shadow-[0_20px_60px_-30px_rgba(184,149,85,0.45)]">
+          {/* Corner gold flourishes */}
+          <span aria-hidden className="pointer-events-none absolute top-0 left-0 h-10 w-10 border-t border-l border-[#B89555]/70 rounded-tl-2xl" />
+          <span aria-hidden className="pointer-events-none absolute top-0 right-0 h-10 w-10 border-t border-r border-[#B89555]/70 rounded-tr-2xl" />
+          <span aria-hidden className="pointer-events-none absolute bottom-0 left-0 h-10 w-10 border-b border-l border-[#B89555]/70 rounded-bl-2xl" />
+          <span aria-hidden className="pointer-events-none absolute bottom-0 right-0 h-10 w-10 border-b border-r border-[#B89555]/70 rounded-br-2xl" />
+
           {/* Header */}
           <div className="relative text-center mb-8">
             <span
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 bg-white text-[#102540] shadow-sm"
+              data-allow-dark-cta data-no-contrast-guard
+              className="allow-white inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 bg-[#102540] text-white shadow-sm border border-[#B89555]/60"
+              style={{ color: "#FFFFFF" }}
             >
-              <span className="text-[#102540]">Get in touch</span>
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>Get in touch</span>
             </span>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.1em] text-[#1A1A1A]">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.14em] text-[#1A1A1A]">
               {title}
             </h2>
+            <div className="mx-auto mt-2 mb-3 flex items-center justify-center gap-3">
+              <span className="h-px w-12 bg-[#B89555]/70" />
+              <span className="text-[#B89555] text-xs tracking-[0.4em]">✦</span>
+              <span className="h-px w-12 bg-[#B89555]/70" />
+            </div>
             <p className="text-[#1A1A1A]/75 text-sm md:text-base max-w-xl mx-auto">
               {subtitle}
             </p>
-            <div className="mx-auto mt-4 h-px w-16 bg-[#B89555]/70" />
           </div>
 
           {/* Contact Cards — white surfaces, blue icons */}
