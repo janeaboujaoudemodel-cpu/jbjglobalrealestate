@@ -216,7 +216,14 @@ Deno.serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ change_request: cr, override }),
+      JSON.stringify({
+        change_request: cr,
+        override,
+        override_id: override.id,
+        request_id: cr?.id,
+        selector: parsed.selector,
+        route,
+      }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (e) {
