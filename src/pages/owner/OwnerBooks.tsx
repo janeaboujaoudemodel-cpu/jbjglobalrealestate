@@ -23,6 +23,21 @@ type Book = {
   created_at: string;
 };
 
+// Schema uses `is_restricted` (true = draft/locked). We expose this in the UI
+// as `is_published` (the inverse) for clarity.
+type BookRow = {
+  id: string;
+  book_number: number;
+  title: string;
+  description: string | null;
+  is_restricted: boolean | null;
+  ai_generated_chapter_count: number | null;
+  source_file_name: string | null;
+  deleted_at: string | null;
+  created_at: string | null;
+};
+
+
 async function fileToText(file: File): Promise<string> {
   const name = file.name.toLowerCase();
   if (name.endsWith(".txt") || name.endsWith(".md")) {
