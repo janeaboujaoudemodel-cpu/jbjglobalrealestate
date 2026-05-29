@@ -565,6 +565,13 @@ export default function BrokerCRM() {
       )}
 
       {tab === "databases" && (
+        openDbSheet ? (
+          <BrokerDatabaseSheet
+            databaseId={openDbSheet.id}
+            databaseName={openDbSheet.name}
+            onBack={() => setOpenDbSheet(null)}
+          />
+        ) : (
         <section className="space-y-3">
           {dbs.isLoading ? (
             <Loading />
@@ -573,8 +580,8 @@ export default function BrokerCRM() {
               <Inbox className="h-7 w-7 mx-auto text-[#1A1A1A]/60 mb-3" />
               <div className="text-sm font-semibold text-[#1A1A1A]">No databases shared with you yet</div>
               <p className="text-xs text-[#1A1A1A]/65 mt-1 max-w-md mx-auto">
-                When your manager grants access to a CRM database, it will appear here. You can also request a new
-                database be uploaded to your scope.
+                When your manager grants access to a CRM database — or you upload one yourself — it will appear here.
+                Click any database to open it as a separate sheet without merging into My Leads.
               </p>
               <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
                 <button
@@ -595,13 +602,13 @@ export default function BrokerCRM() {
                 </button>
               </div>
             </PremiumCard>
-
           ) : (
             dbs.data!.map((d) => (
-              <Link
+              <button
                 key={d.grant_id}
-                to={`/broker/crm/database/${d.database_id}`}
-                className="block p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 hover:border-[#B89555]/55 transition-colors"
+                type="button"
+                onClick={() => setOpenDbSheet({ id: d.database_id, name: d.database_name })}
+                className="block w-full text-left p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 hover:border-[#B89555]/55 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <div className="h-9 w-9 rounded-md bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center">
@@ -616,11 +623,13 @@ export default function BrokerCRM() {
                   </div>
                   <ArrowRight className="h-4 w-4 text-[#1A1A1A]/50" />
                 </div>
-              </Link>
+              </button>
             ))
           )}
         </section>
+        )
       )}
+
 
       {tab === "leads" && (
         <div className="space-y-3">
