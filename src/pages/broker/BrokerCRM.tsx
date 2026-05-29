@@ -504,59 +504,142 @@ export default function BrokerCRM() {
 
       {tab === "calls" && (
         <PremiumCard>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-[#1A1A1A]">Calls made</h2>
-            <Button
-              variant="outline"
-              size="sm"
-              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-              onClick={() => setCallDialogOpen(true)}
-            >
-              <Phone className="w-3.5 h-3.5 mr-1.5" /> Log a call
-            </Button>
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <div className="flex items-center gap-3">
+              <h2 className="text-sm font-semibold text-[#1A1A1A]">
+                {callsView === "deleted" ? "Recently deleted" : "Calls made"}
+              </h2>
+              <div className="inline-flex rounded-md border border-[#B89555]/35 bg-[#FDFBF7] p-0.5">
+                <button
+                  type="button"
+                  onClick={() => setCallsView("active")}
+                  className={`text-[11px] px-2.5 py-1 rounded ${callsView === "active" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
+                >
+                  Active
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCallsView("deleted")}
+                  className={`text-[11px] px-2.5 py-1 rounded ${callsView === "deleted" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
+                >
+                  Recently deleted
+                </button>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {callsView === "active" && (callLogs.data ?? []).length > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                  onClick={() => {
+                    if (confirm(`Move all ${callLogs.data!.length} calls to Recently deleted?`)) {
+                      deleteAllCalls.mutate();
+                    }
+                  }}
+                  disabled={deleteAllCalls.isPending}
+                >
+                  Delete all
+                </Button>
+              )}
+              {callsView === "active" && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                  onClick={() => setCallDialogOpen(true)}
+                >
+                  <Phone className="w-3.5 h-3.5 mr-1.5" /> Log a call
+                </Button>
+              )}
+            </div>
           </div>
           {callLogs.isLoading ? (
             <Loading />
           ) : (callLogs.data ?? []).length === 0 ? (
-            <Empty msg="No calls logged yet. Use Log a call to capture broker activity, duration, outcome, and notes." />
+            <Empty msg={callsView === "deleted" ? "No deleted calls. Items you delete will appear here and can be restored within 30 days." : "No calls logged yet. Use Log a call to capture broker activity, duration, outcome, and notes."} />
           ) : (
             <ul className="space-y-2.5">
               {(callLogs.data ?? [])
-                .slice(0, 20)
+                .slice(0, 50)
                 .map((log: any) => {
                   const lead = leadsData.find((item) => item.id === log.lead_id);
                   return (
-                  <li key={log.id}>
-                    <button
-                      type="button"
-                      onClick={() => setOpenCallId(log.id)}
-                      className="w-full p-3.5 flex items-center gap-3 text-left rounded-xl bg-[#FDFBF7] border border-[#B89555]/30 hover:border-[#B89555]/55 hover:bg-[#F7F2EA] transition-colors"
-                    >
-                      <div className="h-9 w-9 rounded-md bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center shrink-0">
-                        <Phone className="h-4 w-4 text-[#1A1A1A]" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold text-[#1A1A1A] truncate flex items-center gap-2 flex-wrap">
-                          {lead?.full_name ? `Call with ${lead.full_name}` : "Manual broker call"}
-                          {log.recording_url && (
-                            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">Recording</span>
-                          )}
-                          {log.ai_processed_at && (
-                            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">AI</span>
-                          )}
-                          {typeof log.ai_score === "number" && (
-                            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#EFE6D6] border border-[#B89555]/45 text-[#1A1A1A]">Score {log.ai_score}</span>
+                  <li key={log.id} className="group">
+                    <div className="w-full rounded-xl bg-[#FDFBF7] border border-[#B89555]/30 hover:border-[#B89555]/55 hover:bg-[#F7F2EA] transition-colors">
+                      <div className="flex items-stretch">
+                        <button
+                          type="button"
+                          onClick={() => setOpenCallId(log.id)}
+                          className="flex-1 min-w-0 p-3.5 flex items-center gap-3 text-left"
+                        >
+                          <div className="h-9 w-9 rounded-md bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center shrink-0">
+                            <Phone className="h-4 w-4 text-[#1A1A1A]" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-semibold text-[#1A1A1A] truncate flex items-center gap-2 flex-wrap">
+                              {lead?.full_name ? `Call with ${lead.full_name}` : "Manual broker call"}
+                              {log.recording_url && (
+                                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">Recording</span>
+                              )}
+                              {log.ai_processed_at && (
+                                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">AI</span>
+                              )}
+                              {typeof log.ai_score === "number" && (
+                                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#EFE6D6] border border-[#B89555]/45 text-[#1A1A1A]">Score {log.ai_score}</span>
+                              )}
+                            </div>
+                            <div className="text-[11px] text-[#1A1A1A]/60 truncate mt-0.5">
+                              {log.call_status || "completed"} · {log.call_type || "outbound"} · {formatDuration(log.duration_seconds)} · {formatDisplayDate(log.created_at)}
+                              {callsView === "deleted" && log.deleted_at && (
+                                <> · deleted {formatDisplayDate(log.deleted_at)}</>
+                              )}
+                            </div>
+                            {(log.ai_summary || log.notes) && (
+                              <div className="text-xs text-[#1A1A1A]/75 mt-1 truncate">{log.ai_summary || log.notes}</div>
+                            )}
+                          </div>
+                          <div className="text-xs text-[#1A1A1A]/65 tabular-nums shrink-0 pr-3">{log.phone_number}</div>
+                        </button>
+                        <div className="flex flex-col justify-center gap-1 pr-3">
+                          {callsView === "active" ? (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (confirm("Move this call to Recently deleted?")) softDeleteCall.mutate(log.id);
+                              }}
+                              className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                              disabled={softDeleteCall.isPending}
+                            >
+                              Delete
+                            </button>
+                          ) : (
+                            <>
+                              <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); restoreCall.mutate(log.id); }}
+                                className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                                disabled={restoreCall.isPending}
+                              >
+                                Restore
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (confirm("Permanently delete this call? This cannot be undone.")) hardDeleteCall.mutate(log.id);
+                                }}
+                                className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A]/80 hover:bg-[#EFE6D6]"
+                                disabled={hardDeleteCall.isPending}
+                              >
+                                Delete forever
+                              </button>
+                            </>
                           )}
                         </div>
-                        <div className="text-[11px] text-[#1A1A1A]/60 truncate mt-0.5">
-                          {log.call_status || "completed"} · {log.call_type || "outbound"} · {formatDuration(log.duration_seconds)} · {formatDisplayDate(log.created_at)}
-                        </div>
-                        {(log.ai_summary || log.notes) && (
-                          <div className="text-xs text-[#1A1A1A]/75 mt-1 truncate">{log.ai_summary || log.notes}</div>
-                        )}
                       </div>
-                      <div className="text-xs text-[#1A1A1A]/65 tabular-nums shrink-0">{log.phone_number}</div>
-                    </button>
+                    </div>
                   </li>
                   );
                 })}
@@ -564,6 +647,7 @@ export default function BrokerCRM() {
           )}
         </PremiumCard>
       )}
+
 
       {tab === "insights" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
