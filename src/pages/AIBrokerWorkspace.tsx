@@ -272,14 +272,8 @@ export default function AIBrokerWorkspace() {
                     {selected.source ? ` · ${selected.source}` : ""}
                     {selected.preferred_language ? ` · prefers ${selected.preferred_language}` : ""}
                   </div>
-                </div>
-                <Link
-                  to={`/broker/leads?focus=${selected.id}`}
-                  className="text-[11px] font-semibold text-[#102540] hover:underline inline-flex items-center gap-1"
-                >
-                  Open lead <ArrowRight className="h-3 w-3" />
-                </Link>
               </div>
+
             )}
             <AssistantChat
               turns={selectedId ? turns : generalTurns}
