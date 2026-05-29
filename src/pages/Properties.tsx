@@ -149,6 +149,24 @@ const COMPLETION_STATUS = [
   { value: "under-construction", label: "Under Construction" },
 ];
 
+const isReadyProject = (project: Record<string, unknown>) => {
+  const statusText = [
+    project.construction_status,
+    project.status,
+    project.status_label,
+    project.handover_date,
+    project.availability_status,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return /\b(ready|completed|complete|delivered)\b/.test(statusText);
+};
+
+const prioritizeOffPlan = <T extends Record<string, unknown>>(projects: T[]) =>
+  [...projects].sort((a, b) => Number(isReadyProject(a)) - Number(isReadyProject(b)));
+
 // Sale status options with color dots
 const SALE_STATUS = [
   { value: "all", label: "All Sale Statuses", dotClass: null },
