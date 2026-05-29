@@ -120,6 +120,7 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
   project,
   className,
 }) => {
+  const [isPlanOpen, setIsPlanOpen] = React.useState(false);
   const hasPrice = typeof price === "number" && price > 0;
   const summary = formatPaymentPlanSummary(project);
   const breakdown = getBreakdownRows(project);
@@ -164,23 +165,23 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
           >
             {summary}
           </span>
-            <Popover>
+            <Popover open={isPlanOpen} onOpenChange={setIsPlanOpen}>
               <PopoverTrigger asChild>
                 <button
                   type="button"
                   onPointerDown={(e) => {
-                    e.preventDefault();
                     e.stopPropagation();
                   }}
                   onMouseDown={(e) => {
-                    e.preventDefault();
                     e.stopPropagation();
                   }}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
+                    setIsPlanOpen((open) => !open);
                   }}
                   aria-label="View payment plan breakdown"
+                  aria-expanded={isPlanOpen}
                   className={cn(
                     "inline-flex h-5 w-5 items-center justify-center rounded-full",
                     "text-[#1A1A1A]/70 hover:text-[#1A1A1A]",
