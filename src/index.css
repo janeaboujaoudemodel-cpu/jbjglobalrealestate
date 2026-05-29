@@ -6056,3 +6056,15 @@ button[data-phone-code-trigger]:focus-visible :is(span, svg, [class*="lucide"]) 
   opacity: 1 !important;
 }
 
+svg.jj-signout-icon,
+svg.jj-signout-icon *,
+button[data-signout-action] svg.jj-signout-icon,
+button[data-signout-action]:hover svg.jj-signout-icon,
+button[data-signout-action] svg.jj-signout-icon *,
+button[data-signout-action]:hover svg.jj-signout-icon * {
+  color: #DC2626 !important;
+  stroke: #DC2626 !important;
+  -webkit-text-fill-color: #DC2626 !important;
+  opacity: 1 !important;
+}
+
