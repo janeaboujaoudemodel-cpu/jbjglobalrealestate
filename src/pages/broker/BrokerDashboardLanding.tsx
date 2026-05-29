@@ -154,7 +154,8 @@ function daysAgo(iso?: string | null) {
 }
 
 export default function BrokerDashboardLanding() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [callDialogOpen, setCallDialogOpen] = useState(false);
   const { profile, loading: profileLoading } = useBrokerProfile();
@@ -196,11 +197,24 @@ export default function BrokerDashboardLanding() {
     onError: (e: any) => toast.error(e?.message || "Could not log call"),
   });
 
-  const firstName =
-    profile?.display_name?.split(" ")[0] ||
-    user?.user_metadata?.first_name ||
+  const fullName =
+    profile?.display_name?.trim() ||
+    [user?.user_metadata?.first_name, user?.user_metadata?.last_name].filter(Boolean).join(" ").trim() ||
     user?.email?.split("@")[0] ||
     "there";
+  const firstName = fullName.split(" ")[0];
+  const initials = getInitials(fullName, user?.email);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success("Signed out successfully");
+      navigate("/");
+    } catch {
+      toast.error("Failed to sign out");
+    }
+  };
+
 
   const leadsData: any[] = (leads.data as any[]) ?? [];
   const totalLeads = leadsData.length;
