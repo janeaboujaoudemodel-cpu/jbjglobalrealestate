@@ -54,6 +54,9 @@ export const BrokerPortalRoutes = () => (
     <Route path="crm/database/:id" element={<BrokerDatabaseView />} />
     <Route path="databases" element={<BrokerDatabasesList />} />
     <Route path="listings" element={<ListingPortalMyListings />} />
+    <Route path="listings/new" element={<BrokerListingNew />} />
+    <Route path="listings/new/manual" element={<SellerListing />} />
+    <Route path="listings/new/ai" element={<ListingPortalSubmit />} />
     <Route path="calendar" element={<BrokerCalendar />} />
     <Route path="tasks" element={<BrokerTasks />} />
     <Route path="notifications" element={<BrokerInbox />} />
