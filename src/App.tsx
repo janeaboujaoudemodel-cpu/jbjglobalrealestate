@@ -46,6 +46,7 @@ import { DeveloperHubRoutes } from "@/routes/DeveloperHubRoutes";
 import { DevelopersPortalRoutes } from "@/routes/DevelopersPortalRoutes";
 import OwnerOverrideLoader from "@/components/owner-overrides/OwnerOverrideLoader";
 import WebDevDock from "@/components/owner-webdev/WebDevDock";
+import WebDevChangeHighlight from "@/components/owner-webdev/WebDevChangeHighlight";
 
 // ── QueryClient ──
 const queryClient = new QueryClient({
@@ -105,6 +106,7 @@ const App = () => {
                    <SeoHighlightOverlay />
                    <OwnerOverrideLoader />
                    <WebDevDock />
+                   <WebDevChangeHighlight />
                    
             {/* BrandIntroSplash disabled until further notice */}
             <Routes>
