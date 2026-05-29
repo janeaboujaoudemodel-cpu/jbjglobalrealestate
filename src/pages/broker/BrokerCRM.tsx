@@ -80,6 +80,7 @@ export default function BrokerCRM() {
   const [tab, setTab] = useState<Tab>("pipeline");
   const [search, setSearch] = useState("");
   const [requestOpen, setRequestOpen] = useState(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
   const [callDialogOpen, setCallDialogOpen] = useState(false);
   const [openCallId, setOpenCallId] = useState<string | null>(null);
   const dbs = useBrokerScopedDatabases();
