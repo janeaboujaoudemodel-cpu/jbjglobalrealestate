@@ -421,6 +421,29 @@ export default function LogCallDialog({
     }
   };
 
+  const downloadRecording = () => {
+    if (!audioBlob || !audioPreviewUrl) return;
+    const ext = audioBlob.type.includes("mp4") ? "mp4" : audioBlob.type.includes("ogg") ? "ogg" : "webm";
+    const a = document.createElement("a");
+    a.href = audioPreviewUrl;
+    a.download = `jbj-call-recording-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-")}.${ext}`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+
+  const shareRecording = async () => {
+    if (!audioBlob) return;
+    const ext = audioBlob.type.includes("mp4") ? "mp4" : audioBlob.type.includes("ogg") ? "ogg" : "webm";
+    const file = new File([audioBlob], `jbj-call-recording.${ext}`, { type: audioBlob.type || "audio/webm" });
+    if (navigator.canShare?.({ files: [file] }) && navigator.share) {
+      await navigator.share({ title: "JBJ call recording", files: [file] });
+    } else {
+      downloadRecording();
+      toast.message("Sharing is not available in this browser, so the recording was downloaded instead.");
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o && isSaving) return; onOpenChange(o); if (!o) reset(); }}>
       <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/30 max-h-[90vh] overflow-y-auto">
