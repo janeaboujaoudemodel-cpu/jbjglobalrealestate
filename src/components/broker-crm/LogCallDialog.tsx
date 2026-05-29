@@ -7,7 +7,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Phone, CheckCircle2, Loader2, Mic, Search, X, Sparkles,
+  Phone, CheckCircle2, Loader2, Mic, Search, X, Sparkles, Pause, Play, Square, RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -82,7 +82,7 @@ export default function LogCallDialog({
   const [notes, setNotes] = useState("");
 
   // Recorder state
-  const [recState, setRecState] = useState<"idle" | "recording" | "stopped">("idle");
+  const [recState, setRecState] = useState<"idle" | "recording" | "paused" | "stopped">("idle");
   const [seconds, setSeconds] = useState(0);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [savingRecording, setSavingRecording] = useState(false);
