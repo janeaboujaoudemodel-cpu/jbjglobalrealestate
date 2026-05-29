@@ -403,7 +403,16 @@ const Properties = () => {
 
   // Apply shortcut filters (price, bedrooms, status, construction, handover, etc.) reactively
   const finalProjects = useMemo(() => applyShortcutFilters(sortedProjects, shortcutFilters), [sortedProjects, shortcutFilters]);
-  const visibleProjects = useMemo(() => finalProjects.slice(0, 60), [finalProjects]);
+  // Pagination — 12 per page with numeric page controls
+  const PAGE_SIZE = 12;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(finalProjects.length / PAGE_SIZE));
+  useEffect(() => { setCurrentPage(1); }, [finalProjects.length]);
+  const safePage = Math.min(currentPage, totalPages);
+  const visibleProjects = useMemo(
+    () => finalProjects.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
+    [finalProjects, safePage],
+  );
 
   // Brief "filtering" skeleton state — keeps the UI responsive on slow devices
   // when users change filters/sort so results never feel frozen.
