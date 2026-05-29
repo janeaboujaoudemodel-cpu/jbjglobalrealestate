@@ -783,7 +783,6 @@ export default function JoinApplication() {
           {!positionsLoading && openPositions.length > 0 && (
             <Card
               id="open-positions"
-              data-allow-dark-cta
               data-no-contrast-guard
               className="careers-card-navy mb-8 rounded-2xl scroll-mt-24 overflow-hidden"
             >

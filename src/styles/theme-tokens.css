@@ -370,6 +370,25 @@ label[data-required]::after {
     0 1px 0 rgba(255, 255, 255, 0.82) inset !important;
 }
 
+/* Job cards sit on champagne/cream surfaces: force readable ink, not inherited white. */
+[data-careers-page] .careers-card-navy .careers-card-strong,
+[data-careers-page] .careers-card-navy .careers-card-strong :is(h1,h2,h3,h4,h5,h6,p,span,strong,em,small,a,li,div) {
+  color: var(--t-ink) !important;
+  -webkit-text-fill-color: var(--t-ink) !important;
+}
+[data-careers-page] .careers-card-navy .careers-card-strong svg:not(.allow-white) {
+  color: var(--t-careers-navy) !important;
+  stroke: var(--t-careers-navy) !important;
+}
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta,
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta *,
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover,
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 /* ---- Premium luxury form fields (BLUE 2px border, navy on focus) ---- */
 [data-careers-page] .careers-blue-field,
 [data-careers-page] input.careers-blue-field {
@@ -695,6 +714,25 @@ label[data-required]::after {
 [data-careers-page] .careers-card-navy .careers-open-badge * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Final override: champagne job cards inside the navy section must never inherit navy-section white text. */
+[data-careers-page] .careers-card-navy .careers-card-strong,
+[data-careers-page] .careers-card-navy .careers-card-strong :is(h1,h2,h3,h4,h5,h6,p,span,strong,em,small,a,li,div) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+[data-careers-page] .careers-card-navy .careers-card-strong svg:not(.allow-white) {
+  color: #102540 !important;
+  stroke: #102540 !important;
+}
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta,
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta *,
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover,
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
 
 /* ============================================================
