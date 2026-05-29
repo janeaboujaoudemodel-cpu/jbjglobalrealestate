@@ -1,10 +1,12 @@
 /**
  * JBJ Web Developer dock — owner/admin only.
- * Powerful Lovable-style UI tweaker:
+ * Owner-only inline UI tweaker with:
  *  - Natural-language instruction
  *  - Optional screenshot of the current viewport (html2canvas)
  *  - Element picker (click any element to target it)
- *  - Approve / Reject / Take me there
+ *  - Voice note (ElevenLabs Scribe transcription)
+ *  - Live CSS preview (`pending`) with explicit Save / Cancel
+ *  - "Take me there" navigates to the affected route and highlights
  */
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -20,6 +22,8 @@ import {
   MousePointerClick,
   Image as ImageIcon,
   Trash2,
+  Mic,
+  Square,
 } from "lucide-react";
 import html2canvas from "html2canvas";
 import { Button } from "@/components/ui/button";
@@ -68,7 +72,11 @@ export default function WebDevDock() {
   const [screenshot, setScreenshot] = useState<string | null>(null);
   const [picking, setPicking] = useState(false);
   const [targetSelector, setTargetSelector] = useState<string | null>(null);
+  const [recording, setRecording] = useState(false);
+  const [transcribing, setTranscribing] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
 
   // Gate: only owner/admin
   useEffect(() => {
@@ -97,6 +105,13 @@ export default function WebDevDock() {
   useEffect(() => {
     if (allowed && open) loadRequests();
   }, [allowed, open]);
+
+  // Refresh trigger from highlight overlay (Save/Cancel there)
+  useEffect(() => {
+    const onRefresh = () => { if (allowed) loadRequests(); };
+    window.addEventListener("jbj:webdev-refresh", onRefresh);
+    return () => window.removeEventListener("jbj:webdev-refresh", onRefresh);
+  }, [allowed]);
 
   useEffect(() => {
     if (!allowed) return;
@@ -184,6 +199,75 @@ export default function WebDevDock() {
     }
   };
 
+  // ── Voice note ─────────────────────────────────────────────────────────
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+        ? "audio/webm;codecs=opus"
+        : "audio/webm";
+      const rec = new MediaRecorder(stream, { mimeType: mime });
+      chunksRef.current = [];
+      rec.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+      rec.onstop = async () => {
+        stream.getTracks().forEach((t) => t.stop());
+        const blob = new Blob(chunksRef.current, { type: mime });
+        await transcribe(blob);
+      };
+      rec.start();
+      recorderRef.current = rec;
+      setRecording(true);
+    } catch (e) {
+      toast({
+        title: "Microphone blocked",
+        description: e instanceof Error ? e.message : "Allow mic access.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const stopRecording = () => {
+    const rec = recorderRef.current;
+    if (rec && rec.state !== "inactive") rec.stop();
+    setRecording(false);
+  };
+
+  const transcribe = async (blob: Blob) => {
+    setTranscribing(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const fd = new FormData();
+      fd.append("audio", blob, "voice.webm");
+      const resp = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/owner-webdev-voice`,
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${session?.access_token ?? ""}` },
+          body: fd,
+        },
+      );
+      const json = await resp.json();
+      if (!resp.ok) throw new Error(json.error ?? "Transcription failed");
+      const text = String(json.text ?? "").trim();
+      if (text) {
+        setInstruction((prev) => (prev ? `${prev.trim()} ${text}` : text));
+        toast({ title: "Voice transcribed" });
+      } else {
+        toast({ title: "No speech detected" });
+      }
+    } catch (e) {
+      toast({
+        title: "Voice failed",
+        description: e instanceof Error ? e.message : "Unknown",
+        variant: "destructive",
+      });
+    } finally {
+      setTranscribing(false);
+    }
+  };
+
   const submit = async () => {
     if (!instruction.trim()) return;
     setSubmitting(true);
@@ -213,13 +297,29 @@ export default function WebDevDock() {
       const json = await resp.json();
       if (!resp.ok) throw new Error(json.error ?? "Failed");
       toast({
-        title: "Web Developer ready",
-        description: "Review the change on this page and Approve or Reject.",
+        title: "Preview ready",
+        description: "Review the change, then Save to keep it.",
       });
       setInstruction("");
       setScreenshot(null);
       setTargetSelector(null);
       await loadRequests();
+
+      // Auto-highlight if the change applies to the current route
+      if (json?.override_id && json?.selector && json?.route === pathname) {
+        setTimeout(() => {
+          window.dispatchEvent(
+            new CustomEvent("jbj:webdev-highlight", {
+              detail: {
+                selector: json.selector,
+                overrideId: json.override_id,
+                requestId: json.request_id,
+                changeLabel: instruction.slice(0, 60),
+              },
+            }),
+          );
+        }, 400);
+      }
     } catch (e) {
       toast({
         title: "Couldn't apply",
@@ -236,16 +336,46 @@ export default function WebDevDock() {
     if (status === "approved") {
       await supabase.from("owner_ui_overrides").update({ status: "approved" }).eq("id", cr.override_id);
       await supabase.from("owner_change_requests").update({ status: "approved", reviewed_at: new Date().toISOString() }).eq("id", cr.id);
+      toast({ title: "Saved", description: "Change is now live." });
     } else {
       await supabase.from("owner_ui_overrides").delete().eq("id", cr.override_id);
       await supabase.from("owner_change_requests").update({ status: "rejected", reviewed_at: new Date().toISOString() }).eq("id", cr.id);
       window.dispatchEvent(new CustomEvent("jbj:override-preview", { detail: [] }));
+      toast({ title: "Cancelled" });
     }
     await loadRequests();
   };
 
-  const takeMeThere = (cr: ChangeRequest) => {
-    if (cr.route !== pathname) navigate(cr.route);
+  const takeMeThere = async (cr: ChangeRequest) => {
+    // Fetch override row to get selector for highlighting
+    let selector: string | null = null;
+    if (cr.override_id) {
+      const { data } = await supabase
+        .from("owner_ui_overrides")
+        .select("selector")
+        .eq("id", cr.override_id)
+        .maybeSingle();
+      selector = data?.selector ?? null;
+    }
+    const dispatchHighlight = () => {
+      if (!selector) return;
+      window.dispatchEvent(
+        new CustomEvent("jbj:webdev-highlight", {
+          detail: {
+            selector,
+            overrideId: cr.override_id,
+            requestId: cr.id,
+            changeLabel: cr.instruction.slice(0, 60),
+          },
+        }),
+      );
+    };
+    if (cr.route !== pathname) {
+      navigate(cr.route);
+      setTimeout(dispatchHighlight, 600);
+    } else {
+      dispatchHighlight();
+    }
   };
 
   if (!allowed) return null;
@@ -258,6 +388,8 @@ export default function WebDevDock() {
     setOpen(true);
   };
 
+  const hasRequests = requests.length > 0;
+
   return (
     <div
       className="fixed bottom-6 right-6 z-[12000] flex flex-col items-end gap-3 isolate pointer-events-none"
@@ -267,19 +399,17 @@ export default function WebDevDock() {
       {open && (
         <div
           ref={panelRef}
-          className="pointer-events-auto w-[min(420px,calc(100vw-2rem))] h-[min(640px,calc(100vh-3rem))] bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          className="pointer-events-auto w-[min(420px,calc(100vw-2rem))] max-h-[min(640px,calc(100vh-3rem))] bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           data-owner-webdev-dock
-          data-gold-hairline
           data-no-contrast-guard
         >
           {/* Header */}
           <div
             className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/30 bg-[#F7F2EA] shrink-0"
-            data-gold-hairline
           >
             <div className="flex items-center gap-2 min-w-0">
               <div className="w-8 h-8 rounded-full bg-[#102540] flex items-center justify-center shrink-0">
-                <Sparkles className="w-4 h-4 text-[#EFE6D6]" data-no-contrast-guard />
+                <Sparkles className="w-4 h-4 text-[#EFE6D6] allow-white" data-no-contrast-guard />
               </div>
               <div className="min-w-0">
                 <div className="text-sm font-semibold text-[#1A1A1A] truncate">
@@ -294,13 +424,14 @@ export default function WebDevDock() {
               onClick={() => setOpen(false)}
               className="p-1.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A] shrink-0"
               aria-label="Minimize"
+              title="Minimize"
             >
               <Minus className="w-4 h-4" />
             </button>
           </div>
 
           {/* Composer */}
-          <div className="p-3 border-b border-[#B89555]/20 shrink-0 bg-[#FDFBF7]" data-gold-hairline>
+          <div className="p-3 border-b border-[#B89555]/20 shrink-0 bg-[#FDFBF7]">
             <div className="text-[11px] text-[#1A1A1A]/60 mb-1.5 truncate">
               On <span className="font-medium text-[#1A1A1A]">{pathname}</span>
             </div>
@@ -317,8 +448,9 @@ export default function WebDevDock() {
                     />
                     <button
                       onClick={() => setScreenshot(null)}
-                      className="absolute -top-1 -right-1 bg-[#1A1A1A] text-white rounded-full p-0.5"
+                      className="absolute -top-1 -right-1 bg-[#1A1A1A] text-white rounded-full p-0.5 allow-white"
                       aria-label="Remove screenshot"
+                      data-no-contrast-guard
                     >
                       <X className="w-2.5 h-2.5" />
                     </button>
@@ -353,7 +485,7 @@ export default function WebDevDock() {
                   className="inline-flex items-center gap-1 h-8 px-2 rounded-md border border-[#B89555]/40 bg-white hover:bg-[#EFE6D6] text-[#1A1A1A] text-xs"
                   title="Capture viewport screenshot"
                 >
-                  <Camera className="w-3.5 h-3.5" /> Screenshot
+                  <Camera className="w-3.5 h-3.5" /> Shot
                 </button>
                 <button
                   type="button"
@@ -366,64 +498,84 @@ export default function WebDevDock() {
                   title="Pick an element to target"
                 >
                   <MousePointerClick className="w-3.5 h-3.5" />
-                  {picking ? "Click any element…" : "Pick"}
+                  {picking ? "Pick…" : "Pick"}
+                </button>
+                <button
+                  type="button"
+                  onClick={recording ? stopRecording : startRecording}
+                  disabled={transcribing}
+                  className={`inline-flex items-center gap-1 h-8 px-2 rounded-md border text-xs ${
+                    recording
+                      ? "bg-red-600 border-red-700 text-white allow-white"
+                      : transcribing
+                      ? "bg-[#EFE6D6] border-[#B89555]/40 text-[#1A1A1A]/60"
+                      : "bg-white border-[#B89555]/40 hover:bg-[#EFE6D6] text-[#1A1A1A]"
+                  }`}
+                  data-no-contrast-guard={recording ? "true" : undefined}
+                  data-allow-dark-cta={recording ? "true" : undefined}
+                  style={recording ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
+                  title={recording ? "Stop recording" : "Voice note"}
+                >
+                  {transcribing ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : recording ? (
+                    <Square className="w-3.5 h-3.5" />
+                  ) : (
+                    <Mic className="w-3.5 h-3.5" />
+                  )}
+                  {recording ? "Stop" : transcribing ? "…" : "Voice"}
                 </button>
               </div>
               <Button
                 size="sm"
                 onClick={submit}
                 disabled={submitting || !instruction.trim()}
-                className="bg-[#102540] hover:bg-[#1a3d63] text-white allow-white h-8 px-3 shrink-0 disabled:opacity-60"
+                className="bg-[#102540] hover:bg-[#1a3d63] text-white allow-white h-8 px-4 shrink-0 disabled:opacity-60 font-semibold"
                 data-no-contrast-guard
                 data-allow-dark-cta
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               >
                 {submitting ? (
-                  <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+                  <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" style={{ color: "#FFFFFF" }} />
                 ) : (
-                  <Send className="w-3.5 h-3.5 mr-1.5" />
+                  <Send className="w-3.5 h-3.5 mr-1.5" style={{ color: "#FFFFFF" }} />
                 )}
-                Send
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Send</span>
               </Button>
             </div>
           </div>
 
-          {/* History */}
-          <div className="flex-1 min-h-0 overflow-auto p-2 space-y-2 bg-[#FDFBF7]">
-            {requests.length === 0 && (
-              <div className="text-center text-xs text-[#1A1A1A]/60 py-8">
-                <ImageIcon className="w-6 h-6 mx-auto mb-2 opacity-40" />
-                No requests yet. Describe a UI change above —
-                attach a screenshot or pick an element for precision.
-              </div>
-            )}
-            {requests.map((cr) => (
-              <div
-                key={cr.id}
-                className="p-2.5 rounded-lg border border-[#B89555]/30 bg-white"
-                data-gold-hairline
-              >
-                <div className="flex items-center justify-between mb-1 gap-2">
-                  <span
-                    className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 ${
-                      cr.status === "approved"
-                        ? "bg-emerald-50 text-emerald-700"
-                        : cr.status === "rejected"
-                        ? "bg-red-50 text-red-700"
-                        : "bg-[#EFE6D6] text-[#1A1A1A]"
-                    }`}
-                  >
-                    {cr.status}
-                  </span>
-                  <span className="text-[10px] text-[#1A1A1A]/50 truncate">
-                    {cr.route}
-                  </span>
-                </div>
-                <p className="text-xs text-[#1A1A1A]/85 leading-snug line-clamp-3">
-                  {cr.instruction}
-                </p>
-                {cr.status === "ready" && (
-                  <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-                    {cr.route !== pathname && (
+          {/* History — only takes space when there are requests, kills the empty gap */}
+          {hasRequests ? (
+            <div className="flex-1 min-h-0 overflow-auto p-2 space-y-2 bg-[#FDFBF7]">
+              {requests.map((cr) => (
+                <div
+                  key={cr.id}
+                  className="p-2.5 rounded-lg border border-[#B89555]/30 bg-white"
+                >
+                  <div className="flex items-center justify-between mb-1 gap-2">
+                    <span
+                      className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 ${
+                        cr.status === "approved"
+                          ? "bg-emerald-50 text-emerald-700"
+                          : cr.status === "rejected"
+                          ? "bg-red-50 text-red-700"
+                          : cr.status === "ready"
+                          ? "bg-amber-50 text-amber-700"
+                          : "bg-[#EFE6D6] text-[#1A1A1A]"
+                      }`}
+                    >
+                      {cr.status === "ready" ? "preview" : cr.status}
+                    </span>
+                    <span className="text-[10px] text-[#1A1A1A]/50 truncate">
+                      {cr.route}
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#1A1A1A]/85 leading-snug line-clamp-3">
+                    {cr.instruction}
+                  </p>
+                  {cr.status === "ready" && (
+                    <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                       <Button
                         size="sm"
                         variant="ghost"
@@ -432,29 +584,37 @@ export default function WebDevDock() {
                       >
                         <ExternalLink className="w-3 h-3 mr-1" /> Take me there
                       </Button>
-                    )}
-                    <Button
-                      size="sm"
-                      onClick={() => decide(cr, "approved")}
-                      className="h-7 text-xs px-2 bg-emerald-600 hover:bg-emerald-700 text-white allow-white"
-                      data-no-contrast-guard
-                      data-allow-dark-cta
-                    >
-                      <Check className="w-3 h-3 mr-1" /> Approve
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => decide(cr, "rejected")}
-                      className="h-7 text-xs px-2 text-red-700 hover:bg-red-50"
-                    >
-                      <Trash2 className="w-3 h-3 mr-1" /> Reject
-                    </Button>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+                      <Button
+                        size="sm"
+                        onClick={() => decide(cr, "approved")}
+                        className="h-7 text-xs px-2 bg-emerald-600 hover:bg-emerald-700 text-white allow-white font-semibold"
+                        data-no-contrast-guard
+                        data-allow-dark-cta
+                        style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                      >
+                        <Check className="w-3 h-3 mr-1" style={{ color: "#FFFFFF" }} />
+                        <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Save</span>
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => decide(cr, "rejected")}
+                        className="h-7 text-xs px-2 text-red-700 hover:bg-red-50"
+                      >
+                        <Trash2 className="w-3 h-3 mr-1" /> Cancel
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="px-3 py-3 bg-[#FDFBF7] text-center text-[11px] text-[#1A1A1A]/55 shrink-0">
+              <ImageIcon className="w-4 h-4 mx-auto mb-1 opacity-40" />
+              No requests yet. Describe a UI change above — attach a screenshot,
+              pick an element, or use voice.
+            </div>
+          )}
         </div>
       )}
 
@@ -465,9 +625,10 @@ export default function WebDevDock() {
           data-owner-webdev-dock
           data-no-contrast-guard
           data-allow-dark-cta
+          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
-          <Sparkles className="w-4 h-4 text-[#EFE6D6] shrink-0" />
-          <span className="text-sm font-medium leading-none">Web Developer</span>
+          <Sparkles className="w-4 h-4 text-[#EFE6D6] shrink-0 allow-white" />
+          <span className="text-sm font-medium leading-none" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Web Developer</span>
         </button>
       )}
     </div>
