@@ -316,8 +316,9 @@ export default function JoinApplication() {
     toast.success(`Selected: ${label}`, {
       description: "Application form synced. Continue below to complete your application.",
     });
-    // Jump wizard to Role & Experience step so users see the sync immediately
-    setCurrentStep((s) => (s < 2 ? 2 : s));
+    // Always start the wizard from Step 1 (Personal) so the user fills
+    // it in order, regardless of any prior progress.
+    setCurrentStep(0);
     setTimeout(scrollToForm, 80);
   };
 
@@ -449,6 +450,23 @@ export default function JoinApplication() {
 
   const goToStep = (idx: number) => {
     const clamped = Math.max(0, Math.min(TOTAL_STEPS - 1, idx));
+    // Backward / same-step navigation is always allowed.
+    if (clamped <= currentStep) {
+      setCurrentStep(clamped);
+      setTimeout(scrollToForm, 50);
+      return;
+    }
+    // Forward navigation: enforce sequential completion. Validate every
+    // step from current up to (but not including) the target. The first
+    // invalid step becomes the new active step (with errors surfaced by
+    // validateStep) so the user can't skip ahead.
+    for (let i = currentStep; i < clamped; i++) {
+      if (!validateStep(i)) {
+        setCurrentStep(i);
+        setTimeout(scrollToForm, 50);
+        return;
+      }
+    }
     setCurrentStep(clamped);
     setTimeout(scrollToForm, 50);
   };
