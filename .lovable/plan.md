@@ -1,108 +1,103 @@
-## What I found (inspection summary)
+## Goal
 
-I inspected the whole academy/certification stack. Findings:
+Bring the Broker portal to parity with the Owner CRM and add three new pillars:
+1. Broker **Database Sheets** (like Owner CRM) with merge-into-main-leads control.
+2. Broker **email connect** (Gmail / Outlook / Company IMAP) with smart work-related filtering inside `/broker/inbox`.
+3. **Internal Channel** (existing owner team-chat) wired to every broker, plus **HR Announcements Channel** (humanized persona, never branded as "AI").
 
-### Visual problems you flagged
-1. **Book covers are crowded.** `PremiumBookCover` stacks 6 ornaments on every cover — JBJ medallion ring, title block, gold rule, subtitle, *full Burj Khalifa skyline silhouette*, double gold frame, "No. X" tag, footer wordmark. On long titles ("Buyer & Investor Advisory" etc.) the title runs into the medallion above and the skyline below. That's the "overlay hiding the title/description" you see, plus the "lines/designs on the books" you want removed.
-2. **The card under each cover repeats** the title, the learning-path chip, and the description — so the same title is shown twice (once engraved, once below), creating the cluttered feel.
-3. **Certificate contrast issues.** Faded champagne text on dark obsidian: body copy uses `text-[#EFE6D6]/65` and `/80` → fails contrast on the dark plate; the "Company Seal" dashed placeholder reads as a broken element; the giant `PREVIEW` watermark you want gone; mobile stamp duplicated below; "Founder & CEO" / signature line cramped against the date column.
-
-### Critical wiring gap (nothing currently works end-to-end)
-4. **No code writes to `broker_education_progress`.** I grepped the entire repo — the table is only read, never written. So:
-   - Lessons can't be marked complete from `BookReader`.
-   - `broker_points` (shown on `/broker/account` as "Points Earned") is never incremented.
-   - The certificate unlock condition (`allModulesComplete`) is computed from local React state only, not from the DB — so it resets on refresh and never reflects real progress.
-   - The `broker_education_tests` table (75 modules × N questions) exists but has zero UI.
-5. **Two certification systems coexist.** `CertificationSection` (phases via `useCertification`) is imported in `BrokerLearning.tsx` but never rendered — only `CertificatePreview` is used. Dead import → confusion about which is authoritative.
+Strict rules carried through everything: broker can never DELETE a lead — only mark **Junk**, which returns to the owner Junk queue for redistribute / delete. No "AI" wording or bot icons on HR or any assistant persona.
 
 ---
 
-## Plan (3 acts)
+## Act 1 — Broker CRM = Owner CRM parity (Database Sheets + Junk return)
 
-### Act 1 — Book cover & library layout (premium + readable)
+### DB (one migration)
+- New `broker_databases` (id, broker_user_id, name, source, row_count, merged_into_main bool, color, created_at) — broker-owned scoped copy.
+- New `broker_database_leads` (id, broker_database_id, broker_user_id, lead snapshot fields, source_lead_id nullable, status enum: new/contacted/qualified/viewing/negotiation/won/junk, merged_to_main bool).
+- New `crm_junk_returns` (id, original_broker_id, lead_id, reason, returned_at, owner_action enum: pending/redistributed/deleted, redistributed_to).
+- RPCs:
+  - `broker_add_database(name, rows jsonb, merge_into_main bool)` — creates sheet; if `merge_into_main=true`, also inserts copies into `crm_leads` with `assigned_broker_id=auth.uid()` and flips `merged_to_main=true`.
+  - `broker_merge_database_to_main(database_id)` — later toggle.
+  - `broker_mark_lead_junk(lead_id, reason)` — flips status, inserts `crm_junk_returns` row, removes from broker's active pipeline, **never deletes**.
+  - `owner_redistribute_junk(junk_id, new_broker_id)` / `owner_delete_junk(junk_id)`.
+- RLS: brokers select/insert/update only their rows; junk_returns selectable by owner + the originating broker; no DELETE policy for brokers anywhere.
+- GRANTs to `authenticated` + `service_role`.
 
-`src/components/books/PremiumBookCover.tsx`
-- Delete the Burj-Khalifa skyline block (lines 108–127) and the double-frame inner ring. Keep only: dark gradient, single 1px gold hairline frame inset 8%, left spine, optional `No. X` tag.
-- Remove the JBJ circular medallion above the title. Title sits centered, vertically balanced.
-- Title block: tighten `splitTitle` to max 3 lines, drop max font-size to `clamp(9px, 9.5cqw, 44px)`, increase line-height to 1.15 so descenders don't clip the gold rule.
-- Move footer wordmark `JBJ GLOBAL REAL ESTATE` from bottom-edge to a single-line eyebrow above the title, smaller, in `#B89555`. Drop "| BROKER LEARNING LIBRARY".
-- Subtitle (learning path) stays under the gold rule.
+### Frontend
+- `/broker/crm` — extend existing `BrokerCRM.tsx`:
+  - **Add database** button → `AddBrokerDatabaseDialog` (upload CSV / paste / manual) with a **"Where should these leads live?"** radio:
+    - *Keep as separate database sheet only* (default)
+    - *Also merge into My Leads*
+  - **Assigned Databases** tab lists `broker_databases` cards (premium champagne, gold hairline). Click → opens **subsection inside the same page** (not a new route) rendering `<BrokerDatabaseSheet />` — same CRM table styling, kanban + grid, but scoped to that database only.
+  - Inside the sheet: per-row **Promote to My Leads** (copies into `crm_leads`) and **Mark Junk** (calls junk RPC). Delete button is **removed** for brokers globally.
+- `/owner/crm?section=leads&sub=junk` — new **Junk Returns** sub-tab listing `crm_junk_returns` pending rows. Actions: **Redistribute** (broker picker → reassign) or **Delete permanently**.
+- Update `BrokerLeadsPage` action menu: replace Delete with Mark Junk (with reason textarea).
 
-`src/components/broker-education/Book3DCard.tsx`
-- Remove the title `<h3>` and the description `<p>` block (lines 96–104) — the cover already shows the title. Keep only: learning-path chip + CTA button.
-- Rebalance card min-height (currently `min-h-[218px]`) since two text blocks are leaving. Replace with `min-h-[120px]` so the cover dominates the card visually.
-- Replace status badge with a discreet gold dot + small "In progress 3/5" / "Completed" pill in the cover top-right (no colored fills — uses `#EFE6D6` + ink per the No-Gold-Fills rule).
+---
 
-`src/pages/broker/BrokerLearning.tsx`
-- Library grid → switch to `grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5` so books feel like a real shelf, not 1 per row on tablet.
-- Group label upgraded to PremiumSectionCard band per memory: full-bleed champagne band with gold hairline title rule.
-- Add a chapter/lesson flow strip under each group: `Foundations · 4 books · 20 lessons · ~3h 30m`.
+## Act 2 — Broker email connect + smart inbox
 
-### Act 2 — Certificate redesign (contrast + signature block + stamp-as-seal)
+### Connect flow (broker portal → Settings → "Email accounts")
+- Gmail OAuth via existing Google connector (per-user OAuth tokens stored in new `broker_email_accounts` table: provider, email, refresh_token_encrypted, scopes, last_synced_at).
+- Outlook / Microsoft OAuth via Microsoft Graph connector.
+- Generic IMAP/SMTP for company emails (host, port, username, password_encrypted).
+- One broker can connect multiple accounts (company + personal).
 
-`src/components/certification/CertificatePreview.tsx`
-- **Remove `PREVIEW` watermark entirely.** Locked state is already communicated by the lock badge on the parent panel.
-- **Switch dark obsidian plate → premium champagne plate** to match the rest of the academy: background `linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)`, gold hairline frame, ink text `#1A1A1A`. (Dark plate violates the Champagne-Dominant core rule.)
-- All body copy goes to solid `#1A1A1A` (no opacity) — kills the faded-contrast issue.
-- **Stamp-as-seal:** drop the dashed "Company Seal" placeholder. Render the owner stamp (already fetched via `useOwnerSignatureAssets("stamp")`) centered behind the signature row at 130px with `mix-blend-multiply` + 0.85 opacity so it reads as an embossed wax seal, not a floating image. If no stamp uploaded → use a static gold-foil seal SVG (lucide `BadgeCheck` inside a conic gold ring) — never a dashed empty box.
-- **Signature block rebuild** (under signature image):
-  - Line 1: "Jeyhun Babayev" — `font-semibold text-[#1A1A1A]`
-  - Line 2: "Founder & CEO" — `text-[#1A1A1A]/70 text-[11px] uppercase tracking-[0.18em]`
-  - Line 3: "JBJ Global Real Estate" — `text-[#B89555] text-[10px]`
-  - Gold hairline above the block, fixed 300px width, right-aligned per the Signature+Gold Divider Lock memory.
-- Date + Certificate ID move to a bottom strip below the signature row (centered), not a third column — fixes the cramped 3-column squeeze.
-- Certificate ID rendered in gold monospace inside a small champagne pill.
-- Medallion at top: keep the existing `CertificateMedallion` but recolor to read on champagne (inner disc → ink ring, gold conic outer stays).
+### Smart filtering edge function `broker-email-sync`
+- Runs on demand + cron every 15 min per connected account.
+- Pulls last 200 messages, runs `google/gemini-2.5-flash-lite` classifier with labels: `new_launch`, `commission`, `onboarding_letter`, `warning_letter`, `termination`, `leave_approval`, `internal_jbj`, `client_lead`, `other`.
+- Writes into existing `broker_messages` (or new `broker_email_messages` if needed) with `category`, `summary`, `is_work_related`, `source_account_id`.
 
-### Act 3 — Wire the lesson → progress → points → certificate chain (the real gap)
+### UI in `/broker/inbox`
+- Left rail: filter by category chips (New Launch, Commission, HR, Internal, Leads).
+- Connected accounts pill row at top with sync-now + disconnect.
+- Quick reply uses existing tone-matched reply generator (purple AI badge — allowed in Inbox compose, not in HR).
 
-This is what makes everything actually work end-to-end. New hook `src/hooks/useEducationProgress.ts`:
+---
 
-```text
-markModuleStarted(bookId, moduleId)   → upsert progress row { status:'in_progress', started_at:now() }
-markModuleCompleted(bookId, moduleId) → upsert { status:'completed', completed_at:now() }
-                                       → award points via RPC (see migration below)
-```
+## Act 3 — Internal Channel wired to brokers + HR Channel (no AI labeling)
 
-`useBrokerEducation` already reads progress — extend it to also return totals + points so the academy shows real numbers, not local state.
+### Internal channel
+- `internal_chat_messages` already exists for owner team chat (`/team-chat`).
+- Extend: add `channel` enum (`team_general`, `hr_announcements`, `direct`) and `recipient_user_id` for DMs.
+- Auto-subscribe every `broker_profiles` row to `team_general` + `hr_announcements`.
+- Render a new `/broker/messages` (or extend `BrokerInbox` with a "Channels" tab) showing both channels and DMs.
+- Owner & colleagues can: open broker profile → **"Message"** (creates DM) or **"Email + CC Owner"** (opens compose dialog that drafts a template via Gemini, user edits, sends through Resend with owner in CC). Both deliver to broker inbox-on-site AND to their connected email.
 
-**Migration** (`add_lesson_completion_rpc`):
-- `complete_module(_book_id uuid, _module_id uuid) returns broker_points` — SECURITY DEFINER. Upserts progress row, awards **10 points/lesson**, **+50 bonus** when last module of a book is completed, **+200 bonus** when all 15 books done. Updates `broker_points.total_points_earned` and recomputes `level = floor(total/500)+1`.
-- `get_education_summary(_user uuid)` returning `{ total_lessons, completed_lessons, books_completed, points, level, is_certified }` — single round-trip for the dashboard.
-- GRANTs: `EXECUTE ... TO authenticated`.
+### HR Channel (humanized, never "AI")
+- New `hr_announcements` table (id, author_persona, title, body, category enum birthday/event/briefing/launch/celebration, scheduled_for, sent_at, audience).
+- Persona picker uses existing `team-members.ts` config (e.g., "Amanda Clarke — Executive Assistant"). **No bot icon, no "AI" word anywhere in broker-facing UI** — channel header shows the persona's photo + human title only.
+- Owner page `/owner/hr/announcements` — composer (rich text + image), schedule, audience (all brokers / all employees / specific team), preview as broker.
+- Broadcast pipeline: write row → fan out into `internal_chat_messages` with `channel='hr_announcements'` for every target user → optional Resend email digest.
 
-`BookReader.tsx`
-- Add "Mark complete" button at end of each module → calls `markModuleCompleted`. Toast: "+10 points · Module 3/5 complete".
-- Lesson timer chip at top of each module: `~{estimated_minutes} min · Lesson {module_number} of {total}`.
-- Free-flow chapter rail in the left sidebar: clickable chapter list with check/lock/in-progress states, points pill per chapter.
+---
 
-`BrokerLearning.tsx`
-- Replace local `moduleProgress` state with `useEducationProgress()`.
-- New top KPI row: **Books completed · Lessons completed · Points earned · Level · Certificate status** (5 tiles, semantic icon tones per IconTile standard).
-- Certificate unlock now driven by `summary.is_certified` from the DB — survives refresh.
-- Delete the unused `CertificationSection` import.
+## Act 4 — Stability, intelligence, end-to-end QA
 
-### Recommendations (what's missing — answer to your question)
+- Indexes on every new FK + `(broker_user_id, status)` + `(broker_user_id, sent_at desc)`.
+- Realtime publication on `internal_chat_messages`, `hr_announcements`, `broker_database_leads`, `crm_junk_returns`.
+- Audit logs: every junk return, redistribution, email connect/disconnect, HR broadcast → `admin_edit_log`.
+- AI intelligence layer (Gemini 2.5 Flash):
+  - Auto-suggest junk reason when broker hovers Mark Junk.
+  - Auto-categorize incoming emails (Act 2 classifier).
+  - Owner-side AI suggestion: "12 junk leads look re-qualifiable — redistribute to Top 3 brokers?"
+- Manual QA after build (screenshots): `/broker/crm` add+open database sheet, junk flow, `/owner/crm` junk queue, `/broker/inbox` with connected Gmail, `/owner/hr/announcements` broadcast landing in a broker's channel.
 
-1. **Quizzes are dead data.** 75 lessons have `broker_education_tests` rows but no UI. Add a 3-question quiz gate at the end of each module (pass ≥ 2/3 → mark complete, +5 bonus points). Without this anyone can speed-click "Mark complete".
-2. **No leaderboard / no streaks.** Add a weekly leaderboard panel (top 10 brokers by points this week) + daily-streak chip — the `broker_points` table can carry these with two new columns (`current_streak_days`, `last_active_date`).
-3. **No completion email / no badge on broker profile.** When `is_certified` flips, send a Resend email with the cert PDF and stamp a "Certified JBJ Broker" badge on `broker_profiles.custom_label`.
-4. **No mobile-first reader.** `BookReader` currently assumes desktop. Add a sticky bottom action bar on mobile (Prev · Mark complete · Next) and collapse the chapter rail behind a drawer.
-5. **No "resume where I left off"** card on the academy header. Cheap win: show the last in-progress lesson with a one-click Continue.
-6. **Decide one certification system.** Either delete `CertificationSection` + `useCertification` (recommended — they're unused) or wire them in place of `CertificatePreview` and delete the latter. Right now both exist and only one is rendered → tech debt.
+---
+
+## Out of scope (flagged, not built)
+- True 2-way email sync (sent items mirror) — read-only sync first; send still goes through Resend.
+- SMS / WhatsApp ingestion into broker inbox.
+- Per-broker billing / paid seat gating (you said "decide later").
+- Migrating historical `broker_messages` rows into new category schema (forward-only).
 
 ---
 
 ## Technical notes
+- Email secrets: stored encrypted via existing `pgsodium`/encryption helpers; never returned to client.
+- Google/Microsoft OAuth: use `standard_connectors--connect` for app-level send, but for per-broker mailbox read we set up per-user OAuth flow (each broker authorizes their own mailbox — connector alone won't work for multi-tenant inbox reading).
+- All new public tables follow GRANT + RLS contract.
+- All UI uses existing champagne tokens, PricePill, IconTile, no gray surfaces, no faded gold, navy CTAs.
+- HR persona compliance enforced via a single `HumanPersonaBadge` component — banned from importing anywhere that would render "AI" or bot icons in HR/assistant contexts.
 
-- All new colors stay within the locked palette: `#FDFBF7 / #F7F2EA / #EFE6D6 / #B89555 (hairline) / #1A1A1A`. No raw grays. Gold is hairline-only — no gold fills.
-- Certificate plate becomes champagne (compliant) — no dark obsidian.
-- Points RPC uses SECURITY DEFINER so the trigger can update `broker_points` even though RLS restricts direct user updates.
-- Memory updates after build: add `mem://features/broker/academy-progress-wiring` and `mem://features/broker/certificate-champagne-standard`.
-
-### Out of scope
-- Rebuilding the quiz UI engine (recommended but listed under recommendations, not built in this pass unless you approve).
-- Translations for new copy (existing `broker_education_books_translations` covers book titles; new strings will use English only for now).
-- Email delivery on cert issue (recommendation #3).
-
-If you want quizzes + leaderboard + cert email shipped in the same pass, say so and I'll fold them into the build.
+Reply **"approve"** to start Act 1, or tell me which acts to skip / reorder.

@@ -18,6 +18,9 @@ import RequestDatabaseDialog from "@/components/broker-portal/RequestDatabaseDia
 import UploadDatabaseDialog from "@/components/crm/UploadDatabaseDialog";
 import LogCallDialog from "@/components/broker-crm/LogCallDialog";
 import CallDetailSheet from "@/components/broker-crm/CallDetailSheet";
+import BrokerDatabaseSheet from "@/components/broker-crm/BrokerDatabaseSheet";
+import MarkJunkDialog from "@/components/broker-crm/MarkJunkDialog";
+import { AlertTriangle } from "lucide-react";
 
 type Tab = "pipeline" | "databases" | "leads" | "calls" | "insights" | "activity";
 
@@ -83,6 +86,8 @@ export default function BrokerCRM() {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [callDialogOpen, setCallDialogOpen] = useState(false);
   const [openCallId, setOpenCallId] = useState<string | null>(null);
+  const [openDbSheet, setOpenDbSheet] = useState<{ id: string; name: string } | null>(null);
+  const [junkLead, setJunkLead] = useState<{ id: string; name: string } | null>(null);
   const dbs = useBrokerScopedDatabases();
   const leads = useBrokerScopedLeads();
   const tasks = useBrokerPersonalTasks();
@@ -560,6 +565,13 @@ export default function BrokerCRM() {
       )}
 
       {tab === "databases" && (
+        openDbSheet ? (
+          <BrokerDatabaseSheet
+            databaseId={openDbSheet.id}
+            databaseName={openDbSheet.name}
+            onBack={() => setOpenDbSheet(null)}
+          />
+        ) : (
         <section className="space-y-3">
           {dbs.isLoading ? (
             <Loading />
@@ -568,8 +580,8 @@ export default function BrokerCRM() {
               <Inbox className="h-7 w-7 mx-auto text-[#1A1A1A]/60 mb-3" />
               <div className="text-sm font-semibold text-[#1A1A1A]">No databases shared with you yet</div>
               <p className="text-xs text-[#1A1A1A]/65 mt-1 max-w-md mx-auto">
-                When your manager grants access to a CRM database, it will appear here. You can also request a new
-                database be uploaded to your scope.
+                When your manager grants access to a CRM database — or you upload one yourself — it will appear here.
+                Click any database to open it as a separate sheet without merging into My Leads.
               </p>
               <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
                 <button
@@ -590,13 +602,13 @@ export default function BrokerCRM() {
                 </button>
               </div>
             </PremiumCard>
-
           ) : (
             dbs.data!.map((d) => (
-              <Link
+              <button
                 key={d.grant_id}
-                to={`/broker/crm/database/${d.database_id}`}
-                className="block p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 hover:border-[#B89555]/55 transition-colors"
+                type="button"
+                onClick={() => setOpenDbSheet({ id: d.database_id, name: d.database_name })}
+                className="block w-full text-left p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 hover:border-[#B89555]/55 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <div className="h-9 w-9 rounded-md bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center">
@@ -611,11 +623,13 @@ export default function BrokerCRM() {
                   </div>
                   <ArrowRight className="h-4 w-4 text-[#1A1A1A]/50" />
                 </div>
-              </Link>
+              </button>
             ))
           )}
         </section>
+        )
       )}
+
 
       {tab === "leads" && (
         <div className="space-y-3">
@@ -683,7 +697,7 @@ export default function BrokerCRM() {
                 </div>
                 <div className="divide-y divide-[#B89555]/15">
                   {filteredLeads.map((l: any) => (
-                    <div key={l.id} className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 items-center px-4 py-3">
+                    <div key={l.id} className="grid grid-cols-[40px_1fr_120px_120px_100px_90px] gap-3 items-center px-4 py-3">
                       <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/25 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
                         {(l.full_name || "?").slice(0, 1).toUpperCase()}
                       </div>
@@ -694,6 +708,16 @@ export default function BrokerCRM() {
                       <div className="text-xs text-[#1A1A1A]/75 truncate">{l.pipeline_stage || "new"}</div>
                       <div className="text-xs text-[#1A1A1A]/75 truncate">{l.source || l.lead_source_type || "—"}</div>
                       <div className="text-[11px] text-[#1A1A1A]/60 tabular-nums text-right">{formatDisplayDate(l.updated_at)}</div>
+                      <div className="text-right">
+                        <button
+                          type="button"
+                          onClick={() => setJunkLead({ id: l.id, name: l.full_name })}
+                          className="inline-flex items-center gap-1 h-7 px-2 rounded-md border border-[#B89555]/40 text-[11px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                          title="Return to JBJ owner as junk"
+                        >
+                          <AlertTriangle className="h-3 w-3" /> Junk
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>

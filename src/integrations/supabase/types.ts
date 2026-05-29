@@ -9363,6 +9363,10 @@ export type Database = {
           is_global_broker: boolean | null
           is_investor: boolean
           is_junk: boolean
+          junk_original_broker_id: string | null
+          junk_reason: string | null
+          junk_returned_at: string | null
+          junk_returned_by_user_id: string | null
           languages: string[] | null
           last_contacted_at: string | null
           last_updated_by: string | null
@@ -9371,6 +9375,7 @@ export type Database = {
           lead_source_type: string | null
           lead_type: string | null
           list_id: string | null
+          merged_to_main_leads: boolean
           nationality: string | null
           next_followup_at: string | null
           notes: string | null
@@ -9465,6 +9470,10 @@ export type Database = {
           is_global_broker?: boolean | null
           is_investor?: boolean
           is_junk?: boolean
+          junk_original_broker_id?: string | null
+          junk_reason?: string | null
+          junk_returned_at?: string | null
+          junk_returned_by_user_id?: string | null
           languages?: string[] | null
           last_contacted_at?: string | null
           last_updated_by?: string | null
@@ -9473,6 +9482,7 @@ export type Database = {
           lead_source_type?: string | null
           lead_type?: string | null
           list_id?: string | null
+          merged_to_main_leads?: boolean
           nationality?: string | null
           next_followup_at?: string | null
           notes?: string | null
@@ -9567,6 +9577,10 @@ export type Database = {
           is_global_broker?: boolean | null
           is_investor?: boolean
           is_junk?: boolean
+          junk_original_broker_id?: string | null
+          junk_reason?: string | null
+          junk_returned_at?: string | null
+          junk_returned_by_user_id?: string | null
           languages?: string[] | null
           last_contacted_at?: string | null
           last_updated_by?: string | null
@@ -9575,6 +9589,7 @@ export type Database = {
           lead_source_type?: string | null
           lead_type?: string | null
           list_id?: string | null
+          merged_to_main_leads?: boolean
           nationality?: string | null
           next_followup_at?: string | null
           notes?: string | null
@@ -37796,6 +37811,14 @@ export type Database = {
         Args: { _db: string; _user: string }
         Returns: boolean
       }
+      broker_mark_lead_junk: {
+        Args: { _lead_id: string; _reason: string }
+        Returns: undefined
+      }
+      broker_promote_lead_to_main: {
+        Args: { _lead_id: string }
+        Returns: undefined
+      }
       bulk_assign_leads: {
         Args: {
           p_assigned_by_user_id: string
@@ -38100,6 +38123,10 @@ export type Database = {
           is_global_broker: boolean | null
           is_investor: boolean
           is_junk: boolean
+          junk_original_broker_id: string | null
+          junk_reason: string | null
+          junk_returned_at: string | null
+          junk_returned_by_user_id: string | null
           languages: string[] | null
           last_contacted_at: string | null
           last_updated_by: string | null
@@ -38108,6 +38135,7 @@ export type Database = {
           lead_source_type: string | null
           lead_type: string | null
           list_id: string | null
+          merged_to_main_leads: boolean
           nationality: string | null
           next_followup_at: string | null
           notes: string | null
@@ -38617,6 +38645,11 @@ export type Database = {
       mask_phone: { Args: { phone: string }; Returns: string }
       next_booking_id: { Args: { prefix?: string }; Returns: string }
       next_doc_number: { Args: { _template_key: string }; Returns: string }
+      owner_delete_junk_lead: { Args: { _lead_id: string }; Returns: undefined }
+      owner_redistribute_junk_lead: {
+        Args: { _lead_id: string; _new_broker_id: string }
+        Returns: undefined
+      }
       portal_rep_owns: {
         Args: { _rep_id: string; _uid: string }
         Returns: boolean
