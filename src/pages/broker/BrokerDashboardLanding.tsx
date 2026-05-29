@@ -5,6 +5,7 @@ import {
   Users, Database, Calendar, ListTodo, Handshake, BadgeDollarSign,
   ArrowRight, Plus, Phone, Brain, Sparkles, Activity, ChevronRight, Briefcase,
 } from "lucide-react";
+import { IconTile, type IconTileTone } from "@/components/ui/icon-tile";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBrokerProfile } from "@/hooks/useBrokerProfile";
