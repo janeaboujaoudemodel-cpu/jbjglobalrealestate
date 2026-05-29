@@ -32825,6 +32825,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_cvs: {
+        Row: {
+          created_at: string
+          data: Json
+          deleted_at: string | null
+          id: string
+          photo_url: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          deleted_at?: string | null
+          id?: string
+          photo_url?: string | null
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          deleted_at?: string | null
+          id?: string
+          photo_url?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_daily_activity: {
         Row: {
           created_at: string
