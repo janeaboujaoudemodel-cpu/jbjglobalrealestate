@@ -4,9 +4,8 @@
  * generates a scoped CSS override (soft mode), and exposes Approve /
  * Reject / Take me there controls.
  */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import {
   Sparkles,
   Send,
@@ -163,18 +162,25 @@ export default function WebDevDock() {
 
   if (!allowed) return null;
 
+  const openDock = () => {
+    try {
+      localStorage.setItem("jj_tour_completed", "true");
+    } catch {
+      // Ignore restricted storage contexts — the dock should still open.
+    }
+    window.dispatchEvent(new CustomEvent("jbj:webdev-open"));
+    setOpen(true);
+  };
+
   return (
     <div
-      className="fixed bottom-6 right-6 z-[9998] flex flex-col items-end gap-3"
+      className="fixed bottom-6 right-6 z-[12000] flex flex-col items-end gap-3 isolate"
       data-no-contrast-guard
     >
       {open && (
-        <motion.div
+        <div
           key="webdev-panel"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 20, opacity: 0 }}
-          className="w-[360px] max-h-[78vh] bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          className="w-[min(380px,calc(100vw-2rem))] h-[min(620px,calc(100vh-3rem))] min-h-[460px] bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           data-gold-hairline
           data-no-contrast-guard
         >
@@ -287,21 +293,19 @@ export default function WebDevDock() {
                 </div>
               ))}
           </div>
-        </motion.div>
+        </div>
       )}
 
       {!open && (
-        <motion.button
+        <button
           key="webdev-launcher"
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          onClick={() => setOpen(true)}
-          className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-[#102540] text-white shadow-lg border border-[#B89555]/40 allow-white hover:bg-[#1a3d63] transition-colors leading-none"
+          onClick={openDock}
+          className="inline-flex items-center gap-2 h-12 min-w-[178px] px-5 rounded-full bg-[#102540] text-white shadow-lg border border-[#B89555]/40 allow-white hover:bg-[#1a3d63] transition-colors leading-none whitespace-nowrap"
           data-no-contrast-guard
         >
           <Sparkles className="w-4 h-4 text-[#EFE6D6] shrink-0" />
           <span className="text-sm font-medium leading-none">Web Developer</span>
-        </motion.button>
+        </button>
       )}
     </div>
   );
