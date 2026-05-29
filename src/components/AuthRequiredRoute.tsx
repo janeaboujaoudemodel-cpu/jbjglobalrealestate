@@ -18,7 +18,11 @@ const AuthRequiredRoute = ({ children }: AuthRequiredRouteProps) => {
   if (loading) return <PageLoader />;
 
   if (!user) {
-    const returnTo = encodeURIComponent(location.pathname + location.search);
+    const fullPath = location.pathname + location.search;
+    // Stash in sessionStorage as backup — survives OAuth round-trips that strip
+    // query params on the Supabase callback redirect.
+    try { sessionStorage.setItem("jbj_post_login_redirect", fullPath); } catch {}
+    const returnTo = encodeURIComponent(fullPath);
     return <Navigate to={`/auth?returnTo=${returnTo}`} replace />;
   }
 
