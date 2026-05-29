@@ -159,6 +159,117 @@ export default function HRAgentChat() {
     }
   };
 
+  const handleCvPicked = (f: File | null) => {
+    if (!f) return;
+    const ok = /\.(pdf|docx?|jpe?g|png|webp|heic|heif)$/i.test(f.name);
+    if (!ok) {
+      toast.error('Please upload PDF, Word, or image (JPG/PNG/HEIC).');
+      return;
+    }
+    if (f.size > 10 * 1024 * 1024) {
+      toast.error('Max file size is 10 MB.');
+      return;
+    }
+    setCvFile(f);
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'user',
+        content: `📎 Attached CV: ${f.name}`,
+        timestamp: new Date().toISOString(),
+      },
+      {
+        role: 'assistant',
+        content: selectedPositionId
+          ? `Got it — I have your CV. Tap "Submit application" when you're ready and I'll file it for the selected role.`
+          : `Thanks! I've received your CV. Please pick the position you're applying for from the selector below, then tap "Submit application".`,
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+  };
+
+  const submitApplication = async () => {
+    if (!user) {
+      toast.error('Please sign in to submit your application.');
+      return;
+    }
+    if (!cvFile) {
+      toast.error('Attach your CV first.');
+      return;
+    }
+    if (!selectedPositionId) {
+      toast.error('Select the position you are applying for.');
+      return;
+    }
+    setSubmittingApp(true);
+    try {
+      // 1) Upload to hr-documents bucket (same path scheme as JoinApplication)
+      const ext = cvFile.name.split('.').pop();
+      const path = `${user.id}/cv-${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from('hr-documents')
+        .upload(path, cvFile, { cacheControl: '3600', upsert: true });
+      if (upErr) throw upErr;
+
+      const pos = openPositions.find((p) => p.id === selectedPositionId);
+      const positionLabel = pos?.title || selectedPositionId;
+
+      // 2) Insert hr_applications row (same wiring as the application form)
+      const { error: appErr } = await supabase.from('hr_applications').insert({
+        user_id: user.id,
+        full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Applicant',
+        email: user.email!,
+        cv_url: path,
+        position_applied: positionLabel,
+        consent_accurate: true,
+        consent_terms: true,
+        status: 'pending',
+        source: 'jessica_chat',
+      } as any);
+      if (appErr && !/duplicate|unique/i.test(appErr.message)) throw appErr;
+
+      // 3) Confirmation email + admin task (best-effort)
+      void supabase.functions.invoke('send-cv-status-email', {
+        body: {
+          email: user.email!,
+          fullName: user.user_metadata?.full_name || user.email,
+          status: 'submitted',
+          position: positionLabel,
+          userId: user.id,
+        },
+      });
+
+      // 4) Tell Jessica so she can guide next steps in conversation
+      try {
+        await supabase.functions.invoke('hr-ai-agent', {
+          body: {
+            action: 'send_message',
+            conversationId,
+            message: `[SYSTEM] Candidate just submitted their CV "${cvFile.name}" for position "${positionLabel}" through the chat. Please confirm receipt warmly and continue the interview.`,
+          },
+        });
+      } catch {}
+
+      setHasApplied(true);
+      setCvFile(null);
+      toast.success('Application submitted — thank you!');
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: `✅ Your application for **${positionLabel}** has been received and your CV is saved to our system. Our HR team will review it within 2–3 business days. In the meantime, I can continue with a few interview questions if you'd like.`,
+          timestamp: new Date().toISOString(),
+        },
+      ]);
+    } catch (e: any) {
+      console.error(e);
+      toast.error(e?.message || 'Failed to submit application.');
+    } finally {
+      setSubmittingApp(false);
+    }
+  };
+
+
   const currentStageBadge = stageBadges[stage] || stageBadges.greeting;
 
   if (initializing) {
