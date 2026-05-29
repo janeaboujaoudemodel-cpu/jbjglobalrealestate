@@ -585,7 +585,7 @@ const Properties = () => {
                   <div className="flex-1 min-w-[110px]">
                     <Select value={intentValue} onValueChange={setIntent}>
                       <SelectTrigger
-                        className="h-full w-full px-3 bg-transparent border-0 rounded-none shadow-none text-[13px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6]/50"
+                        className="h-full w-full px-3 bg-transparent border-0 rounded-none shadow-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus:ring-offset-0 text-[13px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6]/50"
                         aria-label="Transaction intent"
                       >
                         <SelectValue />
@@ -599,16 +599,17 @@ const Properties = () => {
                     </Select>
                   </div>
                   <div className="w-px bg-[#B89555]/40 flex-shrink-0" />
-                  <div className="flex-1 min-w-[110px]">
+                  <div className="flex-1 min-w-[110px] [&_*]:!ring-0 [&_*]:!ring-offset-0 [&_button]:!outline-none">
                     <SortBySelect
                       value={sortBy}
                       onChange={setSortBy}
                       iconOnly
                       borderless
                       size="default"
-                      className="h-full w-full rounded-none"
+                      className="h-full w-full rounded-none border-0 shadow-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
                     />
                   </div>
+
                 </div>
 
 
@@ -688,12 +689,14 @@ const Properties = () => {
                       </span>
                       {activeFilterCount > 0 && (
                         <span
-                          className="allow-white inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold bg-[#B89555] text-[#1A1A1A]"
+                          className="allow-white inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold bg-[#102540] text-white ring-1 ring-[#B89555]/60"
+                          style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                           data-no-contrast-guard
                         >
                           {activeFilterCount}
                         </span>
                       )}
+
                     </button>
                   </DialogTrigger>
 
