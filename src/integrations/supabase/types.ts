@@ -3298,6 +3298,69 @@ export type Database = {
           },
         ]
       }
+      broker_email_accounts: {
+        Row: {
+          access_token_encrypted: string | null
+          created_at: string
+          display_name: string | null
+          email_address: string
+          id: string
+          imap_host: string | null
+          imap_port: number | null
+          last_error: string | null
+          last_synced_at: string | null
+          provider: string
+          refresh_token_encrypted: string | null
+          smtp_host: string | null
+          smtp_port: number | null
+          status: string
+          sync_enabled: boolean
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token_encrypted?: string | null
+          created_at?: string
+          display_name?: string | null
+          email_address: string
+          id?: string
+          imap_host?: string | null
+          imap_port?: number | null
+          last_error?: string | null
+          last_synced_at?: string | null
+          provider: string
+          refresh_token_encrypted?: string | null
+          smtp_host?: string | null
+          smtp_port?: number | null
+          status?: string
+          sync_enabled?: boolean
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token_encrypted?: string | null
+          created_at?: string
+          display_name?: string | null
+          email_address?: string
+          id?: string
+          imap_host?: string | null
+          imap_port?: number | null
+          last_error?: string | null
+          last_synced_at?: string | null
+          provider?: string
+          refresh_token_encrypted?: string | null
+          smtp_host?: string | null
+          smtp_port?: number | null
+          status?: string
+          sync_enabled?: boolean
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       broker_email_templates: {
         Row: {
           created_at: string | null
@@ -3336,6 +3399,86 @@ export type Database = {
           variables?: string[] | null
         }
         Relationships: []
+      }
+      broker_emails: {
+        Row: {
+          account_id: string
+          ai_category: string | null
+          ai_intent: string | null
+          ai_processed_at: string | null
+          ai_summary: string | null
+          body_html: string | null
+          body_text: string | null
+          created_at: string
+          external_id: string
+          from_address: string | null
+          from_name: string | null
+          id: string
+          is_read: boolean
+          is_starred: boolean
+          linked_lead_id: string | null
+          received_at: string
+          snippet: string | null
+          subject: string | null
+          thread_id: string | null
+          to_addresses: string[] | null
+          user_id: string
+        }
+        Insert: {
+          account_id: string
+          ai_category?: string | null
+          ai_intent?: string | null
+          ai_processed_at?: string | null
+          ai_summary?: string | null
+          body_html?: string | null
+          body_text?: string | null
+          created_at?: string
+          external_id: string
+          from_address?: string | null
+          from_name?: string | null
+          id?: string
+          is_read?: boolean
+          is_starred?: boolean
+          linked_lead_id?: string | null
+          received_at: string
+          snippet?: string | null
+          subject?: string | null
+          thread_id?: string | null
+          to_addresses?: string[] | null
+          user_id: string
+        }
+        Update: {
+          account_id?: string
+          ai_category?: string | null
+          ai_intent?: string | null
+          ai_processed_at?: string | null
+          ai_summary?: string | null
+          body_html?: string | null
+          body_text?: string | null
+          created_at?: string
+          external_id?: string
+          from_address?: string | null
+          from_name?: string | null
+          id?: string
+          is_read?: boolean
+          is_starred?: boolean
+          linked_lead_id?: string | null
+          received_at?: string
+          snippet?: string | null
+          subject?: string | null
+          thread_id?: string | null
+          to_addresses?: string[] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_emails_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "broker_email_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       broker_form_requests: {
         Row: {
@@ -17877,6 +18020,89 @@ export type Database = {
           },
         ]
       }
+      hr_announcement_reads: {
+        Row: {
+          announcement_id: string
+          read_at: string
+          user_id: string
+        }
+        Insert: {
+          announcement_id: string
+          read_at?: string
+          user_id: string
+        }
+        Update: {
+          announcement_id?: string
+          read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_announcement_reads_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "hr_announcements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_announcements: {
+        Row: {
+          attachments: Json | null
+          audience: string
+          audience_role: string | null
+          audience_user_ids: string[] | null
+          author_persona: string
+          author_user_id: string
+          body_html: string
+          category: string
+          created_at: string
+          id: string
+          pin: boolean
+          published_at: string | null
+          scheduled_for: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          attachments?: Json | null
+          audience?: string
+          audience_role?: string | null
+          audience_user_ids?: string[] | null
+          author_persona?: string
+          author_user_id: string
+          body_html: string
+          category?: string
+          created_at?: string
+          id?: string
+          pin?: boolean
+          published_at?: string | null
+          scheduled_for?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          attachments?: Json | null
+          audience?: string
+          audience_role?: string | null
+          audience_user_ids?: string[] | null
+          author_persona?: string
+          author_user_id?: string
+          body_html?: string
+          category?: string
+          created_at?: string
+          id?: string
+          pin?: boolean
+          published_at?: string | null
+          scheduled_for?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       hr_applications: {
         Row: {
           ai_ranking: number | null
@@ -20172,32 +20398,41 @@ export type Database = {
       internal_chat_messages: {
         Row: {
           attachments: Json | null
+          channel: string
           created_at: string
           employee_id: string
           employee_name: string
           id: string
           message: string
+          recipient_user_id: string | null
           role: string
+          thread_id: string | null
           user_id: string
         }
         Insert: {
           attachments?: Json | null
+          channel?: string
           created_at?: string
           employee_id: string
           employee_name: string
           id?: string
           message: string
+          recipient_user_id?: string | null
           role: string
+          thread_id?: string | null
           user_id: string
         }
         Update: {
           attachments?: Json | null
+          channel?: string
           created_at?: string
           employee_id?: string
           employee_name?: string
           id?: string
           message?: string
+          recipient_user_id?: string | null
           role?: string
+          thread_id?: string | null
           user_id?: string
         }
         Relationships: []
@@ -37807,6 +38042,10 @@ export type Database = {
         Args: { _lead_id: string; _user_id: string }
         Returns: boolean
       }
+      broker_email_mark_read: {
+        Args: { _email_id: string; _read?: boolean }
+        Returns: undefined
+      }
       broker_has_database_access: {
         Args: { _db: string; _user: string }
         Returns: boolean
@@ -38517,6 +38756,8 @@ export type Database = {
       }
       has_verified_first_deal: { Args: { _user_id: string }; Returns: boolean }
       hash_otp: { Args: { p_code: string }; Returns: string }
+      hr_announcement_mark_read: { Args: { _id: string }; Returns: undefined }
+      hr_announcement_publish: { Args: { _id: string }; Returns: undefined }
       increment_shared_card_views: {
         Args: { card_token: string }
         Returns: undefined
