@@ -74,8 +74,6 @@ export default function PortalShowcaseCard({
     <section className="jj-portal-showcase relative overflow-hidden py-10 md:py-14">
       <div className="relative w-full px-4 md:px-6">
         <div
-          data-surface="dark"
-          data-on-dark
           data-no-contrast-guard
           className="allow-white jj-portal-shell group/portal relative mx-auto max-w-[1500px] overflow-hidden rounded-[34px] border border-[hsl(var(--gold)/0.62)] bg-[hsl(var(--navy-cta))] p-3 shadow-[0_32px_90px_-50px_hsl(var(--navy-cta)/0.75)] sm:p-4 md:p-5"
         >
