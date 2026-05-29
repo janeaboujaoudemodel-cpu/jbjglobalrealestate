@@ -147,6 +147,8 @@ export default function LogCallDialog({
     setCoachTips([]);
     liveTextRef.current = "";
     pendingStopRef.current = null;
+    if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+    setAudioPreviewUrl(null);
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
     stopTracks();
     recRef.current = null;
@@ -154,6 +156,10 @@ export default function LogCallDialog({
   };
 
   useEffect(() => { if (!open) reset(); }, [open]);
+
+  useEffect(() => () => {
+    if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+  }, [audioPreviewUrl]);
 
   useEffect(() => {
     if (!open || !initialLeadId) return;
