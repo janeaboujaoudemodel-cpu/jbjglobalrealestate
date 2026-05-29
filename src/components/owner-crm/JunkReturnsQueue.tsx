@@ -37,10 +37,11 @@ export default function JunkReturnsQueue() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("broker_profiles")
-        .select("user_id, full_name")
-        .order("full_name");
+        .select("user_id, display_name")
+        .eq("is_active", true)
+        .order("display_name");
       if (error) throw error;
-      return data || [];
+      return (data || []).map((b: any) => ({ user_id: b.user_id, full_name: b.display_name }));
     },
   });
 
