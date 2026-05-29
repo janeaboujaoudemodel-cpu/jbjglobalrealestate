@@ -272,8 +272,8 @@ export default function AIBrokerWorkspace() {
                     {selected.source ? ` · ${selected.source}` : ""}
                     {selected.preferred_language ? ` · prefers ${selected.preferred_language}` : ""}
                   </div>
+                </div>
               </div>
-
             )}
             <AssistantChat
               turns={selectedId ? turns : generalTurns}
