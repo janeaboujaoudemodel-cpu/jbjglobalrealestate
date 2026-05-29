@@ -10,8 +10,27 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { SearchableSelect } from '@/components/ui/searchable-select';
+import { PhoneInput } from '@/components/ui/phone-input';
+import { getCountryList, getLanguageList } from '@/constants/localeOptions';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+
+const NATIONALITIES = [
+  "Afghan","Albanian","Algerian","American","Andorran","Angolan","Argentine","Armenian","Australian","Austrian",
+  "Azerbaijani","Bahraini","Bangladeshi","Belgian","Bolivian","Bosnian","Brazilian","British","Bulgarian","Cambodian",
+  "Cameroonian","Canadian","Chilean","Chinese","Colombian","Croatian","Cuban","Czech","Danish","Dutch",
+  "Ecuadorian","Egyptian","Emirati","Estonian","Ethiopian","Filipino","Finnish","French","Georgian","German",
+  "Ghanaian","Greek","Hungarian","Icelandic","Indian","Indonesian","Iranian","Iraqi","Irish","Israeli",
+  "Italian","Jamaican","Japanese","Jordanian","Kazakh","Kenyan","Korean","Kuwaiti","Latvian","Lebanese",
+  "Libyan","Lithuanian","Luxembourgish","Malaysian","Maldivian","Maltese","Mexican","Moldovan","Mongolian","Moroccan",
+  "Nepalese","New Zealander","Nigerian","Norwegian","Omani","Pakistani","Palestinian","Panamanian","Peruvian","Polish",
+  "Portuguese","Qatari","Romanian","Russian","Saudi","Serbian","Singaporean","Slovak","Slovenian","South African",
+  "Spanish","Sri Lankan","Sudanese","Swedish","Swiss","Syrian","Taiwanese","Thai","Tunisian","Turkish",
+  "Ukrainian","Uruguayan","Uzbek","Venezuelan","Vietnamese","Yemeni","Zambian","Zimbabwean",
+];
+const LANGUAGES = getLanguageList();
+const COUNTRIES = getCountryList();
 
 interface OpenPosition {
   id: string;
@@ -59,7 +78,7 @@ export default function HRAgentChat() {
     lastName: '',
     phone: '',
     nationality: '',
-    preferredLanguage: 'en',
+    preferredLanguage: '',
     country: '',
     city: '',
     consentAccurate: false,
@@ -503,23 +522,49 @@ export default function HRAgentChat() {
                     )}
 
                     {applicationStep === 1 && (
-                      <div className="grid gap-2 sm:grid-cols-3">
+                      <div className="grid gap-2 sm:grid-cols-2">
                         <Input value={applicationForm.firstName} onChange={(e) => setApplicationValue('firstName', e.target.value)} placeholder="First name" className="border-[#B89555]/40 text-[#1A1A1A]" />
                         <Input value={applicationForm.lastName} onChange={(e) => setApplicationValue('lastName', e.target.value)} placeholder="Last name" className="border-[#B89555]/40 text-[#1A1A1A]" />
-                        <Input value={applicationForm.phone} onChange={(e) => setApplicationValue('phone', e.target.value)} placeholder="Phone" className="border-[#B89555]/40 text-[#1A1A1A]" />
+                        <div className="sm:col-span-2">
+                          <PhoneInput
+                            value={applicationForm.phone}
+                            onChange={(v) => setApplicationValue('phone', v || '')}
+                            placeholder="Phone number"
+                            className="border-[#B89555]/40"
+                          />
+                        </div>
                       </div>
                     )}
 
                     {applicationStep === 2 && (
                       <div className="grid gap-2 sm:grid-cols-2">
-                        <Input value={applicationForm.nationality} onChange={(e) => setApplicationValue('nationality', e.target.value)} placeholder="Nationality" className="border-[#B89555]/40 text-[#1A1A1A]" />
-                        <Select value={applicationForm.preferredLanguage} onValueChange={(v) => setApplicationValue('preferredLanguage', v)}>
-                          <SelectTrigger className="border-[#B89555]/40 bg-white text-[#1A1A1A]"><SelectValue placeholder="Language" /></SelectTrigger>
-                          <SelectContent className="bg-white text-[#1A1A1A]">
-                            <SelectItem value="en">English</SelectItem><SelectItem value="ar">Arabic</SelectItem><SelectItem value="hi">Hindi</SelectItem><SelectItem value="ur">Urdu</SelectItem><SelectItem value="ru">Russian</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <Input value={applicationForm.country} onChange={(e) => setApplicationValue('country', e.target.value)} placeholder="Country" className="border-[#B89555]/40 text-[#1A1A1A]" />
+                        <SearchableSelect
+                          value={applicationForm.nationality}
+                          onChange={(v) => setApplicationValue('nationality', v)}
+                          options={NATIONALITIES}
+                          placeholder="Select nationality"
+                          searchPlaceholder="Search nationality..."
+                          flagType="nationality"
+                          triggerClassName="h-10 border-[#B89555]/40 bg-white text-[#1A1A1A]"
+                        />
+                        <SearchableSelect
+                          value={applicationForm.preferredLanguage}
+                          onChange={(v) => setApplicationValue('preferredLanguage', v)}
+                          options={LANGUAGES}
+                          placeholder="Select language"
+                          searchPlaceholder="Search language..."
+                          flagType="language"
+                          triggerClassName="h-10 border-[#B89555]/40 bg-white text-[#1A1A1A]"
+                        />
+                        <SearchableSelect
+                          value={applicationForm.country}
+                          onChange={(v) => setApplicationValue('country', v)}
+                          options={COUNTRIES}
+                          placeholder="Select country"
+                          searchPlaceholder="Search country..."
+                          flagType="country"
+                          triggerClassName="h-10 border-[#B89555]/40 bg-white text-[#1A1A1A]"
+                        />
                         <Input value={applicationForm.city} onChange={(e) => setApplicationValue('city', e.target.value)} placeholder="City" className="border-[#B89555]/40 text-[#1A1A1A]" />
                       </div>
                     )}
