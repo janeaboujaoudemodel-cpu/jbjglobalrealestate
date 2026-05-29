@@ -224,7 +224,7 @@ const ListingPortalMyListings = () => {
                 )}
               </div>
               {!ownerOverview && (
-                <Button onClick={() => navigate('/listing-portal/submit')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
+                <Button onClick={() => navigate(submitBase)} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                   <Plus className="w-4 h-4 mr-2" /> New Listing
                 </Button>
 
@@ -316,7 +316,7 @@ const ListingPortalMyListings = () => {
                 <div className="text-center py-12 bg-[#FDFBF7]/60 border-2 border-[#B89555]/20 rounded-2xl">
                   <h3 className="text-[#1A1A1A] font-semibold mb-2">No listings yet</h3>
                   <p className="text-[#1A1A1A]/70 text-sm mb-4">Submit your first property listing!</p>
-                  <Button onClick={() => navigate('/listing-portal/submit')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">Submit Listing</Button>
+                  <Button onClick={() => navigate(submitBase)} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">Submit Listing</Button>
                 </div>
               ) : (
                 <div className="space-y-3">
