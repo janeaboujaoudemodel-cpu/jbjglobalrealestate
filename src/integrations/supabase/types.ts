@@ -4229,6 +4229,60 @@ export type Database = {
           },
         ]
       }
+      broker_requests: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          metadata: Json
+          priority: string
+          recipient_department: string | null
+          recipient_user_id: string | null
+          request_type: string
+          requester_user_id: string
+          resolution_note: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          status: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          priority?: string
+          recipient_department?: string | null
+          recipient_user_id?: string | null
+          request_type: string
+          requester_user_id: string
+          resolution_note?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          priority?: string
+          recipient_department?: string | null
+          recipient_user_id?: string | null
+          request_type?: string
+          requester_user_id?: string
+          resolution_note?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       broker_subscriptions: {
         Row: {
           ai_credits_limit: number | null
@@ -38562,6 +38616,18 @@ export type Database = {
         Returns: {
           content: string
           original_content: string
+        }[]
+      }
+      get_company_directory: {
+        Args: never
+        Returns: {
+          avatar_initials: string
+          department: string
+          email: string
+          full_name: string
+          is_founder: boolean
+          title: string
+          user_id: string
         }[]
       }
       get_crm_field_permissions: {
