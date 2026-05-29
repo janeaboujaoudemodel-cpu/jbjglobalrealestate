@@ -581,15 +581,17 @@ function TrainingCard({ m, onStart }: { m: TModule; onStart: () => void }) {
             ))}
             {m.topics.length > 2 && <span className="text-[11px] text-[#1A1A1A]/55">+{m.topics.length - 2} more</span>}
           </div>
-          <Button
-            size="sm"
+          <button
+            type="button"
             onClick={onStart}
-            className="bg-[#102540] !text-white hover:bg-[#1a3d63] border border-[#B89555]/70 font-semibold shadow-[0_4px_12px_rgba(16,37,64,0.25)] [&_svg]:!text-white"
+            className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)]"
             data-allow-dark-cta
             data-no-contrast-guard
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            <Play className="w-3 h-3 mr-1" /> Start
-          </Button>
+            <Play className="w-3 h-3" style={{ color: "#FFFFFF" }} />
+            <span className="allow-white" style={{ color: "#FFFFFF" }}>Start</span>
+          </button>
         </div>
       </CardContent>
     </Card>
