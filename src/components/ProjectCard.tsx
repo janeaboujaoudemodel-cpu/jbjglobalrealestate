@@ -11,7 +11,7 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
-import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
+import { deriveHandover } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
 import { useUserRole } from "@/hooks/useUserRole";
 import OwnerCardEditMenu from "@/components/cards/OwnerCardEditMenu";
@@ -282,7 +282,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               if (ym) return ym[1];
               return s;
             };
-            const handover = formatHandover(raw) ?? HANDOVER_FALLBACK;
+            const handover = formatHandover(raw);
             const showHandover = Boolean(handover);
             const showEoi = !project.is_sold_out;
             if (!showEoi && !showHandover) return null;
