@@ -2555,6 +2555,7 @@ export type Database = {
           call_status: string | null
           call_type: string | null
           created_at: string | null
+          deleted_at: string | null
           duration_seconds: number | null
           id: string
           lead_id: string | null
@@ -2574,6 +2575,7 @@ export type Database = {
           call_status?: string | null
           call_type?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           duration_seconds?: number | null
           id?: string
           lead_id?: string | null
@@ -2593,6 +2595,7 @@ export type Database = {
           call_status?: string | null
           call_type?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           duration_seconds?: number | null
           id?: string
           lead_id?: string | null
