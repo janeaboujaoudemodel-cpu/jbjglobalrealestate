@@ -223,10 +223,29 @@ const DeveloperPortalCTA = () => {
 
 
 
-  // DEVELOPER — must be in developer mode AND have a registration row
+  // DEVELOPER — gated by mode. Unregistered developers see the luxury
+  // pitch card pointing them to /developer-portal so they can register.
   if (!isDeveloperMode) return null;
   if (devReg.isLoading) return null;
-  if (!status) return null; // no developer_registrations row — render nothing
+  if (!status) {
+    return (
+      <PortalShowcaseCard
+        kind="developer"
+        eyebrow="Developer Portal"
+        title="Your Developer Portal"
+        description="Submit projects, manage launches, and connect with our verified broker network — the JBJ developer command center."
+        cta="Access Platform"
+        href={user ? "/developer-portal" : "/auth?returnTo=%2Fdeveloper-portal&preselect=developer"}
+        features={[
+          { label: "Project Submission", icon: Upload },
+          { label: "Launch Events", icon: PartyPopper },
+          { label: "Listings Manager", icon: ListChecks },
+          { label: "Agreements", icon: FileSignature },
+        ]}
+      />
+    );
+  }
+
 
   return (
     <section className="py-8 md:py-10 bg-[#FDFBF7]">
