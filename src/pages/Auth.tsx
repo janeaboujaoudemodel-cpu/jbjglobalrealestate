@@ -269,6 +269,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             if (isSafeReturnTo(returnTo)) {
               // Always honor returnTo — this is what kills the post-login loop
               // for "/broker/portal", "/investor-dashboard", etc.
+              try { sessionStorage.removeItem('jbj_post_login_redirect'); } catch {}
               navigate(returnTo, { replace: true });
             } else if (modeSelected) {
               navigate("/", { replace: true });
