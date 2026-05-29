@@ -89,16 +89,14 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
       {/* Nav — tight stack, scrolls if overflow */}
       <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-2 jj-scrollbar-gold space-y-1">
         {ITEMS.filter((it) => it.to !== "/broker/forms" || isOwner).map(({ to, label, icon: Icon }) => {
-          const resolvedTo = isOwner && to === "/broker/portal" ? "/owner" : to;
-          const resolvedLabel = isOwner && to === "/broker/portal" ? "Owner Dashboard" : label;
           const active =
             to === "/broker/portal" ? pathname === to : pathname === to || pathname.startsWith(to + "/");
           return (
             <NavLink
               key={to}
-              to={resolvedTo}
+              to={to}
               onClick={onNavigate}
-              title={collapsed ? resolvedLabel : undefined}
+              title={collapsed ? label : undefined}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors border border-transparent outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
                 "text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:border-[#B89555]/40",
@@ -106,7 +104,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
               )}
             >
               <Icon className="h-4 w-4 shrink-0" />
-              {!collapsed && <span className="truncate">{resolvedLabel}</span>}
+              {!collapsed && <span className="truncate">{label}</span>}
             </NavLink>
           );
         })}
@@ -117,17 +115,17 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
       <div className="p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#F7F2EA]">
         {isOwner && (
           <Link
-            to="/owner/crm"
+            to="/owner"
             onClick={() => {
               try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
               onNavigate?.();
             }}
-            title={collapsed ? "Owner Backend" : undefined}
+            title={collapsed ? "Back to JBJ Owner" : undefined}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-[#102540] text-white hover:bg-[#1a3d63]"
             data-allow-dark-cta
           >
             <ArrowLeft className="h-5 w-5 shrink-0" />
-            {!collapsed && <span className="truncate">Owner Backend</span>}
+            {!collapsed && <span className="truncate">Back to JBJ Owner</span>}
             {!collapsed && <Crown className="h-3.5 w-3.5 ml-auto opacity-80" />}
           </Link>
         )}
