@@ -81,7 +81,10 @@ export default function AIBrokerWorkspace() {
         .is("deleted_at", null)
         .order("created_at", { ascending: false })
         .limit(200);
-      if (!isOwner && user?.id) q = q.eq("assigned_broker_id", user.id);
+      // Always scope broker portal to leads explicitly assigned to THIS user.
+      // Owner has their own assistant under /owner/ai — their personal lead
+      // book must NEVER leak into the broker portal.
+      if (user?.id) q = q.eq("assigned_broker_id", user.id);
       const { data: leadRows } = await q;
       const ls = (leadRows ?? []) as Lead[];
       setLeads(ls);
@@ -198,7 +201,7 @@ export default function AIBrokerWorkspace() {
   const selected = leads.find(l => l.id === selectedId) || null;
 
   if (authLoading || roleLoading || loading) {
-    return <BrandedLoader variant="light" className="bg-[#F7F2EA]" />;
+    return <BrandedLoader variant="dark" className="bg-[#1A1A1A]" />;
   }
 
   return (
@@ -208,8 +211,9 @@ export default function AIBrokerWorkspace() {
           <div className="min-w-0">
             <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">JBJ GLOBAL REAL ESTATE</div>
             <h1 className="text-base sm:text-lg font-bold text-[#1A1A1A] flex items-center gap-2 mt-0.5">
-              <Sparkles className="h-4 w-4 text-[#B89555]" /> JBJ Sales Assistant
+              <Sparkles className="h-4 w-4 text-[#B89555]" /> James Morgan
             </h1>
+            <div className="text-[11px] text-[#1A1A1A]/60 mt-0.5">Head of Sales</div>
           </div>
           <button
             type="button"
@@ -269,12 +273,6 @@ export default function AIBrokerWorkspace() {
                     {selected.preferred_language ? ` · prefers ${selected.preferred_language}` : ""}
                   </div>
                 </div>
-                <Link
-                  to={`/broker/leads?focus=${selected.id}`}
-                  className="text-[11px] font-semibold text-[#102540] hover:underline inline-flex items-center gap-1"
-                >
-                  Open lead <ArrowRight className="h-3 w-3" />
-                </Link>
               </div>
             )}
             <AssistantChat
