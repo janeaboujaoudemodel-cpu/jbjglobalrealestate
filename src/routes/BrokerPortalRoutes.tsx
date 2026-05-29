@@ -58,7 +58,7 @@ export const BrokerPortalRoutes = () => (
     <Route path="ai" element={<AIBrokerWorkspace />} />
 
     <Route path="deals" element={<BrokerDealsPage variant="deals" />} />
-    <Route path="commissions" element={<BrokerDealsPage variant="commissions" />} />
+    <Route path="commissions" element={<Navigate to="/broker/deals" replace />} />
     <Route
       path="documents"
       element={
