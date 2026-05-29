@@ -1214,7 +1214,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <button
               data-signout-action
               data-no-contrast-guard
-              data-allow-dark-cta
               onClick={() => { supabase.auth.signOut(); }}
               className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[4px] rounded-lg border w-full group"
               style={{ color: '#DC2626', borderColor: '#B89555', backgroundColor: '#FDFBF7' }}
@@ -1362,7 +1361,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       data-signout-action
                       onClick={() => { supabase.auth.signOut(); }}
                       data-no-contrast-guard
-                      data-allow-dark-cta
                       className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] bg-[#FDFBF7] hover:bg-[#EFE6D6]"
                     >
                       <LogOut data-signout-icon className="w-3.5 h-3.5 !text-[#DC2626]" color="#DC2626" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
