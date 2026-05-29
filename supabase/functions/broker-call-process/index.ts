@@ -80,13 +80,24 @@ serve(async (req) => {
         }
       } catch (e) { console.warn("scribe error", e); }
     }
-    if (!transcriptText && LOVABLE_API_KEY) {
-      try {
-        transcriptText = await transcribeWithLovableAI(audioBytes, mimeType, LOVABLE_API_KEY);
-      } catch (e) { console.warn("lovable ai transcription fallback error", e); }
+    // NOTE: We intentionally do NOT fall back to Gemini "image_url" for audio —
+    // it does not actually transcribe audio and will hallucinate a transcript,
+    // which produced AI summaries unrelated to the real call.
+    const transcriptUnavailable = !transcriptText || transcriptText.trim().length < 4;
+    if (transcriptUnavailable) {
+      // Save a clear placeholder, skip AI analysis entirely so we never fabricate.
+      await admin.from("broker_call_logs").update({
+        transcript_text: "",
+        transcript_segments: segments,
+        ai_summary: "Transcript unavailable — AI analysis skipped to avoid fabricating call details. Please re-record in a quieter environment or check that ElevenLabs Scribe is configured.",
+        ai_next_step: null,
+        ai_score: null,
+        ai_matches: [],
+        ai_processed_at: new Date().toISOString(),
+      }).eq("id", callLogId);
+      return json({ ok: true, transcript_unavailable: true });
     }
-    const transcriptUnavailable = !transcriptText;
-    if (transcriptUnavailable) transcriptText = `Call recorded (${callRow.duration_seconds || 0}s) — transcript unavailable.`;
+
 
     // Pull lead + inventory for the AI evaluation.
     let lead: any = null;
@@ -164,8 +175,9 @@ serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: "You analyse broker call recordings. If the call is about Dubai real estate, act as a senior JBJ real-estate sales director: summarize, score readiness, choose only matching inventory provided, and give the single best next step. If the call is not about real estate, do not force property matches; identify the topic and give practical suggestions based on that topic. Never invent properties or facts." },
-          { role: "user", content: `TRANSCRIPTION_STATUS: ${transcriptUnavailable ? "unavailable" : "available"}\nLEAD:\n${JSON.stringify(lead, null, 2)}\n\nINVENTORY (only choose from these if related_to_real_estate is true):\n${JSON.stringify(inventory, null, 2)}\n\nCALL TRANSCRIPT:\n${transcriptText.slice(0, 18000)}` },
+          { role: "system", content: "You analyse broker call recordings. CRITICAL: base your output STRICTLY on the provided CALL TRANSCRIPT — never use the lead profile, inventory list, or your training data to invent topics, claims, names, prices, or matches that are not literally spoken in the transcript. If the transcript is empty, silent, ambient noise, music, or otherwise has no intelligible speech, return summary='No intelligible speech detected in the recording.', topic='unknown', related_to_real_estate=false, suggestions=[], matches=[], next_step='Re-record the call in a quieter environment.', score=0. If the call is about Dubai real estate, act as a senior JBJ real-estate sales director: summarize ONLY what was actually said, score readiness, and ONLY return inventory matches that the caller explicitly asked for (area, budget, beds). If the call is not about real estate, identify the real topic from the transcript and give practical suggestions about that exact topic. Never force property matches. Never invent facts." },
+          { role: "user", content: `LEAD (for context only — DO NOT use to invent content not in the transcript):\n${JSON.stringify(lead, null, 2)}\n\nINVENTORY (only choose from these if the caller explicitly discussed property requirements):\n${JSON.stringify(inventory, null, 2)}\n\nCALL TRANSCRIPT (this is the ONLY source of truth):\n${transcriptText.slice(0, 18000)}` },
+
         ],
         tools,
         tool_choice: { type: "function", function: { name: "call_analysis" } },
@@ -253,29 +265,3 @@ function mimeToExt(mime: string) {
   return "webm";
 }
 
-async function transcribeWithLovableAI(audioBytes: Uint8Array, mimeType: string, apiKey: string) {
-  let binary = "";
-  const chunkSize = 0x8000;
-  for (let i = 0; i < audioBytes.length; i += chunkSize) {
-    binary += String.fromCharCode(...audioBytes.subarray(i, i + chunkSize));
-  }
-  const audioDataUrl = `data:${mimeType};base64,${btoa(binary)}`;
-  const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "google/gemini-2.5-flash",
-      messages: [{
-        role: "user",
-        content: [
-          { type: "text", text: "Transcribe this call audio as accurately as possible. Return only the transcript text. If no speech is audible, return an empty string." },
-          { type: "image_url", image_url: { url: audioDataUrl } },
-        ],
-      }],
-      max_tokens: 6000,
-    }),
-  });
-  if (!response.ok) throw new Error(`Lovable AI transcription failed: ${response.status}`);
-  const data = await response.json();
-  return (data?.choices?.[0]?.message?.content || "").toString().trim();
-}
