@@ -380,10 +380,17 @@ export default function BrokerCRM() {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Button
-              onClick={() => setRequestOpen(true)}
+              onClick={() => setUploadOpen(true)}
               className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/45 hover:bg-[#E6DAC2]"
             >
-              <Upload className="w-4 h-4 mr-1.5" /> Request database
+              <Upload className="w-4 h-4 mr-1.5" /> Add database
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setRequestOpen(true)}
+              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            >
+              <Inbox className="w-4 h-4 mr-1.5" /> Request database
             </Button>
             <Link
               to="/broker/leads"
