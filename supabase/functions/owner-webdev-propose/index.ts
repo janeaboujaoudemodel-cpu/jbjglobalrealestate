@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const { route, instruction, domSnippet } = await req.json();
+    const { route, instruction, domSnippet, screenshot, targetSelector } = await req.json();
     if (!route || !instruction) {
       return new Response(
         JSON.stringify({ error: "route + instruction required" }),
@@ -64,6 +64,23 @@ Deno.serve(async (req) => {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         },
       );
+    }
+
+    const userContent: Array<Record<string, unknown>> = [
+      {
+        type: "text",
+        text:
+          `Route: ${route}\n` +
+          (targetSelector ? `Preferred selector (from owner pick): ${targetSelector}\n` : "") +
+          `Instruction: ${instruction}\n\n` +
+          `Visible DOM hints (truncated): ${(domSnippet ?? "").slice(0, 4000)}`,
+      },
+    ];
+    if (typeof screenshot === "string" && screenshot.startsWith("data:image/")) {
+      userContent.push({
+        type: "image_url",
+        image_url: { url: screenshot },
+      });
     }
 
     const aiResp = await fetch(
