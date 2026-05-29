@@ -526,14 +526,16 @@ export default function WebDevDock() {
                   {recording ? "Stop" : transcribing ? "…" : "Voice"}
                 </button>
               </div>
-              <Button
-                size="sm"
+              <button
+                type="button"
                 onClick={submit}
                 disabled={submitting || !instruction.trim()}
-                className="bg-[#102540] hover:bg-[#1a3d63] text-white allow-white h-8 px-4 shrink-0 disabled:opacity-60 font-semibold"
+                className="allow-white inline-flex items-center justify-center h-8 px-4 shrink-0 rounded-md font-semibold text-[13px] border border-[#B89555]/40 disabled:opacity-60 transition-colors"
                 data-no-contrast-guard
                 data-allow-dark-cta
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                style={{ backgroundColor: "#102540", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#1a3d63")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#102540")}
               >
                 {submitting ? (
                   <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" style={{ color: "#FFFFFF" }} />
@@ -541,7 +543,7 @@ export default function WebDevDock() {
                   <Send className="w-3.5 h-3.5 mr-1.5" style={{ color: "#FFFFFF" }} />
                 )}
                 <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Send</span>
-              </Button>
+              </button>
             </div>
           </div>
 
