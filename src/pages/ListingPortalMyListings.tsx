@@ -349,14 +349,17 @@ const ListingPortalMyListings = () => {
                             )}
                           </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button size="icon" variant="ghost" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]" onClick={() => handleEdit(listing.id)} title="Edit listing">
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button size="icon" variant="ghost" className="text-[#1A1A1A]/70 hover:text-red-500" onClick={() => handleDeleteClick(listing.id)} title="Delete listing">
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
+                        {!ownerOverview && (
+                          <div className="flex gap-2">
+                            <Button size="icon" variant="ghost" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]" onClick={() => handleEdit(listing.id)} title="Edit listing">
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button size="icon" variant="ghost" className="text-[#1A1A1A]/70 hover:text-red-500" onClick={() => handleDeleteClick(listing.id)} title="Delete listing">
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        )}
+
                       </div>
                     );
                   })}
