@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { FilePen, CheckCircle2, XCircle, Clock, Upload } from "lucide-react";
+import { FilePen, CheckCircle2, XCircle, Clock, Upload, Paperclip, Download, User as UserIcon } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from "@/components/ui/dialog";
@@ -90,9 +90,23 @@ export default function OwnerFormRequests() {
               {!isLoading && visible.length === 0 && (
                 <tr><td colSpan={6} className="px-4 py-10 text-center text-[#1A1A1A]/60">No requests in this view.</td></tr>
               )}
-              {visible.map(r => (
+              {visible.map(r => {
+                const attCount = Array.isArray(r.attachments) ? r.attachments.length : 0;
+                const cdKeys = r.client_details ? Object.keys(r.client_details).filter(k => {
+                  const v = (r.client_details as any)[k];
+                  return v !== null && v !== undefined && v !== "" && !(typeof v === "object" && Object.keys(v).length === 0);
+                }).length : 0;
+                return (
                 <tr key={r.id} className="border-t border-[#B89555]/20 align-top">
-                  <td className="px-4 py-3 text-[#1A1A1A] font-medium">{r.form_type}</td>
+                  <td className="px-4 py-3 text-[#1A1A1A] font-medium">
+                    {r.form_type}
+                    {(attCount > 0 || cdKeys > 0) && (
+                      <div className="mt-1 flex items-center gap-2 text-[10px] text-[#1A1A1A]/60">
+                        {cdKeys > 0 && <span className="inline-flex items-center gap-1"><UserIcon className="w-3 h-3" /> {cdKeys} field{cdKeys === 1 ? "" : "s"}</span>}
+                        {attCount > 0 && <span className="inline-flex items-center gap-1"><Paperclip className="w-3 h-3" /> {attCount} file{attCount === 1 ? "" : "s"}</span>}
+                      </div>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-[#1A1A1A]/80 font-mono text-xs">{r.broker_user_id.slice(0, 8)}…</td>
                   <td className="px-4 py-3 text-[#1A1A1A]/75 hidden lg:table-cell">
                     <div className="line-clamp-3 max-w-md">{r.notes || <span className="text-[#1A1A1A]/40">—</span>}</div>
@@ -112,7 +126,8 @@ export default function OwnerFormRequests() {
                     </Button>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -159,9 +174,32 @@ function ReviewDialog({ request, onClose }: { request: BrokerFormRequest; onClos
     }
   };
 
+  const cd = (request.client_details ?? {}) as Record<string, any>;
+  const attachments = (Array.isArray(request.attachments) ? request.attachments : []) as Array<{ name: string; url: string; path?: string; size?: number; type?: string }>;
+  const cdEntries = Object.entries(cd).filter(([, v]) => {
+    if (v === null || v === undefined || v === "") return false;
+    if (typeof v === "object" && v !== null && !Array.isArray(v) && Object.keys(v).length === 0) return false;
+    return true;
+  });
+
+  const fmtKey = (k: string) =>
+    k.replace(/[_-]+/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
+  const fmtVal = (v: any): string => {
+    if (v == null) return "—";
+    if (Array.isArray(v)) return v.map(fmtVal).join(", ");
+    if (typeof v === "object") return JSON.stringify(v, null, 2);
+    return String(v);
+  };
+  const fmtSize = (n?: number) => {
+    if (!n) return "";
+    if (n < 1024) return `${n} B`;
+    if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+    return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
   return (
     <Dialog open onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-xl bg-[#FDFBF7] border-[#B89555]/30">
+      <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/30 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A]">{request.form_type}</DialogTitle>
           <DialogDescription className="text-[#1A1A1A]/70">
@@ -174,6 +212,52 @@ function ReviewDialog({ request, onClose }: { request: BrokerFormRequest; onClos
             <div className="rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 px-3 py-2 text-sm text-[#1A1A1A]" data-gold-hairline>
               <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 mb-1">Broker notes</div>
               {request.notes}
+            </div>
+          )}
+
+          {cdEntries.length > 0 && (
+            <div className="rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 px-3 py-3" data-gold-hairline>
+              <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 mb-2 flex items-center gap-1.5">
+                <UserIcon className="w-3 h-3" /> Client / party details
+              </div>
+              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                {cdEntries.map(([k, v]) => (
+                  <div key={k} className="min-w-0">
+                    <dt className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/55">{fmtKey(k)}</dt>
+                    <dd className="text-[#1A1A1A] break-words whitespace-pre-wrap">{fmtVal(v)}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          )}
+
+          {attachments.length > 0 && (
+            <div className="rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 px-3 py-3" data-gold-hairline>
+              <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 mb-2 flex items-center gap-1.5">
+                <Paperclip className="w-3 h-3" /> Attachments ({attachments.length})
+              </div>
+              <ul className="space-y-1.5">
+                {attachments.map((f, i) => (
+                  <li key={i} className="flex items-center justify-between gap-3 rounded-md bg-[#FDFBF7] border border-[#B89555]/25 px-3 py-2 text-sm">
+                    <div className="min-w-0 truncate text-[#1A1A1A]">
+                      <span className="font-medium">{f.name || `Attachment ${i + 1}`}</span>
+                      {f.size ? <span className="ml-2 text-[11px] text-[#1A1A1A]/55">{fmtSize(f.size)}</span> : null}
+                    </div>
+                    {f.url ? (
+                      <a
+                        href={f.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#102540] hover:underline shrink-0"
+                      >
+                        <Download className="w-3.5 h-3.5" /> Open
+                      </a>
+                    ) : (
+                      <span className="text-[11px] text-[#1A1A1A]/45">No URL</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 
