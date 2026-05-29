@@ -316,8 +316,9 @@ export default function JoinApplication() {
     toast.success(`Selected: ${label}`, {
       description: "Application form synced. Continue below to complete your application.",
     });
-    // Jump wizard to Role & Experience step so users see the sync immediately
-    setCurrentStep((s) => (s < 2 ? 2 : s));
+    // Always start the wizard from Step 1 (Personal) so the user fills
+    // it in order, regardless of any prior progress.
+    setCurrentStep(0);
     setTimeout(scrollToForm, 80);
   };
 
