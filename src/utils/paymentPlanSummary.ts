@@ -49,7 +49,9 @@ export const formatPaymentPlanSummary = (project: {
     | null
     | undefined;
 
-  // 1. Authoritative milestone array — sum must validate to ~100%
+  // 1. Authoritative milestone array — sum must validate to ~100%.
+  //    Rule: LAST milestone = on-completion %. Everything before = pre-completion.
+  //    Display as "<pre> / <onCompletion>" (e.g. 20+40+40 → "60 / 40").
   if (Array.isArray(pb) && pb.length >= 2) {
     const pcts = pb
       .map((m) => toNum(m?.percentage))
@@ -57,9 +59,9 @@ export const formatPaymentPlanSummary = (project: {
     if (pcts.length >= 2) {
       const total = pcts.reduce((s, n) => s + n, 0);
       if (total >= 95 && total <= 105) {
-        const dp = Math.round(pcts[0]);
-        const rest = Math.max(0, Math.min(100, 100 - dp));
-        return `${dp} / ${rest}`;
+        const onCompletion = Math.round(pcts[pcts.length - 1]);
+        const pre = Math.max(0, Math.min(100, 100 - onCompletion));
+        return `${pre} / ${onCompletion}`;
       }
     }
   }
@@ -72,11 +74,14 @@ export const formatPaymentPlanSummary = (project: {
     const parts = [dp, dc, oc].filter((n): n is number => n !== null);
     if (parts.length >= 2) {
       const total = parts.reduce((s, n) => s + n, 0);
-      if (total >= 95 && total <= 105 && dp !== null) {
-        return `${Math.round(dp)} / ${Math.round(100 - dp)}`;
+      if (total >= 95 && total <= 105 && oc !== null) {
+        const onCompletion = Math.round(oc);
+        const pre = Math.max(0, Math.min(100, 100 - onCompletion));
+        return `${pre} / ${onCompletion}`;
       }
     }
   }
+
 
   // 3. Free-text payment_plan — return verbatim, do NOT parse/guess.
   const planStr = project.payment_plan ? String(project.payment_plan).trim() : "";
