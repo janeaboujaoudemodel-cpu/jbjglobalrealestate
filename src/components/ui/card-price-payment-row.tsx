@@ -143,7 +143,6 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
   const hasPlan = Boolean(summary);
   const handoverRaw = deriveHandover(project as any);
   const handoverLabel = formatHandoverDisplay(handoverRaw) ?? HANDOVER_FALLBACK;
-  const isReady = /^ready$/i.test(handoverLabel);
 
 
   return (
@@ -170,14 +169,14 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
         </span>
       </div>
 
-      {/* RIGHT — Handover (or "Ready" for completed projects), parallel to
+      {/* RIGHT — Handover, parallel to
           the price pill. Per the locked listing-card layout standard, the
           bottom row is always Price LEFT / Handover RIGHT. An optional
           payment-plan info icon sits next to the handover value when a
           breakdown is available, so payment data stays accessible. */}
       <div className="flex flex-col items-end min-w-0">
         <span className="text-[10px] uppercase tracking-[0.14em] font-medium text-[#1A1A1A]/65 leading-none">
-          {isReady ? "Status" : "Handover"}
+          Handover
         </span>
         <div className="mt-1 flex items-center gap-1.5">
           <span
