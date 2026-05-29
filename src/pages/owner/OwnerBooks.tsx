@@ -44,11 +44,9 @@ async function fileToText(file: File): Promise<string> {
     return await file.text();
   }
   if (name.endsWith(".pdf")) {
-    // lazy import pdfjs from CDN to avoid bundle bloat
-    const pdfjs: typeof import("pdfjs-dist") = await import(
-      /* @vite-ignore */ "https://esm.sh/pdfjs-dist@4.0.379/build/pdf.mjs"
-    );
-    // @ts-expect-error - worker setup
+    // CDN imports kept as runtime-only strings so TS does not try to resolve them.
+    const pdfUrl = "https://esm.sh/pdfjs-dist@4.0.379/build/pdf.mjs";
+    const pdfjs: any = await import(/* @vite-ignore */ pdfUrl);
     pdfjs.GlobalWorkerOptions.workerSrc =
       "https://esm.sh/pdfjs-dist@4.0.379/build/pdf.worker.mjs";
     const buf = await file.arrayBuffer();
@@ -60,20 +58,19 @@ async function fileToText(file: File): Promise<string> {
       text +=
         "\n\n" +
         content.items
-          .map((it) => ("str" in it ? (it as { str: string }).str : ""))
+          .map((it: any) => ("str" in it ? (it as { str: string }).str : ""))
           .join(" ");
     }
     return text;
   }
   if (name.endsWith(".docx")) {
-    const mammoth = await import(
-      /* @vite-ignore */ "https://esm.sh/mammoth@1.7.0/mammoth.browser.min.js"
-    );
+    const mammothUrl = "https://esm.sh/mammoth@1.7.0/mammoth.browser.min.js";
+    const mammoth: any = await import(/* @vite-ignore */ mammothUrl);
     const buf = await file.arrayBuffer();
-    const result = await (mammoth as { extractRawText: (o: { arrayBuffer: ArrayBuffer }) => Promise<{ value: string }> })
-      .extractRawText({ arrayBuffer: buf });
+    const result = await mammoth.extractRawText({ arrayBuffer: buf });
     return result.value;
   }
+
   if (name.endsWith(".epub")) {
     throw new Error("EPUB parsing is queued — please convert to PDF or DOCX for now.");
   }
