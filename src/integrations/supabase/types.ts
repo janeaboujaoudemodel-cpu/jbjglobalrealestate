@@ -13454,6 +13454,62 @@ export type Database = {
           },
         ]
       }
+      developer_visits: {
+        Row: {
+          briefing_summary: string | null
+          broker_user_id: string
+          created_at: string
+          developer_id: string
+          id: string
+          notes: string | null
+          sales_rep_details: string | null
+          sales_rep_email: string | null
+          sales_rep_name: string | null
+          sales_rep_phone: string | null
+          updated_at: string
+          visit_date: string
+          visit_time: string | null
+        }
+        Insert: {
+          briefing_summary?: string | null
+          broker_user_id: string
+          created_at?: string
+          developer_id: string
+          id?: string
+          notes?: string | null
+          sales_rep_details?: string | null
+          sales_rep_email?: string | null
+          sales_rep_name?: string | null
+          sales_rep_phone?: string | null
+          updated_at?: string
+          visit_date: string
+          visit_time?: string | null
+        }
+        Update: {
+          briefing_summary?: string | null
+          broker_user_id?: string
+          created_at?: string
+          developer_id?: string
+          id?: string
+          notes?: string | null
+          sales_rep_details?: string | null
+          sales_rep_email?: string | null
+          sales_rep_name?: string | null
+          sales_rep_phone?: string | null
+          updated_at?: string
+          visit_date?: string
+          visit_time?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_visits_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developers: {
         Row: {
           admin_email: string | null
