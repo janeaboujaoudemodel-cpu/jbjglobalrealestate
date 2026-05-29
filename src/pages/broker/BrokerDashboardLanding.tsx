@@ -27,7 +27,7 @@ function PremiumCard({
 }) {
   return (
     <div
-      className={`rounded-2xl bg-[#F7F2EA] border border-[#B89555]/25 p-5 md:p-6 ${className}`}
+      className={`rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 shadow-sm shadow-[#B89555]/5 p-5 md:p-6 ${className}`}
     >
       {children}
     </div>
@@ -40,25 +40,25 @@ function Kpi({
   value,
   to,
   loading,
+  tone = "gold",
 }: {
   icon: any;
   label: string;
   value: number | string;
   to?: string;
   loading?: boolean;
+  tone?: IconTileTone;
 }) {
   const body = (
-    <div className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 px-4 py-4 hover:border-[#B89555]/60 transition-colors h-full">
+    <div className="group relative rounded-2xl bg-[#F7F2EA] border border-[#B89555]/25 px-4 py-5 hover:border-[#B89555]/70 hover:shadow-md hover:shadow-[#B89555]/10 transition-all h-full">
       <div className="flex items-center justify-between">
-        <div className="h-8 w-8 grid place-items-center rounded-md bg-[#EFE6D6] border border-[#B89555]/30">
-          <Icon className="h-4 w-4 text-[#1A1A1A]" />
-        </div>
-        {to && <ArrowRight className="h-4 w-4 text-[#1A1A1A]/35" />}
+        <IconTile icon={Icon} tone={tone} size="md" />
+        {to && <ArrowRight className="h-4 w-4 text-[#1A1A1A]/30 group-hover:text-[#B89555] group-hover:translate-x-0.5 transition-all" />}
       </div>
-      <div className="mt-3 text-2xl md:text-3xl font-semibold tabular-nums text-[#1A1A1A]">
-        {loading ? <span className="inline-block h-7 w-10 bg-[#EFE6D6] rounded animate-pulse" /> : value}
+      <div className="mt-4 text-3xl md:text-4xl font-display font-semibold tabular-nums tracking-tight text-[#1A1A1A] leading-none">
+        {loading ? <span className="inline-block h-8 w-12 bg-[#EFE6D6] rounded animate-pulse" /> : value}
       </div>
-      <div className="text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/60 mt-1">
+      <div className="text-[10.5px] uppercase tracking-[0.16em] text-[#1A1A1A]/60 mt-2 font-medium">
         {label}
       </div>
     </div>
