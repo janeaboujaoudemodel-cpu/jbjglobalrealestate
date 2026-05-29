@@ -37,6 +37,18 @@ body {
   min-height: 100dvh;
 }
 
+[data-signout-action],
+[data-signout-action] [data-signout-label],
+[data-signout-action] [data-signout-icon] {
+  color: #DC2626 !important;
+  -webkit-text-fill-color: #DC2626 !important;
+}
+
+[data-signout-action] [data-signout-icon],
+[data-signout-action] [data-signout-icon] * {
+  stroke: #DC2626 !important;
+}
+
 /* ════════════════════════════════════════════════════════════════
    .cta-premium — premium hover lift + glow + 3D for primary CTAs
    ════════════════════════════════════════════════════════════════ */
