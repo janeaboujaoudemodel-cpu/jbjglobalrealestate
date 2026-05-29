@@ -498,18 +498,48 @@ export default function LogCallDialog({
                 </button>
               )}
               {recState === "recording" && (
-                <button type="button" onClick={stopRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                  <CheckCircle2 className="h-4 w-4" />
-                  <span>Done</span>
-                </button>
+                <>
+                  <button type="button" onClick={pauseRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <Pause className="h-4 w-4" />
+                    <span>Pause</span>
+                  </button>
+                  <button type="button" onClick={stopAndSave} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Square className="h-4 w-4" />}
+                    <span>{isSaving ? "Saving…" : "Stop"}</span>
+                  </button>
+                  <button type="button" onClick={discardRecording} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <X className="h-4 w-4" />
+                    <span>Cancel</span>
+                  </button>
+                </>
+              )}
+              {recState === "paused" && (
+                <>
+                  <button type="button" onClick={resumeRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <Play className="h-4 w-4" />
+                    <span>Resume</span>
+                  </button>
+                  <button type="button" onClick={stopAndSave} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Square className="h-4 w-4" />}
+                    <span>{isSaving ? "Saving…" : "Stop"}</span>
+                  </button>
+                  <button type="button" onClick={discardRecording} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <X className="h-4 w-4" />
+                    <span>Cancel</span>
+                  </button>
+                </>
               )}
               {recState === "stopped" && (
-                <button type="submit" disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                  {isSaving
-                    ? <Loader2 className="h-4 w-4 animate-spin" />
-                    : <CheckCircle2 className="h-4 w-4" />}
-                  <span>{isSaving ? "Saving…" : "Save call log"}</span>
-                </button>
+                <>
+                  <button type="submit" disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
+                    <span>{isSaving ? "Saving…" : "Save call log"}</span>
+                  </button>
+                  <button type="button" onClick={discardRecording} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <RotateCcw className="h-4 w-4" />
+                    <span>Re-record</span>
+                  </button>
+                </>
               )}
               {audioBlob && recState === "stopped" && (
                 <span className="text-[11px] text-[#1A1A1A]/70">
