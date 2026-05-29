@@ -203,7 +203,13 @@ export default function BrokerLearning() {
             <LockedTraining hasUser={!!user} />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {TRAINING.map((m) => <TrainingCard key={m.id} m={m} onStart={() => setActiveModule(m)} />)}
+              {TRAINING.map((m) => (
+                <TrainingCard
+                  key={m.id}
+                  m={{ ...m, progress: moduleProgress[m.id] ?? m.progress }}
+                  onStart={() => openModule(m)}
+                />
+              ))}
             </div>
           )}
         </section>
