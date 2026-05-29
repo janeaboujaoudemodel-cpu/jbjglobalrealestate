@@ -592,14 +592,15 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               </button>
             </PopoverTrigger>
             <PopoverContent 
-              className={cn("w-[min(380px,calc(100vw-2rem))] p-0 z-[100]", popoverStyles)} 
+              className={cn("w-[min(380px,calc(100vw-2rem))] p-0 z-[100] flex flex-col overflow-hidden", popoverStyles)} 
               align="start"
               side="bottom"
               sideOffset={4}
               avoidCollisions={true}
+              collisionPadding={16}
               onOpenAutoFocus={(e) => e.preventDefault()}
               data-no-contrast-guard
-              style={{ backgroundColor: "#F7F2EA", border: "1px solid rgba(184,149,85,0.4)" }}
+              style={{ backgroundColor: "#F7F2EA", border: "1px solid rgba(184,149,85,0.4)", maxHeight: "min(var(--radix-popover-content-available-height, 70vh), 460px)" }}
             >
               <Command className={commandStyles} data-no-contrast-guard style={{ backgroundColor: "transparent" }}>
                 <CommandInput 
@@ -609,7 +610,8 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 />
 
 
-                <CommandList className="max-h-[350px] overflow-y-auto overscroll-contain" data-no-contrast-guard>
+                <CommandList className="flex-1 min-h-0 overflow-y-auto overscroll-contain" data-no-contrast-guard>
+
                   <CommandEmpty className={cn("text-sm py-6 text-center", commandEmptyStyles)}>
                     No country found. Try searching by name or code.
                   </CommandEmpty>

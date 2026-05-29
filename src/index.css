@@ -5967,20 +5967,28 @@ button[data-phone-code-trigger]:focus-visible :is(span, svg, [class*="lucide"]) 
 /* cmdk Command + input wrapper must be transparent inside our
    champagne popovers — kills the "white highlight" behind the
    "Search country name or code…" placeholder. Force every descendant
-   that could carry the bg-popover token (near-white) to transparent. */
+   that could carry the bg-popover token (near-white) to transparent,
+   and override the global .bg-popover input rule that paints inputs
+   solid white with a dark border. */
 [data-radix-popper-content-wrapper] [cmdk-root],
 [data-radix-popper-content-wrapper] [cmdk-root] > *,
 [data-radix-popper-content-wrapper] [cmdk-input-wrapper],
 [data-radix-popper-content-wrapper] [cmdk-input-wrapper] > *,
-[data-radix-popper-content-wrapper] [cmdk-input],
-[data-radix-popper-content-wrapper] [cmdk-list] {
+[data-radix-popper-content-wrapper] [cmdk-list],
+[data-radix-popper-content-wrapper] input[cmdk-input],
+[data-radix-popper-content-wrapper] input[cmdk-input]:focus,
+[data-radix-popper-content-wrapper] input[cmdk-input]:focus-visible,
+[data-radix-popper-content-wrapper] input[cmdk-input]:hover {
   background-color: transparent !important;
   background-image: none !important;
-}
-[data-radix-popper-content-wrapper] [cmdk-input]:focus,
-[data-radix-popper-content-wrapper] [cmdk-input]:focus-visible {
-  outline: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
   box-shadow: none !important;
-  background-color: transparent !important;
+  outline: none !important;
+  color: #1A1A1A !important;
+}
+[data-radix-popper-content-wrapper] input[cmdk-input]::placeholder {
+  color: rgba(26, 26, 26, 0.55) !important;
+  opacity: 1 !important;
 }
 
