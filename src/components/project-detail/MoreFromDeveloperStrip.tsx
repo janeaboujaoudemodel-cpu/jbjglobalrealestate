@@ -90,7 +90,6 @@ export default function MoreFromDeveloperStrip({ developerId, developerName, dev
               {/* Bottom row — price LEFT, handover RIGHT (per locked listing-card layout standard). */}
               {(() => {
                 const handover = formatHandoverDisplay(deriveHandover(p as any)) ?? HANDOVER_FALLBACK;
-                const isReady = /^ready$/i.test(handover);
                 const hasPrice = typeof p.price_from === "number" && p.price_from > 0;
                 return (
                   <div className="mt-1.5 flex items-end justify-between gap-2">
@@ -100,7 +99,7 @@ export default function MoreFromDeveloperStrip({ developerId, developerName, dev
                       </p>
                     ) : <span />}
                     <p className="text-[11px] font-semibold tabular-nums text-[#1A1A1A] truncate">
-                      <span className="text-[#1A1A1A]/65 mr-1">{isReady ? "Status" : "Handover"}</span>
+                      <span className="text-[#1A1A1A]/65 mr-1">Handover</span>
                       {handover}
                     </p>
                   </div>
