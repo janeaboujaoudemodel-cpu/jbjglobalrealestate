@@ -165,33 +165,19 @@ export default function WebDevDock() {
 
   return (
     <div
-      className="fixed bottom-6 right-6 z-[9998]"
+      className="fixed bottom-6 right-6 z-[9998] flex flex-col items-end gap-3"
       data-no-contrast-guard
     >
-      <AnimatePresence>
-        {!open && (
-          <motion.button
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            onClick={() => setOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#102540] text-white shadow-lg border border-[#B89555]/40 allow-white hover:bg-[#1a3d63] transition-colors"
-          >
-            <Sparkles className="w-4 h-4 text-[#EFE6D6]" />
-            <span className="text-sm font-medium">Web Developer</span>
-          </motion.button>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 30, opacity: 0 }}
-            className="w-[360px] max-h-[78vh] bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
-            data-gold-hairline
-          >
+      {open && (
+        <motion.div
+          key="webdev-panel"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 20, opacity: 0 }}
+          className="w-[360px] max-h-[78vh] bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          data-gold-hairline
+          data-no-contrast-guard
+        >
             <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/20 bg-[#F7F2EA]" data-gold-hairline>
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-full bg-[#102540] flex items-center justify-center">
