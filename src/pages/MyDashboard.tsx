@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useUserModeContext } from "@/contexts/UserModeContext";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { SEOHead } from "@/components/SEOHead";
 import { Loader2, BookOpen, ChevronRight, ListChecks, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
@@ -207,6 +208,7 @@ const MyDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, loading: authLoading, isOwner, ownerLoading } = useAuth();
+  const { isOwner: roleIsOwner, isLoading: roleOwnerLoading } = useIsAppOwner();
   const { role, isLoading: roleLoading } = useUserRole();
   const { mode, isInvestorMode, isBrokerMode, isCombinedMode } = useUserModeContext();
 
@@ -256,12 +258,12 @@ const MyDashboard = () => {
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
-    if (!authLoading && !ownerLoading && user && isOwner) {
+    if (!authLoading && !ownerLoading && !roleOwnerLoading && user && (isOwner || roleIsOwner)) {
       navigate('/owner', { replace: true });
     }
-  }, [authLoading, ownerLoading, user, isOwner, navigate]);
+  }, [authLoading, ownerLoading, roleOwnerLoading, user, isOwner, roleIsOwner, navigate]);
 
-  if (authLoading || ownerLoading || roleLoading) {
+  if (authLoading || ownerLoading || roleOwnerLoading || roleLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
@@ -269,7 +271,7 @@ const MyDashboard = () => {
     );
   }
 
-  if (!user || isOwner) {
+  if (!user || isOwner || roleIsOwner) {
     return null;
   }
 
