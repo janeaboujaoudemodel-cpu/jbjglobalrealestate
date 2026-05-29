@@ -55,7 +55,6 @@ export default function AIBrokerWorkspace() {
   const [turns, setTurns] = useState<ChatTurn[]>([]);
   const [generalTurns, setGeneralTurns] = useState<ChatTurn[]>([]);
   const [chatLoading, setChatLoading] = useState(false);
-  const [, setInsights] = useState<{ score?: number; reason?: string; matches?: any[]; next?: string }>({});
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/auth?redirect=/broker/ai");
@@ -171,9 +170,6 @@ export default function AIBrokerWorkspace() {
         content: s.reply || "",
         draft_message: s.draft_message,
       }]);
-      if (activeId) {
-        setInsights({ score: s.score, reason: s.score_reason, matches: s.matches, next: s.next_step });
-      }
     } catch (e: any) {
       console.error(e);
       const msg = e?.message?.includes("Rate limit") ? "Rate limit — try again shortly."
@@ -303,14 +299,6 @@ export default function AIBrokerWorkspace() {
               onClearLead={selectedId ? () => setSelectedId(null) : undefined}
             />
           </div>
-
-          <AssistantInsights
-            score={insights.score}
-            scoreReason={insights.reason}
-            matches={insights.matches}
-            nextStep={insights.next}
-            onUseMatch={(m) => handleSend(`Draft a WhatsApp message to ${selected?.full_name?.split(" ")[0] || "the client"} proposing ${m.name} by ${m.developer}. Be warm and concise.`, "draft")}
-          />
         </div>
       </div>
     </div>
