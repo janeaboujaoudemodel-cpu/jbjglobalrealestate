@@ -147,9 +147,12 @@ export default function AssistantChat({ turns, loading, onSend, leadName, leadPh
             type="submit"
             disabled={loading || !input.trim()}
             data-allow-dark-cta
-            className="h-10 px-4 rounded-lg bg-[#102540] text-white allow-white text-sm font-semibold hover:bg-[#1a3d63] disabled:opacity-50 inline-flex items-center gap-1.5"
+            data-no-contrast-guard
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            className="allow-white h-10 px-4 rounded-lg bg-[#102540] text-white text-sm font-semibold hover:bg-[#1a3d63] disabled:opacity-50 inline-flex items-center gap-1.5"
           >
-            <Send className="h-4 w-4" /> Send
+            <Send className="h-4 w-4 allow-white" style={{ color: "#FFFFFF" }} />
+            <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Send</span>
           </button>
         </form>
       </div>
