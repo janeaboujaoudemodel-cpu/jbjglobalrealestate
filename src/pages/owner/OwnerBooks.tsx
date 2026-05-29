@@ -37,6 +37,20 @@ type BookRow = {
   created_at: string | null;
 };
 
+// Per-book color palettes — gives each cover its own identity, library-shelf feel.
+const BOOK_PALETTES = [
+  { spine: "#5b1216", cover: "#8a1c22", cover2: "#5b1216", foil: "#e8c878" }, // oxblood
+  { spine: "#0b2545", cover: "#13315c", cover2: "#0b2545", foil: "#e8c878" }, // navy
+  { spine: "#1f3b2c", cover: "#2f5d44", cover2: "#1f3b2c", foil: "#e8c878" }, // forest
+  { spine: "#2a1a3f", cover: "#46295a", cover2: "#2a1a3f", foil: "#e8c878" }, // aubergine
+  { spine: "#3a1f0f", cover: "#5b3320", cover2: "#3a1f0f", foil: "#e8c878" }, // cognac
+  { spine: "#1a1a1a", cover: "#2b2b2b", cover2: "#1a1a1a", foil: "#c9a84c" }, // obsidian
+  { spine: "#5a4528", cover: "#7a5e34", cover2: "#5a4528", foil: "#f0d78c" }, // bronze
+  { spine: "#0e3b3a", cover: "#185856", cover2: "#0e3b3a", foil: "#e8c878" }, // teal
+  { spine: "#6a1e3a", cover: "#8c2a4f", cover2: "#6a1e3a", foil: "#e8c878" }, // burgundy
+];
+
+
 
 async function fileToText(file: File): Promise<string> {
   const name = file.name.toLowerCase();
