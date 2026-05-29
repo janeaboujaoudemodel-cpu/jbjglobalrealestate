@@ -297,16 +297,21 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                     <span data-no-contrast-guard style={{ color: "#1A1A1A" }}>EOI</span>
                   </span>
                 )}
-                {showHandover && (
-                  <span
-                    data-no-contrast-guard
-                    className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide border border-[#B89555]/40 shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
-                    style={{ color: "#1A1A1A", backgroundColor: "#FFFFFF" }}
-                  >
-                    <span data-no-contrast-guard style={{ color: "#1A1A1A" }} className="uppercase tracking-[0.12em]">Handover</span>
-                    <span data-no-contrast-guard style={{ color: "#1A1A1A" }}>{handover}</span>
-                  </span>
-                )}
+                {showHandover && (() => {
+                  const isReady = /^ready$/i.test(handover);
+                  return (
+                    <span
+                      data-no-contrast-guard
+                      className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide border border-[#B89555]/40 shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
+                      style={{ color: "#1A1A1A", backgroundColor: "#FFFFFF" }}
+                    >
+                      {!isReady && (
+                        <span data-no-contrast-guard style={{ color: "#1A1A1A" }} className="uppercase tracking-[0.12em]">Handover</span>
+                      )}
+                      <span data-no-contrast-guard style={{ color: "#1A1A1A" }} className={isReady ? "uppercase tracking-[0.12em]" : ""}>{handover}</span>
+                    </span>
+                  );
+                })()}
               </div>
             );
           })()}
