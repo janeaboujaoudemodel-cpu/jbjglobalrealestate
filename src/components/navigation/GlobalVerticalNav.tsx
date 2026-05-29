@@ -1212,6 +1212,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
           {session ? (
             <button
+              data-signout-action
               data-no-contrast-guard
               data-allow-dark-cta
               onClick={() => { supabase.auth.signOut(); }}
@@ -1220,8 +1221,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(26,26,26,0.08)'; e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.borderColor = '#B89555'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#DC2626'); (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('stroke', '#DC2626'); }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.borderColor = '#B89555'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#DC2626'); (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('stroke', '#DC2626'); }}
             >
-              <LogOut data-signout-icon className="w-3 h-3" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
-              <span style={{ color: '#DC2626' }}>Sign Out</span>
+              <LogOut data-signout-icon className="w-3 h-3 !text-[#DC2626]" color="#DC2626" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
+              <span data-signout-label className="!text-[#DC2626]" style={{ color: '#DC2626' }}>Sign Out</span>
             </button>
           ) : (
             <Link
@@ -1358,12 +1359,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
+                      data-signout-action
                       onClick={() => { supabase.auth.signOut(); }}
                       data-no-contrast-guard
                       data-allow-dark-cta
                       className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] bg-[#FDFBF7] hover:bg-[#EFE6D6]"
                     >
-                      <LogOut className="w-3.5 h-3.5 allow-white" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
+                      <LogOut data-signout-icon className="w-3.5 h-3.5 !text-[#DC2626]" color="#DC2626" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]" style={{ color: '#DC2626' }}>Sign Out</TooltipContent>
