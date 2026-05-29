@@ -449,25 +449,114 @@ export default function BrokerCRM() {
 
       {/* Body */}
       {tab === "pipeline" && (
-        <PremiumCard>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-[#1A1A1A]">Pipeline by stage</h2>
-            <span className="text-xs text-[#1A1A1A]/55">{totalLeads} total leads</span>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {stageCounts.map((s) => (
+        <div className="space-y-4">
+          <PremiumCard>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-semibold text-[#1A1A1A]">Pipeline by stage</h2>
+              <span className="text-xs text-[#1A1A1A]/55">{totalLeads} total leads</span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+              {stageCounts.map((s) => (
+                <button
+                  key={s.key}
+                  type="button"
+                  onClick={() => { setSearch(s.label.toLowerCase()); setTab("leads"); }}
+                  className="text-left rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 px-4 py-3 hover:border-[#B89555]/55 hover:bg-[#F7F2EA] transition-colors focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+                >
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">{s.label}</div>
+                  <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1">{s.count}</div>
+                </button>
+              ))}
+            </div>
+          </PremiumCard>
+
+          {/* Leads table — always visible on Pipeline tab so the empty state guides the broker */}
+          <section className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/20">
+              <h3 className="text-sm font-semibold text-[#1A1A1A]">Your leads</h3>
               <button
-                key={s.key}
                 type="button"
-                onClick={() => { setSearch(s.label.toLowerCase()); setTab("leads"); }}
-                className="text-left rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 px-4 py-3 hover:border-[#B89555]/55 hover:bg-[#F7F2EA] transition-colors focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+                onClick={() => setTab("leads")}
+                className="text-[11px] text-[#1A1A1A]/65 hover:text-[#1A1A1A] inline-flex items-center gap-1"
               >
-                <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">{s.label}</div>
-                <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1">{s.count}</div>
+                View all <ArrowRight className="h-3 w-3" />
               </button>
-            ))}
-          </div>
-        </PremiumCard>
+            </div>
+            {leads.isLoading ? (
+              <Loading />
+            ) : leadsData.length === 0 ? (
+              <div>
+                <div className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 px-4 py-2.5 bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
+                  <div></div>
+                  <div>Lead</div>
+                  <div>Stage</div>
+                  <div>Source</div>
+                  <div className="text-right">Updated</div>
+                </div>
+                <div className="py-12 px-6 text-center">
+                  <Users className="h-8 w-8 mx-auto text-[#1A1A1A]/55 mb-3" />
+                  <div className="text-sm font-semibold text-[#1A1A1A]">There are no leads yet</div>
+                  <p className="text-xs text-[#1A1A1A]/65 mt-1 max-w-md mx-auto">
+                    Start adding your first leads — your pipeline, stages, and conversion will fill in
+                    automatically as you work.
+                  </p>
+                  <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                    <Link
+                      to="/broker/leads"
+                      className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#102540] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1a3d63] shadow-sm transition-colors"
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                    >
+                      <Plus className="h-4 w-4" /> Add your first lead
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setUploadOpen(true)}
+                      className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/55 hover:bg-[#E6DAC2] transition-colors"
+                    >
+                      <Upload className="h-4 w-4" /> Upload a database
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 px-4 py-2.5 bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
+                  <div></div>
+                  <div>Lead</div>
+                  <div>Stage</div>
+                  <div>Source</div>
+                  <div className="text-right">Updated</div>
+                </div>
+                <div className="divide-y divide-[#B89555]/15">
+                  {leadsData.slice(0, 8).map((l: any) => (
+                    <div key={l.id} className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 items-center px-4 py-3">
+                      <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/25 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
+                        {(l.full_name || "?").slice(0, 1).toUpperCase()}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-medium text-[#1A1A1A] truncate">{l.full_name || "Unnamed lead"}</div>
+                        <div className="text-[11px] text-[#1A1A1A]/65 truncate">{getLeadEmail(l) || getLeadPhone(l) || "—"}</div>
+                      </div>
+                      <div className="text-xs text-[#1A1A1A]/75 truncate">{l.pipeline_stage || "new"}</div>
+                      <div className="text-xs text-[#1A1A1A]/75 truncate">{l.source || l.lead_source_type || "—"}</div>
+                      <div className="text-[11px] text-[#1A1A1A]/60 tabular-nums text-right">{formatDisplayDate(l.updated_at)}</div>
+                    </div>
+                  ))}
+                </div>
+                {leadsData.length > 8 && (
+                  <button
+                    type="button"
+                    onClick={() => setTab("leads")}
+                    className="w-full text-center text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] py-3 border-t border-[#B89555]/15 hover:bg-[#EFE6D6]/40"
+                  >
+                    View all {leadsData.length} leads →
+                  </button>
+                )}
+              </div>
+            )}
+          </section>
+        </div>
       )}
 
       {tab === "databases" && (
