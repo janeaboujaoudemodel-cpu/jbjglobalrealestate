@@ -633,91 +633,172 @@ export default function BrokerCRM() {
           ) : (callLogs.data ?? []).length === 0 ? (
             <Empty msg={callsView === "deleted" ? "No deleted calls. Items you delete will appear here and can be restored within 30 days." : "No calls logged yet. Use Log a call to capture broker activity, duration, outcome, and notes."} />
           ) : (
-            <ul className="space-y-2.5">
-              {(callLogs.data ?? [])
-                .slice(0, 50)
-                .map((log: any) => {
-                  const lead = leadsData.find((item) => item.id === log.lead_id);
-                  return (
-                  <li key={log.id} className="group">
-                    <div className="w-full rounded-xl bg-[#FDFBF7] border border-[#B89555]/30 hover:border-[#B89555]/55 hover:bg-[#F7F2EA] transition-colors">
-                      <div className="flex items-stretch">
+            <>
+              {/* Bulk selection toolbar */}
+              {(() => {
+                const visible = (callLogs.data ?? []).slice(0, 50);
+                const allSelected = visible.length > 0 && visible.every((l: any) => selectedCallIds.has(l.id));
+                const someSelected = selectedCallIds.size > 0;
+                const selectedArr = Array.from(selectedCallIds);
+                return (
+                  <div className="mb-3 flex items-center justify-between gap-2 flex-wrap rounded-lg bg-[#EFE6D6]/50 border border-[#B89555]/30 px-3 py-2">
+                    <label className="flex items-center gap-2 text-xs text-[#1A1A1A] cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={allSelected}
+                        onChange={(e) => {
+                          if (e.target.checked) setSelectedCallIds(new Set(visible.map((l: any) => l.id)));
+                          else setSelectedCallIds(new Set());
+                        }}
+                        className="h-4 w-4 accent-[#B89555]"
+                      />
+                      <span className="font-medium">
+                        {someSelected ? `${selectedCallIds.size} selected` : "Select all"}
+                      </span>
+                    </label>
+                    {someSelected && (
+                      <div className="flex items-center gap-2">
+                        {callsView === "active" ? (
+                          <Button
+                            variant="outline" size="sm"
+                            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                            onClick={() => {
+                              if (confirm(`Move ${selectedArr.length} call(s) to Recently deleted?`)) bulkSoftDelete.mutate(selectedArr);
+                            }}
+                            disabled={bulkSoftDelete.isPending}
+                          >
+                            Delete selected
+                          </Button>
+                        ) : (
+                          <>
+                            <Button
+                              variant="outline" size="sm"
+                              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                              onClick={() => bulkRestore.mutate(selectedArr)}
+                              disabled={bulkRestore.isPending}
+                            >
+                              Restore selected
+                            </Button>
+                            <Button
+                              variant="outline" size="sm"
+                              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                              onClick={() => {
+                                if (confirm(`Permanently delete ${selectedArr.length} call(s)? This cannot be undone.`)) bulkHardDelete.mutate(selectedArr);
+                              }}
+                              disabled={bulkHardDelete.isPending}
+                            >
+                              Delete forever
+                            </Button>
+                          </>
+                        )}
                         <button
                           type="button"
-                          onClick={() => setOpenCallId(log.id)}
-                          className="flex-1 min-w-0 p-3.5 flex items-center gap-3 text-left"
+                          onClick={() => setSelectedCallIds(new Set())}
+                          className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
                         >
-                          <div className="h-9 w-9 rounded-md bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center shrink-0">
-                            <Phone className="h-4 w-4 text-[#1A1A1A]" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-semibold text-[#1A1A1A] truncate flex items-center gap-2 flex-wrap">
-                              {lead?.full_name ? `Call with ${lead.full_name}` : "Manual broker call"}
-                              {log.recording_url && (
-                                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">Recording</span>
-                              )}
-                              {log.ai_processed_at && (
-                                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">AI</span>
-                              )}
-                              {typeof log.ai_score === "number" && (
-                                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#EFE6D6] border border-[#B89555]/45 text-[#1A1A1A]">Score {log.ai_score}</span>
-                              )}
-                            </div>
-                            <div className="text-[11px] text-[#1A1A1A]/60 truncate mt-0.5">
-                              {log.call_status || "completed"} · {log.call_type || "outbound"} · {formatDuration(log.duration_seconds)} · {formatDisplayDate(log.created_at)}
-                              {callsView === "deleted" && log.deleted_at && (
-                                <> · deleted {formatDisplayDate(log.deleted_at)}</>
-                              )}
-                            </div>
-                            {(log.ai_summary || log.notes) && (
-                              <div className="text-xs text-[#1A1A1A]/75 mt-1 truncate">{log.ai_summary || log.notes}</div>
-                            )}
-                          </div>
-                          <div className="text-xs text-[#1A1A1A]/65 tabular-nums shrink-0 pr-3">{log.phone_number}</div>
+                          Clear
                         </button>
-                        <div className="flex flex-col justify-center gap-1 pr-3">
-                          {callsView === "active" ? (
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (confirm("Move this call to Recently deleted?")) softDeleteCall.mutate(log.id);
-                              }}
-                              className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-                              disabled={softDeleteCall.isPending}
-                            >
-                              Delete
-                            </button>
-                          ) : (
-                            <>
-                              <button
-                                type="button"
-                                onClick={(e) => { e.stopPropagation(); restoreCall.mutate(log.id); }}
-                                className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-                                disabled={restoreCall.isPending}
-                              >
-                                Restore
-                              </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+
+              <ul className="space-y-2.5">
+                {(callLogs.data ?? [])
+                  .slice(0, 50)
+                  .map((log: any) => {
+                    const lead = leadsData.find((item) => item.id === log.lead_id);
+                    const checked = selectedCallIds.has(log.id);
+                    return (
+                    <li key={log.id} className="group">
+                      <div className={`w-full rounded-xl border transition-colors ${checked ? "bg-[#F2EADA] border-[#B89555]/60" : "bg-[#FDFBF7] border-[#B89555]/30 hover:border-[#B89555]/55 hover:bg-[#F7F2EA]"}`}>
+                        <div className="flex items-stretch">
+                          <label className="pl-3.5 flex items-center cursor-pointer" onClick={(e) => e.stopPropagation()}>
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => toggleSelectCall(log.id)}
+                              className="h-4 w-4 accent-[#B89555]"
+                            />
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => setOpenCallId(log.id)}
+                            className="flex-1 min-w-0 p-3.5 flex items-center gap-3 text-left"
+                          >
+                            <div className="h-9 w-9 rounded-md bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center shrink-0">
+                              <Phone className="h-4 w-4 text-[#1A1A1A]" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-semibold text-[#1A1A1A] truncate flex items-center gap-2 flex-wrap">
+                                {lead?.full_name ? `Call with ${lead.full_name}` : "Manual broker call"}
+                                {log.recording_url && (
+                                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">Recording</span>
+                                )}
+                                {log.ai_processed_at && (
+                                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">AI</span>
+                                )}
+                                {typeof log.ai_score === "number" && (
+                                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#EFE6D6] border border-[#B89555]/45 text-[#1A1A1A]">Score {log.ai_score}</span>
+                                )}
+                              </div>
+                              <div className="text-[11px] text-[#1A1A1A]/60 truncate mt-0.5">
+                                {log.call_status || "completed"} · {log.call_type || "outbound"} · {formatDuration(log.duration_seconds)} · {formatDisplayDate(log.created_at)}
+                                {callsView === "deleted" && log.deleted_at && (
+                                  <> · deleted {formatDisplayDate(log.deleted_at)}</>
+                                )}
+                              </div>
+                              {(log.ai_summary || log.notes) && (
+                                <div className="text-xs text-[#1A1A1A]/75 mt-1 truncate">{log.ai_summary || log.notes}</div>
+                              )}
+                            </div>
+                            <div className="text-xs text-[#1A1A1A]/65 tabular-nums shrink-0 pr-3">{log.phone_number}</div>
+                          </button>
+                          <div className="flex flex-col justify-center gap-1 pr-3">
+                            {callsView === "active" ? (
                               <button
                                 type="button"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  if (confirm("Permanently delete this call? This cannot be undone.")) hardDeleteCall.mutate(log.id);
+                                  if (confirm("Move this call to Recently deleted?")) softDeleteCall.mutate(log.id);
                                 }}
-                                className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A]/80 hover:bg-[#EFE6D6]"
-                                disabled={hardDeleteCall.isPending}
+                                className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                                disabled={softDeleteCall.isPending}
                               >
-                                Delete forever
+                                Delete
                               </button>
-                            </>
-                          )}
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={(e) => { e.stopPropagation(); restoreCall.mutate(log.id); }}
+                                  className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                                  disabled={restoreCall.isPending}
+                                >
+                                  Restore
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (confirm("Permanently delete this call? This cannot be undone.")) hardDeleteCall.mutate(log.id);
+                                  }}
+                                  className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A]/80 hover:bg-[#EFE6D6]"
+                                  disabled={hardDeleteCall.isPending}
+                                >
+                                  Delete forever
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                  );
-                })}
-            </ul>
+                    </li>
+                    );
+                  })}
+              </ul>
+            </>
           )}
         </PremiumCard>
       )}
