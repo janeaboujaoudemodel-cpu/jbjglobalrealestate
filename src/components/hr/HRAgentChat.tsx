@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Loader2, Calendar, FileText, CheckCircle, Sparkles, Copy, Paperclip, X, Briefcase } from 'lucide-react';
+import { Send, Bot, User, Loader2, Calendar, FileText, CheckCircle, Sparkles, Paperclip, X, Briefcase } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -345,19 +345,6 @@ export default function HRAgentChat() {
                         {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
-                    {/* Copy Button */}
-                    <button
-                      onClick={async () => {
-                        await navigator.clipboard.writeText(message.content);
-                        toast.success(t('chat.messageCopied') || 'Message copied');
-                      }}
-                      className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors opacity-0 group-hover:opacity-100 ${
-                        message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
-                      }`}
-                    >
-                      <Copy className="w-3 h-3" />
-                      <span>{t('chat.copy') || 'Copy'}</span>
-                    </button>
                   </div>
                 </motion.div>
               ))}
@@ -386,7 +373,7 @@ export default function HRAgentChat() {
 
         {(mode === 'owner' || stage !== 'completed') && (
           <div className="border-t border-[#B89555]/20 p-4 space-y-3">
-            {mode !== 'owner' && !hasApplied && (
+            {!hasApplied && (
               <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 space-y-2">
                 <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A]/70">
                   <Briefcase className="w-3.5 h-3.5 text-[#102540]" /> Apply for a position
