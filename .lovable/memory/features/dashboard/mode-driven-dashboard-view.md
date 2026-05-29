@@ -14,6 +14,7 @@ LOCKED RULE — never violate.
   (investor→investor, broker→broker_partner, developer→no change), and call
   `queryClient.invalidateQueries()` so the page re-skins without reload.
 - Owner verified always short-circuits to the owner cockpit.
+- Header/account "Dashboard" links for verified owners MUST point to `/owner`, never `/my-dashboard`, `/broker-dashboard`, `/broker/portal`, or `/broker/crm`.
 
 ## Shared vs mode-only matrix (canonical)
 
