@@ -43,7 +43,7 @@ const ManualWizard = lazy(() => import("@/pages/SellerListing"));
 const AIWizard = lazy(() => import("@/pages/ListingPortalSubmit"));
 const BrowseListings = lazy(() => import("@/pages/ListingPortal"));
 
-type Mode = "manual" | "ai" | "browse";
+type Mode = "pick" | "manual" | "ai" | "browse";
 type Purpose = "sale" | "rent";
 
 /* ────────────────────────────── theme tokens ────────────────────────────── */
@@ -58,14 +58,13 @@ const INK = "#1A1A1A";
 
 const ListProperty = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const mode = (searchParams.get("mode") as Mode) || "ai";
+  const mode = (searchParams.get("mode") as Mode) || "pick";
   const purpose = (searchParams.get("purpose") as Purpose) || "sale";
 
   useEffect(() => {
-    if (!searchParams.get("mode") || !searchParams.get("purpose")) {
+    if (!searchParams.get("purpose")) {
       const next = new URLSearchParams(searchParams);
-      if (!next.get("mode")) next.set("mode", "ai");
-      if (!next.get("purpose")) next.set("purpose", "sale");
+      next.set("purpose", "sale");
       setSearchParams(next, { replace: true });
     }
   }, [searchParams, setSearchParams]);
@@ -91,8 +90,9 @@ const ListProperty = () => {
       case "browse":
         return BrowseListings;
       case "ai":
-      default:
         return AIWizard;
+      default:
+        return null;
     }
   }, [mode]);
 
