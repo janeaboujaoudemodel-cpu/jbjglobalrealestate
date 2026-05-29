@@ -18,6 +18,9 @@ import RequestDatabaseDialog from "@/components/broker-portal/RequestDatabaseDia
 import UploadDatabaseDialog from "@/components/crm/UploadDatabaseDialog";
 import LogCallDialog from "@/components/broker-crm/LogCallDialog";
 import CallDetailSheet from "@/components/broker-crm/CallDetailSheet";
+import BrokerDatabaseSheet from "@/components/broker-crm/BrokerDatabaseSheet";
+import MarkJunkDialog from "@/components/broker-crm/MarkJunkDialog";
+import { AlertTriangle } from "lucide-react";
 
 type Tab = "pipeline" | "databases" | "leads" | "calls" | "insights" | "activity";
 
@@ -83,6 +86,8 @@ export default function BrokerCRM() {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [callDialogOpen, setCallDialogOpen] = useState(false);
   const [openCallId, setOpenCallId] = useState<string | null>(null);
+  const [openDbSheet, setOpenDbSheet] = useState<{ id: string; name: string } | null>(null);
+  const [junkLead, setJunkLead] = useState<{ id: string; name: string } | null>(null);
   const dbs = useBrokerScopedDatabases();
   const leads = useBrokerScopedLeads();
   const tasks = useBrokerPersonalTasks();
