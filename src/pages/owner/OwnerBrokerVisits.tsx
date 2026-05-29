@@ -49,13 +49,13 @@ export default function OwnerBrokerVisits() {
       // Hydrate broker names via profiles (best effort)
       const ids = Array.from(new Set(rows.map((r) => r.broker_user_id)));
       if (ids.length) {
-        const { data: profs } = await supabase
+        const { data: profs } = await (supabase as any)
           .from("profiles")
           .select("user_id, full_name, email")
           .in("user_id", ids);
-        const map = new Map((profs ?? []).map((p: any) => [p.user_id, p]));
+        const map = new Map(((profs ?? []) as any[]).map((p: any) => [p.user_id, p]));
         rows.forEach((r) => {
-          const p = map.get(r.broker_user_id);
+          const p: any = map.get(r.broker_user_id);
           r.broker = p
             ? { id: p.user_id, full_name: p.full_name ?? null, email: p.email ?? null }
             : { id: r.broker_user_id, full_name: null, email: null };
