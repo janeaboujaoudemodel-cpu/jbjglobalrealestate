@@ -30,6 +30,7 @@ const BrokerFormRequests     = lazy(() => import("@/pages/broker/BrokerFormReque
 const BrokerLearning         = lazy(() => import("@/pages/broker/BrokerLearning"));
 const BookReader             = lazy(() => import("@/pages/broker/BookReader"));
 const BrokerDealsPage        = lazy(() => import("@/pages/broker/BrokerDealsPage"));
+const BrokerDeveloperVisits  = lazy(() => import("@/pages/broker/BrokerDeveloperVisits"));
 
 const Wrap = (
   <AuthRequiredRoute>
@@ -63,6 +64,7 @@ export const BrokerPortalRoutes = () => (
     <Route path="ai" element={<AIBrokerWorkspace />} />
 
     <Route path="deals" element={<BrokerDealsPage variant="deals" />} />
+    <Route path="developer-visits" element={<BrokerDeveloperVisits />} />
     <Route path="commissions" element={<Navigate to="/broker/deals" replace />} />
     <Route path="forms" element={<OwnerOnlyRoute><BrokerFormRequests /></OwnerOnlyRoute>} />
     <Route path="learning" element={<BrokerLearning />} />
