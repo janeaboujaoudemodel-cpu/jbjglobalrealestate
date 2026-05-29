@@ -257,20 +257,31 @@ export default function OwnerBooks() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {visible.map((b) => (
-              <div
-                key={b.id}
-                className="rounded-2xl border border-[#B89555]/25 bg-[#F7F2EA] p-4 flex flex-col gap-3"
-                data-gold-hairline
-              >
-                <div className="aspect-[5/7] rounded-lg bg-[#FBF6EC] border border-[#B89555]/30 flex items-end p-4">
-                  <div>
-                    <div className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/60 mb-1">
-                      Book {b.book_number}
-                    </div>
-                    <div className="text-base font-semibold text-[#1A1A1A] line-clamp-3">
-                      {b.title}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 pt-4">
+            {visible.map((b, i) => {
+              const palette = BOOK_PALETTES[i % BOOK_PALETTES.length];
+              return (
+              <div key={b.id} className="flex flex-col gap-3">
+                <div className="book-3d-wrap">
+                  <div
+                    className="book-3d"
+                    style={{
+                      ['--spine' as any]: palette.spine,
+                      ['--cover' as any]: palette.cover,
+                      ['--cover2' as any]: palette.cover2,
+                      ['--foil' as any]: palette.foil,
+                    }}
+                  >
+                    <div className="book-3d__pages" />
+                    <div className="book-3d__cover">
+                      <div className="book-3d__frame">
+                        <div className="book-3d__eyebrow">JBJ · Vol {b.book_number}</div>
+                        <div className="book-3d__title">{b.title}</div>
+                        <div className="book-3d__rule" />
+                        <div className="book-3d__author">JBJ Global</div>
+                      </div>
+                      <div className="book-3d__spineEdge" />
+                      <div className="book-3d__gloss" />
                     </div>
                   </div>
                 </div>
@@ -327,7 +338,7 @@ export default function OwnerBooks() {
                   )}
                 </div>
               </div>
-            ))}
+            );})}
           </div>
         )}
       </div>
