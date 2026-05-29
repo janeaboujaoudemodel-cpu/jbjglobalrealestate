@@ -584,9 +584,30 @@ export default function LogCallDialog({
                 </>
               )}
               {audioBlob && recState === "stopped" && (
-                <span className="text-[11px] text-[#1A1A1A]/70">
-                  Captured · {(audioBlob.size / 1024).toFixed(0)} KB · will be transcribed on save
-                </span>
+                <div className="w-full rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-3 space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-[11px] text-[#1A1A1A]/70">
+                      Captured · {(audioBlob.size / 1024).toFixed(0)} KB · review before saving
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={downloadRecording}
+                        className="inline-flex h-8 items-center gap-1.5 rounded-md border border-[#B89555]/40 px-2.5 text-[11px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                      >
+                        <Download className="h-3.5 w-3.5" /> Download
+                      </button>
+                      <button
+                        type="button"
+                        onClick={shareRecording}
+                        className="inline-flex h-8 items-center gap-1.5 rounded-md border border-[#B89555]/40 px-2.5 text-[11px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                      >
+                        <Share2 className="h-3.5 w-3.5" /> Share
+                      </button>
+                    </div>
+                  </div>
+                  {audioPreviewUrl && <audio controls src={audioPreviewUrl} className="w-full" />}
+                </div>
               )}
             </div>
             {(coachTips.length > 0 || coachLoading) && (
