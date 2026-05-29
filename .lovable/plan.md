@@ -1,52 +1,85 @@
-# Broker Portal cleanup + Document Studio template merge
+## Goal
 
-## 1. Broker Portal sidebar (`src/components/broker-portal/BrokerPortalSidebar.tsx`)
+Bring `/cv-builder` up to the same premium standard as Document Studio: full-page A4 preview, real editor controls on the left, AI assistant rail on the right, photo + socials, saved CVs that can be re-opened/edited, and AI-assisted writing + AI re-generation from an uploaded old CV.
 
-- **Remove "Request a Form" item entirely** from broker sidebar — this surface is owner-only going forward. Owners reach it from `/owner/forms` in their own backend.
-- Confirm every remaining item routes somewhere real and is clickable: Dashboard, CRM, Listings, Calendar, Tasks, Deals & Commissions, JBJ Academy, AI Sales Assistant, Notifications, Settings.
-- Block the `/broker/forms` route for non-owner brokers (redirect to `/broker/portal`) so deep links can't reach the form-request page.
+## Layout (3-pane, full-page)
 
-## 2. AI Sales Assistant page (`src/pages/AIBrokerWorkspace.tsx` + helpers)
+```text
+┌─ Sub-header (Back · title · Save · Download · Saved CVs ▾) ─────────────────┐
+│ LEFT 340px        │  CENTER (A4 preview, scrollable, multi-page)   │ RIGHT 320px │
+│ Sections list     │   ┌──────────── A4 page 1 ────────────┐         │ AI helper   │
+│ (Personal / Photo │   │  [Photo]  Name · Headline         │         │ rail        │
+│  Summary / Exp /  │   │  email · phone · location · socials│        │             │
+│  Edu / Skills /   │   │  ── Summary ──                    │         │ • Write     │
+│  Langs / Certs /  │   │  ── Experience ──                 │         │   summary   │
+│  Socials)         │   │  …                                │         │   with AI   │
+│ Each row: drag,   │   └───────────────────────────────────┘         │ • Improve   │
+│ edit, delete,     │   ┌──────────── A4 page 2 ────────────┐         │   bullets   │
+│ duplicate, +Add   │   └───────────────────────────────────┘         │ • Re-write  │
+│                   │                                                  │   from      │
+│                   │                                                  │   uploaded  │
+│                   │                                                  │   CV        │
+└───────────────────┴──────────────────────────────────────────────────┴─────────────┘
+```
 
-The page the user sees at `/broker/ai` is rendering a dark "AI Broker Workspace" panel with a wrong broker profile (JAJ / `janeaboujaoudenails@gmail.com`, Daily Capacity 0/200, no chat). Issues to fix:
+- Center preview becomes full-width of the middle column (no more cramped card). Each A4 page = real `210×297mm` scaled to container width with `aspect-[210/297]`, white background, gold hairline, centered with shadow — same visual language as Document Studio pages.
+- Pages auto-add when content overflows (already implemented in measurement, just visualized).
 
-- **Profile identity must come from the signed-in user** (`useAuth` + `useBrokerProfile`), never from a different broker row. Avatar initials = first 2 letters of the signed-in user's display name / email local-part (e.g. `JA` for Jane).
-- **Remove the "Daily Capacity 0/200" card** — that's the admin AI-broker capacity widget, not relevant on a broker's own assistant page.
-- **Restore the chat panel as the default view**: when no lead is selected, show a general assistant chat box (not a blank right-pane). The chat must accept input and post to the broker AI edge function.
-- Strip the dark-themed "JBJ GLOBAL REAL ESTATE / AI Broker Workspace" hero card (the page already has a champagne header in the new design — the dark card is a leftover and overlaps).
-- Make sure auth + role resolves once (no re-blink loop) — already done in last turn, just verify the page renders content for owners impersonating broker mode too.
+## Left rail — real editor controls
 
-## 3. Marketing Toolkit entry for brokers
+Per section row:
+- Edit (inline open), Delete (trash), Duplicate, drag-handle to reorder.
+- Each repeater group (Experience / Education / Cert) shows `+ Add experience`, etc., as a primary gold-hairline button (not text link).
+- New **Photo** field at the top of Personal Details: upload (jpg/png), crop to square, stored as base64 in draft + `cv-photos` bucket on save. Remove button.
+- New **Socials** repeater under Personal Details: Email, Phone, Website, LinkedIn, Instagram, Facebook, X/Twitter, WhatsApp, custom URL — each rendered in preview header with its icon.
 
-- The broker sidebar currently has **no** Marketing Toolkit item (the `/broker/marketing` route redirects to `/broker/portal`). Keep it that way — there is no broken "Open Royal Tools" item to remove from the sidebar.
-- Inside `BrokerDashboardLanding`, the "Smart next action" / quick-action area gets a small **"Broker tools"** strip listing only the broker-relevant utilities that actually work today (Caption + translate, Photo enhancer, Background AI, Property suite, Voice suite) as direct in-page links — no redirect to the Royal Tools hub.
+## Right rail — AI assistant (mirrors Document Studio's AI panel)
 
-## 4. RERA templates → Document Studio (single source of truth)
+A persistent `AICVAssistant` column with:
+1. **Write summary with AI** — small textarea ("describe yourself in a few words / target role"), calls `cv-ai-assist` edge function with action `summary` → fills `data.summary`.
+2. **Improve experience bullets** — per-experience "Polish with AI" button writes back into `bullets`.
+3. **Regenerate from uploaded CV** — upload PDF/DOCX, sends to `cv-ai-parse` edge function which returns structured `CVData`; preview-then-apply (same pattern as AI enrich).
+4. **Translate CV** — pick target language, regenerate copy.
 
-Today some of these live on a separate forms page. Move/duplicate them into the Document Studio template registry so the Document Studio is the single portal:
+All AI calls use Lovable AI Gateway (`openai/gpt-5.5` for parsing, `google/gemini-3.5-flash` for short rewrites). No new secrets.
 
-- Memorandum of Understanding (MOU)
-- Form of Tenancy (Ejari)
-- Form A — Listing Agreement (Seller)
-- Form B — Buyer Agency Agreement
-- Form F — Sales & Purchase Agreement (SPA)
-- Form I — Viewing Form
-- Form U — Cancellation
-- No Objection Certificate (NOC)
-- Property Reservation Form
+## Saved CVs
 
-For each, register a template in the Document Studio template list with the existing locked letterhead chrome, multi-page signature rule, and the standard footer/signature lock. Reuse the existing composers in `src/components/document-studio/templates/` where present; for any missing ones, add minimal composer files following the locked signature + gold divider standard so they slot into the existing renderer.
+- New table `user_cvs (user_id, title, data jsonb, photo_url, updated_at, deleted_at)` with RLS (`user_id = auth.uid()`), GRANTs for authenticated + service_role.
+- Sub-header dropdown **Saved CVs** lists user's CVs (uses `Document Action Picker` standard: Preview / Edit / Delete with 30-day Recently Deleted tab).
+- **Download** button also auto-saves the current CV (insert/update) so the user can re-open and edit it later.
+- Anonymous visitors keep the existing `localStorage` draft path; saving requires login (ActionGate).
 
-The owner-only `/owner/forms` page stays — it's the request inbox brokers file into. Generation now happens **only** in Document Studio.
+## Storage
 
-## Out of scope for this pass
+- New bucket `cv-photos` (public read, owner write under `user_id/…`).
+- New bucket `cv-uploads` (private; ingest path for "regenerate from old CV", auto-deleted after parse).
 
-- Rebuilding the AI assistant's backend logic (we'll just wire the UI to the existing edge function).
-- Repointing every external link to the new Document Studio templates — done in a follow-up.
+## Edge functions
 
-## Technical notes
+- `cv-ai-assist` — `{ action: 'summary' | 'bullets' | 'translate', payload }` → returns text/JSON.
+- `cv-ai-parse` — accepts `{ fileUrl }`, parses with `openai/gpt-5.5`, returns full `CVData` shape.
 
-- Sidebar: edit `ITEMS` array in `BrokerPortalSidebar.tsx`, delete the `/broker/forms` row.
-- Route guard: in `BrokerPortalRoutes.tsx`, wrap `/broker/forms` with an `isOwner`-only guard (or replace with `<Navigate to="/broker/portal" />` when not owner).
-- AI workspace: replace the dark JAJ card section with a thin header bound to `useAuth()` user; delete the capacity card; mount `AssistantChat` in the right pane unconditionally (with `hasLead={false}` when none selected).
-- Document Studio templates: extend the template manifest used by `<DocumentStudio>` to include the 9 RERA templates; each composer wraps content in explicit `page(n, ...)` sections and uses `LockedLetterhead` / `LockedFooter` per the Signature+Gold Divider Lock memory.
+Both deploy with default `verify_jwt = false` + in-code auth check.
+
+## Files to change / add
+
+- Rewrite `src/pages/CVBuilder.tsx` (3-column shell, full-page preview, new sub-header).
+- New `src/components/cv-builder/CVPreviewA4.tsx` — pure preview component (photo header, socials icons, sections, page break).
+- New `src/components/cv-builder/CVEditorRail.tsx` — left rail with edit/delete/duplicate/reorder.
+- New `src/components/cv-builder/CVAIAssistant.tsx` — right rail.
+- New `src/components/cv-builder/SavedCVsMenu.tsx` — dropdown + dialog (Action Picker pattern).
+- New `src/hooks/useUserCVs.ts` — list/save/soft-delete/restore.
+- New edge functions `supabase/functions/cv-ai-assist/index.ts`, `supabase/functions/cv-ai-parse/index.ts`.
+- Migration: `user_cvs` table + `cv-photos`, `cv-uploads` buckets + policies.
+
+## Not changing
+
+- Document Studio templates and signature/lock standards stay untouched.
+- Existing draft auto-save (`localStorage`) preserved for non-logged-in flow.
+- PDF export pipeline kept; only the on-screen preview gets the new full-page treatment.
+
+## Open questions
+
+1. Photo style on the CV — circular avatar in a left sidebar column of the A4, or square in the top-right corner? (Default: circular, top-left next to name.)
+2. Should "Saved CVs" be owner/admin only, or available to every signed-in user? (Default: every signed-in user, RLS scoped to `auth.uid()`.)
