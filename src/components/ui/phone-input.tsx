@@ -596,7 +596,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               avoidCollisions={true}
               onOpenAutoFocus={(e) => e.preventDefault()}
               data-no-contrast-guard
-              style={{ backgroundColor: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}
+              style={{ backgroundColor: "#F7F2EA", border: "1px solid rgba(184,149,85,0.4)" }}
             >
               <Command className={commandStyles} data-no-contrast-guard>
                 <CommandInput 
