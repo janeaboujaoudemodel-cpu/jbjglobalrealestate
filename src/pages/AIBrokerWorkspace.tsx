@@ -55,7 +55,7 @@ export default function AIBrokerWorkspace() {
   const [turns, setTurns] = useState<ChatTurn[]>([]);
   const [generalTurns, setGeneralTurns] = useState<ChatTurn[]>([]);
   const [chatLoading, setChatLoading] = useState(false);
-  const [insights, setInsights] = useState<{ score?: number; reason?: string; matches?: Match[]; next?: string }>({});
+  const [, setInsights] = useState<{ score?: number; reason?: string; matches?: any[]; next?: string }>({});
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/auth?redirect=/broker/ai");
