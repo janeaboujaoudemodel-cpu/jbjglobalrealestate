@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import RequestDatabaseDialog from "@/components/broker-portal/RequestDatabaseDialog";
+import UploadDatabaseDialog from "@/components/crm/UploadDatabaseDialog";
 import LogCallDialog from "@/components/broker-crm/LogCallDialog";
 import CallDetailSheet from "@/components/broker-crm/CallDetailSheet";
 
