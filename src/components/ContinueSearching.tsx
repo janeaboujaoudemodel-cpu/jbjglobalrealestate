@@ -71,7 +71,7 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     }
 
     let animId: number;
-    const speed = 0.6;
+    const speed = 1.4;
 
     const tick = () => {
       const singleSetWidth = track.scrollWidth / 3;
