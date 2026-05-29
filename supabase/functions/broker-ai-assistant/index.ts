@@ -58,42 +58,40 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    const leadId: string = body.leadId;
+    const leadId: string | null = body.leadId || null;
     const userMessage: string = (body.message ?? "").toString().slice(0, 4000);
     const mode: string = body.mode ?? "freeform";
-    if (!leadId) {
-      return new Response(JSON.stringify({ error: "leadId required" }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
 
-    // Fetch lead
-    const { data: lead, error: leadErr } = await supabase
-      .from("crm_leads")
-      .select("id, full_name, preferred_language, nationality, current_location_city, current_location_country, notes, internal_comments, lead_intent, pipeline_stage, budget_min, budget_max, budget_currency, preferred_location, preferred_project, property_type, bedroom_requirement, buying_purpose, lead_type, source, tags, ai_score, last_contacted_at, created_at, whatsapp_e164, phone_e164")
-      .eq("id", leadId)
-      .maybeSingle();
-    if (leadErr || !lead) {
-      return new Response(JSON.stringify({ error: "Lead not found" }), {
-        status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Service-role for inventory + chat history (RLS-safe reads of published projects)
+    // Service-role for inventory + history reads
     const admin = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // Inventory — filter loosely by lead preferences
+    let lead: any = null;
+    if (leadId) {
+      const { data: leadRow, error: leadErr } = await supabase
+        .from("crm_leads")
+        .select("id, full_name, preferred_language, nationality, current_location_city, current_location_country, notes, internal_comments, lead_intent, pipeline_stage, budget_min, budget_max, budget_currency, preferred_location, preferred_project, property_type, bedroom_requirement, buying_purpose, lead_type, source, tags, ai_score, last_contacted_at, created_at, whatsapp_e164, phone_e164")
+        .eq("id", leadId)
+        .maybeSingle();
+      if (leadErr || !leadRow) {
+        return new Response(JSON.stringify({ error: "Lead not found" }), {
+          status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      lead = leadRow;
+    }
+
+    // Inventory — filter loosely by lead preferences when a lead exists
     let invQuery = admin
       .from("projects")
       .select("id, name, slug, area_name, bedrooms_min, bedrooms_max, price_from, price_to, price_currency, property_type_label, status, developer_id")
       .eq("is_published", true)
       .limit(40);
-    if (lead.budget_max) invQuery = invQuery.lte("price_from", Number(lead.budget_max) * 1.15);
-    if (lead.budget_min) invQuery = invQuery.gte("price_to", Number(lead.budget_min) * 0.85);
-    if (lead.preferred_location) invQuery = invQuery.ilike("area_name", `%${lead.preferred_location}%`);
+    if (lead?.budget_max) invQuery = invQuery.lte("price_from", Number(lead.budget_max) * 1.15);
+    if (lead?.budget_min) invQuery = invQuery.gte("price_to", Number(lead.budget_min) * 0.85);
+    if (lead?.preferred_location) invQuery = invQuery.ilike("area_name", `%${lead.preferred_location}%`);
     const { data: projects } = await invQuery;
 
     // Developer names
@@ -114,21 +112,25 @@ serve(async (req) => {
       status: p.status,
     })).slice(0, 25);
 
-    // Prior chat (last 20)
-    const { data: prior } = await supabase
-      .from("broker_ai_chats")
-      .select("role, content")
-      .eq("broker_id", user.id)
-      .eq("lead_id", leadId)
-      .order("created_at", { ascending: true })
-      .limit(20);
+    // Prior chat (last 20) — only when a lead is selected
+    const prior = leadId
+      ? (await supabase
+          .from("broker_ai_chats")
+          .select("role, content")
+          .eq("broker_id", user.id)
+          .eq("lead_id", leadId)
+          .order("created_at", { ascending: true })
+          .limit(20)).data
+      : [];
+
+    const systemPrompt = lead ? SYSTEM_PROMPT_LEAD : SYSTEM_PROMPT_GENERAL;
+    const contextPayload = lead
+      ? `LEAD PROFILE:\n${JSON.stringify(lead, null, 2)}\n\nINVENTORY (only choose from these):\n${JSON.stringify(inventory, null, 2)}\n\nMODE: ${mode}`
+      : `NO LEAD IN CONTEXT — general broker Q&A.\n\nINVENTORY (only choose from these if the broker asks about properties):\n${JSON.stringify(inventory, null, 2)}\n\nMODE: ${mode}`;
 
     const messages: any[] = [
-      { role: "system", content: SYSTEM_PROMPT },
-      {
-        role: "system",
-        content: `LEAD PROFILE:\n${JSON.stringify(lead, null, 2)}\n\nINVENTORY (only choose from these):\n${JSON.stringify(inventory, null, 2)}\n\nMODE: ${mode}`,
-      },
+      { role: "system", content: systemPrompt },
+      { role: "system", content: contextPayload },
       ...((prior ?? []).map((m: any) => ({ role: m.role, content: m.content }))),
     ];
     if (userMessage) messages.push({ role: "user", content: userMessage });
