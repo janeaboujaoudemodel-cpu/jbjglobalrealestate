@@ -10,6 +10,7 @@ import AuthRequiredRoute from "@/components/AuthRequiredRoute";
 import ModeRequiredRoute from "@/components/ModeRequiredRoute";
 import BrokerPortalLayout from "@/components/broker-portal/BrokerPortalLayout";
 import OwnerRedirectGuard from "@/components/broker-portal/OwnerRedirectGuard";
+import OwnerOnlyRoute from "@/components/broker-portal/OwnerOnlyRoute";
 
 const BrokerDashboardLanding = lazy(() => import("@/pages/broker/BrokerDashboardLanding"));
 const BrokerCRM              = lazy(() => import("@/pages/broker/BrokerCRM"));
@@ -68,7 +69,7 @@ export const BrokerPortalRoutes = () => (
         />
       }
     />
-    <Route path="forms" element={<BrokerFormRequests />} />
+    <Route path="forms" element={<OwnerOnlyRoute><BrokerFormRequests /></OwnerOnlyRoute>} />
     <Route path="learning" element={<BrokerLearning />} />
     <Route path="learning/book/:bookId" element={<BookReader />} />
     <Route path="academy" element={<Navigate to="/broker/learning?tab=training" replace />} />

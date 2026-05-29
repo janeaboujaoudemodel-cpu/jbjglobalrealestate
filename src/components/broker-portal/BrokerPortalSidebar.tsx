@@ -1,7 +1,7 @@
 import { NavLink, useLocation, useNavigate, Link } from "react-router-dom";
 import {
   LayoutDashboard, Briefcase, ListChecks, Calendar, ListTodo,
-  Handshake, FilePen, GraduationCap,
+  Handshake, GraduationCap,
   Brain, Bell, Settings, ChevronLeft, ChevronRight, ArrowLeft, Crown, Home, LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,8 @@ import { toast } from "sonner";
 
 type Item = { to: string; label: string; icon: any };
 
+// Forms & Agreements is owner-only — brokers file requests from inside
+// individual lead/contract flows, not from a top-level sidebar entry.
 const ITEMS: Item[] = [
   { to: "/broker/portal",        label: "Dashboard",          icon: LayoutDashboard },
   { to: "/broker/crm",           label: "CRM Pipeline",       icon: Briefcase },
@@ -18,7 +20,6 @@ const ITEMS: Item[] = [
   { to: "/broker/calendar",      label: "Calendar",           icon: Calendar },
   { to: "/broker/tasks",         label: "Tasks",              icon: ListTodo },
   { to: "/broker/deals",         label: "Deals & Commissions",icon: Handshake },
-  { to: "/broker/forms",         label: "Request a Form",     icon: FilePen },
   { to: "/broker/learning",      label: "JBJ Academy",        icon: GraduationCap },
   { to: "/broker/ai",            label: "AI Sales Assistant", icon: Brain },
   { to: "/broker/notifications", label: "Notifications",      icon: Bell },
