@@ -6002,6 +6002,22 @@ button[data-phone-code-trigger]:focus-visible :is(span, svg, [class*="lucide"]) 
   stroke: #B89555 !important;
   opacity: 1 !important;
 }
+[data-phone-country-command] input[cmdk-input],
+[data-phone-country-command] input[cmdk-input]:hover,
+[data-phone-country-command] input[cmdk-input]:focus,
+[data-phone-country-command] input[cmdk-input]:focus-visible {
+  width: 100% !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset-color: transparent !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+}
 [data-radix-popper-content-wrapper] input[cmdk-input]::placeholder {
   color: rgba(26, 26, 26, 0.55) !important;
   opacity: 1 !important;
