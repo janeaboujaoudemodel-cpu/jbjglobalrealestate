@@ -217,6 +217,7 @@ export default function OwnerBooks() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
+      <style>{BOOK_3D_CSS}</style>
       <div className="container mx-auto px-6 py-10 max-w-6xl">
         <div className="flex items-end justify-between mb-8 gap-4 flex-wrap">
           <div>
