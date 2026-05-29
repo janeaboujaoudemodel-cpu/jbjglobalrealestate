@@ -7,7 +7,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Phone, CheckCircle2, Loader2, Mic, Search, X, Sparkles, Pause, Play, Square, RotateCcw,
+  Phone, CheckCircle2, Loader2, Mic, Search, X, Sparkles, Pause, Play, Square, RotateCcw, Download, Share2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -55,7 +55,7 @@ interface Props {
   initialLeadId?: string | null;
   submitting: boolean;
   onSubmit: (input: LogCallSubmit) => Promise<{ callLogId?: string } | void>;
-  onSaved?: () => void;
+  onSaved?: (callLogId?: string) => void;
 }
 
 const getPhone = (l: PickerLead) => (l.phone ?? l.phone_e164 ?? "").toString();
@@ -96,6 +96,7 @@ export default function LogCallDialog({
   const secondsRef = useRef(0);
   const pendingStopRef = useRef<((value: RecordingResult | null) => void) | null>(null);
   const liveTextRef = useRef<string>("");
+  const [audioPreviewUrl, setAudioPreviewUrl] = useState<string | null>(null);
 
   const stopTracks = () => {
     if (streamRef.current) {
@@ -146,6 +147,8 @@ export default function LogCallDialog({
     setCoachTips([]);
     liveTextRef.current = "";
     pendingStopRef.current = null;
+    if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+    setAudioPreviewUrl(null);
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
     stopTracks();
     recRef.current = null;
@@ -153,6 +156,10 @@ export default function LogCallDialog({
   };
 
   useEffect(() => { if (!open) reset(); }, [open]);
+
+  useEffect(() => () => {
+    if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+  }, [audioPreviewUrl]);
 
   useEffect(() => {
     if (!open || !initialLeadId) return;
@@ -177,6 +184,8 @@ export default function LogCallDialog({
         return;
       }
       setAudioBlob(null);
+      if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+      setAudioPreviewUrl(null);
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           channelCount: 1,
@@ -200,8 +209,10 @@ export default function LogCallDialog({
       mr.onstop = () => {
         const blobType = mime || chunksRef.current.find((part) => part instanceof Blob)?.type || "audio/webm";
         const blob = new Blob(chunksRef.current, { type: blobType });
-        const finalSeconds = Math.max(secondsRef.current, chunksRef.current.length ? 1 : 0);
+        const elapsed = startedAtRef.current ? Math.ceil((Date.now() - startedAtRef.current) / 1000) : 0;
+        const finalSeconds = Math.max(secondsRef.current, elapsed, chunksRef.current.length ? 1 : 0);
         setAudioBlob(blob);
+        setAudioPreviewUrl(URL.createObjectURL(blob));
         setDurationSeconds(String(finalSeconds));
         setSeconds(finalSeconds);
         setRecState("stopped");
@@ -233,6 +244,7 @@ export default function LogCallDialog({
     const recorder = recRef.current;
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
     if (recorder && recorder.state !== "inactive") {
+      try { recorder.requestData?.(); } catch (err) { console.warn("recorder.requestData failed", err); }
       try { recorder.stop(); } catch (err) { console.warn("recorder.stop failed", err); }
     } else {
       // already inactive — finalize manually
@@ -286,6 +298,8 @@ export default function LogCallDialog({
     stopTracks();
     recRef.current = null;
     chunksRef.current = [];
+    if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+    setAudioPreviewUrl(null);
     setAudioBlob(null);
     setSeconds(0);
     secondsRef.current = 0;
@@ -384,7 +398,7 @@ export default function LogCallDialog({
         toast.success("Recording saved — AI is processing it");
         await supabase.from("broker_call_logs").select("id").eq("id", callLogId).maybeSingle();
       }
-      onSaved?.();
+      onSaved?.(callLogId);
       onOpenChange(false);
     } catch (e: any) {
       console.error(e);
@@ -396,10 +410,38 @@ export default function LogCallDialog({
 
   const isSaving = submitting || savingRecording;
 
-  const stopAndSave = async () => {
+  const stopAndPreview = async () => {
     if (isSaving) return;
-    const syntheticSubmitEvent = { preventDefault: () => undefined };
-    await submit(syntheticSubmitEvent);
+    const stopped = await stopRecordingAndGetBlob();
+    if (stopped?.blob?.size) {
+      toast.success("Recording ready — review it before saving");
+    } else {
+      toast.error("No audio was captured. Check microphone permission and try again.");
+      setRecState("idle");
+    }
+  };
+
+  const downloadRecording = () => {
+    if (!audioBlob || !audioPreviewUrl) return;
+    const ext = audioBlob.type.includes("mp4") ? "mp4" : audioBlob.type.includes("ogg") ? "ogg" : "webm";
+    const a = document.createElement("a");
+    a.href = audioPreviewUrl;
+    a.download = `jbj-call-recording-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-")}.${ext}`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+
+  const shareRecording = async () => {
+    if (!audioBlob) return;
+    const ext = audioBlob.type.includes("mp4") ? "mp4" : audioBlob.type.includes("ogg") ? "ogg" : "webm";
+    const file = new File([audioBlob], `jbj-call-recording.${ext}`, { type: audioBlob.type || "audio/webm" });
+    if (navigator.canShare?.({ files: [file] }) && navigator.share) {
+      await navigator.share({ title: "JBJ call recording", files: [file] });
+    } else {
+      downloadRecording();
+      toast.message("Sharing is not available in this browser, so the recording was downloaded instead.");
+    }
   };
 
   return (
@@ -503,7 +545,7 @@ export default function LogCallDialog({
                     <Pause className="h-4 w-4" />
                     <span>Pause</span>
                   </button>
-                  <button type="button" onClick={stopAndSave} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                  <button type="button" onClick={stopAndPreview} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
                     {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Square className="h-4 w-4" />}
                     <span>{isSaving ? "Saving…" : "Stop"}</span>
                   </button>
@@ -519,7 +561,7 @@ export default function LogCallDialog({
                     <Play className="h-4 w-4" />
                     <span>Resume</span>
                   </button>
-                  <button type="button" onClick={stopAndSave} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                  <button type="button" onClick={stopAndPreview} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
                     {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Square className="h-4 w-4" />}
                     <span>{isSaving ? "Saving…" : "Stop"}</span>
                   </button>
@@ -542,9 +584,30 @@ export default function LogCallDialog({
                 </>
               )}
               {audioBlob && recState === "stopped" && (
-                <span className="text-[11px] text-[#1A1A1A]/70">
-                  Captured · {(audioBlob.size / 1024).toFixed(0)} KB · will be transcribed on save
-                </span>
+                <div className="w-full rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-3 space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-[11px] text-[#1A1A1A]/70">
+                      Captured · {(audioBlob.size / 1024).toFixed(0)} KB · review before saving
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={downloadRecording}
+                        className="inline-flex h-8 items-center gap-1.5 rounded-md border border-[#B89555]/40 px-2.5 text-[11px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                      >
+                        <Download className="h-3.5 w-3.5" /> Download
+                      </button>
+                      <button
+                        type="button"
+                        onClick={shareRecording}
+                        className="inline-flex h-8 items-center gap-1.5 rounded-md border border-[#B89555]/40 px-2.5 text-[11px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                      >
+                        <Share2 className="h-3.5 w-3.5" /> Share
+                      </button>
+                    </div>
+                  </div>
+                  {audioPreviewUrl && <audio controls src={audioPreviewUrl} className="w-full" />}
+                </div>
               )}
             </div>
             {(coachTips.length > 0 || coachLoading) && (
