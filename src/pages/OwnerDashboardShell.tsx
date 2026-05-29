@@ -32,6 +32,10 @@ const OwnerDashboardShell = () => {
   const isMobile = useIsMobile();
 
   useEffect(() => {
+    try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
+  }, []);
+
+  useEffect(() => {
     if (typeof window === "undefined") return;
     window.localStorage.setItem("owner.fullscreen", fullscreen ? "1" : "0");
   }, [fullscreen]);
