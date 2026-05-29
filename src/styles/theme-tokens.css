@@ -716,6 +716,25 @@ label[data-required]::after {
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
+/* Final override: champagne job cards inside the navy section must never inherit navy-section white text. */
+[data-careers-page] .careers-card-navy .careers-card-strong,
+[data-careers-page] .careers-card-navy .careers-card-strong :is(h1,h2,h3,h4,h5,h6,p,span,strong,em,small,a,li,div) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+[data-careers-page] .careers-card-navy .careers-card-strong svg:not(.allow-white) {
+  color: #102540 !important;
+  stroke: #102540 !important;
+}
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta,
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta *,
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover,
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 /* ============================================================
  * GLOBAL FORM STANDARD — JBJ Public Lead-Capture Form
  *
