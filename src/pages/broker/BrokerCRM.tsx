@@ -137,6 +137,27 @@ export default function BrokerCRM() {
     },
   });
 
+  // Lightweight counts for both views (so the toggle can show a number badge).
+  const callCounts = useQuery({
+    queryKey: ["broker-call-counts", user?.id],
+    enabled: !!user?.id,
+    queryFn: async () => {
+      const [activeRes, deletedRes] = await Promise.all([
+        supabase
+          .from("broker_call_logs")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user!.id)
+          .is("deleted_at", null),
+        supabase
+          .from("broker_call_logs")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user!.id)
+          .not("deleted_at", "is", null),
+      ]);
+      return { active: activeRes.count ?? 0, deleted: deletedRes.count ?? 0 };
+    },
+  });
+
   const createCallLog = useMutation({
     mutationFn: async (input: {
       leadId?: string | null;
