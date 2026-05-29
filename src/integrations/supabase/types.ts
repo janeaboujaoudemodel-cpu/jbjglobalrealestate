@@ -3303,7 +3303,9 @@ export type Database = {
       }
       broker_form_requests: {
         Row: {
+          attachments: Json
           broker_user_id: string
+          client_details: Json
           created_at: string
           delivered_file_url: string | null
           form_type: string
@@ -3316,7 +3318,9 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          attachments?: Json
           broker_user_id: string
+          client_details?: Json
           created_at?: string
           delivered_file_url?: string | null
           form_type: string
@@ -3329,7 +3333,9 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          attachments?: Json
           broker_user_id?: string
+          client_details?: Json
           created_at?: string
           delivered_file_url?: string | null
           form_type?: string
@@ -3776,6 +3782,7 @@ export type Database = {
           broker_user_id: string
           completed_at: string | null
           created_at: string
+          deleted_at: string | null
           description: string | null
           due_at: string | null
           id: string
@@ -3789,6 +3796,7 @@ export type Database = {
           broker_user_id: string
           completed_at?: string | null
           created_at?: string
+          deleted_at?: string | null
           description?: string | null
           due_at?: string | null
           id?: string
@@ -3802,6 +3810,7 @@ export type Database = {
           broker_user_id?: string
           completed_at?: string | null
           created_at?: string
+          deleted_at?: string | null
           description?: string | null
           due_at?: string | null
           id?: string
