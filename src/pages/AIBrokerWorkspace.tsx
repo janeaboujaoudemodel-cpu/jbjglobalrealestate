@@ -126,18 +126,6 @@ export default function AIBrokerWorkspace() {
         content: r.content,
         draft_message: r.structured?.draft_message ?? null,
       })).filter(t => t.role === "user" || t.role === "assistant"));
-      // Hydrate insights from last assistant turn
-      const lastA = [...rows].reverse().find(r => r.role === "assistant" && r.structured);
-      if (lastA?.structured) {
-        setInsights({
-          score: lastA.structured.score,
-          reason: lastA.structured.score_reason,
-          matches: lastA.structured.matches,
-          next: lastA.structured.next_step,
-        });
-      } else {
-        setInsights({});
-      }
     } catch (e) {
       console.error(e);
     }
