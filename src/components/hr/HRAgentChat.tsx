@@ -380,7 +380,77 @@ export default function HRAgentChat() {
         </ScrollArea>
 
         {(mode === 'owner' || stage !== 'completed') && (
-          <div className="border-t border-[#B89555]/20 p-4">
+          <div className="border-t border-[#B89555]/20 p-4 space-y-3">
+            {mode !== 'owner' && !hasApplied && (
+              <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 space-y-2">
+                <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A]/70">
+                  <Briefcase className="w-3.5 h-3.5 text-[#102540]" /> Apply for a position
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Select value={selectedPositionId} onValueChange={setSelectedPositionId}>
+                    <SelectTrigger className="flex-1 border-[#B89555]/40 bg-white text-[#1A1A1A]">
+                      <SelectValue placeholder="Select position…" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white text-[#1A1A1A]">
+                      {openPositions.length === 0 && (
+                        <SelectItem value="__none" disabled>No open positions</SelectItem>
+                      )}
+                      {openPositions.map((p) => (
+                        <SelectItem key={p.id} value={p.id}>
+                          {p.title}{p.department ? ` — ${p.department}` : ''}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {cvFile ? (
+                    <div className="flex items-center gap-2 rounded-md border border-emerald-600/40 bg-emerald-50 px-3 py-1.5 text-xs text-[#1A1A1A]">
+                      <FileText className="w-3.5 h-3.5 text-emerald-700" />
+                      <span className="truncate max-w-[140px]">{cvFile.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => setCvFile(null)}
+                        className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+                        aria-label="Remove CV"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                    >
+                      <Paperclip className="w-4 h-4 mr-1.5" /> Attach CV
+                    </Button>
+                  )}
+                  <Button
+                    type="button"
+                    onClick={submitApplication}
+                    disabled={submittingApp || !cvFile || !selectedPositionId}
+                    className="bg-[#102540] text-white hover:bg-[#1a3d63]"
+                  >
+                    {submittingApp ? (
+                      <><Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> Submitting…</>
+                    ) : (
+                      'Submit application'
+                    )}
+                  </Button>
+                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.heic,.heif,application/pdf,image/*"
+                  className="hidden"
+                  onChange={(e) => handleCvPicked(e.target.files?.[0] || null)}
+                />
+                <p className="text-[10px] text-[#1A1A1A]/60">
+                  PDF · Word · JPG / PNG / HEIC — max 10 MB. Your CV is stored securely with our HR team.
+                </p>
+              </div>
+            )}
+
             <div className="flex gap-2">
               <Input
                 value={input}
@@ -390,8 +460,8 @@ export default function HRAgentChat() {
                 disabled={loading}
                 className="flex-1 border-[#B89555]/30 focus:border-[#B89555]"
               />
-              <Button 
-                onClick={sendMessage} 
+              <Button
+                onClick={sendMessage}
                 disabled={!input.trim() || loading}
                 size="icon"
                 className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
@@ -399,7 +469,7 @@ export default function HRAgentChat() {
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </Button>
             </div>
-            <p className="text-xs text-[#1A1A1A]/70 mt-2 text-center">
+            <p className="text-xs text-[#1A1A1A]/70 text-center">
               Press Enter to send • AI-powered interview assistant
             </p>
           </div>
