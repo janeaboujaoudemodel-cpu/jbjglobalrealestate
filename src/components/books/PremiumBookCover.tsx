@@ -126,7 +126,10 @@ export function PremiumBookCover({
         />
       </div>
 
-      <div className="absolute inset-x-[12%] bottom-[6%] truncate text-center text-[clamp(8px,1.2vw,15px)] font-semibold uppercase tracking-[0.28em] text-[#B89555]">
+      <div
+        className="absolute inset-x-[12%] bottom-[6%] truncate text-center font-semibold uppercase tracking-[0.24em] text-[#B89555]"
+        style={{ fontSize: "clamp(6px, 3cqw, 14px)" }}
+      >
         {footer}
       </div>
       {/* Top sheen removed — was creating a visible white cut band across the cover */}
