@@ -7,7 +7,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Phone, CheckCircle2, Loader2, Mic, Search, X, Sparkles,
+  Phone, CheckCircle2, Loader2, Mic, Search, X, Sparkles, Pause, Play, Square, RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -82,7 +82,7 @@ export default function LogCallDialog({
   const [notes, setNotes] = useState("");
 
   // Recorder state
-  const [recState, setRecState] = useState<"idle" | "recording" | "stopped">("idle");
+  const [recState, setRecState] = useState<"idle" | "recording" | "paused" | "stopped">("idle");
   const [seconds, setSeconds] = useState(0);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [savingRecording, setSavingRecording] = useState(false);
@@ -243,6 +243,57 @@ export default function LogCallDialog({
     }
   };
 
+  const pauseRecording = () => {
+    const recorder = recRef.current;
+    if (!recorder || recorder.state !== "recording") return;
+    try {
+      recorder.pause();
+      if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
+      setRecState("paused");
+    } catch (err) {
+      console.warn("recorder.pause failed", err);
+    }
+  };
+
+  const resumeRecording = () => {
+    const recorder = recRef.current;
+    if (!recorder || recorder.state !== "paused") return;
+    try {
+      recorder.resume();
+      setRecState("recording");
+      timerRef.current = window.setInterval(() => {
+        setSeconds((s) => {
+          const next = s + 1;
+          secondsRef.current = next;
+          return next;
+        });
+      }, 1000) as unknown as number;
+    } catch (err) {
+      console.warn("recorder.resume failed", err);
+    }
+  };
+
+  const discardRecording = () => {
+    if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
+    try {
+      if (recRef.current && recRef.current.state !== "inactive") {
+        recRef.current.onstop = null;
+        recRef.current.stop();
+      }
+    } catch (err) {
+      console.warn("recorder discard stop failed", err);
+    }
+    stopTracks();
+    recRef.current = null;
+    chunksRef.current = [];
+    setAudioBlob(null);
+    setSeconds(0);
+    secondsRef.current = 0;
+    startedAtRef.current = null;
+    setDurationSeconds("0");
+    setRecState("idle");
+  };
+
   const stopRecordingAndGetBlob = () => new Promise<RecordingResult | null>((resolve) => {
     const recorder = recRef.current;
     if (!recorder || recorder.state === "inactive") {
@@ -288,7 +339,7 @@ export default function LogCallDialog({
     setSavingRecording(true);
     let finalAudioBlob = audioBlob;
     let finalDuration = Math.max(0, Number(durationSeconds) || secondsRef.current || 0);
-    if (recState === "recording") {
+    if (recState === "recording" || recState === "paused") {
       const stopped = await stopRecordingAndGetBlob();
       finalAudioBlob = stopped?.blob ?? null;
       finalDuration = stopped?.seconds ?? finalDuration;
@@ -344,6 +395,12 @@ export default function LogCallDialog({
   };
 
   const isSaving = submitting || savingRecording;
+
+  const stopAndSave = async () => {
+    if (isSaving) return;
+    const syntheticSubmitEvent = { preventDefault: () => undefined };
+    await submit(syntheticSubmitEvent);
+  };
 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o && isSaving) return; onOpenChange(o); if (!o) reset(); }}>
@@ -441,18 +498,48 @@ export default function LogCallDialog({
                 </button>
               )}
               {recState === "recording" && (
-                <button type="button" onClick={stopRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                  <CheckCircle2 className="h-4 w-4" />
-                  <span>Done</span>
-                </button>
+                <>
+                  <button type="button" onClick={pauseRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <Pause className="h-4 w-4" />
+                    <span>Pause</span>
+                  </button>
+                  <button type="button" onClick={stopAndSave} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Square className="h-4 w-4" />}
+                    <span>{isSaving ? "Saving…" : "Stop"}</span>
+                  </button>
+                  <button type="button" onClick={discardRecording} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <X className="h-4 w-4" />
+                    <span>Cancel</span>
+                  </button>
+                </>
+              )}
+              {recState === "paused" && (
+                <>
+                  <button type="button" onClick={resumeRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <Play className="h-4 w-4" />
+                    <span>Resume</span>
+                  </button>
+                  <button type="button" onClick={stopAndSave} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Square className="h-4 w-4" />}
+                    <span>{isSaving ? "Saving…" : "Stop"}</span>
+                  </button>
+                  <button type="button" onClick={discardRecording} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <X className="h-4 w-4" />
+                    <span>Cancel</span>
+                  </button>
+                </>
               )}
               {recState === "stopped" && (
-                <button type="submit" disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                  {isSaving
-                    ? <Loader2 className="h-4 w-4 animate-spin" />
-                    : <CheckCircle2 className="h-4 w-4" />}
-                  <span>{isSaving ? "Saving…" : "Save call log"}</span>
-                </button>
+                <>
+                  <button type="submit" disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
+                    <span>{isSaving ? "Saving…" : "Save call log"}</span>
+                  </button>
+                  <button type="button" onClick={discardRecording} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                    <RotateCcw className="h-4 w-4" />
+                    <span>Re-record</span>
+                  </button>
+                </>
               )}
               {audioBlob && recState === "stopped" && (
                 <span className="text-[11px] text-[#1A1A1A]/70">
