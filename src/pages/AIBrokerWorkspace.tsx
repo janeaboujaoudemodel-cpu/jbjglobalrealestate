@@ -284,7 +284,7 @@ export default function AIBrokerWorkspace() {
                   </div>
                 </div>
                 <Link
-                  to={`/broker/leads/${selected.id}`}
+                  to={`/broker/leads?focus=${selected.id}`}
                   className="text-[11px] font-semibold text-[#102540] hover:underline inline-flex items-center gap-1"
                 >
                   Open lead <ArrowRight className="h-3 w-3" />
