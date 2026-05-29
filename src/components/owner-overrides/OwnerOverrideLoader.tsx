@@ -21,14 +21,23 @@ function camelToKebab(s: string) {
   return s.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
 }
 
+function scopeAwayFromWebDevDock(selector: string) {
+  const trimmed = selector.trim();
+  if (!trimmed || /owner-webdev|data-owner-webdev-dock|jbj-webdev/i.test(trimmed)) return "";
+  return `:is(${trimmed}):not([data-owner-webdev-dock]):not([data-owner-webdev-dock] *)`;
+}
+
 function buildCss(rows: OverrideRow[]) {
   return rows
     .map((r) => {
+      const selector = scopeAwayFromWebDevDock(r.selector);
+      if (!selector) return "";
       const body = Object.entries(r.css ?? {})
         .map(([k, v]) => `  ${camelToKebab(k)}: ${v} !important;`)
         .join("\n");
-      return `/* override:${r.id} */\n${r.selector} {\n${body}\n}`;
+      return `/* override:${r.id} */\n${selector} {\n${body}\n}`;
     })
+    .filter(Boolean)
     .join("\n\n");
 }
 
