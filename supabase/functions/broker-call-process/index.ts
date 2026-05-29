@@ -265,29 +265,3 @@ function mimeToExt(mime: string) {
   return "webm";
 }
 
-async function transcribeWithLovableAI(audioBytes: Uint8Array, mimeType: string, apiKey: string) {
-  let binary = "";
-  const chunkSize = 0x8000;
-  for (let i = 0; i < audioBytes.length; i += chunkSize) {
-    binary += String.fromCharCode(...audioBytes.subarray(i, i + chunkSize));
-  }
-  const audioDataUrl = `data:${mimeType};base64,${btoa(binary)}`;
-  const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "google/gemini-2.5-flash",
-      messages: [{
-        role: "user",
-        content: [
-          { type: "text", text: "Transcribe this call audio as accurately as possible. Return only the transcript text. If no speech is audible, return an empty string." },
-          { type: "image_url", image_url: { url: audioDataUrl } },
-        ],
-      }],
-      max_tokens: 6000,
-    }),
-  });
-  if (!response.ok) throw new Error(`Lovable AI transcription failed: ${response.status}`);
-  const data = await response.json();
-  return (data?.choices?.[0]?.message?.content || "").toString().trim();
-}
