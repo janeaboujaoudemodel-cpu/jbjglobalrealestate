@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { useFavorites, useShortlist } from "@/hooks/useFavorites";
 import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -65,7 +66,9 @@ interface GlobalHeaderProps {
 }
 
 const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
-  const { user, isOwner, signOut } = useAuth();
+  const { user, isOwner: authIsOwner, signOut } = useAuth();
+  const { isOwner: roleIsOwner } = useIsAppOwner();
+  const isOwner = authIsOwner || roleIsOwner;
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
