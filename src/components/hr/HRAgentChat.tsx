@@ -1,15 +1,22 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Loader2, Calendar, FileText, CheckCircle, Sparkles, Copy } from 'lucide-react';
+import { Send, Bot, User, Loader2, Calendar, FileText, CheckCircle, Sparkles, Copy, Paperclip, X, Briefcase } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+
+interface OpenPosition {
+  id: string;
+  title: string;
+  department: string | null;
+}
 
 interface Message {
   role: 'user' | 'assistant';
