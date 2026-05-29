@@ -4,7 +4,7 @@
  * generates a scoped CSS override (soft mode), and exposes Approve /
  * Reject / Take me there controls.
  */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Sparkles,
