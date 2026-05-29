@@ -130,14 +130,26 @@ export default function HRAgentChat() {
   const sendMessage = async () => {
     if (!input.trim() || !conversationId || loading) return;
 
+    const outgoing = input.trim();
+
     const userMessage: Message = {
       role: 'user',
-      content: input,
+      content: outgoing,
       timestamp: new Date().toISOString()
     };
 
     setMessages(prev => [...prev, userMessage]);
     setInput('');
+
+    if (chatIntent === 'undecided' && /\b(apply|job|career|position|vacancy|cv)\b/i.test(outgoing)) {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: 'Sure — tap **Apply for a Job** below and I’ll open the 5-step application inside this chat.',
+        timestamp: new Date().toISOString()
+      }]);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -145,7 +157,7 @@ export default function HRAgentChat() {
         body: {
           action: 'send_message',
           conversationId,
-          message: input
+          message: outgoing
         }
       });
 
