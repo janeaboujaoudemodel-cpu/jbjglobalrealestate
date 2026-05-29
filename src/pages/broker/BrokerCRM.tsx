@@ -28,18 +28,25 @@ function PremiumCard({ children, className = "" }: { children: React.ReactNode; 
   );
 }
 
-function Kpi({ icon: Icon, label, value, sub }: { icon: any; label: string; value: string | number; sub?: string }) {
+function Kpi({
+  icon: Icon, label, value, sub, onClick,
+}: { icon: any; label: string; value: string | number; sub?: string; onClick?: () => void }) {
   return (
-    <div className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 px-4 py-4">
+    <button
+      type="button"
+      onClick={onClick}
+      className="group text-left rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 px-4 py-4 hover:border-[#B89555]/60 hover:bg-[#F2EADA] transition-colors w-full focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+    >
       <div className="flex items-center justify-between">
         <div className="h-8 w-8 grid place-items-center rounded-md bg-[#EFE6D6] border border-[#B89555]/35">
           <Icon className="h-4 w-4 text-[#1A1A1A]" />
         </div>
+        <ArrowRight className="h-3.5 w-3.5 text-[#1A1A1A]/40 group-hover:text-[#B89555] transition-colors" />
       </div>
       <div className="mt-3 text-2xl md:text-3xl font-semibold tabular-nums text-[#1A1A1A]">{value}</div>
       <div className="text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/60 mt-1">{label}</div>
       {sub && <div className="text-[11px] text-[#1A1A1A]/55 mt-1">{sub}</div>}
-    </div>
+    </button>
   );
 }
 
@@ -97,6 +104,17 @@ export default function BrokerCRM() {
   }, [searchParams, setSearchParams]);
 
   const [callsView, setCallsView] = useState<"active" | "deleted">("active");
+  const [selectedCallIds, setSelectedCallIds] = useState<Set<string>>(new Set());
+
+  // Clear selection when toggling view
+  useEffect(() => { setSelectedCallIds(new Set()); }, [callsView]);
+
+  const toggleSelectCall = (id: string) =>
+    setSelectedCallIds((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
 
   const callLogs = useQuery({
     queryKey: ["broker-call-logs", user?.id, callsView],
@@ -244,6 +262,57 @@ export default function BrokerCRM() {
     onError: (e: any) => toast.error(e?.message || "Could not permanently delete call"),
   });
 
+  const bulkSoftDelete = useMutation({
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase
+        .from("broker_call_logs")
+        .update({ deleted_at: new Date().toISOString() })
+        .in("id", ids)
+        .eq("user_id", user!.id);
+      if (error) throw error;
+    },
+    onSuccess: (_d, ids) => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      toast.success(`${ids.length} call${ids.length > 1 ? "s" : ""} moved to Recently deleted`);
+      setSelectedCallIds(new Set());
+    },
+    onError: (e: any) => toast.error(e?.message || "Bulk delete failed"),
+  });
+
+  const bulkRestore = useMutation({
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase
+        .from("broker_call_logs")
+        .update({ deleted_at: null })
+        .in("id", ids)
+        .eq("user_id", user!.id);
+      if (error) throw error;
+    },
+    onSuccess: (_d, ids) => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      toast.success(`${ids.length} call${ids.length > 1 ? "s" : ""} restored`);
+      setSelectedCallIds(new Set());
+    },
+    onError: (e: any) => toast.error(e?.message || "Bulk restore failed"),
+  });
+
+  const bulkHardDelete = useMutation({
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase
+        .from("broker_call_logs")
+        .delete()
+        .in("id", ids)
+        .eq("user_id", user!.id);
+      if (error) throw error;
+    },
+    onSuccess: (_d, ids) => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      toast.success(`${ids.length} call${ids.length > 1 ? "s" : ""} permanently deleted`);
+      setSelectedCallIds(new Set());
+    },
+    onError: (e: any) => toast.error(e?.message || "Bulk permanent delete failed"),
+  });
+
 
   const leadsData: any[] = (leads.data as any[]) ?? [];
   const filteredLeads = useMemo(() => {
@@ -313,11 +382,11 @@ export default function BrokerCRM() {
 
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
-        <Kpi icon={Users} label="Assigned leads" value={totalLeads} />
-        <Kpi icon={Database} label="Databases" value={dbs.data?.length ?? 0} />
-        <Kpi icon={Phone} label="Calls logged" value={callsLogged} />
-        <Kpi icon={ClipboardList} label="Pending follow-ups" value={followUps} />
-        <Kpi icon={TrendingUp} label="Conversion" value={`${conversion}%`} sub={`${wonStage} won`} />
+        <Kpi icon={Users} label="Assigned leads" value={totalLeads} onClick={() => setTab("leads")} />
+        <Kpi icon={Database} label="Databases" value={dbs.data?.length ?? 0} onClick={() => setTab("databases")} />
+        <Kpi icon={Phone} label="Calls logged" value={callsLogged} onClick={() => setTab("calls")} />
+        <Kpi icon={ClipboardList} label="Pending follow-ups" value={followUps} onClick={() => setTab("activity")} />
+        <Kpi icon={TrendingUp} label="Conversion" value={`${conversion}%`} sub={`${wonStage} won`} onClick={() => setTab("insights")} />
       </div>
 
       {/* Tabs */}
@@ -357,10 +426,15 @@ export default function BrokerCRM() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             {stageCounts.map((s) => (
-              <div key={s.key} className="rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 px-4 py-3">
+              <button
+                key={s.key}
+                type="button"
+                onClick={() => { setSearch(s.label.toLowerCase()); setTab("leads"); }}
+                className="text-left rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 px-4 py-3 hover:border-[#B89555]/55 hover:bg-[#F7F2EA] transition-colors focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+              >
                 <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">{s.label}</div>
                 <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1">{s.count}</div>
-              </div>
+              </button>
             ))}
           </div>
         </PremiumCard>
@@ -559,91 +633,172 @@ export default function BrokerCRM() {
           ) : (callLogs.data ?? []).length === 0 ? (
             <Empty msg={callsView === "deleted" ? "No deleted calls. Items you delete will appear here and can be restored within 30 days." : "No calls logged yet. Use Log a call to capture broker activity, duration, outcome, and notes."} />
           ) : (
-            <ul className="space-y-2.5">
-              {(callLogs.data ?? [])
-                .slice(0, 50)
-                .map((log: any) => {
-                  const lead = leadsData.find((item) => item.id === log.lead_id);
-                  return (
-                  <li key={log.id} className="group">
-                    <div className="w-full rounded-xl bg-[#FDFBF7] border border-[#B89555]/30 hover:border-[#B89555]/55 hover:bg-[#F7F2EA] transition-colors">
-                      <div className="flex items-stretch">
+            <>
+              {/* Bulk selection toolbar */}
+              {(() => {
+                const visible = (callLogs.data ?? []).slice(0, 50);
+                const allSelected = visible.length > 0 && visible.every((l: any) => selectedCallIds.has(l.id));
+                const someSelected = selectedCallIds.size > 0;
+                const selectedArr = Array.from(selectedCallIds);
+                return (
+                  <div className="mb-3 flex items-center justify-between gap-2 flex-wrap rounded-lg bg-[#EFE6D6]/50 border border-[#B89555]/30 px-3 py-2">
+                    <label className="flex items-center gap-2 text-xs text-[#1A1A1A] cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={allSelected}
+                        onChange={(e) => {
+                          if (e.target.checked) setSelectedCallIds(new Set(visible.map((l: any) => l.id)));
+                          else setSelectedCallIds(new Set());
+                        }}
+                        className="h-4 w-4 accent-[#B89555]"
+                      />
+                      <span className="font-medium">
+                        {someSelected ? `${selectedCallIds.size} selected` : "Select all"}
+                      </span>
+                    </label>
+                    {someSelected && (
+                      <div className="flex items-center gap-2">
+                        {callsView === "active" ? (
+                          <Button
+                            variant="outline" size="sm"
+                            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                            onClick={() => {
+                              if (confirm(`Move ${selectedArr.length} call(s) to Recently deleted?`)) bulkSoftDelete.mutate(selectedArr);
+                            }}
+                            disabled={bulkSoftDelete.isPending}
+                          >
+                            Delete selected
+                          </Button>
+                        ) : (
+                          <>
+                            <Button
+                              variant="outline" size="sm"
+                              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                              onClick={() => bulkRestore.mutate(selectedArr)}
+                              disabled={bulkRestore.isPending}
+                            >
+                              Restore selected
+                            </Button>
+                            <Button
+                              variant="outline" size="sm"
+                              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                              onClick={() => {
+                                if (confirm(`Permanently delete ${selectedArr.length} call(s)? This cannot be undone.`)) bulkHardDelete.mutate(selectedArr);
+                              }}
+                              disabled={bulkHardDelete.isPending}
+                            >
+                              Delete forever
+                            </Button>
+                          </>
+                        )}
                         <button
                           type="button"
-                          onClick={() => setOpenCallId(log.id)}
-                          className="flex-1 min-w-0 p-3.5 flex items-center gap-3 text-left"
+                          onClick={() => setSelectedCallIds(new Set())}
+                          className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
                         >
-                          <div className="h-9 w-9 rounded-md bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center shrink-0">
-                            <Phone className="h-4 w-4 text-[#1A1A1A]" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-semibold text-[#1A1A1A] truncate flex items-center gap-2 flex-wrap">
-                              {lead?.full_name ? `Call with ${lead.full_name}` : "Manual broker call"}
-                              {log.recording_url && (
-                                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">Recording</span>
-                              )}
-                              {log.ai_processed_at && (
-                                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">AI</span>
-                              )}
-                              {typeof log.ai_score === "number" && (
-                                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#EFE6D6] border border-[#B89555]/45 text-[#1A1A1A]">Score {log.ai_score}</span>
-                              )}
-                            </div>
-                            <div className="text-[11px] text-[#1A1A1A]/60 truncate mt-0.5">
-                              {log.call_status || "completed"} · {log.call_type || "outbound"} · {formatDuration(log.duration_seconds)} · {formatDisplayDate(log.created_at)}
-                              {callsView === "deleted" && log.deleted_at && (
-                                <> · deleted {formatDisplayDate(log.deleted_at)}</>
-                              )}
-                            </div>
-                            {(log.ai_summary || log.notes) && (
-                              <div className="text-xs text-[#1A1A1A]/75 mt-1 truncate">{log.ai_summary || log.notes}</div>
-                            )}
-                          </div>
-                          <div className="text-xs text-[#1A1A1A]/65 tabular-nums shrink-0 pr-3">{log.phone_number}</div>
+                          Clear
                         </button>
-                        <div className="flex flex-col justify-center gap-1 pr-3">
-                          {callsView === "active" ? (
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (confirm("Move this call to Recently deleted?")) softDeleteCall.mutate(log.id);
-                              }}
-                              className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-                              disabled={softDeleteCall.isPending}
-                            >
-                              Delete
-                            </button>
-                          ) : (
-                            <>
-                              <button
-                                type="button"
-                                onClick={(e) => { e.stopPropagation(); restoreCall.mutate(log.id); }}
-                                className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-                                disabled={restoreCall.isPending}
-                              >
-                                Restore
-                              </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+
+              <ul className="space-y-2.5">
+                {(callLogs.data ?? [])
+                  .slice(0, 50)
+                  .map((log: any) => {
+                    const lead = leadsData.find((item) => item.id === log.lead_id);
+                    const checked = selectedCallIds.has(log.id);
+                    return (
+                    <li key={log.id} className="group">
+                      <div className={`w-full rounded-xl border transition-colors ${checked ? "bg-[#F2EADA] border-[#B89555]/60" : "bg-[#FDFBF7] border-[#B89555]/30 hover:border-[#B89555]/55 hover:bg-[#F7F2EA]"}`}>
+                        <div className="flex items-stretch">
+                          <label className="pl-3.5 flex items-center cursor-pointer" onClick={(e) => e.stopPropagation()}>
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => toggleSelectCall(log.id)}
+                              className="h-4 w-4 accent-[#B89555]"
+                            />
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => setOpenCallId(log.id)}
+                            className="flex-1 min-w-0 p-3.5 flex items-center gap-3 text-left"
+                          >
+                            <div className="h-9 w-9 rounded-md bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center shrink-0">
+                              <Phone className="h-4 w-4 text-[#1A1A1A]" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-semibold text-[#1A1A1A] truncate flex items-center gap-2 flex-wrap">
+                                {lead?.full_name ? `Call with ${lead.full_name}` : "Manual broker call"}
+                                {log.recording_url && (
+                                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">Recording</span>
+                                )}
+                                {log.ai_processed_at && (
+                                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A]/75">AI</span>
+                                )}
+                                {typeof log.ai_score === "number" && (
+                                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#EFE6D6] border border-[#B89555]/45 text-[#1A1A1A]">Score {log.ai_score}</span>
+                                )}
+                              </div>
+                              <div className="text-[11px] text-[#1A1A1A]/60 truncate mt-0.5">
+                                {log.call_status || "completed"} · {log.call_type || "outbound"} · {formatDuration(log.duration_seconds)} · {formatDisplayDate(log.created_at)}
+                                {callsView === "deleted" && log.deleted_at && (
+                                  <> · deleted {formatDisplayDate(log.deleted_at)}</>
+                                )}
+                              </div>
+                              {(log.ai_summary || log.notes) && (
+                                <div className="text-xs text-[#1A1A1A]/75 mt-1 truncate">{log.ai_summary || log.notes}</div>
+                              )}
+                            </div>
+                            <div className="text-xs text-[#1A1A1A]/65 tabular-nums shrink-0 pr-3">{log.phone_number}</div>
+                          </button>
+                          <div className="flex flex-col justify-center gap-1 pr-3">
+                            {callsView === "active" ? (
                               <button
                                 type="button"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  if (confirm("Permanently delete this call? This cannot be undone.")) hardDeleteCall.mutate(log.id);
+                                  if (confirm("Move this call to Recently deleted?")) softDeleteCall.mutate(log.id);
                                 }}
-                                className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A]/80 hover:bg-[#EFE6D6]"
-                                disabled={hardDeleteCall.isPending}
+                                className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                                disabled={softDeleteCall.isPending}
                               >
-                                Delete forever
+                                Delete
                               </button>
-                            </>
-                          )}
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={(e) => { e.stopPropagation(); restoreCall.mutate(log.id); }}
+                                  className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                                  disabled={restoreCall.isPending}
+                                >
+                                  Restore
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (confirm("Permanently delete this call? This cannot be undone.")) hardDeleteCall.mutate(log.id);
+                                  }}
+                                  className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A]/80 hover:bg-[#EFE6D6]"
+                                  disabled={hardDeleteCall.isPending}
+                                >
+                                  Delete forever
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                  );
-                })}
-            </ul>
+                    </li>
+                    );
+                  })}
+              </ul>
+            </>
           )}
         </PremiumCard>
       )}
