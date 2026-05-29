@@ -184,6 +184,8 @@ export default function LogCallDialog({
         return;
       }
       setAudioBlob(null);
+      if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+      setAudioPreviewUrl(null);
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           channelCount: 1,
@@ -207,8 +209,10 @@ export default function LogCallDialog({
       mr.onstop = () => {
         const blobType = mime || chunksRef.current.find((part) => part instanceof Blob)?.type || "audio/webm";
         const blob = new Blob(chunksRef.current, { type: blobType });
-        const finalSeconds = Math.max(secondsRef.current, chunksRef.current.length ? 1 : 0);
+        const elapsed = startedAtRef.current ? Math.ceil((Date.now() - startedAtRef.current) / 1000) : 0;
+        const finalSeconds = Math.max(secondsRef.current, elapsed, chunksRef.current.length ? 1 : 0);
         setAudioBlob(blob);
+        setAudioPreviewUrl(URL.createObjectURL(blob));
         setDurationSeconds(String(finalSeconds));
         setSeconds(finalSeconds);
         setRecState("stopped");
@@ -240,6 +244,7 @@ export default function LogCallDialog({
     const recorder = recRef.current;
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
     if (recorder && recorder.state !== "inactive") {
+      try { recorder.requestData?.(); } catch (err) { console.warn("recorder.requestData failed", err); }
       try { recorder.stop(); } catch (err) { console.warn("recorder.stop failed", err); }
     } else {
       // already inactive — finalize manually
