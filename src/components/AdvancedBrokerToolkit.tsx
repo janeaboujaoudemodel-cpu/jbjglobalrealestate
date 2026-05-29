@@ -19,7 +19,6 @@ import {
   Shield,
   Award,
   Brain,
-  FileText,
   BarChart3,
   CreditCard,
   Palette,
