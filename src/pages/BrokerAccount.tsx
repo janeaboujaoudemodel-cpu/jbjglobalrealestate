@@ -14,19 +14,15 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { AdminTasksPanel } from "@/components/crm/AdminTasksPanel";
-import InvestorDashboard from "@/components/account/InvestorDashboard";
 import {
-  User,
   GraduationCap,
   Phone,
   MessageCircle,
-  Mail,
   MapPin,
   Trophy,
   Star,
   Target,
   TrendingUp,
-  Calendar,
   Clock,
   CheckCircle2,
   ChevronRight,
@@ -38,7 +34,7 @@ import {
   ListTodo
 } from "lucide-react";
 import { toast } from "sonner";
-import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subDays } from "date-fns";
+import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from "date-fns";
 
 interface TrainingModule {
   id: string;
