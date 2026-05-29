@@ -86,43 +86,26 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
         </div>
 
 
-        {/* ── Content panel ───────────────────────────────────────── */}
-        <div className="flex min-h-[218px] flex-1 flex-col gap-3 px-2 pt-5">
+        {/* ── Content panel ─ minimal: chip + CTA, title lives on cover ── */}
+        <div className="flex min-h-[120px] flex-1 flex-col gap-3 px-2 pt-5">
           <div className="inline-flex max-w-full items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-[10px] uppercase tracking-[0.15em] self-start">
             <Sparkles className="w-3 h-3" />
             <span className="truncate">{book.learning_path}</span>
           </div>
 
-          <h3 className="text-[#1A1A1A] text-base font-bold leading-tight line-clamp-2 min-h-[40px]">
-            {book.title}
-          </h3>
-
-          {book.description && (
-            <p className="text-[#1A1A1A]/70 text-xs leading-relaxed line-clamp-3 min-h-[54px]">
-              {book.description}
-            </p>
-          )}
-
-          <div className="pt-3 mt-auto border-t border-[#B89555]/20">
+          <div className="pt-1 mt-auto">
             {effectivelyLocked ? (
-              <div className="space-y-2">
-                <p className="text-[#1A1A1A]/65 text-[11px] leading-snug">
-                  {book.is_restricted
-                    ? "Available after completing all foundational books and manager approval."
-                    : "Join the JBJ Broker Circle to unlock this book."}
-                </p>
-                <Button
-                  size="sm"
-                  className="w-full bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50 font-semibold"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (!book.is_restricted) onOpen(book);
-                  }}
-                >
-                  <Lock className="w-3 h-3 mr-2" />
-                  {book.is_restricted ? "Restricted" : "Preview Book"}
-                </Button>
-              </div>
+              <Button
+                size="sm"
+                className="w-full bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50 font-semibold"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!book.is_restricted) onOpen(book);
+                }}
+              >
+                <Lock className="w-3 h-3 mr-2" />
+                {book.is_restricted ? "Restricted" : "Preview Book"}
+              </Button>
             ) : (
               <Button
                 size="sm"
@@ -146,3 +129,4 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
     </motion.div>
   );
 }
+

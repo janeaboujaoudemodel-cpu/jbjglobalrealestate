@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Share2, Lock, Award, Medal } from "lucide-react";
+import { Download, Share2, Lock, Award, Medal, BadgeCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
@@ -11,7 +11,7 @@ interface CertificatePreviewProps {
   isLocked?: boolean;
 }
 
-/** Premium gold medallion — composed lucide icons + gradient ring + slow shimmer */
+/** Premium gold medallion — reads on champagne (ink center) */
 function CertificateMedallion({ size = 64 }: { size?: number }) {
   return (
     <span
@@ -19,7 +19,7 @@ function CertificateMedallion({ size = 64 }: { size?: number }) {
       style={{ width: size, height: size }}
       data-no-contrast-guard
     >
-      {/* Outer gold ring */}
+      {/* Outer gold conic ring */}
       <span
         className="absolute inset-0 rounded-full"
         style={{
@@ -32,43 +32,61 @@ function CertificateMedallion({ size = 64 }: { size?: number }) {
           maskComposite: "exclude",
         }}
       />
-      {/* Inner champagne disc */}
+      {/* Inner champagne disc with subtle warm core */}
       <span
         className="absolute inset-[6px] rounded-full"
         style={{
           background:
-            "radial-gradient(circle at 30% 25%, #FFF4D8 0%, #EFE6D6 45%, #C8A65A 100%)",
-          boxShadow: "inset 0 0 12px rgba(184,149,85,0.45)",
+            "radial-gradient(circle at 30% 25%, #FFF6E0 0%, #F1E2B8 55%, #C8A65A 100%)",
+          boxShadow: "inset 0 0 10px rgba(184,149,85,0.45)",
         }}
       />
-      {/* Slow rotating shimmer */}
-      <span
-        className="absolute inset-0 rounded-full motion-safe:animate-[pulseSlow_4s_ease-in-out_infinite] pointer-events-none"
-        style={{
-          background:
-            "conic-gradient(from 0deg, transparent 0deg, rgba(255,244,216,0.55) 40deg, transparent 90deg, transparent 360deg)",
-          mixBlendMode: "screen",
-          opacity: 0.55,
-        }}
-      />
-      {/* Award icon */}
       <Award
         className="relative"
         style={{
           width: size * 0.5,
           height: size * 0.5,
-          color: "#5A3F12",
+          color: "#1A1A1A",
           filter: "drop-shadow(0 1px 0 rgba(255,244,216,0.6))",
         }}
         strokeWidth={2}
       />
-      {/* Small medal accent */}
       <Medal
         className="absolute bottom-0 right-0"
         style={{ width: size * 0.28, height: size * 0.28, color: "#B89555" }}
         strokeWidth={2.2}
       />
     </span>
+  );
+}
+
+/** Gold-foil fallback seal when no owner stamp uploaded */
+function FoilSeal({ size = 130 }: { size?: number }) {
+  return (
+    <div
+      className="relative grid place-items-center rounded-full"
+      style={{
+        width: size,
+        height: size,
+        background:
+          "radial-gradient(circle at 30% 25%, #FFF6E0 0%, #F1E2B8 50%, #B89555 100%)",
+        boxShadow:
+          "inset 0 0 14px rgba(138,106,53,0.45), 0 4px 14px rgba(184,149,85,0.25)",
+      }}
+      data-no-contrast-guard
+    >
+      <div
+        className="absolute inset-[6px] rounded-full border border-[#8A6A35]/60"
+        style={{ boxShadow: "inset 0 0 8px rgba(255,246,224,0.4)" }}
+      />
+      <BadgeCheck className="relative" style={{ width: size * 0.42, height: size * 0.42, color: "#1A1A1A" }} strokeWidth={2} />
+      <span
+        className="absolute bottom-[14%] text-[#1A1A1A]/80 font-semibold uppercase"
+        style={{ fontSize: size * 0.075, letterSpacing: "0.2em" }}
+      >
+        JBJ · CERTIFIED
+      </span>
+    </div>
   );
 }
 
@@ -113,173 +131,146 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
             </h3>
             <p className="text-[#1A1A1A]/70 text-sm mt-1 max-w-md">
               {isLocked
-                ? "Complete all certification phases to earn this certificate"
-                : "You've completed the JBJ Broker Certification Program"}
+                ? "Complete every training module to unlock and download your certificate."
+                : "You've completed the JBJ Broker Certification Program."}
             </p>
           </div>
 
-          {/* Certificate plate — dark obsidian with metallic mirror sweep */}
+          {/* Certificate plate — champagne (compliant with global theme) */}
           <div
             className={cn(
-              "relative rounded-2xl overflow-hidden mb-6 border border-[#B89555]/60",
-              "shadow-[0_24px_60px_-24px_rgba(0,0,0,0.55)]",
+              "relative rounded-2xl overflow-hidden mb-6 border border-[#B89555]/55",
+              "shadow-[0_24px_60px_-28px_rgba(26,26,26,0.35)]",
             )}
             style={{
               background:
-                "linear-gradient(135deg, #0E0B07 0%, #1A1410 50%, #0E0B07 100%)",
+                "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)",
             }}
           >
-            {/* Subtle gold fleck pattern */}
+            {/* Subtle champagne fleck texture */}
             <div
               aria-hidden
-              className="absolute inset-0 opacity-30 pointer-events-none"
+              className="absolute inset-0 opacity-40 pointer-events-none"
               style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B89555' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B89555' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
               }}
             />
 
-            {/* Metallic mirror sweep — slow continuous */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 overflow-hidden"
-            >
-              <span
-                className="absolute top-0 left-0 h-full w-1/3 motion-safe:animate-[metallicSweep_8s_ease-in-out_infinite]"
-                style={{
-                  background:
-                    "linear-gradient(105deg, transparent 0%, rgba(241,226,184,0.10) 45%, rgba(255,244,216,0.18) 50%, rgba(241,226,184,0.10) 55%, transparent 100%)",
-                }}
-              />
-            </div>
-
             {/* Double-rule frame */}
-            <div className="absolute inset-3 rounded-xl border border-[#B89555]/35 pointer-events-none" />
-            <div className="absolute inset-5 rounded-lg border border-[#B89555]/15 pointer-events-none" />
+            <div className="absolute inset-3 rounded-xl border border-[#B89555]/45 pointer-events-none" />
+            <div className="absolute inset-5 rounded-lg border border-[#B89555]/25 pointer-events-none" />
 
             {/* Corner flourishes */}
-            <div className="absolute top-5 left-5 w-10 h-10 border-t-[1.5px] border-l-[1.5px] border-[#B89555]/70 rounded-tl-md pointer-events-none" />
-            <div className="absolute top-5 right-5 w-10 h-10 border-t-[1.5px] border-r-[1.5px] border-[#B89555]/70 rounded-tr-md pointer-events-none" />
-            <div className="absolute bottom-5 left-5 w-10 h-10 border-b-[1.5px] border-l-[1.5px] border-[#B89555]/70 rounded-bl-md pointer-events-none" />
-            <div className="absolute bottom-5 right-5 w-10 h-10 border-b-[1.5px] border-r-[1.5px] border-[#B89555]/70 rounded-br-md pointer-events-none" />
+            <div className="absolute top-5 left-5 w-10 h-10 border-t-[1.5px] border-l-[1.5px] border-[#B89555]/75 rounded-tl-md pointer-events-none" />
+            <div className="absolute top-5 right-5 w-10 h-10 border-t-[1.5px] border-r-[1.5px] border-[#B89555]/75 rounded-tr-md pointer-events-none" />
+            <div className="absolute bottom-5 left-5 w-10 h-10 border-b-[1.5px] border-l-[1.5px] border-[#B89555]/75 rounded-bl-md pointer-events-none" />
+            <div className="absolute bottom-5 right-5 w-10 h-10 border-b-[1.5px] border-r-[1.5px] border-[#B89555]/75 rounded-br-md pointer-events-none" />
 
             {/* Content */}
-            <div className="relative z-10 px-8 sm:px-12 py-10 sm:py-12 text-center">
-              {/* Brand wordmark — champagne, no gradient (legible) */}
-              <div className="text-[15px] sm:text-base font-semibold tracking-[0.32em] text-[#EFE6D6]">
+            <div className="relative z-10 px-8 sm:px-14 py-10 sm:py-14 text-center">
+              {/* Brand wordmark */}
+              <div className="text-[15px] sm:text-base font-semibold tracking-[0.32em] text-[#1A1A1A]">
                 JBJ GLOBAL REAL ESTATE
               </div>
 
               {/* Gold rule */}
-              <div className="mx-auto mt-3 mb-5 h-px w-20 bg-gradient-to-r from-transparent via-[#B89555] to-transparent" />
+              <div className="mx-auto mt-3 mb-6 h-px w-24 bg-gradient-to-r from-transparent via-[#B89555] to-transparent" />
 
               {/* Eyebrow */}
-              <div className="text-[11px] sm:text-xs tracking-[0.34em] uppercase text-[#B89555] mb-5">
+              <div className="text-[11px] sm:text-xs tracking-[0.34em] uppercase text-[#B89555] mb-6">
                 Certificate of Achievement
               </div>
 
-              <div className="text-[#EFE6D6]/85 text-sm mb-3">
+              <div className="text-[#1A1A1A] text-sm mb-3">
                 This is to certify that
               </div>
 
-              {/* Recipient name — solid champagne + thin gold underline */}
-              <div className="inline-block pb-2 mb-5 border-b border-[#B89555]/60">
-                <div className="text-3xl sm:text-4xl font-serif text-[#FFF4D8] tracking-wide">
+              {/* Recipient name */}
+              <div className="inline-block pb-2 mb-6 border-b border-[#B89555]/70">
+                <div className="text-3xl sm:text-4xl font-serif text-[#1A1A1A] tracking-wide">
                   {userName}
                 </div>
               </div>
 
-              <div className="text-[#EFE6D6]/80 text-sm max-w-md mx-auto mb-5 leading-relaxed">
+              <div className="text-[#1A1A1A]/85 text-sm max-w-md mx-auto mb-6 leading-relaxed">
                 has successfully completed all phases of the JBJ Global Real Estate
                 Broker Certification Program and is hereby recognised as a
               </div>
 
               {/* Title */}
-              <div className="flex items-center justify-center gap-3 mb-2">
-                <span className="h-px w-10 bg-[#B89555]/70" />
-                <div className="text-base sm:text-lg font-semibold tracking-[0.28em] text-[#FFF4D8] uppercase">
+              <div className="flex items-center justify-center gap-3 mb-10">
+                <span className="h-px w-12 bg-[#B89555]/70" />
+                <div className="text-base sm:text-lg font-semibold tracking-[0.28em] text-[#1A1A1A] uppercase">
                   Certified JBJ Broker
                 </div>
-                <span className="h-px w-10 bg-[#B89555]/70" />
+                <span className="h-px w-12 bg-[#B89555]/70" />
               </div>
 
-              {/* Signature + stamp row */}
-              <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 items-end gap-6 text-left">
-                {/* Signature */}
-                <div className="col-span-1">
-                  <div className="h-12 flex items-end">
+              {/* Seal — centered, behind signature row vibe */}
+              <div className="flex justify-center mb-8">
+                {stampUrl && !isLocked ? (
+                  <div className="relative" style={{ filter: "drop-shadow(0 2px 6px rgba(184,149,85,0.25))" }}>
+                    <StampOverlay
+                      src={stampUrl}
+                      size={130}
+                      opacity={0.92}
+                      style={{ mixBlendMode: "multiply" as const }}
+                    />
+                  </div>
+                ) : (
+                  <FoilSeal size={130} />
+                )}
+              </div>
+
+              {/* Signature block — right-aligned, locked layout */}
+              <div className="flex justify-end mb-6">
+                <div className="w-[300px] text-right">
+                  <div className="h-12 flex items-end justify-end">
                     {signatureUrl && !isLocked ? (
                       <img
                         src={signatureUrl}
                         alt="Signature"
                         draggable={false}
-                        className="max-h-12 max-w-[180px] object-contain"
-                        style={{ filter: "brightness(1.6) contrast(1.1)" }}
+                        className="max-h-12 max-w-[220px] object-contain"
                       />
                     ) : (
-                      <span className="text-[#EFE6D6]/30 text-xs italic">
+                      <span className="text-[#1A1A1A]/40 text-xs italic">
                         {isLocked ? "— signature on issue —" : ""}
                       </span>
                     )}
                   </div>
-                  <div className="h-px w-full bg-[#B89555]/60 mt-1" />
-                  <div className="text-[11px] text-[#EFE6D6] mt-1 font-medium">
+                  <div className="h-px w-full bg-[#B89555]/70 mt-1" />
+                  <div className="text-[13px] text-[#1A1A1A] mt-2 font-semibold">
                     Jeyhun Babayev
                   </div>
-                  <div className="text-[10px] text-[#EFE6D6]/65 tracking-wide">
-                    Founder &amp; CEO, JBJ Global Real Estate
+                  <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-[0.18em] mt-0.5">
+                    Founder &amp; CEO
                   </div>
-                </div>
-
-                {/* Stamp — center on sm+ */}
-                <div className="hidden sm:flex justify-center col-span-1">
-                  {stampUrl && !isLocked ? (
-                    <div className="relative">
-                      <StampOverlay
-                        src={stampUrl}
-                        size={104}
-                        opacity={0.92}
-                        style={{ filter: "brightness(1.15)" }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-[104px] h-[104px] rounded-full border border-dashed border-[#B89555]/40 flex items-center justify-center text-[10px] text-[#EFE6D6]/40 tracking-widest uppercase text-center px-2">
-                      Company Seal
-                    </div>
-                  )}
-                </div>
-
-                {/* Date + ID */}
-                <div className="col-span-1 text-right">
-                  <div className="h-px w-full bg-[#B89555]/60 mb-1" />
-                  <div className="text-[11px] text-[#EFE6D6] font-medium">
-                    {currentDate}
-                  </div>
-                  <div className="text-[10px] text-[#EFE6D6]/65 tracking-wide mt-2">
-                    Certificate ID
-                  </div>
-                  <div className="text-[11px] text-[#B89555] font-mono tracking-tight">
-                    {certId}
+                  <div className="text-[10px] text-[#B89555] tracking-wide mt-0.5">
+                    JBJ Global Real Estate
                   </div>
                 </div>
               </div>
 
-              {/* Mobile stamp row */}
-              {stampUrl && !isLocked && (
-                <div className="sm:hidden flex justify-center mt-6">
-                  <StampOverlay src={stampUrl} size={88} opacity={0.92} />
+              {/* Bottom strip — date + certificate ID */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-5 border-t border-[#B89555]/35">
+                <div className="text-left">
+                  <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
+                    Issued
+                  </div>
+                  <div className="text-[12px] text-[#1A1A1A] font-medium mt-0.5">
+                    {currentDate}
+                  </div>
                 </div>
-              )}
-
-              {isLocked && (
-                <div
-                  aria-hidden
-                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                >
-                  <span className="text-[80px] sm:text-[120px] font-bold tracking-[0.25em] text-[#B89555]/10 rotate-[-18deg] select-none">
-                    PREVIEW
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 px-3 py-1">
+                  <span className="text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
+                    Certificate ID
+                  </span>
+                  <span className="text-[11px] text-[#1A1A1A] font-mono">
+                    {certId}
                   </span>
                 </div>
-              )}
+              </div>
             </div>
           </div>
 

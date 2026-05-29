@@ -3897,7 +3897,9 @@ export type Database = {
       broker_points: {
         Row: {
           created_at: string | null
+          current_streak_days: number
           id: string
+          last_active_date: string | null
           level: number | null
           points: number | null
           total_points_earned: number | null
@@ -3906,7 +3908,9 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          current_streak_days?: number
           id?: string
+          last_active_date?: string | null
           level?: number | null
           points?: number | null
           total_points_earned?: number | null
@@ -3915,7 +3919,9 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          current_streak_days?: number
           id?: string
+          last_active_date?: string | null
           level?: number | null
           points?: number | null
           total_points_earned?: number | null
@@ -37914,6 +37920,26 @@ export type Database = {
       cleanup_old_health_logs: { Args: never; Returns: undefined }
       cleanup_rate_limit_records: { Args: never; Returns: number }
       cleanup_temp_video_files: { Args: never; Returns: undefined }
+      complete_module: {
+        Args: { _book_id: string; _module_id: string }
+        Returns: {
+          created_at: string | null
+          current_streak_days: number
+          id: string
+          last_active_date: string | null
+          level: number | null
+          points: number | null
+          total_points_earned: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "broker_points"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       crm_auto_purge_old_deleted: { Args: never; Returns: number }
       crm_broker_auto_expire_invites: {
         Args: never
@@ -38297,6 +38323,20 @@ export type Database = {
           title: string
         }[]
       }
+      get_education_summary: {
+        Args: never
+        Returns: {
+          books_completed: number
+          completed_lessons: number
+          current_streak_days: number
+          in_progress_lessons: number
+          is_certified: boolean
+          level: number
+          total_books: number
+          total_lessons: number
+          total_points: number
+        }[]
+      }
       get_employee_full_bank_details: {
         Args: { p_salary_id: string }
         Returns: {
@@ -38624,6 +38664,10 @@ export type Database = {
       set_podcast_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
+      start_module: {
+        Args: { _book_id: string; _module_id: string }
+        Returns: undefined
+      }
       trigger_emergency_lockdown: {
         Args: {
           p_departments?: string[]

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useRef, useLayoutEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, BookOpen, Clock, Headphones, Target, List, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Clock, Headphones, Target, List, X, Check, Sparkles, Trophy } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { supabase } from "@/integrations/supabase/client";
 import { sanitizeHtml } from "@/utils/contentSanitizer";
 import { useBookAudio } from "@/hooks/useBookAudio";
+import { useEducationProgress } from "@/hooks/useEducationProgress";
+import { toast } from "sonner";
 import type { EducationBook, EducationModule } from "@/hooks/useBrokerEducation";
+
 
 type Page =
   | { kind: "cover"; book: EducationBook }
@@ -80,6 +83,26 @@ export default function BookReader() {
 
   const audio = useBookAudio(bookId ?? null, book?.voice_enabled);
   const { parts, sizerRef } = usePaginatedChapters(modules);
+  const { summary, startModule, completeModule } = useEducationProgress();
+  const [completingId, setCompletingId] = useState<string | null>(null);
+
+  // Track which modules the user has completed locally for instant UI feedback
+  const [localCompleted, setLocalCompleted] = useState<Set<string>>(new Set());
+
+  const handleComplete = async (mod: EducationModule) => {
+    if (!bookId || completingId === mod.id || localCompleted.has(mod.id)) return;
+    setCompletingId(mod.id);
+    const res = await completeModule(bookId, mod.id);
+    setCompletingId(null);
+    if (res) {
+      setLocalCompleted((s) => new Set(s).add(mod.id));
+      toast.success(`+${res.awarded} points`, {
+        description: `Lesson complete · ${res.total} total points`,
+        icon: <Trophy className="w-4 h-4" />,
+      });
+    }
+  };
+
 
   useEffect(() => {
     if (!bookId) return;
@@ -154,6 +177,25 @@ export default function BookReader() {
     return () => window.removeEventListener("keydown", onKey);
   }, [safeIndex, totalPages]);
 
+  // Mark a module as in-progress whenever its first body page is shown
+  useEffect(() => {
+    if (!bookId || !current) return;
+    if (current.kind === "chapter-open" || current.kind === "chapter-body") {
+      startModule(bookId, current.module.id);
+    }
+  }, [bookId, current, startModule]);
+
+  // Current module from the visible page (used by the Mark Complete CTA)
+  const currentModule: EducationModule | null =
+    current && (current.kind === "chapter-open" || current.kind === "chapter-body")
+      ? current.module
+      : null;
+  const isLastBodyOfModule =
+    current?.kind === "chapter-body" && current.partIndex === current.partCount - 1;
+  const currentDoneId = currentModule?.id;
+  const currentIsDone = currentDoneId ? localCompleted.has(currentDoneId) : false;
+
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
@@ -222,6 +264,26 @@ export default function BookReader() {
             </div>
             <div className="text-sm font-semibold text-[#1A1A1A] truncate">{book.title}</div>
           </div>
+          {currentModule && (
+            <Button
+              size="sm"
+              onClick={() => handleComplete(currentModule)}
+              disabled={currentIsDone || completingId === currentModule.id}
+              className={
+                currentIsDone
+                  ? "bg-emerald-600 hover:bg-emerald-600 text-white border border-emerald-700"
+                  : isLastBodyOfModule
+                    ? "bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555]/50"
+                    : "bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50"
+              }
+            >
+              {currentIsDone ? (
+                <><Check className="w-4 h-4 mr-1.5" /> Completed</>
+              ) : (
+                <><Sparkles className="w-4 h-4 mr-1.5" /> Mark complete +10</>
+              )}
+            </Button>
+          )}
           <Button
             size="sm"
             variant="ghost"
@@ -230,6 +292,7 @@ export default function BookReader() {
           >
             <List className="w-4 h-4 mr-1.5" /> Contents
           </Button>
+
           <TooltipProvider delayDuration={200}>
             <Tooltip>
               <TooltipTrigger asChild>

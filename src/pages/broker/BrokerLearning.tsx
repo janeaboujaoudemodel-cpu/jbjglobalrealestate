@@ -16,7 +16,9 @@ import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
 import { Book3DCard, BookDetailModal } from "@/components/broker-education";
 import { CertificatePreview } from "@/components/certification";
+import { useEducationProgress } from "@/hooks/useEducationProgress";
 import { BROKER_LESSONS } from "./brokerLessonContent";
+
 
 // ────────────────────────────────────────────────────────────────────────────
 // Training modules (portal-native, no full-bleed marketing chrome)
@@ -110,6 +112,8 @@ export default function BrokerLearning() {
   const trainingLocked = !user || mode !== "broker";
 
   const { books, loading, progressMap } = useBrokerEducation();
+  const { summary: eduSummary } = useEducationProgress();
+
   const [selectedBook, setSelectedBook] = useState<EducationBook | null>(null);
   const [activeModule, setActiveModule] = useState<TModule | null>(null);
   const [lessonIndex, setLessonIndex] = useState(0);
@@ -153,7 +157,9 @@ export default function BrokerLearning() {
     TRAINING.reduce((acc, m) => acc + (moduleProgress[m.id] ?? m.progress ?? 0), 0) /
     TRAINING.length;
   const allModulesComplete =
+    eduSummary.is_certified ||
     TRAINING.every((m) => (moduleProgress[m.id] ?? m.progress ?? 0) >= 100);
+
   const certificatesEarned = TRAINING.filter(
     (m) => (moduleProgress[m.id] ?? m.progress ?? 0) >= 100,
   ).length;
