@@ -18,22 +18,68 @@ import LogCallDialog from "@/components/broker-crm/LogCallDialog";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { supabase } from "@/integrations/supabase/client";
 
+/* ─────────────────────────────────────────────────────────────────────────
+   PremiumCard — luxury surface used for every section block on the broker
+   homepage. Layered champagne gradient + gold hairline + soft inner light.
+   ───────────────────────────────────────────────────────────────────────── */
 function PremiumCard({
   children,
   className = "",
+  padded = true,
 }: {
   children: React.ReactNode;
   className?: string;
+  padded?: boolean;
 }) {
   return (
     <div
-      className={`rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 shadow-sm shadow-[#B89555]/5 p-5 md:p-6 ${className}`}
+      className={`relative rounded-[1.25rem] border border-[#B89555]/35 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_10px_30px_-18px_rgba(16,37,64,0.25)] overflow-hidden ${padded ? "p-5 md:p-7" : ""} ${className}`}
     >
-      {children}
+      {/* Top gold hairline + inner radial glow */}
+      <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/55 to-transparent" />
+      <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(184,149,85,0.08),transparent_60%)]" />
+      <div className="relative">{children}</div>
     </div>
   );
 }
 
+/* ─── Section eyebrow (icon + small label + accent rule) ─────────────── */
+function SectionHeader({
+  icon: Icon,
+  eyebrow,
+  title,
+  action,
+}: {
+  icon: any;
+  eyebrow: string;
+  title: string;
+  action?: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-end justify-between gap-4 mb-5">
+      <div className="min-w-0">
+        <div className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/45 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
+          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#EFE6D6] border border-[#B89555]/45">
+            <Icon className="h-3 w-3 text-[#1A1A1A]" strokeWidth={2.2} />
+          </span>
+          <span className="text-[9.5px] font-semibold uppercase tracking-[0.24em] text-[#1A1A1A]">
+            {eyebrow}
+          </span>
+        </div>
+        <h2 className="mt-2.5 font-display text-lg md:text-xl font-semibold text-[#1A1A1A] tracking-tight leading-tight">
+          {title}
+        </h2>
+        <div className="mt-2 flex items-center gap-2" aria-hidden="true">
+          <span className="block h-px w-8 bg-gradient-to-r from-[#B89555]/70 to-transparent" />
+          <span className="block w-1 h-1 rotate-45 bg-[#B89555]/60" />
+        </div>
+      </div>
+      {action && <div className="shrink-0">{action}</div>}
+    </div>
+  );
+}
+
+/* ─── KPI tile — editorial column with semantic icon tone ────────────── */
 function Kpi({
   icon: Icon,
   label,
@@ -50,15 +96,23 @@ function Kpi({
   tone?: IconTileTone;
 }) {
   const body = (
-    <div className="group relative rounded-2xl bg-[#F7F2EA] border border-[#B89555]/25 px-4 py-5 hover:border-[#B89555]/70 hover:shadow-md hover:shadow-[#B89555]/10 transition-all h-full">
+    <div className="group relative h-full rounded-[1.1rem] border border-[#B89555]/30 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] px-4 py-5 hover:border-[#B89555]/65 hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-20px_rgba(16,37,64,0.35)] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset] transition-all duration-300 overflow-hidden">
+      {/* gold hairline along top */}
+      <span className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/55 to-transparent" />
       <div className="flex items-center justify-between">
         <IconTile icon={Icon} tone={tone} size="md" />
-        {to && <ArrowRight className="h-4 w-4 text-[#1A1A1A]/30 group-hover:text-[#B89555] group-hover:translate-x-0.5 transition-all" />}
+        {to && (
+          <ArrowRight className="h-4 w-4 text-[#1A1A1A]/35 group-hover:text-[#1A1A1A] group-hover:translate-x-0.5 transition-all" />
+        )}
       </div>
-      <div className="mt-4 text-3xl md:text-4xl font-display font-semibold tabular-nums tracking-tight text-[#1A1A1A] leading-none">
-        {loading ? <span className="inline-block h-8 w-12 bg-[#EFE6D6] rounded animate-pulse" /> : value}
+      <div className="mt-5 text-[2rem] md:text-[2.4rem] font-display font-semibold tabular-nums tracking-tight text-[#1A1A1A] leading-none">
+        {loading ? (
+          <span className="inline-block h-8 w-12 bg-[#EFE6D6] rounded animate-pulse" />
+        ) : (
+          value
+        )}
       </div>
-      <div className="text-[10.5px] uppercase tracking-[0.16em] text-[#1A1A1A]/60 mt-2 font-medium">
+      <div className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A]/65 mt-2.5 font-semibold">
         {label}
       </div>
     </div>
@@ -143,82 +197,129 @@ export default function BrokerDashboardLanding() {
   ).length;
 
   return (
-    <div className="space-y-6 md:space-y-8">
-      {/* Welcome strip — refined editorial header */}
-      <div className="relative overflow-hidden rounded-2xl border border-[#B89555]/30 bg-gradient-to-br from-[#F7F2EA] via-[#F7F2EA] to-[#EFE6D6] shadow-sm shadow-[#B89555]/10">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
-        <div className="relative p-5 md:p-7 flex flex-col md:flex-row md:items-center gap-5 md:gap-8 justify-between">
-          <div className="flex items-center gap-4 md:gap-5 min-w-0">
-            <div className="h-14 w-14 md:h-16 md:w-16 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 grid place-items-center overflow-hidden shadow-sm shadow-[#B89555]/15 shrink-0">
-              {profile?.photo_url ? (
-                <img src={profile.photo_url} alt="" className="h-full w-full object-cover" />
-              ) : (
-                <span className="text-lg font-display font-semibold text-[#1A1A1A]">
-                  {firstName.charAt(0).toUpperCase()}
-                </span>
-              )}
-            </div>
-            <div className="min-w-0">
-              <div className="text-[10px] uppercase tracking-[0.24em] text-[#1A1A1A]/55 font-medium">
-                Welcome back
-              </div>
-              <h1 className="font-display text-[26px] md:text-4xl font-semibold text-[#1A1A1A] truncate leading-tight tracking-tight mt-0.5">
-                {profileLoading ? "…" : firstName}
-              </h1>
-              <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                {profile?.title && (
-                  <span className="text-xs text-[#1A1A1A]/70">{profile.title}</span>
-                )}
-                {profile?.current_tier && (
-                  <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.16em] px-2 py-0.5 rounded-md bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] font-medium">
-                    {profile.current_tier}
+    <div className="space-y-7 md:space-y-9">
+      {/* ════════════════════════════════════════════════════════════════
+          WELCOME — editorial hero strip with navy backing frame
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="relative">
+        {/* navy backing frame */}
+        <div
+          aria-hidden="true"
+          data-allow-dark-cta
+          className="pointer-events-none absolute inset-x-0 inset-y-2 rounded-[1.6rem] bg-[#102540] border border-[#B89555]/55 shadow-[0_22px_60px_-30px_rgba(16,37,64,0.55)]"
+        />
+        <div className="relative m-1 rounded-[1.4rem] border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-6 md:p-9 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset] overflow-hidden">
+          <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+          <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(184,149,85,0.12),transparent_60%)]" />
+
+          <div className="relative flex flex-col md:flex-row md:items-center gap-6 md:gap-8 justify-between">
+            {/* Identity block */}
+            <div className="flex items-center gap-4 md:gap-5 min-w-0">
+              <div className="relative h-16 w-16 md:h-20 md:w-20 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/55 grid place-items-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_10px_22px_-12px_rgba(184,149,85,0.5)] shrink-0">
+                {profile?.photo_url ? (
+                  <img src={profile.photo_url} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <span className="font-display text-2xl font-semibold text-[#1A1A1A]">
+                    {firstName.charAt(0).toUpperCase()}
                   </span>
                 )}
               </div>
+              <div className="min-w-0">
+                {/* eyebrow plaque */}
+                <div className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/45 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
+                  <span className="relative inline-flex items-center justify-center w-3.5 h-3.5">
+                    <span className="absolute inset-0 rotate-45 rounded-[3px] border border-[#B89555]/70" aria-hidden="true" />
+                    <span className="w-0.5 h-0.5 rounded-full bg-[#B89555]" aria-hidden="true" />
+                  </span>
+                  <span className="text-[9.5px] font-semibold uppercase tracking-[0.28em] text-[#1A1A1A]">
+                    Broker Workspace
+                  </span>
+                </div>
+                <h1 className="font-display text-[28px] md:text-[40px] lg:text-[44px] font-semibold text-[#1A1A1A] truncate leading-[1.04] tracking-[-0.02em] mt-2.5">
+                  Welcome, {profileLoading ? "…" : firstName}
+                </h1>
+                <div className="mt-2 flex items-center gap-3" aria-hidden="true">
+                  <span className="block h-px w-10 bg-gradient-to-r from-[#B89555]/80 to-transparent" />
+                  <span className="block w-1 h-1 rotate-45 bg-[#B89555]/70" />
+                  <span className="block h-px w-3 bg-[#B89555]/40" />
+                </div>
+                <div className="flex items-center gap-2 mt-3 flex-wrap">
+                  {profile?.title && (
+                    <span className="text-[12.5px] text-[#1A1A1A]/75 font-medium">{profile.title}</span>
+                  )}
+                  {profile?.current_tier && (
+                    <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.2em] px-2.5 py-1 rounded-md bg-[#FDFBF7] border border-[#B89555]/45 text-[#1A1A1A] font-semibold shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
+                      {profile.current_tier}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Primary actions */}
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <Link
+                to="/broker/leads"
+                data-allow-dark-cta
+                data-no-contrast-guard
+                className="allow-white inline-flex items-center gap-2 h-11 pl-5 pr-3 rounded-xl bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/65 text-white text-sm font-semibold shadow-[0_1px_0_rgba(255,255,255,0.10)_inset,0_10px_28px_-12px_rgba(16,37,64,0.55)] hover:-translate-y-0.5 transition-all duration-300"
+                style={{ color: "#FFFFFF" }}
+              >
+                <span style={{ color: "#FFFFFF" }}>Add lead</span>
+                <span className="inline-flex w-7 h-7 rounded-lg bg-[#1a3d63] border border-[#B89555]/55 items-center justify-center">
+                  <Plus className="h-3.5 w-3.5" style={{ color: "#FFFFFF" }} strokeWidth={2.4} />
+                </span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => setCallDialogOpen(true)}
+                className="inline-flex items-center gap-2 h-11 px-4 rounded-xl bg-[#FDFBF7] border border-[#B89555]/45 text-[#1A1A1A] text-sm font-semibold hover:bg-[#EFE6D6] hover:border-[#B89555]/75 hover:-translate-y-0.5 transition-all duration-300 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]"
+              >
+                <Phone className="h-4 w-4 text-[#1A1A1A]" strokeWidth={2.2} /> Log a call
+              </button>
             </div>
           </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <Link
-              to="/broker/leads"
-              className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-[#102540] text-white text-sm font-medium hover:bg-[#1a3d63] transition-colors shadow-sm"
-              data-allow-dark-cta
-            >
-              <Plus className="h-4 w-4" /> Add lead
-            </Link>
-            <button
-              type="button"
-              onClick={() => setCallDialogOpen(true)}
-              className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-[#FDFBF7] border border-[#B89555]/45 text-[#1A1A1A] text-sm font-medium hover:bg-[#EFE6D6] transition-colors"
-            >
-              <Phone className="h-4 w-4" /> Log a call
-            </button>
-          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════
+          KPI ROW
+          ════════════════════════════════════════════════════════════════ */}
+      <div>
+        <div className="mb-4 flex items-center gap-2 pl-1">
+          <span className="text-[10px] uppercase tracking-[0.28em] font-semibold text-[#1A1A1A]/70">
+            Today's Pulse
+          </span>
+          <span className="flex-1 h-px bg-gradient-to-r from-[#B89555]/40 via-[#B89555]/15 to-transparent" />
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+          <Kpi icon={Users}           tone="blue"    label="Total leads"          value={totalLeads}     to="/broker/leads"        loading={leads.isLoading} />
+          <Kpi icon={Handshake}       tone="emerald" label="Active deals"         value={activeDeals}    to="/broker/deals"        loading={leads.isLoading} />
+          <Kpi icon={Calendar}        tone="amber"   label="Meetings today"       value={meetingsToday}  to="/broker/calendar"     loading={cal.isLoading} />
+          <Kpi icon={Sparkles}        tone="purple"  label="New assignments"      value={newAssignments} to="/broker/leads"        loading={leads.isLoading} />
+          <Kpi icon={BadgeDollarSign} tone="gold"    label="Commission pipeline"  value="—"              to="/broker/commissions"  />
+          <Kpi icon={ListTodo}        tone="rose"    label="Pending follow-ups"   value={followUps}      to="/broker/tasks"        loading={tasks.isLoading} />
         </div>
       </div>
 
-      {/* KPI tiles — semantic icon tones for visual hierarchy */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-        <Kpi icon={Users}           tone="blue"    label="Total leads"          value={totalLeads}     to="/broker/leads"        loading={leads.isLoading} />
-        <Kpi icon={Handshake}       tone="emerald" label="Active deals"         value={activeDeals}    to="/broker/deals"        loading={leads.isLoading} />
-        <Kpi icon={Calendar}        tone="amber"   label="Meetings today"       value={meetingsToday}  to="/broker/calendar"     loading={cal.isLoading} />
-        <Kpi icon={Sparkles}        tone="purple"  label="New assignments"      value={newAssignments} to="/broker/leads"        loading={leads.isLoading} />
-        <Kpi icon={BadgeDollarSign} tone="gold"    label="Commission pipeline"  value="—"              to="/broker/commissions"  />
-        <Kpi icon={ListTodo}        tone="rose"    label="Pending follow-ups"   value={followUps}      to="/broker/tasks"        loading={tasks.isLoading} />
-      </div>
-
-
-      {/* Activity + Smart actions */}
+      {/* ════════════════════════════════════════════════════════════════
+          ACTIVITY + SMART ACTIONS
+          ════════════════════════════════════════════════════════════════ */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 md:gap-6">
         <PremiumCard className="lg:col-span-3">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Activity className="h-4 w-4 text-[#1A1A1A]/70" />
-              <h2 className="text-sm font-semibold text-[#1A1A1A]">Live activity</h2>
-            </div>
-            <Link to="/broker/notifications" className="text-xs text-[#1A1A1A]/65 hover:text-[#1A1A1A] inline-flex items-center gap-1">
-              All updates <ChevronRight className="h-3 w-3" />
-            </Link>
-          </div>
+          <SectionHeader
+            icon={Activity}
+            eyebrow="Live Activity"
+            title="What's moving in your pipeline"
+            action={
+              <Link
+                to="/broker/notifications"
+                className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A] inline-flex items-center gap-1 transition-colors"
+              >
+                All updates <ChevronRight className="h-3 w-3" />
+              </Link>
+            }
+          />
           {leads.isLoading ? (
             <div className="space-y-2">
               {[0, 1, 2].map((i) => (
@@ -234,23 +335,23 @@ export default function BrokerDashboardLanding() {
           ) : (
             <ul className="divide-y divide-[#B89555]/15">
               {leadsData.slice(0, 6).map((l: any) => (
-                <li key={l.id} className="py-2.5 flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/25 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
+                <li key={l.id} className="py-3 flex items-center gap-3 group/row">
+                  <div className="h-9 w-9 rounded-full bg-gradient-to-b from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/40 grid place-items-center text-[11px] font-semibold text-[#1A1A1A] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
                     {(l.full_name || "?").slice(0, 1).toUpperCase()}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm text-[#1A1A1A] truncate">
+                    <div className="text-sm font-semibold text-[#1A1A1A] truncate">
                       {l.full_name || "Unnamed lead"}
-                      <span className="text-[#1A1A1A]/55"> · {l.pipeline_stage || "new"}</span>
+                      <span className="text-[#1A1A1A]/55 font-normal"> · {l.pipeline_stage || "new"}</span>
                     </div>
-                    <div className="text-[11px] text-[#1A1A1A]/55 truncate">
+                    <div className="text-[11.5px] text-[#1A1A1A]/60 truncate">
                       Updated {formatDisplayDate(l.updated_at)}
                       {l.source ? ` · source: ${l.source}` : ""}
                     </div>
                   </div>
                   <Link
                     to="/broker/crm"
-                    className="text-[11px] text-[#1A1A1A]/70 hover:text-[#1A1A1A] inline-flex items-center gap-0.5"
+                    className="text-[11px] font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A] inline-flex items-center gap-0.5 px-2 py-1 rounded-md hover:bg-[#FDFBF7] transition-colors"
                   >
                     Open <ChevronRight className="h-3 w-3" />
                   </Link>
@@ -262,48 +363,54 @@ export default function BrokerDashboardLanding() {
 
         <div className="lg:col-span-2 space-y-4 md:space-y-6">
           <PremiumCard>
-            <div className="flex items-center gap-2 mb-3">
-              <Brain className="h-4 w-4 text-[#1A1A1A]/70" />
-              <h2 className="text-sm font-semibold text-[#1A1A1A]">Smart next action</h2>
-            </div>
-            <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">
-              Your AI sales assistant suggests the highest-priority follow-up
+            <SectionHeader icon={Brain} eyebrow="JBJ Intelligence" title="Smart next action" />
+            <p className="text-[13px] text-[#1A1A1A]/75 leading-[1.7]">
+              Your assistant suggests the highest-priority follow-up
               based on lead freshness, last contact, and pipeline stage.
             </p>
             <Link
               to="/broker/ai"
-              className="mt-4 inline-flex items-center gap-2 h-9 px-3 rounded-md bg-[#102540] text-white text-xs font-medium hover:bg-[#1a3d63] transition-colors"
               data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white mt-5 inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/65 text-white text-xs font-semibold shadow-[0_1px_0_rgba(255,255,255,0.10)_inset,0_10px_26px_-14px_rgba(16,37,64,0.55)] hover:-translate-y-0.5 transition-all duration-300"
+              style={{ color: "#FFFFFF" }}
             >
-              <Sparkles className="h-3.5 w-3.5" /> Open AI assistant
+              <Sparkles className="h-3.5 w-3.5" style={{ color: "#FFFFFF" }} strokeWidth={2.2} />
+              <span style={{ color: "#FFFFFF" }}>Open assistant</span>
             </Link>
           </PremiumCard>
 
           <PremiumCard>
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-[#1A1A1A]/70" />
-                <h2 className="text-sm font-semibold text-[#1A1A1A]">Today</h2>
-              </div>
-              <Link to="/broker/calendar" className="text-xs text-[#1A1A1A]/65 hover:text-[#1A1A1A]">
-                Calendar
-              </Link>
-            </div>
+            <SectionHeader
+              icon={Calendar}
+              eyebrow="Schedule"
+              title="Today's meetings"
+              action={
+                <Link
+                  to="/broker/calendar"
+                  className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A] inline-flex items-center gap-1 transition-colors"
+                >
+                  Calendar <ChevronRight className="h-3 w-3" />
+                </Link>
+              }
+            />
             {cal.isLoading ? (
               <div className="space-y-2">
                 <div className="h-10 rounded-lg bg-[#EFE6D6]/60 animate-pulse" />
                 <div className="h-10 rounded-lg bg-[#EFE6D6]/60 animate-pulse" />
               </div>
             ) : meetingsToday === 0 ? (
-              <div className="rounded-lg border border-dashed border-[#B89555]/40 bg-[#FDFBF7] px-4 py-5 text-center">
-                <Calendar className="h-5 w-5 text-[#1A1A1A]/55 mx-auto mb-2" />
-                <p className="text-sm font-medium text-[#1A1A1A]">No meetings today</p>
-                <p className="text-[11px] text-[#1A1A1A]/65 mt-1">
+              <div className="rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] px-4 py-6 text-center shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
+                <div className="mx-auto w-10 h-10 rounded-xl bg-[#EFE6D6] border border-[#B89555]/45 grid place-items-center mb-3">
+                  <Calendar className="h-4 w-4 text-[#1A1A1A]" strokeWidth={2} />
+                </div>
+                <p className="text-sm font-semibold text-[#1A1A1A]">No meetings today</p>
+                <p className="text-[11.5px] text-[#1A1A1A]/65 mt-1 leading-relaxed">
                   Your calendar is clear. New bookings will appear here automatically.
                 </p>
                 <Link
                   to="/broker/calendar"
-                  className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium text-[#1A1A1A] hover:text-[#B89555]"
+                  className="mt-3 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#1A1A1A] hover:text-[#1A1A1A] underline decoration-[#B89555]/60 underline-offset-4 hover:decoration-[#B89555] transition-colors"
                 >
                   Open calendar <ChevronRight className="h-3 w-3" />
                 </Link>
@@ -311,9 +418,12 @@ export default function BrokerDashboardLanding() {
             ) : (
               <ul className="space-y-2">
                 {(cal.data ?? []).filter((e) => isToday(e.starts_at)).slice(0, 4).map((e) => (
-                  <li key={e.id} className="flex items-center justify-between text-xs rounded-md bg-[#FDFBF7] border border-[#B89555]/20 px-3 py-2">
-                    <span className="truncate text-[#1A1A1A] font-medium">{e.title}</span>
-                    <span className="text-[#1A1A1A]/65 tabular-nums ml-3">
+                  <li
+                    key={e.id}
+                    className="flex items-center justify-between text-xs rounded-lg bg-[#FDFBF7] border border-[#B89555]/30 px-3.5 py-2.5 hover:border-[#B89555]/55 transition-colors shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]"
+                  >
+                    <span className="truncate text-[#1A1A1A] font-semibold">{e.title}</span>
+                    <span className="text-[#1A1A1A]/70 tabular-nums ml-3 text-[11.5px] font-medium">
                       {new Date(e.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </span>
                   </li>
@@ -321,21 +431,26 @@ export default function BrokerDashboardLanding() {
               </ul>
             )}
           </PremiumCard>
-
         </div>
       </div>
 
-      {/* My Databases */}
+      {/* ════════════════════════════════════════════════════════════════
+          MY DATABASES
+          ════════════════════════════════════════════════════════════════ */}
       <PremiumCard>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Database className="h-4 w-4 text-[#1A1A1A]/70" />
-            <h2 className="text-sm font-semibold text-[#1A1A1A]">My databases</h2>
-          </div>
-          <Link to="/broker/databases" className="text-xs text-[#1A1A1A]/65 hover:text-[#1A1A1A] inline-flex items-center gap-1">
-            View all <ChevronRight className="h-3 w-3" />
-          </Link>
-        </div>
+        <SectionHeader
+          icon={Database}
+          eyebrow="Data Access"
+          title="My databases"
+          action={
+            <Link
+              to="/broker/databases"
+              className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A] inline-flex items-center gap-1 transition-colors"
+            >
+              View all <ChevronRight className="h-3 w-3" />
+            </Link>
+          }
+        />
         {dbs.isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {[0, 1, 2].map((i) => (
@@ -354,17 +469,18 @@ export default function BrokerDashboardLanding() {
               <Link
                 key={d.grant_id}
                 to={`/broker/crm/database/${d.database_id}`}
-                className="block p-4 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 transition-colors"
+                className="group relative block p-4 rounded-xl bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/30 hover:border-[#B89555]/65 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-18px_rgba(16,37,64,0.3)] transition-all duration-300 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset] overflow-hidden"
               >
+                <span className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/55 to-transparent" />
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="text-sm font-medium text-[#1A1A1A] truncate">{d.database_name}</div>
-                    <div className="text-[11px] text-[#1A1A1A]/60 mt-1">
+                    <div className="text-sm font-semibold text-[#1A1A1A] truncate">{d.database_name}</div>
+                    <div className="text-[11px] text-[#1A1A1A]/65 mt-1.5">
                       {d.permission_level === "edit" ? "Edit access" : "View access"} · granted{" "}
                       {formatDisplayDate(d.granted_at)}
                     </div>
                   </div>
-                  <span className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/55 shrink-0">
+                  <span className="text-[9.5px] uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]/70 shrink-0 px-2 py-0.5 rounded-md bg-[#FDFBF7] border border-[#B89555]/35">
                     {d.status}
                   </span>
                 </div>
@@ -374,17 +490,23 @@ export default function BrokerDashboardLanding() {
         )}
       </PremiumCard>
 
-      {/* My leads preview */}
+      {/* ════════════════════════════════════════════════════════════════
+          RECENT LEADS
+          ════════════════════════════════════════════════════════════════ */}
       <PremiumCard>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Briefcase className="h-4 w-4 text-[#1A1A1A]/70" />
-            <h2 className="text-sm font-semibold text-[#1A1A1A]">Recent leads</h2>
-          </div>
-          <Link to="/broker/crm" className="text-xs text-[#1A1A1A]/65 hover:text-[#1A1A1A] inline-flex items-center gap-1">
-            Open full CRM <ChevronRight className="h-3 w-3" />
-          </Link>
-        </div>
+        <SectionHeader
+          icon={Briefcase}
+          eyebrow="Pipeline"
+          title="Recent leads"
+          action={
+            <Link
+              to="/broker/crm"
+              className="text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A] inline-flex items-center gap-1 transition-colors"
+            >
+              Open full CRM <ChevronRight className="h-3 w-3" />
+            </Link>
+          }
+        />
         {leads.isLoading ? (
           <div className="space-y-2">
             {[0, 1, 2, 3].map((i) => (
@@ -398,25 +520,28 @@ export default function BrokerDashboardLanding() {
             description="Leads assigned to you, or leads inside databases shared with you, will show up here."
           />
         ) : (
-          <div className="overflow-x-auto -mx-2 px-2">
+          <div className="overflow-x-auto -mx-2 px-2 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7]/60">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/55 border-b border-[#B89555]/20">
-                  <th className="py-2 pr-3 font-medium">Name</th>
-                  <th className="py-2 pr-3 font-medium">Status</th>
-                  <th className="py-2 pr-3 font-medium">Source</th>
-                  <th className="py-2 pr-3 font-medium">Updated</th>
+                <tr className="text-left text-[9.5px] uppercase tracking-[0.2em] text-[#1A1A1A]/65 font-semibold border-b border-[#B89555]/25">
+                  <th className="py-3 px-3">Name</th>
+                  <th className="py-3 px-3">Status</th>
+                  <th className="py-3 px-3">Source</th>
+                  <th className="py-3 px-3">Updated</th>
                 </tr>
               </thead>
               <tbody>
                 {leadsData.slice(0, 5).map((l: any) => (
-                  <tr key={l.id} className="border-b border-[#B89555]/10 last:border-0">
-                    <td className="py-2.5 pr-3 text-[#1A1A1A] truncate max-w-[18ch]">
+                  <tr
+                    key={l.id}
+                    className="border-b border-[#B89555]/12 last:border-0 hover:bg-[#F7F2EA]/60 transition-colors"
+                  >
+                    <td className="py-3 px-3 text-[#1A1A1A] font-medium truncate max-w-[18ch]">
                       {l.full_name || "Unnamed"}
                     </td>
-                    <td className="py-2.5 pr-3 text-[#1A1A1A]/75">{l.status || "—"}</td>
-                    <td className="py-2.5 pr-3 text-[#1A1A1A]/75">{l.source || "—"}</td>
-                    <td className="py-2.5 pr-3 text-[#1A1A1A]/55 tabular-nums">
+                    <td className="py-3 px-3 text-[#1A1A1A]/80">{l.status || "—"}</td>
+                    <td className="py-3 px-3 text-[#1A1A1A]/80">{l.source || "—"}</td>
+                    <td className="py-3 px-3 text-[#1A1A1A]/60 tabular-nums">
                       {formatDisplayDate(l.updated_at)}
                     </td>
                   </tr>
