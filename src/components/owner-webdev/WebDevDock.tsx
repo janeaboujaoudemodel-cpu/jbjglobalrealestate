@@ -341,7 +341,7 @@ export default function WebDevDock() {
       await supabase.from("owner_ui_overrides").delete().eq("id", cr.override_id);
       await supabase.from("owner_change_requests").update({ status: "rejected", reviewed_at: new Date().toISOString() }).eq("id", cr.id);
       window.dispatchEvent(new CustomEvent("jbj:override-preview", { detail: [] }));
-      toast({ title: "Cancelled" });
+      // Silent cancel — dock UI reflects the change; no floating toast (was rendering behind dock)
     }
     await loadRequests();
   };

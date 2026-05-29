@@ -165,7 +165,7 @@ export default function WebDevChangeHighlight() {
     }
     window.dispatchEvent(new CustomEvent("jbj:override-preview", { detail: [] }));
     window.dispatchEvent(new CustomEvent("jbj:webdev-refresh"));
-    toast({ title: "Cancelled", description: "Change discarded." });
+    // Silent cancel — highlight closes immediately; no floating toast behind the dock
     setActive(null);
   };
 
