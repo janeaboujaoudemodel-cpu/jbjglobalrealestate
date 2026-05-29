@@ -110,12 +110,13 @@ const ListProperty = () => {
         canonicalPath="/list-property"
       />
 
-      {/* ───────────────────── Hero (blue fade) ───────────────────── */}
+      {/* ───────────────────── Hero (navy gradient) ───────────────────── */}
       <section
-        className="relative w-full"
-        style={{ background: BLUE_GRADIENT }}
+        className="relative w-full bg-[#102540]"
+        data-surface="dark"
         data-allow-dark-cta
         data-no-contrast-guard
+        style={{ background: BLUE_GRADIENT }}
       >
         {/* subtle gold hairline along the bottom of the hero */}
         <div
