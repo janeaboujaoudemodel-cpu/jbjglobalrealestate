@@ -147,33 +147,27 @@ export default function AIBrokerWorkspace() {
   };
 
   const handleSend = async (message: string, mode = "freeform") => {
-    let activeId = selectedId;
-    if (!activeId) {
-      if (leads.length > 0) {
-        activeId = leads[0].id;
-        setSelectedId(activeId);
-      } else {
-        toast.info("You don't have any leads yet. Add a lead first so the assistant can help you with them.");
-        return;
-      }
-    }
+    const activeId = selectedId; // may be null → general Q&A mode
+    const setActive = activeId ? setTurns : setGeneralTurns;
     const tempUserId = `u-${Date.now()}`;
-    setTurns(t => [...t, { id: tempUserId, role: "user", content: message }]);
+    setActive(t => [...t, { id: tempUserId, role: "user", content: message }]);
     setChatLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("broker-ai-assistant", {
-        body: { leadId: activeId, message, mode },
+        body: { leadId: activeId ?? null, message, mode },
       });
       if (error) throw error;
       const s = data?.structured;
       if (!s) throw new Error("No structured reply");
-      setTurns(t => [...t, {
+      setActive(t => [...t, {
         id: `a-${Date.now()}`,
         role: "assistant",
         content: s.reply || "",
         draft_message: s.draft_message,
       }]);
-      setInsights({ score: s.score, reason: s.score_reason, matches: s.matches, next: s.next_step });
+      if (activeId) {
+        setInsights({ score: s.score, reason: s.score_reason, matches: s.matches, next: s.next_step });
+      }
     } catch (e: any) {
       console.error(e);
       const msg = e?.message?.includes("Rate limit") ? "Rate limit — try again shortly."
