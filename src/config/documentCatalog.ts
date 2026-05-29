@@ -813,10 +813,103 @@ const CLIENT: DocumentTemplate[] = [
       { key: "notes", label: "Brief", type: "textarea", required: true },
     ],
   },
+  // ─── Added RERA-aligned client documents ──────────────────────────
+  // These slot into Document Studio as the single source of truth for
+  // every form/agreement. Composers in src/templates/composers/index.ts
+  // fall back to standardBody for any id not explicitly handled, which
+  // produces a polished body using `notes` + the field set below.
+  {
+    id: "mou",
+    audience: "client",
+    label: "Memorandum of Understanding (MOU)",
+    description: "Pre-contract MOU between buyer and seller — terms, price, deposit, timeline.",
+    icon: Handshake,
+    needsClient: true,
+    emailSubject: "Memorandum of Understanding · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a binding Memorandum of Understanding between the buyer and seller for the property described. Cover: parties, property, agreed price, deposit, payment schedule, key milestones (SPA signing, transfer), exclusivity, governing law (UAE) and default. Keep clauses numbered and concise.",
+    fields: [
+      { key: "recipientName", label: "Buyer Full Name", type: "text", required: true },
+      { key: "sellerName", label: "Seller Full Name", type: "text", required: true },
+      { key: "propertyRef", label: "Property Address / Reference", type: "text", required: true },
+      { key: "agreedPrice", label: "Agreed Price (AED)", type: "text", required: true },
+      { key: "deposit", label: "Deposit (AED)", type: "text" },
+      { key: "spaDate", label: "Target SPA Signing Date", type: "date" },
+      { key: "transferDate", label: "Target Transfer Date", type: "date" },
+      { key: "notes", label: "Additional Terms", type: "textarea" },
+    ],
+  },
+  {
+    id: "ejari_tenancy",
+    audience: "client",
+    label: "Tenancy Contract (Ejari)",
+    description: "Full Ejari-style tenancy contract between landlord and tenant.",
+    icon: Key,
+    needsClient: true,
+    emailSubject: "Tenancy Contract · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a complete Ejari-aligned tenancy contract. Include parties, property, annual rent, payment schedule (cheques), term (start/end), security deposit, agency commission, maintenance responsibilities, utilities, and Dubai-Land-Department / Ejari registration clause.",
+    fields: [
+      { key: "recipientName", label: "Tenant Full Name", type: "text", required: true },
+      { key: "landlordName", label: "Landlord Full Name", type: "text", required: true },
+      { key: "propertyRef", label: "Property Address", type: "text", required: true },
+      { key: "annualRent", label: "Annual Rent (AED)", type: "text", required: true },
+      { key: "chequeCount", label: "Number of Cheques", type: "text", placeholder: "e.g., 4" },
+      { key: "securityDeposit", label: "Security Deposit (AED)", type: "text" },
+      { key: "startDate", label: "Contract Start", type: "date", required: true },
+      { key: "endDate", label: "Contract End", type: "date", required: true },
+      { key: "commission", label: "Agency Commission (AED or %)", type: "text" },
+      { key: "notes", label: "Additional Clauses", type: "textarea" },
+    ],
+  },
+  {
+    id: "noc",
+    audience: "client",
+    label: "No Objection Certificate (NOC)",
+    description: "Developer / landlord NOC for sale, lease, fit-out or transfer.",
+    icon: ShieldCheck,
+    needsClient: true,
+    emailSubject: "No Objection Certificate · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a formal No Objection Certificate confirming the issuer has no objection to the stated action (sale, lease, transfer, fit-out) by the named party for the specified property. Keep wording precise, single-purpose and signed/stamped on the last page.",
+    fields: [
+      { key: "recipientName", label: "Issued To (Name)", type: "text", required: true },
+      { key: "issuerName", label: "Issuing Party (Developer / Landlord)", type: "text", required: true },
+      { key: "propertyRef", label: "Property / Unit Reference", type: "text", required: true },
+      { key: "purpose", label: "Purpose of NOC", type: "select", required: true, options: [
+        { value: "sale", label: "Sale / Transfer of Ownership" },
+        { value: "lease", label: "Lease / Sub-lease" },
+        { value: "fitout", label: "Fit-Out / Renovation" },
+        { value: "utility", label: "Utility Connection (DEWA / Cooling)" },
+        { value: "other", label: "Other (specify in notes)" },
+      ]},
+      { key: "issueDate", label: "Issue Date", type: "date", required: true },
+      { key: "validUntil", label: "Valid Until", type: "date" },
+      { key: "notes", label: "Additional Details", type: "textarea" },
+    ],
+  },
+  {
+    id: "property_reservation",
+    audience: "client",
+    label: "Property Reservation Form",
+    description: "Off-plan / secondary reservation: holds a unit pending SPA.",
+    icon: ClipboardCheck,
+    needsClient: true,
+    emailSubject: "Property Reservation Form · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a property reservation form confirming the buyer's intent to purchase the unit, the reservation deposit received, the validity window of the reservation, and the next steps to convert into an SPA. Keep wording short, formal and binding.",
+    fields: [
+      { key: "recipientName", label: "Buyer Full Name", type: "text", required: true },
+      { key: "propertyRef", label: "Unit / Property Reference", type: "text", required: true },
+      { key: "projectName", label: "Project / Tower Name", type: "text" },
+      { key: "reservationFee", label: "Reservation Deposit (AED)", type: "text", required: true },
+      { key: "totalPrice", label: "Indicative Total Price (AED)", type: "text" },
+      { key: "paymentMethod", label: "Payment Method", type: "text", placeholder: "Bank transfer / cheque / card" },
+      { key: "validUntil", label: "Reservation Valid Until", type: "date", required: true },
+      { key: "notes", label: "Additional Terms", type: "textarea" },
+    ],
+  },
 ];
-
-
-export const DOCUMENT_CATALOG: DocumentTemplate[] = [...STAFF, ...CLIENT];
 
 export type DocumentScope = DocumentAudience | "all";
 export function getCatalogByAudience(audience: DocumentScope): DocumentTemplate[] {
