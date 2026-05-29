@@ -1,7 +1,7 @@
 import { NavLink, useLocation, useNavigate, Link } from "react-router-dom";
 import {
   LayoutDashboard, Users, Briefcase, Database, ListChecks, Calendar, ListTodo,
-  Handshake, FileSignature, GraduationCap, Sparkles,
+  Handshake, FileSignature, GraduationCap, Sparkles, Building2,
   Brain, Bell, Settings, ChevronLeft, ChevronRight, ArrowLeft, Crown, Home, LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -9,26 +9,28 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { toast } from "sonner";
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 
 type Item = { to: string; label: string; icon: any };
 
 // Full broker nav per the approved plan. Owner-only surfaces (e.g. global
 // /owner/forms admin) are NOT listed here — brokers only see their own slice.
 const ITEMS: Item[] = [
-  { to: "/broker/portal",        label: "Dashboard",          icon: LayoutDashboard },
-  { to: "/broker/leads",         label: "My Leads",           icon: Users },
-  { to: "/broker/crm",           label: "CRM Pipeline",       icon: Briefcase },
-  { to: "/broker/databases",     label: "Assigned Databases", icon: Database },
-  { to: "/broker/listings",      label: "Listings",           icon: ListChecks },
-  { to: "/broker/calendar",      label: "Calendar",           icon: Calendar },
-  { to: "/broker/tasks",         label: "Tasks",              icon: ListTodo },
-  { to: "/broker/deals",         label: "Deals & Commission", icon: Handshake },
-  { to: "/broker/forms",         label: "Forms & Agreements", icon: FileSignature },
-  { to: "/broker/learning",      label: "JBJ Academy",        icon: GraduationCap },
-  { to: "/broker-toolkit",       label: "Marketing Toolkit",  icon: Sparkles },
-  { to: "/broker/ai",            label: "AI Sales Assistant", icon: Brain },
-  { to: "/broker/notifications", label: "Notifications",      icon: Bell },
-  { to: "/broker/settings",      label: "Settings",           icon: Settings },
+  { to: "/broker/portal",            label: "Dashboard",          icon: LayoutDashboard },
+  { to: "/broker/leads",             label: "My Leads",           icon: Users },
+  { to: "/broker/crm",               label: "CRM Pipeline",       icon: Briefcase },
+  { to: "/broker/databases",         label: "Assigned Databases", icon: Database },
+  { to: "/broker/listings",          label: "Listings",           icon: ListChecks },
+  { to: "/broker/calendar",          label: "Calendar",           icon: Calendar },
+  { to: "/broker/tasks",             label: "Tasks",              icon: ListTodo },
+  { to: "/broker/deals",             label: "Deals & Commission", icon: Handshake },
+  { to: "/broker/developer-visits",  label: "Developer Visits",   icon: Building2 },
+  { to: "/broker/forms",             label: "Forms & Agreements", icon: FileSignature },
+  { to: "/broker/learning",          label: "JBJ Academy",        icon: GraduationCap },
+  { to: "/broker-toolkit",           label: "Marketing Toolkit",  icon: Sparkles },
+  { to: "/broker/ai",                label: "AI Sales Assistant", icon: Brain },
+  { to: "/broker/notifications",     label: "Notifications",      icon: Bell },
+  { to: "/broker/settings",          label: "Settings",           icon: Settings },
 ];
 
 interface Props {
@@ -57,31 +59,37 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
 
   return (
     <div className="h-full flex flex-col min-h-0" data-no-contrast-guard>
-      {/* Logo row — height locked to --shell-header-h so divider aligns with top bar */}
+      {/* Logo row — height locked to --shell-header-h so divider aligns with top bar.
+          Uses the official JBJ monogram (never the "JBJ" letter fallback). */}
       <div
-        className="border-b border-[#B89555]/40 flex items-center justify-between px-3 flex-shrink-0 bg-[#F7F2EA]"
+        className="border-b border-[#B89555]/40 flex items-center gap-2 px-3 flex-shrink-0 bg-[#F7F2EA]"
         style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
       >
-        {!collapsed ? (
-          <div className="min-w-0">
-            <div className="text-[9px] uppercase tracking-[0.24em] text-[#1A1A1A]/55 truncate font-medium">
-              JBJ GLOBAL REAL ESTATE
+        <Link
+          to="/broker/portal"
+          onClick={onNavigate}
+          className="flex items-center gap-2 min-w-0"
+          aria-label="JBJ Global Real Estate — Broker Portal"
+        >
+          <img
+            src={jbjMonogramNobuffer}
+            alt="JBJ"
+            width={collapsed ? 36 : 40}
+            height={collapsed ? 36 : 40}
+            className="object-contain flex-shrink-0"
+            style={{ width: collapsed ? 36 : 40, height: collapsed ? 36 : 40 }}
+          />
+          {!collapsed && (
+            <div className="min-w-0">
+              <div className="text-[9px] uppercase tracking-[0.24em] text-[#1A1A1A]/55 truncate font-medium">
+                JBJ GLOBAL REAL ESTATE
+              </div>
+              <div className="font-display text-[13px] font-semibold text-[#1A1A1A] mt-0.5 truncate tracking-tight">
+                Broker Portal
+              </div>
             </div>
-            <div className="font-display text-[15px] font-semibold text-[#1A1A1A] mt-0.5 truncate tracking-tight">Broker Portal</div>
-          </div>
-        ) : (
-          <span className="font-display text-base font-bold text-[#1A1A1A]">JBJ</span>
-        )}
-        {onToggle && (
-          <button
-            type="button"
-            onClick={onToggle}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="h-7 w-7 grid place-items-center rounded-md border border-[#B89555]/30 text-[#1A1A1A]/80 hover:bg-[#EFE6D6] flex-shrink-0"
-          >
-            {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-          </button>
-        )}
+          )}
+        </Link>
       </div>
 
       {/* Nav — tight stack, scrolls if overflow */}
@@ -109,7 +117,8 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
       </nav>
 
 
-      {/* Pinned footer — seals the sidebar (mirrors OwnerDashboardShell) */}
+      {/* Pinned footer — seals the sidebar. Collapse button lives at the very bottom
+          BELOW Sign Out per owner directive — never at the top of the sidebar. */}
       <div className="p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#F7F2EA]">
         {isOwner && (
           <Link
@@ -145,6 +154,24 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
           <LogOut className="h-5 w-5 shrink-0" />
           {!collapsed && <span className="truncate">Sign Out</span>}
         </button>
+
+        {/* Collapse toggle — always at the very bottom, below Sign Out */}
+        {onToggle && (
+          <button
+            type="button"
+            onClick={onToggle}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            className={cn(
+              "mt-1 w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-colors",
+              "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6] border border-[#B89555]/30",
+              collapsed && "justify-center"
+            )}
+          >
+            {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+            {!collapsed && <span className="truncate">Collapse</span>}
+          </button>
+        )}
       </div>
     </div>
   );
