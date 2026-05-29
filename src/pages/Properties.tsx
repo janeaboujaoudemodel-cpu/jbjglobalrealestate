@@ -1200,7 +1200,7 @@ const Properties = () => {
           </div>
         </section>
       ) : (
-        <section className="py-12 bg-[#FDFBF7]">
+        <section id="properties-results" className="py-12 bg-[#FDFBF7] scroll-mt-[104px]">
           <div className="container mx-auto px-3 sm:px-4">
             <div className="flex">
               {/* Vertical nav handled globally by MainLayout */}
