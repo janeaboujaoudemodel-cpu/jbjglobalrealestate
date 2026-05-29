@@ -950,8 +950,8 @@ export default function JoinApplication() {
                   onStepClick={goToStep}
                 />
 
-                {/* Stable-height wizard panel — prevents the form jumping size between steps */}
-                <div className="min-h-[640px]">
+                {/* Wizard panel — height adapts to content */}
+                <div>
 
                 {/* Step 0 — Personal */}
                 <div className={currentStep === 0 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
@@ -1106,6 +1106,17 @@ export default function JoinApplication() {
 
                 {/* Step 2 — Role & Experience */}
                 <div className={currentStep === 2 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
+                {/* Empty state — when no role picked yet and positions come from DB */}
+                {!selectedPosition && openPositions.length > 0 && (
+                  <div className="rounded-xl border-2 border-dashed border-[#B89555]/60 bg-[#F7F2EA]/50 px-5 py-6 text-center">
+                    <p className="text-[#102540] font-semibold text-base">
+                      Select a role from <span className="underline">Open Positions</span> above to load the qualification questions for that position.
+                    </p>
+                    <p className="text-[#1A1A1A]/70 text-sm mt-2">
+                      Your application will auto-sync here and the relevant experience questions will appear in this step.
+                    </p>
+                  </div>
+                )}
                 {/* Position fallback (only when no DB positions) */}
                 {openPositions.length === 0 && (
                   <div className="space-y-2">
