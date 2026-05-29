@@ -149,6 +149,31 @@ const COMPLETION_STATUS = [
   { value: "under-construction", label: "Under Construction" },
 ];
 
+const isReadyProject = (project: object) => {
+  const p = project as {
+    construction_status?: unknown;
+    status?: unknown;
+    status_label?: unknown;
+    handover_date?: unknown;
+    availability_status?: unknown;
+  };
+  const statusText = [
+    p.construction_status,
+    p.status,
+    p.status_label,
+    p.handover_date,
+    p.availability_status,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return /\b(ready|completed|complete|delivered)\b/.test(statusText);
+};
+
+const prioritizeOffPlan = <T extends object>(projects: T[]): T[] =>
+  [...projects].sort((a, b) => Number(isReadyProject(a)) - Number(isReadyProject(b)));
+
 // Sale status options with color dots
 const SALE_STATUS = [
   { value: "all", label: "All Sale Statuses", dotClass: null },
@@ -388,21 +413,18 @@ const Properties = () => {
             new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
     }
-    // Off-plan first: unless the user explicitly filters for ready properties,
-    // push "Ready" projects to the back of the list so off-plan leads the page.
     if (appliedFilters.completionStatus !== 'ready') {
-      const isReady = (p: any) => {
-        const s = String(p?.construction_status ?? p?.status_label ?? '').toLowerCase();
-        return /ready|completed|hand[\s-]?over\s*done/.test(s);
-      };
-      sorted.sort((a, b) => Number(isReady(a)) - Number(isReady(b)));
+      sorted = prioritizeOffPlan(sorted);
     }
     return sorted;
   }, [filteredProjects, sortBy, appliedFilters.completionStatus]);
 
 
   // Apply shortcut filters (price, bedrooms, status, construction, handover, etc.) reactively
-  const finalProjects = useMemo(() => applyShortcutFilters(sortedProjects, shortcutFilters), [sortedProjects, shortcutFilters]);
+  const finalProjects = useMemo(() => {
+    const filtered = applyShortcutFilters(sortedProjects, shortcutFilters);
+    return appliedFilters.completionStatus === 'ready' ? filtered : prioritizeOffPlan(filtered);
+  }, [sortedProjects, shortcutFilters, appliedFilters.completionStatus]);
   // Pagination — 12 per page with numeric page controls
   const PAGE_SIZE = 12;
   const [currentPage, setCurrentPage] = useState(1);
