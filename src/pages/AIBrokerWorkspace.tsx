@@ -69,7 +69,9 @@ export default function AIBrokerWorkspace() {
   }, [searchParams]);
 
   const bootstrap = async () => {
-    setLoading(true);
+    // Only show the full-screen loader on the FIRST load — subsequent
+    // role/auth resolves must not re-blink the screen.
+    setLoading(prev => (leads.length === 0 ? true : prev));
     try {
       // Broker portal: scope to leads explicitly assigned to THIS broker.
       // Owner gets full visibility for previews/QA.
@@ -196,7 +198,7 @@ export default function AIBrokerWorkspace() {
   const selected = leads.find(l => l.id === selectedId) || null;
 
   if (authLoading || roleLoading || loading) {
-    return <BrandedLoader variant="light" text="Loading JBJ Sales Assistant…" className="min-h-dvh bg-[#F7F2EA]" />;
+    return <BrandedLoader variant="light" className="bg-[#F7F2EA]" />;
   }
 
   return (
