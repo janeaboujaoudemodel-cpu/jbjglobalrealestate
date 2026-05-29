@@ -398,9 +398,12 @@ const Index = () => {
         </LazyVisible>
       </PremiumSectionCard>
 
-      <PremiumSectionCard tone="surface" padding="none" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={500}>
-          <div className="rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7]/70 p-5 md:p-8 shadow-[0_1px_0_rgba(184,149,85,0.25),0_10px_30px_-18px_rgba(184,149,85,0.35)]">
+      <PremiumSectionCard tone="surface" padding="none" wrapperClassName="py-4">
+        <LazyVisible minHeight={1100} rootMargin="1200px">
+          <div
+            className="rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7] p-5 md:p-8 shadow-[0_1px_0_rgba(184,149,85,0.25),0_10px_30px_-18px_rgba(184,149,85,0.35)]"
+            style={{ contain: "layout paint", minHeight: 1050 }}
+          >
             <Suspense fallback={<SectionLoader />}>
               <MortgageCalculator compact />
             </Suspense>
@@ -431,6 +434,7 @@ const Index = () => {
           </div>
         </LazyVisible>
       </PremiumSectionCard>
+
 
       <PodcastVisibilityGate>
         <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
