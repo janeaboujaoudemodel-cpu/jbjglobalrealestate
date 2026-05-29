@@ -62,6 +62,8 @@ export const BrokerPortalRoutes = () => (
     <Route path="calendar" element={<BrokerCalendar />} />
     <Route path="tasks" element={<BrokerTasks />} />
     <Route path="notifications" element={<BrokerInbox />} />
+    <Route path="messages" element={<BrokerMessages />} />
+    <Route path="email" element={<BrokerEmailHub />} />
     <Route path="settings" element={<BrokerAccount />} />
     <Route path="ai" element={<AIBrokerWorkspace />} />
 
