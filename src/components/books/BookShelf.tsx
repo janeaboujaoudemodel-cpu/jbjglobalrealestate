@@ -4,6 +4,7 @@ import { BookOpen, Clock, ChevronRight, X, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { BookCoverFace } from '@/components/books/BookCoverFace';
+import { BookCard } from '@/components/books/BookCard';
 import type { BookData } from '@/types/books';
 export type { BookData, BookTOCItem } from '@/types/books';
 
@@ -23,51 +24,19 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
           <BookOpen className="w-5 h-5 text-[#1A1A1A]" />
           {title}
         </h2>
-        {/* No card background — books float directly on the layer */}
+        {/* Canonical BookCard grid — no caption beneath, title is engraved on the cover */}
         <div className="flex flex-wrap justify-center gap-6 md:gap-8">
           {books.map((book) => (
-            <motion.button
+            <BookCard
               key={book.title}
+              book={book}
+              size="sm"
               onClick={() => setSelectedBook(book)}
-              className="group flex flex-col items-center gap-3 w-28 md:w-36"
-              whileHover={{ y: -8 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              {/* 3D Book with spine, pages edge, and perspective */}
-              <div className="relative flex-shrink-0" style={{ perspective: '1200px' }}>
-                <div className="absolute -bottom-2 left-2 right-2 h-4 bg-[#1A1A1A]/20 blur-lg rounded-full" />
-                <div
-                  className="relative w-24 h-36 md:w-32 md:h-44 transition-transform duration-500 group-hover:[transform:rotateY(-8deg)]"
-                  style={{ transformStyle: 'preserve-3d' }}
-                >
-                  {/* Front cover */}
-                  <div
-                    className="relative rounded-r-lg overflow-hidden ring-1 ring-gold/50 bg-[#1A1A1A]"
-                    style={{
-                      transform: 'translateZ(1px)',
-                      backfaceVisibility: 'hidden',
-                      boxShadow: '0 8px 25px rgba(200,167,102,0.3), 0 4px 12px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.2)',
-                    }}
-                  >
-                    <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
-                    <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white/15 to-transparent z-10" />
-                    <BookCoverFace book={book} bare />
-                  </div>
-                  {/* 3D Spine */}
-                  <div
-                    className="absolute top-0 left-0 w-3 h-full bg-gradient-to-r from-zinc-800 to-zinc-700 origin-left"
-                    style={{ transform: 'rotateY(-90deg) translateX(-6px)' }}
-                  />
-                  {/* 3D pages edge removed to prevent white divider cutting the cover art */}
-                </div>
-              </div>
-              <p className="text-xs text-[#1A1A1A]/70 text-center font-medium group-hover:text-[#1A1A1A] transition-colors leading-tight">
-                {book.title}
-              </p>
-            </motion.button>
+            />
           ))}
         </div>
       </div>
+
 
       {/* TOC Modal — Gold Champagne Theme */}
       {selectedBook && (

@@ -1,8 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { BookData } from "@/types/books";
-import { PremiumBookCover } from "@/components/books/PremiumBookCover";
-
-
+import { PremiumBookCover, pickBookTone } from "@/components/books/PremiumBookCover";
 
 type BookCoverFaceSize = "thumb" | "modal" | "hero";
 
@@ -14,21 +12,18 @@ interface BookCoverFaceProps {
   bare?: boolean;
 }
 
-// LOCKED: all books share the Digital-Marketing/No.14 master style — uniform black tone.
-const coverToneByCategory: Record<BookData["category"], "black"> = {
-  guide: "black",
-  report: "black",
-  education: "black",
-  faq: "black",
-};
-
 export function BookCoverFace({ book, size = "thumb", className, bare = false }: BookCoverFaceProps) {
+  const subtitle =
+    book.category === "faq" ? "Frequently Asked Questions" :
+    book.category === "report" ? "Market Intelligence" :
+    book.category === "education" ? "Education" : "Guide";
+
   return (
     <PremiumBookCover
       title={book.title}
-      subtitle={book.category === "faq" ? "Frequently Asked Questions" : book.category === "report" ? "Market Intelligence" : book.category === "education" ? "Education" : "Guide"}
+      subtitle={subtitle}
       footer="JBJ GLOBAL REAL ESTATE  |  PREMIUM LIBRARY"
-      tone={coverToneByCategory[book.category]}
+      tone={pickBookTone(book.title)}
       className={cn("relative w-full h-full", bare ? "" : "block", className)}
     />
   );
