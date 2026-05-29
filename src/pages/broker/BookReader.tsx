@@ -83,6 +83,26 @@ export default function BookReader() {
 
   const audio = useBookAudio(bookId ?? null, book?.voice_enabled);
   const { parts, sizerRef } = usePaginatedChapters(modules);
+  const { summary, startModule, completeModule } = useEducationProgress();
+  const [completingId, setCompletingId] = useState<string | null>(null);
+
+  // Track which modules the user has completed locally for instant UI feedback
+  const [localCompleted, setLocalCompleted] = useState<Set<string>>(new Set());
+
+  const handleComplete = async (mod: EducationModule) => {
+    if (!bookId || completingId === mod.id || localCompleted.has(mod.id)) return;
+    setCompletingId(mod.id);
+    const res = await completeModule(bookId, mod.id);
+    setCompletingId(null);
+    if (res) {
+      setLocalCompleted((s) => new Set(s).add(mod.id));
+      toast.success(`+${res.awarded} points`, {
+        description: `Lesson complete · ${res.total} total points`,
+        icon: <Trophy className="w-4 h-4" />,
+      });
+    }
+  };
+
 
   useEffect(() => {
     if (!bookId) return;
