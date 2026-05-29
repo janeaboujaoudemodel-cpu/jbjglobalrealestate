@@ -1,7 +1,7 @@
 import { NavLink, useLocation, useNavigate, Link } from "react-router-dom";
 import {
   LayoutDashboard, Users, Briefcase, Database, ListChecks, Calendar, ListTodo,
-  Handshake, BadgeDollarSign, FileText, FileSignature, GraduationCap, Sparkles,
+  Handshake, FileSignature, GraduationCap, Sparkles,
   Brain, Bell, Settings, ChevronLeft, ChevronRight, ArrowLeft, Crown, Home, LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,7 +23,6 @@ const ITEMS: Item[] = [
   { to: "/broker/calendar",      label: "Calendar",           icon: Calendar },
   { to: "/broker/tasks",         label: "Tasks",              icon: ListTodo },
   { to: "/broker/deals",         label: "Deals & Commission", icon: Handshake },
-  { to: "/broker/documents",     label: "Documents",          icon: FileText },
   { to: "/broker/forms",         label: "Forms & Agreements", icon: FileSignature },
   { to: "/broker/learning",      label: "JBJ Academy",        icon: GraduationCap },
   { to: "/broker-toolkit",       label: "Marketing Toolkit",  icon: Sparkles },
