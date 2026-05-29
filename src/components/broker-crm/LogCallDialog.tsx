@@ -243,6 +243,57 @@ export default function LogCallDialog({
     }
   };
 
+  const pauseRecording = () => {
+    const recorder = recRef.current;
+    if (!recorder || recorder.state !== "recording") return;
+    try {
+      recorder.pause();
+      if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
+      setRecState("paused");
+    } catch (err) {
+      console.warn("recorder.pause failed", err);
+    }
+  };
+
+  const resumeRecording = () => {
+    const recorder = recRef.current;
+    if (!recorder || recorder.state !== "paused") return;
+    try {
+      recorder.resume();
+      setRecState("recording");
+      timerRef.current = window.setInterval(() => {
+        setSeconds((s) => {
+          const next = s + 1;
+          secondsRef.current = next;
+          return next;
+        });
+      }, 1000) as unknown as number;
+    } catch (err) {
+      console.warn("recorder.resume failed", err);
+    }
+  };
+
+  const discardRecording = () => {
+    if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
+    try {
+      if (recRef.current && recRef.current.state !== "inactive") {
+        recRef.current.onstop = null;
+        recRef.current.stop();
+      }
+    } catch (err) {
+      console.warn("recorder discard stop failed", err);
+    }
+    stopTracks();
+    recRef.current = null;
+    chunksRef.current = [];
+    setAudioBlob(null);
+    setSeconds(0);
+    secondsRef.current = 0;
+    startedAtRef.current = null;
+    setDurationSeconds("0");
+    setRecState("idle");
+  };
+
   const stopRecordingAndGetBlob = () => new Promise<RecordingResult | null>((resolve) => {
     const recorder = recRef.current;
     if (!recorder || recorder.state === "inactive") {
