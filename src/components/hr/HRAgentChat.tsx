@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Loader2, Calendar, FileText, CheckCircle, Sparkles, Paperclip, X, Briefcase, MessageCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Send, Bot, User, Loader2, FileText, CheckCircle, Sparkles, Paperclip, X, Briefcase, MessageCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
