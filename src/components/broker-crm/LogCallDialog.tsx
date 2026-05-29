@@ -298,6 +298,8 @@ export default function LogCallDialog({
     stopTracks();
     recRef.current = null;
     chunksRef.current = [];
+    if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+    setAudioPreviewUrl(null);
     setAudioBlob(null);
     setSeconds(0);
     secondsRef.current = 0;
@@ -396,7 +398,7 @@ export default function LogCallDialog({
         toast.success("Recording saved — AI is processing it");
         await supabase.from("broker_call_logs").select("id").eq("id", callLogId).maybeSingle();
       }
-      onSaved?.();
+      onSaved?.(callLogId);
       onOpenChange(false);
     } catch (e: any) {
       console.error(e);
@@ -408,10 +410,15 @@ export default function LogCallDialog({
 
   const isSaving = submitting || savingRecording;
 
-  const stopAndSave = async () => {
+  const stopAndPreview = async () => {
     if (isSaving) return;
-    const syntheticSubmitEvent = { preventDefault: () => undefined };
-    await submit(syntheticSubmitEvent);
+    const stopped = await stopRecordingAndGetBlob();
+    if (stopped?.blob?.size) {
+      toast.success("Recording ready — review it before saving");
+    } else {
+      toast.error("No audio was captured. Check microphone permission and try again.");
+      setRecState("idle");
+    }
   };
 
   return (
