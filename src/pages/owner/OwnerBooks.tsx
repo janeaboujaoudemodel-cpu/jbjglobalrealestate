@@ -171,7 +171,7 @@ export default function OwnerBooks() {
   const softDelete = async (id: string) => {
     await supabase
       .from("broker_education_books")
-      .update({ deleted_at: new Date().toISOString(), is_published: false })
+      .update({ deleted_at: new Date().toISOString(), is_restricted: true })
       .eq("id", id);
     await load();
   };
@@ -185,10 +185,11 @@ export default function OwnerBooks() {
   const togglePublish = async (b: Book) => {
     await supabase
       .from("broker_education_books")
-      .update({ is_published: !b.is_published })
+      .update({ is_restricted: b.is_published })
       .eq("id", b.id);
     await load();
   };
+
   const renameInline = async (id: string, title: string) => {
     await supabase
       .from("broker_education_books")
