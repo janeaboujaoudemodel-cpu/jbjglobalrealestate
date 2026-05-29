@@ -37,6 +37,78 @@ type BookRow = {
   created_at: string | null;
 };
 
+// Per-book color palettes — gives each cover its own identity, library-shelf feel.
+const BOOK_PALETTES = [
+  { spine: "#5b1216", cover: "#8a1c22", cover2: "#5b1216", foil: "#e8c878" }, // oxblood
+  { spine: "#0b2545", cover: "#13315c", cover2: "#0b2545", foil: "#e8c878" }, // navy
+  { spine: "#1f3b2c", cover: "#2f5d44", cover2: "#1f3b2c", foil: "#e8c878" }, // forest
+  { spine: "#2a1a3f", cover: "#46295a", cover2: "#2a1a3f", foil: "#e8c878" }, // aubergine
+  { spine: "#3a1f0f", cover: "#5b3320", cover2: "#3a1f0f", foil: "#e8c878" }, // cognac
+  { spine: "#1a1a1a", cover: "#2b2b2b", cover2: "#1a1a1a", foil: "#c9a84c" }, // obsidian
+  { spine: "#5a4528", cover: "#7a5e34", cover2: "#5a4528", foil: "#f0d78c" }, // bronze
+  { spine: "#0e3b3a", cover: "#185856", cover2: "#0e3b3a", foil: "#e8c878" }, // teal
+  { spine: "#6a1e3a", cover: "#8c2a4f", cover2: "#6a1e3a", foil: "#e8c878" }, // burgundy
+];
+
+const BOOK_3D_CSS = `
+.book-3d-wrap { perspective: 1600px; padding: 8px 0 18px; display:flex; justify-content:center; }
+.book-3d {
+  position: relative;
+  width: 78%;
+  aspect-ratio: 5 / 7;
+  transform-style: preserve-3d;
+  transform: rotateY(-22deg) rotateX(4deg);
+  transition: transform .55s cubic-bezier(.2,.7,.2,1);
+  filter: drop-shadow(22px 28px 28px rgba(20,12,4,.32)) drop-shadow(2px 4px 6px rgba(20,12,4,.18));
+}
+.book-3d-wrap:hover .book-3d { transform: rotateY(-8deg) rotateX(2deg) translateY(-3px); }
+.book-3d__cover {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(120% 80% at 30% 20%, rgba(255,255,255,.10), transparent 55%),
+    linear-gradient(135deg, var(--cover) 0%, var(--cover2) 100%);
+  border-radius: 3px 8px 8px 3px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.35), inset 0 0 22px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+.book-3d__pages {
+  position:absolute; top:2%; right:-1.2%; bottom:2%; width: 12px;
+  background: repeating-linear-gradient(to bottom, #f5ecd8 0 1px, #e6d8b6 1px 2px);
+  transform: translateZ(-12px) rotateY(8deg);
+  border-radius: 1px;
+  box-shadow: inset -2px 0 4px rgba(0,0,0,.18);
+}
+.book-3d__spineEdge {
+  position:absolute; top:0; left:0; bottom:0; width: 14px;
+  background: linear-gradient(90deg, rgba(0,0,0,.55), rgba(0,0,0,.18) 60%, transparent);
+  border-right: 1px solid rgba(0,0,0,.4);
+}
+.book-3d__gloss {
+  position:absolute; inset:0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.16) 42%, transparent 55%);
+  pointer-events:none;
+}
+.book-3d__frame {
+  position:absolute; inset: 9% 8% 9% 11%;
+  border: 1px solid color-mix(in srgb, var(--foil) 70%, transparent);
+  border-radius: 2px;
+  padding: 14px 12px;
+  display:flex; flex-direction:column;
+  color: var(--foil);
+  text-shadow: 0 1px 0 rgba(0,0,0,.45);
+  font-family: 'Inter', sans-serif;
+}
+.book-3d__eyebrow { font-size: 9px; letter-spacing: .28em; text-transform: uppercase; opacity:.9; }
+.book-3d__title {
+  margin-top: 12px; font-size: 17px; line-height: 1.18; font-weight: 700;
+  letter-spacing: .01em;
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;
+}
+.book-3d__rule { margin-top:auto; height:1px; background: currentColor; opacity:.7; }
+.book-3d__author { margin-top: 8px; font-size: 10px; letter-spacing:.22em; text-transform:uppercase; opacity:.9; }
+`;
+
+
 
 async function fileToText(file: File): Promise<string> {
   const name = file.name.toLowerCase();
@@ -203,6 +275,7 @@ export default function OwnerBooks() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
+      <style>{BOOK_3D_CSS}</style>
       <div className="container mx-auto px-6 py-10 max-w-6xl">
         <div className="flex items-end justify-between mb-8 gap-4 flex-wrap">
           <div>
@@ -257,20 +330,31 @@ export default function OwnerBooks() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {visible.map((b) => (
-              <div
-                key={b.id}
-                className="rounded-2xl border border-[#B89555]/25 bg-[#F7F2EA] p-4 flex flex-col gap-3"
-                data-gold-hairline
-              >
-                <div className="aspect-[5/7] rounded-lg bg-[#FBF6EC] border border-[#B89555]/30 flex items-end p-4">
-                  <div>
-                    <div className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/60 mb-1">
-                      Book {b.book_number}
-                    </div>
-                    <div className="text-base font-semibold text-[#1A1A1A] line-clamp-3">
-                      {b.title}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 pt-4">
+            {visible.map((b, i) => {
+              const palette = BOOK_PALETTES[i % BOOK_PALETTES.length];
+              return (
+              <div key={b.id} className="flex flex-col gap-3">
+                <div className="book-3d-wrap">
+                  <div
+                    className="book-3d"
+                    style={{
+                      ['--spine' as any]: palette.spine,
+                      ['--cover' as any]: palette.cover,
+                      ['--cover2' as any]: palette.cover2,
+                      ['--foil' as any]: palette.foil,
+                    }}
+                  >
+                    <div className="book-3d__pages" />
+                    <div className="book-3d__cover">
+                      <div className="book-3d__frame">
+                        <div className="book-3d__eyebrow">JBJ · Vol {b.book_number}</div>
+                        <div className="book-3d__title">{b.title}</div>
+                        <div className="book-3d__rule" />
+                        <div className="book-3d__author">JBJ Global</div>
+                      </div>
+                      <div className="book-3d__spineEdge" />
+                      <div className="book-3d__gloss" />
                     </div>
                   </div>
                 </div>
@@ -327,7 +411,7 @@ export default function OwnerBooks() {
                   )}
                 </div>
               </div>
-            ))}
+            );})}
           </div>
         )}
       </div>
