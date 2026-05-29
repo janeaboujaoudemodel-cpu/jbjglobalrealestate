@@ -52,6 +52,7 @@ export default function AIBrokerWorkspace() {
   const [stats, setStats] = useState<WeekStats>({ leads: 0, messages: 0, emails: 0, calls: 0, conversions: 0 });
 
   const [turns, setTurns] = useState<ChatTurn[]>([]);
+  const [generalTurns, setGeneralTurns] = useState<ChatTurn[]>([]);
   const [chatLoading, setChatLoading] = useState(false);
   const [insights, setInsights] = useState<{ score?: number; reason?: string; matches?: Match[]; next?: string }>({});
 
@@ -77,7 +78,9 @@ export default function AIBrokerWorkspace() {
       const { data: leadRows } = await q;
       const ls = (leadRows ?? []) as Lead[];
       setLeads(ls);
-      if (ls.length && !selectedId) setSelectedId(ls[0].id);
+      // Do NOT auto-select a lead — the assistant now supports general Q&A
+      // without a lead in context. The broker explicitly clicks a lead to
+      // switch into per-lead mode.
 
       // Weekly stats (best-effort)
       try {
@@ -144,33 +147,27 @@ export default function AIBrokerWorkspace() {
   };
 
   const handleSend = async (message: string, mode = "freeform") => {
-    let activeId = selectedId;
-    if (!activeId) {
-      if (leads.length > 0) {
-        activeId = leads[0].id;
-        setSelectedId(activeId);
-      } else {
-        toast.info("You don't have any leads yet. Add a lead first so the assistant can help you with them.");
-        return;
-      }
-    }
+    const activeId = selectedId; // may be null → general Q&A mode
+    const setActive = activeId ? setTurns : setGeneralTurns;
     const tempUserId = `u-${Date.now()}`;
-    setTurns(t => [...t, { id: tempUserId, role: "user", content: message }]);
+    setActive(t => [...t, { id: tempUserId, role: "user", content: message }]);
     setChatLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("broker-ai-assistant", {
-        body: { leadId: activeId, message, mode },
+        body: { leadId: activeId ?? null, message, mode },
       });
       if (error) throw error;
       const s = data?.structured;
       if (!s) throw new Error("No structured reply");
-      setTurns(t => [...t, {
+      setActive(t => [...t, {
         id: `a-${Date.now()}`,
         role: "assistant",
         content: s.reply || "",
         draft_message: s.draft_message,
       }]);
-      setInsights({ score: s.score, reason: s.score_reason, matches: s.matches, next: s.next_step });
+      if (activeId) {
+        setInsights({ score: s.score, reason: s.score_reason, matches: s.matches, next: s.next_step });
+      }
     } catch (e: any) {
       console.error(e);
       const msg = e?.message?.includes("Rate limit") ? "Rate limit — try again shortly."
@@ -289,13 +286,15 @@ export default function AIBrokerWorkspace() {
               </div>
             )}
             <AssistantChat
-              turns={turns}
+              turns={selectedId ? turns : generalTurns}
               loading={chatLoading}
               onSend={handleSend}
               leadName={selected?.full_name}
               leadPhone={selected?.phone_e164}
               leadWhatsapp={selected?.whatsapp_e164}
-              disabled={!selectedId}
+              disabled={false}
+              hasLead={!!selectedId}
+              onClearLead={selectedId ? () => setSelectedId(null) : undefined}
             />
           </div>
 
