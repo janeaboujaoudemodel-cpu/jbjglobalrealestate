@@ -297,7 +297,7 @@ export default function BrokerDashboardLanding() {
           <Kpi icon={Handshake}       tone="emerald" label="Active deals"         value={activeDeals}    to="/broker/deals"        loading={leads.isLoading} />
           <Kpi icon={Calendar}        tone="amber"   label="Meetings today"       value={meetingsToday}  to="/broker/calendar"     loading={cal.isLoading} />
           <Kpi icon={Sparkles}        tone="purple"  label="New assignments"      value={newAssignments} to="/broker/leads"        loading={leads.isLoading} />
-          <Kpi icon={BadgeDollarSign} tone="gold"    label="Commission pipeline"  value="—"              to="/broker/commissions"  />
+          <Kpi icon={BadgeDollarSign} tone="gold"    label="Commission pipeline"  value="—"              to="/broker/deals"        />
           <Kpi icon={ListTodo}        tone="rose"    label="Pending follow-ups"   value={followUps}      to="/broker/tasks"        loading={tasks.isLoading} />
         </div>
       </div>
