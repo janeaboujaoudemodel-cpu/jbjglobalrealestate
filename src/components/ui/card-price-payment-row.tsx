@@ -141,6 +141,10 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
   const summary = formatPaymentPlanSummary(project);
   const breakdown = getBreakdownRows(project);
   const hasPlan = Boolean(summary);
+  const handoverRaw = deriveHandover(project as any);
+  const handoverLabel = formatHandoverDisplay(handoverRaw) ?? HANDOVER_FALLBACK;
+  const isReady = /^ready$/i.test(handoverLabel);
+
 
   return (
     <div
