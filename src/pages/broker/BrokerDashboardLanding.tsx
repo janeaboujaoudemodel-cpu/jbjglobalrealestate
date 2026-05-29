@@ -144,42 +144,43 @@ export default function BrokerDashboardLanding() {
 
   return (
     <div className="space-y-6 md:space-y-8">
-      {/* Welcome strip */}
-      <PremiumCard>
-        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 justify-between">
-          <div className="flex items-center gap-4">
-            <div className="h-14 w-14 rounded-full bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center overflow-hidden">
+      {/* Welcome strip — refined editorial header */}
+      <div className="relative overflow-hidden rounded-2xl border border-[#B89555]/30 bg-gradient-to-br from-[#F7F2EA] via-[#F7F2EA] to-[#EFE6D6] shadow-sm shadow-[#B89555]/10">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+        <div className="relative p-5 md:p-7 flex flex-col md:flex-row md:items-center gap-5 md:gap-8 justify-between">
+          <div className="flex items-center gap-4 md:gap-5 min-w-0">
+            <div className="h-14 w-14 md:h-16 md:w-16 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 grid place-items-center overflow-hidden shadow-sm shadow-[#B89555]/15 shrink-0">
               {profile?.photo_url ? (
                 <img src={profile.photo_url} alt="" className="h-full w-full object-cover" />
               ) : (
-                <span className="text-base font-semibold text-[#1A1A1A]">
+                <span className="text-lg font-display font-semibold text-[#1A1A1A]">
                   {firstName.charAt(0).toUpperCase()}
                 </span>
               )}
             </div>
             <div className="min-w-0">
-              <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">
+              <div className="text-[10px] uppercase tracking-[0.24em] text-[#1A1A1A]/55 font-medium">
                 Welcome back
               </div>
-              <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] truncate">
+              <h1 className="font-display text-[26px] md:text-4xl font-semibold text-[#1A1A1A] truncate leading-tight tracking-tight mt-0.5">
                 {profileLoading ? "…" : firstName}
               </h1>
-              <div className="flex items-center gap-2 mt-1 flex-wrap">
+              <div className="flex items-center gap-2 mt-1.5 flex-wrap">
                 {profile?.title && (
-                  <span className="text-xs text-[#1A1A1A]/65">{profile.title}</span>
+                  <span className="text-xs text-[#1A1A1A]/70">{profile.title}</span>
                 )}
                 {profile?.current_tier && (
-                  <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.16em] px-2 py-0.5 rounded-md bg-[#EFE6D6] border border-[#B89555]/35 text-[#1A1A1A]">
+                  <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.16em] px-2 py-0.5 rounded-md bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] font-medium">
                     {profile.current_tier}
                   </span>
                 )}
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <Link
               to="/broker/leads"
-              className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-[#102540] text-white text-sm font-medium hover:bg-[#1a3d63] transition-colors"
+              className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-[#102540] text-white text-sm font-medium hover:bg-[#1a3d63] transition-colors shadow-sm"
               data-allow-dark-cta
             >
               <Plus className="h-4 w-4" /> Add lead
@@ -187,23 +188,24 @@ export default function BrokerDashboardLanding() {
             <button
               type="button"
               onClick={() => setCallDialogOpen(true)}
-              className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] text-sm font-medium hover:bg-[#EFE6D6] transition-colors"
+              className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-[#FDFBF7] border border-[#B89555]/45 text-[#1A1A1A] text-sm font-medium hover:bg-[#EFE6D6] transition-colors"
             >
               <Phone className="h-4 w-4" /> Log a call
             </button>
           </div>
         </div>
-      </PremiumCard>
-
-      {/* KPI tiles */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-        <Kpi icon={Users}           label="Total leads"          value={totalLeads}     to="/broker/leads"        loading={leads.isLoading} />
-        <Kpi icon={Handshake}       label="Active deals"         value={activeDeals}    to="/broker/deals"        loading={leads.isLoading} />
-        <Kpi icon={Calendar}        label="Meetings today"       value={meetingsToday}  to="/broker/calendar"     loading={cal.isLoading} />
-        <Kpi icon={Sparkles}        label="New assignments"      value={newAssignments} to="/broker/leads"        loading={leads.isLoading} />
-        <Kpi icon={BadgeDollarSign} label="Commission pipeline"  value="—"              to="/broker/commissions"  />
-        <Kpi icon={ListTodo}        label="Pending follow-ups"   value={followUps}      to="/broker/tasks"        loading={tasks.isLoading} />
       </div>
+
+      {/* KPI tiles — semantic icon tones for visual hierarchy */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+        <Kpi icon={Users}           tone="blue"    label="Total leads"          value={totalLeads}     to="/broker/leads"        loading={leads.isLoading} />
+        <Kpi icon={Handshake}       tone="emerald" label="Active deals"         value={activeDeals}    to="/broker/deals"        loading={leads.isLoading} />
+        <Kpi icon={Calendar}        tone="amber"   label="Meetings today"       value={meetingsToday}  to="/broker/calendar"     loading={cal.isLoading} />
+        <Kpi icon={Sparkles}        tone="purple"  label="New assignments"      value={newAssignments} to="/broker/leads"        loading={leads.isLoading} />
+        <Kpi icon={BadgeDollarSign} tone="gold"    label="Commission pipeline"  value="—"              to="/broker/commissions"  />
+        <Kpi icon={ListTodo}        tone="rose"    label="Pending follow-ups"   value={followUps}      to="/broker/tasks"        loading={tasks.isLoading} />
+      </div>
+
 
       {/* Activity + Smart actions */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 md:gap-6">
