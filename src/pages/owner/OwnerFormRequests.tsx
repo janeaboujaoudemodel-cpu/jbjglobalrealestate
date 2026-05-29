@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { FilePen, CheckCircle2, XCircle, Clock, Upload } from "lucide-react";
+import { FilePen, CheckCircle2, XCircle, Clock, Upload, Paperclip, Download, User as UserIcon } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from "@/components/ui/dialog";
