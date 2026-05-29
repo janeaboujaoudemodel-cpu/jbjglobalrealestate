@@ -577,15 +577,18 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 aria-haspopup="dialog"
                 disabled={disabled}
                 data-phone-code-trigger
-                className={cn("w-full sm:w-[160px] h-12 inline-flex items-center justify-between shrink-0 rounded-lg px-3 transition-colors", buttonStyles)}
-                data-no-contrast-guard={isCareersPhoneInput ? true : undefined}
-                style={isCareersPhoneInput ? { backgroundColor: "#102540", border: "2px solid #102540", color: "#FFFFFF", boxShadow: "none" } : undefined}
+                className={cn("w-full sm:w-[160px] h-12 inline-flex items-center justify-between shrink-0 rounded-lg px-3 transition-colors allow-white", buttonStyles)}
+                data-no-contrast-guard
+                data-allow-dark-cta
+                style={isCareersPhoneInput
+                  ? { backgroundColor: "#102540", border: "2px solid #102540", color: "#FFFFFF", boxShadow: "none" }
+                  : isLight ? undefined : { backgroundColor: "#1A1A1A", color: "#FFFFFF" }}
               >
-                <span className="flex items-center gap-2 truncate">
+                <span className="flex items-center gap-2 truncate" style={isLight ? undefined : { color: "#FFFFFF" }}>
                   <span className="text-xl">{currentCountry.flag}</span>
-                  <span className="font-medium">{currentCode}</span>
+                  <span className="font-medium" style={isLight ? undefined : { color: "#FFFFFF" }}>{currentCode}</span>
                 </span>
-                <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-100" style={{ color: isCareersPhoneInput ? "#FFFFFF" : undefined, stroke: isCareersPhoneInput ? "#FFFFFF" : undefined }} />
+                <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-100" style={isLight ? undefined : { color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </button>
             </PopoverTrigger>
             <PopoverContent 
@@ -598,12 +601,15 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               data-no-contrast-guard
               style={{ backgroundColor: "#F7F2EA", border: "1px solid rgba(184,149,85,0.4)" }}
             >
-              <Command className={commandStyles} data-no-contrast-guard>
-                <CommandInput 
-                  placeholder="Search country name or code..." 
-                  className={cn("h-12 text-base", commandInputStyles)}
-                  style={{ color: "#1A1A1A", backgroundColor: "transparent" }}
-                />
+              <Command className={commandStyles} data-no-contrast-guard style={{ backgroundColor: "transparent" }}>
+                <div style={{ backgroundColor: "transparent" }}>
+                  <CommandInput 
+                    placeholder="Search country name or code..." 
+                    className={cn("h-12 text-base !bg-transparent", commandInputStyles)}
+                    style={{ color: "#1A1A1A", backgroundColor: "transparent" }}
+                  />
+                </div>
+
                 <CommandList className="max-h-[350px] overflow-y-auto overscroll-contain" data-no-contrast-guard>
                   <CommandEmpty className={cn("text-sm py-6 text-center", commandEmptyStyles)}>
                     No country found. Try searching by name or code.
