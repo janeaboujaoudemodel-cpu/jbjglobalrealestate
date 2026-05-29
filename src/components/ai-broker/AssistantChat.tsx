@@ -109,13 +109,13 @@ export default function AssistantChat({ turns, loading, onSend, leadName, leadPh
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={disabled ? "Pick a lead to start chatting" : "Ask the assistant…"}
-            disabled={disabled || loading}
+            placeholder={disabled ? "Pick a lead on the left, then ask the assistant…" : "Ask the assistant…"}
+            disabled={loading}
             className="flex-1 h-10 px-3 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:border-[#B89555]"
           />
           <button
             type="submit"
-            disabled={disabled || loading || !input.trim()}
+            disabled={loading || !input.trim()}
             data-allow-dark-cta
             className="h-10 px-4 rounded-lg bg-[#102540] text-white text-sm font-semibold hover:bg-[#1a3d63] disabled:opacity-50 inline-flex items-center gap-1.5"
           >
