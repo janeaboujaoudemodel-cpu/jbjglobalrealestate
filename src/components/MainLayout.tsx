@@ -105,6 +105,15 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const [isChatCollapsed, setIsChatCollapsed] = useState(true);
   const [layoutGuardTriggered, setLayoutGuardTriggered] = useState(false);
 
+  useEffect(() => {
+    const closeTourForWebDeveloper = () => {
+      completeTour();
+      setShowTour(false);
+    };
+    window.addEventListener("jbj:webdev-open", closeTourForWebDeveloper);
+    return () => window.removeEventListener("jbj:webdev-open", closeTourForWebDeveloper);
+  }, [completeTour, setShowTour]);
+
   // Mobile: always keep chat minimized
   useEffect(() => {
     if (isMobile) {
