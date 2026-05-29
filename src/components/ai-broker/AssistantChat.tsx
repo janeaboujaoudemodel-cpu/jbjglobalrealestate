@@ -51,7 +51,7 @@ export default function AssistantChat({ turns, loading, onSend, leadName, leadPh
   const quick = hasLead ? QUICK_LEAD : QUICK_GENERAL;
 
   return (
-    <div className="flex-1 flex flex-col border border-[#B89555]/30 rounded-2xl bg-[#FDFBF7] overflow-hidden min-h-[560px]">
+    <div className="flex-1 flex flex-col border border-[#B89555]/30 rounded-2xl bg-[#FDFBF7] text-[#1A1A1A] overflow-hidden min-h-[560px]">
       {hasLead && leadName && (
         <div className="px-4 py-2 border-b border-[#B89555]/20 bg-[#F7F2EA] flex items-center justify-between gap-3">
           <div className="text-[11px] text-[#1A1A1A]/70 truncate">
@@ -90,7 +90,7 @@ export default function AssistantChat({ turns, loading, onSend, leadName, leadPh
           <div key={t.id} className={`flex ${t.role === "user" ? "justify-end" : "justify-start"}`}>
             <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm ${
               t.role === "user"
-                ? "bg-[#102540] text-white"
+                ? "bg-[#102540] text-white allow-white"
                 : "bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/25"
             }`}>
               <div className="whitespace-pre-wrap leading-relaxed">{t.content}</div>
@@ -124,7 +124,7 @@ export default function AssistantChat({ turns, loading, onSend, leadName, leadPh
               key={q.label}
               onClick={() => submit(q.prompt, q.mode)}
               disabled={loading}
-              className="text-[11px] px-2.5 py-1 rounded-md border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-50"
+              className="text-[11px] px-2.5 py-1 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-50"
             >
               {q.label}
             </button>
@@ -147,7 +147,7 @@ export default function AssistantChat({ turns, loading, onSend, leadName, leadPh
             type="submit"
             disabled={loading || !input.trim()}
             data-allow-dark-cta
-            className="h-10 px-4 rounded-lg bg-[#102540] text-white text-sm font-semibold hover:bg-[#1a3d63] disabled:opacity-50 inline-flex items-center gap-1.5"
+            className="h-10 px-4 rounded-lg bg-[#102540] text-white allow-white text-sm font-semibold hover:bg-[#1a3d63] disabled:opacity-50 inline-flex items-center gap-1.5"
           >
             <Send className="h-4 w-4" /> Send
           </button>

@@ -35,18 +35,11 @@ export function BrandedLoader({ text = "Loading...", className = "", variant = "
             filter: variant === 'light' 
               ? 'drop-shadow(0 0 24px rgba(0,0,0,0.3))'
               : 'drop-shadow(0 0 24px rgba(200,167,102,0.5))',
-            animation: "goldFill 2s ease-in-out infinite",
           }}
         />
-        <style>{`
-          @keyframes goldFill {
-            0%, 100% { opacity: 0.7; filter: ${variant === 'light' ? 'drop-shadow(0 0 16px rgba(0,0,0,0.2))' : 'drop-shadow(0 0 16px rgba(200,167,102,0.3))'}; }
-            50% { opacity: 1; filter: ${variant === 'light' ? 'drop-shadow(0 0 32px rgba(0,0,0,0.4))' : 'drop-shadow(0 0 32px rgba(200,167,102,0.7))'}; }
-          }
-        `}</style>
       </div>
       <span
-        className={`text-xs tracking-[0.25em] uppercase animate-pulse ${variant === 'light' ? 'text-[#1A1A1A]/60' : 'text-[#1A1A1A]/70'}`}
+        className={`text-xs tracking-[0.25em] uppercase font-semibold ${variant === 'light' ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]'}`}
       >
         {text}
       </span>
@@ -64,7 +57,7 @@ export function BrandedLoaderInline({ size = 24, className = "", variant = "dark
     <img
       src={logo}
       alt="Loading"
-      className={`object-contain animate-pulse ${className}`}
+      className={`object-contain ${className}`}
       style={{ 
         width: size, 
         height: size, 

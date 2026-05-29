@@ -41,7 +41,7 @@ const KPI_CARDS: Array<{
 export default function AIBrokerWorkspace() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const { isOwner } = useUserRole();
+  const { isOwner, isLoading: roleLoading } = useUserRole();
 
   const [leads, setLeads] = useState<Lead[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -60,7 +60,7 @@ export default function AIBrokerWorkspace() {
     if (!authLoading && !user) navigate("/auth?redirect=/broker/ai");
   }, [user, authLoading, navigate]);
 
-  useEffect(() => { if (user) bootstrap(); /* eslint-disable-next-line */ }, [user, isOwner]);
+  useEffect(() => { if (user && !roleLoading) bootstrap(); /* eslint-disable-next-line */ }, [user, roleLoading, isOwner]);
   useEffect(() => { if (selectedId) loadChat(selectedId); }, [selectedId]);
 
   const bootstrap = async () => {
@@ -205,12 +205,12 @@ export default function AIBrokerWorkspace() {
 
   const selected = leads.find(l => l.id === selectedId) || null;
 
-  if (authLoading || loading) {
-    return <BrandedLoader variant="light" text="Loading JBJ Sales Assistant…" className="min-h-screen" />;
+  if (authLoading || roleLoading || loading) {
+    return <BrandedLoader variant="light" text="Loading JBJ Sales Assistant…" className="min-h-dvh bg-[#F7F2EA]" />;
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F2EA]" data-no-contrast-guard>
+    <div className="min-h-dvh bg-[#F7F2EA]">
       <header className="bg-[#FDFBF7] border-b border-[#B89555]/30 sticky top-0 z-20">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <div className="min-w-0">
