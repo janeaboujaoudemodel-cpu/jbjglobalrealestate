@@ -66,7 +66,8 @@ const toNum = (v: unknown): number | null => {
   return Number.isFinite(n) && n > 0 ? n : null;
 };
 
-const DEFAULT_LABELS = ["Down payment", "During construction", "After completion"];
+const DEFAULT_LABELS = ["Down payment", "During construction", "On completion"];
+const SUMMARY_LABELS = ["During construction", "On completion"];
 
 function getBreakdownRows(
   project: CardPricePaymentRowProps["project"],
@@ -95,8 +96,24 @@ function getBreakdownRows(
     const parts: { label: string; value: string }[] = [];
     if (dp !== null) parts.push({ label: "Down payment", value: `${Math.round(dp)}%` });
     if (dc !== null) parts.push({ label: "During construction", value: `${Math.round(dc)}%` });
-    if (oc !== null) parts.push({ label: "After completion", value: `${Math.round(oc)}%` });
+    if (oc !== null) parts.push({ label: "On completion", value: `${Math.round(oc)}%` });
     if (parts.length >= 2) return parts;
+  }
+
+  const planStr = project.payment_plan ? String(project.payment_plan).trim() : "";
+  if (planStr) {
+    const tokens = planStr.split(/[/|+\-–—]/).map((t) => t.trim()).filter(Boolean);
+    const nums = tokens
+      .map((t) => Number(t.replace(/[^\d.]/g, "")))
+      .filter((n) => Number.isFinite(n) && n > 0);
+    const total = nums.reduce((sum, n) => sum + n, 0);
+    if (tokens.length === nums.length && nums.length >= 2 && total >= 95 && total <= 105) {
+      const labels = nums.length === 2 ? SUMMARY_LABELS : DEFAULT_LABELS;
+      return nums.map((n, i) => ({
+        label: labels[i] ?? `Stage ${i + 1}`,
+        value: `${Math.round(n)}%`,
+      }));
+    }
   }
 
   // Fallback: derive from summary string ("20 / 80", "10 / 50 / 40")
@@ -104,8 +121,9 @@ function getBreakdownRows(
   if (summary) {
     const pcts = summary.split("/").map((s) => s.trim());
     if (pcts.length >= 2) {
+      const labels = pcts.length === 2 ? SUMMARY_LABELS : DEFAULT_LABELS;
       return pcts.map((v, i) => ({
-        label: DEFAULT_LABELS[i] ?? `Stage ${i + 1}`,
+        label: labels[i] ?? `Stage ${i + 1}`,
         value: v.endsWith("%") ? v : `${v}%`,
       }));
     }
