@@ -261,12 +261,14 @@ export default function WebDevDock() {
   return (
     <div
       className="fixed bottom-6 right-6 z-[12000] flex flex-col items-end gap-3 isolate pointer-events-none"
+      data-owner-webdev-dock
       data-no-contrast-guard
     >
       {open && (
         <div
           ref={panelRef}
           className="pointer-events-auto w-[min(420px,calc(100vw-2rem))] h-[min(640px,calc(100vh-3rem))] bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          data-owner-webdev-dock
           data-gold-hairline
           data-no-contrast-guard
         >
@@ -460,6 +462,7 @@ export default function WebDevDock() {
         <button
           onClick={openDock}
           className="pointer-events-auto inline-flex items-center gap-2 h-12 min-w-[178px] px-5 rounded-full bg-[#102540] text-white shadow-lg border border-[#B89555]/40 allow-white hover:bg-[#1a3d63] transition-colors leading-none whitespace-nowrap"
+          data-owner-webdev-dock
           data-no-contrast-guard
           data-allow-dark-cta
         >
