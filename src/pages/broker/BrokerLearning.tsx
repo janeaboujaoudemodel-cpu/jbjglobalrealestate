@@ -157,7 +157,9 @@ export default function BrokerLearning() {
     TRAINING.reduce((acc, m) => acc + (moduleProgress[m.id] ?? m.progress ?? 0), 0) /
     TRAINING.length;
   const allModulesComplete =
+    eduSummary.is_certified ||
     TRAINING.every((m) => (moduleProgress[m.id] ?? m.progress ?? 0) >= 100);
+
   const certificatesEarned = TRAINING.filter(
     (m) => (moduleProgress[m.id] ?? m.progress ?? 0) >= 100,
   ).length;
