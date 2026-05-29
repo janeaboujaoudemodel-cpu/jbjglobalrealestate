@@ -53,7 +53,13 @@ interface Verification {
 
 const ListingPortalMyListings = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
+  const { isOwner } = useIsAppOwner();
+  const embeddedInBrokerPortal = location.pathname.startsWith('/broker');
+  // Owner viewing inside the broker portal sees ALL broker submissions
+  // (so they can review pending/approved listings across the network).
+  const ownerOverview = embeddedInBrokerPortal && isOwner;
   const [listings, setListings] = useState<MyListing[]>([]);
   const [deletedListings, setDeletedListings] = useState<MyListing[]>([]);
   const [points, setPoints] = useState<PointsData | null>(null);
@@ -70,12 +76,17 @@ const ListingPortalMyListings = () => {
 
   useEffect(() => {
     if (user?.id) fetchAll();
-  }, [user?.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, ownerOverview]);
 
   const fetchAll = async () => {
     setLoading(true);
+    const listingsQuery = ownerOverview
+      ? supabase.from('portal_listings').select('*').order('created_at', { ascending: false }).limit(500)
+      : supabase.from('portal_listings').select('*').eq('user_id', user!.id).order('created_at', { ascending: false });
+
     const [listingsRes, pointsRes, verRes] = await Promise.all([
-      supabase.from('portal_listings').select('*').eq('user_id', user!.id).order('created_at', { ascending: false }),
+      listingsQuery,
       supabase.from('portal_points').select('*').eq('user_id', user!.id).single(),
       supabase.from('broker_verifications').select('*').eq('user_id', user!.id).single(),
     ]);
@@ -96,6 +107,7 @@ const ListingPortalMyListings = () => {
     if (verRes.data) setVerification(verRes.data as Verification);
     setLoading(false);
   };
+
 
   const handleDeleteClick = (id: string) => {
     setListingToDelete(id);
