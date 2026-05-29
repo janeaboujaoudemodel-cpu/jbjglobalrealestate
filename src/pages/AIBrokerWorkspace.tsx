@@ -95,10 +95,16 @@ export default function AIBrokerWorkspace() {
       // Weekly stats (best-effort)
       try {
         const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-        const { data: weekLeads } = await supabase
+        let wq = supabase
           .from("crm_leads")
           .select("id, pipeline_stage, last_contacted_at, account_status")
+          .is("deleted_at", null)
           .gte("created_at", since);
+        // Scope KPIs to THIS broker's assigned leads only — the broker
+        // portal must never count the owner's personal book or other
+        // brokers' leads.
+        if (user?.id) wq = wq.eq("assigned_broker_id", user.id);
+        const { data: weekLeads } = await wq;
         const wl = weekLeads ?? [];
         setStats({
           leads: wl.length,
