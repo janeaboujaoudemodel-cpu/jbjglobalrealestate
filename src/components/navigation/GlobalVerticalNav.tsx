@@ -1361,9 +1361,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       onClick={() => { supabase.auth.signOut(); }}
                       data-no-contrast-guard
                       data-allow-dark-cta
-                      className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[hsl(0_73%_42%)] bg-[hsl(0_73%_42%)] text-[hsl(var(--primary-foreground))] hover:bg-[hsl(0_73%_36%)] hover:border-[hsl(0_73%_36%)]"
+                      className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] bg-[#FDFBF7] hover:bg-[#EFE6D6]"
                     >
-                      <LogOut className="w-3.5 h-3.5 text-current" strokeWidth={2.25} />
+                      <LogOut className="w-3.5 h-3.5 text-[#B91C1C]" strokeWidth={2.25} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign Out</TooltipContent>
