@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   GraduationCap, BookOpen, Lock, BarChart3, MessageSquare, Shield,
-  CheckCircle, Clock, Play, ChevronRight, Award,
+  CheckCircle, Clock, Play, ChevronRight, ChevronLeft, Award, X, Check,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
 import { Book3DCard, BookDetailModal } from "@/components/broker-education";
+import { CertificatePreview } from "@/components/certification";
+import { BROKER_LESSONS } from "./brokerLessonContent";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Training modules (portal-native, no full-bleed marketing chrome)
