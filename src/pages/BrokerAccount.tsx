@@ -391,26 +391,26 @@ const BrokerAccount = () => {
                   <CardContent>
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="p-3 rounded-lg bg-blue-500/10 text-center">
-                          <Phone className="h-6 w-6 mx-auto text-blue-500 mb-1" />
-                          <p className="text-xl font-bold">{weekCalls}</p>
-                          <p className="text-xs text-muted-foreground">Calls This Week</p>
+                        <div className="p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 text-center">
+                          <Phone className="h-6 w-6 mx-auto text-[#1A1A1A] mb-1" />
+                          <p className="text-xl font-bold text-[#1A1A1A]">{weekCalls}</p>
+                          <p className="text-xs text-[#1A1A1A]/70">Calls This Week</p>
                         </div>
-                        <div className="p-3 rounded-lg bg-green-500/10 text-center">
-                          <MessageCircle className="h-6 w-6 mx-auto text-green-500 mb-1" />
-                          <p className="text-xl font-bold">{weekChats}</p>
-                          <p className="text-xs text-muted-foreground">Chats This Week</p>
+                        <div className="p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 text-center">
+                          <MessageCircle className="h-6 w-6 mx-auto text-[#1A1A1A] mb-1" />
+                          <p className="text-xl font-bold text-[#1A1A1A]">{weekChats}</p>
+                          <p className="text-xs text-[#1A1A1A]/70">Chats This Week</p>
                         </div>
                       </div>
-                      <div className="border-t pt-4">
-                        <h4 className="text-sm font-medium mb-3">Monthly Performance</h4>
+                      <div className="pt-4" data-gold-hairline style={{ borderTop: "1px solid rgba(184,149,85,0.35)" }}>
+                        <h4 className="text-sm font-medium mb-3 text-[#1A1A1A]">Monthly Performance</h4>
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-muted-foreground">Total Calls</span>
-                          <span className="font-medium">{monthCalls}</span>
+                          <span className="text-sm text-[#1A1A1A]/70">Total Calls</span>
+                          <span className="font-medium text-[#1A1A1A]">{monthCalls}</span>
                         </div>
                         <div className="flex items-center justify-between mt-2">
-                          <span className="text-sm text-muted-foreground">Total Chats</span>
-                          <span className="font-medium">{monthChats}</span>
+                          <span className="text-sm text-[#1A1A1A]/70">Total Chats</span>
+                          <span className="font-medium text-[#1A1A1A]">{monthChats}</span>
                         </div>
                       </div>
                       <Button className="w-full" onClick={() => navigate('/crm')}>
