@@ -86,8 +86,6 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
                 clickable && "cursor-pointer hover:-translate-y-0.5",
                 isActive
                   ? "careers-pill-active allow-white data-[allow-dark-cta]:text-white"
-                  : s.done
-                  ? "careers-pill-complete"
                   : "careers-pill-inactive hover:border-[#BFA46A] hover:shadow-[0_14px_22px_-18px_rgba(7,27,51,0.4)]"
               )}
 
