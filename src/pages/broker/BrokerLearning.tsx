@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   GraduationCap, BookOpen, Lock, BarChart3, MessageSquare, Shield,
-  CheckCircle, Clock, Play, ChevronRight, Award,
+  CheckCircle, Clock, Play, ChevronRight, ChevronLeft, Award, X, Check,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
 import { Book3DCard, BookDetailModal } from "@/components/broker-education";
+import { CertificatePreview } from "@/components/certification";
+import { BROKER_LESSONS } from "./brokerLessonContent";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Training modules (portal-native, no full-bleed marketing chrome)
@@ -110,6 +112,17 @@ export default function BrokerLearning() {
   const { books, loading, progressMap } = useBrokerEducation();
   const [selectedBook, setSelectedBook] = useState<EducationBook | null>(null);
   const [activeModule, setActiveModule] = useState<TModule | null>(null);
+  const [lessonIndex, setLessonIndex] = useState(0);
+  const [moduleProgress, setModuleProgress] = useState<Record<string, number>>({});
+
+  const openModule = (m: TModule) => {
+    setActiveModule(m);
+    setLessonIndex(0);
+  };
+  const closeModule = () => {
+    setActiveModule(null);
+    setLessonIndex(0);
+  };
 
   const groupedBooks = useMemo(() => {
     const byPath = new Map<string, EducationBook[]>();
@@ -137,7 +150,13 @@ export default function BrokerLearning() {
   }, [books]);
 
   const totalProgress =
-    TRAINING.reduce((acc, m) => acc + (m.progress || 0), 0) / TRAINING.length;
+    TRAINING.reduce((acc, m) => acc + (moduleProgress[m.id] ?? m.progress ?? 0), 0) /
+    TRAINING.length;
+  const allModulesComplete =
+    TRAINING.every((m) => (moduleProgress[m.id] ?? m.progress ?? 0) >= 100);
+  const certificatesEarned = TRAINING.filter(
+    (m) => (moduleProgress[m.id] ?? m.progress ?? 0) >= 100,
+  ).length;
 
   return (
     <div className="w-full bg-[#FDFBF7]">
@@ -147,7 +166,7 @@ export default function BrokerLearning() {
         noIndex
       />
 
-        <div className="w-full px-1 lg:px-2 py-2 flex flex-col gap-14">
+        <div className="w-full px-4 lg:px-8 pt-6 pb-16 flex flex-col gap-14">
         {/* ── Header ───────────────────────────────────────────────── */}
         <motion.header
           initial={{ opacity: 0, y: 10 }}
@@ -184,7 +203,13 @@ export default function BrokerLearning() {
             <LockedTraining hasUser={!!user} />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {TRAINING.map((m) => <TrainingCard key={m.id} m={m} onStart={() => setActiveModule(m)} />)}
+              {TRAINING.map((m) => (
+                <TrainingCard
+                  key={m.id}
+                  m={{ ...m, progress: moduleProgress[m.id] ?? m.progress }}
+                  onStart={() => openModule(m)}
+                />
+              ))}
             </div>
           )}
         </section>
@@ -267,8 +292,10 @@ export default function BrokerLearning() {
         </section>
 
         {/* ── Certificates & Progress ──────────────────────────────── */}
-        <section className="flex flex-col gap-6">
+        <section className="flex flex-col gap-6 pb-2">
           <SectionTitle eyebrow="Your Record" title="Certificates & Progress" />
+
+          {/* Top row — KPI tiles */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-6" data-gold-hairline>
               <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
@@ -278,7 +305,7 @@ export default function BrokerLearning() {
                 Certificates earned
               </div>
               <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">
-                {TRAINING.filter((m) => (m.progress || 0) >= 100).length}
+                {certificatesEarned}
               </div>
               <p className="mt-1 text-xs text-[#1A1A1A]/60">
                 Complete every lesson in a module to earn its certificate. Certificates appear here automatically and can be downloaded from your Account.
@@ -312,6 +339,21 @@ export default function BrokerLearning() {
               </p>
             </div>
           </div>
+
+          {/* Certificate panel — locked until all training modules complete */}
+          <div className="relative">
+            {!allModulesComplete && (
+              <span
+                className="pointer-events-none absolute top-3 right-3 z-20 grid place-items-center w-9 h-9 rounded-full bg-[#FDFBF7] border border-[#B89555]/55 shadow-[0_2px_8px_rgba(184,149,85,0.25)]"
+                data-no-contrast-guard
+                aria-label="Certificate locked"
+                title="Complete every training module to unlock your certificate"
+              >
+                <Lock className="w-4 h-4" style={{ color: "#B89555" }} strokeWidth={2.2} />
+              </span>
+            )}
+            <CertificatePreview isLocked={!allModulesComplete} />
+          </div>
         </section>
 
 
@@ -321,51 +363,146 @@ export default function BrokerLearning() {
           onClose={() => setSelectedBook(null)}
         />
 
-        <Dialog open={!!activeModule} onOpenChange={(o) => !o && setActiveModule(null)}>
-          <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/40">
-            {activeModule && (
-              <>
-                <DialogHeader>
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-12 h-12 rounded-xl bg-[#102540] grid place-items-center text-white border border-[#B89555]/70" data-allow-dark-cta data-no-contrast-guard>
-                      {activeModule.icon}
-                    </div>
-                    <div className="min-w-0">
-                      <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/50 font-semibold mb-2">{CAT_LABEL[activeModule.category]}</Badge>
-                      <DialogTitle className="text-xl text-[#1A1A1A] leading-tight">{activeModule.title}</DialogTitle>
-                      <div className="flex items-center gap-3 mt-2 text-xs text-[#1A1A1A]/70">
-                        <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{activeModule.duration}</span>
-                        <span>{activeModule.lessons} lessons</span>
-                        <span className="flex items-center gap-1"><Award className="w-3 h-3" />+50 pts on completion</span>
+        <Dialog open={!!activeModule} onOpenChange={(o) => !o && closeModule()}>
+          <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/40 max-h-[88vh] overflow-y-auto">
+            {activeModule && (() => {
+              const lessons = BROKER_LESSONS[activeModule.id] ?? [];
+              const total = lessons.length || activeModule.lessons;
+              const safeIndex = Math.min(lessonIndex, Math.max(total - 1, 0));
+              const lesson = lessons[safeIndex];
+              const isLast = safeIndex >= total - 1;
+              const pct = total > 0 ? Math.round(((safeIndex + 1) / total) * 100) : 0;
+              return (
+                <>
+                  <DialogHeader>
+                    <div className="flex items-start gap-3">
+                      <div
+                        className="shrink-0 w-12 h-12 rounded-xl bg-[#102540] grid place-items-center text-white border border-[#B89555]/70"
+                        data-allow-dark-cta
+                        data-no-contrast-guard
+                      >
+                        {activeModule.icon}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/50 font-semibold mb-2">
+                          {CAT_LABEL[activeModule.category]}
+                        </Badge>
+                        <DialogTitle className="text-xl text-[#1A1A1A] leading-tight">
+                          {activeModule.title}
+                        </DialogTitle>
+                        <div className="flex items-center gap-3 mt-2 text-xs text-[#1A1A1A]/70 flex-wrap">
+                          <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{activeModule.duration}</span>
+                          <span>{total} lessons</span>
+                          <span className="flex items-center gap-1"><Award className="w-3 h-3" />+50 pts on completion</span>
+                        </div>
                       </div>
                     </div>
+                  </DialogHeader>
+
+                  {/* Lesson progress */}
+                  <div className="mt-2">
+                    <div className="flex items-center justify-between text-[11px] text-[#1A1A1A]/65 mb-1.5 uppercase tracking-[0.18em]">
+                      <span>Lesson {safeIndex + 1} of {total}</span>
+                      <span>{pct}%</span>
+                    </div>
+                    <Progress value={pct} className="h-1.5 bg-[#EFE6D6] [&>div]:bg-[#B89555]" />
                   </div>
-                </DialogHeader>
-                <p className="text-sm text-[#1A1A1A]/80 mt-2">{activeModule.description}</p>
-                <div className="rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-4 mt-2">
-                  <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 mb-2">Lesson plan</div>
-                  <ol className="space-y-2">
-                    {activeModule.topics.map((t, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm text-[#1A1A1A]">
-                        <span className="shrink-0 w-6 h-6 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 grid place-items-center text-[11px] font-semibold">{i + 1}</span>
-                        <span>{t}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-                <div className="flex items-center justify-end gap-2 pt-2">
-                  <Button variant="ghost" onClick={() => setActiveModule(null)} className="text-[#1A1A1A]">Close</Button>
-                  <Button
-                    className="bg-[#102540] !text-white hover:bg-[#1a3d63] border border-[#B89555]/70 font-semibold [&_svg]:!text-white"
-                    data-allow-dark-cta
-                    data-no-contrast-guard
-                    onClick={() => setActiveModule(null)}
-                  >
-                    <Play className="w-3 h-3 mr-1" /> Begin first lesson
-                  </Button>
-                </div>
-              </>
-            )}
+
+                  {/* Lesson body */}
+                  {lesson ? (
+                    <div className="mt-4 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-5">
+                      <h3 className="text-[#1A1A1A] font-bold text-base leading-tight">{lesson.title}</h3>
+                      <p className="text-sm text-[#1A1A1A]/85 mt-2 leading-relaxed">{lesson.body}</p>
+
+                      {lesson.bullets && lesson.bullets.length > 0 && (
+                        <ul className="mt-3 space-y-1.5">
+                          {lesson.bullets.map((b, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm text-[#1A1A1A]/85">
+                              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#B89555] shrink-0" />
+                              <span>{b}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {lesson.doAndDont && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                          <div className="rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-3">
+                            <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.18em] text-[#1F5132] font-semibold mb-1.5">
+                              <Check className="w-3.5 h-3.5" /> Always
+                            </div>
+                            <ul className="space-y-1 text-xs text-[#1A1A1A]/85">
+                              {lesson.doAndDont.do.map((d, i) => <li key={i}>“{d}”</li>)}
+                            </ul>
+                          </div>
+                          <div className="rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-3">
+                            <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.18em] text-[#7A1F1F] font-semibold mb-1.5">
+                              <X className="w-3.5 h-3.5" /> Never
+                            </div>
+                            <ul className="space-y-1 text-xs text-[#1A1A1A]/85">
+                              {lesson.doAndDont.dont.map((d, i) => <li key={i}>“{d}”</li>)}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-[#1A1A1A]/70 mt-4">
+                      Lesson content for this module is being prepared.
+                    </p>
+                  )}
+
+                  {/* Navigation */}
+                  <div className="flex items-center justify-between gap-2 pt-4">
+                    <Button
+                      variant="ghost"
+                      onClick={closeModule}
+                      className="text-[#1A1A1A]"
+                    >
+                      Close
+                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        onClick={() => setLessonIndex((i) => Math.max(0, i - 1))}
+                        disabled={safeIndex === 0}
+                        className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                      >
+                        <ChevronLeft className="w-3.5 h-3.5 mr-1" /> Previous
+                      </Button>
+                      {!isLast ? (
+                        <button
+                          type="button"
+                          onClick={() => setLessonIndex((i) => i + 1)}
+                          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)]"
+                          data-allow-dark-cta
+                          data-no-contrast-guard
+                          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                        >
+                          <span className="allow-white" style={{ color: "#FFFFFF" }}>Next lesson</span>
+                          <ChevronRight className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setModuleProgress((p) => ({ ...p, [activeModule.id]: 100 }));
+                            closeModule();
+                          }}
+                          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)]"
+                          data-allow-dark-cta
+                          data-no-contrast-guard
+                          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                        >
+                          <CheckCircle className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} />
+                          <span className="allow-white" style={{ color: "#FFFFFF" }}>Mark complete</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </>
+              );
+            })()}
           </DialogContent>
         </Dialog>
       </div>
@@ -444,15 +581,17 @@ function TrainingCard({ m, onStart }: { m: TModule; onStart: () => void }) {
             ))}
             {m.topics.length > 2 && <span className="text-[11px] text-[#1A1A1A]/55">+{m.topics.length - 2} more</span>}
           </div>
-          <Button
-            size="sm"
+          <button
+            type="button"
             onClick={onStart}
-            className="bg-[#102540] !text-white hover:bg-[#1a3d63] border border-[#B89555]/70 font-semibold shadow-[0_4px_12px_rgba(16,37,64,0.25)] [&_svg]:!text-white"
+            className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)]"
             data-allow-dark-cta
             data-no-contrast-guard
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            <Play className="w-3 h-3 mr-1" /> Start
-          </Button>
+            <Play className="w-3 h-3" style={{ color: "#FFFFFF" }} />
+            <span className="allow-white" style={{ color: "#FFFFFF" }}>Start</span>
+          </button>
         </div>
       </CardContent>
     </Card>
