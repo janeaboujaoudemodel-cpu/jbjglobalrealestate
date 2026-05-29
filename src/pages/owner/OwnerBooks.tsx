@@ -23,17 +23,30 @@ type Book = {
   created_at: string;
 };
 
+// Schema uses `is_restricted` (true = draft/locked). We expose this in the UI
+// as `is_published` (the inverse) for clarity.
+type BookRow = {
+  id: string;
+  book_number: number;
+  title: string;
+  description: string | null;
+  is_restricted: boolean | null;
+  ai_generated_chapter_count: number | null;
+  source_file_name: string | null;
+  deleted_at: string | null;
+  created_at: string | null;
+};
+
+
 async function fileToText(file: File): Promise<string> {
   const name = file.name.toLowerCase();
   if (name.endsWith(".txt") || name.endsWith(".md")) {
     return await file.text();
   }
   if (name.endsWith(".pdf")) {
-    // lazy import pdfjs from CDN to avoid bundle bloat
-    const pdfjs: typeof import("pdfjs-dist") = await import(
-      /* @vite-ignore */ "https://esm.sh/pdfjs-dist@4.0.379/build/pdf.mjs"
-    );
-    // @ts-expect-error - worker setup
+    // CDN imports kept as runtime-only strings so TS does not try to resolve them.
+    const pdfUrl = "https://esm.sh/pdfjs-dist@4.0.379/build/pdf.mjs";
+    const pdfjs: any = await import(/* @vite-ignore */ pdfUrl);
     pdfjs.GlobalWorkerOptions.workerSrc =
       "https://esm.sh/pdfjs-dist@4.0.379/build/pdf.worker.mjs";
     const buf = await file.arrayBuffer();
@@ -45,20 +58,19 @@ async function fileToText(file: File): Promise<string> {
       text +=
         "\n\n" +
         content.items
-          .map((it) => ("str" in it ? (it as { str: string }).str : ""))
+          .map((it: any) => ("str" in it ? (it as { str: string }).str : ""))
           .join(" ");
     }
     return text;
   }
   if (name.endsWith(".docx")) {
-    const mammoth = await import(
-      /* @vite-ignore */ "https://esm.sh/mammoth@1.7.0/mammoth.browser.min.js"
-    );
+    const mammothUrl = "https://esm.sh/mammoth@1.7.0/mammoth.browser.min.js";
+    const mammoth: any = await import(/* @vite-ignore */ mammothUrl);
     const buf = await file.arrayBuffer();
-    const result = await (mammoth as { extractRawText: (o: { arrayBuffer: ArrayBuffer }) => Promise<{ value: string }> })
-      .extractRawText({ arrayBuffer: buf });
+    const result = await mammoth.extractRawText({ arrayBuffer: buf });
     return result.value;
   }
+
   if (name.endsWith(".epub")) {
     throw new Error("EPUB parsing is queued — please convert to PDF or DOCX for now.");
   }
@@ -77,12 +89,26 @@ export default function OwnerBooks() {
     const { data } = await supabase
       .from("broker_education_books")
       .select(
-        "id, book_number, title, description, is_published, ai_generated_chapter_count, source_file_name, deleted_at, created_at",
+        "id, book_number, title, description, is_restricted, ai_generated_chapter_count, source_file_name, deleted_at, created_at",
       )
       .order("created_at", { ascending: false });
-    setBooks((data ?? []) as Book[]);
+    const rows = (data ?? []) as unknown as BookRow[];
+    setBooks(
+      rows.map((r) => ({
+        id: r.id,
+        book_number: r.book_number,
+        title: r.title,
+        description: r.description,
+        is_published: !r.is_restricted,
+        ai_generated_chapter_count: r.ai_generated_chapter_count,
+        source_file_name: r.source_file_name,
+        deleted_at: r.deleted_at,
+        created_at: r.created_at ?? "",
+      })),
+    );
     setLoading(false);
   };
+
   useEffect(() => {
     load();
   }, []);
@@ -145,7 +171,7 @@ export default function OwnerBooks() {
   const softDelete = async (id: string) => {
     await supabase
       .from("broker_education_books")
-      .update({ deleted_at: new Date().toISOString(), is_published: false })
+      .update({ deleted_at: new Date().toISOString(), is_restricted: true })
       .eq("id", id);
     await load();
   };
@@ -159,10 +185,11 @@ export default function OwnerBooks() {
   const togglePublish = async (b: Book) => {
     await supabase
       .from("broker_education_books")
-      .update({ is_published: !b.is_published })
+      .update({ is_restricted: b.is_published })
       .eq("id", b.id);
     await load();
   };
+
   const renameInline = async (id: string, title: string) => {
     await supabase
       .from("broker_education_books")
