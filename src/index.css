@@ -4603,10 +4603,35 @@ a[class*="bg-red-"]:hover {
   opacity: 1 !important;
 }
 
+/* LOCKED NAVY CTA: the only approved white-on-color button surface.
+   Used for broker call recording and global dark CTAs. */
+.jj-navy-cta,
+.jj-navy-cta:hover,
+.jj-navy-cta:focus-visible {
+  background: #102540 !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(184, 149, 85, 0.55) !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+.jj-navy-cta:hover {
+  background: #1a3d63 !important;
+}
+
+.jj-navy-cta :where(span, p, svg, [class*="lucide"]),
+.jj-navy-cta:hover :where(span, p, svg, [class*="lucide"]),
+.jj-navy-cta:focus-visible :where(span, p, svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
 /* IDLE state: any button/link with a navy/black own background must
    render white text + white icons at rest. This complements the hover
-   rule above and stops "Stop / Save call log / Start recording" style
-   buttons from inheriting ink-on-ink from the contrast guards. */
+   rule above and stops dark CTAs from inheriting ink-on-ink from guards. */
 :where(a, button, [role="button"]):is(
   [class*="bg-[#102540]"], [class*="bg-[#1a3d63]"],
   [class*="bg-[#1A1A1A]"], [class*="bg-black"]

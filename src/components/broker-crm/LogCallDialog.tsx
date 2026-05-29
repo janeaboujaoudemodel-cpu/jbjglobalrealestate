@@ -2,7 +2,7 @@
 // - searchable lead picker (name / phone / email / nationality / source)
 // - browser microphone recorder
 // - upload of recording, AI transcription + evaluation
-// - auto duration, points awarded by parent
+// - auto duration, no points awarded for call logging
 // Designed to live inside BrokerCRM.tsx as the only call-logging surface.
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -67,8 +67,7 @@ function formatTimer(s: number) {
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
 
-const navyControlClass = "bg-[#102540] !text-white hover:bg-[#1a3d63] hover:!text-white disabled:opacity-100 border border-[#B89555]/55 [&_svg]:!text-white [&_svg]:!stroke-white [&_span]:!text-white [&_span]:[-webkit-text-fill-color:#FFFFFF]";
-const creamControlClass = "border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A] [&_svg]:text-[#1A1A1A]";
+const navyControlClass = "jj-navy-cta inline-flex h-10 items-center justify-center gap-2 rounded-md px-6 py-2 text-sm font-semibold transition-colors disabled:pointer-events-none disabled:opacity-70";
 
 export default function LogCallDialog({
   open, onOpenChange, leads, userId, initialLeadId, submitting, onSubmit, onSaved,
@@ -83,7 +82,7 @@ export default function LogCallDialog({
   const [notes, setNotes] = useState("");
 
   // Recorder state
-  const [recState, setRecState] = useState<"idle" | "recording" | "paused" | "stopped">("idle");
+  const [recState, setRecState] = useState<"idle" | "recording" | "stopped">("idle");
   const [seconds, setSeconds] = useState(0);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [savingRecording, setSavingRecording] = useState(false);
@@ -244,57 +243,6 @@ export default function LogCallDialog({
     }
   };
 
-  const pauseRecording = () => {
-    const recorder = recRef.current;
-    if (!recorder || recorder.state !== "recording") return;
-    try {
-      recorder.pause();
-      if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
-      setRecState("paused");
-    } catch (err) {
-      console.warn("recorder.pause failed", err);
-    }
-  };
-
-  const resumeRecording = () => {
-    const recorder = recRef.current;
-    if (!recorder || recorder.state !== "paused") return;
-    try {
-      recorder.resume();
-      setRecState("recording");
-      timerRef.current = window.setInterval(() => {
-        setSeconds((s) => {
-          const next = s + 1;
-          secondsRef.current = next;
-          return next;
-        });
-      }, 1000) as unknown as number;
-    } catch (err) {
-      console.warn("recorder.resume failed", err);
-    }
-  };
-
-  const discardRecording = () => {
-    if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
-    try {
-      if (recRef.current && recRef.current.state !== "inactive") {
-        recRef.current.onstop = null;
-        recRef.current.stop();
-      }
-    } catch (err) {
-      console.warn("recorder discard stop failed", err);
-    }
-    stopTracks();
-    recRef.current = null;
-    chunksRef.current = [];
-    setAudioBlob(null);
-    setSeconds(0);
-    secondsRef.current = 0;
-    startedAtRef.current = null;
-    setDurationSeconds("0");
-    setRecState("idle");
-  };
-
   const stopRecordingAndGetBlob = () => new Promise<RecordingResult | null>((resolve) => {
     const recorder = recRef.current;
     if (!recorder || recorder.state === "inactive") {
@@ -340,7 +288,7 @@ export default function LogCallDialog({
     setSavingRecording(true);
     let finalAudioBlob = audioBlob;
     let finalDuration = Math.max(0, Number(durationSeconds) || secondsRef.current || 0);
-    if (recState === "recording" || recState === "paused") {
+    if (recState === "recording") {
       const stopped = await stopRecordingAndGetBlob();
       finalAudioBlob = stopped?.blob ?? null;
       finalDuration = stopped?.seconds ?? finalDuration;
@@ -487,24 +435,24 @@ export default function LogCallDialog({
             </div>
             <div className="flex flex-wrap items-center gap-2">
               {recState === "idle" && (
-                <Button type="button" onClick={startRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                  <Mic className="h-4 w-4 mr-2 text-white stroke-white allow-white" />
-                  <span className="text-white allow-white">Start recording</span>
-                </Button>
+                <button type="button" onClick={startRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                  <Mic className="h-4 w-4" />
+                  <span>Start recording</span>
+                </button>
               )}
-              {(recState === "recording" || recState === "paused") && (
-                <Button type="button" onClick={stopRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
-                  <CheckCircle2 className="h-4 w-4 mr-2 text-white stroke-white allow-white" />
-                  <span className="text-white allow-white">Done</span>
-                </Button>
+              {recState === "recording" && (
+                <button type="button" onClick={stopRecording} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                  <CheckCircle2 className="h-4 w-4" />
+                  <span>Done</span>
+                </button>
               )}
               {recState === "stopped" && (
-                <Button type="submit" disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                <button type="submit" disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
                   {isSaving
-                    ? <Loader2 className="h-4 w-4 mr-2 animate-spin text-white stroke-white allow-white" />
-                    : <CheckCircle2 className="h-4 w-4 mr-2 text-white stroke-white allow-white" />}
-                  <span className="text-white allow-white">{isSaving ? "Saving…" : "Save call log"}</span>
-                </Button>
+                    ? <Loader2 className="h-4 w-4 animate-spin" />
+                    : <CheckCircle2 className="h-4 w-4" />}
+                  <span>{isSaving ? "Saving…" : "Save call log"}</span>
+                </button>
               )}
               {audioBlob && recState === "stopped" && (
                 <span className="text-[11px] text-[#1A1A1A]/70">
