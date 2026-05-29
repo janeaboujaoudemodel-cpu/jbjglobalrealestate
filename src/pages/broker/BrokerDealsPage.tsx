@@ -125,10 +125,9 @@ export default function BrokerDealsPage({ variant = "deals" }: Props) {
   }, [rows]);
 
   const isCommissions = variant === "commissions";
-  const title = isCommissions ? "Commissions" : "Deals & Commissions";
-  const description = isCommissions
-    ? "Your commission ledger and projections. Numbers are derived from leads currently assigned to you — JBJ owner finalises every payout."
-    : "Live pipeline of every offer you've initiated, with projected commission per stage. Numbers populate the moment your first assigned lead reaches the qualified stage.";
+  const title = "Deals & Commission";
+  const description =
+    "Your unified pipeline of every deal you've initiated and the projected commission per stage. Numbers populate the moment your first assigned lead reaches the qualified stage — JBJ owner finalises every payout.";
 
   return (
     <div className="space-y-8">
