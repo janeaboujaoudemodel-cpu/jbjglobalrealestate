@@ -1216,7 +1216,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               onClick={() => { supabase.auth.signOut(); }}
               className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[4px] rounded-lg border w-full group"
               style={{ color: '#1A1A1A', borderColor: '#B89555', backgroundColor: '#FDFBF7' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(185,28,28,0.08)'; e.currentTarget.style.color = '#B91C1C'; e.currentTarget.style.borderColor = '#B91C1C'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#B91C1C'); }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(185,28,28,0.08)'; e.currentTarget.style.color = '#B91C1C'; e.currentTarget.style.borderColor = '#B89555'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#B91C1C'); }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.color = '#1A1A1A'; e.currentTarget.style.borderColor = '#B89555'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#B91C1C'); }}
             >
               <LogOut data-signout-icon className="w-3 h-3" style={{ color: '#B91C1C' }} />
