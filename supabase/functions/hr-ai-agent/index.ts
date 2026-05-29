@@ -67,15 +67,15 @@ async function callLovableAI(systemPrompt: string, userMessage: string, conversa
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'openai/gpt-5-mini',
+      model: 'google/gemini-2.5-flash',
       messages,
-      temperature: 0.7,
-      max_tokens: 1000
     }),
   });
 
   if (!response.ok) {
-    throw new Error(`AI API error: ${response.status}`);
+    const errBody = await response.text();
+    console.error('AI gateway error', response.status, errBody);
+    throw new Error(`AI API error: ${response.status} ${errBody}`);
   }
 
   const data = await response.json();
