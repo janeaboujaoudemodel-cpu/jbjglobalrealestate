@@ -90,9 +90,23 @@ export default function OwnerFormRequests() {
               {!isLoading && visible.length === 0 && (
                 <tr><td colSpan={6} className="px-4 py-10 text-center text-[#1A1A1A]/60">No requests in this view.</td></tr>
               )}
-              {visible.map(r => (
+              {visible.map(r => {
+                const attCount = Array.isArray(r.attachments) ? r.attachments.length : 0;
+                const cdKeys = r.client_details ? Object.keys(r.client_details).filter(k => {
+                  const v = (r.client_details as any)[k];
+                  return v !== null && v !== undefined && v !== "" && !(typeof v === "object" && Object.keys(v).length === 0);
+                }).length : 0;
+                return (
                 <tr key={r.id} className="border-t border-[#B89555]/20 align-top">
-                  <td className="px-4 py-3 text-[#1A1A1A] font-medium">{r.form_type}</td>
+                  <td className="px-4 py-3 text-[#1A1A1A] font-medium">
+                    {r.form_type}
+                    {(attCount > 0 || cdKeys > 0) && (
+                      <div className="mt-1 flex items-center gap-2 text-[10px] text-[#1A1A1A]/60">
+                        {cdKeys > 0 && <span className="inline-flex items-center gap-1"><UserIcon className="w-3 h-3" /> {cdKeys} field{cdKeys === 1 ? "" : "s"}</span>}
+                        {attCount > 0 && <span className="inline-flex items-center gap-1"><Paperclip className="w-3 h-3" /> {attCount} file{attCount === 1 ? "" : "s"}</span>}
+                      </div>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-[#1A1A1A]/80 font-mono text-xs">{r.broker_user_id.slice(0, 8)}…</td>
                   <td className="px-4 py-3 text-[#1A1A1A]/75 hidden lg:table-cell">
                     <div className="line-clamp-3 max-w-md">{r.notes || <span className="text-[#1A1A1A]/40">—</span>}</div>
@@ -112,7 +126,8 @@ export default function OwnerFormRequests() {
                     </Button>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
