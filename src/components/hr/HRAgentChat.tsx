@@ -241,7 +241,7 @@ export default function HRAgentChat() {
           </div>
         </ScrollArea>
 
-        {stage !== 'completed' && (
+        {(mode === 'owner' || stage !== 'completed') && (
           <div className="border-t border-[#B89555]/20 p-4">
             <div className="flex gap-2">
               <Input
@@ -267,7 +267,7 @@ export default function HRAgentChat() {
           </div>
         )}
 
-        {stage === 'completed' && (
+        {stage === 'completed' && mode !== 'owner' && (
           <div className="border-t border-[#B89555]/20 p-4 bg-emerald-50">
             <div className="flex items-center justify-center gap-2 text-emerald-600">
               <CheckCircle className="w-5 h-5" />
