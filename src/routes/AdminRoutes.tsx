@@ -36,6 +36,7 @@ const DataOperations = lazy(() => import("@/pages/market-intelligence/internal/D
 const ContrastReview = lazy(() => import("@/pages/internal/ContrastReview"));
 const FadedGoldAllowlist = lazy(() => import("@/pages/admin/FadedGoldAllowlist"));
 const HRAgent = lazy(() => import("@/pages/HRAgent"));
+const HRAnnouncementsHub = lazy(() => import("@/pages/owner/HRAnnouncementsHub"));
 const ReferralAdmin = lazy(() => import("@/pages/ReferralAdmin"));
 const OwnerCreativeSuite = lazy(() => import("@/pages/OwnerCreativeSuite"));
 const BrandPaletteHub = lazy(() => import("@/pages/owner/BrandPaletteHub"));
@@ -169,6 +170,7 @@ export const AdminRoutes = () => (
     <Route path="/owner/recommendations" element={<OwnerGuard><OwnerRecommendations /></OwnerGuard>} />
     {/* Public Jessica chat page — must NOT redirect into owner-only careers portal. */}
     <Route path="/hr-agent" element={<HRAgent />} />
+    <Route path="/owner/hr/announcements" element={<OwnerGuard><HRAnnouncementsHub /></OwnerGuard>} />
     <Route path="/referral-admin" element={<OwnerGuard><ReferralAdmin /></OwnerGuard>} />
     <Route path="/executive-assistant" element={<OwnerGuard><ExecutiveAssistant /></OwnerGuard>} />
     <Route path="/call-review" element={<OwnerGuard><CallReview /></OwnerGuard>} />
