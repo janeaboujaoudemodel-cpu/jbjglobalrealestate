@@ -69,7 +69,7 @@ export const BrokerPortalRoutes = () => (
         />
       }
     />
-    <Route path="forms" element={<BrokerFormRequests />} />
+    <Route path="forms" element={<OwnerOnlyRoute><BrokerFormRequests /></OwnerOnlyRoute>} />
     <Route path="learning" element={<BrokerLearning />} />
     <Route path="learning/book/:bookId" element={<BookReader />} />
     <Route path="academy" element={<Navigate to="/broker/learning?tab=training" replace />} />
