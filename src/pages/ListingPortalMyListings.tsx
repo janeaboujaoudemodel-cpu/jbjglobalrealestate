@@ -231,29 +231,32 @@ const ListingPortalMyListings = () => {
             </div>
 
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
-                <Star className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
-                <p className="text-2xl font-bold text-[#1A1A1A]">{points?.points || 0}</p>
-                <p className="text-xs text-[#1A1A1A]/70">Points</p>
+            {/* Stats Cards — broker only (owner sees aggregate, not personal points) */}
+            {!ownerOverview && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
+                  <Star className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{points?.points || 0}</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Points</p>
+                </div>
+                <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
+                  <Award className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
+                  <p className="text-sm font-bold text-[#1A1A1A] capitalize">{points?.tier || 'Starter'}</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Tier</p>
+                </div>
+                <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
+                  <Sparkles className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{points?.free_listings_remaining ?? 3}</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Free Left</p>
+                </div>
+                <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
+                  <Shield className={`w-5 h-5 mx-auto mb-1 ${verification?.status === 'verified' ? 'text-emerald-500' : 'text-[#1A1A1A]/70'}`} />
+                  <p className="text-sm font-bold text-[#1A1A1A] capitalize">{verification?.status || 'Not Verified'}</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Broker Status</p>
+                </div>
               </div>
-              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
-                <Award className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
-                <p className="text-sm font-bold text-[#1A1A1A] capitalize">{points?.tier || 'Starter'}</p>
-                <p className="text-xs text-[#1A1A1A]/70">Tier</p>
-              </div>
-              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
-                <Sparkles className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
-                <p className="text-2xl font-bold text-[#1A1A1A]">{points?.free_listings_remaining ?? 3}</p>
-                <p className="text-xs text-[#1A1A1A]/70">Free Left</p>
-              </div>
-              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
-                <Shield className={`w-5 h-5 mx-auto mb-1 ${verification?.status === 'verified' ? 'text-emerald-500' : 'text-[#1A1A1A]/70'}`} />
-                <p className="text-sm font-bold text-[#1A1A1A] capitalize">{verification?.status || 'Not Verified'}</p>
-                <p className="text-xs text-[#1A1A1A]/70">Broker Status</p>
-              </div>
-            </div>
+            )}
+
 
             {/* Verification */}
             {(!verification || verification.status === 'pending') && (
