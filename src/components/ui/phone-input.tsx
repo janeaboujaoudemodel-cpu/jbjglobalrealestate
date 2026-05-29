@@ -602,13 +602,12 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               style={{ backgroundColor: "#F7F2EA", border: "1px solid rgba(184,149,85,0.4)" }}
             >
               <Command className={commandStyles} data-no-contrast-guard style={{ backgroundColor: "transparent" }}>
-                <div style={{ backgroundColor: "transparent" }}>
-                  <CommandInput 
-                    placeholder="Search country name or code..." 
-                    className={cn("h-12 text-base !bg-transparent", commandInputStyles)}
-                    style={{ color: "#1A1A1A", backgroundColor: "transparent" }}
-                  />
-                </div>
+                <CommandInput 
+                  placeholder="Search country name or code..." 
+                  className={cn("h-12 text-base !bg-transparent", commandInputStyles)}
+                  style={{ color: "#1A1A1A", backgroundColor: "transparent" }}
+                />
+
 
                 <CommandList className="max-h-[350px] overflow-y-auto overscroll-contain" data-no-contrast-guard>
                   <CommandEmpty className={cn("text-sm py-6 text-center", commandEmptyStyles)}>
