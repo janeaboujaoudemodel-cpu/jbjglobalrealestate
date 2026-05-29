@@ -321,30 +321,33 @@ function SegmentedPill({
   icon: React.ReactNode;
   children: React.ReactNode;
 }) {
+  const fg = active ? "#FFFFFF" : INK;
   return (
     <button
       type="button"
       onClick={onClick}
-      data-allow-dark-cta={active ? "" : undefined}
-      data-no-contrast-guard={active ? "" : undefined}
-      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-150"
+      data-allow-dark-cta
+      data-no-contrast-guard
+      className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-150 ${active ? "bg-[#102540] hover:bg-[#1a3d63]" : ""}`}
       style={
         active
           ? {
               backgroundColor: BLUE,
               color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
               border: `1px solid ${BLUE_DEEP}`,
-              boxShadow: "0 4px 12px -4px rgba(37,99,235,0.45)",
+              boxShadow: "0 8px 22px -10px rgba(16,37,64,0.45)",
             }
           : {
               backgroundColor: CHAMPAGNE,
               color: INK,
-              border: `1px solid ${GOLD}40`,
+              WebkitTextFillColor: INK,
+              border: `1px solid ${GOLD}66`,
             }
       }
     >
-      {icon}
-      {children}
+      <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{icon}</span>
+      <span style={{ color: fg, WebkitTextFillColor: fg }}>{children}</span>
     </button>
   );
 }
