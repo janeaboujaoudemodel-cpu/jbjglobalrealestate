@@ -223,9 +223,10 @@ const ListingPortalMyListings = () => {
                 )}
               </div>
               {!ownerOverview && (
-                <Button onClick={() => navigate(embeddedInBrokerPortal ? '/broker/listings/submit' : '/listing-portal/submit')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
+                <Button onClick={() => navigate('/listing-portal/submit')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                   <Plus className="w-4 h-4 mr-2" /> New Listing
                 </Button>
+
               )}
             </div>
 
