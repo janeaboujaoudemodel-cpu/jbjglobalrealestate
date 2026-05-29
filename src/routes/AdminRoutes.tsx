@@ -36,6 +36,7 @@ const DataOperations = lazy(() => import("@/pages/market-intelligence/internal/D
 const ContrastReview = lazy(() => import("@/pages/internal/ContrastReview"));
 const FadedGoldAllowlist = lazy(() => import("@/pages/admin/FadedGoldAllowlist"));
 const HRAgent = lazy(() => import("@/pages/HRAgent"));
+const HRAnnouncementsHub = lazy(() => import("@/pages/owner/HRAnnouncementsHub"));
 const ReferralAdmin = lazy(() => import("@/pages/ReferralAdmin"));
 const OwnerCreativeSuite = lazy(() => import("@/pages/OwnerCreativeSuite"));
 const BrandPaletteHub = lazy(() => import("@/pages/owner/BrandPaletteHub"));
