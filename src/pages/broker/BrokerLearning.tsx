@@ -150,7 +150,13 @@ export default function BrokerLearning() {
   }, [books]);
 
   const totalProgress =
-    TRAINING.reduce((acc, m) => acc + (m.progress || 0), 0) / TRAINING.length;
+    TRAINING.reduce((acc, m) => acc + (moduleProgress[m.id] ?? m.progress ?? 0), 0) /
+    TRAINING.length;
+  const allModulesComplete =
+    TRAINING.every((m) => (moduleProgress[m.id] ?? m.progress ?? 0) >= 100);
+  const certificatesEarned = TRAINING.filter(
+    (m) => (moduleProgress[m.id] ?? m.progress ?? 0) >= 100,
+  ).length;
 
   return (
     <div className="w-full bg-[#FDFBF7]">
