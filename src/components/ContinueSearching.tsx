@@ -71,7 +71,7 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     }
 
     let animId: number;
-    const speed = 0.6;
+    const speed = 1.4;
 
     const tick = () => {
       const singleSetWidth = track.scrollWidth / 3;
@@ -339,15 +339,7 @@ const ContinueSearching = ({
             </Link>
           </div>
         ) : (
-          <div
-            className="relative w-full"
-            style={{
-              WebkitMaskImage:
-                "linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%)",
-              maskImage:
-                "linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%)",
-            }}
-          >
+          <div className="relative w-full">
             <WalkingStrip items={displayItems} patchItem={patchItem} />
           </div>
         )}
