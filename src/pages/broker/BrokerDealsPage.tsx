@@ -7,9 +7,9 @@
  * elsewhere. Never redirects into the company CRM.
  */
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Handshake, TrendingUp, Wallet, Clock, CheckCircle2, ArrowRight } from "lucide-react";
+import { Handshake, TrendingUp, Wallet, Clock, CheckCircle2 } from "lucide-react";
+
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEOHead } from "@/components/SEOHead";
