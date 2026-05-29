@@ -262,6 +262,57 @@ export default function BrokerCRM() {
     onError: (e: any) => toast.error(e?.message || "Could not permanently delete call"),
   });
 
+  const bulkSoftDelete = useMutation({
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase
+        .from("broker_call_logs")
+        .update({ deleted_at: new Date().toISOString() })
+        .in("id", ids)
+        .eq("user_id", user!.id);
+      if (error) throw error;
+    },
+    onSuccess: (_d, ids) => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      toast.success(`${ids.length} call${ids.length > 1 ? "s" : ""} moved to Recently deleted`);
+      setSelectedCallIds(new Set());
+    },
+    onError: (e: any) => toast.error(e?.message || "Bulk delete failed"),
+  });
+
+  const bulkRestore = useMutation({
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase
+        .from("broker_call_logs")
+        .update({ deleted_at: null })
+        .in("id", ids)
+        .eq("user_id", user!.id);
+      if (error) throw error;
+    },
+    onSuccess: (_d, ids) => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      toast.success(`${ids.length} call${ids.length > 1 ? "s" : ""} restored`);
+      setSelectedCallIds(new Set());
+    },
+    onError: (e: any) => toast.error(e?.message || "Bulk restore failed"),
+  });
+
+  const bulkHardDelete = useMutation({
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase
+        .from("broker_call_logs")
+        .delete()
+        .in("id", ids)
+        .eq("user_id", user!.id);
+      if (error) throw error;
+    },
+    onSuccess: (_d, ids) => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      toast.success(`${ids.length} call${ids.length > 1 ? "s" : ""} permanently deleted`);
+      setSelectedCallIds(new Set());
+    },
+    onError: (e: any) => toast.error(e?.message || "Bulk permanent delete failed"),
+  });
+
 
   const leadsData: any[] = (leads.data as any[]) ?? [];
   const filteredLeads = useMemo(() => {
