@@ -264,6 +264,26 @@ export default function BookReader() {
             </div>
             <div className="text-sm font-semibold text-[#1A1A1A] truncate">{book.title}</div>
           </div>
+          {currentModule && (
+            <Button
+              size="sm"
+              onClick={() => handleComplete(currentModule)}
+              disabled={currentIsDone || completingId === currentModule.id}
+              className={
+                currentIsDone
+                  ? "bg-emerald-600 hover:bg-emerald-600 text-white border border-emerald-700"
+                  : isLastBodyOfModule
+                    ? "bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555]/50"
+                    : "bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50"
+              }
+            >
+              {currentIsDone ? (
+                <><Check className="w-4 h-4 mr-1.5" /> Completed</>
+              ) : (
+                <><Sparkles className="w-4 h-4 mr-1.5" /> Mark complete +10</>
+              )}
+            </Button>
+          )}
           <Button
             size="sm"
             variant="ghost"
@@ -272,6 +292,7 @@ export default function BookReader() {
           >
             <List className="w-4 h-4 mr-1.5" /> Contents
           </Button>
+
           <TooltipProvider delayDuration={200}>
             <Tooltip>
               <TooltipTrigger asChild>

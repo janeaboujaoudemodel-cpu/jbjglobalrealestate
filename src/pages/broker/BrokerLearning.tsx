@@ -16,7 +16,9 @@ import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
 import { Book3DCard, BookDetailModal } from "@/components/broker-education";
 import { CertificatePreview } from "@/components/certification";
+import { useEducationProgress } from "@/hooks/useEducationProgress";
 import { BROKER_LESSONS } from "./brokerLessonContent";
+
 
 // ────────────────────────────────────────────────────────────────────────────
 // Training modules (portal-native, no full-bleed marketing chrome)
