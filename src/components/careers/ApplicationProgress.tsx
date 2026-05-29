@@ -23,10 +23,14 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
   const validityPct = (completed / total) * 100;
   const wizardFloor =
     typeof activeStep === "number"
-      ? ((activeStep + 0.5) / total) * 100
+      ? ((activeStep + 1) / total) * 100
       : 0;
   const raw = Math.max(validityPct, wizardFloor);
-  const pct = Math.min(100, Math.max(completed === total ? 100 : 5, Math.round(raw)));
+  // Cap at 95% until every section is actually valid — hits 100% only on full completion.
+  const pct =
+    completed === total
+      ? 100
+      : Math.min(95, Math.max(5, Math.round(raw)));
 
 
 
