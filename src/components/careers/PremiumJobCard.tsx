@@ -62,14 +62,14 @@ const TAG_STYLES: Record<
     icon: Star,
     bg: "bg-[#F7F2EA]",
     ring: "border-[#B89555]",
-    text: "text-[#B89555]",
+    text: "text-[#1A1A1A]",
   },
   partner: {
     label: "Partner",
     icon: Star,
     bg: "bg-[#F7F2EA]",
     ring: "border-[#B89555]",
-    text: "text-[#B89555]",
+    text: "text-[#1A1A1A]",
   },
   featured: {
     label: "Featured",
