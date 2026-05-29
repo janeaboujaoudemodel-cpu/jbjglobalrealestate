@@ -1,7 +1,7 @@
 import { NavLink, useLocation, useNavigate, Link } from "react-router-dom";
 import {
   LayoutDashboard, Users, Briefcase, Database, ListChecks, Calendar, ListTodo,
-  Handshake, FileSignature, GraduationCap, Sparkles, Building2,
+  Handshake, FileSignature, GraduationCap, Sparkles, Building2, Inbox, MessagesSquare,
   Brain, Bell, Settings, ChevronLeft, ChevronRight, ArrowLeft, Crown, Home, LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -21,6 +21,8 @@ const ITEMS: Item[] = [
   { to: "/broker/crm",               label: "CRM Pipeline",       icon: Briefcase },
   { to: "/broker/databases",         label: "Assigned Databases", icon: Database },
   { to: "/broker/listings",          label: "Listings",           icon: ListChecks },
+  { to: "/broker/email",             label: "Smart Inbox",        icon: Inbox },
+  { to: "/broker/messages",          label: "Team & HR",          icon: MessagesSquare },
   { to: "/broker/calendar",          label: "Calendar",           icon: Calendar },
   { to: "/broker/tasks",             label: "Tasks",              icon: ListTodo },
   { to: "/broker/deals",             label: "Deals & Commission", icon: Handshake },
