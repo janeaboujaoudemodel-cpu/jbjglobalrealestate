@@ -37,10 +37,20 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#102540]/82">
             Application Progress
           </p>
-          <p className="text-sm font-semibold text-[#1A1A1A] mt-0.5">
-            {typeof activeStep === "number"
-              ? `Step ${activeStep + 1} of ${steps.length} — ${steps[activeStep]?.label}`
-              : `${completed} of ${steps.length} sections complete`}
+          <p
+            className="text-sm font-semibold text-[#1A1A1A] mt-0.5"
+            translate="no"
+            data-no-translate="true"
+          >
+            {typeof activeStep === "number" ? (
+              <>
+                <span translate="no">Step {activeStep + 1} of {steps.length}</span>
+                <span className="text-[#1A1A1A]/60"> — </span>
+                <span translate="no" data-no-translate="true">{steps[activeStep]?.label}</span>
+              </>
+            ) : (
+              <span translate="no">{completed} of {steps.length} sections complete</span>
+            )}
           </p>
         </div>
         <div className="text-right">
