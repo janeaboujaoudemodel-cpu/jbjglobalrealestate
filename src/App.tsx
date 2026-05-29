@@ -100,8 +100,10 @@ const App = () => {
                   <OwnerVisitorToggle />
                   <SEOBreadcrumbs />
                   <CanonicalAndHreflang />
-                  <SeoHighlightOverlay />
-                  
+                   <SeoHighlightOverlay />
+                   <OwnerOverrideLoader />
+                   <WebDevDock />
+                   
             {/* BrandIntroSplash disabled until further notice */}
             <Routes>
               {/* ── Standalone Routes (no shell) ── */}
