@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Upload, FolderOpen, PartyPopper, ListChecks, Briefcase, FileSignature, CheckCircle2, Clock, XCircle, ArrowRight, Rocket, LayoutDashboard, CalendarCheck, TrendingUp, BarChart3, Calculator, Home, Search, PieChart, GraduationCap, Brain, Target, Star, Zap, Headphones } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -105,6 +106,7 @@ const brokerShortcuts = [
 
 const DeveloperPortalCTA = () => {
   const { user } = useAuth();
+  const { isOwner } = useIsAppOwner();
   const { isLoading: isModeLoading, isDeveloperMode, isInvestorMode, isBrokerMode } = useUserModeContext();
 
   // Per-category registration probes. Only the probe matching the active mode
