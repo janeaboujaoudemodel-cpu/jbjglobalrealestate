@@ -67,7 +67,7 @@ function formatTimer(s: number) {
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
 
-const navyControlClass = "jj-navy-cta inline-flex h-10 items-center justify-center gap-2 rounded-md px-6 py-2 text-sm font-semibold transition-colors disabled:pointer-events-none disabled:opacity-70";
+const navyControlClass = "jj-navy-cta inline-flex h-10 items-center justify-center gap-2 rounded-md border border-[#B89555]/55 bg-[hsl(var(--navy-cta))] px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-[hsl(var(--navy-cta-hover))] hover:text-white focus-visible:bg-[hsl(var(--navy-cta-hover))] focus-visible:text-white disabled:pointer-events-none disabled:opacity-70 [&_span]:text-white [&_svg]:text-white [&_svg]:stroke-white";
 
 export default function LogCallDialog({
   open, onOpenChange, leads, userId, initialLeadId, submitting, onSubmit, onSaved,
