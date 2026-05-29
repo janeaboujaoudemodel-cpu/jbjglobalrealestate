@@ -1,20 +1,14 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, LucideIcon } from "lucide-react";
+import { ArrowRight, LucideIcon, ShieldCheck, Sparkles } from "lucide-react";
 import PortalHeroArt, { type PortalKind } from "./PortalHeroArt";
+import { IconTile } from "@/components/ui/icon-tile";
+import { cn } from "@/lib/utils";
 
 /**
  * PortalShowcaseCard — single canonical homepage card used to advertise
  * every JBJ portal (Broker / Developer / Careers / Owner / Investor).
  *
  * Update this file and every portal showcase across the homepage updates.
- *
- * Brand-locked:
- *  - champagne plate on navy frame
- *  - 1px gold hairline accents (no gold fills)
- *  - ink editorial typography
- *  - navy CTA (#102540) with white text — repaint guard friendly
- *  - hero artwork = purposeful SVG via <PortalHeroArt />, NOT a lucide icon
- *  - no decorative Roman serials, no "Est · MMXXV", no bag emblems
  */
 export interface PortalShowcaseCardProps {
   kind: PortalKind;
@@ -31,6 +25,39 @@ export interface PortalShowcaseCardProps {
 const DEFAULT_HELPER =
   "Secure sign-in with your JBJ account — your workspace, personalized.";
 
+const PORTAL_ACCENT: Record<PortalKind, { metric: string; metricLabel: string; panelTitle: string; modules: string[] }> = {
+  broker: {
+    metric: "360°",
+    metricLabel: "Broker operating suite",
+    panelTitle: "Deal Command Center",
+    modules: ["Pipeline", "Listings", "Academy", "AI Sales"],
+  },
+  developer: {
+    metric: "LIVE",
+    metricLabel: "Launch-ready project desk",
+    panelTitle: "Project Submission Suite",
+    modules: ["Inventory", "Launches", "Approvals", "Broker Network"],
+  },
+  careers: {
+    metric: "48h",
+    metricLabel: "Executive review window",
+    panelTitle: "Talent Access Desk",
+    modules: ["Profile", "Interview", "Academy", "Offers"],
+  },
+  owner: {
+    metric: "HQ",
+    metricLabel: "Private owner command",
+    panelTitle: "Portfolio Oversight",
+    modules: ["Revenue", "Leads", "Approvals", "Insights"],
+  },
+  investor: {
+    metric: "ROI",
+    metricLabel: "Investor intelligence layer",
+    panelTitle: "Investment Workbench",
+    modules: ["Matches", "Yield", "Market", "Portfolio"],
+  },
+};
+
 export default function PortalShowcaseCard({
   kind,
   eyebrow,
@@ -41,108 +68,171 @@ export default function PortalShowcaseCard({
   features,
   helper = DEFAULT_HELPER,
 }: PortalShowcaseCardProps) {
+  const accent = PORTAL_ACCENT[kind];
+
   return (
-    <section className="py-20 md:py-28 relative overflow-hidden">
-      {/* Navy backing frame — gold hairline, premium shadow */}
-      <div
-        data-surface="dark"
-        data-on-dark
-        data-no-contrast-guard
-        className="allow-white pointer-events-none absolute inset-x-1 md:inset-x-3 inset-y-2 md:inset-y-3 rounded-[2.5rem] bg-[#102540] border border-[#B89555]/55 shadow-[0_30px_80px_-40px_rgba(16,37,64,0.65)]"
-      />
-
-      <div className="w-full px-1 md:px-3 relative">
-        {/* Champagne plate */}
+    <section className="jj-portal-showcase relative overflow-hidden py-10 md:py-14">
+      <div className="relative w-full px-4 md:px-6">
         <div
-          data-surface="page"
-          className="group/portal relative rounded-[2rem] border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-8 sm:p-10 md:p-16 lg:p-20 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.55),0_2px_0_rgba(255,255,255,0.9)_inset] hover:shadow-[0_40px_100px_-40px_rgba(16,37,64,0.45),0_2px_0_rgba(255,255,255,0.95)_inset,0_0_0_1px_rgba(184,149,85,0.35)] hover:-translate-y-0.5 overflow-hidden m-1 md:m-2 transition-all duration-500"
+          data-surface="dark"
+          data-on-dark
+          data-no-contrast-guard
+          className="allow-white jj-portal-shell group/portal relative mx-auto max-w-[1500px] overflow-hidden rounded-[34px] border border-[hsl(var(--gold)/0.62)] bg-[hsl(var(--navy-cta))] p-3 shadow-[0_32px_90px_-50px_hsl(var(--navy-cta)/0.75)] sm:p-4 md:p-5"
         >
-          {/* Inner wash */}
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(184,149,85,0.10),transparent_55%)]" />
+          <div className="pointer-events-none absolute inset-0 opacity-80 [background-image:linear-gradient(90deg,hsl(var(--gold)/0.10)_1px,transparent_1px),linear-gradient(180deg,hsl(var(--gold)/0.08)_1px,transparent_1px)] [background-size:72px_72px]" />
+          <div className="pointer-events-none absolute -right-28 -top-28 h-72 w-72 rounded-full border border-[hsl(var(--gold)/0.24)]" />
+          <div className="pointer-events-none absolute -bottom-32 left-10 h-80 w-80 rounded-full border border-[hsl(var(--gold)/0.18)]" />
 
-          <div className="relative grid lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-center">
-            {/* LEFT — editorial copy */}
-            <div className="min-w-0">
-              {/* Eyebrow plaque */}
-              <div className="inline-flex items-center gap-2.5 pl-2.5 pr-3.5 py-1.5 rounded-full bg-[#FDFBF7] border border-[#B89555]/55 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_6px_18px_-12px_rgba(184,149,85,0.45)] mb-6">
-                <span className="relative inline-flex items-center justify-center w-4 h-4">
-                  <span className="absolute inset-0 rotate-45 rounded-[3px] border border-[#B89555]/70" aria-hidden="true" />
-                  <span className="w-1 h-1 rounded-full bg-[#B89555]" aria-hidden="true" />
-                </span>
-                <span className="text-[10.5px] font-semibold tracking-[0.28em] uppercase text-[#1A1A1A]">
-                  {eyebrow}
-                </span>
-              </div>
+          <div className="relative grid min-h-[560px] gap-3 lg:grid-cols-[0.86fr_1.14fr]">
+            <aside className="relative overflow-hidden rounded-[28px] border border-[hsl(var(--gold)/0.56)] bg-[linear-gradient(135deg,hsl(var(--background))_0%,hsl(var(--secondary))_52%,hsl(var(--champagne-3))_100%)] p-7 shadow-[inset_0_1px_0_hsl(0_0%_100%/0.76),0_18px_45px_-30px_hsl(0_0%_0%/0.48)] sm:p-9 lg:p-11">
+              <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-[linear-gradient(90deg,transparent,hsl(var(--gold)/0.72),transparent)]" />
+              <div className="pointer-events-none absolute -right-20 top-16 h-56 w-56 rounded-full bg-[radial-gradient(circle,hsl(var(--gold)/0.13),transparent_68%)]" />
 
-              {/* Display title */}
-              <h2 className="text-3xl md:text-[2.6rem] lg:text-[3.1rem] font-serif font-bold text-[#1A1A1A] leading-[1.02] tracking-[-0.018em]">
-                {title}
-              </h2>
-              <div className="mt-4 flex items-center gap-3" aria-hidden="true">
-                <span className="block h-px w-10 bg-gradient-to-r from-[#B89555]/80 to-transparent" />
-                <span className="block w-1 h-1 rotate-45 bg-[#B89555]/70" />
-                <span className="block h-px w-3 bg-[#B89555]/40" />
-              </div>
-
-              {/* Body */}
-              <p className="text-[#1A1A1A]/80 text-[15.5px] md:text-[17px] mt-5 leading-[1.75] max-w-[58ch]">
-                {description}
-              </p>
-
-              {/* Feature chips */}
-              <ul className="flex flex-wrap gap-2.5 mt-8 list-none p-0">
-                {features.map((f) => (
-                  <li key={f.label}>
-                    <span className="group/chip inline-flex items-center gap-2 pl-2 pr-3.5 py-1.5 rounded-full bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/40 text-[12.5px] font-semibold text-[#1A1A1A] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_4px_12px_-8px_rgba(184,149,85,0.35)] hover:border-[#B89555]/75 hover:shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_8px_20px_-10px_rgba(184,149,85,0.55)] transition-all duration-300">
-                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#FDFBF7] border border-[#B89555]/45 group-hover/chip:border-[#B89555]/75 transition-colors">
-                        <f.icon className="w-3 h-3 text-[#1A1A1A]" strokeWidth={2.2} />
-                      </span>
-                      {f.label}
+              <div className="relative flex h-full flex-col">
+                <div className="mb-8 flex items-center justify-between gap-4">
+                  <div className="inline-flex items-center gap-3 rounded-full border border-[hsl(var(--gold)/0.55)] bg-[hsl(var(--background)/0.72)] px-3 py-2 shadow-[inset_0_1px_0_hsl(0_0%_100%/0.72)]">
+                    <IconTile icon={ShieldCheck} tone="gold" size="sm" className="rounded-full" />
+                    <span className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground">
+                      {eyebrow}
                     </span>
-                  </li>
-                ))}
-              </ul>
+                  </div>
+                  <span className="hidden rounded-full border border-[hsl(var(--gold)/0.38)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-foreground/70 sm:inline-flex">
+                    Private access
+                  </span>
+                </div>
 
-              {/* CTA row */}
-              <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-3">
-                <Link
-                  to={href}
-                  data-surface="dark"
-                  data-on-dark
-                  data-no-contrast-guard
-                  data-allow-dark-cta
-                  className="allow-white group inline-flex items-center gap-3 pl-7 pr-3 py-3 rounded-2xl bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/65 text-white hover:text-white [&_*]:hover:!text-white [&_svg]:hover:!stroke-white text-[15px] font-bold tracking-tight shadow-[0_1px_0_rgba(255,255,255,0.08)_inset,0_12px_34px_-14px_rgba(16,37,64,0.6)] hover:shadow-[0_1px_0_rgba(255,255,255,0.10)_inset,0_22px_56px_-16px_rgba(16,37,64,0.75)] hover:-translate-y-0.5 transition-all duration-300"
-                  style={{ color: "#FFFFFF" }}
-                >
-                  <span className="allow-white" data-no-contrast-guard style={{ color: "#FFFFFF" }}>{cta}</span>
-                  <span className="w-9 h-9 rounded-full bg-[#1a3d63] border border-[#B89555]/60 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.12)_inset] transition-transform duration-300 group-hover:translate-x-1">
-                    <ArrowRight className="w-4 h-4 allow-white" data-no-contrast-guard style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
-                  </span>
-                </Link>
-                {helper && (
-                  <span className="inline-flex items-center gap-3 text-[12.5px] text-[#1A1A1A]/75 font-medium">
-                    <span className="hidden sm:block h-4 w-px bg-[#B89555]/45" aria-hidden="true" />
-                    <span className="italic font-normal">{helper}</span>
-                  </span>
-                )}
+                <h2 className="max-w-[12ch] font-display text-[clamp(2.3rem,5vw,5.6rem)] font-black leading-[0.9] text-foreground">
+                  {title}
+                </h2>
+
+                <p className="mt-7 max-w-[58ch] text-base font-medium leading-[1.78] text-foreground/78 md:text-[17px]">
+                  {description}
+                </p>
+
+                <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                  {features.map((f, index) => (
+                    <li key={f.label}>
+                      <span className="flex min-h-[68px] items-center gap-3 rounded-2xl border border-[hsl(var(--gold)/0.34)] bg-[hsl(var(--background)/0.58)] px-3.5 py-3 shadow-[inset_0_1px_0_hsl(0_0%_100%/0.64)] transition-all duration-300 group-hover/portal:border-[hsl(var(--gold)/0.52)]">
+                        <IconTile icon={f.icon} tone="gold" size="sm" className="rounded-xl" />
+                        <span className="min-w-0">
+                          <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-foreground/48">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                          <span className="block text-sm font-extrabold leading-tight text-foreground">
+                            {f.label}
+                          </span>
+                        </span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
+                  <Link
+                    to={href}
+                    data-surface="dark"
+                    data-on-dark
+                    data-no-contrast-guard
+                    data-allow-dark-cta
+                    className="allow-white group/cta inline-flex min-h-[60px] items-center justify-between gap-5 rounded-2xl border border-[hsl(var(--gold)/0.68)] bg-[hsl(var(--navy-cta))] px-6 text-[15px] font-extrabold text-white shadow-[inset_0_1px_0_hsl(0_0%_100%/0.10),0_18px_38px_-22px_hsl(var(--navy-cta)/0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[hsl(var(--navy-cta-hover))] hover:text-white hover:shadow-[inset_0_1px_0_hsl(0_0%_100%/0.12),0_25px_58px_-24px_hsl(var(--navy-cta)/0.95)] sm:min-w-[245px]"
+                  >
+                    <span className="allow-white" data-no-contrast-guard>{cta}</span>
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(var(--gold)/0.58)] bg-[hsl(var(--navy-cta-hover))] transition-transform duration-300 group-hover/cta:translate-x-1">
+                      <ArrowRight className="allow-white h-4 w-4 text-white" data-no-contrast-guard strokeWidth={2.4} />
+                    </span>
+                  </Link>
+
+                  {helper && (
+                    <span className="border-l border-[hsl(var(--gold)/0.42)] pl-4 text-[12px] font-semibold italic leading-relaxed text-foreground/62">
+                      {helper}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
+            </aside>
 
-            {/* RIGHT — purposeful editorial hero artwork */}
-            <div className="relative hidden lg:flex items-center justify-center">
-              <div className="relative w-[300px] h-[320px] flex items-center justify-center">
-                {/* Soft champagne glow */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 rounded-[40px] bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.12),transparent_70%)]"
-                />
-                {/* Vertical hairline rails */}
-                <div aria-hidden="true" className="absolute left-0 top-8 bottom-8 w-px bg-gradient-to-b from-transparent via-[#B89555]/35 to-transparent" />
-                <div aria-hidden="true" className="absolute right-0 top-8 bottom-8 w-px bg-gradient-to-b from-transparent via-[#B89555]/35 to-transparent" />
+            <div className="relative overflow-hidden rounded-[28px] border border-[hsl(var(--gold)/0.46)] bg-[hsl(var(--navy-cta)/0.94)] p-4 shadow-[inset_0_1px_0_hsl(0_0%_100%/0.08)] sm:p-5 lg:p-7">
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,hsl(var(--gold)/0.16),transparent_32%),linear-gradient(135deg,hsl(0_0%_100%/0.06),transparent_42%)]" />
+              <div className="relative flex h-full flex-col gap-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[hsl(var(--gold)/0.34)] bg-[hsl(var(--background)/0.08)] px-4 py-3 backdrop-blur-sm">
+                  <div className="flex items-center gap-3">
+                    <IconTile icon={Sparkles} tone="gold" size="sm" className="rounded-full bg-[hsl(var(--champagne-3))]" />
+                    <div>
+                      <p className="allow-white text-[10px] font-bold uppercase tracking-[0.22em] text-white/56" data-no-contrast-guard>
+                        JBJ Global Real Estate
+                      </p>
+                      <p className="allow-white text-sm font-extrabold text-white" data-no-contrast-guard>
+                        {accent.panelTitle}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="rounded-full border border-[hsl(var(--gold)/0.46)] px-3 py-1.5">
+                    <span className="allow-white text-[11px] font-bold uppercase tracking-[0.18em] text-white" data-no-contrast-guard>
+                      Verified workspace
+                    </span>
+                  </div>
+                </div>
 
-                {/* Plate */}
-                <div className="relative w-[220px] h-[290px] rounded-[28px] bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/55 shadow-[0_30px_70px_-28px_rgba(16,37,64,0.35),0_1px_0_rgba(255,255,255,0.95)_inset] p-6 transition-transform duration-500 group-hover/portal:scale-[1.02]">
-                  <PortalHeroArt kind={kind} />
+                <div className="grid flex-1 gap-4 xl:grid-cols-[0.95fr_1.05fr]">
+                  <div className="flex flex-col gap-4">
+                    <div className="rounded-[24px] border border-[hsl(var(--gold)/0.36)] bg-[hsl(var(--background))] p-5 shadow-[0_20px_55px_-32px_hsl(0_0%_0%/0.72)]">
+                      <div className="mb-5 flex items-end justify-between gap-4">
+                        <div>
+                          <p className="text-[10px] font-black uppercase tracking-[0.22em] text-foreground/45">
+                            Access level
+                          </p>
+                          <p className="mt-2 text-5xl font-black leading-none text-foreground">
+                            {accent.metric}
+                          </p>
+                        </div>
+                        <div className="h-16 w-16 rounded-2xl border border-[hsl(var(--gold)/0.45)] bg-[hsl(var(--champagne-2))] p-2">
+                          <PortalHeroArt kind={kind} className="opacity-95" />
+                        </div>
+                      </div>
+                      <p className="text-sm font-bold text-foreground/72">{accent.metricLabel}</p>
+                    </div>
+
+                    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+                      {accent.modules.map((module, index) => (
+                        <div
+                          key={module}
+                          className={cn(
+                            "rounded-2xl border p-4 transition-transform duration-300 group-hover/portal:-translate-y-0.5",
+                            index === 0
+                              ? "border-[hsl(var(--gold)/0.62)] bg-[hsl(var(--champagne-3))] text-foreground"
+                              : "border-[hsl(var(--gold)/0.28)] bg-[hsl(var(--background)/0.10)] text-white"
+                          )}
+                        >
+                          <p className={cn("text-[10px] font-black uppercase tracking-[0.18em]", index === 0 ? "text-foreground/48" : "allow-white text-white/48")} data-no-contrast-guard>
+                            Module {index + 1}
+                          </p>
+                          <p className={cn("mt-2 text-sm font-extrabold", index === 0 ? "text-foreground" : "allow-white text-white")} data-no-contrast-guard>
+                            {module}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="relative min-h-[360px] overflow-hidden rounded-[26px] border border-[hsl(var(--gold)/0.40)] bg-[linear-gradient(145deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)))] p-5 shadow-[inset_0_1px_0_hsl(0_0%_100%/0.75)]">
+                    <div className="absolute inset-x-5 top-5 flex items-center justify-between border-b border-[hsl(var(--gold)/0.22)] pb-4">
+                      <span className="text-[10px] font-black uppercase tracking-[0.24em] text-foreground/50">Private OS</span>
+                      <span className="rounded-full border border-[hsl(var(--gold)/0.42)] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-foreground">Live</span>
+                    </div>
+                    <div className="absolute inset-x-5 bottom-5 top-20 grid grid-rows-[1fr_auto] gap-4">
+                      <div className="relative overflow-hidden rounded-2xl border border-[hsl(var(--gold)/0.34)] bg-[hsl(var(--background)/0.64)] p-5">
+                        <PortalHeroArt kind={kind} className="mx-auto h-full max-h-[230px] opacity-95" />
+                      </div>
+                      <div className="grid grid-cols-3 gap-3">
+                        {["Lead Flow", "Inventory", "Close Rate"].map((label, index) => (
+                          <div key={label} className="rounded-2xl border border-[hsl(var(--gold)/0.30)] bg-[hsl(var(--background)/0.62)] p-3">
+                            <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-foreground/46">{label}</span>
+                            <span className="mt-2 block text-lg font-black text-foreground">{["92", "48", "+31"][index]}{index === 1 ? "" : "%"}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
