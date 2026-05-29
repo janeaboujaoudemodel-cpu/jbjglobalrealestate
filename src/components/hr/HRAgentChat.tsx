@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Loader2, Calendar, FileText, CheckCircle, Sparkles, Paperclip, X, Briefcase } from 'lucide-react';
+import { Send, Bot, User, Loader2, Calendar, FileText, CheckCircle, Sparkles, Paperclip, X, Briefcase, MessageCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -52,6 +54,19 @@ export default function HRAgentChat() {
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [submittingApp, setSubmittingApp] = useState(false);
   const [hasApplied, setHasApplied] = useState(false);
+  const [chatIntent, setChatIntent] = useState<'undecided' | 'question' | 'apply'>('undecided');
+  const [applicationStep, setApplicationStep] = useState(0);
+  const [applicationForm, setApplicationForm] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    nationality: '',
+    preferredLanguage: 'en',
+    country: '',
+    city: '',
+    consentAccurate: false,
+    consentTerms: false,
+  });
 
   useEffect(() => {
     if (user) {
@@ -188,13 +203,68 @@ export default function HRAgentChat() {
     ]);
   };
 
+  const startApplicationInChat = () => {
+    setChatIntent('apply');
+    setApplicationStep(0);
+    setMessages((prev) => [
+      ...prev,
+      { role: 'user', content: 'Apply for a Job', timestamp: new Date().toISOString() },
+      { role: 'assistant', content: "Perfect — I'll collect your application here in 5 quick steps, then save your CV securely for HR review.", timestamp: new Date().toISOString() },
+    ]);
+  };
+
+  const continueWithQuestions = () => {
+    setChatIntent('question');
+    setMessages((prev) => [
+      ...prev,
+      { role: 'user', content: 'I have a question', timestamp: new Date().toISOString() },
+      { role: 'assistant', content: 'Of course — type your question below and I’ll help.', timestamp: new Date().toISOString() },
+    ]);
+  };
+
+  const setApplicationValue = (key: keyof typeof applicationForm, value: string | boolean) => {
+    setApplicationForm((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const isStepComplete = (step: number) => {
+    if (step === 0) return Boolean(selectedPositionId);
+    if (step === 1) return Boolean(applicationForm.firstName.trim() && applicationForm.lastName.trim() && applicationForm.phone.trim());
+    if (step === 2) return Boolean(applicationForm.nationality.trim() && applicationForm.country.trim() && applicationForm.city.trim() && applicationForm.preferredLanguage);
+    if (step === 3) return Boolean(cvFile);
+    return Boolean(applicationForm.consentAccurate && applicationForm.consentTerms);
+  };
+
+  const nextApplicationStep = () => {
+    if (!isStepComplete(applicationStep)) {
+      toast.error('Complete this step first.');
+      return;
+    }
+    setApplicationStep((prev) => Math.min(prev + 1, 4));
+  };
+
   const submitApplication = async () => {
     if (!user) {
       toast.error('Please sign in to submit your application.');
       return;
     }
+    if (!applicationForm.consentAccurate || !applicationForm.consentTerms) {
+      toast.error('Confirm the application consent first.');
+      setApplicationStep(4);
+      return;
+    }
+    if (!applicationForm.firstName.trim() || !applicationForm.lastName.trim() || !applicationForm.phone.trim()) {
+      toast.error('Complete your personal details first.');
+      setApplicationStep(1);
+      return;
+    }
+    if (!applicationForm.nationality.trim() || !applicationForm.country.trim() || !applicationForm.city.trim()) {
+      toast.error('Complete your location details first.');
+      setApplicationStep(2);
+      return;
+    }
     if (!cvFile) {
-      toast.error('Attach your CV first.');
+      toast.error('Upload your CV first.');
+      setApplicationStep(3);
       return;
     }
     if (!selectedPositionId) {
@@ -217,17 +287,17 @@ export default function HRAgentChat() {
       // 2) Insert hr_applications row (same wiring as the application form)
       const { error: appErr } = await supabase.from('hr_applications').insert({
         user_id: user.id,
-        full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Applicant',
+        full_name: `${applicationForm.firstName} ${applicationForm.lastName}`.trim(),
         email: user.email!,
-        phone_e164: user.user_metadata?.phone || '—',
-        nationality: user.user_metadata?.nationality || '—',
-        preferred_language: 'en',
-        current_location_country: '—',
-        current_location_city: '—',
+        phone_e164: applicationForm.phone,
+        nationality: applicationForm.nationality,
+        preferred_language: applicationForm.preferredLanguage,
+        current_location_country: applicationForm.country,
+        current_location_city: applicationForm.city,
         cv_url: path,
         position_applied: positionLabel,
-        consent_accurate: true,
-        consent_terms: true,
+        consent_accurate: applicationForm.consentAccurate,
+        consent_terms: applicationForm.consentTerms,
         status: 'pending',
         source: 'jessica_chat',
       } as any);
