@@ -144,7 +144,16 @@ export default function AIBrokerWorkspace() {
   };
 
   const handleSend = async (message: string, mode = "freeform") => {
-    if (!selectedId) return;
+    let activeId = selectedId;
+    if (!activeId) {
+      if (leads.length > 0) {
+        activeId = leads[0].id;
+        setSelectedId(activeId);
+      } else {
+        toast.info("You don't have any leads yet. Add a lead first so the assistant can help you with them.");
+        return;
+      }
+    }
     const tempUserId = `u-${Date.now()}`;
     setTurns(t => [...t, { id: tempUserId, role: "user", content: message }]);
     setChatLoading(true);
