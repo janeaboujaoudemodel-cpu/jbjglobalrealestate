@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useIsAppOwner } from '@/hooks/useIsAppOwner';
 import { toast } from 'sonner';
+
 import {
   Plus, ArrowLeft, Trash2, Edit, Clock, CheckCircle,
   XCircle, Star, Award, Sparkles, Shield, Upload, RotateCcw, AlertTriangle
