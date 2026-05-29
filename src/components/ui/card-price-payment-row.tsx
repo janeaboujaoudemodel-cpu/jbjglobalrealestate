@@ -66,7 +66,7 @@ const toNum = (v: unknown): number | null => {
   return Number.isFinite(n) && n > 0 ? n : null;
 };
 
-const DEFAULT_LABELS = ["Down payment", "During construction", "Post handover"];
+const DEFAULT_LABELS = ["Down payment", "During construction", "After completion"];
 
 function getBreakdownRows(
   project: CardPricePaymentRowProps["project"],
@@ -95,7 +95,7 @@ function getBreakdownRows(
     const parts: { label: string; value: string }[] = [];
     if (dp !== null) parts.push({ label: "Down payment", value: `${Math.round(dp)}%` });
     if (dc !== null) parts.push({ label: "During construction", value: `${Math.round(dc)}%` });
-    if (oc !== null) parts.push({ label: "Post handover", value: `${Math.round(oc)}%` });
+    if (oc !== null) parts.push({ label: "After completion", value: `${Math.round(oc)}%` });
     if (parts.length >= 2) return parts;
   }
 
