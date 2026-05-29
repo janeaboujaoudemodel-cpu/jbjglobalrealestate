@@ -1,11 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Users, Database, Calendar, ListTodo, Handshake, BadgeDollarSign,
   ArrowRight, Plus, Phone, Brain, Sparkles, Activity, ChevronRight, Briefcase,
+  ChevronDown, User as UserIcon, Settings as SettingsIcon, LogOut,
 } from "lucide-react";
 import { IconTile, type IconTileTone } from "@/components/ui/icon-tile";
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBrokerProfile } from "@/hooks/useBrokerProfile";
@@ -17,6 +22,18 @@ import BrokerEmptyState from "@/components/broker-portal/BrokerEmptyState";
 import LogCallDialog from "@/components/broker-crm/LogCallDialog";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { supabase } from "@/integrations/supabase/client";
+
+/** Build two-letter initials: first letter of first word + first letter of last word. */
+function getInitials(name?: string | null, email?: string | null): string {
+  const src = (name || "").trim() || (email || "").split("@")[0] || "";
+  if (!src) return "JB";
+  const parts = src.replace(/[._-]+/g, " ").split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "JB";
+  if (parts.length === 1) {
+    return (parts[0].slice(0, 2) || "JB").toUpperCase();
+  }
+  return ((parts[0][0] || "") + (parts[parts.length - 1][0] || "")).toUpperCase();
+}
 
 /* ─────────────────────────────────────────────────────────────────────────
    PremiumCard — luxury surface used for every section block on the broker
