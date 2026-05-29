@@ -399,7 +399,7 @@ export default function WebDevDock() {
       {open && (
         <div
           ref={panelRef}
-          className="pointer-events-auto w-[min(420px,calc(100vw-2rem))] max-h-[min(640px,calc(100vh-3rem))] bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          className="pointer-events-auto w-[min(460px,calc(100vw-2rem))] h-[min(720px,calc(100vh-3rem))] bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           data-owner-webdev-dock
           data-no-contrast-guard
         >
