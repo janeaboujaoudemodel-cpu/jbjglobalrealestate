@@ -167,39 +167,43 @@ const ListProperty = () => {
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Button
+              <button
+                type="button"
                 onClick={() => setMode("manual")}
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="h-11 px-6 font-semibold w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:brightness-[0.97]"
                 style={{
                   backgroundColor: CHAMPAGNE,
                   color: INK,
                   border: `1px solid ${GOLD}`,
+                  WebkitTextFillColor: INK,
                 }}
               >
-                <ClipboardCheck className="w-4 h-4 mr-2" style={{ color: INK }} />
-                List Manually
-              </Button>
-              <Button
+                <ClipboardCheck className="w-4 h-4" style={{ color: INK }} />
+                <span style={{ color: INK, WebkitTextFillColor: INK }}>List Manually</span>
+              </button>
+              <button
+                type="button"
                 onClick={() => setMode("ai")}
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="h-11 px-6 font-semibold w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:bg-white/5"
                 style={{
                   backgroundColor: "transparent",
                   color: "#FFFFFF",
                   border: `1.5px solid ${GOLD}`,
+                  WebkitTextFillColor: "#FFFFFF",
                 }}
               >
-                <Wand2 className="w-4 h-4 mr-2" style={{ color: GOLD }} />
-                List with AI
-                <Sparkles className="w-3.5 h-3.5 ml-1.5" style={{ color: GOLD }} />
-              </Button>
+                <Wand2 className="w-4 h-4" style={{ color: GOLD }} />
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>List with AI</span>
+                <Sparkles className="w-3.5 h-3.5" style={{ color: GOLD }} />
+              </button>
               <a
                 href="#my-submissions"
                 className="text-sm font-medium underline-offset-4 hover:underline"
-                style={{ color: "rgba(255,255,255,0.85)" }}
+                style={{ color: "rgba(255,255,255,0.85)", WebkitTextFillColor: "rgba(255,255,255,0.85)" }}
                 data-no-contrast-guard
               >
                 View my submissions →
