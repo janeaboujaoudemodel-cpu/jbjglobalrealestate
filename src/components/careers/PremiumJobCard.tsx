@@ -171,7 +171,6 @@ export default function PremiumJobCard({
               return (
                 <span
                   key={t}
-                  data-no-contrast-guard={t === "featured" ? "" : undefined}
                   className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text}`}
                   style={t === "featured" ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                 >
