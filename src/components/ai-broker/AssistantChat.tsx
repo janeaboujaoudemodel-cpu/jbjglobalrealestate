@@ -94,7 +94,7 @@ export default function AssistantChat({ turns, loading, onSend, leadName, leadPh
             <button
               key={q.label}
               onClick={() => submit(q.prompt, q.mode)}
-              disabled={loading || disabled}
+              disabled={loading}
               className="text-[11px] px-2.5 py-1 rounded-md border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-50"
             >
               {q.label}
