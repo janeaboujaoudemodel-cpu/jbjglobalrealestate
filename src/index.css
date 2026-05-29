@@ -4684,11 +4684,11 @@ a[class*="bg-red-"]:hover {
 :where(span, div, li, [role="status"]):is(
   [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"],
   [class~="bg-[#1A1A1A]"], [class~="bg-black"]
-):not(.allow-ink):not([data-no-contrast-guard]),
+):not(.allow-ink),
 :where(span, div, li, [role="status"]):is(
   [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"],
   [class~="bg-[#1A1A1A]"], [class~="bg-black"]
-):not(.allow-ink):not([data-no-contrast-guard])
+):not(.allow-ink)
   :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]):not(.text-price-orange):not([class*="text-price-orange"]) {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
