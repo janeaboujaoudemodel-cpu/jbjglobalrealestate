@@ -1069,6 +1069,12 @@ export default function BrokerCRM() {
         open={!!openCallId}
         onOpenChange={(o) => { if (!o) setOpenCallId(null); }}
       />
+      <MarkJunkDialog
+        open={!!junkLead}
+        leadId={junkLead?.id ?? null}
+        leadName={junkLead?.name ?? null}
+        onOpenChange={(o) => { if (!o) setJunkLead(null); }}
+      />
     </div>
   );
 }
