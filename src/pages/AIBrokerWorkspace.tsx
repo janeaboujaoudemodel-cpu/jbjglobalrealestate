@@ -286,13 +286,15 @@ export default function AIBrokerWorkspace() {
               </div>
             )}
             <AssistantChat
-              turns={turns}
+              turns={selectedId ? turns : generalTurns}
               loading={chatLoading}
               onSend={handleSend}
               leadName={selected?.full_name}
               leadPhone={selected?.phone_e164}
               leadWhatsapp={selected?.whatsapp_e164}
-              disabled={!selectedId}
+              disabled={false}
+              hasLead={!!selectedId}
+              onClearLead={selectedId ? () => setSelectedId(null) : undefined}
             />
           </div>
 
