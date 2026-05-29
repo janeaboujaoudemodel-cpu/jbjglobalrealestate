@@ -697,7 +697,7 @@ export default function BrokerCRM() {
                 </div>
                 <div className="divide-y divide-[#B89555]/15">
                   {filteredLeads.map((l: any) => (
-                    <div key={l.id} className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 items-center px-4 py-3">
+                    <div key={l.id} className="grid grid-cols-[40px_1fr_120px_120px_100px_90px] gap-3 items-center px-4 py-3">
                       <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/25 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
                         {(l.full_name || "?").slice(0, 1).toUpperCase()}
                       </div>
@@ -708,6 +708,16 @@ export default function BrokerCRM() {
                       <div className="text-xs text-[#1A1A1A]/75 truncate">{l.pipeline_stage || "new"}</div>
                       <div className="text-xs text-[#1A1A1A]/75 truncate">{l.source || l.lead_source_type || "—"}</div>
                       <div className="text-[11px] text-[#1A1A1A]/60 tabular-nums text-right">{formatDisplayDate(l.updated_at)}</div>
+                      <div className="text-right">
+                        <button
+                          type="button"
+                          onClick={() => setJunkLead({ id: l.id, name: l.full_name })}
+                          className="inline-flex items-center gap-1 h-7 px-2 rounded-md border border-[#B89555]/40 text-[11px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                          title="Return to JBJ owner as junk"
+                        >
+                          <AlertTriangle className="h-3 w-3" /> Junk
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
