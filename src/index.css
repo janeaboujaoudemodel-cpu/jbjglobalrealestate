@@ -5987,6 +5987,21 @@ button[data-phone-code-trigger]:focus-visible :is(span, svg, [class*="lucide"]) 
   outline: none !important;
   color: #1A1A1A !important;
 }
+[data-radix-popper-content-wrapper] [data-phone-country-command] [cmdk-input-wrapper] {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 10px 16px !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(184, 149, 85, 0.6) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+[data-radix-popper-content-wrapper] [data-phone-country-command] [cmdk-input-wrapper] svg {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+  opacity: 1 !important;
+}
 [data-radix-popper-content-wrapper] input[cmdk-input]::placeholder {
   color: rgba(26, 26, 26, 0.55) !important;
   opacity: 1 !important;
