@@ -86,6 +86,7 @@ const OwnerContractReview = lazy(() => import("@/pages/e-signature/ContractRevie
 const OwnerMeetings = lazy(() => import("@/pages/owner/OwnerMeetings"));
 const OwnerNewsHub = lazy(() => import("@/pages/owner/OwnerNewsHub"));
 const OwnerMarketIntel = lazy(() => import("@/pages/owner/OwnerMarketIntel"));
+const OwnerBooks = lazy(() => import("@/pages/owner/OwnerBooks"));
 
 const OwnerDocumentsTab = () => <DocumentsFormsHub initialTabOverride="documents" />;
 const OwnerEsignTab = () => <DocumentsFormsHub initialTabOverride="esign" />;
