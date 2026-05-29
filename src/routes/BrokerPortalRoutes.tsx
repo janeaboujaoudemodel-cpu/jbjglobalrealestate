@@ -26,7 +26,6 @@ const SellerListing          = lazy(() => import("@/pages/SellerListing"));
 const ListingPortalSubmit    = lazy(() => import("@/pages/ListingPortalSubmit"));
 const BrokerAccount          = lazy(() => import("@/pages/BrokerAccount"));
 const AIBrokerWorkspace      = lazy(() => import("@/pages/AIBrokerWorkspace"));
-const BrokerComingSoonSection= lazy(() => import("@/pages/broker/BrokerComingSoonSection"));
 const BrokerFormRequests     = lazy(() => import("@/pages/broker/BrokerFormRequests"));
 const BrokerLearning         = lazy(() => import("@/pages/broker/BrokerLearning"));
 const BookReader             = lazy(() => import("@/pages/broker/BookReader"));
@@ -65,16 +64,6 @@ export const BrokerPortalRoutes = () => (
 
     <Route path="deals" element={<BrokerDealsPage variant="deals" />} />
     <Route path="commissions" element={<Navigate to="/broker/deals" replace />} />
-    <Route
-      path="documents"
-      element={
-        <BrokerComingSoonSection
-          title="Documents"
-          description="Open the Document Studio to draft, sign and manage your client documents."
-          cta={{ to: "/document-studio", label: "Open Document Studio" }}
-        />
-      }
-    />
     <Route path="forms" element={<OwnerOnlyRoute><BrokerFormRequests /></OwnerOnlyRoute>} />
     <Route path="learning" element={<BrokerLearning />} />
     <Route path="learning/book/:bookId" element={<BookReader />} />
