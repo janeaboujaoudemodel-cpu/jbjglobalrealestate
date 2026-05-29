@@ -345,19 +345,6 @@ export default function HRAgentChat() {
                         {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
-                    {/* Copy Button */}
-                    <button
-                      onClick={async () => {
-                        await navigator.clipboard.writeText(message.content);
-                        toast.success(t('chat.messageCopied') || 'Message copied');
-                      }}
-                      className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors opacity-0 group-hover:opacity-100 ${
-                        message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
-                      }`}
-                    >
-                      <Copy className="w-3 h-3" />
-                      <span>{t('chat.copy') || 'Copy'}</span>
-                    </button>
                   </div>
                 </motion.div>
               ))}
