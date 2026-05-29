@@ -144,7 +144,10 @@ const MortgageCalculatorPage = () => {
             {["Emirates NBD", "ADCB", "FAB", "Mashreq", "DIB", "RAKBANK"].map((bank) => (
               <div
                 key={bank}
+                data-on-dark
+                data-no-contrast-guard
                 className="px-5 py-3 rounded-lg border border-white/25 bg-white/5 text-white font-semibold text-base md:text-lg tracking-wide hover:bg-white/10 hover:border-white/50 transition-colors allow-white"
+                style={{ color: "#FFFFFF" }}
               >
                 {bank}
               </div>
