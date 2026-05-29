@@ -7,6 +7,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { toast } from "sonner";
 
 type Item = { to: string; label: string; icon: any };
@@ -41,7 +42,9 @@ interface Props {
 export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNavigate }: Props) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { isOwner } = useUserRole();
+  const { isOwner: modeOwner } = useUserRole();
+  const { isOwner: appOwner } = useIsAppOwner();
+  const isOwner = modeOwner || appOwner;
   const { signOut } = useAuth();
 
   const handleSignOut = async () => {
@@ -86,14 +89,16 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
       {/* Nav — tight stack, scrolls if overflow */}
       <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-2 jj-scrollbar-gold space-y-1">
         {ITEMS.filter((it) => it.to !== "/broker/forms" || isOwner).map(({ to, label, icon: Icon }) => {
+          const resolvedTo = isOwner && to === "/broker/portal" ? "/owner" : to;
+          const resolvedLabel = isOwner && to === "/broker/portal" ? "Owner Dashboard" : label;
           const active =
             to === "/broker/portal" ? pathname === to : pathname === to || pathname.startsWith(to + "/");
           return (
             <NavLink
               key={to}
-              to={to}
+              to={resolvedTo}
               onClick={onNavigate}
-              title={collapsed ? label : undefined}
+              title={collapsed ? resolvedLabel : undefined}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors border border-transparent outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
                 "text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:border-[#B89555]/40",
@@ -101,7 +106,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
               )}
             >
               <Icon className="h-4 w-4 shrink-0" />
-              {!collapsed && <span className="truncate">{label}</span>}
+              {!collapsed && <span className="truncate">{resolvedLabel}</span>}
             </NavLink>
           );
         })}

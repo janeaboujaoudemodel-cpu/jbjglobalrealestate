@@ -10,6 +10,7 @@ import AuthRequiredRoute from "@/components/AuthRequiredRoute";
 import ModeRequiredRoute from "@/components/ModeRequiredRoute";
 import OwnerGuard from "@/components/OwnerGuard";
 import { BrokerPortalRoutes } from "@/routes/BrokerPortalRoutes";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 
 // ── Property & Listing Pages ──
 const Index = lazy(() => import("@/pages/Index"));
@@ -203,6 +204,16 @@ const RegisterInvestor = lazy(() => import("@/pages/register/RegisterInvestor"))
 const RegisterBroker = lazy(() => import("@/pages/register/RegisterBroker"));
 const RegisterDeveloper = lazy(() => import("@/pages/register/RegisterDeveloper"));
 const CVBuilder = lazy(() => import("@/pages/CVBuilder"));
+
+const OwnerAwareBrokerRedirect = () => {
+  const { isOwner, isLoading } = useIsAppOwner();
+  if (isLoading) return null;
+  if (isOwner) {
+    try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
+    return <Navigate to="/owner" replace />;
+  }
+  return <Navigate to="/broker/portal" replace />;
+};
 
 
 
@@ -402,8 +413,8 @@ export const PublicRoutes = () => (
 
     {/* ── Broker Pages (Tier 2 — login required) ── */}
     <Route path="/broker-toolkit" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerToolkit /></ModeRequiredRoute></AuthRequiredRoute>} />
-    <Route path="/broker-toolkit/dashboard" element={<Navigate to="/broker-dashboard" replace />} />
-    <Route path="/broker-dashboard" element={<Navigate to="/broker/portal" replace />} />
+    <Route path="/broker-toolkit/dashboard" element={<OwnerAwareBrokerRedirect />} />
+    <Route path="/broker-dashboard" element={<OwnerAwareBrokerRedirect />} />
     <Route path="/broker-resources" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerResources /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/broker/training" element={<Navigate to="/broker/learning?tab=training" replace />} />
     {/* /broker/learning and /broker/learning/book/:bookId are mounted inside BrokerPortalRoutes so the portal sidebar wraps them */}
@@ -414,10 +425,10 @@ export const PublicRoutes = () => (
     <Route path="/interior-design-ai" element={<AuthRequiredRoute><InteriorDesignAI /></AuthRequiredRoute>} />
     <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
     <Route path="/investor-hub" element={<AuthRequiredRoute><ModeRequiredRoute modes={['investor']}><InvestorHub /></ModeRequiredRoute></AuthRequiredRoute>} />
-    <Route path="/broker-hub" element={<Navigate to="/broker/portal" replace />} />
+    <Route path="/broker-hub" element={<OwnerAwareBrokerRedirect />} />
     <Route path="/jbj-academy" element={<AuthRequiredRoute><JBJAcademy /></AuthRequiredRoute>} />
     <Route path="/academy/graduates" element={<AcademyGraduates />} />
-    <Route path="/broker-portal" element={<Navigate to="/broker/portal" replace />} />
+    <Route path="/broker-portal" element={<OwnerAwareBrokerRedirect />} />
 
     {/* ── Canonical Broker Portal (nested /broker/* shell) ── */}
     {BrokerPortalRoutes()}
