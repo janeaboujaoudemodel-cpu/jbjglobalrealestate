@@ -350,15 +350,24 @@ const DeveloperPortalCTA = () => {
     );
   }
 
-  // BROKER — single message card pointing to YOUR broker portal
+  // BROKER — single message card pointing to YOUR broker portal.
+  // Resolve href based on auth/role so the click never lands on a guard loop:
+  //  • Unauthenticated → /auth?returnTo=/broker/portal&preselect=broker
+  //  • Owner → /broker/portal?preview=1 (so OwnerRedirectGuard doesn't bounce to /owner)
+  //  • Authenticated broker → /broker/portal direct
   if (isBrokerMode) {
+    const brokerHref = !user
+      ? "/auth?returnTo=%2Fbroker%2Fportal&preselect=broker"
+      : isOwner
+        ? "/broker/portal?preview=1"
+        : "/broker/portal";
     return (
       <PortalVisitCard
         eyebrow="Broker Portal"
         title="Your Broker Portal"
         description="Everything you need to close — CRM, listings, JBJ Academy and AI sales tools, in one professional command center."
         cta="Visit Your Broker Portal"
-        href="/broker/portal"
+        href={brokerHref}
         Icon={Briefcase}
         features={[
           { label: "CRM & Pipeline", icon: Briefcase },
