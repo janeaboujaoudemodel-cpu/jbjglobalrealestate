@@ -937,6 +937,15 @@ export default function BrokerCRM() {
         }}
       />
       <RequestDatabaseDialog open={requestOpen} onOpenChange={setRequestOpen} />
+      <UploadDatabaseDialog
+        open={uploadOpen}
+        onOpenChange={setUploadOpen}
+        onCreated={() => {
+          queryClient.invalidateQueries({ queryKey: ["broker-scoped-databases"] });
+          queryClient.invalidateQueries({ queryKey: ["broker-scoped-leads"] });
+          setTab("databases");
+        }}
+      />
       <CallDetailSheet
         callId={openCallId}
         leadName={(() => {
