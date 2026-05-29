@@ -17,6 +17,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { searchItems } from '@/config/globalSearchIndex';
 import { useUserAlerts } from '@/hooks/useUserAlerts';
+import { useIsAppOwner } from '@/hooks/useIsAppOwner';
 
 interface MegaMenuAccountProps {
   onClose: () => void;
@@ -37,7 +38,9 @@ const SEARCH_SHORTCUTS = [
 
 const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>(({ onClose }, ref) => {
   // IMPORTANT: Get ownerLoading from AuthContext to handle owner verification timing
-  const { user, isOwner, ownerLoading, signOut } = useAuth();
+  const { user, isOwner: authIsOwner, ownerLoading, signOut } = useAuth();
+  const { isOwner: roleIsOwner, isLoading: roleOwnerLoading } = useIsAppOwner();
+  const isOwner = authIsOwner || roleIsOwner;
   const { t, language, setLanguage } = useLanguage();
   const { tierProgress, isCombinedMode, investorTierProgress, brokerTierProgress } = useTierProgress();
   const { mode, isDeveloperMode } = useUserModeContext();
@@ -291,7 +294,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   };
 
   // Unified loading: show skeleton until ALL critical queries resolve
-  const isDataLoading = ownerLoading || crmLoading;
+  const isDataLoading = ownerLoading || roleOwnerLoading || crmLoading;
 
   return (
     <MegaMenuShell 
