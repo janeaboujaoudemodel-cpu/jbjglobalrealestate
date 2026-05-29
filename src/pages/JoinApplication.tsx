@@ -450,6 +450,23 @@ export default function JoinApplication() {
 
   const goToStep = (idx: number) => {
     const clamped = Math.max(0, Math.min(TOTAL_STEPS - 1, idx));
+    // Backward / same-step navigation is always allowed.
+    if (clamped <= currentStep) {
+      setCurrentStep(clamped);
+      setTimeout(scrollToForm, 50);
+      return;
+    }
+    // Forward navigation: enforce sequential completion. Validate every
+    // step from current up to (but not including) the target. The first
+    // invalid step becomes the new active step (with errors surfaced by
+    // validateStep) so the user can't skip ahead.
+    for (let i = currentStep; i < clamped; i++) {
+      if (!validateStep(i)) {
+        setCurrentStep(i);
+        setTimeout(scrollToForm, 50);
+        return;
+      }
+    }
     setCurrentStep(clamped);
     setTimeout(scrollToForm, 50);
   };
