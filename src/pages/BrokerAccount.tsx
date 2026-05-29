@@ -59,15 +59,6 @@ interface BrokerPoints {
   level: number;
 }
 
-interface ActivityStats {
-  date: string;
-  calls_made: number;
-  chats_sent: number;
-  emails_sent: number;
-  visits_completed: number;
-  leads_contacted: number;
-}
-
 interface CallLog {
   id: string;
   phone_number: string;
@@ -91,11 +82,10 @@ const BrokerAccount = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { isOwner: isAppOwner, isLoading: appOwnerLoading } = useIsAppOwner();
-  const { isBroker, isInvestor, isVisitor, role, isLoading: roleLoading } = useUserRole();
+  const { isBroker, isLoading: roleLoading } = useUserRole();
   const [modules, setModules] = useState<TrainingModule[]>([]);
   const [progress, setProgress] = useState<TrainingProgress[]>([]);
   const [points, setPoints] = useState<BrokerPoints | null>(null);
-  const [activityStats, setActivityStats] = useState<ActivityStats[]>([]);
   const [callLogs, setCallLogs] = useState<CallLog[]>([]);
   const [chatLogs, setChatLogs] = useState<ChatLog[]>([]);
   const [loading, setLoading] = useState(true);
