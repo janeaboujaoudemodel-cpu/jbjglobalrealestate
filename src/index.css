@@ -967,6 +967,26 @@ All colors MUST be HSL.
   ):hover:is(.text-white, [class*="text-white/"], [class*="hover:text-white"]):not([data-no-contrast-guard]):not([data-on-dark]):not(.allow-white) {
     color: #1A1A1A !important;
   }
+
+  /* HARD LOCK: a button/link whose OWN surface is champagne/cream/gold must be ink,
+     even if future code accidentally adds text-white, allow-white, or guard opt-outs.
+     White text/icons are allowed only on real navy/dark CTA surfaces such as .jj-navy-cta. */
+  :where(button, a, [role="button"], [role="menuitem"], [role="tab"]):is(
+    .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-muted, .bg-accent,
+    [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+    [class*="bg-[#E6DAC2]"], [class*="bg-[#B89555]"], .bg-gold
+  ):not(.jj-navy-cta):not([class*="bg-[#102540]"]):not([class*="bg-[#1a3d63]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"]),
+  :where(button, a, [role="button"], [role="menuitem"], [role="tab"]):is(
+    .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-muted, .bg-accent,
+    [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+    [class*="bg-[#E6DAC2]"], [class*="bg-[#B89555]"], .bg-gold
+  ):not(.jj-navy-cta):not([class*="bg-[#102540]"]):not([class*="bg-[#1a3d63]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"])
+    :where(span, p, small, strong, svg, [class*="lucide"]):not([data-on-dark] *):not([data-surface="dark"] *) {
+    color: #1A1A1A !important;
+    stroke: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+    opacity: 1 !important;
+  }
 }
 
 
