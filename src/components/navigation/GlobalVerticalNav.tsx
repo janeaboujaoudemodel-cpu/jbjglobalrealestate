@@ -1363,7 +1363,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       data-allow-dark-cta
                       className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] bg-[#FDFBF7] hover:bg-[#EFE6D6]"
                     >
-                      <LogOut className="w-3.5 h-3.5 text-[#B91C1C]" strokeWidth={2.25} />
+                      <LogOut className="w-3.5 h-3.5 allow-white" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign Out</TooltipContent>
