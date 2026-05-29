@@ -34,7 +34,7 @@ export default function AssistantChat({ turns, loading, onSend, leadName, leadPh
 
   const submit = (msg?: string, mode?: string) => {
     const text = (msg ?? input).trim();
-    if (!text || loading || disabled) return;
+    if (!text || loading) return;
     onSend(text, mode);
     if (!msg) setInput("");
   };
