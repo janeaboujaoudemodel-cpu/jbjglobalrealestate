@@ -1,72 +1,109 @@
-## Web Developer Dock — fixes + new capabilities
+# Broker Portal — Repair & Redesign Plan
 
-Scope is limited to `src/components/owner-webdev/WebDevDock.tsx`, a new voice-note edge function, the existing `owner_ui_overrides` flow, and a small "before/after" overlay component. Owner-only gating is already enforced (`user_roles` check) and stays unchanged.
+The audit confirmed: `/broker/portal` already exists with a full route shell, sidebar, layout, and 18+ pages. We do **not** build a new portal. We fix auth, harden role gating, then rebuild the **landing dashboard** + tighten the sidebar.
 
-### 1. Visual fixes (Send button + gap)
+---
 
-- **"Send" label readability**: the global contrast guard is fighting the navy CTA. Lock the button with `data-allow-dark-cta` + `.allow-white` (already set) and force `color:#FFFFFF` + `WebkitTextFillColor:#FFFFFF` inline so the word stays white on navy. Add a secondary variant: when the user prefers light styling, render label in `#102540` on a champagne pill. Default stays white-on-navy but legible.
-- **Big gap under the chat**: the panel uses a fixed `h-[min(640px,...)]` but the History list has `flex-1` with empty state padding `py-8` creating dead space. Switch panel to `h-auto max-h-[min(640px,...)]` so it hugs content when history is empty, and reduce empty-state padding to `py-3`. History area becomes `flex-1 min-h-[80px]` only when there are requests.
+## Phase 1 — Kill the auth redirect loop (highest priority)
 
-### 2. Voice note input
+**Root cause (from audit):**
+- `AuthRequiredRoute` writes `?returnTo=…` — `Auth.tsx` reads it correctly.
+- `BrokerGuard` writes `?redirect=…` — `Auth.tsx` ignores it → user lands on `/`.
+- `OwnerRedirectGuard` bounces owners visiting `/broker/portal` to `/owner` unless `?preview=1` is set — this can loop when an owner is the test user.
+- `signInWithGoogle` has no explicit `redirectTo`, so OAuth strips `returnTo`.
 
-- Add a mic button next to Screenshot / Pick in the composer.
-- Press-and-hold (or click to start / click to stop) records via `MediaRecorder` (webm/opus).
-- On stop, upload blob to a new edge function `owner-webdev-voice` which calls ElevenLabs Scribe (`scribe_v2`) and returns transcribed text.
-- Transcribed text is appended to the `instruction` textarea (user can edit before Send).
-- Requires `ELEVENLABS_API_KEY` secret. If not set, prompt to add it.
+**Fixes:**
+1. `Auth.tsx`: accept both `?returnTo` and `?redirect` (alias). Fallback order: `returnTo` → `redirect` → `sessionStorage["jbj_post_login_redirect"]` → `/`.
+2. `AuthRequiredRoute` + `BrokerGuard`: standardize on `?returnTo=`, additionally stash the intended path in `sessionStorage` before navigating to `/auth` (OAuth-safe).
+3. `signInWithGoogle(returnTo?)`: pass `redirectTo: ${origin}/auth/callback?returnTo=…` so the loop survives the Google round-trip.
+4. `OwnerRedirectGuard`: when the user is owner **and** the source CTA was the public homepage broker card, auto-append `?preview=1` instead of forcing `/owner`. Add a one-line "Viewing as broker preview · Switch to Owner" banner.
+5. `DeveloperPortalCTA` broker CTA: if already authenticated AND `isBrokerMode`, render the CTA as a direct `<Link to="/broker/portal">` with no gate; if unauthenticated, navigate to `/auth?returnTo=/broker/portal&preselect=broker`.
+6. Verify the loop is dead via the full flow: Home → CTA → /auth → sign-in → /broker/portal (no homepage bounce), and refresh on /broker/portal stays put.
 
-### 3. Owner-only minimizer (always visible)
+---
 
-- Keep the floating launcher pill (`!open` state) — it already minimizes the dock.
-- When dock is `open`, add a second always-visible **minimize chip** anchored bottom-left of the panel header (in addition to the existing top-right minus). This gives a persistent thumb-reach minimize on mobile and desktop.
-- Visibility is already gated by `allowed` (owner/admin role) — no change needed.
+## Phase 2 — Sidebar & route hygiene (no new routes)
 
-### 4. Edit-in-place: Live preview, explicit Save / Cancel
+Existing sidebar already has 10 items. Reconcile against the user's required list:
 
-Today, AI proposals write directly to `owner_ui_overrides` with `status='pending'` and the preview loader already injects pending CSS. Reshape the flow:
+| Required item        | Status                    | Action                                |
+| -------------------- | ------------------------- | ------------------------------------- |
+| Dashboard            | ✅ `/broker/portal`        | keep                                  |
+| My Leads             | ✅ `/broker/leads`         | promote in sidebar                    |
+| CRM Pipeline         | ✅ `/broker/crm`           | keep                                  |
+| Assigned Databases   | ✅ `/broker/databases`     | add to sidebar (currently routed only)|
+| Listings             | ✅ `/broker/listings`      | keep                                  |
+| Calendar             | ✅ `/broker/calendar`      | keep                                  |
+| Tasks                | ✅ `/broker/tasks`         | keep                                  |
+| Deals                | ✅ `/broker/deals`         | split from "Deals & Commissions"      |
+| Commissions          | ✅ `/broker/commissions`   | split                                 |
+| Documents            | ✅ `/broker/documents`     | keep                                  |
+| Forms & Agreements   | ⚠️ `/broker/forms` is `OwnerOnlyRoute` | repurpose as broker-readable agreements list; owner-only admin moves to `/owner/forms` |
+| JBJ Academy          | ✅ `/broker/learning`      | keep                                  |
+| Marketing Toolkit    | ⚠️ redirects to portal    | wire to `BrokerToolkit` page          |
+| AI Sales Assistant   | ✅ `/broker/ai`            | keep                                  |
+| Notifications        | ✅ `/broker/notifications` | keep                                  |
+| Settings             | ✅ `/broker/settings`      | keep                                  |
 
-- Edge function `owner-webdev-propose` already creates a `pending` override. Keep that — it becomes the **preview-only** state.
-- Add two buttons per request card (already exist as Approve/Reject, rename for clarity):
-  - **Save** → flips override `status` to `approved` (persists across sessions/users).
-  - **Cancel** → deletes the override row + clears the preview event (current Reject behavior).
-- Pending overrides are scoped to the current owner session via the existing `jbj:override-preview` event and `OwnerOverrideLoader` — public visitors never see them until Save.
-- Add a "Discard all unsaved" pill in the dock header when ≥1 pending override exists.
+Remove owner-footer button from `BrokerPortalSidebar` for non-owners (already conditional; verify). Hide every owner/admin/relationships/dev/agency path per the existing `BrokerGuard` blocklist.
 
-### 5. "Take me there" + before/after visual
+---
 
-- Every new request stores `route` and `selector` (already in DB).
-- When a proposal lands on a different route, the existing "Take me there" button navigates. Enhance it:
-  - After navigation, dispatch `jbj:webdev-highlight` with `{ selector, beforeCss, afterCss }`.
-  - New small overlay component `WebDevChangeHighlight.tsx` listens, scrolls the target into view, draws a gold ring around it for 4s, and opens a floating **Before / After** card with two thumbnails:
-    - **Before** = screenshot captured before the override (html2canvas of the element with override temporarily disabled).
-    - **After** = screenshot with override applied.
-  - User can toggle a slider between Before and After, then click Save or Cancel from the card — same actions as the dock list.
+## Phase 3 — Rebuild `BrokerDashboardLanding` (the actual UI work)
 
-### Technical notes
+The current landing is the "empty white" page the user is complaining about. Replace its body with a real workspace, using the project's champagne/gold/ink system + `<PremiumSectionCard>` + `<IconTile>` (no new design tokens):
 
-- Files touched:
-  - `src/components/owner-webdev/WebDevDock.tsx` — UI fixes, voice mic, Save/Cancel rename, panel sizing.
-  - `src/components/owner-webdev/WebDevChangeHighlight.tsx` — **new**, mounted once in `App.tsx` (gated by owner role).
-  - `supabase/functions/owner-webdev-voice/index.ts` — **new**, ElevenLabs Scribe transcription, `verify_jwt` enforced via existing `requireOwnerAuth`.
-  - `src/components/owner-overrides/OwnerOverrideLoader.tsx` — no change required; pending overrides already render only for owner via existing scoping.
-- No DB migration needed — `owner_ui_overrides.status` already supports `pending`/`approved`/`rejected`.
-- Secret: `ELEVENLABS_API_KEY` (will request via `add_secret` if missing when implementing).
-- Memory updated after build: `mem://features/owner-dashboard/web-developer-dock-standard`.
+1. **Welcome row** — broker name, brokerage, tier badge, avatar, mode chip. Data from `useBrokerProfile` + `useUserRole`.
+2. **KPI strip (6 cards)** — Total Leads, Active Deals, Meetings Today, New Assignments, Commission Pipeline, Pending Follow-ups. Data via new read-only hook `useBrokerKpis()` querying:
+   - `crm_leads` count where `assigned_broker_id = auth.uid()`
+   - `crm_deals` count where stage ∈ active set
+   - `crm_meetings` where date = today
+   - `vw_crm_database_access` rows newer than 7d
+   - sum of `crm_deals.commission_pending`
+   - `crm_leads` where `next_followup_at <= now()`
+   (All scoped server-side by RLS; no new tables.)
+3. **Activity feed** — read from existing `admin_edit_log` + `crm_lead_events` filtered to the broker's `assigned_broker_id`. Reuses existing query patterns.
+4. **My Databases preview** — top 4 cards from `useBrokerScopedDatabases`, "View all" → `/broker/databases`.
+5. **Today panel** — upcoming meetings + due tasks (existing hooks).
+6. **Smart features row** — AI lead suggestions, freshness indicator, next-action chips. Backed by `ai-broker-suggestions` edge function (already exists per repo grep — if not, wire a stub that surfaces top-3 stale leads from `crm_leads` without inventing data).
 
-```text
-┌──────────── Web Developer Dock ─────────────┐
-│ ⚡ JBJ Web Developer            [_] minimize │
-├──────────────────────────────────────────────┤
-│ On /properties                               │
-│ [screenshot chip] [target chip]              │
-│ ┌────────────────────────────────────────┐  │
-│ │ Describe a UI change…                  │  │
-│ └────────────────────────────────────────┘  │
-│ [📷 Shot] [🎯 Pick] [🎤 Voice]    [→ Send]  │
-├──────────────────────────────────────────────┤
-│ pending · /home                              │
-│ "Increase hero padding"                      │
-│ [Take me there] [✓ Save] [✕ Cancel]          │
-└──────────────────────────────────────────────┘
-                                  [_ minimize]
-```
+Skeletons + empty states + onboarding state (when broker has 0 assigned leads) for every section. No fake placeholder data.
+
+---
+
+## Phase 4 — Role-gated data access (verify, don't rebuild)
+
+- `useBrokerScopedLeads` and `useBrokerScopedDatabases` already filter by `auth.uid()`. Confirm RLS on `crm_leads`, `crm_deals`, `crm_meetings`, `vw_crm_database_access` denies cross-broker reads. No migrations expected; if a missing policy is found, add the minimum scoped policy in a single migration.
+- Confirm three role-detection systems agree (`UserModeContext`, `useUserRole`, `BrokerGuard`). Consolidate the dashboard on `useUserRole` (the most accurate) and stop reading `localStorage` for gating.
+
+---
+
+## Phase 5 — Verification (end-to-end manual run before sign-off)
+
+Walk and screenshot:
+1. Anonymous → Home → "Visit Your Broker Portal" → `/auth?returnTo=/broker/portal` → sign in → lands on `/broker/portal` (no homepage bounce).
+2. Refresh on `/broker/portal` → stays put.
+3. Sign out → sign in again → lands on `/broker/portal` directly.
+4. Owner visits `/broker/portal` → sees preview banner, not `/owner` redirect loop.
+5. Broker navigates Dashboard → CRM → Database → Lead → Logout.
+6. Owner-only routes (`/owner/*`, `/admin/*`) hidden in sidebar; direct URL blocked.
+
+---
+
+## Out of scope (explicitly not doing)
+
+- No new CRM, no new portal, no new sidebar primitive.
+- No design-system tokens added; reusing champagne/gold/ink + navy CTA.
+- No homepage CTA copy/wording change beyond making it work.
+- No edge function rewrites unless an existing one is broken on the dashboard query path.
+
+---
+
+## Technical notes
+
+- Auth fallback chain implemented in `Auth.tsx` post-`signInWithPassword` block (lines 226–268) and in the already-signed-in early-return (lines 433–442).
+- OAuth round-trip: persist `returnTo` to `sessionStorage` before `signInWithOAuth`; `/auth/callback` route (or the existing Auth-page mount) reads it on `SIGNED_IN` event.
+- `BrokerDashboardLanding` keeps the `BrokerPortalLayout` shell — only the inner page body is replaced.
+- All new queries gated behind `useAuthReady`-style pattern (don't fire before `getSession()` resolves) to prevent the "loading spinner hanging forever" symptom.
+
+Please confirm this plan, or tell me which phases to drop / re-order, and I'll implement.

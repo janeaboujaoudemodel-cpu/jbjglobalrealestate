@@ -131,10 +131,12 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
     );
   }
 
-  // VISITOR (no session) → redirect to auth with redirect-back
+  // VISITOR (no session) → redirect to auth with returnTo (standardized param)
   if (!user) {
-    const redirectPath = encodeURIComponent(location.pathname + location.search);
-    return <Navigate to={`/auth?redirect=${redirectPath}`} replace />;
+    const fullPath = location.pathname + location.search;
+    try { sessionStorage.setItem("jbj_post_login_redirect", fullPath); } catch {}
+    const returnTo = encodeURIComponent(fullPath);
+    return <Navigate to={`/auth?returnTo=${returnTo}`} replace />;
   }
 
   // Pure-broker path guard: brokers hitting an owner/admin area get bounced

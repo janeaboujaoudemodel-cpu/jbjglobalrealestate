@@ -223,9 +223,15 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             }
           } else {
             toast.success("Welcome back!");
-            // Honor ?returnTo and ?preselect from URL
+            // Honor ?returnTo (canonical), ?redirect (legacy alias), or the
+            // sessionStorage backup written by AuthRequiredRoute/BrokerGuard
+            // before bouncing here. The backup survives OAuth round-trips that
+            // strip query params on the Supabase callback redirect.
             const params = new URLSearchParams(window.location.search);
-            const returnTo = params.get('returnTo');
+            let returnTo = params.get('returnTo') || params.get('redirect');
+            if (!returnTo) {
+              try { returnTo = sessionStorage.getItem('jbj_post_login_redirect'); } catch {}
+            }
             const preselect = params.get('preselect');
             // Pick up either the URL param or a value stashed during signup.
             let pendingPreselect: string | null = preselect;
@@ -263,6 +269,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             if (isSafeReturnTo(returnTo)) {
               // Always honor returnTo — this is what kills the post-login loop
               // for "/broker/portal", "/investor-dashboard", etc.
+              try { sessionStorage.removeItem('jbj_post_login_redirect'); } catch {}
               navigate(returnTo, { replace: true });
             } else if (modeSelected) {
               navigate("/", { replace: true });
@@ -432,14 +439,20 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
   // ─── Already signed in → auto-redirect (no interstitial screen) ───
   if (user && mode !== "reset" && !isReactivationPreview) {
-    const returnTo = searchParams.get("returnTo") || "/";
+    // Accept canonical ?returnTo, legacy ?redirect, or sessionStorage backup.
+    let returnTo = searchParams.get("returnTo") || searchParams.get("redirect");
+    if (!returnTo) {
+      try { returnTo = sessionStorage.getItem("jbj_post_login_redirect"); } catch {}
+    }
+    const safe = returnTo && returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/";
+    try { sessionStorage.removeItem("jbj_post_login_redirect"); } catch {}
     // Fire a brief welcome toast once, then bounce the user straight to where they came from.
     if (typeof window !== "undefined" && !(window as any).__jbjWelcomeBackShown) {
       (window as any).__jbjWelcomeBackShown = true;
       toast.success("Welcome back!");
-      setTimeout(() => { navigate(returnTo, { replace: true }); }, 50);
+      setTimeout(() => { navigate(safe, { replace: true }); }, 50);
     } else {
-      setTimeout(() => { navigate(returnTo, { replace: true }); }, 0);
+      setTimeout(() => { navigate(safe, { replace: true }); }, 0);
     }
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
