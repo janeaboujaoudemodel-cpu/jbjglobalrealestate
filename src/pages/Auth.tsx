@@ -223,9 +223,15 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             }
           } else {
             toast.success("Welcome back!");
-            // Honor ?returnTo and ?preselect from URL
+            // Honor ?returnTo (canonical), ?redirect (legacy alias), or the
+            // sessionStorage backup written by AuthRequiredRoute/BrokerGuard
+            // before bouncing here. The backup survives OAuth round-trips that
+            // strip query params on the Supabase callback redirect.
             const params = new URLSearchParams(window.location.search);
-            const returnTo = params.get('returnTo');
+            let returnTo = params.get('returnTo') || params.get('redirect');
+            if (!returnTo) {
+              try { returnTo = sessionStorage.getItem('jbj_post_login_redirect'); } catch {}
+            }
             const preselect = params.get('preselect');
             // Pick up either the URL param or a value stashed during signup.
             let pendingPreselect: string | null = preselect;
