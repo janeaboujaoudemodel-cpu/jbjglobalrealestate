@@ -6039,3 +6039,32 @@ button[data-phone-code-trigger]:focus-visible :is(span, svg, [class*="lucide"]) 
   opacity: 1 !important;
 }
 
+/* FINAL OVERRIDE — Sign Out is destructive and must remain red in both
+   expanded and collapsed nav states, including hover. Keep this after all
+   contrast guards so the icon can never be repainted white. */
+[data-signout-action],
+[data-signout-action]:hover,
+[data-signout-action] [data-signout-label],
+[data-signout-action]:hover [data-signout-label],
+[data-signout-action] [data-signout-icon],
+[data-signout-action]:hover [data-signout-icon],
+[data-signout-action] [data-signout-icon] *,
+[data-signout-action]:hover [data-signout-icon] * {
+  color: #DC2626 !important;
+  stroke: #DC2626 !important;
+  -webkit-text-fill-color: #DC2626 !important;
+  opacity: 1 !important;
+}
+
+svg.jj-signout-icon,
+svg.jj-signout-icon *,
+button[data-signout-action] svg.jj-signout-icon,
+button[data-signout-action]:hover svg.jj-signout-icon,
+button[data-signout-action] svg.jj-signout-icon *,
+button[data-signout-action]:hover svg.jj-signout-icon * {
+  color: #DC2626 !important;
+  stroke: #DC2626 !important;
+  -webkit-text-fill-color: #DC2626 !important;
+  opacity: 1 !important;
+}
+

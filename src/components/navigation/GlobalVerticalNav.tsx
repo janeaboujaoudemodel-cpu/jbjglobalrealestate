@@ -1214,14 +1214,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <button
               data-signout-action
               data-no-contrast-guard
-              data-allow-dark-cta
               onClick={() => { supabase.auth.signOut(); }}
               className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[4px] rounded-lg border w-full group"
               style={{ color: '#DC2626', borderColor: '#B89555', backgroundColor: '#FDFBF7' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(26,26,26,0.08)'; e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.borderColor = '#B89555'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#DC2626'); (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('stroke', '#DC2626'); }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(220,38,38,0.08)'; e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.borderColor = '#DC2626'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#DC2626', 'important'); (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('stroke', '#DC2626', 'important'); }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.borderColor = '#B89555'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#DC2626'); (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('stroke', '#DC2626'); }}
             >
-              <LogOut data-signout-icon className="w-3 h-3 !text-[#DC2626]" color="#DC2626" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
+              <LogOut data-signout-icon data-no-contrast-guard className="w-3 h-3 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
               <span data-signout-label className="!text-[#DC2626]" style={{ color: '#DC2626' }}>Sign Out</span>
             </button>
           ) : (
@@ -1362,10 +1361,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       data-signout-action
                       onClick={() => { supabase.auth.signOut(); }}
                       data-no-contrast-guard
-                      data-allow-dark-cta
-                      className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] bg-[#FDFBF7] hover:bg-[#EFE6D6]"
+                      className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] bg-[#FDFBF7] hover:bg-[#FEE2E2] hover:border-[#DC2626]"
                     >
-                      <LogOut data-signout-icon className="w-3.5 h-3.5 !text-[#DC2626]" color="#DC2626" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
+                      <LogOut data-signout-icon data-no-contrast-guard className="w-3.5 h-3.5 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]" style={{ color: '#DC2626' }}>Sign Out</TooltipContent>
@@ -1420,7 +1418,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-[#FDFBF7] h-full relative overscroll-contain [&_button>span]:!text-[#B89555] [&_button_svg]:!text-[#B89555] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
+        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-[#FDFBF7] h-full relative overscroll-contain [&_button:not([data-signout-action])>span]:!text-[#B89555] [&_button:not([data-signout-action])_svg]:!text-[#B89555] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
           {renderNavContent()}
         </div>
       )}
