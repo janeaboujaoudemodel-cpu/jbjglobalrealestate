@@ -222,11 +222,13 @@ serve(async (req) => {
       });
     }
 
-    // Persist both turns
-    const rows: any[] = [];
-    if (userMessage) rows.push({ broker_id: user.id, lead_id: leadId, role: "user", content: userMessage });
-    rows.push({ broker_id: user.id, lead_id: leadId, role: "assistant", content: structured.reply || "", structured });
-    if (rows.length) await supabase.from("broker_ai_chats").insert(rows);
+    // Persist both turns — only when a lead is in context
+    if (leadId) {
+      const rows: any[] = [];
+      if (userMessage) rows.push({ broker_id: user.id, lead_id: leadId, role: "user", content: userMessage });
+      rows.push({ broker_id: user.id, lead_id: leadId, role: "assistant", content: structured.reply || "", structured });
+      if (rows.length) await supabase.from("broker_ai_chats").insert(rows);
+    }
 
     return new Response(JSON.stringify({ structured }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
