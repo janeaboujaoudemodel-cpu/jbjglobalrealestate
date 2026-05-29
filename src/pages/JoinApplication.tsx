@@ -1288,6 +1288,9 @@ export default function JoinApplication() {
                 </div>
                 {/* End of step 4 wrapper */}
 
+                </div>
+                {/* End of stable-height wizard panel */}
+
                 {/* Wizard navigation */}
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
                   <Button
