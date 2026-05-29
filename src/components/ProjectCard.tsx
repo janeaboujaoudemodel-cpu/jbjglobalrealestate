@@ -331,7 +331,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             Every row below reserves a fixed min-height so cards stay
             pixel-identical even when properties have missing/short
             location, unit-types, size, developer, or description. */}
-        <div className="p-5 pt-4 flex-1 flex flex-col gap-2">
+        <div className="p-5 pt-10 flex-1 flex flex-col gap-2">
           {/* Header block — title (always 2 lines) + location (always 1 line) */}
           <div className="flex flex-col gap-1">
             <h4 className="text-[#1A1A1A] text-lg font-bold break-words leading-tight line-clamp-2 min-h-[2.75rem] group-hover:text-[#B89555] transition-colors">
