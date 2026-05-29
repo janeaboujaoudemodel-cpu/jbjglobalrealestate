@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useOwnerVerification } from "@/hooks/useOwnerVerification";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import VisitorDashboard from "@/components/dashboard/VisitorDashboard";
 import { Loader2 } from "lucide-react";
 
@@ -27,13 +28,14 @@ const Dashboard = () => {
   const { user, loading: authLoading } = useAuth();
   const { mode, isLoading: modeLoading } = useUserModeContext();
   const { isOwner, isLoading: ownerLoading } = useOwnerVerification();
+  const { isOwner: roleIsOwner, isLoading: roleOwnerLoading } = useIsAppOwner();
 
-  if (authLoading || modeLoading || ownerLoading) return <Spinner />;
+  if (authLoading || modeLoading || ownerLoading || roleOwnerLoading) return <Spinner />;
   if (!user) return <VisitorDashboard />;
 
   // Owner cockpit lives at /owner — always send verified owner there, regardless
   // of route. Also clear any stale broker-preview flag so the redirect sticks.
-  if (isOwner) {
+  if (isOwner || roleIsOwner) {
     if (typeof window !== "undefined") {
       try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
       window.location.replace("/owner");
