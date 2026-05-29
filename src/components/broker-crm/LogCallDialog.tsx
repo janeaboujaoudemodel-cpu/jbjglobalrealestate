@@ -339,7 +339,7 @@ export default function LogCallDialog({
     setSavingRecording(true);
     let finalAudioBlob = audioBlob;
     let finalDuration = Math.max(0, Number(durationSeconds) || secondsRef.current || 0);
-    if (recState === "recording") {
+    if (recState === "recording" || recState === "paused") {
       const stopped = await stopRecordingAndGetBlob();
       finalAudioBlob = stopped?.blob ?? null;
       finalDuration = stopped?.seconds ?? finalDuration;
@@ -395,6 +395,12 @@ export default function LogCallDialog({
   };
 
   const isSaving = submitting || savingRecording;
+
+  const stopAndSave = async () => {
+    if (isSaving) return;
+    const syntheticSubmitEvent = { preventDefault: () => undefined };
+    await submit(syntheticSubmitEvent);
+  };
 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o && isSaving) return; onOpenChange(o); if (!o) reset(); }}>
