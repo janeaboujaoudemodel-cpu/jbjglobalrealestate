@@ -213,7 +213,7 @@ export default function BrokerCRM() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       queryClient.invalidateQueries({ queryKey: ["broker-personal-tasks"] });
       toast.success("Call logged successfully");
       setTab("calls");
@@ -231,7 +231,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success("Call moved to Recently deleted");
     },
     onError: (e: any) => toast.error(e?.message || "Could not delete call"),
@@ -247,7 +247,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success("Call restored");
     },
     onError: (e: any) => toast.error(e?.message || "Could not restore call"),
@@ -263,7 +263,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success("All calls moved to Recently deleted");
     },
     onError: (e: any) => toast.error(e?.message || "Could not delete all calls"),
@@ -279,7 +279,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success("Call permanently deleted");
     },
     onError: (e: any) => toast.error(e?.message || "Could not permanently delete call"),
@@ -295,7 +295,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: (_d, ids) => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success(`${ids.length} call${ids.length > 1 ? "s" : ""} moved to Recently deleted`);
       setSelectedCallIds(new Set());
     },
@@ -312,7 +312,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: (_d, ids) => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success(`${ids.length} call${ids.length > 1 ? "s" : ""} restored`);
       setSelectedCallIds(new Set());
     },
@@ -329,7 +329,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: (_d, ids) => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success(`${ids.length} call${ids.length > 1 ? "s" : ""} permanently deleted`);
       setSelectedCallIds(new Set());
     },
