@@ -31,6 +31,8 @@ const BrokerLearning         = lazy(() => import("@/pages/broker/BrokerLearning"
 const BookReader             = lazy(() => import("@/pages/broker/BookReader"));
 const BrokerDealsPage        = lazy(() => import("@/pages/broker/BrokerDealsPage"));
 const BrokerDeveloperVisits  = lazy(() => import("@/pages/broker/BrokerDeveloperVisits"));
+const BrokerMessages         = lazy(() => import("@/pages/broker/BrokerMessages"));
+const BrokerEmailHub         = lazy(() => import("@/pages/broker/BrokerEmailHub"));
 
 const Wrap = (
   <AuthRequiredRoute>
@@ -60,6 +62,8 @@ export const BrokerPortalRoutes = () => (
     <Route path="calendar" element={<BrokerCalendar />} />
     <Route path="tasks" element={<BrokerTasks />} />
     <Route path="notifications" element={<BrokerInbox />} />
+    <Route path="messages" element={<BrokerMessages />} />
+    <Route path="email" element={<BrokerEmailHub />} />
     <Route path="settings" element={<BrokerAccount />} />
     <Route path="ai" element={<AIBrokerWorkspace />} />
 
