@@ -148,8 +148,9 @@ const ListingPortalMyListings = () => {
     }
   };
 
+  const submitBase = embeddedInBrokerPortal ? '/broker/listings/new' : '/listing-portal/submit';
   const handleEdit = (id: string) => {
-    navigate(`/listing-portal/submit?edit=${id}`);
+    navigate(embeddedInBrokerPortal ? `/broker/listings/new/manual?edit=${id}` : `/listing-portal/submit?edit=${id}`);
   };
 
   const handleVerificationSubmit = async () => {
