@@ -5,6 +5,14 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export type BFRStatus = "pending" | "approved" | "rejected" | "delivered";
 
+export interface BrokerFormAttachment {
+  name: string;
+  url: string;
+  path?: string;
+  size?: number;
+  type?: string;
+}
+
 export interface BrokerFormRequest {
   id: string;
   broker_user_id: string;
@@ -17,6 +25,8 @@ export interface BrokerFormRequest {
   delivered_file_url: string | null;
   created_at: string;
   updated_at: string;
+  client_details?: Record<string, any> | null;
+  attachments?: BrokerFormAttachment[] | null;
 }
 
 const TABLE = "broker_form_requests" as const;
