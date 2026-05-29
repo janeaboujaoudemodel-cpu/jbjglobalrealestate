@@ -44,13 +44,33 @@ export default function HRAgentChat() {
   const [mode, setMode] = useState<'applicant' | 'owner'>('applicant');
   const [initializing, setInitializing] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // CV + position application state
+  const [openPositions, setOpenPositions] = useState<OpenPosition[]>([]);
+  const [selectedPositionId, setSelectedPositionId] = useState<string>('');
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [submittingApp, setSubmittingApp] = useState(false);
+  const [hasApplied, setHasApplied] = useState(false);
 
   useEffect(() => {
     if (user) {
       startConversation();
     }
   }, [user]);
+
+  useEffect(() => {
+    // Fetch open positions for the in-chat picker
+    (async () => {
+      const { data } = await supabase
+        .from('open_positions')
+        .select('id, title, department')
+        .neq('status', 'hidden')
+        .order('is_featured', { ascending: false })
+        .order('created_at', { ascending: false });
+      setOpenPositions((data as OpenPosition[]) || []);
+    })();
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
