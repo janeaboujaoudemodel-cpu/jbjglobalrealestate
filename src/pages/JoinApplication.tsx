@@ -951,6 +951,9 @@ export default function JoinApplication() {
                   onStepClick={goToStep}
                 />
 
+                {/* Stable-height wizard panel — prevents the form jumping size between steps */}
+                <div className="min-h-[640px]">
+
                 {/* Step 0 — Personal */}
                 <div className={currentStep === 0 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
 
