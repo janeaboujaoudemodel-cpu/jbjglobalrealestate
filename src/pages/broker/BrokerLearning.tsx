@@ -166,7 +166,7 @@ export default function BrokerLearning() {
         noIndex
       />
 
-        <div className="w-full px-1 lg:px-2 py-2 flex flex-col gap-14">
+        <div className="w-full px-4 lg:px-8 pt-6 pb-16 flex flex-col gap-14">
         {/* ── Header ───────────────────────────────────────────────── */}
         <motion.header
           initial={{ opacity: 0, y: 10 }}
