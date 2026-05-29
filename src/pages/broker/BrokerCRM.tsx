@@ -320,11 +320,11 @@ export default function BrokerCRM() {
 
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
-        <Kpi icon={Users} label="Assigned leads" value={totalLeads} />
-        <Kpi icon={Database} label="Databases" value={dbs.data?.length ?? 0} />
-        <Kpi icon={Phone} label="Calls logged" value={callsLogged} />
-        <Kpi icon={ClipboardList} label="Pending follow-ups" value={followUps} />
-        <Kpi icon={TrendingUp} label="Conversion" value={`${conversion}%`} sub={`${wonStage} won`} />
+        <Kpi icon={Users} label="Assigned leads" value={totalLeads} onClick={() => setTab("leads")} />
+        <Kpi icon={Database} label="Databases" value={dbs.data?.length ?? 0} onClick={() => setTab("databases")} />
+        <Kpi icon={Phone} label="Calls logged" value={callsLogged} onClick={() => setTab("calls")} />
+        <Kpi icon={ClipboardList} label="Pending follow-ups" value={followUps} onClick={() => setTab("activity")} />
+        <Kpi icon={TrendingUp} label="Conversion" value={`${conversion}%`} sub={`${wonStage} won`} onClick={() => setTab("insights")} />
       </div>
 
       {/* Tabs */}
