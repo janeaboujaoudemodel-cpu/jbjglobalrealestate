@@ -40,21 +40,32 @@ const AreasWeCover = () => {
     <section className="bg-[#FDFBF7] py-12 md:py-20">
       <div className="w-full">
         {/* Premium champagne frame */}
-        <div className="relative w-full mx-auto rounded-[28px] bg-gradient-to-b from-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10 lg:p-12">
+        <div className="relative w-full mx-auto rounded-[28px] bg-gradient-to-b from-[#FFFDF8] via-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10 lg:p-12 border border-[#B89555]/45 shadow-[0_24px_70px_-32px_rgba(184,149,85,0.45)]">
+          {/* Corner gold flourishes */}
+          <span aria-hidden className="pointer-events-none absolute top-0 left-0 h-12 w-12 border-t border-l border-[#B89555]/70 rounded-tl-[28px]" />
+          <span aria-hidden className="pointer-events-none absolute top-0 right-0 h-12 w-12 border-t border-r border-[#B89555]/70 rounded-tr-[28px]" />
+          <span aria-hidden className="pointer-events-none absolute bottom-0 left-0 h-12 w-12 border-b border-l border-[#B89555]/70 rounded-bl-[28px]" />
+          <span aria-hidden className="pointer-events-none absolute bottom-0 right-0 h-12 w-12 border-b border-r border-[#B89555]/70 rounded-br-[28px]" />
 
           <div className="relative text-center mb-8 md:mb-10">
             <span
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 bg-white text-[#102540] shadow-sm"
+              data-allow-dark-cta data-no-contrast-guard
+              className="allow-white inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 bg-[#102540] text-white shadow-sm border border-[#B89555]/60"
+              style={{ color: "#FFFFFF" }}
             >
-              <MapPin className="w-3 h-3 text-[#102540]" />
-              <span className="text-[#102540]">{t("areas.topLabel", "Top Areas")}</span>
+              <MapPin className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>{t("areas.topLabel", "Top Areas")}</span>
             </span>
 
-            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight">
+            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight uppercase tracking-[0.08em]">
               {t("areas.topTitle", "Top Areas in Dubai")}
             </h2>
-            <div className="mx-auto mt-3 h-px w-16 bg-[#B89555]/70" />
-            <p className="mt-4 text-sm md:text-base text-[#1A1A1A]/75 max-w-xl mx-auto">
+            <div className="mx-auto mt-3 mb-3 flex items-center justify-center gap-3">
+              <span className="h-px w-12 bg-[#B89555]/70" />
+              <span className="text-[#B89555] text-xs tracking-[0.4em]">✦</span>
+              <span className="h-px w-12 bg-[#B89555]/70" />
+            </div>
+            <p className="mt-2 text-sm md:text-base text-[#1A1A1A]/75 max-w-xl mx-auto">
               {t(
                 "areas.topSubtitle",
                 "The most trending and high-demand neighbourhoods our investors are watching right now."
