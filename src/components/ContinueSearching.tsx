@@ -339,15 +339,7 @@ const ContinueSearching = ({
             </Link>
           </div>
         ) : (
-          <div
-            className="relative w-full"
-            style={{
-              WebkitMaskImage:
-                "linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%)",
-              maskImage:
-                "linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%)",
-            }}
-          >
+          <div className="relative w-full">
             <WalkingStrip items={displayItems} patchItem={patchItem} />
           </div>
         )}
