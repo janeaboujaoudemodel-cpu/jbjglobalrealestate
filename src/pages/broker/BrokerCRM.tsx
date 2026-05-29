@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import RequestDatabaseDialog from "@/components/broker-portal/RequestDatabaseDialog";
+import UploadDatabaseDialog from "@/components/crm/UploadDatabaseDialog";
 import LogCallDialog from "@/components/broker-crm/LogCallDialog";
 import CallDetailSheet from "@/components/broker-crm/CallDetailSheet";
 
@@ -79,6 +80,7 @@ export default function BrokerCRM() {
   const [tab, setTab] = useState<Tab>("pipeline");
   const [search, setSearch] = useState("");
   const [requestOpen, setRequestOpen] = useState(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
   const [callDialogOpen, setCallDialogOpen] = useState(false);
   const [openCallId, setOpenCallId] = useState<string | null>(null);
   const dbs = useBrokerScopedDatabases();
@@ -132,6 +134,27 @@ export default function BrokerCRM() {
       if (error) throw error;
       return data ?? [];
 
+    },
+  });
+
+  // Lightweight counts for both views (so the toggle can show a number badge).
+  const callCounts = useQuery({
+    queryKey: ["broker-call-counts", user?.id],
+    enabled: !!user?.id,
+    queryFn: async () => {
+      const [activeRes, deletedRes] = await Promise.all([
+        supabase
+          .from("broker_call_logs")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user!.id)
+          .is("deleted_at", null),
+        supabase
+          .from("broker_call_logs")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user!.id)
+          .not("deleted_at", "is", null),
+      ]);
+      return { active: activeRes.count ?? 0, deleted: deletedRes.count ?? 0 };
     },
   });
 
@@ -190,7 +213,7 @@ export default function BrokerCRM() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       queryClient.invalidateQueries({ queryKey: ["broker-personal-tasks"] });
       toast.success("Call logged successfully");
       setTab("calls");
@@ -208,7 +231,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success("Call moved to Recently deleted");
     },
     onError: (e: any) => toast.error(e?.message || "Could not delete call"),
@@ -224,7 +247,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success("Call restored");
     },
     onError: (e: any) => toast.error(e?.message || "Could not restore call"),
@@ -240,7 +263,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success("All calls moved to Recently deleted");
     },
     onError: (e: any) => toast.error(e?.message || "Could not delete all calls"),
@@ -256,7 +279,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success("Call permanently deleted");
     },
     onError: (e: any) => toast.error(e?.message || "Could not permanently delete call"),
@@ -272,7 +295,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: (_d, ids) => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success(`${ids.length} call${ids.length > 1 ? "s" : ""} moved to Recently deleted`);
       setSelectedCallIds(new Set());
     },
@@ -289,7 +312,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: (_d, ids) => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success(`${ids.length} call${ids.length > 1 ? "s" : ""} restored`);
       setSelectedCallIds(new Set());
     },
@@ -306,7 +329,7 @@ export default function BrokerCRM() {
       if (error) throw error;
     },
     onSuccess: (_d, ids) => {
-      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] }); queryClient.invalidateQueries({ queryKey: ["broker-call-counts"] });
       toast.success(`${ids.length} call${ids.length > 1 ? "s" : ""} permanently deleted`);
       setSelectedCallIds(new Set());
     },
@@ -357,10 +380,17 @@ export default function BrokerCRM() {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Button
-              onClick={() => setRequestOpen(true)}
+              onClick={() => setUploadOpen(true)}
               className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/45 hover:bg-[#E6DAC2]"
             >
-              <Upload className="w-4 h-4 mr-1.5" /> Request database
+              <Upload className="w-4 h-4 mr-1.5" /> Add database
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setRequestOpen(true)}
+              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            >
+              <Inbox className="w-4 h-4 mr-1.5" /> Request database
             </Button>
             <Link
               to="/broker/leads"
@@ -452,15 +482,24 @@ export default function BrokerCRM() {
                 When your manager grants access to a CRM database, it will appear here. You can also request a new
                 database be uploaded to your scope.
               </p>
-              <button
-                type="button"
-                onClick={() => setRequestOpen(true)}
-                className="mt-5 inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#102540] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1a3d63] shadow-sm transition-colors"
-                data-allow-dark-cta
-                data-no-contrast-guard
-              >
-                <Upload className="w-4 h-4" /> Request a database
-              </button>
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setUploadOpen(true)}
+                  className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#102540] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1a3d63] shadow-sm transition-colors"
+                  data-allow-dark-cta
+                  data-no-contrast-guard
+                >
+                  <Upload className="w-4 h-4" /> Add a database
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRequestOpen(true)}
+                  className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/55 hover:bg-[#E6DAC2] transition-colors"
+                >
+                  <Inbox className="w-4 h-4" /> Request a database
+                </button>
+              </div>
             </PremiumCard>
 
           ) : (
@@ -587,16 +626,22 @@ export default function BrokerCRM() {
                 <button
                   type="button"
                   onClick={() => setCallsView("active")}
-                  className={`text-[11px] px-2.5 py-1 rounded ${callsView === "active" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
+                  className={`text-[11px] px-2.5 py-1 rounded inline-flex items-center gap-1.5 ${callsView === "active" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
                 >
                   Active
+                  <span className="tabular-nums text-[10px] px-1.5 py-0.5 rounded bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A]/80">
+                    {callCounts.data?.active ?? 0}
+                  </span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setCallsView("deleted")}
-                  className={`text-[11px] px-2.5 py-1 rounded ${callsView === "deleted" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
+                  className={`text-[11px] px-2.5 py-1 rounded inline-flex items-center gap-1.5 ${callsView === "deleted" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
                 >
                   Recently deleted
+                  <span className="tabular-nums text-[10px] px-1.5 py-0.5 rounded bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A]/80">
+                    {callCounts.data?.deleted ?? 0}
+                  </span>
                 </button>
               </div>
             </div>
@@ -653,7 +698,11 @@ export default function BrokerCRM() {
                         className="h-4 w-4 accent-[#B89555]"
                       />
                       <span className="font-medium">
-                        {someSelected ? `${selectedCallIds.size} selected` : "Select all"}
+                        {allSelected
+                          ? `Deselect all (${selectedCallIds.size})`
+                          : someSelected
+                            ? `${selectedCallIds.size} selected · Select all`
+                            : "Select all"}
                       </span>
                     </label>
                     {someSelected && (
@@ -888,6 +937,15 @@ export default function BrokerCRM() {
         }}
       />
       <RequestDatabaseDialog open={requestOpen} onOpenChange={setRequestOpen} />
+      <UploadDatabaseDialog
+        open={uploadOpen}
+        onOpenChange={setUploadOpen}
+        onCreated={() => {
+          queryClient.invalidateQueries({ queryKey: ["broker-scoped-databases"] });
+          queryClient.invalidateQueries({ queryKey: ["broker-scoped-leads"] });
+          setTab("databases");
+        }}
+      />
       <CallDetailSheet
         callId={openCallId}
         leadName={(() => {
