@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Send, Sparkles, Loader2 } from "lucide-react";
+import { Send, Sparkles, Loader2, X } from "lucide-react";
 import ReadyMessageCard from "./ReadyMessageCard";
 
 export interface ChatTurn {
@@ -17,13 +17,22 @@ interface Props {
   leadPhone?: string | null;
   leadWhatsapp?: string | null;
   disabled?: boolean;
+  hasLead?: boolean;
+  onClearLead?: () => void;
 }
 
-const QUICK = [
+const QUICK_LEAD = [
   { label: "Score this lead", mode: "score", prompt: "Score this lead and explain why." },
   { label: "Recommend properties", mode: "recommend", prompt: "Recommend the best 3 matches from inventory and explain why each fits." },
   { label: "Draft WhatsApp", mode: "draft", prompt: "Draft a friendly WhatsApp message to re-engage this lead based on their interest." },
   { label: "Next step", mode: "freeform", prompt: "What is the single best next step I should take with this lead today?" },
+];
+
+const QUICK_GENERAL = [
+  { label: "Handle a price objection", mode: "freeform", prompt: "Give me 3 strong ways to handle a buyer who says the price is too high in Dubai off-plan." },
+  { label: "Best ROI areas 2026", mode: "freeform", prompt: "What are the best ROI areas in Dubai right now for off-plan investors?" },
+  { label: "Cold WhatsApp opener", mode: "freeform", prompt: "Write me a cold WhatsApp opener for a new investor lead from LinkedIn." },
+  { label: "Qualify a buyer", mode: "freeform", prompt: "Give me a 5-question script to qualify a new buyer in 2 minutes." },
 ];
 
 export default function AssistantChat({ turns, loading, onSend, leadName, leadPhone, leadWhatsapp, disabled }: Props) {
