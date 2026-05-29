@@ -600,7 +600,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               collisionPadding={16}
               onOpenAutoFocus={(e) => e.preventDefault()}
               data-no-contrast-guard
-              style={{ backgroundColor: "#F7F2EA", border: "1px solid rgba(184,149,85,0.4)", maxHeight: "min(70vh, 460px)" }}
+              style={{ backgroundColor: "#F7F2EA", border: "1px solid rgba(184,149,85,0.4)", maxHeight: "min(var(--radix-popover-content-available-height, 70vh), 460px)" }}
             >
               <Command className={commandStyles} data-no-contrast-guard style={{ backgroundColor: "transparent" }}>
                 <CommandInput 
