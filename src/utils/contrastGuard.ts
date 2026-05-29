@@ -17,6 +17,11 @@ function parseRgb(input: string): [number, number, number] | null {
   return [Number(m[1]), Number(m[2]), Number(m[3])];
 }
 
+function parseRgbAlpha(input: string): number {
+  const m = input.match(/rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*([\d.]+)\s*\)/i);
+  return m ? Number(m[1]) : 1;
+}
+
 function averageGradientRgb(input: string): string | null {
   const matches = [...input.matchAll(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/gi)];
   if (!matches.length) return null;
@@ -47,7 +52,10 @@ function effectiveBgColor(el: Element): string {
     const style = window.getComputedStyle(cur);
     const bg = style.backgroundColor;
     if (bg && !bg.includes("rgba(0, 0, 0, 0)") && bg !== "transparent") {
-      return bg;
+      // Translucent overlays (e.g. bg-white/5 on navy) are NOT the effective
+      // surface — keep walking up so we measure against the real parent.
+      const alpha = parseRgbAlpha(bg);
+      if (alpha >= 0.6) return bg;
     }
     // Element has a gradient or image background (no flat color but rendered surface).
     // Trust the explicit data-surface contract instead of falling through to page.
