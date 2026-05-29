@@ -5810,6 +5810,33 @@ hr[data-gold-hairline],
   stroke: currentColor !important;
 }
 
+/* GLOBAL CHAMPAGNE/GOLD BUTTON LOCK — if an interactive element's OWN
+   surface is champagne/cream/gold, its label and icons are always ink
+   at rest, hover, focus, and disabled. White text on these fills is banned. */
+:is(button, a, [role="button"]):is(
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"],
+  [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"],
+  [class*="bg-[linear-gradient"][class*="#FDFBF7"], [class*="bg-[linear-gradient"][class*="#F7F1E6"],
+  [class*="bg-[linear-gradient"][class*="#EFE6D6"], [class*="bg-[linear-gradient"][class*="#ECE2D2"]
+):not(.allow-white):not([data-on-dark]):not([data-allow-dark-cta]),
+:is(button, a, [role="button"]):is(
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"],
+  [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"],
+  [class*="bg-[linear-gradient"][class*="#FDFBF7"], [class*="bg-[linear-gradient"][class*="#F7F1E6"],
+  [class*="bg-[linear-gradient"][class*="#EFE6D6"], [class*="bg-[linear-gradient"][class*="#ECE2D2"]
+):not(.allow-white):not([data-on-dark]):not([data-allow-dark-cta]):is(:hover, :focus-visible, :disabled),
+:is(button, a, [role="button"]):is(
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"],
+  [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"],
+  [class*="bg-[linear-gradient"][class*="#FDFBF7"], [class*="bg-[linear-gradient"][class*="#F7F1E6"],
+  [class*="bg-[linear-gradient"][class*="#EFE6D6"], [class*="bg-[linear-gradient"][class*="#ECE2D2"]
+):not(.allow-white):not([data-on-dark]):not([data-allow-dark-cta]) :is(span, p, svg, [class*="lucide"]) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
 .overseas-investors-strip-link,
 .overseas-investors-strip-link:hover,
 .overseas-investors-strip-link :is(span, svg),
