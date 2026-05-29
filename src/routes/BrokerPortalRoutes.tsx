@@ -10,6 +10,7 @@ import AuthRequiredRoute from "@/components/AuthRequiredRoute";
 import ModeRequiredRoute from "@/components/ModeRequiredRoute";
 import BrokerPortalLayout from "@/components/broker-portal/BrokerPortalLayout";
 import OwnerRedirectGuard from "@/components/broker-portal/OwnerRedirectGuard";
+import OwnerOnlyRoute from "@/components/broker-portal/OwnerOnlyRoute";
 
 const BrokerDashboardLanding = lazy(() => import("@/pages/broker/BrokerDashboardLanding"));
 const BrokerCRM              = lazy(() => import("@/pages/broker/BrokerCRM"));
