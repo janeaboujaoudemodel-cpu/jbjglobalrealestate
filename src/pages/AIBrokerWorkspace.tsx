@@ -78,7 +78,9 @@ export default function AIBrokerWorkspace() {
       const { data: leadRows } = await q;
       const ls = (leadRows ?? []) as Lead[];
       setLeads(ls);
-      if (ls.length && !selectedId) setSelectedId(ls[0].id);
+      // Do NOT auto-select a lead — the assistant now supports general Q&A
+      // without a lead in context. The broker explicitly clicks a lead to
+      // switch into per-lead mode.
 
       // Weekly stats (best-effort)
       try {
