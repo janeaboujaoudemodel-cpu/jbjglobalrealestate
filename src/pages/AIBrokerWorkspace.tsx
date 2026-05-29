@@ -52,6 +52,7 @@ export default function AIBrokerWorkspace() {
   const [stats, setStats] = useState<WeekStats>({ leads: 0, messages: 0, emails: 0, calls: 0, conversions: 0 });
 
   const [turns, setTurns] = useState<ChatTurn[]>([]);
+  const [generalTurns, setGeneralTurns] = useState<ChatTurn[]>([]);
   const [chatLoading, setChatLoading] = useState(false);
   const [insights, setInsights] = useState<{ score?: number; reason?: string; matches?: Match[]; next?: string }>({});
 
