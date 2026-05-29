@@ -7,9 +7,9 @@
  * elsewhere. Never redirects into the company CRM.
  */
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Handshake, TrendingUp, Wallet, Clock, CheckCircle2, ArrowRight } from "lucide-react";
+import { Handshake, TrendingUp, Wallet, Clock, CheckCircle2 } from "lucide-react";
+
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEOHead } from "@/components/SEOHead";
@@ -257,19 +257,11 @@ function DealsTable({
           icon={<Handshake className="h-4 w-4" />}
           title={emptyTitle}
           description={emptyDescription || ""}
-          action={
-            <Link
-              to="/broker/crm"
-              className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md bg-[#102540] text-white text-xs font-medium hover:bg-[#1a3d63] transition-colors"
-              data-allow-dark-cta
-            >
-              Open my CRM <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          }
         />
       </section>
     );
   }
+
 
   return (
     <section className="space-y-3">

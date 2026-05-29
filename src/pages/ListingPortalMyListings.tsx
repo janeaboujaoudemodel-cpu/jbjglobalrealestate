@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useIsAppOwner } from '@/hooks/useIsAppOwner';
 import { toast } from 'sonner';
+
 import {
   Plus, ArrowLeft, Trash2, Edit, Clock, CheckCircle,
   XCircle, Star, Award, Sparkles, Shield, Upload, RotateCcw, AlertTriangle
@@ -51,7 +53,13 @@ interface Verification {
 
 const ListingPortalMyListings = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
+  const { isOwner } = useIsAppOwner();
+  const embeddedInBrokerPortal = location.pathname.startsWith('/broker');
+  // Owner viewing inside the broker portal sees ALL broker submissions
+  // (so they can review pending/approved listings across the network).
+  const ownerOverview = embeddedInBrokerPortal && isOwner;
   const [listings, setListings] = useState<MyListing[]>([]);
   const [deletedListings, setDeletedListings] = useState<MyListing[]>([]);
   const [points, setPoints] = useState<PointsData | null>(null);
@@ -68,12 +76,17 @@ const ListingPortalMyListings = () => {
 
   useEffect(() => {
     if (user?.id) fetchAll();
-  }, [user?.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, ownerOverview]);
 
   const fetchAll = async () => {
     setLoading(true);
+    const listingsQuery = ownerOverview
+      ? supabase.from('portal_listings').select('*').order('created_at', { ascending: false }).limit(500)
+      : supabase.from('portal_listings').select('*').eq('user_id', user!.id).order('created_at', { ascending: false });
+
     const [listingsRes, pointsRes, verRes] = await Promise.all([
-      supabase.from('portal_listings').select('*').eq('user_id', user!.id).order('created_at', { ascending: false }),
+      listingsQuery,
       supabase.from('portal_points').select('*').eq('user_id', user!.id).single(),
       supabase.from('broker_verifications').select('*').eq('user_id', user!.id).single(),
     ]);
@@ -94,6 +107,7 @@ const ListingPortalMyListings = () => {
     if (verRes.data) setVerification(verRes.data as Verification);
     setLoading(false);
   };
+
 
   const handleDeleteClick = (id: string) => {
     setListingToDelete(id);
@@ -188,46 +202,64 @@ const ListingPortalMyListings = () => {
   }
 
   return (
-    <section className="relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-      <div className="relative py-12 overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-4">
-              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
-            </Button>
-            <div className="flex justify-between items-center mb-8">
-              <h1 className="text-2xl font-bold text-[#1A1A1A]">My Listings</h1>
-              <Button onClick={() => navigate('/listing-portal/submit')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
-                <Plus className="w-4 h-4 mr-2" /> New Listing
+    <section className={embeddedInBrokerPortal ? "w-full" : "relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"}>
+      <div className={embeddedInBrokerPortal ? "" : "relative py-12 overflow-hidden"}>
+        <div className={embeddedInBrokerPortal ? "" : "container mx-auto px-4 relative z-10"}>
+          <div className={embeddedInBrokerPortal ? "" : "max-w-4xl mx-auto"}>
+            {!embeddedInBrokerPortal && (
+              <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-4">
+                <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
               </Button>
+            )}
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-2xl font-bold text-[#1A1A1A]">
+                  {ownerOverview ? 'All Broker Listings' : 'My Listings'}
+                </h1>
+                {ownerOverview && (
+                  <p className="text-xs text-[#1A1A1A]/65 mt-1">
+                    Every listing submitted by brokers under JBJ, with current status.
+                  </p>
+                )}
+              </div>
+              {!ownerOverview && (
+                <Button onClick={() => navigate('/listing-portal/submit')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
+                  <Plus className="w-4 h-4 mr-2" /> New Listing
+                </Button>
+
+              )}
             </div>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
-                <Star className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
-                <p className="text-2xl font-bold text-[#1A1A1A]">{points?.points || 0}</p>
-                <p className="text-xs text-[#1A1A1A]/70">Points</p>
+
+            {/* Stats Cards — broker only (owner sees aggregate, not personal points) */}
+            {!ownerOverview && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
+                  <Star className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{points?.points || 0}</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Points</p>
+                </div>
+                <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
+                  <Award className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
+                  <p className="text-sm font-bold text-[#1A1A1A] capitalize">{points?.tier || 'Starter'}</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Tier</p>
+                </div>
+                <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
+                  <Sparkles className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{points?.free_listings_remaining ?? 3}</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Free Left</p>
+                </div>
+                <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
+                  <Shield className={`w-5 h-5 mx-auto mb-1 ${verification?.status === 'verified' ? 'text-emerald-500' : 'text-[#1A1A1A]/70'}`} />
+                  <p className="text-sm font-bold text-[#1A1A1A] capitalize">{verification?.status || 'Not Verified'}</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Broker Status</p>
+                </div>
               </div>
-              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
-                <Award className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
-                <p className="text-sm font-bold text-[#1A1A1A] capitalize">{points?.tier || 'Starter'}</p>
-                <p className="text-xs text-[#1A1A1A]/70">Tier</p>
-              </div>
-              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
-                <Sparkles className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
-                <p className="text-2xl font-bold text-[#1A1A1A]">{points?.free_listings_remaining ?? 3}</p>
-                <p className="text-xs text-[#1A1A1A]/70">Free Left</p>
-              </div>
-              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
-                <Shield className={`w-5 h-5 mx-auto mb-1 ${verification?.status === 'verified' ? 'text-emerald-500' : 'text-[#1A1A1A]/70'}`} />
-                <p className="text-sm font-bold text-[#1A1A1A] capitalize">{verification?.status || 'Not Verified'}</p>
-                <p className="text-xs text-[#1A1A1A]/70">Broker Status</p>
-              </div>
-            </div>
+            )}
+
 
             {/* Verification */}
-            {(!verification || verification.status === 'pending') && (
+            {!ownerOverview && (!verification || verification.status === 'pending') && (
               <div className="bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-xl p-4 mb-6">
                 <div className="flex justify-between items-center">
                   <div>
@@ -317,14 +349,17 @@ const ListingPortalMyListings = () => {
                             )}
                           </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button size="icon" variant="ghost" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]" onClick={() => handleEdit(listing.id)} title="Edit listing">
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button size="icon" variant="ghost" className="text-[#1A1A1A]/70 hover:text-red-500" onClick={() => handleDeleteClick(listing.id)} title="Delete listing">
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
+                        {!ownerOverview && (
+                          <div className="flex gap-2">
+                            <Button size="icon" variant="ghost" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]" onClick={() => handleEdit(listing.id)} title="Edit listing">
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button size="icon" variant="ghost" className="text-[#1A1A1A]/70 hover:text-red-500" onClick={() => handleDeleteClick(listing.id)} title="Delete listing">
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        )}
+
                       </div>
                     );
                   })}
