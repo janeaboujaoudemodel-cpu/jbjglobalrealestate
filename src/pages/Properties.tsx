@@ -388,8 +388,18 @@ const Properties = () => {
             new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
     }
+    // Off-plan first: unless the user explicitly filters for ready properties,
+    // push "Ready" projects to the back of the list so off-plan leads the page.
+    if (appliedFilters.completionStatus !== 'ready') {
+      const isReady = (p: any) => {
+        const s = String(p?.construction_status ?? p?.status_label ?? '').toLowerCase();
+        return /ready|completed|hand[\s-]?over\s*done/.test(s);
+      };
+      sorted.sort((a, b) => Number(isReady(a)) - Number(isReady(b)));
+    }
     return sorted;
-  }, [filteredProjects, sortBy]);
+  }, [filteredProjects, sortBy, appliedFilters.completionStatus]);
+
 
   // Apply shortcut filters (price, bedrooms, status, construction, handover, etc.) reactively
   const finalProjects = useMemo(() => applyShortcutFilters(sortedProjects, shortcutFilters), [sortedProjects, shortcutFilters]);
