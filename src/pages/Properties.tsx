@@ -149,13 +149,20 @@ const COMPLETION_STATUS = [
   { value: "under-construction", label: "Under Construction" },
 ];
 
-const isReadyProject = (project: Record<string, unknown>) => {
+const isReadyProject = (project: object) => {
+  const p = project as {
+    construction_status?: unknown;
+    status?: unknown;
+    status_label?: unknown;
+    handover_date?: unknown;
+    availability_status?: unknown;
+  };
   const statusText = [
-    project.construction_status,
-    project.status,
-    project.status_label,
-    project.handover_date,
-    project.availability_status,
+    p.construction_status,
+    p.status,
+    p.status_label,
+    p.handover_date,
+    p.availability_status,
   ]
     .filter(Boolean)
     .join(" ")
@@ -164,7 +171,7 @@ const isReadyProject = (project: Record<string, unknown>) => {
   return /\b(ready|completed|complete|delivered)\b/.test(statusText);
 };
 
-const prioritizeOffPlan = <T extends Record<string, unknown>>(projects: T[]) =>
+const prioritizeOffPlan = <T extends object>(projects: T[]): T[] =>
   [...projects].sort((a, b) => Number(isReadyProject(a)) - Number(isReadyProject(b)));
 
 // Sale status options with color dots
