@@ -682,7 +682,11 @@ export default function BrokerCRM() {
                         className="h-4 w-4 accent-[#B89555]"
                       />
                       <span className="font-medium">
-                        {someSelected ? `${selectedCallIds.size} selected` : "Select all"}
+                        {allSelected
+                          ? `Deselect all (${selectedCallIds.size})`
+                          : someSelected
+                            ? `${selectedCallIds.size} selected · Select all`
+                            : "Select all"}
                       </span>
                     </label>
                     {someSelected && (
