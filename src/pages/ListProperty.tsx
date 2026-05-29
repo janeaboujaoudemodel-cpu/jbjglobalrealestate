@@ -47,12 +47,15 @@ type Mode = "pick" | "manual" | "ai" | "browse";
 type Purpose = "sale" | "rent";
 
 /* ────────────────────────────── theme tokens ────────────────────────────── */
-const BLUE = "#2563EB";
-const BLUE_DEEP = "#102540";
+// Approved navy per brand guard — never substitute another blue
+const BLUE = "#102540";
+const BLUE_HOVER = "#1a3d63";
+const BLUE_DEEP = "#0B1B33";
 const BLUE_GRADIENT =
-  "linear-gradient(135deg, #0B2E5C 0%, #102540 45%, #1A4A8A 100%)";
+  "linear-gradient(135deg, #0B1B33 0%, #102540 50%, #1a3d63 100%)";
 const GOLD = "#B89555";
 const CHAMPAGNE = "#FDFBF7";
+const CHAMPAGNE_SURFACE = "#F7F2EA";
 const CHAMPAGNE_RAISED = "#EFE6D6";
 const INK = "#1A1A1A";
 
