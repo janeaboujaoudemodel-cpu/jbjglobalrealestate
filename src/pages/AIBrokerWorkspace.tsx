@@ -211,8 +211,9 @@ export default function AIBrokerWorkspace() {
           <div className="min-w-0">
             <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">JBJ GLOBAL REAL ESTATE</div>
             <h1 className="text-base sm:text-lg font-bold text-[#1A1A1A] flex items-center gap-2 mt-0.5">
-              <Sparkles className="h-4 w-4 text-[#B89555]" /> JBJ Sales Assistant
+              <Sparkles className="h-4 w-4 text-[#B89555]" /> James Morgan
             </h1>
+            <div className="text-[11px] text-[#1A1A1A]/60 mt-0.5">Head of Sales</div>
           </div>
           <button
             type="button"
