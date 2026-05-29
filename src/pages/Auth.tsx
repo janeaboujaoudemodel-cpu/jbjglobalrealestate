@@ -439,14 +439,20 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
   // ─── Already signed in → auto-redirect (no interstitial screen) ───
   if (user && mode !== "reset" && !isReactivationPreview) {
-    const returnTo = searchParams.get("returnTo") || "/";
+    // Accept canonical ?returnTo, legacy ?redirect, or sessionStorage backup.
+    let returnTo = searchParams.get("returnTo") || searchParams.get("redirect");
+    if (!returnTo) {
+      try { returnTo = sessionStorage.getItem("jbj_post_login_redirect"); } catch {}
+    }
+    const safe = returnTo && returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/";
+    try { sessionStorage.removeItem("jbj_post_login_redirect"); } catch {}
     // Fire a brief welcome toast once, then bounce the user straight to where they came from.
     if (typeof window !== "undefined" && !(window as any).__jbjWelcomeBackShown) {
       (window as any).__jbjWelcomeBackShown = true;
       toast.success("Welcome back!");
-      setTimeout(() => { navigate(returnTo, { replace: true }); }, 50);
+      setTimeout(() => { navigate(safe, { replace: true }); }, 50);
     } else {
-      setTimeout(() => { navigate(returnTo, { replace: true }); }, 0);
+      setTimeout(() => { navigate(safe, { replace: true }); }, 0);
     }
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
