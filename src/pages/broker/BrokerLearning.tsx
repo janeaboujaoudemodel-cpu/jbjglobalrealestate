@@ -112,6 +112,17 @@ export default function BrokerLearning() {
   const { books, loading, progressMap } = useBrokerEducation();
   const [selectedBook, setSelectedBook] = useState<EducationBook | null>(null);
   const [activeModule, setActiveModule] = useState<TModule | null>(null);
+  const [lessonIndex, setLessonIndex] = useState(0);
+  const [moduleProgress, setModuleProgress] = useState<Record<string, number>>({});
+
+  const openModule = (m: TModule) => {
+    setActiveModule(m);
+    setLessonIndex(0);
+  };
+  const closeModule = () => {
+    setActiveModule(null);
+    setLessonIndex(0);
+  };
 
   const groupedBooks = useMemo(() => {
     const byPath = new Map<string, EducationBook[]>();
