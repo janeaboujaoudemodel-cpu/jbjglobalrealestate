@@ -1,7 +1,7 @@
 import { NavLink, useLocation, useNavigate, Link } from "react-router-dom";
 import {
-  LayoutDashboard, Briefcase, ListChecks, Calendar, ListTodo,
-  Handshake, GraduationCap,
+  LayoutDashboard, Users, Briefcase, Database, ListChecks, Calendar, ListTodo,
+  Handshake, BadgeDollarSign, FileText, FileSignature, GraduationCap, Sparkles,
   Brain, Bell, Settings, ChevronLeft, ChevronRight, ArrowLeft, Crown, Home, LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,16 +11,22 @@ import { toast } from "sonner";
 
 type Item = { to: string; label: string; icon: any };
 
-// Forms & Agreements is owner-only — brokers file requests from inside
-// individual lead/contract flows, not from a top-level sidebar entry.
+// Full broker nav per the approved plan. Owner-only surfaces (e.g. global
+// /owner/forms admin) are NOT listed here — brokers only see their own slice.
 const ITEMS: Item[] = [
   { to: "/broker/portal",        label: "Dashboard",          icon: LayoutDashboard },
+  { to: "/broker/leads",         label: "My Leads",           icon: Users },
   { to: "/broker/crm",           label: "CRM Pipeline",       icon: Briefcase },
+  { to: "/broker/databases",     label: "Assigned Databases", icon: Database },
   { to: "/broker/listings",      label: "Listings",           icon: ListChecks },
   { to: "/broker/calendar",      label: "Calendar",           icon: Calendar },
   { to: "/broker/tasks",         label: "Tasks",              icon: ListTodo },
-  { to: "/broker/deals",         label: "Deals & Commissions",icon: Handshake },
+  { to: "/broker/deals",         label: "Deals",              icon: Handshake },
+  { to: "/broker/commissions",   label: "Commissions",        icon: BadgeDollarSign },
+  { to: "/broker/documents",     label: "Documents",          icon: FileText },
+  { to: "/broker/forms",         label: "Forms & Agreements", icon: FileSignature },
   { to: "/broker/learning",      label: "JBJ Academy",        icon: GraduationCap },
+  { to: "/broker-toolkit",       label: "Marketing Toolkit",  icon: Sparkles },
   { to: "/broker/ai",            label: "AI Sales Assistant", icon: Brain },
   { to: "/broker/notifications", label: "Notifications",      icon: Bell },
   { to: "/broker/settings",      label: "Settings",           icon: Settings },
