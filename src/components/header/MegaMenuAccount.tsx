@@ -226,8 +226,12 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     return unique.slice(0, 12);
   }, [searchQuery, isOwner, hasCRMAccess, hasListingAdminAccess, user]);
 
+  const dashboardHref = isOwner ? '/owner' : '/my-dashboard';
+  const dashboardLabel = isOwner ? t('account.ownerDashboard', 'Owner Dashboard') : t('account.myDashboard', 'My Dashboard');
+  const dashboardDescription = isOwner ? t('account.commandCenter', 'Command Center') : t('account.myDashboardDesc', 'Your personalized dashboard');
+
   const accountLinks = [
-    { href: '/my-dashboard', label: t('account.myDashboard', 'My Dashboard'), icon: LayoutDashboard, description: t('account.myDashboardDesc', 'Your personalized dashboard'), badge: 0 },
+    { href: dashboardHref, label: dashboardLabel, icon: LayoutDashboard, description: dashboardDescription, badge: 0 },
     { href: '/my-dashboard#notifications', label: t('account.notifications', 'Notifications'), icon: Bell, description: t('account.notificationsDesc', 'Ticket & system alerts'), badge: (alertCounts?.unreadTicketNotifications || 0) + (alertCounts?.unreadListingNotifications || 0) + (alertCounts?.unreadSystemNotifications || 0) },
     { href: '/my-dashboard#inbox', label: t('account.inbox', 'Inbox'), icon: Headphones, description: t('account.inboxDesc', 'Messages from JBJ'), badge: 0 },
     { href: '/my-dashboard#tasks', label: t('account.myTasks', 'My Tasks'), icon: ListChecks, description: t('account.myTasksDesc', 'View and manage your tasks'), badge: alertCounts?.pendingTasks || 0 },

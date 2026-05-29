@@ -815,7 +815,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
                       <Heart className="w-4 h-4 text-[#1A1A1A]/70" />My Favorites
                     </Link>
-                    <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                    <Link to={isOwner ? "/owner" : "/my-dashboard"} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
                       <LayoutDashboard className="w-4 h-4 text-[#1A1A1A]/70" />My Dashboard
                     </Link>
                     <Link to="/ai-calendar" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
@@ -998,8 +998,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                                 <p className="text-sm font-medium text-[#1A1A1A] truncate">{accountDisplayName}</p>
                               </div>
                             </div>
-                            <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
-                              <Home className="w-4 h-4 text-[#1A1A1A]" />My Dashboard
+                            <Link to={isOwner ? "/owner" : "/my-dashboard"} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                              <Home className="w-4 h-4 text-[#1A1A1A]" />{isOwner ? "Owner Dashboard" : "My Dashboard"}
                             </Link>
                             <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
                               <User className="w-4 h-4 text-[#1A1A1A]" />My Profile

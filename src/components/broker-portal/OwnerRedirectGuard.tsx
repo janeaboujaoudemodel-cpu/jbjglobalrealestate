@@ -1,8 +1,9 @@
 import { ReactNode, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 
 const PREVIEW_KEY = "jbj_broker_portal_preview";
+const PREVIEW_VALUE = "explicit";
 export const BROKER_PREVIEW_PARAM = "preview";
 
 /**
@@ -22,14 +23,14 @@ export default function OwnerRedirectGuard({ children }: { children: ReactNode }
   // Otherwise a fast click from /broker/portal?preview=1 to /broker/crm can
   // happen before the effect writes sessionStorage and owners get bounced back.
   if (previewQuery === "1") {
-    try { sessionStorage.setItem(PREVIEW_KEY, "1"); } catch {}
+    try { sessionStorage.setItem(PREVIEW_KEY, PREVIEW_VALUE); } catch {}
   } else if (previewQuery === "0") {
     try { sessionStorage.removeItem(PREVIEW_KEY); } catch {}
   }
 
   useEffect(() => {
     if (previewQuery === "1") {
-      try { sessionStorage.setItem(PREVIEW_KEY, "1"); } catch {}
+      try { sessionStorage.setItem(PREVIEW_KEY, PREVIEW_VALUE); } catch {}
     } else if (previewQuery === "0") {
       try { sessionStorage.removeItem(PREVIEW_KEY); } catch {}
     }
@@ -40,10 +41,10 @@ export default function OwnerRedirectGuard({ children }: { children: ReactNode }
 
   let previewing = previewQuery === "1";
   if (!previewing) {
-    try { previewing = sessionStorage.getItem(PREVIEW_KEY) === "1"; } catch {}
+    try { previewing = sessionStorage.getItem(PREVIEW_KEY) === PREVIEW_VALUE; } catch {}
   }
   if (previewing) return <>{children}</>;
 
-  try { sessionStorage.setItem(PREVIEW_KEY, "1"); } catch {}
-  return <>{children}</>;
+  const ownerTarget = location.pathname.startsWith("/broker/crm") ? "/owner/crm" : "/owner";
+  return <Navigate to={ownerTarget} replace />;
 }

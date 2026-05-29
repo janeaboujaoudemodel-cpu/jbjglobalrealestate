@@ -206,7 +206,7 @@ function AccountSettingsCard() {
 const MyDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, isOwner, ownerLoading } = useAuth();
   const { role, isLoading: roleLoading } = useUserRole();
   const { mode, isInvestorMode, isBrokerMode, isCombinedMode } = useUserModeContext();
 
@@ -255,7 +255,13 @@ const MyDashboard = () => {
     }
   }, [user, authLoading, navigate]);
 
-  if (authLoading || roleLoading) {
+  useEffect(() => {
+    if (!authLoading && !ownerLoading && user && isOwner) {
+      navigate('/owner', { replace: true });
+    }
+  }, [authLoading, ownerLoading, user, isOwner, navigate]);
+
+  if (authLoading || ownerLoading || roleLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
@@ -263,7 +269,7 @@ const MyDashboard = () => {
     );
   }
 
-  if (!user) {
+  if (!user || isOwner) {
     return null;
   }
 
