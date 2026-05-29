@@ -112,6 +112,8 @@ export default function BrokerLearning() {
   const trainingLocked = !user || mode !== "broker";
 
   const { books, loading, progressMap } = useBrokerEducation();
+  const { summary: eduSummary } = useEducationProgress();
+
   const [selectedBook, setSelectedBook] = useState<EducationBook | null>(null);
   const [activeModule, setActiveModule] = useState<TModule | null>(null);
   const [lessonIndex, setLessonIndex] = useState(0);
