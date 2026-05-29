@@ -259,7 +259,7 @@ const ListingPortalMyListings = () => {
 
 
             {/* Verification */}
-            {(!verification || verification.status === 'pending') && (
+            {!ownerOverview && (!verification || verification.status === 'pending') && (
               <div className="bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-xl p-4 mb-6">
                 <div className="flex justify-between items-center">
                   <div>
