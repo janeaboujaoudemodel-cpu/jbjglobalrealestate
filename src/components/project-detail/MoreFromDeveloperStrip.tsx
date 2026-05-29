@@ -36,7 +36,7 @@ export default function MoreFromDeveloperStrip({ developerId, developerName, dev
     queryFn: async () => {
       const { data } = await supabase
         .from("projects")
-        .select("id, name, slug, location, price_from, cover_image_url, handover_date")
+        .select("id, name, slug, location, price_from, cover_image_url, handover_date, expected_completion, construction_status, payment_plan, payment_breakdown, status_label, description")
         .eq("developer_id", developerId!)
         .neq("id", currentProjectId)
         .eq("is_published", true)
