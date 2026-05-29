@@ -180,6 +180,71 @@ export default function BrokerCRM() {
     onError: (e: any) => toast.error(e?.message || "Could not log call"),
   });
 
+  const softDeleteCall = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("broker_call_logs")
+        .update({ deleted_at: new Date().toISOString() })
+        .eq("id", id)
+        .eq("user_id", user!.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      toast.success("Call moved to Recently deleted");
+    },
+    onError: (e: any) => toast.error(e?.message || "Could not delete call"),
+  });
+
+  const restoreCall = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("broker_call_logs")
+        .update({ deleted_at: null })
+        .eq("id", id)
+        .eq("user_id", user!.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      toast.success("Call restored");
+    },
+    onError: (e: any) => toast.error(e?.message || "Could not restore call"),
+  });
+
+  const deleteAllCalls = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase
+        .from("broker_call_logs")
+        .update({ deleted_at: new Date().toISOString() })
+        .eq("user_id", user!.id)
+        .is("deleted_at", null);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      toast.success("All calls moved to Recently deleted");
+    },
+    onError: (e: any) => toast.error(e?.message || "Could not delete all calls"),
+  });
+
+  const hardDeleteCall = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("broker_call_logs")
+        .delete()
+        .eq("id", id)
+        .eq("user_id", user!.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["broker-call-logs"] });
+      toast.success("Call permanently deleted");
+    },
+    onError: (e: any) => toast.error(e?.message || "Could not permanently delete call"),
+  });
+
+
   const leadsData: any[] = (leads.data as any[]) ?? [];
   const filteredLeads = useMemo(() => {
     if (!search.trim()) return leadsData;
