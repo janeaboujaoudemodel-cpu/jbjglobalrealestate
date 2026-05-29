@@ -610,16 +610,22 @@ export default function BrokerCRM() {
                 <button
                   type="button"
                   onClick={() => setCallsView("active")}
-                  className={`text-[11px] px-2.5 py-1 rounded ${callsView === "active" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
+                  className={`text-[11px] px-2.5 py-1 rounded inline-flex items-center gap-1.5 ${callsView === "active" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
                 >
                   Active
+                  <span className="tabular-nums text-[10px] px-1.5 py-0.5 rounded bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A]/80">
+                    {callCounts.data?.active ?? 0}
+                  </span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setCallsView("deleted")}
-                  className={`text-[11px] px-2.5 py-1 rounded ${callsView === "deleted" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
+                  className={`text-[11px] px-2.5 py-1 rounded inline-flex items-center gap-1.5 ${callsView === "deleted" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
                 >
                   Recently deleted
+                  <span className="tabular-nums text-[10px] px-1.5 py-0.5 rounded bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A]/80">
+                    {callCounts.data?.deleted ?? 0}
+                  </span>
                 </button>
               </div>
             </div>
