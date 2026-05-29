@@ -1303,8 +1303,14 @@ export default function JoinApplication() {
                     <ArrowLeft className="w-4 h-4 mr-1.5" /> Back
                   </Button>
 
-                  <p className="rounded-full border border-[#BFA46A] bg-[linear-gradient(180deg,#FBF6EE_0%,#F2E8D8_100%)] px-4 py-2 text-xs font-semibold text-[#1A1A1A] text-center order-first sm:order-none shadow-[inset_0_1px_0_rgba(255,255,255,0.72),0_10px_20px_-18px_rgba(7,27,51,0.35)]">
-                    Step {currentStep + 1} of {TOTAL_STEPS} — {STEP_LABELS[currentStep]}
+                  <p
+                    className="rounded-full border border-[#BFA46A] bg-[linear-gradient(180deg,#FBF6EE_0%,#F2E8D8_100%)] px-4 py-2 text-xs font-semibold text-[#1A1A1A] text-center order-first sm:order-none shadow-[inset_0_1px_0_rgba(255,255,255,0.72),0_10px_20px_-18px_rgba(7,27,51,0.35)]"
+                    translate="no"
+                    data-no-translate="true"
+                  >
+                    <span translate="no">Step {currentStep + 1} of {TOTAL_STEPS}</span>
+                    <span className="text-[#1A1A1A]/60"> — </span>
+                    <span translate="no" data-no-translate="true">{STEP_LABELS[currentStep]}</span>
                   </p>
 
                   {currentStep < TOTAL_STEPS - 1 ? (
