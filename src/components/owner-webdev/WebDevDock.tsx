@@ -286,10 +286,23 @@ export default function WebDevDock() {
                   )}
                 </div>
               ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </motion.div>
+      )}
+
+      {!open && (
+        <motion.button
+          key="webdev-launcher"
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          onClick={() => setOpen(true)}
+          className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-[#102540] text-white shadow-lg border border-[#B89555]/40 allow-white hover:bg-[#1a3d63] transition-colors leading-none"
+          data-no-contrast-guard
+        >
+          <Sparkles className="w-4 h-4 text-[#EFE6D6] shrink-0" />
+          <span className="text-sm font-medium leading-none">Web Developer</span>
+        </motion.button>
+      )}
     </div>
   );
 }
