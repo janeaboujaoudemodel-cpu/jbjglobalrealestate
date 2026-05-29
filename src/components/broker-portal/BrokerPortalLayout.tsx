@@ -100,7 +100,7 @@ export default function BrokerPortalLayout() {
               <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">
                 JBJ GLOBAL REAL ESTATE
               </div>
-              <h1 className="text-[#1A1A1A] font-semibold text-sm md:text-base tracking-wide truncate">
+              <h1 className="font-display text-[#1A1A1A] font-semibold text-sm md:text-base tracking-tight truncate">
                 Broker Workspace
               </h1>
             </div>
