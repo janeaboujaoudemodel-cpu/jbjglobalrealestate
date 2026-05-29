@@ -177,6 +177,25 @@ export default function BookReader() {
     return () => window.removeEventListener("keydown", onKey);
   }, [safeIndex, totalPages]);
 
+  // Mark a module as in-progress whenever its first body page is shown
+  useEffect(() => {
+    if (!bookId || !current) return;
+    if (current.kind === "chapter-open" || current.kind === "chapter-body") {
+      startModule(bookId, current.module.id);
+    }
+  }, [bookId, current, startModule]);
+
+  // Current module from the visible page (used by the Mark Complete CTA)
+  const currentModule: EducationModule | null =
+    current && (current.kind === "chapter-open" || current.kind === "chapter-body")
+      ? current.module
+      : null;
+  const isLastBodyOfModule =
+    current?.kind === "chapter-body" && current.partIndex === current.partCount - 1;
+  const currentDoneId = currentModule?.id;
+  const currentIsDone = currentDoneId ? localCompleted.has(currentDoneId) : false;
+
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
