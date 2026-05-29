@@ -482,15 +482,24 @@ export default function BrokerCRM() {
                 When your manager grants access to a CRM database, it will appear here. You can also request a new
                 database be uploaded to your scope.
               </p>
-              <button
-                type="button"
-                onClick={() => setRequestOpen(true)}
-                className="mt-5 inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#102540] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1a3d63] shadow-sm transition-colors"
-                data-allow-dark-cta
-                data-no-contrast-guard
-              >
-                <Upload className="w-4 h-4" /> Request a database
-              </button>
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setUploadOpen(true)}
+                  className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#102540] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1a3d63] shadow-sm transition-colors"
+                  data-allow-dark-cta
+                  data-no-contrast-guard
+                >
+                  <Upload className="w-4 h-4" /> Add a database
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRequestOpen(true)}
+                  className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/55 hover:bg-[#E6DAC2] transition-colors"
+                >
+                  <Inbox className="w-4 h-4" /> Request a database
+                </button>
+              </div>
             </PremiumCard>
 
           ) : (
