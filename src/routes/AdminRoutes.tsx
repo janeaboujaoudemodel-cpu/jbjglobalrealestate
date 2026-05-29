@@ -167,7 +167,8 @@ export const AdminRoutes = () => (
     <Route path="/owner/job-offer-template" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
     <Route path="/job-offer-template" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
     <Route path="/owner/recommendations" element={<OwnerGuard><OwnerRecommendations /></OwnerGuard>} />
-    <Route path="/hr-agent" element={<Navigate to="/owner/careers-portal?section=hr-agent" replace />} />
+    {/* Public Jessica chat page — must NOT redirect into owner-only careers portal. */}
+    <Route path="/hr-agent" element={<HRAgent />} />
     <Route path="/referral-admin" element={<OwnerGuard><ReferralAdmin /></OwnerGuard>} />
     <Route path="/executive-assistant" element={<OwnerGuard><ExecutiveAssistant /></OwnerGuard>} />
     <Route path="/call-review" element={<OwnerGuard><CallReview /></OwnerGuard>} />
