@@ -1297,7 +1297,7 @@ const Properties = () => {
                     <div className="flex items-center gap-1.5">
                       <button
                         type="button"
-                        onClick={() => { setCurrentPage((p) => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                        onClick={() => { setCurrentPage((p) => Math.max(1, p - 1)); document.getElementById("properties-results")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}
                         disabled={safePage === 1}
                         className="h-9 px-3 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] text-[13px] font-medium text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                       >
@@ -1315,7 +1315,7 @@ const Properties = () => {
                             <button
                               key={p}
                               type="button"
-                              onClick={() => { setCurrentPage(p); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                              onClick={() => { setCurrentPage(p); document.getElementById("properties-results")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}
                               className={`h-9 min-w-[36px] px-2 rounded-md border text-[13px] font-semibold tabular-nums transition-colors ${
                                 p === safePage
                                   ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
@@ -1329,7 +1329,7 @@ const Properties = () => {
                         })}
                       <button
                         type="button"
-                        onClick={() => { setCurrentPage((p) => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                        onClick={() => { setCurrentPage((p) => Math.min(totalPages, p + 1)); document.getElementById("properties-results")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}
                         disabled={safePage === totalPages}
                         className="h-9 px-3 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] text-[13px] font-medium text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                       >
