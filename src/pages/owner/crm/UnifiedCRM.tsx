@@ -120,6 +120,7 @@ const CRMSideRail = lazy(() => import("@/components/crm/CRMSideRail"));
 const CRMFloatingInsightsWidget = lazy(() => import("@/components/crm/CRMFloatingInsightsWidget"));
 const CRMAINextActions = lazy(() => import("@/components/crm/CRMAINextActions"));
 // SharedWithBrokersView removed — replaced by per-lead Access dialog in the leads table.
+const JunkReturnsQueue    = lazy(() => import("@/components/owner-crm/JunkReturnsQueue"));
 
 type Entity =
   | "leads" | "investors" | "developers" | "sales-reps"
@@ -145,6 +146,7 @@ const VIEWS: Record<Entity, ViewItem[]> = {
     { id: "overview",      label: "Dashboard",     group: "People" },
     { id: "flagged",       label: "Flagged",       group: "People" },
     { id: "vip",           label: "VIP",           group: "People" },
+    { id: "junk-returns",  label: "Junk Returns",  group: "People" },
     { id: "management",    label: "Lead Mgmt",     group: "People" },
     { id: "tasks",         label: "Tasks",         group: "Workspace" },
     { id: "calendar",      label: "Calendar",      group: "Workspace" },
@@ -345,6 +347,7 @@ export default function UnifiedCRM() {
         // "shared" view removed — falls through to "all"
         case "flagged":       return <FlaggedLeadsView userId={userId} onRefresh={() => {}} />;
         case "vip":           return <CRMLeadsTableV2 userId={userId} filterType="vip" onRefresh={() => {}} isOwner />;
+        case "junk-returns":  return <Suspense fallback={<Fallback />}><JunkReturnsQueue /></Suspense>;
         case "management":    return <RecentlyDeletedLeads userId={userId} onRefresh={() => {}} isOwner />;
         case "tasks":         return <Embed><CRMTasks /></Embed>;
         case "calendar":      return <Embed><CRMCalendar /></Embed>;
