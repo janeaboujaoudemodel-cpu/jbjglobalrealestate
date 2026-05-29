@@ -287,15 +287,30 @@ export default function BrokerDashboardLanding() {
               </Link>
             </div>
             {cal.isLoading ? (
-              <div className="h-10 rounded-lg bg-[#EFE6D6]/60 animate-pulse" />
+              <div className="space-y-2">
+                <div className="h-10 rounded-lg bg-[#EFE6D6]/60 animate-pulse" />
+                <div className="h-10 rounded-lg bg-[#EFE6D6]/60 animate-pulse" />
+              </div>
             ) : meetingsToday === 0 ? (
-              <p className="text-xs text-[#1A1A1A]/60">No meetings scheduled for today.</p>
+              <div className="rounded-lg border border-dashed border-[#B89555]/40 bg-[#FDFBF7] px-4 py-5 text-center">
+                <Calendar className="h-5 w-5 text-[#1A1A1A]/55 mx-auto mb-2" />
+                <p className="text-sm font-medium text-[#1A1A1A]">No meetings today</p>
+                <p className="text-[11px] text-[#1A1A1A]/65 mt-1">
+                  Your calendar is clear. New bookings will appear here automatically.
+                </p>
+                <Link
+                  to="/broker/calendar"
+                  className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium text-[#1A1A1A] hover:text-[#B89555]"
+                >
+                  Open calendar <ChevronRight className="h-3 w-3" />
+                </Link>
+              </div>
             ) : (
               <ul className="space-y-2">
                 {(cal.data ?? []).filter((e) => isToday(e.starts_at)).slice(0, 4).map((e) => (
-                  <li key={e.id} className="flex items-center justify-between text-xs">
-                    <span className="truncate text-[#1A1A1A]">{e.title}</span>
-                    <span className="text-[#1A1A1A]/55 tabular-nums ml-3">
+                  <li key={e.id} className="flex items-center justify-between text-xs rounded-md bg-[#FDFBF7] border border-[#B89555]/20 px-3 py-2">
+                    <span className="truncate text-[#1A1A1A] font-medium">{e.title}</span>
+                    <span className="text-[#1A1A1A]/65 tabular-nums ml-3">
                       {new Date(e.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </span>
                   </li>
@@ -303,6 +318,7 @@ export default function BrokerDashboardLanding() {
               </ul>
             )}
           </PremiumCard>
+
         </div>
       </div>
 
