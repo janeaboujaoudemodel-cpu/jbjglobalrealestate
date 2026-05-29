@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useRef, useLayoutEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, BookOpen, Clock, Headphones, Target, List, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Clock, Headphones, Target, List, X, Check, Sparkles, Trophy } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { supabase } from "@/integrations/supabase/client";
 import { sanitizeHtml } from "@/utils/contentSanitizer";
 import { useBookAudio } from "@/hooks/useBookAudio";
+import { useEducationProgress } from "@/hooks/useEducationProgress";
+import { toast } from "sonner";
 import type { EducationBook, EducationModule } from "@/hooks/useBrokerEducation";
+
 
 type Page =
   | { kind: "cover"; book: EducationBook }
