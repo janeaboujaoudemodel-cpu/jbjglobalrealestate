@@ -71,9 +71,15 @@ export default function AssistantLeadList({ leads, selectedId, onSelect, search,
                     {l.pipeline_stage || "new"} {l.source ? `· ${l.source}` : ""}
                   </div>
                 </div>
-                <span className={`shrink-0 text-[10px] font-bold min-w-[44px] h-9 px-1.5 rounded-md border-2 grid place-items-center bg-transparent tabular-nums ${scoreClass(l.ai_score)}`}>
-                  {l.ai_score != null ? `${l.ai_score}%` : "—"}
-                </span>
+                {l.ai_score != null && l.ai_score > 0 ? (
+                  <span className={`shrink-0 text-[10px] font-bold min-w-[44px] h-9 px-1.5 rounded-md border-2 grid place-items-center bg-transparent tabular-nums ${scoreClass(l.ai_score)}`}>
+                    {l.ai_score}%
+                  </span>
+                ) : (
+                  <span className="shrink-0 text-[10px] font-medium text-[#1A1A1A]/40 min-w-[44px] h-9 px-1.5 rounded-md border border-dashed border-[#1A1A1A]/15 grid place-items-center" title="Score appears after AI analyzes lead activity">
+                    —
+                  </span>
+                )}
               </div>
             </button>
           );

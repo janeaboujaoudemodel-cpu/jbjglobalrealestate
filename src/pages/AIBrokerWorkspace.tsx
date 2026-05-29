@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { supabase } from "@/integrations/supabase/client";
@@ -40,6 +40,7 @@ const KPI_CARDS: Array<{
 
 export default function AIBrokerWorkspace() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user, loading: authLoading } = useAuth();
   const { isOwner, isLoading: roleLoading } = useUserRole();
 
@@ -62,6 +63,11 @@ export default function AIBrokerWorkspace() {
 
   useEffect(() => { if (user && !roleLoading) bootstrap(); /* eslint-disable-next-line */ }, [user, roleLoading, isOwner]);
   useEffect(() => { if (selectedId) loadChat(selectedId); }, [selectedId]);
+  // Allow deep-linking from /broker/leads etc. via ?leadId=<uuid>
+  useEffect(() => {
+    const qid = searchParams.get("leadId");
+    if (qid && qid !== selectedId) setSelectedId(qid);
+  }, [searchParams]);
 
   const bootstrap = async () => {
     setLoading(true);
@@ -278,7 +284,7 @@ export default function AIBrokerWorkspace() {
                   </div>
                 </div>
                 <Link
-                  to={`/broker/leads/${selected.id}`}
+                  to={`/broker/leads?focus=${selected.id}`}
                   className="text-[11px] font-semibold text-[#102540] hover:underline inline-flex items-center gap-1"
                 >
                   Open lead <ArrowRight className="h-3 w-3" />
