@@ -168,6 +168,7 @@ export default function WebDevDock() {
     } catch {
       // Ignore restricted storage contexts — the dock should still open.
     }
+    window.dispatchEvent(new CustomEvent("jbj:webdev-open"));
     setOpen(true);
   };
 
