@@ -403,13 +403,13 @@ export const PublicRoutes = () => (
     <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
     <Route path="/redeem-referral" element={<RedeemReferral />} />
     <Route path="/spreadsheet" element={<AuthRequiredRoute><Spreadsheet /></AuthRequiredRoute>} />
-    <Route path="/documents" element={<AuthRequiredRoute><Documents /></AuthRequiredRoute>} />
+    <Route path="/documents" element={<OwnerGuard><Documents /></OwnerGuard>} />
     <Route path="/qr-generator" element={<AuthRequiredRoute><QRCodeGenerator /></AuthRequiredRoute>} />
     <Route path="/contract-forms" element={<AuthRequiredRoute><ContractForms /></AuthRequiredRoute>} />
     <Route path="/video-meeting" element={<AuthRequiredRoute><VideoMeeting /></AuthRequiredRoute>} />
     <Route path="/breakfast-booking" element={<BreakfastBooking />} />
     <Route path="/presentations" element={<Presentations />} />
-    <Route path="/document-studio" element={<AuthRequiredRoute><DocumentStudio /></AuthRequiredRoute>} />
+    <Route path="/document-studio" element={<OwnerGuard><DocumentStudio /></OwnerGuard>} />
 
     {/* ── Broker Pages (Tier 2 — login required) ── */}
     <Route path="/broker-toolkit" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerToolkit /></ModeRequiredRoute></AuthRequiredRoute>} />
@@ -432,7 +432,7 @@ export const PublicRoutes = () => (
 
     {/* ── Canonical Broker Portal (nested /broker/* shell) ── */}
     {BrokerPortalRoutes()}
-    <Route path="/document-scanner" element={<AuthRequiredRoute><ScanSignDocuments /></AuthRequiredRoute>} />
+    <Route path="/document-scanner" element={<OwnerGuard><ScanSignDocuments /></OwnerGuard>} />
     <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
     <Route path="/scan-sign-documents" element={<Navigate to="/document-scanner" replace />} />
     <Route path="/signature-studio" element={<Navigate to="/document-scanner" replace />} />
