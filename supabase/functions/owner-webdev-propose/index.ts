@@ -97,13 +97,11 @@ Deno.serve(async (req) => {
             {
               role: "system",
               content:
-                "You convert a UI instruction into a scoped CSS override. Use a SAFE css selector (tag, class, data attribute) that targets the smallest reasonable element. Generate only CSS PROPERTIES (transform, margin, padding, color, background, font-size, opacity, display, etc). Never reposition auth/login/payment elements. Output ONLY via the propose_override tool.",
+                "You convert a UI instruction into a scoped CSS override. If a 'Preferred selector' is provided, use it. Otherwise pick a SAFE css selector (tag, class, data attribute) targeting the smallest reasonable element. Generate only CSS PROPERTIES (transform, margin, padding, color, background, font-size, opacity, display, gap, border-radius, box-shadow, etc). Never reposition auth/login/payment elements. If a screenshot is attached, use it as ground truth for layout. Output ONLY via the propose_override tool.",
             },
             {
               role: "user",
-              content: `Route: ${route}\nInstruction: ${instruction}\n\nVisible DOM hints (truncated): ${
-                (domSnippet ?? "").slice(0, 4000)
-              }`,
+              content: userContent,
             },
           ],
           tools: [
