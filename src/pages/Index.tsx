@@ -63,6 +63,7 @@ const BrokerOnboardingBanner = lazy(chunkImports.BrokerOnboardingBanner);
 const JBJPodcastSection = lazy(chunkImports.JBJPodcastSection);
 const ResalePropertiesSection = lazy(chunkImports.ResalePropertiesSection);
 const DeveloperPortalCTA = lazy(() => import("@/components/home/DeveloperPortalCTA"));
+const CareersPortalShowcase = lazy(() => import("@/components/home/CareersPortalShowcase"));
 const CategorySelectorSection = lazy(() => import("@/components/home/CategorySelectorSection"));
 const CTABand = lazy(() => import("@/components/home/CTABand"));
 
