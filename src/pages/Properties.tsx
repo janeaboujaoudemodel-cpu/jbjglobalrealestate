@@ -1259,6 +1259,67 @@ const Properties = () => {
                     return nodes;
                   })}
                 </div>
+              )}
+
+              {/* Pagination — numeric page controls + total count */}
+              {!showSkeletons && finalProjects.length > PAGE_SIZE && (
+                <div className="px-2 sm:px-4 pt-4 pb-2">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <p className="text-[12px] text-[#1A1A1A]/70 font-medium">
+                      Showing <span className="text-[#1A1A1A] font-semibold">{(safePage - 1) * PAGE_SIZE + 1}</span>–
+                      <span className="text-[#1A1A1A] font-semibold">{Math.min(safePage * PAGE_SIZE, finalProjects.length)}</span> of{" "}
+                      <span className="text-[#1A1A1A] font-semibold">{finalProjects.length}</span> properties · Page{" "}
+                      <span className="text-[#1A1A1A] font-semibold">{safePage}</span> of{" "}
+                      <span className="text-[#1A1A1A] font-semibold">{totalPages}</span>
+                    </p>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => { setCurrentPage((p) => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                        disabled={safePage === 1}
+                        className="h-9 px-3 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] text-[13px] font-medium text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      >
+                        Previous
+                      </button>
+                      {Array.from({ length: totalPages }, (_, i) => i + 1)
+                        .filter((p) => p === 1 || p === totalPages || Math.abs(p - safePage) <= 1)
+                        .flatMap((p, idx, arr) => {
+                          const prev = arr[idx - 1];
+                          const gap = prev && p - prev > 1;
+                          return [
+                            gap ? (
+                              <span key={`gap-${p}`} className="px-1 text-[#1A1A1A]/50 text-[13px]">…</span>
+                            ) : null,
+                            <button
+                              key={p}
+                              type="button"
+                              onClick={() => { setCurrentPage(p); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                              className={`h-9 min-w-[36px] px-2 rounded-md border text-[13px] font-semibold tabular-nums transition-colors ${
+                                p === safePage
+                                  ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+                                  : "bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                              }`}
+                              aria-current={p === safePage ? "page" : undefined}
+                            >
+                              {p}
+                            </button>,
+                          ];
+                        })}
+                      <button
+                        type="button"
+                        onClick={() => { setCurrentPage((p) => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                        disabled={safePage === totalPages}
+                        className="h-9 px-3 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] text-[13px] font-medium text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {finalProjects.length === 0 && !showSkeletons && (
+                <div style={{ display: "none" }} />
               ) : (
                 <div className="py-12 px-4">
                   {/* Premium No Results UI */}
