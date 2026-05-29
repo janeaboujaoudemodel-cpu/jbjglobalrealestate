@@ -1,28 +1,16 @@
 import { useState } from "react";
 import { useHRAnnouncements, useMarkAnnouncementRead } from "@/hooks/useHRAnnouncements";
-import { useTeamChannelMessages, useSendChannelMessage } from "@/hooks/useTeamChat";
-import { Megaphone, Hash, Pin, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Megaphone, Hash, Pin, Inbox } from "lucide-react";
+import TeamDirectory from "@/components/team/TeamDirectory";
+import BrokerRequestsTab from "@/components/team/BrokerRequestsTab";
 import { formatDisplayDate } from "@/utils/formatDate";
 
-type Tab = "hr" | "team";
+type Tab = "team" | "hr" | "requests";
 
 export default function BrokerMessages() {
-  const [tab, setTab] = useState<Tab>("hr");
+  const [tab, setTab] = useState<Tab>("team");
   const announcements = useHRAnnouncements();
-  const teamMessages = useTeamChannelMessages("team_general");
-  const send = useSendChannelMessage();
   const markRead = useMarkAnnouncementRead();
-  const [draft, setDraft] = useState("");
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const text = draft.trim();
-    if (!text) return;
-    setDraft("");
-    await send.mutateAsync({ channel: "team_general", message: text });
-  };
 
   return (
     <div className="space-y-5 p-4 md:p-6">
@@ -30,14 +18,15 @@ export default function BrokerMessages() {
         <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">JBJ GLOBAL REAL ESTATE</div>
         <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mt-1">Messages</h1>
         <p className="text-sm text-[#1A1A1A]/70 mt-1">
-          HR announcements from the company and live conversation with your team.
+          Direct chat with the JBJ team, HR announcements, and a place to send internal requests.
         </p>
       </div>
 
       <nav className="flex flex-wrap gap-1 border-b border-[#B89555]/25">
         {([
-          { id: "hr", label: "HR Announcements", icon: Megaphone },
           { id: "team", label: "Team Channel", icon: Hash },
+          { id: "hr", label: "HR Announcements", icon: Megaphone },
+          { id: "requests", label: "Requests", icon: Inbox },
         ] as const).map((t) => {
           const Icon = t.icon;
           const active = tab === t.id;
@@ -53,6 +42,8 @@ export default function BrokerMessages() {
           );
         })}
       </nav>
+
+      {tab === "team" && <TeamDirectory />}
 
       {tab === "hr" && (
         <section className="space-y-3">
@@ -89,45 +80,7 @@ export default function BrokerMessages() {
         </section>
       )}
 
-      {tab === "team" && (
-        <section className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 flex flex-col" style={{ minHeight: 480 }}>
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
-            {teamMessages.isLoading ? (
-              <div className="text-sm text-[#1A1A1A]/60">Loading…</div>
-            ) : (teamMessages.data ?? []).length === 0 ? (
-              <div className="text-sm text-[#1A1A1A]/60 text-center py-10">
-                No messages in #general yet. Be the first to say hello.
-              </div>
-            ) : (
-              teamMessages.data!.map((m: any) => (
-                <div key={m.id} className="flex gap-3">
-                  <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center text-[10px] font-semibold text-[#1A1A1A] shrink-0">
-                    {(m.employee_name || "?").slice(0, 2).toUpperCase()}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-[#1A1A1A]">{m.employee_name}</span>
-                      <span className="text-[11px] text-[#1A1A1A]/55">{formatDisplayDate(m.created_at)}</span>
-                    </div>
-                    <p className="text-sm text-[#1A1A1A]/85 whitespace-pre-wrap break-words">{m.message}</p>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-          <form onSubmit={submit} className="border-t border-[#B89555]/25 p-3 flex gap-2">
-            <Input
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              placeholder="Message #general…"
-              className="bg-white border-[#B89555]/30 text-[#1A1A1A]"
-            />
-            <Button type="submit" disabled={!draft.trim() || send.isPending} className="bg-[#102540] hover:bg-[#1a3d63] text-white" data-allow-dark-cta>
-              <Send className="h-4 w-4" />
-            </Button>
-          </form>
-        </section>
-      )}
+      {tab === "requests" && <BrokerRequestsTab />}
     </div>
   );
 }
