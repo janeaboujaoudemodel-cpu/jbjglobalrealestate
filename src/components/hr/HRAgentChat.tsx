@@ -12,7 +12,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 interface OpenPosition {
   id: string;
@@ -37,7 +36,6 @@ const stageBadges: Record<string, { label: string; color: string; icon: React.Re
 
 export default function HRAgentChat() {
   const { user } = useAuth();
-  const { t } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -141,7 +139,8 @@ export default function HRAgentChat() {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
 
-    if (chatIntent === 'undecided' && /\b(apply|job|career|position|vacancy|cv)\b/i.test(outgoing)) {
+    if (chatIntent !== 'apply' && /\b(apply|job|career|position|vacancy|cv)\b/i.test(outgoing)) {
+      setChatIntent('undecided');
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: 'Sure — tap **Apply for a Job** below and I’ll open the 5-step application inside this chat.',
@@ -319,7 +318,7 @@ export default function HRAgentChat() {
       void supabase.functions.invoke('send-cv-status-email', {
         body: {
           email: user.email!,
-          fullName: user.user_metadata?.full_name || user.email,
+          fullName: `${applicationForm.firstName} ${applicationForm.lastName}`.trim(),
           status: 'submitted',
           position: positionLabel,
           userId: user.id,
@@ -558,7 +557,7 @@ export default function HRAgentChat() {
                           Next <ArrowRight className="w-4 h-4 ml-1.5 text-[#1A1A1A]" />
                         </Button>
                       ) : (
-                        <Button type="button" onClick={submitApplication} disabled={submittingApp || !isStepComplete(4)} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] disabled:text-[#1A1A1A] border border-[#B89555]/50">
+                        <Button type="button" onClick={submitApplication} disabled={submittingApp || !isStepComplete(4)} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] disabled:text-[#1A1A1A] disabled:opacity-100 border border-[#B89555]/50">
                           {submittingApp ? <><Loader2 className="w-4 h-4 mr-1.5 animate-spin text-[#1A1A1A]" /> Submitting…</> : 'Submit application'}
                         </Button>
                       )}
