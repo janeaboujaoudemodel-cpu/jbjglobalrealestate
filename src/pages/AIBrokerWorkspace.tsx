@@ -11,7 +11,7 @@ import {
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import AssistantLeadList, { type ListLead } from "@/components/ai-broker/AssistantLeadList";
 import AssistantChat, { type ChatTurn } from "@/components/ai-broker/AssistantChat";
-import AssistantInsights, { type Match } from "@/components/ai-broker/AssistantInsights";
+
 import LeadFiltersPopover, { type LeadFilters } from "@/components/ai-broker/LeadFiltersPopover";
 
 interface Lead extends ListLead {
