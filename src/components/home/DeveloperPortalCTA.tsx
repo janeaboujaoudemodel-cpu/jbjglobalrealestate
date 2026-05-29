@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { PearlButton } from "@/components/ui/pearl-button";
 import { useUserModeContext } from "@/contexts/UserModeContext";
+import PortalShowcaseCard from "@/components/home/PortalShowcaseCard";
 
 type RegStatus = "pending" | "under_review" | "approved" | "rejected" | null;
 
