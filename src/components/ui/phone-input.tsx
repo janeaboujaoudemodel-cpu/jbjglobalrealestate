@@ -528,14 +528,16 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     const popoverStyles = isLight
       ? "jbj-form-popover"
       : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50";
-    // Premium search header: champagne raised surface w/ 1px gold hairline,
-    // gold search icon, ink text. Sits flush inside the popover header.
+    // Premium search header: TRANSPARENT bg (no champagne tint), gold 1px
+    // hairline below, gold search icon, ink text. The popover already paints
+    // the surface — the search bar must NOT introduce its own fill or it
+    // looks like a white highlighted band on cream.
     const commandStyles =
       "bg-transparent overflow-hidden rounded-t-lg " +
       "[&_[cmdk-input-wrapper]]:px-4 [&_[cmdk-input-wrapper]]:py-2.5 " +
       "[&_[cmdk-input-wrapper]]:border-0 [&_[cmdk-input-wrapper]]:border-b " +
       "[&_[cmdk-input-wrapper]]:border-[#B89555]/40 " +
-      "[&_[cmdk-input-wrapper]]:bg-[#F7F2EA] " +
+      "[&_[cmdk-input-wrapper]]:bg-transparent " +
       "[&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 " +
       "[&_[cmdk-input-wrapper]_svg]:opacity-100 [&_[cmdk-input-wrapper]_svg]:text-[#B89555] " +
       "[&_[cmdk-input-wrapper]_svg]:mr-3";
@@ -545,8 +547,12 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       "focus:ring-0 focus:outline-none";
 
 
+    // NOTE: removed all hover/selected bg-[#102540]/N tints — they were
+    // either painting items navy-on-cream or triggering the navy-pill
+    // white-text guard. Use champagne tints only (cream #EFE6D6) so text
+    // stays ink and the global contrast guards never fire.
     const commandItemStyles = isLight
-      ? "jbj-form-option text-[#102540] hover:bg-[#102540]/5 data-[selected=true]:bg-[#102540]/8 data-[selected=true]:text-[#102540]"
+      ? "text-[#1A1A1A] hover:bg-[#EFE6D6]/60 data-[selected=true]:bg-[#EFE6D6] data-[selected=true]:text-[#1A1A1A]"
       : "text-[#1A1A1A] hover:bg-[#EFE6D6]/20 data-[selected=true]:bg-[#EFE6D6]/30 data-[selected=true]:text-[#1A1A1A]";
     const commandEmptyStyles = isLight
       ? "text-[#1A1A1A]/70"
@@ -588,32 +594,37 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               sideOffset={4}
               avoidCollisions={true}
               onOpenAutoFocus={(e) => e.preventDefault()}
+              data-no-contrast-guard
+              style={{ backgroundColor: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}
             >
-              <Command className={commandStyles}>
+              <Command className={commandStyles} data-no-contrast-guard>
                 <CommandInput 
                   placeholder="Search country name or code..." 
                   className={cn("h-12 text-base", commandInputStyles)}
+                  style={{ color: "#1A1A1A", backgroundColor: "transparent" }}
                 />
-                <CommandList className="max-h-[350px] overflow-y-auto overscroll-contain">
+                <CommandList className="max-h-[350px] overflow-y-auto overscroll-contain" data-no-contrast-guard>
                   <CommandEmpty className={cn("text-sm py-6 text-center", commandEmptyStyles)}>
                     No country found. Try searching by name or code.
                   </CommandEmpty>
                   {Object.entries(COUNTRY_CODES_BY_REGION).map(([region, countries]) => (
-                    <CommandGroup key={region} heading={region} className="text-[#1A1A1A] text-xs font-semibold px-2 py-1">
+                    <CommandGroup key={region} heading={region} className="text-[#1A1A1A] text-xs font-semibold px-2 py-1" data-no-contrast-guard>
                       {countries.map((country) => (
                         <CommandItem
                           key={`${country.code}-${country.country}`}
                           value={`${region} ${country.country} ${country.code} ${country.flag}`}
                           onSelect={() => handleCodeChange(country.code)}
                           className={cn("cursor-pointer py-2.5 px-2 rounded-md", commandItemStyles)}
+                          data-no-contrast-guard
+                          style={{ color: "#1A1A1A" }}
                         >
-                          <span className="flex items-center gap-3 w-full">
-                            <span className="text-xl">{country.flag}</span>
-                            <span className="font-semibold min-w-[65px]">{country.code}</span>
-                            <span className={cn("text-sm truncate flex-1", countryNameStyles)}>{country.country}</span>
+                          <span className="flex items-center gap-3 w-full" style={{ color: "#1A1A1A" }}>
+                            <span className="text-xl" data-decorative="true">{country.flag}</span>
+                            <span className="font-semibold min-w-[65px]" style={{ color: "#1A1A1A" }}>{country.code}</span>
+                            <span className={cn("text-sm truncate flex-1", countryNameStyles)} style={{ color: "#1A1A1A" }}>{country.country}</span>
                           </span>
                           {currentCode === country.code && (
-                            <CheckCircle className="h-5 w-5 text-[#1A1A1A] ml-auto shrink-0" />
+                            <CheckCircle className="h-5 w-5 ml-auto shrink-0" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
                           )}
                         </CommandItem>
                       ))}
@@ -623,6 +634,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               </Command>
             </PopoverContent>
           </Popover>
+
           
           {/* Phone Number Input - Fills remaining space */}
           <div className="relative flex-1 w-full min-w-0">
