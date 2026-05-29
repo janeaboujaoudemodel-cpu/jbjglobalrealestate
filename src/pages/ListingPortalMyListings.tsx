@@ -202,19 +202,33 @@ const ListingPortalMyListings = () => {
   }
 
   return (
-    <section className="relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-      <div className="relative py-12 overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-4">
-              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
-            </Button>
-            <div className="flex justify-between items-center mb-8">
-              <h1 className="text-2xl font-bold text-[#1A1A1A]">My Listings</h1>
-              <Button onClick={() => navigate('/listing-portal/submit')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
-                <Plus className="w-4 h-4 mr-2" /> New Listing
+    <section className={embeddedInBrokerPortal ? "w-full" : "relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"}>
+      <div className={embeddedInBrokerPortal ? "" : "relative py-12 overflow-hidden"}>
+        <div className={embeddedInBrokerPortal ? "" : "container mx-auto px-4 relative z-10"}>
+          <div className={embeddedInBrokerPortal ? "" : "max-w-4xl mx-auto"}>
+            {!embeddedInBrokerPortal && (
+              <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-4">
+                <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
               </Button>
+            )}
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-2xl font-bold text-[#1A1A1A]">
+                  {ownerOverview ? 'All Broker Listings' : 'My Listings'}
+                </h1>
+                {ownerOverview && (
+                  <p className="text-xs text-[#1A1A1A]/65 mt-1">
+                    Every listing submitted by brokers under JBJ, with current status.
+                  </p>
+                )}
+              </div>
+              {!ownerOverview && (
+                <Button onClick={() => navigate(embeddedInBrokerPortal ? '/broker/listings/submit' : '/listing-portal/submit')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
+                  <Plus className="w-4 h-4 mr-2" /> New Listing
+                </Button>
+              )}
             </div>
+
 
             {/* Stats Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
