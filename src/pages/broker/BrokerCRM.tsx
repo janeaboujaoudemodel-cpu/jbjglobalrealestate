@@ -364,10 +364,15 @@ export default function BrokerCRM() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             {stageCounts.map((s) => (
-              <div key={s.key} className="rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 px-4 py-3">
+              <button
+                key={s.key}
+                type="button"
+                onClick={() => { setSearch(s.label.toLowerCase()); setTab("leads"); }}
+                className="text-left rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 px-4 py-3 hover:border-[#B89555]/55 hover:bg-[#F7F2EA] transition-colors focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+              >
                 <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">{s.label}</div>
                 <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1">{s.count}</div>
-              </div>
+              </button>
             ))}
           </div>
         </PremiumCard>
