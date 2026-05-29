@@ -1,16 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Loader2, Calendar, FileText, CheckCircle, Sparkles, Paperclip, X, Briefcase } from 'lucide-react';
+import { Send, Bot, User, Loader2, FileText, CheckCircle, Sparkles, Paperclip, X, Briefcase, MessageCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 interface OpenPosition {
   id: string;
@@ -35,7 +36,6 @@ const stageBadges: Record<string, { label: string; color: string; icon: React.Re
 
 export default function HRAgentChat() {
   const { user } = useAuth();
-  const { t } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -52,6 +52,19 @@ export default function HRAgentChat() {
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [submittingApp, setSubmittingApp] = useState(false);
   const [hasApplied, setHasApplied] = useState(false);
+  const [chatIntent, setChatIntent] = useState<'undecided' | 'question' | 'apply'>('undecided');
+  const [applicationStep, setApplicationStep] = useState(0);
+  const [applicationForm, setApplicationForm] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    nationality: '',
+    preferredLanguage: 'en',
+    country: '',
+    city: '',
+    consentAccurate: false,
+    consentTerms: false,
+  });
 
   useEffect(() => {
     if (user) {
@@ -115,14 +128,27 @@ export default function HRAgentChat() {
   const sendMessage = async () => {
     if (!input.trim() || !conversationId || loading) return;
 
+    const outgoing = input.trim();
+
     const userMessage: Message = {
       role: 'user',
-      content: input,
+      content: outgoing,
       timestamp: new Date().toISOString()
     };
 
     setMessages(prev => [...prev, userMessage]);
     setInput('');
+
+    if (chatIntent !== 'apply' && /\b(apply|job|career|position|vacancy|cv)\b/i.test(outgoing)) {
+      setChatIntent('undecided');
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: 'Sure — tap **Apply for a Job** below and I’ll open the 5-step application inside this chat.',
+        timestamp: new Date().toISOString()
+      }]);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -130,7 +156,7 @@ export default function HRAgentChat() {
         body: {
           action: 'send_message',
           conversationId,
-          message: input
+          message: outgoing
         }
       });
 
@@ -188,13 +214,68 @@ export default function HRAgentChat() {
     ]);
   };
 
+  const startApplicationInChat = () => {
+    setChatIntent('apply');
+    setApplicationStep(0);
+    setMessages((prev) => [
+      ...prev,
+      { role: 'user', content: 'Apply for a Job', timestamp: new Date().toISOString() },
+      { role: 'assistant', content: "Perfect — I'll collect your application here in 5 quick steps, then save your CV securely for HR review.", timestamp: new Date().toISOString() },
+    ]);
+  };
+
+  const continueWithQuestions = () => {
+    setChatIntent('question');
+    setMessages((prev) => [
+      ...prev,
+      { role: 'user', content: 'I have a question', timestamp: new Date().toISOString() },
+      { role: 'assistant', content: 'Of course — type your question below and I’ll help.', timestamp: new Date().toISOString() },
+    ]);
+  };
+
+  const setApplicationValue = (key: keyof typeof applicationForm, value: string | boolean) => {
+    setApplicationForm((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const isStepComplete = (step: number) => {
+    if (step === 0) return Boolean(selectedPositionId);
+    if (step === 1) return Boolean(applicationForm.firstName.trim() && applicationForm.lastName.trim() && applicationForm.phone.trim());
+    if (step === 2) return Boolean(applicationForm.nationality.trim() && applicationForm.country.trim() && applicationForm.city.trim() && applicationForm.preferredLanguage);
+    if (step === 3) return Boolean(cvFile);
+    return Boolean(applicationForm.consentAccurate && applicationForm.consentTerms);
+  };
+
+  const nextApplicationStep = () => {
+    if (!isStepComplete(applicationStep)) {
+      toast.error('Complete this step first.');
+      return;
+    }
+    setApplicationStep((prev) => Math.min(prev + 1, 4));
+  };
+
   const submitApplication = async () => {
     if (!user) {
       toast.error('Please sign in to submit your application.');
       return;
     }
+    if (!applicationForm.consentAccurate || !applicationForm.consentTerms) {
+      toast.error('Confirm the application consent first.');
+      setApplicationStep(4);
+      return;
+    }
+    if (!applicationForm.firstName.trim() || !applicationForm.lastName.trim() || !applicationForm.phone.trim()) {
+      toast.error('Complete your personal details first.');
+      setApplicationStep(1);
+      return;
+    }
+    if (!applicationForm.nationality.trim() || !applicationForm.country.trim() || !applicationForm.city.trim()) {
+      toast.error('Complete your location details first.');
+      setApplicationStep(2);
+      return;
+    }
     if (!cvFile) {
-      toast.error('Attach your CV first.');
+      toast.error('Upload your CV first.');
+      setApplicationStep(3);
       return;
     }
     if (!selectedPositionId) {
@@ -217,17 +298,17 @@ export default function HRAgentChat() {
       // 2) Insert hr_applications row (same wiring as the application form)
       const { error: appErr } = await supabase.from('hr_applications').insert({
         user_id: user.id,
-        full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Applicant',
+        full_name: `${applicationForm.firstName} ${applicationForm.lastName}`.trim(),
         email: user.email!,
-        phone_e164: user.user_metadata?.phone || '—',
-        nationality: user.user_metadata?.nationality || '—',
-        preferred_language: 'en',
-        current_location_country: '—',
-        current_location_city: '—',
+        phone_e164: applicationForm.phone,
+        nationality: applicationForm.nationality,
+        preferred_language: applicationForm.preferredLanguage,
+        current_location_country: applicationForm.country,
+        current_location_city: applicationForm.city,
         cv_url: path,
         position_applied: positionLabel,
-        consent_accurate: true,
-        consent_terms: true,
+        consent_accurate: applicationForm.consentAccurate,
+        consent_terms: applicationForm.consentTerms,
         status: 'pending',
         source: 'jessica_chat',
       } as any);
@@ -237,7 +318,7 @@ export default function HRAgentChat() {
       void supabase.functions.invoke('send-cv-status-email', {
         body: {
           email: user.email!,
-          fullName: user.user_metadata?.full_name || user.email,
+          fullName: `${applicationForm.firstName} ${applicationForm.lastName}`.trim(),
           status: 'submitted',
           position: positionLabel,
           userId: user.id,
@@ -373,73 +454,116 @@ export default function HRAgentChat() {
 
         {(mode === 'owner' || stage !== 'completed') && (
           <div className="border-t border-[#B89555]/20 p-4 space-y-3">
-            {!hasApplied && (
-              <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 space-y-2">
-                <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A]/70">
-                  <Briefcase className="w-3.5 h-3.5 text-[#102540]" /> Apply for a position
-                </div>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <Select value={selectedPositionId} onValueChange={setSelectedPositionId}>
-                    <SelectTrigger className="flex-1 border-[#B89555]/40 bg-white text-[#1A1A1A]">
-                      <SelectValue placeholder="Select position…" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white text-[#1A1A1A]">
-                      {openPositions.length === 0 && (
-                        <SelectItem value="__none" disabled>No open positions</SelectItem>
-                      )}
-                      {openPositions.map((p) => (
-                        <SelectItem key={p.id} value={p.id}>
-                          {p.title}{p.department ? ` — ${p.department}` : ''}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {cvFile ? (
-                    <div className="flex items-center gap-2 rounded-md border border-emerald-600/40 bg-emerald-50 px-3 py-1.5 text-xs text-[#1A1A1A]">
-                      <FileText className="w-3.5 h-3.5 text-emerald-700" />
-                      <span className="truncate max-w-[140px]">{cvFile.name}</span>
-                      <button
-                        type="button"
-                        onClick={() => setCvFile(null)}
-                        className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
-                        aria-label="Remove CV"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
+            {!hasApplied && chatIntent !== 'question' && (
+              <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 space-y-3">
+                {chatIntent === 'undecided' ? (
+                  <>
+                    <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A]/70">
+                      <MessageCircle className="w-3.5 h-3.5 text-[#102540]" /> What would you like to do?
                     </div>
-                  ) : (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => fileInputRef.current?.click()}
-                      className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-                    >
-                      <Paperclip className="w-4 h-4 mr-1.5" /> Attach CV
-                    </Button>
-                  )}
-                  <Button
-                    type="button"
-                    onClick={submitApplication}
-                    disabled={submittingApp || !cvFile || !selectedPositionId}
-                    className="bg-[#102540] text-white hover:bg-[#1a3d63]"
-                  >
-                    {submittingApp ? (
-                      <><Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> Submitting…</>
-                    ) : (
-                      'Submit application'
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      <Button type="button" onClick={startApplicationInChat} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border border-[#B89555]/50">
+                        <Briefcase className="w-4 h-4 mr-1.5 text-[#1A1A1A]" /> Apply for a Job
+                      </Button>
+                      <Button type="button" variant="outline" onClick={continueWithQuestions} className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A]">
+                        <MessageCircle className="w-4 h-4 mr-1.5 text-[#1A1A1A]" /> Ask Jessica
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A]/70">
+                        <Briefcase className="w-3.5 h-3.5 text-[#102540]" /> Apply for a position
+                      </div>
+                      <span className="text-xs font-semibold text-[#1A1A1A]">Step {applicationStep + 1} of 5</span>
+                    </div>
+
+                    <div className="grid grid-cols-5 gap-1" aria-hidden="true">
+                      {[0, 1, 2, 3, 4].map((step) => (
+                        <span key={step} className={`h-1.5 rounded-full ${step <= applicationStep ? 'bg-[#102540]' : 'bg-[#EFE6D6]'}`} />
+                      ))}
+                    </div>
+
+                    {applicationStep === 0 && (
+                      <div className="space-y-2">
+                        <Label className="text-[#1A1A1A]">Position</Label>
+                        <Select value={selectedPositionId} onValueChange={setSelectedPositionId}>
+                          <SelectTrigger className="border-[#B89555]/40 bg-white text-[#1A1A1A]">
+                            <SelectValue placeholder="Select position…" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white text-[#1A1A1A]">
+                            {openPositions.length === 0 && <SelectItem value="__none" disabled>No open positions</SelectItem>}
+                            {openPositions.map((p) => (
+                              <SelectItem key={p.id} value={p.id}>{p.title}{p.department ? ` — ${p.department}` : ''}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
                     )}
-                  </Button>
-                </div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.heic,.heif,application/pdf,image/*"
-                  className="hidden"
-                  onChange={(e) => handleCvPicked(e.target.files?.[0] || null)}
-                />
-                <p className="text-[10px] text-[#1A1A1A]/60">
-                  PDF · Word · JPG / PNG / HEIC — max 10 MB. Your CV is stored securely with our HR team.
-                </p>
+
+                    {applicationStep === 1 && (
+                      <div className="grid gap-2 sm:grid-cols-3">
+                        <Input value={applicationForm.firstName} onChange={(e) => setApplicationValue('firstName', e.target.value)} placeholder="First name" className="border-[#B89555]/40 text-[#1A1A1A]" />
+                        <Input value={applicationForm.lastName} onChange={(e) => setApplicationValue('lastName', e.target.value)} placeholder="Last name" className="border-[#B89555]/40 text-[#1A1A1A]" />
+                        <Input value={applicationForm.phone} onChange={(e) => setApplicationValue('phone', e.target.value)} placeholder="Phone" className="border-[#B89555]/40 text-[#1A1A1A]" />
+                      </div>
+                    )}
+
+                    {applicationStep === 2 && (
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        <Input value={applicationForm.nationality} onChange={(e) => setApplicationValue('nationality', e.target.value)} placeholder="Nationality" className="border-[#B89555]/40 text-[#1A1A1A]" />
+                        <Select value={applicationForm.preferredLanguage} onValueChange={(v) => setApplicationValue('preferredLanguage', v)}>
+                          <SelectTrigger className="border-[#B89555]/40 bg-white text-[#1A1A1A]"><SelectValue placeholder="Language" /></SelectTrigger>
+                          <SelectContent className="bg-white text-[#1A1A1A]">
+                            <SelectItem value="en">English</SelectItem><SelectItem value="ar">Arabic</SelectItem><SelectItem value="hi">Hindi</SelectItem><SelectItem value="ur">Urdu</SelectItem><SelectItem value="ru">Russian</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Input value={applicationForm.country} onChange={(e) => setApplicationValue('country', e.target.value)} placeholder="Country" className="border-[#B89555]/40 text-[#1A1A1A]" />
+                        <Input value={applicationForm.city} onChange={(e) => setApplicationValue('city', e.target.value)} placeholder="City" className="border-[#B89555]/40 text-[#1A1A1A]" />
+                      </div>
+                    )}
+
+                    {applicationStep === 3 && (
+                      <div className="space-y-2">
+                        {cvFile ? (
+                          <div className="flex items-center gap-2 rounded-md border border-emerald-600/40 bg-emerald-50 px-3 py-2 text-sm text-[#1A1A1A]">
+                            <FileText className="w-4 h-4 text-emerald-700" /><span className="truncate flex-1">{cvFile.name}</span>
+                            <button type="button" onClick={() => setCvFile(null)} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]" aria-label="Remove CV"><X className="w-4 h-4" /></button>
+                          </div>
+                        ) : (
+                          <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} className="w-full border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A]">
+                            <Paperclip className="w-4 h-4 mr-1.5 text-[#1A1A1A]" /> Upload CV
+                          </Button>
+                        )}
+                        <input ref={fileInputRef} type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.heic,.heif,application/pdf,image/*" className="hidden" onChange={(e) => handleCvPicked(e.target.files?.[0] || null)} />
+                        <p className="text-[10px] text-[#1A1A1A]/60">PDF · Word · JPG / PNG / HEIC — max 10 MB. Your CV is stored securely with our HR team.</p>
+                      </div>
+                    )}
+
+                    {applicationStep === 4 && (
+                      <div className="space-y-3 text-sm text-[#1A1A1A]">
+                        <label className="flex gap-2"><Checkbox checked={applicationForm.consentAccurate} onCheckedChange={(v) => setApplicationValue('consentAccurate', v === true)} /><span>I confirm the details I provided are accurate.</span></label>
+                        <label className="flex gap-2"><Checkbox checked={applicationForm.consentTerms} onCheckedChange={(v) => setApplicationValue('consentTerms', v === true)} /><span>I consent to JBJ GLOBAL REAL ESTATE storing my CV for recruitment review.</span></label>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between gap-2">
+                      <Button type="button" variant="outline" onClick={() => setApplicationStep((prev) => Math.max(prev - 1, 0))} disabled={applicationStep === 0} className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A]">
+                        <ArrowLeft className="w-4 h-4 mr-1.5 text-[#1A1A1A]" /> Back
+                      </Button>
+                      {applicationStep < 4 ? (
+                        <Button type="button" onClick={nextApplicationStep} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border border-[#B89555]/50">
+                          Next <ArrowRight className="w-4 h-4 ml-1.5 text-[#1A1A1A]" />
+                        </Button>
+                      ) : (
+                        <Button type="button" onClick={submitApplication} disabled={submittingApp || !isStepComplete(4)} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] disabled:text-[#1A1A1A] disabled:opacity-100 border border-[#B89555]/50">
+                          {submittingApp ? <><Loader2 className="w-4 h-4 mr-1.5 animate-spin text-[#1A1A1A]" /> Submitting…</> : 'Submit application'}
+                        </Button>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             )}
 
