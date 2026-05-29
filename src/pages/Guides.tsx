@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { INVESTOR_BOOKS } from "@/data/bookCollections";
-import { BookCoverFace } from "@/components/books/BookCoverFace";
+import { BookCard } from "@/components/books/BookCard";
 import type { BookData } from "@/types/books"; // used for selectedBook state typing
 
 const fadeInUp = {
@@ -178,49 +178,24 @@ const Guides = () => {
             </p>
           </motion.div>
 
-          {/* Books Grid */}
+          {/* Books Grid — canonical BookCard, no caption (title is on cover) */}
           <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-6xl mx-auto">
             {allGuideBooks.filter(b => b.title !== 'Company Profile').map((book) => (
-              <motion.button
-                key={book.title}
-                variants={fadeInUp}
-                onClick={() => setSelectedBook(book)}
-                className="group flex flex-col items-center gap-3 w-28 md:w-36"
-                whileHover={{ y: -8 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-              >
-                <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-[#B89555]/40 shadow-[4px_4px_20px_rgba(0,0,0,0.18)] group-hover:shadow-[6px_6px_30px_rgba(184,149,85,0.35)] transition-shadow">
-                  <BookCoverFace book={book} bare />
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/15 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <p className="text-xs text-[#1A1A1A]/80 text-center font-medium group-hover:text-[#1A1A1A] transition-colors leading-tight">
-                  {book.title}
-                </p>
-              </motion.button>
+              <motion.div key={book.title} variants={fadeInUp}>
+                <BookCard book={book} size="sm" onClick={() => setSelectedBook(book)} />
+              </motion.div>
             ))}
           </div>
 
           {/* Company Profile — separate row, faded gold hairline */}
           {allGuideBooks.filter(b => b.title === 'Company Profile').map((book) => (
             <motion.div key={book.title} variants={fadeInUp} className="flex justify-center mt-10 pt-8" style={{ borderTop: "1px solid rgba(184,149,85,0.20)" }}>
-              <motion.button
-                onClick={() => setSelectedBook(book)}
-                className="group flex flex-col items-center gap-3 w-28 md:w-36"
-                whileHover={{ y: -8 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-              >
-                <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-[#B89555]/40 shadow-[4px_4px_20px_rgba(0,0,0,0.18)] group-hover:shadow-[6px_6px_30px_rgba(184,149,85,0.35)] transition-shadow">
-                  <BookCoverFace book={book} bare />
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/15 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <p className="text-xs text-[#1A1A1A]/80 text-center font-medium group-hover:text-[#1A1A1A] transition-colors leading-tight">
-                  {book.title}
-                </p>
-              </motion.button>
+              <BookCard book={book} size="sm" onClick={() => setSelectedBook(book)} />
             </motion.div>
           ))}
         </motion.div>
       </section>
+
 
       {/* What You'll Learn — premium 3-col IconTile grid on page tone */}
       <section className="jj-band jj-band--page">
