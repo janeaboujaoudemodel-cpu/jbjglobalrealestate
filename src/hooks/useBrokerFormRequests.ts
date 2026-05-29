@@ -87,7 +87,13 @@ export function useCreateBrokerFormRequest() {
   const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (payload: { form_type: string; lead_id?: string | null; notes?: string | null }) => {
+    mutationFn: async (payload: {
+      form_type: string;
+      lead_id?: string | null;
+      notes?: string | null;
+      client_details?: Record<string, unknown> | null;
+      attachments?: unknown[] | null;
+    }) => {
       if (!user?.id) throw new Error("Not signed in");
       const { error } = await supabase
         .from(TABLE as any)
@@ -96,6 +102,8 @@ export function useCreateBrokerFormRequest() {
           form_type: payload.form_type,
           lead_id: payload.lead_id ?? null,
           notes: payload.notes ?? null,
+          client_details: payload.client_details ?? {},
+          attachments: payload.attachments ?? [],
           status: "pending",
         } as any);
       if (error) throw error;
@@ -103,6 +111,7 @@ export function useCreateBrokerFormRequest() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["broker-form-requests"] }),
   });
 }
+
 
 export function useUpdateBrokerFormRequest() {
   const qc = useQueryClient();

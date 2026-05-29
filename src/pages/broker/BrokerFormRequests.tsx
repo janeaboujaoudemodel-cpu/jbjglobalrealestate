@@ -51,13 +51,15 @@ export default function BrokerFormRequests() {
             and sends the final signed copy back to you here.
           </p>
         </div>
-        <Button
+        <button
+          type="button"
           onClick={() => setOpen(true)}
-          className="bg-[#102540] text-white hover:bg-[#1a3d63] self-start md:self-end"
           data-allow-dark-cta
+          className="allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md bg-[#102540] text-white text-sm font-semibold hover:bg-[#1a3d63] border border-[#B89555]/40 transition-colors self-start md:self-end"
         >
-          <Plus className="w-4 h-4 mr-1.5" /> New request
-        </Button>
+          <Plus className="w-4 h-4" /> New request
+        </button>
+
       </div>
 
       {/* Empty state */}
@@ -71,9 +73,15 @@ export default function BrokerFormRequests() {
             When you need a Form A, MOU, Tenancy Contract or any JBJ document, request it here and JBJ will
             prepare and return it to you.
           </p>
-          <Button onClick={() => setOpen(true)} className="bg-[#102540] text-white hover:bg-[#1a3d63]" data-allow-dark-cta>
-            <Plus className="w-4 h-4 mr-1.5" /> Submit your first request
-          </Button>
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            data-allow-dark-cta
+            className="allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md bg-[#102540] text-white text-sm font-semibold hover:bg-[#1a3d63] border border-[#B89555]/40 transition-colors"
+          >
+            <Plus className="w-4 h-4" /> Submit your first request
+          </button>
+
         </div>
       )}
 
