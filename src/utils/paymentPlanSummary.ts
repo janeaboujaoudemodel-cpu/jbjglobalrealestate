@@ -28,6 +28,9 @@ interface LegacyBreakdown {
   on_completion?: string | number | null;
 }
 
+const cleanVisiblePlanText = (value: string): string =>
+  value.replace(/handover/gi, "completion");
+
 const toNum = (v: unknown): number | null => {
   if (v === null || v === undefined) return null;
   const n = typeof v === "number" ? v : Number(String(v).replace(/[^\d.]/g, ""));
@@ -77,7 +80,7 @@ export const formatPaymentPlanSummary = (project: {
 
   // 3. Free-text payment_plan — return verbatim, do NOT parse/guess.
   const planStr = project.payment_plan ? String(project.payment_plan).trim() : "";
-  if (planStr) return planStr;
+  if (planStr) return cleanVisiblePlanText(planStr);
 
   return null;
 };
