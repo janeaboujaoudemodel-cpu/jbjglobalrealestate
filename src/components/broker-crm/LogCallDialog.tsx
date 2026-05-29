@@ -7,7 +7,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Phone, CheckCircle2, Loader2, Mic, Search, X, Sparkles, Pause, Play, Square, RotateCcw,
+  Phone, CheckCircle2, Loader2, Mic, Search, X, Sparkles, Pause, Play, Square, RotateCcw, Download, Share2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -55,7 +55,7 @@ interface Props {
   initialLeadId?: string | null;
   submitting: boolean;
   onSubmit: (input: LogCallSubmit) => Promise<{ callLogId?: string } | void>;
-  onSaved?: () => void;
+  onSaved?: (callLogId?: string) => void;
 }
 
 const getPhone = (l: PickerLead) => (l.phone ?? l.phone_e164 ?? "").toString();
@@ -96,6 +96,7 @@ export default function LogCallDialog({
   const secondsRef = useRef(0);
   const pendingStopRef = useRef<((value: RecordingResult | null) => void) | null>(null);
   const liveTextRef = useRef<string>("");
+  const [audioPreviewUrl, setAudioPreviewUrl] = useState<string | null>(null);
 
   const stopTracks = () => {
     if (streamRef.current) {
