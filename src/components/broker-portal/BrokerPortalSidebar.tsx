@@ -63,13 +63,13 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
       >
         {!collapsed ? (
           <div className="min-w-0">
-            <div className="text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 truncate">
+            <div className="text-[9px] uppercase tracking-[0.24em] text-[#1A1A1A]/55 truncate font-medium">
               JBJ GLOBAL REAL ESTATE
             </div>
-            <div className="text-sm font-semibold text-[#1A1A1A] mt-0.5 truncate">Broker Portal</div>
+            <div className="font-display text-[15px] font-semibold text-[#1A1A1A] mt-0.5 truncate tracking-tight">Broker Portal</div>
           </div>
         ) : (
-          <span className="text-sm font-bold text-[#1A1A1A]">JBJ</span>
+          <span className="font-display text-base font-bold text-[#1A1A1A]">JBJ</span>
         )}
         {onToggle && (
           <button

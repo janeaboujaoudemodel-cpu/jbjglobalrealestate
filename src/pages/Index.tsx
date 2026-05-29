@@ -268,10 +268,10 @@ const Index = () => {
             {/* Headline — exact copy from reference photo */}
             <motion.h1
               variants={fadeInUp}
-              className="font-bold tracking-tight leading-[1.08] text-balance w-full mx-auto"
+              className="font-display font-semibold tracking-tight leading-[1.05] text-balance w-full mx-auto"
               style={{
-                fontSize: "clamp(1.75rem, 4.8vw + 0.5rem, 4rem)",
-                letterSpacing: "-0.015em",
+                fontSize: "clamp(1.85rem, 5vw + 0.5rem, 4.25rem)",
+                letterSpacing: "-0.02em",
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
                 wordSpacing: "0.01em",
