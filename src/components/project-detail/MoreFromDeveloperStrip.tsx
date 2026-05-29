@@ -3,6 +3,24 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/lib/formatPrice";
+import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
+
+const formatHandoverDisplay = (v: string | null): string | null => {
+  if (!v) return null;
+  const s = v.trim();
+  if (/^ready$/i.test(s)) return "Ready";
+  const qm = s.match(/Q\s?([1-4])\s*[\/\-\s]?\s*(20\d{2})/i);
+  if (qm) return `Q${qm[1]} ${qm[2]}`;
+  const d = new Date(s);
+  if (!Number.isNaN(d.getTime())) {
+    const q = Math.floor(d.getMonth() / 3) + 1;
+    return `Q${q} ${d.getFullYear()}`;
+  }
+  const ym = s.match(/^(20\d{2})$/);
+  if (ym) return ym[1];
+  return s;
+};
+
 
 interface Props {
   developerId?: string | null;
@@ -18,7 +36,7 @@ export default function MoreFromDeveloperStrip({ developerId, developerName, dev
     queryFn: async () => {
       const { data } = await supabase
         .from("projects")
-        .select("id, name, slug, location, price_from, cover_image_url, handover_date")
+        .select("id, name, slug, location, price_from, cover_image_url, handover_date, expected_completion, construction_status, payment_plan, payment_breakdown, status_label, description")
         .eq("developer_id", developerId!)
         .neq("id", currentProjectId)
         .eq("is_published", true)
@@ -69,12 +87,27 @@ export default function MoreFromDeveloperStrip({ developerId, developerName, dev
                 <p className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 truncate">{p.location}</p>
               )}
               <p className="text-sm font-semibold text-foreground mt-1 truncate">{p.name}</p>
-              {typeof p.price_from === "number" && p.price_from > 0 && (
-                <p className="text-xs text-price-orange font-bold mt-1">
-                  From {formatPrice(p.price_from)}
-                </p>
-              )}
+              {/* Bottom row — price LEFT, handover RIGHT (per locked listing-card layout standard). */}
+              {(() => {
+                const handover = formatHandoverDisplay(deriveHandover(p as any)) ?? HANDOVER_FALLBACK;
+                const isReady = /^ready$/i.test(handover);
+                const hasPrice = typeof p.price_from === "number" && p.price_from > 0;
+                return (
+                  <div className="mt-1.5 flex items-end justify-between gap-2">
+                    {hasPrice ? (
+                      <p className="text-xs text-price-orange font-bold tabular-nums truncate">
+                        From {formatPrice(p.price_from!)}
+                      </p>
+                    ) : <span />}
+                    <p className="text-[11px] font-semibold tabular-nums text-[#1A1A1A] truncate">
+                      <span className="text-[#1A1A1A]/65 mr-1">{isReady ? "Status" : "Handover"}</span>
+                      {handover}
+                    </p>
+                  </div>
+                );
+              })()}
             </div>
+
           </Link>
         ))}
       </div>
