@@ -101,7 +101,6 @@ const ListProperty = () => {
 
   return (
     <div
-      data-marketing-page
       className="min-h-screen"
       style={{ backgroundColor: CHAMPAGNE, color: INK }}
     >
