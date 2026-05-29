@@ -41,13 +41,12 @@ interface LeadRow {
 
 const maskEmail = (value: string | null) => {
   if (!value || !value.includes('@')) return 'No email on record';
-  const [name, domain] = value.split('@');
-  return `${name.slice(0, 2)}•••@${domain}`;
+  return 'Email on record';
 };
 
 const maskPhone = (value: string | null) => {
   if (!value) return 'No phone on record';
-  return value.length > 4 ? `•••• ${value.slice(-4)}` : 'Phone on record';
+  return 'Phone on record';
 };
 
 const formatValue = (value: string | null) =>
@@ -179,7 +178,7 @@ export default function LeadSourcesPanel() {
                   <div key={event.id} className="rounded-lg border border-[#B89555]/25 bg-[#FDFBF7] p-4">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <div className="font-semibold text-[#1A1A1A]">{lead?.full_name || event.email?.split('@')[0] || 'Anonymous visitor'}</div>
+                        <div className="font-semibold text-[#1A1A1A]">{lead?.full_name || (event.user_id ? 'Registered user' : 'Anonymous visitor')}</div>
                         <div className="text-xs text-[#1A1A1A]/60 mt-0.5">{new Date(event.created_at).toLocaleString()}</div>
                       </div>
                       <span className="shrink-0 rounded-md border border-[#B89555]/40 bg-[#EFE6D6] px-2 py-1 text-[11px] font-semibold text-[#1A1A1A]">
