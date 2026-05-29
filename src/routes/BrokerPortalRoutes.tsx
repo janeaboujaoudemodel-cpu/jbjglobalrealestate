@@ -21,6 +21,9 @@ const BrokerCalendar         = lazy(() => import("@/pages/broker/BrokerCalendar"
 const BrokerTasks            = lazy(() => import("@/pages/broker/BrokerTasks"));
 const BrokerInbox            = lazy(() => import("@/pages/broker/BrokerInbox"));
 const ListingPortalMyListings= lazy(() => import("@/pages/ListingPortalMyListings"));
+const BrokerListingNew       = lazy(() => import("@/pages/broker/BrokerListingNew"));
+const SellerListing          = lazy(() => import("@/pages/SellerListing"));
+const ListingPortalSubmit    = lazy(() => import("@/pages/ListingPortalSubmit"));
 const BrokerAccount          = lazy(() => import("@/pages/BrokerAccount"));
 const AIBrokerWorkspace      = lazy(() => import("@/pages/AIBrokerWorkspace"));
 const BrokerComingSoonSection= lazy(() => import("@/pages/broker/BrokerComingSoonSection"));
