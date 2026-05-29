@@ -533,10 +533,12 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     // the surface — the search bar must NOT introduce its own fill or it
     // looks like a white highlighted band on cream.
     const commandStyles =
-      "bg-transparent overflow-hidden rounded-t-lg " +
+      "bg-transparent overflow-hidden rounded-none " +
+      "[&_[cmdk-input-wrapper]]:w-full [&_[cmdk-input-wrapper]]:m-0 " +
       "[&_[cmdk-input-wrapper]]:px-4 [&_[cmdk-input-wrapper]]:py-2.5 " +
       "[&_[cmdk-input-wrapper]]:border-0 [&_[cmdk-input-wrapper]]:border-b " +
-      "[&_[cmdk-input-wrapper]]:border-[#B89555]/40 " +
+      "[&_[cmdk-input-wrapper]]:border-[#B89555]/60 " +
+      "[&_[cmdk-input-wrapper]]:rounded-none [&_[cmdk-input-wrapper]]:shadow-none " +
       "[&_[cmdk-input-wrapper]]:bg-transparent " +
       "[&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 " +
       "[&_[cmdk-input-wrapper]_svg]:opacity-100 [&_[cmdk-input-wrapper]_svg]:text-[#B89555] " +
@@ -602,7 +604,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               data-no-contrast-guard
               style={{ backgroundColor: "#F7F2EA", border: "1px solid rgba(184,149,85,0.4)", maxHeight: "min(var(--radix-popover-content-available-height, 70vh), 460px)" }}
             >
-              <Command className={commandStyles} data-no-contrast-guard style={{ backgroundColor: "transparent" }}>
+              <Command className={commandStyles} data-phone-country-command data-no-contrast-guard style={{ backgroundColor: "transparent" }}>
                 <CommandInput 
                   placeholder="Search country name or code..." 
                   className={cn("h-12 text-base !bg-transparent", commandInputStyles)}
