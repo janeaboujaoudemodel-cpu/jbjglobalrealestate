@@ -21,24 +21,7 @@ import {
   formatPaymentPlanSummary,
   PAYMENT_PLAN_NA,
 } from "@/utils/paymentPlanSummary";
-import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { cn } from "@/lib/utils";
-
-const formatHandoverDisplay = (v: string | null): string | null => {
-  if (!v) return null;
-  const s = v.trim();
-  if (/^ready$/i.test(s)) return "Ready";
-  const qm = s.match(/Q\s?([1-4])\s*[\/\-\s]?\s*(20\d{2})/i);
-  if (qm) return `Q${qm[1]} ${qm[2]}`;
-  const d = new Date(s);
-  if (!Number.isNaN(d.getTime())) {
-    const q = Math.floor(d.getMonth() / 3) + 1;
-    return `Q${q} ${d.getFullYear()}`;
-  }
-  const ym = s.match(/^(20\d{2})$/);
-  if (ym) return ym[1];
-  return s;
-};
 
 
 const SYMBOLS: Record<string, string> = {
@@ -141,8 +124,6 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
   const summary = formatPaymentPlanSummary(project);
   const breakdown = getBreakdownRows(project);
   const hasPlan = Boolean(summary);
-  const handoverRaw = deriveHandover(project as any);
-  const handoverLabel = formatHandoverDisplay(handoverRaw) ?? HANDOVER_FALLBACK;
 
 
   return (
@@ -169,14 +150,10 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
         </span>
       </div>
 
-      {/* RIGHT — Handover, parallel to
-          the price pill. Per the locked listing-card layout standard, the
-          bottom row is always Price LEFT / Handover RIGHT. An optional
-          payment-plan info icon sits next to the handover value when a
-          breakdown is available, so payment data stays accessible. */}
+      {hasPlan && breakdown && breakdown.length > 0 && (
       <div className="flex flex-col items-end min-w-0">
         <span className="text-[10px] uppercase tracking-[0.14em] font-medium text-[#1A1A1A]/65 leading-none">
-          Handover
+          Payment Plan
         </span>
         <div className="mt-1 flex items-center gap-1.5">
           <span
@@ -185,9 +162,8 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
               "text-[15px] sm:text-base",
             )}
           >
-            {handoverLabel}
+            {summary}
           </span>
-          {hasPlan && breakdown && breakdown.length > 0 && (
             <Popover>
               <PopoverTrigger asChild>
                 <button
@@ -241,9 +217,9 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
                 </ul>
               </PopoverContent>
             </Popover>
-          )}
         </div>
       </div>
+      )}
 
     </div>
   );

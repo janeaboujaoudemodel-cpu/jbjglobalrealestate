@@ -282,8 +282,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               if (ym) return ym[1];
               return s;
             };
-            const handover = formatHandover(raw);
-            const showHandover = handover && !/^ready$/i.test(handover);
+            const handover = formatHandover(raw) ?? HANDOVER_FALLBACK;
+            const showHandover = Boolean(handover);
             const showEoi = !project.is_sold_out;
             if (!showEoi && !showHandover) return null;
             return (
@@ -300,9 +300,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                 {showHandover && (
                   <span
                     data-no-contrast-guard
-                    className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide border border-[#B89555]/40 shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
+                    className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide border border-[#B89555]/40 shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
                     style={{ color: "#1A1A1A", backgroundColor: "#FFFFFF" }}
                   >
+                    <span data-no-contrast-guard style={{ color: "#1A1A1A" }} className="uppercase tracking-[0.12em]">Handover</span>
                     <span data-no-contrast-guard style={{ color: "#1A1A1A" }}>{handover}</span>
                   </span>
                 )}
@@ -389,7 +390,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             {/* Thin gold hairline — separates description from bottom row */}
             <div className="w-full border-t border-[#B89555]/45" />
 
-            {/* Bottom row — Reelly-style: Price from (left) + Payment plan (right) with info popover. */}
+            {/* Bottom row — price only. Handover lives beside EOI on the photo. */}
             <CardPricePaymentRow
               price={project.price_from}
               currency={currency}
