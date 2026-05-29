@@ -319,7 +319,7 @@ const Index = () => {
 
       {/* DEVELOPER / INVESTOR / BROKER PORTAL CTA (mode-gated, one at a time) */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={520}>
+        <LazyVisible minHeight={700}>
           <Suspense fallback={<SectionLoader />}>
             <DeveloperPortalCTA />
           </Suspense>
@@ -328,7 +328,7 @@ const Index = () => {
 
       {/* CAREERS PORTAL — public, visible to all modes */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={520}>
+        <LazyVisible minHeight={700}>
           <Suspense fallback={<SectionLoader />}>
             <CareersPortalShowcase />
           </Suspense>
