@@ -545,7 +545,7 @@ export default function LogCallDialog({
                     <Pause className="h-4 w-4" />
                     <span>Pause</span>
                   </button>
-                  <button type="button" onClick={stopAndSave} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                  <button type="button" onClick={stopAndPreview} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
                     {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Square className="h-4 w-4" />}
                     <span>{isSaving ? "Saving…" : "Stop"}</span>
                   </button>
@@ -561,7 +561,7 @@ export default function LogCallDialog({
                     <Play className="h-4 w-4" />
                     <span>Resume</span>
                   </button>
-                  <button type="button" onClick={stopAndSave} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
+                  <button type="button" onClick={stopAndPreview} disabled={isSaving} className={navyControlClass} data-surface="dark" data-allow-dark-cta data-no-contrast-guard>
                     {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Square className="h-4 w-4" />}
                     <span>{isSaving ? "Saving…" : "Stop"}</span>
                   </button>
