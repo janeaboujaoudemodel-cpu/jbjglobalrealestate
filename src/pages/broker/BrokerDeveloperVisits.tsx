@@ -1,0 +1,397 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Building2, Search, Plus, Calendar as CalendarIcon, Clock, User, Phone, Mail, FileText, Trash2, Check, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { formatDisplayDate } from "@/utils/formatDate";
+
+type Developer = { id: string; name: string; slug: string | null; logo_url: string | null };
+type Visit = {
+  id: string;
+  developer_id: string;
+  visit_date: string;
+  visit_time: string | null;
+  briefing_summary: string | null;
+  notes: string | null;
+  sales_rep_name: string | null;
+  sales_rep_phone: string | null;
+  sales_rep_email: string | null;
+  sales_rep_details: string | null;
+  created_at: string;
+  developer?: Developer | null;
+};
+
+function todayIso() {
+  const d = new Date();
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+function nowHm() {
+  const d = new Date();
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+export default function BrokerDeveloperVisits() {
+  const { user } = useAuth();
+  const qc = useQueryClient();
+
+  // Developer search dropdown state
+  const [devQuery, setDevQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const [picked, setPicked] = useState<Developer | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+
+  // Form state
+  const [date, setDate] = useState(todayIso());
+  const [time, setTime] = useState(nowHm());
+  const [briefing, setBriefing] = useState("");
+  const [notes, setNotes] = useState("");
+  const [repName, setRepName] = useState("");
+  const [repPhone, setRepPhone] = useState("");
+  const [repEmail, setRepEmail] = useState("");
+  const [repDetails, setRepDetails] = useState("");
+
+  // Click-outside to close dropdown
+  useEffect(() => {
+    function onDoc(e: MouseEvent) {
+      if (!wrapRef.current) return;
+      if (!wrapRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+
+  // Developer search
+  const devs = useQuery({
+    queryKey: ["dv-devs", devQuery],
+    enabled: devQuery.trim().length > 0 && open,
+    queryFn: async () => {
+      const q = devQuery.trim();
+      const { data, error } = await supabase
+        .from("developers")
+        .select("id, name, slug, logo_url")
+        .ilike("name", `%${q}%`)
+        .order("name", { ascending: true })
+        .limit(20);
+      if (error) throw error;
+      return (data ?? []) as Developer[];
+    },
+  });
+
+  // Visits list (latest first)
+  const visits = useQuery({
+    queryKey: ["dv-visits", user?.id],
+    enabled: !!user?.id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("developer_visits")
+        .select("*, developer:developers(id,name,slug,logo_url)")
+        .order("visit_date", { ascending: false })
+        .order("created_at", { ascending: false })
+        .limit(200);
+      if (error) throw error;
+      return (data ?? []) as Visit[];
+    },
+  });
+
+  const createMut = useMutation({
+    mutationFn: async () => {
+      if (!user?.id) throw new Error("Not signed in");
+      if (!picked) throw new Error("Pick a developer first");
+      if (!date) throw new Error("Pick a visit date");
+      const payload = {
+        broker_user_id: user.id,
+        developer_id: picked.id,
+        visit_date: date,
+        visit_time: time || null,
+        briefing_summary: briefing.trim() || null,
+        notes: notes.trim() || null,
+        sales_rep_name: repName.trim() || null,
+        sales_rep_phone: repPhone.trim() || null,
+        sales_rep_email: repEmail.trim() || null,
+        sales_rep_details: repDetails.trim() || null,
+      };
+      const { error } = await supabase.from("developer_visits").insert(payload);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Developer visit logged");
+      // Reset form
+      setPicked(null);
+      setDevQuery("");
+      setBriefing("");
+      setNotes("");
+      setRepName("");
+      setRepPhone("");
+      setRepEmail("");
+      setRepDetails("");
+      setDate(todayIso());
+      setTime(nowHm());
+      qc.invalidateQueries({ queryKey: ["dv-visits", user?.id] });
+    },
+    onError: (err: any) => toast.error(err?.message || "Failed to save visit"),
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("developer_visits").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Visit removed");
+      qc.invalidateQueries({ queryKey: ["dv-visits", user?.id] });
+    },
+    onError: (err: any) => toast.error(err?.message || "Failed to delete"),
+  });
+
+  const totalThisMonth = useMemo(() => {
+    const now = new Date();
+    const ym = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    return (visits.data ?? []).filter((v) => v.visit_date.startsWith(ym)).length;
+  }, [visits.data]);
+
+  return (
+    <div className="space-y-6">
+      {/* Header card */}
+      <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/25 p-5 md:p-6">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 grid place-items-center rounded-md bg-[#EFE6D6] border border-[#B89555]/35">
+            <Building2 className="h-5 w-5 text-[#1A1A1A]" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 font-semibold">
+              JBJ Global Real Estate
+            </div>
+            <h1 className="text-xl md:text-2xl font-semibold text-[#1A1A1A]">Developer Visits</h1>
+            <p className="text-sm text-[#1A1A1A]/65 mt-0.5">
+              Log every visit you make to a developer sales office. Your activity feeds straight into the
+              employee tracking dashboard so your manager can see your effort.
+            </p>
+          </div>
+          <div className="ml-auto text-right">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 font-semibold">
+              This month
+            </div>
+            <div className="text-2xl font-semibold text-[#1A1A1A] tabular-nums">{totalThisMonth}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Log visit form */}
+      <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/25 p-5 md:p-6">
+        <h2 className="text-sm font-semibold text-[#1A1A1A] mb-4">Log a new visit</h2>
+
+        {/* Developer picker */}
+        <div ref={wrapRef} className="relative mb-4">
+          <label className="block text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 font-semibold mb-1.5">
+            Developer
+          </label>
+          {picked ? (
+            <div className="flex items-center gap-3 px-3 h-12 rounded-md bg-[#FDFBF7] border border-[#B89555]/40">
+              {picked.logo_url ? (
+                <img src={picked.logo_url} alt={picked.name} className="h-8 w-8 object-contain rounded bg-[#EFE6D6] p-0.5" />
+              ) : (
+                <div className="h-8 w-8 rounded bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center text-[10px] font-bold text-[#1A1A1A]">
+                  {picked.name.slice(0, 2).toUpperCase()}
+                </div>
+              )}
+              <div className="text-sm font-medium text-[#1A1A1A] truncate flex-1">{picked.name}</div>
+              <button
+                type="button"
+                onClick={() => { setPicked(null); setDevQuery(""); }}
+                className="h-7 w-7 grid place-items-center rounded-md border border-[#B89555]/30 text-[#1A1A1A]/70 hover:bg-[#EFE6D6]"
+                aria-label="Change developer"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/45" />
+                <Input
+                  value={devQuery}
+                  onChange={(e) => { setDevQuery(e.target.value); setOpen(true); }}
+                  onFocus={() => setOpen(true)}
+                  placeholder="Type a few letters of the developer name…"
+                  className="pl-9 bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] h-12"
+                />
+              </div>
+              {open && devQuery.trim().length > 0 && (
+                <div className="absolute z-30 mt-1 left-0 right-0 max-h-72 overflow-auto rounded-md border border-[#B89555]/40 bg-[#FDFBF7] shadow-lg">
+                  {devs.isLoading && (
+                    <div className="px-3 py-2 text-xs text-[#1A1A1A]/60">Searching…</div>
+                  )}
+                  {!devs.isLoading && (devs.data?.length ?? 0) === 0 && (
+                    <div className="px-3 py-3 text-xs text-[#1A1A1A]/60">No developers match that name.</div>
+                  )}
+                  {(devs.data ?? []).map((d) => (
+                    <button
+                      key={d.id}
+                      type="button"
+                      onClick={() => { setPicked(d); setOpen(false); }}
+                      className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-[#EFE6D6]/70 border-b last:border-b-0 border-[#B89555]/15"
+                    >
+                      {d.logo_url ? (
+                        <img src={d.logo_url} alt={d.name} className="h-7 w-7 object-contain rounded bg-[#EFE6D6] p-0.5 flex-shrink-0" />
+                      ) : (
+                        <div className="h-7 w-7 rounded bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center text-[10px] font-bold text-[#1A1A1A] flex-shrink-0">
+                          {d.name.slice(0, 2).toUpperCase()}
+                        </div>
+                      )}
+                      <span className="text-sm text-[#1A1A1A] truncate">{d.name}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+
+        {/* Date + time */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="block text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 font-semibold mb-1.5">
+              <CalendarIcon className="inline h-3.5 w-3.5 mr-1 -mt-0.5" /> Visit date
+            </label>
+            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)}
+              className="bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] h-11" />
+          </div>
+          <div>
+            <label className="block text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 font-semibold mb-1.5">
+              <Clock className="inline h-3.5 w-3.5 mr-1 -mt-0.5" /> Visit time
+            </label>
+            <Input type="time" value={time} onChange={(e) => setTime(e.target.value)}
+              className="bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] h-11" />
+          </div>
+        </div>
+
+        {/* Briefing + notes */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="block text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 font-semibold mb-1.5">
+              <FileText className="inline h-3.5 w-3.5 mr-1 -mt-0.5" /> Briefing summary
+            </label>
+            <Textarea value={briefing} onChange={(e) => setBriefing(e.target.value)}
+              placeholder="What did the developer brief you on? Projects, units, pricing, incentives…"
+              className="bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] min-h-[120px]" />
+          </div>
+          <div>
+            <label className="block text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 font-semibold mb-1.5">
+              Personal notes
+            </label>
+            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)}
+              placeholder="Anything you want to remember (next steps, client fit, follow-up date…)"
+              className="bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] min-h-[120px]" />
+          </div>
+        </div>
+
+        {/* Sales rep block */}
+        <div className="rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 p-4">
+          <div className="text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 font-semibold mb-3">
+            <User className="inline h-3.5 w-3.5 mr-1 -mt-0.5" /> Sales representative at the developer
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <Input value={repName} onChange={(e) => setRepName(e.target.value)} placeholder="Rep full name"
+              className="bg-white border-[#B89555]/40 text-[#1A1A1A] h-10" />
+            <div className="relative">
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/45" />
+              <Input value={repPhone} onChange={(e) => setRepPhone(e.target.value)} placeholder="+971 50 000 0000"
+                className="pl-9 bg-white border-[#B89555]/40 text-[#1A1A1A] h-10" />
+            </div>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/45" />
+              <Input value={repEmail} onChange={(e) => setRepEmail(e.target.value)} placeholder="rep@developer.com"
+                className="pl-9 bg-white border-[#B89555]/40 text-[#1A1A1A] h-10" />
+            </div>
+          </div>
+          <Textarea
+            value={repDetails} onChange={(e) => setRepDetails(e.target.value)}
+            placeholder="Other details about the rep — role, language, best contact time, personality notes…"
+            className="mt-3 bg-white border-[#B89555]/40 text-[#1A1A1A] min-h-[80px]"
+          />
+        </div>
+
+        <div className="mt-5 flex items-center justify-end gap-2">
+          <button
+            type="button"
+            disabled={!picked || createMut.isPending}
+            onClick={() => createMut.mutate()}
+            className="inline-flex items-center gap-2 h-11 px-5 rounded-md bg-[#102540] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1a3d63] shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            data-allow-dark-cta
+            data-no-contrast-guard
+          >
+            {createMut.isPending ? "Saving…" : (<><Check className="h-4 w-4" /> Save visit</>)}
+          </button>
+        </div>
+      </div>
+
+      {/* History */}
+      <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/25 overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#B89555]/20">
+          <h2 className="text-sm font-semibold text-[#1A1A1A]">Your visit history</h2>
+          <span className="text-xs text-[#1A1A1A]/55 tabular-nums">{visits.data?.length ?? 0} total</span>
+        </div>
+        {visits.isLoading ? (
+          <div className="px-5 py-10 text-center text-sm text-[#1A1A1A]/60">Loading…</div>
+        ) : (visits.data?.length ?? 0) === 0 ? (
+          <div className="px-5 py-12 text-center">
+            <Building2 className="h-8 w-8 mx-auto text-[#1A1A1A]/55 mb-3" />
+            <div className="text-sm font-semibold text-[#1A1A1A]">No visits logged yet</div>
+            <p className="text-xs text-[#1A1A1A]/65 mt-1 max-w-md mx-auto">
+              Pick a developer above, fill in the date, briefing, and the sales rep you met — your first
+              visit will appear here.
+            </p>
+          </div>
+        ) : (
+          <div className="divide-y divide-[#B89555]/15">
+            {(visits.data ?? []).map((v) => (
+              <div key={v.id} className="px-5 py-4 flex items-start gap-3">
+                {v.developer?.logo_url ? (
+                  <img src={v.developer.logo_url} alt="" className="h-9 w-9 object-contain rounded bg-[#EFE6D6] p-0.5 flex-shrink-0" />
+                ) : (
+                  <div className="h-9 w-9 rounded bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center text-[10px] font-bold text-[#1A1A1A] flex-shrink-0">
+                    {(v.developer?.name ?? "?").slice(0, 2).toUpperCase()}
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-sm font-semibold text-[#1A1A1A] truncate">{v.developer?.name ?? "Unknown developer"}</span>
+                    <span className="text-[11px] text-[#1A1A1A]/60 tabular-nums">
+                      {formatDisplayDate(v.visit_date)}{v.visit_time ? ` · ${v.visit_time.slice(0, 5)}` : ""}
+                    </span>
+                  </div>
+                  {v.sales_rep_name && (
+                    <div className="text-xs text-[#1A1A1A]/75 mt-0.5">
+                      Rep: <span className="font-medium">{v.sales_rep_name}</span>
+                      {v.sales_rep_phone ? ` · ${v.sales_rep_phone}` : ""}
+                      {v.sales_rep_email ? ` · ${v.sales_rep_email}` : ""}
+                    </div>
+                  )}
+                  {v.briefing_summary && (
+                    <div className="text-xs text-[#1A1A1A]/80 mt-1.5 whitespace-pre-wrap">{v.briefing_summary}</div>
+                  )}
+                  {v.notes && (
+                    <div className="text-[11px] text-[#1A1A1A]/65 mt-1 whitespace-pre-wrap italic">Note: {v.notes}</div>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { if (confirm("Delete this visit?")) deleteMut.mutate(v.id); }}
+                  className="h-8 w-8 grid place-items-center rounded-md border border-[#B89555]/30 text-[#1A1A1A]/60 hover:text-red-700 hover:bg-red-50"
+                  aria-label="Delete visit"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
