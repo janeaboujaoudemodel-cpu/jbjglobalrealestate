@@ -1,10 +1,12 @@
 /**
- * Persistent JBJ Web Developer dock — visible only to owner/admin users
- * on owner-authenticated routes. Lets the owner describe a UI change,
- * generates a scoped CSS override (soft mode), and exposes Approve /
- * Reject / Take me there controls.
+ * JBJ Web Developer dock — owner/admin only.
+ * Powerful Lovable-style UI tweaker:
+ *  - Natural-language instruction
+ *  - Optional screenshot of the current viewport (html2canvas)
+ *  - Element picker (click any element to target it)
+ *  - Approve / Reject / Take me there
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Sparkles,
@@ -13,8 +15,13 @@ import {
   X,
   ExternalLink,
   Loader2,
-  ChevronDown,
+  Minus,
+  Camera,
+  MousePointerClick,
+  Image as ImageIcon,
+  Trash2,
 } from "lucide-react";
+import html2canvas from "html2canvas";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,6 +36,27 @@ type ChangeRequest = {
   created_at: string;
 };
 
+function buildSelector(el: Element): string {
+  if (el.id) return `#${CSS.escape(el.id)}`;
+  const parts: string[] = [];
+  let node: Element | null = el;
+  let depth = 0;
+  while (node && depth < 4 && node.nodeType === 1 && node.tagName !== "BODY") {
+    let part = node.tagName.toLowerCase();
+    const cls = (node.getAttribute("class") || "")
+      .split(/\s+/)
+      .filter((c) => c && !c.startsWith("hover:") && !c.startsWith("data-") && c.length < 30)
+      .slice(0, 2)
+      .map((c) => `.${CSS.escape(c)}`)
+      .join("");
+    part += cls;
+    parts.unshift(part);
+    node = node.parentElement;
+    depth++;
+  }
+  return parts.join(" > ");
+}
+
 export default function WebDevDock() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -37,8 +65,12 @@ export default function WebDevDock() {
   const [submitting, setSubmitting] = useState(false);
   const [requests, setRequests] = useState<ChangeRequest[]>([]);
   const [allowed, setAllowed] = useState(false);
+  const [screenshot, setScreenshot] = useState<string | null>(null);
+  const [picking, setPicking] = useState(false);
+  const [targetSelector, setTargetSelector] = useState<string | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
-  // Gate: only owner/admin sees the dock
+  // Gate: only owner/admin
   useEffect(() => {
     (async () => {
       const { data: u } = await supabase.auth.getUser();
@@ -54,7 +86,6 @@ export default function WebDevDock() {
     })();
   }, []);
 
-  // Load recent requests
   const loadRequests = async () => {
     const { data } = await supabase
       .from("owner_change_requests")
@@ -67,7 +98,6 @@ export default function WebDevDock() {
     if (allowed && open) loadRequests();
   }, [allowed, open]);
 
-  // Pull previews (pending overrides) for current route
   useEffect(() => {
     if (!allowed) return;
     (async () => {
@@ -80,6 +110,79 @@ export default function WebDevDock() {
       );
     })();
   }, [allowed, pathname, requests]);
+
+  // Element picker
+  useEffect(() => {
+    if (!picking) return;
+    const overlay = document.createElement("div");
+    overlay.style.cssText =
+      "position:fixed;pointer-events:none;z-index:11999;border:2px solid #B89555;background:rgba(184,149,85,0.15);transition:all 80ms;";
+    document.body.appendChild(overlay);
+    const onMove = (e: MouseEvent) => {
+      const panel = panelRef.current;
+      const el = document
+        .elementsFromPoint(e.clientX, e.clientY)
+        .find((n) => !panel || !panel.contains(n));
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      overlay.style.left = `${r.left}px`;
+      overlay.style.top = `${r.top}px`;
+      overlay.style.width = `${r.width}px`;
+      overlay.style.height = `${r.height}px`;
+    };
+    const onClick = (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const panel = panelRef.current;
+      const el = document
+        .elementsFromPoint(e.clientX, e.clientY)
+        .find((n) => !panel || !panel.contains(n));
+      if (el) {
+        const sel = buildSelector(el);
+        setTargetSelector(sel);
+        toast({ title: "Target locked", description: sel });
+      }
+      setPicking(false);
+    };
+    document.addEventListener("mousemove", onMove, true);
+    document.addEventListener("click", onClick, true);
+    document.body.style.cursor = "crosshair";
+    return () => {
+      document.removeEventListener("mousemove", onMove, true);
+      document.removeEventListener("click", onClick, true);
+      document.body.style.cursor = "";
+      overlay.remove();
+    };
+  }, [picking]);
+
+  const captureScreenshot = async () => {
+    try {
+      const panel = panelRef.current;
+      if (panel) panel.style.visibility = "hidden";
+      await new Promise((r) => setTimeout(r, 50));
+      const canvas = await html2canvas(document.body, {
+        logging: false,
+        useCORS: true,
+        scale: 0.6,
+        windowWidth: window.innerWidth,
+        windowHeight: window.innerHeight,
+        x: window.scrollX,
+        y: window.scrollY,
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+      if (panel) panel.style.visibility = "";
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
+      setScreenshot(dataUrl);
+      toast({ title: "Screenshot captured", description: "Attached to next request." });
+    } catch (e) {
+      toast({
+        title: "Screenshot failed",
+        description: e instanceof Error ? e.message : "Unknown",
+        variant: "destructive",
+      });
+    }
+  };
 
   const submit = async () => {
     if (!instruction.trim()) return;
@@ -97,8 +200,13 @@ export default function WebDevDock() {
           },
           body: JSON.stringify({
             route: pathname,
-            instruction,
+            instruction:
+              targetSelector
+                ? `Target selector: ${targetSelector}\n\n${instruction}`
+                : instruction,
             domSnippet,
+            screenshot,
+            targetSelector,
           }),
         },
       );
@@ -109,6 +217,8 @@ export default function WebDevDock() {
         description: "Review the change on this page and Approve or Reject.",
       });
       setInstruction("");
+      setScreenshot(null);
+      setTargetSelector(null);
       await loadRequests();
     } catch (e) {
       toast({
@@ -124,40 +234,18 @@ export default function WebDevDock() {
   const decide = async (cr: ChangeRequest, status: "approved" | "rejected") => {
     if (!cr.override_id) return;
     if (status === "approved") {
-      await supabase
-        .from("owner_ui_overrides")
-        .update({ status: "approved" })
-        .eq("id", cr.override_id);
-      await supabase
-        .from("owner_change_requests")
-        .update({ status: "approved", reviewed_at: new Date().toISOString() })
-        .eq("id", cr.id);
+      await supabase.from("owner_ui_overrides").update({ status: "approved" }).eq("id", cr.override_id);
+      await supabase.from("owner_change_requests").update({ status: "approved", reviewed_at: new Date().toISOString() }).eq("id", cr.id);
     } else {
-      await supabase
-        .from("owner_ui_overrides")
-        .delete()
-        .eq("id", cr.override_id);
-      await supabase
-        .from("owner_change_requests")
-        .update({ status: "rejected", reviewed_at: new Date().toISOString() })
-        .eq("id", cr.id);
-      // remove from live preview
-      window.dispatchEvent(
-        new CustomEvent("jbj:override-preview", { detail: [] }),
-      );
+      await supabase.from("owner_ui_overrides").delete().eq("id", cr.override_id);
+      await supabase.from("owner_change_requests").update({ status: "rejected", reviewed_at: new Date().toISOString() }).eq("id", cr.id);
+      window.dispatchEvent(new CustomEvent("jbj:override-preview", { detail: [] }));
     }
     await loadRequests();
   };
 
   const takeMeThere = (cr: ChangeRequest) => {
-    if (cr.route === pathname) {
-      // pulse the element
-      // selectors are stored on override row; do a soft scroll to first matching
-      const sel = (cr.instruction ?? "").slice(0, 0); // placeholder
-      void sel;
-    } else {
-      navigate(cr.route);
-    }
+    if (cr.route !== pathname) navigate(cr.route);
   };
 
   if (!allowed) return null;
@@ -165,143 +253,215 @@ export default function WebDevDock() {
   const openDock = () => {
     try {
       localStorage.setItem("jj_tour_completed", "true");
-    } catch {
-      // Ignore restricted storage contexts — the dock should still open.
-    }
+    } catch { /* ignore */ }
     window.dispatchEvent(new CustomEvent("jbj:webdev-open"));
     setOpen(true);
   };
 
   return (
     <div
-      className="fixed bottom-6 right-6 z-[12000] flex flex-col items-end gap-3 isolate"
+      className="fixed bottom-6 right-6 z-[12000] flex flex-col items-end gap-3 isolate pointer-events-none"
       data-no-contrast-guard
     >
       {open && (
         <div
-          key="webdev-panel"
-          className="w-[min(380px,calc(100vw-2rem))] h-[min(620px,calc(100vh-3rem))] min-h-[460px] bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          ref={panelRef}
+          className="pointer-events-auto w-[min(420px,calc(100vw-2rem))] h-[min(640px,calc(100vh-3rem))] bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           data-gold-hairline
           data-no-contrast-guard
         >
-            <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/20 bg-[#F7F2EA]" data-gold-hairline>
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-full bg-[#102540] flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-[#EFE6D6]" data-no-contrast-guard />
-                </div>
-                <div>
-                  <div className="text-sm font-semibold text-[#1A1A1A]">JBJ Web Developer</div>
-                  <div className="text-[10px] text-[#1A1A1A]/60">Soft mode · CSS overlay</div>
-                </div>
+          {/* Header */}
+          <div
+            className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/30 bg-[#F7F2EA] shrink-0"
+            data-gold-hairline
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-8 h-8 rounded-full bg-[#102540] flex items-center justify-center shrink-0">
+                <Sparkles className="w-4 h-4 text-[#EFE6D6]" data-no-contrast-guard />
               </div>
-              <button
-                onClick={() => setOpen(false)}
-                className="p-1.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]"
-              >
-                <ChevronDown className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="p-3 border-b border-[#B89555]/20" data-gold-hairline>
-              <div className="text-[11px] text-[#1A1A1A]/60 mb-1.5">
-                On <span className="font-medium text-[#1A1A1A]">{pathname}</span>
-              </div>
-              <Textarea
-                placeholder="e.g. Move the search bar up by 20px and add 12px padding"
-                value={instruction}
-                onChange={(e) => setInstruction(e.target.value)}
-                rows={3}
-                className="text-sm resize-none bg-white border-[#B89555]/30"
-              />
-              <div className="flex justify-end mt-2">
-                <Button
-                  size="sm"
-                  onClick={submit}
-                  disabled={submitting || !instruction.trim()}
-                  className="bg-[#102540] hover:bg-[#1a3d63] text-white allow-white"
-                  data-no-contrast-guard
-                >
-                  {submitting ? (
-                    <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
-                  ) : (
-                    <Send className="w-3.5 h-3.5 mr-1.5" />
-                  )}
-                  Send
-                </Button>
+              <div className="min-w-0">
+                <div className="text-sm font-semibold text-[#1A1A1A] truncate">
+                  JBJ Web Developer
+                </div>
+                <div className="text-[10px] text-[#1A1A1A]/60 truncate">
+                  Owner-only · soft CSS overlay
+                </div>
               </div>
             </div>
+            <button
+              onClick={() => setOpen(false)}
+              className="p-1.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A] shrink-0"
+              aria-label="Minimize"
+            >
+              <Minus className="w-4 h-4" />
+            </button>
+          </div>
 
-            <div className="flex-1 overflow-auto p-2 space-y-2">
-              {requests.length === 0 && (
-                <div className="text-center text-xs text-[#1A1A1A]/60 py-6">
-                  No requests yet. Describe a UI change above.
-                </div>
-              )}
-              {requests.map((cr) => (
-                <div
-                  key={cr.id}
-                  className="p-2.5 rounded-lg border border-[#B89555]/20 bg-white"
-                  data-gold-hairline
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span
-                      className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded ${
-                        cr.status === "approved"
-                          ? "bg-emerald-50 text-emerald-700"
-                          : cr.status === "rejected"
-                          ? "bg-red-50 text-red-700"
-                          : "bg-[#EFE6D6] text-[#1A1A1A]"
-                      }`}
+          {/* Composer */}
+          <div className="p-3 border-b border-[#B89555]/20 shrink-0 bg-[#FDFBF7]" data-gold-hairline>
+            <div className="text-[11px] text-[#1A1A1A]/60 mb-1.5 truncate">
+              On <span className="font-medium text-[#1A1A1A]">{pathname}</span>
+            </div>
+
+            {/* Attachments preview */}
+            {(screenshot || targetSelector) && (
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
+                {screenshot && (
+                  <div className="relative">
+                    <img
+                      src={screenshot}
+                      alt="capture"
+                      className="h-12 w-20 object-cover rounded border border-[#B89555]/40"
+                    />
+                    <button
+                      onClick={() => setScreenshot(null)}
+                      className="absolute -top-1 -right-1 bg-[#1A1A1A] text-white rounded-full p-0.5"
+                      aria-label="Remove screenshot"
                     >
-                      {cr.status}
-                    </span>
-                    <span className="text-[10px] text-[#1A1A1A]/50 truncate max-w-[140px]">
-                      {cr.route}
-                    </span>
+                      <X className="w-2.5 h-2.5" />
+                    </button>
                   </div>
-                  <p className="text-xs text-[#1A1A1A]/85 leading-snug line-clamp-3">
-                    {cr.instruction}
-                  </p>
-                  {cr.status === "ready" && (
-                    <div className="flex items-center gap-1.5 mt-2">
+                )}
+                {targetSelector && (
+                  <div className="flex items-center gap-1 bg-[#EFE6D6] border border-[#B89555]/40 rounded-full px-2 py-1 text-[10px] text-[#1A1A1A] max-w-[220px]">
+                    <MousePointerClick className="w-3 h-3 shrink-0" />
+                    <span className="truncate font-mono">{targetSelector}</span>
+                    <button onClick={() => setTargetSelector(null)} aria-label="Clear target">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <Textarea
+              placeholder="Describe a UI change. e.g. Make the hero headline 20% larger and add 24px top padding."
+              value={instruction}
+              onChange={(e) => setInstruction(e.target.value)}
+              rows={3}
+              className="text-sm resize-none bg-white border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40"
+            />
+
+            {/* Action bar */}
+            <div className="flex items-center justify-between gap-2 mt-2">
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={captureScreenshot}
+                  className="inline-flex items-center gap-1 h-8 px-2 rounded-md border border-[#B89555]/40 bg-white hover:bg-[#EFE6D6] text-[#1A1A1A] text-xs"
+                  title="Capture viewport screenshot"
+                >
+                  <Camera className="w-3.5 h-3.5" /> Screenshot
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPicking(true)}
+                  className={`inline-flex items-center gap-1 h-8 px-2 rounded-md border text-xs ${
+                    picking
+                      ? "bg-[#B89555]/20 border-[#B89555] text-[#1A1A1A]"
+                      : "bg-white border-[#B89555]/40 hover:bg-[#EFE6D6] text-[#1A1A1A]"
+                  }`}
+                  title="Pick an element to target"
+                >
+                  <MousePointerClick className="w-3.5 h-3.5" />
+                  {picking ? "Click any element…" : "Pick"}
+                </button>
+              </div>
+              <Button
+                size="sm"
+                onClick={submit}
+                disabled={submitting || !instruction.trim()}
+                className="bg-[#102540] hover:bg-[#1a3d63] text-white allow-white h-8 px-3 shrink-0 disabled:opacity-60"
+                data-no-contrast-guard
+                data-allow-dark-cta
+              >
+                {submitting ? (
+                  <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+                ) : (
+                  <Send className="w-3.5 h-3.5 mr-1.5" />
+                )}
+                Send
+              </Button>
+            </div>
+          </div>
+
+          {/* History */}
+          <div className="flex-1 min-h-0 overflow-auto p-2 space-y-2 bg-[#FDFBF7]">
+            {requests.length === 0 && (
+              <div className="text-center text-xs text-[#1A1A1A]/60 py-8">
+                <ImageIcon className="w-6 h-6 mx-auto mb-2 opacity-40" />
+                No requests yet. Describe a UI change above —
+                attach a screenshot or pick an element for precision.
+              </div>
+            )}
+            {requests.map((cr) => (
+              <div
+                key={cr.id}
+                className="p-2.5 rounded-lg border border-[#B89555]/30 bg-white"
+                data-gold-hairline
+              >
+                <div className="flex items-center justify-between mb-1 gap-2">
+                  <span
+                    className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 ${
+                      cr.status === "approved"
+                        ? "bg-emerald-50 text-emerald-700"
+                        : cr.status === "rejected"
+                        ? "bg-red-50 text-red-700"
+                        : "bg-[#EFE6D6] text-[#1A1A1A]"
+                    }`}
+                  >
+                    {cr.status}
+                  </span>
+                  <span className="text-[10px] text-[#1A1A1A]/50 truncate">
+                    {cr.route}
+                  </span>
+                </div>
+                <p className="text-xs text-[#1A1A1A]/85 leading-snug line-clamp-3">
+                  {cr.instruction}
+                </p>
+                {cr.status === "ready" && (
+                  <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                    {cr.route !== pathname && (
                       <Button
                         size="sm"
                         variant="ghost"
                         onClick={() => takeMeThere(cr)}
-                        className="h-7 text-xs px-2 text-[#1A1A1A]"
+                        className="h-7 text-xs px-2 text-[#1A1A1A] hover:bg-[#EFE6D6]"
                       >
                         <ExternalLink className="w-3 h-3 mr-1" /> Take me there
                       </Button>
-                      <Button
-                        size="sm"
-                        onClick={() => decide(cr, "approved")}
-                        className="h-7 text-xs px-2 bg-emerald-600 hover:bg-emerald-700 text-white allow-white"
-                        data-no-contrast-guard
-                      >
-                        <Check className="w-3 h-3 mr-1" /> Approve
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => decide(cr, "rejected")}
-                        className="h-7 text-xs px-2 text-red-700 hover:bg-red-50"
-                      >
-                        <X className="w-3 h-3 mr-1" /> Reject
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              ))}
+                    )}
+                    <Button
+                      size="sm"
+                      onClick={() => decide(cr, "approved")}
+                      className="h-7 text-xs px-2 bg-emerald-600 hover:bg-emerald-700 text-white allow-white"
+                      data-no-contrast-guard
+                      data-allow-dark-cta
+                    >
+                      <Check className="w-3 h-3 mr-1" /> Approve
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => decide(cr, "rejected")}
+                      className="h-7 text-xs px-2 text-red-700 hover:bg-red-50"
+                    >
+                      <Trash2 className="w-3 h-3 mr-1" /> Reject
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       )}
 
       {!open && (
         <button
-          key="webdev-launcher"
           onClick={openDock}
-          className="inline-flex items-center gap-2 h-12 min-w-[178px] px-5 rounded-full bg-[#102540] text-white shadow-lg border border-[#B89555]/40 allow-white hover:bg-[#1a3d63] transition-colors leading-none whitespace-nowrap"
+          className="pointer-events-auto inline-flex items-center gap-2 h-12 min-w-[178px] px-5 rounded-full bg-[#102540] text-white shadow-lg border border-[#B89555]/40 allow-white hover:bg-[#1a3d63] transition-colors leading-none whitespace-nowrap"
           data-no-contrast-guard
+          data-allow-dark-cta
         >
           <Sparkles className="w-4 h-4 text-[#EFE6D6] shrink-0" />
           <span className="text-sm font-medium leading-none">Web Developer</span>
