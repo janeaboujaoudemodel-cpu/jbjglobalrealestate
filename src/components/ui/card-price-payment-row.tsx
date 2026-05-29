@@ -168,6 +168,14 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
               <PopoverTrigger asChild>
                 <button
                   type="button"
+                  onPointerDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -184,6 +192,7 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
                   <Info className="h-3.5 w-3.5" aria-hidden="true" />
                 </button>
               </PopoverTrigger>
+
               <PopoverContent
                 align="end"
                 side="top"

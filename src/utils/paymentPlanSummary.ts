@@ -83,9 +83,26 @@ export const formatPaymentPlanSummary = (project: {
   }
 
 
-  // 3. Free-text payment_plan — return verbatim, do NOT parse/guess.
+  // 3. Free-text payment_plan — if it's a plain numeric ratio like "20/40/40"
+  //    or "60 / 40", normalise to pre-completion / on-completion (last token = on-completion).
+  //    Otherwise return verbatim — do NOT parse/guess wording.
   const planStr = project.payment_plan ? String(project.payment_plan).trim() : "";
-  if (planStr) return cleanVisiblePlanText(planStr);
+  if (planStr) {
+    const tokens = planStr.split(/[/|+\-–—]/).map((t) => t.trim()).filter(Boolean);
+    const nums = tokens
+      .map((t) => Number(t.replace(/[^\d.]/g, "")))
+      .filter((n) => Number.isFinite(n) && n > 0);
+    if (tokens.length === nums.length && nums.length >= 2) {
+      const total = nums.reduce((s, n) => s + n, 0);
+      if (total >= 95 && total <= 105) {
+        const onCompletion = Math.round(nums[nums.length - 1]);
+        const pre = Math.max(0, Math.min(100, 100 - onCompletion));
+        return `${pre} / ${onCompletion}`;
+      }
+    }
+    return cleanVisiblePlanText(planStr);
+  }
+
 
   return null;
 };
