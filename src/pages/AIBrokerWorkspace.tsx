@@ -198,7 +198,7 @@ export default function AIBrokerWorkspace() {
   const selected = leads.find(l => l.id === selectedId) || null;
 
   if (authLoading || roleLoading || loading) {
-    return <BrandedLoader variant="light" text="Loading JBJ Sales Assistant…" className="min-h-dvh bg-[#F7F2EA]" />;
+    return <BrandedLoader variant="light" className="bg-[#F7F2EA]" />;
   }
 
   return (
