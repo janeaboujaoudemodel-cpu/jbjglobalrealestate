@@ -252,96 +252,70 @@ export default function BookReader() {
         </div>
       </div>
 
-      {/* Book stage */}
+      {/* Book stage — flat, no 3D hardcover frame */}
       <div className="relative container mx-auto px-4 max-w-5xl py-10 lg:py-14">
-        {/* Floor shadow under the book */}
-        <div className="absolute left-1/2 -translate-x-1/2 bottom-6 w-[70%] max-w-[700px] h-10 bg-black/25 blur-2xl rounded-full pointer-events-none" />
-
-        <div className="relative mx-auto" style={{ perspective: "2200px" }}>
-          {/* Outer hardcover frame */}
+        <div className="relative mx-auto">
+          {/* Flat page paper area */}
           <div
-            className="relative mx-auto rounded-r-md rounded-l-sm bg-gradient-to-br from-[#1c1812] via-[#2a2118] to-[#15110b] border border-[#B89555]/30"
+            className="relative bg-[#FBF6EC] rounded-2xl overflow-hidden mx-auto border border-[#B89555]/25 shadow-[0_18px_60px_-30px_rgba(0,0,0,0.35)]"
             style={{
               width: "min(720px, 96vw)",
-              padding: "14px 14px 14px 28px",
-              boxShadow:
-                "0 30px 60px -20px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(184,149,85,0.15)",
+              aspectRatio: "5 / 7",
             }}
+            data-gold-hairline
           >
-            {/* Hardcover spine notch */}
-            <div className="absolute left-[18px] top-3 bottom-3 w-[2px] bg-[#B89555]/30 rounded" />
-            <div className="absolute left-3 top-3 bottom-3 w-[2px] bg-black/40 rounded" />
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={safeIndex}
+                custom={direction}
+                initial={{ opacity: 0, x: direction > 0 ? 24 : -24 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: direction > 0 ? -24 : 24 }}
+                transition={{ duration: 0.32, ease: [0.22, 0.61, 0.36, 1] }}
+                className="absolute inset-0"
+              >
+                {current?.kind === "cover" && (
+                  <CoverFace
+                    book={book}
+                    totalChapters={modules.length}
+                    totalMinutes={totalMinutes}
+                    onOpen={next}
+                  />
+                )}
 
-            {/* Page paper area */}
-            <div
-              className="relative bg-[#FBF6EC] rounded-r-sm rounded-l-[2px] overflow-hidden"
-              style={{
-                aspectRatio: "5 / 7",
-                boxShadow:
-                  "inset 0 0 0 1px rgba(184,149,85,0.18), inset 0 0 60px rgba(184,149,85,0.06)",
-              }}
-            >
-              {/* Page edges (right side fanning effect) */}
-              <div className="absolute right-0 top-0 bottom-0 w-3 pointer-events-none">
-                <div className="absolute inset-0 bg-gradient-to-l from-[#e6d8bd]/70 to-transparent" />
-                <div className="absolute right-[1px] top-[2%] bottom-[2%] w-[1px] bg-[#c9b58a]/40" />
-                <div className="absolute right-[3px] top-[3%] bottom-[3%] w-[1px] bg-[#c9b58a]/30" />
+                {current?.kind === "toc" && (
+                  <TocPage
+                    modules={modules}
+                    onJump={(idx) => goTo(idx)}
+                    chapterStartIndex={chapterStartIndex}
+                  />
+                )}
+
+                {current?.kind === "chapter-open" && (
+                  <ChapterOpenPage module={current.module} moduleIndex={current.moduleIndex} />
+                )}
+
+                {current?.kind === "chapter-body" && (
+                  <ChapterBodyPage
+                    module={current.module}
+                    html={current.html}
+                    partIndex={current.partIndex}
+                    partCount={current.partCount}
+                  />
+                )}
+
+                {current?.kind === "back" && <BackCoverFace book={book} onRestart={() => goTo(0)} />}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Page number footer */}
+            {physicalPageNumber !== null && (
+              <div className="absolute bottom-3 left-0 right-0 flex justify-center pointer-events-none">
+                <span className="text-[11px] tracking-widest text-[#1A1A1A]/55 font-medium">
+                  {physicalPageNumber} / {totalPhysicalPages}
+                </span>
               </div>
-
-              <AnimatePresence mode="wait" custom={direction}>
-                <motion.div
-                  key={safeIndex}
-                  custom={direction}
-                  initial={{ opacity: 0, rotateY: direction > 0 ? 18 : -18, x: direction > 0 ? 40 : -40 }}
-                  animate={{ opacity: 1, rotateY: 0, x: 0 }}
-                  exit={{ opacity: 0, rotateY: direction > 0 ? -18 : 18, x: direction > 0 ? -40 : 40 }}
-                  transition={{ duration: 0.45, ease: [0.22, 0.61, 0.36, 1] }}
-                  className="absolute inset-0"
-                  style={{ transformOrigin: direction > 0 ? "left center" : "right center" }}
-                >
-                  {current?.kind === "cover" && (
-                    <CoverFace
-                      book={book}
-                      totalChapters={modules.length}
-                      totalMinutes={totalMinutes}
-                      onOpen={next}
-                    />
-                  )}
-
-                  {current?.kind === "toc" && (
-                    <TocPage
-                      modules={modules}
-                      onJump={(idx) => goTo(idx)}
-                      chapterStartIndex={chapterStartIndex}
-                    />
-                  )}
-
-                  {current?.kind === "chapter-open" && (
-                    <ChapterOpenPage module={current.module} moduleIndex={current.moduleIndex} />
-                  )}
-
-                  {current?.kind === "chapter-body" && (
-                    <ChapterBodyPage
-                      module={current.module}
-                      html={current.html}
-                      partIndex={current.partIndex}
-                      partCount={current.partCount}
-                    />
-                  )}
-
-                  {current?.kind === "back" && <BackCoverFace book={book} onRestart={() => goTo(0)} />}
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Page number footer */}
-              {physicalPageNumber !== null && (
-                <div className="absolute bottom-3 left-0 right-0 flex justify-center pointer-events-none">
-                  <span className="text-[11px] tracking-widest text-[#1A1A1A]/55 font-medium">
-                    {physicalPageNumber} / {totalPhysicalPages}
-                  </span>
-                </div>
-              )}
-            </div>
+            )}
           </div>
 
           {/* Side nav buttons */}
