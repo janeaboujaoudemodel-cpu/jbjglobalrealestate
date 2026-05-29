@@ -146,15 +146,19 @@ const ListProperty = () => {
               JBJ Seller Portal
             </span>
             <h1
-              className="mt-5 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
-              style={{ color: "#FFFFFF" }}
+              className="mt-5 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight"
+              style={{
+                color: "#FFFFFF",
+                textShadow: "0 2px 18px rgba(0,0,0,0.35)",
+                letterSpacing: "-0.02em",
+              }}
               data-no-contrast-guard
             >
               List Your Property
             </h1>
             <p
-              className="mt-4 text-base sm:text-lg max-w-2xl mx-auto font-medium"
-              style={{ color: GOLD }}
+              className="mt-4 text-base sm:text-lg max-w-2xl mx-auto"
+              style={{ color: "rgba(255,255,255,0.88)" }}
               data-no-contrast-guard
             >
               Priority listing with JBJ Global Real Estate — premium reach, full
@@ -162,15 +166,19 @@ const ListProperty = () => {
               dashboard.
             </p>
 
-            <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Button
                 onClick={() => setMode("manual")}
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="h-11 px-6 font-semibold border-0 w-full sm:w-auto"
-                style={{ backgroundColor: BLUE, color: "#FFFFFF" }}
+                className="h-11 px-6 font-semibold w-full sm:w-auto"
+                style={{
+                  backgroundColor: CHAMPAGNE,
+                  color: INK,
+                  border: `1px solid ${GOLD}`,
+                }}
               >
-                <ClipboardCheck className="w-4 h-4 mr-2" />
+                <ClipboardCheck className="w-4 h-4 mr-2" style={{ color: INK }} />
                 List Manually
               </Button>
               <Button
@@ -184,14 +192,14 @@ const ListProperty = () => {
                   border: `1.5px solid ${GOLD}`,
                 }}
               >
-                <Wand2 className="w-4 h-4 mr-2" />
+                <Wand2 className="w-4 h-4 mr-2" style={{ color: GOLD }} />
                 List with AI
                 <Sparkles className="w-3.5 h-3.5 ml-1.5" style={{ color: GOLD }} />
               </Button>
               <a
                 href="#my-submissions"
                 className="text-sm font-medium underline-offset-4 hover:underline"
-                style={{ color: GOLD }}
+                style={{ color: "rgba(255,255,255,0.85)" }}
                 data-no-contrast-guard
               >
                 View my submissions →
