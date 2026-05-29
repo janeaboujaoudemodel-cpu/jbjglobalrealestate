@@ -271,17 +271,21 @@ const ListProperty = () => {
         </div>
       </section>
 
-      {/* ─────────────────── Active form / browser ─────────────────── */}
+      {/* ─────────────────── Active form / browser / picker ─────────────────── */}
       <section className="px-2 sm:px-4 md:px-6 pt-8 pb-12">
-        <Suspense
-          fallback={
-            <div className="py-24">
-              <BrandedLoader />
-            </div>
-          }
-        >
-          <ActiveTab key={`${mode}-${purpose}`} />
-        </Suspense>
+        {mode === "pick" || !ActiveTab ? (
+          <PremiumModePicker onPick={setMode} />
+        ) : (
+          <Suspense
+            fallback={
+              <div className="py-24">
+                <BrandedLoader />
+              </div>
+            }
+          >
+            <ActiveTab key={`${mode}-${purpose}`} />
+          </Suspense>
+        )}
       </section>
 
       {/* ───────────────── My Submissions section ───────────────── */}
