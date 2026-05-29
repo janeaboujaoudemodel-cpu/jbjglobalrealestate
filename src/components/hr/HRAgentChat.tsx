@@ -373,7 +373,7 @@ export default function HRAgentChat() {
 
         {(mode === 'owner' || stage !== 'completed') && (
           <div className="border-t border-[#B89555]/20 p-4 space-y-3">
-            {mode !== 'owner' && !hasApplied && (
+            {!hasApplied && (
               <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 space-y-2">
                 <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A]/70">
                   <Briefcase className="w-3.5 h-3.5 text-[#102540]" /> Apply for a position
