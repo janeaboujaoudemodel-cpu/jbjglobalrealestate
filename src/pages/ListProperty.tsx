@@ -47,12 +47,15 @@ type Mode = "pick" | "manual" | "ai" | "browse";
 type Purpose = "sale" | "rent";
 
 /* ────────────────────────────── theme tokens ────────────────────────────── */
-const BLUE = "#2563EB";
-const BLUE_DEEP = "#102540";
+// Approved navy per brand guard — never substitute another blue
+const BLUE = "#102540";
+const BLUE_HOVER = "#1a3d63";
+const BLUE_DEEP = "#0B1B33";
 const BLUE_GRADIENT =
-  "linear-gradient(135deg, #0B2E5C 0%, #102540 45%, #1A4A8A 100%)";
+  "linear-gradient(135deg, #0B1B33 0%, #102540 50%, #1a3d63 100%)";
 const GOLD = "#B89555";
 const CHAMPAGNE = "#FDFBF7";
+const CHAMPAGNE_SURFACE = "#F7F2EA";
 const CHAMPAGNE_RAISED = "#EFE6D6";
 const INK = "#1A1A1A";
 
@@ -98,7 +101,6 @@ const ListProperty = () => {
 
   return (
     <div
-      data-marketing-page
       className="min-h-screen"
       style={{ backgroundColor: CHAMPAGNE, color: INK }}
     >
@@ -108,12 +110,13 @@ const ListProperty = () => {
         canonicalPath="/list-property"
       />
 
-      {/* ───────────────────── Hero (blue fade) ───────────────────── */}
+      {/* ───────────────────── Hero (navy gradient) ───────────────────── */}
       <section
-        className="relative w-full"
-        style={{ background: BLUE_GRADIENT }}
+        className="relative w-full bg-[#102540]"
+        data-surface="dark"
         data-allow-dark-cta
         data-no-contrast-guard
+        style={{ background: BLUE_GRADIENT }}
       >
         {/* subtle gold hairline along the bottom of the hero */}
         <div
@@ -143,15 +146,19 @@ const ListProperty = () => {
               JBJ Seller Portal
             </span>
             <h1
-              className="mt-5 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
-              style={{ color: "#FFFFFF" }}
+              className="mt-5 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight"
+              style={{
+                color: "#FFFFFF",
+                textShadow: "0 2px 18px rgba(0,0,0,0.35)",
+                letterSpacing: "-0.02em",
+              }}
               data-no-contrast-guard
             >
               List Your Property
             </h1>
             <p
-              className="mt-4 text-base sm:text-lg max-w-2xl mx-auto font-medium"
-              style={{ color: GOLD }}
+              className="mt-4 text-base sm:text-lg max-w-2xl mx-auto"
+              style={{ color: "rgba(255,255,255,0.88)" }}
               data-no-contrast-guard
             >
               Priority listing with JBJ Global Real Estate — premium reach, full
@@ -159,36 +166,44 @@ const ListProperty = () => {
               dashboard.
             </p>
 
-            <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Button
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <button
+                type="button"
                 onClick={() => setMode("manual")}
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="h-11 px-6 font-semibold border-0 w-full sm:w-auto"
-                style={{ backgroundColor: BLUE, color: "#FFFFFF" }}
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:brightness-[0.97]"
+                style={{
+                  backgroundColor: CHAMPAGNE,
+                  color: INK,
+                  border: `1px solid ${GOLD}`,
+                  WebkitTextFillColor: INK,
+                }}
               >
-                <ClipboardCheck className="w-4 h-4 mr-2" />
-                List Manually
-              </Button>
-              <Button
+                <ClipboardCheck className="w-4 h-4" style={{ color: INK }} />
+                <span style={{ color: INK, WebkitTextFillColor: INK }}>List Manually</span>
+              </button>
+              <button
+                type="button"
                 onClick={() => setMode("ai")}
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="h-11 px-6 font-semibold w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:bg-white/5"
                 style={{
                   backgroundColor: "transparent",
                   color: "#FFFFFF",
                   border: `1.5px solid ${GOLD}`,
+                  WebkitTextFillColor: "#FFFFFF",
                 }}
               >
-                <Wand2 className="w-4 h-4 mr-2" />
-                List with AI
-                <Sparkles className="w-3.5 h-3.5 ml-1.5" style={{ color: GOLD }} />
-              </Button>
+                <Wand2 className="w-4 h-4" style={{ color: GOLD }} />
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>List with AI</span>
+                <Sparkles className="w-3.5 h-3.5" style={{ color: GOLD }} />
+              </button>
               <a
                 href="#my-submissions"
                 className="text-sm font-medium underline-offset-4 hover:underline"
-                style={{ color: GOLD }}
+                style={{ color: "rgba(255,255,255,0.85)", WebkitTextFillColor: "rgba(255,255,255,0.85)" }}
                 data-no-contrast-guard
               >
                 View my submissions →
@@ -306,30 +321,33 @@ function SegmentedPill({
   icon: React.ReactNode;
   children: React.ReactNode;
 }) {
+  const fg = active ? "#FFFFFF" : INK;
   return (
     <button
       type="button"
       onClick={onClick}
-      data-allow-dark-cta={active ? "" : undefined}
-      data-no-contrast-guard={active ? "" : undefined}
-      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-150"
+      data-allow-dark-cta
+      data-no-contrast-guard
+      className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-150 ${active ? "bg-[#102540] hover:bg-[#1a3d63]" : ""}`}
       style={
         active
           ? {
               backgroundColor: BLUE,
               color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
               border: `1px solid ${BLUE_DEEP}`,
-              boxShadow: "0 4px 12px -4px rgba(37,99,235,0.45)",
+              boxShadow: "0 8px 22px -10px rgba(16,37,64,0.45)",
             }
           : {
               backgroundColor: CHAMPAGNE,
               color: INK,
-              border: `1px solid ${GOLD}40`,
+              WebkitTextFillColor: INK,
+              border: `1px solid ${GOLD}66`,
             }
       }
     >
-      {icon}
-      {children}
+      <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{icon}</span>
+      <span style={{ color: fg, WebkitTextFillColor: fg }}>{children}</span>
     </button>
   );
 }
