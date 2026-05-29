@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/lib/formatPrice";
-import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
+import { deriveHandover } from "@/utils/handoverDerivation";
 
 const formatHandoverDisplay = (v: string | null): string | null => {
   if (!v) return null;
@@ -89,7 +89,7 @@ export default function MoreFromDeveloperStrip({ developerId, developerName, dev
               <p className="text-sm font-semibold text-foreground mt-1 truncate">{p.name}</p>
               {/* Bottom row — price LEFT, handover RIGHT (per locked listing-card layout standard). */}
               {(() => {
-                const handover = formatHandoverDisplay(deriveHandover(p as any)) ?? HANDOVER_FALLBACK;
+                const handover = formatHandoverDisplay(deriveHandover(p as any));
                 const hasPrice = typeof p.price_from === "number" && p.price_from > 0;
                 return (
                   <div className="mt-1.5 flex items-end justify-between gap-2">
@@ -98,10 +98,9 @@ export default function MoreFromDeveloperStrip({ developerId, developerName, dev
                         From {formatPrice(p.price_from!)}
                       </p>
                     ) : <span />}
-                    <p className="text-[11px] font-semibold tabular-nums text-[#1A1A1A] truncate">
-                      <span className="text-[#1A1A1A]/65 mr-1">Handover</span>
-                      {handover}
-                    </p>
+                    {handover ? (
+                      <p className="text-[11px] font-semibold tabular-nums text-[#1A1A1A] truncate">{handover}</p>
+                    ) : <span />}
                   </div>
                 );
               })()}

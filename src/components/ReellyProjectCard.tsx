@@ -9,7 +9,7 @@ import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
-import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
+import { deriveHandover } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
 import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
  
@@ -288,12 +288,13 @@ const ReellyProjectCard = ({
               />
             </div>
 
-            {/* Handover / Ready — thin meta line beneath, right-aligned */}
-            <div className="flex justify-end mt-1">
-              <span className="text-[#1A1A1A]/75 text-[11px] font-semibold tabular-nums handover-orange">
-                {deriveHandover(project) || HANDOVER_FALLBACK}
-              </span>
-            </div>
+            {deriveHandover(project) && (
+              <div className="flex justify-end mt-1">
+                <span className="text-[#1A1A1A]/75 text-[11px] font-semibold tabular-nums handover-orange">
+                  {deriveHandover(project)}
+                </span>
+              </div>
+            )}
          </div>
        </Link>
 
