@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { AdminTasksPanel } from "@/components/crm/AdminTasksPanel";
 import InvestorDashboard from "@/components/account/InvestorDashboard";
 import {
@@ -89,6 +90,7 @@ interface ChatLog {
 const BrokerAccount = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
+  const { isOwner: isAppOwner, isLoading: appOwnerLoading } = useIsAppOwner();
   const { isBroker, isInvestor, isVisitor, role, isLoading: roleLoading } = useUserRole();
   const [modules, setModules] = useState<TrainingModule[]>([]);
   const [progress, setProgress] = useState<TrainingProgress[]>([]);
@@ -142,19 +144,17 @@ const BrokerAccount = () => {
         return;
       }
       try {
-        const [modulesRes, progressRes, pointsRes, statsRes, callsRes, chatsRes] = await Promise.allSettled([
+        const [modulesRes, progressRes, pointsRes, callsRes, chatsRes] = await Promise.allSettled([
           supabase.from('hr_training_modules').select('id, title, category, duration_minutes').order('display_order'),
           supabase.from('broker_training_progress').select('module_id, is_completed, completed_at').eq('user_id', user.id),
           supabase.from('broker_points').select('*').eq('user_id', user.id).maybeSingle(),
-          supabase.from('broker_activity_stats').select('*').eq('user_id', user.id).order('date', { ascending: false }).limit(30),
-          supabase.from('broker_call_logs').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(50),
+          supabase.from('broker_call_logs').select('*').eq('user_id', user.id).is('deleted_at', null).order('created_at', { ascending: false }).limit(50),
           supabase.from('broker_chat_logs').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(50),
         ]);
         if (cancelled) return;
         if (modulesRes.status === 'fulfilled' && modulesRes.value.data) setModules(modulesRes.value.data);
         if (progressRes.status === 'fulfilled' && progressRes.value.data) setProgress(progressRes.value.data);
         if (pointsRes.status === 'fulfilled' && pointsRes.value.data) setPoints(pointsRes.value.data);
-        if (statsRes.status === 'fulfilled' && statsRes.value.data) setActivityStats(statsRes.value.data);
         if (callsRes.status === 'fulfilled' && callsRes.value.data) setCallLogs(callsRes.value.data);
         if (chatsRes.status === 'fulfilled' && chatsRes.value.data) setChatLogs(chatsRes.value.data);
       } catch (error) {
@@ -174,26 +174,31 @@ const BrokerAccount = () => {
     }
   }, [authLoading, roleLoading, loading, user, navigate]);
 
+  useEffect(() => {
+    if (!authLoading && !appOwnerLoading && user && isAppOwner) {
+      try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
+      navigate('/owner', { replace: true });
+    }
+  }, [authLoading, appOwnerLoading, user, isAppOwner, navigate]);
+
   const completedModules = progress.filter(p => p.is_completed).length;
   const totalModules = modules.length;
   const trainingProgress = totalModules > 0 ? (completedModules / totalModules) * 100 : 0;
 
-  // Calculate stats
   const today = new Date();
-  const todayStats = activityStats.find(s => s.date === format(today, 'yyyy-MM-dd'));
-  const thisWeekStats = activityStats.filter(s => {
-    const date = new Date(s.date);
-    return date >= startOfWeek(today) && date <= endOfWeek(today);
-  });
-  const thisMonthStats = activityStats.filter(s => {
-    const date = new Date(s.date);
-    return date >= startOfMonth(today) && date <= endOfMonth(today);
-  });
+  const weekStart = startOfWeek(today);
+  const weekEnd = endOfWeek(today);
+  const monthStart = startOfMonth(today);
+  const monthEnd = endOfMonth(today);
+  const isWithin = (value: string, start: Date, end: Date) => {
+    const date = new Date(value);
+    return date >= start && date <= end;
+  };
 
-  const weekCalls = thisWeekStats.reduce((sum, s) => sum + s.calls_made, 0);
-  const weekChats = thisWeekStats.reduce((sum, s) => sum + s.chats_sent, 0);
-  const monthCalls = thisMonthStats.reduce((sum, s) => sum + s.calls_made, 0);
-  const monthChats = thisMonthStats.reduce((sum, s) => sum + s.chats_sent, 0);
+  const weekCalls = callLogs.filter((call) => isWithin(call.created_at, weekStart, weekEnd)).length;
+  const weekChats = chatLogs.filter((chat) => isWithin(chat.created_at, weekStart, weekEnd)).length;
+  const monthCalls = callLogs.filter((call) => isWithin(call.created_at, monthStart, monthEnd)).length;
+  const monthChats = chatLogs.filter((chat) => isWithin(chat.created_at, monthStart, monthEnd)).length;
 
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -201,7 +206,7 @@ const BrokerAccount = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  if (loading || authLoading || roleLoading) {
+  if (loading || authLoading || roleLoading || appOwnerLoading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center bg-transparent">
         <BrandedLoader text="Loading..." />
@@ -210,7 +215,7 @@ const BrokerAccount = () => {
   }
 
 
-  if (!user) return null;
+  if (!user || isAppOwner) return null;
 
   return (
     <div>
