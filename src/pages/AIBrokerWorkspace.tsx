@@ -201,7 +201,7 @@ export default function AIBrokerWorkspace() {
   const selected = leads.find(l => l.id === selectedId) || null;
 
   if (authLoading || roleLoading || loading) {
-    return <BrandedLoader variant="light" className="bg-[#F7F2EA]" />;
+    return <BrandedLoader variant="dark" className="bg-[#1A1A1A]" />;
   }
 
   return (
