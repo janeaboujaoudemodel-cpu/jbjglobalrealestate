@@ -1259,7 +1259,7 @@ const Properties = () => {
                     return nodes;
                   })}
                 </div>
-              )}
+              ) : null}
 
               {/* Pagination — numeric page controls + total count */}
               {!showSkeletons && finalProjects.length > PAGE_SIZE && (
