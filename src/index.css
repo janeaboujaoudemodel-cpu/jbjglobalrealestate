@@ -5932,3 +5932,39 @@ section h1:not([data-no-navy-accent])::after {
 .tracking-\[0\.2em\][class*="rounded-full"][class*="border"]:not([data-no-navy-accent]):not([data-on-dark]) :is(span, svg) {
   color: #FFFFFF !important;
 }
+
+/* ============================================================
+   GLOBAL LOCK — Phone code trigger ( [data-phone-code-trigger] )
+   - background stays dark (navy/ink), text + chevron ALWAYS white
+   - never flipped by contrast guards
+   GLOBAL LOCK — Country/search command popover
+   - cmdk Command inside any popover must NEVER paint a white band
+     (bg-popover token is near-white); we force transparent so the
+     parent champagne surface shows through.
+   ============================================================ */
+button[data-phone-code-trigger],
+button[data-phone-code-trigger]:hover,
+button[data-phone-code-trigger]:focus,
+button[data-phone-code-trigger]:focus-visible {
+  color: #FFFFFF !important;
+}
+button[data-phone-code-trigger] :is(span, svg, [class*="lucide"]),
+button[data-phone-code-trigger]:hover :is(span, svg, [class*="lucide"]),
+button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]),
+button[data-phone-code-trigger]:focus-visible :is(span, svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* cmdk Command + input wrapper must be transparent inside our
+   champagne popovers — kills the "white highlight" behind the
+   "Search country name or code…" placeholder. */
+[data-radix-popper-content-wrapper] [cmdk-root],
+[data-radix-popper-content-wrapper] [cmdk-input-wrapper],
+[data-radix-popper-content-wrapper] [cmdk-input] {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
