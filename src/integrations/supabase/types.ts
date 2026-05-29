@@ -3030,16 +3030,27 @@ export type Database = {
       }
       broker_education_books: {
         Row: {
+          ai_generated_chapter_count: number | null
+          ai_generated_summary: string | null
           book_number: number
           cover_image_url: string | null
+          cover_style: Json | null
           created_at: string | null
+          created_by: string | null
+          deleted_at: string | null
           description: string | null
           id: string
           is_restricted: boolean | null
+          last_ai_restyle_at: string | null
           learning_objective: string | null
           learning_path: string
           min_tier: Database["public"]["Enums"]["broker_training_tier"] | null
           sort_order: number | null
+          source_file_name: string | null
+          source_file_url: string | null
+          source_mime: string | null
+          source_size_bytes: number | null
+          sync_filename: boolean | null
           title: string
           unlock_requirements: Json | null
           updated_at: string | null
@@ -3048,16 +3059,27 @@ export type Database = {
           voice_provider: string
         }
         Insert: {
+          ai_generated_chapter_count?: number | null
+          ai_generated_summary?: string | null
           book_number: number
           cover_image_url?: string | null
+          cover_style?: Json | null
           created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
           description?: string | null
           id?: string
           is_restricted?: boolean | null
+          last_ai_restyle_at?: string | null
           learning_objective?: string | null
           learning_path: string
           min_tier?: Database["public"]["Enums"]["broker_training_tier"] | null
           sort_order?: number | null
+          source_file_name?: string | null
+          source_file_url?: string | null
+          source_mime?: string | null
+          source_size_bytes?: number | null
+          sync_filename?: boolean | null
           title: string
           unlock_requirements?: Json | null
           updated_at?: string | null
@@ -3066,16 +3088,27 @@ export type Database = {
           voice_provider?: string
         }
         Update: {
+          ai_generated_chapter_count?: number | null
+          ai_generated_summary?: string | null
           book_number?: number
           cover_image_url?: string | null
+          cover_style?: Json | null
           created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
           description?: string | null
           id?: string
           is_restricted?: boolean | null
+          last_ai_restyle_at?: string | null
           learning_objective?: string | null
           learning_path?: string
           min_tier?: Database["public"]["Enums"]["broker_training_tier"] | null
           sort_order?: number | null
+          source_file_name?: string | null
+          source_file_url?: string | null
+          source_mime?: string | null
+          source_size_bytes?: number | null
+          sync_filename?: boolean | null
           title?: string
           unlock_requirements?: Json | null
           updated_at?: string | null
@@ -3125,6 +3158,7 @@ export type Database = {
       }
       broker_education_modules: {
         Row: {
+          ai_summary: string | null
           book_id: string
           content: string | null
           created_at: string | null
@@ -3137,6 +3171,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          ai_summary?: string | null
           book_id: string
           content?: string | null
           created_at?: string | null
@@ -3149,6 +3184,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          ai_summary?: string | null
           book_id?: string
           content?: string | null
           created_at?: string | null
@@ -24206,6 +24242,45 @@ export type Database = {
         }
         Relationships: []
       }
+      owner_change_requests: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          instruction: string
+          notes: string | null
+          override_id: string | null
+          proposed_override: Json | null
+          reviewed_at: string | null
+          route: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          instruction: string
+          notes?: string | null
+          override_id?: string | null
+          proposed_override?: Json | null
+          reviewed_at?: string | null
+          route: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          instruction?: string
+          notes?: string | null
+          override_id?: string | null
+          proposed_override?: Json | null
+          reviewed_at?: string | null
+          route?: string
+          status?: string
+        }
+        Relationships: []
+      }
       owner_comm_ai_drafts: {
         Row: {
           ai_confidence: number | null
@@ -25111,6 +25186,42 @@ export type Database = {
           storage_path?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      owner_ui_overrides: {
+        Row: {
+          created_at: string
+          created_by: string
+          css: Json
+          id: string
+          label: string | null
+          route_pattern: string
+          selector: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          css?: Json
+          id?: string
+          label?: string | null
+          route_pattern: string
+          selector: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          css?: Json
+          id?: string
+          label?: string | null
+          route_pattern?: string
+          selector?: string
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }
