@@ -154,8 +154,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
           {/* Classic divider between input and Search button — desktop only, elegant gold */}
           <div
             aria-hidden="true"
-            className="hidden lg:flex flex-shrink-0 self-stretch w-px bg-[#B89555]/60"
-            style={{ marginTop: "10px", marginBottom: "10px" }}
+            className="hidden lg:flex flex-shrink-0 self-stretch w-px"
+            style={{ marginTop: "10px", marginBottom: "10px", backgroundColor: "#B89555" }}
           />
 
           {/* Search — white segment merged with input field */}
