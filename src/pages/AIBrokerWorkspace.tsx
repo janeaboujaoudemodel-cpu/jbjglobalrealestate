@@ -40,6 +40,7 @@ const KPI_CARDS: Array<{
 
 export default function AIBrokerWorkspace() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user, loading: authLoading } = useAuth();
   const { isOwner, isLoading: roleLoading } = useUserRole();
 
