@@ -551,9 +551,10 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     // either painting items navy-on-cream or triggering the navy-pill
     // white-text guard. Use champagne tints only (cream #EFE6D6) so text
     // stays ink and the global contrast guards never fire.
-    const commandItemStyles = isLight
-      ? "text-[#1A1A1A] hover:bg-[#EFE6D6]/60 data-[selected=true]:bg-[#EFE6D6] data-[selected=true]:text-[#1A1A1A]"
-      : "text-[#1A1A1A] hover:bg-[#EFE6D6]/20 data-[selected=true]:bg-[#EFE6D6]/30 data-[selected=true]:text-[#1A1A1A]";
+    // Flat — no per-row backgrounds, no hover/selected tint. Whole list shares
+    // one uniform champagne surface so there are no visible "highlight" boxes
+    // around each row.
+    const commandItemStyles = "text-[#1A1A1A] bg-transparent hover:bg-transparent data-[selected=true]:bg-transparent data-[selected=true]:text-[#1A1A1A] aria-selected:bg-transparent";
     const commandEmptyStyles = isLight
       ? "text-[#1A1A1A]/70"
       : "text-[#1A1A1A]/70";
@@ -595,7 +596,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               avoidCollisions={true}
               onOpenAutoFocus={(e) => e.preventDefault()}
               data-no-contrast-guard
-              style={{ backgroundColor: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}
+              style={{ backgroundColor: "#F7F2EA", border: "1px solid rgba(184,149,85,0.4)" }}
             >
               <Command className={commandStyles} data-no-contrast-guard>
                 <CommandInput 
