@@ -582,7 +582,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               </button>
             </PopoverTrigger>
             <PopoverContent 
-              className={cn("w-[340px] p-0 z-[100]", popoverStyles)} 
+              className={cn("w-[min(380px,calc(100vw-2rem))] p-0 z-[100]", popoverStyles)} 
               align="start"
               side="bottom"
               sideOffset={4}
