@@ -28,18 +28,25 @@ function PremiumCard({ children, className = "" }: { children: React.ReactNode; 
   );
 }
 
-function Kpi({ icon: Icon, label, value, sub }: { icon: any; label: string; value: string | number; sub?: string }) {
+function Kpi({
+  icon: Icon, label, value, sub, onClick,
+}: { icon: any; label: string; value: string | number; sub?: string; onClick?: () => void }) {
   return (
-    <div className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 px-4 py-4">
+    <button
+      type="button"
+      onClick={onClick}
+      className="group text-left rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 px-4 py-4 hover:border-[#B89555]/60 hover:bg-[#F2EADA] transition-colors w-full focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+    >
       <div className="flex items-center justify-between">
         <div className="h-8 w-8 grid place-items-center rounded-md bg-[#EFE6D6] border border-[#B89555]/35">
           <Icon className="h-4 w-4 text-[#1A1A1A]" />
         </div>
+        <ArrowRight className="h-3.5 w-3.5 text-[#1A1A1A]/40 group-hover:text-[#B89555] transition-colors" />
       </div>
       <div className="mt-3 text-2xl md:text-3xl font-semibold tabular-nums text-[#1A1A1A]">{value}</div>
       <div className="text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/60 mt-1">{label}</div>
       {sub && <div className="text-[11px] text-[#1A1A1A]/55 mt-1">{sub}</div>}
-    </div>
+    </button>
   );
 }
 
