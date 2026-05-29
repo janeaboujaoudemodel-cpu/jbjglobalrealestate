@@ -572,25 +572,25 @@ function TrainingCard({ m, onStart }: { m: TModule; onStart: () => void }) {
           </div>
         )}
 
-        <div className="mt-5 flex items-center justify-between gap-3">
-          <div className="flex flex-wrap gap-1.5">
+        <div className="mt-auto pt-5 flex items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-1.5 min-w-0 flex-1 overflow-hidden">
             {m.topics.slice(0, 2).map((t, i) => (
-              <span key={i} className="text-[11px] bg-[#FDFBF7] text-[#1A1A1A]/85 px-2 py-0.5 rounded border border-[#B89555]/30">
+              <span key={i} className="text-[11px] bg-[#FDFBF7] text-[#1A1A1A]/85 px-2 py-0.5 rounded border border-[#B89555]/30 max-w-full truncate">
                 {t}
               </span>
             ))}
-            {m.topics.length > 2 && <span className="text-[11px] text-[#1A1A1A]/55">+{m.topics.length - 2} more</span>}
+            {m.topics.length > 2 && <span className="text-[11px] text-[#1A1A1A]/55 whitespace-nowrap">+{m.topics.length - 2} more</span>}
           </div>
           <button
             type="button"
             onClick={onStart}
-            className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)]"
+            className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)] leading-none"
             data-allow-dark-cta
             data-no-contrast-guard
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            <Play className="w-3 h-3" style={{ color: "#FFFFFF" }} />
-            <span className="allow-white" style={{ color: "#FFFFFF" }}>Start</span>
+            <Play className="w-3 h-3 shrink-0" style={{ color: "#FFFFFF" }} />
+            <span className="allow-white whitespace-nowrap" style={{ color: "#FFFFFF" }}>Start</span>
           </button>
         </div>
       </CardContent>
