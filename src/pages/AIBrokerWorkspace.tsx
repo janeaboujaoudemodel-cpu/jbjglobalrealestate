@@ -63,6 +63,11 @@ export default function AIBrokerWorkspace() {
 
   useEffect(() => { if (user && !roleLoading) bootstrap(); /* eslint-disable-next-line */ }, [user, roleLoading, isOwner]);
   useEffect(() => { if (selectedId) loadChat(selectedId); }, [selectedId]);
+  // Allow deep-linking from /broker/leads etc. via ?leadId=<uuid>
+  useEffect(() => {
+    const qid = searchParams.get("leadId");
+    if (qid && qid !== selectedId) setSelectedId(qid);
+  }, [searchParams]);
 
   const bootstrap = async () => {
     setLoading(true);
