@@ -1319,8 +1319,6 @@ const Properties = () => {
               )}
 
               {finalProjects.length === 0 && !showSkeletons && (
-                <div style={{ display: "none" }} />
-              ) : (
                 <div className="py-12 px-4">
                   {/* Premium No Results UI */}
                   <div className="text-center mb-10">
