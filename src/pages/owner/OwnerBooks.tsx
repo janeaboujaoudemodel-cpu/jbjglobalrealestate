@@ -89,12 +89,26 @@ export default function OwnerBooks() {
     const { data } = await supabase
       .from("broker_education_books")
       .select(
-        "id, book_number, title, description, is_published, ai_generated_chapter_count, source_file_name, deleted_at, created_at",
+        "id, book_number, title, description, is_restricted, ai_generated_chapter_count, source_file_name, deleted_at, created_at",
       )
       .order("created_at", { ascending: false });
-    setBooks((data ?? []) as Book[]);
+    const rows = (data ?? []) as unknown as BookRow[];
+    setBooks(
+      rows.map((r) => ({
+        id: r.id,
+        book_number: r.book_number,
+        title: r.title,
+        description: r.description,
+        is_published: !r.is_restricted,
+        ai_generated_chapter_count: r.ai_generated_chapter_count,
+        source_file_name: r.source_file_name,
+        deleted_at: r.deleted_at,
+        created_at: r.created_at ?? "",
+      })),
+    );
     setLoading(false);
   };
+
   useEffect(() => {
     load();
   }, []);
