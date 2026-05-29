@@ -159,7 +159,7 @@ export default function AIBrokerWorkspace() {
     setChatLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("broker-ai-assistant", {
-        body: { leadId: selectedId, message, mode },
+        body: { leadId: activeId, message, mode },
       });
       if (error) throw error;
       const s = data?.structured;
