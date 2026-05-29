@@ -5498,7 +5498,10 @@ hr:not([data-gold-hairline]),
 }
 
 hr[data-gold-hairline],
-[data-gold-hairline] {
+[role="separator"][data-gold-hairline],
+[data-divider][data-gold-hairline],
+[data-section-divider][data-gold-hairline],
+[data-adaptive-hairline][data-gold-hairline] {
   border: 0 !important;
   height: 1px !important;
   background: linear-gradient(
@@ -5510,6 +5513,7 @@ hr[data-gold-hairline],
     transparent 100%
   ) !important;
 }
+
 
 /* 2. Tailwind `divide-*` utilities — soften gray internal dividers to champagne. */
 [class*="divide-gray"] > :not([hidden]) ~ :not([hidden]),
