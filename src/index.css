@@ -5946,7 +5946,13 @@ button[data-phone-code-trigger],
 button[data-phone-code-trigger]:hover,
 button[data-phone-code-trigger]:focus,
 button[data-phone-code-trigger]:focus-visible {
+  background-color: #102540 !important;
+  background-image: none !important;
+  border: 1px solid rgba(184, 149, 85, 0.55) !important;
   color: #FFFFFF !important;
+}
+button[data-phone-code-trigger]:hover {
+  background-color: #1a3d63 !important;
 }
 button[data-phone-code-trigger] :is(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger]:hover :is(span, svg, [class*="lucide"]),
@@ -5960,11 +5966,21 @@ button[data-phone-code-trigger]:focus-visible :is(span, svg, [class*="lucide"]) 
 
 /* cmdk Command + input wrapper must be transparent inside our
    champagne popovers — kills the "white highlight" behind the
-   "Search country name or code…" placeholder. */
+   "Search country name or code…" placeholder. Force every descendant
+   that could carry the bg-popover token (near-white) to transparent. */
 [data-radix-popper-content-wrapper] [cmdk-root],
+[data-radix-popper-content-wrapper] [cmdk-root] > *,
 [data-radix-popper-content-wrapper] [cmdk-input-wrapper],
-[data-radix-popper-content-wrapper] [cmdk-input] {
+[data-radix-popper-content-wrapper] [cmdk-input-wrapper] > *,
+[data-radix-popper-content-wrapper] [cmdk-input],
+[data-radix-popper-content-wrapper] [cmdk-list] {
   background-color: transparent !important;
   background-image: none !important;
+}
+[data-radix-popper-content-wrapper] [cmdk-input]:focus,
+[data-radix-popper-content-wrapper] [cmdk-input]:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
 }
 
