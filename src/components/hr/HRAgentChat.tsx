@@ -151,16 +151,11 @@ export default function HRAgentChat() {
     <Card className="w-full max-w-2xl mx-auto shadow-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-[#B89555]/30">
       <CardHeader className="border-b border-[#B89555]/20 bg-gradient-to-r from-gold/10 to-gold/5">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
-              <Bot className="w-6 h-6 text-[#1A1A1A]" />
-            </div>
-            <div>
-              <CardTitle className="text-lg text-[#1A1A1A]">Jessica</CardTitle>
-              <p className="text-sm text-[#1A1A1A]/70">
-                {mode === 'owner' ? 'Executive HR assistant' : 'Available 24/7 to support you'}
-              </p>
-            </div>
+          <div>
+            <CardTitle className="text-lg text-[#1A1A1A]">Jessica</CardTitle>
+            <p className="text-sm text-[#1A1A1A]/70">
+              {mode === 'owner' ? 'Executive HR assistant' : 'Available 24/7 to support you'}
+            </p>
           </div>
           {mode === 'owner' ? (
             <Badge className="bg-[#102540] text-white flex items-center gap-1 border border-[#B89555]/40">
