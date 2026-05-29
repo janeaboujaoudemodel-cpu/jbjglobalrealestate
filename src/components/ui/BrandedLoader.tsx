@@ -8,41 +8,46 @@ interface BrandedLoaderProps {
 }
 
 /**
- * Premium branded loader — JBJ monogram with pulse animation and gold glow.
- * variant='dark' (default): dark background → light monogram
- * variant='light': light background → dark monogram
+ * Premium branded loader — compact JBJ monogram with a soft gold pulse.
+ * Centered on screen. No long status text (a tiny dot row only).
  */
-export function BrandedLoader({ text = "Loading...", className = "", variant = "light" }: BrandedLoaderProps) {
+export function BrandedLoader({ text, className = "", variant = "light" }: BrandedLoaderProps) {
   const logo = variant === 'light' ? jbjMonogramNobuffer : jbjMonogramLightTransparent;
-  
+
   return (
-    <div className={`flex flex-col items-center justify-center min-h-screen gap-6 ${className}`}>
-      <div className="relative w-40 h-40 md:w-52 md:h-52">
-        {/* Gold fill animation overlay */}
-        <div className="absolute inset-0 overflow-hidden rounded-full">
-          <img
-            src={logo}
-            alt="Loading"
-            className="w-full h-full object-contain opacity-20"
-            style={{ filter: "grayscale(1)" }}
-          />
-        </div>
-        <img
-          src={logo}
-          alt="Loading"
-          className="relative w-full h-full object-contain"
-          style={{ 
-            filter: variant === 'light' 
-              ? 'drop-shadow(0 0 24px rgba(0,0,0,0.3))'
-              : 'drop-shadow(0 0 24px rgba(200,167,102,0.5))',
+    <div className={`fixed inset-0 flex flex-col items-center justify-center gap-4 ${className}`}>
+      <div className="relative w-16 h-16 flex items-center justify-center">
+        {/* Soft gold pulsing ring */}
+        <span
+          className="absolute inset-0 rounded-full"
+          style={{
+            boxShadow: "0 0 0 1px rgba(184,149,85,0.35), 0 0 24px rgba(184,149,85,0.25)",
+            animation: "jbj-pulse 1.6s ease-in-out infinite",
           }}
         />
+        <img
+          src={logo}
+          alt=""
+          aria-hidden="true"
+          className="relative w-12 h-12 object-contain"
+          style={{ animation: "jbj-fade 1.6s ease-in-out infinite" }}
+        />
       </div>
-      <span
-        className={`text-xs tracking-[0.25em] uppercase font-semibold ${variant === 'light' ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]'}`}
-      >
-        {text}
-      </span>
+      {text ? (
+        <span className="text-[10px] tracking-[0.25em] uppercase text-[#1A1A1A]/60">
+          {text}
+        </span>
+      ) : null}
+      <style>{`
+        @keyframes jbj-pulse {
+          0%, 100% { transform: scale(0.92); opacity: 0.55; }
+          50% { transform: scale(1.08); opacity: 1; }
+        }
+        @keyframes jbj-fade {
+          0%, 100% { opacity: 0.75; }
+          50% { opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 }
@@ -52,17 +57,17 @@ export function BrandedLoader({ text = "Loading...", className = "", variant = "
  */
 export function BrandedLoaderInline({ size = 24, className = "", variant = "dark" }: { size?: number; className?: string; variant?: 'dark' | 'light' }) {
   const logo = variant === 'light' ? jbjMonogramNobuffer : jbjMonogramLightTransparent;
-  
+
   return (
     <img
       src={logo}
-      alt="Loading"
+      alt=""
+      aria-hidden="true"
       className={`object-contain ${className}`}
-      style={{ 
-        width: size, 
-        height: size, 
-        filter: "drop-shadow(0 0 8px rgba(200,167,102,0.4))",
-        mixBlendMode: "multiply"
+      style={{
+        width: size,
+        height: size,
+        animation: "jbj-fade 1.6s ease-in-out infinite",
       }}
     />
   );
