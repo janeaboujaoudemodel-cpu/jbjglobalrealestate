@@ -80,13 +80,24 @@ serve(async (req) => {
         }
       } catch (e) { console.warn("scribe error", e); }
     }
-    if (!transcriptText && LOVABLE_API_KEY) {
-      try {
-        transcriptText = await transcribeWithLovableAI(audioBytes, mimeType, LOVABLE_API_KEY);
-      } catch (e) { console.warn("lovable ai transcription fallback error", e); }
+    // NOTE: We intentionally do NOT fall back to Gemini "image_url" for audio —
+    // it does not actually transcribe audio and will hallucinate a transcript,
+    // which produced AI summaries unrelated to the real call.
+    const transcriptUnavailable = !transcriptText || transcriptText.trim().length < 4;
+    if (transcriptUnavailable) {
+      // Save a clear placeholder, skip AI analysis entirely so we never fabricate.
+      await admin.from("broker_call_logs").update({
+        transcript_text: "",
+        transcript_segments: segments,
+        ai_summary: "Transcript unavailable — AI analysis skipped to avoid fabricating call details. Please re-record in a quieter environment or check that ElevenLabs Scribe is configured.",
+        ai_next_step: null,
+        ai_score: null,
+        ai_matches: [],
+        ai_processed_at: new Date().toISOString(),
+      }).eq("id", callLogId);
+      return json({ ok: true, transcript_unavailable: true });
     }
-    const transcriptUnavailable = !transcriptText;
-    if (transcriptUnavailable) transcriptText = `Call recorded (${callRow.duration_seconds || 0}s) — transcript unavailable.`;
+
 
     // Pull lead + inventory for the AI evaluation.
     let lead: any = null;
