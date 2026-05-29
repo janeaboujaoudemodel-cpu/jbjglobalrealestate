@@ -87,12 +87,27 @@ export default function MoreFromDeveloperStrip({ developerId, developerName, dev
                 <p className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 truncate">{p.location}</p>
               )}
               <p className="text-sm font-semibold text-foreground mt-1 truncate">{p.name}</p>
-              {typeof p.price_from === "number" && p.price_from > 0 && (
-                <p className="text-xs text-price-orange font-bold mt-1">
-                  From {formatPrice(p.price_from)}
-                </p>
-              )}
+              {/* Bottom row — price LEFT, handover RIGHT (per locked listing-card layout standard). */}
+              {(() => {
+                const handover = formatHandoverDisplay(deriveHandover(p as any)) ?? HANDOVER_FALLBACK;
+                const isReady = /^ready$/i.test(handover);
+                const hasPrice = typeof p.price_from === "number" && p.price_from > 0;
+                return (
+                  <div className="mt-1.5 flex items-end justify-between gap-2">
+                    {hasPrice ? (
+                      <p className="text-xs text-price-orange font-bold tabular-nums truncate">
+                        From {formatPrice(p.price_from!)}
+                      </p>
+                    ) : <span />}
+                    <p className="text-[11px] font-semibold tabular-nums text-[#1A1A1A] truncate">
+                      <span className="text-[#1A1A1A]/65 mr-1">{isReady ? "Status" : "Handover"}</span>
+                      {handover}
+                    </p>
+                  </div>
+                );
+              })()}
             </div>
+
           </Link>
         ))}
       </div>
