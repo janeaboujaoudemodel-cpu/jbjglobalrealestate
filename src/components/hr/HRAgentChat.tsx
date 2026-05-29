@@ -1,15 +1,22 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Loader2, Calendar, FileText, CheckCircle, Sparkles, Copy } from 'lucide-react';
+import { Send, Bot, User, Loader2, Calendar, FileText, CheckCircle, Sparkles, Copy, Paperclip, X, Briefcase } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+
+interface OpenPosition {
+  id: string;
+  title: string;
+  department: string | null;
+}
 
 interface Message {
   role: 'user' | 'assistant';
@@ -37,13 +44,33 @@ export default function HRAgentChat() {
   const [mode, setMode] = useState<'applicant' | 'owner'>('applicant');
   const [initializing, setInitializing] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // CV + position application state
+  const [openPositions, setOpenPositions] = useState<OpenPosition[]>([]);
+  const [selectedPositionId, setSelectedPositionId] = useState<string>('');
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [submittingApp, setSubmittingApp] = useState(false);
+  const [hasApplied, setHasApplied] = useState(false);
 
   useEffect(() => {
     if (user) {
       startConversation();
     }
   }, [user]);
+
+  useEffect(() => {
+    // Fetch open positions for the in-chat picker
+    (async () => {
+      const { data } = await supabase
+        .from('open_positions')
+        .select('id, title, department')
+        .neq('status', 'hidden')
+        .order('is_featured', { ascending: false })
+        .order('created_at', { ascending: false });
+      setOpenPositions((data as OpenPosition[]) || []);
+    })();
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -131,6 +158,122 @@ export default function HRAgentChat() {
       sendMessage();
     }
   };
+
+  const handleCvPicked = (f: File | null) => {
+    if (!f) return;
+    const ok = /\.(pdf|docx?|jpe?g|png|webp|heic|heif)$/i.test(f.name);
+    if (!ok) {
+      toast.error('Please upload PDF, Word, or image (JPG/PNG/HEIC).');
+      return;
+    }
+    if (f.size > 10 * 1024 * 1024) {
+      toast.error('Max file size is 10 MB.');
+      return;
+    }
+    setCvFile(f);
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'user',
+        content: `📎 Attached CV: ${f.name}`,
+        timestamp: new Date().toISOString(),
+      },
+      {
+        role: 'assistant',
+        content: selectedPositionId
+          ? `Got it — I have your CV. Tap "Submit application" when you're ready and I'll file it for the selected role.`
+          : `Thanks! I've received your CV. Please pick the position you're applying for from the selector below, then tap "Submit application".`,
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+  };
+
+  const submitApplication = async () => {
+    if (!user) {
+      toast.error('Please sign in to submit your application.');
+      return;
+    }
+    if (!cvFile) {
+      toast.error('Attach your CV first.');
+      return;
+    }
+    if (!selectedPositionId) {
+      toast.error('Select the position you are applying for.');
+      return;
+    }
+    setSubmittingApp(true);
+    try {
+      // 1) Upload to hr-documents bucket (same path scheme as JoinApplication)
+      const ext = cvFile.name.split('.').pop();
+      const path = `${user.id}/cv-${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from('hr-documents')
+        .upload(path, cvFile, { cacheControl: '3600', upsert: true });
+      if (upErr) throw upErr;
+
+      const pos = openPositions.find((p) => p.id === selectedPositionId);
+      const positionLabel = pos?.title || selectedPositionId;
+
+      // 2) Insert hr_applications row (same wiring as the application form)
+      const { error: appErr } = await supabase.from('hr_applications').insert({
+        user_id: user.id,
+        full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Applicant',
+        email: user.email!,
+        phone_e164: user.user_metadata?.phone || '—',
+        nationality: user.user_metadata?.nationality || '—',
+        preferred_language: 'en',
+        current_location_country: '—',
+        current_location_city: '—',
+        cv_url: path,
+        position_applied: positionLabel,
+        consent_accurate: true,
+        consent_terms: true,
+        status: 'pending',
+        source: 'jessica_chat',
+      } as any);
+      if (appErr && !/duplicate|unique/i.test(appErr.message)) throw appErr;
+
+      // 3) Confirmation email + admin task (best-effort)
+      void supabase.functions.invoke('send-cv-status-email', {
+        body: {
+          email: user.email!,
+          fullName: user.user_metadata?.full_name || user.email,
+          status: 'submitted',
+          position: positionLabel,
+          userId: user.id,
+        },
+      });
+
+      // 4) Tell Jessica so she can guide next steps in conversation
+      try {
+        await supabase.functions.invoke('hr-ai-agent', {
+          body: {
+            action: 'send_message',
+            conversationId,
+            message: `[SYSTEM] Candidate just submitted their CV "${cvFile.name}" for position "${positionLabel}" through the chat. Please confirm receipt warmly and continue the interview.`,
+          },
+        });
+      } catch {}
+
+      setHasApplied(true);
+      setCvFile(null);
+      toast.success('Application submitted — thank you!');
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: `✅ Your application for **${positionLabel}** has been received and your CV is saved to our system. Our HR team will review it within 2–3 business days. In the meantime, I can continue with a few interview questions if you'd like.`,
+          timestamp: new Date().toISOString(),
+        },
+      ]);
+    } catch (e: any) {
+      console.error(e);
+      toast.error(e?.message || 'Failed to submit application.');
+    } finally {
+      setSubmittingApp(false);
+    }
+  };
+
 
   const currentStageBadge = stageBadges[stage] || stageBadges.greeting;
 
@@ -242,7 +385,77 @@ export default function HRAgentChat() {
         </ScrollArea>
 
         {(mode === 'owner' || stage !== 'completed') && (
-          <div className="border-t border-[#B89555]/20 p-4">
+          <div className="border-t border-[#B89555]/20 p-4 space-y-3">
+            {mode !== 'owner' && !hasApplied && (
+              <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 space-y-2">
+                <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A]/70">
+                  <Briefcase className="w-3.5 h-3.5 text-[#102540]" /> Apply for a position
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Select value={selectedPositionId} onValueChange={setSelectedPositionId}>
+                    <SelectTrigger className="flex-1 border-[#B89555]/40 bg-white text-[#1A1A1A]">
+                      <SelectValue placeholder="Select position…" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white text-[#1A1A1A]">
+                      {openPositions.length === 0 && (
+                        <SelectItem value="__none" disabled>No open positions</SelectItem>
+                      )}
+                      {openPositions.map((p) => (
+                        <SelectItem key={p.id} value={p.id}>
+                          {p.title}{p.department ? ` — ${p.department}` : ''}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {cvFile ? (
+                    <div className="flex items-center gap-2 rounded-md border border-emerald-600/40 bg-emerald-50 px-3 py-1.5 text-xs text-[#1A1A1A]">
+                      <FileText className="w-3.5 h-3.5 text-emerald-700" />
+                      <span className="truncate max-w-[140px]">{cvFile.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => setCvFile(null)}
+                        className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+                        aria-label="Remove CV"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                    >
+                      <Paperclip className="w-4 h-4 mr-1.5" /> Attach CV
+                    </Button>
+                  )}
+                  <Button
+                    type="button"
+                    onClick={submitApplication}
+                    disabled={submittingApp || !cvFile || !selectedPositionId}
+                    className="bg-[#102540] text-white hover:bg-[#1a3d63]"
+                  >
+                    {submittingApp ? (
+                      <><Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> Submitting…</>
+                    ) : (
+                      'Submit application'
+                    )}
+                  </Button>
+                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.heic,.heif,application/pdf,image/*"
+                  className="hidden"
+                  onChange={(e) => handleCvPicked(e.target.files?.[0] || null)}
+                />
+                <p className="text-[10px] text-[#1A1A1A]/60">
+                  PDF · Word · JPG / PNG / HEIC — max 10 MB. Your CV is stored securely with our HR team.
+                </p>
+              </div>
+            )}
+
             <div className="flex gap-2">
               <Input
                 value={input}
@@ -252,8 +465,8 @@ export default function HRAgentChat() {
                 disabled={loading}
                 className="flex-1 border-[#B89555]/30 focus:border-[#B89555]"
               />
-              <Button 
-                onClick={sendMessage} 
+              <Button
+                onClick={sendMessage}
                 disabled={!input.trim() || loading}
                 size="icon"
                 className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
@@ -261,7 +474,7 @@ export default function HRAgentChat() {
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </Button>
             </div>
-            <p className="text-xs text-[#1A1A1A]/70 mt-2 text-center">
+            <p className="text-xs text-[#1A1A1A]/70 text-center">
               Press Enter to send • AI-powered interview assistant
             </p>
           </div>
