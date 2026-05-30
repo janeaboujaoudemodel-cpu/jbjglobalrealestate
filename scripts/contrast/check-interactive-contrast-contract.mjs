@@ -9,7 +9,7 @@ const SRC = path.join(root, 'src');
 
 const exts = new Set(['.tsx', '.jsx']);
 const INTERACTIVE_RE = /<(Button|button|a|Badge|TabsTrigger)\b|role=["'](?:button|tab|menuitem|status|switch)["']/;
-const LIGHT_BG_RE = /(?<![:\w-])(bg-\[#(?:FDFBF7|F7F2EA|F7F1E6|EFE6D6|ECE2D2|B89555|A68444|D4AF37)\](?:\/[0-9]{1,3})?|bg-white|bg-background|bg-card|bg-popover|bg-secondary|bg-accent|bg-muted|from-\[#(?:FDFBF7|F7F2EA|F7F1E6|EFE6D6|ECE2D2)\])/;
+const LIGHT_BG_RE = /(?<![:\w-])(bg-\[#(?:FDFBF7|F7F2EA|F7F1E6|EFE6D6|ECE2D2|B89555|A68444|D4AF37)\](?!\/)|bg-white|bg-background|bg-card|bg-popover|bg-secondary|bg-accent|bg-muted|from-\[#(?:FDFBF7|F7F2EA|F7F1E6|EFE6D6|ECE2D2)\](?!\/))/;
 const DARK_BG_RE = /(?<![:\w-])(bg-\[#(?:102540|1a3d63|1A1A1A|0F0F0F|111111)\]|bg-black|bg-primary|bg-foreground|from-\[#(?:102540|1a3d63|1A1A1A)\]|from-black)/;
 const WHITE_TEXT_RE = /(?<![:\w-])(text-white(?:\/[0-9]{1,3})?|text-\[#(?:FDFBF7|F7F2EA|FFFFFF)\](?:\/[0-9]{1,3})?)/;
 const DARK_TEXT_RE = /(?<![:\w-])(text-black(?:\/[0-9]{1,3})?|text-\[#1A1A1A\](?:\/[0-9]{1,3})?|text-zinc-(?:900|950)(?:\/[0-9]{1,3})?|text-neutral-(?:900|950)(?:\/[0-9]{1,3})?)/;
@@ -34,8 +34,7 @@ function check() {
       if (line.includes('contrast-ok')) return;
       const textRisk = (LIGHT_BG_RE.test(line) && WHITE_TEXT_RE.test(line)) || (DARK_BG_RE.test(line) && DARK_TEXT_RE.test(line)) || BAD_ACTIVE_TAB_RE.test(line);
       if (!textRisk) return;
-      const nearby = lines.slice(Math.max(0, idx - 2), Math.min(lines.length, idx + 3)).join(' ');
-      if (!INTERACTIVE_RE.test(nearby) && !/className=|className\{|Badge|TabsTrigger|role=/.test(nearby)) return;
+      if (!INTERACTIVE_RE.test(line)) return;
       violations.push({ file: rel, line: idx + 1, snippet: line.trim().slice(0, 220) });
     });
   }
