@@ -6071,6 +6071,168 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   color: #DC2626 !important;
   stroke: #DC2626 !important;
   -webkit-text-fill-color: #DC2626 !important;
+}
+
+/* ============================================================
+   CTA PRIMITIVE SYSTEM — state-locked, guard-proof.
+   Loaded last so source-order beats every prior contrast guard
+   at equal specificity. Use on <a> / <button> / [role="button"];
+   nested span/svg/lucide auto-inherit the locked color.
+
+   Variants:
+     .jj-cta-dark        — navy fill, WHITE text+icons, all states
+     .jj-cta-champagne   — champagne fill, INK text+icons, all states
+     .jj-cta-outline     — transparent, INK text+icons, gold hairline
+     .jj-pill-active     — active tab/pill: cream + ink + hairline
+
+   These primitives are the final word — no opt-out needed.
+   ============================================================ */
+
+:where(.jj-cta-dark) {
+  background-color: #102540;
+  border: 1px solid rgba(184, 149, 85, 0.55);
+  border-radius: 0.75rem;
+  padding: 0.625rem 1.125rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+.jj-cta-dark,
+.jj-cta-dark:link,
+.jj-cta-dark:visited,
+.jj-cta-dark:hover,
+.jj-cta-dark:focus,
+.jj-cta-dark:focus-visible,
+.jj-cta-dark:active,
+.jj-cta-dark[data-state],
+.jj-cta-dark[aria-pressed],
+.jj-cta-dark[aria-current],
+.jj-cta-dark :where(span, p, small, strong, em, svg, [class*="lucide"]),
+.jj-cta-dark:hover :where(span, p, small, strong, em, svg, [class*="lucide"]),
+.jj-cta-dark:focus :where(span, p, small, strong, em, svg, [class*="lucide"]),
+.jj-cta-dark:focus-visible :where(span, p, small, strong, em, svg, [class*="lucide"]),
+.jj-cta-dark:active :where(span, p, small, strong, em, svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
+.jj-cta-dark:hover { background-color: #1a3d63 !important; }
+.jj-cta-dark:disabled,
+.jj-cta-dark[aria-disabled="true"] {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  background-color: #102540 !important;
+}
+
+:where(.jj-cta-champagne) {
+  background-color: #EFE6D6;
+  border: 1px solid rgba(184, 149, 85, 0.55);
+  border-radius: 0.75rem;
+  padding: 0.625rem 1.125rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+.jj-cta-champagne,
+.jj-cta-champagne:link,
+.jj-cta-champagne:visited,
+.jj-cta-champagne:hover,
+.jj-cta-champagne:focus,
+.jj-cta-champagne:focus-visible,
+.jj-cta-champagne:active,
+.jj-cta-champagne[data-state],
+.jj-cta-champagne[aria-pressed],
+.jj-cta-champagne[aria-current],
+.jj-cta-champagne :where(span, p, small, strong, em, svg, [class*="lucide"]),
+.jj-cta-champagne:hover :where(span, p, small, strong, em, svg, [class*="lucide"]),
+.jj-cta-champagne:focus :where(span, p, small, strong, em, svg, [class*="lucide"]),
+.jj-cta-champagne:focus-visible :where(span, p, small, strong, em, svg, [class*="lucide"]),
+.jj-cta-champagne:active :where(span, p, small, strong, em, svg, [class*="lucide"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+.jj-cta-champagne:hover { background-color: #E5D9C2 !important; }
+.jj-cta-champagne:disabled,
+.jj-cta-champagne[aria-disabled="true"] {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  background-color: #EFE6D6 !important;
+}
+
+:where(.jj-cta-outline) {
+  background-color: transparent;
+  border: 1px solid rgba(26, 26, 26, 0.35);
+  border-radius: 0.75rem;
+  padding: 0.625rem 1.125rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 200ms ease, border-color 200ms ease;
+}
+.jj-cta-outline,
+.jj-cta-outline:link,
+.jj-cta-outline:visited,
+.jj-cta-outline:hover,
+.jj-cta-outline:focus,
+.jj-cta-outline:focus-visible,
+.jj-cta-outline:active,
+.jj-cta-outline :where(span, p, small, strong, em, svg, [class*="lucide"]),
+.jj-cta-outline:hover :where(span, p, small, strong, em, svg, [class*="lucide"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+.jj-cta-outline:hover {
+  background-color: #EFE6D6 !important;
+  border-color: rgba(26, 26, 26, 0.55) !important;
+}
+
+:where(.jj-pill-active) {
+  background-color: #EFE6D6;
+  border: 1px solid rgba(184, 149, 85, 0.55);
+}
+.jj-pill-active,
+.jj-pill-active :where(span, p, small, strong, em, svg, [class*="lucide"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* Champagne CTA inside ANY dark surface must keep ink text — overrides
+   the "children of dark inherit white" guards at lines 4205-4258. */
+:is(.bg-foreground, .bg-black, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [data-surface="dark"], [data-surface="ink"])
+  .jj-cta-champagne,
+:is(.bg-foreground, .bg-black, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [data-surface="dark"], [data-surface="ink"])
+  .jj-cta-champagne :where(span, p, small, strong, em, svg, [class*="lucide"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+:is(.bg-foreground, .bg-black, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [data-surface="dark"], [data-surface="ink"])
+  .jj-cta-champagne { background-color: #EFE6D6 !important; }
+
+/* Generic dark-CTA hardening: ANY button with bg-[#1A1A1A] + text-white
+   keeps WHITE text in every state regardless of wrapper data-attrs.
+   Fixes the cookie "Manage Preferences" regression. */
+button[class~="bg-[#1A1A1A]"][class*="text-white"],
+button[class~="bg-[#1A1A1A]"][class*="text-white"]:hover,
+button[class~="bg-[#1A1A1A]"][class*="text-white"]:focus,
+button[class~="bg-[#1A1A1A]"][class*="text-white"]:focus-visible,
+button[class~="bg-[#1A1A1A]"][class*="text-white"] :where(span, p, svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
 
