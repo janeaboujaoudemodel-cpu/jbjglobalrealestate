@@ -443,6 +443,10 @@ export default function BrokerCRM() {
           { id: "calls", label: "Calls", icon: Phone },
           { id: "insights", label: "Insights", icon: Sparkles },
           { id: "activity", label: "Activity", icon: Activity },
+          { id: "calendar", label: "Calendar", icon: CalendarIcon },
+          { id: "tasks", label: "Tasks", icon: ListTodo },
+          { id: "notes", label: "Notes", icon: StickyNote },
+          { id: "inbox", label: "Inbox", icon: Inbox },
         ] as const).map((t) => {
           const Icon = t.icon;
           const active = tab === t.id;
