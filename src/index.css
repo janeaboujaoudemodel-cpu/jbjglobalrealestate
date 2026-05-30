@@ -6837,3 +6837,52 @@ svg * {
   stroke: #1A1A1A !important;
 }
 
+
+/* =====================================================================
+ * FINAL SURFACE FOREGROUND LOCK — idle + hover + focus + active.
+ * Last rule in the stylesheet. Pins descendants of explicitly tagged
+ * dark/navy/ink surfaces to white, and explicitly tagged light/
+ * champagne/cream/gold surfaces to ink, regardless of upstream class.
+ * Opt out per element with [data-no-contrast-guard].
+ * ===================================================================== */
+.surface-navy, .surface-dark, .surface-ink,
+[data-surface="navy"], [data-surface="dark"], [data-surface="ink"] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.surface-navy :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+.surface-dark :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+.surface-ink  :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+[data-surface="navy"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+[data-surface="dark"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+[data-surface="ink"]  :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+.surface-light, .surface-page, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+[data-surface="page"], [data-surface="light"], [data-surface="pearl"],
+[data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+.surface-light :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+.surface-page :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+.surface-champagne :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+.surface-cream :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+.surface-raised :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+.surface-gold :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+[data-surface="page"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+[data-surface="light"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+[data-surface="pearl"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+[data-surface="champagne"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+[data-surface="cream"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+[data-surface="raised"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
+[data-surface="gold"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
