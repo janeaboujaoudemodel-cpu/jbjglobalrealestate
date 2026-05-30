@@ -211,11 +211,12 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
+                opacity: 1,
               }}
             >
               <span
                 className="allow-white whitespace-nowrap"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 8px rgba(0,0,0,0.55)" }}
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1, filter: "none", textShadow: "0 2px 8px rgba(0,0,0,0.55)" }}
               >
                 Free Consultation
               </span>
