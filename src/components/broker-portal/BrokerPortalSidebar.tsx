@@ -86,7 +86,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
           />
           {!collapsed && (
             <div className="min-w-0">
-              <div className="text-[9px] uppercase tracking-[0.24em] text-[#1A1A1A]/55 truncate font-medium">
+              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground truncate font-medium">
                 JBJ GLOBAL REAL ESTATE
               </div>
               <div className="font-display text-[13px] font-semibold text-[#1A1A1A] mt-0.5 truncate tracking-tight">
