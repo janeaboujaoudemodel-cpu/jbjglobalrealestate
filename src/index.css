@@ -6758,3 +6758,137 @@ section:has(> .absolute.inset-0 picture)
   opacity: 0.62 !important;
 }
 
+/* =====================================================================
+ * STABILITY LOCK — NO COLOR TRANSITIONS, NO HOVER FLICKER
+ * ---------------------------------------------------------------------
+ * Root cause of the platform-wide "blink" the owner reported was NOT
+ * a missing rule — it was that competing :hover / :focus / data-state
+ * cascade layers transition color/stroke/fill on every interaction.
+ * When two rules resolve to the same final color but with different
+ * specificities, the transition still animates the computed value
+ * back-and-forth, producing the visible flash on hover/scroll/focus.
+ *
+ * Fix: disable color-family transitions globally. Backgrounds, borders,
+ * transforms, shadows, and opacity may still animate — only the four
+ * foreground properties are pinned to instantaneous swaps.
+ *
+ * This is intentionally the LAST rule in the stylesheet.
+ * ===================================================================== */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
+}
+
+/* Explicit reset for elements/utilities that override transition-property
+   with `all` (Tailwind `transition-all`, `transition-colors`, etc.). */
+:where(
+  [class*="transition-all"],
+  [class*="transition-colors"],
+  [class~="transition"]
+) {
+  transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
+}
+
+/* Belt-and-braces: foreground color/stroke/fill never animate, ever. */
+*,
+*::before,
+*::after,
+svg,
+svg * {
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}
+
+/* Re-enable transition duration for the props we DO want to animate. */
+*,
+*::before,
+*::after {
+  transition-duration: 200ms, 200ms, 200ms, 200ms, 200ms, 200ms, 200ms !important;
+}
+
+/* =====================================================================
+ * IDLE = HOVER = FOCUS = ACTIVE foreground lock on every CTA primitive.
+ * If any future override tries to flip color on a state, this last-rule
+ * block re-pins it. Backgrounds may still shift on hover; foreground
+ * never does.
+ * ===================================================================== */
+.jj-cta-dark,
+.jj-cta-dark:hover,
+.jj-cta-dark:focus,
+.jj-cta-dark:focus-visible,
+.jj-cta-dark:active,
+.jj-navy-cta,
+.jj-navy-cta:hover,
+.jj-navy-cta:focus,
+.jj-navy-cta:focus-visible,
+.jj-navy-cta:active,
+.jj-cta-dark :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-cta-dark:hover :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-cta-dark:focus :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-cta-dark:focus-visible :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-cta-dark:active :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-navy-cta :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-navy-cta:hover :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-navy-cta:focus :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-navy-cta:focus-visible :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-navy-cta:active :where(span,p,small,strong,em,svg,[class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: currentColor;
+  opacity: 1 !important;
+}
+
+.jj-cta-champagne,
+.jj-cta-champagne:hover,
+.jj-cta-champagne:focus,
+.jj-cta-champagne:focus-visible,
+.jj-cta-champagne:active,
+.jj-cta-outline,
+.jj-cta-outline:hover,
+.jj-cta-outline:focus,
+.jj-cta-outline:focus-visible,
+.jj-cta-outline:active,
+.jj-pill-active,
+.jj-pill-active:hover,
+.jj-pill-active:focus,
+.jj-pill-active:focus-visible,
+.jj-pill-active:active,
+.jj-cta-champagne :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-cta-champagne:hover :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-cta-champagne:focus :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-cta-champagne:focus-visible :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-cta-champagne:active :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-cta-outline :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-cta-outline:hover :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-pill-active :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-pill-active:hover :where(span,p,small,strong,em,svg,[class*="lucide"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  fill: currentColor;
+  opacity: 1 !important;
+}
+
+/* Image overlay dark — explicit, never inherits champagne ink */
+.image-overlay-dark,
+.image-overlay-dark *,
+.glass-dark,
+.glass-dark *,
+[data-overlay="dark"],
+[data-overlay="dark"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,svg,[class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+.glass-light,
+.glass-light :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,svg,[class*="lucide"]),
+[data-overlay="light"],
+[data-overlay="light"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,svg,[class*="lucide"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
