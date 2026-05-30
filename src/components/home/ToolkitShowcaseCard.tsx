@@ -177,7 +177,10 @@ export function ToolkitShowcaseCard() {
               <div className="mt-4">
                 <Link
                   to={active.href}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/25 hover:bg-white/40 backdrop-blur-md text-white font-semibold text-sm border border-white/50 transition-colors shadow-[0_8px_24px_rgba(0,0,0,0.35)]"
+                  data-surface="dark"
+                  data-no-contrast-guard
+                  data-allow-dark-cta
+                  className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1A1A1A]/55 hover:bg-[#1A1A1A]/75 backdrop-blur-md text-white font-semibold text-sm border border-white/60 transition-[background-color] shadow-[0_8px_24px_rgba(0,0,0,0.35)]"
                   style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}
                 >
                   <span className="allow-white" style={{ color: "#FFFFFF" }}>{active.cta}</span>
