@@ -109,6 +109,13 @@ function contrastRatio(a: RGB, b: RGB): number {
 // ---------- background resolution ----------
 
 function effectiveBg(el: Element): RGB {
+  // Photo/video heroes are deliberately darkened by overlays. Their actual
+  // image pixels are not exposed through computed background-color, so treat
+  // the region as dark for contrast decisions and only fix foregrounds.
+  if (el.closest('[data-hero-dark], .jj-hero-fullscreen, .on-dark')) {
+    return [26, 26, 26];
+  }
+
   // Build ancestor chain (root → leaf) then composite alpha back-to-front.
   const chain: Element[] = [];
   let cur: Element | null = el;
