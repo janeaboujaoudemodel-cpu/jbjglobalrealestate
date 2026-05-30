@@ -114,7 +114,7 @@ export default function BrokerDashboard() {
     { 
       title: "Notes & Calendar", 
       icon: Calendar, 
-      href: "/crm-notes",
+      href: "/broker/crm?tab=notes",
       description: "Tasks and reminders",
       internal: true,
       external: true,
@@ -360,10 +360,10 @@ export default function BrokerDashboard() {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {[
-                    { to: "/crm-notes", icon: FileText, label: "View Notes" },
-                    { to: "/crm-reminders", icon: Bell, label: "Reminders" },
-                    { to: "/inbox", icon: Mail, label: "My Inbox" },
-                    { to: "/crm-calendar", icon: Calendar, label: "Calendar" },
+                    { to: "/broker/crm?tab=notes", icon: FileText, label: "View Notes" },
+                    { to: "/broker/crm?tab=tasks", icon: Bell, label: "Reminders" },
+                    { to: "/broker/email", icon: Mail, label: "My Inbox" },
+                    { to: "/broker/crm?tab=calendar", icon: Calendar, label: "Calendar" },
                   ].map(({ to, icon: BtnIcon, label }) => (
                     <Link key={to} to={to} className="w-full">
                       <Button

@@ -33,7 +33,7 @@ const KPI_CARDS: Array<{
 }> = [
   { key: "leads",       label: "Total leads",  href: "/broker/leads",                    Icon: Users,         tone: "text-blue-600 border-blue-500" },
   { key: "messages",    label: "Messages",     href: "/broker/ai?tab=chat",              Icon: MessageSquare, tone: "text-emerald-600 border-emerald-500" },
-  { key: "emails",      label: "Emails",       href: "/broker/inbox",                    Icon: Mail,          tone: "text-amber-600 border-amber-500" },
+  { key: "emails",      label: "Emails",       href: "/broker/email",                    Icon: Mail,          tone: "text-amber-600 border-amber-500" },
   { key: "calls",       label: "Calls",        href: "/broker/calendar?view=calls",      Icon: Phone,         tone: "text-[#102540] border-[#102540]" },
   { key: "conversions", label: "Conversions",  href: "/broker/deals?stage=won",          Icon: TrendingUp,    tone: "text-emerald-700 border-emerald-700" },
 ];

@@ -17,8 +17,8 @@ export default function BrokerInbox() {
         <p className="text-xs text-[#1A1A1A]/70 mt-2 max-w-md mx-auto">
           Your messages will appear here once your account is wired into the team chat
           and email channels. In the meantime, use{" "}
-          <Link className="underline" to="/broker/crm/notes">Notes</Link> and{" "}
-          <Link className="underline" to="/broker/crm/tasks">Tasks</Link> to capture follow-ups.
+          <Link className="underline" to="/broker/crm?tab=notes">Notes</Link> and{" "}
+          <Link className="underline" to="/broker/crm?tab=tasks">Tasks</Link> to capture follow-ups.
         </p>
       </div>
     </div>

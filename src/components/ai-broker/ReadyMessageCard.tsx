@@ -52,7 +52,7 @@ export default function ReadyMessageCard({ message, leadName, leadPhone, leadWha
           </a>
         )}
         <a
-          href={`/broker/inbox?compose=1&body=${encodeURIComponent(message)}`}
+          href={`/broker/email?compose=1&body=${encodeURIComponent(message)}`}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-[#102540] text-[#102540] hover:bg-[#102540]/5"
         >
           <Mail className="h-3.5 w-3.5" /> Email composer

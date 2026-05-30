@@ -66,6 +66,22 @@ export const BrokerPortalRoutes = () => (
     <Route path="messages" element={<BrokerMessages />} />
     <Route path="email" element={<BrokerEmailHub />} />
     <Route path="email/setup" element={<BrokerEmailSetup />} />
+    <Route path="inbox" element={<Navigate to="/broker/email" replace />} />
+    <Route path="connect-email" element={<Navigate to="/broker/email" replace />} />
+    <Route path="connect-gmail" element={<Navigate to="/broker/email" replace />} />
+    <Route path="connect-outlook" element={<Navigate to="/broker/email" replace />} />
+    <Route path="email/connect" element={<Navigate to="/broker/email" replace />} />
+    <Route path="email/connect/:provider" element={<Navigate to="/broker/email" replace />} />
+    <Route path="email/outlook" element={<Navigate to="/broker/email" replace />} />
+    <Route path="email/gmail" element={<Navigate to="/broker/email" replace />} />
+    <Route path="crm/databases" element={<Navigate to="/broker/crm?tab=databases" replace />} />
+    <Route path="crm/leads" element={<Navigate to="/broker/crm?tab=leads" replace />} />
+    <Route path="crm/calendar" element={<Navigate to="/broker/crm?tab=calendar" replace />} />
+    <Route path="crm/tasks" element={<Navigate to="/broker/crm?tab=tasks" replace />} />
+    <Route path="crm/notes" element={<Navigate to="/broker/crm?tab=notes" replace />} />
+    <Route path="crm/inbox" element={<Navigate to="/broker/crm?tab=inbox" replace />} />
+    <Route path="crm/settings" element={<Navigate to="/broker/settings" replace />} />
+    <Route path="crm/projects" element={<Navigate to="/broker/crm?tab=databases" replace />} />
     <Route path="settings" element={<BrokerAccount />} />
     <Route path="ai" element={<AIBrokerWorkspace />} />
 
