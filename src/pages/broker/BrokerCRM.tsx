@@ -21,6 +21,7 @@ import LogCallDialog from "@/components/broker-crm/LogCallDialog";
 import CallDetailSheet from "@/components/broker-crm/CallDetailSheet";
 import BrokerDatabaseSheet from "@/components/broker-crm/BrokerDatabaseSheet";
 import MarkJunkDialog from "@/components/broker-crm/MarkJunkDialog";
+import LeadHubSheet from "@/components/broker-crm/LeadHubSheet";
 import { AlertTriangle } from "lucide-react";
 
 // CRM is the unified hub — these surfaces also remain in the sidebar but are
@@ -98,6 +99,7 @@ export default function BrokerCRM() {
   const [openCallId, setOpenCallId] = useState<string | null>(null);
   const [openDbSheet, setOpenDbSheet] = useState<{ id: string; name: string } | null>(null);
   const [junkLead, setJunkLead] = useState<{ id: string; name: string } | null>(null);
+  const [hubLead, setHubLead] = useState<any | null>(null);
   const dbs = useBrokerScopedDatabases();
   const leads = useBrokerScopedLeads();
   const tasks = useBrokerPersonalTasks();
@@ -711,7 +713,15 @@ export default function BrokerCRM() {
                 </div>
                 <div className="divide-y divide-[#B89555]/15">
                   {filteredLeads.map((l: any) => (
-                    <div key={l.id} className="grid grid-cols-[40px_1fr_120px_120px_100px_90px] gap-3 items-center px-4 py-3">
+                    <div
+                      key={l.id}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => setHubLead(l)}
+                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setHubLead(l); } }}
+                      className="grid grid-cols-[40px_1fr_120px_120px_100px_90px] gap-3 items-center px-4 py-3 cursor-pointer hover:bg-[#EFE6D6]/40 transition-colors focus:outline-none focus:bg-[#EFE6D6]/60"
+                      title="Open lead hub (calendar, tasks, notes)"
+                    >
                       <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/25 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
                         {(l.full_name || "?").slice(0, 1).toUpperCase()}
                       </div>
@@ -725,7 +735,7 @@ export default function BrokerCRM() {
                       <div className="text-right">
                         <button
                           type="button"
-                          onClick={() => setJunkLead({ id: l.id, name: l.full_name })}
+                          onClick={(e) => { e.stopPropagation(); setJunkLead({ id: l.id, name: l.full_name }); }}
                           className="inline-flex items-center gap-1 h-7 px-2 rounded-md border border-[#B89555]/40 text-[11px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
                           title="Return to JBJ owner as junk"
                         >
@@ -1109,6 +1119,11 @@ export default function BrokerCRM() {
         leadId={junkLead?.id ?? null}
         leadName={junkLead?.name ?? null}
         onOpenChange={(o) => { if (!o) setJunkLead(null); }}
+      />
+      <LeadHubSheet
+        lead={hubLead}
+        open={!!hubLead}
+        onOpenChange={(o) => { if (!o) setHubLead(null); }}
       />
     </div>
   );
