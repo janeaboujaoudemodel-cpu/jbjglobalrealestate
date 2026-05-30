@@ -6159,10 +6159,10 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 
 :where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,[data-surface])
   :where(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,span,small,strong,em,b,i,label,summary,th,td,caption,legend,figcaption,a,button,input,textarea,select,svg,[class*="lucide"]):not([data-surface]):not([data-decorative="true"]):not([data-sidebar-gold-label]) {
-  color: inherit;
-  -webkit-text-fill-color: currentColor;
-  stroke: currentColor;
-  opacity: 1;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
 }
 
 .jj-cta-dark,
@@ -6227,6 +6227,15 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 :where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-black,.bg-foreground,[class~="bg-[#102540]"],[class~="bg-[#1a3d63]"],[class~="bg-[#1A1A1A]"]):not(.allow-ink),
 :where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-black,.bg-foreground,[class~="bg-[#102540]"],[class~="bg-[#1a3d63]"],[class~="bg-[#1A1A1A]"]):not(.allow-ink):hover,
 :where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-black,.bg-foreground,[class~="bg-[#102540]"],[class~="bg-[#1a3d63]"],[class~="bg-[#1A1A1A]"]):not(.allow-ink) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
+  color: hsl(var(--jj-on-dark)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
+  stroke: hsl(var(--jj-on-dark)) !important;
+  opacity: 1 !important;
+}
+
+:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is([class*="bg-[#102540]/"],[class*="bg-[#1a3d63]/"],[class*="bg-[#1A1A1A]/"],[class*="bg-black/"]):not(.allow-ink),
+:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is([class*="bg-[#102540]/"],[class*="bg-[#1a3d63]/"],[class*="bg-[#1A1A1A]/"],[class*="bg-black/"]):not(.allow-ink):hover,
+:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is([class*="bg-[#102540]/"],[class*="bg-[#1a3d63]/"],[class*="bg-[#1A1A1A]/"],[class*="bg-black/"]):not(.allow-ink) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
   color: hsl(var(--jj-on-dark)) !important;
   -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
   stroke: hsl(var(--jj-on-dark)) !important;
