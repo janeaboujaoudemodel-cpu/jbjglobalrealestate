@@ -6235,4 +6235,162 @@ button[class~="bg-[#1A1A1A]"][class*="text-white"] :where(span, p, svg, [class*=
   opacity: 1 !important;
 }
 
+/* ============================================================
+   PLATFORM CONTRAST CONTRACT — single source of truth.
+   Last in file by design. Applies to every interactive surface,
+   badge, tab, menu item, card action, modal action, and future CTA.
+
+   Rules:
+   - Dark/navy own background => white label + white icons.
+   - Champagne/gold/cream/white own background => ink label + icons.
+   - Outline on light => ink; outline on dark/hero => white until hover.
+   - Idle/hover/active/focus/disabled never change label/icon contrast.
+   ============================================================ */
+:root {
+  --jj-on-dark: 0 0% 100%;
+  --jj-on-light: var(--foreground);
+  --jj-dark-cta-bg: var(--navy-cta);
+  --jj-dark-cta-bg-hover: var(--navy-cta-hover);
+  --jj-light-cta-bg: var(--accent);
+  --jj-light-cta-bg-hover: 36 35% 83%;
+  --jj-contrast-hairline: var(--gold);
+}
+
+:where(.jj-badge-dark) {
+  background-color: hsl(var(--jj-dark-cta-bg)) !important;
+  border-color: hsl(var(--jj-contrast-hairline) / 0.55) !important;
+}
+
+:where(.jj-badge-champagne, .jj-badge-outline) {
+  background-color: hsl(var(--jj-light-cta-bg)) !important;
+  border-color: hsl(var(--jj-contrast-hairline) / 0.55) !important;
+}
+
+:where(.jj-badge-outline) {
+  background-color: transparent !important;
+}
+
+:where(
+  .jj-cta-dark,
+  .jj-navy-cta,
+  .jj-badge-dark,
+  a, button, [role="button"], [role="tab"], [role="menuitem"], [role="switch"], summary,
+  span, div, li, [role="status"]
+):is(
+  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-[#0F0F0F]"], [class~="bg-[#111111]"], [class~="bg-black"],
+  [class~="bg-primary"], [class~="bg-foreground"], .bg-primary, .bg-foreground, .bg-black,
+  [class*="data-[state=active]:bg-[#102540]"][data-state="active"],
+  [class*="data-[state=active]:bg-[#1a3d63]"][data-state="active"],
+  [class*="data-[state=active]:bg-[#1A1A1A]"][data-state="active"],
+  [class*="data-[state=active]:bg-black"][data-state="active"],
+  [class*="data-[state=checked]:bg-[#102540]"][data-state="checked"],
+  [class*="aria-pressed:bg-[#102540]"][aria-pressed="true"],
+  [class*="aria-current:bg-[#102540]"][aria-current]
+),
+:where(a, button, [role="button"], [role="tab"], [role="menuitem"], summary):is(
+  [class*="hover:bg-[#102540]"], [class*="hover:bg-[#1a3d63]"], [class*="hover:bg-[#1A1A1A]"], [class*="hover:bg-black"], [class*="hover:bg-primary"], [class*="hover:bg-foreground"]
+):hover,
+:where(
+  .jj-cta-dark,
+  .jj-navy-cta,
+  .jj-badge-dark,
+  a, button, [role="button"], [role="tab"], [role="menuitem"], [role="switch"], summary,
+  span, div, li, [role="status"]
+):is(
+  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-[#0F0F0F]"], [class~="bg-[#111111]"], [class~="bg-black"],
+  [class~="bg-primary"], [class~="bg-foreground"], .bg-primary, .bg-foreground, .bg-black,
+  [class*="data-[state=active]:bg-[#102540]"][data-state="active"],
+  [class*="data-[state=active]:bg-[#1a3d63]"][data-state="active"],
+  [class*="data-[state=active]:bg-[#1A1A1A]"][data-state="active"],
+  [class*="data-[state=active]:bg-black"][data-state="active"],
+  [class*="data-[state=checked]:bg-[#102540]"][data-state="checked"],
+  [class*="aria-pressed:bg-[#102540]"][aria-pressed="true"],
+  [class*="aria-current:bg-[#102540]"][aria-current]
+) :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]),
+:where(a, button, [role="button"], [role="tab"], [role="menuitem"], summary):is(
+  [class*="hover:bg-[#102540]"], [class*="hover:bg-[#1a3d63]"], [class*="hover:bg-[#1A1A1A]"], [class*="hover:bg-black"], [class*="hover:bg-primary"], [class*="hover:bg-foreground"]
+):hover :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
+  color: hsl(var(--jj-on-dark)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
+  stroke: hsl(var(--jj-on-dark)) !important;
+  opacity: 1 !important;
+}
+
+:where(
+  .jj-cta-champagne,
+  .jj-pill-active,
+  .jj-badge-champagne,
+  .jj-badge-outline,
+  a, button, [role="button"], [role="tab"], [role="menuitem"], [role="switch"], summary,
+  span, div, li, [role="status"]
+):is(
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [class~="bg-[#D4AF37]"], [class~="bg-white"],
+  [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#F7F1E6]/"], [class*="bg-[#EFE6D6]/"], [class*="bg-[#ECE2D2]/"], [class*="bg-[#B89555]/"],
+  [class~="bg-background"], [class~="bg-card"], [class~="bg-popover"], [class~="bg-secondary"], [class~="bg-accent"], [class~="bg-muted"],
+  .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted,
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"], [class*="from-[#EFE6D6]"], [class*="from-[#ECE2D2]"],
+  [class*="data-[state=active]:bg-[#FDFBF7]"][data-state="active"],
+  [class*="data-[state=active]:bg-[#F7F2EA]"][data-state="active"],
+  [class*="data-[state=active]:bg-[#EFE6D6]"][data-state="active"],
+  [class*="data-[state=checked]:bg-[#EFE6D6]"][data-state="checked"]
+),
+:where(a, button, [role="button"], [role="tab"], [role="menuitem"], summary):is(
+  [class*="hover:bg-[#FDFBF7]"], [class*="hover:bg-[#F7F2EA]"], [class*="hover:bg-[#F7F1E6]"], [class*="hover:bg-[#EFE6D6]"], [class*="hover:bg-[#ECE2D2]"], [class*="hover:bg-white"], [class*="hover:bg-background"], [class*="hover:bg-secondary"], [class*="hover:bg-accent"], [class*="hover:bg-muted"]
+):hover,
+:where(
+  .jj-cta-champagne,
+  .jj-pill-active,
+  .jj-badge-champagne,
+  .jj-badge-outline,
+  a, button, [role="button"], [role="tab"], [role="menuitem"], [role="switch"], summary,
+  span, div, li, [role="status"]
+):is(
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [class~="bg-[#D4AF37]"], [class~="bg-white"],
+  [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#F7F1E6]/"], [class*="bg-[#EFE6D6]/"], [class*="bg-[#ECE2D2]/"], [class*="bg-[#B89555]/"],
+  [class~="bg-background"], [class~="bg-card"], [class~="bg-popover"], [class~="bg-secondary"], [class~="bg-accent"], [class~="bg-muted"],
+  .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted,
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"], [class*="from-[#EFE6D6]"], [class*="from-[#ECE2D2]"],
+  [class*="data-[state=active]:bg-[#FDFBF7]"][data-state="active"],
+  [class*="data-[state=active]:bg-[#F7F2EA]"][data-state="active"],
+  [class*="data-[state=active]:bg-[#EFE6D6]"][data-state="active"],
+  [class*="data-[state=checked]:bg-[#EFE6D6]"][data-state="checked"]
+) :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]),
+:where(a, button, [role="button"], [role="tab"], [role="menuitem"], summary):is(
+  [class*="hover:bg-[#FDFBF7]"], [class*="hover:bg-[#F7F2EA]"], [class*="hover:bg-[#F7F1E6]"], [class*="hover:bg-[#EFE6D6]"], [class*="hover:bg-[#ECE2D2]"], [class*="hover:bg-white"], [class*="hover:bg-background"], [class*="hover:bg-secondary"], [class*="hover:bg-accent"], [class*="hover:bg-muted"]
+):hover :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
+  color: hsl(var(--jj-on-light)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
+  stroke: hsl(var(--jj-on-light)) !important;
+  opacity: 1 !important;
+}
+
+:where(.jj-cta-outline, .jj-badge-outline) {
+  color: hsl(var(--jj-on-light)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
+  stroke: hsl(var(--jj-on-light)) !important;
+}
+
+:where([data-surface="dark"], [data-surface="ink"], [data-hero-dark], .bg-black, .bg-foreground, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"])
+  :where(.jj-cta-outline, .jj-badge-outline):not(:hover),
+:where([data-surface="dark"], [data-surface="ink"], [data-hero-dark], .bg-black, .bg-foreground, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"])
+  :where(.jj-cta-outline, .jj-badge-outline):not(:hover) :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
+  color: hsl(var(--jj-on-dark)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
+  stroke: hsl(var(--jj-on-dark)) !important;
+  opacity: 1 !important;
+}
+
+:where(.jj-cta-dark, .jj-navy-cta):hover {
+  background-color: hsl(var(--jj-dark-cta-bg-hover)) !important;
+}
+
+:where(.jj-cta-champagne, .jj-pill-active):hover {
+  background-color: hsl(var(--jj-light-cta-bg-hover)) !important;
+}
+
+:where(.jj-cta-dark, .jj-cta-champagne, .jj-cta-outline, .jj-navy-cta, .jj-pill-active, .jj-badge-dark, .jj-badge-champagne, .jj-badge-outline):is(:disabled, [aria-disabled="true"], [data-disabled]) {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
 
