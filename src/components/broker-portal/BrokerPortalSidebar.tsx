@@ -16,11 +16,12 @@ type Item = { to: string; label: string; icon: any };
 
 // Full broker nav per the approved plan. Owner-only surfaces (e.g. global
 // /owner/forms admin) are NOT listed here — brokers only see their own slice.
+// NOTE: "My Leads" and "Assigned Databases" are intentionally NOT in the
+// sidebar — they live as tabs inside CRM Pipeline (/broker/crm) instead, to
+// match the owner CRM hub pattern. Routes still exist for direct links.
 const ITEMS: Item[] = [
   { to: "/broker/portal",            label: "Dashboard",          icon: LayoutDashboard },
-  { to: "/broker/leads",             label: "My Leads",           icon: Users },
   { to: "/broker/crm",               label: "CRM Pipeline",       icon: Briefcase },
-  { to: "/broker/databases",         label: "Assigned Databases", icon: Database },
   { to: "/broker/listings",          label: "Listings",           icon: ListChecks },
   { to: "/broker/email",             label: "Smart Inbox",        icon: Inbox },
   { to: "/broker/email/setup",       label: "Email Setup",        icon: KeyRound },

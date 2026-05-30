@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useBrokerScopedDatabases } from "@/hooks/useBrokerScopedDatabases";
@@ -7,6 +7,7 @@ import { useBrokerPersonalTasks } from "@/hooks/useBrokerPersonalTasks";
 import {
   Database, Users, Activity, ArrowRight, Loader2, Plus, Phone, Upload,
   TrendingUp, BarChart3, Inbox, ClipboardList, Sparkles, Search,
+  Calendar as CalendarIcon, ListTodo, StickyNote,
 } from "lucide-react";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,16 @@ import BrokerDatabaseSheet from "@/components/broker-crm/BrokerDatabaseSheet";
 import MarkJunkDialog from "@/components/broker-crm/MarkJunkDialog";
 import { AlertTriangle } from "lucide-react";
 
-type Tab = "pipeline" | "databases" | "leads" | "calls" | "insights" | "activity";
+// CRM is the unified hub — these surfaces also remain in the sidebar but are
+// embedded here as tabs for a single-pane workflow (matches owner CRM hub).
+const BrokerCalendarTab = lazy(() => import("@/pages/broker/BrokerCalendar"));
+const BrokerTasksTab    = lazy(() => import("@/pages/broker/BrokerTasks"));
+const BrokerNotesTab    = lazy(() => import("@/pages/broker/BrokerNotes"));
+const BrokerInboxTab    = lazy(() => import("@/pages/broker/BrokerInbox"));
+
+type Tab =
+  | "pipeline" | "databases" | "leads" | "calls" | "insights" | "activity"
+  | "calendar" | "tasks" | "notes" | "inbox";
 
 function PremiumCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
@@ -95,7 +105,7 @@ export default function BrokerCRM() {
   useEffect(() => {
     const nextTab = searchParams.get("tab") as Tab | null;
     const action = searchParams.get("action");
-    if (nextTab && ["pipeline", "databases", "leads", "calls", "insights", "activity"].includes(nextTab)) {
+    if (nextTab && ["pipeline", "databases", "leads", "calls", "insights", "activity", "calendar", "tasks", "notes", "inbox"].includes(nextTab)) {
       setTab(nextTab);
     }
     if (action === "log-call") {
@@ -433,6 +443,10 @@ export default function BrokerCRM() {
           { id: "calls", label: "Calls", icon: Phone },
           { id: "insights", label: "Insights", icon: Sparkles },
           { id: "activity", label: "Activity", icon: Activity },
+          { id: "calendar", label: "Calendar", icon: CalendarIcon },
+          { id: "tasks", label: "Tasks", icon: ListTodo },
+          { id: "notes", label: "Notes", icon: StickyNote },
+          { id: "inbox", label: "Inbox", icon: Inbox },
         ] as const).map((t) => {
           const Icon = t.icon;
           const active = tab === t.id;
@@ -1035,6 +1049,27 @@ export default function BrokerCRM() {
             </ul>
           )}
         </PremiumCard>
+      )}
+
+      {tab === "calendar" && (
+        <Suspense fallback={<Loading />}>
+          <BrokerCalendarTab />
+        </Suspense>
+      )}
+      {tab === "tasks" && (
+        <Suspense fallback={<Loading />}>
+          <BrokerTasksTab />
+        </Suspense>
+      )}
+      {tab === "notes" && (
+        <Suspense fallback={<Loading />}>
+          <BrokerNotesTab />
+        </Suspense>
+      )}
+      {tab === "inbox" && (
+        <Suspense fallback={<Loading />}>
+          <BrokerInboxTab />
+        </Suspense>
       )}
 
       <LogCallDialog
