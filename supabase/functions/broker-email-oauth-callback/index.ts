@@ -1,4 +1,5 @@
-// Receives the OAuth redirect, exchanges code → tokens, upserts broker_email_accounts, posts back to opener.
+// Receives the OAuth redirect, exchanges code → tokens using the broker's OWN OAuth app credentials,
+// upserts broker_email_accounts, posts back to opener.
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -21,7 +22,13 @@ Deno.serve(async (req) => {
 
   try {
     const provider = st.provider as "gmail" | "outlook";
-    const tokens = await exchangeCode(provider, code);
+    const { data: appRows } = await svc.rpc("get_broker_oauth_app", { _user_id: st.user_id, _provider: provider });
+    const app = appRows?.[0];
+    if (!app?.client_id || !app?.client_secret) {
+      return html("OAuth app credentials missing. Re-add them in Email Setup.", false, "no_oauth_app");
+    }
+
+    const tokens = await exchangeCode(provider, code, app.client_id, app.client_secret);
     const profile = await fetchProfile(provider, tokens.access_token);
 
     const row = {
@@ -47,7 +54,7 @@ Deno.serve(async (req) => {
   }
 });
 
-async function exchangeCode(p: "gmail" | "outlook", code: string) {
+async function exchangeCode(p: "gmail" | "outlook", code: string, clientId: string, clientSecret: string) {
   const isG = p === "gmail";
   const endpoint = isG
     ? "https://oauth2.googleapis.com/token"
@@ -56,8 +63,8 @@ async function exchangeCode(p: "gmail" | "outlook", code: string) {
     code,
     redirect_uri: CALLBACK,
     grant_type: "authorization_code",
-    client_id: Deno.env.get(isG ? "GOOGLE_OAUTH_CLIENT_ID" : "MICROSOFT_OAUTH_CLIENT_ID")!,
-    client_secret: Deno.env.get(isG ? "GOOGLE_OAUTH_CLIENT_SECRET" : "MICROSOFT_OAUTH_CLIENT_SECRET")!,
+    client_id: clientId,
+    client_secret: clientSecret,
   });
   const r = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body });
   if (!r.ok) throw new Error(`${r.status} ${await r.text()}`);

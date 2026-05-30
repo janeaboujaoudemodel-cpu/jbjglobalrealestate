@@ -1,4 +1,5 @@
-// Starts OAuth flow for Gmail/Outlook. Returns an authorization URL the broker opens in a popup.
+// Starts OAuth flow for Gmail/Outlook using the broker's OWN OAuth app credentials
+// (stored per-user in broker_email_oauth_apps).
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
@@ -35,13 +36,17 @@ Deno.serve(async (req) => {
     const { provider } = await req.json().catch(() => ({}));
     if (provider !== "gmail" && provider !== "outlook") return j({ error: "provider must be gmail|outlook" }, 400);
 
-    const clientId = provider === "gmail"
-      ? Deno.env.get("GOOGLE_OAUTH_CLIENT_ID")
-      : Deno.env.get("MICROSOFT_OAUTH_CLIENT_ID");
-    if (!clientId) return j({ error: `${provider} OAuth not configured — owner must add ${provider === "gmail" ? "GOOGLE" : "MICROSOFT"}_OAUTH_CLIENT_ID/SECRET` }, 503);
+    const svc = createClient(SUPABASE_URL, SERVICE);
+    const { data: app } = await svc.rpc("get_broker_oauth_app", { _user_id: userId, _provider: provider });
+    const clientId = app?.[0]?.client_id;
+    if (!clientId) {
+      return j({
+        error: `No ${provider === "gmail" ? "Google" : "Microsoft"} OAuth app configured. Add your Client ID & Secret in Email Setup first.`,
+        code: "no_oauth_app",
+      }, 412);
+    }
 
     const state = crypto.randomUUID() + "." + crypto.randomUUID();
-    const svc = createClient(SUPABASE_URL, SERVICE);
     const { error: insErr } = await svc.from("broker_email_oauth_states").insert({ state, user_id: userId, provider });
     if (insErr) return j({ error: insErr.message }, 500);
 
