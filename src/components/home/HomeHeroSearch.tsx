@@ -199,13 +199,13 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             <button
               type="button"
               onClick={openBooking}
-              data-surface="navy"
+              data-surface="ink"
               data-no-contrast-guard
               data-allow-dark-cta
               aria-label="Book your free consultation now"
-              className="jj-hero-consultation-cta surface-navy allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
+              className="surface-ink allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
                 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em]
-                bg-[#1A1A1A] hover:bg-[#1A1A1A] backdrop-blur-md
+                bg-[#1A1A1A]/70 hover:bg-[#1A1A1A]/80 backdrop-blur-md border-l border-[#B89555]/45
                 transition-[background-color] duration-200"
               style={{
                 color: "#FFFFFF",
@@ -213,8 +213,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               }}
             >
               <span
-                data-surface="navy"
-                className="jj-hero-consultation-label allow-white whitespace-nowrap"
+                className="allow-white whitespace-nowrap"
                 style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 8px rgba(0,0,0,0.55)" }}
               >
                 Free Consultation
@@ -240,10 +239,10 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             onClick={openBooking}
             data-surface="dark"
             aria-label="Book your free consultation now"
-            className="surface-dark allow-white flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
+            className="surface-ink allow-white flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
               text-[13px] font-semibold whitespace-nowrap
-              border border-[#B89555]/70 bg-[#102540] backdrop-blur-[2px]
-              transition-colors duration-200 hover:bg-[#1a3d63]"
+              border border-[#B89555]/70 bg-[#1A1A1A]/70 backdrop-blur-[2px]
+              transition-colors duration-200 hover:bg-[#1A1A1A]/80"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
