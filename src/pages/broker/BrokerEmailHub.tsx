@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useBrokerEmails, useBrokerEmailAccounts, useMarkEmailRead, useClassifyEmail, EMAIL_CATEGORIES, type EmailCategory } from "@/hooks/useBrokerEmails";
-import { Mail, Sparkles, Plug, Star } from "lucide-react";
+import { useBrokerEmails, useBrokerEmailAccounts, useMarkEmailRead, useClassifyEmail, useConnectBrokerEmail, useSyncBrokerEmail, EMAIL_CATEGORIES, type EmailCategory } from "@/hooks/useBrokerEmails";
+import { Mail, Sparkles, Plug, Star, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { toast } from "sonner";
