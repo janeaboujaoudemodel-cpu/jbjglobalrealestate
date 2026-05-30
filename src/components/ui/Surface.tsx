@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 
 export type SurfaceTone =
   | "page"
+  | "pearl"
   | "light"
   | "champagne"
   | "cream"
@@ -27,6 +28,18 @@ export type SurfaceTone =
   | "ink"
   | "dark";
 
+const surfaceClass: Record<SurfaceTone, string> = {
+  page: "surface-page",
+  pearl: "surface-light",
+  light: "surface-light",
+  champagne: "surface-champagne",
+  cream: "surface-cream",
+  raised: "surface-raised",
+  gold: "surface-gold",
+  navy: "surface-navy",
+  ink: "surface-ink",
+  dark: "surface-dark",
+};
 
 type SurfaceProps<T extends keyof JSX.IntrinsicElements = "div"> = {
   tone?: SurfaceTone;
@@ -48,6 +61,7 @@ export function Surface<T extends keyof JSX.IntrinsicElements = "div">({
       data-surface={tone}
       className={cn(
         "bg-[hsl(var(--surface-bg))] text-[hsl(var(--surface-fg))] border-[hsl(var(--surface-border))]",
+        surfaceClass[tone],
         className
       )}
       {...rest}
