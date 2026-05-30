@@ -177,8 +177,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   return (
     <div
       data-surface="champagne"
-      className={
-        "group relative overflow-hidden rounded-2xl border border-[#B89555]/60 transition-all duration-300 flex flex-col " +
+        className={
+        "surface-champagne group relative overflow-hidden rounded-2xl border border-[#B89555]/60 transition-all duration-300 flex flex-col " +
         "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
         "shadow-[0_0_18px_hsl(var(--gold)/0.14),0_18px_55px_hsl(0_0%_0%/0.16)] hover:border-[#B89555] " +
         "hover:shadow-[0_0_26px_hsl(var(--gold)/0.18),0_26px_75px_hsl(0_0%_0%/0.20)]"
@@ -237,7 +237,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
       <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
         {/* Image — static cover, NO carousel arrows on cards (gallery only). */}
-        <div className="aspect-[16/10] overflow-hidden relative" data-surface="ink">
+          <div className="surface-ink aspect-[16/10] overflow-hidden relative" data-surface="ink">
           <VerifiedMedia
             src={primaryImageUrl}
             alt={
@@ -287,23 +287,23 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             const showEoi = !project.is_sold_out;
             if (!showEoi && !showHandover) return null;
             return (
-              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 allow-white" data-no-contrast-guard>
+              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5" data-surface="light">
                 {showEoi && (
                   <span
-                    data-no-contrast-guard
+                    data-surface="light"
                     className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-[0.12em] uppercase border border-[#B89555]/40 shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
                     style={{ color: "#1A1A1A", backgroundColor: "#FFFFFF" }}
                   >
-                    <span data-no-contrast-guard style={{ color: "#1A1A1A" }}>EOI</span>
+                    <span style={{ color: "#1A1A1A" }}>EOI</span>
                   </span>
                 )}
                 {showHandover && (
                   <span
-                    data-no-contrast-guard
+                    data-surface="light"
                     className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide border border-[#B89555]/40 shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
                     style={{ color: "#1A1A1A", backgroundColor: "#FFFFFF" }}
                   >
-                    <span data-no-contrast-guard style={{ color: "#1A1A1A" }} className={/^ready$/i.test(handover) ? "uppercase tracking-[0.12em]" : ""}>{handover}</span>
+                    <span style={{ color: "#1A1A1A" }} className={/^ready$/i.test(handover) ? "uppercase tracking-[0.12em]" : ""}>{handover}</span>
                   </span>
                 )}
               </div>
