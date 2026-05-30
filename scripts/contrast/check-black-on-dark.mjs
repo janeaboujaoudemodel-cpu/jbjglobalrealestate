@@ -29,7 +29,7 @@ const DARK_CLASS_RE =
 // Solid black or near-black text. Excludes state-prefixed forms (hover:,
 // focus:, group-hover:, dark:, data-[…]:) — those are intentional swaps.
 const BLACK_TEXT_RE =
-  /(?<![:\w-])(text-black(?!\/)|text-zinc-(?:900|950)(?!\/)|text-neutral-(?:900|950)(?!\/))\b/;
+  /(?<![:\w-])(text-black(?:\/[0-9]{1,3})?|text-zinc-(?:900|950)(?:\/[0-9]{1,3})?|text-neutral-(?:900|950)(?:\/[0-9]{1,3})?|text-\[#1A1A1A\](?:\/[0-9]{1,3})?)\b/;
 
 const exts = new Set(['.tsx', '.jsx']);
 
