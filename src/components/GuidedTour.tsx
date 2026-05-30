@@ -273,7 +273,8 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   <Button
                     onClick={() => { setStepIdx(0); setPhase("spotlight"); }}
                     type="button"
-                    className="w-full h-12 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#FDFBF7] font-semibold rounded-xl group border border-[#B89555]/40"
+                    variant="dark"
+                    className="w-full h-12 rounded-xl group"
                   >
                     <Compass className="w-4 h-4 mr-2" />
                     <span className="flex-1 text-left">Start the quick tour</span>
@@ -282,8 +283,8 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   <Button
                     onClick={handleComplete}
                     type="button"
-                    variant="ghost"
-                    className="w-full h-10 rounded-xl text-sm text-[#1A1A1A]/70"
+                    variant="secondary"
+                    className="w-full h-10 rounded-xl text-sm"
                   >
                     Skip for now
                   </Button>
@@ -292,7 +293,8 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 <Button
                   onClick={handleComplete}
                   type="button"
-                  className="w-full h-12 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#FDFBF7] font-semibold rounded-xl border border-[#B89555]/40"
+                  variant="dark"
+                  className="w-full h-12 rounded-xl"
                 >
                   Done
                 </Button>
