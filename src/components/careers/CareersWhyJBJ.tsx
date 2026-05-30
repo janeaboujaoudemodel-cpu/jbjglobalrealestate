@@ -35,7 +35,7 @@ const BENEFITS = [
 
 export function CareersWhyJBJ() {
   return (
-    <section className="relative py-16 px-4 sm:px-6 lg:px-8 bg-[#FDFBF7]">
+    <section data-surface="page" className="surface-page relative py-16 px-4 sm:px-6 lg:px-8 bg-[#FDFBF7]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555] bg-[#F7F2EA] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#102540]">
@@ -44,7 +44,7 @@ export function CareersWhyJBJ() {
           <h2 className="mt-4 text-3xl md:text-5xl font-semibold text-[#1A1A1A] tracking-tight">
             Built for the top 1% of real estate talent
           </h2>
-          <p className="mt-3 text-base md:text-lg text-[#1A1A1A]/75 max-w-2xl mx-auto">
+          <p className="mt-3 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             JBJ GLOBAL REAL ESTATE is engineered to amplify exceptional people. Here's what sets us apart.
           </p>
         </div>
@@ -55,7 +55,8 @@ export function CareersWhyJBJ() {
             return (
               <article
                 key={b.title}
-                className="group relative overflow-hidden rounded-2xl border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] p-6 transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_-25px_rgba(184,149,85,0.4)] hover:border-[#B89555]"
+                data-surface="champagne"
+                className="surface-champagne group relative overflow-hidden rounded-2xl border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] p-6 transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_-25px_rgba(184,149,85,0.4)] hover:border-[#B89555]"
               >
                 <div className="pointer-events-none absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-[#B89555]/8 blur-3xl group-hover:bg-[#B89555]/15 transition" />
 
@@ -64,7 +65,7 @@ export function CareersWhyJBJ() {
                     <Icon className="h-7 w-7 text-[#102540]" strokeWidth={2} />
                   </div>
                   <h3 className="mt-4 text-xl font-bold text-[#1A1A1A] leading-snug">{b.title}</h3>
-                  <p className="mt-2 text-sm text-[#1A1A1A]/75 leading-relaxed">{b.description}</p>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{b.description}</p>
                 </div>
 
                 <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent" />
