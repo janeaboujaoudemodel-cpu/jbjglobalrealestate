@@ -864,7 +864,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                     </div>
                     <div className="flex gap-1.5">
                       <button onClick={() => { const a = new Audio(trackUrl); a.play(); }} className="flex-1 flex items-center justify-center gap-1 py-1 rounded text-[10px] bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 transition-colors"><Play className="w-2.5 h-2.5" />Play</button>
-                      <a href={trackUrl} download={`dubbed_${lc}.webm`} className="flex-1 flex items-center justify-center gap-1 py-1 rounded text-[10px] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A] transition-colors"><Download className="w-2.5 h-2.5" />Download</a>
+                      <a href={trackUrl} download={`dubbed_${lc}.webm`} className="jj-cta-dark flex-1 flex items-center justify-center gap-1 py-1 rounded text-[10px] transition-colors"><Download className="w-2.5 h-2.5" />Download</a>
                     </div>
                   </div>
                 );
@@ -991,7 +991,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 </div>
                 <div className="flex items-center justify-between">
                   <p className="text-xs text-[#1A1A1A]/70">Bold Text</p>
-                  <button onClick={() => setCaptionStyle(p => ({ ...p, fontWeight: p.fontWeight === 'bold' ? 'normal' : 'bold' }))} className={`px-3 py-1 rounded text-xs font-bold transition-colors ${captionStyle.fontWeight === 'bold' ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-[#1A1A1A]/70 border border-transparent'}`}>B</button>
+                  <button onClick={() => setCaptionStyle(p => ({ ...p, fontWeight: p.fontWeight === 'bold' ? 'normal' : 'bold' }))} className={`px-3 py-1 rounded text-xs font-bold transition-colors ${captionStyle.fontWeight === 'bold' ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'jj-cta-dark border border-transparent'}`}>B</button>
                 </div>
               </div>
 
@@ -1093,9 +1093,9 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                         <span className="text-[10px] text-[#1A1A1A]/70 font-mono w-10">{fmtDuration(previewDuration)}</span>
                       </div>
                       <div className="flex items-center justify-center gap-2">
-                        <button onClick={() => seekPreview(-5)} className="p-1.5 rounded-lg bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A]/70 transition-colors" title="-5s"><SkipBack className="w-3.5 h-3.5" /></button>
+                    <button onClick={() => seekPreview(-5)} className="jj-cta-dark p-1.5 rounded-lg transition-colors" title="-5s"><SkipBack className="w-3.5 h-3.5" /></button>
                         <button onClick={togglePreviewPlay} className="p-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] transition-colors">{previewPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}</button>
-                        <button onClick={() => seekPreview(5)} className="p-1.5 rounded-lg bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A]/70 transition-colors" title="+5s"><SkipForward className="w-3.5 h-3.5" /></button>
+                    <button onClick={() => seekPreview(5)} className="jj-cta-dark p-1.5 rounded-lg transition-colors" title="+5s"><SkipForward className="w-3.5 h-3.5" /></button>
                       </div>
                     </div>
 
