@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useBrokerEmails, useBrokerEmailAccounts, useMarkEmailRead, useClassifyEmail, EMAIL_CATEGORIES, type EmailCategory } from "@/hooks/useBrokerEmails";
-import { Mail, Sparkles, Plug, Star } from "lucide-react";
+import { useBrokerEmails, useBrokerEmailAccounts, useMarkEmailRead, useClassifyEmail, useConnectBrokerEmail, useSyncBrokerEmail, EMAIL_CATEGORIES, type EmailCategory } from "@/hooks/useBrokerEmails";
+import { Mail, Sparkles, Plug, Star, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { toast } from "sonner";
@@ -11,6 +11,8 @@ export default function BrokerEmailHub() {
   const accounts = useBrokerEmailAccounts();
   const markRead = useMarkEmailRead();
   const classify = useClassifyEmail();
+  const connect = useConnectBrokerEmail();
+  const sync = useSyncBrokerEmail();
 
   return (
     <div className="space-y-5 p-4 md:p-6">
@@ -25,19 +27,37 @@ export default function BrokerEmailHub() {
               Connect Gmail or Outlook. Incoming messages are auto-categorised by AI: client leads, new launches, commissions, HR, and more.
             </p>
           </div>
-          <Button
-            variant="outline"
-            onClick={() => toast.info("Email provider connect — Gmail/Outlook OAuth coming next")}
-            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-          >
-            <Plug className="h-4 w-4 mr-1.5" /> Connect email account
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              onClick={() => connect.mutate("gmail")}
+              disabled={connect.isPending}
+              className="bg-[#102540] hover:bg-[#1a3d63] text-white"
+              data-allow-dark-cta
+            >
+              <Plug className="h-4 w-4 mr-1.5" /> Connect Gmail
+            </Button>
+            <Button
+              onClick={() => connect.mutate("outlook")}
+              disabled={connect.isPending}
+              variant="outline"
+              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            >
+              <Plug className="h-4 w-4 mr-1.5" /> Connect Outlook
+            </Button>
+          </div>
         </div>
         {(accounts.data ?? []).length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
             {accounts.data!.map((a: any) => (
-              <span key={a.id} className="text-[11px] px-2 py-1 rounded-md bg-[#EFE6D6] border border-[#B89555]/35 text-[#1A1A1A]">
+              <span key={a.id} className="text-[11px] px-2 py-1 rounded-md bg-[#EFE6D6] border border-[#B89555]/35 text-[#1A1A1A] inline-flex items-center gap-1.5">
                 {a.provider} · {a.email_address} · {a.status}
+                <button
+                  onClick={() => sync.mutate(a.id)}
+                  className="inline-flex items-center text-[#1A1A1A]/70 hover:text-[#1A1A1A] ml-1"
+                  title="Sync now"
+                >
+                  <RefreshCw className={`h-3 w-3 ${sync.isPending ? "animate-spin" : ""}`} />
+                </button>
               </span>
             ))}
           </div>

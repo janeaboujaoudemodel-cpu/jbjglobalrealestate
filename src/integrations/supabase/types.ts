@@ -3304,13 +3304,16 @@ export type Database = {
           created_at: string
           display_name: string | null
           email_address: string
+          history_id: string | null
           id: string
           imap_host: string | null
           imap_port: number | null
           last_error: string | null
           last_synced_at: string | null
           provider: string
+          provider_account_id: string | null
           refresh_token_encrypted: string | null
+          scope: string | null
           smtp_host: string | null
           smtp_port: number | null
           status: string
@@ -3324,13 +3327,16 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           email_address: string
+          history_id?: string | null
           id?: string
           imap_host?: string | null
           imap_port?: number | null
           last_error?: string | null
           last_synced_at?: string | null
           provider: string
+          provider_account_id?: string | null
           refresh_token_encrypted?: string | null
+          scope?: string | null
           smtp_host?: string | null
           smtp_port?: number | null
           status?: string
@@ -3344,19 +3350,46 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           email_address?: string
+          history_id?: string | null
           id?: string
           imap_host?: string | null
           imap_port?: number | null
           last_error?: string | null
           last_synced_at?: string | null
           provider?: string
+          provider_account_id?: string | null
           refresh_token_encrypted?: string | null
+          scope?: string | null
           smtp_host?: string | null
           smtp_port?: number | null
           status?: string
           sync_enabled?: boolean
           token_expires_at?: string | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      broker_email_oauth_states: {
+        Row: {
+          created_at: string
+          expires_at: string
+          provider: string
+          state: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          provider: string
+          state: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          provider?: string
+          state?: string
           user_id?: string
         }
         Relationships: []
