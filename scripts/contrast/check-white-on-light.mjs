@@ -24,12 +24,12 @@ const SRC = path.join(root, 'src');
 const LIGHT_CLASS_RE =
   /\b(bg-white(?!\/)|bg-pearl-[123](?!\/)|bg-cream(?!\/)|bg-champagne(?!\/)|bg-\[#F[0-9A-Fa-f]{2,5}\](?!\/)|bg-\[#FFF[0-9A-Fa-f]*\](?!\/)|from-\[#[CDEF][0-9A-Fa-f]{5}\](?!\/)|from-gold(?!-dark)\b|from-\[hsl\(var\(--gold\)\)\](?!\/))\b/;
 
-// Same — solid text-white only (not text-white/40), and exclude any
+// Same — text-white and faded text-white/NN, and exclude any
 // modifier-prefixed variant (hover:text-white, group-hover:text-white,
 // focus:text-white, active:text-white, data-[…]:text-white, dark:text-white).
 // Those represent state-driven swaps (usually paired with a dark hover bg)
 // and are not a static contrast regression.
-const WHITE_TEXT_RE = /(?<![:\w-])text-white(?!\/)\b/;
+const WHITE_TEXT_RE = /(?<![:\w-])text-white(?:\/[0-9]{1,3})?\b|(?<![:\w-])text-\[#FDFBF7\](?:\/[0-9]{1,3})?\b|(?<![:\w-])text-\[#F7F2EA\](?:\/[0-9]{1,3})?\b/;
 
 const exts = new Set(['.tsx', '.jsx']);
 
