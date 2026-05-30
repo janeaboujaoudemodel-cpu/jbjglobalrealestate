@@ -22,6 +22,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { ListingModeCards } from "@/components/broker-portal/ListingModeCards";
 
 interface MyListing {
   id: string;
@@ -224,10 +225,19 @@ const ListingPortalMyListings = () => {
                 )}
               </div>
               {!ownerOverview && (
-                <Button onClick={() => navigate(submitBase)} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
+                <Button
+                  onClick={() => {
+                    const el = document.getElementById('submit-new-listing');
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                      navigate(submitBase);
+                    }
+                  }}
+                  className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
+                >
                   <Plus className="w-4 h-4 mr-2" /> New Listing
                 </Button>
-
               )}
             </div>
 
@@ -313,10 +323,11 @@ const ListingPortalMyListings = () => {
               </div>
             ) : activeTab === 'active' ? (
               listings.length === 0 ? (
-                <div className="text-center py-12 bg-[#FDFBF7]/60 border-2 border-[#B89555]/20 rounded-2xl">
+                <div className="text-center py-10 bg-[#FDFBF7]/60 border-2 border-[#B89555]/20 rounded-2xl">
                   <h3 className="text-[#1A1A1A] font-semibold mb-2">No listings yet</h3>
-                  <p className="text-[#1A1A1A]/70 text-sm mb-4">Submit your first property listing!</p>
-                  <Button onClick={() => navigate(submitBase)} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">Submit Listing</Button>
+                  <p className="text-[#1A1A1A]/70 text-sm">
+                    Submit your first property listing — pick how you want to start below.
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -400,6 +411,19 @@ const ListingPortalMyListings = () => {
                   ))}
                 </div>
               )
+            )}
+
+            {/* Submit a New Listing — inline two-card chooser (broker only) */}
+            {!ownerOverview && (
+              <section id="submit-new-listing" className="mt-10 scroll-mt-28">
+                <div className="mb-4">
+                  <h2 className="text-xl font-bold text-[#1A1A1A]">Submit a New Listing</h2>
+                  <p className="text-sm text-[#1A1A1A]/70 mt-1">
+                    Choose how you want to add this property — both options stay inside your broker workspace.
+                  </p>
+                </div>
+                <ListingModeCards />
+              </section>
             )}
           </div>
         </div>
