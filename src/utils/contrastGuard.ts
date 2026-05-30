@@ -256,7 +256,7 @@ function scanAll(root: ParentNode = document.body) {
   const sel =
     'h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, ' +
     'span, small, strong, em, b, i, u, code, label, ' +
-    'a, button, summary, ' +
+    'a, button, input, textarea, select, summary, ' +
     '[role="button"], [role="link"], [role="tab"], [role="menuitem"], [role="status"], [role="switch"], ' +
     'th, td, caption, legend, figcaption, ' +
     'svg, [class*="lucide"]';
@@ -292,7 +292,7 @@ function fixSubtree(root: Element | null) {
       fixElement(root);
       const sel =
         'h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,b,i,label,' +
-        'a,button,summary,svg,[class*="lucide"],' +
+        'a,button,input,textarea,select,summary,svg,[class*="lucide"],' +
         '[role="button"],[role="link"],[role="tab"],[role="menuitem"]';
       const inner = root.querySelectorAll(sel);
       for (let i = 0; i < inner.length; i++) {
@@ -345,7 +345,7 @@ export function installContrastGuard() {
   const delegate = (e: Event) => {
     const t = e.target as Element | null;
     if (!t || t.nodeType !== 1) return;
-    const root = (t.closest('a, button, [role="button"], [role="tab"], [role="menuitem"], summary, label') || t) as Element;
+    const root = (t.closest('a, button, input, textarea, select, [role="button"], [role="tab"], [role="menuitem"], summary, label') || t) as Element;
     fixSubtree(root);
   };
   document.addEventListener('mouseover', delegate, true);
