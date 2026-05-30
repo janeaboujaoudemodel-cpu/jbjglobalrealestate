@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useBrokerEmails, useBrokerEmailAccounts, useMarkEmailRead, useClassifyEmail, useConnectBrokerEmail, useSyncBrokerEmail, EMAIL_CATEGORIES, type EmailCategory } from "@/hooks/useBrokerEmails";
-import { Mail, Sparkles, Plug, Star, RefreshCw } from "lucide-react";
+import { useBrokerOAuthApps } from "@/hooks/useBrokerOAuthApps";
+import { Mail, Sparkles, Plug, Star, RefreshCw, KeyRound, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { toast } from "sonner";
@@ -9,10 +11,23 @@ export default function BrokerEmailHub() {
   const [category, setCategory] = useState<EmailCategory>("all");
   const emails = useBrokerEmails(category);
   const accounts = useBrokerEmailAccounts();
+  const oauthApps = useBrokerOAuthApps();
   const markRead = useMarkEmailRead();
   const classify = useClassifyEmail();
   const connect = useConnectBrokerEmail();
   const sync = useSyncBrokerEmail();
+
+  const hasGmailApp = !!oauthApps.data?.find((a) => a.provider === "gmail");
+  const hasOutlookApp = !!oauthApps.data?.find((a) => a.provider === "outlook");
+
+  const tryConnect = (p: "gmail" | "outlook") => {
+    const ok = p === "gmail" ? hasGmailApp : hasOutlookApp;
+    if (!ok) {
+      toast.error(`Add your ${p === "gmail" ? "Google" : "Microsoft"} OAuth credentials in Email Setup first.`);
+      return;
+    }
+    connect.mutate(p);
+  };
 
   return (
     <div className="space-y-5 p-4 md:p-6">
@@ -29,7 +44,14 @@ export default function BrokerEmailHub() {
           </div>
           <div className="flex flex-wrap gap-2">
             <Button
-              onClick={() => connect.mutate("gmail")}
+              asChild
+              variant="outline"
+              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            >
+              <Link to="/broker/email/setup"><KeyRound className="h-4 w-4 mr-1.5" /> Email Setup</Link>
+            </Button>
+            <Button
+              onClick={() => tryConnect("gmail")}
               disabled={connect.isPending}
               className="bg-[#102540] hover:bg-[#1a3d63] text-white"
               data-allow-dark-cta
@@ -37,7 +59,7 @@ export default function BrokerEmailHub() {
               <Plug className="h-4 w-4 mr-1.5" /> Connect Gmail
             </Button>
             <Button
-              onClick={() => connect.mutate("outlook")}
+              onClick={() => tryConnect("outlook")}
               disabled={connect.isPending}
               variant="outline"
               className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
@@ -46,6 +68,14 @@ export default function BrokerEmailHub() {
             </Button>
           </div>
         </div>
+        {!hasGmailApp && !hasOutlookApp && (
+          <div className="mt-3 flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+            <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
+            <div>
+              No OAuth credentials yet. Go to <Link to="/broker/email/setup" className="underline font-semibold">Email Setup</Link> and paste your Google or Microsoft Client ID & Secret to enable connecting your mailbox.
+            </div>
+          </div>
+        )}
         {(accounts.data ?? []).length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
             {accounts.data!.map((a: any) => (

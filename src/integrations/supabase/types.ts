@@ -3370,6 +3370,42 @@ export type Database = {
         }
         Relationships: []
       }
+      broker_email_oauth_apps: {
+        Row: {
+          client_id: string
+          client_secret: string
+          created_at: string
+          id: string
+          is_active: boolean
+          label: string | null
+          provider: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          client_id: string
+          client_secret: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          label?: string | null
+          provider: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          client_id?: string
+          client_secret?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          label?: string | null
+          provider?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       broker_email_oauth_states: {
         Row: {
           created_at: string
@@ -38649,6 +38685,13 @@ export type Database = {
         Returns: {
           content: string
           original_content: string
+        }[]
+      }
+      get_broker_oauth_app: {
+        Args: { _provider: string; _user_id: string }
+        Returns: {
+          client_id: string
+          client_secret: string
         }[]
       }
       get_company_directory: {
