@@ -25,12 +25,11 @@ const TYPE_CONFIG: Record<RecentItemType, { icon: typeof Home; label: string; pa
 };
 
 /**
- * WalkingStrip — stable horizontal scroller for Continue Searching cards.
- *
- * No rAF, no transform loop, no cloned triplicate list, and no custom drag.
- * Cards remain readable at rest while native horizontal scroll stays available.
+ * WalkingStrip — same CSS-keyframe rhythm as the guides/reports carousel.
+ * No rAF and no drag. Track is duplicated for a seamless 0 → -50% loop.
  */
 function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
+  const [paused, setPaused] = useState(false);
   // Deduplicate items by slug+type to prevent visual duplicates.
   const seen = new Set<string>();
   const uniqueItems = items.filter(item => {
@@ -39,15 +38,28 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     seen.add(key);
     return true;
   });
+  const trackItems = uniqueItems.length <= 1 ? uniqueItems : [...uniqueItems, ...uniqueItems];
 
   return (
-    <div className="w-full overflow-x-auto overscroll-x-contain no-scrollbar scroll-smooth" style={{ touchAction: "pan-x pan-y" }}>
-      <div className="flex w-max gap-4 px-4 py-2 md:px-8 lg:px-12 snap-x snap-mandatory">
-        {uniqueItems.map((item, i) => (
-          <div key={`${item.type}-${item.id}`} className="shrink-0 snap-start">
+    <div
+      className="w-full overflow-hidden select-none"
+      style={{ touchAction: "pan-y" }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div
+        data-marquee-track
+        className="flex w-max gap-4 px-4 py-2 md:px-8 lg:px-12 will-change-transform"
+        style={{
+          animation: uniqueItems.length > 1 ? "jbj-book-marquee 38s linear infinite" : undefined,
+          animationPlayState: paused ? "paused" : "running",
+        }}
+      >
+        {trackItems.map((item, i) => (
+          <div key={`${item.type}-${item.id}-${i}`} className="shrink-0">
             <RecentCard3D
               item={item}
-              index={i}
+              index={i % Math.max(1, uniqueItems.length)}
               patchItem={patchItem}
             />
           </div>
