@@ -6623,53 +6623,53 @@ section:has(> .absolute.inset-0 picture)
 :root,
 [data-surface="page"],
 [data-surface="light"] {
-  --surface-bg: 253 251 247;     /* #FDFBF7 */
-  --surface-fg: 26 26 26;        /* #1A1A1A */
-  --surface-fg-muted: 74 74 74;  /* #4A4A4A */
-  --surface-icon: 26 26 26;
-  --surface-border: 184 149 85;  /* gold hairline */
+  --surface-bg: 36 50% 98%;      /* #FDFBF7 */
+  --surface-fg: 0 0% 10%;        /* #1A1A1A */
+  --surface-fg-muted: 0 0% 29%;  /* #4A4A4A */
+  --surface-icon: 0 0% 10%;
+  --surface-border: 40 35% 53%;  /* #B89555 hairline */
 }
 
 [data-surface="champagne"] {
-  --surface-bg: 247 242 234;     /* #F7F2EA */
-  --surface-fg: 26 26 26;
-  --surface-fg-muted: 74 74 74;
-  --surface-icon: 26 26 26;
-  --surface-border: 184 149 85;
+  --surface-bg: 36 40% 94%;      /* #F7F2EA */
+  --surface-fg: 0 0% 10%;
+  --surface-fg-muted: 0 0% 29%;
+  --surface-icon: 0 0% 10%;
+  --surface-border: 40 35% 53%;
 }
 
 [data-surface="cream"],
 [data-surface="raised"] {
-  --surface-bg: 239 230 214;     /* #EFE6D6 */
-  --surface-fg: 26 26 26;
-  --surface-fg-muted: 74 74 74;
-  --surface-icon: 26 26 26;
-  --surface-border: 184 149 85;
+  --surface-bg: 36 38% 88%;      /* #EFE6D6 */
+  --surface-fg: 0 0% 10%;
+  --surface-fg-muted: 0 0% 29%;
+  --surface-icon: 0 0% 10%;
+  --surface-border: 40 35% 53%;
 }
 
 [data-surface="gold"] {
-  --surface-bg: 184 149 85;      /* #B89555 */
-  --surface-fg: 26 26 26;        /* ink on gold (high contrast) */
-  --surface-fg-muted: 26 26 26;
-  --surface-icon: 26 26 26;
-  --surface-border: 26 26 26;
+  --surface-bg: 40 35% 53%;      /* #B89555 */
+  --surface-fg: 0 0% 10%;        /* ink on gold (AA); white fails */
+  --surface-fg-muted: 0 0% 10%;
+  --surface-icon: 0 0% 10%;
+  --surface-border: 0 0% 10%;
 }
 
 [data-surface="navy"] {
-  --surface-bg: 16 37 64;        /* #102540 */
-  --surface-fg: 255 255 255;
-  --surface-fg-muted: 230 230 230;
-  --surface-icon: 255 255 255;
-  --surface-border: 184 149 85;
+  --surface-bg: 211 60% 16%;     /* #102540 */
+  --surface-fg: 0 0% 100%;
+  --surface-fg-muted: 0 0% 90%;
+  --surface-icon: 0 0% 100%;
+  --surface-border: 40 35% 53%;
 }
 
 [data-surface="dark"],
 [data-surface="ink"] {
-  --surface-bg: 26 26 26;        /* #1A1A1A */
-  --surface-fg: 255 255 255;
-  --surface-fg-muted: 220 220 220;
-  --surface-icon: 255 255 255;
-  --surface-border: 184 149 85;
+  --surface-bg: 0 0% 10%;        /* #1A1A1A */
+  --surface-fg: 0 0% 100%;
+  --surface-fg-muted: 0 0% 86%;
+  --surface-icon: 0 0% 100%;
+  --surface-border: 40 35% 53%;
 }
 
 /* Foreground inheritance — descendants without an authored color follow
@@ -6677,19 +6677,19 @@ section:has(> .absolute.inset-0 picture)
    but the runtime engine will correct them when they produce a contrast
    failure. Scoped to text/icon-bearing tags to avoid touching backgrounds. */
 :where([data-surface]) {
-  color: rgb(var(--surface-fg));
+  color: hsl(var(--surface-fg));
 }
 :where([data-surface]) :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, span, small, strong, em, b, i, label, summary, th, td, caption, legend, figcaption) {
   color: inherit;
 }
 :where([data-surface]) :where(svg:not([fill]):not([stroke]), [class*="lucide"]) {
-  color: rgb(var(--surface-icon));
+  color: hsl(var(--surface-icon));
   stroke: currentColor;
 }
 
 /* Convenience utility classes — same contract, no JSX prop required. */
-.surface-fg        { color: rgb(var(--surface-fg)) !important; }
-.surface-fg-muted  { color: rgb(var(--surface-fg-muted)) !important; }
-.surface-icon      { color: rgb(var(--surface-icon)) !important; stroke: currentColor !important; }
-.surface-border    { border-color: rgb(var(--surface-border)) !important; }
+.surface-fg        { color: hsl(var(--surface-fg)) !important; }
+.surface-fg-muted  { color: hsl(var(--surface-fg-muted)) !important; }
+.surface-icon      { color: hsl(var(--surface-icon)) !important; stroke: currentColor !important; }
+.surface-border    { border-color: hsl(var(--surface-border)) !important; }
 
