@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useBrokerScopedDatabases } from "@/hooks/useBrokerScopedDatabases";
@@ -7,6 +7,7 @@ import { useBrokerPersonalTasks } from "@/hooks/useBrokerPersonalTasks";
 import {
   Database, Users, Activity, ArrowRight, Loader2, Plus, Phone, Upload,
   TrendingUp, BarChart3, Inbox, ClipboardList, Sparkles, Search,
+  Calendar as CalendarIcon, ListTodo, StickyNote,
 } from "lucide-react";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,16 @@ import BrokerDatabaseSheet from "@/components/broker-crm/BrokerDatabaseSheet";
 import MarkJunkDialog from "@/components/broker-crm/MarkJunkDialog";
 import { AlertTriangle } from "lucide-react";
 
-type Tab = "pipeline" | "databases" | "leads" | "calls" | "insights" | "activity";
+// CRM is the unified hub — these surfaces also remain in the sidebar but are
+// embedded here as tabs for a single-pane workflow (matches owner CRM hub).
+const BrokerCalendarTab = lazy(() => import("@/pages/broker/BrokerCalendar"));
+const BrokerTasksTab    = lazy(() => import("@/pages/broker/BrokerTasks"));
+const BrokerNotesTab    = lazy(() => import("@/pages/broker/BrokerNotes"));
+const BrokerInboxTab    = lazy(() => import("@/pages/broker/BrokerInbox"));
+
+type Tab =
+  | "pipeline" | "databases" | "leads" | "calls" | "insights" | "activity"
+  | "calendar" | "tasks" | "notes" | "inbox";
 
 function PremiumCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
