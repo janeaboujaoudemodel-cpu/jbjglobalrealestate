@@ -12,8 +12,9 @@ interface Props {
 export default function BrokerEmptyState({ icon, title, description, action, className }: Props) {
   return (
     <div
+      data-surface="champagne"
       className={cn(
-        "rounded-xl bg-[#FDFBF7] border border-dashed border-[#B89555]/35 px-6 py-10 text-center",
+        "surface-champagne rounded-xl bg-[#FDFBF7] border border-dashed border-[#B89555]/35 px-6 py-10 text-center",
         className,
       )}
     >
@@ -24,7 +25,7 @@ export default function BrokerEmptyState({ icon, title, description, action, cla
       )}
       <div className="text-sm font-semibold text-[#1A1A1A]">{title}</div>
       {description && (
-        <p className="mt-1.5 text-xs text-[#1A1A1A]/65 max-w-md mx-auto leading-relaxed">
+        <p className="mt-1.5 text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
           {description}
         </p>
       )}
