@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import UserAvatarMenu from "@/components/navigation/UserAvatarMenu";
 
 /**
  * Broker Portal shell — mirrors the structural pattern of OwnerDashboardShell:
