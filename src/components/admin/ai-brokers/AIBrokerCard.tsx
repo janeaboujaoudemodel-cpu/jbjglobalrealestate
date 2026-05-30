@@ -159,44 +159,44 @@ export function AIBrokerCard({
 
         {/* Stats Grid */}
         <div className="grid grid-cols-4 gap-3">
-          <div className="bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-lg p-3 text-center">
+          <div className="bg-[#EFE6D6] border border-[#B89555]/20 rounded-lg p-3 text-center">
             <Users className="h-4 w-4 text-[#1A1A1A] mx-auto mb-1" />
             <p className="text-[#1A1A1A] font-semibold">
               {broker.total_leads_handled || 0}
             </p>
-            <p className="text-[#1A1A1A]/50 text-xs">Leads</p>
+            <p className="text-muted-foreground text-xs">Leads</p>
           </div>
-          <div className="bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-lg p-3 text-center">
+          <div className="bg-[#EFE6D6] border border-[#B89555]/20 rounded-lg p-3 text-center">
             <TrendingUp className="h-4 w-4 text-emerald-500 mx-auto mb-1" />
             <p className="text-[#1A1A1A] font-semibold">{conversionRate}%</p>
-            <p className="text-[#1A1A1A]/50 text-xs">Conversion</p>
+            <p className="text-muted-foreground text-xs">Conversion</p>
           </div>
-          <div className="bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-lg p-3 text-center">
+          <div className="bg-[#EFE6D6] border border-[#B89555]/20 rounded-lg p-3 text-center">
             <Clock className="h-4 w-4 text-blue-500 mx-auto mb-1" />
             <p className="text-[#1A1A1A] font-semibold">
               {formatResponseTime(broker.average_response_time_seconds)}
             </p>
-            <p className="text-[#1A1A1A]/50 text-xs">Avg Response</p>
+            <p className="text-muted-foreground text-xs">Avg Response</p>
           </div>
-          <div className="bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-lg p-3 text-center">
+          <div className="bg-[#EFE6D6] border border-[#B89555]/20 rounded-lg p-3 text-center">
             <MessageSquare className="h-4 w-4 text-purple-500 mx-auto mb-1" />
             <p className="text-[#1A1A1A] font-semibold">
               {broker.working_hours_start?.slice(0, 5) || "09:00"} -{" "}
               {broker.working_hours_end?.slice(0, 5) || "18:00"}
             </p>
-            <p className="text-[#1A1A1A]/50 text-xs">Hours</p>
+            <p className="text-muted-foreground text-xs">Hours</p>
           </div>
         </div>
 
         {/* Languages */}
         {broker.languages && broker.languages.length > 0 && (
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-[#1A1A1A]/60">Languages:</span>
+            <span className="text-muted-foreground">Languages:</span>
             <div className="flex gap-1">
               {broker.languages.map((lang) => (
                 <Badge
                   key={lang}
-                  className="bg-[#EFE6D6]/10 text-[#1A1A1A]/70 text-xs border border-[#B89555]/20"
+                  className="bg-[#EFE6D6] text-muted-foreground text-xs border border-[#B89555]/20"
                 >
                   {lang}
                 </Badge>
