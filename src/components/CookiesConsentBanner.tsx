@@ -143,20 +143,23 @@ const CookiesConsentBanner = () => {
                     <div className="grid grid-cols-1 sm:flex sm:flex-row gap-2 sm:gap-3">
                       <Button
                         onClick={handleAcceptAll}
-                        className="bg-[#EFE6D6] text-[#1A1A1A] font-semibold hover:brightness-110 transition-all border border-[#B89555]/60 shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        className="jj-cta-champagne shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        data-cta="champagne"
                       >
                         Accept All
                       </Button>
                       <Button
                         onClick={handleRejectNonEssential}
                         variant="outline"
-                        className="bg-[#FDFBF7] text-[#1A1A1A] font-semibold border border-[#1A1A1A]/30 hover:bg-[#EFE6D6] hover:border-[#1A1A1A]/50 transition-all shadow-sm px-4 sm:px-6 text-sm whitespace-nowrap"
+                        className="jj-cta-outline shadow-sm px-4 sm:px-6 text-sm whitespace-nowrap"
+                        data-cta="outline"
                       >
                         Reject All
                       </Button>
                       <Button
                         onClick={() => setShowPreferences(true)}
-                        className="bg-[#1A1A1A] text-white font-semibold border-2 border-[#1A1A1A] hover:bg-[#1A1A1A] hover:border-[#1A1A1A] transition-all shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        className="jj-cta-dark shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        data-cta="dark"
                       >
                         Manage Preferences
                       </Button>
