@@ -105,7 +105,7 @@ export default function BrokerCRM() {
   useEffect(() => {
     const nextTab = searchParams.get("tab") as Tab | null;
     const action = searchParams.get("action");
-    if (nextTab && ["pipeline", "databases", "leads", "calls", "insights", "activity"].includes(nextTab)) {
+    if (nextTab && ["pipeline", "databases", "leads", "calls", "insights", "activity", "calendar", "tasks", "notes", "inbox"].includes(nextTab)) {
       setTab(nextTab);
     }
     if (action === "log-call") {
