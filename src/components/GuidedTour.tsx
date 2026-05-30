@@ -270,16 +270,18 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
 
               {phase === "welcome" ? (
                 <div className="space-y-2.5">
-                  <Button
+                  <button
                     onClick={() => { setStepIdx(0); setPhase("spotlight"); }}
                     type="button"
-                    variant="dark"
-                    className="w-full h-12 rounded-xl group"
+                    data-surface="navy"
+                    data-allow-dark-cta
+                    className="allow-white surface-navy w-full h-12 rounded-xl group inline-flex items-center justify-center gap-2 px-4 bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/60 text-white font-semibold transition-all"
+                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                   >
-                    <Compass className="w-4 h-4 mr-2" />
-                    <span className="flex-1 text-left">Start the quick tour</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                  </Button>
+                    <Compass className="w-4 h-4 mr-2 text-white allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                    <span className="flex-1 text-left text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Start the quick tour</span>
+                    <ArrowRight className="w-4 h-4 text-white allow-white group-hover:translate-x-0.5 transition-transform" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  </button>
                   <Button
                     onClick={handleComplete}
                     type="button"
