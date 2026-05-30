@@ -39,11 +39,11 @@ export default function BrokerDashboard() {
       </header>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <Stat icon={Database}   label="Assigned databases" value={dbs.data?.length ?? 0}   to="/broker/crm/databases" />
-        <Stat icon={Users}      label="Leads in scope"     value={leads.data?.length ?? 0} to="/broker/crm/leads" />
-        <Stat icon={ListTodo}   label="Open tasks"         value={openTasks}                to="/broker/crm/tasks" />
-        <Stat icon={StickyNote} label="Notes"              value={notes.data?.length ?? 0}  to="/broker/crm/notes" />
-        <Stat icon={Calendar}   label="Upcoming events"    value={cal.data?.length ?? 0}    to="/broker/crm/calendar" />
+        <Stat icon={Database}   label="Assigned databases" value={dbs.data?.length ?? 0}   to="/broker/crm?tab=databases" />
+        <Stat icon={Users}      label="Leads in scope"     value={leads.data?.length ?? 0} to="/broker/crm?tab=leads" />
+        <Stat icon={ListTodo}   label="Open tasks"         value={openTasks}                to="/broker/crm?tab=tasks" />
+        <Stat icon={StickyNote} label="Notes"              value={notes.data?.length ?? 0}  to="/broker/crm?tab=notes" />
+        <Stat icon={Calendar}   label="Upcoming events"    value={cal.data?.length ?? 0}    to="/broker/crm?tab=calendar" />
       </div>
 
       <section className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -82,7 +82,7 @@ export default function BrokerDashboard() {
             </ul>
           ) : (
             <p className="text-xs text-[#1A1A1A]/60">
-              No tasks yet. <Link to="/broker/crm/tasks" className="underline">Create your first task →</Link>
+              No tasks yet. <Link to="/broker/crm?tab=tasks" className="underline">Create your first task →</Link>
             </p>
           )}
         </div>
