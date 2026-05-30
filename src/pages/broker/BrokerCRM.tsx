@@ -1120,6 +1120,11 @@ export default function BrokerCRM() {
         leadName={junkLead?.name ?? null}
         onOpenChange={(o) => { if (!o) setJunkLead(null); }}
       />
+      <LeadHubSheet
+        lead={hubLead}
+        open={!!hubLead}
+        onOpenChange={(o) => { if (!o) setHubLead(null); }}
+      />
     </div>
   );
 }
