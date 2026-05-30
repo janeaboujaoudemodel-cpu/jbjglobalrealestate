@@ -11,23 +11,17 @@
  *  2. Reads the element's own computed foreground color.
  *  3. If the foreground/background contrast ratio is < the WCAG floor, the
  *     engine forces the element's `color` (and `stroke` for icons/SVGs) to
- *     the opposite pole — pure white on dark surfaces, ink #1A1A1A on light
- *     surfaces — locally via inline `!important`. Backgrounds are NEVER
- *     changed.
+ *     whichever canonical foreground has the stronger real contrast: white
+ *     on navy/dark/black, ink on champagne/gold/cream/light. Backgrounds are
+ *     NEVER changed.
  *  4. Re-runs after route changes, DOM mutations, hover, focus, and tab
  *     visibility, so hover/active/focus/disabled/loading states all stay
  *     readable.
  *
- * Opt-outs (the element OR an ancestor may carry any of these):
- *   [data-no-contrast-guard]   — generic opt-out (e.g. AI premium purple)
- *   [data-decorative="true"]   — decorative glyph / spinner
- *   .allow-white               — author insists on white text
- *   .allow-ink                 — author insists on ink text
- *   [data-on-dark]             — author marks element as "always on dark"
- *
- * Already-correct elements (ratio ≥ floor) are skipped — the engine only
- * corrects real contrast failures, so contracted primitives (`.jj-cta-*`,
- * navy CTAs with white text, champagne pills with ink) keep working.
+ * Only decorative media/effects are skipped. Author opt-outs such as
+ * `.allow-white`, `.allow-ink`, `[data-on-dark]`, and
+ * `[data-no-contrast-guard]` are intentionally NOT honored for readable text:
+ * live contrast wins over class intent.
  */
 
 const PAGE_BASE: RGB = [253, 251, 247]; // #FDFBF7 — the global painted baseline
@@ -42,15 +36,7 @@ const SKIP_ATTR = 'data-jbj-contrast-skip';
 type RGB = [number, number, number];
 
 const SKIP_SELECTOR = [
-  '[data-no-contrast-guard]',
   '[data-decorative="true"]',
-  '.allow-white',
-  '.allow-ink',
-  '[data-on-dark]',
-  '.jj-text-fade-allow',
-  '.jj-icon-fade-allow',
-  // Premium AI surfaces explicitly own their palette.
-  '[data-ai-surface]',
   // Sign-out is forced red site-wide; never touch it.
   '[data-signout-action]',
   '.jj-signout-icon',
@@ -64,7 +50,6 @@ const SKIP_SELECTOR = [
 const TAGS_SKIP = new Set([
   'SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME', 'CANVAS', 'VIDEO', 'AUDIO',
   'IMG', 'PICTURE', 'SOURCE', 'TRACK', 'OBJECT', 'EMBED',
-  'INPUT', 'TEXTAREA', 'SELECT', 'OPTION', // inputs manage their own contrast
   'BR', 'HR', 'META', 'LINK', 'HEAD', 'TITLE',
 ]);
 
