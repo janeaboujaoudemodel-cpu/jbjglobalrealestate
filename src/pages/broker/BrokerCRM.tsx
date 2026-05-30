@@ -21,6 +21,7 @@ import LogCallDialog from "@/components/broker-crm/LogCallDialog";
 import CallDetailSheet from "@/components/broker-crm/CallDetailSheet";
 import BrokerDatabaseSheet from "@/components/broker-crm/BrokerDatabaseSheet";
 import MarkJunkDialog from "@/components/broker-crm/MarkJunkDialog";
+import LeadHubSheet from "@/components/broker-crm/LeadHubSheet";
 import { AlertTriangle } from "lucide-react";
 
 // CRM is the unified hub — these surfaces also remain in the sidebar but are
