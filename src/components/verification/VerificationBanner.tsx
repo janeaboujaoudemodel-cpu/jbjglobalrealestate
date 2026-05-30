@@ -64,8 +64,9 @@ const VerificationBanner = () => {
               aria-label="Open identity verification"
               style={{ color: "#1A1A1A" }}
             >
-              <span className="relative z-10" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Get Verified</span>
+              <span data-surface="champagne" className="relative z-10" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Get Verified</span>
               <ArrowRight
+                data-surface="champagne"
                 className="relative z-10 w-4 h-4 group-hover:translate-x-0.5 transition-transform"
                 strokeWidth={2.5}
                 style={{ color: "#1A1A1A", stroke: "#1A1A1A" }}
