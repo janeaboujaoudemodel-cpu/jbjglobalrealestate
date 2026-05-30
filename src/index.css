@@ -6681,7 +6681,7 @@ section:has(> .absolute.inset-0 picture)
 :where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,.glass-light,.glass-dark,.image-overlay-dark,[data-overlay="dark"],[data-overlay="light"],[data-surface]) {
   color: hsl(var(--surface-fg));
 }
-:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,.glass-light,.glass-dark,.image-overlay-dark,[data-overlay="dark"],[data-overlay="light"],[data-surface]) :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, span, small, strong, em, b, i, label, summary, th, td, caption, legend, figcaption, a, button, input, textarea, select) {
+:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,.glass-light,.glass-dark,.image-overlay-dark,[data-overlay="dark"],[data-overlay="light"],[data-surface]) :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, span, small, strong, em, b, i, label, summary, th, td, caption, legend, figcaption, a, button, input, textarea, select):not([data-surface]):not(.surface-page):not(.surface-light):not(.surface-champagne):not(.surface-cream):not(.surface-raised):not(.surface-gold):not(.surface-navy):not(.surface-dark):not(.surface-ink):not(.glass-light):not(.glass-dark):not(.image-overlay-dark) {
   color: inherit;
   -webkit-text-fill-color: currentColor;
 }
