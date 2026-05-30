@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useBrokerOAuthApps, useSaveBrokerOAuthApp, useDeleteBrokerOAuthApp, getOAuthRedirectUri, type OAuthProvider } from "@/hooks/useBrokerOAuthApps";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -112,6 +112,12 @@ function ProviderPanel({
   const [clientId, setClientId] = useState(existing?.client_id ?? "");
   const [clientSecret, setClientSecret] = useState(existing?.client_secret ?? "");
   const [label, setLabel] = useState(existing?.label ?? "");
+
+  useEffect(() => {
+    setClientId(existing?.client_id ?? "");
+    setClientSecret(existing?.client_secret ?? "");
+    setLabel(existing?.label ?? "");
+  }, [existing?.client_id, existing?.client_secret, existing?.label]);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
