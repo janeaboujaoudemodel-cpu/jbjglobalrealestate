@@ -6074,873 +6074,187 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 }
 
 /* ============================================================
-   CTA PRIMITIVE SYSTEM — state-locked, guard-proof.
-   Loaded last so source-order beats every prior contrast guard
-   at equal specificity. Use on <a> / <button> / [role="button"];
-   nested span/svg/lucide auto-inherit the locked color.
+   CTA + SURFACE CONTRAST CONTRACT — single source of truth.
 
-   Variants:
-     .jj-cta-dark        — navy fill, WHITE text+icons, all states
-     .jj-cta-champagne   — champagne fill, INK text+icons, all states
-     .jj-cta-outline     — transparent, INK text+icons, gold hairline
-     .jj-pill-active     — active tab/pill: cream + ink + hairline
-
-   These primitives are the final word — no opt-out needed.
+   Rule:
+   - Navy / ink own backgrounds => WHITE text + WHITE icons.
+   - Champagne / cream / gold / white own backgrounds => INK text + INK icons.
+   - Only exception: [data-sidebar-gold-label] may be gold at rest.
    ============================================================ */
 
-:where(.jj-cta-dark) {
-  background-color: #102540;
-  border: 1px solid rgba(184, 149, 85, 0.55);
-  border-radius: 0.75rem;
-  padding: 0.625rem 1.125rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
-}
-
-/* Own dark-blue/ink boxes (including icon-only tiles) always carry white
-   foreground at rest and hover. Do not use data-no-contrast-guard to escape. */
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink),
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink):hover,
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]),
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink):hover :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
-/* Light/champagne/gold own boxes always carry ink, unless they are the
-   approved expanded broker-sidebar label exception. */
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]),
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]):hover,
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]),
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]):hover :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
-
-.jj-cta-champagne[data-cta="champagne"],
-.jj-cta-champagne[data-cta="champagne"]:hover,
-.jj-cta-champagne[data-cta="champagne"] :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-cta-champagne[data-cta="champagne"]:hover :where(span,p,small,strong,em,svg,[class*="lucide"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-.jj-cta-dark,
-.jj-cta-dark:link,
-.jj-cta-dark:visited,
-.jj-cta-dark:hover,
-.jj-cta-dark:focus,
-.jj-cta-dark:focus-visible,
-.jj-cta-dark:active,
-.jj-cta-dark[data-state],
-.jj-cta-dark[aria-pressed],
-.jj-cta-dark[aria-current],
-.jj-cta-dark :where(span, p, small, strong, em, svg, [class*="lucide"]),
-.jj-cta-dark:hover :where(span, p, small, strong, em, svg, [class*="lucide"]),
-.jj-cta-dark:focus :where(span, p, small, strong, em, svg, [class*="lucide"]),
-.jj-cta-dark:focus-visible :where(span, p, small, strong, em, svg, [class*="lucide"]),
-.jj-cta-dark:active :where(span, p, small, strong, em, svg, [class*="lucide"]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-.jj-cta-dark:hover { background-color: #1a3d63 !important; }
-.jj-cta-dark:disabled,
-.jj-cta-dark[aria-disabled="true"] {
-  opacity: 0.6 !important;
-  cursor: not-allowed !important;
-  background-color: #102540 !important;
-}
-
-:where(.jj-cta-champagne) {
-  background-color: #EFE6D6;
-  border: 1px solid rgba(184, 149, 85, 0.55);
-  border-radius: 0.75rem;
-  padding: 0.625rem 1.125rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
-}
-.jj-cta-champagne,
-.jj-cta-champagne:link,
-.jj-cta-champagne:visited,
-.jj-cta-champagne:hover,
-.jj-cta-champagne:focus,
-.jj-cta-champagne:focus-visible,
-.jj-cta-champagne:active,
-.jj-cta-champagne[data-state],
-.jj-cta-champagne[aria-pressed],
-.jj-cta-champagne[aria-current],
-.jj-cta-champagne :where(span, p, small, strong, em, svg, [class*="lucide"]),
-.jj-cta-champagne:hover :where(span, p, small, strong, em, svg, [class*="lucide"]),
-.jj-cta-champagne:focus :where(span, p, small, strong, em, svg, [class*="lucide"]),
-.jj-cta-champagne:focus-visible :where(span, p, small, strong, em, svg, [class*="lucide"]),
-.jj-cta-champagne:active :where(span, p, small, strong, em, svg, [class*="lucide"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
-.jj-cta-champagne:hover { background-color: #E5D9C2 !important; }
-.jj-cta-champagne:disabled,
-.jj-cta-champagne[aria-disabled="true"] {
-  opacity: 0.6 !important;
-  cursor: not-allowed !important;
-  background-color: #EFE6D6 !important;
-}
-
-:where(.jj-cta-outline) {
-  background-color: transparent;
-  border: 1px solid rgba(26, 26, 26, 0.35);
-  border-radius: 0.75rem;
-  padding: 0.625rem 1.125rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: background-color 200ms ease, border-color 200ms ease;
-}
-.jj-cta-outline,
-.jj-cta-outline:link,
-.jj-cta-outline:visited,
-.jj-cta-outline:hover,
-.jj-cta-outline:focus,
-.jj-cta-outline:focus-visible,
-.jj-cta-outline:active,
-.jj-cta-outline :where(span, p, small, strong, em, svg, [class*="lucide"]),
-.jj-cta-outline:hover :where(span, p, small, strong, em, svg, [class*="lucide"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
-.jj-cta-outline:hover {
-  background-color: #EFE6D6 !important;
-  border-color: rgba(26, 26, 26, 0.55) !important;
-}
-
-:where(.jj-pill-active) {
-  background-color: #EFE6D6;
-  border: 1px solid rgba(184, 149, 85, 0.55);
-}
-.jj-pill-active,
-.jj-pill-active :where(span, p, small, strong, em, svg, [class*="lucide"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
-
-/* Champagne CTA inside ANY dark surface must keep ink text — overrides
-   the "children of dark inherit white" guards at lines 4205-4258. */
-:is(.bg-foreground, .bg-black, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [data-surface="dark"], [data-surface="ink"])
-  .jj-cta-champagne,
-:is(.bg-foreground, .bg-black, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [data-surface="dark"], [data-surface="ink"])
-  .jj-cta-champagne :where(span, p, small, strong, em, svg, [class*="lucide"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-:is(.bg-foreground, .bg-black, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [data-surface="dark"], [data-surface="ink"])
-  .jj-cta-champagne { background-color: #EFE6D6 !important; }
-
-/* Generic dark-CTA hardening: ANY button with bg-[#1A1A1A] + text-white
-   keeps WHITE text in every state regardless of wrapper data-attrs.
-   Fixes the cookie "Manage Preferences" regression. */
-button[class~="bg-[#1A1A1A]"][class*="text-white"],
-button[class~="bg-[#1A1A1A]"][class*="text-white"]:hover,
-button[class~="bg-[#1A1A1A]"][class*="text-white"]:focus,
-button[class~="bg-[#1A1A1A]"][class*="text-white"]:focus-visible,
-button[class~="bg-[#1A1A1A]"][class*="text-white"] :where(span, p, svg, [class*="lucide"]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
-/* ============================================================
-   PLATFORM CONTRAST CONTRACT — single source of truth.
-   Last in file by design. Applies to every interactive surface,
-   badge, tab, menu item, card action, modal action, and future CTA.
-
-   Rules:
-   - Dark/navy own background => white label + white icons.
-   - Champagne/gold/cream/white own background => ink label + icons.
-   - Outline on light => ink; outline on dark/hero => white until hover.
-   - Idle/hover/active/focus/disabled never change label/icon contrast.
-   ============================================================ */
 :root {
   --jj-on-dark: 0 0% 100%;
-  --jj-on-light: var(--foreground);
-  --jj-dark-cta-bg: var(--navy-cta);
-  --jj-dark-cta-bg-hover: var(--navy-cta-hover);
-  --jj-light-cta-bg: var(--accent);
-  --jj-light-cta-bg-hover: 36 35% 83%;
-  --jj-contrast-hairline: var(--gold);
+  --jj-on-light: 0 0% 10%;
+  --jj-navy-bg: 211 60% 16%;
+  --jj-navy-bg-hover: 209 58% 25%;
+  --jj-light-bg: 36 38% 88%;
+  --jj-light-bg-hover: 36 35% 83%;
+  --jj-gold-border: 40 35% 53%;
 }
 
-:where(.jj-badge-dark) {
-  background-color: hsl(var(--jj-dark-cta-bg)) !important;
-  border-color: hsl(var(--jj-contrast-hairline) / 0.55) !important;
-}
-
-:where(.jj-badge-champagne, .jj-badge-outline) {
-  background-color: hsl(var(--jj-light-cta-bg)) !important;
-  border-color: hsl(var(--jj-contrast-hairline) / 0.55) !important;
-}
-
-:where(.jj-badge-outline) {
-  background-color: transparent !important;
-}
-
-:where(
-  .jj-cta-dark,
-  .jj-navy-cta,
-  .jj-badge-dark,
-  a, button, [role="button"], [role="tab"], [role="menuitem"], [role="switch"], summary,
-  span, div, li, [role="status"]
-):is(
-  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-[#0F0F0F]"], [class~="bg-[#111111]"], [class~="bg-black"],
-  [class~="bg-primary"], [class~="bg-foreground"], .bg-primary, .bg-foreground, .bg-black,
-  [class*="data-[state=active]:bg-[#102540]"][data-state="active"],
-  [class*="data-[state=active]:bg-[#1a3d63]"][data-state="active"],
-  [class*="data-[state=active]:bg-[#1A1A1A]"][data-state="active"],
-  [class*="data-[state=active]:bg-black"][data-state="active"],
-  [class*="data-[state=checked]:bg-[#102540]"][data-state="checked"],
-  [class*="aria-pressed:bg-[#102540]"][aria-pressed="true"],
-  [class*="aria-current:bg-[#102540]"][aria-current]
-),
-:where(a, button, [role="button"], [role="tab"], [role="menuitem"], summary):is(
-  [class*="hover:bg-[#102540]"], [class*="hover:bg-[#1a3d63]"], [class*="hover:bg-[#1A1A1A]"], [class*="hover:bg-black"], [class*="hover:bg-primary"], [class*="hover:bg-foreground"]
-):hover,
-:where(
-  .jj-cta-dark,
-  .jj-navy-cta,
-  .jj-badge-dark,
-  a, button, [role="button"], [role="tab"], [role="menuitem"], [role="switch"], summary,
-  span, div, li, [role="status"]
-):is(
-  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-[#0F0F0F]"], [class~="bg-[#111111]"], [class~="bg-black"],
-  [class~="bg-primary"], [class~="bg-foreground"], .bg-primary, .bg-foreground, .bg-black,
-  [class*="data-[state=active]:bg-[#102540]"][data-state="active"],
-  [class*="data-[state=active]:bg-[#1a3d63]"][data-state="active"],
-  [class*="data-[state=active]:bg-[#1A1A1A]"][data-state="active"],
-  [class*="data-[state=active]:bg-black"][data-state="active"],
-  [class*="data-[state=checked]:bg-[#102540]"][data-state="checked"],
-  [class*="aria-pressed:bg-[#102540]"][aria-pressed="true"],
-  [class*="aria-current:bg-[#102540]"][aria-current]
-) :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]),
-:where(a, button, [role="button"], [role="tab"], [role="menuitem"], summary):is(
-  [class*="hover:bg-[#102540]"], [class*="hover:bg-[#1a3d63]"], [class*="hover:bg-[#1A1A1A]"], [class*="hover:bg-black"], [class*="hover:bg-primary"], [class*="hover:bg-foreground"]
-):hover :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
-  color: hsl(var(--jj-on-dark)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
-  stroke: hsl(var(--jj-on-dark)) !important;
-  opacity: 1 !important;
-}
-
-:where(
-  .jj-cta-champagne,
-  .jj-pill-active,
-  .jj-badge-champagne,
-  .jj-badge-outline,
-  a, button, [role="button"], [role="tab"], [role="menuitem"], [role="switch"], summary,
-  span, div, li, [role="status"]
-):is(
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [class~="bg-[#D4AF37]"], [class~="bg-white"],
-  [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#F7F1E6]/"], [class*="bg-[#EFE6D6]/"], [class*="bg-[#ECE2D2]/"], [class*="bg-[#B89555]/"],
-  [class~="bg-background"], [class~="bg-card"], [class~="bg-popover"], [class~="bg-secondary"], [class~="bg-accent"], [class~="bg-muted"],
-  .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted,
-  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"], [class*="from-[#EFE6D6]"], [class*="from-[#ECE2D2]"],
-  [class*="data-[state=active]:bg-[#FDFBF7]"][data-state="active"],
-  [class*="data-[state=active]:bg-[#F7F2EA]"][data-state="active"],
-  [class*="data-[state=active]:bg-[#EFE6D6]"][data-state="active"],
-  [class*="data-[state=checked]:bg-[#EFE6D6]"][data-state="checked"]
-),
-:where(a, button, [role="button"], [role="tab"], [role="menuitem"], summary):is(
-  [class*="hover:bg-[#FDFBF7]"], [class*="hover:bg-[#F7F2EA]"], [class*="hover:bg-[#F7F1E6]"], [class*="hover:bg-[#EFE6D6]"], [class*="hover:bg-[#ECE2D2]"], [class*="hover:bg-white"], [class*="hover:bg-background"], [class*="hover:bg-secondary"], [class*="hover:bg-accent"], [class*="hover:bg-muted"]
-):hover,
-:where(
-  .jj-cta-champagne,
-  .jj-pill-active,
-  .jj-badge-champagne,
-  .jj-badge-outline,
-  a, button, [role="button"], [role="tab"], [role="menuitem"], [role="switch"], summary,
-  span, div, li, [role="status"]
-):is(
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [class~="bg-[#D4AF37]"], [class~="bg-white"],
-  [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#F7F1E6]/"], [class*="bg-[#EFE6D6]/"], [class*="bg-[#ECE2D2]/"], [class*="bg-[#B89555]/"],
-  [class~="bg-background"], [class~="bg-card"], [class~="bg-popover"], [class~="bg-secondary"], [class~="bg-accent"], [class~="bg-muted"],
-  .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted,
-  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"], [class*="from-[#EFE6D6]"], [class*="from-[#ECE2D2]"],
-  [class*="data-[state=active]:bg-[#FDFBF7]"][data-state="active"],
-  [class*="data-[state=active]:bg-[#F7F2EA]"][data-state="active"],
-  [class*="data-[state=active]:bg-[#EFE6D6]"][data-state="active"],
-  [class*="data-[state=checked]:bg-[#EFE6D6]"][data-state="checked"]
-) :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]),
-:where(a, button, [role="button"], [role="tab"], [role="menuitem"], summary):is(
-  [class*="hover:bg-[#FDFBF7]"], [class*="hover:bg-[#F7F2EA]"], [class*="hover:bg-[#F7F1E6]"], [class*="hover:bg-[#EFE6D6]"], [class*="hover:bg-[#ECE2D2]"], [class*="hover:bg-white"], [class*="hover:bg-background"], [class*="hover:bg-secondary"], [class*="hover:bg-accent"], [class*="hover:bg-muted"]
-):hover :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
-  color: hsl(var(--jj-on-light)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
-  stroke: hsl(var(--jj-on-light)) !important;
-  opacity: 1 !important;
-}
-
-:where(.jj-cta-outline, .jj-badge-outline) {
-  color: hsl(var(--jj-on-light)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
-  stroke: hsl(var(--jj-on-light)) !important;
-}
-
-:where([data-surface="dark"], [data-surface="ink"], [data-hero-dark], .bg-black, .bg-foreground, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"])
-  :where(.jj-cta-outline, .jj-badge-outline):not(:hover),
-:where([data-surface="dark"], [data-surface="ink"], [data-hero-dark], .bg-black, .bg-foreground, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"])
-  :where(.jj-cta-outline, .jj-badge-outline):not(:hover) :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
-  color: hsl(var(--jj-on-dark)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
-  stroke: hsl(var(--jj-on-dark)) !important;
-  opacity: 1 !important;
-}
-
-:where(.jj-cta-dark, .jj-navy-cta):hover {
-  background-color: hsl(var(--jj-dark-cta-bg-hover)) !important;
-}
-
-:where(.jj-cta-champagne, .jj-pill-active):hover {
-  background-color: hsl(var(--jj-light-cta-bg-hover)) !important;
-}
-
-:where(.jj-cta-dark, .jj-cta-champagne, .jj-cta-outline, .jj-navy-cta, .jj-pill-active, .jj-badge-dark, .jj-badge-champagne, .jj-badge-outline):is(:disabled, [aria-disabled="true"], [data-disabled]) {
-  opacity: 0.6 !important;
-  cursor: not-allowed !important;
-}
-
-:where([role="tab"][data-state="active"], [class*="data-[state=active]:jj-pill-active"][data-state="active"]) {
-  background-color: hsl(var(--jj-light-cta-bg)) !important;
-  border: 1px solid hsl(var(--jj-contrast-hairline) / 0.55) !important;
-  color: hsl(var(--jj-on-light)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
-  opacity: 1 !important;
-}
-
-:where([role="tab"][data-state="active"], [class*="data-[state=active]:jj-pill-active"][data-state="active"])
-  :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
-  color: hsl(var(--jj-on-light)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
-  stroke: hsl(var(--jj-on-light)) !important;
-  opacity: 1 !important;
-}
-
-/* Translucent white/champagne overlays on genuinely dark surfaces are still
-   visually dark; never flip their labels/icons to ink just because the class
-   contains bg-[#FDFBF7]/5 or hover:bg-[#FDFBF7]/10. */
-:where([data-surface="dark"], [data-surface="ink"], [data-hero-dark], .bg-black, .bg-foreground, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class*="from-black"], [class*="from-zinc-9"])
-  :where(a, button, [role="button"], [role="tab"], [role="menuitem"], summary, input, textarea, select, span, div, li):is(
-    [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#F7F1E6]/"], [class*="bg-[#EFE6D6]/"], [class*="bg-white/"],
-    [class*="hover:bg-[#FDFBF7]/"], [class*="hover:bg-[#F7F2EA]/"], [class*="hover:bg-[#EFE6D6]/"], [class*="hover:bg-white/"]
-  ),
-:where([data-surface="dark"], [data-surface="ink"], [data-hero-dark], .bg-black, .bg-foreground, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class*="from-black"], [class*="from-zinc-9"])
-  :where(a, button, [role="button"], [role="tab"], [role="menuitem"], summary, input, textarea, select, span, div, li):is(
-    [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#F7F1E6]/"], [class*="bg-[#EFE6D6]/"], [class*="bg-white/"],
-    [class*="hover:bg-[#FDFBF7]/"], [class*="hover:bg-[#F7F2EA]/"], [class*="hover:bg-[#EFE6D6]/"], [class*="hover:bg-white/"]
-  ) :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
-  color: hsl(var(--jj-on-dark)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
-  stroke: hsl(var(--jj-on-dark)) !important;
-  opacity: 1 !important;
-}
-
-/* ============================================================
-   FINAL PLATFORM VISUAL CONTRAST AUTHORITY.
-   This is intentionally the last contrast layer. It fixes the root
-   architecture issue where older remap/hover utilities could repaint a
-   descendant differently from its actual rendered surface.
-   ============================================================ */
-
-/* Image/dark-overlay heroes: text must never inherit ink from champagne
-   remap utilities. Buttons keep their own surface contract below. */
-section:has(> .absolute.inset-0 img),
-section:has(> .absolute.inset-0 picture),
-:where([data-hero-dark], .jj-hero-fullscreen, .jj-hero-compact) {
-  --jj-current-surface-foreground: #FFFFFF;
-}
-
-section:has(> .absolute.inset-0 img)
-  :where(h1, h2, h3, h4, p, li, small, strong, em):not(:where(button, a, [role="button"], [role="tab"]) *),
-section:has(> .absolute.inset-0 picture)
-  :where(h1, h2, h3, h4, p, li, small, strong, em):not(:where(button, a, [role="button"], [role="tab"]) *),
-:where([data-hero-dark], .jj-hero-fullscreen, .jj-hero-compact)
-  :where(h1, h2, h3, h4, p, li, small, strong, em):not(:where(button, a, [role="button"], [role="tab"]) *) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72) !important;
-  opacity: 1 !important;
-}
-
-section:has(> .absolute.inset-0 img)
-  :where([class*="text-transparent"], [class*="bg-clip-text"]):not(:where(button, a, [role="button"], [role="tab"]) *),
-section:has(> .absolute.inset-0 picture)
-  :where([class*="text-transparent"], [class*="bg-clip-text"]):not(:where(button, a, [role="button"], [role="tab"]) *),
-:where([data-hero-dark], .jj-hero-fullscreen, .jj-hero-compact)
-  :where([class*="text-transparent"], [class*="bg-clip-text"]):not(:where(button, a, [role="button"], [role="tab"]) *) {
-  background-image: none !important;
-  background-color: transparent !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-
-/* Own-surface contract for all future interactive elements and badges. */
-:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary, .jj-badge-dark, .jj-cta-dark, .jj-navy-cta):is(
-  .bg-black, .bg-foreground,
-  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"],
-  [class*="hover:bg-[#102540]"], [class*="hover:bg-[#1a3d63]"], [class*="hover:bg-[#1A1A1A]"], [class*="hover:bg-black"]
-),
-:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary, .jj-badge-dark, .jj-cta-dark, .jj-navy-cta):is(
-  .bg-black, .bg-foreground,
-  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"],
-  [class*="hover:bg-[#102540]"], [class*="hover:bg-[#1a3d63]"], [class*="hover:bg-[#1A1A1A]"], [class*="hover:bg-black"]
-) :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
-:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary, .jj-badge-champagne, .jj-badge-outline, .jj-cta-champagne, .jj-pill-active):is(
-  .bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted,
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"],
-  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#EFE6D6]"], [class*="to-[#FDFBF7]"], [class*="to-[#F7F2EA]"], [class*="to-[#EFE6D6]"],
-  [class*="hover:bg-white"], [class*="hover:bg-[#FDFBF7]"], [class*="hover:bg-[#F7F2EA]"], [class*="hover:bg-[#EFE6D6]"]
-),
-:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary, .jj-badge-champagne, .jj-badge-outline, .jj-cta-champagne, .jj-pill-active):is(
-  .bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted,
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"],
-  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#EFE6D6]"], [class*="to-[#FDFBF7]"], [class*="to-[#F7F2EA]"], [class*="to-[#EFE6D6]"],
-  [class*="hover:bg-white"], [class*="hover:bg-[#FDFBF7]"], [class*="hover:bg-[#F7F2EA]"], [class*="hover:bg-[#EFE6D6]"]
-) :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
-
-/* Ghost/transparent controls follow their actual parent surface. */
-:where([data-surface="dark"], [data-surface="ink"], [data-hero-dark], .bg-black, .bg-foreground, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], section:has(> .absolute.inset-0 img))
-  :where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is(.bg-transparent, [class~="bg-transparent"]):not(:hover),
-:where([data-surface="dark"], [data-surface="ink"], [data-hero-dark], .bg-black, .bg-foreground, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], section:has(> .absolute.inset-0 img))
-  :where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is(.bg-transparent, [class~="bg-transparent"]):not(:hover)
-  :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
-/* Source-order correction: hover utility names alone are not the current
-   surface. Idle transparent/ghost controls stay readable on their parent;
-   hover colors activate only while hovered. */
-:where([data-surface="page"], [data-surface="champagne"], [data-surface="light"], .bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"])
-  :where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is(.bg-transparent, [class~="bg-transparent"]):not(:hover),
-:where([data-surface="page"], [data-surface="champagne"], [data-surface="light"], .bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"])
-  :where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is(.bg-transparent, [class~="bg-transparent"]):not(:hover)
-  :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
-
-:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is([class*="hover:bg-[#102540]"], [class*="hover:bg-[#1a3d63]"], [class*="hover:bg-[#1A1A1A]"], [class*="hover:bg-black"]):hover,
-:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is([class*="hover:bg-[#102540]"], [class*="hover:bg-[#1a3d63]"], [class*="hover:bg-[#1A1A1A]"], [class*="hover:bg-black"]):hover
-  :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
-:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is([class*="hover:bg-white"], [class*="hover:bg-[#FDFBF7]"], [class*="hover:bg-[#F7F2EA]"], [class*="hover:bg-[#EFE6D6]"]):hover,
-:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is([class*="hover:bg-white"], [class*="hover:bg-[#FDFBF7]"], [class*="hover:bg-[#F7F2EA]"], [class*="hover:bg-[#EFE6D6]"]):hover
-  :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
-
-
-
-/* =========================================================================
-   UNIVERSAL WHITE-ON-LIGHT LOCK (PASS 6)
-   Any non-button element (input, label, span, p, div, textarea, select
-   trigger, badge, chip) whose OWN background class is champagne/cream/white
-   but whose author classes ask for white/whitish text is forced back to
-   ink #1A1A1A. Covers the AI tool pages (Input/Label/SelectTrigger with
-   bg-[#F7F2EA] + text-white), Compare modal inputs, JBJ Design Studio,
-   Interior Design AI, PropertySearchBar — without per-component patches.
-   Opt-out: data-no-contrast-guard, .allow-white, data-on-dark, data-decorative.
-   ========================================================================= */
-:where(:not(button):not(a):not([role="button"])):is(
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"],
-  [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-white"],
-  [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#EFE6D6]/"],
-  [class*="bg-white/"]
-):is(
-  .text-white, [class~="text-white"], [class*="text-white/"],
-  .text-\[\#FDFBF7\], .text-\[\#FFFFFF\], .text-\[\#fafafa\], .text-gray-200, .text-gray-100
-):not(.allow-white):not([data-on-dark]):not([data-no-contrast-guard]):not([data-decorative="true"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
-
-/* Labels/helpers sitting as direct children of a champagne/cream container
-   also flip to ink (covers <Label className="text-white/85"> patterns). */
-:where([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-white"], [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#EFE6D6]/"])
-  > :is(label, span, p, small, h1, h2, h3, h4, h5, h6, li, div):is(
-    .text-white, [class~="text-white"], [class*="text-white/"],
-    .text-\[\#FDFBF7\], .text-\[\#FFFFFF\], .text-\[\#fafafa\], .text-gray-200, .text-gray-100
-  ):not(.allow-white):not([data-on-dark]):not([data-no-contrast-guard]):not([data-decorative="true"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  opacity: 1 !important;
-}
-
-/* Inputs/textareas/select triggers with champagne fill — placeholder stays
-   soft ink (no white) so the field stays readable while typing. */
-:where(input, textarea, select, [role="combobox"], [data-radix-select-trigger]):is(
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-white"], [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#EFE6D6]/"]
-):not(.allow-white):not([data-on-dark]):not([data-no-contrast-guard]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-:where(input, textarea):is(
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-white"], [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#EFE6D6]/"]
-):not(.allow-white):not([data-on-dark]):not([data-no-contrast-guard])::placeholder {
-  color: rgba(26,26,26,0.55) !important;
-  -webkit-text-fill-color: rgba(26,26,26,0.55) !important;
-  opacity: 1 !important;
-}
-
-/* =========================================================================
-   STABLE SURFACE CONTRACT — semantic surface → stable foreground.
-   No JavaScript repainting. No generic foreground guessing. Components opt
-   into an explicit light/dark/navy/glass/overlay surface and all text/icons
-   inside that primitive keep the same readable polarity at idle/hover/focus.
-
-   Tokens:
-     --surface-bg          actual rendered surface (informational)
-     --surface-fg          primary text/icon color for this surface
-     --surface-fg-muted    secondary text on this surface
-     --surface-icon        icon stroke color
-     --surface-border      gold/ink hairline color
-   ========================================================================= */
-
-:root,
 .surface-page,
 .surface-light,
 [data-surface="page"],
 [data-surface="light"],
 [data-surface="pearl"] {
-  --surface-bg: 36 50% 98%;      /* #FDFBF7 */
-  --surface-fg: 0 0% 10%;        /* #1A1A1A */
-  --surface-fg-muted: 0 0% 29%;  /* #4A4A4A */
-  --surface-icon: 0 0% 10%;
-  --surface-border: 40 35% 53%;  /* #B89555 hairline */
+  --surface-bg: 36 50% 98%;
+  --surface-fg: var(--jj-on-light);
+  --surface-fg-muted: 0 0% 29%;
+  --surface-icon: var(--jj-on-light);
+  --surface-border: var(--jj-gold-border);
 }
 
 .surface-champagne,
 [data-surface="champagne"] {
-  --surface-bg: 36 40% 94%;      /* #F7F2EA */
-  --surface-fg: 0 0% 10%;
+  --surface-bg: 36 40% 94%;
+  --surface-fg: var(--jj-on-light);
   --surface-fg-muted: 0 0% 29%;
-  --surface-icon: 0 0% 10%;
-  --surface-border: 40 35% 53%;
+  --surface-icon: var(--jj-on-light);
+  --surface-border: var(--jj-gold-border);
 }
 
 .surface-cream,
 .surface-raised,
 [data-surface="cream"],
 [data-surface="raised"] {
-  --surface-bg: 36 38% 88%;      /* #EFE6D6 */
-  --surface-fg: 0 0% 10%;
+  --surface-bg: 36 38% 88%;
+  --surface-fg: var(--jj-on-light);
   --surface-fg-muted: 0 0% 29%;
-  --surface-icon: 0 0% 10%;
-  --surface-border: 40 35% 53%;
+  --surface-icon: var(--jj-on-light);
+  --surface-border: var(--jj-gold-border);
 }
 
 .surface-gold,
 [data-surface="gold"] {
-  --surface-bg: 40 35% 53%;      /* #B89555 */
-  --surface-fg: 0 0% 10%;        /* ink on gold (AA); white fails */
-  --surface-fg-muted: 0 0% 10%;
-  --surface-icon: 0 0% 10%;
-  --surface-border: 0 0% 10%;
+  --surface-bg: var(--jj-gold-border);
+  --surface-fg: var(--jj-on-light);
+  --surface-fg-muted: var(--jj-on-light);
+  --surface-icon: var(--jj-on-light);
+  --surface-border: var(--jj-on-light);
 }
 
 .surface-navy,
 [data-surface="navy"] {
-  --surface-bg: 211 60% 16%;     /* #102540 */
-  --surface-fg: 0 0% 100%;
+  --surface-bg: var(--jj-navy-bg);
+  --surface-fg: var(--jj-on-dark);
   --surface-fg-muted: 0 0% 90%;
-  --surface-icon: 0 0% 100%;
-  --surface-border: 40 35% 53%;
+  --surface-icon: var(--jj-on-dark);
+  --surface-border: var(--jj-gold-border);
 }
 
 .surface-dark,
 .surface-ink,
 [data-surface="dark"],
 [data-surface="ink"] {
-  --surface-bg: 0 0% 10%;        /* #1A1A1A */
-  --surface-fg: 0 0% 100%;
+  --surface-bg: 0 0% 10%;
+  --surface-fg: var(--jj-on-dark);
   --surface-fg-muted: 0 0% 86%;
-  --surface-icon: 0 0% 100%;
-  --surface-border: 40 35% 53%;
+  --surface-icon: var(--jj-on-dark);
+  --surface-border: var(--jj-gold-border);
 }
 
-/* Foreground inheritance — descendants follow the component's chosen surface. */
-:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,.glass-light,.glass-dark,.image-overlay-dark,[data-overlay="dark"],[data-overlay="light"],[data-surface]) {
+:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,[data-surface]) {
   color: hsl(var(--surface-fg));
 }
-:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,.glass-light,.glass-dark,.image-overlay-dark,[data-overlay="dark"],[data-overlay="light"],[data-surface]) :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, span, small, strong, em, b, i, label, summary, th, td, caption, legend, figcaption, a, button, input, textarea, select):not([data-surface]):not(.surface-page):not(.surface-light):not(.surface-champagne):not(.surface-cream):not(.surface-raised):not(.surface-gold):not(.surface-navy):not(.surface-dark):not(.surface-ink):not(.glass-light):not(.glass-dark):not(.image-overlay-dark) {
+
+:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,[data-surface])
+  :where(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,span,small,strong,em,b,i,label,summary,th,td,caption,legend,figcaption,a,button,input,textarea,select,svg,[class*="lucide"]):not([data-surface]):not([data-decorative="true"]):not([data-sidebar-gold-label]) {
   color: inherit;
   -webkit-text-fill-color: currentColor;
-}
-:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,.glass-light,.glass-dark,.image-overlay-dark,[data-overlay="dark"],[data-overlay="light"],[data-surface]) :where(svg, [class*="lucide"]) {
-  color: hsl(var(--surface-icon));
   stroke: currentColor;
   opacity: 1;
 }
 
-/* Convenience utility classes — same contract, no JSX prop required. */
-.surface-fg        { color: hsl(var(--surface-fg)) !important; }
-.surface-fg-muted  { color: hsl(var(--surface-fg-muted)) !important; }
-.surface-icon      { color: hsl(var(--surface-icon)) !important; stroke: currentColor !important; }
-.surface-border    { border-color: hsl(var(--surface-border)) !important; }
-
-:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,.glass-light,.glass-dark,.image-overlay-dark,[data-overlay="dark"],[data-overlay="light"],[data-surface]) :where(input, textarea)::placeholder {
-  color: currentColor;
-  -webkit-text-fill-color: currentColor;
-  opacity: 0.62;
-}
-
-/* =====================================================================
- * STABILITY LOCK — NO COLOR TRANSITIONS, NO HOVER FLICKER
- * ---------------------------------------------------------------------
- * Root cause of the platform-wide "blink" the owner reported was NOT
- * a missing rule — it was that competing :hover / :focus / data-state
- * cascade layers transition color/stroke/fill on every interaction.
- * When two rules resolve to the same final color but with different
- * specificities, the transition still animates the computed value
- * back-and-forth, producing the visible flash on hover/scroll/focus.
- *
- * Fix: disable color-family transitions globally. Backgrounds, borders,
- * transforms, shadows, and opacity may still animate — only the four
- * foreground properties are pinned to instantaneous swaps.
- *
- * This is intentionally the LAST rule in the stylesheet.
- * ===================================================================== */
-*,
-*::before,
-*::after {
-  transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
-}
-
-/* Explicit reset for elements/utilities that override transition-property
-   with `all` (Tailwind `transition-all`, `transition-colors`, etc.). */
-:where(
-  [class*="transition-all"],
-  [class*="transition-colors"],
-  [class~="transition"]
-) {
-  transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
-}
-
-/* Belt-and-braces: foreground color/stroke/fill never animate, ever. */
-*,
-*::before,
-*::after,
-svg,
-svg * {
-  transition-duration: 0s !important;
-  transition-delay: 0s !important;
-}
-
-/* Re-enable transition duration for the props we DO want to animate. */
-*,
-*::before,
-*::after {
-  transition-duration: 200ms, 200ms, 200ms, 200ms, 200ms, 200ms, 200ms !important;
-}
-
-/* =====================================================================
- * IDLE = HOVER = FOCUS = ACTIVE foreground lock on every CTA primitive.
- * If any future override tries to flip color on a state, this last-rule
- * block re-pins it. Backgrounds may still shift on hover; foreground
- * never does.
- * ===================================================================== */
 .jj-cta-dark,
+.jj-navy-cta {
+  background-color: hsl(var(--jj-navy-bg)) !important;
+  border: 1px solid hsl(var(--jj-gold-border) / 0.55) !important;
+  border-radius: 0.75rem;
+  color: hsl(var(--jj-on-dark)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
+}
+
 .jj-cta-dark:hover,
-.jj-cta-dark:focus,
-.jj-cta-dark:focus-visible,
-.jj-cta-dark:active,
-.jj-navy-cta,
-.jj-navy-cta:hover,
-.jj-navy-cta:focus,
-.jj-navy-cta:focus-visible,
-.jj-navy-cta:active,
-.jj-cta-dark :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-cta-dark:hover :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-cta-dark:focus :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-cta-dark:focus-visible :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-cta-dark:active :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-navy-cta :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-navy-cta:hover :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-navy-cta:focus :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-navy-cta:focus-visible :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-navy-cta:active :where(span,p,small,strong,em,svg,[class*="lucide"]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  fill: currentColor;
-  opacity: 1 !important;
+.jj-navy-cta:hover {
+  background-color: hsl(var(--jj-navy-bg-hover)) !important;
 }
 
 .jj-cta-champagne,
+.jj-pill-active {
+  background-color: hsl(var(--jj-light-bg)) !important;
+  border: 1px solid hsl(var(--jj-gold-border) / 0.55) !important;
+  border-radius: 0.75rem;
+  color: hsl(var(--jj-on-light)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
+}
+
 .jj-cta-champagne:hover,
-.jj-cta-champagne:focus,
-.jj-cta-champagne:focus-visible,
-.jj-cta-champagne:active,
-.jj-cta-outline,
-.jj-cta-outline:hover,
-.jj-cta-outline:focus,
-.jj-cta-outline:focus-visible,
-.jj-cta-outline:active,
-.jj-pill-active,
-.jj-pill-active:hover,
-.jj-pill-active:focus,
-.jj-pill-active:focus-visible,
-.jj-pill-active:active,
+.jj-pill-active:hover {
+  background-color: hsl(var(--jj-light-bg-hover)) !important;
+}
+
+.jj-cta-outline {
+  background-color: transparent !important;
+  border: 1px solid hsl(var(--jj-gold-border) / 0.55) !important;
+  border-radius: 0.75rem;
+  color: hsl(var(--jj-on-light)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
+}
+
+.jj-cta-dark :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-cta-dark:hover :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-navy-cta :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-navy-cta:hover :where(span,p,small,strong,em,svg,[class*="lucide"]) {
+  color: hsl(var(--jj-on-dark)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
+  stroke: hsl(var(--jj-on-dark)) !important;
+  opacity: 1 !important;
+}
+
 .jj-cta-champagne :where(span,p,small,strong,em,svg,[class*="lucide"]),
 .jj-cta-champagne:hover :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-cta-champagne:focus :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-cta-champagne:focus-visible :where(span,p,small,strong,em,svg,[class*="lucide"]),
-.jj-cta-champagne:active :where(span,p,small,strong,em,svg,[class*="lucide"]),
 .jj-cta-outline :where(span,p,small,strong,em,svg,[class*="lucide"]),
 .jj-cta-outline:hover :where(span,p,small,strong,em,svg,[class*="lucide"]),
 .jj-pill-active :where(span,p,small,strong,em,svg,[class*="lucide"]),
 .jj-pill-active:hover :where(span,p,small,strong,em,svg,[class*="lucide"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  fill: currentColor;
+  color: hsl(var(--jj-on-light)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
+  stroke: hsl(var(--jj-on-light)) !important;
   opacity: 1 !important;
 }
 
-/* Image overlay dark — explicit, never inherits champagne ink */
-.image-overlay-dark,
-.image-overlay-dark *,
-.glass-dark,
-.glass-dark *,
-[data-overlay="dark"],
-[data-overlay="dark"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,svg,[class*="lucide"]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-.glass-light,
-.glass-light :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,svg,[class*="lucide"]),
-[data-overlay="light"],
-[data-overlay="light"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,svg,[class*="lucide"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-
-
-/* =====================================================================
- * FINAL SURFACE FOREGROUND LOCK — idle + hover + focus + active.
- * Last rule in the stylesheet. Pins descendants of explicitly tagged
- * dark/navy/ink surfaces to white, and explicitly tagged light/
- * champagne/cream/gold surfaces to ink, regardless of upstream class.
- * Opt out per element with [data-no-contrast-guard].
- * ===================================================================== */
-.surface-navy, .surface-dark, .surface-ink,
-[data-surface="navy"], [data-surface="dark"], [data-surface="ink"] {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-.surface-navy :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-.surface-dark :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-.surface-ink  :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-[data-surface="navy"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-[data-surface="dark"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-[data-surface="ink"]  :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
+/* Own dark boxes beat light/champagne ancestors. */
+:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-black,.bg-foreground,[class~="bg-[#102540]"],[class~="bg-[#1a3d63]"],[class~="bg-[#1A1A1A]"]):not(.allow-ink),
+:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-black,.bg-foreground,[class~="bg-[#102540]"],[class~="bg-[#1a3d63]"],[class~="bg-[#1A1A1A]"]):not(.allow-ink):hover,
+:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-black,.bg-foreground,[class~="bg-[#102540]"],[class~="bg-[#1a3d63]"],[class~="bg-[#1A1A1A]"]):not(.allow-ink) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
+  color: hsl(var(--jj-on-dark)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
+  stroke: hsl(var(--jj-on-dark)) !important;
   opacity: 1 !important;
 }
 
-.surface-light, .surface-page, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
-[data-surface="page"], [data-surface="light"], [data-surface="pearl"],
-[data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-.surface-light :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-.surface-page :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-.surface-champagne :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-.surface-cream :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-.surface-raised :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-.surface-gold :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-[data-surface="page"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-[data-surface="light"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-[data-surface="pearl"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-[data-surface="champagne"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-[data-surface="cream"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-[data-surface="raised"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
-[data-surface="gold"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
+/* Own light boxes beat dark/navy ancestors. */
+:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-white,.bg-background,.bg-card,.bg-accent,[class~="bg-[#FDFBF7]"],[class~="bg-[#F7F2EA]"],[class~="bg-[#EFE6D6]"],[class~="bg-[#B89555]"]):not([data-sidebar-gold-label]),
+:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-white,.bg-background,.bg-card,.bg-accent,[class~="bg-[#FDFBF7]"],[class~="bg-[#F7F2EA]"],[class~="bg-[#EFE6D6]"],[class~="bg-[#B89555]"]):not([data-sidebar-gold-label]):hover,
+:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-white,.bg-background,.bg-card,.bg-accent,[class~="bg-[#FDFBF7]"],[class~="bg-[#F7F2EA]"],[class~="bg-[#EFE6D6]"],[class~="bg-[#B89555]"]):not([data-sidebar-gold-label]) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
+  color: hsl(var(--jj-on-light)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
+  stroke: hsl(var(--jj-on-light)) !important;
   opacity: 1 !important;
 }
 
-/* FINAL exception to the surface lock: an element's OWN dark-blue/ink box
-   wins over a light/champagne ancestor. This fixes blue icon tiles on Join/
-   careers and every future navy icon box. Whole-token matching only. */
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink),
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink):hover,
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]),
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink):hover :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
+[data-sidebar-gold-label] {
+  color: hsl(var(--jj-gold-border)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-gold-border)) !important;
+}
+[data-sidebar-gold-label]:hover,
+[data-sidebar-gold-label]:hover * {
+  color: hsl(var(--jj-on-light)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
+  stroke: hsl(var(--jj-on-light)) !important;
 }
 
-/* FINAL exception in the opposite direction: an element's OWN light/
-   champagne/gold box wins over a dark/navy ancestor. */
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]),
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]):hover,
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]),
-:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]):hover :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
+/* Prevent foreground flicker only; do not kill animation durations. */
+:where(a,button,[role="button"],[role="tab"],svg,[class*="lucide"],span,p,h1,h2,h3,h4,h5,h6) {
+  transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
 }
