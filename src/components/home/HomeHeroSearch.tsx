@@ -202,6 +202,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               data-surface="ink"
               data-no-contrast-guard
               data-allow-dark-cta
+              data-hero-consultation-lock
               aria-label="Book your free consultation now"
               className="surface-ink allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
                 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em]
@@ -238,6 +239,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             type="button"
             onClick={openBooking}
             data-surface="dark"
+            data-hero-consultation-lock
             aria-label="Book your free consultation now"
             className="surface-ink allow-white flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
               text-[13px] font-semibold whitespace-nowrap
