@@ -6693,3 +6693,68 @@ section:has(> .absolute.inset-0 picture)
 .surface-icon      { color: hsl(var(--surface-icon)) !important; stroke: currentColor !important; }
 .surface-border    { border-color: hsl(var(--surface-border)) !important; }
 
+/* =========================================================================
+   FOREGROUND-ONLY CONTRAST CONTRACT v3
+   -------------------------------------------------------------------------
+   This is the permanent source-order contract: known surfaces establish a
+   foreground variable, then only readable foreground/text/icon/stroke values
+   are corrected. Backgrounds are never repainted here.
+   ========================================================================= */
+
+:where(.bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-muted, .bg-accent, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"]) {
+  --contrast-fg: hsl(0 0% 10%);
+  --contrast-muted-fg: hsl(0 0% 29%);
+  color: var(--contrast-fg);
+}
+
+:where([class~="bg-[#B89555]"], [class~="bg-[#A68444]"], .bg-gold, [data-surface="gold"]) {
+  --contrast-fg: hsl(0 0% 10%);
+  --contrast-muted-fg: hsl(0 0% 10%);
+  color: var(--contrast-fg);
+}
+
+:where(.bg-black, .bg-foreground, .bg-primary, .bg-gray-800, .bg-gray-900, .bg-gray-950, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"]) {
+  --contrast-fg: hsl(0 0% 100%);
+  --contrast-muted-fg: hsl(0 0% 86%);
+  color: var(--contrast-fg);
+}
+
+:where(.bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-muted, .bg-accent, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], .bg-gold, [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"])
+  :where(h1,h2,h3,h4,h5,h6,p,li,dt,dd,span,small,strong,em,b,i,label,summary,th,td,caption,legend,figcaption,a,button,[role="button"],[role="tab"],[role="menuitem"],input,textarea,select,svg,[class*="lucide"]):not([data-price-badge] *):not(.price-pill-value):not([class*="text-price-orange"]):not(.text-price-orange):not([data-signout-action] *):not([data-signout-action]) {
+  color: var(--contrast-fg, hsl(var(--surface-fg))) !important;
+  -webkit-text-fill-color: var(--contrast-fg, hsl(var(--surface-fg))) !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+:where(.bg-black, .bg-foreground, .bg-primary, .bg-gray-800, .bg-gray-900, .bg-gray-950, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"])
+  :where(h1,h2,h3,h4,h5,h6,p,li,dt,dd,span,small,strong,em,b,i,label,summary,th,td,caption,legend,figcaption,a,button,[role="button"],[role="tab"],[role="menuitem"],input,textarea,select,svg,[class*="lucide"]):not([data-price-badge] *):not(.price-pill-value):not([class*="text-price-orange"]):not(.text-price-orange):not([data-signout-action] *):not([data-signout-action]) {
+  color: var(--contrast-fg, hsl(var(--surface-fg))) !important;
+  -webkit-text-fill-color: var(--contrast-fg, hsl(var(--surface-fg))) !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+/* Nested surface islands always win over an outer card/hero surface. */
+:where(.bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-muted, .bg-accent, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"])
+  :where(.bg-black, .bg-foreground, .bg-primary, .bg-gray-800, .bg-gray-900, .bg-gray-950, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"])
+  :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,b,i,label,a,button,[role="button"],svg,[class*="lucide"]):not([data-price-badge] *):not(.price-pill-value) {
+  color: hsl(0 0% 100%) !important;
+  -webkit-text-fill-color: hsl(0 0% 100%) !important;
+  stroke: currentColor !important;
+}
+
+:where(.bg-black, .bg-foreground, .bg-primary, .bg-gray-800, .bg-gray-900, .bg-gray-950, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"])
+  :where(.bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-muted, .bg-accent, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"])
+  :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,b,i,label,a,button,[role="button"],input,textarea,select,svg,[class*="lucide"]):not([data-price-badge] *):not(.price-pill-value) {
+  color: hsl(0 0% 10%) !important;
+  -webkit-text-fill-color: hsl(0 0% 10%) !important;
+  stroke: currentColor !important;
+}
+
+:where(input, textarea)::placeholder {
+  color: currentColor !important;
+  -webkit-text-fill-color: currentColor !important;
+  opacity: 0.62 !important;
+}
+
