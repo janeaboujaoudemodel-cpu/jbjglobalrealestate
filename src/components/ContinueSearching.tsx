@@ -300,7 +300,6 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
   const [logoError, setLogoError] = useState(false);
   const urlValid = isUrlValid(item.imageUrl);
   const [imgBroken, setImgBroken] = useState(!urlValid);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
   const fetchAttempted = useRef(false);
 
@@ -409,21 +408,6 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
   // logo_url (via item.developerLogo), NEVER the card's background image.
   const showDevCardLogo = item.type === "developer" && item.developerLogo && !logoError;
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-    setTilt({
-      x: (y - 0.5) * -12,
-      y: (x - 0.5) * 12,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-  };
-
   return (
     <div
       ref={cardRef}
@@ -433,15 +417,11 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         transformStyle: "preserve-3d",
         perspective: "800px",
       }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
     >
       <Link
         to={linkTo}
         className="group relative block w-[160px] md:w-[200px] h-[220px] md:h-[260px] rounded-xl overflow-hidden transition-all duration-500"
         style={{
-          transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${tilt.x || tilt.y ? 1.05 : 1})`,
-          transition: tilt.x || tilt.y ? "transform 0.1s ease-out" : "transform 0.4s ease-out",
           transformStyle: "preserve-3d",
         }}
       >
@@ -513,9 +493,9 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             legibility over any image (light, dark, busy, washed out). */}
         <div className="absolute inset-x-0 bottom-0 h-[55%] z-10 bg-gradient-to-t from-black via-black/95 via-40% to-transparent pointer-events-none" />
         <div className="absolute inset-x-0 bottom-0 h-[34%] z-10 bg-black/80 pointer-events-none" style={{ mixBlendMode: "normal" }} />
-        <div className="absolute bottom-0 left-0 right-0 p-3 z-20" style={{ transform: "translateZ(25px)" }}>
+        <div className="absolute bottom-0 left-0 right-0 p-3 z-20 flex min-h-[88px] flex-col justify-end" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
-            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/90 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/30 allow-white" style={{ color: "#FFFFFF" }}>
+            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/90 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/30 allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               {item.subtitle}
             </span>
           )}
