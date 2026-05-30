@@ -199,13 +199,13 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             <button
               type="button"
               onClick={openBooking}
-              data-surface="dark"
+              data-surface="navy"
               data-no-contrast-guard
               data-allow-dark-cta
               aria-label="Book your free consultation now"
-              className="allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
+              className="jj-hero-consultation-cta surface-navy allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
                 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em]
-                bg-[#1A1A1A]/55 hover:bg-[#1A1A1A]/70 backdrop-blur-md
+                bg-[#1A1A1A] hover:bg-[#1A1A1A] backdrop-blur-md
                 transition-[background-color] duration-200"
               style={{
                 color: "#FFFFFF",
@@ -213,7 +213,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               }}
             >
               <span
-                className="allow-white whitespace-nowrap"
+                data-surface="navy"
+                className="jj-hero-consultation-label allow-white whitespace-nowrap"
                 style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 8px rgba(0,0,0,0.55)" }}
               >
                 Free Consultation

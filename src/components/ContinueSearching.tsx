@@ -24,23 +24,11 @@ const TYPE_CONFIG: Record<RecentItemType, { icon: typeof Home; label: string; pa
   area: { icon: MapPin, label: "Areas", pathPrefix: "/area" },
 };
 
-// Walking strip that uses translateX transform like book marquee.
-// Only animates (and only clones the list) when the unique items overflow
-// the visible viewport, so short lists never show the same card twice.
 /**
  * WalkingStrip — stable horizontal scroller for Continue Searching cards.
  *
- * Replaces the previous marquee/auto-translate animation, which was flaky:
- * the "shouldAnimate" toggle flipped between static-centered and animated
- * states whenever the viewport width or the items array changed (e.g. when
- * a self-heal fetch patched a developer logo). That caused the section to
- * collapse to a single centered card or "get stuck".
- *
- * New behaviour: items always render in a single horizontal row inside a
- * native overflow-x-auto rail with `no-scrollbar` (no visible gold rail —
- * two-finger swipe / wheel / trackpad scroll still works). Snap-mandatory
- * for a clean stop on each card. No transforms, no rAF loop, no re-flow
- * on patch — fully deterministic.
+ * No rAF, no transform loop, no cloned triplicate list, and no custom drag.
+ * Cards remain readable at rest while native horizontal scroll stays available.
  */
 function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
   // Deduplicate items by slug+type to prevent visual duplicates.
@@ -52,85 +40,11 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     return true;
   });
 
-  const trackRef = useRef<HTMLDivElement>(null);
-  const posRef = useRef(0);
-  const draggingRef = useRef(false);
-  const dragStartXRef = useRef(0);
-  const dragStartPosRef = useRef(0);
-  const hoverRef = useRef(false);
-
-  const enoughToLoop = uniqueItems.length >= 3;
-  const rendered = enoughToLoop ? [...uniqueItems, ...uniqueItems, ...uniqueItems] : uniqueItems;
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    if (!enoughToLoop) {
-      track.style.transform = `translateX(0px)`;
-      return;
-    }
-
-    let animId: number;
-    const speed = 0.35;
-
-    const tick = () => {
-      const singleSetWidth = track.scrollWidth / 3;
-      if (!hoverRef.current && !draggingRef.current) {
-        posRef.current += speed;
-      }
-      if (singleSetWidth > 0) {
-        if (posRef.current >= singleSetWidth * 2) posRef.current -= singleSetWidth;
-        if (posRef.current < 0) posRef.current += singleSetWidth;
-      }
-      track.style.transform = `translateX(-${posRef.current}px)`;
-      animId = requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(() => {
-      posRef.current = (track.scrollWidth / 3) || 0;
-      animId = requestAnimationFrame(tick);
-    });
-
-    return () => cancelAnimationFrame(animId);
-  }, [enoughToLoop, uniqueItems.length]);
-
-  const onPointerDown = (e: React.PointerEvent) => {
-    if (!enoughToLoop) return;
-    draggingRef.current = true;
-    dragStartXRef.current = e.clientX;
-    dragStartPosRef.current = posRef.current;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-  };
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (!draggingRef.current) return;
-    const dx = e.clientX - dragStartXRef.current;
-    posRef.current = dragStartPosRef.current - dx;
-  };
-  const onPointerUp = (e: React.PointerEvent) => {
-    if (!draggingRef.current) return;
-    draggingRef.current = false;
-    try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch {}
-  };
-  const onWheel = (e: React.WheelEvent) => {
-    if (!enoughToLoop) return;
-    if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
-    posRef.current += e.deltaX;
-  };
-
   return (
-    <div
-      className="overflow-hidden w-full select-none cursor-grab active:cursor-grabbing"
-      style={{ touchAction: "pan-y" }}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
-      onWheel={onWheel}
-      onMouseEnter={() => { hoverRef.current = true; }}
-      onMouseLeave={() => { hoverRef.current = false; }}
-    >
-      <div ref={trackRef} className="flex gap-4 py-2 will-change-transform" style={{ width: "max-content" }}>
-        {rendered.map((item, i) => (
-          <div key={`${item.type}-${item.id}-${i}`} className="shrink-0" onClickCapture={(e) => { if (draggingRef.current) { e.preventDefault(); e.stopPropagation(); } }}>
+    <div className="w-full overflow-x-auto overscroll-x-contain no-scrollbar scroll-smooth" style={{ touchAction: "pan-x pan-y" }}>
+      <div className="flex w-max gap-4 px-4 py-2 md:px-8 lg:px-12 snap-x snap-mandatory">
+        {uniqueItems.map((item, i) => (
+          <div key={`${item.type}-${item.id}`} className="shrink-0 snap-start">
             <RecentCard3D
               item={item}
               index={i}
@@ -232,10 +146,10 @@ const ContinueSearching = ({
         <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center shadow-sm">
-              <History className="w-5 h-5 text-[#B89555]" />
+              <History className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#B89555]">
+              <span className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#1A1A1A]">
                 {eyebrow}
               </span>
               <h2 className="text-xl md:text-2xl font-semibold text-[#1A1A1A] leading-tight">
@@ -333,7 +247,7 @@ const ContinueSearching = ({
             <p className="text-[#1A1A1A]/70 text-xs mb-5">Your recently viewed properties, developers, and areas will appear here.</p>
             <Link
               to="/properties"
-              className="px-6 py-2.5 rounded-lg bg-[#B89555] border border-[#B89555] text-[#1A1A1A] text-sm font-semibold hover:bg-[#a8854a] transition-all duration-300"
+              className="jj-cta-champagne px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300"
             >
               Explore Now
             </Link>

@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { MapPin, Mail, Phone, MessageCircle } from "lucide-react";
+import { AtSign, MapPin, Phone, MessageCircle } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
@@ -426,7 +426,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             className="jj-cta-champagne w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
             style={{ color: "#1A1A1A" }}
           >
-            <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
+            <AtSign className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
             <span className="truncate text-xs font-semibold" style={{ color: "#1A1A1A" }}>Email</span>
           </a>
           <a

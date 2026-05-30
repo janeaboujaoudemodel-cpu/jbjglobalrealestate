@@ -6099,6 +6099,39 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   gap: 0.5rem;
   transition: background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
 }
+
+/* Own dark-blue/ink boxes (including icon-only tiles) always carry white
+   foreground at rest and hover. Do not use data-no-contrast-guard to escape. */
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink),
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink):hover,
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]),
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink):hover :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Light/champagne/gold own boxes always carry ink, unless they are the
+   approved expanded broker-sidebar label exception. */
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]),
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]):hover,
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]),
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]):hover :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+.jj-cta-champagne[data-cta="champagne"],
+.jj-cta-champagne[data-cta="champagne"]:hover,
+.jj-cta-champagne[data-cta="champagne"] :where(span,p,small,strong,em,svg,[class*="lucide"]),
+.jj-cta-champagne[data-cta="champagne"]:hover :where(span,p,small,strong,em,svg,[class*="lucide"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
 .jj-cta-dark,
 .jj-cta-dark:link,
 .jj-cta-dark:visited,
@@ -6881,6 +6914,31 @@ svg * {
 [data-surface="cream"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
 [data-surface="raised"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]),
 [data-surface="gold"] :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,label,a,button,svg,[class*="lucide"]):not([data-no-contrast-guard]):not([data-decorative="true"]):not([data-surface]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* FINAL exception to the surface lock: an element's OWN dark-blue/ink box
+   wins over a light/champagne ancestor. This fixes blue icon tiles on Join/
+   careers and every future navy icon box. Whole-token matching only. */
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink),
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink):hover,
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]),
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink):hover :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* FINAL exception in the opposite direction: an element's OWN light/
+   champagne/gold box wins over a dark/navy ancestor. */
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]),
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]):hover,
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]),
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]):hover :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
