@@ -42,7 +42,7 @@ const CombinedContactNewsletter = ({
 
   return (
     <section id="ready-to-get-started" className={`py-8 sm:py-12 md:py-16 bg-[#FDFBF7] ${className}`}>
-      <div className="max-w-4xl mx-auto px-4 md:px-6">
+      <div className="w-full px-4 md:px-6">
         <div className="relative rounded-2xl bg-gradient-to-b from-[#FFFDF8] via-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10 border border-[#B89555]/45 shadow-[0_20px_60px_-30px_rgba(184,149,85,0.45)]">
           {/* Corner gold flourishes */}
           <span aria-hidden className="pointer-events-none absolute top-0 left-0 h-10 w-10 border-t border-l border-[#B89555]/70 rounded-tl-2xl" />

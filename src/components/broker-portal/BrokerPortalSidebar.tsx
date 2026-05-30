@@ -111,8 +111,11 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
               onClick={onNavigate}
               title={collapsed ? label : undefined}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors border border-transparent outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
-                "text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:border-[#B89555]/40",
+                "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors border border-transparent outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
+                // Expanded: labels render gold by default, ink on hover. Collapsed: stay ink for icon clarity.
+                collapsed
+                  ? "text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:border-[#B89555]/40"
+                  : "text-[#B89555] hover:text-[#1A1A1A] hover:border-[#B89555]/40",
                 active && "text-[#1A1A1A] font-semibold border-[#B89555] bg-transparent",
               )}
             >
