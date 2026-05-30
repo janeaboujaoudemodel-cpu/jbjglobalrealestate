@@ -1,87 +1,90 @@
-Plan to fix the global contrast architecture without marking it complete until verified visually.
+## Plan: fix the global contrast system properly
 
- do not mark complete after checking only the homepage or one button.
+### 1. Remove the remaining conflicting global contrast architecture
 
-&nbsp;
+- Keep `src/utils/contrastGuard.ts` as a no-op and remove/ban any runtime repaint hooks permanently.
+- Replace the broad late-stage CSS rules in `src/index.css` that target generic `button`, `a`, `span`, `div`, `[role]`, hover states, and arbitrary background classes with a narrower **surface contract**:
+  - `data-surface="navy|dark|ink"`, `.surface-navy`, `.surface-dark`, `.image-overlay-dark`, `.glass-dark` → white text, white icons, stable idle/hover/focus/active.
+  - `data-surface="page|light|champagne|cream|raised|gold|pearl"`, `.surface-light`, `.surface-champagne`, `.glass-light` → ink/navy text and icons, stable idle/hover/focus/active.
+- Remove misleading CSS comments that still reference a runtime engine fixing contrast.
+- Preserve the brand rules: champagne-dominant theme, no gray surfaces, gold only as hairline/accent, navy CTAs with white text.
 
-Before building, first remove the runtime repaint/flicker source completely, then rebuild only the stable surface/foreground contract. Do not patch individual screenshots.
+### 2. Strengthen reusable primitives instead of patching one screenshot
 
-&nbsp;
+Update the reusable components so child content inherits a stable readable foreground from the component itself:
 
-After build, validate the actual live preview across homepage, broker portal visuals, careers visuals, property cards, books/guides, Get Verified, search bars, floating widgets, and cookie/banner buttons. Test idle, hover, focus, after scroll, and after 5 seconds. No blinking, no delayed color switching, no white on champagne/light, no black on navy/dark.
+- `Surface`: emit both `data-surface` and matching `.surface-*` class; expose foreground/icon variables for descendants.
+- `Button`: replace hover text-color flips with locked variants:
+  - dark/navy CTA: white foreground in every state.
+  - champagne/outline CTA: ink foreground in every state.
+  - hero/media button: no white-to-black foreground flip unless the component is explicitly moved to a light surface primitive.
+- `Badge`, `Tabs`, `IconTile`: bind each variant to a known light/dark surface and make icon strokes follow the same foreground token.
+- Add/normalize small primitives if needed for overlay cards, glass cards, light cards, and dark chips so pages do not hand-roll contrast.
 
-&nbsp;
+### 3. Bind the affected reusable sections to those primitives
 
-Only say complete after visual proof from multiple sections.
+Refactor the components the user listed, using surface classes rather than `data-no-contrast-guard`, inline color hacks, or hover-only readability:
 
-1. Remove runtime repainting completely
-
-- Remove the `installContrastGuard()` import/call from `src/App.tsx`, not just no-op the function.
-- Keep `src/utils/contrastGuard.ts` as a no-op compatibility module and add a static guard test so no MutationObserver / hover / scroll / focus contrast repaint engine can be reintroduced.
-- Confirm no remaining contrast-related MutationObserver/event listener is changing foreground colors after load.
-
-2. Replace the current conflicting CSS layers with one stable surface contract
-
-- In `src/index.css`, remove the broad competing contrast blocks that force black/white/navy via class-name guessing, hover matching, `aria-*`, `data-active`, global nav/button selectors, and broad `!important` descendants.
-- Replace them with a single final contract based on explicit semantic primitives only:
-  - `.surface-dark`, `.surface-navy`, `[data-surface="dark|navy|ink"]` → white foreground/icons/strokes/placeholders in every state.
-  - `.surface-light`, `.surface-cream`, `.surface-champagne`, `.surface-gold`, `.surface-pearl`, `[data-surface="page|light|cream|champagne|gold|pearl|raised"]` → ink/navy foreground/icons/strokes/placeholders in every state.
-  - `.image-overlay-dark` → dark overlay with white foreground/icons/strokes.
-  - `.glass-dark` → dark glass with white foreground/icons/strokes.
-  - `.glass-light` → light glass with ink/navy foreground/icons/strokes.
-  - `.cta-navy` / `.jj-cta-dark` → navy + white in idle/hover/focus/active/disabled.
-  - `.cta-champagne` / `.jj-cta-champagne` → champagne + ink in idle/hover/focus/active/disabled.
-  - `.cta-outline-light` / `.jj-cta-outline` → light/transparent + ink.
-  - `.cta-outline-dark` → transparent on dark + white.
-- Preserve brand constraints: no gold fills, champagne palette, navy CTA, price orange, semantic data colors, AI purple.
-
-3. Refactor reusable primitives instead of individual visible buttons
-
-- Update `Surface` to emit both `data-surface` and the matching `.surface-*` class, with correct light/dark foreground tokens.
-- Update `Button` variants to use only the stable CTA primitive classes; remove variants that switch text color on hover.
-- Update `Badge`, `Tabs`, and `IconTile` to declare stable own-surface contracts.
-- Ensure child `svg`, Lucide icons, labels, counters, placeholders, and text inherit from the primitive, not from page-level guesswork.
-
-4. Explicitly contract the affected templates/components
-
-Apply stable surface classes to reusable templates only, not one-off screenshots:
-
-- Homepage hero search block and hero CTAs.
-- Get Verified banner/button.
-- Floating Contact Us and Web Developer widgets.
-- Cookie banner and its buttons.
-- Property cards, recently viewed cards, handover/date/status chips, and image overlay content.
-- Guide/book covers and guide tiles.
-- Broker portal preview/mockup cards.
+- Homepage top + `HomeHeroSearch`.
+- Recently viewed/property cards and `ProjectCard` chips/buttons.
+- Guide/book carousel and book covers (`GuideBookSection`, `BookCoverFace`, `PremiumBookCover`, `BookCard`, `BookShelf`).
+- Broker portal preview card and homepage portal cards (`PortalShowcaseCard`, broker/developer/careers wrappers).
 - Careers/JBJ visual cards.
-- Any generated card/overlay primitives used by those sections.
+- Floating `Contact Us` and `Web Developer` widgets.
+- `VerificationBanner` / Get Verified.
+- `CookiesConsentBanner` buttons and preference controls.
+- Search bars/header search surfaces.
+- Generated tiles/cards that reuse `Button`, `Badge`, `Tabs`, `IconTile`, or card primitives.
 
-5. Strengthen regression checks
+### 4. Replace unsafe local patterns found in the audit
 
-- Update `scripts/contrast/*` to fail on:
-  - runtime contrast guard installation or MutationObserver color repainting,
-  - broad global `color: ... !important` selectors that target generic `button`, `a`, `span`, `div`, `nav`, `[aria-*]`, `[data-active]`, or hover class-name matching,
-  - white-on-light or dark-on-dark in reusable primitives/templates,
-  - image/overlay cards missing `.image-overlay-dark`, `.glass-dark`, or explicit `data-surface`.
+Specifically address these current code smells:
 
-6. Visual validation before calling it done
+- `data-no-contrast-guard` used as a visual opt-out on components that should instead declare a real surface.
+- `allow-white` sprinkled on light/unknown surfaces.
+- `hover:text-*`, `focus:text-*`, or `active:text-*` used without a matching stable primitive.
+- Light cards using `text-white` or white SVG strokes.
+- Navy/dark/glass cards using `text-foreground`, `text-[#1A1A1A]`, or low-opacity dark text.
+- Cookie banner buttons that flip to dark background/white text on hover instead of staying on one readable primitive.
+- Portal modules with `bg-[hsl(var(--background)/0.10)] text-white` ambiguity; make them explicit dark glass or light glass.
 
-After implementation, use the live preview on desktop and mobile and verify each target in idle, hover/focus, after scroll, and after waiting 5 seconds:
+### 5. Add regression checks that fail automatically
 
-- Homepage top hero.
-- Homepage search bar, including Search button.
-- Get Verified banner/button.
+Add/extend contrast scripts and wire them into `check:contrast` / `check:contrast:pr-gate`:
+
+- Fail if `installContrastGuard()` is imported/called or if `MutationObserver`/mouseover/focusin/pointerdown route repainting is reintroduced for contrast.
+- Fail on broad `!important` generic selectors in `src/index.css` that target generic `button`, `a`, `span`, `div`, `nav`, `[role]`, `[aria-*]`, `[data-active]`, or hover class matching for foreground colors.
+- Fail if reusable components contain white-on-light or dark-on-dark class combinations.
+- Fail if hover/focus/active changes only foreground polarity without an approved surface primitive.
+- Fail if icons use white/faded strokes on light surfaces or low-opacity dark strokes on dark surfaces.
+
+### 6. Validation before calling it complete
+
+After implementation, I will visually verify in the live preview, not ask you to report one section at a time:
+
+- Desktop and mobile.
+- Homepage top and search bar.
+- Recently viewed/property cards.
+- Guide/book carousel and book covers.
+- Broker portal visuals.
+- Careers/JBJ visual cards.
+- Get Verified banner.
 - Floating Contact Us and Web Developer widgets.
-- Recently viewed/property cards and overlay chips.
-- Guide/book carousel and cover titles.
-- Broker portal homepage visual card.
-- Careers/JBJ visual card.
 - Cookie banner/buttons.
+- States: idle, hover, focus, after scroll, and after waiting 5 seconds.
 
-Completion criteria:
+I will only report completion after the preview screenshots/observations show stable readable contrast across those targets.
 
-- Zero text/icon blinking or black↔white flipping.
-- No readable state depends on hover, scroll, or delayed repaint.
-- Dark/navy/image-overlay surfaces stay white foreground.
-- Champagne/cream/pearl/gold/light surfaces stay dark foreground.
-- Provide screenshots/observations from multiple pages/states before saying complete.
+Approved, but do not mark complete after checking only one or two sections.
+
+&nbsp;
+
+Important: the main issue is still global instability and wrong foreground inheritance. Fix the root CSS/primitives first, then verify all listed sections visually.
+
+&nbsp;
+
+Do not use runtime repainting, broad `!important` hacks, or hover-only readability. Every reusable component must have a stable surface contract: dark/navy = white text/icons, light/champagne/cream/gold/pearl = ink/navy text/icons.
+
+&nbsp;
+
+Completion is only accepted after live visual proof across homepage, broker visuals, careers/JBJ visuals, property cards, guide/book covers, Get Verified, cookie banner, floating widgets, search bars, idle, hover, focus, scroll, and 5-second wait.
