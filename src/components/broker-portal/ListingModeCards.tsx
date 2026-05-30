@@ -61,7 +61,8 @@ function ListingModeCard({
   return (
     <Link
       to={to}
-      className="group relative flex flex-col rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/55 hover:border-[#B89555] p-6 md:p-7 transition-all hover:shadow-[0_14px_30px_rgba(184,149,85,0.22)]"
+      data-surface="champagne"
+      className="surface-champagne group relative flex flex-col rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/55 hover:border-[#B89555] p-6 md:p-7 transition-all hover:shadow-[0_14px_30px_rgba(184,149,85,0.22)]"
     >
       <div className="flex items-start justify-between gap-4">
         <div className="w-12 h-12 rounded-xl bg-[#FDFBF7] border border-[#B89555]/60 grid place-items-center shadow-[0_4px_10px_rgba(184,149,85,0.18)]">
@@ -78,19 +79,19 @@ function ListingModeCard({
       </div>
 
       <div className="mt-5">
-        <div className="text-[10px] uppercase tracking-[0.22em] font-semibold text-[#1A1A1A]/55">
+        <div className="text-xs uppercase tracking-[0.18em] font-semibold text-muted-foreground">
           {eyebrow}
         </div>
         <h2 className="mt-1 text-xl md:text-2xl font-bold text-[#1A1A1A] leading-tight">
           {title}
         </h2>
-        <p className="mt-2 text-sm text-[#1A1A1A]/75 leading-relaxed">
+        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
           {description}
         </p>
       </div>
 
       <div className="mt-6 flex items-center justify-between">
-        <span className="text-[11px] font-semibold text-[#1A1A1A]/65 bg-[#FDFBF7] border border-[#B89555]/40 rounded-md px-2 py-1">
+        <span className="text-xs font-semibold text-muted-foreground bg-[#FDFBF7] border border-[#B89555]/40 rounded-md px-2 py-1">
           {tag}
         </span>
         <span
