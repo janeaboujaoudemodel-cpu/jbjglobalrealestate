@@ -41,6 +41,7 @@ const SKIP_SELECTOR = [
   '[data-signout-action]',
   '.jj-signout-icon',
   // Price-orange brand token.
+  '[data-price-badge]',
   '.text-price-orange',
   '[class*="text-price-orange"]',
   // Decorative glyphs and gradient text effects.
