@@ -51,7 +51,7 @@ export function AIBrokerCard({
   };
 
   return (
-    <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 overflow-hidden">
+    <Card data-surface="champagne" className="surface-champagne bg-[#FDFBF7] border-2 border-[#B89555]/30 overflow-hidden">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
@@ -77,13 +77,13 @@ export function AIBrokerCard({
             </div>
             <div>
               <h3 className="text-[#1A1A1A] font-semibold text-lg">{broker.name}</h3>
-              <p className="text-[#1A1A1A]/60 text-sm">{broker.email}</p>
+              <p className="text-muted-foreground text-sm">{broker.email}</p>
               <div className="flex gap-2 mt-1">
                 {broker.specialization?.slice(0, 2).map((spec) => (
                   <Badge
                     key={spec}
                     variant="outline"
-                    className="border-[#B89555]/30 text-[#1A1A1A]/60 text-xs"
+                    className="border-[#B89555]/30 text-muted-foreground text-xs"
                   >
                     {spec}
                   </Badge>
@@ -93,7 +93,7 @@ export function AIBrokerCard({
           </div>
 
           <div className="flex flex-row items-center gap-2 flex-shrink-0">
-            <span className="text-sm text-[#1A1A1A]/60 whitespace-nowrap">
+            <span className="text-sm text-muted-foreground whitespace-nowrap">
               {isActive ? "Active" : "Paused"}
             </span>
             <Switch
@@ -106,7 +106,7 @@ export function AIBrokerCard({
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-[#1A1A1A]/60">
+                <Button variant="ghost" size="icon" className="text-muted-foreground">
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -138,12 +138,12 @@ export function AIBrokerCard({
         {/* Capacity Bar */}
         <div>
           <div className="flex justify-between text-sm mb-1">
-            <span className="text-[#1A1A1A]/60">Daily Capacity</span>
+            <span className="text-muted-foreground">Daily Capacity</span>
             <span className="text-[#1A1A1A]">
               {capacityUsed} / {capacityLimit}
             </span>
           </div>
-          <div className="h-2 bg-[#EFE6D6]/10 rounded-full overflow-hidden">
+          <div className="h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
             <div
               className={`h-full transition-all ${
                 capacityPercent > 90
