@@ -124,7 +124,7 @@ const CookiesConsentBanner = () => {
           style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
           data-chrome="cookie-banner"
         >
-          <div className="pointer-events-auto relative max-w-lg sm:max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-xl border border-[#B89555]/40 rounded-2xl shadow-2xl shadow-gold/10 overflow-hidden max-h-[80vh] overflow-y-auto overscroll-contain">
+          <div data-surface="champagne" className="surface-champagne pointer-events-auto relative max-w-lg sm:max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-xl border border-[#B89555]/40 rounded-2xl shadow-2xl shadow-gold/10 overflow-hidden max-h-[80vh] overflow-y-auto overscroll-contain">
             {/* Top gold accent line */}
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
             
@@ -227,14 +227,16 @@ const CookiesConsentBanner = () => {
                 <div className="flex gap-3">
                   <Button
                     onClick={handleSavePreferences}
-                    className="bg-[#EFE6D6] text-[#1A1A1A] font-semibold hover:brightness-110 transition-all border border-[#B89555]/50 shadow-lg px-6"
+                    className="jj-cta-champagne font-semibold hover:brightness-110 transition-all border border-[#B89555]/50 shadow-lg px-6"
+                    data-cta="champagne"
                   >
                     Save preferences
                   </Button>
                   <Button
                     onClick={() => setShowPreferences(false)}
                     variant="outline"
-                    className="bg-[#FDFBF7]/80 border-[#1A1A1A]/20 text-[#1A1A1A] font-medium hover:bg-[#1A1A1A] hover:text-white transition-all px-6"
+                    className="jj-cta-outline bg-[#FDFBF7]/80 border-[#B89555]/40 text-[#1A1A1A] font-medium transition-all px-6"
+                    data-cta="outline"
                   >
                     Cancel
                   </Button>
