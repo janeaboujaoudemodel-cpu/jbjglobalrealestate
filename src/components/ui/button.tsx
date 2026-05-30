@@ -13,22 +13,22 @@ import { cn } from "@/lib/utils";
  * ============================================================
  */
 
-// PRIMARY: champagne mother-of-pearl with gold hairline — premium default CTA
-// Replaces the legacy black/white look site-wide per brand standard.
+// PRIMARY: champagne mother-of-pearl with gold hairline — premium default CTA.
+// Contrast is locked globally by .jj-cta-* primitives in index.css.
 const BRAND_PRIMARY =
-  "bg-[linear-gradient(135deg,#FDFBF7_0%,#F7F1E6_50%,#ECE2D2_100%)] text-[#1A1A1A] border border-[#B89555] hover:bg-[linear-gradient(135deg,#FFFFFF_0%,#FAF4E8_50%,#EFE2C9_100%)] hover:border-[#A68444] shadow-[0_4px_14px_-4px_rgba(184,149,85,0.35),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_10px_28px_-8px_rgba(184,149,85,0.5),inset_0_1px_0_rgba(255,255,255,0.95)] hover:-translate-y-0.5 active:translate-y-0 font-semibold";
+  "jj-cta-champagne shadow-[0_4px_14px_-4px_rgba(184,149,85,0.35),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_10px_28px_-8px_rgba(184,149,85,0.5),inset_0_1px_0_rgba(255,255,255,0.95)] hover:-translate-y-0.5 active:translate-y-0";
 
 // SECONDARY: champagne surface, gold border
 const BRAND_SECONDARY =
-  "bg-[#F7F2EA] text-[#1A1A1A] border-2 border-[#B89555]/40 hover:bg-[#EFE6D6] hover:border-[#B89555] hover:-translate-y-0.5 active:translate-y-0";
+  "jj-cta-outline hover:-translate-y-0.5 active:translate-y-0";
 
 // TERTIARY: subtle champagne ghost
 const BRAND_TERTIARY =
-  "bg-[#F7F2EA] text-[#1A1A1A]/75 border-2 border-[#B89555]/20 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] hover:border-[#B89555]/40";
+  "jj-cta-outline border-[#B89555]/25";
 
 // GOLD: cream champagne tile with thin gold border (debranded fill)
 const BRAND_GOLD =
-  "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] hover:bg-[#F7F2EA] hover:border-[#A68444] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 font-semibold";
+  "jj-cta-champagne shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0";
 
 // HERO: transparent with white border on dark images (dark hero overlays)
 const BRAND_HERO =
@@ -38,7 +38,7 @@ const BRAND_MEDIA = BRAND_HERO;
 
 // DARK: dark surface (for dark sections only)
 const BRAND_DARK =
-  "bg-[#1A1A1A] text-white border-2 border-[#B89555]/40 hover:bg-[#2A2A2A] hover:text-white hover:border-[#B89555] hover:-translate-y-0.5 active:translate-y-0";
+  "jj-cta-dark hover:-translate-y-0.5 active:translate-y-0";
 
 // AI Tool button variants — keep AI premium purple identity
 const AI_MONO = "bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white border border-[#B89555]/40 shadow-sm";

@@ -79,7 +79,7 @@ function effectiveBgColor(el: Element): string {
 }
 
 function fixIfLowContrast(el: HTMLElement, minRatio: number) {
-  if (el.closest("[data-no-contrast-guard], [data-cta], .jj-cta-dark, .jj-cta-champagne, .jj-cta-outline, .jj-pill-active")) return;
+  if (el.closest("[data-no-contrast-guard], .jj-cta-dark, .jj-cta-champagne, .jj-cta-outline, .jj-pill-active, .jj-badge-dark, .jj-badge-champagne, .jj-badge-outline, [data-cta='dark'], [data-cta='champagne'], [data-cta='outline'], [data-cta='pill-active']")) return;
   // Skip nodes with no rendered text content (decorative wrappers)
   if (!el.textContent || !el.textContent.trim()) return;
   const cs = window.getComputedStyle(el);
@@ -103,7 +103,7 @@ function fixIfLowContrast(el: HTMLElement, minRatio: number) {
 }
 
 function fixWhiteOnBright(el: Element) {
-  if (el.closest("[data-no-contrast-guard], [data-cta], [data-surface='dark'], .allow-white, .jj-cta-dark")) return;
+  if (el.closest("[data-no-contrast-guard], [data-surface='dark'], .allow-white, .jj-cta-dark, .jj-badge-dark, [data-cta='dark']")) return;
   if (el.closest(".bg-black, [class~='bg-[#1A1A1A]'], [class*='bg-gray-9'], [class*='bg-neutral-9'], [class*='bg-zinc-9']")) return;
   const cs = window.getComputedStyle(el);
   if (cs.visibility === "hidden" || cs.display === "none" || cs.opacity === "0") return;
