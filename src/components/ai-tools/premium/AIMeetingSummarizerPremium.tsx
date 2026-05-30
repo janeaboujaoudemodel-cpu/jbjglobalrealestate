@@ -929,10 +929,10 @@ const AIMeetingSummarizerPremium = () => {
                 <CardContent className="p-5">
                   <Tabs defaultValue="properties">
                     <TabsList className="bg-[#FDFBF7] border border-[#B89555]/20 w-full">
-                      <TabsTrigger value="properties" className="flex-1 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]/70">
+                      <TabsTrigger value="properties" className="flex-1 text-[#1A1A1A]">
                         <Home className="h-4 w-4 mr-1" /> Properties
                       </TabsTrigger>
-                      <TabsTrigger value="mortgage" className="flex-1 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]/70">
+                      <TabsTrigger value="mortgage" className="flex-1 text-[#1A1A1A]">
                         <Calculator className="h-4 w-4 mr-1" /> Mortgage
                       </TabsTrigger>
                     </TabsList>
