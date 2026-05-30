@@ -39,12 +39,11 @@ export default function OwnerRedirectGuard({ children }: { children: ReactNode }
   if (isLoading) return <>{children}</>;
   if (!isOwner) return <>{children}</>;
 
-  let previewing = previewQuery === "1";
-  if (!previewing) {
-    try { previewing = sessionStorage.getItem(PREVIEW_KEY) === PREVIEW_VALUE; } catch {}
-  }
-  if (previewing) return <>{children}</>;
-
-  const ownerTarget = location.pathname.startsWith("/broker/crm") ? "/owner/crm" : "/owner";
-  return <Navigate to={ownerTarget} replace />;
+  // Owner intentionally navigated into /broker/*. Treat any direct hit as a
+  // preview session (sticky for the rest of the tab session). They always
+  // have the "JBJ Owner" button in the portal header to leave again.
+  // Previously this redirected away unless ?preview=1 was present, which
+  // broke direct/sidebar navigation to nested pages like /broker/email/setup.
+  try { sessionStorage.setItem(PREVIEW_KEY, PREVIEW_VALUE); } catch {}
+  return <>{children}</>;
 }
