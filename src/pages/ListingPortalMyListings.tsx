@@ -412,6 +412,19 @@ const ListingPortalMyListings = () => {
                 </div>
               )
             )}
+
+            {/* Submit a New Listing — inline two-card chooser (broker only) */}
+            {!ownerOverview && (
+              <section id="submit-new-listing" className="mt-10 scroll-mt-28">
+                <div className="mb-4">
+                  <h2 className="text-xl font-bold text-[#1A1A1A]">Submit a New Listing</h2>
+                  <p className="text-sm text-[#1A1A1A]/70 mt-1">
+                    Choose how you want to add this property — both options stay inside your broker workspace.
+                  </p>
+                </div>
+                <ListingModeCards />
+              </section>
+            )}
           </div>
         </div>
       </div>
