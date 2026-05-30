@@ -8,13 +8,13 @@ import {
 
 const NAV = [
   { to: "/broker/crm", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/broker/crm/databases", label: "Databases", icon: Database },
-  { to: "/broker/crm/leads", label: "Leads", icon: Users },
-  { to: "/broker/crm/calendar", label: "Calendar", icon: Calendar },
-  { to: "/broker/crm/inbox", label: "Inbox", icon: Inbox },
-  { to: "/broker/crm/tasks", label: "Tasks", icon: ListTodo },
-  { to: "/broker/crm/notes", label: "Notes", icon: StickyNote },
-  { to: "/broker/crm/projects", label: "Projects", icon: Building2 },
+  { to: "/broker/crm?tab=databases", label: "Databases", icon: Database },
+  { to: "/broker/crm?tab=leads", label: "Leads", icon: Users },
+  { to: "/broker/crm?tab=calendar", label: "Calendar", icon: Calendar },
+  { to: "/broker/crm?tab=inbox", label: "Inbox", icon: Inbox },
+  { to: "/broker/crm?tab=tasks", label: "Tasks", icon: ListTodo },
+  { to: "/broker/crm?tab=notes", label: "Notes", icon: StickyNote },
+  { to: "/broker/crm?tab=databases", label: "Projects", icon: Building2 },
   { to: "/broker/training", label: "Training", icon: GraduationCap },
 ];
 
@@ -66,7 +66,7 @@ export default function BrokerWorkspaceShell() {
           ))}
           <div className="pt-3 mt-3 border-t border-[#B89555]/15">
             <NavLink
-              to="/broker/crm/settings"
+              to="/broker/settings"
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition ${
                   isActive ? "bg-[#EFE6D6]" : "text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/50"
