@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { SUPABASE_URL } from "@/config/backend";
 import { toast } from "sonner";
 
 export type OAuthProvider = "gmail" | "outlook";
@@ -78,6 +79,5 @@ export function useDeleteBrokerOAuthApp() {
 
 /** The OAuth redirect URI that brokers must paste into Google/Microsoft consoles. */
 export function getOAuthRedirectUri(): string {
-  const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID as string;
-  return `https://${projectId}.supabase.co/functions/v1/broker-email-oauth-callback`;
+  return `${SUPABASE_URL.replace(/\/$/, "")}/functions/v1/broker-email-oauth-callback`;
 }
