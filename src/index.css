@@ -6393,4 +6393,39 @@ button[class~="bg-[#1A1A1A]"][class*="text-white"] :where(span, p, svg, [class*=
   cursor: not-allowed !important;
 }
 
+:where([role="tab"][data-state="active"], [class*="data-[state=active]:jj-pill-active"][data-state="active"]) {
+  background-color: hsl(var(--jj-light-cta-bg)) !important;
+  border: 1px solid hsl(var(--jj-contrast-hairline) / 0.55) !important;
+  color: hsl(var(--jj-on-light)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
+  opacity: 1 !important;
+}
+
+:where([role="tab"][data-state="active"], [class*="data-[state=active]:jj-pill-active"][data-state="active"])
+  :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
+  color: hsl(var(--jj-on-light)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
+  stroke: hsl(var(--jj-on-light)) !important;
+  opacity: 1 !important;
+}
+
+/* Translucent white/champagne overlays on genuinely dark surfaces are still
+   visually dark; never flip their labels/icons to ink just because the class
+   contains bg-[#FDFBF7]/5 or hover:bg-[#FDFBF7]/10. */
+:where([data-surface="dark"], [data-surface="ink"], [data-hero-dark], .bg-black, .bg-foreground, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class*="from-black"], [class*="from-zinc-9"])
+  :where(a, button, [role="button"], [role="tab"], [role="menuitem"], summary, input, textarea, select, span, div, li):is(
+    [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#F7F1E6]/"], [class*="bg-[#EFE6D6]/"], [class*="bg-white/"],
+    [class*="hover:bg-[#FDFBF7]/"], [class*="hover:bg-[#F7F2EA]/"], [class*="hover:bg-[#EFE6D6]/"], [class*="hover:bg-white/"]
+  ),
+:where([data-surface="dark"], [data-surface="ink"], [data-hero-dark], .bg-black, .bg-foreground, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class*="from-black"], [class*="from-zinc-9"])
+  :where(a, button, [role="button"], [role="tab"], [role="menuitem"], summary, input, textarea, select, span, div, li):is(
+    [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#F7F1E6]/"], [class*="bg-[#EFE6D6]/"], [class*="bg-white/"],
+    [class*="hover:bg-[#FDFBF7]/"], [class*="hover:bg-[#F7F2EA]/"], [class*="hover:bg-[#EFE6D6]/"], [class*="hover:bg-white/"]
+  ) :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
+  color: hsl(var(--jj-on-dark)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
+  stroke: hsl(var(--jj-on-dark)) !important;
+  opacity: 1 !important;
+}
+
 
