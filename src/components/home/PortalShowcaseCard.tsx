@@ -74,15 +74,15 @@ export default function PortalShowcaseCard({
     <section className="jj-portal-showcase relative overflow-hidden py-10 md:py-14">
       <div className="relative w-full px-4 md:px-6">
         <div
-          data-no-contrast-guard
-          className="allow-white jj-portal-shell group/portal relative mx-auto max-w-[1500px] overflow-hidden rounded-[34px] border border-[hsl(var(--gold)/0.62)] bg-[hsl(var(--navy-cta))] p-3 shadow-[0_32px_90px_-50px_hsl(var(--navy-cta)/0.75)] sm:p-4 md:p-5"
+          data-surface="navy"
+          className="surface-navy allow-white jj-portal-shell group/portal relative mx-auto max-w-[1500px] overflow-hidden rounded-[34px] border border-[hsl(var(--gold)/0.62)] bg-[hsl(var(--navy-cta))] p-3 shadow-[0_32px_90px_-50px_hsl(var(--navy-cta)/0.75)] sm:p-4 md:p-5"
         >
           <div className="pointer-events-none absolute inset-0 opacity-80 [background-image:linear-gradient(90deg,hsl(var(--gold)/0.10)_1px,transparent_1px),linear-gradient(180deg,hsl(var(--gold)/0.08)_1px,transparent_1px)] [background-size:72px_72px]" />
           <div className="pointer-events-none absolute -right-28 -top-28 h-72 w-72 rounded-full border border-[hsl(var(--gold)/0.24)]" />
           <div className="pointer-events-none absolute -bottom-32 left-10 h-80 w-80 rounded-full border border-[hsl(var(--gold)/0.18)]" />
 
           <div className="relative grid min-h-[560px] gap-3 lg:grid-cols-[0.86fr_1.14fr]">
-            <aside className="relative overflow-hidden rounded-[28px] border border-[hsl(var(--gold)/0.56)] bg-[linear-gradient(135deg,hsl(var(--background))_0%,hsl(var(--secondary))_52%,hsl(var(--champagne-3))_100%)] p-7 shadow-[inset_0_1px_0_hsl(0_0%_100%/0.76),0_18px_45px_-30px_hsl(0_0%_0%/0.48)] sm:p-9 lg:p-11">
+            <aside data-surface="champagne" className="surface-champagne relative overflow-hidden rounded-[28px] border border-[hsl(var(--gold)/0.56)] bg-[linear-gradient(135deg,hsl(var(--background))_0%,hsl(var(--secondary))_52%,hsl(var(--champagne-3))_100%)] p-7 shadow-[inset_0_1px_0_hsl(0_0%_100%/0.76),0_18px_45px_-30px_hsl(0_0%_0%/0.48)] sm:p-9 lg:p-11">
               <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-[linear-gradient(90deg,transparent,hsl(var(--gold)/0.72),transparent)]" />
               <div className="pointer-events-none absolute -right-20 top-16 h-56 w-56 rounded-full bg-[radial-gradient(circle,hsl(var(--gold)/0.13),transparent_68%)]" />
 
@@ -128,13 +128,12 @@ export default function PortalShowcaseCard({
                 <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Link
                     to={href}
-                    data-surface="dark"
+                    data-surface="navy"
                     data-on-dark
-                    data-no-contrast-guard
                     data-allow-dark-cta
-                    className="allow-white group/cta inline-flex min-h-[60px] items-center justify-between gap-5 rounded-2xl border border-[hsl(var(--gold)/0.68)] bg-[hsl(var(--navy-cta))] px-6 text-[15px] font-extrabold text-white shadow-[inset_0_1px_0_hsl(0_0%_100%/0.10),0_18px_38px_-22px_hsl(var(--navy-cta)/0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[hsl(var(--navy-cta-hover))] hover:text-white hover:shadow-[inset_0_1px_0_hsl(0_0%_100%/0.12),0_25px_58px_-24px_hsl(var(--navy-cta)/0.95)] sm:min-w-[245px]"
+                    className="surface-navy allow-white group/cta inline-flex min-h-[60px] items-center justify-between gap-5 rounded-2xl border border-[hsl(var(--gold)/0.68)] bg-[hsl(var(--navy-cta))] px-6 text-[15px] font-extrabold text-white shadow-[inset_0_1px_0_hsl(0_0%_100%/0.10),0_18px_38px_-22px_hsl(var(--navy-cta)/0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[hsl(var(--navy-cta-hover))] hover:text-white hover:shadow-[inset_0_1px_0_hsl(0_0%_100%/0.12),0_25px_58px_-24px_hsl(var(--navy-cta)/0.95)] sm:min-w-[245px]"
                   >
-                    <span className="allow-white" data-no-contrast-guard>{cta}</span>
+                    <span className="allow-white">{cta}</span>
                     <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(var(--gold)/0.58)] bg-[hsl(var(--navy-cta-hover))] transition-transform duration-300 group-hover/cta:translate-x-1">
                       <ArrowRight className="allow-white h-4 w-4 text-white" data-no-contrast-guard strokeWidth={2.4} />
                     </span>
@@ -149,10 +148,10 @@ export default function PortalShowcaseCard({
               </div>
             </aside>
 
-            <div className="relative overflow-hidden rounded-[28px] border border-[hsl(var(--gold)/0.46)] bg-[hsl(var(--navy-cta)/0.94)] p-4 shadow-[inset_0_1px_0_hsl(0_0%_100%/0.08)] sm:p-5 lg:p-7">
+              <div data-surface="navy" className="surface-navy relative overflow-hidden rounded-[28px] border border-[hsl(var(--gold)/0.46)] bg-[hsl(var(--navy-cta)/0.94)] p-4 shadow-[inset_0_1px_0_hsl(0_0%_100%/0.08)] sm:p-5 lg:p-7">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,hsl(var(--gold)/0.16),transparent_32%),linear-gradient(135deg,hsl(0_0%_100%/0.06),transparent_42%)]" />
               <div className="relative flex h-full flex-col gap-4">
-                <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[hsl(var(--gold)/0.34)] bg-[hsl(var(--background)/0.08)] px-4 py-3 backdrop-blur-sm">
+                <div className="glass-dark flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[hsl(var(--gold)/0.34)] bg-[hsl(var(--background)/0.08)] px-4 py-3 backdrop-blur-sm">
                   <div className="flex items-center gap-3">
                     <IconTile icon={Sparkles} tone="gold" size="sm" className="rounded-full bg-[hsl(var(--champagne-3))]" />
                     <div>
@@ -173,7 +172,7 @@ export default function PortalShowcaseCard({
 
                 <div className="grid flex-1 gap-4 xl:grid-cols-[0.95fr_1.05fr]">
                   <div className="flex flex-col gap-4">
-                    <div className="rounded-[24px] border border-[hsl(var(--gold)/0.36)] bg-[hsl(var(--background))] p-5 shadow-[0_20px_55px_-32px_hsl(0_0%_0%/0.72)]">
+                    <div data-surface="light" className="surface-light rounded-[24px] border border-[hsl(var(--gold)/0.36)] bg-[hsl(var(--background))] p-5 shadow-[0_20px_55px_-32px_hsl(0_0%_0%/0.72)]">
                       <div className="mb-5 flex items-end justify-between gap-4">
                         <div>
                           <p className="text-[10px] font-black uppercase tracking-[0.22em] text-foreground/45">
@@ -198,7 +197,7 @@ export default function PortalShowcaseCard({
                             "rounded-2xl border p-4 transition-transform duration-300 group-hover/portal:-translate-y-0.5",
                             index === 0
                               ? "border-[hsl(var(--gold)/0.62)] bg-[hsl(var(--champagne-3))] text-foreground"
-                              : "border-[hsl(var(--gold)/0.28)] bg-[hsl(var(--background)/0.10)] text-white"
+                              : "glass-dark border-[hsl(var(--gold)/0.28)] bg-[hsl(var(--background)/0.10)] text-white"
                           )}
                         >
                           <p className={cn("text-[10px] font-black uppercase tracking-[0.18em]", index === 0 ? "text-foreground/48" : "allow-white text-white/48")} data-no-contrast-guard>
@@ -212,7 +211,7 @@ export default function PortalShowcaseCard({
                     </div>
                   </div>
 
-                  <div className="relative min-h-[360px] overflow-hidden rounded-[26px] border border-[hsl(var(--gold)/0.40)] bg-[linear-gradient(145deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)))] p-5 shadow-[inset_0_1px_0_hsl(0_0%_100%/0.75)]">
+                  <div data-surface="champagne" className="surface-champagne relative min-h-[360px] overflow-hidden rounded-[26px] border border-[hsl(var(--gold)/0.40)] bg-[linear-gradient(145deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)))] p-5 shadow-[inset_0_1px_0_hsl(0_0%_100%/0.75)]">
                     <div className="absolute inset-x-5 top-5 flex items-center justify-between border-b border-[hsl(var(--gold)/0.22)] pb-4">
                       <span className="text-[10px] font-black uppercase tracking-[0.24em] text-foreground/50">Private OS</span>
                       <span className="rounded-full border border-[hsl(var(--gold)/0.42)] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-foreground">Live</span>

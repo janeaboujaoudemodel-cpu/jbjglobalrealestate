@@ -26,7 +26,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
   };
 
   return (
-    <section className="py-12 md:py-20 jj-section-champagne">
+    <section className="surface-champagne py-12 md:py-20 jj-section-champagne" data-surface="champagne">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Canonical 3D Book Cover — left column */}
@@ -57,7 +57,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
                 {book.title}
               </h2>
             </div>
-            <p className="text-sm text-white/90 mb-6 flex items-center gap-2">
+            <p className="text-sm text-[#1A1A1A] mb-6 flex items-center gap-2">
               <Clock className="w-4 h-4" />
               {book.tableOfContents.length} chapters &middot; ~{totalTime} min total reading time
             </p>
@@ -76,7 +76,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
                     onClick={isClickable ? () => handleChapterClick(idx) : undefined}
                     className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all group ${
                       isClickable
-                        ? 'hover:bg-[#EFE6D6]/10 cursor-pointer'
+                        ? 'hover:bg-[#EFE6D6]/70 cursor-pointer'
                         : ''
                     }`}
                   >
@@ -92,7 +92,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
 
                     {/* Duration */}
                     {chapter.duration && (
-                      <span className="flex items-center gap-1 text-white/70 text-xs flex-shrink-0">
+                      <span className="flex items-center gap-1 text-[#1A1A1A]/80 text-xs flex-shrink-0">
                         <Clock className="w-3 h-3" />
                         {chapter.duration}
                       </span>
@@ -100,7 +100,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
 
                     {/* Arrow */}
                     {isClickable && (
-                      <ChevronRight className="w-4 h-4 text-white/70 group-hover:text-[#B89555] transition-colors flex-shrink-0" />
+                      <ChevronRight className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#B89555] transition-colors flex-shrink-0" />
                     )}
                   </Tag>
                 );

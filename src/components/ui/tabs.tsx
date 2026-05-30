@@ -11,8 +11,9 @@ const TabsList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.List
     ref={ref}
+    data-surface="champagne"
     className={cn(
-      "inline-flex h-10 items-center justify-center rounded-md bg-[#F7F2EA] p-1 text-[#1A1A1A] border border-[#B89555]/30",
+      "surface-champagne inline-flex h-10 items-center justify-center rounded-md bg-[#F7F2EA] p-1 text-[#1A1A1A] border border-[#B89555]/30",
       className,
     )}
     {...props}
@@ -26,8 +27,9 @@ const TabsTrigger = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
+    data-surface="champagne"
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium text-[#1A1A1A] ring-offset-background transition-all data-[state=active]:jj-pill-active data-[state=active]:shadow-sm hover:bg-[#EFE6D6] hover:text-[#1A1A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/50 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
+      "surface-champagne inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium text-[#1A1A1A] ring-offset-background transition-all data-[state=active]:jj-pill-active data-[state=active]:shadow-sm hover:bg-[#EFE6D6] hover:text-[#1A1A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/50 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
       className,
     )}
     {...props}

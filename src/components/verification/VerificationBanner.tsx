@@ -36,7 +36,8 @@ const VerificationBanner = () => {
         initial={{ opacity: 1 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.0, ease: "easeInOut" }}
-        className="relative overflow-hidden bg-[#102540]"
+        data-surface="navy"
+        className="surface-navy relative overflow-hidden bg-[#102540]"
       >
         <div className="max-w-[1600px] mx-auto px-4 py-4 sm:py-5 relative z-10">
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
@@ -58,6 +59,7 @@ const VerificationBanner = () => {
               type="button"
               onClick={() => setModalOpen(true)}
               className="jj-cta-champagne group relative flex-shrink-0 px-5 py-2.5 text-sm tracking-wide shadow-[0_2px_10px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.7)] hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-all duration-300 ease-out overflow-hidden"
+              data-surface="champagne"
               data-cta="champagne"
               aria-label="Open identity verification"
             >

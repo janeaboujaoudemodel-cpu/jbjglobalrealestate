@@ -105,7 +105,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
       >
         {/* Single continuous pill: white search field, then dark action segments */}
         <div
-          data-no-contrast-guard
+          data-surface="dark"
           className="group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl
             overflow-hidden bg-transparent border border-[#B89555]/55
             focus-within:border-[#B89555] hover:border-[#B89555]/80
@@ -123,8 +123,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               keeps the pill clean. */}
           <div
             role="search"
-            data-no-contrast-guard
-            className="flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0 bg-white"
+            data-surface="light"
+            className="surface-light flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0 bg-white"
           >
             <input
               type="text"
@@ -138,7 +138,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               }}
               placeholder="Search projects, developers, areas, tools…"
               aria-label="Search the JBJ website"
-              data-no-contrast-guard
+              data-surface="light"
               className="flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-normal"
               style={{
                 color: "#1A1A1A",
@@ -163,10 +163,10 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             <button
               type="button"
               onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
-              data-no-contrast-guard
+              data-surface="light"
               aria-label="Search properties now"
               disabled={searching}
-              className="relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8
+              className="surface-light relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8
                 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 bg-white
                 disabled:cursor-wait transition-colors duration-200 hover:bg-[#F8F8F8]"
               style={{
@@ -180,13 +180,13 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
                 {searching ? "Searching…" : "Search"}
               </span>
               {searching && (
-                <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#1A1A1A" }} data-no-contrast-guard strokeWidth={2.4} />
+                <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#1A1A1A" }} strokeWidth={2.4} />
               )}
             </button>
             <span
               role="tooltip"
               className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2 px-3 py-1.5 rounded-md
-                bg-[#1A1A1A] text-white text-[11.5px] font-medium tracking-[-0.005em] whitespace-nowrap
+                surface-dark bg-[#1A1A1A] text-white text-[11.5px] font-medium tracking-[-0.005em] whitespace-nowrap
                 border border-[#B89555]/55 shadow-lg opacity-0 group-hover/search:opacity-100 z-50"
             >
               Search properties now
@@ -198,9 +198,9 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             <button
               type="button"
               onClick={openBooking}
-              data-no-contrast-guard
+              data-surface="navy"
               aria-label="Book your free consultation now"
-              className="allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
+              className="surface-navy allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
                 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-[#1A1A1A]
                 transition-colors duration-200 hover:bg-[#2A2A2A]"
               style={{
@@ -218,7 +218,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             <span
               role="tooltip"
               className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2 px-3 py-1.5 rounded-md
-                bg-[#1A1A1A] text-white text-[11.5px] font-medium tracking-[-0.005em] whitespace-nowrap
+                surface-dark bg-[#1A1A1A] text-white text-[11.5px] font-medium tracking-[-0.005em] whitespace-nowrap
                 border border-[#B89555]/55 shadow-lg opacity-0 group-hover/book:opacity-100 z-50"
             >
               Book your free consultation now
@@ -233,9 +233,9 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
           <button
             type="button"
             onClick={openBooking}
-            data-no-contrast-guard
+            data-surface="dark"
             aria-label="Book your free consultation now"
-            className="allow-white flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
+            className="surface-dark allow-white flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
               text-[13px] font-semibold whitespace-nowrap
               border border-[#B89555]/70 bg-transparent backdrop-blur-[2px]
               transition-colors duration-200 hover:bg-white/5"

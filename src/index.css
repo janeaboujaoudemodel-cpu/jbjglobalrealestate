@@ -6602,27 +6602,25 @@ section:has(> .absolute.inset-0 picture)
 }
 
 /* =========================================================================
-   SURFACE CONTRACT v2 — semantic surface → foreground token system.
-   Backgrounds are never changed by this layer. Each surface declares its
-   own foreground/icon/border pair via CSS variables; descendants without
-   an authored color inherit them automatically.
-
-   Use `<Surface tone="…">` or `data-surface="…"` to pin a region.
-   The runtime contrast engine (src/utils/contrastGuard.ts) catches any
-   element where author classes still produce a low-contrast result and
-   forces it to the opposite pole locally — never globally.
+   STABLE SURFACE CONTRACT — semantic surface → stable foreground.
+   No JavaScript repainting. No generic foreground guessing. Components opt
+   into an explicit light/dark/navy/glass/overlay surface and all text/icons
+   inside that primitive keep the same readable polarity at idle/hover/focus.
 
    Tokens:
-     --surface-bg          actual rendered surface (informational, not painted)
+     --surface-bg          actual rendered surface (informational)
      --surface-fg          primary text/icon color for this surface
-     --surface-fg-muted    secondary text on this surface (≥ AA on body text)
-     --surface-icon        icon stroke color (defaults to --surface-fg)
-     --surface-border      hairline color on this surface
+     --surface-fg-muted    secondary text on this surface
+     --surface-icon        icon stroke color
+     --surface-border      gold/ink hairline color
    ========================================================================= */
 
 :root,
+.surface-page,
+.surface-light,
 [data-surface="page"],
-[data-surface="light"] {
+[data-surface="light"],
+[data-surface="pearl"] {
   --surface-bg: 36 50% 98%;      /* #FDFBF7 */
   --surface-fg: 0 0% 10%;        /* #1A1A1A */
   --surface-fg-muted: 0 0% 29%;  /* #4A4A4A */
@@ -6630,6 +6628,7 @@ section:has(> .absolute.inset-0 picture)
   --surface-border: 40 35% 53%;  /* #B89555 hairline */
 }
 
+.surface-champagne,
 [data-surface="champagne"] {
   --surface-bg: 36 40% 94%;      /* #F7F2EA */
   --surface-fg: 0 0% 10%;
@@ -6638,6 +6637,8 @@ section:has(> .absolute.inset-0 picture)
   --surface-border: 40 35% 53%;
 }
 
+.surface-cream,
+.surface-raised,
 [data-surface="cream"],
 [data-surface="raised"] {
   --surface-bg: 36 38% 88%;      /* #EFE6D6 */
@@ -6647,6 +6648,7 @@ section:has(> .absolute.inset-0 picture)
   --surface-border: 40 35% 53%;
 }
 
+.surface-gold,
 [data-surface="gold"] {
   --surface-bg: 40 35% 53%;      /* #B89555 */
   --surface-fg: 0 0% 10%;        /* ink on gold (AA); white fails */
@@ -6655,6 +6657,7 @@ section:has(> .absolute.inset-0 picture)
   --surface-border: 0 0% 10%;
 }
 
+.surface-navy,
 [data-surface="navy"] {
   --surface-bg: 211 60% 16%;     /* #102540 */
   --surface-fg: 0 0% 100%;
@@ -6663,6 +6666,8 @@ section:has(> .absolute.inset-0 picture)
   --surface-border: 40 35% 53%;
 }
 
+.surface-dark,
+.surface-ink,
 [data-surface="dark"],
 [data-surface="ink"] {
   --surface-bg: 0 0% 10%;        /* #1A1A1A */
@@ -6672,19 +6677,18 @@ section:has(> .absolute.inset-0 picture)
   --surface-border: 40 35% 53%;
 }
 
-/* Foreground inheritance — descendants without an authored color follow
-   the surface contract. Authored colors still win at normal specificity,
-   but the runtime engine will correct them when they produce a contrast
-   failure. Scoped to text/icon-bearing tags to avoid touching backgrounds. */
-:where([data-surface]) {
+/* Foreground inheritance — descendants follow the component's chosen surface. */
+:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,.glass-light,.glass-dark,.image-overlay-dark,[data-overlay="dark"],[data-overlay="light"],[data-surface]) {
   color: hsl(var(--surface-fg));
 }
-:where([data-surface]) :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, span, small, strong, em, b, i, label, summary, th, td, caption, legend, figcaption) {
+:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,.glass-light,.glass-dark,.image-overlay-dark,[data-overlay="dark"],[data-overlay="light"],[data-surface]) :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, span, small, strong, em, b, i, label, summary, th, td, caption, legend, figcaption, a, button, input, textarea, select) {
   color: inherit;
+  -webkit-text-fill-color: currentColor;
 }
-:where([data-surface]) :where(svg:not([fill]):not([stroke]), [class*="lucide"]) {
+:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,.glass-light,.glass-dark,.image-overlay-dark,[data-overlay="dark"],[data-overlay="light"],[data-surface]) :where(svg, [class*="lucide"]) {
   color: hsl(var(--surface-icon));
   stroke: currentColor;
+  opacity: 1;
 }
 
 /* Convenience utility classes — same contract, no JSX prop required. */
@@ -6693,69 +6697,10 @@ section:has(> .absolute.inset-0 picture)
 .surface-icon      { color: hsl(var(--surface-icon)) !important; stroke: currentColor !important; }
 .surface-border    { border-color: hsl(var(--surface-border)) !important; }
 
-/* =========================================================================
-   FOREGROUND-ONLY CONTRAST CONTRACT v3
-   -------------------------------------------------------------------------
-   This is the permanent source-order contract: known surfaces establish a
-   foreground variable, then only readable foreground/text/icon/stroke values
-   are corrected. Backgrounds are never repainted here.
-   ========================================================================= */
-
-:where(.bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-muted, .bg-accent, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"]) {
-  --contrast-fg: hsl(0 0% 10%);
-  --contrast-muted-fg: hsl(0 0% 29%);
-  color: var(--contrast-fg);
-}
-
-:where([class~="bg-[#B89555]"], [class~="bg-[#A68444]"], .bg-gold, [data-surface="gold"]) {
-  --contrast-fg: hsl(0 0% 10%);
-  --contrast-muted-fg: hsl(0 0% 10%);
-  color: var(--contrast-fg);
-}
-
-:where(.bg-black, .bg-foreground, .bg-primary, .bg-gray-800, .bg-gray-900, .bg-gray-950, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"]) {
-  --contrast-fg: hsl(0 0% 100%);
-  --contrast-muted-fg: hsl(0 0% 86%);
-  color: var(--contrast-fg);
-}
-
-:where(.bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-muted, .bg-accent, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], .bg-gold, [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"])
-  :where(h1,h2,h3,h4,h5,h6,p,li,dt,dd,span,small,strong,em,b,i,label,summary,th,td,caption,legend,figcaption,a,button,[role="button"],[role="tab"],[role="menuitem"],input,textarea,select,svg,[class*="lucide"]):not([data-price-badge] *):not(.price-pill-value):not([class*="text-price-orange"]):not(.text-price-orange):not([data-signout-action] *):not([data-signout-action]) {
-  color: var(--contrast-fg, hsl(var(--surface-fg))) !important;
-  -webkit-text-fill-color: var(--contrast-fg, hsl(var(--surface-fg))) !important;
-  stroke: currentColor !important;
-  opacity: 1 !important;
-}
-
-:where(.bg-black, .bg-foreground, .bg-primary, .bg-gray-800, .bg-gray-900, .bg-gray-950, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"])
-  :where(h1,h2,h3,h4,h5,h6,p,li,dt,dd,span,small,strong,em,b,i,label,summary,th,td,caption,legend,figcaption,a,button,[role="button"],[role="tab"],[role="menuitem"],input,textarea,select,svg,[class*="lucide"]):not([data-price-badge] *):not(.price-pill-value):not([class*="text-price-orange"]):not(.text-price-orange):not([data-signout-action] *):not([data-signout-action]) {
-  color: var(--contrast-fg, hsl(var(--surface-fg))) !important;
-  -webkit-text-fill-color: var(--contrast-fg, hsl(var(--surface-fg))) !important;
-  stroke: currentColor !important;
-  opacity: 1 !important;
-}
-
-/* Nested surface islands always win over an outer card/hero surface. */
-:where(.bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-muted, .bg-accent, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"])
-  :where(.bg-black, .bg-foreground, .bg-primary, .bg-gray-800, .bg-gray-900, .bg-gray-950, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"])
-  :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,b,i,label,a,button,[role="button"],svg,[class*="lucide"]):not([data-price-badge] *):not(.price-pill-value) {
-  color: hsl(0 0% 100%) !important;
-  -webkit-text-fill-color: hsl(0 0% 100%) !important;
-  stroke: currentColor !important;
-}
-
-:where(.bg-black, .bg-foreground, .bg-primary, .bg-gray-800, .bg-gray-900, .bg-gray-950, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"])
-  :where(.bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-muted, .bg-accent, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"], [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"])
-  :where(h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,b,i,label,a,button,[role="button"],input,textarea,select,svg,[class*="lucide"]):not([data-price-badge] *):not(.price-pill-value) {
-  color: hsl(0 0% 10%) !important;
-  -webkit-text-fill-color: hsl(0 0% 10%) !important;
-  stroke: currentColor !important;
-}
-
-:where(input, textarea)::placeholder {
-  color: currentColor !important;
-  -webkit-text-fill-color: currentColor !important;
-  opacity: 0.62 !important;
+:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,.glass-light,.glass-dark,.image-overlay-dark,[data-overlay="dark"],[data-overlay="light"],[data-surface]) :where(input, textarea)::placeholder {
+  color: currentColor;
+  -webkit-text-fill-color: currentColor;
+  opacity: 0.62;
 }
 
 /* =====================================================================
