@@ -203,7 +203,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               data-no-contrast-guard
               data-allow-dark-cta
               aria-label="Book your free consultation now"
-              className="surface-navy allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
+              className="jj-hero-consultation-cta surface-navy allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
                 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em]
                 bg-[#1A1A1A] hover:bg-[#1A1A1A] backdrop-blur-md
                 transition-[background-color] duration-200"
@@ -214,7 +214,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             >
               <span
                 data-surface="navy"
-                className="allow-white whitespace-nowrap"
+                className="jj-hero-consultation-label allow-white whitespace-nowrap"
                 style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 8px rgba(0,0,0,0.55)" }}
               >
                 Free Consultation
