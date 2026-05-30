@@ -117,7 +117,7 @@ export default function BrokerSpreadsheet() {
 
   return (
     <div>
-      <Link to="/broker/crm/databases" className="inline-flex items-center gap-1.5 text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-4">
+      <Link to="/broker/crm?tab=databases" className="inline-flex items-center gap-1.5 text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-4">
         <ArrowLeft className="h-3.5 w-3.5" /> Back to databases
       </Link>
 
