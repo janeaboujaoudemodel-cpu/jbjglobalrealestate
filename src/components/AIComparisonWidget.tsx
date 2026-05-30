@@ -109,11 +109,12 @@ const AIComparisonWidget = () => {
         <div className="flex flex-col sm:flex-row gap-3">
           <Link to="/properties?compareMode=1" className="flex-1">
             <button
-              className="w-full relative inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-[#FDFBF7] border border-[#B89555]/60 hover:bg-[#2a2a2a] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] active:scale-[0.98] transition-all duration-300 group"
+              data-surface="ink"
+              className="surface-ink allow-white w-full relative inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-white border border-[#B89555]/60 hover:bg-[#2a2a2a] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] active:scale-[0.98] transition-all duration-300 group"
             >
-              <BarChart3 className="w-5 h-5 text-[#B89555] group-hover:text-white transition-colors" />
-              <span>Start exploring</span>
-              <ArrowUpRight className="w-5 h-5 text-[#B89555] group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+              <BarChart3 className="allow-white w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>Start exploring</span>
+              <ArrowUpRight className="allow-white w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </button>
           </Link>
           <Link to="/compare-manual" className="flex-1">

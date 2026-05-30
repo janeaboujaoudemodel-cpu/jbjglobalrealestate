@@ -25,12 +25,11 @@ const TYPE_CONFIG: Record<RecentItemType, { icon: typeof Home; label: string; pa
 };
 
 /**
- * WalkingStrip — stable horizontal scroller for Continue Searching cards.
- *
- * No rAF, no transform loop, no cloned triplicate list, and no custom drag.
- * Cards remain readable at rest while native horizontal scroll stays available.
+ * WalkingStrip — same CSS-keyframe rhythm as the guides/reports carousel.
+ * No rAF and no drag. Track is duplicated for a seamless 0 → -50% loop.
  */
 function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
+  const [paused, setPaused] = useState(false);
   // Deduplicate items by slug+type to prevent visual duplicates.
   const seen = new Set<string>();
   const uniqueItems = items.filter(item => {
@@ -39,15 +38,28 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     seen.add(key);
     return true;
   });
+  const trackItems = uniqueItems.length <= 1 ? uniqueItems : [...uniqueItems, ...uniqueItems];
 
   return (
-    <div className="w-full overflow-x-auto overscroll-x-contain no-scrollbar scroll-smooth" style={{ touchAction: "pan-x pan-y" }}>
-      <div className="flex w-max gap-4 px-4 py-2 md:px-8 lg:px-12 snap-x snap-mandatory">
-        {uniqueItems.map((item, i) => (
-          <div key={`${item.type}-${item.id}`} className="shrink-0 snap-start">
+    <div
+      className="w-full overflow-hidden select-none"
+      style={{ touchAction: "pan-y" }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div
+        data-marquee-track
+        className="flex w-max gap-4 px-4 py-2 md:px-8 lg:px-12 will-change-transform"
+        style={{
+          animation: uniqueItems.length > 1 ? "jbj-book-marquee 38s linear infinite" : undefined,
+          animationPlayState: paused ? "paused" : "running",
+        }}
+      >
+        {trackItems.map((item, i) => (
+          <div key={`${item.type}-${item.id}-${i}`} className="shrink-0">
             <RecentCard3D
               item={item}
-              index={i}
+              index={i % Math.max(1, uniqueItems.length)}
               patchItem={patchItem}
             />
           </div>
@@ -288,7 +300,6 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
   const [logoError, setLogoError] = useState(false);
   const urlValid = isUrlValid(item.imageUrl);
   const [imgBroken, setImgBroken] = useState(!urlValid);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
   const fetchAttempted = useRef(false);
 
@@ -397,21 +408,6 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
   // logo_url (via item.developerLogo), NEVER the card's background image.
   const showDevCardLogo = item.type === "developer" && item.developerLogo && !logoError;
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-    setTilt({
-      x: (y - 0.5) * -12,
-      y: (x - 0.5) * 12,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-  };
-
   return (
     <div
       ref={cardRef}
@@ -421,15 +417,11 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         transformStyle: "preserve-3d",
         perspective: "800px",
       }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
     >
       <Link
         to={linkTo}
         className="group relative block w-[160px] md:w-[200px] h-[220px] md:h-[260px] rounded-xl overflow-hidden transition-all duration-500"
         style={{
-          transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${tilt.x || tilt.y ? 1.05 : 1})`,
-          transition: tilt.x || tilt.y ? "transform 0.1s ease-out" : "transform 0.4s ease-out",
           transformStyle: "preserve-3d",
         }}
       >
@@ -501,9 +493,9 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             legibility over any image (light, dark, busy, washed out). */}
         <div className="absolute inset-x-0 bottom-0 h-[55%] z-10 bg-gradient-to-t from-black via-black/95 via-40% to-transparent pointer-events-none" />
         <div className="absolute inset-x-0 bottom-0 h-[34%] z-10 bg-black/80 pointer-events-none" style={{ mixBlendMode: "normal" }} />
-        <div className="absolute bottom-0 left-0 right-0 p-3 z-20" style={{ transform: "translateZ(25px)" }}>
+        <div className="absolute bottom-0 left-0 right-0 p-3 z-20 flex min-h-[88px] flex-col justify-end" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
-            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/90 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/30 allow-white" style={{ color: "#FFFFFF" }}>
+            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/90 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/30 allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               {item.subtitle}
             </span>
           )}

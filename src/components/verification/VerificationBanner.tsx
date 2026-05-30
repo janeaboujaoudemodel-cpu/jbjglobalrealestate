@@ -43,7 +43,7 @@ const VerificationBanner = () => {
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
             {/* Shield icon */}
             <div data-surface="navy" className="surface-navy flex-shrink-0 w-10 h-10 rounded-lg bg-[#1a3d63] border border-white/20 flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-white" />
+              <ShieldCheck className="w-5 h-5 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </div>
 
             {/* Text */}

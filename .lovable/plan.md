@@ -1,45 +1,62 @@
-I will fix this as a system-level regression, not one button at a time.
+# Plan — Stop, Consolidate, Enforce ONE Contrast Rule
 
-Plan:
+I will stop adding new CSS and instead **delete conflicting layers**, lock a single rule, and visually verify each highlighted spot.
 
-1. Restore the CTA contrast primitives
-- Remove the broad late CSS rules that infer foreground from `hover:bg-*`, force every descendant color, and globally rewrite transition durations.
-- Keep only explicit surface/CTA contracts: dark/fiberglass = white text/icons; champagne/light/gold = ink text/icons.
-- Add a locked `fiberglass` CTA primitive for dark image/hero overlays so it does not get turned blue or champagne by global rules.
+## The ONE Rule (locked, no exceptions except where you named them)
 
-2. Fix the directly broken homepage controls
-- Homepage hero `Free Consultation`: restore the previous dark/fiberglass translucent look with white title, not blue/navy.
-- `Get Verified`: keep champagne/light button with black title and black arrow in idle, hover, focus, and active states.
-- Search button: keep black/ink text on its light search surface.
-- Cookie/tour controls: fix the visible Welcome Guide button regression where the light button currently has white unreadable text.
+| Surface (own background) | Text + Icons |
+|---|---|
+| Navy `#102540` / `#1a3d63` | **WHITE** (idle + hover) |
+| Black / Ink `#1A1A1A` | **WHITE** (idle + hover) |
+| Champagne `#F7F2EA` / Cream `#EFE6D6` / Gold `#B89555` / White | **INK `#1A1A1A`** (idle + hover) |
 
-3. Fix listing-card action buttons/icons
-- Update the ProjectCard Email / Call / Chat actions so the button surface and icon/text color are explicit.
-- If the action tile is dark, icon and label are white. If the action tile is champagne, icon and label are ink. No black icon boxes with invisible icons.
+**Named exceptions only:** expanded broker sidebar category labels (gold idle → ink hover). Nothing else.
 
-4. Fix service and Royal Tools tab/hero panels
-- Active `Buy Property` and active `Property Evaluator` tabs: champagne/cream background with black text and black icon.
-- Inactive tabs: dark/fiberglass/navy background with white text and white icon.
-- Image-panel copy (`AI-powered property valuation...`, service descriptions): white, readable, and shadowed on the dark overlay.
-- `Explore Now` and `Get Evaluation`: fiberglass/dark translucent CTA with white text and white arrow in all states.
+## Step 1 — Clean conflicting CSS (delete, don't add)
 
-5. Fix Continue Searching motion
-- Remove the fast requestAnimationFrame marquee/translate loop.
-- Replace it with a stable native horizontal rail/snap layout that a normal user can read at rest.
-- Remove drag-style behavior to comply with the non-draggable UI rule.
+In `src/index.css` I will **remove** the recently stacked overlapping rules that fight each other:
+- Duplicated "navy box lock" blocks
+- `.jj-hero-consultation-cta` one-off lock
+- Any late `hover:bg-*` foreground inference rules
+- Stray `[data-cta]` overrides added in the last 3 turns
 
-6. Fix spacing/loading/layout regressions
-- Mortgage calculator card: remove the forced 1050px minimum height that creates the large empty gap under the CTA buttons.
-- Top Areas images: make the visible three area photos load eagerly with stable dimensions so they appear faster and do not shift.
-- Ready to Get Started: make the section full width to match Top Areas in Dubai.
+Replace with **one** consolidated block keyed off `data-surface` + own-bg hex detection. No component-specific CSS.
 
-7. Broker vertical sidebar exception
-- In the expanded broker sidebar only, category labels render gold by default.
-- On hover they become black.
-- Collapsed sidebar/icon-only behavior remains stable and readable.
+## Step 2 — Fix each highlighted regression
 
-8. Visual validation before calling it done
-- Test desktop and mobile live preview.
-- Check homepage hero/search, Get Verified, property cards, Continue Searching, guides/books, Explore Services, JBJ Royal Tools Hub, mortgage card, Top Areas, Ready to Get Started, floating Contact Us/Web Developer widgets, cookie/tour controls, and broker sidebar.
-- For each: idle, hover, focus, after scroll, and after a 5-second wait.
-- I will only report completion after the live preview confirms no flicker and no unreadable text/icons.
+1. **Hero "Free Consultation"** (`HomeHeroSearch.tsx`) — fiberglass dark translucent box, white label + white icon, locked idle/hover. Remove the one-off class.
+2. **"Get Verified" banner** (`VerificationBanner.tsx`) — champagne pill = INK text + INK arrow. Shield icon tile = navy box = **WHITE** shield (currently rendering black — fix).
+3. **ProjectCard email button** — replace circle with **inbox/envelope shape** (`Mail` icon in rounded-square champagne tile, ink stroke). Same for Call/Chat: rounded-square, champagne bg, ink icon.
+4. **Overseas Investors strip** ("Invest in Dubai…") — navy bg, **WHITE** title + WHITE stats + WHITE "Learn more" + WHITE arrow + WHITE globe. Strip any contrast-guard flip.
+5. **Explore Our Services** (`ExploreServicesExpander.tsx`):
+   - Section title/subtitle on dark image panel → **WHITE**
+   - Active tab ("Buy Property") = champagne bg + INK text/icon
+   - Inactive tabs = navy/dark + WHITE text/icon
+   - "Explore Now" CTA = navy/fiberglass + WHITE label + WHITE arrow
+6. **JBJ Royal Tools Hub** (`ToolkitShowcaseCard.tsx`) — same rules: "Explore JBJ Tools" header CTA on navy = WHITE; active tab champagne+ink; "Calculate Now" navy+WHITE.
+7. **AI Property Comparison** (`AIComparisonWidget.tsx`) — "Start exploring" button: bg `#1A1A1A` → WHITE label + WHITE icons (currently ink — fix).
+8. **"Connect With Mortgage Partners"** (`Index.tsx` ~L439) — navy bg → WHITE label + WHITE icons.
+9. **"Explore All Areas"** (`AreasWeCover.tsx` via `pearl-button`) — if rendered on dark, WHITE; if champagne, INK. Read computed bg and lock.
+10. **Continue Searching marquee** (`ContinueSearching.tsx`) — replace current snap rail with the **same continuous CSS-keyframe marquee** used by "Explore Our Guides & Reports" at the same speed. Developer name row: align baseline across all cards, WHITE on the dark card overlay.
+11. **Books / Guides titles** — restore the original PremiumBookCover label rendering; revert any color change made in the last 2 turns.
+
+## Step 3 — Sitewide audit pass
+
+Run `scripts/contrast/check-contrast-architecture.mjs` + a fresh `check-white-on-light.mjs` and `check-black-on-dark.mjs`. Fix every hit, not just the highlighted ones.
+
+## Step 4 — Visual proof (mandatory before I claim done)
+
+For each of the 11 spots above I will capture browser screenshots at desktop (1366) **and** mobile (390), in **idle** AND **hover** states, and paste them in the reply. No "looks good" claim without the screenshot.
+
+## Step 5 — Memory update
+
+Update `mem://constraints/navy-pill-white-text-lock` and `mem://ui-ux/visual-standards/cta-primitive-system` with the consolidated rule and the exception list (broker sidebar only). Remove now-obsolete one-off entries.
+
+## What I will NOT do
+
+- No new component-specific CSS classes
+- No new `data-*` attributes beyond the existing `data-surface` / `data-cta` / `data-no-contrast-guard`
+- No edits to business logic, data, or unrelated components
+- No "I think it's fixed" — only screenshot-verified completion
+
+Approve and I'll execute in order: clean → fix → audit → screenshot proof.
