@@ -201,8 +201,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               data-surface="navy"
               aria-label="Book your free consultation now"
               className="surface-navy allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
-                text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-[#1A1A1A]
-                transition-colors duration-200 hover:bg-[#2A2A2A]"
+                text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-[#102540]
+                transition-colors duration-200 hover:bg-[#1a3d63]"
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
@@ -237,12 +237,13 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             aria-label="Book your free consultation now"
             className="surface-dark allow-white flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
               text-[13px] font-semibold whitespace-nowrap
-              border border-[#B89555]/70 bg-transparent backdrop-blur-[2px]
-              transition-colors duration-200 hover:bg-white/5"
+              border border-[#B89555]/70 bg-[#102540] backdrop-blur-[2px]
+              transition-colors duration-200 hover:bg-[#1a3d63]"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
-              boxShadow: "inset 0 1px 0 rgba(255,238,200,0.15)",
+              textShadow: "0 2px 8px rgba(0,0,0,0.72)",
+              boxShadow: "inset 0 1px 0 rgba(255,238,200,0.15), 0 10px 26px rgba(0,0,0,0.32)",
             }}
           >
             <CalendarCheck className="allow-white w-4 h-4" strokeWidth={2.2} style={{ color: "#FFFFFF" }} />

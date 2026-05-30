@@ -30,9 +30,10 @@ const HeroPropertySearch = () => {
       className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto"
     >
       <div
-        className="relative flex items-center gap-2 sm:gap-3 rounded-2xl p-2 sm:p-2.5"
+        data-surface="dark"
+        className="surface-dark relative flex items-center gap-2 sm:gap-3 rounded-2xl p-2 sm:p-2.5"
         style={{
-          background: "rgba(253, 251, 247, 0.10)",
+          background: "rgba(16, 37, 64, 0.82)",
           WebkitBackdropFilter: "blur(18px) saturate(160%)",
           backdropFilter: "blur(18px) saturate(160%)",
           border: "1px solid rgba(212, 184, 150, 0.55)",
@@ -60,7 +61,7 @@ const HeroPropertySearch = () => {
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search projects, developers, or areas in Dubai…"
           autoComplete="off"
-          data-no-contrast-guard
+          data-surface="dark"
           className="flex-1 min-w-0 bg-transparent border-0 outline-none text-sm sm:text-base font-medium tracking-tight placeholder:font-normal"
           style={{
             color: "#FFFFFF",
@@ -71,7 +72,7 @@ const HeroPropertySearch = () => {
 
         <button
           type="submit"
-          data-no-contrast-guard
+          data-surface="champagne"
           aria-label="Search"
           className="group inline-flex items-center justify-center gap-2 h-10 sm:h-11 px-4 sm:px-6 rounded-xl text-sm font-semibold tracking-tight transition-[transform,box-shadow,border-color,background] duration-300 ease-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2C9A0]/65"
           style={{
