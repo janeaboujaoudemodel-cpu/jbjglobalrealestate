@@ -68,8 +68,9 @@ const App = () => {
       event.preventDefault();
     };
     window.addEventListener("unhandledrejection", handleUnhandledRejection);
-    // Install runtime same-tone contrast guard (companion to PASS 5 CSS guard)
-    import("@/utils/contrastGuard").then((m) => m.installContrastGuard()).catch(() => {});
+    // Runtime contrast guard permanently disabled — contrast is owned 100% by
+    // the static CSS surface contract in src/index.css. Re-introducing any JS
+    // repaint here will re-introduce the platform-wide hover/scroll flicker.
 
     return () => {
       window.removeEventListener("unhandledrejection", handleUnhandledRejection);
