@@ -174,7 +174,14 @@ function isLargeText(cs: CSSStyleDeclaration): boolean {
   return px >= 24 || (px >= 18.66 && w >= 600);
 }
 
+function isFormControl(el: Element): boolean {
+  return el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement;
+}
+
 function hasOwnText(el: Element): boolean {
+  if (isFormControl(el)) return true;
+  if (el.getAttribute('aria-label')?.trim()) return true;
+  if (el.getAttribute('placeholder')?.trim()) return true;
   for (const node of Array.from(el.childNodes)) {
     if (node.nodeType === 3 && (node.textContent || '').trim().length > 0) return true;
   }
@@ -218,13 +225,20 @@ function fixElement(el: Element) {
     return;
   }
 
-  // Force opposite pole. Light bg → ink. Dark bg → white.
-  const target = bgLum > 0.5 ? INK : WHITE;
+  // Use the canonical foreground that actually produces stronger contrast.
+  // This prevents threshold mistakes on mid-gold: #B89555 is visually bright,
+  // and ink is AA while white is not.
+  const inkRatio = contrastRatio(bg, [26, 26, 26]);
+  const whiteRatio = contrastRatio(bg, [255, 255, 255]);
+  const target = inkRatio >= whiteRatio ? INK : WHITE;
   const html = el as HTMLElement;
   html.style.setProperty('color', target, 'important');
   html.style.setProperty('-webkit-text-fill-color', target, 'important');
+  if (isFormControl(el)) {
+    html.style.setProperty('--jbj-placeholder-fg', target === INK ? 'rgba(26, 26, 26, 0.58)' : 'rgba(255, 255, 255, 0.72)', 'important');
+  }
   if (isSvg || el.querySelector?.('svg, [class*="lucide"]')) {
-    html.style.setProperty('stroke', 'currentColor', 'important');
+    html.style.setProperty('stroke', target, 'important');
   }
   if (parseFloat(cs.opacity) < 1) {
     html.style.setProperty('opacity', '1', 'important');
