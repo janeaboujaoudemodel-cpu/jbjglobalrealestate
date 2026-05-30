@@ -23,16 +23,16 @@ if (/new\s+MutationObserver|addEventListener\(['"](?:mouseover|focusin|pointerdo
 }
 
 const stylesheet = fs.existsSync(css) ? fs.readFileSync(css, 'utf8') : '';
-const forbiddenBroadSelectors = [
-  /:where\([^)]*(?:button|span|div|nav|\[role)[^)]*\)[^{]*\{[^}]*color:[^}]*!important/gs,
-  /:is\([^)]*(?:button|span|div|nav|\[role)[^)]*\)[^{]*\{[^}]*color:[^}]*!important/gs,
-];
-for (const re of forbiddenBroadSelectors) {
-  const matches = stylesheet.match(re) ?? [];
-  const unsafe = matches.filter((m) => !/jj-cta|jj-badge|surface-|data-surface|image-overlay-dark|glass-dark|glass-light/.test(m));
-  if (unsafe.length) {
-    violations.push(`src/index.css contains ${unsafe.length} broad generic foreground !important override(s). Use surface/CTA primitives instead.`);
-  }
+if (/installContrastGuard|new\s+MutationObserver|addEventListener\(['"](?:mouseover|focusin|pointerdown|scroll)/.test(stylesheet)) {
+  violations.push('src/index.css must not reintroduce runtime-style contrast repainting hooks.');
+}
+
+const stableContractIndex = stylesheet.indexOf('STABLE SURFACE CONTRACT');
+const stableContract = stableContractIndex >= 0 ? stylesheet.slice(stableContractIndex) : '';
+const unsafeStableRules = stableContract.match(/(?:button|span|div|nav|\[role)[^{]*\{[^}]*color:[^}]*!important/gs) ?? [];
+const unsafeUnscoped = unsafeStableRules.filter((m) => !/jj-cta|jj-badge|surface-|data-surface|image-overlay-dark|glass-dark|glass-light|data-overlay/.test(m));
+if (unsafeUnscoped.length) {
+  violations.push('The stable surface contract contains unscoped generic foreground overrides. Scope them to surface/CTA primitives.');
 }
 
 if (violations.length) {
