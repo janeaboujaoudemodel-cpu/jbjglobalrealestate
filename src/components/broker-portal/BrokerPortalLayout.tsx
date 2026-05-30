@@ -130,11 +130,8 @@ export default function BrokerPortalLayout() {
             <div className="hidden sm:flex items-center gap-1.5 bg-[#EFE6D6] border border-[#B89555] rounded-md px-2.5 py-1 text-xs font-bold text-[#1A1A1A] tracking-wide">
               <Shield className="h-3.5 w-3.5" /> Broker
             </div>
-            {user?.email && (
-              <span className="hidden lg:inline text-xs text-[#1A1A1A]/70 truncate max-w-[180px]">
-                {user.email.split("@")[0]}
-              </span>
-            )}
+            {/* Mother-of-pearl circular avatar dropdown — same as front-end header */}
+            <UserAvatarMenu />
           </div>
         </header>
 
