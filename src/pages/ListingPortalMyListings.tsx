@@ -323,10 +323,11 @@ const ListingPortalMyListings = () => {
               </div>
             ) : activeTab === 'active' ? (
               listings.length === 0 ? (
-                <div className="text-center py-12 bg-[#FDFBF7]/60 border-2 border-[#B89555]/20 rounded-2xl">
+                <div className="text-center py-10 bg-[#FDFBF7]/60 border-2 border-[#B89555]/20 rounded-2xl">
                   <h3 className="text-[#1A1A1A] font-semibold mb-2">No listings yet</h3>
-                  <p className="text-[#1A1A1A]/70 text-sm mb-4">Submit your first property listing!</p>
-                  <Button onClick={() => navigate(submitBase)} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">Submit Listing</Button>
+                  <p className="text-[#1A1A1A]/70 text-sm">
+                    Submit your first property listing — pick how you want to start below.
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-3">
