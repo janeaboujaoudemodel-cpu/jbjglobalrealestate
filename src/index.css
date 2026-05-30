@@ -6600,3 +6600,96 @@ section:has(> .absolute.inset-0 picture)
   -webkit-text-fill-color: rgba(26,26,26,0.55) !important;
   opacity: 1 !important;
 }
+
+/* =========================================================================
+   SURFACE CONTRACT v2 — semantic surface → foreground token system.
+   Backgrounds are never changed by this layer. Each surface declares its
+   own foreground/icon/border pair via CSS variables; descendants without
+   an authored color inherit them automatically.
+
+   Use `<Surface tone="…">` or `data-surface="…"` to pin a region.
+   The runtime contrast engine (src/utils/contrastGuard.ts) catches any
+   element where author classes still produce a low-contrast result and
+   forces it to the opposite pole locally — never globally.
+
+   Tokens:
+     --surface-bg          actual rendered surface (informational, not painted)
+     --surface-fg          primary text/icon color for this surface
+     --surface-fg-muted    secondary text on this surface (≥ AA on body text)
+     --surface-icon        icon stroke color (defaults to --surface-fg)
+     --surface-border      hairline color on this surface
+   ========================================================================= */
+
+:root,
+[data-surface="page"],
+[data-surface="light"] {
+  --surface-bg: 253 251 247;     /* #FDFBF7 */
+  --surface-fg: 26 26 26;        /* #1A1A1A */
+  --surface-fg-muted: 74 74 74;  /* #4A4A4A */
+  --surface-icon: 26 26 26;
+  --surface-border: 184 149 85;  /* gold hairline */
+}
+
+[data-surface="champagne"] {
+  --surface-bg: 247 242 234;     /* #F7F2EA */
+  --surface-fg: 26 26 26;
+  --surface-fg-muted: 74 74 74;
+  --surface-icon: 26 26 26;
+  --surface-border: 184 149 85;
+}
+
+[data-surface="cream"],
+[data-surface="raised"] {
+  --surface-bg: 239 230 214;     /* #EFE6D6 */
+  --surface-fg: 26 26 26;
+  --surface-fg-muted: 74 74 74;
+  --surface-icon: 26 26 26;
+  --surface-border: 184 149 85;
+}
+
+[data-surface="gold"] {
+  --surface-bg: 184 149 85;      /* #B89555 */
+  --surface-fg: 26 26 26;        /* ink on gold (high contrast) */
+  --surface-fg-muted: 26 26 26;
+  --surface-icon: 26 26 26;
+  --surface-border: 26 26 26;
+}
+
+[data-surface="navy"] {
+  --surface-bg: 16 37 64;        /* #102540 */
+  --surface-fg: 255 255 255;
+  --surface-fg-muted: 230 230 230;
+  --surface-icon: 255 255 255;
+  --surface-border: 184 149 85;
+}
+
+[data-surface="dark"],
+[data-surface="ink"] {
+  --surface-bg: 26 26 26;        /* #1A1A1A */
+  --surface-fg: 255 255 255;
+  --surface-fg-muted: 220 220 220;
+  --surface-icon: 255 255 255;
+  --surface-border: 184 149 85;
+}
+
+/* Foreground inheritance — descendants without an authored color follow
+   the surface contract. Authored colors still win at normal specificity,
+   but the runtime engine will correct them when they produce a contrast
+   failure. Scoped to text/icon-bearing tags to avoid touching backgrounds. */
+:where([data-surface]) {
+  color: rgb(var(--surface-fg));
+}
+:where([data-surface]) :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, span, small, strong, em, b, i, label, summary, th, td, caption, legend, figcaption) {
+  color: inherit;
+}
+:where([data-surface]) :where(svg:not([fill]):not([stroke]), [class*="lucide"]) {
+  color: rgb(var(--surface-icon));
+  stroke: currentColor;
+}
+
+/* Convenience utility classes — same contract, no JSX prop required. */
+.surface-fg        { color: rgb(var(--surface-fg)) !important; }
+.surface-fg-muted  { color: rgb(var(--surface-fg-muted)) !important; }
+.surface-icon      { color: rgb(var(--surface-icon)) !important; stroke: currentColor !important; }
+.surface-border    { border-color: rgb(var(--surface-border)) !important; }
+
