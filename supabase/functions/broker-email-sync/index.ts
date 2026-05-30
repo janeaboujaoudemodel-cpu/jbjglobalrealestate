@@ -27,10 +27,12 @@ Deno.serve(async (req) => {
       const u = createClient(SUPABASE_URL, ANON, { global: { headers: { Authorization: auth } } });
       const { data: claims } = await u.auth.getClaims(auth.replace("Bearer ", ""));
       if (!claims?.claims?.sub) return j({ error: "Unauthorized" }, 401);
-      const { data } = await svc.from("broker_email_accounts").select("*")
-        .eq("id", body.accountId).eq("user_id", claims.claims.sub).maybeSingle();
-      if (!data) return j({ error: "Account not found" }, 404);
-      accounts = [data];
+      let query = svc.from("broker_email_accounts").select("*")
+        .eq("user_id", claims.claims.sub).eq("status", "active").eq("sync_enabled", true);
+      if (body.accountId) query = query.eq("id", body.accountId);
+      const { data } = await query.order("last_synced_at", { ascending: true, nullsFirst: true }).limit(body.accountId ? 1 : 10);
+      if (body.accountId && !(data ?? []).length) return j({ error: "Account not found" }, 404);
+      accounts = data ?? [];
     }
 
     const out: any[] = [];
@@ -91,7 +93,7 @@ async function syncGmail(svc: any, acc: any, token: string): Promise<number> {
   let inserted = 0;
   for (const m of messages) {
     const { data: existing } = await svc.from("broker_emails").select("id")
-      .eq("account_id", acc.id).eq("provider_message_id", m.id).maybeSingle();
+      .eq("account_id", acc.id).eq("external_id", m.id).maybeSingle();
     if (existing) continue;
     const r = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${m.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -102,7 +104,7 @@ async function syncGmail(svc: any, acc: any, token: string): Promise<number> {
     for (const h of d.payload?.headers ?? []) headers[h.name.toLowerCase()] = h.value;
     const from = parseAddr(headers["from"]);
     await svc.from("broker_emails").insert({
-      account_id: acc.id, user_id: acc.user_id, provider_message_id: m.id,
+      account_id: acc.id, user_id: acc.user_id, external_id: m.id,
       thread_id: d.threadId, subject: headers["subject"] ?? "(no subject)",
       from_address: from.email, from_name: from.name, snippet: d.snippet ?? null,
       received_at: headers["date"] ? new Date(headers["date"]).toISOString() : new Date(parseInt(d.internalDate)).toISOString(),
@@ -122,10 +124,10 @@ async function syncOutlook(svc: any, acc: any, token: string): Promise<number> {
   let inserted = 0;
   for (const m of value) {
     const { data: existing } = await svc.from("broker_emails").select("id")
-      .eq("account_id", acc.id).eq("provider_message_id", m.id).maybeSingle();
+      .eq("account_id", acc.id).eq("external_id", m.id).maybeSingle();
     if (existing) continue;
     await svc.from("broker_emails").insert({
-      account_id: acc.id, user_id: acc.user_id, provider_message_id: m.id,
+      account_id: acc.id, user_id: acc.user_id, external_id: m.id,
       thread_id: m.conversationId, subject: m.subject ?? "(no subject)",
       from_address: m.from?.emailAddress?.address ?? null,
       from_name: m.from?.emailAddress?.name ?? null,
