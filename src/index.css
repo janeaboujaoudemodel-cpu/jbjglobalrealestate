@@ -6517,9 +6517,9 @@ section:has(> .absolute.inset-0 picture)
 /* Source-order correction: hover utility names alone are not the current
    surface. Idle transparent/ghost controls stay readable on their parent;
    hover colors activate only while hovered. */
-:where(:root:not(.dark), [data-surface="page"], [data-surface="champagne"], [data-surface="light"], .bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"])
+:where([data-surface="page"], [data-surface="champagne"], [data-surface="light"], .bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"])
   :where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is(.bg-transparent, [class~="bg-transparent"]):not(:hover),
-:where(:root:not(.dark), [data-surface="page"], [data-surface="champagne"], [data-surface="light"], .bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"])
+:where([data-surface="page"], [data-surface="champagne"], [data-surface="light"], .bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"])
   :where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is(.bg-transparent, [class~="bg-transparent"]):not(:hover)
   :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
   color: #1A1A1A !important;
