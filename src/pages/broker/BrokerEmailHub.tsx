@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useBrokerEmails, useBrokerEmailAccounts, useMarkEmailRead, useClassifyEmail, useConnectBrokerEmail, useSyncBrokerEmail, EMAIL_CATEGORIES, type EmailCategory } from "@/hooks/useBrokerEmails";
-import { Mail, Sparkles, Plug, Star, RefreshCw } from "lucide-react";
+import { useBrokerOAuthApps } from "@/hooks/useBrokerOAuthApps";
+import { Mail, Sparkles, Plug, Star, RefreshCw, KeyRound, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { toast } from "sonner";
@@ -9,10 +11,23 @@ export default function BrokerEmailHub() {
   const [category, setCategory] = useState<EmailCategory>("all");
   const emails = useBrokerEmails(category);
   const accounts = useBrokerEmailAccounts();
+  const oauthApps = useBrokerOAuthApps();
   const markRead = useMarkEmailRead();
   const classify = useClassifyEmail();
   const connect = useConnectBrokerEmail();
   const sync = useSyncBrokerEmail();
+
+  const hasGmailApp = !!oauthApps.data?.find((a) => a.provider === "gmail");
+  const hasOutlookApp = !!oauthApps.data?.find((a) => a.provider === "outlook");
+
+  const tryConnect = (p: "gmail" | "outlook") => {
+    const ok = p === "gmail" ? hasGmailApp : hasOutlookApp;
+    if (!ok) {
+      toast.error(`Add your ${p === "gmail" ? "Google" : "Microsoft"} OAuth credentials in Email Setup first.`);
+      return;
+    }
+    connect.mutate(p);
+  };
 
   return (
     <div className="space-y-5 p-4 md:p-6">
