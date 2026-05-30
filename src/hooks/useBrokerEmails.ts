@@ -74,3 +74,56 @@ export function useClassifyEmail() {
     onError: (e: any) => toast.error(e?.message || "Classification failed"),
   });
 }
+
+/**
+ * Opens an OAuth popup that connects the broker's Gmail or Outlook mailbox.
+ * Resolves when the callback page posts back success/failure.
+ */
+export function useConnectBrokerEmail() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (provider: "gmail" | "outlook") => {
+      const { data, error } = await supabase.functions.invoke("broker-email-oauth-start", { body: { provider } });
+      if (error) throw error;
+      const url = (data as any)?.url;
+      if (!url) throw new Error("OAuth URL missing");
+      const popup = window.open(url, "jbj-email-oauth", "width=520,height=680");
+      if (!popup) throw new Error("Popup blocked — allow popups and try again");
+      return await new Promise<{ email: string }>((resolve, reject) => {
+        const timer = setTimeout(() => { window.removeEventListener("message", onMsg); reject(new Error("Timed out")); }, 180_000);
+        function onMsg(e: MessageEvent) {
+          const d = e.data;
+          if (!d || d.source !== "jbj-broker-oauth") return;
+          window.removeEventListener("message", onMsg);
+          clearTimeout(timer);
+          if (d.ok) resolve({ email: d.email });
+          else reject(new Error(d.code || "OAuth failed"));
+        }
+        window.addEventListener("message", onMsg);
+      });
+    },
+    onSuccess: ({ email }) => {
+      toast.success(`Connected ${email}`);
+      qc.invalidateQueries({ queryKey: ["broker-email-accounts"] });
+      supabase.functions.invoke("broker-email-sync", { body: { accountId: null } }).catch(() => {});
+    },
+    onError: (e: any) => toast.error(e?.message || "Connect failed"),
+  });
+}
+
+export function useSyncBrokerEmail() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (accountId: string) => {
+      const { data, error } = await supabase.functions.invoke("broker-email-sync", { body: { accountId } });
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Inbox synced");
+      qc.invalidateQueries({ queryKey: ["broker-emails"] });
+      qc.invalidateQueries({ queryKey: ["broker-email-accounts"] });
+    },
+    onError: (e: any) => toast.error(e?.message || "Sync failed"),
+  });
+}
