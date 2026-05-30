@@ -6428,4 +6428,122 @@ button[class~="bg-[#1A1A1A]"][class*="text-white"] :where(span, p, svg, [class*=
   opacity: 1 !important;
 }
 
+/* ============================================================
+   FINAL PLATFORM VISUAL CONTRAST AUTHORITY.
+   This is intentionally the last contrast layer. It fixes the root
+   architecture issue where older remap/hover utilities could repaint a
+   descendant differently from its actual rendered surface.
+   ============================================================ */
+
+/* Image/dark-overlay heroes: text must never inherit ink from champagne
+   remap utilities. Buttons keep their own surface contract below. */
+section:has(> .absolute.inset-0 img),
+section:has(> .absolute.inset-0 picture),
+:where([data-hero-dark], .jj-hero-fullscreen, .jj-hero-compact) {
+  --jj-current-surface-foreground: #FFFFFF;
+}
+
+section:has(> .absolute.inset-0 img)
+  :where(h1, h2, h3, h4, p, li, small, strong, em):not(:where(button, a, [role="button"], [role="tab"]) *),
+section:has(> .absolute.inset-0 picture)
+  :where(h1, h2, h3, h4, p, li, small, strong, em):not(:where(button, a, [role="button"], [role="tab"]) *),
+:where([data-hero-dark], .jj-hero-fullscreen, .jj-hero-compact)
+  :where(h1, h2, h3, h4, p, li, small, strong, em):not(:where(button, a, [role="button"], [role="tab"]) *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72) !important;
+  opacity: 1 !important;
+}
+
+section:has(> .absolute.inset-0 img)
+  :where([class*="text-transparent"], [class*="bg-clip-text"]):not(:where(button, a, [role="button"], [role="tab"]) *),
+section:has(> .absolute.inset-0 picture)
+  :where([class*="text-transparent"], [class*="bg-clip-text"]):not(:where(button, a, [role="button"], [role="tab"]) *),
+:where([data-hero-dark], .jj-hero-fullscreen, .jj-hero-compact)
+  :where([class*="text-transparent"], [class*="bg-clip-text"]):not(:where(button, a, [role="button"], [role="tab"]) *) {
+  background-image: none !important;
+  background-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Own-surface contract for all future interactive elements and badges. */
+:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary, .jj-badge-dark, .jj-cta-dark, .jj-navy-cta):is(
+  .bg-black, .bg-foreground,
+  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"],
+  [class*="hover:bg-[#102540]"], [class*="hover:bg-[#1a3d63]"], [class*="hover:bg-[#1A1A1A]"], [class*="hover:bg-black"]
+),
+:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary, .jj-badge-dark, .jj-cta-dark, .jj-navy-cta):is(
+  .bg-black, .bg-foreground,
+  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"],
+  [class*="hover:bg-[#102540]"], [class*="hover:bg-[#1a3d63]"], [class*="hover:bg-[#1A1A1A]"], [class*="hover:bg-black"]
+) :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary, .jj-badge-champagne, .jj-badge-outline, .jj-cta-champagne, .jj-pill-active):is(
+  .bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted,
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#EFE6D6]"], [class*="to-[#FDFBF7]"], [class*="to-[#F7F2EA]"], [class*="to-[#EFE6D6]"],
+  [class*="hover:bg-white"], [class*="hover:bg-[#FDFBF7]"], [class*="hover:bg-[#F7F2EA]"], [class*="hover:bg-[#EFE6D6]"]
+),
+:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary, .jj-badge-champagne, .jj-badge-outline, .jj-cta-champagne, .jj-pill-active):is(
+  .bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted,
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#B89555]"], [class~="bg-[#A68444]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#EFE6D6]"], [class*="to-[#FDFBF7]"], [class*="to-[#F7F2EA]"], [class*="to-[#EFE6D6]"],
+  [class*="hover:bg-white"], [class*="hover:bg-[#FDFBF7]"], [class*="hover:bg-[#F7F2EA]"], [class*="hover:bg-[#EFE6D6]"]
+) :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* Ghost/transparent controls follow their actual parent surface. */
+:where([data-surface="dark"], [data-surface="ink"], [data-hero-dark], .bg-black, .bg-foreground, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], section:has(> .absolute.inset-0 img))
+  :where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is(.bg-transparent, [class~="bg-transparent"]):not(:hover),
+:where([data-surface="dark"], [data-surface="ink"], [data-hero-dark], .bg-black, .bg-foreground, [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], section:has(> .absolute.inset-0 img))
+  :where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is(.bg-transparent, [class~="bg-transparent"]):not(:hover)
+  :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Source-order correction: hover utility names alone are not the current
+   surface. Idle transparent/ghost controls stay readable on their parent;
+   hover colors activate only while hovered. */
+:where([data-surface="page"], [data-surface="champagne"], [data-surface="light"], .bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"])
+  :where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is(.bg-transparent, [class~="bg-transparent"]):not(:hover),
+:where([data-surface="page"], [data-surface="champagne"], [data-surface="light"], .bg-white, .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"])
+  :where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is(.bg-transparent, [class~="bg-transparent"]):not(:hover)
+  :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is([class*="hover:bg-[#102540]"], [class*="hover:bg-[#1a3d63]"], [class*="hover:bg-[#1A1A1A]"], [class*="hover:bg-black"]):hover,
+:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is([class*="hover:bg-[#102540]"], [class*="hover:bg-[#1a3d63]"], [class*="hover:bg-[#1A1A1A]"], [class*="hover:bg-black"]):hover
+  :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is([class*="hover:bg-white"], [class*="hover:bg-[#FDFBF7]"], [class*="hover:bg-[#F7F2EA]"], [class*="hover:bg-[#EFE6D6]"]):hover,
+:where(button, a, [role="button"], [role="tab"], [role="menuitem"], summary):is([class*="hover:bg-white"], [class*="hover:bg-[#FDFBF7]"], [class*="hover:bg-[#F7F2EA]"], [class*="hover:bg-[#EFE6D6]"]):hover
+  :where(span, p, small, strong, em, svg, [class*="lucide"]):not([data-decorative="true"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
 
