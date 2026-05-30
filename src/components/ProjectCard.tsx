@@ -414,32 +414,45 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         </div>
       </Link>
 
-      {/* CTA Buttons — Email, Call, WhatsApp. Solid surfaces, equal grid */}
+      {/* CTA Buttons — Email, Call, WhatsApp. Champagne tile + ink icons/labels. */}
       <div className="px-4 pb-4">
         <div className="grid grid-cols-3 gap-2 border-t border-[#B89555]/40 pt-3">
-          <Button asChild variant="secondary" size="sm" className="w-full min-w-0 overflow-hidden px-2 h-9">
-            <a
-              href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
-              onClick={(e) => e.stopPropagation()}
-              aria-label={`Email about ${project.name}`}
-              className="flex items-center justify-center gap-1.5"
-            >
-              <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-              <span className="truncate text-xs font-semibold">Email</span>
-            </a>
-          </Button>
-          <Button asChild variant="secondary" size="sm" className="w-full min-w-0 overflow-hidden px-2 h-9">
-            <a href={callHref} onClick={(e) => e.stopPropagation()} aria-label={`Call about ${project.name}`} className="flex items-center justify-center gap-1.5">
-              <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-              <span className="truncate text-xs font-semibold">Call</span>
-            </a>
-          </Button>
-          <Button asChild variant="secondary" size="sm" className="w-full min-w-0 overflow-hidden px-2 h-9">
-            <a href={whatsappHref} onClick={(e) => e.stopPropagation()} aria-label={`WhatsApp about ${project.name}`} className="flex items-center justify-center gap-1.5">
-              <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-              <span className="truncate text-xs font-semibold">Chat</span>
-            </a>
-          </Button>
+          <a
+            href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
+            onClick={(e) => e.stopPropagation()}
+            aria-label={`Email about ${project.name}`}
+            data-surface="champagne"
+            data-cta="champagne"
+            className="jj-cta-champagne w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            style={{ color: "#1A1A1A" }}
+          >
+            <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
+            <span className="truncate text-xs font-semibold" style={{ color: "#1A1A1A" }}>Email</span>
+          </a>
+          <a
+            href={callHref}
+            onClick={(e) => e.stopPropagation()}
+            aria-label={`Call about ${project.name}`}
+            data-surface="champagne"
+            data-cta="champagne"
+            className="jj-cta-champagne w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            style={{ color: "#1A1A1A" }}
+          >
+            <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
+            <span className="truncate text-xs font-semibold" style={{ color: "#1A1A1A" }}>Call</span>
+          </a>
+          <a
+            href={whatsappHref}
+            onClick={(e) => e.stopPropagation()}
+            aria-label={`WhatsApp about ${project.name}`}
+            data-surface="champagne"
+            data-cta="champagne"
+            className="jj-cta-champagne w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            style={{ color: "#1A1A1A" }}
+          >
+            <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
+            <span className="truncate text-xs font-semibold" style={{ color: "#1A1A1A" }}>Chat</span>
+          </a>
         </div>
       </div>
     </div>

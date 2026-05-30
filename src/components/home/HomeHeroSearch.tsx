@@ -193,16 +193,20 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             </span>
           </div>
 
-          {/* Free Consultation — text only, with instant hover tooltip */}
+          {/* Free Consultation — fiberglass (dark translucent) with WHITE title.
+              NOT navy/blue. Sits on the dark hero so opacity reads through. */}
           <div className="relative hidden md:flex flex-shrink-0 group/book">
             <button
               type="button"
               onClick={openBooking}
-              data-surface="navy"
+              data-surface="dark"
+              data-no-contrast-guard
+              data-allow-dark-cta
               aria-label="Book your free consultation now"
-              className="surface-navy allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
-                text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-[#102540]
-                transition-colors duration-200 hover:bg-[#1a3d63]"
+              className="allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
+                text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em]
+                bg-[#1A1A1A]/55 hover:bg-[#1A1A1A]/70 backdrop-blur-md
+                transition-[background-color] duration-200"
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
@@ -210,7 +214,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             >
               <span
                 className="allow-white whitespace-nowrap"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 8px rgba(0,0,0,0.55)" }}
               >
                 Free Consultation
               </span>

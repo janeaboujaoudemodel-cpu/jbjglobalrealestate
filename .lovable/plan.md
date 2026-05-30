@@ -1,90 +1,45 @@
-## Plan: fix the global contrast system properly
+I will fix this as a system-level regression, not one button at a time.
 
-### 1. Remove the remaining conflicting global contrast architecture
+Plan:
 
-- Keep `src/utils/contrastGuard.ts` as a no-op and remove/ban any runtime repaint hooks permanently.
-- Replace the broad late-stage CSS rules in `src/index.css` that target generic `button`, `a`, `span`, `div`, `[role]`, hover states, and arbitrary background classes with a narrower **surface contract**:
-  - `data-surface="navy|dark|ink"`, `.surface-navy`, `.surface-dark`, `.image-overlay-dark`, `.glass-dark` → white text, white icons, stable idle/hover/focus/active.
-  - `data-surface="page|light|champagne|cream|raised|gold|pearl"`, `.surface-light`, `.surface-champagne`, `.glass-light` → ink/navy text and icons, stable idle/hover/focus/active.
-- Remove misleading CSS comments that still reference a runtime engine fixing contrast.
-- Preserve the brand rules: champagne-dominant theme, no gray surfaces, gold only as hairline/accent, navy CTAs with white text.
+1. Restore the CTA contrast primitives
+- Remove the broad late CSS rules that infer foreground from `hover:bg-*`, force every descendant color, and globally rewrite transition durations.
+- Keep only explicit surface/CTA contracts: dark/fiberglass = white text/icons; champagne/light/gold = ink text/icons.
+- Add a locked `fiberglass` CTA primitive for dark image/hero overlays so it does not get turned blue or champagne by global rules.
 
-### 2. Strengthen reusable primitives instead of patching one screenshot
+2. Fix the directly broken homepage controls
+- Homepage hero `Free Consultation`: restore the previous dark/fiberglass translucent look with white title, not blue/navy.
+- `Get Verified`: keep champagne/light button with black title and black arrow in idle, hover, focus, and active states.
+- Search button: keep black/ink text on its light search surface.
+- Cookie/tour controls: fix the visible Welcome Guide button regression where the light button currently has white unreadable text.
 
-Update the reusable components so child content inherits a stable readable foreground from the component itself:
+3. Fix listing-card action buttons/icons
+- Update the ProjectCard Email / Call / Chat actions so the button surface and icon/text color are explicit.
+- If the action tile is dark, icon and label are white. If the action tile is champagne, icon and label are ink. No black icon boxes with invisible icons.
 
-- `Surface`: emit both `data-surface` and matching `.surface-*` class; expose foreground/icon variables for descendants.
-- `Button`: replace hover text-color flips with locked variants:
-  - dark/navy CTA: white foreground in every state.
-  - champagne/outline CTA: ink foreground in every state.
-  - hero/media button: no white-to-black foreground flip unless the component is explicitly moved to a light surface primitive.
-- `Badge`, `Tabs`, `IconTile`: bind each variant to a known light/dark surface and make icon strokes follow the same foreground token.
-- Add/normalize small primitives if needed for overlay cards, glass cards, light cards, and dark chips so pages do not hand-roll contrast.
+4. Fix service and Royal Tools tab/hero panels
+- Active `Buy Property` and active `Property Evaluator` tabs: champagne/cream background with black text and black icon.
+- Inactive tabs: dark/fiberglass/navy background with white text and white icon.
+- Image-panel copy (`AI-powered property valuation...`, service descriptions): white, readable, and shadowed on the dark overlay.
+- `Explore Now` and `Get Evaluation`: fiberglass/dark translucent CTA with white text and white arrow in all states.
 
-### 3. Bind the affected reusable sections to those primitives
+5. Fix Continue Searching motion
+- Remove the fast requestAnimationFrame marquee/translate loop.
+- Replace it with a stable native horizontal rail/snap layout that a normal user can read at rest.
+- Remove drag-style behavior to comply with the non-draggable UI rule.
 
-Refactor the components the user listed, using surface classes rather than `data-no-contrast-guard`, inline color hacks, or hover-only readability:
+6. Fix spacing/loading/layout regressions
+- Mortgage calculator card: remove the forced 1050px minimum height that creates the large empty gap under the CTA buttons.
+- Top Areas images: make the visible three area photos load eagerly with stable dimensions so they appear faster and do not shift.
+- Ready to Get Started: make the section full width to match Top Areas in Dubai.
 
-- Homepage top + `HomeHeroSearch`.
-- Recently viewed/property cards and `ProjectCard` chips/buttons.
-- Guide/book carousel and book covers (`GuideBookSection`, `BookCoverFace`, `PremiumBookCover`, `BookCard`, `BookShelf`).
-- Broker portal preview card and homepage portal cards (`PortalShowcaseCard`, broker/developer/careers wrappers).
-- Careers/JBJ visual cards.
-- Floating `Contact Us` and `Web Developer` widgets.
-- `VerificationBanner` / Get Verified.
-- `CookiesConsentBanner` buttons and preference controls.
-- Search bars/header search surfaces.
-- Generated tiles/cards that reuse `Button`, `Badge`, `Tabs`, `IconTile`, or card primitives.
+7. Broker vertical sidebar exception
+- In the expanded broker sidebar only, category labels render gold by default.
+- On hover they become black.
+- Collapsed sidebar/icon-only behavior remains stable and readable.
 
-### 4. Replace unsafe local patterns found in the audit
-
-Specifically address these current code smells:
-
-- `data-no-contrast-guard` used as a visual opt-out on components that should instead declare a real surface.
-- `allow-white` sprinkled on light/unknown surfaces.
-- `hover:text-*`, `focus:text-*`, or `active:text-*` used without a matching stable primitive.
-- Light cards using `text-white` or white SVG strokes.
-- Navy/dark/glass cards using `text-foreground`, `text-[#1A1A1A]`, or low-opacity dark text.
-- Cookie banner buttons that flip to dark background/white text on hover instead of staying on one readable primitive.
-- Portal modules with `bg-[hsl(var(--background)/0.10)] text-white` ambiguity; make them explicit dark glass or light glass.
-
-### 5. Add regression checks that fail automatically
-
-Add/extend contrast scripts and wire them into `check:contrast` / `check:contrast:pr-gate`:
-
-- Fail if `installContrastGuard()` is imported/called or if `MutationObserver`/mouseover/focusin/pointerdown route repainting is reintroduced for contrast.
-- Fail on broad `!important` generic selectors in `src/index.css` that target generic `button`, `a`, `span`, `div`, `nav`, `[role]`, `[aria-*]`, `[data-active]`, or hover class matching for foreground colors.
-- Fail if reusable components contain white-on-light or dark-on-dark class combinations.
-- Fail if hover/focus/active changes only foreground polarity without an approved surface primitive.
-- Fail if icons use white/faded strokes on light surfaces or low-opacity dark strokes on dark surfaces.
-
-### 6. Validation before calling it complete
-
-After implementation, I will visually verify in the live preview, not ask you to report one section at a time:
-
-- Desktop and mobile.
-- Homepage top and search bar.
-- Recently viewed/property cards.
-- Guide/book carousel and book covers.
-- Broker portal visuals.
-- Careers/JBJ visual cards.
-- Get Verified banner.
-- Floating Contact Us and Web Developer widgets.
-- Cookie banner/buttons.
-- States: idle, hover, focus, after scroll, and after waiting 5 seconds.
-
-I will only report completion after the preview screenshots/observations show stable readable contrast across those targets.
-
-Approved, but do not mark complete after checking only one or two sections.
-
-&nbsp;
-
-Important: the main issue is still global instability and wrong foreground inheritance. Fix the root CSS/primitives first, then verify all listed sections visually.
-
-&nbsp;
-
-Do not use runtime repainting, broad `!important` hacks, or hover-only readability. Every reusable component must have a stable surface contract: dark/navy = white text/icons, light/champagne/cream/gold/pearl = ink/navy text/icons.
-
-&nbsp;
-
-Completion is only accepted after live visual proof across homepage, broker visuals, careers/JBJ visuals, property cards, guide/book covers, Get Verified, cookie banner, floating widgets, search bars, idle, hover, focus, scroll, and 5-second wait.
+8. Visual validation before calling it done
+- Test desktop and mobile live preview.
+- Check homepage hero/search, Get Verified, property cards, Continue Searching, guides/books, Explore Services, JBJ Royal Tools Hub, mortgage card, Top Areas, Ready to Get Started, floating Contact Us/Web Developer widgets, cookie/tour controls, and broker sidebar.
+- For each: idle, hover, focus, after scroll, and after a 5-second wait.
+- I will only report completion after the live preview confirms no flicker and no unreadable text/icons.

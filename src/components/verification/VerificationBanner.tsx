@@ -54,19 +54,21 @@ const VerificationBanner = () => {
               </p>
             </div>
 
-            {/* CTA Button — light champagne pill on dark navy with 3D gold glow on hover */}
+            {/* CTA Button — champagne pill, BLACK title + BLACK arrow at all states */}
             <button
               type="button"
               onClick={() => setModalOpen(true)}
-              className="jj-cta-champagne group relative flex-shrink-0 px-5 py-2.5 text-sm tracking-wide shadow-[0_2px_10px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.7)] hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-all duration-300 ease-out overflow-hidden"
+              className="jj-cta-champagne group relative flex-shrink-0 px-5 py-2.5 text-sm tracking-wide shadow-[0_2px_10px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.7)] hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-transform duration-300 ease-out overflow-hidden"
               data-surface="champagne"
               data-cta="champagne"
               aria-label="Open identity verification"
+              style={{ color: "#1A1A1A" }}
             >
-              <span className="relative z-10">Get Verified</span>
+              <span className="relative z-10" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Get Verified</span>
               <ArrowRight
                 className="relative z-10 w-4 h-4 group-hover:translate-x-0.5 transition-transform"
                 strokeWidth={2.5}
+                style={{ color: "#1A1A1A", stroke: "#1A1A1A" }}
               />
             </button>
 
