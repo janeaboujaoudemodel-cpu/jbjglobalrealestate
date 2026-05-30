@@ -32,7 +32,7 @@ const BRAND_GOLD =
 
 // HERO: transparent with white border on dark images (dark hero overlays)
 const BRAND_HERO =
-  "bg-transparent text-white border-2 border-white/60 shadow-[0_14px_45px_hsl(0_0%_0%/0.35),inset_0_1px_0_hsl(0_0%_100%/0.18)] hover:bg-[#FDFBF7] hover:text-[#1A1A1A] hover:border-white hover:-translate-y-0.5 active:translate-y-0";
+  "surface-dark bg-transparent text-white border-2 border-white/60 shadow-[0_14px_45px_hsl(0_0%_0%/0.35),inset_0_1px_0_hsl(0_0%_100%/0.18)] hover:bg-white/10 hover:text-white hover:border-white hover:-translate-y-0.5 active:translate-y-0";
 
 const BRAND_MEDIA = BRAND_HERO;
 
@@ -46,6 +46,9 @@ const AI_MONO = "bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white border border-[#B895
 // Dark theme variants (for use on dark sections)
 const DARK_GHOST = "bg-transparent text-white border-2 border-[#B89555]/40 hover:bg-[#FDFBF7]/10 hover:border-[#B89555] transition-all";
 const DARK_OUTLINE = "bg-transparent text-white border-2 border-white/40 hover:bg-[#FDFBF7]/10 hover:border-white/60 transition-all";
+
+const DARK_SURFACE_VARIANTS = new Set(["hero", "media", "dark", "dark-ghost", "dark-outline"]);
+const LIGHT_CTA_VARIANTS = new Set(["primary", "secondary", "tertiary", "gold", "default", "destructive", "outline", "ghost", "link"]);
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap [word-break:keep-all] rounded-md text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em]",
@@ -113,10 +116,21 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
+    const effectiveVariant = variant ?? "primary";
+    const surface = DARK_SURFACE_VARIANTS.has(effectiveVariant) ? "dark" : "champagne";
+    const cta = DARK_SURFACE_VARIANTS.has(effectiveVariant)
+      ? "dark"
+      : LIGHT_CTA_VARIANTS.has(effectiveVariant)
+        ? effectiveVariant === "outline" || effectiveVariant === "ghost" || effectiveVariant === "link" || effectiveVariant === "secondary" || effectiveVariant === "tertiary"
+          ? "outline"
+          : "champagne"
+        : undefined;
 
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
+        data-surface={surface}
+        data-cta={cta}
         ref={ref}
         {...props}
       />
