@@ -202,7 +202,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               aria-label="Book your free consultation now"
               className="surface-navy allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
                 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] bg-[#102540]
-                transition-colors duration-200 hover:bg-[#2A2A2A]"
+                transition-colors duration-200 hover:bg-[#1a3d63]"
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
