@@ -6267,3 +6267,15 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 :where(a,button,[role="button"],[role="tab"],svg,[class*="lucide"],span,p,h1,h2,h3,h4,h5,h6) {
   transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
 }
+
+[data-hero-consultation-lock],
+[data-hero-consultation-lock]:hover,
+[data-hero-consultation-lock] span,
+[data-hero-consultation-lock]:hover span,
+[data-hero-consultation-lock] svg,
+[data-hero-consultation-lock]:hover svg {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
