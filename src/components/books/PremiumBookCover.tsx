@@ -67,7 +67,8 @@ export function PremiumBookCover({
 
   return (
     <div
-      className={cn("relative h-full w-full overflow-hidden bg-[#10100f] text-[#EFE6D6]", className)}
+      data-surface="dark"
+      className={cn("surface-dark relative h-full w-full overflow-hidden bg-[#10100f] text-[#EFE6D6]", className)}
       style={{ containerType: "inline-size" }}
     >
       {/* Base gradient */}
