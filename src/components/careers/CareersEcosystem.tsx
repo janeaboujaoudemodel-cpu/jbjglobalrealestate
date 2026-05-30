@@ -68,7 +68,7 @@ const PILLARS: PillarTile[] = [
 
 export function CareersEcosystem() {
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F7F2EA] via-[#FDFBF7] to-[#EFE6D6]">
+    <section data-surface="champagne" className="surface-champagne relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F7F2EA] via-[#FDFBF7] to-[#EFE6D6]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 bg-[#FDFBF7] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#102540]">
@@ -77,7 +77,7 @@ export function CareersEcosystem() {
           <h2 className="mt-5 text-3xl md:text-5xl font-semibold text-[#1A1A1A] tracking-tight">
             The JBJ Broker Growth Ecosystem
           </h2>
-          <p className="mt-4 text-base md:text-lg text-[#1A1A1A]/75 max-w-3xl mx-auto leading-relaxed">
+          <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             A live operating platform — direct developer access, AI sales infrastructure,
             a global investor base, and dedicated marketing, training, and onboarding —
             engineered to amplify the performance of every JBJ broker.
@@ -91,7 +91,8 @@ export function CareersEcosystem() {
             return (
             <article
                 key={tile.title}
-              className="careers-card-strong group relative overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1"
+              data-surface="champagne"
+              className="surface-champagne careers-card-strong group relative overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1"
               >
                 {/* Decorative glow */}
                 <div className="pointer-events-none absolute -top-16 -left-16 h-32 w-32 rounded-full bg-[#102540]/[0.04] blur-3xl group-hover:bg-[#102540]/[0.09] transition" />
