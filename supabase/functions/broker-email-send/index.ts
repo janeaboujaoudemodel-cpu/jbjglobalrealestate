@@ -78,13 +78,16 @@ async function refreshIfNeeded(svc: any, acc: any): Promise<string> {
   if (exp - 60_000 > Date.now()) return acc.access_token_encrypted;
   if (!acc.refresh_token_encrypted) throw new Error("No refresh token");
   const isG = acc.provider === "gmail";
+  const { data: appRows } = await svc.rpc("get_broker_oauth_app", { _user_id: acc.user_id, _provider: acc.provider });
+  const app = appRows?.[0];
+  if (!app?.client_id || !app?.client_secret) throw new Error("OAuth app credentials missing for this broker; re-add in Email Setup");
   const r = await fetch(isG ? "https://oauth2.googleapis.com/token" : "https://login.microsoftonline.com/common/oauth2/v2.0/token", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
       refresh_token: acc.refresh_token_encrypted, grant_type: "refresh_token",
-      client_id: Deno.env.get(isG ? "GOOGLE_OAUTH_CLIENT_ID" : "MICROSOFT_OAUTH_CLIENT_ID")!,
-      client_secret: Deno.env.get(isG ? "GOOGLE_OAUTH_CLIENT_SECRET" : "MICROSOFT_OAUTH_CLIENT_SECRET")!,
+      client_id: app.client_id,
+      client_secret: app.client_secret,
     }),
   });
   if (!r.ok) throw new Error(`Refresh ${r.status}`);

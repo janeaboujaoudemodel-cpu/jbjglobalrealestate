@@ -3,6 +3,7 @@ import {
   LayoutDashboard, Users, Briefcase, Database, ListChecks, Calendar, ListTodo,
   Handshake, FileSignature, GraduationCap, Sparkles, Building2, Inbox, MessagesSquare,
   Brain, Bell, Settings, ChevronLeft, ChevronRight, ArrowLeft, Crown, Home, LogOut,
+  KeyRound,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -22,6 +23,7 @@ const ITEMS: Item[] = [
   { to: "/broker/databases",         label: "Assigned Databases", icon: Database },
   { to: "/broker/listings",          label: "Listings",           icon: ListChecks },
   { to: "/broker/email",             label: "Smart Inbox",        icon: Inbox },
+  { to: "/broker/email/setup",       label: "Email Setup",        icon: KeyRound },
   { to: "/broker/messages",          label: "Team & HR",          icon: MessagesSquare },
   { to: "/broker/calendar",          label: "Calendar",           icon: Calendar },
   { to: "/broker/tasks",             label: "Tasks",              icon: ListTodo },
@@ -98,7 +100,9 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
       <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-2 jj-scrollbar-gold space-y-1">
         {ITEMS.filter((it) => it.to !== "/broker/forms" || isOwner).map(({ to, label, icon: Icon }) => {
           const active =
-            to === "/broker/portal" ? pathname === to : pathname === to || pathname.startsWith(to + "/");
+            to === "/broker/portal" || to === "/broker/email"
+              ? pathname === to
+              : pathname === to || pathname.startsWith(to + "/");
           return (
             <NavLink
               key={to}
