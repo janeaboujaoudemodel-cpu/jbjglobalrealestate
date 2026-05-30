@@ -29,8 +29,14 @@ if (/installContrastGuard|new\s+MutationObserver|addEventListener\(['"](?:mouseo
 
 const stableContractIndex = stylesheet.indexOf('STABLE SURFACE CONTRACT');
 const stableContract = stableContractIndex >= 0 ? stylesheet.slice(stableContractIndex) : '';
-const unsafeStableRules = stableContract.match(/(?:button|span|div|nav|\[role)[^{]*\{[^}]*color:[^}]*!important/gs) ?? [];
-const unsafeUnscoped = unsafeStableRules.filter((m) => !/jj-cta|jj-badge|surface-|data-surface|image-overlay-dark|glass-dark|glass-light|data-overlay/.test(m));
+const unsafeStableRules = stableContract
+  .split('}')
+  .map((rule) => {
+    const [selector = '', body = ''] = rule.split('{');
+    return { selector, body };
+  })
+  .filter(({ selector, body }) => /color:[^;]*!important/.test(body) && /\b(button|span|div|nav)\b|\[role/.test(selector));
+const unsafeUnscoped = unsafeStableRules.filter(({ selector }) => !/jj-cta|jj-badge|surface-|data-surface|image-overlay-dark|glass-dark|glass-light|data-overlay/.test(selector));
 if (unsafeUnscoped.length) {
   violations.push('The stable surface contract contains unscoped generic foreground overrides. Scope them to surface/CTA primitives.');
 }
