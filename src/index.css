@@ -6919,3 +6919,28 @@ svg * {
   stroke: #1A1A1A !important;
   opacity: 1 !important;
 }
+
+/* FINAL exception to the surface lock: an element's OWN dark-blue/ink box
+   wins over a light/champagne ancestor. This fixes blue icon tiles on Join/
+   careers and every future navy icon box. Whole-token matching only. */
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink),
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink):hover,
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]),
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"]):not(.allow-ink):hover :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* FINAL exception in the opposite direction: an element's OWN light/
+   champagne/gold box wins over a dark/navy ancestor. */
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]),
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]):hover,
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]),
+:where(a,button,span,div,li,[role="button"],[role="status"]):is([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#B89555]"], [class~="bg-white"]):not([data-sidebar-gold-label]):hover :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
