@@ -10,6 +10,7 @@ Multi-layer automated WCAG AA contrast gate that blocks PRs introducing low-cont
 | **White-on-light** (`check-white-on-light.mjs`) | `text-white` statically nested inside a known light wrapper (`bg-white`, champagne, gold, pearl…) | CI on every PR | <1s |
 | **Black-on-dark** (`check-black-on-dark.mjs`) | `text-black` (or near-black tokens like `text-zinc-900`) statically nested inside a known dark wrapper (`bg-black`, `bg-zinc-900`, …). Mirror of white-on-light. | CI on every PR | <1s |
 | **Low-opacity text** (`check-low-opacity-text.mjs`) | `text-*/NN` and `opacity-NN` below 40 on text-bearing nodes — catches `text-foreground/10`, `text-black/20`, `opacity-[0.08]`, etc. that render copy effectively invisible regardless of the underlay (typical side-effect of a global CSS override). State-driven reveals (`hover:`, `disabled:`, `group-hover:`, …) are excluded. Faded icons are reported as non-blocking warnings. | CI on every PR | <1s |
+| **Interactive contract** (`check-interactive-contrast-contract.mjs`) | Buttons, pills, badges, tabs, menu items, and status chips cannot pair dark backgrounds with dark text or champagne/gold backgrounds with white text. Enforces the `.jj-cta-*` / `.jj-badge-*` / `.jj-pill-active` single source of truth. | CI on every PR | <1s |
 | **Rendered** (`check-rendered.mjs`) | Real DOM via Playwright + axe-core's `color-contrast` rule, across the routes listed in the script | CI on every PR/push to `main` | ~2 min |
 
 ## Failure policy
@@ -43,6 +44,7 @@ npm run check:contrast:tokens          # fast token check
 npm run check:contrast:white-on-light  # static white-on-light scan
 npm run check:contrast:black-on-dark   # static black-on-dark scan
 npm run check:contrast:low-opacity     # static near-transparent text scan
+npm run check:contrast:interactive     # static interactive contrast contract
 npm run check:contrast:rendered        # needs preview at $PREVIEW_URL (default http://localhost:8080)
 npm run check:contrast                 # all of the above
 
