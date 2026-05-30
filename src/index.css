@@ -6547,3 +6547,56 @@ section:has(> .absolute.inset-0 picture)
 }
 
 
+
+/* =========================================================================
+   UNIVERSAL WHITE-ON-LIGHT LOCK (PASS 6)
+   Any non-button element (input, label, span, p, div, textarea, select
+   trigger, badge, chip) whose OWN background class is champagne/cream/white
+   but whose author classes ask for white/whitish text is forced back to
+   ink #1A1A1A. Covers the AI tool pages (Input/Label/SelectTrigger with
+   bg-[#F7F2EA] + text-white), Compare modal inputs, JBJ Design Studio,
+   Interior Design AI, PropertySearchBar — without per-component patches.
+   Opt-out: data-no-contrast-guard, .allow-white, data-on-dark, data-decorative.
+   ========================================================================= */
+:where(:not(button):not(a):not([role="button"])):is(
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"],
+  [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-white"],
+  [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#EFE6D6]/"],
+  [class*="bg-white/"]
+):is(
+  .text-white, [class~="text-white"], [class*="text-white/"],
+  .text-\[\#FDFBF7\], .text-\[\#FFFFFF\], .text-\[\#fafafa\], .text-gray-200, .text-gray-100
+):not(.allow-white):not([data-on-dark]):not([data-no-contrast-guard]):not([data-decorative="true"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* Labels/helpers sitting as direct children of a champagne/cream container
+   also flip to ink (covers <Label className="text-white/85"> patterns). */
+:where([class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-white"], [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#EFE6D6]/"])
+  > :is(label, span, p, small, h1, h2, h3, h4, h5, h6, li, div):is(
+    .text-white, [class~="text-white"], [class*="text-white/"],
+    .text-\[\#FDFBF7\], .text-\[\#FFFFFF\], .text-\[\#fafafa\], .text-gray-200, .text-gray-100
+  ):not(.allow-white):not([data-on-dark]):not([data-no-contrast-guard]):not([data-decorative="true"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* Inputs/textareas/select triggers with champagne fill — placeholder stays
+   soft ink (no white) so the field stays readable while typing. */
+:where(input, textarea, select, [role="combobox"], [data-radix-select-trigger]):is(
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-white"], [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#EFE6D6]/"]
+):not(.allow-white):not([data-on-dark]):not([data-no-contrast-guard]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+:where(input, textarea):is(
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-white"], [class*="bg-[#FDFBF7]/"], [class*="bg-[#F7F2EA]/"], [class*="bg-[#EFE6D6]/"]
+):not(.allow-white):not([data-on-dark]):not([data-no-contrast-guard])::placeholder {
+  color: rgba(26,26,26,0.55) !important;
+  -webkit-text-fill-color: rgba(26,26,26,0.55) !important;
+  opacity: 1 !important;
+}
