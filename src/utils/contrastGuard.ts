@@ -11,23 +11,17 @@
  *  2. Reads the element's own computed foreground color.
  *  3. If the foreground/background contrast ratio is < the WCAG floor, the
  *     engine forces the element's `color` (and `stroke` for icons/SVGs) to
- *     the opposite pole — pure white on dark surfaces, ink #1A1A1A on light
- *     surfaces — locally via inline `!important`. Backgrounds are NEVER
- *     changed.
+ *     whichever canonical foreground has the stronger real contrast: white
+ *     on navy/dark/black, ink on champagne/gold/cream/light. Backgrounds are
+ *     NEVER changed.
  *  4. Re-runs after route changes, DOM mutations, hover, focus, and tab
  *     visibility, so hover/active/focus/disabled/loading states all stay
  *     readable.
  *
- * Opt-outs (the element OR an ancestor may carry any of these):
- *   [data-no-contrast-guard]   — generic opt-out (e.g. AI premium purple)
- *   [data-decorative="true"]   — decorative glyph / spinner
- *   .allow-white               — author insists on white text
- *   .allow-ink                 — author insists on ink text
- *   [data-on-dark]             — author marks element as "always on dark"
- *
- * Already-correct elements (ratio ≥ floor) are skipped — the engine only
- * corrects real contrast failures, so contracted primitives (`.jj-cta-*`,
- * navy CTAs with white text, champagne pills with ink) keep working.
+ * Only decorative media/effects are skipped. Author opt-outs such as
+ * `.allow-white`, `.allow-ink`, `[data-on-dark]`, and
+ * `[data-no-contrast-guard]` are intentionally NOT honored for readable text:
+ * live contrast wins over class intent.
  */
 
 const PAGE_BASE: RGB = [253, 251, 247]; // #FDFBF7 — the global painted baseline
@@ -42,19 +36,12 @@ const SKIP_ATTR = 'data-jbj-contrast-skip';
 type RGB = [number, number, number];
 
 const SKIP_SELECTOR = [
-  '[data-no-contrast-guard]',
   '[data-decorative="true"]',
-  '.allow-white',
-  '.allow-ink',
-  '[data-on-dark]',
-  '.jj-text-fade-allow',
-  '.jj-icon-fade-allow',
-  // Premium AI surfaces explicitly own their palette.
-  '[data-ai-surface]',
   // Sign-out is forced red site-wide; never touch it.
   '[data-signout-action]',
   '.jj-signout-icon',
   // Price-orange brand token.
+  '[data-price-badge]',
   '.text-price-orange',
   '[class*="text-price-orange"]',
   // Decorative glyphs and gradient text effects.
@@ -64,7 +51,6 @@ const SKIP_SELECTOR = [
 const TAGS_SKIP = new Set([
   'SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME', 'CANVAS', 'VIDEO', 'AUDIO',
   'IMG', 'PICTURE', 'SOURCE', 'TRACK', 'OBJECT', 'EMBED',
-  'INPUT', 'TEXTAREA', 'SELECT', 'OPTION', // inputs manage their own contrast
   'BR', 'HR', 'META', 'LINK', 'HEAD', 'TITLE',
 ]);
 
@@ -123,6 +109,13 @@ function contrastRatio(a: RGB, b: RGB): number {
 // ---------- background resolution ----------
 
 function effectiveBg(el: Element): RGB {
+  // Photo/video heroes are deliberately darkened by overlays. Their actual
+  // image pixels are not exposed through computed background-color, so treat
+  // the region as dark for contrast decisions and only fix foregrounds.
+  if (el.closest('[data-hero-dark], .jj-hero-fullscreen, .on-dark')) {
+    return [26, 26, 26];
+  }
+
   // Build ancestor chain (root → leaf) then composite alpha back-to-front.
   const chain: Element[] = [];
   let cur: Element | null = el;
@@ -189,7 +182,14 @@ function isLargeText(cs: CSSStyleDeclaration): boolean {
   return px >= 24 || (px >= 18.66 && w >= 600);
 }
 
+function isFormControl(el: Element): boolean {
+  return el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement;
+}
+
 function hasOwnText(el: Element): boolean {
+  if (isFormControl(el)) return true;
+  if (el.getAttribute('aria-label')?.trim()) return true;
+  if (el.getAttribute('placeholder')?.trim()) return true;
   for (const node of Array.from(el.childNodes)) {
     if (node.nodeType === 3 && (node.textContent || '').trim().length > 0) return true;
   }
@@ -233,13 +233,20 @@ function fixElement(el: Element) {
     return;
   }
 
-  // Force opposite pole. Light bg → ink. Dark bg → white.
-  const target = bgLum > 0.5 ? INK : WHITE;
+  // Use the canonical foreground that actually produces stronger contrast.
+  // This prevents threshold mistakes on mid-gold: #B89555 is visually bright,
+  // and ink is AA while white is not.
+  const inkRatio = contrastRatio(bg, [26, 26, 26]);
+  const whiteRatio = contrastRatio(bg, [255, 255, 255]);
+  const target = inkRatio >= whiteRatio ? INK : WHITE;
   const html = el as HTMLElement;
   html.style.setProperty('color', target, 'important');
   html.style.setProperty('-webkit-text-fill-color', target, 'important');
+  if (isFormControl(el)) {
+    html.style.setProperty('--jbj-placeholder-fg', target === INK ? 'rgba(26, 26, 26, 0.58)' : 'rgba(255, 255, 255, 0.72)', 'important');
+  }
   if (isSvg || el.querySelector?.('svg, [class*="lucide"]')) {
-    html.style.setProperty('stroke', 'currentColor', 'important');
+    html.style.setProperty('stroke', target, 'important');
   }
   if (parseFloat(cs.opacity) < 1) {
     html.style.setProperty('opacity', '1', 'important');
@@ -257,7 +264,7 @@ function scanAll(root: ParentNode = document.body) {
   const sel =
     'h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, ' +
     'span, small, strong, em, b, i, u, code, label, ' +
-    'a, button, summary, ' +
+    'a, button, input, textarea, select, summary, ' +
     '[role="button"], [role="link"], [role="tab"], [role="menuitem"], [role="status"], [role="switch"], ' +
     'th, td, caption, legend, figcaption, ' +
     'svg, [class*="lucide"]';
@@ -293,7 +300,7 @@ function fixSubtree(root: Element | null) {
       fixElement(root);
       const sel =
         'h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,b,i,label,' +
-        'a,button,summary,svg,[class*="lucide"],' +
+        'a,button,input,textarea,select,summary,svg,[class*="lucide"],' +
         '[role="button"],[role="link"],[role="tab"],[role="menuitem"]';
       const inner = root.querySelectorAll(sel);
       for (let i = 0; i < inner.length; i++) {
@@ -346,7 +353,7 @@ export function installContrastGuard() {
   const delegate = (e: Event) => {
     const t = e.target as Element | null;
     if (!t || t.nodeType !== 1) return;
-    const root = (t.closest('a, button, [role="button"], [role="tab"], [role="menuitem"], summary, label') || t) as Element;
+    const root = (t.closest('a, button, input, textarea, select, [role="button"], [role="tab"], [role="menuitem"], summary, label') || t) as Element;
     fixSubtree(root);
   };
   document.addEventListener('mouseover', delegate, true);
