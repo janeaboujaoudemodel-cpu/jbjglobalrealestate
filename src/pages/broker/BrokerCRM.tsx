@@ -1051,6 +1051,27 @@ export default function BrokerCRM() {
         </PremiumCard>
       )}
 
+      {tab === "calendar" && (
+        <Suspense fallback={<Loading />}>
+          <BrokerCalendarTab />
+        </Suspense>
+      )}
+      {tab === "tasks" && (
+        <Suspense fallback={<Loading />}>
+          <BrokerTasksTab />
+        </Suspense>
+      )}
+      {tab === "notes" && (
+        <Suspense fallback={<Loading />}>
+          <BrokerNotesTab />
+        </Suspense>
+      )}
+      {tab === "inbox" && (
+        <Suspense fallback={<Loading />}>
+          <BrokerInboxTab />
+        </Suspense>
+      )}
+
       <LogCallDialog
         open={callDialogOpen}
         onOpenChange={setCallDialogOpen}
