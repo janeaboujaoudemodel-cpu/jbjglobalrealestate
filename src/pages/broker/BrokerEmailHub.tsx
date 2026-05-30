@@ -68,6 +68,14 @@ export default function BrokerEmailHub() {
             </Button>
           </div>
         </div>
+        {!hasGmailApp && !hasOutlookApp && (
+          <div className="mt-3 flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+            <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
+            <div>
+              No OAuth credentials yet. Go to <Link to="/broker/email/setup" className="underline font-semibold">Email Setup</Link> and paste your Google or Microsoft Client ID & Secret to enable connecting your mailbox.
+            </div>
+          </div>
+        )}
         {(accounts.data ?? []).length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
             {accounts.data!.map((a: any) => (
