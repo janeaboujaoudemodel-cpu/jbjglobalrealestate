@@ -146,10 +146,10 @@ const ContinueSearching = ({
         <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center shadow-sm">
-              <History className="w-5 h-5 text-[#B89555]" />
+              <History className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#B89555]">
+              <span className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#1A1A1A]">
                 {eyebrow}
               </span>
               <h2 className="text-xl md:text-2xl font-semibold text-[#1A1A1A] leading-tight">
@@ -247,7 +247,7 @@ const ContinueSearching = ({
             <p className="text-[#1A1A1A]/70 text-xs mb-5">Your recently viewed properties, developers, and areas will appear here.</p>
             <Link
               to="/properties"
-              className="px-6 py-2.5 rounded-lg bg-[#B89555] border border-[#B89555] text-[#1A1A1A] text-sm font-semibold hover:bg-[#a8854a] transition-all duration-300"
+              className="jj-cta-champagne px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300"
             >
               Explore Now
             </Link>
