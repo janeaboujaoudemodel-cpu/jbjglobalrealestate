@@ -25,14 +25,14 @@ export type IconTileTone =
 export type IconTileSize = "sm" | "md" | "lg" | "xl";
 
 const TONE: Record<IconTileTone, { tile: string; icon: string }> = {
-  gold:    { tile: "bg-[#EFE6D6] ring-1 ring-[#B89555]",            icon: "text-[#1A1A1A]" },
+  gold:    { tile: "surface-raised bg-[#EFE6D6] ring-1 ring-[#B89555]", icon: "text-[#1A1A1A]" },
   emerald: { tile: "bg-emerald-500/10 ring-1 ring-emerald-500/30", icon: "text-emerald-600" },
   red:     { tile: "bg-red-500/10 ring-1 ring-red-500/30",         icon: "text-red-600" },
   blue:    { tile: "bg-blue-500/10 ring-1 ring-blue-500/30",       icon: "text-blue-600" },
   amber:   { tile: "bg-amber-500/10 ring-1 ring-amber-500/30",     icon: "text-amber-600" },
   purple:  { tile: "bg-purple-500/10 ring-1 ring-purple-500/30",   icon: "text-purple-600" },
   rose:    { tile: "bg-rose-500/10 ring-1 ring-rose-500/30",       icon: "text-rose-600" },
-  ink:     { tile: "bg-[#1A1A1A] ring-1 ring-[#1A1A1A]",           icon: "text-white" },
+  ink:     { tile: "surface-ink bg-[#1A1A1A] ring-1 ring-[#1A1A1A]", icon: "text-white" },
 };
 
 const SIZE: Record<IconTileSize, { box: string; icon: string }> = {
@@ -59,6 +59,7 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
         ref={ref}
         data-icon-tile=""
         data-icon-tile-tone={tone}
+        data-surface={tone === "ink" ? "ink" : "raised"}
         className={cn(
           "inline-flex items-center justify-center flex-shrink-0",
           s.box,
