@@ -44,7 +44,14 @@ export default function BrokerEmailHub() {
           </div>
           <div className="flex flex-wrap gap-2">
             <Button
-              onClick={() => connect.mutate("gmail")}
+              asChild
+              variant="outline"
+              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            >
+              <Link to="/broker/email/setup"><KeyRound className="h-4 w-4 mr-1.5" /> Email Setup</Link>
+            </Button>
+            <Button
+              onClick={() => tryConnect("gmail")}
               disabled={connect.isPending}
               className="bg-[#102540] hover:bg-[#1a3d63] text-white"
               data-allow-dark-cta
@@ -52,7 +59,7 @@ export default function BrokerEmailHub() {
               <Plug className="h-4 w-4 mr-1.5" /> Connect Gmail
             </Button>
             <Button
-              onClick={() => connect.mutate("outlook")}
+              onClick={() => tryConnect("outlook")}
               disabled={connect.isPending}
               variant="outline"
               className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
