@@ -16,7 +16,17 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-export type SurfaceTone = "page" | "champagne" | "gold" | "ink";
+export type SurfaceTone =
+  | "page"
+  | "light"
+  | "champagne"
+  | "cream"
+  | "raised"
+  | "gold"
+  | "navy"
+  | "ink"
+  | "dark";
+
 
 type SurfaceProps<T extends keyof JSX.IntrinsicElements = "div"> = {
   tone?: SurfaceTone;
