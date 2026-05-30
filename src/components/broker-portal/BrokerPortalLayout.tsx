@@ -98,7 +98,7 @@ export default function BrokerPortalLayout() {
               </button>
             )}
             <div className="min-w-0 leading-tight">
-              <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">
+              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
                 JBJ GLOBAL REAL ESTATE
               </div>
               <h1 className="font-display text-[#1A1A1A] font-semibold text-sm md:text-base tracking-tight truncate">
@@ -143,7 +143,7 @@ export default function BrokerPortalLayout() {
           >
             <Crown className="h-3.5 w-3.5" />
             <span className="font-semibold">Owner preview</span>
-            <span className="text-[#1A1A1A]/70">— you're viewing the broker portal exactly as your registered brokers see it.</span>
+            <span className="text-muted-foreground">— you're viewing the broker portal exactly as your registered brokers see it.</span>
           </div>
         )}
 
