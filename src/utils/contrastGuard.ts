@@ -1,44 +1,112 @@
 /**
- * contrastGuard — Runtime same-tone guard.
+ * contrastGuard — Universal runtime contrast engine.
  *
- * Walks every interactive element after each route change and forces an inverse
- * color when the computed text color is too close to its background.
+ * Replaces "patch one button at a time" with a real architectural fix.
  *
- * Companion to the static CSS guard in `index.css` (PASS 5 — UNIVERSAL SAME-TONE).
- * The CSS pass catches class-based combos; this runtime pass catches inline styles,
- * cascaded variables, and dynamic third-party content.
+ * For every visible element in the DOM:
+ *  1. Walks the ancestor chain and composites alpha-aware background colors
+ *     over the canonical page base (#FDFBF7). Includes gradient-stop averaging
+ *     when an ancestor uses a CSS gradient or image. This yields the element's
+ *     ACTUAL rendered surface color — not a guess from class names.
+ *  2. Reads the element's own computed foreground color.
+ *  3. If the foreground/background contrast ratio is < the WCAG floor, the
+ *     engine forces the element's `color` (and `stroke` for icons/SVGs) to
+ *     the opposite pole — pure white on dark surfaces, ink #1A1A1A on light
+ *     surfaces — locally via inline `!important`. Backgrounds are NEVER
+ *     changed.
+ *  4. Re-runs after route changes, DOM mutations, hover, focus, and tab
+ *     visibility, so hover/active/focus/disabled/loading states all stay
+ *     readable.
+ *
+ * Opt-outs (the element OR an ancestor may carry any of these):
+ *   [data-no-contrast-guard]   — generic opt-out (e.g. AI premium purple)
+ *   [data-decorative="true"]   — decorative glyph / spinner
+ *   .allow-white               — author insists on white text
+ *   .allow-ink                 — author insists on ink text
+ *   [data-on-dark]             — author marks element as "always on dark"
+ *
+ * Already-correct elements (ratio ≥ floor) are skipped — the engine only
+ * corrects real contrast failures, so contracted primitives (`.jj-cta-*`,
+ * navy CTAs with white text, champagne pills with ink) keep working.
  */
 
-const CONTRAST_FIX_CLASS = "jbj-contrast-fix";
+const PAGE_BASE: RGB = [253, 251, 247]; // #FDFBF7 — the global painted baseline
+const INK = '#1A1A1A';
+const WHITE = '#FFFFFF';
+const MIN_RATIO_TEXT = 4.5;
+const MIN_RATIO_LARGE = 3.0;
+const RESCAN_INTERVAL_MS = 350;
+const FIX_ATTR = 'data-jbj-contrast-fixed';
+const SKIP_ATTR = 'data-jbj-contrast-skip';
 
-function parseRgb(input: string): [number, number, number] | null {
-  const m = input.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+type RGB = [number, number, number];
+
+const SKIP_SELECTOR = [
+  '[data-no-contrast-guard]',
+  '[data-decorative="true"]',
+  '.allow-white',
+  '.allow-ink',
+  '[data-on-dark]',
+  '.jj-text-fade-allow',
+  '.jj-icon-fade-allow',
+  // Premium AI surfaces explicitly own their palette.
+  '[data-ai-surface]',
+  // Sign-out is forced red site-wide; never touch it.
+  '[data-signout-action]',
+  '.jj-signout-icon',
+  // Price-orange brand token.
+  '.text-price-orange',
+  '[class*="text-price-orange"]',
+  // Decorative glyphs and gradient text effects.
+  '[class*="bg-clip-text"]',
+].join(',');
+
+const TAGS_SKIP = new Set([
+  'SCRIPT', 'STYLE', 'NOSCRIPT', 'IFRAME', 'CANVAS', 'VIDEO', 'AUDIO',
+  'IMG', 'PICTURE', 'SOURCE', 'TRACK', 'OBJECT', 'EMBED',
+  'INPUT', 'TEXTAREA', 'SELECT', 'OPTION', // inputs manage their own contrast
+  'BR', 'HR', 'META', 'LINK', 'HEAD', 'TITLE',
+]);
+
+// ---------- color math ----------
+
+function parseColor(input: string): { rgb: RGB; a: number } | null {
+  if (!input) return null;
+  const m = input.match(/rgba?\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)(?:\s*,\s*(-?\d+(?:\.\d+)?))?\s*\)/i);
   if (!m) return null;
-  return [Number(m[1]), Number(m[2]), Number(m[3])];
+  const r = Math.max(0, Math.min(255, +m[1]));
+  const g = Math.max(0, Math.min(255, +m[2]));
+  const b = Math.max(0, Math.min(255, +m[3]));
+  const a = m[4] === undefined ? 1 : Math.max(0, Math.min(1, +m[4]));
+  return { rgb: [r, g, b], a };
 }
 
-function parseRgbAlpha(input: string): number {
-  const m = input.match(/rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*([\d.]+)\s*\)/i);
-  return m ? Number(m[1]) : 1;
+function composite(src: RGB, srcA: number, dst: RGB): RGB {
+  if (srcA >= 1) return src;
+  if (srcA <= 0) return dst;
+  return [
+    src[0] * srcA + dst[0] * (1 - srcA),
+    src[1] * srcA + dst[1] * (1 - srcA),
+    src[2] * srcA + dst[2] * (1 - srcA),
+  ];
 }
 
-function averageGradientRgb(input: string): string | null {
-  const matches = [...input.matchAll(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/gi)];
-  if (!matches.length) return null;
-  const totals = matches.reduce(
-    (acc, m) => {
-      acc[0] += Number(m[1]);
-      acc[1] += Number(m[2]);
-      acc[2] += Number(m[3]);
-      return acc;
-    },
-    [0, 0, 0],
-  );
-  const count = matches.length;
-  return `rgb(${Math.round(totals[0] / count)}, ${Math.round(totals[1] / count)}, ${Math.round(totals[2] / count)})`;
+function averageGradient(bgImage: string): RGB | null {
+  const stops = [...bgImage.matchAll(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\s*\)/g)];
+  if (!stops.length) return null;
+  let r = 0, g = 0, b = 0, w = 0;
+  for (const s of stops) {
+    const a = s[4] === undefined ? 1 : +s[4];
+    r += +s[1] * a;
+    g += +s[2] * a;
+    b += +s[3] * a;
+    w += a;
+  }
+  if (w === 0) return null;
+  return [r / w, g / w, b / w];
 }
 
-function relLuminance([r, g, b]: [number, number, number]): number {
+function relLuminance([r, g, b]: RGB): number {
   const norm = [r, g, b].map((v) => {
     const x = v / 255;
     return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
@@ -46,142 +114,247 @@ function relLuminance([r, g, b]: [number, number, number]): number {
   return 0.2126 * norm[0] + 0.7152 * norm[1] + 0.0722 * norm[2];
 }
 
-function effectiveBgColor(el: Element): string {
+function contrastRatio(a: RGB, b: RGB): number {
+  const la = relLuminance(a);
+  const lb = relLuminance(b);
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+
+// ---------- background resolution ----------
+
+function effectiveBg(el: Element): RGB {
+  // Build ancestor chain (root → leaf) then composite alpha back-to-front.
+  const chain: Element[] = [];
   let cur: Element | null = el;
-  while (cur && cur instanceof HTMLElement) {
-    const style = window.getComputedStyle(cur);
-    const bg = style.backgroundColor;
-    if (bg && !bg.includes("rgba(0, 0, 0, 0)") && bg !== "transparent") {
-      // Translucent overlays (e.g. bg-white/5 on navy) are NOT the effective
-      // surface — keep walking up so we measure against the real parent.
-      const alpha = parseRgbAlpha(bg);
-      if (alpha >= 0.6) return bg;
-    }
-    // Element has a gradient or image background (no flat color but rendered surface).
-    // Trust the explicit data-surface contract instead of falling through to page.
-    const surface = cur.getAttribute("data-surface");
-    if (surface) {
-      if (surface === "dark" || surface === "ink") return "rgb(26, 26, 26)";
-      if (surface === "gold") return "rgb(184, 149, 85)";
-      // page / champagne / light
-      return "rgb(253, 251, 247)";
-    }
-    const bgImage = style.backgroundImage;
-    if (bgImage && bgImage !== "none") {
-      const average = averageGradientRgb(bgImage);
-      if (average) return average;
-      // Unknown image surface — bail out of guarding rather than guessing.
-      return "__unknown__";
-    }
+  while (cur && cur.nodeType === 1) {
+    chain.push(cur);
     cur = cur.parentElement;
   }
-  return "rgb(253, 251, 247)"; // page #FDFBF7 fallback
-}
+  let bg: RGB = [...PAGE_BASE] as RGB;
+  for (let i = chain.length - 1; i >= 0; i--) {
+    const node = chain[i];
+    const cs = getComputedStyle(node);
 
-function fixIfLowContrast(el: HTMLElement, minRatio: number) {
-  if (el.closest("[data-no-contrast-guard], .jj-cta-dark, .jj-cta-champagne, .jj-cta-outline, .jj-pill-active, .jj-badge-dark, .jj-badge-champagne, .jj-badge-outline, [data-cta='dark'], [data-cta='champagne'], [data-cta='outline'], [data-cta='pill-active']")) return;
-  // Skip nodes with no rendered text content (decorative wrappers)
-  if (!el.textContent || !el.textContent.trim()) return;
-  const cs = window.getComputedStyle(el);
-  if (cs.visibility === "hidden" || cs.display === "none" || cs.opacity === "0") return;
-  const fg = parseRgb(cs.color);
-  const bgStr = effectiveBgColor(el);
-  if (bgStr === "__unknown__") return; // unknown gradient/image surface — leave authored color alone
-  const bg = parseRgb(bgStr);
-  if (!fg || !bg) return;
-  const lf = relLuminance(fg);
-  const lb = relLuminance(bg);
-  const ratio = (Math.max(lf, lb) + 0.05) / (Math.min(lf, lb) + 0.05);
-  if (ratio < minRatio) {
-    el.classList.add(CONTRAST_FIX_CLASS);
-    if (lb < 0.4) {
-      el.style.setProperty("color", "#FDFBF7", "important");
-    } else {
-      el.style.setProperty("color", "#1A1A1A", "important");
+    // Honor explicit surface declarations.
+    const surface = (node as HTMLElement).dataset?.surface;
+    if (surface) {
+      if (surface === 'dark' || surface === 'ink') bg = [26, 26, 26];
+      else if (surface === 'gold') bg = [184, 149, 85];
+      else if (surface === 'navy') bg = [16, 37, 64];
+      else if (surface === 'champagne') bg = [247, 242, 234];
+      else if (surface === 'cream' || surface === 'raised') bg = [239, 230, 214];
+      else if (surface === 'light' || surface === 'page') bg = [253, 251, 247];
+    }
+
+    // Composite solid bg color.
+    const parsed = parseColor(cs.backgroundColor);
+    if (parsed && parsed.a > 0) {
+      bg = composite(parsed.rgb, parsed.a, bg);
+    }
+
+    // Gradients/images contribute an averaged stop color.
+    const bgImage = cs.backgroundImage;
+    if (bgImage && bgImage !== 'none') {
+      const avg = averageGradient(bgImage);
+      if (avg) {
+        // Assume image/gradient is fully opaque for the visible region.
+        bg = avg;
+      }
     }
   }
+  return bg;
 }
 
-function fixWhiteOnBright(el: Element) {
-  if (el.closest("[data-no-contrast-guard], [data-surface='dark'], .allow-white, .jj-cta-dark, .jj-badge-dark, [data-cta='dark']")) return;
-  if (el.closest(".bg-black, [class~='bg-[#1A1A1A]'], [class*='bg-gray-9'], [class*='bg-neutral-9'], [class*='bg-zinc-9']")) return;
-  const cs = window.getComputedStyle(el);
-  if (cs.visibility === "hidden" || cs.display === "none" || cs.opacity === "0") return;
-  const fg = parseRgb(cs.color);
-  const bgStr = effectiveBgColor(el);
-  if (bgStr === "__unknown__") return;
-  const bg = parseRgb(bgStr);
-  if (!fg || !bg) return;
-  const isWhiteForeground = fg[0] > 235 && fg[1] > 235 && fg[2] > 235;
-  const isBrightSurface = relLuminance(bg) > 0.52;
-  if (isWhiteForeground && isBrightSurface) {
-    el.classList.add(CONTRAST_FIX_CLASS);
-    if (el instanceof HTMLElement || el instanceof SVGElement) {
-      el.style.setProperty("color", "#1A1A1A", "important");
-      el.style.setProperty("stroke", "currentColor", "important");
-    }
-  }
+// ---------- per-element fix ----------
+
+function shouldSkip(el: Element): boolean {
+  if (TAGS_SKIP.has(el.tagName)) return true;
+  if (el.hasAttribute(SKIP_ATTR)) return true;
+  // Walk up once to honor inherited opt-outs.
+  if (el.closest(SKIP_SELECTOR)) return true;
+  return false;
 }
+
+function isVisible(el: Element, cs: CSSStyleDeclaration): boolean {
+  if (cs.display === 'none' || cs.visibility === 'hidden') return false;
+  if (parseFloat(cs.opacity) === 0) return false;
+  const r = (el as HTMLElement).getBoundingClientRect?.();
+  if (!r) return true;
+  return r.width > 0 && r.height > 0;
+}
+
+function isLargeText(cs: CSSStyleDeclaration): boolean {
+  const px = parseFloat(cs.fontSize) || 16;
+  const w = parseInt(cs.fontWeight, 10) || 400;
+  return px >= 24 || (px >= 18.66 && w >= 600);
+}
+
+function hasOwnText(el: Element): boolean {
+  for (const node of Array.from(el.childNodes)) {
+    if (node.nodeType === 3 && (node.textContent || '').trim().length > 0) return true;
+  }
+  return false;
+}
+
+function fixElement(el: Element) {
+  if (shouldSkip(el)) return;
+  const cs = getComputedStyle(el);
+  if (!isVisible(el, cs)) return;
+
+  const isSvg = el instanceof SVGElement;
+  const hasText = hasOwnText(el);
+  if (!isSvg && !hasText) return;
+
+  const bg = effectiveBg(el);
+  const bgLum = relLuminance(bg);
+
+  // Foreground: for SVGs prefer fill, else color; fall back to color.
+  const fgSource = isSvg ? (cs.fill && cs.fill !== 'none' ? cs.fill : cs.color) : cs.color;
+  const fg = parseColor(fgSource);
+  if (!fg) return;
+
+  // Skip if foreground is fully transparent (likely intentional).
+  if (fg.a === 0) return;
+
+  // Effective foreground composited over bg for the ratio test.
+  const effFg = composite(fg.rgb, fg.a, bg);
+  const ratio = contrastRatio(effFg, bg);
+
+  const floor = isLargeText(cs) ? MIN_RATIO_LARGE : MIN_RATIO_TEXT;
+  if (ratio >= floor) {
+    // Already passes — clear any prior fix.
+    if ((el as HTMLElement).hasAttribute(FIX_ATTR)) {
+      (el as HTMLElement).style.removeProperty('color');
+      (el as HTMLElement).style.removeProperty('-webkit-text-fill-color');
+      (el as HTMLElement).style.removeProperty('stroke');
+      (el as HTMLElement).style.removeProperty('opacity');
+      (el as HTMLElement).removeAttribute(FIX_ATTR);
+    }
+    return;
+  }
+
+  // Force opposite pole. Light bg → ink. Dark bg → white.
+  const target = bgLum > 0.5 ? INK : WHITE;
+  const html = el as HTMLElement;
+  html.style.setProperty('color', target, 'important');
+  html.style.setProperty('-webkit-text-fill-color', target, 'important');
+  if (isSvg || el.querySelector?.('svg, [class*="lucide"]')) {
+    html.style.setProperty('stroke', 'currentColor', 'important');
+  }
+  if (parseFloat(cs.opacity) < 1) {
+    html.style.setProperty('opacity', '1', 'important');
+  }
+  html.setAttribute(FIX_ATTR, target === INK ? 'ink' : 'on-dark');
+}
+
+// ---------- scheduler ----------
 
 let scheduled = false;
-let lastRun = 0;
-const MIN_INTERVAL_MS = 250; // throttle: max 4 scans/sec
-function scan() {
+let lastScan = 0;
+
+function scanAll(root: ParentNode = document.body) {
+  // Cover anything text- or icon-bearing. Keep selectors broad but bounded.
+  const sel =
+    'h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, ' +
+    'span, small, strong, em, b, i, u, code, label, ' +
+    'a, button, summary, ' +
+    '[role="button"], [role="link"], [role="tab"], [role="menuitem"], [role="status"], [role="switch"], ' +
+    'th, td, caption, legend, figcaption, ' +
+    'svg, [class*="lucide"]';
+  const nodes = root.querySelectorAll(sel);
+  // Cap per-pass workload to keep main thread responsive.
+  const MAX = 3000;
+  const limit = Math.min(nodes.length, MAX);
+  for (let i = 0; i < limit; i++) {
+    try { fixElement(nodes[i]); } catch { /* swallow */ }
+  }
+}
+
+function schedule(root: ParentNode = document.body) {
   if (scheduled) return;
-  const now = Date.now();
-  const wait = Math.max(0, MIN_INTERVAL_MS - (now - lastRun));
+  const now = performance.now();
+  const wait = Math.max(0, RESCAN_INTERVAL_MS - (now - lastScan));
   scheduled = true;
   const run = () => {
     scheduled = false;
-    lastRun = Date.now();
+    lastScan = performance.now();
     requestAnimationFrame(() => {
-      // Interactive elements — UI contrast floor (~3:1)
-      const interactives = document.querySelectorAll<HTMLElement>(
-        'button, a[href], [role="button"], [role="menuitem"], [role="tab"], summary, label.cursor-pointer'
-      );
-      interactives.forEach((el) => fixIfLowContrast(el, 2.5));
-      // Text-bearing nodes — body-text floor (tolerant 3.5; AA is 4.5)
-      const textNodes = document.querySelectorAll<HTMLElement>(
-        "h1, h2, h3, h4, h5, h6, p, li, blockquote, dt, dd, span, small, strong, em, [data-card], .card"
-      );
-      textNodes.forEach((el) => fixIfLowContrast(el, 3.5));
-      const whiteForegroundNodes = document.querySelectorAll<HTMLElement>(
-        ".text-white, [class*='text-white/'], svg.text-white, svg[class*='text-white/']"
-      );
-      whiteForegroundNodes.forEach(fixWhiteOnBright);
+      try { scanAll(root); } catch { /* swallow */ }
     });
   };
-  if (wait > 0) setTimeout(run, wait);
-  else run();
+  if (wait > 0) setTimeout(run, wait); else run();
 }
+
+// Local subtree fix for hover/focus/active — runs immediately, no throttle.
+function fixSubtree(root: Element | null) {
+  if (!root) return;
+  requestAnimationFrame(() => {
+    try {
+      fixElement(root);
+      const sel =
+        'h1,h2,h3,h4,h5,h6,p,li,span,small,strong,em,b,i,label,' +
+        'a,button,summary,svg,[class*="lucide"],' +
+        '[role="button"],[role="link"],[role="tab"],[role="menuitem"]';
+      const inner = root.querySelectorAll(sel);
+      for (let i = 0; i < inner.length; i++) {
+        try { fixElement(inner[i]); } catch { /* swallow */ }
+      }
+    } catch { /* swallow */ }
+  });
+}
+
+// ---------- public API ----------
 
 let installed = false;
 
 export function installContrastGuard() {
-  if (installed || typeof window === "undefined") return;
+  if (installed || typeof window === 'undefined') return;
   installed = true;
 
-  // Initial pass after layout settles
-  setTimeout(scan, 250);
-  setTimeout(scan, 1000);
+  // Initial passes after layout and after late hydration.
+  setTimeout(() => schedule(), 200);
+  setTimeout(() => schedule(), 800);
+  setTimeout(() => schedule(), 1800);
 
-  // After every route change (URL update)
-  window.addEventListener("popstate", scan);
-  // pushState/replaceState patches
+  // Route changes — patch history APIs.
+  const trigger = () => setTimeout(() => schedule(), 150);
+  window.addEventListener('popstate', trigger);
   const origPush = history.pushState;
   const origReplace = history.replaceState;
   history.pushState = function (...args) {
     const r = origPush.apply(this, args as Parameters<typeof origPush>);
-    setTimeout(scan, 200);
+    trigger();
     return r;
   };
   history.replaceState = function (...args) {
     const r = origReplace.apply(this, args as Parameters<typeof origReplace>);
-    setTimeout(scan, 200);
+    trigger();
     return r;
   };
 
-  // DOM mutations (modals, dialogs, async content)
-  const mo = new MutationObserver(() => scan());
-  mo.observe(document.body, { childList: true, subtree: true, attributes: false });
+  // DOM mutations — async/lazy content, modals, popovers.
+  const mo = new MutationObserver(() => schedule());
+  mo.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class', 'style', 'data-state', 'aria-pressed', 'aria-current', 'aria-expanded', 'data-active'],
+  });
+
+  // Hover / focus / active — re-fix the affected subtree immediately so state
+  // changes (hover bg swap, active fill swap) never expose unreadable text.
+  const delegate = (e: Event) => {
+    const t = e.target as Element | null;
+    if (!t || t.nodeType !== 1) return;
+    const root = (t.closest('a, button, [role="button"], [role="tab"], [role="menuitem"], summary, label') || t) as Element;
+    fixSubtree(root);
+  };
+  document.addEventListener('mouseover', delegate, true);
+  document.addEventListener('focusin', delegate, true);
+  document.addEventListener('pointerdown', delegate, true);
+
+  // Tab visibility — re-scan on return.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') schedule();
+  });
 }
