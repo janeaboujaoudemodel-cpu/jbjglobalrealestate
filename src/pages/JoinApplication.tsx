@@ -1346,32 +1346,34 @@ export default function JoinApplication() {
                   {currentStep < TOTAL_STEPS - 1 ? (
                     <Button
                       type="button"
+                      variant="dark"
                       onClick={handleNext}
                       disabled={loading}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="careers-navy-cta sm:w-48 h-12 rounded-xl font-semibold"
+                      className="jj-cta-dark careers-navy-cta sm:w-48 h-12 rounded-xl font-semibold"
                     >
                       Continue <ArrowRight className="w-4 h-4 ml-1.5" />
                     </Button>
                   ) : (
                     <Button
                       type="submit"
+                      variant="dark"
                       disabled={loading}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="careers-navy-cta sm:flex-1 h-14 rounded-xl font-bold text-base sm:text-lg"
+                      className="jj-cta-dark careers-navy-cta sm:flex-1 h-14 rounded-xl font-bold text-base sm:text-lg"
 
                     >
                       {loading ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />
-                          <span className="text-white">Submitting...</span>
+                          <span>Submitting...</span>
                         </>
                       ) : user ? (
-                        <span className="text-white">Submit Application</span>
+                        <span>Submit Application</span>
                       ) : (
-                        <span className="text-white">Continue & Sign In to Submit</span>
+                        <span>Continue & Sign In to Submit</span>
                       )}
                     </Button>
                   )}
