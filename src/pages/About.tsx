@@ -103,7 +103,7 @@ const FeatureCard = ({
     variants={fadeInUp}
   >
     <div className="w-14 h-14 rounded-lg bg-[#1A1A1A] flex items-center justify-center mb-5">
-      <Icon className="w-7 h-7 text-[#1A1A1A]" />
+      <Icon className="w-7 h-7 text-white" />
     </div>
     <h3 className="text-[#1A1A1A] text-xl font-semibold mb-3">{title}</h3>
     <p className="text-[#1A1A1A]/70 text-base leading-relaxed">{description}</p>
