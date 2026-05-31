@@ -95,7 +95,7 @@ const FeatureCard = ({
   title, 
   description
 }: { 
-  icon: React.ComponentType<{ className?: string }>; 
+  icon: import("lucide-react").LucideIcon; 
   title: string; 
   description: string;
 }) => (
