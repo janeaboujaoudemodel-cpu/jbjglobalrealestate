@@ -6261,16 +6261,15 @@ html body :is(
   -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
 }
 
-html body :is(
-  [data-surface], [data-cta], [data-photo-copy-lock],
-  .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-navy, .surface-ink, .surface-dark,
-  .jj-cta-champagne, .jj-pill-active, .jj-cta-outline, .jj-cta-dark, .jj-navy-cta
-) :where(h1,h2,h3,h4,h5,h6,p,span,small,strong,em,b,i,label,a,button,li,dt,dd,summary,th,td,caption,legend,figcaption,svg,[class*="lucide"]):not([data-decorative="true"]):not([data-no-contrast-guard]):not(.text-price-orange):not([class*="text-price-orange"]):not([data-price]):not([data-price] *):not(.fill-red-500):not(.text-red-500) {
-  color: var(--jj-stable-fg, hsl(var(--jj-on-light))) !important;
-  -webkit-text-fill-color: var(--jj-stable-fg, hsl(var(--jj-on-light))) !important;
-  stroke: var(--jj-stable-fg, hsl(var(--jj-on-light))) !important;
-  opacity: 1 !important;
-}
+/* Descendant cascade rule REMOVED.
+   The previous rule forced every descendant of any [data-surface] / CTA
+   ancestor to the ancestor's stable-fg, which broke nested dark cards
+   sitting inside light sections (e.g. the navy banner on /join).
+   Nested-surface precedence is handled correctly by the TWO-RULE
+   CONTRAST CONTRACT above (RULE A / RULE B) which already excludes
+   the opposing surface and its descendants. Do not reintroduce a
+   broad descendant cascade here. */
+
 
 /* Prevent foreground flicker only; do not kill animation durations. */
 :where(a,button,[role="button"],[role="tab"],svg,[class*="lucide"],span,p,h1,h2,h3,h4,h5,h6) {
