@@ -4267,3 +4267,26 @@ html body .jj-favorite-trigger :where(svg,[class*="lucide"]):not(.fill-red-500):
 :where(a,button,[role="button"],[role="tab"],svg,[class*="lucide"],span,p,h1,h2,h3,h4,h5,h6) {
   transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
 }
+
+/* ============================================================
+ * LEGACY DARK-DEFAULT CLASS LIGHT-ANCESTOR GUARD
+ * Several legacy `.jj-inactive-item / .jj-tab-inactive / .jj-sort-inactive /
+ * .jj-role / .jj-label / .jj-section-label / .jj-profile-role / .jj-gold-accent`
+ * classes default to text-white because they were authored for dark hero
+ * panels. When they appear on a champagne/page/cream/raised/gold ancestor,
+ * force ink so the Rule B contract is honoured.
+ * ============================================================ */
+html body :is(
+  [data-surface="page"], [data-surface="light"], [data-surface="champagne"],
+  [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+  .surface-page, .surface-light, .surface-champagne, .surface-cream,
+  .surface-raised, .surface-gold
+) :is(
+  .jj-inactive-item, .jj-inactive-item-icon, .jj-inactive-item-number,
+  .jj-tab-inactive, .jj-sort-inactive,
+  .jj-role, .jj-label, .jj-section-label,
+  .jj-profile-role, .jj-gold-accent
+) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
