@@ -2978,127 +2978,13 @@ button:disabled:has(.lucide),
  * Runs LAST so it beats earlier low-contrast utility classes.
  * ============================================================ */
 
-/* 1. Lift faded ink (text-[#1A1A1A]/25..85) to solid ink on light surfaces.
-   Opt out the entire subtree under [data-no-contrast-guard] so popups/dialogs
-   that own their own contrast aren't broken. */
-:root:not(.dark) :is(
-  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#EFE6D6\],
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
-  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
-):not([data-surface="dark"]):not([data-no-contrast-guard]) :is(
-  .text-\[\#1A1A1A\]\/25, .text-\[\#1A1A1A\]\/40, .text-\[\#1A1A1A\]\/50,
-  .text-\[\#1A1A1A\]\/60, .text-\[\#1A1A1A\]\/65, .text-\[\#1A1A1A\]\/70,
-  .text-\[\#1A1A1A\]\/80, .text-\[\#1A1A1A\]\/85, .text-\[\#1A1A1A\]\/90,
-  [class*="text-[#1A1A1A]/2"], [class*="text-[#1A1A1A]/3"],
-  [class*="text-[#1A1A1A]/4"], [class*="text-[#1A1A1A]/5"],
-  [class*="text-[#1A1A1A]/6"], [class*="text-[#1A1A1A]/7"]
-):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([class~="bg-[#1A1A1A]"] *):not([class*="bg-foreground"] *):not(.bg-black *) {
-  color: #1A1A1A !important;
-  --tw-text-opacity: 1 !important;
-}
-
-/* 2. Replace gray/silver utility surfaces with champagne */
-:root:not(.dark) :is(
-  .bg-\[\#F7F2EA\], .bg-\[\#F7F2EA\], .bg-gray-50, .bg-gray-100,
-  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#F7F2EA\], .bg-\[\#F7F2EA\],
-  .bg-\[\#F7F2EA\], .bg-\[\#F7F2EA\]
-):not([data-surface="dark"]) {
-  background-color: #F7F2EA !important;
-}
-
-/* 3. Replace neutral text on light surfaces with ink/brown */
-:root:not(.dark) :is(
-  .text-\[\#1A1A1A\]\/70, .text-\[\#1A1A1A\]\/70, .text-\[\#1A1A1A\]\/70, .text-\[\#1A1A1A\]\/70,
-  .text-\[\#1A1A1A\]\/60, .text-\[\#1A1A1A\]\/70, .text-\[\#1A1A1A\]\/70, .text-\[\#1A1A1A\]\/70,
-  .text-\[\#1A1A1A\]\/70, .text-\[\#1A1A1A\]\/70
-) {
-  color: #3A2D1D !important;
-  --tw-text-opacity: 1 !important;
-}
-
-/* 4. Neutral borders on light surfaces → champagne gold hairline.
- *    Covers every gray family (gray/slate/zinc/neutral/stone) at shades
- *    100–700 + the common `border-border`/`divide-*` tokens. Light surfaces
- *    only — dark sections opt out via [data-surface="dark"]. */
-:root:not(.dark) :where(
-  .border-gray-100, .border-gray-200, .border-gray-300, .border-gray-400, .border-gray-500, .border-gray-600, .border-gray-700,
-  .border-slate-100, .border-slate-200, .border-slate-300, .border-slate-400, .border-slate-500, .border-slate-600, .border-slate-700,
-  .border-zinc-100, .border-zinc-200, .border-zinc-300, .border-zinc-400, .border-zinc-500, .border-zinc-600, .border-zinc-700,
-  .border-neutral-100, .border-neutral-200, .border-neutral-300, .border-neutral-400, .border-neutral-500, .border-neutral-600, .border-neutral-700,
-  .border-stone-100, .border-stone-200, .border-stone-300, .border-stone-400, .border-stone-500, .border-stone-600, .border-stone-700,
-  .divide-gray-100 > *, .divide-gray-200 > *, .divide-gray-300 > *,
-  .divide-slate-100 > *, .divide-slate-200 > *, .divide-slate-300 > *
-):not([data-surface="dark"]):not([data-no-contrast-guard]) {
-  border-color: rgba(184, 149, 85, 0.40) !important;
-}
-
-/* 5. Faded brown text-[#5A4A2E] on champagne reads as gray — promote to #3A2D1D */
-:root:not(.dark) :is(
-  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#EFE6D6\],
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"]
-):not([data-surface="dark"]) :is(
-  .text-\[\#8A7556\], [class*="text-[#8A7556]"]
-) {
-  color: #3A2D1D !important;
-}
+/* Legacy anti-gray foreground/color repaint rules neutralized.
+   No foreground contrast logic remains here. */
 
 /* ============================================================
-   GLOBAL ICON VISIBILITY STANDARD — Maison-grade clarity
-   Inspired by Hermès / Chanel / LV editorial: every glyph reads
-   at full opacity with confident stroke. Decorative inline SVGs
-   inside icon-sized containers (≤ 64px) are never faded.
-   Opt-out: add class `jj-icon-fade-allow` to a parent.
+   LEGACY ICON VISIBILITY COLOR GUARD — NEUTRALIZED
+   Icon opacity/stroke/color contrast is owned by the final two-rule contract.
    ============================================================ */
-@layer utilities {
-  /* 1. Force inline lucide-style icons to full opacity site-wide */
-  :where(svg.lucide,
-         button > svg,
-         a > svg,
-         [role="button"] > svg,
-         [class*="size-"] > svg,
-         [class*="h-3"] > svg, [class*="h-4"] > svg,
-         [class*="h-5"] > svg, [class*="h-6"] > svg,
-         [class*="h-7"] > svg, [class*="h-8"] > svg):not(
-            .jj-icon-fade-allow svg
-         ):not([data-decorative="true"]) {
-    opacity: 1 !important;
-  }
-
-  /* 2. Minimum stroke weight floor for lucide icons (no hairlines) */
-  :where(svg.lucide):not(.jj-icon-fade-allow svg) {
-    stroke-width: max(1.75, var(--jj-icon-stroke, 1.75)) !important;
-  }
-
-  /* 3. Bump faded icon colors to opaque on light surfaces.
-        Targets common low-alpha Tailwind utilities used on icons. */
-  :where(
-    body,
-    [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
-    [class*="bg-champagne"], [class*="bg-background"], [class*="bg-card"],
-    [class*="bg-muted"], [class*="bg-white"]
-  ):not([data-surface="dark"]) :where(
-    .text-foreground\/30, .text-foreground\/40, .text-foreground\/50, .text-foreground\/60,
-    .text-muted-foreground\/30, .text-muted-foreground\/40, .text-muted-foreground\/50, .text-muted-foreground\/60,
-    .text-black\/30, .text-black\/40, .text-black\/50, .text-black\/60,
-    [class*="text-foreground/3"], [class*="text-foreground/4"],
-    [class*="text-foreground/5"], [class*="text-foreground/6"],
-    [class*="text-muted-foreground/3"], [class*="text-muted-foreground/4"],
-    [class*="text-muted-foreground/5"], [class*="text-muted-foreground/6"]
-  ):is(svg, [class*="lucide"]):not(.jj-icon-fade-allow):not([data-decorative="true"]) {
-    color: #1A1A1A !important;
-    opacity: 1 !important;
-  }
-
-  /* 4. On dark surfaces, faded white icons → solid champagne white */
-  [data-surface="dark"] :where(
-    .text-white\/30, .text-white\/40, .text-white\/50, .text-white\/60, .text-white\/70,
-    [class*="text-white/3"], [class*="text-white/4"],
-    [class*="text-white/5"], [class*="text-white/6"], [class*="text-white/7"]
-  ):is(svg, [class*="lucide"]):not(.jj-icon-fade-allow):not([data-decorative="true"]) {
-    color: #FFFFFF !important;
-    opacity: 0.95 !important;
-  }
-}
 
 /* =====================================================================
    LEGACY TEXT/INTERACTIVE CONTRAST GUARD — NEUTRALIZED
@@ -3183,45 +3069,9 @@ a[class*="bg-red-"]:hover {
 }
 
 /* ============================================================
- * URGENT CONTRAST RESCUE — legacy AI tool pages and dark cards
- * NOTE: whole-token [class~="..."] matches only — never substring —
- * so conditional Tailwind variants (hover:bg-black/5, group-hover:…)
- * cannot accidentally win and repaint champagne content white.
+ * LEGACY URGENT CONTRAST RESCUE — NEUTRALIZED
+ * Removed dark-card descendant repaint rules; final contract wins.
  * ============================================================ */
-:where(
-  [class~="bg-black"], [class~="bg-gray-800"], [class~="bg-gray-900"], [class~="bg-gray-950"],
-  [class~="bg-zinc-800"], [class~="bg-zinc-900"], [class~="bg-zinc-950"],
-  [class~="bg-[#0D0C08]"], [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"]
-) :is(h1, h2, h3, h4, h5, h6, p, span, li, label, small, strong, em, div):not(.text-price-orange):not([class*="text-price-orange"]):not([data-no-contrast-guard]):not([data-surface="page"]):not([data-surface="champagne"]):not([data-surface="light"]):not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"]):not([data-surface="page"] *):not([data-surface="champagne"] *):not([data-surface="light"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-pill-active):not(.jj-pill-active *):not(.jj-cta-outline):not(.jj-cta-outline *) {
-  color: rgb(255 255 255 / 0.92);
-}
-
-/* Brown faded text on dark surfaces becomes legible champagne */
-:where(
-  [class~="bg-black"], [class~="bg-gray-800"], [class~="bg-gray-900"], [class~="bg-gray-950"],
-  [class~="bg-zinc-800"], [class~="bg-zinc-900"], [class~="bg-zinc-950"],
-  [class~="bg-[#0D0C08]"], [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"]
-) :is([class*="text-[#5A4A2E]"], [class*="text-[#3A2D1D]"], [class*="text-[#8A7556]"]):not([data-no-contrast-guard]) {
-  color: #F5E9D0 !important;
-  opacity: 1 !important;
-}
-
-/* Inputs / textareas / selects on dark surfaces — readable text + placeholder */
-:where(
-  [class~="bg-black"], [class~="bg-gray-800"], [class~="bg-gray-900"], [class~="bg-gray-950"],
-  [class~="bg-zinc-800"], [class~="bg-zinc-900"], [class~="bg-zinc-950"],
-  [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"]
-) :is(input, textarea, select):not([data-no-contrast-guard]) {
-  color: #FFFFFF !important;
-}
-:where(
-  [class~="bg-black"], [class~="bg-gray-800"], [class~="bg-gray-900"], [class~="bg-gray-950"],
-  [class~="bg-zinc-800"], [class~="bg-zinc-900"], [class~="bg-zinc-950"],
-  [class~="bg-[#1A1A1A]"], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"]
-) :is(input, textarea, select)::placeholder {
-  color: rgba(255,255,255,0.6) !important;
-}
-
 
 /* Pending Tasks popup is forced champagne — guarantee its descendants render
    ink even if global guards otherwise inverted them. */
@@ -4235,19 +4085,10 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   --surface-border: var(--jj-gold-border);
 }
 
-:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,[data-surface]) {
-  color: hsl(var(--surface-fg));
-}
-
-:where(.surface-page,.surface-light,.surface-champagne,.surface-cream,.surface-raised,.surface-gold,.surface-navy,.surface-dark,.surface-ink,[data-surface])
-  :where(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,span,small,strong,em,b,i,label,summary,th,td,caption,legend,figcaption,a,button,input,textarea,select,svg,[class*="lucide"]):not([data-surface]):not([data-decorative="true"]):not([data-sidebar-gold-label]) {
-  color: inherit !important;
-  -webkit-text-fill-color: currentColor !important;
-  stroke: currentColor !important;
-  opacity: 1 !important;
-}
+/* Surface foreground inheritance removed; the final two-rule contract below owns surface foregrounds. */
 
 .jj-cta-dark,
+.jj-navy-cta {.jj-cta-dark,
 .jj-navy-cta {
   background-color: hsl(var(--jj-navy-bg)) !important;
   border: 1px solid hsl(var(--jj-gold-border) / 0.55) !important;
@@ -4305,36 +4146,9 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   opacity: 1 !important;
 }
 
-/* Own dark boxes beat light/champagne ancestors. */
-:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-black,.bg-foreground,[class~="bg-[#102540]"],[class~="bg-[#1a3d63]"],[class~="bg-[#1A1A1A]"]):not(.allow-ink),
-:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-black,.bg-foreground,[class~="bg-[#102540]"],[class~="bg-[#1a3d63]"],[class~="bg-[#1A1A1A]"]):not(.allow-ink):hover,
-:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-black,.bg-foreground,[class~="bg-[#102540]"],[class~="bg-[#1a3d63]"],[class~="bg-[#1A1A1A]"]):not(.allow-ink) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
-  color: hsl(var(--jj-on-dark)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
-  stroke: hsl(var(--jj-on-dark)) !important;
-  opacity: 1 !important;
-}
+/* Legacy own-box duplicate rules removed; final two-rule contract below owns these outcomes. */
 
-:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is([class~="bg-[#102540]/50"],[class~="bg-[#102540]/60"],[class~="bg-[#102540]/70"],[class~="bg-[#102540]/80"],[class~="bg-[#102540]/90"],[class~="bg-[#1a3d63]/50"],[class~="bg-[#1a3d63]/60"],[class~="bg-[#1a3d63]/70"],[class~="bg-[#1a3d63]/80"],[class~="bg-[#1a3d63]/90"],[class~="bg-[#1A1A1A]/50"],[class~="bg-[#1A1A1A]/60"],[class~="bg-[#1A1A1A]/70"],[class~="bg-[#1A1A1A]/80"],[class~="bg-[#1A1A1A]/90"],[class~="bg-black/50"],[class~="bg-black/60"],[class~="bg-black/70"],[class~="bg-black/80"],[class~="bg-black/90"]):not(.allow-ink),
-:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is([class~="bg-[#102540]/50"],[class~="bg-[#102540]/60"],[class~="bg-[#102540]/70"],[class~="bg-[#102540]/80"],[class~="bg-[#102540]/90"],[class~="bg-[#1a3d63]/50"],[class~="bg-[#1a3d63]/60"],[class~="bg-[#1a3d63]/70"],[class~="bg-[#1a3d63]/80"],[class~="bg-[#1a3d63]/90"],[class~="bg-[#1A1A1A]/50"],[class~="bg-[#1A1A1A]/60"],[class~="bg-[#1A1A1A]/70"],[class~="bg-[#1A1A1A]/80"],[class~="bg-[#1A1A1A]/90"],[class~="bg-black/50"],[class~="bg-black/60"],[class~="bg-black/70"],[class~="bg-black/80"],[class~="bg-black/90"]):not(.allow-ink):hover,
-:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is([class~="bg-[#102540]/50"],[class~="bg-[#102540]/60"],[class~="bg-[#102540]/70"],[class~="bg-[#102540]/80"],[class~="bg-[#102540]/90"],[class~="bg-[#1a3d63]/50"],[class~="bg-[#1a3d63]/60"],[class~="bg-[#1a3d63]/70"],[class~="bg-[#1a3d63]/80"],[class~="bg-[#1a3d63]/90"],[class~="bg-[#1A1A1A]/50"],[class~="bg-[#1A1A1A]/60"],[class~="bg-[#1A1A1A]/70"],[class~="bg-[#1A1A1A]/80"],[class~="bg-[#1A1A1A]/90"],[class~="bg-black/50"],[class~="bg-black/60"],[class~="bg-black/70"],[class~="bg-black/80"],[class~="bg-black/90"]):not(.allow-ink) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]):not([data-no-contrast-guard]) {
-  color: hsl(var(--jj-on-dark)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
-  stroke: hsl(var(--jj-on-dark)) !important;
-  opacity: 1 !important;
-}
-
-/* Own light boxes beat dark/navy ancestors. */
-:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-white,.bg-background,.bg-card,.bg-accent,[class~="bg-[#FDFBF7]"],[class~="bg-[#F7F2EA]"],[class~="bg-[#EFE6D6]"],[class~="bg-[#B89555]"]):not([data-sidebar-gold-label]),
-:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-white,.bg-background,.bg-card,.bg-accent,[class~="bg-[#FDFBF7]"],[class~="bg-[#F7F2EA]"],[class~="bg-[#EFE6D6]"],[class~="bg-[#B89555]"]):not([data-sidebar-gold-label]):hover,
-:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is(.bg-white,.bg-background,.bg-card,.bg-accent,[class~="bg-[#FDFBF7]"],[class~="bg-[#F7F2EA]"],[class~="bg-[#EFE6D6]"],[class~="bg-[#B89555]"]):not([data-sidebar-gold-label]) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
-  color: hsl(var(--jj-on-light)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
-  stroke: hsl(var(--jj-on-light)) !important;
-  opacity: 1 !important;
-}
-
-[data-sidebar-gold-label] {
+[data-sidebar-gold-label] {[data-sidebar-gold-label] {
   color: hsl(var(--jj-gold-border)) !important;
   -webkit-text-fill-color: hsl(var(--jj-gold-border)) !important;
 }
@@ -4419,42 +4233,9 @@ html body .jj-favorite-trigger :where(svg,[class*="lucide"]):not(.fill-red-500):
 }
 
 /* ============================================================
- * STABLE SURFACE CONTRACT — ARCHITECTURE LOCK
- * Winning rule fixed: never infer foreground from substring classes such as
- * `group-hover:bg-[#102540]/10`; those are not own surfaces and were turning
- * champagne sidebar icons white. Only explicit surfaces/CTA primitives own FG.
+ * LEGACY STABLE SURFACE CONTRACT — NEUTRALIZED
+ * Duplicate root foreground rules removed; final two-rule contract wins.
  * ============================================================ */
-html body :is(
-  [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
-  [data-cta="champagne"], .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
-  .jj-cta-champagne, .jj-pill-active, .jj-cta-outline,
-  .bg-white, .bg-card, .bg-popover,
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#D8C7A6]"]
-) {
-  --jj-stable-fg: hsl(var(--jj-on-light));
-  color: hsl(var(--jj-on-light)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
-}
-
-html body :is(
-  [data-surface="navy"], [data-surface="ink"], [data-surface="dark"], [data-cta="dark"], [data-photo-copy-lock],
-  .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta,
-  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], .bg-black
-) {
-  --jj-stable-fg: hsl(var(--jj-on-dark));
-  color: hsl(var(--jj-on-dark)) !important;
-  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
-}
-
-/* Descendant cascade rule REMOVED.
-   The previous rule forced every descendant of any [data-surface] / CTA
-   ancestor to the ancestor's stable-fg, which broke nested dark cards
-   sitting inside light sections (e.g. the navy banner on /join).
-   Nested-surface precedence is handled correctly by the TWO-RULE
-   CONTRAST CONTRACT above (RULE A / RULE B) which already excludes
-   the opposing surface and its descendants. Do not reintroduce a
-   broad descendant cascade here. */
-
 
 /* Prevent foreground flicker only; do not kill animation durations. */
 :where(a,button,[role="button"],[role="tab"],svg,[class*="lucide"],span,p,h1,h2,h3,h4,h5,h6) {
