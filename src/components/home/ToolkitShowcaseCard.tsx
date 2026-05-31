@@ -75,7 +75,7 @@ export function ToolkitShowcaseCard() {
     <section className="bg-[#FDFBF7] py-10 md:py-14">
       <div className="w-full">
 
-        <div className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)]">
+        <div data-surface="champagne" className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)]">
           {/* Header */}
           <div className="px-5 md:px-7 pt-5 md:pt-6 pb-4 flex items-start justify-between gap-4">
             <div className="min-w-0">
@@ -131,19 +131,18 @@ export function ToolkitShowcaseCard() {
                   key={t.id}
                   data-tab-id={t.id}
                   data-surface={isActive ? "champagne" : "dark"}
-                  data-no-contrast-guard
                   data-cta={isActive ? "champagne" : "dark"}
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveId(t.id)}
                   style={isActive ? { color: "#1A1A1A" } : { color: "#FFFFFF" }}
-                  className={`allow-white shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-[background-color] ${
+                  className={`shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-[background-color] ${
                     isActive
-                      ? `bg-[#EFE6D6] shadow-[inset_0_-2px_0_#B89555,inset_0_1px_0_rgba(255,255,255,0.7)]`
+                      ? `jj-pill-active bg-[#EFE6D6] shadow-[inset_0_-2px_0_#B89555,inset_0_1px_0_rgba(255,255,255,0.7)]`
                       : `text-white hover:bg-[#1a3d63]`
                   }`}
                 >
-                  <Icon className="w-4 h-4 allow-white" style={isActive ? { color: "#1A1A1A", stroke: "#1A1A1A" } : { color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  <Icon className={`w-4 h-4 ${isActive ? "" : "allow-white"}`} style={isActive ? { color: "#1A1A1A", stroke: "#1A1A1A" } : { color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   <span style={isActive ? { color: "#1A1A1A" } : { color: "#FFFFFF" }}>{t.name}</span>
                 </button>
               );
@@ -154,14 +153,14 @@ export function ToolkitShowcaseCard() {
 
           {/* Active tool hero panel — image fills card; soft bottom fade
               only; frosted-glass CTA so the image shows through. */}
-          <div key={active.id} className="relative h-[420px] md:h-[520px] overflow-hidden">
+          <div key={active.id} data-surface="dark" data-photo-copy-lock className="relative h-[420px] md:h-[520px] overflow-hidden">
             <div
               className="absolute inset-0 bg-cover bg-center animate-fade-in"
               style={{ backgroundImage: `url(${active.image})` }}
             />
             <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
 
-            <div className="relative h-full flex flex-col justify-end p-5 md:p-8 max-w-xl">
+            <div data-surface="dark" className="relative h-full flex flex-col justify-end p-5 md:p-8 max-w-xl">
               <h3
                 className="text-white text-2xl md:text-3xl font-extrabold leading-tight"
                 style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 14px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9)" }}

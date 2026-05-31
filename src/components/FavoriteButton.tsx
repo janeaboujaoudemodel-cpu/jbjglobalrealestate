@@ -97,12 +97,15 @@ const FavoriteButton = ({
       <Tooltip>
         <TooltipTrigger asChild>
           <button
+            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+            data-surface="champagne"
+            data-cta="champagne"
             onClick={handleFavoriteClick}
             disabled={toggleUserFavorite.isPending}
-            className={`${sizeClasses[size]} flex items-center justify-center rounded-full transition-all duration-200 border ${
+            className={`${sizeClasses[size]} jj-favorite-trigger flex items-center justify-center rounded-full transition-all duration-200 border ${
               isFavorite 
                 ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/40 shadow-lg"
-                : "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555] hover:shadow-lg"
+                : "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555] hover:shadow-lg hover:bg-[#EFE6D6]"
             }`}
           >
             <Heart
@@ -114,8 +117,8 @@ const FavoriteButton = ({
             />
           </button>
         </TooltipTrigger>
-        <TooltipContent side="bottom" sideOffset={8} className="z-[10100] bg-[#1A1A1A]/90 text-white border-[#B89555]/30 text-xs">
-          <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
+        <TooltipContent side="bottom" sideOffset={8} data-surface="navy" className="z-[10100] bg-[#102540] text-white border-[#B89555]/55 text-xs shadow-[0_10px_28px_-14px_rgba(16,37,64,0.9)]">
+          <p className="text-white allow-white">{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
         </TooltipContent>
       </Tooltip>
 
@@ -123,12 +126,15 @@ const FavoriteButton = ({
         <Tooltip>
           <TooltipTrigger asChild>
             <button
+              aria-label={isShortlisted ? "Remove from shortlist" : "Add to shortlist"}
+              data-surface="champagne"
+              data-cta="champagne"
               onClick={handleShortlistClick}
               disabled={toggleUserShortlist.isPending}
-              className={`${sizeClasses[size]} flex items-center justify-center rounded-full transition-all duration-200 border ${
+              className={`${sizeClasses[size]} jj-favorite-trigger flex items-center justify-center rounded-full transition-all duration-200 border ${
                 isShortlisted
                   ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555] shadow-lg"
-                  : "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555] hover:shadow-lg"
+                  : "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555] hover:shadow-lg hover:bg-[#EFE6D6]"
               }`}
             >
               {isShortlisted ? (
@@ -138,8 +144,8 @@ const FavoriteButton = ({
               )}
             </button>
           </TooltipTrigger>
-        <TooltipContent side="bottom" sideOffset={8} className="z-[10100] bg-[#1A1A1A]/90 text-white border-[#B89555]/30 text-xs">
-            <p>{isShortlisted ? "Remove from shortlist" : "Add to shortlist"}</p>
+        <TooltipContent side="bottom" sideOffset={8} data-surface="navy" className="z-[10100] bg-[#102540] text-white border-[#B89555]/55 text-xs shadow-[0_10px_28px_-14px_rgba(16,37,64,0.9)]">
+            <p className="text-white allow-white">{isShortlisted ? "Remove from shortlist" : "Add to shortlist"}</p>
           </TooltipContent>
         </Tooltip>
       )}
