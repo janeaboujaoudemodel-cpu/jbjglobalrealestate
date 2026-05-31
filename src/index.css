@@ -4330,90 +4330,11 @@ html body
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-/* Descendant text/icons on raw dark own-boxes => WHITE,
- * BUT stop at a descendant that itself opens a light own-box
- * (so a champagne pill inside a dark banner keeps ink). */
-html body
-  :is(
-    [class~="bg-black"],
-    [class*="bg-[#1A1A1A]"], [class*="bg-[#1a1a1a]"],
-    [class*="bg-[#0A0908]"], [class*="bg-[#0D0D0D]"], [class*="bg-[#0d0d0d]"],
-    [class*="bg-[#102540]"], [class*="bg-[#1a3d63]"], [class*="bg-[#143052]"],
-    [class*="bg-[#071B33]"], [class*="bg-[#0E2848]"]
-  ):not(.allow-ink):not([data-no-contrast-guard]):not([data-premium])
-  :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],h1,h2,h3,h4,h5,h6,label,li,a)
-    :not(.allow-ink)
-    :not([data-no-contrast-guard])
-    :not([data-sidebar-gold-label])
-    :not([data-surface="page"]):not([data-surface="light"]):not([data-surface="champagne"])
-    :not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"])
-    :not(.surface-page):not(.surface-light):not(.surface-champagne)
-    :not(.surface-cream):not(.surface-raised):not(.surface-gold)
-    :not(.jj-cta-champagne):not(.jj-pill-active):not(.jj-cta-outline)
-    :not([class~="bg-white"])
-    :not([class*="bg-[#FDFBF7]"]):not([class*="bg-[#fdfbf7]"])
-    :not([class*="bg-[#F7F2EA]"]):not([class*="bg-[#f7f2ea]"])
-    :not([class*="bg-[#EFE6D6]"]):not([class*="bg-[#efe6d6]"])
-    :not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *)
-    :not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *)
-    :not(.jj-cta-champagne *):not(.jj-pill-active *):not(.jj-cta-outline *) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
-/* RULE B* — Raw champagne/cream/page/white own boxes => INK foreground */
-html body
-  :is(
-    [class~="bg-white"],
-    [class*="bg-[#FFFFFF]"], [class*="bg-[#ffffff]"],
-    [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"],
-    [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"],
-    [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"]
-  ):not(.allow-white):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not([data-premium]):not([data-premium] *),
-html body
-  :is(
-    [class~="bg-white"],
-    [class*="bg-[#FFFFFF]"], [class*="bg-[#ffffff]"],
-    [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"],
-    [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"],
-    [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"]
-  ):not(.allow-white):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not([data-premium]):not([data-premium] *):hover {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-
-/* Descendant text/icons on raw light own-boxes => INK,
- * BUT stop at a descendant that itself opens a dark/navy own-box
- * (so a navy CTA inside a champagne card keeps white). */
-html body
-  :is(
-    [class~="bg-white"],
-    [class*="bg-[#FFFFFF]"], [class*="bg-[#ffffff]"],
-    [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"],
-    [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"],
-    [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"]
-  ):not(.allow-white):not([data-no-contrast-guard]):not([data-premium])
-  :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],h1,h2,h3,h4,h5,h6,label,li,a)
-    :not(.allow-white)
-    :not([data-no-contrast-guard])
-    :not([data-allow-dark-cta])
-    :not([data-on-dark])
-    :not([data-sidebar-gold-label])
-    :not([data-surface="navy"]):not([data-surface="ink"]):not([data-surface="dark"])
-    :not(.surface-navy):not(.surface-ink):not(.surface-dark)
-    :not(.jj-cta-dark):not(.jj-navy-cta)
-    :not([class~="bg-black"])
-    :not([class*="bg-[#1A1A1A]"]):not([class*="bg-[#1a1a1a]"])
-    :not([class*="bg-[#0A0908]"]):not([class*="bg-[#0D0D0D]"]):not([class*="bg-[#0d0d0d]"])
-    :not([class*="bg-[#102540]"]):not([class*="bg-[#1a3d63]"]):not([class*="bg-[#143052]"])
-    :not([class*="bg-[#071B33]"]):not([class*="bg-[#0E2848]"])
-    :not([data-surface="navy"] *):not([data-surface="ink"] *):not([data-surface="dark"] *)
-    :not(.jj-cta-dark *):not(.jj-navy-cta *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
+/* Descendant rules intentionally omitted:
+ * Setting color on the own box is enough — descendants inherit, and
+ * any descendant with an explicit text-* class keeps its own color
+ * (so a navy CTA inside a champagne card and a champagne pill inside
+ * a navy banner both render correctly without descendant exclusion
+ * gymnastics). Explicit black-on-black or white-on-light in component
+ * code remains a per-component bug, not an architecture concern. */
 
