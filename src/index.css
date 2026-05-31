@@ -3226,7 +3226,7 @@ a[class*="bg-red-"]:hover {
     0 0 0 1px rgba(184, 149, 85, 0.18) !important;
   white-space: nowrap !important;
 }
-.card-status-badge * { color: #1A1A1A !important; }
+.card-status-badge * { color: #1A1A1A; }
 
 
 /* Premium square payment-plan badge — ink fill, gold hairline.

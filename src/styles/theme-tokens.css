@@ -222,9 +222,9 @@ label[data-required]::after {
 .bg-surface    { background-color: var(--t-surface) !important; }
 .bg-raised     { background-color: var(--t-raised)  !important; }
 
-.text-ink      { color: var(--t-ink)      !important; }
-.text-ink-soft { color: var(--t-ink-soft) !important; }
-.text-gold     { color: var(--t-gold)     !important; }
+.text-ink      { color: var(--t-ink); }
+.text-ink-soft { color: var(--t-ink-soft); }
+.text-gold     { color: var(--t-gold); }
 
 .border-gold       { border-color: var(--t-gold-soft)  !important; }
 .border-gold-faint { border-color: var(--t-gold-faint) !important; }
