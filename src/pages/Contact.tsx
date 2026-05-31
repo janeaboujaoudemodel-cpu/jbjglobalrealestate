@@ -380,7 +380,7 @@ END:VCARD`;
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)]">
                 <div className="text-center mb-8">
                   <div className="w-14 h-14 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Shield className="w-7 h-7 text-[#1A1A1A]" />
+                    <Shield className="w-7 h-7 text-white" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
                     Request a Consultation

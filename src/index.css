@@ -1021,12 +1021,9 @@ All colors MUST be HSL.
 [data-marketing-page] section[class~="bg-[#1A1A1A]"] {
   background: #F7F2EA !important;
 }
-[data-marketing-page] section[class~="bg-[#1A1A1A]"] [class~="text-[#1A1A1A]"] {
-  color: #1A1A1A;
-}
-[data-marketing-page] section[class~="bg-[#1A1A1A]"] [class~="text-white"] {
-  color: #1A1A1A;
-}
+/* Foreground descendant repaints removed — they flipped legitimate
+   white text on dark overlay cards (e.g. About market intelligence
+   cards) to ink-on-dark. Components own their own foreground. */
 
 
 /* Layer 3 - Inner content cards */
@@ -2858,15 +2855,12 @@ a .lucide,
  * surface that contains a Lucide icon. Guarantees the premium icon
  * contrast stays visible during every interaction in both themes.
  *
- * Targets: <a>, <button>, [role="button"] containing a .lucide child,
- * and Card-like containers explicitly opted-in via .icon-tile.
- * ============================================================ */
-
-/* Base: smooth transitions, ensure currentColor flows to the icon */
-a:has(> .lucide),
-a:has(.lucide),
-button:has(.lucide),
-[role="button"]:has(.lucide),
+/* Base: smooth transitions for explicit .icon-tile containers only.
+   Earlier versions matched a:has(.lucide) / button:has(.lucide) /
+   [role="button"]:has(.lucide), which repainted icon+text color on
+   hover/active/focus for ANY clickable element with an icon — the
+   root cause of the black-on-dark and washed-icon regressions on
+   About / Market Intelligence / Contact cards. */
 .icon-tile {
   transition:
     background-color 180ms ease,
@@ -2877,18 +2871,11 @@ button:has(.lucide),
   outline: none;
 }
 
-a:has(.lucide) .lucide,
-button:has(.lucide) .lucide,
-[role="button"]:has(.lucide) .lucide,
 .icon-tile .lucide {
   transition: color 180ms ease, transform 180ms ease, opacity 180ms ease;
 }
 
-/* HOVER — subtle surface lift + slightly stronger ink.
-   NOTE: Scoped to `.icon-tile` only. Earlier versions matched any
-   `a/button:hover:has(.lucide)`, which darkened entire project
-   cards on hover and dragged the orange price/handover text
-   off-color via the runtime contrast guard. */
+/* HOVER — subtle surface lift, scoped strictly to `.icon-tile`. */
 @media (hover: hover) {
   .icon-tile:hover {
     background-color: hsl(var(--accent) / 0.6);
@@ -2901,43 +2888,28 @@ button:has(.lucide) .lucide,
   }
 }
 
-/* ACTIVE — pressed feel, never dims the icon below contrast threshold */
-a:active:has(.lucide),
-button:active:has(.lucide),
-[role="button"]:active:has(.lucide),
+/* ACTIVE */
 .icon-tile:active {
   background-color: hsl(var(--accent));
   box-shadow: inset 0 1px 2px 0 hsl(var(--foreground) / 0.08);
   transform: translateY(0);
 }
-a:active:has(.lucide) .lucide,
-button:active:has(.lucide) .lucide,
-[role="button"]:active:has(.lucide) .lucide,
 .icon-tile:active .lucide {
   color: hsl(var(--accent-foreground));
   opacity: 1;
 }
 
-/* KEYBOARD FOCUS — high-contrast ring, only on :focus-visible (no mouse halo) */
-a:focus-visible:has(.lucide),
-button:focus-visible:has(.lucide),
-[role="button"]:focus-visible:has(.lucide),
+/* KEYBOARD FOCUS */
 .icon-tile:focus-visible {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
   box-shadow: 0 0 0 4px hsl(var(--ring) / 0.18);
 }
-a:focus-visible:has(.lucide) .lucide,
-button:focus-visible:has(.lucide) .lucide,
-[role="button"]:focus-visible:has(.lucide) .lucide,
 .icon-tile:focus-visible .lucide {
   color: hsl(var(--foreground));
 }
 
-/* DISABLED — icon stays distinguishable but de-emphasised */
-a[aria-disabled="true"]:has(.lucide),
-button:disabled:has(.lucide),
-[role="button"][aria-disabled="true"]:has(.lucide),
+/* DISABLED */
 .icon-tile[aria-disabled="true"] {
   opacity: 0.55;
   cursor: not-allowed;
@@ -2945,28 +2917,18 @@ button:disabled:has(.lucide),
   transform: none;
 }
 
-/* DARK MODE — flip hover/active surface to keep contrast premium.
-   Scoped to `.icon-tile` only (see note above). */
+/* DARK MODE */
 .dark .icon-tile:hover {
   background-color: hsl(var(--accent) / 0.4);
   box-shadow: 0 1px 2px 0 hsl(0 0% 0% / 0.4);
 }
-.dark a:active:has(.lucide),
-.dark button:active:has(.lucide),
-.dark [role="button"]:active:has(.lucide),
 .dark .icon-tile:active {
   background-color: hsl(var(--accent) / 0.7);
 }
 
-/* Reduced motion — kill transforms / transitions, keep state colors */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  a:has(.lucide),
-  button:has(.lucide),
-  [role="button"]:has(.lucide),
   .icon-tile,
-  a:has(.lucide) .lucide,
-  button:has(.lucide) .lucide,
-  [role="button"]:has(.lucide) .lucide,
   .icon-tile .lucide {
     transition: none !important;
     transform: none !important;
