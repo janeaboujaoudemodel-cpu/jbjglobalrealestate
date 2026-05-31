@@ -56,6 +56,16 @@ for (const route of routes) {
       return { color, parsed: rgb(color), tag: 'BODY', className: '' };
     };
 
+    const isVisiblyHidden = (element) => {
+      let node = element;
+      while (node && node.nodeType === 1) {
+        const styles = getComputedStyle(node);
+        if (styles.visibility === 'hidden' || Number.parseFloat(styles.opacity || '1') <= 0.05) return true;
+        node = node.parentElement;
+      }
+      return false;
+    };
+
     const matchingRules = (element) => {
       const matched = [];
       for (const sheet of Array.from(document.styleSheets)) {
@@ -87,9 +97,9 @@ for (const route of routes) {
     return Array.from(document.querySelectorAll(selectors)).flatMap((element) => {
       const rect = element.getBoundingClientRect();
       if (rect.width < 4 || rect.height < 4 || rect.bottom < 0 || rect.top > innerHeight || rect.right < 0 || rect.left > innerWidth) return [];
+      if (isVisiblyHidden(element)) return [];
 
       const computed = getComputedStyle(element);
-      if (Number.parseFloat(computed.opacity || '1') <= 0.05 || computed.visibility === 'hidden') return [];
       const foreground = rgb(computed.color);
       const background = effectiveBackground(element);
       if (!foreground || !background.parsed) return [];
