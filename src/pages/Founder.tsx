@@ -319,9 +319,8 @@ const Founder = () => {
                     data-surface="champagne"
                     variants={fadeInUp}
                   >
-                    <div className="w-14 h-14 mx-auto mb-6 bg-[#1A1A1A] rounded-xl flex items-center justify-center border border-[#B89555]/30" data-surface="ink">
-                      <member.icon className="w-6 h-6 text-white" />
-                    </div>
+                    <IconTile icon={member.icon} tone="ink" size="lg" className="mx-auto mb-6" />
+
                     <h4 className="text-[#1A1A1A] text-lg font-semibold mb-1">
                       {member.name}
                     </h4>
