@@ -4169,17 +4169,15 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 
 /* ============================================================
  * TWO-RULE CONTRAST CONTRACT (FINAL WINNER)
- * Only two contrast rules exist site-wide:
- *   Rule A — dark/navy/ink own box → WHITE text + icons
- *   Rule B — champagne/page/gold/light own box → INK text + icons
- * Each rule excludes the OTHER tone's elements AND their descendants,
- * so nested champagne CTAs inside navy banners (and vice versa) win.
+ * Rule A — dark/navy/ink OWN backgrounds → white foreground.
+ * Rule B — champagne/page/gold/light OWN backgrounds → ink foreground.
+ * No broad descendant repainting: nested opposite-tone boxes must keep
+ * their own local contrast and gold text must remain gold accents.
  * ============================================================ */
 
-/* RULE A — Dark/navy/ink own box wins over any ancestor. */
+/* RULE A — labelled dark/navy/ink own boxes. */
 html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta):not(.allow-ink):not([data-surface="champagne"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"]):not(.jj-cta-champagne):not(.jj-pill-active):not(.jj-cta-outline),
 html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta):not(.allow-ink):not([data-surface="champagne"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"]):not(.jj-cta-champagne):not(.jj-pill-active):not(.jj-cta-outline):hover,
-html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta):not(.allow-ink) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],h1,h2,h3,h4,h5,h6,label,a,button):not([data-sidebar-gold-label]):not([data-decorative="true"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="champagne"]):not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"]):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-pill-active):not(.jj-pill-active *):not(.jj-cta-outline):not(.jj-cta-outline *),
 html body [data-hero-consultation-lock],
 html body [data-hero-consultation-lock]:hover,
 html body [data-hero-consultation-lock] *,
@@ -4190,21 +4188,26 @@ html body [data-hero-consultation-lock]:hover * {
   opacity: 1 !important;
 }
 
-/* RULE B — Champagne/page/gold/light own box wins over any ancestor. */
+/* RULE B — labelled champagne/page/gold/light own boxes. */
 html body :is([data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white):not([data-surface="navy"]):not([data-surface="ink"]):not([data-surface="dark"]):not(.jj-cta-dark):not(.jj-navy-cta),
-html body :is([data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white):not([data-surface="navy"]):not([data-surface="ink"]):not([data-surface="dark"]):not(.jj-cta-dark):not(.jj-navy-cta):hover,
-html body :is(.jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],h1,h2,h3,h4,h5,h6,label,a) {
+html body :is([data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white):not([data-surface="navy"]):not([data-surface="ink"]):not([data-surface="dark"]):not(.jj-cta-dark):not(.jj-navy-cta):hover {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   opacity: 1 !important;
 }
 
-/* LOCK: Active champagne tabs/pills always beat dark/navy ancestors, even if
-   legacy code accidentally leaves allow-white/data-no-contrast-guard behind. */
-html body :is([role="tab"], button, a, [role="button"]):is([data-surface="champagne"], [data-surface="light"], [data-surface="raised"], [data-cta="champagne"], .jj-pill-active),
-html body :is([role="tab"], button, a, [role="button"]):is([data-surface="champagne"], [data-surface="light"], [data-surface="raised"], [data-cta="champagne"], .jj-pill-active):hover,
-html body :is([role="tab"], button, a, [role="button"]):is([data-surface="champagne"], [data-surface="light"], [data-surface="raised"], [data-cta="champagne"], .jj-pill-active) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],h1,h2,h3,h4,h5,h6,label) {
+/* CTA/pill primitives are self-contained controls, so their icons/labels follow
+   the primitive foreground without leaking into surrounding sections. */
+html body :is(.jj-cta-dark, .jj-navy-cta):not(.allow-ink) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],label),
+html body :is(.jj-cta-dark, .jj-navy-cta):not(.allow-ink):hover :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],label) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body :is(.jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],label),
+html body :is(.jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white):hover :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],label) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
