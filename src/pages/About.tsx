@@ -103,7 +103,7 @@ const FeatureCard = ({
     variants={fadeInUp}
   >
     <div className="w-14 h-14 rounded-lg bg-[#1A1A1A] flex items-center justify-center mb-5">
-      <Icon className="w-7 h-7 text-[#1A1A1A]" />
+      <Icon className="w-7 h-7 text-white" />
     </div>
     <h3 className="text-[#1A1A1A] text-xl font-semibold mb-3">{title}</h3>
     <p className="text-[#1A1A1A]/70 text-base leading-relaxed">{description}</p>
@@ -410,19 +410,19 @@ const About = () => {
                 {/* Overlay Cards - Market Intelligence Visual - LARGER CONTENT */}
                 <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-4">
                   <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <BarChart3 className="w-8 h-8 text-[#1A1A1A] mb-3" />
+                    <BarChart3 className="w-8 h-8 text-white mb-3" />
                     <p className="text-white text-base font-semibold">Government Data</p>
                   </div>
                   <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <Building2 className="w-8 h-8 text-[#1A1A1A] mb-3" />
+                    <Building2 className="w-8 h-8 text-white mb-3" />
                     <p className="text-white text-base font-semibold">Infrastructure</p>
                   </div>
                   <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <TrendingUp className="w-8 h-8 text-[#1A1A1A] mb-3" />
+                    <TrendingUp className="w-8 h-8 text-white mb-3" />
                     <p className="text-white text-base font-semibold">Market Cycles</p>
                   </div>
                   <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <Target className="w-8 h-8 text-[#1A1A1A] mb-3" />
+                    <Target className="w-8 h-8 text-white mb-3" />
                     <p className="text-white text-base font-semibold">Planning Strategy</p>
                   </div>
                 </div>
@@ -539,7 +539,7 @@ const About = () => {
             
             {/* Initials */}
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1A1A1A] border-2 border-[#B89555] mt-4">
-              <span className="text-[#1A1A1A] text-xl font-bold">JBJ</span>
+              <span className="text-white text-xl font-bold">JBJ</span>
             </div>
           </motion.div>
         </Section>
