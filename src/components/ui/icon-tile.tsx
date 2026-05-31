@@ -20,6 +20,7 @@ export type IconTileTone =
   | "amber"
   | "purple"
   | "rose"
+  | "navy"
   | "ink";
 
 export type IconTileSize = "sm" | "md" | "lg" | "xl";
@@ -32,6 +33,7 @@ const TONE: Record<IconTileTone, { tile: string; icon: string }> = {
   amber:   { tile: "bg-amber-500/10 ring-1 ring-amber-500/30",     icon: "text-amber-600" },
   purple:  { tile: "bg-purple-500/10 ring-1 ring-purple-500/30",   icon: "text-purple-600" },
   rose:    { tile: "bg-rose-500/10 ring-1 ring-rose-500/30",       icon: "text-rose-600" },
+  navy:    { tile: "surface-navy bg-[#102540] ring-1 ring-[#B89555]", icon: "text-white" },
   ink:     { tile: "surface-ink bg-[#1A1A1A] ring-1 ring-[#1A1A1A]", icon: "text-white" },
 };
 
@@ -54,26 +56,26 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
   ({ icon: Icon, tone = "gold", size = "md", className, iconClassName, ...rest }, ref) => {
     const t = TONE[tone];
     const s = SIZE[size];
-    const isInk = tone === "ink";
+    const isDark = tone === "ink" || tone === "navy";
     return (
       <div
         ref={ref}
         data-icon-tile=""
         data-icon-tile-tone={tone}
-        data-surface={isInk ? "ink" : "raised"}
-        data-no-contrast-guard={isInk ? "" : undefined}
+        data-surface={isDark ? tone : "raised"}
+        data-no-contrast-guard={isDark ? "" : undefined}
         className={cn(
           "inline-flex items-center justify-center flex-shrink-0",
           s.box,
           t.tile,
-          isInk && "allow-white",
+          isDark && "allow-white",
           className,
         )}
         {...rest}
       >
         <Icon
-          className={cn(s.icon, t.icon, isInk && "allow-white", iconClassName)}
-          {...(isInk ? { style: { color: "#FFFFFF", stroke: "#FFFFFF" } } : {})}
+          className={cn(s.icon, t.icon, isDark && "allow-white", iconClassName)}
+          {...(isDark ? { style: { color: "#FFFFFF", stroke: "#FFFFFF" } } : {})}
         />
       </div>
     );
