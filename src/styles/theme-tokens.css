@@ -1116,17 +1116,15 @@ button[role="checkbox"][data-state="checked"]:not([data-no-gold-check]) svg {
  * through. Lock the foreground colour for any dark CTA inside the
  * careers page so the button text NEVER disappears again.
  * ============================================================ */
-[data-careers-page] [data-allow-dark-cta],
-[data-careers-page] [data-allow-dark-cta] *:not(svg),
-[data-careers-page] [data-no-contrast-guard][data-allow-dark-cta],
-[data-careers-page] [data-no-contrast-guard][data-allow-dark-cta] *:not(svg),
+[data-careers-page] .careers-navy-cta,
+[data-careers-page] .careers-navy-cta :where(span),
 [data-careers-page] .allow-white,
-[data-careers-page] .allow-white * {
+[data-careers-page] .allow-white :where(span) {
   color: #FFFFFF;
   -webkit-text-fill-color: #FFFFFF;
 }
 
-[data-careers-page] [data-allow-dark-cta] svg,
+[data-careers-page] .careers-navy-cta svg,
 [data-careers-page] .allow-white svg {
   color: #FFFFFF;
   stroke: #FFFFFF;
