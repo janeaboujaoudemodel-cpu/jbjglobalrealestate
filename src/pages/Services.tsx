@@ -458,11 +458,11 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Footer Disclaimer */}
-      <section className="bg-[#1A1A1A] py-8 border-t border-[#1A1A1A]">
+      {/* Footer Disclaimer — champagne band, ink text (section bg is auto-remapped on marketing pages) */}
+      <section className="bg-[#1A1A1A] py-8 border-t border-[#B89555]/30">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-white/90 text-sm max-w-3xl mx-auto">
-            JBJ Global Real Estate is a licensed real estate brokerage. Advisory support is provided 
+          <p className="text-[#1A1A1A]/80 text-sm max-w-3xl mx-auto">
+            JBJ Global Real Estate is a licensed real estate brokerage. Advisory support is provided
             within brokerage scope. Partner services are delivered independently under partner licenses.
           </p>
         </div>
