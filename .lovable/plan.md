@@ -1,72 +1,51 @@
-I found the remaining winning conflicts. They are not backend issues; they are frontend CSS/component conflicts.
+## What I found
 
-What is still winning and why:
+The current failures are not random page bugs; they come from two still-conflicting contrast layers:
 
-1. `src/index.css` lines 1021–1029
-   - Selector: `[data-marketing-page] section[class~="bg-[#1A1A1A]"] [class~="text-white"]`
-   - It turns every `text-white` inside a marketing page section with `bg-[#1A1A1A]` into ink.
-   - This is why dark overlay cards and CTA text become black/dark when they should remain white.
-   - It also defeats local component intent because it is later/global and targets raw Tailwind classes.
+1. **`src/styles/theme-tokens.css` is imported before `src/index.css`, so later `index.css` rules can still win.**
+2. **Careers `/join` has a local broad repaint conflict:**
+   - `.careers-card-navy :is(..., span, div)` forces all text inside the navy section to white.
+   - Later `.careers-card-navy .careers-card-strong ...` forces all text in job cards to ink.
+   - Then `.careers-navy-cta` tries to force Apply buttons white.
+   - This competing stack is why the screenshot shows normal/rest button text wrong while hover can look correct.
+3. **Owner sidebar screenshot issue is local component conflict, not the vertical nav exception:**
+   - `OwnerDashboardShell.tsx` Sign Out button uses inline `style={{ color: "#1A1A1A" }}` and no protected destructive contrast attributes/classes.
+   - That allows white/incorrect inherited text on champagne states in the expanded owner shell.
+4. **There are still broad legacy “force all descendants” selectors in the contrast architecture**, especially page/section scoped selectors that repaint `span/div/*` rather than only primitives. These are the rules that keep beating component intent.
 
-2. `src/index.css` lines 2866–2935
-   - Selectors using `a:has(.lucide)`, `button:has(.lucide)`, `[role="button"]:has(.lucide)`, and `.icon-tile`.
-   - The problem is `.icon-tile` is used on whole cards in `About.tsx`, not only icon tiles.
-   - On focus/active/hover it forces icon/card foreground to generic foreground/accent colors, which explains several black-on-dark icon and card regressions.
+## Fix plan
 
-3. `src/pages/About.tsx`
-   - The About page contains local hardcoded conflicts:
-     - Hero body paragraph uses `text-[#1A1A1A]/70` inside a dark hero.
-     - Hero CTA arrows use `text-[#1A1A1A]` on a dark/transparent CTA.
-     - Overlay market cards use `bg-[#1A1A1A]/85` + `text-white`, but the marketing-page remap can flip them.
-     - `FeatureCard` uses `.icon-tile` on the full card, causing global icon-tile interaction rules to treat the entire card like an icon tile.
+1. **Clean existing contrast rules only — no new contrast system**
+   - In `src/styles/theme-tokens.css`, remove/narrow the broad descendant repaint selectors that target every `span/div` inside `.careers-card-navy` and `.careers-card-strong`.
+   - Keep only explicit element/primitive locks:
+     - navy section headings/copy = white
+     - champagne job card content = ink
+     - `.careers-navy-cta` button and its direct label/icon = white at rest, hover, focus, active
+   - Remove duplicated careers CTA/button override blocks that compete with each other.
 
-4. `src/components/market-intelligence/*`
-   - The navy icon boxes intentionally use white icons, but broad lucide/CTA/global rules can override these because they only use `allow-white` and `data-no-contrast-guard`, not the locked CTA primitive.
-   - The source of the issue is not the Market Intelligence page content itself; it is the remaining global icon/marketing remap rules winning against these local icons.
+2. **Fix the proven `/join` rest-state button bug**
+   - Update `PremiumJobCard.tsx` Apply button to use the locked CTA primitive consistently (`jj-cta-dark` / `careers-navy-cta`) and remove inline child-only color hacks that depend on ancestor rules.
+   - Update the “View all positions” button so it is either champagne+ink or navy+white consistently, not caught between outline/default/global styles.
 
-5. `src/components/SupportTicketBox.tsx`
-   - The button is raw `bg-[#1A1A1A] text-white`, not the locked `.jj-cta-dark` primitive.
-   - The support button can therefore still be affected by global icon/color rules, especially because it contains an icon and nested spans.
+3. **Fix the proven `/owner` Sign Out bug without touching the collapsed vertical sidebar exception**
+   - Update only `OwnerDashboardShell.tsx` bottom Sign Out button so it is destructive red-on-champagne at rest and hover, matching the protected `data-signout-action` pattern already used in `GlobalVerticalNav.tsx`.
+   - Do not change the collapsed vertical sidebar gold label exception.
 
-Cleanup plan — no new architecture, no new broad rules:
+4. **Audit/remove remaining winning broad selectors in CSS**
+   - Check `index.css` and `theme-tokens.css` for selectors that repaint broad descendants such as `*`, `span`, `div`, or all text inside a surface.
+   - Keep only scoped primitive locks already defined by the architecture: `.jj-cta-dark`, `.jj-cta-champagne`, `.jj-pill-active`, `.jj-cta-outline`, phone trigger, signout action, and specific hero/video locks.
 
-1. Remove the remaining broad marketing-page foreground repaint.
-   - Delete only the descendant color flips at `src/index.css` lines 1024–1029.
-   - Keep the section background remap if needed, but stop it from repainting `text-white` descendants.
-   - This directly addresses black/dark text appearing on dark overlay cards.
+5. **Visual validation before saying fixed**
+   - Use browser screenshots after implementation on:
+     - `/join` at the open positions section: Apply buttons and View all positions at rest and hover.
+     - `/owner`: expanded sidebar Sign Out and main owner content.
+     - `/` and one marketing page: ensure no regression to white-on-champagne or ink-on-navy.
+   - Only report complete if screenshots/computed styles confirm no black/blue text on navy buttons and no white text on champagne/gold buttons.
 
-2. Narrow the global lucide/icon interaction block.
-   - Remove `a:has(.lucide)`, `button:has(.lucide)`, and `[role="button"]:has(.lucide)` from hover/active/focus color-changing rules.
-   - Keep only non-color transition basics if harmless, and keep `.icon-tile` behavior only for actual icon tiles.
-   - Do not touch the vertical sidebar-specific rules; it stays locked as-is.
+## Files to edit
 
-3. Fix misuse of `.icon-tile` in About cards.
-   - Remove `.icon-tile` from full `FeatureCard` containers in `src/pages/About.tsx`.
-   - The full card is not an icon tile; only the small icon square should carry icon styling.
-   - This is cleanup, not a new rule.
-
-4. Correct the hardcoded About-page contradictions.
-   - Dark hero paragraph and transparent hero CTA arrows must be white on the dark image.
-   - Champagne-hover button text must be ink only on hover/filled champagne state.
-   - Dark overlay market cards must keep white text/icons.
-   - No homepage changes.
-
-5. Convert affected raw dark buttons/icons to existing primitives only.
-   - For SupportTicketBox and similar visible raw dark CTAs, use the already-existing `.jj-cta-dark` primitive instead of raw `bg-[#1A1A1A] text-white`.
-   - This is not adding a rule; it uses the existing locked primitive.
-
-6. Verify visually before saying fixed.
-   - Capture screenshots of `/about`, `/market-intelligence`, and `/contact` at the same 1178×891 viewport.
-   - Check the exact marked areas:
-     - About market overlay cards: white on dark.
-     - About service icon squares: white icon on dark, card text ink on champagne.
-     - About hero CTAs: readable in idle and hover states.
-     - Market Intelligence icon boxes: white icons on navy.
-     - Contact consultation icon and support CTA icon/text: readable.
-   - Do not change vertical sidebar or homepage contrast.
-
-Files expected to change:
-- `src/index.css`
-- `src/pages/About.tsx`
-- `src/components/SupportTicketBox.tsx`
-- Possibly `src/components/market-intelligence/MarketOverviewDashboard.tsx`, `AIMarketInsights.tsx`, and `DataSourcesPanel.tsx` only if visual inspection confirms their icon boxes are still being overridden after the CSS cleanup.
+- `src/styles/theme-tokens.css`
+- `src/components/careers/PremiumJobCard.tsx`
+- `src/pages/JoinApplication.tsx`
+- `src/pages/OwnerDashboardShell.tsx`
+- `src/index.css` only if the final audit finds another broad winning selector that must be removed/narrowed

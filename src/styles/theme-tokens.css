@@ -370,9 +370,9 @@ label[data-required]::after {
     0 1px 0 rgba(255, 255, 255, 0.82) inset !important;
 }
 
-/* Job cards sit on champagne/cream surfaces: force readable ink, not inherited white. */
-[data-careers-page] .careers-card-navy .careers-card-strong,
-[data-careers-page] .careers-card-navy .careers-card-strong :is(h1,h2,h3,h4,h5,h6,p,span,strong,em,small,a,li,div) {
+/* Job cards sit on champagne/cream surfaces: set the card inheritance only.
+   Do not repaint every descendant; CTA primitives and local labels own contrast. */
+[data-careers-page] .careers-card-navy .careers-card-strong {
   color: var(--t-ink);
   -webkit-text-fill-color: var(--t-ink);
 }
@@ -381,9 +381,9 @@ label[data-required]::after {
   stroke: var(--t-careers-navy);
 }
 [data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta,
-[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta *,
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta :where(span, svg),
 [data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover,
-[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover * {
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover :where(span, svg) {
   color: #FFFFFF;
   -webkit-text-fill-color: #FFFFFF;
   stroke: #FFFFFF;
@@ -689,12 +689,12 @@ label[data-required]::after {
   transform: translateX(110%);
   transition: transform 1.2s ease;
 }
-/* Force white text inside the navy card regardless of nested utilities */
-[data-careers-page] .careers-card-navy :is(h1,h2,h3,h4,h5,h6,p,span,strong,em,small,a,li,div) {
+/* Navy section chrome only: avoid repainting nested job-card descendants. */
+[data-careers-page] .careers-card-navy > :not(.careers-card-strong) :is(h1,h2,h3,h4,h5,h6,p,span,strong,em,small,a,li) {
   color: #FFFFFF;
   -webkit-text-fill-color: #FFFFFF;
 }
-[data-careers-page] .careers-card-navy svg {
+[data-careers-page] .careers-card-navy > :not(.careers-card-strong) svg {
   color: #FFFFFF;
   stroke: #FFFFFF;
 }
@@ -716,9 +716,8 @@ label[data-required]::after {
   -webkit-text-fill-color: #FFFFFF;
 }
 
-/* Final override: champagne job cards inside the navy section must never inherit navy-section white text. */
-[data-careers-page] .careers-card-navy .careers-card-strong,
-[data-careers-page] .careers-card-navy .careers-card-strong :is(h1,h2,h3,h4,h5,h6,p,span,strong,em,small,a,li,div) {
+/* Final card inheritance: champagne job cards inside the navy section use ink by default. */
+[data-careers-page] .careers-card-navy .careers-card-strong {
   color: #1A1A1A;
   -webkit-text-fill-color: #1A1A1A;
 }
@@ -727,9 +726,9 @@ label[data-required]::after {
   stroke: #102540;
 }
 [data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta,
-[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta *,
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta :where(span, svg),
 [data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover,
-[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover * {
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover :where(span, svg) {
   color: #FFFFFF;
   -webkit-text-fill-color: #FFFFFF;
   stroke: #FFFFFF;
@@ -1117,17 +1116,15 @@ button[role="checkbox"][data-state="checked"]:not([data-no-gold-check]) svg {
  * through. Lock the foreground colour for any dark CTA inside the
  * careers page so the button text NEVER disappears again.
  * ============================================================ */
-[data-careers-page] [data-allow-dark-cta],
-[data-careers-page] [data-allow-dark-cta] *:not(svg),
-[data-careers-page] [data-no-contrast-guard][data-allow-dark-cta],
-[data-careers-page] [data-no-contrast-guard][data-allow-dark-cta] *:not(svg),
+[data-careers-page] .careers-navy-cta,
+[data-careers-page] .careers-navy-cta :where(span),
 [data-careers-page] .allow-white,
-[data-careers-page] .allow-white * {
+[data-careers-page] .allow-white :where(span) {
   color: #FFFFFF;
   -webkit-text-fill-color: #FFFFFF;
 }
 
-[data-careers-page] [data-allow-dark-cta] svg,
+[data-careers-page] .careers-navy-cta svg,
 [data-careers-page] .allow-white svg {
   color: #FFFFFF;
   stroke: #FFFFFF;
