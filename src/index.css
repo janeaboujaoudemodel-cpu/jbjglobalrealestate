@@ -2825,10 +2825,16 @@ svg.lucide,
   color: hsl(var(--destructive-foreground));
 }
 
-/* 4. Buttons: icons follow the button's text color (always paired) */
-button .lucide,
-a .lucide,
-[role="button"] .lucide {
+/* 4. Buttons: icons follow the button's text color UNLESS the icon
+      explicitly opts into its own color via a Tailwind text-* utility,
+      `allow-white`, `data-no-contrast-guard`, or an inline style.
+      The old unscoped `color: currentColor` (specificity 0,1,1) was
+      overriding `.text-white` (0,1,0) on every navy/dark CTA tile,
+      flipping white icons to dark — the exact black-icon-on-navy
+      regression reported on /join contact cards and FAQ chevrons. */
+button .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-guard]):not([style*="color"]):not([style*="stroke"]),
+a      .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-guard]):not([style*="color"]):not([style*="stroke"]),
+[role="button"] .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-guard]):not([style*="color"]):not([style*="stroke"]) {
   color: currentColor;
 }
 
