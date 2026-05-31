@@ -1,43 +1,36 @@
-## Diagnosis
+I will not add a new broad CSS rule. I will remove the conflicting winner and reduce the contrast system back to explicit primitives, then verify with screenshots.
 
-The screenshot confirms the broken area is not a missing local class. The winning rule is the final global `RULE A — dark/navy/ink own boxes` in `src/index.css`.
+What I found:
+- The visible homepage issue is real: the hero headline is rendered almost black on the dark video overlay, and some CTA/button areas are at risk of black-on-navy or white-on-champagne conflicts.
+- The main winning conflict is the final block in `src/index.css`: `CTA + SURFACE CONTRAST CONTRACT — FINAL SINGLE SOURCE OF TRUTH`, especially Rule A/Rule B at lines 4145–4233.
+- That block uses very broad descendant selectors with `!important`, including `-webkit-text-fill-color`, so it overrides local component intent across buttons, spans, icons, headings, and nested surfaces.
+- There are also earlier overlapping locks in `src/index.css` and `src/styles/theme-tokens.css` for phone buttons, gold debrand, careers fields, and hero readability. These are not all wrong, but the final Rule A/Rule B sweep is too broad and is still winning.
 
-Why it is winning:
-- `/founder` wraps large champagne cards inside parent sections with `bg-[#1A1A1A]`.
-- Rule A treats any ancestor with `bg-[#1A1A1A]` as a dark surface and forces all descendant text/icons to white with `!important`.
-- Its nested exclusion only detects light descendants if they have explicit markers like `data-surface="champagne"`, `.surface-*`, or exact raw classes such as `bg-[#FDFBF7]`.
-- The Founder page’s champagne panels mostly use gradients like `from-champagne-light via-champagne to-champagne-dark` and classes like `jj-layer-2`, `jj-layer-active`, `jj-card-inner`, so Rule A does not recognize them as light surfaces and overrides their ink text to white.
-- This means the architecture is still ancestor-driven instead of own-surface-driven.
+Fix plan:
+1. Remove the broad descendant repaint section from the final contrast contract in `src/index.css` instead of adding more exceptions.
+   - Remove/neutralize Rule A descendant forcing all children to white.
+   - Remove/neutralize Rule B descendant forcing all children to ink.
+   - Keep only narrow primitive styling for `.jj-cta-dark`, `.jj-cta-champagne`, `.jj-cta-outline`, `.jj-pill-active`, `[data-phone-code-trigger]`, and `[data-surface]` variables.
 
-## Plan
+2. Restore explicit primitive foregrounds, not global sweeping.
+   - `.jj-cta-dark`, `.jj-navy-cta`, and `button[data-phone-code-trigger]`: own text/icons white.
+   - `.jj-cta-champagne`, `.jj-pill-active`, `.jj-cta-outline`: own text/icons ink, while allowing `.text-gold`/gold accents to remain gold.
+   - Dark hero text stays white through the existing hero-specific rule, not through global dark-ancestor repainting.
 
-1. **Fix the contract selector, not the symptom**
-   - In `src/index.css`, change the final contrast contract so dark Rule A does not repaint descendants inside known light/champagne containers.
-   - Add the missing light-surface primitives to the Rule A exclusion list: `.jj-layer-2`, `.jj-layer-active`, `.jj-card-inner`, champagne gradient utility combinations, and existing light token surfaces.
-   - Keep Rule B responsible for ink text on those light containers.
+3. Clean only proven duplicate/conflicting locks.
+   - Remove duplicate phone-code foreground rules only if the primitive lock replaces them exactly.
+   - Do not touch unrelated careers/form rules unless visual inspection proves they are currently winning incorrectly.
+   - Do not add champagne backgrounds or broad new `!important` color sweeps.
 
-2. **Mark Founder champagne panels as light surfaces where necessary**
-   - In `src/pages/Founder.tsx`, add `data-surface="champagne"` only to the actual champagne/gold cards and panels that currently sit under dark parent sections.
-   - Fix the few dark icon tiles that currently contain `text-[#1A1A1A]` icons on `bg-[#1A1A1A]` so icons are white on dark tiles.
-   - Do not change layout, content, background design, photos, or section structure.
+4. Add a read-only visual audit script/check that reports:
+   - black/dark text on navy/dark buttons,
+   - white text on champagne/light/gold backgrounds,
+   - visible text contrast below threshold in the viewport,
+   - the last matching CSS rules for each failure.
+   This is for verification only, not runtime repainting.
 
-3. **Remove remaining conflicting foreground locks in token CSS**
-   - In `src/styles/theme-tokens.css`, remove broad `-webkit-text-fill-color` / `color` locks that are not component-specific and can override hover/idle text unexpectedly.
-   - Preserve legitimate scoped controls: form fields, disabled placeholders, and explicit navy button states.
-
-4. **Add a targeted audit script output for the real failure**
-   - Use existing contrast scripts plus a focused source audit for “light/champagne card under dark parent without `data-surface`”.
-   - This catches exactly the conflict in the screenshot instead of only counting generic white-on-light classes.
-
-5. **Verify idle and hover states**
-   - Check `/founder` at the user’s viewport.
-   - Verify the visible Founder profile text, bio card, role cards, governance cards, regulatory card, CTA buttons, sidebar buttons, and hover states.
-   - Confirm: champagne/gold surfaces render ink text/icons; navy/ink boxes render white text/icons; gold accents remain gold hairlines/text where intended.
-
-## Boundaries
-
-- No new broad `!important` repaint sweep.
-- No runtime contrast guard.
-- No feature/content removal.
-- No changes to backend or business logic.
-- Keep the design champagne/gold with ink text, not white-on-champagne.
+5. Visual verification before claiming fixed:
+   - Capture screenshots of `/` at the current 1178×891 viewport.
+   - Test the visible states: initial homepage, hover on Free Consultation, header controls, mode selector, contact tab, and the welcome/modal state if it appears.
+   - Also inspect `/founder` because it was previously affected.
+   - I will only say fixed if screenshots show: white on blue/navy/dark buttons, ink/gold on champagne surfaces, and hero text readable.

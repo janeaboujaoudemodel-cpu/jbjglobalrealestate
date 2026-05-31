@@ -4142,94 +4142,41 @@ button[data-phone-code-trigger]:hover {
   -webkit-text-fill-color: currentColor;
 }
 
-/* RULE A — dark/navy/ink own boxes. */
-html body :is(
-  [data-surface="navy"], [data-surface="ink"], [data-surface="dark"],
-  .surface-navy, .surface-ink, .surface-dark,
-  .jj-cta-dark, .jj-navy-cta,
-  button[data-phone-code-trigger],
-  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"],
-  [class~="bg-[#1A1A1A]"], [class~="bg-black"]
-):not(.allow-ink):not(.allow-white):not([data-no-contrast-guard]):not(.jj-gold-accent):not(.text-gold):not([data-allow-gold]):not([class*="text-[#B89555]"]):not([data-surface="champagne"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"]):not(.jj-cta-champagne):not(.jj-pill-active):not(.jj-cta-outline),
-html body :is(
-  [data-surface="navy"], [data-surface="ink"], [data-surface="dark"],
-  .surface-navy, .surface-ink, .surface-dark,
-  .jj-cta-dark, .jj-navy-cta,
-  button[data-phone-code-trigger],
-  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"],
-  [class~="bg-[#1A1A1A]"], [class~="bg-black"]
-):not(.allow-ink):not(.allow-white):not([data-no-contrast-guard]):not(.jj-gold-accent):not(.text-gold):not([data-allow-gold]):not([class*="text-[#B89555]"]):not([data-surface="champagne"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"]):not(.jj-cta-champagne):not(.jj-pill-active):not(.jj-cta-outline):hover,
-html body [data-hero-consultation-lock],
-html body [data-hero-consultation-lock]:hover,
-html body [data-photo-copy-lock] {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
+/* PRIMITIVE CONTRAST LOCKS — no broad descendant repaint sweeps. */
+.jj-cta-dark,
+.jj-navy-cta,
+button[data-phone-code-trigger],
+[data-hero-consultation-lock],
+[data-photo-copy-lock] {
+  color: hsl(var(--jj-on-dark));
+  -webkit-text-fill-color: hsl(var(--jj-on-dark));
 }
 
-html body :is(
-  [data-surface="navy"], [data-surface="ink"], [data-surface="dark"],
-  .surface-navy, .surface-ink, .surface-dark,
-  .jj-cta-dark, .jj-navy-cta,
-  button[data-phone-code-trigger],
-  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"],
-  [class~="bg-[#1A1A1A]"], [class~="bg-black"],
-  [data-hero-consultation-lock], [data-photo-copy-lock]
-) :where(h1,h2,h3,h4,h5,h6,p,span,small,strong,em,b,i,a,button,label,li,svg,[class*="lucide"]):not(:is([data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .jj-layer-2, .jj-layer-active, .jj-card-inner, .jj-box-active, .jj-section-champagne, .jj-cta-champagne, .jj-pill-active, .jj-cta-outline, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-white"], [class~="from-champagne-light"], [class~="via-champagne"], [class~="to-champagne-dark"], [class~="from-[#FDFBF7]"], [class~="via-[#F7F2EA]"], [class~="to-[#EFE6D6]"])):not(:is([data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .jj-layer-2, .jj-layer-active, .jj-card-inner, .jj-box-active, .jj-section-champagne, .jj-cta-champagne, .jj-pill-active, .jj-cta-outline, [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-white"], [class~="from-champagne-light"], [class~="via-champagne"], [class~="to-champagne-dark"], [class~="from-[#FDFBF7]"], [class~="via-[#F7F2EA]"], [class~="to-[#EFE6D6]"]) *):not(.allow-ink):not(.allow-white):not([data-no-contrast-guard]):not(.jj-gold-accent):not(.text-gold):not([data-allow-gold]):not([class*="text-[#B89555]"]):not(.text-price-orange):not(.jj-price):not([data-price]):not([data-jj-price]):not([data-price-badge]):not(.price-pill-value):not(.price-display):not(.price-value):not(.property-price):not(.listing-price):not(.starting-price):not(.jj-handover):not([data-handover="true"]):not(.handover-date):not(.completion-date):not(.handover-pill) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
+.jj-cta-dark :where(span, svg, [class*="lucide"]),
+.jj-navy-cta :where(span, svg, [class*="lucide"]),
+button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
+[data-hero-consultation-lock] :where(span, svg, [class*="lucide"]),
+[data-photo-copy-lock] :where(span, svg, [class*="lucide"]) {
+  color: hsl(var(--jj-on-dark));
+  -webkit-text-fill-color: hsl(var(--jj-on-dark));
+  stroke: hsl(var(--jj-on-dark));
+  opacity: 1;
 }
 
-/* RULE B — champagne/page/gold/light own boxes. */
-html body :is(
-  [data-surface="page"], [data-surface="light"], [data-surface="champagne"],
-  [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
-  .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
-  .jj-layer-2, .jj-layer-active, .jj-card-inner, .jj-box-active, .jj-section-champagne,
-  .jj-cta-champagne, .jj-pill-active, .jj-cta-outline,
-  .jj-favorite-trigger,
-  .bg-page, .bg-surface, .bg-raised,
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-white"],
-  [class~="from-champagne-light"], [class~="via-champagne"], [class~="to-champagne-dark"],
-  [class~="from-[#FDFBF7]"], [class~="via-[#F7F2EA]"], [class~="to-[#EFE6D6]"]
-):not(.allow-white):not([data-no-contrast-guard]):not(.jj-gold-accent):not(.text-gold):not([data-allow-gold]):not([class*="text-[#B89555]"]):not([data-surface="navy"]):not([data-surface="ink"]):not([data-surface="dark"]):not(.jj-cta-dark):not(.jj-navy-cta),
-html body :is(
-  [data-surface="page"], [data-surface="light"], [data-surface="champagne"],
-  [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
-  .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
-  .jj-layer-2, .jj-layer-active, .jj-card-inner, .jj-box-active, .jj-section-champagne,
-  .jj-cta-champagne, .jj-pill-active, .jj-cta-outline,
-  .jj-favorite-trigger,
-  .bg-page, .bg-surface, .bg-raised,
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-white"],
-  [class~="from-champagne-light"], [class~="via-champagne"], [class~="to-champagne-dark"],
-  [class~="from-[#FDFBF7]"], [class~="via-[#F7F2EA]"], [class~="to-[#EFE6D6]"]
-):not(.allow-white):not([data-no-contrast-guard]):not(.jj-gold-accent):not(.text-gold):not([data-allow-gold]):not([class*="text-[#B89555]"]):not([data-surface="navy"]):not([data-surface="ink"]):not([data-surface="dark"]):not(.jj-cta-dark):not(.jj-navy-cta):hover {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
+.jj-cta-champagne,
+.jj-pill-active,
+.jj-cta-outline {
+  color: hsl(var(--jj-on-light));
+  -webkit-text-fill-color: hsl(var(--jj-on-light));
 }
 
-html body :is(
-  [data-surface="page"], [data-surface="light"], [data-surface="champagne"],
-  [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
-  .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
-  .jj-layer-2, .jj-layer-active, .jj-card-inner, .jj-box-active, .jj-section-champagne,
-  .jj-cta-champagne, .jj-pill-active, .jj-cta-outline,
-  .jj-favorite-trigger,
-  .bg-page, .bg-surface, .bg-raised,
-  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"], [class~="bg-white"],
-  [class~="from-champagne-light"], [class~="via-champagne"], [class~="to-champagne-dark"],
-  [class~="from-[#FDFBF7]"], [class~="via-[#F7F2EA]"], [class~="to-[#EFE6D6]"]
-) :where(h1,h2,h3,h4,h5,h6,p,span,small,strong,em,b,i,a,button,label,li,svg,[class*="lucide"]):not(:is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta, button[data-phone-code-trigger], [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], [class~="bg-black"], [data-photo-copy-lock])):not(.allow-white):not([data-no-contrast-guard]):not(.jj-gold-accent):not(.text-gold):not([data-allow-gold]):not([class*="text-[#B89555]"]):not(.text-price-orange):not(.jj-price):not([data-price]):not([data-jj-price]):not([data-price-badge]):not(.price-pill-value):not(.price-display):not(.price-value):not(.property-price):not(.listing-price):not(.starting-price):not(.jj-handover):not([data-handover="true"]):not(.handover-date):not(.completion-date):not(.handover-pill) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
+.jj-cta-champagne :where(span, svg, [class*="lucide"]):not(.jj-gold-accent):not(.text-gold):not([data-allow-gold]),
+.jj-pill-active :where(span, svg, [class*="lucide"]):not(.jj-gold-accent):not(.text-gold):not([data-allow-gold]),
+.jj-cta-outline :where(span, svg, [class*="lucide"]):not(.jj-gold-accent):not(.text-gold):not([data-allow-gold]) {
+  color: hsl(var(--jj-on-light));
+  -webkit-text-fill-color: hsl(var(--jj-on-light));
+  stroke: hsl(var(--jj-on-light));
+  opacity: 1;
 }
 
 html body [data-photo-copy-lock] :where(h1,h2,h3,h4,h5,h6,p,span):not(.jj-pill-active *) {
