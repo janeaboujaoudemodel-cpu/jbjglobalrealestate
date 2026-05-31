@@ -1,5 +1,6 @@
 import { Mail, Phone, MessageCircle, Sparkles } from "lucide-react";
 import { CONTACT_INFO } from "@/constants/stats";
+import IconTile from "@/components/ui/icon-tile";
 
 /**
  * Premium glassmorphism contact block for the Careers page.
@@ -71,13 +72,12 @@ export default function CareersContactBlock() {
               >
                 <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
                 <div className="flex items-start gap-3">
-                  <div
-                    data-allow-dark-cta
-                    data-no-contrast-guard
-                    className="grid place-items-center h-10 w-10 rounded-xl bg-[#102540] border border-[#B89555]/60 shadow-[0_6px_14px_-8px_rgba(16,37,64,0.55)] transition-transform duration-300 group-hover:scale-105"
-                  >
-                    <Icon className="h-5 w-5 text-white" />
-                  </div>
+                  <IconTile
+                    icon={Icon}
+                    tone="navy"
+                    size="md"
+                    className="shadow-[0_6px_14px_-8px_rgba(16,37,64,0.55)] transition-transform duration-300 group-hover:scale-105"
+                  />
                   <div className="min-w-0 flex-1">
                     <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#102540]/70">
                       {label}
