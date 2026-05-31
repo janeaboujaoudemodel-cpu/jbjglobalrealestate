@@ -3862,32 +3862,21 @@ hr[data-gold-hairline],
    Per "No Gold Fills" rule: gold survives only as hairline accent.
    Opt-out: add `data-allow-bright-gold` to the element.
    ────────────────────────────────────────────────────────────── */
-[class*="bg-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="bg-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="bg-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="from-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="from-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="to-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="to-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="to-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="via-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="via-[#EFE6D6]"]:not([data-allow-bright-gold]) {
+[class~="bg-[#EFE6D6]"]:not([data-allow-bright-gold]),
+[class~="from-[#EFE6D6]"]:not([data-allow-bright-gold]),
+[class~="to-[#EFE6D6]"]:not([data-allow-bright-gold]),
+[class~="via-[#EFE6D6]"]:not([data-allow-bright-gold]) {
   background-image: none !important;
   background-color: #EFE6D6 !important;
   color: #1A1A1A !important;
 }
-[class*="text-[#B89555]"]:not([data-allow-bright-gold]),
-[class*="text-[#B89555]"]:not([data-allow-bright-gold]),
-[class*="text-[#B89555]"]:not([data-allow-bright-gold]) {
+[class~="text-[#B89555]"]:not([data-allow-bright-gold]) {
   color: #B89555 !important;
 }
-[class*="border-[#B89555]"]:not([data-allow-bright-gold]),
-[class*="border-[#B89555]"]:not([data-allow-bright-gold]),
-[class*="border-[#B89555]"]:not([data-allow-bright-gold]) {
+[class~="border-[#B89555]"]:not([data-allow-bright-gold]) {
   border-color: #B89555 !important;
 }
-[class*="ring-[#B89555]"]:not([data-allow-bright-gold]),
-[class*="ring-[#B89555]"]:not([data-allow-bright-gold]) {
+[class~="ring-[#B89555]"]:not([data-allow-bright-gold]) {
   --tw-ring-color: #B89555 !important;
 }
 
