@@ -4243,11 +4243,6 @@ html body .jj-favorite-trigger :where(svg,[class*="lucide"]):not(.fill-red-500):
  * Duplicate root foreground rules removed; final two-rule contract wins.
  * ============================================================ */
 
-/* Prevent foreground flicker only; do not kill animation durations. */
-:where(a,button,[role="button"],[role="tab"],svg,[class*="lucide"],span,p,h1,h2,h3,h4,h5,h6) {
-  transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
-}
-
 /* ============================================================
  * LEGACY DARK-DEFAULT CLASS LIGHT-ANCESTOR GUARD
  * Several legacy `.jj-inactive-item / .jj-tab-inactive / .jj-sort-inactive /
@@ -4271,50 +4266,7 @@ html body :is(
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
-/* ============================================================
- * TWO-RULE CONTRACT — RAW TAILWIND OWN-BACKGROUND EXTENSION
- *
- * Extends Rule A (dark) and Rule B (light) to plain Tailwind
- * arbitrary background utilities so any element/component using
- * raw bg classes (without a data-surface attribute) still gets
- * the correct foreground. Solves black-on-black and white-on-
- * champagne regressions across the entire site, including
- * hover/focus/active states.
- *
- * Opt-outs (preserved):
- *   .allow-white         – component wants white text on light bg
- *   .allow-ink           – component wants ink text on dark bg
- *   [data-no-contrast-guard], [data-allow-dark-cta], [data-on-dark]
- *   [data-premium]       – premium-scoped (theme-tokens.css)
- *   AI purple surfaces (carry data-no-contrast-guard already)
- * ============================================================ */
-
-/* RULE A* — Raw dark/navy/ink own boxes => WHITE foreground */
-html body
-  :is(
-    [class~="bg-black"],
-    [class*="bg-[#1A1A1A]"], [class*="bg-[#1a1a1a]"],
-    [class*="bg-[#0A0908]"], [class*="bg-[#0D0D0D]"], [class*="bg-[#0d0d0d]"],
-    [class*="bg-[#102540]"], [class*="bg-[#1a3d63]"], [class*="bg-[#143052]"],
-    [class*="bg-[#071B33]"], [class*="bg-[#0E2848]"]
-  ):not(.allow-ink):not([data-no-contrast-guard]):not([data-premium]):not([data-premium] *),
-html body
-  :is(
-    [class~="bg-black"],
-    [class*="bg-[#1A1A1A]"], [class*="bg-[#1a1a1a]"],
-    [class*="bg-[#0A0908]"], [class*="bg-[#0D0D0D]"], [class*="bg-[#0d0d0d]"],
-    [class*="bg-[#102540]"], [class*="bg-[#1a3d63]"], [class*="bg-[#143052]"],
-    [class*="bg-[#071B33]"], [class*="bg-[#0E2848]"]
-  ):not(.allow-ink):not([data-no-contrast-guard]):not([data-premium]):not([data-premium] *):hover {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-
-/* Descendant rules intentionally omitted:
- * Setting color on the own box is enough — descendants inherit, and
- * any descendant with an explicit text-* class keeps its own color
- * (so a navy CTA inside a champagne card and a champagne pill inside
- * a navy banner both render correctly without descendant exclusion
- * gymnastics). Explicit black-on-black or white-on-light in component
- * code remains a per-component bug, not an architecture concern. */
+/* Raw Tailwind bg-* global repaint extension removed: broad class* selectors
+   were overriding champagne/gold sections to white. Use data-surface or CTA
+   primitives for own-box contrast. */
 
