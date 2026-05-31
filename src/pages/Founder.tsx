@@ -372,27 +372,19 @@ const Founder = () => {
                   
                   <div className="grid sm:grid-cols-2 gap-4 mb-6">
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
-                        <FileCheck className="w-4 h-4 text-white" />
-                      </div>
+                      <IconTile icon={FileCheck} tone="ink" size="sm" />
                       <p className="text-[#1A1A1A]/70">Clear decision-making authority</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
-                        <Shield className="w-4 h-4 text-white" />
-                      </div>
+                      <IconTile icon={Shield} tone="ink" size="sm" />
                       <p className="text-[#1A1A1A]/70">Compliance with UAE real estate regulations</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
-                        <Scale className="w-4 h-4 text-white" />
-                      </div>
+                      <IconTile icon={Scale} tone="ink" size="sm" />
                       <p className="text-[#1A1A1A]/70">Controlled advisory and brokerage processes</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
-                        <Users className="w-4 h-4 text-white" />
-                      </div>
+                      <IconTile icon={Users} tone="ink" size="sm" />
                       <p className="text-[#1A1A1A]/70">Transparent internal accountability</p>
                     </div>
                   </div>
