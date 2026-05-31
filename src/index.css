@@ -4632,12 +4632,12 @@ a[class*="bg-red-"]:hover {
   [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
   .bg-card, .bg-background, .bg-popover, .bg-white
 ):not([data-surface="dark"])
-  :where(a, button, [role="button"]):is([class*="bg-[#102540]"], [class*="bg-[#1a3d63]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]):hover,
+  :where(a, button, [role="button"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], .bg-black, .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]):hover,
 :where(
   [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
   .bg-card, .bg-background, .bg-popover, .bg-white
 ):not([data-surface="dark"])
-  :where(a, button, [role="button"]):is([class*="bg-[#102540]"], [class*="bg-[#1a3d63]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]):hover
+  :where(a, button, [role="button"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], .bg-black, .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]):hover
   :where(span, p, svg, [class*="lucide"]) {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
