@@ -168,14 +168,17 @@ export default function PremiumJobCard({
             {computedTags.map((t) => {
               const cfg = TAG_STYLES[t];
               const Icon = cfg.icon;
+              const isFeatured = t === "featured";
               return (
                 <span
                   key={t}
-                  className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text}`}
-                  style={t === "featured" ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
+                  data-no-contrast-guard={isFeatured ? "true" : undefined}
+                  data-allow-dark-cta={isFeatured ? "true" : undefined}
+                  className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text} ${isFeatured ? "allow-white" : ""}`}
+                  style={isFeatured ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                 >
-                  <Icon className={`w-3 h-3 ${t === "featured" ? "allow-white" : ""}`} style={t === "featured" ? { color: "#FFFFFF" } : undefined} />
-                  <span style={t === "featured" ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{cfg.label}</span>
+                  <Icon className={`w-3 h-3 ${isFeatured ? "allow-white" : ""}`} style={isFeatured ? { color: "#FFFFFF" } : undefined} />
+                  <span className={isFeatured ? "allow-white" : ""} style={isFeatured ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{cfg.label}</span>
                 </span>
               );
             })}

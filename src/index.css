@@ -504,16 +504,40 @@ All colors MUST be HSL.
  * Gray is FORBIDDEN for data values, labels, chart elements.
  * ============================================================ */
 @layer utilities {
-  /* Bump all gray-500/600/700 text to high-contrast foreground */
-  .text-gray-500,
-  .text-gray-600,
-  .text-gray-700 {
+  /* Bump gray-500/600/700 text to high-contrast foreground.
+     SCOPED to light surfaces only — on any dark/navy/ink own-box these
+     colors would be invisible, so they must inherit the dark-surface
+     foreground from the final two-rule contract. */
+  :where(
+    :root:not(.dark),
+    [data-surface="page"], [data-surface="light"], [data-surface="champagne"],
+    [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+    .surface-page, .surface-light, .surface-champagne, .surface-cream,
+    .surface-raised, .surface-gold
+  ) :is(.text-gray-500, .text-gray-600, .text-gray-700) {
     color: hsl(0 0% 20%) !important;
   }
 
-  /* Bump muted-foreground to readable contrast */
-  .text-muted-foreground {
+  /* Bump muted-foreground to readable contrast — light surfaces only. */
+  :where(
+    :root:not(.dark),
+    [data-surface="page"], [data-surface="light"], [data-surface="champagne"],
+    [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+    .surface-page, .surface-light, .surface-champagne, .surface-cream,
+    .surface-raised, .surface-gold
+  ) .text-muted-foreground {
     color: hsl(0 0% 30%) !important;
+  }
+  /* On dark/navy/ink surfaces, muted-foreground stays readable on dark. */
+  :where(
+    [data-surface="navy"], [data-surface="ink"], [data-surface="dark"],
+    .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta
+  ) .text-muted-foreground,
+  :where(
+    [data-surface="navy"], [data-surface="ink"], [data-surface="dark"],
+    .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta
+  ) :is(.text-gray-500, .text-gray-600, .text-gray-700) {
+    color: rgba(255, 255, 255, 0.78) !important;
   }
 
   /* Fix faded gold opacity text */
@@ -1006,13 +1030,13 @@ All colors MUST be HSL.
    re-mapped to champagne so the canvas stays continuous. Owner/admin/
    portal pages are NOT marked `data-marketing-page` and keep their
    dark surfaces. */
-[data-marketing-page] section[class*="bg-[#1A1A1A]"] {
+[data-marketing-page] section[class~="bg-[#1A1A1A]"] {
   background: #F7F2EA !important;
 }
-[data-marketing-page] section[class*="bg-[#1A1A1A]"] [class*="text-[#1A1A1A]"] {
+[data-marketing-page] section[class~="bg-[#1A1A1A]"] [class~="text-[#1A1A1A]"] {
   color: #1A1A1A !important;
 }
-[data-marketing-page] section[class*="bg-[#1A1A1A]"] [class*="text-white"] {
+[data-marketing-page] section[class~="bg-[#1A1A1A]"] [class~="text-white"] {
   color: #1A1A1A !important;
 }
 
@@ -1267,7 +1291,7 @@ All colors MUST be HSL.
   }
 
   .jj-property-card-detail {
-    @apply text-base font-medium text-white;
+    @apply text-base font-medium text-foreground;
   }
 
   /* --- User / Employee Card --- */
@@ -1299,7 +1323,7 @@ All colors MUST be HSL.
   }
 
   .jj-user-card-role {
-    @apply text-sm font-normal text-white/90;
+    @apply text-sm font-normal text-muted-foreground;
   }
 
   /* --- CRM Record Card --- */
@@ -1321,7 +1345,7 @@ All colors MUST be HSL.
   }
 
   .jj-crm-card-status {
-    @apply text-xs font-medium uppercase tracking-wide px-2 py-1 rounded bg-white/10 text-white;
+    @apply text-xs font-medium uppercase tracking-wide px-2 py-1 rounded bg-[#EFE6D6] text-foreground border border-[#B89555]/40;
   }
 
   .jj-crm-card-meta {
@@ -2832,8 +2856,11 @@ a .lucide,
 .dark [class~="bg-[#F7F2EA]"] .lucide {
   color: hsl(0 0% 7%); /* dark ink on stubbornly-light surface */
 }
-:root:not(.dark) [class*="bg-black"] .lucide,
-:root:not(.dark) [class~="bg-[#1A1A1A]"] .lucide,
+:root:not(.dark) [class~="bg-black"] .lucide,
+:root:not(.dark) [class~="bg-[#0D0D0D]"] .lucide,
+:root:not(.dark) [class~="bg-[#0A0908]"] .lucide,
+:root:not(.dark) [class~="bg-[#102540]"] .lucide,
+:root:not(.dark) [class~="bg-[#1a3d63]"] .lucide,
 :root:not(.dark) [class~="bg-[#1A1A1A]"] .lucide {
   color: hsl(0 0% 100%); /* light ink on stubbornly-dark surface */
 }
@@ -4239,4 +4266,27 @@ html body .jj-favorite-trigger :where(svg,[class*="lucide"]):not(.fill-red-500):
 /* Prevent foreground flicker only; do not kill animation durations. */
 :where(a,button,[role="button"],[role="tab"],svg,[class*="lucide"],span,p,h1,h2,h3,h4,h5,h6) {
   transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
+}
+
+/* ============================================================
+ * LEGACY DARK-DEFAULT CLASS LIGHT-ANCESTOR GUARD
+ * Several legacy `.jj-inactive-item / .jj-tab-inactive / .jj-sort-inactive /
+ * .jj-role / .jj-label / .jj-section-label / .jj-profile-role / .jj-gold-accent`
+ * classes default to text-white because they were authored for dark hero
+ * panels. When they appear on a champagne/page/cream/raised/gold ancestor,
+ * force ink so the Rule B contract is honoured.
+ * ============================================================ */
+html body :is(
+  [data-surface="page"], [data-surface="light"], [data-surface="champagne"],
+  [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+  .surface-page, .surface-light, .surface-champagne, .surface-cream,
+  .surface-raised, .surface-gold
+) :is(
+  .jj-inactive-item, .jj-inactive-item-icon, .jj-inactive-item-number,
+  .jj-tab-inactive, .jj-sort-inactive,
+  .jj-role, .jj-label, .jj-section-label,
+  .jj-profile-role, .jj-gold-accent
+) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }

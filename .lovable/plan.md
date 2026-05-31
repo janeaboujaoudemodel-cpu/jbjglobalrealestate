@@ -1,37 +1,67 @@
-Plan to finish the contrast cleanup without touching already-fixed sections:
+# Final Contrast Cleanup — One Source of Truth
 
-1. Remove the duplicate/winning contrast systems in `src/index.css`
-   - Neutralize the older global blocks that still compete with the final contract:
-     - `GLOBAL PREMIUM ICON VISIBILITY` broad dark/light icon rules around lines 569-943.
-     - `UNIVERSAL WHITE-ON-CHAMPAGNE/GOLD CONTRAST GUARD` around lines 945-1008.
-     - `GLOBAL CONTRAST ENFORCEMENT` around lines 2991-3238.
-     - `LIGHT-SURFACE INTERACTIVE LABEL GUARD` around lines 3239-3262.
-     - `DARK SURFACE ESCAPE HATCH` around lines 3264-3375.
-     - `FINAL LIGHT-SURFACE INK RESTORE` and global heading/navy sweep around lines 5220-5258 where it can override nested dark boxes.
-     - `UNIVERSAL SVG ICON CONTRAST GUARD` around lines 5352-5390 where it still treats gold/champagne descendants too broadly.
-     - Duplicate CTA/surface blocks around lines 5699-6150 that repeat the same rules before the final contract.
-   - Keep unrelated locked fixes intact: hero consultation lock, photo copy lock, favorite button lock, sidebar collapse gold control, phone trigger/cmdk lock, sign-out red lock, price/developer/card standards.
+## Why the "Featured" pill is black on navy
+The pill background is `bg-[#102540]` (navy own surface → must render white per Rule A). It currently renders ink because **broad substring CSS guards** in `src/index.css` repaint `text-white` to ink whenever the class contains a string starting with `bg-[#1`, plus a separate `:where(.bg-black, .bg-gray-900, …) [class*="text-[#1A1A1A]"]` rule remaps anything ink-ish on dark to gold. That same family of broad selectors is the root cause of the remaining site-wide contrast conflicts.
 
-2. Keep only the final two-rule architecture at the end of `src/index.css`
-   - Rule A: any element whose own surface is navy / ink / dark must render white text and white icons.
-   - Rule B: any element whose own surface is champagne / page / cream / raised / gold / white must render ink text and ink icons.
-   - Use only exact own-surface selectors: `[data-surface]`, `.surface-*`, `.jj-cta-*`, `.jj-pill-active`, `.jj-navy-cta`, and exact whole-token background matches like `[class~="bg-[#102540]"]`.
-   - No broad substring surface detection like `[class*="bg-black"]`, `[class*="bg-[#0"]`, `[class*="from-[#FDFBF7]"]`, or descendant-wide inheritance that repaints nested opposite-tone boxes.
+## The Final Two-Rule Contract (locked, unchanged)
+- **Rule A** — Own background navy/ink/dark → white text + white icons.
+- **Rule B** — Own background champagne / cream / gold / page / white → ink (`#1A1A1A`) text + ink icons.
 
-3. Fix the final contract so nested surfaces are stable
-   - A navy CTA inside champagne stays white.
-   - A champagne/light card inside navy stays ink.
-   - Gold is treated as light/champagne for foreground, per your rule.
-   - `allow-white` stops being a light-surface escape hatch unless the element itself is dark/navy.
-   - Existing explicit exceptions remain only where already locked: photo overlays, hero consultation, sign-out red, phone trigger, sidebar collapse control.
+Everything else in `index.css` must either *serve* these two rules or be removed.
 
-4. Align loaded secondary stylesheet only if validation proves it conflicts
-   - `src/styles/theme-tokens.css` is imported after `index.css`, so I will inspect and only narrow any selectors there that override the final two-rule contract.
-   - I will not rewrite the careers/join styling that is already repaired unless it directly violates the two rules.
+## What gets cleaned in `src/index.css`
 
-5. Validate with screenshots and computed checks
-   - Routes to validate: `/`, `/properties`, `/developers`, `/areas`, `/toolkit`, `/ai-hub`, `/ai-broker-workspace`, `/join`, `/profile?tab=settings`.
-   - Check both conditions programmatically in the browser:
-     - White/champagne text or icons on champagne/gold/light backgrounds: zero.
-     - Ink/black text or icons on navy/dark backgrounds: zero.
-   - Capture screenshots after the cleanup and only report complete once the two-rule contract is stable.
+### 1. Replace all broad-substring background selectors with whole-token matches
+- `[class*="bg-black"]` → `[class~="bg-black"]` (kills accidental matches on `hover:bg-black/5`, `bg-black/10`, etc.).
+- `[class*="bg-[#0"]` → enumerated dark tokens only (`bg-[#0D0D0D]`, `bg-[#0A0908]`). This currently catches every sky/emerald/teal/blue hex starting with `0`.
+- `[class*="bg-[#1"]` is the direct cause of the Featured-pill bug — restrict to actual ink tokens (`bg-[#1A1A1A]`, `bg-[#102540]`, `bg-[#1a3d63]`).
+- Same treatment for the gray-neutraliser block at lines 5552–5554 where `:not()` is currently attached to the descendant combinator (so the opt-outs apply to descendants, not the gray element).
+
+### 2. Delete the "ink-text → gold on dark" remap
+Lines 3080–3090 and 3169–3181 force `text-[#1A1A1A]` to `#B89555` on any dark surface. This produces gold body text on navy (low-AA) and is also what flips white→non-white in some chains. Replace with Rule A: white (`#FFFFFF` / `rgba(255,255,255,.92)`).
+
+### 3. Collapse the triple `[data-surface="gold"]` definitions
+Lines 854, 5041, 6024 all redefine gold. The first one still sets `--surface-fg: white`, contradicting Rule B. Keep a single canonical block with `--surface-fg: ink`.
+
+### 4. Scope the unscoped muted-foreground overrides
+Lines 508–517 force `.text-gray-500/600/700` and `.text-muted-foreground` to `hsl(0 0% 20–30%)` with `!important`, no surface guard → invisible on any dark surface that isn't tagged `[data-surface="dark"]`. Scope these to light surfaces only.
+
+### 5. Close the `bg-[#1A1A1A]/<opacity>` guard gap
+Extend the dark-surface guard to match opacity variants (`bg-[#1A1A1A]/40`, `/60`, `/80`) so translucent dark tiles still render white text.
+
+### 6. Retire legacy `@layer components` classes that hardcode white on champagne cards
+Inside `index.css` lines ~1700–2400, rewrite these to use `text-foreground` (which resolves to ink on light, white on dark via the existing token system) or guard them with `[data-surface="dark"] .class { … }`:
+- `.jj-property-card-detail`, `.jj-user-card-role`, `.jj-crm-card-status`
+- `.jj-inactive-item` (+ `:hover`, `-icon`, `-number`)
+- `.jj-tab-inactive` (+ `:hover`), `.jj-sort-inactive` (+ `:hover`)
+- `.jj-role`, `.jj-label`, `.jj-section-label`
+- `.jj-profile-card .jj-profile-role`
+- `.jj-gold-accent` (currently `text-white` — misnamed)
+
+### 7. Remove dead/duplicate code
+- Typo block at lines 4136–4138 (`buttonbuttonbutton`, `aa` selectors — never match).
+- Any leftover `GLOBAL MONOCHROME OVERRIDE` / `URGENT CONTRAST RESCUE` fragments that still duplicate the final contract.
+
+## Component fixes (handful, surgical)
+
+- **`AIHub.tsx:894`** — `placeholder:text-[#1A1A1A]/70` on dark input → `placeholder:text-white/60`.
+- **`toolkit/ToolkitLanding.tsx:81`**, **`Founder.tsx:127`**, **`video-meet/MeetingAIAssistant.tsx:248`** — swap dark `text-[#1A1A1A]` to white on their dark backgrounds.
+- **`CommunitySearchModal.tsx`**, **`DeveloperSearchModal.tsx`**, **`OTPVerificationModal.tsx`** — replace root `text-white` on `bg-[#FDFBF7]` champagne dialogs with `text-foreground`.
+- **AI tool pages** (`AIEmailGeneratorPage`, `AIDescriptionWriterPage`, `AIClientMatcherPage`, `AISocialMediaPage`, `AIInvestmentReportPage`) — remove `text-white` from `bg-[#F7F2EA]` form fields (let token system render ink).
+- **Gold CTAs with white text** (`PublicSignDocument.tsx:19`, `ESignatureDashboard.tsx:328,646`, `ListingsApproval.tsx:188`, `StampGeneratorPage.tsx:82,187`, `SentimentIndicator.tsx:174`) — switch to `text-[#1A1A1A]` per Rule B (gold = light surface).
+- **`ProjectCard.tsx`, `ModeSwitcher.tsx`** — deduplicate nested `data-no-contrast-guard` (keep only the outermost).
+
+## What is explicitly NOT touched (locked)
+Hero CTA, Favorite button, Photo overlays, Sidebar ink/gold, Sign-out red, Phone trigger, `<PricePill>`, `<DeveloperLink>`, `<IconTile>`, navy CTA primitives (`.jj-cta-dark`/`-champagne`/`-outline`), `.jj-pill-active`, mode-color identity, no-gray rules, no-photo-no-publish, listing-card layout, full-bleed band system, document-studio signature blocks.
+
+## Validation
+1. `rg` sweep confirming zero `[class*="bg-black"]`, `[class*="bg-[#0"]`, `[class*="bg-[#1"]` substring guards remain in `index.css`.
+2. CSS parses (PostCSS) cleanly.
+3. Live screenshots at viewport 1178×891 on: `/careers` (Featured pill white-on-navy), `/join` (navy banner white text), `/`, `/projects`, `/ai-hub`, `/toolkit`, `/founder`, owner CRM, presentation flow, e-signature, stamp generator, modal dialogs (Community/Developer/OTP), all five AI tool pages.
+4. DOM contrast probe: 0 white-on-light, 0 ink-on-dark, 0 gold-on-dark for body text.
+5. Confirm previously-fixed surfaces (sidebar ink, hero white, photo overlays, sign-out red) are unchanged.
+
+## Files touched
+- `src/index.css` (main cleanup — selector narrowing, legacy class rewrites, dead-code removal, single-source gold token)
+- ~12 component files listed above (surgical class swaps only)
+- No changes to tokens, configs, design system contracts, or business logic.
