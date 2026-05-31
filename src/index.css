@@ -4088,7 +4088,6 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 /* Surface foreground inheritance removed; the final two-rule contract below owns surface foregrounds. */
 
 .jj-cta-dark,
-.jj-navy-cta {.jj-cta-dark,
 .jj-navy-cta {
   background-color: hsl(var(--jj-navy-bg)) !important;
   border: 1px solid hsl(var(--jj-gold-border) / 0.55) !important;
@@ -4148,7 +4147,7 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 
 /* Legacy own-box duplicate rules removed; final two-rule contract below owns these outcomes. */
 
-[data-sidebar-gold-label] {[data-sidebar-gold-label] {
+[data-sidebar-gold-label] {
   color: hsl(var(--jj-gold-border)) !important;
   -webkit-text-fill-color: hsl(var(--jj-gold-border)) !important;
 }
