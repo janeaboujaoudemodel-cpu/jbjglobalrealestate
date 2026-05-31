@@ -158,7 +158,8 @@ const CookiesConsentBanner = () => {
                       </Button>
                       <Button
                         onClick={() => setShowPreferences(true)}
-                        className="jj-cta-dark shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        variant="dark"
+                        className="shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
                         data-cta="dark"
                       >
                         Manage Preferences

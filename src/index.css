@@ -4632,12 +4632,12 @@ a[class*="bg-red-"]:hover {
   [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
   .bg-card, .bg-background, .bg-popover, .bg-white
 ):not([data-surface="dark"])
-  :where(a, button, [role="button"]):is([class*="bg-[#102540]"], [class*="bg-[#1a3d63]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]):hover,
+  :where(a, button, [role="button"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], .bg-black, .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]):hover,
 :where(
   [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
   .bg-card, .bg-background, .bg-popover, .bg-white
 ):not([data-surface="dark"])
-  :where(a, button, [role="button"]):is([class*="bg-[#102540]"], [class*="bg-[#1a3d63]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]):hover
+  :where(a, button, [role="button"]):is([class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], .bg-black, .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]):hover
   :where(span, p, svg, [class*="lucide"]) {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -6184,9 +6184,9 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   opacity: 1 !important;
 }
 
-:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is([class*="bg-[#102540]/"],[class*="bg-[#1a3d63]/"],[class*="bg-[#1A1A1A]/"],[class*="bg-black/"]):not(.allow-ink),
-:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is([class*="bg-[#102540]/"],[class*="bg-[#1a3d63]/"],[class*="bg-[#1A1A1A]/"],[class*="bg-black/"]):not(.allow-ink):hover,
-:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is([class*="bg-[#102540]/"],[class*="bg-[#1a3d63]/"],[class*="bg-[#1A1A1A]/"],[class*="bg-black/"]):not(.allow-ink) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]) {
+:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is([class~="bg-[#102540]/50"],[class~="bg-[#102540]/60"],[class~="bg-[#102540]/70"],[class~="bg-[#102540]/80"],[class~="bg-[#102540]/90"],[class~="bg-[#1a3d63]/50"],[class~="bg-[#1a3d63]/60"],[class~="bg-[#1a3d63]/70"],[class~="bg-[#1a3d63]/80"],[class~="bg-[#1a3d63]/90"],[class~="bg-[#1A1A1A]/50"],[class~="bg-[#1A1A1A]/60"],[class~="bg-[#1A1A1A]/70"],[class~="bg-[#1A1A1A]/80"],[class~="bg-[#1A1A1A]/90"],[class~="bg-black/50"],[class~="bg-black/60"],[class~="bg-black/70"],[class~="bg-black/80"],[class~="bg-black/90"]):not(.allow-ink),
+:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is([class~="bg-[#102540]/50"],[class~="bg-[#102540]/60"],[class~="bg-[#102540]/70"],[class~="bg-[#102540]/80"],[class~="bg-[#102540]/90"],[class~="bg-[#1a3d63]/50"],[class~="bg-[#1a3d63]/60"],[class~="bg-[#1a3d63]/70"],[class~="bg-[#1a3d63]/80"],[class~="bg-[#1a3d63]/90"],[class~="bg-[#1A1A1A]/50"],[class~="bg-[#1A1A1A]/60"],[class~="bg-[#1A1A1A]/70"],[class~="bg-[#1A1A1A]/80"],[class~="bg-[#1A1A1A]/90"],[class~="bg-black/50"],[class~="bg-black/60"],[class~="bg-black/70"],[class~="bg-black/80"],[class~="bg-black/90"]):not(.allow-ink):hover,
+:where(a,button,span,div,li,[role="button"],[role="tab"],[role="status"]):is([class~="bg-[#102540]/50"],[class~="bg-[#102540]/60"],[class~="bg-[#102540]/70"],[class~="bg-[#102540]/80"],[class~="bg-[#102540]/90"],[class~="bg-[#1a3d63]/50"],[class~="bg-[#1a3d63]/60"],[class~="bg-[#1a3d63]/70"],[class~="bg-[#1a3d63]/80"],[class~="bg-[#1a3d63]/90"],[class~="bg-[#1A1A1A]/50"],[class~="bg-[#1A1A1A]/60"],[class~="bg-[#1A1A1A]/70"],[class~="bg-[#1A1A1A]/80"],[class~="bg-[#1A1A1A]/90"],[class~="bg-black/50"],[class~="bg-black/60"],[class~="bg-black/70"],[class~="bg-black/80"],[class~="bg-black/90"]):not(.allow-ink) :where(span,p,small,strong,em,svg,[class*="lucide"]):not([data-decorative="true"]):not([data-no-contrast-guard]) {
   color: hsl(var(--jj-on-dark)) !important;
   -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
   stroke: hsl(var(--jj-on-dark)) !important;
@@ -6289,20 +6289,16 @@ html body .jj-favorite-trigger :where(svg,[class*="lucide"]):not(.fill-red-500):
 
 /* ============================================================
  * STABLE SURFACE CONTRACT — ARCHITECTURE LOCK
- * One inherited foreground variable, set by the nearest own surface.
- * Light/champagne/gold surfaces => ink. Navy/ink/photo surfaces => white.
- * This intentionally ignores legacy allow-white/data-no-contrast-guard on
- * light own boxes; those flags are not allowed to make champagne unreadable.
+ * Winning rule fixed: never infer foreground from substring classes such as
+ * `group-hover:bg-[#102540]/10`; those are not own surfaces and were turning
+ * champagne sidebar icons white. Only explicit surfaces/CTA primitives own FG.
  * ============================================================ */
 html body :is(
   [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
   [data-cta="champagne"], .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
   .jj-cta-champagne, .jj-pill-active, .jj-cta-outline,
   .bg-white, .bg-card, .bg-popover,
-  [class~="bg-[#FDFBF7]"], [class*="bg-[#FDFBF7]/"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#D8C7A6]"],
-  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"], [class*="from-[#EFE6D6]"], [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"],
-  [class*="via-[#FDFBF7]"], [class*="via-[#F7F2EA]"], [class*="via-[#F7F1E6]"], [class*="via-[#EFE6D6]"], [class*="via-[#ECE2D2]"], [class*="via-[#D8C7A6]"],
-  [class*="to-[#FDFBF7]"], [class*="to-[#F7F2EA]"], [class*="to-[#F7F1E6]"], [class*="to-[#EFE6D6]"], [class*="to-[#ECE2D2]"], [class*="to-[#D8C7A6]"]
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#D8C7A6]"]
 ) {
   --jj-stable-fg: hsl(var(--jj-on-light));
   color: hsl(var(--jj-on-light)) !important;
@@ -6312,8 +6308,7 @@ html body :is(
 html body :is(
   [data-surface="navy"], [data-surface="ink"], [data-surface="dark"], [data-cta="dark"], [data-photo-copy-lock],
   .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta,
-  [class~="bg-[#102540]"], [class*="bg-[#102540]/"], [class~="bg-[#1a3d63]"], [class*="bg-[#1a3d63]/"],
-  [class~="bg-[#1A1A1A]"], [class*="bg-[#1A1A1A]/"], .bg-black, [class*="bg-black/"]
+  [class~="bg-[#102540]"], [class~="bg-[#1a3d63]"], [class~="bg-[#1A1A1A]"], .bg-black
 ) {
   --jj-stable-fg: hsl(var(--jj-on-dark));
   color: hsl(var(--jj-on-dark)) !important;
@@ -6323,11 +6318,8 @@ html body :is(
 html body :is(
   [data-surface], [data-cta], [data-photo-copy-lock],
   .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-navy, .surface-ink, .surface-dark,
-  .jj-cta-champagne, .jj-pill-active, .jj-cta-outline, .jj-cta-dark, .jj-navy-cta,
-  .bg-white, .bg-card, .bg-popover,
-  [class~="bg-[#FDFBF7]"], [class*="bg-[#FDFBF7]/"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"], [class~="bg-[#D8C7A6]"],
-  [class~="bg-[#102540]"], [class*="bg-[#102540]/"], [class~="bg-[#1a3d63]"], [class*="bg-[#1a3d63]/"], [class~="bg-[#1A1A1A]"], [class*="bg-[#1A1A1A]/"], .bg-black, [class*="bg-black/"]
-) :where(h1,h2,h3,h4,h5,h6,p,span,small,strong,em,b,i,label,a,button,li,dt,dd,summary,th,td,caption,legend,figcaption,svg,[class*="lucide"]):not([data-decorative="true"]):not(.text-price-orange):not([class*="text-price-orange"]):not([data-price]):not([data-price] *):not(.fill-red-500):not(.text-red-500) {
+  .jj-cta-champagne, .jj-pill-active, .jj-cta-outline, .jj-cta-dark, .jj-navy-cta
+) :where(h1,h2,h3,h4,h5,h6,p,span,small,strong,em,b,i,label,a,button,li,dt,dd,summary,th,td,caption,legend,figcaption,svg,[class*="lucide"]):not([data-decorative="true"]):not([data-no-contrast-guard]):not(.text-price-orange):not([class*="text-price-orange"]):not([data-price]):not([data-price] *):not(.fill-red-500):not(.text-red-500) {
   color: var(--jj-stable-fg, hsl(var(--jj-on-light))) !important;
   -webkit-text-fill-color: var(--jj-stable-fg, hsl(var(--jj-on-light))) !important;
   stroke: var(--jj-stable-fg, hsl(var(--jj-on-light))) !important;
