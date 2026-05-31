@@ -26,7 +26,10 @@ const contrastRatio = (fg, bg) => {
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 };
 
-const browser = await chromium.launch({ headless: true });
+const launchOptions = process.env.CHROMIUM_PATH
+  ? { headless: true, executablePath: process.env.CHROMIUM_PATH }
+  : { headless: true, executablePath: '/bin/chromium' };
+const browser = await chromium.launch(launchOptions);
 const context = await browser.newContext({ viewport, deviceScaleFactor: 2 });
 const failures = [];
 
