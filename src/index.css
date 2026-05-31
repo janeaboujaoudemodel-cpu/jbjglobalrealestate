@@ -2844,14 +2844,7 @@ a .lucide,
 .dark [class~="bg-[#F7F2EA]"] .lucide {
   color: hsl(0 0% 7%); /* dark ink on stubbornly-light surface */
 }
-:root:not(.dark) [class~="bg-black"] .lucide,
-:root:not(.dark) [class~="bg-[#0D0D0D]"] .lucide,
-:root:not(.dark) [class~="bg-[#0A0908]"] .lucide,
-:root:not(.dark) [class~="bg-[#102540]"] .lucide,
-:root:not(.dark) [class~="bg-[#1a3d63]"] .lucide,
-:root:not(.dark) [class~="bg-[#1A1A1A]"] .lucide {
-  color: hsl(0 0% 100%); /* light ink on stubbornly-dark surface */
-}
+/* Broad dark-ancestor icon repaint removed. CTA primitives now own dark icon contrast. */
 
 /* 6. Last-line safety: never allow an icon to inherit color: transparent */
 .lucide[style*="color: transparent"],
