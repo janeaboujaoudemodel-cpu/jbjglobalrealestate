@@ -3734,18 +3734,18 @@ hr[data-gold-hairline],
 /* 1a. EXTENDED background remap — covers shades 400→900 in addition
  *     to the 50→300 block already declared above. */
 :where(
-  .bg-gray-400, .bg-gray-500, .bg-gray-600, .bg-gray-700, .bg-gray-800,
-  .bg-neutral-400, .bg-neutral-500, .bg-neutral-600, .bg-neutral-700, .bg-neutral-800,
-  .bg-slate-400, .bg-slate-500, .bg-slate-600, .bg-slate-700, .bg-slate-800,
-  .bg-zinc-400, .bg-zinc-500, .bg-zinc-600, .bg-zinc-700, .bg-zinc-800,
-  .bg-stone-400, .bg-stone-500, .bg-stone-600, .bg-stone-700, .bg-stone-800
+  .bg-gray-400, .bg-gray-500,
+  .bg-neutral-400, .bg-neutral-500,
+  .bg-slate-400, .bg-slate-500,
+  .bg-zinc-400, .bg-zinc-500,
+  .bg-stone-400, .bg-stone-500
 ):not([data-surface="dark"]):not([data-no-contrast-guard]):not([class*="bg-gradient"]) {
   background-color: #EFE6D6 !important;
 }
 
 /* 1b. Background opacity variants (e.g. bg-gray-200/50, bg-muted/40) */
-:where([class*="bg-gray-"], [class*="bg-neutral-"], [class*="bg-slate-"], [class*="bg-zinc-"], [class*="bg-stone-"], [class*="bg-muted/"])
-:not([data-surface="dark"]):not([data-no-contrast-guard]):not([class*="bg-gray-9"]):not([class*="bg-neutral-9"]):not([class*="bg-slate-9"]):not([class*="bg-zinc-9"]):not([class*="bg-stone-9"]):not([class*="bg-gradient"]) {
+:root:not(.dark) :where([class*="bg-gray-"], [class*="bg-neutral-"], [class*="bg-slate-"], [class*="bg-zinc-"], [class*="bg-stone-"], [class*="bg-muted/"])
+:not([data-surface="dark"]):not([data-no-contrast-guard]):not([class*="bg-gray-6"]):not([class*="bg-gray-7"]):not([class*="bg-gray-8"]):not([class*="bg-gray-9"]):not([class*="bg-neutral-6"]):not([class*="bg-neutral-7"]):not([class*="bg-neutral-8"]):not([class*="bg-neutral-9"]):not([class*="bg-slate-6"]):not([class*="bg-slate-7"]):not([class*="bg-slate-8"]):not([class*="bg-slate-9"]):not([class*="bg-zinc-6"]):not([class*="bg-zinc-7"]):not([class*="bg-zinc-8"]):not([class*="bg-zinc-9"]):not([class*="bg-stone-6"]):not([class*="bg-stone-7"]):not([class*="bg-stone-8"]):not([class*="bg-stone-9"]):not([class*="bg-gradient"]) {
   background-color: #F7F2EA !important;
 }
 
