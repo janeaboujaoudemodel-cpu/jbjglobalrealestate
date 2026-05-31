@@ -1030,13 +1030,13 @@ All colors MUST be HSL.
    re-mapped to champagne so the canvas stays continuous. Owner/admin/
    portal pages are NOT marked `data-marketing-page` and keep their
    dark surfaces. */
-[data-marketing-page] section[class*="bg-[#1A1A1A]"] {
+[data-marketing-page] section[class~="bg-[#1A1A1A]"] {
   background: #F7F2EA !important;
 }
-[data-marketing-page] section[class*="bg-[#1A1A1A]"] [class*="text-[#1A1A1A]"] {
+[data-marketing-page] section[class~="bg-[#1A1A1A]"] [class~="text-[#1A1A1A]"] {
   color: #1A1A1A !important;
 }
-[data-marketing-page] section[class*="bg-[#1A1A1A]"] [class*="text-white"] {
+[data-marketing-page] section[class~="bg-[#1A1A1A]"] [class~="text-white"] {
   color: #1A1A1A !important;
 }
 
