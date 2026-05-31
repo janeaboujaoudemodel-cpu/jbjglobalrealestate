@@ -1,51 +1,52 @@
-## What I found
+## What is actually breaking now
 
-The current failures are not random page bugs; they come from two still-conflicting contrast layers:
+The screenshot confirms the damage is not the Apply button anymore. The broken text is inside the champagne job cards on `/join`: titles, metadata, descriptions, badge labels, and footer copy are rendering white over the light champagne card.
 
-1. **`src/styles/theme-tokens.css` is imported before `src/index.css`, so later `index.css` rules can still win.**
-2. **Careers `/join` has a local broad repaint conflict:**
-   - `.careers-card-navy :is(..., span, div)` forces all text inside the navy section to white.
-   - Later `.careers-card-navy .careers-card-strong ...` forces all text in job cards to ink.
-   - Then `.careers-navy-cta` tries to force Apply buttons white.
-   - This competing stack is why the screenshot shows normal/rest button text wrong while hover can look correct.
-3. **Owner sidebar screenshot issue is local component conflict, not the vertical nav exception:**
-   - `OwnerDashboardShell.tsx` Sign Out button uses inline `style={{ color: "#1A1A1A" }}` and no protected destructive contrast attributes/classes.
-   - That allows white/incorrect inherited text on champagne states in the expanded owner shell.
-4. **There are still broad legacy “force all descendants” selectors in the contrast architecture**, especially page/section scoped selectors that repaint `span/div/*` rather than only primitives. These are the rules that keep beating component intent.
+The likely winning conflict is in `src/styles/theme-tokens.css`, not a missing component class:
 
-## Fix plan
+- `.careers-card-navy` is a dark/navy parent section.
+- It still has broad descendant rules around that section, especially:
+  - `[data-careers-page] .careers-card-navy > :not(.careers-card-strong) :is(...) { color: #FFFFFF; -webkit-text-fill-color: #FFFFFF; }`
+  - `.careers-white *`, `.careers-gold *`, `.careers-navy *`, `.allow-white`, and duplicate end-of-file hard override blocks.
+- Because job cards are nested below `CardContent`/grid wrappers, the `> :not(.careers-card-strong)` selector can still match descendants inside the job cards. That means the navy-section rule is wrongly painting nested champagne card text white.
+- The later `.careers-card-strong { color: ink }` inheritance is not enough because child elements have their own Tailwind text classes and/or inherited `-webkit-text-fill-color`, so white still wins visually.
 
-1. **Clean existing contrast rules only — no new contrast system**
-   - In `src/styles/theme-tokens.css`, remove/narrow the broad descendant repaint selectors that target every `span/div` inside `.careers-card-navy` and `.careers-card-strong`.
-   - Keep only explicit element/primitive locks:
-     - navy section headings/copy = white
-     - champagne job card content = ink
-     - `.careers-navy-cta` button and its direct label/icon = white at rest, hover, focus, active
-   - Remove duplicated careers CTA/button override blocks that compete with each other.
+## Surgical fix plan
 
-2. **Fix the proven `/join` rest-state button bug**
-   - Update `PremiumJobCard.tsx` Apply button to use the locked CTA primitive consistently (`jj-cta-dark` / `careers-navy-cta`) and remove inline child-only color hacks that depend on ancestor rules.
-   - Update the “View all positions” button so it is either champagne+ink or navy+white consistently, not caught between outline/default/global styles.
+1. **Remove/narrow only the winning broad careers selectors**
+   - In `src/styles/theme-tokens.css`, replace the navy-section descendant selector with a scope that targets only the Open Positions header/search chrome, not the job card grid.
+   - Remove duplicate broad hard overrides at the end of the file that use `.allow-white` / generic descendants and can leak into light cards.
+   - Keep the existing primitives only:
+     - dark/navy buttons (`.careers-navy-cta`, `.jj-cta-dark`) = navy background + white text/icons, normal and hover.
+     - champagne job cards (`.careers-card-strong`) = ink/navy text/icons, normal and hover.
+     - explicitly dark badges (Featured) = navy background + white text/icons.
 
-3. **Fix the proven `/owner` Sign Out bug without touching the collapsed vertical sidebar exception**
-   - Update only `OwnerDashboardShell.tsx` bottom Sign Out button so it is destructive red-on-champagne at rest and hover, matching the protected `data-signout-action` pattern already used in `GlobalVerticalNav.tsx`.
-   - Do not change the collapsed vertical sidebar gold label exception.
+2. **Make the job card surface declare its own contrast locally**
+   - In `PremiumJobCard.tsx`, mark the card as its own champagne surface (`data-surface="champagne"`) so parent dark-section rules should not treat it as part of the navy surface.
+   - Remove unnecessary `allow-white`/inline white styling except on the true dark Featured badge and true dark selected icon tile.
+   - Do not add new visual styles; only restore intended text classes already present in the component.
 
-4. **Audit/remove remaining winning broad selectors in CSS**
-   - Check `index.css` and `theme-tokens.css` for selectors that repaint broad descendants such as `*`, `span`, `div`, or all text inside a surface.
-   - Keep only scoped primitive locks already defined by the architecture: `.jj-cta-dark`, `.jj-cta-champagne`, `.jj-pill-active`, `.jj-cta-outline`, phone trigger, signout action, and specific hero/video locks.
+3. **Clean the `/join` button/link local misuse**
+   - Fix the Sign In/Create Account child link that currently adds `text-white` inside a champagne default button. It should not force white text on a champagne CTA.
+   - Keep actual navy CTAs white via the existing `.jj-cta-dark` / `.careers-navy-cta` primitives.
 
-5. **Visual validation before saying fixed**
-   - Use browser screenshots after implementation on:
-     - `/join` at the open positions section: Apply buttons and View all positions at rest and hover.
-     - `/owner`: expanded sidebar Sign Out and main owner content.
-     - `/` and one marketing page: ensure no regression to white-on-champagne or ink-on-navy.
-   - Only report complete if screenshots/computed styles confirm no black/blue text on navy buttons and no white text on champagne/gold buttons.
+4. **Audit for the same conflict pattern in current contrast architecture**
+   - Check `src/index.css` and `src/styles/theme-tokens.css` for remaining broad selectors that repaint all `span`, `div`, `*`, or nested descendants on a parent surface.
+   - Only remove/narrow selectors that can override nested own-surfaces. Do not add a new global CSS system.
 
-## Files to edit
+5. **Visual validation before claiming complete**
+   - Use browser screenshots, not guesses, after the patch:
+     - `/join` at the job cards: normal state and hover over one card/button.
+     - `/join` hero/top: navy description panel and dark buttons remain white-on-navy.
+     - `/owner`: sidebar Sign Out and expanded shell remain readable.
+     - `/` and one marketing page: no obvious regression.
+   - Confirm computed colors for visible problem elements:
+     - champagne/gold/light backgrounds: ink/navy text/icons.
+     - navy/dark backgrounds and dark CTA buttons: white text/icons.
+
+## Files to change
 
 - `src/styles/theme-tokens.css`
 - `src/components/careers/PremiumJobCard.tsx`
 - `src/pages/JoinApplication.tsx`
-- `src/pages/OwnerDashboardShell.tsx`
-- `src/index.css` only if the final audit finds another broad winning selector that must be removed/narrowed
+- `src/index.css` only if the audit finds another broad winning selector that must be narrowed, not expanded.
