@@ -6219,6 +6219,12 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
 }
 
+/* Final surface winner: own navy/ink controls always beat champagne ancestors.
+   This is the clean architectural lock for dark CTA/icon contrast. */
+html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark):not(.allow-ink),
+html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark):not(.allow-ink):hover,
+html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark):not(.allow-ink) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"]):not([data-sidebar-gold-label]):not([data-decorative="true"]),
+html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark):not(.allow-ink):hover :where(span,p,small,strong,em,b,i,svg,[class*="lucide"]):not([data-sidebar-gold-label]):not([data-decorative="true"]),
 html body [data-hero-consultation-lock],
 html body [data-hero-consultation-lock]:hover,
 html body [data-hero-consultation-lock] *,
