@@ -1,10 +1,10 @@
 import { chromium } from 'playwright';
 
-const url = 'https://id-preview--357981e3-cd4c-4c0d-ad5b-a1a379078f50.lovable.app/';
+const url = 'https://357981e3-cd4c-4c0d-ad5b-a1a379078f50.lovableproject.com/';
 const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium' });
 const page = await browser.newPage({ viewport: { width: 1178, height: 891 }, deviceScaleFactor: 2 });
 await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-await page.waitForTimeout(2500);
+await page.waitForTimeout(8000); console.log('title', await page.title()); console.log('body', (await page.locator('body').innerText().catch(e => String(e))).slice(0,500));
 
 const results = await page.evaluate(() => {
   function rulesFor(el) {
