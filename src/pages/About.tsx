@@ -539,7 +539,7 @@ const About = () => {
             
             {/* Initials */}
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1A1A1A] border-2 border-[#B89555] mt-4">
-              <span className="text-[#1A1A1A] text-xl font-bold">JBJ</span>
+              <span className="text-white text-xl font-bold">JBJ</span>
             </div>
           </motion.div>
         </Section>
