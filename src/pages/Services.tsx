@@ -431,13 +431,13 @@ const Services = () => {
                     {/* We do not provide */}
                     <div>
                       <h3 className="text-[#1A1A1A] font-semibold text-lg mb-4 flex items-center gap-2">
-                        <AlertCircle className="w-5 h-5 text-white/90" />
+                        <AlertCircle className="w-5 h-5 text-[#1A1A1A]" />
                         We do not provide
                       </h3>
                       <ul className="space-y-3">
                         {scopeExcludes.map((item, idx) => (
                           <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
-                            <span className="text-white/70">•</span>
+                            <span className="text-[#1A1A1A]">•</span>
                             <span>{item}</span>
                           </li>
                         ))}
