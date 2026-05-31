@@ -425,9 +425,8 @@ const Founder = () => {
               >
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm space-y-6" data-surface="champagne">
                   <div className="flex items-center gap-4 pb-6 border-b border-[#B89555]/20">
-                    <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center" data-surface="ink">
-                      <Building2 className="w-7 h-7 text-white" />
-                    </div>
+                    <IconTile icon={Building2} tone="ink" size="lg" />
+
                     <div>
                       <p className="text-[#1A1A1A] text-xl font-semibold">Dubai Mainland Licensed</p>
                       <p className="text-[#1A1A1A] text-sm uppercase tracking-wider">Real Estate Brokerage</p>
