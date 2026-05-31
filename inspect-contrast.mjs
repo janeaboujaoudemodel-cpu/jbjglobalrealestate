@@ -3,7 +3,7 @@ import { chromium } from 'playwright';
 const url = 'https://id-preview--357981e3-cd4c-4c0d-ad5b-a1a379078f50.lovable.app/';
 const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium' });
 const page = await browser.newPage({ viewport: { width: 1178, height: 891 }, deviceScaleFactor: 2 });
-await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
 await page.waitForTimeout(2500);
 
 const results = await page.evaluate(() => {
