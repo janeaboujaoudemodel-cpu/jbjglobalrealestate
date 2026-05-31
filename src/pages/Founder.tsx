@@ -153,6 +153,7 @@ const Founder = () => {
             <motion.div variants={fadeInUp}>
               <a 
                 href="#leadership"
+                data-surface="champagne"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-gold/20 to-gold/10 border border-[#B89555]/50 text-[#1A1A1A] font-semibold rounded-xl hover:bg-[#EFE6D6]/30 transition-all duration-300"
               >
                 Meet Our Leadership
