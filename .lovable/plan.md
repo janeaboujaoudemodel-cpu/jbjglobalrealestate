@@ -1,59 +1,37 @@
-Plan to finish the contrast cleanup cleanly
+Plan to finish the contrast cleanup without touching already-fixed sections:
 
-1. Preserve the repaired locks
-- Do not remove or weaken the already-fixed locks for:
-  - Hero consultation CTA
-  - Continue Searching/favorite trigger
-  - Photo overlay text
-  - Sidebar gold/ink icons
-  - Cookie banner dark CTA
-  - Assistant Send dark CTA
-- Keep the approved CTA primitives as the source of truth: `.jj-cta-dark`, `.jj-cta-champagne`, `.jj-cta-outline`, `.jj-pill-active`, plus `data-cta`.
+1. Remove the duplicate/winning contrast systems in `src/index.css`
+   - Neutralize the older global blocks that still compete with the final contract:
+     - `GLOBAL PREMIUM ICON VISIBILITY` broad dark/light icon rules around lines 569-943.
+     - `UNIVERSAL WHITE-ON-CHAMPAGNE/GOLD CONTRAST GUARD` around lines 945-1008.
+     - `GLOBAL CONTRAST ENFORCEMENT` around lines 2991-3238.
+     - `LIGHT-SURFACE INTERACTIVE LABEL GUARD` around lines 3239-3262.
+     - `DARK SURFACE ESCAPE HATCH` around lines 3264-3375.
+     - `FINAL LIGHT-SURFACE INK RESTORE` and global heading/navy sweep around lines 5220-5258 where it can override nested dark boxes.
+     - `UNIVERSAL SVG ICON CONTRAST GUARD` around lines 5352-5390 where it still treats gold/champagne descendants too broadly.
+     - Duplicate CTA/surface blocks around lines 5699-6150 that repeat the same rules before the final contract.
+   - Keep unrelated locked fixes intact: hero consultation lock, photo copy lock, favorite button lock, sidebar collapse gold control, phone trigger/cmdk lock, sign-out red lock, price/developer/card standards.
 
-2. Remove the remaining winning conflicts in `src/index.css`
-- Neutralize the old “GLOBAL MONOCHROME OVERRIDE — WHITE DOMINANT” block that still rewrites champagne backgrounds to white and gold/champagne text to black.
-- Remove or narrow legacy broad selectors that still infer contrast from substring classes:
-  - `[class*="bg-black"]`
-  - `[class*="bg-[#0"]`
-  - `[class*="from-[#FDFBF7]"]`
-  - `[class*="from-[#F7F2EA]"]`
-  - `[class*="text-[#B89555]"]`
-  - `[class*="text-[#1A1A1A]"]`
-- Replace them with whole-token selectors (`[class~="..."]`) or explicit surface markers only, so hover/data variant classes can no longer win accidentally.
+2. Keep only the final two-rule architecture at the end of `src/index.css`
+   - Rule A: any element whose own surface is navy / ink / dark must render white text and white icons.
+   - Rule B: any element whose own surface is champagne / page / cream / raised / gold / white must render ink text and ink icons.
+   - Use only exact own-surface selectors: `[data-surface]`, `.surface-*`, `.jj-cta-*`, `.jj-pill-active`, `.jj-navy-cta`, and exact whole-token background matches like `[class~="bg-[#102540]"]`.
+   - No broad substring surface detection like `[class*="bg-black"]`, `[class*="bg-[#0"]`, `[class*="from-[#FDFBF7]"]`, or descendant-wide inheritance that repaints nested opposite-tone boxes.
 
-3. Consolidate to one final contrast contract
-- Keep exactly two architectural outcomes:
-  - Dark/navy/ink own surface → white text/icons.
-  - Champagne/page/cream/raised/light/gold own surface → ink text/icons.
-- Explicitly define nested-surface precedence:
-  - Light card inside dark section stays ink.
-  - Navy button inside champagne section stays white.
-  - Champagne button inside navy section stays ink.
-- Treat gold as a light/champagne-family surface for foreground purposes, matching the project rule: gold is accent/hairline only, not a white-text fill.
+3. Fix the final contract so nested surfaces are stable
+   - A navy CTA inside champagne stays white.
+   - A champagne/light card inside navy stays ink.
+   - Gold is treated as light/champagne for foreground, per your rule.
+   - `allow-white` stops being a light-surface escape hatch unless the element itself is dark/navy.
+   - Existing explicit exceptions remain only where already locked: photo overlays, hero consultation, sign-out red, phone trigger, sidebar collapse control.
 
-4. Clean form/select/menu contrast rules
-- Keep form controls readable, but stop global rules from forcing every input/select to pure white if it sits in a champagne component that should remain champagne.
-- Preserve the locked phone/cmdk rules from memory.
-- Ensure Radix menus/popovers default to ink on light surfaces unless they explicitly carry dark surface/CTA markers.
+4. Align loaded secondary stylesheet only if validation proves it conflicts
+   - `src/styles/theme-tokens.css` is imported after `index.css`, so I will inspect and only narrow any selectors there that override the final two-rule contract.
+   - I will not rewrite the careers/join styling that is already repaired unless it directly violates the two rules.
 
-5. Add a small audit safety net
-- Add a focused runtime/static-friendly selector contract near the end of `index.css` that wins over older blocks without adding new broad conflicts.
-- The final lock will avoid `.allow-white` as a contrast decision on light surfaces; own background/surface must decide contrast.
-
-6. Validate visually and with computed styles
-- Capture screenshots at the current viewport for:
-  - `/join` because that is the current broken context.
-  - `/` homepage repaired sections.
-  - `/ai-broker-workspace` sidebar + dark CTA regression area.
-  - `/ai-hub` and `/toolkit` AI/tool cards.
-  - `/properties`, `/developers`, `/areas` listing/card pages.
-- Run computed-style checks for:
-  - white-on-champagne/light/gold count = 0
-  - dark-on-navy/dark count = 0
-  - sidebar white-icon count = 0
-  - dark CTA text/icon white on navy = true
-  - champagne CTA text/icon ink = true
-
-Files expected to change
-- `src/index.css` primarily.
-- Only if validation reveals a component with wrong surface metadata, make minimal component fixes to add the correct `data-surface`/`data-cta` marker, without redesigning or removing features.
+5. Validate with screenshots and computed checks
+   - Routes to validate: `/`, `/properties`, `/developers`, `/areas`, `/toolkit`, `/ai-hub`, `/ai-broker-workspace`, `/join`, `/profile?tab=settings`.
+   - Check both conditions programmatically in the browser:
+     - White/champagne text or icons on champagne/gold/light backgrounds: zero.
+     - Ink/black text or icons on navy/dark backgrounds: zero.
+   - Capture screenshots after the cleanup and only report complete once the two-rule contract is stable.
