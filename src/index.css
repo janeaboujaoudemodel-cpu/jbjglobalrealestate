@@ -6219,12 +6219,19 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
 }
 
-/* Final surface winner: own navy/ink controls always beat champagne ancestors.
-   This is the clean architectural lock for dark CTA/icon contrast. */
-html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark):not(.allow-ink),
-html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark):not(.allow-ink):hover,
-html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark):not(.allow-ink) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"]):not([data-sidebar-gold-label]):not([data-decorative="true"]):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
-html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark):not(.allow-ink):hover :where(span,p,small,strong,em,b,i,svg,[class*="lucide"]):not([data-sidebar-gold-label]):not([data-decorative="true"]):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
+/* ============================================================
+ * TWO-RULE CONTRAST CONTRACT (FINAL WINNER)
+ * Only two contrast rules exist site-wide:
+ *   Rule A — dark/navy/ink own box → WHITE text + icons
+ *   Rule B — champagne/page/gold/light own box → INK text + icons
+ * Each rule excludes the OTHER tone's elements AND their descendants,
+ * so nested champagne CTAs inside navy banners (and vice versa) win.
+ * ============================================================ */
+
+/* RULE A — Dark/navy/ink own box wins over any ancestor. */
+html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta):not(.allow-ink):not([data-surface="champagne"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"]):not(.jj-cta-champagne):not(.jj-pill-active):not(.jj-cta-outline),
+html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta):not(.allow-ink):not([data-surface="champagne"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"]):not(.jj-cta-champagne):not(.jj-pill-active):not(.jj-cta-outline):hover,
+html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta):not(.allow-ink) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],h1,h2,h3,h4,h5,h6,label,a,button):not([data-sidebar-gold-label]):not([data-decorative="true"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="champagne"]):not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"]):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-pill-active):not(.jj-pill-active *):not(.jj-cta-outline):not(.jj-cta-outline *),
 html body [data-hero-consultation-lock],
 html body [data-hero-consultation-lock]:hover,
 html body [data-hero-consultation-lock] *,
@@ -6233,5 +6240,19 @@ html body [data-hero-consultation-lock]:hover * {
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   opacity: 1 !important;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.45) !important;
+}
+
+/* RULE B — Champagne/page/gold/light own box wins over any ancestor. */
+html body :is([data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white):not([data-surface="navy"]):not([data-surface="ink"]):not([data-surface="dark"]):not(.jj-cta-dark):not(.jj-navy-cta),
+html body :is([data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white):not([data-surface="navy"]):not([data-surface="ink"]):not([data-surface="dark"]):not(.jj-cta-dark):not(.jj-navy-cta):hover,
+html body :is(.jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],h1,h2,h3,h4,h5,h6,label,a) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* Prevent foreground flicker only; do not kill animation durations. */
+:where(a,button,[role="button"],[role="tab"],svg,[class*="lucide"],span,p,h1,h2,h3,h4,h5,h6) {
+  transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
 }
