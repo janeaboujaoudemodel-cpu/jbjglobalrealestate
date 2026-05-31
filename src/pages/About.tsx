@@ -410,19 +410,19 @@ const About = () => {
                 {/* Overlay Cards - Market Intelligence Visual - LARGER CONTENT */}
                 <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-4">
                   <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <BarChart3 className="w-8 h-8 text-[#1A1A1A] mb-3" />
+                    <BarChart3 className="w-8 h-8 text-white mb-3" />
                     <p className="text-white text-base font-semibold">Government Data</p>
                   </div>
                   <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <Building2 className="w-8 h-8 text-[#1A1A1A] mb-3" />
+                    <Building2 className="w-8 h-8 text-white mb-3" />
                     <p className="text-white text-base font-semibold">Infrastructure</p>
                   </div>
                   <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <TrendingUp className="w-8 h-8 text-[#1A1A1A] mb-3" />
+                    <TrendingUp className="w-8 h-8 text-white mb-3" />
                     <p className="text-white text-base font-semibold">Market Cycles</p>
                   </div>
                   <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <Target className="w-8 h-8 text-[#1A1A1A] mb-3" />
+                    <Target className="w-8 h-8 text-white mb-3" />
                     <p className="text-white text-base font-semibold">Planning Strategy</p>
                   </div>
                 </div>
