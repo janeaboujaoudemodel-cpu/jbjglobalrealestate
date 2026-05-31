@@ -4010,14 +4010,11 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 }
 
 /* ============================================================
-   CTA + SURFACE CONTRAST CONTRACT — FINAL SINGLE SOURCE OF TRUTH
+   CTA + SURFACE PRIMITIVES — EXPLICIT ONLY
 
-   Rule A: dark / navy / ink own backgrounds => WHITE text + icons.
-   Rule B: champagne / page / cream / gold / white own backgrounds => INK text + icons.
-
-   The selectors include raw legacy bg utilities as OWN surfaces, but nested
-   opposite-tone boxes are excluded so a navy button inside a champagne card
-   keeps white text and a champagne card inside a dark section keeps ink text.
+   No broad descendant repaint sweeps live here. Foreground locking is scoped
+   only to CTA primitives and phone/action controls so component-level gold,
+   ink, and hero treatments are not overwritten by ancestor surfaces.
    ============================================================ */
 
 :root {
