@@ -237,18 +237,19 @@ export default function PremiumJobCard({
             <Button
               type="button"
               size="sm"
+              variant="dark"
               data-allow-dark-cta
               data-no-contrast-guard
-              className="careers-navy-cta h-10 rounded-xl px-5 font-semibold active:translate-y-[1px] transition-all"
+              className="jj-cta-dark careers-navy-cta h-10 rounded-xl px-5 font-semibold active:translate-y-[1px] transition-all"
               onClick={(e) => {
                 e.stopPropagation();
                 onApply(id);
               }}
             >
               {CtaIcon ? (
-                <CtaIcon className="w-3.5 h-3.5 mr-1.5 allow-white" style={{ color: "#FFFFFF" }} />
+                <CtaIcon className="w-3.5 h-3.5 mr-1.5" />
               ) : null}
-              <span className="allow-white" style={{ color: "#FFFFFF" }}>{ctaLabel}</span>
+              <span>{ctaLabel}</span>
             </Button>
           ) : (
             <Button
