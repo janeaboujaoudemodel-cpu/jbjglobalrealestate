@@ -2916,66 +2916,18 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 }
 
 /* ============================================================
- * GLOBAL MONOCHROME OVERRIDE — WHITE DOMINANT
- * Catches hardcoded colors across 800+ component files
+ * LEGACY MONOCHROME OVERRIDE — NEUTRALIZED (kept as no-op for diff history).
+ * The previous block forced champagne backgrounds to white and gold/cream
+ * text to black, fighting the current Champagne-Gold design standard and
+ * producing the white-on-champagne / black-on-black contrast regressions.
+ * Contrast is now owned exclusively by:
+ *   - the surface tokens ([data-surface], .surface-*)
+ *   - the CTA primitives (.jj-cta-dark/-champagne/-outline/.jj-pill-active)
+ *   - the TWO-RULE CONTRAST CONTRACT at the end of this file.
+ * Do NOT reintroduce broad [class*="bg-..."] / [class*="from-..."] / 
+ * [class*="text-[#B89555]"] / [class*="text-[#1A1A1A]"] color overrides here.
  * ============================================================ */
 
-/* Champagne/cream gradient backgrounds → white surface */
-[class*="from-[#FDFBF7]"],
-[class*="from-[#F7F1E6]"],
-[class*="from-[#F7F2EA]"],
-[class*="from-[#ECE2D2]"],
-[class*="from-[#E8DCC8]"],
-[class*="from-[#EFE6D6]"],
-[class*="from-[#DCCFB5]"],
-[class*="from-[#D8C7A6]"],
-[class*="from-[#D4C4A8]"] {
-  --tw-gradient-from: #FFFFFF !important;
-  --tw-gradient-via: #FAFAFA !important;
-  --tw-gradient-to: #F5F5F5 !important;
-}
-
-/* Gold hex text → black */
-[class*="text-[#D4AF37]"],
-[class*="text-[#B89555]"],
-[class*="text-[#B8860B]"],
-[class*="text-[#F5E6C8]"] {
-  color: #111111 !important;
-}
-
-/* Cream/champagne text (was meant for dark bg, now on white) → black */
-[class*="text-[#F7F1E6]"],
-[class*="text-[#D4B896]"],
-[class*="text-[#EFE6D6]"],
-[class*="text-[#E8DCC8]"],
-[class*="text-[#DCCFB5]"] {
-  color: #111111 !important;
-}
-
-/* Cream text opacity variants → dark */
-[class*="text-[#D4B896]/"] {
-  color: rgba(0,0,0,0.5) !important;
-}
-
-/* Light/cream backgrounds → white */
-[class~="bg-[#FDFBF7]"],
-[class~="bg-[#F7F1E6]"],
-[class~="bg-[#F7F2EA]"],
-[class~="bg-[#ECE2D2]"],
-[class~="bg-[#EFE6D6]"] {
-  background-color: #FFFFFF !important;
-}
-
-/* Brown/champagne background gradients → white */
-[class*="from-[hsl(32"],
-[class*="from-[hsl(33"],
-[class*="from-[hsl(34"],
-[class*="from-[hsl(36"],
-[class*="from-[hsl(38"] {
-  --tw-gradient-from: #FFFFFF !important;
-  --tw-gradient-via: #FAFAFA !important;
-  --tw-gradient-to: #F5F5F5 !important;
-}
 
 /* ============================================================
  * MODERN CHAMPAGNE/GOLD CONTRAST GUARD

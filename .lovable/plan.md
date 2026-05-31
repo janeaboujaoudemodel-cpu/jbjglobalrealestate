@@ -1,62 +1,59 @@
-# Plan — Stop, Consolidate, Enforce ONE Contrast Rule
+Plan to finish the contrast cleanup cleanly
 
-I will stop adding new CSS and instead **delete conflicting layers**, lock a single rule, and visually verify each highlighted spot.
+1. Preserve the repaired locks
+- Do not remove or weaken the already-fixed locks for:
+  - Hero consultation CTA
+  - Continue Searching/favorite trigger
+  - Photo overlay text
+  - Sidebar gold/ink icons
+  - Cookie banner dark CTA
+  - Assistant Send dark CTA
+- Keep the approved CTA primitives as the source of truth: `.jj-cta-dark`, `.jj-cta-champagne`, `.jj-cta-outline`, `.jj-pill-active`, plus `data-cta`.
 
-## The ONE Rule (locked, no exceptions except where you named them)
+2. Remove the remaining winning conflicts in `src/index.css`
+- Neutralize the old “GLOBAL MONOCHROME OVERRIDE — WHITE DOMINANT” block that still rewrites champagne backgrounds to white and gold/champagne text to black.
+- Remove or narrow legacy broad selectors that still infer contrast from substring classes:
+  - `[class*="bg-black"]`
+  - `[class*="bg-[#0"]`
+  - `[class*="from-[#FDFBF7]"]`
+  - `[class*="from-[#F7F2EA]"]`
+  - `[class*="text-[#B89555]"]`
+  - `[class*="text-[#1A1A1A]"]`
+- Replace them with whole-token selectors (`[class~="..."]`) or explicit surface markers only, so hover/data variant classes can no longer win accidentally.
 
-| Surface (own background) | Text + Icons |
-|---|---|
-| Navy `#102540` / `#1a3d63` | **WHITE** (idle + hover) |
-| Black / Ink `#1A1A1A` | **WHITE** (idle + hover) |
-| Champagne `#F7F2EA` / Cream `#EFE6D6` / Gold `#B89555` / White | **INK `#1A1A1A`** (idle + hover) |
+3. Consolidate to one final contrast contract
+- Keep exactly two architectural outcomes:
+  - Dark/navy/ink own surface → white text/icons.
+  - Champagne/page/cream/raised/light/gold own surface → ink text/icons.
+- Explicitly define nested-surface precedence:
+  - Light card inside dark section stays ink.
+  - Navy button inside champagne section stays white.
+  - Champagne button inside navy section stays ink.
+- Treat gold as a light/champagne-family surface for foreground purposes, matching the project rule: gold is accent/hairline only, not a white-text fill.
 
-**Named exceptions only:** expanded broker sidebar category labels (gold idle → ink hover). Nothing else.
+4. Clean form/select/menu contrast rules
+- Keep form controls readable, but stop global rules from forcing every input/select to pure white if it sits in a champagne component that should remain champagne.
+- Preserve the locked phone/cmdk rules from memory.
+- Ensure Radix menus/popovers default to ink on light surfaces unless they explicitly carry dark surface/CTA markers.
 
-## Step 1 — Clean conflicting CSS (delete, don't add)
+5. Add a small audit safety net
+- Add a focused runtime/static-friendly selector contract near the end of `index.css` that wins over older blocks without adding new broad conflicts.
+- The final lock will avoid `.allow-white` as a contrast decision on light surfaces; own background/surface must decide contrast.
 
-In `src/index.css` I will **remove** the recently stacked overlapping rules that fight each other:
-- Duplicated "navy box lock" blocks
-- `.jj-hero-consultation-cta` one-off lock
-- Any late `hover:bg-*` foreground inference rules
-- Stray `[data-cta]` overrides added in the last 3 turns
+6. Validate visually and with computed styles
+- Capture screenshots at the current viewport for:
+  - `/join` because that is the current broken context.
+  - `/` homepage repaired sections.
+  - `/ai-broker-workspace` sidebar + dark CTA regression area.
+  - `/ai-hub` and `/toolkit` AI/tool cards.
+  - `/properties`, `/developers`, `/areas` listing/card pages.
+- Run computed-style checks for:
+  - white-on-champagne/light/gold count = 0
+  - dark-on-navy/dark count = 0
+  - sidebar white-icon count = 0
+  - dark CTA text/icon white on navy = true
+  - champagne CTA text/icon ink = true
 
-Replace with **one** consolidated block keyed off `data-surface` + own-bg hex detection. No component-specific CSS.
-
-## Step 2 — Fix each highlighted regression
-
-1. **Hero "Free Consultation"** (`HomeHeroSearch.tsx`) — fiberglass dark translucent box, white label + white icon, locked idle/hover. Remove the one-off class.
-2. **"Get Verified" banner** (`VerificationBanner.tsx`) — champagne pill = INK text + INK arrow. Shield icon tile = navy box = **WHITE** shield (currently rendering black — fix).
-3. **ProjectCard email button** — replace circle with **inbox/envelope shape** (`Mail` icon in rounded-square champagne tile, ink stroke). Same for Call/Chat: rounded-square, champagne bg, ink icon.
-4. **Overseas Investors strip** ("Invest in Dubai…") — navy bg, **WHITE** title + WHITE stats + WHITE "Learn more" + WHITE arrow + WHITE globe. Strip any contrast-guard flip.
-5. **Explore Our Services** (`ExploreServicesExpander.tsx`):
-   - Section title/subtitle on dark image panel → **WHITE**
-   - Active tab ("Buy Property") = champagne bg + INK text/icon
-   - Inactive tabs = navy/dark + WHITE text/icon
-   - "Explore Now" CTA = navy/fiberglass + WHITE label + WHITE arrow
-6. **JBJ Royal Tools Hub** (`ToolkitShowcaseCard.tsx`) — same rules: "Explore JBJ Tools" header CTA on navy = WHITE; active tab champagne+ink; "Calculate Now" navy+WHITE.
-7. **AI Property Comparison** (`AIComparisonWidget.tsx`) — "Start exploring" button: bg `#1A1A1A` → WHITE label + WHITE icons (currently ink — fix).
-8. **"Connect With Mortgage Partners"** (`Index.tsx` ~L439) — navy bg → WHITE label + WHITE icons.
-9. **"Explore All Areas"** (`AreasWeCover.tsx` via `pearl-button`) — if rendered on dark, WHITE; if champagne, INK. Read computed bg and lock.
-10. **Continue Searching marquee** (`ContinueSearching.tsx`) — replace current snap rail with the **same continuous CSS-keyframe marquee** used by "Explore Our Guides & Reports" at the same speed. Developer name row: align baseline across all cards, WHITE on the dark card overlay.
-11. **Books / Guides titles** — restore the original PremiumBookCover label rendering; revert any color change made in the last 2 turns.
-
-## Step 3 — Sitewide audit pass
-
-Run `scripts/contrast/check-contrast-architecture.mjs` + a fresh `check-white-on-light.mjs` and `check-black-on-dark.mjs`. Fix every hit, not just the highlighted ones.
-
-## Step 4 — Visual proof (mandatory before I claim done)
-
-For each of the 11 spots above I will capture browser screenshots at desktop (1366) **and** mobile (390), in **idle** AND **hover** states, and paste them in the reply. No "looks good" claim without the screenshot.
-
-## Step 5 — Memory update
-
-Update `mem://constraints/navy-pill-white-text-lock` and `mem://ui-ux/visual-standards/cta-primitive-system` with the consolidated rule and the exception list (broker sidebar only). Remove now-obsolete one-off entries.
-
-## What I will NOT do
-
-- No new component-specific CSS classes
-- No new `data-*` attributes beyond the existing `data-surface` / `data-cta` / `data-no-contrast-guard`
-- No edits to business logic, data, or unrelated components
-- No "I think it's fixed" — only screenshot-verified completion
-
-Approve and I'll execute in order: clean → fix → audit → screenshot proof.
+Files expected to change
+- `src/index.css` primarily.
+- Only if validation reveals a component with wrong surface metadata, make minimal component fixes to add the correct `data-surface`/`data-cta` marker, without redesigning or removing features.
