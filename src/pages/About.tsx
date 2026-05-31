@@ -165,7 +165,7 @@ const About = () => {
               A Licensed Brokerage Built on Structure, Clarity, and Accountability
             </motion.p>
             <motion.p 
-              className="text-[#1A1A1A]/70 text-base md:text-lg max-w-3xl mx-auto mb-10"
+              className="text-white/85 text-base md:text-lg max-w-3xl mx-auto mb-10"
               style={{ lineHeight: 1.7 }}
               variants={fadeInUp}
             >
@@ -175,33 +175,29 @@ const About = () => {
               className="flex flex-wrap justify-center gap-4"
               variants={fadeInUp}
             >
-              {/* Hero CTA Buttons - Transparent bg, white 3D border, white title, gold icon on normal; filled on hover */}
+              {/* Hero CTA Buttons - Transparent bg, white border + white label + white icon on dark hero */}
               <Link to="/services" className="relative z-20">
                 <button 
-                  className="group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
+                  className="group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent hover:bg-white/10"
                   style={{
                     border: '2px solid rgba(255,255,255,0.8)',
                     boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                   }}
                 >
-                  <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Explore Our Services</span>
-                  <ArrowUpRight className="w-4 h-4 text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                  {/* Hover fill overlay */}
-                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                  <span className="text-white">Explore Our Services</span>
+                  <ArrowUpRight className="w-4 h-4 text-white" />
                 </button>
               </Link>
               <Link 
                 to="/contact" 
-                className="relative z-20 group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
+                className="relative z-20 group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent hover:bg-white/10"
                 style={{
                   border: '2px solid rgba(255,255,255,0.8)',
                   boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                 }}
               >
-                <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Contact Our Team</span>
-                <ArrowUpRight className="w-4 h-4 text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                {/* Hover fill overlay */}
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                <span className="text-white">Contact Our Team</span>
+                <ArrowUpRight className="w-4 h-4 text-white" />
               </Link>
             </motion.div>
           </motion.div>
