@@ -410,7 +410,7 @@ const Founder = () => {
       {/* SECTION 4: REGULATORY POSITIONING - 3-Layer System */}
       <section className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden">
         <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg" data-surface="champagne">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -431,10 +431,10 @@ const Founder = () => {
                 className="max-w-4xl mx-auto"
                 variants={fadeInUp}
               >
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm space-y-6">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm space-y-6" data-surface="champagne">
                   <div className="flex items-center gap-4 pb-6 border-b border-[#B89555]/20">
-                    <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
-                      <Building2 className="w-7 h-7 text-[#1A1A1A]" />
+                    <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center" data-surface="ink">
+                      <Building2 className="w-7 h-7 text-white" />
                     </div>
                     <div>
                       <p className="text-[#1A1A1A] text-xl font-semibold">Dubai Mainland Licensed</p>
@@ -465,6 +465,7 @@ const Founder = () => {
               {/* INNER CARD - Champagne Layer */}
               <motion.div 
                 className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                data-surface="champagne"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
