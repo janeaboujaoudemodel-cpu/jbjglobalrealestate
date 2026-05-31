@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { SafeImage } from "@/components/SafeImage";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
+import { IconTile } from "@/components/ui/icon-tile";
 
 // Import founder images
 import founderHero from "@/assets/founder-hero.png";
@@ -318,9 +319,8 @@ const Founder = () => {
                     data-surface="champagne"
                     variants={fadeInUp}
                   >
-                    <div className="w-14 h-14 mx-auto mb-6 bg-[#1A1A1A] rounded-xl flex items-center justify-center border border-[#B89555]/30" data-surface="ink">
-                      <member.icon className="w-6 h-6 text-white" />
-                    </div>
+                    <IconTile icon={member.icon} tone="ink" size="lg" className="mx-auto mb-6" />
+
                     <h4 className="text-[#1A1A1A] text-lg font-semibold mb-1">
                       {member.name}
                     </h4>
@@ -372,27 +372,19 @@ const Founder = () => {
                   
                   <div className="grid sm:grid-cols-2 gap-4 mb-6">
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
-                        <FileCheck className="w-4 h-4 text-white" />
-                      </div>
+                      <IconTile icon={FileCheck} tone="ink" size="sm" />
                       <p className="text-[#1A1A1A]/70">Clear decision-making authority</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
-                        <Shield className="w-4 h-4 text-white" />
-                      </div>
+                      <IconTile icon={Shield} tone="ink" size="sm" />
                       <p className="text-[#1A1A1A]/70">Compliance with UAE real estate regulations</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
-                        <Scale className="w-4 h-4 text-white" />
-                      </div>
+                      <IconTile icon={Scale} tone="ink" size="sm" />
                       <p className="text-[#1A1A1A]/70">Controlled advisory and brokerage processes</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
-                        <Users className="w-4 h-4 text-white" />
-                      </div>
+                      <IconTile icon={Users} tone="ink" size="sm" />
                       <p className="text-[#1A1A1A]/70">Transparent internal accountability</p>
                     </div>
                   </div>
@@ -433,9 +425,8 @@ const Founder = () => {
               >
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm space-y-6" data-surface="champagne">
                   <div className="flex items-center gap-4 pb-6 border-b border-[#B89555]/20">
-                    <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center" data-surface="ink">
-                      <Building2 className="w-7 h-7 text-white" />
-                    </div>
+                    <IconTile icon={Building2} tone="ink" size="lg" />
+
                     <div>
                       <p className="text-[#1A1A1A] text-xl font-semibold">Dubai Mainland Licensed</p>
                       <p className="text-[#1A1A1A] text-sm uppercase tracking-wider">Real Estate Brokerage</p>

@@ -23,6 +23,7 @@ import { CalendlyEmbed } from "@/components/marketing/CalendlyEmbed";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 
 import SupportTicketBox from "@/components/SupportTicketBox";
+import { IconTile } from "@/components/ui/icon-tile";
 import contactHeroVideo from "@/assets/videos/services-hero.mp4";
 import VideoBackground from "@/components/VideoBackground";
 
@@ -379,9 +380,8 @@ END:VCARD`;
               /* Form */
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)]">
                 <div className="text-center mb-8">
-                  <div className="w-14 h-14 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Shield className="w-7 h-7 text-white" />
-                  </div>
+                  <IconTile icon={Shield} tone="ink" size="lg" className="mx-auto mb-4" />
+
                   <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
                     Request a Consultation
                   </h2>
@@ -834,9 +834,8 @@ END:VCARD`;
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-[#1A1A1A] rounded-xl flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-[#1A1A1A]" />
-                </div>
+                <IconTile icon={Shield} tone="ink" size="md" />
+
                 <h3 className="text-[#1A1A1A] font-semibold text-lg">
                   <span className="text-[#1A1A1A]">Important</span> Notice
                 </h3>
@@ -857,9 +856,8 @@ END:VCARD`;
           {/* Inner Pearl Layer */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto text-center">
-              <div className="w-10 h-10 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Calendar className="w-5 h-5 text-[#1A1A1A]" />
-              </div>
+              <IconTile icon={Calendar} tone="ink" size="md" className="mx-auto mb-4" />
+
               <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">
                 Appointments
               </h3>

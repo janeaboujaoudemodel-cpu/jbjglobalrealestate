@@ -54,21 +54,27 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
   ({ icon: Icon, tone = "gold", size = "md", className, iconClassName, ...rest }, ref) => {
     const t = TONE[tone];
     const s = SIZE[size];
+    const isInk = tone === "ink";
     return (
       <div
         ref={ref}
         data-icon-tile=""
         data-icon-tile-tone={tone}
-        data-surface={tone === "ink" ? "ink" : "raised"}
+        data-surface={isInk ? "ink" : "raised"}
+        data-no-contrast-guard={isInk ? "" : undefined}
         className={cn(
           "inline-flex items-center justify-center flex-shrink-0",
           s.box,
           t.tile,
+          isInk && "allow-white",
           className,
         )}
         {...rest}
       >
-        <Icon className={cn(s.icon, t.icon, iconClassName)} />
+        <Icon
+          className={cn(s.icon, t.icon, isInk && "allow-white", iconClassName)}
+          {...(isInk ? { style: { color: "#FFFFFF", stroke: "#FFFFFF" } } : {})}
+        />
       </div>
     );
   },
