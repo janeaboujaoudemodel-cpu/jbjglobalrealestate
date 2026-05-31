@@ -253,25 +253,25 @@ const Founder = () => {
                 {/* Role Focus Cards */}
                 <div className="grid grid-cols-2 gap-3 md:gap-4 mt-6">
                   <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
-                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne">
+                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne" data-surface="champagne">
                       <Globe className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Strategic Leadership</p>
                   </div>
                   <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
-                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne">
+                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne" data-surface="champagne">
                       <Shield className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Regulatory Alignment</p>
                   </div>
                   <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
-                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne">
+                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne" data-surface="champagne">
                       <Scale className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Internal Controls</p>
                   </div>
                   <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
-                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne">
+                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne" data-surface="champagne">
                       <Users className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Partner Coordination</p>
