@@ -878,17 +878,19 @@ export default function JoinApplication() {
                   <div className="mt-6 text-center">
                     <Button
                       type="button"
-                      variant="outline"
+                      variant="dark"
+                      data-allow-dark-cta
+                      data-no-contrast-guard
                       onClick={() => setShowAllPositions((v) => !v)}
-                      className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555] hover:bg-[#F7F2EA] rounded-xl px-5 h-11 font-semibold"
+                      className="jj-cta-dark careers-navy-cta rounded-xl px-5 h-11 font-semibold"
                     >
                       {showAllPositions ? (
                         <>
-                          <ChevronUp className="w-4 h-4 mr-1 text-[#B89555]" /> Show less
+                          <ChevronUp className="w-4 h-4 mr-1" /> Show less
                         </>
                       ) : (
                         <>
-                          <ChevronDown className="w-4 h-4 mr-1 text-[#B89555]" /> View all {filteredPositions.length} positions
+                          <ChevronDown className="w-4 h-4 mr-1" /> View all {filteredPositions.length} positions
                         </>
                       )}
                     </Button>
