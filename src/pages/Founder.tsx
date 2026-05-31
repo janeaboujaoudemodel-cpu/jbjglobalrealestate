@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { SafeImage } from "@/components/SafeImage";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
+import { IconTile } from "@/components/ui/icon-tile";
 
 // Import founder images
 import founderHero from "@/assets/founder-hero.png";
