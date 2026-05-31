@@ -176,8 +176,8 @@ const Founder = () => {
 
       {/* SECTION 1: FOUNDER - 3-Layer System */}
       <section id="leadership" className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden">
-        <div className="jj-layer-2">
-          <div className="jj-layer-active rounded-2xl p-4 sm:p-6 md:p-8">
+        <div className="jj-layer-2" data-surface="champagne">
+          <div className="jj-layer-active rounded-2xl p-4 sm:p-6 md:p-8" data-surface="champagne">
             <motion.div 
               className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center"
               initial="hidden"
@@ -241,7 +241,7 @@ const Founder = () => {
                 </p>
                 
                 {/* Bio Card - Champagne Inner */}
-                <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-6 space-y-4">
+                <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-6 space-y-4" data-surface="champagne">
                   <p className="text-lg md:text-xl font-light text-[#1A1A1A]">
                     Jane Bou Jaoude is the Founder and Chief Executive Officer of JBJ Global Real Estate, a Dubai mainland licensed real estate brokerage authorized to BUY, SELL, and RENT properties across the UAE.
                   </p>
@@ -252,26 +252,26 @@ const Founder = () => {
                 
                 {/* Role Focus Cards */}
                 <div className="grid grid-cols-2 gap-3 md:gap-4 mt-6">
-                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
-                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne">
+                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
+                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne" data-surface="champagne">
                       <Globe className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Strategic Leadership</p>
                   </div>
-                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
-                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne">
+                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
+                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne" data-surface="champagne">
                       <Shield className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Regulatory Alignment</p>
                   </div>
-                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
-                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne">
+                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
+                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne" data-surface="champagne">
                       <Scale className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Internal Controls</p>
                   </div>
-                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
-                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne">
+                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
+                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne" data-surface="champagne">
                       <Users className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Partner Coordination</p>
@@ -286,7 +286,7 @@ const Founder = () => {
       {/* SECTION 2: EXECUTIVE LEADERSHIP - 3-Layer System */}
       <section className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden">
         <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg" data-surface="champagne">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -315,16 +315,17 @@ const Founder = () => {
                   <motion.div 
                     key={index}
                     className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 hover:border-[#B89555] transition-all duration-500 text-center shadow-sm"
+                    data-surface="champagne"
                     variants={fadeInUp}
                   >
-                    <div className="w-14 h-14 mx-auto mb-6 bg-[#1A1A1A] rounded-xl flex items-center justify-center border border-[#B89555]/30">
-                      <member.icon className="w-6 h-6 text-[#1A1A1A]" />
+                    <div className="w-14 h-14 mx-auto mb-6 bg-[#1A1A1A] rounded-xl flex items-center justify-center border border-[#B89555]/30" data-surface="ink">
+                      <member.icon className="w-6 h-6 text-white" />
                     </div>
                     <h4 className="text-[#1A1A1A] text-lg font-semibold mb-1">
                       {member.name}
                     </h4>
                     {member.nameAr && (
-                      <p className="text-white/90 text-sm mb-2">{member.nameAr}</p>
+                      <p className="text-[#1A1A1A]/70 text-sm mb-2">{member.nameAr}</p>
                     )}
                     <p className="text-[#1A1A1A] text-xs uppercase tracking-wider mb-4">
                       {member.role}
@@ -343,7 +344,7 @@ const Founder = () => {
       {/* SECTION 3: GOVERNANCE & OVERSIGHT - 3-Layer System */}
       <section className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden">
         <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg" data-surface="champagne">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -364,33 +365,33 @@ const Founder = () => {
                 className="max-w-4xl mx-auto"
                 variants={fadeInUp}
               >
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm" data-surface="champagne">
                   <p className="text-lg mb-6 text-[#1A1A1A]">
                     JBJ Global Real Estate operates with a centralized governance structure designed to ensure:
                   </p>
                   
                   <div className="grid sm:grid-cols-2 gap-4 mb-6">
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-                        <FileCheck className="w-4 h-4 text-[#1A1A1A]" />
+                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
+                        <FileCheck className="w-4 h-4 text-white" />
                       </div>
                       <p className="text-[#1A1A1A]/70">Clear decision-making authority</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-                        <Shield className="w-4 h-4 text-[#1A1A1A]" />
+                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
+                        <Shield className="w-4 h-4 text-white" />
                       </div>
                       <p className="text-[#1A1A1A]/70">Compliance with UAE real estate regulations</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-                        <Scale className="w-4 h-4 text-[#1A1A1A]" />
+                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
+                        <Scale className="w-4 h-4 text-white" />
                       </div>
                       <p className="text-[#1A1A1A]/70">Controlled advisory and brokerage processes</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-                        <Users className="w-4 h-4 text-[#1A1A1A]" />
+                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
+                        <Users className="w-4 h-4 text-white" />
                       </div>
                       <p className="text-[#1A1A1A]/70">Transparent internal accountability</p>
                     </div>
@@ -409,7 +410,7 @@ const Founder = () => {
       {/* SECTION 4: REGULATORY POSITIONING - 3-Layer System */}
       <section className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden">
         <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg" data-surface="champagne">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -430,10 +431,10 @@ const Founder = () => {
                 className="max-w-4xl mx-auto"
                 variants={fadeInUp}
               >
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm space-y-6">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm space-y-6" data-surface="champagne">
                   <div className="flex items-center gap-4 pb-6 border-b border-[#B89555]/20">
-                    <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
-                      <Building2 className="w-7 h-7 text-[#1A1A1A]" />
+                    <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center" data-surface="ink">
+                      <Building2 className="w-7 h-7 text-white" />
                     </div>
                     <div>
                       <p className="text-[#1A1A1A] text-xl font-semibold">Dubai Mainland Licensed</p>
@@ -464,6 +465,7 @@ const Founder = () => {
               {/* INNER CARD - Champagne Layer */}
               <motion.div 
                 className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                data-surface="champagne"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
