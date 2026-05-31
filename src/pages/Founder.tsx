@@ -286,7 +286,7 @@ const Founder = () => {
       {/* SECTION 2: EXECUTIVE LEADERSHIP - 3-Layer System */}
       <section className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden">
         <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg" data-surface="champagne">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -315,16 +315,17 @@ const Founder = () => {
                   <motion.div 
                     key={index}
                     className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 hover:border-[#B89555] transition-all duration-500 text-center shadow-sm"
+                    data-surface="champagne"
                     variants={fadeInUp}
                   >
-                    <div className="w-14 h-14 mx-auto mb-6 bg-[#1A1A1A] rounded-xl flex items-center justify-center border border-[#B89555]/30">
-                      <member.icon className="w-6 h-6 text-[#1A1A1A]" />
+                    <div className="w-14 h-14 mx-auto mb-6 bg-[#1A1A1A] rounded-xl flex items-center justify-center border border-[#B89555]/30" data-surface="ink">
+                      <member.icon className="w-6 h-6 text-white" />
                     </div>
                     <h4 className="text-[#1A1A1A] text-lg font-semibold mb-1">
                       {member.name}
                     </h4>
                     {member.nameAr && (
-                      <p className="text-white/90 text-sm mb-2">{member.nameAr}</p>
+                      <p className="text-[#1A1A1A]/70 text-sm mb-2">{member.nameAr}</p>
                     )}
                     <p className="text-[#1A1A1A] text-xs uppercase tracking-wider mb-4">
                       {member.role}
