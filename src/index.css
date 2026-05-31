@@ -37,18 +37,6 @@ body {
   min-height: 100dvh;
 }
 
-[data-signout-action],
-[data-signout-action] [data-signout-label],
-[data-signout-action] [data-signout-icon] {
-  color: #DC2626 !important;
-  -webkit-text-fill-color: #DC2626 !important;
-}
-
-[data-signout-action] [data-signout-icon],
-[data-signout-action] [data-signout-icon] * {
-  stroke: #DC2626 !important;
-}
-
 /* ════════════════════════════════════════════════════════════════
    .cta-premium — premium hover lift + glow + 3D for primary CTAs
    ════════════════════════════════════════════════════════════════ */
@@ -413,18 +401,18 @@ All colors MUST be HSL.
  * ============================================================ */
 @layer base {
   .surface-light {
-    --background: 0 0% 100%;
+    --background: 36 50% 98%;
     --foreground: 0 0% 7%;
-    --card: 0 0% 100%;
+    --card: 36 50% 98%;
     --card-foreground: 0 0% 7%;
-    --popover: 0 0% 100%;
+    --popover: 36 50% 98%;
     --popover-foreground: 0 0% 7%;
-    --muted: 0 0% 96%;
+    --muted: 36 40% 94%;
     --muted-foreground: 0 0% 35%;
-    --accent: 0 0% 94%;
+    --accent: 36 38% 88%;
     --accent-foreground: 0 0% 7%;
-    --border: 0 0% 85%;
-    --input: 0 0% 90%;
+    --border: 40 35% 65%;
+    --input: 40 35% 65%;
     color: hsl(var(--card-foreground));
   }
 
@@ -1662,7 +1650,7 @@ All colors MUST be HSL.
   }
   
   .jj-profile-card .jj-profile-role {
-    @apply text-white/90 text-sm mt-1;
+    @apply text-foreground/70 text-sm mt-1;
   }
 
   /* Profile image container - ensures proper sizing */
