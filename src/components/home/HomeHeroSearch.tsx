@@ -204,19 +204,22 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               data-allow-dark-cta
               data-hero-consultation-lock
               aria-label="Book your free consultation now"
-              className="surface-ink allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
+              className="allow-white flex items-center justify-center self-stretch h-full px-5 lg:px-6
                 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em]
-                bg-[#1A1A1A]/70 hover:bg-[#1A1A1A]/80 backdrop-blur-md border-l border-[#B89555]/45
+                border-l border-[#B89555]/45
                 transition-[background-color] duration-200"
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
+                backgroundColor: "#0F0F0F",
                 opacity: 1,
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#1A1A1A")}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#0F0F0F")}
             >
               <span
                 className="allow-white whitespace-nowrap"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1, filter: "none", textShadow: "0 2px 8px rgba(0,0,0,0.55)" }}
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}
               >
                 Free Consultation
               </span>
