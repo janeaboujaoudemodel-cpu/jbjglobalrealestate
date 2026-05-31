@@ -37,18 +37,6 @@ body {
   min-height: 100dvh;
 }
 
-[data-signout-action],
-[data-signout-action] [data-signout-label],
-[data-signout-action] [data-signout-icon] {
-  color: #DC2626 !important;
-  -webkit-text-fill-color: #DC2626 !important;
-}
-
-[data-signout-action] [data-signout-icon],
-[data-signout-action] [data-signout-icon] * {
-  stroke: #DC2626 !important;
-}
-
 /* ════════════════════════════════════════════════════════════════
    .cta-premium — premium hover lift + glow + 3D for primary CTAs
    ════════════════════════════════════════════════════════════════ */
@@ -413,18 +401,18 @@ All colors MUST be HSL.
  * ============================================================ */
 @layer base {
   .surface-light {
-    --background: 0 0% 100%;
+    --background: 36 50% 98%;
     --foreground: 0 0% 7%;
-    --card: 0 0% 100%;
+    --card: 36 50% 98%;
     --card-foreground: 0 0% 7%;
-    --popover: 0 0% 100%;
+    --popover: 36 50% 98%;
     --popover-foreground: 0 0% 7%;
-    --muted: 0 0% 96%;
+    --muted: 36 40% 94%;
     --muted-foreground: 0 0% 35%;
-    --accent: 0 0% 94%;
+    --accent: 36 38% 88%;
     --accent-foreground: 0 0% 7%;
-    --border: 0 0% 85%;
-    --input: 0 0% 90%;
+    --border: 40 35% 65%;
+    --input: 40 35% 65%;
     color: hsl(var(--card-foreground));
   }
 
@@ -649,7 +637,7 @@ All colors MUST be HSL.
   color: #F7F2EA !important;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6) !important;
 }
-.jj-hero-fullscreen.jj-hero-compact :is(h1, h2, h3, p, span, a, button, label)[class*="text-black"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+.jj-hero-fullscreen.jj-hero-compact :is(h1, h2, h3, p, span, a, button, label)[class~="text-black"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
   color: #F7F2EA !important;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6) !important;
 }
@@ -1662,7 +1650,7 @@ All colors MUST be HSL.
   }
   
   .jj-profile-card .jj-profile-role {
-    @apply text-white/90 text-sm mt-1;
+    @apply text-foreground/70 text-sm mt-1;
   }
 
   /* Profile image container - ensures proper sizing */
@@ -3023,15 +3011,15 @@ button:disabled:has(.lucide),
    ate when the hero copy used `text-white`, `text-white/85`, etc.
    Adds a soft text-shadow so words survive bright video frames.
    ===================================================================== */
-.jj-hero-fullscreen :is(h1, h2, h3, h4, h5, h6),
-.jj-hero-fullscreen :is(p, span, a, label, li),
-[data-surface="dark"] :is(h1, h2, h3, h4, h5, h6) {
+.jj-hero-fullscreen :is(h1, h2, h3, h4, h5, h6):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
+.jj-hero-fullscreen :is(p, span, a, label, li):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
+[data-surface="dark"] :is(h1, h2, h3, h4, h5, h6):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *) {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
 }
-.jj-hero-fullscreen .text-white,
-.jj-hero-fullscreen [class*="text-white"],
-.jj-hero-fullscreen h1,
-.jj-hero-fullscreen h2 {
+.jj-hero-fullscreen .text-white:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
+.jj-hero-fullscreen [class*="text-white"]:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
+.jj-hero-fullscreen h1:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
+.jj-hero-fullscreen h2:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *) {
   color: #FFFFFF !important;
   opacity: 1 !important;
 }
@@ -3746,18 +3734,18 @@ hr[data-gold-hairline],
 /* 1a. EXTENDED background remap — covers shades 400→900 in addition
  *     to the 50→300 block already declared above. */
 :where(
-  .bg-gray-400, .bg-gray-500, .bg-gray-600, .bg-gray-700, .bg-gray-800,
-  .bg-neutral-400, .bg-neutral-500, .bg-neutral-600, .bg-neutral-700, .bg-neutral-800,
-  .bg-slate-400, .bg-slate-500, .bg-slate-600, .bg-slate-700, .bg-slate-800,
-  .bg-zinc-400, .bg-zinc-500, .bg-zinc-600, .bg-zinc-700, .bg-zinc-800,
-  .bg-stone-400, .bg-stone-500, .bg-stone-600, .bg-stone-700, .bg-stone-800
+  .bg-gray-400, .bg-gray-500,
+  .bg-neutral-400, .bg-neutral-500,
+  .bg-slate-400, .bg-slate-500,
+  .bg-zinc-400, .bg-zinc-500,
+  .bg-stone-400, .bg-stone-500
 ):not([data-surface="dark"]):not([data-no-contrast-guard]):not([class*="bg-gradient"]) {
   background-color: #EFE6D6 !important;
 }
 
 /* 1b. Background opacity variants (e.g. bg-gray-200/50, bg-muted/40) */
-:where([class*="bg-gray-"], [class*="bg-neutral-"], [class*="bg-slate-"], [class*="bg-zinc-"], [class*="bg-stone-"], [class*="bg-muted/"])
-:not([data-surface="dark"]):not([data-no-contrast-guard]):not([class*="bg-gray-9"]):not([class*="bg-neutral-9"]):not([class*="bg-slate-9"]):not([class*="bg-zinc-9"]):not([class*="bg-stone-9"]):not([class*="bg-gradient"]) {
+:root:not(.dark) :where([class*="bg-gray-"], [class*="bg-neutral-"], [class*="bg-slate-"], [class*="bg-zinc-"], [class*="bg-stone-"], [class*="bg-muted/"])
+:not([data-surface="dark"]):not([data-no-contrast-guard]):not([class*="bg-gray-6"]):not([class*="bg-gray-7"]):not([class*="bg-gray-8"]):not([class*="bg-gray-9"]):not([class*="bg-neutral-6"]):not([class*="bg-neutral-7"]):not([class*="bg-neutral-8"]):not([class*="bg-neutral-9"]):not([class*="bg-slate-6"]):not([class*="bg-slate-7"]):not([class*="bg-slate-8"]):not([class*="bg-slate-9"]):not([class*="bg-zinc-6"]):not([class*="bg-zinc-7"]):not([class*="bg-zinc-8"]):not([class*="bg-zinc-9"]):not([class*="bg-stone-6"]):not([class*="bg-stone-7"]):not([class*="bg-stone-8"]):not([class*="bg-stone-9"]):not([class*="bg-gradient"]) {
   background-color: #F7F2EA !important;
 }
 
@@ -3874,32 +3862,21 @@ hr[data-gold-hairline],
    Per "No Gold Fills" rule: gold survives only as hairline accent.
    Opt-out: add `data-allow-bright-gold` to the element.
    ────────────────────────────────────────────────────────────── */
-[class*="bg-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="bg-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="bg-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="from-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="from-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="to-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="to-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="to-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="via-[#EFE6D6]"]:not([data-allow-bright-gold]),
-[class*="via-[#EFE6D6]"]:not([data-allow-bright-gold]) {
+[class~="bg-[#EFE6D6]"]:not([data-allow-bright-gold]),
+[class~="from-[#EFE6D6]"]:not([data-allow-bright-gold]),
+[class~="to-[#EFE6D6]"]:not([data-allow-bright-gold]),
+[class~="via-[#EFE6D6]"]:not([data-allow-bright-gold]) {
   background-image: none !important;
   background-color: #EFE6D6 !important;
   color: #1A1A1A !important;
 }
-[class*="text-[#B89555]"]:not([data-allow-bright-gold]),
-[class*="text-[#B89555]"]:not([data-allow-bright-gold]),
-[class*="text-[#B89555]"]:not([data-allow-bright-gold]) {
+[class~="text-[#B89555]"]:not([data-allow-bright-gold]) {
   color: #B89555 !important;
 }
-[class*="border-[#B89555]"]:not([data-allow-bright-gold]),
-[class*="border-[#B89555]"]:not([data-allow-bright-gold]),
-[class*="border-[#B89555]"]:not([data-allow-bright-gold]) {
+[class~="border-[#B89555]"]:not([data-allow-bright-gold]) {
   border-color: #B89555 !important;
 }
-[class*="ring-[#B89555]"]:not([data-allow-bright-gold]),
-[class*="ring-[#B89555]"]:not([data-allow-bright-gold]) {
+[class~="ring-[#B89555]"]:not([data-allow-bright-gold]) {
   --tw-ring-color: #B89555 !important;
 }
 
@@ -4192,17 +4169,15 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 
 /* ============================================================
  * TWO-RULE CONTRAST CONTRACT (FINAL WINNER)
- * Only two contrast rules exist site-wide:
- *   Rule A — dark/navy/ink own box → WHITE text + icons
- *   Rule B — champagne/page/gold/light own box → INK text + icons
- * Each rule excludes the OTHER tone's elements AND their descendants,
- * so nested champagne CTAs inside navy banners (and vice versa) win.
+ * Rule A — dark/navy/ink OWN backgrounds → white foreground.
+ * Rule B — champagne/page/gold/light OWN backgrounds → ink foreground.
+ * No broad descendant repainting: nested opposite-tone boxes must keep
+ * their own local contrast and gold text must remain gold accents.
  * ============================================================ */
 
-/* RULE A — Dark/navy/ink own box wins over any ancestor. */
+/* RULE A — labelled dark/navy/ink own boxes. */
 html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta):not(.allow-ink):not([data-surface="champagne"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"]):not(.jj-cta-champagne):not(.jj-pill-active):not(.jj-cta-outline),
 html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta):not(.allow-ink):not([data-surface="champagne"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"]):not(.jj-cta-champagne):not(.jj-pill-active):not(.jj-cta-outline):hover,
-html body :is([data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta):not(.allow-ink) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],h1,h2,h3,h4,h5,h6,label,a,button):not([data-sidebar-gold-label]):not([data-decorative="true"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="champagne"]):not([data-surface="cream"]):not([data-surface="raised"]):not([data-surface="gold"]):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-pill-active):not(.jj-pill-active *):not(.jj-cta-outline):not(.jj-cta-outline *),
 html body [data-hero-consultation-lock],
 html body [data-hero-consultation-lock]:hover,
 html body [data-hero-consultation-lock] *,
@@ -4213,21 +4188,26 @@ html body [data-hero-consultation-lock]:hover * {
   opacity: 1 !important;
 }
 
-/* RULE B — Champagne/page/gold/light own box wins over any ancestor. */
+/* RULE B — labelled champagne/page/gold/light own boxes. */
 html body :is([data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white):not([data-surface="navy"]):not([data-surface="ink"]):not([data-surface="dark"]):not(.jj-cta-dark):not(.jj-navy-cta),
-html body :is([data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white):not([data-surface="navy"]):not([data-surface="ink"]):not([data-surface="dark"]):not(.jj-cta-dark):not(.jj-navy-cta):hover,
-html body :is(.jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],h1,h2,h3,h4,h5,h6,label,a) {
+html body :is([data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"], .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold, .jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white):not([data-surface="navy"]):not([data-surface="ink"]):not([data-surface="dark"]):not(.jj-cta-dark):not(.jj-navy-cta):hover {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   opacity: 1 !important;
 }
 
-/* LOCK: Active champagne tabs/pills always beat dark/navy ancestors, even if
-   legacy code accidentally leaves allow-white/data-no-contrast-guard behind. */
-html body :is([role="tab"], button, a, [role="button"]):is([data-surface="champagne"], [data-surface="light"], [data-surface="raised"], [data-cta="champagne"], .jj-pill-active),
-html body :is([role="tab"], button, a, [role="button"]):is([data-surface="champagne"], [data-surface="light"], [data-surface="raised"], [data-cta="champagne"], .jj-pill-active):hover,
-html body :is([role="tab"], button, a, [role="button"]):is([data-surface="champagne"], [data-surface="light"], [data-surface="raised"], [data-cta="champagne"], .jj-pill-active) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],h1,h2,h3,h4,h5,h6,label) {
+/* CTA/pill primitives are self-contained controls, so their icons/labels follow
+   the primitive foreground without leaking into surrounding sections. */
+html body :is(.jj-cta-dark, .jj-navy-cta):not(.allow-ink) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],label),
+html body :is(.jj-cta-dark, .jj-navy-cta):not(.allow-ink):hover :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],label) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body :is(.jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white) :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],label),
+html body :is(.jj-cta-champagne, .jj-pill-active, .jj-cta-outline):not(.allow-white):hover :where(span,p,small,strong,em,b,i,svg,[class*="lucide"],label) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -4263,11 +4243,6 @@ html body .jj-favorite-trigger :where(svg,[class*="lucide"]):not(.fill-red-500):
  * Duplicate root foreground rules removed; final two-rule contract wins.
  * ============================================================ */
 
-/* Prevent foreground flicker only; do not kill animation durations. */
-:where(a,button,[role="button"],[role="tab"],svg,[class*="lucide"],span,p,h1,h2,h3,h4,h5,h6) {
-  transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
-}
-
 /* ============================================================
  * LEGACY DARK-DEFAULT CLASS LIGHT-ANCESTOR GUARD
  * Several legacy `.jj-inactive-item / .jj-tab-inactive / .jj-sort-inactive /
@@ -4291,50 +4266,7 @@ html body :is(
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
-/* ============================================================
- * TWO-RULE CONTRACT — RAW TAILWIND OWN-BACKGROUND EXTENSION
- *
- * Extends Rule A (dark) and Rule B (light) to plain Tailwind
- * arbitrary background utilities so any element/component using
- * raw bg classes (without a data-surface attribute) still gets
- * the correct foreground. Solves black-on-black and white-on-
- * champagne regressions across the entire site, including
- * hover/focus/active states.
- *
- * Opt-outs (preserved):
- *   .allow-white         – component wants white text on light bg
- *   .allow-ink           – component wants ink text on dark bg
- *   [data-no-contrast-guard], [data-allow-dark-cta], [data-on-dark]
- *   [data-premium]       – premium-scoped (theme-tokens.css)
- *   AI purple surfaces (carry data-no-contrast-guard already)
- * ============================================================ */
-
-/* RULE A* — Raw dark/navy/ink own boxes => WHITE foreground */
-html body
-  :is(
-    [class~="bg-black"],
-    [class*="bg-[#1A1A1A]"], [class*="bg-[#1a1a1a]"],
-    [class*="bg-[#0A0908]"], [class*="bg-[#0D0D0D]"], [class*="bg-[#0d0d0d]"],
-    [class*="bg-[#102540]"], [class*="bg-[#1a3d63]"], [class*="bg-[#143052]"],
-    [class*="bg-[#071B33]"], [class*="bg-[#0E2848]"]
-  ):not(.allow-ink):not([data-no-contrast-guard]):not([data-premium]):not([data-premium] *),
-html body
-  :is(
-    [class~="bg-black"],
-    [class*="bg-[#1A1A1A]"], [class*="bg-[#1a1a1a]"],
-    [class*="bg-[#0A0908]"], [class*="bg-[#0D0D0D]"], [class*="bg-[#0d0d0d]"],
-    [class*="bg-[#102540]"], [class*="bg-[#1a3d63]"], [class*="bg-[#143052]"],
-    [class*="bg-[#071B33]"], [class*="bg-[#0E2848]"]
-  ):not(.allow-ink):not([data-no-contrast-guard]):not([data-premium]):not([data-premium] *):hover {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-
-/* Descendant rules intentionally omitted:
- * Setting color on the own box is enough — descendants inherit, and
- * any descendant with an explicit text-* class keeps its own color
- * (so a navy CTA inside a champagne card and a champagne pill inside
- * a navy banner both render correctly without descendant exclusion
- * gymnastics). Explicit black-on-black or white-on-light in component
- * code remains a per-component bug, not an architecture concern. */
+/* Raw Tailwind bg-* global repaint extension removed: broad class* selectors
+   were overriding champagne/gold sections to white. Use data-surface or CTA
+   primitives for own-box contrast. */
 
