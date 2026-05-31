@@ -452,15 +452,14 @@ const SupportTicketBox = () => {
                     understand the problem better.
                   </p>
 
-                  {/* Support Promise */}
-                  <div className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl p-6 mb-6 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
+                  {/* Support Promise — champagne surface for legibility */}
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 rounded-xl p-6 mb-6 relative overflow-hidden">
                     <div className="relative z-10">
                       <div className="flex items-center gap-2 mb-3">
                         <AlertCircle className="w-5 h-5 text-[#1A1A1A]" />
                         <span className="text-[#1A1A1A] font-semibold">Our Commitment</span>
                       </div>
-                      <ul className="space-y-2 text-sm text-[#1A1A1A]/70">
+                      <ul className="space-y-2 text-sm text-[#1A1A1A]/80">
                         <li className="flex items-center gap-2">
                           <span className="text-[#1A1A1A]">✓</span>
                           Response within 24 hours
@@ -491,14 +490,17 @@ const SupportTicketBox = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                       <Button
-                        className="bg-[#1A1A1A] text-white border-2 border-[#1A1A1A] px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:bg-[#1A1A1A] hover:border-[#1A1A1A] hover:-translate-y-0.5 active:translate-y-0 shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
+                        data-cta="dark"
+                        data-allow-dark-cta
+                        className="jj-cta-dark px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
                       >
-                        <span className="flex items-center gap-2">
+                        <span className="flex items-center gap-2 text-white">
                           <PremiumHeadsetIcon size={20} color="#ffffff" />
                           <span className="text-white font-bold">Create Support Ticket</span>
                         </span>
                       </Button>
                     </DialogTrigger>
+
 
                       <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] max-w-2xl max-h-[90vh] z-[10050] flex flex-col overflow-hidden shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)] p-0 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                       <DialogHeader className="flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] z-10 pb-4 px-6 pt-6 border-b border-[#B89555]/20">
