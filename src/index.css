@@ -1021,12 +1021,9 @@ All colors MUST be HSL.
 [data-marketing-page] section[class~="bg-[#1A1A1A]"] {
   background: #F7F2EA !important;
 }
-[data-marketing-page] section[class~="bg-[#1A1A1A]"] [class~="text-[#1A1A1A]"] {
-  color: #1A1A1A;
-}
-[data-marketing-page] section[class~="bg-[#1A1A1A]"] [class~="text-white"] {
-  color: #1A1A1A;
-}
+/* Foreground descendant repaints removed — they flipped legitimate
+   white text on dark overlay cards (e.g. About market intelligence
+   cards) to ink-on-dark. Components own their own foreground. */
 
 
 /* Layer 3 - Inner content cards */
