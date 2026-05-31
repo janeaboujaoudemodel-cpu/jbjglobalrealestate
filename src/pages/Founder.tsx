@@ -124,7 +124,7 @@ const Founder = () => {
             variants={staggerContainer}
           >
             <motion.div className="mb-4" variants={fadeInUp}>
-              <span className="inline-flex items-center gap-2 bg-[#1A1A1A]/40 backdrop-blur-md border border-[#B89555]/40 text-[#1A1A1A] text-xs uppercase tracking-[0.3em] px-5 py-2.5 rounded-full shadow-lg shadow-gold/10">
+              <span className="inline-flex items-center gap-2 bg-[#1A1A1A]/40 backdrop-blur-md border border-[#B89555]/40 text-[#FDFBF7] text-xs uppercase tracking-[0.3em] px-5 py-2.5 rounded-full shadow-lg shadow-gold/10">
                 <Building2 className="w-3.5 h-3.5" />
                 Executive Governance
               </span>
@@ -136,7 +136,7 @@ const Founder = () => {
             >
               Founder &
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#D4B96A] to-gold">
+              <span className="text-[#FDFBF7]">
                 Leadership
               </span>
             </motion.h1>
@@ -157,7 +157,7 @@ const Founder = () => {
                 className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-gold/20 to-gold/10 border border-[#B89555]/50 text-[#1A1A1A] font-semibold rounded-xl hover:bg-[#EFE6D6]/30 transition-all duration-300"
               >
                 Meet Our Leadership
-                <ArrowUpRight className="w-4 h-4" />
+                <ArrowUpRight className="w-4 h-4 text-[#1A1A1A]" />
               </a>
             </motion.div>
           </motion.div>
