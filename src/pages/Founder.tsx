@@ -176,8 +176,8 @@ const Founder = () => {
 
       {/* SECTION 1: FOUNDER - 3-Layer System */}
       <section id="leadership" className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden">
-        <div className="jj-layer-2">
-          <div className="jj-layer-active rounded-2xl p-4 sm:p-6 md:p-8">
+        <div className="jj-layer-2" data-surface="champagne">
+          <div className="jj-layer-active rounded-2xl p-4 sm:p-6 md:p-8" data-surface="champagne">
             <motion.div 
               className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center"
               initial="hidden"
@@ -241,7 +241,7 @@ const Founder = () => {
                 </p>
                 
                 {/* Bio Card - Champagne Inner */}
-                <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-6 space-y-4">
+                <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-6 space-y-4" data-surface="champagne">
                   <p className="text-lg md:text-xl font-light text-[#1A1A1A]">
                     Jane Bou Jaoude is the Founder and Chief Executive Officer of JBJ Global Real Estate, a Dubai mainland licensed real estate brokerage authorized to BUY, SELL, and RENT properties across the UAE.
                   </p>
@@ -252,25 +252,25 @@ const Founder = () => {
                 
                 {/* Role Focus Cards */}
                 <div className="grid grid-cols-2 gap-3 md:gap-4 mt-6">
-                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
                     <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne">
                       <Globe className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Strategic Leadership</p>
                   </div>
-                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
                     <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne">
                       <Shield className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Regulatory Alignment</p>
                   </div>
-                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
                     <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne">
                       <Scale className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Internal Controls</p>
                   </div>
-                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
                     <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne">
                       <Users className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
                     </div>
