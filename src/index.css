@@ -1291,7 +1291,7 @@ All colors MUST be HSL.
   }
 
   .jj-property-card-detail {
-    @apply text-base font-medium text-white;
+    @apply text-base font-medium text-foreground;
   }
 
   /* --- User / Employee Card --- */
