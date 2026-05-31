@@ -89,6 +89,7 @@ for (const route of routes) {
       if (rect.width < 4 || rect.height < 4 || rect.bottom < 0 || rect.top > innerHeight || rect.right < 0 || rect.left > innerWidth) return [];
 
       const computed = getComputedStyle(element);
+      if (Number.parseFloat(computed.opacity || '1') <= 0.05 || computed.visibility === 'hidden') return [];
       const foreground = rgb(computed.color);
       const background = effectiveBackground(element);
       if (!foreground || !background.parsed) return [];
@@ -99,7 +100,8 @@ for (const route of routes) {
       const blueDarkBg = background.parsed.b > background.parsed.r + 20 && bgLum < 0.25;
       const champagneLightBg = bgLum > 0.72 && background.parsed.r > 220 && background.parsed.g > 200;
       const blackOnBlue = blueDarkBg && fgLum < 0.18;
-      const whiteOnChampagne = champagneLightBg && fgLum > 0.72;
+      const insideDarkHero = Boolean(element.closest('[data-hero-dark]'));
+      const whiteOnChampagne = champagneLightBg && fgLum > 0.72 && !insideDarkHero;
 
       if (ratio >= 4.5 && !blackOnBlue && !whiteOnChampagne) return [];
       return [{
