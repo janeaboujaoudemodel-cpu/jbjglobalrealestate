@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Shield, Users, TrendingUp, Building2, BarChart3, FileCheck, Scale, Heart, Target, Sparkles } from "lucide-react";
+import { ArrowUpRight, Shield, Users, TrendingUp, Building2, BarChart3, FileCheck, Scale, Heart, Target, Sparkles, type LucideIcon } from "lucide-react";
+import { IconTile } from "@/components/ui/icon-tile";
 
 import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
@@ -94,7 +95,7 @@ const FeatureCard = ({
   title, 
   description
 }: { 
-  icon: React.ComponentType<{ className?: string }>; 
+  icon: import("lucide-react").LucideIcon; 
   title: string; 
   description: string;
 }) => (
@@ -102,9 +103,8 @@ const FeatureCard = ({
     className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] rounded-xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1"
     variants={fadeInUp}
   >
-    <div className="w-14 h-14 rounded-lg bg-[#1A1A1A] flex items-center justify-center mb-5">
-      <Icon className="w-7 h-7 text-white" />
-    </div>
+    <IconTile icon={Icon} tone="gold" size="lg" className="mb-5" />
+
     <h3 className="text-[#1A1A1A] text-xl font-semibold mb-3">{title}</h3>
     <p className="text-[#1A1A1A]/70 text-base leading-relaxed">{description}</p>
   </motion.div>

@@ -1,42 +1,43 @@
-I will fix this as a contrast-infrastructure cleanup, not as one-off styling.
+## Goal
+Fix only the regressions visible in the new screenshots. Do not touch already-approved areas (careers/job cards, Services footer, /join navy contact tiles). No new global selectors — remove or scope the **winning** conflicts, then patch the few hand-rolled tiles.
 
-What is actually broken:
-- The screenshot failures are real: navy/blue filled icon tiles are inheriting dark foreground from broader icon/color rules, so icons become dark on navy.
-- `/services` has explicit `text-white/90` and `text-white/70` on a section that is now visually champagne after the global band rules, causing white-on-light text.
-- The remaining risk is not only one selector. The problem is competing broad rules: `.careers-navy *`, `.careers-white *`, `.allow-white`, and the global `a/button .lucide { color: currentColor }` icon rule can override local intended contrast.
+## Confirmed root causes (from code + live DOM inspection)
 
-Implementation plan:
-1. Narrow the careers color helper rules in `src/styles/theme-tokens.css`
-   - Remove wildcard descendant repaint behavior from `.careers-navy *`, `.careers-gold *`, `.careers-white *`, and `.allow-white` where it can leak into nested surfaces.
-   - Keep only explicit primitives:
-     - `.careers-navy-cta` / `.jj-cta-dark` = navy background + white text/icons.
-     - champagne cards/sections = ink text/icons.
-     - true dark badges/tiles = white text/icons.
+1. **Icon tiles on /about, /contact, /founder render as solid black squares** even though the inner svg computes to `color/stroke = rgb(255,255,255)`. The pattern in `About.tsx` (and clones in `Contact.tsx`, `Founder.tsx`) is hand-rolled:
+   ```
+   <div className="w-14 h-14 rounded-lg bg-[#1A1A1A] ...">
+     <Icon className="w-7 h-7 text-white" />
+   </div>
+   ```
+   The Lucide stroke is white but at 14×14 tile + 24px default render the icon collapses to a near-invisible hairline on the marketing background blend. We will replace every hand-rolled `bg-[#1A1A1A]` icon tile on these three pages with the locked `<IconTile tone="ink" size="lg" icon={Icon} />` primitive (which already carries `data-surface="ink"`, `text-white` + safe stroke, and is guard-exempt).
 
-2. Fix the global Lucide icon conflict in `src/index.css`
-   - The current `button .lucide, a .lucide, [role="button"] .lucide { color: currentColor; }` rule is too broad.
-   - Replace it with a scoped version that does not override icons already marked `text-white`, `allow-white`, `data-no-contrast-guard`, or inside dark/navy/CTA primitives.
-   - Add a narrow lock for dark own-surfaces only: `[data-surface="navy"|"ink"|"dark"]`, `.surface-navy`, `.surface-ink`, `.surface-dark`, `.jj-cta-dark`, `.jj-navy-cta` icons stay white.
-   - Do not add a new runtime guard or duplicate system.
+2. **/owner/founder-assistant — "Escalations" pill** uses the same hand-rolled white-on-light pattern instead of `.jj-pill-active`. Fix by replacing with the locked pill primitive (champagne fill + ink text + gold hairline).
 
-3. Mark the reported dark icon containers as real dark surfaces where needed
-   - In `CareersContactBlock.tsx`, the navy icon tile will declare `data-surface="navy"` / existing dark opt-out so its icon stays white.
-   - In `CareersFAQ.tsx`, the open FAQ chevron circle will declare the same dark surface contract so the chevron stays white.
-   - This is not a visual redesign; it only declares the already-existing navy background correctly.
+3. **/contact phone helper "Select your country code, then enter your phone number"** is rendered with `text-white/70` on what is now (after the `[data-marketing-page] section.bg-[#1A1A1A]` champagne remap) a champagne band → invisible. Replace with `text-[#1A1A1A]/70`.
 
-4. Fix the `/services` white-on-champagne text
-   - In `Services.tsx`, replace the explicit white text/icon bullets in the champagne/light service scope/footer areas with ink.
-   - If the section is intended to be dark, mark it `data-surface="dark"`; if it is visually champagne, all text becomes ink. I will follow the actual rendered surface from the screenshot: champagne = ink.
+4. **/contact "Create Support Ticket" button** uses raw `bg-[#1A1A1A] text-white` inside a champagne card. The black-CTA→navy guard should repaint it, but the button is wrapped inside `Surface` with `data-no-contrast-guard`. Remove the opt-out from that one button so it gets the standard navy CTA treatment, or switch it to `.jj-cta-dark`.
 
-5. Strengthen validation so this does not get falsely marked fixed again
-   - Update the existing contrast checker to inspect SVG icons as first-class contrast targets, not just text nodes, so dark-icon-on-navy is caught.
-   - Re-run visible contrast checks on `/join`, `/services`, `/owner`, and `/`.
-   - Use browser screenshots/computed styles for the exact reported elements before saying complete.
+5. **/ai-hub "All tools in one place…" subcopy + search input** use `text-white/70` and `placeholder:text-white/50` inside a champagne band. Repaint to ink (`text-[#1A1A1A]/70`, `placeholder:text-[#1A1A1A]/45`).
 
-Files expected to change:
-- `src/index.css`
-- `src/styles/theme-tokens.css`
-- `src/components/careers/CareersContactBlock.tsx`
-- `src/components/careers/CareersFAQ.tsx`
-- `src/pages/Services.tsx`
-- `scripts/contrast/check-visible-contrast-contract.mjs`
+## The winning rule we are NOT touching
+`[data-marketing-page] section[class~="bg-[#1A1A1A]"] { background: #F7F2EA !important }` (index.css:1021) is correct and must stay — the bug is that pages still hard-code `text-white` children inside those remapped sections. We fix the children, not the remap.
+
+## Files to edit (surgical, no new CSS rules)
+
+- `src/pages/About.tsx` — replace the `FeatureCard` inline icon tile div with `<IconTile tone="ink" size="lg" icon={Icon} />`. Also replace the 4 hand-rolled overlay tiles in "Market Intelligence" section (lines ~408-420) so they keep navy bg + white icon via the IconTile primitive.
+- `src/pages/Contact.tsx` — (a) swap the hero icon tile, "Important Notice" tile, "Appointments" tile, "Need Help?" tile for `<IconTile tone="ink"/>` or `tone="red"` where semantic; (b) repaint the phone-helper microcopy to ink; (c) convert "Create Support Ticket" button to `.jj-cta-dark` (removes the white-on-champagne case).
+- `src/pages/Founder.tsx` — replace the 4 leadership card avatar tiles + the 4 governance bullet icon tiles with `<IconTile tone="ink" size="lg" />`.
+- `src/pages/OwnerFounderAssistant.tsx` (or the chat header component that renders the Escalations chip) — replace the hand-rolled chip with `<span className="jj-pill-active">…</span>` so it inherits the locked champagne + ink + gold-hairline tokens.
+- `src/pages/AiHub.tsx` — (a) repaint the "All tools in one place…" `<p>` and the search input's text + placeholder to ink utilities; (b) leave the dark hero alone.
+
+No new CSS, no new selectors, no new guard layers. We are only removing hand-rolled white-on-light spots and routing through the existing locked primitives.
+
+## Verification (mandatory before claiming done)
+
+For each of the 5 routes — `/about`, `/contact`, `/founder`, `/owner/founder-assistant`, `/ai-hub` — I will:
+1. `navigate_to_sandbox` to that route.
+2. Take a viewport screenshot at the previously-broken section (scroll into view first).
+3. Run `extract` to assert: for every icon-tile container, `bg ∈ {#1A1A1A, #EFE6D6}` and inner svg `color === expected foreground`; for every text node previously broken, `color !== rgba(255,…)` on champagne and `color !== rgba(0..40,…)` on navy.
+4. Only after the assertion passes will I mark the change done.
+
+I will NOT touch: careers / job cards, Services footer, /join navy tiles, or any of the global rules approved in earlier turns.
