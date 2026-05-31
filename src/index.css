@@ -3016,8 +3016,8 @@ button:disabled:has(.lucide),
 [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *) {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
 }
-.jj-hero-fullscreen .text-white,
-.jj-hero-fullscreen [class*="text-white"],
+.jj-hero-fullscreen .text-white:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
+.jj-hero-fullscreen [class*="text-white"]:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
 .jj-hero-fullscreen h1:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
 .jj-hero-fullscreen h2:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *) {
   color: #FFFFFF !important;
