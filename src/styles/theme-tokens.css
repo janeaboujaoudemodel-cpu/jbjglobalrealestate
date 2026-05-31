@@ -689,12 +689,12 @@ label[data-required]::after {
   transform: translateX(110%);
   transition: transform 1.2s ease;
 }
-/* Force white text inside the navy card regardless of nested utilities */
-[data-careers-page] .careers-card-navy :is(h1,h2,h3,h4,h5,h6,p,span,strong,em,small,a,li,div) {
+/* Navy section chrome only: avoid repainting nested job-card descendants. */
+[data-careers-page] .careers-card-navy > :not(.careers-card-strong) :is(h1,h2,h3,h4,h5,h6,p,span,strong,em,small,a,li) {
   color: #FFFFFF;
   -webkit-text-fill-color: #FFFFFF;
 }
-[data-careers-page] .careers-card-navy svg {
+[data-careers-page] .careers-card-navy > :not(.careers-card-strong) svg {
   color: #FFFFFF;
   stroke: #FFFFFF;
 }
@@ -716,9 +716,8 @@ label[data-required]::after {
   -webkit-text-fill-color: #FFFFFF;
 }
 
-/* Final override: champagne job cards inside the navy section must never inherit navy-section white text. */
-[data-careers-page] .careers-card-navy .careers-card-strong,
-[data-careers-page] .careers-card-navy .careers-card-strong :is(h1,h2,h3,h4,h5,h6,p,span,strong,em,small,a,li,div) {
+/* Final card inheritance: champagne job cards inside the navy section use ink by default. */
+[data-careers-page] .careers-card-navy .careers-card-strong {
   color: #1A1A1A;
   -webkit-text-fill-color: #1A1A1A;
 }
@@ -727,9 +726,9 @@ label[data-required]::after {
   stroke: #102540;
 }
 [data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta,
-[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta *,
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta :where(span, svg),
 [data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover,
-[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover * {
+[data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover :where(span, svg) {
   color: #FFFFFF;
   -webkit-text-fill-color: #FFFFFF;
   stroke: #FFFFFF;
