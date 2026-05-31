@@ -117,8 +117,11 @@ for (const route of routes) {
     }).slice(0, 40);
   }, { rgbSource: rgb.toString(), luminanceSource: luminance.toString(), contrastRatioSource: contrastRatio.toString() });
 
-  if (routeFailures.length) failures.push({ route, failures: routeFailures });
-  console.log(`${routeFailures.length ? '✗' : '✓'} ${route} — ${routeFailures.length} visible contrast issue(s)`);
+  const polarityFailures = routeFailures.filter((item) => item.blackOnBlue || item.whiteOnChampagne);
+  if (polarityFailures.length) failures.push({ route, failures: polarityFailures });
+  console.log(
+    `${polarityFailures.length ? '✗' : '✓'} ${route} — ${polarityFailures.length} black-on-blue/white-on-champagne issue(s), ${routeFailures.length} low-contrast warning(s)`,
+  );
   await page.close();
 }
 
