@@ -448,7 +448,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         )}
 
         {/* Gradient overlay — stronger at bottom for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/10" data-surface="dark" />
 
         {/* Elevated glass reflection effect */}
         <div
@@ -485,7 +485,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
 
         {/* Favorite button */}
         {item.type === "property" && (
-          <div className="absolute top-2 right-2 z-20 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200" style={{ transform: "translateZ(30px)" }}>
+          <div className="absolute top-2 right-2 z-30 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200 overflow-visible" style={{ transform: "translateZ(30px)" }}>
             <FavoriteButton projectId={item.id} showShortlist={false} size="sm" />
           </div>
         )}
@@ -493,13 +493,14 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             legibility over any image (light, dark, busy, washed out). */}
         <div className="absolute inset-x-0 bottom-0 h-[55%] z-10 bg-gradient-to-t from-black via-black/95 via-40% to-transparent pointer-events-none" />
         <div className="absolute inset-x-0 bottom-0 h-[34%] z-10 bg-black/80 pointer-events-none" style={{ mixBlendMode: "normal" }} />
-        <div className="absolute bottom-0 left-0 right-0 p-3 z-20 flex min-h-[88px] flex-col justify-end" style={{ transform: "translateZ(25px)" }}>
+        <div data-surface="dark" data-photo-copy-lock className="absolute bottom-0 left-0 right-0 p-3 z-20 flex min-h-[88px] flex-col justify-end" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
-            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/90 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/30 allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            <span data-surface="dark" className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-black/90 backdrop-blur-sm text-[10px] text-white font-semibold truncate border border-white/30 allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               {item.subtitle}
             </span>
           )}
           <h3
+            data-surface="dark"
             className="allow-white font-extrabold text-[15px] md:text-base leading-tight line-clamp-2 transition-colors duration-300"
             style={{
               color: "#FFFFFF",
