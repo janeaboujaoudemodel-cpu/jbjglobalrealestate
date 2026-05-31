@@ -504,16 +504,40 @@ All colors MUST be HSL.
  * Gray is FORBIDDEN for data values, labels, chart elements.
  * ============================================================ */
 @layer utilities {
-  /* Bump all gray-500/600/700 text to high-contrast foreground */
-  .text-gray-500,
-  .text-gray-600,
-  .text-gray-700 {
+  /* Bump gray-500/600/700 text to high-contrast foreground.
+     SCOPED to light surfaces only — on any dark/navy/ink own-box these
+     colors would be invisible, so they must inherit the dark-surface
+     foreground from the final two-rule contract. */
+  :where(
+    :root:not(.dark),
+    [data-surface="page"], [data-surface="light"], [data-surface="champagne"],
+    [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+    .surface-page, .surface-light, .surface-champagne, .surface-cream,
+    .surface-raised, .surface-gold
+  ) :is(.text-gray-500, .text-gray-600, .text-gray-700) {
     color: hsl(0 0% 20%) !important;
   }
 
-  /* Bump muted-foreground to readable contrast */
-  .text-muted-foreground {
+  /* Bump muted-foreground to readable contrast — light surfaces only. */
+  :where(
+    :root:not(.dark),
+    [data-surface="page"], [data-surface="light"], [data-surface="champagne"],
+    [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+    .surface-page, .surface-light, .surface-champagne, .surface-cream,
+    .surface-raised, .surface-gold
+  ) .text-muted-foreground {
     color: hsl(0 0% 30%) !important;
+  }
+  /* On dark/navy/ink surfaces, muted-foreground stays readable on dark. */
+  :where(
+    [data-surface="navy"], [data-surface="ink"], [data-surface="dark"],
+    .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta
+  ) .text-muted-foreground,
+  :where(
+    [data-surface="navy"], [data-surface="ink"], [data-surface="dark"],
+    .surface-navy, .surface-ink, .surface-dark, .jj-cta-dark, .jj-navy-cta
+  ) :is(.text-gray-500, .text-gray-600, .text-gray-700) {
+    color: rgba(255, 255, 255, 0.78) !important;
   }
 
   /* Fix faded gold opacity text */
