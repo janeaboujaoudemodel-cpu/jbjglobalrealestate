@@ -637,7 +637,7 @@ All colors MUST be HSL.
   color: #F7F2EA !important;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6) !important;
 }
-.jj-hero-fullscreen.jj-hero-compact :is(h1, h2, h3, p, span, a, button, label)[class*="text-black"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+.jj-hero-fullscreen.jj-hero-compact :is(h1, h2, h3, p, span, a, button, label)[class~="text-black"]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
   color: #F7F2EA !important;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6) !important;
 }
@@ -3011,15 +3011,15 @@ button:disabled:has(.lucide),
    ate when the hero copy used `text-white`, `text-white/85`, etc.
    Adds a soft text-shadow so words survive bright video frames.
    ===================================================================== */
-.jj-hero-fullscreen :is(h1, h2, h3, h4, h5, h6),
-.jj-hero-fullscreen :is(p, span, a, label, li),
-[data-surface="dark"] :is(h1, h2, h3, h4, h5, h6) {
+.jj-hero-fullscreen :is(h1, h2, h3, h4, h5, h6):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
+.jj-hero-fullscreen :is(p, span, a, label, li):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
+[data-surface="dark"] :is(h1, h2, h3, h4, h5, h6):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *) {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
 }
 .jj-hero-fullscreen .text-white,
 .jj-hero-fullscreen [class*="text-white"],
-.jj-hero-fullscreen h1,
-.jj-hero-fullscreen h2 {
+.jj-hero-fullscreen h1:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *),
+.jj-hero-fullscreen h2:not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not(.surface-page *):not(.surface-light *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *) {
   color: #FFFFFF !important;
   opacity: 1 !important;
 }
