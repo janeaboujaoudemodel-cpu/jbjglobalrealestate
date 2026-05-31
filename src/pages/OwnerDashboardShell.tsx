@@ -96,12 +96,13 @@ const OwnerDashboardShell = () => {
         </button>
         <button
           onClick={handleSignOut}
-          style={{ color: "#1A1A1A" }}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium hover:!text-red-700 hover:bg-red-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500/40"
+          data-signout-action
+          data-no-contrast-guard
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border border-[#B89555]/40 bg-[#FDFBF7] text-[#DC2626] hover:bg-[#FEE2E2] hover:border-[#DC2626] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500/40"
           aria-label="Sign out"
         >
-          <LogOut className="w-5 h-5 flex-shrink-0" />
-          {!collapsed && <span>Sign Out</span>}
+          <LogOut data-signout-icon className="w-5 h-5 flex-shrink-0 jj-signout-icon text-[#DC2626]" />
+          {!collapsed && <span data-signout-label className="text-[#DC2626]">Sign Out</span>}
         </button>
       </div>
     </>
