@@ -834,9 +834,8 @@ END:VCARD`;
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-[#1A1A1A] rounded-xl flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-[#1A1A1A]" />
-                </div>
+                <IconTile icon={Shield} tone="ink" size="md" />
+
                 <h3 className="text-[#1A1A1A] font-semibold text-lg">
                   <span className="text-[#1A1A1A]">Important</span> Notice
                 </h3>
