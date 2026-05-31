@@ -344,7 +344,7 @@ const Founder = () => {
       {/* SECTION 3: GOVERNANCE & OVERSIGHT - 3-Layer System */}
       <section className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden">
         <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg" data-surface="champagne">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -365,33 +365,33 @@ const Founder = () => {
                 className="max-w-4xl mx-auto"
                 variants={fadeInUp}
               >
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-sm" data-surface="champagne">
                   <p className="text-lg mb-6 text-[#1A1A1A]">
                     JBJ Global Real Estate operates with a centralized governance structure designed to ensure:
                   </p>
                   
                   <div className="grid sm:grid-cols-2 gap-4 mb-6">
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-                        <FileCheck className="w-4 h-4 text-[#1A1A1A]" />
+                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
+                        <FileCheck className="w-4 h-4 text-white" />
                       </div>
                       <p className="text-[#1A1A1A]/70">Clear decision-making authority</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-                        <Shield className="w-4 h-4 text-[#1A1A1A]" />
+                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
+                        <Shield className="w-4 h-4 text-white" />
                       </div>
                       <p className="text-[#1A1A1A]/70">Compliance with UAE real estate regulations</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-                        <Scale className="w-4 h-4 text-[#1A1A1A]" />
+                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
+                        <Scale className="w-4 h-4 text-white" />
                       </div>
                       <p className="text-[#1A1A1A]/70">Controlled advisory and brokerage processes</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-                        <Users className="w-4 h-4 text-[#1A1A1A]" />
+                      <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0" data-surface="ink">
+                        <Users className="w-4 h-4 text-white" />
                       </div>
                       <p className="text-[#1A1A1A]/70">Transparent internal accountability</p>
                     </div>
