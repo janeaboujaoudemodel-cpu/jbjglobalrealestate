@@ -6268,14 +6268,13 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   transition-property: background-color, border-color, box-shadow, transform, opacity, filter, backdrop-filter !important;
 }
 
-[data-hero-consultation-lock],
-[data-hero-consultation-lock]:hover,
-[data-hero-consultation-lock] span,
-[data-hero-consultation-lock]:hover span,
-[data-hero-consultation-lock] svg,
-[data-hero-consultation-lock]:hover svg {
+html body [data-hero-consultation-lock],
+html body [data-hero-consultation-lock]:hover,
+html body [data-hero-consultation-lock] *,
+html body [data-hero-consultation-lock]:hover * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   opacity: 1 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.45) !important;
 }
