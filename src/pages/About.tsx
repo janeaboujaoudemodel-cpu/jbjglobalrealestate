@@ -20,6 +20,23 @@ const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
 };
+import { useFounderPhoto as _useFounderPhotoSrc } from "@/hooks/useFounderPhoto";
+
+// Founder portrait that honors the owner-uploaded override
+const FounderAboutPortrait = () => {
+  const { photoUrl } = useFounderPhoto();
+  const src = photoUrl || founderProfessional;
+  return (
+    <img
+      src={src}
+      alt="Founder & CEO of JBJ GLOBAL REAL ESTATE"
+      className="w-full h-full transition-transform duration-300 group-hover:scale-105"
+      style={{ objectFit: 'cover', objectPosition: 'center 5%', transform: 'scale(1.25)' }}
+      loading="lazy"
+      decoding="async"
+    />
+  );
+};
 
 const staggerContainer = {
   hidden: { opacity: 0 },
