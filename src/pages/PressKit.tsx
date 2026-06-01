@@ -166,20 +166,23 @@ const PressKit = () => {
             variants={staggerContainer}
           >
             <motion.span
-              className="inline-block text-[#1A1A1A] text-xs uppercase tracking-[0.4em] mb-6"
+              className="allow-white inline-block text-[#ECE2D2] text-xs uppercase tracking-[0.4em] mb-6"
               variants={fadeInUp}
+              data-no-contrast-guard
             >
               Media Resources
             </motion.span>
             <motion.h1 
-              className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
+              className="allow-white text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
               variants={fadeInUp}
+              data-no-contrast-guard
             >
-              Press <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Kit</span>
+              Press <span className="allow-white text-[#B89555]" data-no-contrast-guard>Kit</span>
             </motion.h1>
             <motion.p 
-              className="text-[#1A1A1A]/70 text-lg md:text-xl max-w-2xl mx-auto mb-6"
+              className="allow-white text-[#ECE2D2]/85 text-lg md:text-xl max-w-2xl mx-auto mb-6"
               variants={fadeInUp}
+              data-no-contrast-guard
             >
               Official media resources for JBJ Global Real Estate
             </motion.p>
