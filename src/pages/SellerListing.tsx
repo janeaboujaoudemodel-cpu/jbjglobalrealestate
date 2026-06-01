@@ -614,31 +614,36 @@ Requirements:
 
 
         {/* Layer 2 continues for form content */}
-        <div className="pb-16 pt-8" style={{ background: "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)" }}>
-          <div className="container mx-auto px-4">
-          {/* Progress Steps - Using champagne active color */}
+        <div className="pb-16 pt-8 relative" data-no-contrast-guard data-allow-dark-cta style={{ background: "linear-gradient(135deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)" }}>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{ background: "radial-gradient(circle at 85% 12%, rgba(16,185,129,0.22) 0%, transparent 55%)" }}
+          />
+          <div className="container mx-auto px-4 relative">
+          {/* Progress Steps - on solid emerald, white glyphs */}
           <div className="max-w-4xl mx-auto mb-8">
             <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
               {STEPS.map((step, index) => (
                 <div 
                   key={step.number}
-                  className={`flex flex-col items-center min-w-[80px] cursor-pointer transition-all ${
-                    currentStep === step.number 
-                      ? 'text-[#1A1A1A]' 
-                      : currentStep > step.number 
-                        ? 'text-[#1A1A1A]' 
-                        : 'text-[#1A1A1A]/70'
-                  }`}
+                  data-no-contrast-guard
+                  className="flex flex-col items-center min-w-[80px] cursor-pointer transition-all"
                   onClick={() => step.number < currentStep && setCurrentStep(step.number)}
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 border-2 transition-all ${
                     currentStep === step.number 
-                      ? 'border-[#0F5132] text-white shadow-lg [&_svg]:!text-white' 
+                      ? 'border-white text-white shadow-lg [&_svg]:!text-white' 
                       : currentStep > step.number 
-                        ? 'bg-white border-[#0F5132] text-[#0F5132]'
-                        : 'bg-white/60 border-[#0F5132]/30 text-[#0F5132]/70'
+                        ? 'border-white/80 text-white [&_svg]:!text-white'
+                        : 'border-white/40 text-white/70 [&_svg]:!text-white/70'
                   }`}
-                  style={currentStep === step.number ? { background: 'linear-gradient(135deg, #0F5132 0%, #064E3B 100%)' } : undefined}>
+                  style={currentStep === step.number
+                    ? { background: 'linear-gradient(135deg, #10B981 0%, #0F5132 100%)' }
+                    : currentStep > step.number
+                      ? { backgroundColor: 'rgba(255,255,255,0.18)' }
+                      : { backgroundColor: 'rgba(255,255,255,0.08)' }
+                  }>
 
                     {currentStep > step.number ? (
                       <CheckCircle2 className="w-5 h-5" />
@@ -646,17 +651,23 @@ Requirements:
                       <step.icon className="w-5 h-5" />
                     )}
                   </div>
-                  <span className={`text-xs text-center whitespace-nowrap ${
-                    currentStep === step.number ? 'text-[#1A1A1A] font-medium' : 'text-[#1A1A1A]/70'
-                  }`}>{step.title}</span>
+                  <span
+                    className="text-xs text-center whitespace-nowrap"
+                    style={{
+                      color: currentStep === step.number ? '#FFFFFF' : 'rgba(255,255,255,0.75)',
+                      WebkitTextFillColor: currentStep === step.number ? '#FFFFFF' : 'rgba(255,255,255,0.75)',
+                      fontWeight: currentStep === step.number ? 600 : 400,
+                    }}
+                  >{step.title}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Form Content - White/Champagne/Gold Theme */}
+          {/* Form Content - ombre soft card on solid emerald */}
           <div className="max-w-3xl mx-auto">
-            <div className="rounded-2xl p-6 md:p-8 shadow-xl" style={{ background: "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)", border: "1.5px solid #0F5132" }}>
+            <div className="rounded-2xl p-6 md:p-8 shadow-xl" style={{ background: "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)", border: "1.5px solid #10B981" }}>
+
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
                 {currentStep === 1 && (
