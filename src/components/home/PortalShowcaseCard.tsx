@@ -75,7 +75,7 @@ export default function PortalShowcaseCard({
       <div className="relative w-full px-4 md:px-6">
         <div
           data-surface="navy"
-          className="surface-navy allow-white jj-portal-shell group/portal relative mx-auto max-w-[1500px] overflow-hidden rounded-[34px] border border-[hsl(var(--gold)/0.62)] bg-[hsl(var(--navy-cta))] p-3 shadow-[0_32px_90px_-50px_hsl(var(--navy-cta)/0.75)] sm:p-4 md:p-5"
+          className="surface-navy jj-portal-shell group/portal relative mx-auto max-w-[1500px] overflow-hidden rounded-[34px] border border-[hsl(var(--gold)/0.62)] bg-[hsl(var(--navy-cta))] p-3 shadow-[0_32px_90px_-50px_hsl(var(--navy-cta)/0.75)] sm:p-4 md:p-5"
         >
           <div className="pointer-events-none absolute inset-0 opacity-80 [background-image:linear-gradient(90deg,hsl(var(--gold)/0.10)_1px,transparent_1px),linear-gradient(180deg,hsl(var(--gold)/0.08)_1px,transparent_1px)] [background-size:72px_72px]" />
           <div className="pointer-events-none absolute -right-28 -top-28 h-72 w-72 rounded-full border border-[hsl(var(--gold)/0.24)]" />
@@ -193,17 +193,19 @@ export default function PortalShowcaseCard({
                       {accent.modules.map((module, index) => (
                         <div
                           key={module}
+                          data-surface={index === 0 ? "champagne" : "navy"}
+                          data-on-dark={index === 0 ? undefined : true}
                           className={cn(
                             "rounded-2xl border p-4 transition-transform duration-300 group-hover/portal:-translate-y-0.5",
                             index === 0
-                              ? "border-[hsl(var(--gold)/0.62)] bg-[hsl(var(--champagne-3))] text-foreground"
-                              : "glass-dark border-[hsl(var(--gold)/0.28)] bg-[hsl(var(--background)/0.10)] text-white"
+                              ? "surface-champagne border-[hsl(var(--gold)/0.62)] bg-[hsl(var(--champagne-3))] text-foreground"
+                              : "surface-navy glass-dark border-[hsl(var(--gold)/0.28)] bg-[hsl(var(--background)/0.10)] text-white"
                           )}
                         >
-                          <p className={cn("text-[10px] font-black uppercase tracking-[0.18em]", index === 0 ? "text-foreground/48" : "allow-white text-white/48")} data-no-contrast-guard>
+                          <p className={cn("text-[10px] font-black uppercase tracking-[0.18em]", index === 0 ? "text-foreground/60" : "allow-white text-white/78")} data-on-dark={index === 0 ? undefined : true}>
                             Module {index + 1}
                           </p>
-                          <p className={cn("mt-2 text-sm font-extrabold", index === 0 ? "text-foreground" : "allow-white text-white")} data-no-contrast-guard>
+                          <p className={cn("mt-2 text-sm font-extrabold", index === 0 ? "text-foreground" : "allow-white text-white")} data-on-dark={index === 0 ? undefined : true}>
                             {module}
                           </p>
                         </div>
