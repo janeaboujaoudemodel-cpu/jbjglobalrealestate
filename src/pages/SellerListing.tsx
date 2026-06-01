@@ -680,12 +680,12 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Seller Details</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",opacity:0.85}}>Tell us about yourself so we can contact you</p>
+                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Tell us about yourself so we can contact you</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Full Name <span style={{color:"#B91C1C"}}>*</span></Label>
+                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Full Name <span style={{color:"#B91C1C"}}>*</span></Label>
                         <Input
                           {...form.register("seller_full_name")}
                           placeholder="Enter your full name"
@@ -693,7 +693,7 @@ Requirements:
                         />
                       </div>
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Phone Number <span style={{color:"#B91C1C"}}>*</span></Label>
+                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Phone Number <span style={{color:"#B91C1C"}}>*</span></Label>
                         <Input
                           {...form.register("seller_phone")}
                           placeholder="+971 50 123 4567"
@@ -703,7 +703,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Email Address <span style={{color:"#B91C1C"}}>*</span></Label>
+                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Email Address <span style={{color:"#B91C1C"}}>*</span></Label>
                       <Input
                         {...form.register("seller_email")}
                         type="email"
@@ -714,7 +714,7 @@ Requirements:
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Preferred Language</Label>
+                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Preferred Language</Label>
                         <Select 
                           value={form.watch("preferred_language")} 
                           onValueChange={(v) => form.setValue("preferred_language", v)}
@@ -732,7 +732,7 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Preferred Contact Method</Label>
+                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Preferred Contact Method</Label>
                         <Select 
                           value={form.watch("preferred_contact_method")} 
                           onValueChange={(v) => form.setValue("preferred_contact_method", v)}
@@ -750,7 +750,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Seller Type <span style={{color:"#B91C1C"}}>*</span></Label>
+                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Seller Type <span style={{color:"#B91C1C"}}>*</span></Label>
                       <RadioGroup 
                         value={form.watch("seller_type")} 
                         onValueChange={(v) => form.setValue("seller_type", v)}
@@ -769,7 +769,7 @@ Requirements:
                               id={option.value}
                               className="border-[#0F5132]" style={{borderWidth:"1.5px"}}
                             />
-                            <Label htmlFor={option.value} className="ml-2 cursor-pointer font-medium" style={{color:"#064E3B"}}>
+                            <Label htmlFor={option.value} className="ml-2 cursor-pointer font-medium" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B"}}>
                               {option.label}
                             </Label>
                           </div>
@@ -790,12 +790,12 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Property Details</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",opacity:0.85}}>Tell us about your property</p>
+                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Tell us about your property</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Property Type <span style={{color:"#B91C1C"}}>*</span></Label>
+                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Property Type <span style={{color:"#B91C1C"}}>*</span></Label>
                         <Select
                           value={form.watch("property_type")}
                           onValueChange={(v) => form.setValue("property_type", v)}
@@ -815,7 +815,7 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Location / Area <span style={{color:"#B91C1C"}}>*</span></Label>
+                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Location / Area <span style={{color:"#B91C1C"}}>*</span></Label>
                         <Input
                           {...form.register("property_location")}
                           placeholder="e.g., Downtown Dubai"
@@ -825,7 +825,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Community / Building Name</Label>
+                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Community / Building Name</Label>
                       <Input
                         {...form.register("community_building")}
                         placeholder="e.g., Burj Khalifa, Palm Jumeirah"
@@ -835,7 +835,7 @@ Requirements:
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Bedrooms</Label>
+                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Bedrooms</Label>
                         <Select
                           value={form.watch("bedrooms")?.toString()}
                           onValueChange={(v) => form.setValue("bedrooms", parseInt(v))}
@@ -855,7 +855,7 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Size (sq.ft)</Label>
+                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Size (sq.ft)</Label>
                         <Input
                           type="number"
                           {...form.register("property_size_sqft", { valueAsNumber: true })}
@@ -866,7 +866,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Property Status</Label>
+                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Property Status</Label>
                       <RadioGroup
                         value={form.watch("property_status")}
                         onValueChange={(v) => form.setValue("property_status", v)}
@@ -896,7 +896,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Additional Notes</Label>
+                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Additional Notes</Label>
                       <Textarea
                         {...form.register("property_notes")}
                         placeholder="Any other details about your property..."
@@ -917,11 +917,11 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Pricing Information</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",opacity:0.85}}>Help us understand your pricing expectations</p>
+                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Help us understand your pricing expectations</p>
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Purchase Price (AED) - Optional</Label>
+                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Purchase Price (AED) - Optional</Label>
                       <Input
                         type="number"
                         {...form.register("purchase_price", { valueAsNumber: true })}
@@ -932,7 +932,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Target Selling Price (AED) *</Label>
+                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Target Selling Price (AED) *</Label>
                       <Input
                         type="number"
                         {...form.register("target_selling_price", { valueAsNumber: true })}
@@ -942,7 +942,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Minimum Acceptable Price (AED) - Optional</Label>
+                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Minimum Acceptable Price (AED) - Optional</Label>
                       <Input
                         type="number"
                         {...form.register("minimum_acceptable_price", { valueAsNumber: true })}
@@ -952,7 +952,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Selling Urgency</Label>
+                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Selling Urgency</Label>
                       <RadioGroup
                         value={form.watch("selling_urgency")}
                         onValueChange={(v) => form.setValue("selling_urgency", v)}
@@ -984,7 +984,7 @@ Requirements:
                     <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-4">
                       <div className="flex items-center gap-3 mb-3">
                         <Calculator className="w-5 h-5 text-[#1A1A1A]" />
-                        <span className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Need help with pricing?</span>
+                        <span className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Need help with pricing?</span>
                       </div>
                       <p className="text-[#1A1A1A]/70 text-sm mb-3">
                         Run our Property Evaluator to get an informational estimate based on market data.
@@ -1025,7 +1025,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Condition & Upgrades</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",opacity:0.85}}>Tell us about the property's condition and any improvements</p>
+                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Tell us about the property's condition and any improvements</p>
                     </div>
 
                     <div className="space-y-4">
@@ -1056,7 +1056,7 @@ Requirements:
 
                     {form.watch("has_upgrades") && (
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Upgrade Details</Label>
+                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Upgrade Details</Label>
                         <Textarea
                           {...form.register("upgrade_details")}
                           placeholder="Describe any upgrades, renovations, or improvements..."
@@ -1066,7 +1066,7 @@ Requirements:
                     )}
 
                     <div>
-                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Key Highlights (up to 10)</Label>
+                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Key Highlights (up to 10)</Label>
                       <div className="flex gap-2 mb-3">
                         <Input
                           value={newHighlight}
@@ -1106,7 +1106,7 @@ Requirements:
                     {/* Listing Description with AI Generator */}
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <Label className="font-semibold" style={{color:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Listing Description</Label>
+                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Listing Description</Label>
                         <Button
                           type="button"
                           variant="outline"
@@ -1146,7 +1146,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Media Uploads</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",opacity:0.85}}>Upload photos and videos of your property</p>
+                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Upload photos and videos of your property</p>
                     </div>
 
                     <div className="space-y-6">
@@ -1233,7 +1233,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Documents Vault</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",opacity:0.85}}>Upload required documents securely. These are only visible to you and our team.</p>
+                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Upload required documents securely. These are only visible to you and our team.</p>
                     </div>
 
                     <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg p-4 flex items-start gap-3">
@@ -1372,7 +1372,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Review & Submit</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",opacity:0.85}}>Please review your information before submitting</p>
+                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Please review your information before submitting</p>
                     </div>
 
                     <div className="space-y-4">
@@ -1562,7 +1562,7 @@ Requirements:
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <p className="text-sm" style={{color:"#1A1A1A",opacity:0.85}}>
+            <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>
               Run our AI-powered evaluator to get an informational estimate for your property based on current market data.
             </p>
             <div className="bg-[#F7F2EA]/50 rounded-lg p-4 space-y-2 text-sm">
