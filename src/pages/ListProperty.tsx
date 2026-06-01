@@ -782,10 +782,14 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             >
               <Building2 className="w-7 h-7" style={{ color: "#FFFFFF" }} />
             </div>
-            <h3 className="text-lg font-bold mb-2" style={{ color: accent }} data-no-contrast-guard>
+            <h3
+              className="text-xl font-bold mb-2"
+              style={{ color: accent, WebkitTextFillColor: accent }}
+              data-no-contrast-guard
+            >
               No submissions yet
             </h3>
-            <p className="text-sm mb-5" style={{ color: INK + "99" }}>
+            <p className="text-sm mb-5" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }} data-no-contrast-guard>
               Start your first listing above and it will appear here with full
               status tracking.
             </p>
