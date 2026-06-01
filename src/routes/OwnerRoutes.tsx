@@ -136,6 +136,8 @@ export const OwnerRoutes = () => (
     <Route path="settings" element={<OwnerCommSettings />} />
     {/* Unified CRM — single owner-only hub. All legacy sub-routes redirect into it. */}
     <Route path="crm" element={<UnifiedCRM />} />
+    <Route path="academy-approvals" element={<OwnerAcademyApprovals />} />
+    <Route path="crm/academy" element={<OwnerAcademyApprovals />} />
     <Route path="hr/employee/:userId" element={<EmployeeProfile />} />
     <Route path="crm/leads/:id" element={<CRMLeadDetail />} />
     <Route path="crm/leads" element={<Navigate to="/owner/crm?section=leads" replace />} />
