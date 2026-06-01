@@ -142,7 +142,7 @@ const BrokerResources = () => {
   ];
 
   return (
-    <div data-marketing-page data-marketing-page className="min-h-screen bg-[#FDFBF7]">
+    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
       {/* Hero Section with Video */}
       <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
         {/* Background Video */}
