@@ -645,32 +645,15 @@ All colors MUST be HSL.
   color: #F7F2EA;
 }
 
-/* Compact hero height: 70-78vh capped at 820px (non-homepage only) */
+/* Full-viewport hero — guides/FAQ/report pages. */
 .jj-hero-fullscreen.jj-hero-compact {
   height: auto !important;
-  min-height: 70vh !important;
+  min-height: 100vh !important;
   max-height: none !important;
-}
-@media (min-width: 640px) {
-  .jj-hero-fullscreen.jj-hero-compact {
-    min-height: 72vh !important;
-  }
-}
-@media (min-width: 1024px) {
-  .jj-hero-fullscreen.jj-hero-compact {
-    min-height: 78vh !important;
-    max-height: 820px !important;
-  }
 }
 @supports (height: 100dvh) {
   .jj-hero-fullscreen.jj-hero-compact {
-    min-height: 70dvh !important;
-  }
-  @media (min-width: 640px) {
-    .jj-hero-fullscreen.jj-hero-compact { min-height: 72dvh !important; }
-  }
-  @media (min-width: 1024px) {
-    .jj-hero-fullscreen.jj-hero-compact { min-height: 78dvh !important; max-height: 820px !important; }
+    min-height: 100dvh !important;
   }
 }
 
