@@ -110,6 +110,10 @@ const ListProperty = () => {
         canonicalPath="/list-property"
       />
 
+      <div className="px-2 sm:px-4 md:px-6 py-4 md:py-6">
+        <AnimatedBorderShell tone="navy" bare>
+        <div style={{ backgroundColor: CHAMPAGNE }}>
+
       {/* ───────────────────── Hero (navy gradient) ───────────────────── */}
       <section
         className="relative w-full bg-[#102540]"
