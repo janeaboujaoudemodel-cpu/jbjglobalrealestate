@@ -7,8 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { IconTile } from "@/components/ui/icon-tile";
-import { Archive, Search, Download, FileSignature, Stamp, Upload, Sparkles, FileText, Building2, Users, Home, FileCheck, Megaphone, Lock, Briefcase, Folder } from "lucide-react";
+import { Archive, Search, Download, FileSignature, Stamp, Upload, Sparkles, FileText, Building2, Users, Home, FileCheck, Megaphone, Lock, Briefcase, Folder, Pencil } from "lucide-react";
 import { AgreementUploadDrawer } from "@/components/owner/contracts/AgreementUploadDrawer";
+import { AgreementEditDrawer } from "@/components/owner/contracts/AgreementEditDrawer";
+import { openAgreement } from "@/lib/contracts/agreementUrl";
+import { toast } from "sonner";
 
 // Lazy-load the heavy developer combobox so the page renders instantly
 const DeveloperSelectDropdown = lazy(() => import("@/components/developer-portal/DeveloperSelectDropdown"));
