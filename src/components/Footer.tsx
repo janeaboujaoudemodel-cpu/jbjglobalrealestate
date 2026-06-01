@@ -427,7 +427,7 @@ const Footer = () => {
     { label: t("footer.newsInsights") || "News & Insights", href: "/news" },
     { label: "Reviews", href: "/reviews" },
     { label: "Careers", href: "/join" },
-    { label: "Press Kit", href: "/press-kit" },
+    
   ];
 
   const colResources = [
