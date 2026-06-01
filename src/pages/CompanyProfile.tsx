@@ -38,7 +38,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
+import { COMPANY_STATS, CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { toast } from "sonner";
 import { FounderContent } from "@/components/FounderContent";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
