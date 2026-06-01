@@ -2551,7 +2551,8 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 .property-price,
 .listing-price,
 .starting-price {
-  color: hsl(var(--price-orange));
+  color: #1A1A1A;
+  -webkit-text-fill-color: #1A1A1A;
   /* Unified typography — every AED amount reads identically */
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
   font-weight: 600 !important;
@@ -2587,7 +2588,8 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   [data-price-size="xl"] { font-size: 1.75rem !important; }
 }
 
-/* Brighter orange on dark surfaces / gradients for AA contrast */
+/* On dark/photo surfaces (e.g. property detail hero overlay) prices stay
+   readable in champagne, not ink. */
 [data-surface="dark"] .text-price-orange,
 [data-surface="dark"] [class*="text-price-orange"],
 [data-surface="dark"] .jj-price,
@@ -2610,7 +2612,8 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 .dark .property-price,
 .dark .listing-price,
 .dark .starting-price {
-  color: hsl(var(--price-orange-glow));
+  color: #F7F2EA;
+  -webkit-text-fill-color: #F7F2EA;
 }
 
 /* Solid-orange pill (white text on orange) wins over the global rule —
@@ -3134,8 +3137,8 @@ a[class*="bg-red-"]:hover {
   line-height: 1 !important;
   font-variant-numeric: tabular-nums !important;
   letter-spacing: -0.01em !important;
-  color: #B89555;
-  -webkit-text-fill-color: #B89555;
+  color: #1A1A1A;
+  -webkit-text-fill-color: #1A1A1A;
   text-shadow: none !important;
   margin: 0 !important;
   white-space: nowrap !important;
@@ -3676,8 +3679,8 @@ hr[data-gold-hairline],
 }
 .group:hover .price-pill-premium .price-pill-value,
 .group:focus-within .price-pill-premium .price-pill-value {
-  color: #8E6E36;
-  -webkit-text-fill-color: #8E6E36;
+  color: #1A1A1A;
+  -webkit-text-fill-color: #1A1A1A;
 }
 
 /* Status badge (crystal + gold hairline) — same treatment */
