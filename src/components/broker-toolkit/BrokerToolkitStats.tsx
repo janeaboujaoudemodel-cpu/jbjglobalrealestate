@@ -1,92 +1,63 @@
 import { motion } from "framer-motion";
-import { 
-  Wrench, 
-  BookOpen, 
-  Users, 
-  Trophy, 
-  Download
-} from "lucide-react";
+import { Wrench, BookOpen, Users, Trophy, Download } from "lucide-react";
+import { IconTile } from "@/components/ui/icon-tile";
 
 const STATS = [
-  { 
-    value: "11+", 
-    label: "AI-Powered Tools", 
+  {
+    value: "11+",
+    label: "AI-Powered Tools",
     icon: Wrench,
-    color: "text-purple-400",
-    description: "Property comparison, CRM, documents & more"
+    description: "Property comparison, CRM, documents & more",
   },
-  { 
-    value: "24", 
-    label: "Training Modules", 
+  {
+    value: "24",
+    label: "Training Modules",
     icon: BookOpen,
-    color: "text-blue-400",
-    description: "Videos, guides, and playbooks"
+    description: "Videos, guides, and playbooks",
   },
-  { 
-    value: "4", 
-    label: "Free PDF Books", 
+  {
+    value: "4",
+    label: "Free PDF Books",
     icon: Download,
-    color: "text-green-400",
-    description: "Objection handling, scripts & more"
+    description: "Objection handling, scripts & more",
   },
-  { 
-    value: "5", 
-    label: "Support Team Members", 
+  {
+    value: "5",
+    label: "Support Team Members",
     icon: Users,
-    color: "text-pink-400",
-    description: "HR, Admin, Coach & Media"
+    description: "HR, Admin, Coach & Media",
   },
-  { 
-    value: "∞", 
-    label: "Growth Potential", 
+  {
+    value: "∞",
+    label: "Growth Potential",
     icon: Trophy,
-    color: "text-[#1A1A1A]",
-    description: "Points, levels & rewards"
+    description: "Points, levels & rewards",
   },
 ];
 
 export function BrokerToolkitStats() {
   return (
-    <section className="py-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] relative">
-      {/* Top gold glow divider */}
-      <div 
-        className="absolute top-0 left-0 right-0 h-1"
-        style={{
-          background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)',
-          boxShadow: '0 0 20px rgba(212,175,55,0.4), 0 0 40px rgba(212,175,55,0.2)',
-        }}
-      />
-      
-      {/* Bottom gold glow divider */}
-      <div 
-        className="absolute bottom-0 left-0 right-0 h-1"
-        style={{
-          background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)',
-          boxShadow: '0 0 20px rgba(212,175,55,0.4), 0 0 40px rgba(212,175,55,0.2)',
-        }}
-      />
-      
+    <section className="jj-band jj-band--surface py-12 md:py-16">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
           {STATS.map((stat, i) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
+              key={stat.label}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: i * 0.05, duration: 0.4 }}
               viewport={{ once: true }}
-              className="text-center group"
+              className="bg-[#FDFBF7] rounded-2xl p-5 flex flex-col items-center text-center border border-[#B89555]/25 hover:border-[#B89555]/55 transition-colors"
             >
-              {/* Card with darker champagne fill, equal sizing */}
-              <div className="bg-gradient-to-br from-[#EFE6D6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#1A1A1A] rounded-xl p-4 h-full flex flex-col items-center justify-center transition-all duration-300 group-hover:border-[#B89555] group-hover:shadow-lg group-hover:shadow-gold/20">
-                <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[#1A1A1A] mb-2 group-hover:bg-[#EFE6D6] transition-all">
-                  <stat.icon className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
-                </div>
-                <div className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-0.5">
-                  {stat.value}
-                </div>
-                <div className="text-[#1A1A1A] font-semibold text-xs mb-0.5">{stat.label}</div>
-                <div className="text-[#1A1A1A]/70 text-[10px] hidden md:block leading-tight">{stat.description}</div>
+              <IconTile icon={stat.icon} tone="gold" size="md" className="mb-3" />
+              <div className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] leading-none mb-1.5">
+                {stat.value}
+              </div>
+              <div className="text-sm font-medium text-[#1A1A1A] mb-1">
+                {stat.label}
+              </div>
+              <div className="text-xs text-[#1A1A1A]/65 leading-snug hidden md:block">
+                {stat.description}
               </div>
             </motion.div>
           ))}
