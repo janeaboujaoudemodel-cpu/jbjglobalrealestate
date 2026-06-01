@@ -88,8 +88,6 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Disclaimers', href: '/disclaimers', icon: FileText },
     { label: 'Intellectual Property', href: '/intellectual-property', icon: Shield },
     { label: 'AML & KYC Policy', href: '/aml-kyc', icon: Scale },
-    { label: 'Accessibility', href: '/accessibility', icon: Users },
-    { label: 'Trust & Audit Center', href: '/trust-and-audit-center', icon: Shield },
   ];
 
   const colCount = isBrokerMode ? 6 : 5;

@@ -98,11 +98,9 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Company Profile', href: '/company-profile', icon: FileText },
     { label: 'Meet the Team', href: '/team', icon: Users },
     { label: 'Awards', href: '/awards', icon: Award },
-    { label: 'Philanthropy', href: '/philanthropy', icon: Globe },
     
     { label: 'Contact Us', href: '/contact', icon: Phone },
     { label: 'Careers', href: '/join', icon: Briefcase },
-    { label: 'Reviews', href: '/reviews', icon: Target },
   ];
 
   // Block 8: Legal & Compliance
@@ -112,10 +110,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Cookie Policy', href: '/cookies', icon: FileText },
     { label: 'Disclaimers', href: '/disclaimers', icon: FileText },
     { label: 'AML & KYC Policy', href: '/aml-kyc', icon: Shield },
-    { label: 'Accessibility', href: '/accessibility', icon: FileText },
     { label: 'Intellectual Property', href: '/intellectual-property', icon: Shield },
-    
-    { label: 'Trust & Audit', href: '/trust-and-audit-center', icon: Shield },
   ];
 
   // Determine mode-conditional links to display

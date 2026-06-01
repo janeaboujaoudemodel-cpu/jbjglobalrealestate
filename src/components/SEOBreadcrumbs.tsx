@@ -30,7 +30,7 @@ const ROUTE_LABELS: Record<string, string> = {
   '/quiz': 'AI Home Finder',
   '/investor-hub': 'Investor Hub',
   '/market-intelligence': 'Market Intelligence',
-  '/reviews': 'Reviews',
+  
   '/sitemap': 'Sitemap',
   '/developer-hub': 'Developer Hub',
   '/developer-center': 'Developer Center',

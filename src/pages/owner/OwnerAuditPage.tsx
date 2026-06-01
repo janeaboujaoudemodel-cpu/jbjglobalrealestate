@@ -96,7 +96,7 @@ const ROUTE_INVENTORY = [
   { path: '/terms', name: 'Terms of Service', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/privacy', name: 'Privacy Policy', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/cookies', name: 'Cookies Policy', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/trust-and-audit-center', name: 'Trust Center', access: 'public', dashboard: false, sidebar: false, registry: true },
+  
   { path: '/intellectual-property', name: 'Intellectual Property', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/faq', name: 'General FAQ', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/investor-faq', name: 'Investor FAQ', access: 'public', dashboard: false, sidebar: false, registry: true },
@@ -107,7 +107,7 @@ const ROUTE_INVENTORY = [
   { path: '/seller-listing', name: 'Sell Your Property', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/sell/valuation', name: 'Property Valuation', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/landlord-portal', name: 'Landlord Portal', access: 'authenticated', dashboard: false, sidebar: false, registry: true },
-  { path: '/philanthropy', name: 'Philanthropy', access: 'public', dashboard: false, sidebar: false, registry: true },
+  
   { path: '/sitemap', name: 'Sitemap', access: 'public', dashboard: false, sidebar: false, registry: true },
 ];
 
