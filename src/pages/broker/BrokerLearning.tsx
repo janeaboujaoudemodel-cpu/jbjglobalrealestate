@@ -233,7 +233,7 @@ export default function BrokerLearning() {
               Your library is loading or empty. Check back shortly.
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+            <div className="jbj-academy-book-grid grid gap-6 items-stretch">
               {sortedBooks.map((book, i) => (
                 <Book3DCard
                   key={book.id}
