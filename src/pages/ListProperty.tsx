@@ -269,9 +269,14 @@ const ListProperty = () => {
               </button>
               <a
                 href="#my-submissions"
-                className="text-sm font-medium underline-offset-4 hover:underline"
-                style={{ color: "rgba(255,255,255,0.85)", WebkitTextFillColor: "rgba(255,255,255,0.85)" }}
+                className="jj-white-ring inline-flex items-center gap-2 px-5 h-11 text-sm font-semibold transition-all hover:brightness-110"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.06)",
+                  color: "#FFFFFF",
+                  WebkitTextFillColor: "#FFFFFF",
+                }}
                 data-no-contrast-guard
+                data-allow-dark-cta
               >
                 View my submissions →
               </a>
