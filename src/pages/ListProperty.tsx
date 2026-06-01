@@ -573,10 +573,11 @@ function PickerCard({
 
 
 
-/* ───────────────── My Submissions Section ───────────────── */
-function MySubmissionsSection() {
+/* ───────────────── My Submissions Section (mode-aware) ───────────────── */
+function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
   const { user } = useAuth();
   const { listings, isLoading, fetchListings } = useSellerListings();
+  const accent = theme.primary;
 
   useEffect(() => {
     if (user) fetchListings();
@@ -585,11 +586,19 @@ function MySubmissionsSection() {
   return (
     <section
       id="my-submissions"
-      className="scroll-mt-24 px-4 sm:px-6 md:px-10 py-12 md:py-16 relative"
+      className="scroll-mt-24 px-4 sm:px-6 md:px-10 py-12 md:py-16 relative overflow-hidden"
       data-no-contrast-guard
       data-allow-dark-cta
-      style={{ background: BLUE_GRADIENT }}
+      style={{ background: theme.sectionGradient }}
     >
+      {/* premium ombre shine */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: `radial-gradient(circle at 85% 12%, ${theme.iconAccent}26 0%, transparent 55%)`,
+        }}
+      />
       <div className="max-w-6xl mx-auto">
         <div className="flex items-end justify-between flex-wrap gap-3 mb-6">
           <div>
