@@ -39094,6 +39094,7 @@ export type Database = {
       }
       set_founder_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
       set_podcast_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
+      set_team_page_visibility: { Args: { p_enabled: boolean }; Returns: Json }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
       start_module: {
