@@ -84,6 +84,13 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
     setCcs(Array.isArray(meta.cc_emails) ? meta.cc_emails : []);
     setBccs(Array.isArray(meta.bcc_emails) ? meta.bcc_emails : []);
     setWhatsapp(primaryRecipient?.phone || "");
+    // Hydrate filing metadata from envelope (so re-opening shows previously-saved values)
+    setDeveloperId((envelope as any).developer_id || meta.developer_id || null);
+    setDeveloperNameInput(meta.developer_name || "");
+    setContractType(meta.contract_type || "");
+    setEmirate(meta.emirate || "");
+    setArea(meta.area || "");
+    setDevOptions([]);
 
     // Priority: envelope-specific > owner locked default > built-in default
     (async () => {
