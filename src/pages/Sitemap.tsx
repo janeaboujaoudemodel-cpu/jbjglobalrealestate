@@ -208,8 +208,6 @@ const hubSections: HubSection[] = [
       { href: "/founder", label: "Founder & Leadership" },
       { href: "/awards", label: "Awards & Recognition" },
       { href: "/company-profile", label: "Company Profile" },
-      
-      { href: "/philanthropy", label: "Philanthropy" },
     ],
   },
   {
@@ -306,7 +304,6 @@ const legalLinks = [
   { href: "/terms", label: "Terms of Service", icon: FileText },
   { href: "/privacy", label: "Privacy Policy", icon: Shield },
   { href: "/intellectual-property", label: "Intellectual Property", icon: Shield },
-  { href: "/trust-and-audit-center", label: "Trust & Audit Center", icon: Shield },
   { href: "/services/complaint-procedures", label: "Complaint Procedures", icon: FileText },
   { href: "/services/customer-happiness-center", label: "Customer Happiness Center", icon: Heart },
   { href: "/cookies", label: "Cookies Policy", icon: FileText },

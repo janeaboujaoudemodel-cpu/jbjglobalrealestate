@@ -467,7 +467,6 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/services/testimonials", label: "Testimonials", icon: Users },
     
     { href: "/company-profile", label: "Company Profile", icon: FileText },
-    { href: "/philanthropy", label: "Philanthropy", icon: Users },
   ];
 
   // Mobile menu - Resources & Guides (consolidated - all individual guides are accessed as books within the hub pages)
@@ -527,8 +526,6 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/disclaimers", label: "Disclaimers", icon: FileText },
     { href: "/intellectual-property", label: "Intellectual Property", icon: FileText },
     { href: "/aml-kyc", label: "AML & KYC Policy", icon: Shield },
-    { href: "/accessibility", label: "Accessibility", icon: FileText },
-    { href: "/trust-and-audit-center", label: "Trust & Audit Center", icon: Shield },
     { href: "/investor-faq", label: "Investor FAQ", icon: ClipboardCheck },
     { href: "/broker-faq", label: "Broker FAQ", icon: ClipboardCheck },
   ];

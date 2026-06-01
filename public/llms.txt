@@ -32,7 +32,7 @@ JBJ Global Real Estate, founded by Jane Bou Jaoude, is a Dubai-headquartered bro
 ## Optional
 
 - [FAQ](/faq): Frequently asked questions about Dubai real estate.
-- [Reviews](/reviews): Client testimonials and reviews.
+
 - [Customer Happiness](/customer-happiness): Service quality and feedback program.
 - [Privacy Policy](/privacy): How we collect, use, and protect personal information.
 - [Terms of Service](/terms): Terms and conditions for using the website.

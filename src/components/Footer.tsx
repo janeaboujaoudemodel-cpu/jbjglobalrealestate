@@ -221,7 +221,7 @@ const Footer = () => {
     { label: "Law Firm", href: "/services/law-firm" },
     { label: "Broker Certification", href: "/services/broker-certification" },
     { label: "Complaint Procedures", href: "/services/complaint-procedures" },
-    { label: "Testimonials", href: "/reviews" },
+    { label: "Testimonials", href: "/services/testimonials" },
     { label: "Referral Partner", href: "/referral-partner" },
     { label: "Signature Collection", href: "/services/signature-collection" },
   ];
@@ -264,9 +264,6 @@ const Footer = () => {
     { label: t("footer.awardsRecognition") || "Awards & Recognition", href: "/awards" },
     { label: t("footer.newsInsights") || "News & Insights", href: "/news" },
     { label: "Company Profile", href: "/company-profile" },
-    { label: "Philanthropy", href: "/philanthropy" },
-    { label: "Reviews", href: "/reviews" },
-    { label: "Partner Governance", href: "/governance/partners" },
   ];
 
   const careerLinks = [
@@ -292,7 +289,6 @@ const Footer = () => {
     { href: "/partners/legal", label: "Legal" },
     { href: "/partners/company-setup", label: "Company Setup" },
     { href: "/partners/visa-services", label: "Visa Services" },
-    { href: "/governance/partners", label: "Partners Hub" },
   ];
 
   const legalLinks = [
@@ -302,8 +298,6 @@ const Footer = () => {
     { label: "Disclaimers", href: "/disclaimers" },
     { label: "Intellectual Property", href: "/intellectual-property" },
     { label: "AML & KYC Policy", href: "/aml-kyc" },
-    { label: "Accessibility", href: "/accessibility" },
-    { label: "Trust & Audit", href: "/trust-and-audit-center" },
   ];
 
   const businessSuitesLinks = [
@@ -425,7 +419,7 @@ const Footer = () => {
     { label: t("footer.meetTheTeam") || "Meet the Team", href: "/team" },
     { label: t("footer.awardsRecognition") || "Awards", href: "/awards" },
     { label: t("footer.newsInsights") || "News & Insights", href: "/news" },
-    { label: "Reviews", href: "/reviews" },
+    { label: "Testimonials", href: "/services/testimonials" },
     { label: "Careers", href: "/join" },
     
   ];

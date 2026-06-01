@@ -217,11 +217,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Awards", href: "/awards", icon: Award },
   
   { label: "Company Profile", href: "/company-profile", icon: Building },
-  { label: "Philanthropy", href: "/philanthropy", icon: Heart },
-  
-  { label: "Reviews", href: "/reviews", icon: Star },
   { label: "Career Portal", href: "/join", icon: GraduationCap },
-  { label: "Partner Governance", href: "/governance/partners", icon: Shield },
 
   // ── Legal ──
   { label: "Terms of Service", href: "/terms", icon: Scale, megaMenu: 'legal', section: "LEGAL" },
@@ -230,9 +226,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Disclaimers", href: "/disclaimers", icon: FileText },
   { label: "Intellectual Property", href: "/intellectual-property", icon: ShieldCheck },
   { label: "AML / KYC", href: "/aml-kyc", icon: Shield },
-  { label: "Accessibility", href: "/accessibility", icon: Accessibility },
-  { label: "Trust Center", href: "/trust-and-audit-center", icon: ShieldCheck },
-  { label: "Trust & Compliance", href: "/trust-compliance", icon: ShieldCheck },
   
 
   // ── Productivity ──
@@ -406,7 +399,6 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'The Founder', icon: User, href: '/founder' },
     { label: 'Contact Us', icon: Phone, href: '/contact' },
     { label: 'Careers', icon: GraduationCap, href: '/join' },
-    { label: 'Career Portal', icon: Briefcase, href: '/career-portal' },
     { label: 'JBJ Email', icon: Mail, href: '/crm/employees' },
     
     { label: 'Testimonials', icon: Heart, href: '/services/testimonials' },
@@ -418,8 +410,6 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Disclaimers', icon: FileText, href: '/disclaimers' },
     { label: 'Intellectual Property', icon: ShieldCheck, href: '/intellectual-property' },
     { label: 'AML / KYC', icon: Shield, href: '/aml-kyc' },
-    { label: 'Accessibility', icon: Accessibility, href: '/accessibility' },
-    { label: 'Trust Center', icon: ShieldCheck, href: '/trust-and-audit-center' },
   ],
   'ai-tools': [
     { label: 'AI Home Finder', icon: Home, href: '/quiz' },

@@ -453,7 +453,7 @@ const disclaimersBook: BookData = {
 const trustComplianceBook: BookData = {
   title: 'Trust & Compliance',
   cover: trustComplianceCover,
-  href: '/trust-and-audit-center',
+  href: '/aml-kyc',
   category: 'guide',
   coverLocked: true,
   tableOfContents: [
