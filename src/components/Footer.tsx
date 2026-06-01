@@ -263,7 +263,6 @@ const Footer = () => {
     { label: t("footer.meetTheTeam") || "Meet the Team", href: "/team" },
     { label: t("footer.awardsRecognition") || "Awards & Recognition", href: "/awards" },
     { label: t("footer.newsInsights") || "News & Insights", href: "/news" },
-    { label: "Press Kit", href: "/press-kit" },
     { label: "Company Profile", href: "/company-profile" },
     { label: "Philanthropy", href: "/philanthropy" },
     { label: "Reviews", href: "/reviews" },
