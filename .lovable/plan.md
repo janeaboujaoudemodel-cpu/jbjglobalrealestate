@@ -1,39 +1,74 @@
+Do I know what the issue is? Yes.
+
+The screenshot is a real contrast failure. The title is not failing because the whole codebase is “clean”; it is failing because one global CSS cleanup rule is too broad and is still winning over the hero title.
+
 Root cause identified:
 
-- On `/company-profile`, the section wrapper `SectionShell` paints every post-hero section as champagne via `.jj-layer-2`.
-- The section titles inside that champagne band still carry direct Tailwind utilities like `text-white`, `text-white/70`, `text-white/80`, and `text-white/90` in `src/pages/CompanyProfile.tsx`.
-- A parent rule like `.jj-layer-2 { color: #1A1A1A }` cannot override a child’s direct `.text-white` class. That is why the previous fix did not repair the titles.
-- The still-winning selectors/components are:
-  - Component source: `src/pages/CompanyProfile.tsx`, repeated section headings/subcopy using `text-white*` inside `<SectionShell>`.
-  - Global CSS source: Tailwind `.text-white` / `.text-white\/70` utilities still win on the element itself unless a later, more specific light-surface contract targets `.jj-layer-2` descendants.
-  - Current global guard at `src/index.css` only covers `.jj-card-inner` and `.jj-box-active`, not `.jj-layer-2`; therefore headings outside cards remain white on champagne.
+1. The hero title source is a gradient-text pattern:
+   - `src/pages/CompanyProfile.tsx:453-459`
+   - The `h1` is `text-white`, but the actual visible words are inside a nested span:
+     `text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light`
 
-Repair plan:
+2. The winning rule is this global gold-fill cleanup:
+   - `src/index.css:3335-3347`
+   - Selector:
+     `[class*="bg-gradient-to-r"][class*="from-gold"]:not([data-no-gold-debrand])`
+   - It was intended to remove forbidden gold-filled backgrounds, but it also catches gradient text spans.
+   - It removes the gradient, adds a champagne fill/border, and sets `color: #1A1A1A`, which is why the hero title becomes dark/ink inside a dark image hero.
 
-1. Fix the global light-surface contrast contract
-   - Extend the final contrast lock in `src/index.css` so `.jj-layer-2`, `.jj-card-inner`, `.jj-box-active`, `.jj-icon-box-active`, `.surface-champagne`, `.surface-cream`, `.surface-raised`, `.surface-gold`, `.bg-surface`, `.bg-raised`, and `[data-surface="champagne|cream|raised|gold|light|page|pearl"]` force direct descendants using `.text-white` or `text-white/*` to ink.
-   - Include headings, paragraphs, spans, labels, list items, links, and SVG/lucide icons.
-   - Keep exclusions for real dark CTA primitives (`.jj-cta-dark`, `.jj-navy-cta`, `[data-allow-dark-cta]`, `[data-icon-tile][data-surface="navy|ink"]`, `[data-hero-dark]`, `.jj-hero-fullscreen`) so white remains valid only on dark/photo/navy surfaces.
+3. The previous validation passed because the audit scripts are incomplete:
+   - `scripts/contrast/check-rendered.mjs:26-38` does not include `/company-profile`, `/press-kit`, `/join`, `/founder`, `/ai-hub` coverage fully.
+   - `scripts/contrast/check-visible-contrast-contract.mjs:4-6` defaults only to `/,/founder`.
+   - The visible contrast script checks `blackOnBlue`, not black/ink on dark photo heroes.
+   - Axe-style contrast checks often miss text over image/video backgrounds because they inspect CSS background colors, not the real rendered pixels behind the text.
 
-2. Fix the source component so the architecture is clean, not only patched by CSS
-   - Update `SectionShell` in `src/pages/CompanyProfile.tsx` to mark the inner champagne band explicitly as a light surface: `data-surface="champagne"` / `surface-champagne`.
-   - Replace all non-hero `text-white*` in `/company-profile` section titles/subcopy/card rows with ink semantic classes.
-   - Keep white/bright text only in the actual dark hero image overlay and dark photo cards.
+Plan to fix it once, not patch one title:
 
-3. Repair known dark-surface conflicts still visible elsewhere
-   - In `src/components/ui/phone-input.tsx`, remove the hover rule that turns dark phone triggers to ink (`hover:text-[#1A1A1A]`) on a black/navy background.
-   - Ensure the phone trigger and `.jbj-form-trigger-filled` descendants stay white on navy at rest, hover, focus.
-   - Preserve `IconTile` navy/ink behavior as white icons on navy/ink.
+1. Repair the exact winning selector
+   - Narrow the global gold-fill cleanup so it never applies to gradient text:
+     - exclude `.bg-clip-text`
+     - exclude `.text-transparent`
+     - exclude `[class*="bg-clip-text"]`
+   - Keep the no-gold-fill rule for actual buttons/cards/badges so the brand rule is preserved.
 
-4. Add a technical rendered contrast audit script
-   - Add/update a script under `scripts/contrast/` that uses Playwright to visit key public routes and detect:
-     - white/near-white text or icons on champagne/light/gold surfaces;
-     - ink/black text or icons on navy/dark surfaces;
-     - failing selector/class/component context.
-   - Target routes first: `/company-profile`, `/about`, `/contact`, `/founder`, `/join`, `/press-kit`, `/ai-hub`.
+2. Clean the company-profile hero source
+   - Remove the gradient-text span from the hero title.
+   - Render the hero title as real white/champagne text on the dark image overlay.
+   - Change the eyebrow from ink to white/champagne in source instead of relying on rescue CSS.
+   - Keep champagne/ink only for the actual light sections below.
 
-5. Validate before claiming completion
-   - Run the contrast scripts and inspect the exact output.
-   - Navigate as a user through the affected pages and capture screenshots at the relevant sections.
-   - For `/company-profile`, explicitly verify the title rows: Table of Contents, Company Overview, Platform Positioning, Brand Story, Core Values, Services, AI Tools, Marketplace, Dubai Destination, Prime Areas, Platform Benefits, Portfolio Highlights, Investor Journey, Partner Network, Our Process, Why JBJ, Client Experience, Founder & CEO, Company Snapshot, Ready to Connect, and Download.
-   - Only report complete after the rendered screenshots and computed styles confirm: ink on champagne/light; white on navy/dark.
+3. Add a dark-surface foreground lock that catches the inverse problem
+   - Add a focused dark/photo-surface rule for:
+     - `.jj-hero-fullscreen`
+     - `[data-hero-dark]`
+     - `.surface-navy`, `.surface-ink`, `.surface-dark`
+     - `[data-surface="navy|ink|dark"]`
+   - It should repaint accidental `text-[#1A1A1A]`, `text-black`, and black/ink SVG icons to white/champagne only inside true dark/photo surfaces.
+   - It must not affect champagne cards nested inside dark pages.
+
+4. Mark dark/photo areas explicitly
+   - Add `data-hero-dark` / `data-surface="dark"` to dark image heroes where missing.
+   - Add `data-surface="champagne"` only to true champagne/light sections.
+   - This removes guesswork from global CSS.
+
+5. Improve the rendered contrast audit so this cannot pass again
+   - Add `/company-profile`, `/about`, `/contact`, `/founder`, `/join`, `/press-kit`, `/ai-hub`, `/properties`, `/developers`, `/areas` to rendered checks.
+   - Extend the visible-contract script to flag:
+     - white/near-white on champagne/light/gold surfaces;
+     - ink/black on navy/dark surfaces;
+     - ink/black on dark photo heroes;
+     - gradient text inside dark heroes where computed foreground becomes dark.
+   - Output the element text, class list, closest surface/hero ancestor, computed color, background owner, and last matching CSS color rules.
+
+6. Visual validation before claiming completion
+   - Take screenshots after the fix on `/company-profile` at:
+     - hero title;
+     - Table of Contents;
+     - Company Overview;
+     - Company Snapshot;
+     - Download section.
+   - Then check representative pages with the same scripts and screenshots:
+     - `/about`, `/contact`, `/founder`, `/join`, `/press-kit`, `/ai-hub`.
+   - I will not claim “fixed” unless the rendered checks and screenshots confirm both rules:
+     - ink on champagne/light;
+     - white/champagne on navy/dark/photo.

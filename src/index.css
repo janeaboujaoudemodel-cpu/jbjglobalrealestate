@@ -3335,11 +3335,14 @@ a[class*="bg-red-"]:hover {
 /* 4. Linear-gradient backgrounds that use gold endpoints. Tailwind emits
  *    `from-[#B89555]` / `to-[#A68444]` as classes; replace the actual
  *    rendered background image so the gradient flattens to cream. */
-[class*="from-[#B89555]"][class*="to-[#A68444]"]:not([data-no-gold-debrand]),
-[class*="from-[#b89555]"][class*="to-[#a68444]"]:not([data-no-gold-debrand]),
-[class*="from-[#A68444]"][class*="to-[#B89555]"]:not([data-no-gold-debrand]),
-[class*="bg-gradient-to-r"][class*="from-gold"]:not([data-no-gold-debrand]),
-[class*="bg-gradient-to-br"][class*="from-gold"]:not([data-no-gold-debrand]) {
+/* IMPORTANT: exclude gradient-text (bg-clip-text / text-transparent) — those
+ * use the gradient as the *text fill*, not a real surface fill, so they
+ * must not be remapped to a champagne block. */
+[class*="from-[#B89555]"][class*="to-[#A68444]"]:not([data-no-gold-debrand]):not([class*="bg-clip-text"]):not([class*="text-transparent"]),
+[class*="from-[#b89555]"][class*="to-[#a68444]"]:not([data-no-gold-debrand]):not([class*="bg-clip-text"]):not([class*="text-transparent"]),
+[class*="from-[#A68444]"][class*="to-[#B89555]"]:not([data-no-gold-debrand]):not([class*="bg-clip-text"]):not([class*="text-transparent"]),
+[class*="bg-gradient-to-r"][class*="from-gold"]:not([data-no-gold-debrand]):not([class*="bg-clip-text"]):not([class*="text-transparent"]),
+[class*="bg-gradient-to-br"][class*="from-gold"]:not([data-no-gold-debrand]):not([class*="bg-clip-text"]):not([class*="text-transparent"]) {
   background-image: none !important;
   background-color: #EFE6D6 !important;
   color: #1A1A1A;
@@ -4263,3 +4266,45 @@ html body [data-photo-copy-lock] :where(h1,h2,h3,h4,h5,h6,p,span):not(.jj-pill-a
 }
 
 /* Raw Tailwind bg-* repaint sweeps are intentionally not reintroduced. */
+
+/* ============================================================
+ * FINAL DARK-SURFACE TEXT/ICON LOCK (mirror of light-surface lock)
+ * Any `.text-[#1A1A1A]` / `.text-black` Tailwind utility used inside
+ * a dark/photo/navy/ink surface is repainted to champagne so the
+ * inverse contrast bug (ink-on-dark hero) cannot survive.
+ *
+ * Opt-outs:
+ *   - .jj-cta-champagne / .jj-cta-outline / .jj-pill-active (light CTA primitives)
+ *   - [data-no-contrast-guard] / .allow-white
+ *   - Any nested explicit light surface (data-surface=champagne/cream/raised/gold/page/light/pearl)
+ * ============================================================ */
+:where(
+  .jj-hero-fullscreen,
+  [data-hero-dark],
+  .surface-navy,
+  .surface-ink,
+  .surface-dark,
+  [data-surface="navy"],
+  [data-surface="ink"],
+  [data-surface="dark"]
+) :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, button, div):where(.text-black, [class*="text-[#1A1A1A]"]):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not(.allow-white):not(.jj-cta-champagne):not(.jj-cta-outline):not(.jj-pill-active):not(.jj-cta-champagne *):not(.jj-cta-outline *):not(.jj-pill-active *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *):not(.jj-card-inner *):not(.jj-layer-2 *) {
+  color: #F7F2EA !important;
+  -webkit-text-fill-color: #F7F2EA !important;
+  opacity: 1 !important;
+}
+
+:where(
+  .jj-hero-fullscreen,
+  [data-hero-dark],
+  .surface-navy,
+  .surface-ink,
+  .surface-dark,
+  [data-surface="navy"],
+  [data-surface="ink"],
+  [data-surface="dark"]
+) :where(svg, [class*="lucide"]):where(.text-black, [class*="text-[#1A1A1A]"]):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not(.allow-white):not(.jj-cta-champagne *):not(.jj-cta-outline *):not(.jj-pill-active *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *):not(.jj-card-inner *):not(.jj-layer-2 *) {
+  color: #F7F2EA !important;
+  stroke: #F7F2EA !important;
+  opacity: 1 !important;
+}
+

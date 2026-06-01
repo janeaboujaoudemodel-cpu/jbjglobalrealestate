@@ -447,18 +447,17 @@ const CompanyProfile = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <motion.span className="inline-block text-[#1A1A1A] text-xs uppercase tracking-[0.4em] mb-6" variants={fadeInUp}>
+          <motion.span className="allow-white inline-block text-[#ECE2D2] text-xs uppercase tracking-[0.4em] mb-6" variants={fadeInUp} data-no-contrast-guard>
             Company Profile
           </motion.span>
           <motion.h1
-            className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
+            className="allow-white text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
             variants={fadeInUp}
+            data-no-contrast-guard
           >
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
-              {PROFILE_CONTENT.coverPage.title}
-            </span>
+            {PROFILE_CONTENT.coverPage.title}
           </motion.h1>
-          <motion.p className="text-[#ECE2D2] text-lg md:text-xl max-w-2xl mx-auto mb-8" variants={fadeInUp}>
+          <motion.p className="allow-white text-[#ECE2D2] text-lg md:text-xl max-w-2xl mx-auto mb-8" variants={fadeInUp} data-no-contrast-guard>
             {PROFILE_CONTENT.coverPage.subtitle}
           </motion.p>
 
