@@ -560,14 +560,14 @@ Requirements:
                 className="text-3xl md:text-4xl font-bold mb-3"
                 data-no-contrast-guard
                 style={{
-                  background: "linear-gradient(135deg, #0F5132 0%, #1A1A1A 55%, #0F5132 100%)",
+                  background: "linear-gradient(135deg, #022C22 0%, #0F5132 45%, #064E3B 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
                   letterSpacing: "-0.02em",
                 }}
               >
-                List Your Property <span style={{ WebkitTextFillColor: "transparent" }}>for Sale</span>
+                List Your Property for Sale
               </h1>
               <p className="text-[#1A1A1A]/80 mb-6">
                 Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
@@ -666,7 +666,7 @@ Requirements:
 
           {/* Form Content - ombre soft card on solid emerald */}
           <div className="max-w-3xl mx-auto">
-            <div className="rounded-2xl p-6 md:p-8 shadow-xl" style={{ background: "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)", border: "1.5px solid #10B981" }}>
+            <div className="rounded-2xl p-6 md:p-8 shadow-xl" style={{ background: "linear-gradient(135deg, #DCEFE3 0%, #FFFFFF 50%, #C8E2D0 100%)", border: "1.5px solid #0F5132", boxShadow: "0 24px 60px -28px rgba(15,81,50,0.45)" }}>
 
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
