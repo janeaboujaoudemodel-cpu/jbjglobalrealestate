@@ -656,7 +656,7 @@ Requirements:
 
           {/* Form Content - White/Champagne/Gold Theme */}
           <div className="max-w-3xl mx-auto">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-xl">
+            <div className="rounded-2xl p-6 md:p-8 shadow-xl" style={{ background: "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)", border: "1.5px solid #0F5132" }}>
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
                 {currentStep === 1 && (
