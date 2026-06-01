@@ -627,7 +627,7 @@ Requirements:
                     boxShadow: "0 10px 28px -12px rgba(15,81,50,0.55)",
                   }}
                 >
-                  <Wand2 className="w-5 h-5" style={{ color: "#FFFFFF" }} />
+                  <Wand2 className="w-5 h-5 text-white" style={{ color: "#FFFFFF" }} />
                   <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Get Help with JBJ {party} Assistant</span>
                 </button>
               </div>
