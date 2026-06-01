@@ -1468,7 +1468,7 @@ Requirements:
               </AnimatePresence>
 
               {/* Navigation Buttons - Primary Style */}
-              <div className="flex justify-between items-center mt-8 pt-6 border-t border-[#B89555]/20">
+              <div className="flex justify-between items-center mt-8 pt-6 border-t border-[#0F5132]/25">
                 <Button
                   type="button"
                   variant="secondary"
@@ -1480,14 +1480,23 @@ Requirements:
                 </Button>
 
                 {currentStep < 7 ? (
-                  <Button
+                  <button
                     type="button"
-                    variant="primary"
                     onClick={goToNextStep}
+                    data-no-contrast-guard
+                    className="inline-flex items-center gap-2 px-6 h-11 rounded-md text-sm font-bold transition-all hover:brightness-110"
+                    style={{
+                      background: "linear-gradient(135deg, #0F5132 0%, #064E3B 100%)",
+                      color: "#FFFFFF",
+                      WebkitTextFillColor: "#FFFFFF",
+                      border: "1.5px solid #0F5132",
+                      boxShadow: "0 10px 24px -12px rgba(15,81,50,0.55)",
+                    }}
                   >
-                    <span>Next Step</span>
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
+                    <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Next Step</span>
+                    <ArrowRight className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                  </button>
+
                 ) : (
                   <Button
                     type="button"
