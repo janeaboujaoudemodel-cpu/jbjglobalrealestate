@@ -71,9 +71,11 @@ export function FormDraftBar({
         <button
           type="button"
           onClick={onReset}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-red-500/90 text-white hover:bg-red-600 transition-colors"
+          data-no-contrast-guard
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-transparent border border-red-500/40 text-red-600 hover:bg-red-500/10 transition-colors rounded-md"
+          style={{ color: "#DC2626", WebkitTextFillColor: "#DC2626" }}
         >
-          <RotateCcw className="w-3.5 h-3.5" /> Reset
+          <RotateCcw className="w-3.5 h-3.5" style={{ color: "#DC2626" }} /> <span style={{ color: "#DC2626", WebkitTextFillColor: "#DC2626" }}>Reset</span>
         </button>
         {onNew && (
           <button
