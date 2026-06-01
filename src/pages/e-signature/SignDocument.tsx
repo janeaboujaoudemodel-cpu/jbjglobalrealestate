@@ -433,6 +433,16 @@ export default function SignDocument() {
           <a href="mailto:info@jbj.ae" className="underline decoration-[#B89555]/50">info@jbj.ae</a>
         </div>
       </div>
+
+      {data && (
+        <AdoptAndSignDialog
+          open={adoptOpen}
+          onOpenChange={setAdoptOpen}
+          recipientName={data.name}
+          fieldType="signature"
+          onAdopt={handleAdopt}
+        />
+      )}
     </div>
   );
 }
