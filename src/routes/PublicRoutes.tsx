@@ -175,8 +175,9 @@ const BrokerLearningVoiceAdmin = lazy(() => import("@/pages/owner/BrokerLearning
 const AIHub = lazy(() => import("@/pages/AIHub"));
 const InteriorDesignAI = lazy(() => import("@/pages/InteriorDesignAI"));
 const InvestorHub = lazy(() => import("@/pages/InvestorHub"));
-const BrokerHub = lazy(() => import("@/pages/BrokerHub"));
-const JBJAcademy = lazy(() => import("@/pages/JBJAcademy"));
+// /broker-hub retired — duplicates Broker Portal. Redirects via OwnerAwareBrokerRedirect.
+// JBJ Academy now renders the broker learning/training experience (former /broker/learning page).
+const JBJAcademy = lazy(() => import("@/pages/broker/BrokerLearning"));
 // AcademyGraduates merged into /jbj-academy
 const BrokerPortal = lazy(() => import("@/pages/BrokerPortal"));
 
