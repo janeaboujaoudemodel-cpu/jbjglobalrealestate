@@ -964,7 +964,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
     }
 
     // Default mega menu
-    const links = MEGA_MENU_LINKS[activeMegaMenu] || [];
+    const links = (MEGA_MENU_LINKS[activeMegaMenu] || []).filter((link) => shouldShowItem(link as NavItem, null));
     const isLargeMenu = links.length > 12;
 
     return (
