@@ -1,47 +1,39 @@
-I found the actual problem: there is not one remaining broken component. The page still has multiple competing contrast systems, and the currently “winning” rules are applying foreground colors by class instead of by the element’s real surface.
+Root cause identified:
 
-What is wrong now:
-- `CompanyProfile.tsx` puts `text-white` inside champagne cards (`jj-card-inner`), so “Table of Contents” and “Company Snapshot” become white-on-champagne.
-- The global `.jj-card-inner` class sets a champagne background but does not declare itself as a light surface, so dark-surface/hero rules can still win against its children.
-- The final primitive lock only protects direct children of navy/dark surfaces (`>`), so nested icons/text inside navy buttons can still be repainted black.
-- `.icon-tile:hover` globally repaints icon tiles to accent colors, which can override navy icon tiles on hover/focus.
-- `PressKit.tsx` has hard-coded black icons/text inside black/dark tiles and overlays, causing black-on-dark failures.
-- `phone-input.tsx` has a hover rule that turns text black on a dark phone-code trigger.
-- Several section headings in light/champagne bands still use `text-white`; this is why the issue appears “across the website.”
+- On `/company-profile`, the section wrapper `SectionShell` paints every post-hero section as champagne via `.jj-layer-2`.
+- The section titles inside that champagne band still carry direct Tailwind utilities like `text-white`, `text-white/70`, `text-white/80`, and `text-white/90` in `src/pages/CompanyProfile.tsx`.
+- A parent rule like `.jj-layer-2 { color: #1A1A1A }` cannot override a child’s direct `.text-white` class. That is why the previous fix did not repair the titles.
+- The still-winning selectors/components are:
+  - Component source: `src/pages/CompanyProfile.tsx`, repeated section headings/subcopy using `text-white*` inside `<SectionShell>`.
+  - Global CSS source: Tailwind `.text-white` / `.text-white\/70` utilities still win on the element itself unless a later, more specific light-surface contract targets `.jj-layer-2` descendants.
+  - Current global guard at `src/index.css` only covers `.jj-card-inner` and `.jj-box-active`, not `.jj-layer-2`; therefore headings outside cards remain white on champagne.
 
-Plan to fix it properly:
+Repair plan:
 
-1. Fix the global surface contract, not one screenshot at a time
-- Mark `.jj-layer-2`, `.jj-card-inner`, `.jj-box-active`, and `.jj-icon-box-active` as light/champagne surface owners in CSS.
-- Add final light-surface locks so descendants using `.text-white`, `.text-white/70`, `.text-white/80`, etc. render ink on champagne cards/bands.
-- Add final dark/navy locks that work for nested descendants, not only direct children, so navy buttons and icon tiles keep white text/icons.
-- Exclude explicit dark/navy CTA primitives from light-surface locks.
+1. Fix the global light-surface contrast contract
+   - Extend the final contrast lock in `src/index.css` so `.jj-layer-2`, `.jj-card-inner`, `.jj-box-active`, `.jj-icon-box-active`, `.surface-champagne`, `.surface-cream`, `.surface-raised`, `.surface-gold`, `.bg-surface`, `.bg-raised`, and `[data-surface="champagne|cream|raised|gold|light|page|pearl"]` force direct descendants using `.text-white` or `text-white/*` to ink.
+   - Include headings, paragraphs, spans, labels, list items, links, and SVG/lucide icons.
+   - Keep exclusions for real dark CTA primitives (`.jj-cta-dark`, `.jj-navy-cta`, `[data-allow-dark-cta]`, `[data-icon-tile][data-surface="navy|ink"]`, `[data-hero-dark]`, `.jj-hero-fullscreen`) so white remains valid only on dark/photo/navy surfaces.
 
-2. Remove/neutralize the wrong winning hover rules
-- Stop `.icon-tile:hover .lucide` from repainting navy/ink tiles to dark accent colors.
-- Preserve white icons for `[data-icon-tile][data-surface="navy"]` and `[data-icon-tile][data-surface="ink"]` in idle, hover, active, and focus states.
-- Fix `button[data-phone-code-trigger]` and `.jbj-form-trigger-filled` descendants so phone country selector text/icons stay white on navy, including hover.
+2. Fix the source component so the architecture is clean, not only patched by CSS
+   - Update `SectionShell` in `src/pages/CompanyProfile.tsx` to mark the inner champagne band explicitly as a light surface: `data-surface="champagne"` / `surface-champagne`.
+   - Replace all non-hero `text-white*` in `/company-profile` section titles/subcopy/card rows with ink semantic classes.
+   - Keep white/bright text only in the actual dark hero image overlay and dark photo cards.
 
-3. Repair the page-level hard-coded conflicts shown in the screenshots
-- `CompanyProfile.tsx`: convert section headings and card text inside champagne surfaces from `text-white` to ink/gold-safe classes; keep only true photo/dark hero text white.
-- `PressKit.tsx`: replace black icons inside black boxes/overlays with white or `IconTile`; fix protected badges and overlay helper text so dark overlays use white, champagne cards use ink.
-- `SupportTicketBox.tsx`: ensure the “Create Support Ticket” button uses the locked navy CTA surface and the headset icon remains white.
-- `CareersFAQ.tsx` / join FAQ: ensure the open navy chevron circle uses the locked navy icon surface so the chevron stays white.
-- `phone-input.tsx`: remove the hover-to-ink rule on dark phone inputs/triggers.
+3. Repair known dark-surface conflicts still visible elsewhere
+   - In `src/components/ui/phone-input.tsx`, remove the hover rule that turns dark phone triggers to ink (`hover:text-[#1A1A1A]`) on a black/navy background.
+   - Ensure the phone trigger and `.jbj-form-trigger-filled` descendants stay white on navy at rest, hover, focus.
+   - Preserve `IconTile` navy/ink behavior as white icons on navy/ink.
 
-4. Add a targeted technical contrast audit script
-- Add a small script that visits/inspects the affected routes and reports obvious conflicts:
-  - white text on light/champagne/card backgrounds
-  - black/ink icons/text on navy/dark backgrounds
-  - transparent text on non-gradient backgrounds
-- Use it only as validation; do not use it to auto-rewrite the site.
+4. Add a technical rendered contrast audit script
+   - Add/update a script under `scripts/contrast/` that uses Playwright to visit key public routes and detect:
+     - white/near-white text or icons on champagne/light/gold surfaces;
+     - ink/black text or icons on navy/dark surfaces;
+     - failing selector/class/component context.
+   - Target routes first: `/company-profile`, `/about`, `/contact`, `/founder`, `/join`, `/press-kit`, `/ai-hub`.
 
-5. Visual validation before claiming completion
-- Navigate as a user and capture screenshots on the reported pages/sections:
-  - `/join` FAQ + form phone input
-  - `/about` market intelligence/data cards
-  - `/contact` form + support ticket section
-  - `/press-kit` bio, headshots, fact sheet
-  - `/company-profile` hero, table of contents, company snapshot, CTA sections
-- For each failing pattern, inspect computed styles for representative elements: text color, icon color/stroke, own background, nearest surface owner.
-- Only report fixed if screenshots and computed styles confirm the two rules: ink on champagne/light; white on navy/dark.
+5. Validate before claiming completion
+   - Run the contrast scripts and inspect the exact output.
+   - Navigate as a user through the affected pages and capture screenshots at the relevant sections.
+   - For `/company-profile`, explicitly verify the title rows: Table of Contents, Company Overview, Platform Positioning, Brand Story, Core Values, Services, AI Tools, Marketplace, Dubai Destination, Prime Areas, Platform Benefits, Portfolio Highlights, Investor Journey, Partner Network, Our Process, Why JBJ, Client Experience, Founder & CEO, Company Snapshot, Ready to Connect, and Download.
+   - Only report complete after the rendered screenshots and computed styles confirm: ink on champagne/light; white on navy/dark.

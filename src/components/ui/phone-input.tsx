@@ -519,12 +519,12 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       ? "jbj-form-trigger-filled hover:bg-[#102540] hover:text-white hover:border-[#102540] focus:border-[#102540] rounded-lg"
       : isLight 
       ? "jbj-form-trigger-filled"
-      : "bg-[#1A1A1A] border border-[#B89555]/50 text-white hover:bg-[#1A1A1A] hover:text-[#1A1A1A] hover:border-[#B89555] focus:border-[#B89555]";
+      : "bg-[#1A1A1A] border border-[#B89555]/50 text-white hover:bg-[#102540] hover:text-white hover:border-[#B89555] focus:border-[#B89555]";
     const inputStyles = isCareersPhoneInput
       ? "jbj-form-field rounded-lg"
       : isLight
       ? "jbj-form-field"
-      : "bg-[#1A1A1A] border-2 border-[#B89555]/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] hover:border-[#B89555]";
+      : "bg-[#1A1A1A] border-2 border-[#B89555]/50 text-white placeholder:text-white/60 focus:border-[#B89555] hover:border-[#B89555]";
     const popoverStyles = isLight
       ? "jbj-form-popover"
       : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50";
