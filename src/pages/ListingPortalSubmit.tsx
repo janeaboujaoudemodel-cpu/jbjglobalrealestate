@@ -542,9 +542,6 @@ const ListingPortalSubmit = () => {
     return (
       <section
         data-ai-listing-shell
-        data-surface="dark"
-        data-allow-dark-cta
-        data-no-contrast-guard
         className="min-h-screen bg-gradient-to-br from-[#0b1c36] via-[#102540] to-[#1a3d63] pt-24 pb-16"
       >
         <div className="container mx-auto px-4">
