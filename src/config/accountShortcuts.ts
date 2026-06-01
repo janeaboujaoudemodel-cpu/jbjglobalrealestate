@@ -47,6 +47,7 @@ export const ACCOUNT_SHORTCUTS: AccountShortcut[] = [
   { href: "/favorites",                   label: "Favorites / Shortlist", icon: Heart,        description: "Your saved & shortlisted properties", inHeader: true, inSidebar: true },
   { href: "/favorites?tab=shortlist",     label: "Shortlisted",       icon: Star,             inSidebar: true },
   { href: "/favorites?tab=saved-filters", label: "Saved Filters",     icon: Sparkles,         inSidebar: true },
+  { href: "/toolkit",                     label: "AI Tools",          icon: Sparkles,         description: "Professional AI-powered tools", inHeader: true, inSidebar: true },
   { href: "/profile?tab=settings",        label: "Settings",          icon: Settings,         inSidebar: true },
   { href: "/my-tickets",                  label: "My Tickets",        icon: Ticket,           inSidebar: true },
 ];
