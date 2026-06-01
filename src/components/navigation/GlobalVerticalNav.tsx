@@ -1305,6 +1305,34 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
           {/* Section icons — solid champagne body, no silver cast */}
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-[#FDFBF7] w-full">
+            {highlightItems.map((item, i) => {
+              const Icon = item.icon;
+              const isActive = isRouteActive(item.href);
+              return (
+                <Tooltip key={item.href + item.label + i}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      to={item.href}
+                      onClick={collapseAfterNavigation}
+                      data-no-contrast-guard
+                      className={`group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
+                        isActive
+                          ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/80 shadow-sm shadow-gold/15'
+                          : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70'
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{item.label}</TooltipContent>
+                </Tooltip>
+              );
+            })}
+
+            {highlightItems.length > 0 && (
+              <div className="h-px w-5 my-1 bg-[#B89555]/35" aria-hidden="true" />
+            )}
+
             {SECTION_KEYS.map((sectionKey) => {
               if (!shouldShowSection(sectionKey)) return null;
               const SectionIcon = SECTION_ICONS[sectionKey];
