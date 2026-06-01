@@ -4962,3 +4962,19 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 [data-ai-listing-shell] > .container > div > p.text-\[\#1A1A1A\]\/70 {
   color: rgba(255,255,255,0.85) !important;
 }
+
+/* Lock ink text inside the AI wizard's white cards — beats any inherited
+   on-dark flip from outer contrast layers. */
+[data-ai-listing-shell] .text-\[\#1A1A1A\],
+[data-ai-listing-shell] .text-\[\#1A1A1A\]\/70,
+[data-ai-listing-shell] .text-\[\#1A1A1A\]\/50,
+[data-ai-listing-shell] .text-\[\#1A1A1A\]\/8C {
+  color: #1A1A1A !important;
+}
+[data-ai-listing-shell] .text-\[\#1A1A1A\]\/70 {
+  color: rgba(26,26,26,0.72) !important;
+}
+[data-ai-listing-shell] .text-\[\#1A1A1A\] svg,
+[data-ai-listing-shell] svg.text-\[\#1A1A1A\] {
+  color: #1A1A1A !important;
+}
