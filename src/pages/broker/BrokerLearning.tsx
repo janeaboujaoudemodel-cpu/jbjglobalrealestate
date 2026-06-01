@@ -20,7 +20,7 @@ import { PremiumBook3DStyles } from "@/components/broker-education/PremiumBook3D
 import { CertificatePreview } from "@/components/certification";
 import { useEducationProgress } from "@/hooks/useEducationProgress";
 import { BROKER_LESSONS } from "./brokerLessonContent";
-import { useIsOwner } from "@/hooks/useIsOwner";
+
 
 
 // ────────────────────────────────────────────────────────────────────────────
