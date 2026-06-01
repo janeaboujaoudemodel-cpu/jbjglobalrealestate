@@ -103,8 +103,13 @@ const ListingPortalSubmit = () => {
   
   // Read purpose from URL: ?purpose=sale or ?purpose=rent
   const urlPurpose = searchParams.get('purpose');
-  const initialListingType = urlPurpose === 'rent' ? 'rent' : 'sale';
-  const initialCategory = urlPurpose === 'rent' ? 'rental' : 'secondary_offplan';
+  const isRent = urlPurpose === 'rent';
+  const initialListingType = isRent ? 'rent' : 'sale';
+  const initialCategory = isRent ? 'rental' : 'secondary_offplan';
+  const party = isRent ? 'Landlord' : 'Seller';
+  const actionNoun = isRent ? 'Rent' : 'Sale';
+  const actionVerb = isRent ? 'rental' : 'sale';
+  const priceLabel = isRent ? 'Monthly Rent (AED)' : 'Price (AED)';
 
   // Restore from sessionStorage on mount
   const savedState = (() => {
