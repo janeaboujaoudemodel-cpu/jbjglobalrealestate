@@ -387,25 +387,26 @@ const About = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl" />
                 
-                {/* Overlay Cards - Market Intelligence Visual - LARGER CONTENT */}
                 <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-4">
-                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <BarChart3 className="w-8 h-8 text-white mb-3" />
-                    <p className="text-white text-base font-semibold">Government Data</p>
-                  </div>
-                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <Building2 className="w-8 h-8 text-white mb-3" />
-                    <p className="text-white text-base font-semibold">Infrastructure</p>
-                  </div>
-                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <TrendingUp className="w-8 h-8 text-white mb-3" />
-                    <p className="text-white text-base font-semibold">Market Cycles</p>
-                  </div>
-                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <Target className="w-8 h-8 text-white mb-3" />
-                    <p className="text-white text-base font-semibold">Planning Strategy</p>
-                  </div>
+                  {[
+                    { Icon: BarChart3, label: "Government Data" },
+                    { Icon: Building2, label: "Infrastructure" },
+                    { Icon: TrendingUp, label: "Market Cycles" },
+                    { Icon: Target, label: "Planning Strategy" },
+                  ].map(({ Icon, label }) => (
+                    <div
+                      key={label}
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                      className="allow-white rounded-lg p-5 border border-[#B89555]/40"
+                      style={{ background: '#102540' }}
+                    >
+                      <Icon className="w-7 h-7 mb-3" style={{ color: '#FFFFFF' }} />
+                      <p className="text-base font-semibold" style={{ color: '#FFFFFF' }}>{label}</p>
+                    </div>
+                  ))}
                 </div>
+
               </motion.div>
 
               {/* RIGHT: Text Content */}
