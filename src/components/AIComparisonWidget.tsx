@@ -109,8 +109,10 @@ const AIComparisonWidget = () => {
         <div className="flex flex-col sm:flex-row gap-3">
           <Link to="/properties?compareMode=1" className="flex-1">
             <button
-              data-surface="ink"
-              className="surface-ink allow-white w-full relative inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-white border border-[#B89555]/60 hover:bg-[#2a2a2a] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] active:scale-[0.98] transition-all duration-300 group"
+              data-surface="navy"
+              data-allow-dark-cta
+              className="surface-navy allow-white w-full relative inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-bold rounded-xl bg-[#102540] text-white border border-[#B89555]/55 hover:bg-[#1a3d63] hover:border-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(16,37,64,0.5)] active:scale-[0.98] transition-all duration-300 group"
+              style={{ color: "#FFFFFF" }}
             >
               <BarChart3 className="allow-white w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               <span className="allow-white" style={{ color: "#FFFFFF" }}>Start exploring</span>
