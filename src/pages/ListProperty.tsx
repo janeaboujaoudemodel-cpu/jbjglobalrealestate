@@ -691,16 +691,15 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               asChild
               data-allow-dark-cta
               data-no-contrast-guard
-              className="font-semibold border-0 hover:brightness-95"
+              className="jj-white-ring-square font-semibold hover:brightness-95"
               style={{
                 backgroundColor: "#FFFFFF",
                 color: accent,
-                border: `1px solid ${theme.badgeBorder}`,
               }}
             >
               <Link to="/dashboard/my-listings">
                 <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent }} />
-                <span style={{ color: accent, WebkitTextFillColor: accent }}>Open full dashboard</span>
+                <span style={{ color: accent, WebkitTextFillColor: accent, fontWeight: 700 }}>Open full dashboard</span>
               </Link>
             </Button>
           )}
