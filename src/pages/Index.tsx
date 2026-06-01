@@ -79,9 +79,7 @@ const PartnerVerifyHeroCTA = lazy(() => import("@/components/home/PartnerVerifyH
 const DeveloperPartnersMarquee = lazy(() => import("@/components/DeveloperPartnersMarquee"));
 
 const SectionLoader = forwardRef<HTMLDivElement>((_, ref) => (
-  <div ref={ref} className="py-12 flex items-center justify-center">
-    <div className="w-8 h-8 border-2 border-[#B89555]/30 border-t-transparent rounded-full animate-spin" />
-  </div>
+  <div ref={ref} className="min-h-[72px] w-full" aria-hidden="true" />
 ));
 SectionLoader.displayName = "SectionLoader";
 
