@@ -32,6 +32,7 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/comp
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
 import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
+import { useTeamVisibility } from "@/hooks/useTeamVisibility";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
