@@ -159,10 +159,12 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
           Price from
         </span>
         <span
+          data-no-contrast-guard
+          style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
           className={cn(
             "mt-1 font-semibold tabular-nums leading-tight truncate",
             "text-[15px] sm:text-base",
-            hasPrice ? "text-[hsl(var(--price-orange))]" : "text-[#1A1A1A]/70",
+            hasPrice ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70",
           )}
         >
           {hasPrice ? formatPrice(price!, currency) : "On request"}
