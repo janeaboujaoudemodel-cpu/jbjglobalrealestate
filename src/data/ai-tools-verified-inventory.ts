@@ -1362,7 +1362,7 @@ export const AI_TOOLS_INVENTORY_VERIFIED: AIToolEntry[] = [
     fixNeeded: null,
     proofPack: {
       routeFile: 'src/routes/BrokerPortalRoutes.tsx',
-      routeSnippet: `<Route path="ai" element={<AIBrokerWorkspace />} /> // mounted at /broker/ai
+      routeSnippet: `<Route path="ai" element={<AIBrokerWorkspace />} />`,
       navFile: null,
       navSnippet: 'Internal route, not in public nav',
       apiWiringFile: 'src/pages/AIBrokerWorkspace.tsx',
