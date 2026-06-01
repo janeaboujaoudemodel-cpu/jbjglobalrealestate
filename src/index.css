@@ -4978,3 +4978,43 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 [data-ai-listing-shell] svg.text-\[\#1A1A1A\] {
   color: #1A1A1A !important;
 }
+
+/* AI Listing Shell — Save Draft button (navy fill, white text) must stay
+   white on navy even though it sits inside a white draft bar. Global
+   PASS-6 white-on-light lock keeps flipping it; this re-locks it. */
+[data-ai-listing-shell] button.bg-\[\#102540\] {
+  background-color: #102540 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+[data-ai-listing-shell] button.bg-\[\#102540\]:hover {
+  background-color: #1a3d63 !important;
+}
+[data-ai-listing-shell] button.bg-\[\#102540\] svg {
+  color: #FFFFFF !important;
+}
+
+/* "Back to Portal" white ghost button on the navy hero — keep readable */
+[data-ai-listing-shell] button.allow-white.text-white,
+[data-ai-listing-shell] button.allow-white.text-white svg {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Extract with AI primary CTA (white bg + navy text, lives inside white card) */
+[data-ai-listing-shell] button.bg-white.text-\[\#102540\] {
+  background-color: #102540 !important;
+  color: #FFFFFF !important;
+  border-color: #102540 !important;
+}
+[data-ai-listing-shell] button.bg-white.text-\[\#102540\]:hover {
+  background-color: #1a3d63 !important;
+}
+[data-ai-listing-shell] button.bg-white.text-\[\#102540\] svg {
+  color: #FFFFFF !important;
+}
+[data-ai-listing-shell] button.bg-white.text-\[\#102540\]:disabled {
+  background-color: #102540 !important;
+  color: #FFFFFF !important;
+  opacity: 0.5;
+}
