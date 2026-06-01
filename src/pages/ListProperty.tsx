@@ -640,14 +640,14 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
       className="scroll-mt-24 px-4 sm:px-6 md:px-10 py-12 md:py-16 relative overflow-hidden"
       data-no-contrast-guard
       data-allow-dark-cta
-      style={{ background: theme.sectionGradient }}
+      style={{ background: ombreSoft(theme) }}
     >
       {/* premium ombre shine */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(circle at 85% 12%, ${theme.iconAccent}26 0%, transparent 55%)`,
+          background: `radial-gradient(circle at 85% 12%, ${theme.primary}1F 0%, transparent 55%)`,
         }}
       />
       <div className="relative max-w-6xl mx-auto">
@@ -655,20 +655,21 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
           <div>
             <h2
               className="text-2xl md:text-3xl font-bold tracking-tight"
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              style={{ color: accent, WebkitTextFillColor: accent }}
               data-no-contrast-guard
             >
               My Listing Submissions
             </h2>
             <p
               className="mt-1 text-sm"
-              style={{ color: "rgba(255,255,255,0.85)" }}
+              style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
               data-no-contrast-guard
             >
               Track the status of every property you've listed with JBJ. You'll
               receive an email update on every status change.
             </p>
           </div>
+
           {user && (
             <Button
               asChild
