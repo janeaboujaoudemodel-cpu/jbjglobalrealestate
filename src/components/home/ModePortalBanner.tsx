@@ -4,14 +4,16 @@ import { ArrowRight, Briefcase, TrendingUp, Building2, Sparkles } from "lucide-r
 import { useUserModeContext } from "@/contexts/UserModeContext";
 
 /**
- * ModePortalBanner — thin, full-bleed, mode-aware portal CTA.
+ * ModePortalBanner — mode-aware portal CTA strip.
  *
- * Mirrors the visual structure of <VerificationBanner /> (navy #102540
- * full-edge bar, champagne CTA pill) so the homepage gains a second
- * matching attention strip. Content swaps live with the user's mode:
- *   investor  -> Investor Portal
- *   broker    -> Broker Portal
- *   developer -> Developer Portal
+ * Visual inverse of <VerificationBanner />:
+ *   - Champagne/mother-of-pearl background (full-bleed)
+ *   - Navy (#102540) text + icon (inverted tone)
+ *   - Navy CTA pill with white label + white arrow (same shape, padding,
+ *     radius, shadow as the Get Verified champagne pill — only contrast flips)
+ *
+ * Sits flush directly under <VerificationBanner /> so the two read as one
+ * paired block. Mode swaps live with the user's selected mode.
  */
 const MODE_CONFIG = {
   broker: {
@@ -51,17 +53,16 @@ export default function ModePortalBanner() {
       initial={{ opacity: 0, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
-      data-surface="navy"
-      data-allow-dark-cta
-      className="surface-navy relative overflow-hidden bg-[#102540]"
+      data-surface="champagne"
+      className="relative overflow-hidden bg-gradient-to-r from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA]"
     >
-      {/* Subtle gold sheen overlay */}
+      {/* Subtle navy sheen overlay — opposite of gold sheen on Get Verified */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.18]"
+        className="pointer-events-none absolute inset-0 opacity-[0.08]"
         style={{
           background:
-            "radial-gradient(900px 220px at 12% 50%, rgba(184,149,85,0.55), transparent 60%), radial-gradient(700px 200px at 92% 50%, rgba(184,149,85,0.45), transparent 65%)",
+            "radial-gradient(900px 220px at 12% 50%, rgba(16,37,64,0.55), transparent 60%), radial-gradient(700px 200px at 92% 50%, rgba(16,37,64,0.45), transparent 65%)",
         }}
       />
       {/* Top + bottom champagne hairlines */}
@@ -70,49 +71,52 @@ export default function ModePortalBanner() {
 
       <div className="max-w-[1600px] mx-auto px-4 py-4 sm:py-5 relative z-10">
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
-          {/* Mode icon tile */}
+          {/* Mode icon tile — cream tile, navy icon, gold hairline */}
           <div
-            data-surface="navy"
-            data-allow-dark-cta
-            className="surface-navy flex-shrink-0 w-10 h-10 rounded-lg bg-[#1a3d63] border border-white/20 flex items-center justify-center"
+            className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#FDFBF7] border border-[#B89555]/55 flex items-center justify-center"
           >
-            <Icon className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <Icon className="w-5 h-5" style={{ color: "#102540", stroke: "#102540" }} strokeWidth={2.2} />
           </div>
 
-          {/* Text */}
+          {/* Text — navy eyebrow + title, ink body */}
           <div className="flex-1 text-center sm:text-left min-w-0">
             <div className="flex items-center justify-center sm:justify-start gap-2 mb-0.5">
-              <Sparkles className="w-3 h-3" style={{ color: "#B89555", stroke: "#B89555" }} />
+              <Sparkles className="w-3 h-3" style={{ color: "#102540", stroke: "#102540" }} />
               <span
                 className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.18em]"
-                style={{ color: "#B89555" }}
+                style={{ color: "#102540" }}
               >
                 {cfg.eyebrow}
               </span>
             </div>
-            <p className="text-sm sm:text-base text-white/90 font-medium leading-snug">
-              <span className="text-white font-semibold">{cfg.title}.</span>{" "}
-              <span className="text-white/80">{cfg.copy}</span>
+            <p className="text-sm sm:text-base font-medium leading-snug" style={{ color: "#1A1A1A" }}>
+              <span className="font-semibold" style={{ color: "#102540" }}>{cfg.title}.</span>{" "}
+              <span style={{ color: "rgba(26,26,26,0.78)" }}>{cfg.copy}</span>
             </p>
           </div>
 
-          {/* CTA — champagne pill matching Get Verified */}
+          {/* CTA — navy pill, white label + white arrow.
+              Same dimensions/shadow/hover-lift as the champagne Get Verified pill. */}
           <Link
             to={cfg.href}
-            className="jj-cta-champagne group relative flex-shrink-0 px-5 py-2.5 text-sm tracking-wide shadow-[0_2px_10px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.7)] hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-transform duration-300 ease-out overflow-hidden inline-flex items-center gap-2"
-            data-surface="champagne"
-            data-cta="champagne"
+            className="jj-cta-dark group relative flex-shrink-0 px-5 py-2.5 text-sm tracking-wide rounded-md shadow-[0_2px_10px_rgba(16,37,64,0.30),inset_0_1px_0_rgba(255,255,255,0.15)] hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-transform duration-300 ease-out overflow-hidden inline-flex items-center gap-2 border border-[#B89555]/70 bg-[#102540] hover:bg-[#1a3d63]"
+            data-surface="navy"
+            data-cta="dark"
+            data-allow-dark-cta
+            data-no-contrast-guard
             aria-label={cfg.cta}
-            style={{ color: "#1A1A1A" }}
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            <span data-surface="champagne" className="relative z-10" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
+            <span
+              className="allow-white relative z-10 font-semibold"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            >
               {cfg.cta}
             </span>
             <ArrowRight
-              data-surface="champagne"
-              className="relative z-10 w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+              className="allow-white relative z-10 w-4 h-4 group-hover:translate-x-0.5 transition-transform"
               strokeWidth={2.5}
-              style={{ color: "#1A1A1A", stroke: "#1A1A1A" }}
+              style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
             />
           </Link>
         </div>
