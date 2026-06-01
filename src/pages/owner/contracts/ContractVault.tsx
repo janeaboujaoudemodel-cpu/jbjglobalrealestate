@@ -87,6 +87,7 @@ export default function ContractVault() {
   const [q, setQ] = useState("");
   const [developerName, setDeveloperName] = useState<string>("");
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [editing, setEditing] = useState<any | null>(null);
   const [activeType, setActiveType] = useState<ContractType>("all");
 
   const { data: agreements = [] } = useQuery({
@@ -94,7 +95,8 @@ export default function ContractVault() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("external_agreements" as any)
-        .select("id, developer_id, developer_name_raw, contract_type, file_url, file_name, effective_date, expiry_date, commission_pct, ai_confidence, status, uploaded_at")
+        .select("id, developer_id, developer_name_raw, contract_type, file_url, file_path, file_name, effective_date, expiry_date, commission_pct, ai_confidence, status, uploaded_at, deleted_at")
+        .is("deleted_at", null)
         .order("uploaded_at", { ascending: false })
         .limit(500);
       if (error) throw error;
@@ -117,7 +119,19 @@ export default function ContractVault() {
     staleTime: 5 * 60 * 1000,
   });
 
+  // Resolve picked developer name → canonical developer id (for both filters).
+  const { data: devLookup } = useQuery({
+    queryKey: ["developers-id-by-name"],
+    staleTime: 10 * 60 * 1000,
+    queryFn: async () => {
+      const { data } = await supabase.from("developers").select("id, name").limit(2000);
+      const map = new Map<string, string>();
+      (data ?? []).forEach((d: any) => map.set((d.name || "").toLowerCase(), d.id));
+      return map;
+    },
+  });
   const devLower = developerName.trim().toLowerCase();
+  const selectedDeveloperId = devLower ? devLookup?.get(devLower) ?? null : null;
 
   // Counts per type for sidebar badges (combine both sources)
   const typeCounts = useMemo(() => {
@@ -144,16 +158,29 @@ export default function ContractVault() {
   const filteredAgreements = useMemo(() => {
     return agreements.filter((a) => {
       if (activeType !== "all" && inferType(a) !== activeType) return false;
-      if (devLower && (a.developer_name_raw || "").toLowerCase() !== devLower) return false;
+      if (devLower) {
+        // Prefer canonical developer_id; fall back to raw name match for legacy rows.
+        if (selectedDeveloperId) {
+          if (a.developer_id !== selectedDeveloperId) return false;
+        } else if ((a.developer_name_raw || "").toLowerCase() !== devLower) {
+          return false;
+        }
+      }
       return true;
     });
-  }, [agreements, devLower, activeType]);
+  }, [agreements, devLower, selectedDeveloperId, activeType]);
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
     return data.filter((r) => {
       if (activeType !== "all" && inferType(r) !== activeType) return false;
-      if (devLower && (r.developer_name || "").toLowerCase() !== devLower) return false;
+      if (devLower) {
+        if (selectedDeveloperId) {
+          if (r.developer_id !== selectedDeveloperId) return false;
+        } else if ((r.developer_name || "").toLowerCase() !== devLower) {
+          return false;
+        }
+      }
       if (!term) return true;
       return (
         r.envelope_name?.toLowerCase().includes(term) ||
@@ -163,7 +190,13 @@ export default function ContractVault() {
         r.area?.toLowerCase().includes(term)
       );
     });
-  }, [data, q, devLower, activeType]);
+  }, [data, q, devLower, selectedDeveloperId, activeType]);
+
+  const handleOpen = async (row: { file_path?: string | null; file_url?: string | null }) => {
+    try { await openAgreement(row); }
+    catch (e: any) { toast.error(e.message || "Could not open file"); }
+  };
+
 
   // Show developer combobox only for types where it makes sense
   const showDeveloperPicker =
