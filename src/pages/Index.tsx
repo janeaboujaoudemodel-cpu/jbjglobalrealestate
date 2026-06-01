@@ -202,7 +202,8 @@ const Index = () => {
   }, []);
 
   return (
-    <section data-home-page className="relative w-full min-h-screen bg-[#FDFBF7]">
+    <section data-home-page className="relative w-full min-h-screen bg-[#F7F2EA]">
+
       {/* SEO Meta Tags */}
       <SEOHead {...pagesSEO.home} />
       
@@ -296,11 +297,22 @@ const Index = () => {
         <DeveloperPartnersMarquee />
       </Suspense>
 
-      {/* VERIFICATION BANNER — sits immediately under the marquee */}
+      {/* VERIFICATION + MODE-AWARE PORTAL — paired full-bleed banner block.
+          Section above (Developer Partners Marquee) is separated by a clean
+          gold hairline divider. The two banners are flush (no gap) and read
+          as one premium block: Get Verified (navy) → Mode Portal (champagne,
+          inverted contrast). */}
+      <div aria-hidden="true" className="w-full h-px bg-gradient-to-r from-transparent via-[#B89555]/55 to-transparent" />
       <PremiumSectionCard padding="none" width="full" wrapperClassName="">
         <Suspense fallback={null}>
           <VerificationBanner />
         </Suspense>
+        {/* zero-gap join — portal banner sits flush directly under Get Verified */}
+        <div className="-mt-px">
+          <Suspense fallback={null}>
+            <ModePortalBanner />
+          </Suspense>
+        </div>
         <Suspense fallback={null}>
           <PartnerVerifyHeroCTA />
         </Suspense>
@@ -313,13 +325,6 @@ const Index = () => {
         </Suspense>
       </div>
 
-
-      {/* MODE-AWARE PORTAL BANNER — thin full-bleed strip, swaps with mode */}
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="">
-        <Suspense fallback={null}>
-          <ModePortalBanner />
-        </Suspense>
-      </PremiumSectionCard>
 
 
 

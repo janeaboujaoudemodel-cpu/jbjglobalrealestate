@@ -600,8 +600,8 @@ function TrainingCard({
   requestAccessDisabled?: boolean;
 }) {
   return (
-    <Card className={`relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-[#B89555]/55 ${locked ? "" : "hover:border-[#B89555]/80"} transition-all min-h-[240px] shadow-[0_4px_14px_rgba(184,149,85,0.10)] ${locked ? "" : "hover:shadow-[0_14px_30px_rgba(184,149,85,0.20)]"}`}>
-      <CardContent className={`p-5 md:p-6 flex flex-col h-full ${locked ? "opacity-90" : ""}`}>
+    <Card className={`relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-[#B89555]/55 ${locked ? "" : "hover:border-[#B89555]/80"} transition-all min-h-[260px] shadow-[0_4px_14px_rgba(184,149,85,0.10)] ${locked ? "" : "hover:shadow-[0_14px_30px_rgba(184,149,85,0.20)]"}`}>
+      <CardContent className={`p-5 md:p-6 flex flex-col h-full ${locked ? "opacity-90 pb-12" : ""}`}>
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3 min-w-0">
             <div
@@ -634,7 +634,7 @@ function TrainingCard({
           </div>
         )}
 
-        <div className="mt-auto pt-5 flex items-center justify-between gap-3">
+        <div className="mt-auto pt-5 pb-3 flex items-center justify-between gap-3">
           <div className="flex flex-wrap gap-1.5 min-w-0 flex-1 overflow-hidden">
             {m.topics.slice(0, 2).map((t, i) => (
               <span key={i} className="text-[11px] bg-[#FDFBF7] text-[#1A1A1A]/85 px-2 py-0.5 rounded border border-[#B89555]/30 max-w-full truncate">
@@ -673,7 +673,7 @@ function TrainingCard({
       {locked && lockReason && (
         <div
           data-no-contrast-guard
-          className="absolute bottom-0 inset-x-0 px-4 py-2 text-center text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A]/75 bg-gradient-to-t from-[#F7F2EA] to-transparent border-t border-[#B89555]/30"
+          className="absolute bottom-0 inset-x-0 px-4 py-1.5 text-center text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/75 bg-[#F7F2EA] border-t border-[#B89555]/40"
         >
           {lockReason}
         </div>
@@ -681,6 +681,7 @@ function TrainingCard({
     </Card>
   );
 }
+
 
 
 
