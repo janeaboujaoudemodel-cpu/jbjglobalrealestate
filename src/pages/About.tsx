@@ -256,7 +256,7 @@ const About = () => {
                   
                   <ContentText>
                     <p>
-                      JBJ Global Real Estate L.L.C. S.O.C is a licensed real estate brokerage authorized to facilitate property transactions across the UAE. We support local and international clients through every stage of the real estate journey — from market understanding and opportunity evaluation to transaction coordination and completion.
+                      JBJ Global Real Estate L.L.C. S.O.C is a licensed real estate brokerage authorized to facilitate property transactions across the UAE. We support local and international clients through every stage of the real estate journey, from market understanding and opportunity evaluation to transaction coordination and completion.
                     </p>
                     <p>
                       Our role is brokerage and coordination. Where additional services are required, we introduce clients to independent, licensed partners operating under their own regulatory frameworks.
@@ -283,7 +283,7 @@ const About = () => {
                 <SectionHeadline>Our Approach</SectionHeadline>
                 <ContentText>
                   <p>
-                    We believe real estate decisions must be informed, structured, and grounded in verified data — not sales pressure or assumptions.
+                    We believe real estate decisions must be informed, structured, and grounded in verified data, not sales pressure or assumptions.
                   </p>
                   <p>
                     Our approach combines market intelligence, clear process mapping, disciplined transaction management, and defined compliance boundaries. Every engagement is handled with clarity on scope, responsibility, and next steps.
@@ -415,7 +415,7 @@ const About = () => {
                 <SectionHeadline>Data-Driven, Not Opinion-Driven</SectionHeadline>
                 <ContentText>
                   <p>
-                    Our market insights, reports, and tools are built using aggregated official data and verified market information. These insights are designed to support understanding, comparison, and clarity — not to predict outcomes or guarantee results.
+                    Our market insights, reports, and tools are built using aggregated official data and verified market information. These insights are designed to support understanding, comparison, and clarity. They are not designed to predict outcomes or guarantee results.
                   </p>
                   <p>
                     All data usage is transparent, referenced, and handled in accordance with applicable regulations.
@@ -483,7 +483,7 @@ const About = () => {
               <FeatureCard 
                 icon={Target}
                 title="Licensed Scope"
-                description="All activities remain within licensed scope. Trust is built through discipline — not promises."
+                description="All activities remain within licensed scope. Trust is built through discipline, not promises."
               />
             </div>
 
@@ -506,7 +506,7 @@ const About = () => {
                 We are committed to: clear communication, accurate information, structured processes, and long-term client trust.
               </p>
               <p>
-                Real estate is not about speed — it is about precision.
+                Real estate is not about speed. It is about precision.
               </p>
             </ContentText>
             
@@ -559,7 +559,7 @@ const About = () => {
                     className="text-[#1A1A1A]/70 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
                     variants={fadeInUp}
                   >
-                    Whether you are buying, renting, investing, or simply seeking clarity — our role is to guide you with precision, not pressure.
+                    Whether you are buying, renting, investing, or simply seeking clarity, our role is to guide you with precision, not pressure.
                   </motion.p>
 
                   {/* CTA Buttons */}
