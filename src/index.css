@@ -4223,7 +4223,7 @@ button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
   [data-surface="page"],
   [data-surface="light"],
   [data-surface="pearl"]
-) :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, button, div):where(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]):not(.allow-white):not(.jj-cta-dark):not(.jj-navy-cta):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *):not([data-icon-tile][data-surface="navy"] *):not([data-icon-tile][data-surface="ink"] *) {
+) :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, button, div):where(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not(.allow-white):not(.jj-cta-dark):not(.jj-navy-cta):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *):not([data-icon-tile][data-surface="navy"] *):not([data-icon-tile][data-surface="ink"] *):not([data-surface="dark"] *):not([data-surface="navy"] *):not([data-surface="ink"] *):not(.surface-dark *):not(.surface-navy *):not(.surface-ink *):not([data-hero-dark] *):not(.jj-hero-fullscreen *) {
   color: hsl(var(--jj-on-light)) !important;
   -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
   opacity: 1 !important;
@@ -4255,7 +4255,7 @@ button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
   [data-surface="page"],
   [data-surface="light"],
   [data-surface="pearl"]
-) :where(svg, [class*="lucide"]):where(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]):not(.allow-white):not(.jj-cta-dark *):not(.jj-navy-cta *):not([data-allow-dark-cta] *):not([data-icon-tile][data-surface="navy"] *):not([data-icon-tile][data-surface="ink"] *) {
+) :where(svg, [class*="lucide"]):where(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not(.allow-white):not(.jj-cta-dark *):not(.jj-navy-cta *):not([data-allow-dark-cta] *):not([data-icon-tile][data-surface="navy"] *):not([data-icon-tile][data-surface="ink"] *):not([data-surface="dark"] *):not([data-surface="navy"] *):not([data-surface="ink"] *):not(.surface-dark *):not(.surface-navy *):not(.surface-ink *):not([data-hero-dark] *):not(.jj-hero-fullscreen *) {
   color: hsl(var(--jj-on-light)) !important;
   stroke: hsl(var(--jj-on-light)) !important;
   opacity: 1 !important;
