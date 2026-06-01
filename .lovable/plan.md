@@ -1,51 +1,47 @@
-You are right: it is not fixed, and I should not have said it was fixed without visually validating the affected pages.
+I found the actual problem: there is not one remaining broken component. The page still has multiple competing contrast systems, and the currently “winning” rules are applying foreground colors by class instead of by the element’s real surface.
 
-Clear answer:
+What is wrong now:
+- `CompanyProfile.tsx` puts `text-white` inside champagne cards (`jj-card-inner`), so “Table of Contents” and “Company Snapshot” become white-on-champagne.
+- The global `.jj-card-inner` class sets a champagne background but does not declare itself as a light surface, so dark-surface/hero rules can still win against its children.
+- The final primitive lock only protects direct children of navy/dark surfaces (`>`), so nested icons/text inside navy buttons can still be repainted black.
+- `.icon-tile:hover` globally repaints icon tiles to accent colors, which can override navy icon tiles on hover/focus.
+- `PressKit.tsx` has hard-coded black icons/text inside black/dark tiles and overlays, causing black-on-dark failures.
+- `phone-input.tsx` has a hover rule that turns text black on a dark phone-code trigger.
+- Several section headings in light/champagne bands still use `text-white`; this is why the issue appears “across the website.”
 
-1. The screenshot proves the issue is still active on `/join`: navy/blue icon tiles are rendering black/dark icons.
-2. The cause is not one component only. The conflict is CSS infrastructure:
-   - `src/styles/theme-tokens.css` has repeated careers-page rules that repaint SVGs inside `.careers-card-navy .careers-card-strong` to navy/dark unless `.allow-white` is present.
-   - Some dark/navy icon boxes, like the contact cards, are not using the locked CTA/IconTile primitive, so they can still be caught by the wrong SVG repaint rule.
-   - `src/index.css` still has the marketing-page dark-section remap at lines 1021–1023, but it only changes section background; it does not correctly solve nested foreground ownership. Per your instruction, this winning rule should be removed, not expanded.
-3. The previous fix was incomplete because it changed some visible instances instead of removing the conflicting cascade pattern globally and then validating across the page.
+Plan to fix it properly:
 
-Plan to fix cleanly:
+1. Fix the global surface contract, not one screenshot at a time
+- Mark `.jj-layer-2`, `.jj-card-inner`, `.jj-box-active`, and `.jj-icon-box-active` as light/champagne surface owners in CSS.
+- Add final light-surface locks so descendants using `.text-white`, `.text-white/70`, `.text-white/80`, etc. render ink on champagne cards/bands.
+- Add final dark/navy locks that work for nested descendants, not only direct children, so navy buttons and icon tiles keep white text/icons.
+- Exclude explicit dark/navy CTA primitives from light-surface locks.
 
-1. Remove the wrong winning rule
-   - Delete the `[data-marketing-page] section[class~="bg-[#1A1A1A]"]` background remap from `src/index.css`.
-   - Do not replace it with another broad descendant repaint sweep.
+2. Remove/neutralize the wrong winning hover rules
+- Stop `.icon-tile:hover .lucide` from repainting navy/ink tiles to dark accent colors.
+- Preserve white icons for `[data-icon-tile][data-surface="navy"]` and `[data-icon-tile][data-surface="ink"]` in idle, hover, active, and focus states.
+- Fix `button[data-phone-code-trigger]` and `.jbj-form-trigger-filled` descendants so phone country selector text/icons stay white on navy, including hover.
 
-2. Fix the global dark-surface contract once
-   - Extend the existing final primitive/surface contract in `src/index.css` so elements explicitly marked as dark/navy/ink surfaces keep white text/icons:
-     - `.surface-navy`, `.surface-ink`, `.surface-dark`
-     - `[data-surface="navy"]`, `[data-surface="ink"]`, `[data-surface="dark"]`
-     - `[data-allow-dark-cta]`, `[data-no-contrast-guard].allow-white`
-   - Scope it only to explicit own-surface elements, not every nested descendant on the page.
+3. Repair the page-level hard-coded conflicts shown in the screenshots
+- `CompanyProfile.tsx`: convert section headings and card text inside champagne surfaces from `text-white` to ink/gold-safe classes; keep only true photo/dark hero text white.
+- `PressKit.tsx`: replace black icons inside black boxes/overlays with white or `IconTile`; fix protected badges and overlay helper text so dark overlays use white, champagne cards use ink.
+- `SupportTicketBox.tsx`: ensure the “Create Support Ticket” button uses the locked navy CTA surface and the headset icon remains white.
+- `CareersFAQ.tsx` / join FAQ: ensure the open navy chevron circle uses the locked navy icon surface so the chevron stays white.
+- `phone-input.tsx`: remove the hover-to-ink rule on dark phone inputs/triggers.
 
-3. Clean the duplicate conflicting careers CSS
-   - In `src/styles/theme-tokens.css`, remove the duplicate `svg:not(.allow-white)` navy repaint blocks that are overriding white icons.
-   - Keep form/input rules and phone-code trigger rules that are already correct.
-   - Keep `.careers-navy-cta` white foreground lock, but make it consistent with the global primitive instead of competing with it.
+4. Add a targeted technical contrast audit script
+- Add a small script that visits/inspects the affected routes and reports obvious conflicts:
+  - white text on light/champagne/card backgrounds
+  - black/ink icons/text on navy/dark backgrounds
+  - transparent text on non-gradient backgrounds
+- Use it only as validation; do not use it to auto-rewrite the site.
 
-4. Fix the visible `/join` contact cards at the source
-   - Update `CareersContactBlock` icon boxes to use the existing `IconTile` primitive or mark them as explicit navy/dark icon surfaces.
-   - This prevents black icons on blue tiles without adding a new CSS system.
-
-5. Technical validation after implementation
-   - Use browser inspection on `/join` to verify computed styles for the failing elements:
-     - contact-card icon tile background = navy/blue
-     - SVG color/stroke = white
-     - Continue button arrow color/stroke = white
-     - phone-code trigger text/chevron = white
-   - Search the codebase for remaining conflicting selectors like `svg:not(.allow-white)` and broad `text-white`/dark background mismatches.
-
-6. Visual validation after implementation
-   - Navigate as a user and take screenshots/inspect sections on the pages already implicated:
-     - `/join`
-     - `/about`
-     - `/contact`
-     - `/founder`
-     - `/ai-hub`
-   - Check visible sections for dark-on-dark or white-on-light failures before reporting completion.
-
-I will not claim “fixed” unless the computed styles and screenshots confirm it.
+5. Visual validation before claiming completion
+- Navigate as a user and capture screenshots on the reported pages/sections:
+  - `/join` FAQ + form phone input
+  - `/about` market intelligence/data cards
+  - `/contact` form + support ticket section
+  - `/press-kit` bio, headshots, fact sheet
+  - `/company-profile` hero, table of contents, company snapshot, CTA sections
+- For each failing pattern, inspect computed styles for representative elements: text color, icon color/stroke, own background, nearest surface owner.
+- Only report fixed if screenshots and computed styles confirm the two rules: ink on champagne/light; white on navy/dark.
