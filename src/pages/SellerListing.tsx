@@ -719,7 +719,7 @@ Requirements:
                           value={form.watch("preferred_language")} 
                           onValueChange={(v) => form.setValue("preferred_language", v)}
                         >
-                          <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}">
+                          <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="bg-white border-[#10B981]/40">
@@ -737,7 +737,7 @@ Requirements:
                           value={form.watch("preferred_contact_method")} 
                           onValueChange={(v) => form.setValue("preferred_contact_method", v)}
                         >
-                          <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}">
+                          <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="bg-white border-[#10B981]/40">
@@ -800,7 +800,7 @@ Requirements:
                           value={form.watch("property_type")}
                           onValueChange={(v) => form.setValue("property_type", v)}
                         >
-                          <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}">
+                          <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
                           <SelectContent className="bg-white border-[#10B981]/40">
@@ -819,7 +819,7 @@ Requirements:
                         <Input
                           {...form.register("property_location")}
                           placeholder="e.g., Downtown Dubai"
-                          className="mt-1 bg-white text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}"
+                          className="mt-1 bg-white text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}
                         />
                       </div>
                     </div>
@@ -840,7 +840,7 @@ Requirements:
                           value={form.watch("bedrooms")?.toString()}
                           onValueChange={(v) => form.setValue("bedrooms", parseInt(v))}
                         >
-                          <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}">
+                          <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
                             <SelectValue placeholder="Select" />
                           </SelectTrigger>
                           <SelectContent className="bg-white border-[#10B981]/40">
