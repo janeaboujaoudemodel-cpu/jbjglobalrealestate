@@ -863,9 +863,6 @@ const ListingPortalSubmit = () => {
                           <Sparkles className="w-5 h-5 mr-2" style={{ color: '#FFFFFF' }} data-no-contrast-guard />
                           <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                             Extract with AI
-                            {uploadedDocs.length > 0 && ` (${uploadedDocs.length} file${uploadedDocs.length === 1 ? '' : 's'})`}
-                            {sourceUrl.trim() && ' + URL'}
-                            {sourceText.trim() && ' + Text'}
                           </span>
                         </Button>
                         <Button
