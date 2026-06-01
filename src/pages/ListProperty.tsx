@@ -387,45 +387,52 @@ const ListProperty = () => {
   );
 };
 
-/* ────────────────── Segmented pill control ────────────────── */
+/* ────────────────── Segmented pill control (mode-aware) ────────────────── */
 function SegmentedPill({
   active,
   onClick,
   icon,
   children,
+  theme = THEME_NAVY,
+  trailing,
 }: {
   active: boolean;
   onClick: () => void;
   icon: React.ReactNode;
   children: React.ReactNode;
+  theme?: ModeTheme;
+  trailing?: React.ReactNode;
 }) {
-  const fg = active ? "#FFFFFF" : INK;
+  const fg = active ? "#FFFFFF" : theme.primary;
   return (
     <button
       type="button"
       onClick={onClick}
       data-allow-dark-cta
       data-no-contrast-guard
-      className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-150 ${active ? "bg-[#102540] hover:bg-[#1a3d63]" : ""}`}
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-150 hover:brightness-110"
       style={
         active
           ? {
-              backgroundColor: BLUE,
+              background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.primaryDeep} 100%)`,
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
-              border: `1px solid ${BLUE_DEEP}`,
-              boxShadow: "0 8px 22px -10px rgba(16,37,64,0.45)",
+              border: `1px solid ${theme.primaryDeep}`,
+              boxShadow: `0 10px 24px -12px ${theme.primary}99`,
             }
           : {
-              backgroundColor: CHAMPAGNE,
-              color: INK,
-              WebkitTextFillColor: INK,
-              border: `1px solid ${GOLD}66`,
+              backgroundColor: "#FFFFFF",
+              color: theme.primary,
+              WebkitTextFillColor: theme.primary,
+              border: `1.5px solid ${theme.primary}`,
             }
       }
     >
       <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{icon}</span>
       <span style={{ color: fg, WebkitTextFillColor: fg }}>{children}</span>
+      {trailing && (
+        <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{trailing}</span>
+      )}
     </button>
   );
 }
