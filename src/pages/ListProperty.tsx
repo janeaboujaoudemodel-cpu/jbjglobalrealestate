@@ -152,10 +152,15 @@ const ListProperty = () => {
     }
   }, [mode]);
 
+  const theme = themeForMode(mode);
+  const ombreShine =
+    `radial-gradient(circle at 18% 18%, ${theme.iconAccent}33 0%, transparent 60%)`;
+
   return (
     <div
       className="min-h-screen"
       style={{ backgroundColor: CHAMPAGNE, color: INK }}
+      data-listing-mode={theme.name}
     >
       <SEOHead
         title="List Your Property — JBJ Global Real Estate"
@@ -167,23 +172,26 @@ const ListProperty = () => {
         <AnimatedBorderShell tone="navy" bare>
         <div style={{ backgroundColor: CHAMPAGNE }}>
 
-      {/* ───────────────────── Hero (navy gradient) ───────────────────── */}
+      {/* ───────────────────── Hero — mode-aware gradient ───────────────────── */}
       <section
-        className="relative w-full bg-[#102540]"
+        className="relative w-full"
         data-surface="dark"
         data-allow-dark-cta
         data-no-contrast-guard
-        style={{ background: BLUE_GRADIENT }}
+        style={{ background: theme.heroGradient }}
       >
-        {/* subtle purple hairline along the bottom of the hero */}
         <div
           className="absolute inset-x-0 bottom-0 h-px"
           style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(168,85,247,0.65), transparent)",
+            background: `linear-gradient(90deg, transparent, ${theme.badgeBorder}A6, transparent)`,
           }}
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-16 pb-12 md:pb-16">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ background: ombreShine }}
+        />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-16 pb-12 md:pb-16">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -193,13 +201,13 @@ const ListProperty = () => {
             <span
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold"
               style={{
-                backgroundColor: "rgba(168,85,247,0.14)",
+                backgroundColor: theme.badgeBg,
                 color: "#FFFFFF",
-                border: "1px solid #A855F7",
+                border: `1px solid ${theme.badgeBorder}`,
               }}
               data-no-contrast-guard
             >
-              <ShieldCheck className="w-3.5 h-3.5" style={{ color: "#A855F7" }} />
+              <ShieldCheck className="w-3.5 h-3.5" style={{ color: theme.badgeBorder }} />
               JBJ Seller Portal
             </span>
             <h1
@@ -235,6 +243,7 @@ const ListProperty = () => {
                   color: "#FFFFFF",
                   border: "1px solid #15803D",
                   WebkitTextFillColor: "#FFFFFF",
+                  boxShadow: "0 10px 28px -12px rgba(21,128,61,0.55)",
                 }}
               >
                 <ClipboardCheck className="w-4 h-4" style={{ color: "#FFFFFF" }} />
@@ -245,17 +254,18 @@ const ListProperty = () => {
                 onClick={() => setMode("ai")}
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:bg-[#A855F7]/10"
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:brightness-110"
                 style={{
-                  backgroundColor: "transparent",
+                  backgroundColor: "#5B21B6",
                   color: "#FFFFFF",
-                  border: "1.5px solid #A855F7",
+                  border: "1px solid #A855F7",
                   WebkitTextFillColor: "#FFFFFF",
+                  boxShadow: "0 10px 28px -12px rgba(91,33,182,0.55)",
                 }}
               >
-                <Wand2 className="w-4 h-4" style={{ color: "#A855F7" }} />
+                <Wand2 className="w-4 h-4" style={{ color: "#FFFFFF" }} />
                 <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>List with AI</span>
-                <Sparkles className="w-3.5 h-3.5" style={{ color: "#A855F7" }} />
+                <Sparkles className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} />
               </button>
               <a
                 href="#my-submissions"
@@ -270,21 +280,21 @@ const ListProperty = () => {
         </div>
       </section>
 
-      {/* ───────────────── Purpose + Mode selector ───────────────── */}
+      {/* ───────────────── Purpose + Mode selector (mode-aware accent) ───────────────── */}
       <section className="px-4 sm:px-6 md:px-10 mt-8 md:mt-10 pb-8 md:pb-10 relative z-10">
         <div className="max-w-5xl mx-auto">
           <div
             className="rounded-2xl p-4 sm:p-6 md:p-7 shadow-xl"
             style={{
-              backgroundColor: CHAMPAGNE,
-              border: `1px solid ${GOLD}`,
+              backgroundColor: "#FFFFFF",
+              border: `1.5px solid ${theme.primary}`,
+              boxShadow: `0 18px 40px -22px ${theme.primary}66`,
             }}
           >
             <div className="flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
-              {/* Purpose */}
               <div className="flex-1">
                 <div className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-2"
-                  style={{ color: INK + "B3" }}>
+                  style={{ color: theme.primary }}>
                   Purpose
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
@@ -292,6 +302,7 @@ const ListProperty = () => {
                     active={purpose === "sale"}
                     onClick={() => setPurpose("sale")}
                     icon={<Tag className="w-4 h-4" />}
+                    theme={theme}
                   >
                     For Sale
                   </SegmentedPill>
@@ -299,16 +310,16 @@ const ListProperty = () => {
                     active={purpose === "rent"}
                     onClick={() => setPurpose("rent")}
                     icon={<Key className="w-4 h-4" />}
+                    theme={theme}
                   >
                     For Rent
                   </SegmentedPill>
                 </div>
               </div>
 
-              {/* Mode */}
               <div className="flex-1">
                 <div className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-2"
-                  style={{ color: INK + "B3" }}>
+                  style={{ color: theme.primary }}>
                   How would you like to list?
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
@@ -316,6 +327,7 @@ const ListProperty = () => {
                     active={mode === "manual"}
                     onClick={() => setMode("manual")}
                     icon={<ClipboardCheck className="w-4 h-4" />}
+                    theme={THEME_EMERALD}
                   >
                     Manual
                   </SegmentedPill>
@@ -323,16 +335,16 @@ const ListProperty = () => {
                     active={mode === "ai"}
                     onClick={() => setMode("ai")}
                     icon={<Wand2 className="w-4 h-4" />}
+                    theme={THEME_PURPLE}
+                    trailing={<Sparkles className="w-3 h-3" />}
                   >
-                    <span className="flex items-center gap-1.5">
-                      AI-Assisted
-                      <Sparkles className="w-3 h-3" style={{ color: GOLD }} />
-                    </span>
+                    AI-Assisted
                   </SegmentedPill>
                   <SegmentedPill
                     active={mode === "browse"}
                     onClick={() => setMode("browse")}
                     icon={<Eye className="w-4 h-4" />}
+                    theme={THEME_NAVY}
                   >
                     Browse
                   </SegmentedPill>
@@ -366,8 +378,8 @@ const ListProperty = () => {
         )}
       </section>
 
-      {/* ───────────────── My Submissions section ───────────────── */}
-      <MySubmissionsSection />
+      {/* ───────────────── My Submissions section (mode-aware) ───────────────── */}
+      <MySubmissionsSection theme={theme} />
         </div>
         </AnimatedBorderShell>
       </div>
