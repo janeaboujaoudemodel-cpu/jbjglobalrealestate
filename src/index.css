@@ -5042,9 +5042,17 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#102540\] * {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   Manual Listing Shell — emerald accent, white surfaces.
+   Manual Listing Shell — PREMIUM dark emerald + white + ombre cards.
    Scoped to /list-property?mode=manual (SellerListing).
+   Palette:
+     emerald-deep #022C22   forest body
+     emerald      #064E3B   primary
+     emerald-mid  #047857   accent
+     emerald-soft #ECFDF5   wash
+     ink/black    #0A0F0C   ombre tail
    ────────────────────────────────────────────────────────────── */
+
+/* Champagne page/surfaces → white */
 [data-manual-listing-shell] .bg-\[\#FDFBF7\],
 [data-manual-listing-shell] .bg-\[\#F7F2EA\],
 [data-manual-listing-shell] .bg-\[\#EFE6D6\] {
@@ -5052,45 +5060,90 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#102540\] * {
   background-image: none !important;
 }
 
-/* Soft champagne gradient hero band → emerald wash */
-[data-manual-listing-shell] .bg-gradient-to-br.from-\[\#F7F1E6\] {
-  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 50%, #A7F3D0 100%) !important;
+/* Card gradient → premium green-to-black ombre with subtle shine */
+[data-manual-listing-shell] .bg-gradient-to-br.from-\[\#FDFBF7\],
+[data-manual-listing-shell] .bg-gradient-to-br.from-\[\#F7F1E6\],
+[data-manual-listing-shell] .bg-gradient-to-br.from-\[\#F7F2EA\] {
+  background:
+    radial-gradient(circle at 12% 10%, rgba(16,185,129,0.18) 0%, transparent 55%),
+    linear-gradient(135deg, #FFFFFF 0%, #ECFDF5 55%, #064E3B 100%) !important;
+  border-color: rgba(6,78,59,0.55) !important;
+  box-shadow:
+    0 24px 60px -28px rgba(6,78,59,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.7) !important;
+  color: #0A0F0C !important;
 }
 
-/* Gold hairlines → emerald hairlines */
+/* Gold hairlines → deep emerald hairlines */
 [data-manual-listing-shell] .border-\[\#B89555\],
 [data-manual-listing-shell] [class*="border-\[\#B89555\]\/"] {
-  border-color: rgba(21,128,61,0.28) !important;
+  border-color: rgba(6,78,59,0.55) !important;
 }
 
-/* Primary champagne CTAs → emerald fill, white text */
+/* Primary CTAs (champagne/ink) → emerald-to-black ombre fill, white text */
 [data-manual-listing-shell] button.bg-\[\#EFE6D6\],
-[data-manual-listing-shell] button.bg-\[\#1A1A1A\] {
-  background-color: #15803D !important;
+[data-manual-listing-shell] button.bg-\[\#1A1A1A\],
+[data-manual-listing-shell] a.bg-\[\#1A1A1A\] {
+  background: linear-gradient(135deg, #047857 0%, #064E3B 55%, #022C22 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  border: 1px solid #15803D !important;
+  border: 1px solid #022C22 !important;
+  box-shadow: 0 12px 28px -14px rgba(6,78,59,0.6) !important;
 }
 [data-manual-listing-shell] button.bg-\[\#EFE6D6\]:hover,
-[data-manual-listing-shell] button.bg-\[\#1A1A1A\]:hover {
-  background-color: #166534 !important;
+[data-manual-listing-shell] button.bg-\[\#1A1A1A\]:hover,
+[data-manual-listing-shell] a.bg-\[\#1A1A1A\]:hover {
+  filter: brightness(1.08) !important;
 }
 [data-manual-listing-shell] button.bg-\[\#EFE6D6\] svg,
-[data-manual-listing-shell] button.bg-\[\#1A1A1A\] svg {
+[data-manual-listing-shell] button.bg-\[\#1A1A1A\] svg,
+[data-manual-listing-shell] a.bg-\[\#1A1A1A\] svg {
   color: #FFFFFF !important;
 }
 
-/* Selected pill/card outlines → emerald */
+/* Selected pill/card outlines → emerald with ink text on white */
 [data-manual-listing-shell] button.border-\[\#B89555\]\/50 {
-  border-color: #15803D !important;
+  border-color: #064E3B !important;
   background-color: #FFFFFF !important;
+  color: #064E3B !important;
 }
 
-/* Inputs/textarea inside cards */
+/* Inputs / textareas / selects → white with emerald hairline */
 [data-manual-listing-shell] input.bg-\[\#FDFBF7\],
-[data-manual-listing-shell] textarea.bg-\[\#FDFBF7\] {
+[data-manual-listing-shell] input.bg-\[\#F7F2EA\],
+[data-manual-listing-shell] textarea.bg-\[\#FDFBF7\],
+[data-manual-listing-shell] textarea.bg-\[\#F7F2EA\],
+[data-manual-listing-shell] [role="combobox"].bg-\[\#F7F2EA\],
+[data-manual-listing-shell] button.bg-\[\#F7F2EA\] {
   background-color: #FFFFFF !important;
-  color: #1A1A1A !important;
-  border-color: rgba(21,128,61,0.28) !important;
+  color: #0A0F0C !important;
+  border-color: rgba(6,78,59,0.45) !important;
 }
+[data-manual-listing-shell] input:focus,
+[data-manual-listing-shell] textarea:focus,
+[data-manual-listing-shell] [role="combobox"]:focus {
+  border-color: #064E3B !important;
+  box-shadow: 0 0 0 3px rgba(6,78,59,0.15) !important;
+}
+
+/* Step rail header — active step → emerald ombre badge, white icon */
+[data-manual-listing-shell] .bg-gradient-to-br.from-\[\#F7F1E6\].via-\[\#ECE2D2\] {
+  background: linear-gradient(135deg, #047857 0%, #064E3B 60%, #022C22 100%) !important;
+  border-color: #022C22 !important;
+  color: #FFFFFF !important;
+}
+[data-manual-listing-shell] .bg-gradient-to-br.from-\[\#F7F1E6\].via-\[\#ECE2D2\] svg {
+  color: #FFFFFF !important;
+}
+
+/* Section heading + labels → deep emerald for premium contrast */
+[data-manual-listing-shell] h1,
+[data-manual-listing-shell] h2,
+[data-manual-listing-shell] h3 {
+  color: #064E3B !important;
+}
+[data-manual-listing-shell] label {
+  color: #022C22 !important;
+}
+
 
