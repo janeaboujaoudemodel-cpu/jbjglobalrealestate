@@ -656,10 +656,10 @@ const ListingPortalSubmit = () => {
                   letterSpacing: "-0.02em",
                 }}
               >
-                Smart Listing Creator — For {actionNoun}
+                Welcome, {firstName} — {party} Listing Studio for {actionNoun}
               </h1>
               <p className="text-[#1A1A1A]/80 mb-6">
-                Upload your documents and let AI create a professional {actionVerb} listing for you.
+                {user ? `Glad to have you back, ${firstName}. ` : ""}Upload your documents and let AI create a professional {actionVerb} listing for you.
               </p>
 
               <div className="[&>div]:mb-0">
