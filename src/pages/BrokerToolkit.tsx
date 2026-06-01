@@ -27,10 +27,6 @@ const sectionVariants = {
 export default function BrokerToolkit() {
   const [activeSection, setActiveSection] = useState("tools");
 
-  // Sections after the sticky nav alternate between page/surface/raised bands
-  // (the band tone IS the divider — no gray rules, no dark fills).
-  const bandTones = ["surface", "page", "surface", "page", "raised", "page", "surface"];
-
   const bodySections = [
     <BrokerToolkitTools key="tools" />,
     <BrokerToolkitSupport key="support" />,
@@ -53,17 +49,16 @@ export default function BrokerToolkit() {
       />
 
       {bodySections.map((section, i) => (
-        <motion.section
+        <motion.div
           key={section.key}
           custom={i}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
           variants={sectionVariants}
-          className={`jj-band jj-band--${bandTones[i % bandTones.length]}`}
         >
           {section}
-        </motion.section>
+        </motion.div>
       ))}
     </div>
   );
