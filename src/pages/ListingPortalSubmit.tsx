@@ -600,11 +600,20 @@ const ListingPortalSubmit = () => {
   return (
     <section
       data-ai-listing-shell
-      className="relative w-full min-h-screen bg-gradient-to-br from-[#0b1c36] via-[#102540] to-[#1a3d63]"
+      className="relative w-full py-8 md:py-10"
+      style={{ background: "linear-gradient(135deg, #F2EBFF 0%, #FFFFFF 55%, #E5D6FF 100%)" }}
     >
-      <div className="relative pt-20 pb-12 overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <div ref={creatorRef} className="w-full max-w-none">
+      <div className="relative px-3 sm:px-4 md:px-6">
+        <div
+          ref={creatorRef}
+          className="w-full max-w-6xl mx-auto rounded-3xl overflow-hidden"
+          style={{
+            background: "linear-gradient(135deg, #2E1065 0%, #4C1D95 55%, #0B0B0B 100%)",
+            border: "1.5px solid #A855F7",
+            boxShadow: "0 30px 60px -28px rgba(168,85,247,0.55)",
+          }}
+        >
+        <div className="p-5 md:p-8">
             <Button
               variant="ghost"
               onClick={() => navigate('/listing-portal')}
