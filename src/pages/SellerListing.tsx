@@ -538,12 +538,16 @@ Requirements:
         description="Submit your property for sale with JBJ Global Real Estate. Our guided listing tool helps you provide all necessary details for a successful sale."
       />
       
-      <main className="min-h-screen bg-[#1A1A1A] pt-20 pb-12 md:pb-16">
-        {/* Layer 2: Active Champagne Hero Section with proper gutters */}
-        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-t-2xl">
+      <main className="min-h-screen bg-[#FDFBF7] pt-6 pb-12 md:pb-16">
+        {/* Layer 2: Active Champagne Hero Section (full-bleed, no black gutters) */}
+        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
           <div className="container mx-auto px-4 py-12">
             <div className="max-w-4xl mx-auto text-center">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-[#1A1A1A] text-white text-sm font-medium mb-4 border border-[#B89555]/30">
+              <span
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] text-sm font-medium mb-4 border border-[#B89555]"
+                data-no-contrast-guard
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+              >
                 Seller Listing Tool
               </span>
               <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-3">
