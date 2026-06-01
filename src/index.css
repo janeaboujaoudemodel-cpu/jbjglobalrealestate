@@ -3676,8 +3676,8 @@ hr[data-gold-hairline],
 }
 .group:hover .price-pill-premium .price-pill-value,
 .group:focus-within .price-pill-premium .price-pill-value {
-  color: #8E6E36;
-  -webkit-text-fill-color: #8E6E36;
+  color: #1A1A1A;
+  -webkit-text-fill-color: #1A1A1A;
 }
 
 /* Status badge (crystal + gold hairline) — same treatment */
