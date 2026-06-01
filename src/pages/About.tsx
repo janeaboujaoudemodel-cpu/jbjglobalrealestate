@@ -491,7 +491,7 @@ const About = () => {
         </Section>
 
         {/* SECTION 8: OUR COMMITMENT */}
-        <Section className="py-8 md:py-12 lg:py-16">
+        <Section className="!py-6 md:!py-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
