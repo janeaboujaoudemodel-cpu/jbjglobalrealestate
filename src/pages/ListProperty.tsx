@@ -123,12 +123,12 @@ const ListProperty = () => {
         data-no-contrast-guard
         style={{ background: BLUE_GRADIENT }}
       >
-        {/* subtle gold hairline along the bottom of the hero */}
+        {/* subtle purple hairline along the bottom of the hero */}
         <div
           className="absolute inset-x-0 bottom-0 h-px"
           style={{
             background:
-              "linear-gradient(90deg, transparent, rgba(184,149,85,0.6), transparent)",
+              "linear-gradient(90deg, transparent, rgba(168,85,247,0.65), transparent)",
           }}
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-16 pb-12 md:pb-16">
@@ -141,13 +141,13 @@ const ListProperty = () => {
             <span
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold"
               style={{
-                backgroundColor: "rgba(184,149,85,0.12)",
-                color: GOLD,
-                border: `1px solid ${GOLD}`,
+                backgroundColor: "rgba(168,85,247,0.14)",
+                color: "#FFFFFF",
+                border: "1px solid #A855F7",
               }}
               data-no-contrast-guard
             >
-              <ShieldCheck className="w-3.5 h-3.5" style={{ color: GOLD }} />
+              <ShieldCheck className="w-3.5 h-3.5" style={{ color: "#A855F7" }} />
               JBJ Seller Portal
             </span>
             <h1
@@ -177,33 +177,33 @@ const ListProperty = () => {
                 onClick={() => setMode("manual")}
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:brightness-[0.97]"
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:brightness-110"
                 style={{
-                  backgroundColor: CHAMPAGNE,
-                  color: INK,
-                  border: `1px solid ${GOLD}`,
-                  WebkitTextFillColor: INK,
+                  backgroundColor: "#15803D",
+                  color: "#FFFFFF",
+                  border: "1px solid #15803D",
+                  WebkitTextFillColor: "#FFFFFF",
                 }}
               >
-                <ClipboardCheck className="w-4 h-4" style={{ color: INK }} />
-                <span style={{ color: INK, WebkitTextFillColor: INK }}>List Manually</span>
+                <ClipboardCheck className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>List Manually</span>
               </button>
               <button
                 type="button"
                 onClick={() => setMode("ai")}
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:bg-white/5"
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:bg-[#A855F7]/10"
                 style={{
                   backgroundColor: "transparent",
                   color: "#FFFFFF",
-                  border: `1.5px solid ${GOLD}`,
+                  border: "1.5px solid #A855F7",
                   WebkitTextFillColor: "#FFFFFF",
                 }}
               >
-                <Wand2 className="w-4 h-4" style={{ color: GOLD }} />
+                <Wand2 className="w-4 h-4" style={{ color: "#A855F7" }} />
                 <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>List with AI</span>
-                <Sparkles className="w-3.5 h-3.5" style={{ color: GOLD }} />
+                <Sparkles className="w-3.5 h-3.5" style={{ color: "#A855F7" }} />
               </button>
               <a
                 href="#my-submissions"
@@ -292,7 +292,13 @@ const ListProperty = () => {
       </section>
 
       {/* ─────────────────── Active form / browser / picker ─────────────────── */}
-      <section className="px-2 sm:px-4 md:px-6 pt-8 pb-12">
+      <section
+        className={
+          mode === "ai"
+            ? "w-full pt-4 pb-6"
+            : "px-2 sm:px-4 md:px-6 pt-8 pb-12"
+        }
+      >
         {mode === "pick" || !ActiveTab ? (
           <PremiumModePicker onPick={setMode} />
         ) : (
