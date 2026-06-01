@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Lock, CheckCircle, Clock, ArrowRight, Sparkles } from "lucide-react";
 import type { EducationBook, BookProgress } from "@/hooks/useBrokerEducation";
 import { PremiumBook3D } from "@/components/broker-education/PremiumBook3D";
+import { PremiumLockBadge } from "@/components/broker-education/PremiumLock";
 
 interface Book3DCardProps {
   book: EducationBook;
