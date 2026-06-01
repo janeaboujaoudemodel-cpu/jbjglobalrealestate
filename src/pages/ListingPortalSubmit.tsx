@@ -641,7 +641,7 @@ const ListingPortalSubmit = () => {
                   boxShadow: "0 6px 16px -8px rgba(91,33,182,0.55)",
                 }}
               >
-                <Wand2 className="w-3.5 h-3.5" /> AI-Powered · {urlPurpose === 'rent' ? 'Landlord' : 'Seller'} Listing Tool
+                <Wand2 className="w-3.5 h-3.5" /> AI-Powered · {party} Listing Tool
               </span>
               <h1
                 className="text-3xl md:text-4xl font-bold mb-3"
@@ -654,10 +654,10 @@ const ListingPortalSubmit = () => {
                   letterSpacing: "-0.02em",
                 }}
               >
-                Smart Listing Creator — {urlPurpose === 'rent' ? 'For Rent' : 'For Sale'}
+                Smart Listing Creator — For {actionNoun}
               </h1>
               <p className="text-[#1A1A1A]/80 mb-6">
-                Upload your documents and let AI create a professional {urlPurpose === 'rent' ? 'rental' : 'sale'} listing for you.
+                Upload your documents and let AI create a professional {actionVerb} listing for you.
               </p>
 
               <div className="[&>div]:mb-0">
