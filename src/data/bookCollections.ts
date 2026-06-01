@@ -193,18 +193,164 @@ const rentGuideBook: BookData = {
   category: 'guide',
   coverLocked: true,
   tableOfContents: [
-    { title: 'Renting in Dubai: Getting Started', duration: '15 min' },
-    { title: 'Finding the Right Neighborhood', duration: '20 min' },
-    { title: 'Understanding Rental Contracts', duration: '20 min' },
-    { title: 'Ejari Registration Explained', duration: '15 min' },
-    { title: 'Security Deposits & Cheque Payments', duration: '15 min' },
-    { title: 'DEWA & Utility Setup', duration: '10 min' },
-    { title: 'Tenant Rights Under Dubai Law', duration: '20 min' },
-    { title: 'Rental Disputes Resolution', duration: '15 min' },
-    { title: 'Renewal, Increases & Eviction Rules', duration: '20 min' },
-    { title: 'Moving In & Moving Out Checklist', duration: '10 min' },
+    {
+      title: 'Renting in Dubai: Getting Started',
+      duration: '15 min',
+      summary:
+        'Dubai\u2019s rental market is regulated by the Dubai Land Department (DLD) and its agency RERA. Before you start viewings, anchor three things: your budget, your preferred community, and your documentation pack.',
+      bullets: [
+        'Plan for total housing cost = rent + 5% security deposit + 5% agency commission + ~AED 220 Ejari + DEWA deposit (AED 2,000 apartment / AED 4,000 villa).',
+        'Have ready: passport copy, residence visa or entry stamp, Emirates ID (or application), and salary certificate or 3 months\u2019 bank statements.',
+        'Decide on lease length \u2014 12 months is the Dubai default; shorter terms exist but usually carry a 10\u201320% premium.',
+        'Shortlist neighbourhoods by commute time, school catchment, metro access, and community charges.',
+      ],
+      callout: {
+        label: 'Source',
+        body: 'Dubai Land Department \u2014 Real Estate Regulatory Agency (RERA) tenant guidelines.',
+      },
+    },
+    {
+      title: 'Finding the Right Neighborhood',
+      duration: '20 min',
+      summary:
+        'Dubai is a city of distinct master-planned communities. Match the community to your lifestyle before you compare individual units.',
+      bullets: [
+        'Downtown Dubai & Business Bay \u2014 apartments, walkable, premium rents, close to DIFC.',
+        'Dubai Marina, JBR, Bluewaters \u2014 waterfront living, tram + metro, strong short-let resale.',
+        'Palm Jumeirah \u2014 beach access, villas and branded residences, top-tier pricing.',
+        'Arabian Ranches, Dubai Hills, Tilal Al Ghaf \u2014 villa communities with schools, parks, retail.',
+        'JVC, JVT, Town Square, Dubai South \u2014 value-driven family apartments and townhouses.',
+      ],
+    },
+    {
+      title: 'Understanding Rental Contracts',
+      duration: '20 min',
+      summary:
+        'Every Dubai tenancy uses a written contract that feeds into the Ejari system. Read every clause \u2014 once signed and registered, terms govern the full lease year.',
+      bullets: [
+        'Confirm names match passport/Emirates ID for both landlord and tenant.',
+        'Verify the property address matches the title deed and the Makani number.',
+        'Check rent amount, payment schedule, number of cheques, and exact cheque dates.',
+        'Note maintenance responsibility threshold \u2014 commonly AED 500\u20131,000 borne by tenant.',
+        'Look for the 90-day non-renewal notice clause required by Dubai Law No. 33 of 2008.',
+      ],
+      callout: {
+        label: 'Legal basis',
+        body: 'Dubai Law No. 26 of 2007 and amending Law No. 33 of 2008 govern landlord\u2013tenant relations.',
+      },
+    },
+    {
+      title: 'Ejari Registration Explained',
+      duration: '15 min',
+      summary:
+        'Ejari (\u201cmy rent\u201d) is the mandatory DLD registration that gives the tenancy legal force. Without an Ejari certificate you cannot apply for utilities, residence visas, or file rental disputes.',
+      bullets: [
+        'Either the landlord, broker, or tenant can register \u2014 most often the broker handles it.',
+        'Required documents: signed tenancy contract, title deed copy, landlord passport, tenant passport + visa + Emirates ID, DEWA premises number.',
+        'Cost is typically AED 195\u2013220 depending on the service centre or online channel.',
+        'You\u2019ll receive an Ejari certificate with a unique contract number \u2014 keep the PDF safe.',
+        'Renew Ejari each year when the tenancy renews; lapsed Ejari blocks visa and DEWA actions.',
+      ],
+      callout: {
+        label: 'Source',
+        body: 'Dubai Land Department \u2014 Ejari portal & Dubai REST app.',
+      },
+    },
+    {
+      title: 'Security Deposits & Cheque Payments',
+      duration: '15 min',
+      summary:
+        'Dubai still runs on post-dated cheques. Understand the math before you write them \u2014 a bounced cheque can trigger civil and even criminal proceedings.',
+      bullets: [
+        'Security deposit is typically 5% of annual rent for unfurnished, 10% for furnished \u2014 fully refundable subject to property condition.',
+        'Cheques are post-dated; 1, 2, 4, 6, or 12 cheques are common. Fewer cheques often win a 2\u20135% rent discount.',
+        'Write each cheque in the landlord\u2019s exact registered name \u2014 not a property-management company unless the contract names them.',
+        'Keep photocopies of every cheque and request signed receipts.',
+        'Get the deposit refund clause in writing: how soon after move-out, what deductions are allowed.',
+      ],
+    },
+    {
+      title: 'DEWA & Utility Setup',
+      duration: '10 min',
+      summary:
+        'Dubai Electricity & Water Authority (DEWA) supplies power, water, and district cooling billing for most communities. Account activation usually happens within one working day.',
+      bullets: [
+        'Apply on the DEWA app or website with Ejari, Emirates ID, and the premises number.',
+        'Refundable security deposit: AED 2,000 for apartments, AED 4,000 for villas.',
+        'One-time connection fees: ~AED 110 (small property) to AED 310 (large property).',
+        'District cooling (Empower, Emicool, Tabreed) is billed separately \u2014 confirm the chiller provider before signing.',
+        'Internet: du or Etisalat by e&. Allow 3\u20137 days for fibre activation.',
+      ],
+    },
+    {
+      title: 'Tenant Rights Under Dubai Law',
+      duration: '20 min',
+      summary:
+        'Dubai tenancy law is tenant-protective when the lease is properly Ejari-registered. Know your statutory rights before negotiating.',
+      bullets: [
+        'Landlord cannot enter the unit without prior notice and tenant consent.',
+        'Landlord cannot raise rent during the lease term \u2014 only at renewal, capped by the RERA Rental Index.',
+        'Eviction during the lease is allowed only on grounds listed in Article 25 (e.g. non-payment after 30-day notice, illegal use, sale to a buyer who self-occupies).',
+        'Eviction for landlord self-use or sale requires 12 months\u2019 written notice via notary or registered mail.',
+        'Tenant has the right to a property in habitable condition and to undisturbed possession.',
+      ],
+      callout: {
+        label: 'Legal basis',
+        body: 'Dubai Law No. 26 of 2007, Articles 24\u201325, as amended by Law No. 33 of 2008.',
+      },
+    },
+    {
+      title: 'Rental Disputes Resolution',
+      duration: '15 min',
+      summary:
+        'Disagreements go to the Rental Disputes Center (RDC), the judicial arm of DLD created in 2013. Decisions are fast and binding.',
+      bullets: [
+        'File online via the Dubai REST app or in person at the RDC in Deira.',
+        'Filing fee: 3.5% of annual rent (min AED 500, max AED 20,000).',
+        'Mediation stage first; if unresolved, a judge issues a first-instance ruling within ~30 days.',
+        'Appeals are limited to claims above AED 100,000 and must be filed within 15 days.',
+        'Common cases: rent increases above the RERA cap, security deposit refunds, premature eviction.',
+      ],
+      callout: {
+        label: 'Source',
+        body: 'Dubai Land Department \u2014 Rental Disputes Center (RDC).',
+      },
+    },
+    {
+      title: 'Renewal, Increases & Eviction Rules',
+      duration: '20 min',
+      summary:
+        'Rent increases at renewal are capped by the RERA Rental Index. Both parties must give 90 days\u2019 notice before lease end if they want changes.',
+      bullets: [
+        'No increase if current rent is within 10% of the average market rate for similar units.',
+        '5% increase if current rent is 11\u201320% below market.',
+        '10% increase if 21\u201330% below market.',
+        '15% increase if 31\u201340% below market.',
+        '20% increase if more than 40% below market.',
+        'Check your specific cap on the RERA Rental Index (Dubai REST app).',
+        'Any notice of non-renewal or rent change must reach the other party 90 days before lease expiry.',
+      ],
+      callout: {
+        label: 'Legal basis',
+        body: 'Decree No. 43 of 2013 \u2014 Rent Increase Calculation Decree.',
+      },
+    },
+    {
+      title: 'Moving In & Moving Out Checklist',
+      duration: '10 min',
+      summary:
+        'Documenting condition at move-in and move-out protects your deposit. Treat the handover like a property audit.',
+      bullets: [
+        'Move-in: photograph every room, appliance, and existing damage \u2014 share with landlord by email the same day.',
+        'Test every AC, light fixture, tap, drain, lock, and appliance before signing the handover form.',
+        'Record DEWA, gas, chiller, and water meter readings on day one.',
+        'Keep all maintenance receipts \u2014 you can claim reimbursement for repairs the landlord refused to handle.',
+        'Move-out: give 90 days\u2019 notice, settle DEWA + Ejari, repaint if contract requires, request the deposit refund in writing.',
+      ],
+    },
   ],
 };
+
 
 const tenantGuideBook: BookData = {
   title: 'Tenant Guide',
