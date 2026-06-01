@@ -1032,16 +1032,16 @@ const AIHub = () => {
         <section className="py-8 md:py-10 bg-[#1A1A1A]">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {/* Broker Hub CTA */}
+              {/* Broker Portal CTA */}
               <div className="bg-gradient-to-br from-fuchsia-900/30 to-purple-900/30 border border-fuchsia-500/20 rounded-2xl p-8 text-center">
                 <GraduationCap className="w-8 h-8 text-fuchsia-400 mx-auto mb-3" />
-                <h3 className="text-xl font-bold text-white mb-2">JBJ Broker Hub</h3>
+                <h3 className="text-xl font-bold text-white mb-2">JBJ Broker Portal</h3>
                 <p className="text-[#1A1A1A]/70 text-sm mb-4">Training, education, books, certifications, listing portal, and CRM tools for brokers.</p>
                 <button 
-                  onClick={() => navigate('/broker-hub')}
+                  onClick={() => navigate('/broker/portal')}
                   className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white hover:opacity-90 transition-all"
                 >
-                  Go to Broker Hub
+                  Go to Broker Portal
                   <ArrowUpRight className="w-4 h-4" />
                 </button>
               </div>

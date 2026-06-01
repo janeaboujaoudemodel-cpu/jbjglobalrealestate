@@ -29,7 +29,7 @@ const suites = [
     title: 'Broker Intelligence',
     description: 'Lead management, CRM, client communication, objection handling, meeting summaries, listing portals, and AI-powered sales acceleration tools.',
     icon: Users,
-    href: '/broker-hub',
+    href: '/broker/portal',
     toolCount: 18,
     gradient: 'from-fuchsia-600 to-purple-700',
     glowColor: 'fuchsia',

@@ -175,8 +175,9 @@ const BrokerLearningVoiceAdmin = lazy(() => import("@/pages/owner/BrokerLearning
 const AIHub = lazy(() => import("@/pages/AIHub"));
 const InteriorDesignAI = lazy(() => import("@/pages/InteriorDesignAI"));
 const InvestorHub = lazy(() => import("@/pages/InvestorHub"));
-const BrokerHub = lazy(() => import("@/pages/BrokerHub"));
-const JBJAcademy = lazy(() => import("@/pages/JBJAcademy"));
+// /broker-hub retired — duplicates Broker Portal. Redirects via OwnerAwareBrokerRedirect.
+// JBJ Academy now renders the broker learning/training experience (former /broker/learning page).
+const JBJAcademy = lazy(() => import("@/pages/broker/BrokerLearning"));
 // AcademyGraduates merged into /jbj-academy
 const BrokerPortal = lazy(() => import("@/pages/BrokerPortal"));
 
@@ -409,7 +410,7 @@ export const PublicRoutes = () => (
     <Route path="/interior-design-ai" element={<AuthRequiredRoute><InteriorDesignAI /></AuthRequiredRoute>} />
     <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
     <Route path="/investor-hub" element={<AuthRequiredRoute><ModeRequiredRoute modes={['investor']}><InvestorHub /></ModeRequiredRoute></AuthRequiredRoute>} />
-    <Route path="/broker-hub" element={<OwnerAwareBrokerRedirect />} />
+    {/* /broker-hub fully deleted — no route, no redirect. Falls through to NotFound. */}
     <Route path="/jbj-academy" element={<AuthRequiredRoute><JBJAcademy /></AuthRequiredRoute>} />
     {/* /academy/graduates retired — merged into /jbj-academy */}
     <Route path="/broker-portal" element={<OwnerAwareBrokerRedirect />} />
