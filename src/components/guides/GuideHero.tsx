@@ -15,36 +15,47 @@ interface GuideHeroProps {
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 15 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
 const staggerContainer = {
   hidden: { opacity: 0 },
-  visible: { 
+  visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.1 }
-  }
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+  },
 };
 
-export const GuideHero = ({ 
-  badge, 
-  badgeIcon: BadgeIcon, 
-  title, 
-  description, 
+/**
+ * Premium full-viewport guide hero.
+ * - 100dvh (true full screen, mobile-safe)
+ * - Strong dark scrim → headline always readable on photo
+ * - Unified white headline with gold underline accent
+ * - Two CTAs via locked primitives (.jj-cta-champagne / .jj-cta-outline)
+ */
+export const GuideHero = ({
+  badge,
+  badgeIcon: BadgeIcon,
+  title,
+  description,
   videoSrc,
   videoPoster,
   backgroundImage,
-  actions 
+  actions,
 }: GuideHeroProps) => {
   return (
-    <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
-      {/* Video or Image Background */}
+    <section
+      data-hero-dark
+      className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden"
+      style={{ minHeight: "100dvh" }}
+    >
+      {/* Media background */}
       <div className="absolute inset-0 z-0">
         {videoSrc ? (
-          <video 
-            autoPlay 
-            loop 
-            muted 
+          <video
+            autoPlay
+            loop
+            muted
             playsInline
             className="w-full h-full object-cover"
             poster={videoPoster}
@@ -52,64 +63,75 @@ export const GuideHero = ({
             <source src={videoSrc} type="video/mp4" />
           </video>
         ) : backgroundImage ? (
-          <div 
+          <div
             className="w-full h-full bg-cover bg-center"
             style={{ backgroundImage: `url(${backgroundImage})` }}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-b from-zinc-900 to-black" />
         )}
-        {/* Overlay gradients */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/70 to-black" />
+        {/* Two-layer scrim — readable headline guarantee */}
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.45)_45%,rgba(0,0,0,0.78)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.35)_75%)]" />
       </div>
-      
-      {/* Decorative radial gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/8 via-transparent to-transparent z-[1]" />
-      
-      {/* Decorative elements */}
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#EFE6D6]/5 rounded-full blur-3xl z-[1]" />
-      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#EFE6D6]/3 rounded-full blur-3xl z-[1]" />
-      
-      <motion.div 
+
+      <motion.div
         className="relative z-10 w-full py-24"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
       >
         <div className="max-w-4xl mx-auto text-center px-4">
-          {/* Badge - Glass style with gold border, engraved look */}
-          <motion.button 
-            className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
+          {/* Badge */}
+          <motion.div
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-8"
             style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-              backdropFilter: 'blur(20px)',
-              border: '1.5px solid rgba(200,167,102,0.6)',
-              boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
+              background: "rgba(255,255,255,0.06)",
+              backdropFilter: "blur(20px)",
+              border: "1px solid rgba(184,149,85,0.55)",
             }}
             variants={fadeInUp}
           >
-            <span className="text-[#B89555] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">{badge}</span>
-          </motion.button>
-          
-          {/* Title */}
-          <motion.h1 
+            <BadgeIcon className="w-3.5 h-3.5 text-[#B89555]" />
+            <span className="text-[#B89555] font-semibold text-[10px] md:text-xs uppercase tracking-[0.22em]">
+              {badge}
+            </span>
+          </motion.div>
+
+          {/* Title — unified white, gold underline accent */}
+          <motion.h1
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
+            style={{ textShadow: "0 2px 24px rgba(0,0,0,0.55)" }}
             variants={fadeInUp}
           >
             {title}
           </motion.h1>
-          
+
+          {/* Gold hairline accent */}
+          <motion.div
+            variants={fadeInUp}
+            className="mx-auto mb-6 h-px w-24"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, rgba(184,149,85,0.85), transparent)",
+            }}
+          />
+
           {/* Description */}
-          <motion.p 
-            className="text-lg md:text-xl text-white/85 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+          <motion.p
+            className="text-lg md:text-xl text-white/90 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+            style={{ textShadow: "0 1px 12px rgba(0,0,0,0.5)" }}
             variants={fadeInUp}
           >
             {description}
           </motion.p>
-          
-          {/* Actions - Hero CTA Buttons with consistent styling */}
+
+          {/* Actions */}
           {actions && (
-            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
+            <motion.div
+              variants={fadeInUp}
+              className="flex flex-wrap justify-center gap-4"
+            >
               {actions}
             </motion.div>
           )}

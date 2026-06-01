@@ -65,20 +65,15 @@ export const FounderPhilosophySection = () => {
                 </div>
               </div>
               
-              {/* CTA Button - Champagne Gold matching REAL ESTATE wordmark */}
-              <Link 
+              {/* CTA — locked champagne primitive (no gold fill) */}
+              <Link
                 to="/founder"
-                className="relative inline-flex items-center justify-center gap-3 px-8 sm:px-12 py-5 sm:py-6 mt-6 text-base sm:text-lg font-bold rounded-xl transition-all duration-300 group overflow-hidden shadow-lg hover:shadow-xl hover:-translate-y-1"
-                style={{
-                  background: 'linear-gradient(135deg, #D4B896, #B89555, #B8975A)',
-                  color: '#1a1a1a',
-                  border: '2px solid rgba(200,167,102,0.6)',
-                  boxShadow: '0 4px 20px rgba(200,167,102,0.3)',
-                }}
+                data-cta="founder-learn-more"
+                className="jj-cta-champagne inline-flex items-center justify-center gap-3 h-12 px-7 mt-6 rounded-xl text-sm sm:text-base font-semibold"
               >
-                <User className="w-5 h-5 sm:w-6 sm:h-6 text-[#1A1A1A]/80" />
+                <User className="w-4 h-4" />
                 <span className="tracking-wide">Learn More About the Founder</span>
-                <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 text-[#1A1A1A]/80 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </Link>
             </motion.div>
 
