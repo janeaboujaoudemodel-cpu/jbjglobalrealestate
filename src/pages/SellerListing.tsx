@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -86,6 +86,27 @@ const STEPS = [
 const SellerListing = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  // Purpose-aware labelling: ?purpose=rent → Landlord wording, otherwise Seller wording.
+  const isRent = searchParams.get("purpose") === "rent";
+  const party = isRent ? "Landlord" : "Seller";
+  const partyLower = isRent ? "landlord" : "seller";
+  const actionNoun = isRent ? "Rent" : "Sale";
+  const actionVerbCap = isRent ? "Rent Out" : "Sell";
+  const pricingHeading = isRent ? "Rental Pricing" : "Pricing Information";
+  const priceFieldLabel = isRent ? "Target Monthly Rent (AED) *" : "Target Selling Price (AED) *";
+  const minPriceLabel = isRent ? "Minimum Acceptable Rent (AED) - Optional" : "Minimum Acceptable Price (AED) - Optional";
+  const purchasePriceLabel = isRent ? "Current Market Value (AED) - Optional" : "Purchase Price (AED) - Optional";
+  const urgencyLabel = isRent ? "Listing Urgency" : "Selling Urgency";
+  const STEPS_LABELS = {
+    1: `${party} Details`,
+    2: "Property Basics",
+    3: isRent ? "Rental Pricing" : "Pricing",
+    4: "Condition & Upgrades",
+    5: "Media Uploads",
+    6: "Documents Vault",
+    7: "Review & Submit",
+  } as const;
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [listingId, setListingId] = useState<string | null>(null);
@@ -534,8 +555,8 @@ Requirements:
   return (
     <>
       <SEOHead 
-        title="List Your Property | Seller Listing Tool | JBJ Global Real Estate"
-        description="Submit your property for sale with JBJ Global Real Estate. Our guided listing tool helps you provide all necessary details for a successful sale."
+        title={`List Your Property | ${party} Listing Tool | JBJ Global Real Estate`}
+        description={`Submit your property to ${actionVerbCap.toLowerCase()} with JBJ Global Real Estate. Our guided listing tool helps you provide all necessary details for a successful ${actionNoun.toLowerCase()}.`}
       />
       
       <main data-manual-listing-shell className="min-h-screen pt-6 pb-12 md:pb-16" style={{ background: "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)" }}>
@@ -554,7 +575,7 @@ Requirements:
                   boxShadow: "0 6px 16px -8px rgba(15,81,50,0.55)",
                 }}
               >
-                Seller Listing Tool
+                {party} Listing Tool
               </span>
               <h1
                 className="text-3xl md:text-4xl font-bold mb-3"
@@ -567,7 +588,7 @@ Requirements:
                   letterSpacing: "-0.02em",
                 }}
               >
-                List Your Property for Sale
+                List Your Property for {actionNoun}
               </h1>
               <p className="text-[#1A1A1A]/80 mb-6">
                 Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
@@ -577,7 +598,7 @@ Requirements:
                 onSaveDraft={() => { /* auto-save handles this */ toast.success("Draft auto-saved"); }}
                 onReset={() => { clearDraft(); form.reset(); setHighlights([]); setPhotoFiles([]); setVideoFiles([]); setFloorPlanFiles([]); setTitleDeedFile(null); setPassportFile(null); setPoaFile(null); setAdditionalDocs([]); setCurrentStep(1); }}
                 onNew={() => { clearDraft(); form.reset(); setHighlights([]); setPhotoFiles([]); setVideoFiles([]); setFloorPlanFiles([]); setTitleDeedFile(null); setPassportFile(null); setPoaFile(null); setAdditionalDocs([]); setCurrentStep(1); }}
-                label="Seller Listing"
+                label={`${party} Listing`}
                 theme="gold"
               />
 
@@ -605,7 +626,7 @@ Requirements:
                   }}
                 >
                   <Wand2 className="w-5 h-5" style={{ color: "#FFFFFF" }} />
-                  <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Get Help with JBJ Seller Assistant</span>
+                  <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Get Help with JBJ {party} Assistant</span>
                 </button>
               </div>
             </div>
@@ -658,7 +679,7 @@ Requirements:
                       WebkitTextFillColor: currentStep === step.number ? '#FFFFFF' : 'rgba(255,255,255,0.75)',
                       fontWeight: currentStep === step.number ? 600 : 400,
                     }}
-                  >{step.title}</span>
+                  >{STEPS_LABELS[step.number as keyof typeof STEPS_LABELS] ?? step.title}</span>
                 </div>
               ))}
             </div>
@@ -679,7 +700,7 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Seller Details</h2>
+                      <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>{party} Details</h2>
                       <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Tell us about yourself so we can contact you</p>
                     </div>
 
@@ -750,7 +771,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Seller Type <span style={{color:"#B91C1C"}}>*</span></Label>
+                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>{party} Type <span style={{color:"#B91C1C"}}>*</span></Label>
                       <RadioGroup 
                         value={form.watch("seller_type")} 
                         onValueChange={(v) => form.setValue("seller_type", v)}
@@ -916,43 +937,43 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Pricing Information</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Help us understand your pricing expectations</p>
+                      <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>{pricingHeading}</h2>
+                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>{isRent ? "Help us understand your rental expectations" : "Help us understand your pricing expectations"}</p>
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Purchase Price (AED) - Optional</Label>
+                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>{purchasePriceLabel}</Label>
                       <Input
                         type="number"
                         {...form.register("purchase_price", { valueAsNumber: true })}
-                        placeholder="Original purchase price"
+                        placeholder={isRent ? "Estimated current value" : "Original purchase price"}
                         className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
                       />
-                      <p className="text-[#1A1A1A]/70 text-xs mt-1">What you paid for the property</p>
+                      <p className="text-[#1A1A1A]/70 text-xs mt-1">{isRent ? "Approximate current market value" : "What you paid for the property"}</p>
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Target Selling Price (AED) *</Label>
+                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>{priceFieldLabel}</Label>
                       <Input
                         type="number"
                         {...form.register("target_selling_price", { valueAsNumber: true })}
-                        placeholder="Your desired selling price"
+                        placeholder={isRent ? "Your desired monthly rent" : "Your desired selling price"}
                         className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
                       />
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Minimum Acceptable Price (AED) - Optional</Label>
+                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>{minPriceLabel}</Label>
                       <Input
                         type="number"
                         {...form.register("minimum_acceptable_price", { valueAsNumber: true })}
-                        placeholder="Lowest price you'd accept"
+                        placeholder={isRent ? "Lowest monthly rent you'd accept" : "Lowest price you'd accept"}
                         className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
                       />
                     </div>
 
                     <div>
-                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Selling Urgency</Label>
+                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>{urgencyLabel}</Label>
                       <RadioGroup
                         value={form.watch("selling_urgency")}
                         onValueChange={(v) => form.setValue("selling_urgency", v)}
@@ -1376,11 +1397,11 @@ Requirements:
                     </div>
 
                     <div className="space-y-4">
-                      {/* Seller Summary */}
+                      {/* Party Summary */}
                       <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-4">
                         <h3 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
                           <User className="w-4 h-4" />
-                          Seller Details
+                          {party} Details
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <p className="text-[#1A1A1A]/70">Name:</p>
