@@ -770,7 +770,7 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             className="rounded-2xl p-10 text-center"
             data-no-contrast-guard
             style={{
-              background: `linear-gradient(135deg, ${accent}33 0%, ${theme.primaryDeep}55 55%, ${accent}33 100%)`,
+              background: ombreSoft(theme),
               border: `1.5px dashed ${theme.badgeBorder}`,
               boxShadow: `0 20px 40px -20px ${accent}55`,
             }}
@@ -788,9 +788,8 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             <h3
               className="text-xl md:text-2xl font-bold mb-2"
               style={{
-                color: "#FFFFFF",
-                WebkitTextFillColor: "#FFFFFF",
-                textShadow: "0 2px 12px rgba(0,0,0,0.35)",
+                color: theme.primaryDeep,
+                WebkitTextFillColor: theme.primaryDeep,
                 letterSpacing: "-0.01em",
               }}
               data-no-contrast-guard
@@ -800,9 +799,8 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             <p
               className="text-sm mb-5"
               style={{
-                color: "rgba(255,255,255,0.92)",
-                WebkitTextFillColor: "rgba(255,255,255,0.92)",
-                textShadow: "0 1px 6px rgba(0,0,0,0.25)",
+                color: theme.primary,
+                WebkitTextFillColor: theme.primary,
               }}
               data-no-contrast-guard
             >
@@ -810,6 +808,7 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               status tracking.
             </p>
           </div>
+
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {listings.map((l) => (
