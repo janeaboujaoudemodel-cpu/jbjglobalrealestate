@@ -977,6 +977,7 @@ All colors MUST be HSL.
 .jj-layer-2 {
   width: 100%;
   background: #F7F2EA;       /* champagne surface */
+  color: #1A1A1A;
   padding-block: clamp(2.5rem, 5vw, 4.5rem);
   padding-inline: clamp(1rem, 4vw, 2rem);
   border: 0 !important;
@@ -1022,6 +1023,7 @@ All colors MUST be HSL.
   .jj-card-inner {
     @apply rounded-xl p-6;
     background: #FDFBF7;
+    color: #1A1A1A;
     border: 1px solid rgba(184, 149, 85, 0.30);
     box-shadow: 0 1px 3px rgba(26, 26, 26, 0.04);
     transition: all 0.3s ease;
@@ -1036,6 +1038,7 @@ All colors MUST be HSL.
   .jj-box-active {
     @apply rounded-xl p-6;
     background: #FDFBF7;
+    color: #1A1A1A;
     border: 1px solid rgba(184, 149, 85, 0.30);
     box-shadow: 0 1px 3px rgba(26, 26, 26, 0.04);
     transition: all 0.3s ease;
