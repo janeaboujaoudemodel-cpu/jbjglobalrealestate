@@ -354,7 +354,7 @@ const ListProperty = () => {
         }
       >
         {mode === "pick" || !ActiveTab ? (
-          <PremiumModePicker onPick={setMode} />
+          <PremiumModePicker onPick={setMode} purpose={purpose} />
         ) : (
           <Suspense
             fallback={
@@ -426,7 +426,7 @@ function SegmentedPill({
 }
 
 /* ───────────────── Premium two-card mode picker ───────────────── */
-function PremiumModePicker({ onPick }: { onPick: (m: Mode) => void }) {
+function PremiumModePicker({ onPick, purpose = "sale" }: { onPick: (m: Mode) => void; purpose?: Purpose }) {
   // Pick screen uses the navy hero theme as its accent system, so cards
   // visually match the band above. Inner Start CTAs are white-fill / navy-ink.
   const accent = THEME_NAVY.primary;          // #102540
@@ -434,6 +434,19 @@ function PremiumModePicker({ onPick }: { onPick: (m: Mode) => void }) {
   const accentGlow = THEME_NAVY.badgeBorder;  // purple #A855F7
   const cardGradient =
     `linear-gradient(135deg, ${accentDeep} 0%, ${accent} 55%, #0B0B0B 100%)`;
+
+  // Purpose-aware copy: sale → Seller, rent → Landlord
+  const isRent = purpose === "rent";
+  const manualTitle = isRent ? "Landlord Listing Tool" : "Seller Listing Tool";
+  const manualEyebrow = isRent ? "Full Control · Landlord" : "Full Control · Seller";
+  const manualDesc = isRent
+    ? "Fill in every field yourself — rent, location, photos, amenities and tenant contact preferences. Best when you already have the full rental details ready."
+    : "Fill in every field yourself — price, location, photos, amenities and buyer contact preferences. Best when you already have the full property details ready.";
+  const aiTitle = isRent ? "Landlord Assistant (AI)" : "Seller Assistant (AI)";
+  const aiEyebrow = isRent ? "AI-Assisted · Landlord" : "AI-Assisted · Seller";
+  const aiDesc = isRent
+    ? "Paste any portal link, tenancy contract or short description. Our AI auto-fills the rental listing in seconds — you only review and confirm."
+    : "Paste any portal link, brochure or short description. Our AI auto-fills the listing in seconds — you only review and confirm before submitting.";
 
   return (
     <div className="max-w-5xl mx-auto px-2 sm:px-0">
@@ -451,14 +464,14 @@ function PremiumModePicker({ onPick }: { onPick: (m: Mode) => void }) {
           data-allow-dark-cta
         >
           <ShieldCheck className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} />
-          Choose how to list
+          Choose how to list {isRent ? "your rental" : "your property"}
         </span>
         <h2
           className="mt-4 text-2xl md:text-3xl font-bold tracking-tight"
           style={{ color: accent, WebkitTextFillColor: accent }}
           data-no-contrast-guard
         >
-          How would you like to add your property?
+          How would you like to add your {isRent ? "rental" : "property"}?
         </h2>
         <p
           className="mt-2 text-sm md:text-base max-w-2xl mx-auto"
@@ -473,21 +486,22 @@ function PremiumModePicker({ onPick }: { onPick: (m: Mode) => void }) {
         <PickerCard
           onClick={() => onPick("manual")}
           icon={<ClipboardCheck className="w-6 h-6" style={{ color: "#FFFFFF" }} />}
-          eyebrow="Full Control"
-          title="List Manually"
-          description="Fill in every field yourself — price, location, photos, amenities and contact preferences. Best when you already have the full property details ready."
+          eyebrow={manualEyebrow}
+          title={manualTitle}
+          description={manualDesc}
           tag="≈ 4–6 minutes"
         />
         <PickerCard
           onClick={() => onPick("ai")}
           icon={<Wand2 className="w-6 h-6" style={{ color: "#FFFFFF" }} />}
-          eyebrow="AI-Assisted"
-          title="List with AI"
-          description="Paste any portal link, brochure or short description. Our AI auto-fills the listing in seconds — you only review and confirm before submitting."
+          eyebrow={aiEyebrow}
+          title={aiTitle}
+          description={aiDesc}
           tag="≈ 60 seconds"
           accent
         />
       </div>
+
 
       <div className="text-center mt-6">
         <button
@@ -616,8 +630,11 @@ function PickerCard({
           }}
         >
           <span style={{ color: NAVY, WebkitTextFillColor: NAVY }}>Start</span>
-          <ArrowRight className="w-4 h-4" style={{ color: NAVY, strokeWidth: 2.5 }} />
+          <span className="jj-arrow-anim inline-flex">
+            <ArrowRight className="w-4 h-4" style={{ strokeWidth: 2.5 }} />
+          </span>
         </span>
+
       </div>
     </button>
   );
@@ -676,7 +693,7 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               asChild
               data-allow-dark-cta
               data-no-contrast-guard
-              className="font-semibold hover:brightness-105"
+              className="font-semibold hover:brightness-105 jj-dashboard-pulse"
               style={{
                 background: ombreSoft(theme),
                 color: accent,
@@ -687,7 +704,8 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               <Link to="/dashboard/my-listings">
                 <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent }} />
                 <span style={{ color: accent, WebkitTextFillColor: accent, fontWeight: 700 }}>Open full dashboard</span>
-                <ArrowRight className="w-4 h-4 ml-2" style={{ color: accent }} />
+                <span className="jj-arrow-anim inline-flex ml-2"><ArrowRight className="w-4 h-4" /></span>
+
               </Link>
             </Button>
           )}
