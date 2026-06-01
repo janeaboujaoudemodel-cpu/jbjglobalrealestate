@@ -1177,7 +1177,7 @@ const ListingPortalSubmit = () => {
 
                       {/* Main Details Form */}
                       <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6 space-y-4">
-                        <h3 className="text-[#1A1A1A] font-semibold mb-1">Listing Details</h3>
+                        <h3 className="text-[#1A1A1A] font-semibold mb-1">{party} Listing Details — For {actionNoun}</h3>
                         
                         <div>
                           <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Title *</label>
