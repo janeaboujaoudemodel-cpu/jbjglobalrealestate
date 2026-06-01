@@ -2744,6 +2744,7 @@ export type Database = {
           decision_notes: string | null
           id: string
           reflection_text: string
+          required_module_ids: string[]
           status: string
           updated_at: string
           user_id: string
@@ -2758,6 +2759,7 @@ export type Database = {
           decision_notes?: string | null
           id?: string
           reflection_text: string
+          required_module_ids?: string[]
           status?: string
           updated_at?: string
           user_id: string
@@ -2772,6 +2774,7 @@ export type Database = {
           decision_notes?: string | null
           id?: string
           reflection_text?: string
+          required_module_ids?: string[]
           status?: string
           updated_at?: string
           user_id?: string
