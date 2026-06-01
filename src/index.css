@@ -4186,7 +4186,7 @@ button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
   :where(.surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-page, .surface-light, .surface-pearl,
          [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
          [data-surface="page"], [data-surface="light"], [data-surface="pearl"])
-  :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, div, button) {
+  :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, div, button):not(.allow-white):not(.allow-white *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([data-on-dark]):not([data-on-dark] *):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-surface="navy"]):not([data-surface="navy"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not(.surface-navy):not(.surface-navy *):not(.surface-ink):not(.surface-ink *):not(.surface-dark):not(.surface-dark *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   opacity: 1 !important;
@@ -4195,12 +4195,13 @@ button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
   :where(.surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-page, .surface-light, .surface-pearl,
          [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
          [data-surface="page"], [data-surface="light"], [data-surface="pearl"])
-  :where(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold):not(.jj-gold-accent) {
+  :where(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold):not(.jj-gold-accent):not(.allow-white):not(.allow-white *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta] *):not([data-on-dark] *):not(.jj-cta-dark *):not(.jj-navy-cta *):not([data-surface="navy"] *):not([data-surface="ink"] *):not([data-surface="dark"] *):not(.surface-navy *):not(.surface-ink *):not(.surface-dark *) {
   color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   opacity: 1 !important;
 }
+
 
 .jj-cta-champagne,
 .jj-pill-active,
