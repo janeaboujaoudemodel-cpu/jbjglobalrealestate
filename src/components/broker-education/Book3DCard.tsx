@@ -10,6 +10,8 @@ interface Book3DCardProps {
   book: EducationBook;
   progress?: BookProgress;
   onOpen: (book: EducationBook) => void;
+  onRequestAccess?: (book: EducationBook) => void;
+  requestAccessDisabled?: boolean;
   index: number;
   isLocked?: boolean;
 }
@@ -18,11 +20,20 @@ interface Book3DCardProps {
  * Premium book card — full 3D book with spine, front cover, back cover and
  * page edges. Hover rotates the book toward the reader and lifts it.
  */
-export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: Book3DCardProps) {
+export function Book3DCard({
+  book,
+  progress,
+  onOpen,
+  onRequestAccess,
+  requestAccessDisabled = false,
+  index,
+  isLocked = false,
+}: Book3DCardProps) {
   const effectivelyLocked = isLocked || book.is_restricted;
+  const canPreviewLocked = isLocked && !book.is_restricted && !onRequestAccess;
 
   const statusBadge = (() => {
-    if (!progress) return null;
+    if (!progress || effectivelyLocked) return null;
     if (progress.status === "completed") {
       return (
         <Badge className="bg-emerald-600 text-white border-0 shadow-sm">
@@ -49,7 +60,9 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
     >
       <div
         className="flex h-full cursor-pointer flex-col bg-transparent"
-        onClick={() => !book.is_restricted && onOpen(book)}
+        onClick={() => {
+          if (!effectivelyLocked || canPreviewLocked) onOpen(book);
+        }}
       >
         {/* 3D book */}
         <div className="relative px-1 pb-4">
@@ -64,7 +77,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
           )}
           {effectivelyLocked && (
             <div className="absolute inset-0 grid place-items-center pointer-events-none">
-              <PremiumLockBadge size="md" title="Restricted" />
+              <PremiumLockBadge size="md" title="Access required" />
             </div>
           )}
         </div>
@@ -83,16 +96,22 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
             <Button
               size="sm"
               data-cta="book-open"
+              disabled={effectivelyLocked && !!onRequestAccess && requestAccessDisabled}
               className="jj-cta-outline w-full"
               onClick={(e) => {
                 e.stopPropagation();
-                if (!book.is_restricted) onOpen(book);
+                if (effectivelyLocked) {
+                  if (onRequestAccess) onRequestAccess(book);
+                  else if (canPreviewLocked) onOpen(book);
+                  return;
+                }
+                onOpen(book);
               }}
             >
               {effectivelyLocked ? (
                 <>
                   <Lock className="w-3 h-3 mr-2" />
-                  {book.is_restricted ? "Restricted" : "Preview Book"}
+                  {onRequestAccess ? "Request Access" : book.is_restricted ? "Restricted" : "Preview Book"}
                 </>
               ) : (
                 <>
