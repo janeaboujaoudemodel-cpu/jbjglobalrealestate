@@ -1142,12 +1142,12 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                                 setOpenSection(null);
                               }
                             }}
-                            className={`group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 ${getItemStyle(item, sectionKey)}`}
+                            className={`group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 !text-[#1A1A1A] hover:!text-[#B89555]`}
                           >
-                            <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)} group-hover:bg-[#102540]/10 group-hover:border-[#102540]/70`}>
-                              <Icon className={`w-3 h-3 ${getIconStyle(item, sectionKey)} group-hover:text-[#102540] transition-colors`} />
+                            <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
+                              <Icon className="w-3 h-3 !text-[#B89555] transition-colors" />
                             </span>
-                            <span className={`flex-1 relative transition-colors after:bottom-[-2px] after:h-[1.5px] ${subNavHoverUnderline}`}>{item.label}</span>
+                            <span className="flex-1 relative transition-colors !text-[#1A1A1A] group-hover:!text-[#B89555]">{item.label}</span>
                           </Link>
                         );
                       })}
