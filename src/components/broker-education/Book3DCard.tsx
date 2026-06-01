@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Lock, CheckCircle, Clock, ArrowRight, Sparkles, BookOpen } from "lucide-react";
+import { Lock, CheckCircle, Clock, ArrowRight, Sparkles } from "lucide-react";
 import type { EducationBook, BookProgress } from "@/hooks/useBrokerEducation";
-import { PremiumBookCover } from "@/components/books/PremiumBookCover";
+import { PremiumBook3D } from "@/components/broker-education/PremiumBook3D";
 
 interface Book3DCardProps {
   book: EducationBook;
@@ -14,15 +14,11 @@ interface Book3DCardProps {
 }
 
 /**
- * Premium book card — the cover IS the top of the card.
- * Straight (no rotateY tilt), full-bleed cover, subtle gold spine on the left
- * and a hairline page edge on the right to keep the 3D feel.
+ * Premium book card — full 3D book with spine, front cover, back cover and
+ * page edges. Hover rotates the book toward the reader and lifts it.
  */
 export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: Book3DCardProps) {
   const effectivelyLocked = isLocked || book.is_restricted;
-  // LOCKED: every book uses the same Digital-Marketing/No.14 master style.
-  // Cover tone is uniform black across all paths for one consistent collection.
-  const coverTone = "black" as const;
 
   const statusBadge = (() => {
     if (!progress) return null;
@@ -48,85 +44,71 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: Math.min(index * 0.05, 0.3), duration: 0.35 }}
-      whileHover={{ y: -4 }}
       className="group h-full"
     >
       <div
-        className="flex h-full cursor-pointer flex-col overflow-visible bg-transparent"
+        className="flex h-full cursor-pointer flex-col bg-transparent"
         onClick={() => !book.is_restricted && onOpen(book)}
       >
-        {/* Book cover — straight, full-bleed, no white frame */}
-        <div className="relative aspect-[3/4] w-full overflow-visible">
-          {/* Soft floor shadow under the book */}
-          <div className="absolute -bottom-3 left-[6%] right-[4%] h-8 rounded-full bg-[#1A1A1A]/30 blur-xl" />
-          <div className="relative h-full overflow-hidden rounded-r-[6px] rounded-l-[2px] shadow-[14px_18px_38px_rgba(26,26,26,.32),inset_0_0_0_1px_rgba(184,149,85,.45)] transition-transform duration-500 group-hover:-translate-y-1">
-            {/* LOCKED: every book renders via PremiumBookCover for one uniform style */}
-            <PremiumBookCover title={book.title} number={book.book_number} subtitle={book.learning_path} tone={coverTone} />
-            {/* 3D depth — left spine + right page edge */}
-            <div className="absolute inset-y-0 left-0 w-[6%] pointer-events-none bg-gradient-to-r from-[#030303]/90 via-[#1A1A1A]/60 to-transparent" />
-            <div className="absolute inset-y-[2%] right-0 w-[3px] pointer-events-none bg-gradient-to-r from-transparent via-[#EFE6D6]/55 to-[#B89555]/75" />
-
-            {/* Status badge */}
-            {statusBadge && <div className="absolute top-3 right-3 z-20">{statusBadge}</div>}
-
-            {/* Locked overlay */}
-            {effectivelyLocked && (
-              <div className="absolute inset-0 bg-[#1A1A1A]/70 grid place-items-center backdrop-blur-[1px]">
-                <div className="text-center">
-                  <Lock className="w-7 h-7 text-white mx-auto" />
-                  {isLocked && !book.is_restricted && (
-                    <div className="mt-1.5 text-white/85 text-[9px] uppercase tracking-widest">
-                      Join to Unlock
-                    </div>
-                  )}
-                </div>
+        {/* 3D book */}
+        <div className="relative px-1 pb-4">
+          <PremiumBook3D
+            title={book.title}
+            subtitle={book.learning_path}
+            bookNumber={book.book_number}
+            paletteIndex={book.book_number}
+          />
+          {statusBadge && (
+            <div className="absolute top-2 right-2 z-20">{statusBadge}</div>
+          )}
+          {effectivelyLocked && (
+            <div className="absolute inset-0 grid place-items-center pointer-events-none">
+              <div className="rounded-full bg-[#1A1A1A]/75 backdrop-blur-sm w-12 h-12 grid place-items-center">
+                <Lock className="w-5 h-5 text-white" />
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
-
-        {/* ── Content panel ─ minimal: chip + CTA, title lives on cover ── */}
-        <div className="flex min-h-[120px] flex-1 flex-col gap-3 px-2 pt-5">
-          <div className="inline-flex max-w-full items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-[10px] uppercase tracking-[0.15em] self-start">
-            <Sparkles className="w-3 h-3" />
+        {/* Title + CTA below the book */}
+        <div className="flex min-h-[110px] flex-1 flex-col gap-2 px-1">
+          <h3 className="text-[#1A1A1A] font-semibold text-sm leading-snug line-clamp-2">
+            {book.title}
+          </h3>
+          <div className="inline-flex max-w-full items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 text-[#1A1A1A] text-[10px] uppercase tracking-[0.14em] self-start">
+            <Sparkles className="w-2.5 h-2.5" />
             <span className="truncate">{book.learning_path}</span>
           </div>
 
-          <div className="pt-1 mt-auto">
-            {effectivelyLocked ? (
-              <Button
-                size="sm"
-                className="w-full bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50 font-semibold"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (!book.is_restricted) onOpen(book);
-                }}
-              >
-                <Lock className="w-3 h-3 mr-2" />
-                {book.is_restricted ? "Restricted" : "Preview Book"}
-              </Button>
-            ) : (
-              <Button
-                size="sm"
-                className="w-full bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50 font-semibold"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onOpen(book);
-                }}
-              >
-                {progress?.status === "completed"
-                  ? "Review Book"
-                  : progress?.status === "in_progress"
-                  ? "Continue Reading"
-                  : "Open Book"}
-                <ArrowRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            )}
+          <div className="pt-2 mt-auto">
+            <Button
+              size="sm"
+              data-cta="book-open"
+              className="jj-cta-outline w-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!book.is_restricted) onOpen(book);
+              }}
+            >
+              {effectivelyLocked ? (
+                <>
+                  <Lock className="w-3 h-3 mr-2" />
+                  {book.is_restricted ? "Restricted" : "Preview Book"}
+                </>
+              ) : (
+                <>
+                  {progress?.status === "completed"
+                    ? "Review Book"
+                    : progress?.status === "in_progress"
+                    ? "Continue Reading"
+                    : "Open Book"}
+                  <ArrowRight className="w-3 h-3 ml-2 transition-transform group-hover:translate-x-1" />
+                </>
+              )}
+            </Button>
           </div>
         </div>
       </div>
     </motion.div>
   );
 }
-
