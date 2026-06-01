@@ -75,12 +75,14 @@ export function BrokerToolkitHero() {
             <button
               type="button"
               data-cta="hero-secondary"
+              data-on-dark
               onClick={() =>
                 document
                   .getElementById("what-you-get")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
-              className="jj-cta-outline inline-flex items-center gap-2 h-11 px-5 rounded-full text-sm font-medium"
+              className="inline-flex items-center gap-2 h-11 px-5 rounded-full text-sm font-medium border border-white/40 hover:border-white/70 hover:bg-white/10 transition-colors allow-white"
+              style={{ color: "#ffffff" }}
             >
               <span>See What's Included</span>
               <ChevronDown className="w-4 h-4" />
