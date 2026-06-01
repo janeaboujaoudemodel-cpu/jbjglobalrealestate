@@ -1,179 +1,109 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { IconTile } from "@/components/ui/icon-tile";
+import { GraduationCap, Award, Clock, FileText, CheckCircle, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { 
-  GraduationCap,
-  Award,
-  CheckCircle,
-  ArrowUpRight,
-  Clock,
-  BadgeCheck,
-  FileText,
-  Star
-} from "lucide-react";
 
 const CERTIFICATIONS = [
-  {
-    title: "Digital Marketing Mastery",
-    duration: "6 hours",
-    modules: 10,
-    description: "Social media strategies, lead generation, content creation, and personal branding for brokers.",
-    badge: "Certified",
-  },
-  {
-    title: "Quality & Service Excellence",
-    duration: "5 hours",
-    modules: 8,
-    description: "Delivering 5-star customer experiences, handling complaints, and exceeding expectations.",
-    badge: "Excellence",
-  },
-  {
-    title: "Client Relations & Communication",
-    duration: "6 hours",
-    modules: 9,
-    description: "Building rapport, active listening, negotiation psychology, and maintaining long-term relationships.",
-    badge: "Professional",
-  },
-  {
-    title: "Luxury Sales Specialist",
-    duration: "8 hours",
-    modules: 12,
-    description: "VIP client handling, high-net-worth psychology, ultra-premium property positioning.",
-    badge: "Elite",
-  },
-  {
-    title: "Business Development Pro",
-    duration: "5 hours",
-    modules: 7,
-    description: "Prospecting strategies, networking techniques, referral systems, and partnership building.",
-    badge: "Advanced",
-  },
-  {
-    title: "Time Management & Productivity",
-    duration: "4 hours",
-    modules: 6,
-    description: "Prioritization, goal setting, workflow optimization, and work-life balance for sales professionals.",
-    badge: "Master",
-  },
+  { title: "Digital Marketing Mastery", duration: "6 hours", modules: 10, description: "Social media strategies, lead generation, and personal branding for brokers.", badge: "Certified" },
+  { title: "Quality & Service Excellence", duration: "5 hours", modules: 8, description: "Delivering 5-star customer experiences and exceeding expectations.", badge: "Excellence" },
+  { title: "Client Relations & Communication", duration: "6 hours", modules: 9, description: "Building rapport, active listening, and negotiation psychology.", badge: "Professional" },
+  { title: "Luxury Sales Specialist", duration: "8 hours", modules: 12, description: "VIP client handling and ultra-premium property positioning.", badge: "Elite" },
+  { title: "Business Development Pro", duration: "5 hours", modules: 7, description: "Prospecting, networking, and partnership building.", badge: "Advanced" },
+  { title: "Time Management & Productivity", duration: "4 hours", modules: 6, description: "Prioritization, goal setting, and workflow optimization.", badge: "Master" },
 ];
 
-// Unified light blue theme for all certification cards with glow effect
-const CARD_THEME = {
-  bg: "bg-[#1A1A1A]/40 backdrop-blur-sm",
-  border: "border-2 border-sky-400/50 hover:border-sky-300",
-  glow: "shadow-[0_0_20px_rgba(56,189,248,0.2)] hover:shadow-[0_0_30px_rgba(56,189,248,0.4)]",
-  iconBg: "bg-sky-500/20 border border-sky-400/30",
-  iconText: "text-sky-400",
-  badge: "bg-sky-500/20 text-sky-300 border-sky-400/30",
-};
+const BENEFITS = [
+  "Verified badge on your profile",
+  "Priority lead allocation",
+  "Higher commission tiers",
+  "Access to VIP training",
+];
 
 export function BrokerToolkitAcademy() {
   return (
-    <section id="section-academy" className="py-8 md:py-10 bg-[#1A1A1A]">
+    <section id="section-academy" className="jj-band jj-band--surface py-14 md:py-20">
       <div className="container mx-auto px-4">
-        {/* Active Sky Blue Layer */}
-        <div className="bg-gradient-to-br from-sky-900/90 via-sky-900/80 to-sky-950/90 border border-sky-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <Badge className="bg-sky-500/20 text-sky-300 border-sky-400/30 mb-4">
-              <GraduationCap className="w-3 h-3 mr-1" />
-              JBJ Academy
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Professional <span className="text-sky-400">Development Courses</span>
-            </h2>
-            <p className="text-white/70 max-w-2xl mx-auto">
-              Complete our internal certification courses and earn verified JBJ badges. 
-              Go beyond real estate with skills in marketing, client relations, and business development.
-            </p>
-          </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center max-w-2xl mx-auto mb-10"
+        >
+          <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 mb-3">
+            <GraduationCap className="w-3 h-3 mr-1.5" />
+            JBJ Academy
+          </Badge>
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[#1A1A1A] mb-3">
+            Professional development courses
+          </h2>
+          <p className="text-[#1A1A1A]/70 text-base">
+            Earn verified JBJ badges and go beyond real estate with marketing, client relations, and business development.
+          </p>
+        </motion.div>
 
-          {/* Certifications Grid - All cards with unified light blue glow theme */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {CERTIFICATIONS.map((cert, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className={`${CARD_THEME.bg} ${CARD_THEME.border} ${CARD_THEME.glow} transition-all h-full`}>
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className={`w-12 h-12 ${CARD_THEME.iconBg} rounded-xl flex items-center justify-center`}>
-                        <Award className={`w-6 h-6 ${CARD_THEME.iconText}`} />
-                      </div>
-                      <Badge className={CARD_THEME.badge}>
-                        <BadgeCheck className="w-3 h-3 mr-1" />
-                        {cert.badge}
-                      </Badge>
-                    </div>
-                    <h3 className="text-sky-300 font-semibold text-lg mb-2">{cert.title}</h3>
-                    <p className="text-white/70 text-sm mb-4">{cert.description}</p>
-                    <div className="flex items-center justify-between text-xs text-white/90">
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        {cert.duration}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <FileText className="w-3 h-3" />
-                        {cert.modules} modules
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto mb-10">
+          {CERTIFICATIONS.map((cert, i) => (
+            <motion.div
+              key={cert.title}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.04, duration: 0.4 }}
+              viewport={{ once: true }}
+              className="bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 rounded-2xl p-5 h-full flex flex-col transition-colors"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <IconTile icon={Award} tone="gold" size="md" />
+                <span className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/60 font-semibold">
+                  {cert.badge}
+                </span>
+              </div>
+              <h3 className="text-[15px] font-semibold text-[#1A1A1A] mb-1.5 leading-snug">
+                {cert.title}
+              </h3>
+              <p className="text-[13px] text-[#1A1A1A]/65 leading-relaxed flex-1 mb-4">
+                {cert.description}
+              </p>
+              <div className="flex items-center gap-4 text-[11px] text-[#1A1A1A]/60 pt-3 border-t border-[#B89555]/15">
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="w-3 h-3" /> {cert.duration}
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <FileText className="w-3 h-3" /> {cert.modules} modules
+                </span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="bg-[#FDFBF7] border border-[#B89555]/25 rounded-2xl p-6 md:p-8 max-w-5xl mx-auto"
+        >
+          <h3 className="text-center text-[15px] font-semibold text-[#1A1A1A] mb-5">
+            Why get certified?
+          </h3>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+            {BENEFITS.map((benefit) => (
+              <div key={benefit} className="flex items-center gap-2 text-sm text-[#1A1A1A]/80">
+                <CheckCircle className="w-4 h-4 text-[#B89555] flex-shrink-0" />
+                <span>{benefit}</span>
+              </div>
             ))}
           </div>
-
-          {/* Benefits Section - Premium Blue 3D Box with Blue & White Glow */}
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.98, rotateX: 2 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-            whileHover={{ scale: 1.02, rotateX: -2, rotateY: 2 }}
-            viewport={{ once: true }}
-            transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            className="relative bg-gradient-to-br from-sky-600 via-sky-700 to-sky-800 border-2 border-sky-400/60 rounded-2xl p-8 text-center overflow-hidden"
-            style={{
-              boxShadow: `
-                0 0 40px rgba(56,189,248,0.4),
-                0 0 60px rgba(255,255,255,0.15),
-                0 20px 40px rgba(0,0,0,0.3),
-                inset 0 2px 4px rgba(255,255,255,0.2),
-                inset 0 -2px 4px rgba(0,0,0,0.2)
-              `,
-              transform: "perspective(1000px) translateZ(0)",
-            }}
-          >
-            {/* 3D Shine effect */}
-            <span className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-white/20 to-transparent pointer-events-none rounded-t-2xl" />
-            
-            <h3 className="text-xl font-semibold text-white mb-4 flex items-center justify-center gap-2 relative z-10">
-              <Star className="w-5 h-5 text-[#1A1A1A]" />
-              Why Get Certified?
-            </h3>
-            <div className="grid md:grid-cols-4 gap-6 relative z-10">
-              {[
-                "Verified badge on your profile",
-                "Priority lead allocation",
-                "Higher commission tiers",
-                "Access to VIP training"
-              ].map((benefit, i) => (
-                <div key={i} className="flex items-center gap-2 justify-center text-white text-sm">
-                  <CheckCircle className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
-                  <span>{benefit}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
+          <div className="flex justify-center">
+            <Link
+              to="/jbj-academy"
+              data-cta="academy-open"
+              className="jj-cta-dark inline-flex items-center gap-2 h-11 px-5 rounded-full text-sm font-medium"
+            >
+              Open JBJ Academy
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
