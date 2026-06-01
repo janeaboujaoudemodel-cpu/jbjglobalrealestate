@@ -1302,7 +1302,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           </div>
           {/* Section icons — solid champagne body, no silver cast */}
-          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-[#FDFBF7] w-full">
+          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
             {highlightItems.map((item, i) => {
               const Icon = item.icon;
               const isActive = isRouteActive(item.href);
@@ -1460,7 +1460,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-[#FDFBF7] h-full relative overscroll-contain [&_button:not([data-signout-action])>span]:!text-[#B89555] [&_button:not([data-signout-action])_svg]:!text-[#B89555] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
+        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] h-full relative overscroll-contain [&_button:not([data-signout-action])>span]:!text-[#B89555] [&_button:not([data-signout-action])_svg]:!text-[#B89555] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
           {renderNavContent()}
         </div>
       )}
