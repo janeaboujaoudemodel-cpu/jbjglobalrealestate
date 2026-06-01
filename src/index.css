@@ -4741,3 +4741,28 @@ html body :where(
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* FINAL SIDEBAR LOCK — expanded section titles gold; expanded sub-items ink with gold icons. */
+html body [data-sidebar-section],
+html body [data-sidebar-section] [data-sidebar-section-label],
+html body [data-sidebar-section] [data-sidebar-section-icon] {
+  color: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+  stroke: #B89555 !important;
+}
+html body [data-sidebar-subitem],
+html body [data-sidebar-subitem] [data-sidebar-subitem-label] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-sidebar-subitem]:hover,
+html body [data-sidebar-subitem]:hover [data-sidebar-subitem-label] {
+  color: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+}
+html body [data-sidebar-subitem] [data-sidebar-subitem-icon],
+html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
+  color: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+  stroke: #B89555 !important;
+}
