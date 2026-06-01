@@ -4950,3 +4950,15 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
   background-color: #102540 !important;
   color: #FFFFFF !important;
 }
+
+/* AI Listing Shell success-phase: ink labels that sit DIRECTLY on the navy
+   gradient (outside any white card) must become white. We target only the
+   top-level success copy nodes; copy inside white cards stays ink because
+   the cards' bg overrides win. */
+[data-ai-listing-shell] > .container > div > h1.text-\[\#1A1A1A\],
+[data-ai-listing-shell] > .container > div > p.text-\[\#1A1A1A\]\/70 {
+  color: #FFFFFF !important;
+}
+[data-ai-listing-shell] > .container > div > p.text-\[\#1A1A1A\]\/70 {
+  color: rgba(255,255,255,0.85) !important;
+}
