@@ -193,13 +193,9 @@ const NAV_ITEMS: NavItem[] = [
   // ── Broker & Academy ──
   { label: "Broker Portal", href: "/broker/portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY", megaMenu: 'broker' },
   { label: "Broker Toolkit", href: "/broker-toolkit", icon: Wrench },
-  { label: "Broker Resources", href: "/broker-resources", icon: FolderOpen },
-  { label: "Broker Learning", href: "/broker/learning", icon: GraduationCap },
   { label: "Broker Hub", href: "/broker-hub", icon: Compass },
   // Note: "Broker Dashboard" removed from this section — it's the user's personal dashboard, not a broker-only tool.
   { label: "JBJ Academy", href: "/jbj-academy", icon: GraduationCap },
-  { label: "Academy Graduates", href: "/academy/graduates", icon: Award },
-  { label: "AI Broker Workspace", href: "/ai-broker-workspace", icon: Bot },
 
   // ── Investor ──
   { label: "Investor Hub", href: "/investor-hub", icon: TrendingUp, section: "INVESTOR", megaMenu: 'investor' },
