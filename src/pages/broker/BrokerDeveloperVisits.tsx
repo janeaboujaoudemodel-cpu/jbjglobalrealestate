@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Building2, Search, Plus, Calendar as CalendarIcon, Clock, User, Phone, Mail, FileText, Trash2, Check, X } from "lucide-react";
+import { Building2, Search, Plus, Calendar as CalendarIcon, Clock, User, Phone, Mail, FileText, Trash2, Check, X, Star } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Input } from "@/components/ui/input";
