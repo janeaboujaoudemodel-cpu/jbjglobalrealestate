@@ -481,7 +481,7 @@ const ResaleProperties = () => {
                   key={listing.id}
                   className="rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7]/80 backdrop-blur-sm overflow-hidden hover:shadow-xl transition-shadow group"
                 >
-                  <div className="h-48 bg-gradient-to-br from-gold/10 to-gold/5 flex items-center justify-center relative">
+                  <div className="h-48 bg-[#EFE6D6] flex items-center justify-center relative">
                     {listing.images?.[0] ? (
                       <img src={listing.images[0]} alt={listing.title} className="w-full h-full object-cover" />
                     ) : (
