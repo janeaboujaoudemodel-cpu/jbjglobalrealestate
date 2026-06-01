@@ -614,7 +614,7 @@ Requirements:
 
 
         {/* Layer 2 continues for form content */}
-        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] pb-16 pt-8">
+        <div className="pb-16 pt-8" style={{ background: "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)" }}>
           <div className="container mx-auto px-4">
           {/* Progress Steps - Using champagne active color */}
           <div className="max-w-4xl mx-auto mb-8">
