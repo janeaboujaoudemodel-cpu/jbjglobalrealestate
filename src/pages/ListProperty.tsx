@@ -302,7 +302,7 @@ const ListProperty = () => {
           <div
             className="rounded-2xl p-4 sm:p-6 md:p-7 shadow-xl"
             style={{
-              backgroundColor: "#FFFFFF",
+              background: ombreSoft(theme),
               border: `1.5px solid ${theme.primary}`,
               boxShadow: `0 18px 40px -22px ${theme.primary}66`,
             }}
