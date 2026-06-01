@@ -13,6 +13,9 @@ import {
   getTeamMemberById,
 } from "@/config/team-members";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
+import { useTeamPageVisibility } from "@/contexts/TeamPageVisibilityContext";
+import { useUserRole } from "@/hooks/useUserRole";
+import { Navigate } from "react-router-dom";
 import { useSalesHierarchy } from "@/hooks/useSalesHierarchy";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -187,6 +190,14 @@ const MeetTheTeam: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { isFounderVisible } = useFounderVisibility();
+  const { isTeamPageVisible, isLoading: teamVisibilityLoading } = useTeamPageVisibility();
+  const { isOwner: isSiteOwner } = useUserRole();
+
+  // Hard-gate the public /team route when the owner has hidden the team page.
+  // Owners signed in keep access for preview/review.
+  if (!teamVisibilityLoading && !isTeamPageVisible && !isSiteOwner) {
+    return <Navigate to="/about" replace />;
+  }
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const [detailMember, setDetailMember] = useState<TeamMember | null>(null);
