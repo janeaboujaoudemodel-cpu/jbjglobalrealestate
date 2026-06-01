@@ -91,7 +91,7 @@ export const BrokerPortalRoutes = () => (
     <Route path="forms" element={<OwnerOnlyRoute><BrokerFormRequests /></OwnerOnlyRoute>} />
     <Route path="learning" element={<BrokerLearning />} />
     <Route path="learning/book/:bookId" element={<BookReader />} />
-    <Route path="academy" element={<Navigate to="/broker/learning?tab=training" replace />} />
+    {/* /broker/academy retired — use /jbj-academy */}
     {/* Marketing Toolkit removed from broker portal per owner directive — no front-end redirects from inside the portal. */}
     <Route path="marketing" element={<Navigate to="/broker/portal" replace />} />
 

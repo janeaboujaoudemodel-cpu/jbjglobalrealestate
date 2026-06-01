@@ -326,13 +326,7 @@ const MeetTheTeam: React.FC = () => {
 
 
         <div data-marketing-page className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-          {isOwner && (
-            <TeamVisibilityBar
-              totalMembers={allMembers.length}
-              hiddenMembers={hiddenCount}
-              aiCount={aiCount}
-            />
-          )}
+          {/* TeamVisibilityBar removed — visibility is controlled from Owner › Founder Settings only */}
 
           {/* Hero Section with Premium Animated Team Collage */}
           <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
