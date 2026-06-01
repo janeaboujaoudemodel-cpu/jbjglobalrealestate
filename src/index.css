@@ -3134,8 +3134,8 @@ a[class*="bg-red-"]:hover {
   line-height: 1 !important;
   font-variant-numeric: tabular-nums !important;
   letter-spacing: -0.01em !important;
-  color: #B89555;
-  -webkit-text-fill-color: #B89555;
+  color: #1A1A1A;
+  -webkit-text-fill-color: #1A1A1A;
   text-shadow: none !important;
   margin: 0 !important;
   white-space: nowrap !important;
