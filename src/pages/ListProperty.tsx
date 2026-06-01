@@ -219,7 +219,7 @@ const ListProperty = () => {
       </section>
 
       {/* ───────────────── Purpose + Mode selector ───────────────── */}
-      <section className="px-4 sm:px-6 md:px-10 -mt-6 md:-mt-8 relative z-10">
+      <section className="px-4 sm:px-6 md:px-10 mt-8 md:mt-10 pb-8 md:pb-10 relative z-10">
         <div className="max-w-5xl mx-auto">
           <div
             className="rounded-2xl p-4 sm:p-6 md:p-7 shadow-xl"
