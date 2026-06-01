@@ -259,7 +259,7 @@ export default function SignDocument() {
             JBJ Global Real Estate
           </div>
           <FileSignature className="w-10 h-10 text-[#B89555] mx-auto mb-3" />
-          <h1 className="text-2xl font-bold text-[#1A1A1A]">Sign your agreement with DocuSign</h1>
+          <h1 className="text-2xl font-bold text-[#1A1A1A]">Sign your agreement</h1>
           <p className="text-[#1A1A1A]/70 text-sm mt-2">
             {data?.envelope.sender_name || data?.envelope.sender_email} has prepared
             <span className="font-medium text-[#1A1A1A]"> "{data?.envelope.name}" </span>
@@ -267,15 +267,48 @@ export default function SignDocument() {
           </p>
         </div>
 
-        {/* UAE compliance notice */}
+        {/* Primary — Adopt & Sign in-browser */}
+        <Card className="bg-white border-[#B89555]/60 shadow-sm">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold tracking-wide uppercase border border-emerald-200">
+                Recommended
+              </span>
+              <h2 className="font-semibold text-[#1A1A1A]">Sign instantly here</h2>
+            </div>
+            <p className="text-sm text-[#1A1A1A]/75 mb-4 leading-relaxed">
+              Adopt your signature, initials and stamp once — we'll auto-fill <strong>every</strong> field
+              assigned to you across every page of this {data?.envelope.name ? "agreement" : "document"}.
+              No app install, no email round-trip.
+            </p>
+            <Button
+              onClick={() => setAdoptOpen(true)}
+              disabled={signingInBrowser}
+              className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white"
+            >
+              {signingInBrowser ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <PenTool className="w-4 h-4 mr-2" />
+              )}
+              Adopt &amp; Sign
+            </Button>
+            <p className="text-[11px] text-[#1A1A1A]/55 mt-3 leading-relaxed">
+              Your signature, initials, date and stamp are placed in every field assigned to you,
+              an audit trail is recorded, and the signed PDF is emailed back automatically.
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* UAE compliance notice — DocuSign fallback path */}
         <Card className="bg-[#F7F2EA] border-[#B89555]/30">
           <CardContent className="p-5 text-sm text-[#1A1A1A]/85 leading-relaxed">
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-[#B89555] shrink-0 mt-0.5" />
               <p>
-                This agreement must be signed using <strong>DocuSign</strong> — the
-                only e-signature platform officially recognised by UAE authorities.
-                Signatures captured anywhere else cannot be accepted.
+                Prefer <strong>DocuSign</strong>? If your jurisdiction requires a DocuSign-issued
+                certificate, follow the three steps below instead. Either path produces a legally
+                valid, audit-logged signed copy.
               </p>
             </div>
           </CardContent>
