@@ -695,8 +695,6 @@ const ListingPortalSubmit = () => {
       {/* Layer 2 — dark purple band with horizontal step header + centered phase card */}
       <div
         className="pb-16 pt-8 relative"
-        data-no-contrast-guard
-        data-allow-dark-cta
         style={{ background: "linear-gradient(135deg, #2E1065 0%, #4C1D95 50%, #0B0B0B 100%)" }}
       >
         <div
@@ -706,8 +704,8 @@ const ListingPortalSubmit = () => {
         />
         <div className="container mx-auto px-4 relative" ref={creatorRef}>
           {/* Horizontal step header */}
-          <div className="max-w-5xl mx-auto mb-8">
-            <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
+          <div className="max-w-5xl mx-auto mb-8" data-no-contrast-guard data-allow-dark-cta>
+
               {PHASES.map((step, i) => {
                 const Icon = PHASE_ICONS[i] || Sparkles;
                 const isActive = i === phaseIndex;
