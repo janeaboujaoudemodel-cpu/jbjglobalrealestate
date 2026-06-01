@@ -753,7 +753,7 @@ export default function GlobalVerticalNav() {
 
     for (const item of NAV_ITEMS) {
       if (item.highlight) {
-        highlights.push(item);
+        if (shouldShowItem(item, null)) highlights.push(item);
         continue;
       }
       if (item.section) {
@@ -763,13 +763,13 @@ export default function GlobalVerticalNav() {
           if (!sections[currentSection]) sections[currentSection] = [];
         }
       }
-      if (currentSection) {
+      if (currentSection && shouldShowItem(item, currentSection)) {
         sections[currentSection].push(item);
       }
     }
     sections["TOOLS & WORKSPACE"] = PUBLIC_TOOLS_WORKSPACE_ITEMS;
     return { highlightItems: highlights, sectionGroups: sections };
-  }, []);
+  }, [shouldShowItem]);
 
   // Auto-open is now handled by the route-change effect above
 
