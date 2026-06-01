@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   FileSignature, CheckCircle2, XCircle, AlertTriangle, Loader2, Download,
-  Smartphone, Mail, ExternalLink,
+  Smartphone, Mail, ExternalLink, PenTool,
 } from "lucide-react";
 import { toast } from "sonner";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
@@ -16,6 +16,7 @@ import {
   DOCUSIGN_SIGNUP,
   SIGNED_RETURN_EMAIL,
 } from "@/config/docusignHandoff";
+import AdoptAndSignDialog from "@/components/e-signature/AdoptAndSignDialog";
 
 interface RecipientData {
   id: string;
