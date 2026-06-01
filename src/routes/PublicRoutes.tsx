@@ -109,12 +109,10 @@ const Founder = lazy(() => import("@/pages/Founder"));
 const Awards = lazy(() => import("@/pages/Awards"));
 
 const CompanyProfile = lazy(() => import("@/pages/CompanyProfile"));
-const Philanthropy = lazy(() => import("@/pages/Philanthropy"));
 const News = lazy(() => import("@/pages/News"));
 const NewsDetail = lazy(() => import("@/pages/NewsDetail"));
 const MeetTheTeam = lazy(() => import("@/pages/MeetTheTeam"));
 
-const Reviews = lazy(() => import("@/pages/Reviews"));
 const ThankYou = lazy(() => import("@/pages/ThankYou"));
 
 // ── Legal ──
@@ -122,11 +120,8 @@ const Terms = lazy(() => import("@/pages/Terms"));
 const Privacy = lazy(() => import("@/pages/Privacy"));
 const Cookies = lazy(() => import("@/pages/Cookies"));
 const Disclaimers = lazy(() => import("@/pages/Disclaimers"));
-const TrustAndAuditCenter = lazy(() => import("@/pages/TrustAndAuditCenter"));
-const TrustAndCompliance = lazy(() => import("@/pages/TrustAndCompliance"));
 
 const AmlKycPolicy = lazy(() => import("@/pages/AmlKycPolicy"));
-const Accessibility = lazy(() => import("@/pages/Accessibility"));
 const IntellectualProperty = lazy(() => import("@/pages/IntellectualProperty"));
 
 // ── User / Account ──
@@ -184,8 +179,6 @@ const JBJAcademy = lazy(() => import("@/pages/JBJAcademy"));
 const AcademyGraduates = lazy(() => import("@/pages/AcademyGraduates"));
 const BrokerPortal = lazy(() => import("@/pages/BrokerPortal"));
 
-// ── Governance ──
-const PartnerGovernance = lazy(() => import("@/pages/governance/PartnerGovernance"));
 
 // ── Developer Portal ──
 const DeveloperPortal = lazy(() => import("@/pages/DeveloperPortal"));
@@ -338,29 +331,23 @@ export const PublicRoutes = () => (
     <Route path="/awards" element={<Awards />} />
     <Route path="/press-kit" element={<Navigate to="/company-profile" replace />} />
     <Route path="/company-profile" element={<CompanyProfile />} />
-    <Route path="/philanthropy" element={<Philanthropy />} />
     <Route path="/news" element={<News />} />
     <Route path="/news/:id" element={<NewsDetail />} />
     <Route path="/team" element={<MeetTheTeam />} />
     <Route path="/meet-the-team" element={<RedirectWithSearch to="/team" />} />
     {/* /brokers and /our-brokers retired — no redirect; 404 via NotFound catch-all */}
+    {/* /philanthropy, /reviews, /governance/partners, /trust-and-audit-center, /trust-compliance, /accessibility retired — 404 via NotFound */}
 
-
-    <Route path="/reviews" element={<Reviews />} />
     <Route path="/thank-you" element={<ThankYou />} />
     <Route path="/blog" element={<Navigate to="/news" replace />} />
-    <Route path="/governance/partners" element={<PartnerGovernance />} />
 
     {/* ── Legal ── */}
     <Route path="/terms" element={<Terms />} />
     <Route path="/privacy" element={<Privacy />} />
     <Route path="/cookies" element={<Cookies />} />
     <Route path="/disclaimers" element={<Disclaimers />} />
-    <Route path="/trust-and-audit-center" element={<TrustAndAuditCenter />} />
-    <Route path="/trust-compliance" element={<TrustAndCompliance />} />
-    
+
     <Route path="/aml-kyc" element={<AmlKycPolicy />} />
-    <Route path="/accessibility" element={<Accessibility />} />
     <Route path="/intellectual-property" element={<IntellectualProperty />} />
 
     {/* ── User / Account (Tier 2 — login required) ── */}
