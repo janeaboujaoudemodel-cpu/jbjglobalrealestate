@@ -4697,3 +4697,33 @@ html body :where(
   -webkit-text-fill-color: #1A1A1A !important;
   opacity: 1 !important;
 }
+
+/* ============================================================
+ * BLACK-CTA → NAVY GLOBAL REPAINT (locked, see memory)
+ * Any raw bg-[#1A1A1A] / bg-black button or anchor with white-ish
+ * text is repainted to the approved navy #102540 (hover #1a3d63),
+ * 1px gold hairline, white text + icons. Matches the "View Search
+ * History" / "Get Verified" CTA identity site-wide.
+ *
+ * Opt-out via data-allow-dark-cta, data-on-dark, .allow-white-bg,
+ * or data-no-contrast-guard (AI purple, intentional ink chips).
+ * ============================================================ */
+:where(button, a, [role="button"])[class*="bg-[#1A1A1A]"]:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not(.allow-white-bg):not(.jj-cta-dark):not(.jj-navy-cta),
+:where(button, a, [role="button"])[class*="bg-black"]:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not(.allow-white-bg):not(.jj-cta-dark):not(.jj-navy-cta) {
+  background-color: #102540 !important;
+  background-image: none !important;
+  border-color: rgba(184, 149, 85, 0.55) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+:where(button, a, [role="button"])[class*="bg-[#1A1A1A]"]:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not(.allow-white-bg):not(.jj-cta-dark):not(.jj-navy-cta):hover,
+:where(button, a, [role="button"])[class*="bg-black"]:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not(.allow-white-bg):not(.jj-cta-dark):not(.jj-navy-cta):hover {
+  background-color: #1a3d63 !important;
+  border-color: #B89555 !important;
+}
+:where(button, a, [role="button"])[class*="bg-[#1A1A1A]"]:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not(.allow-white-bg):not(.jj-cta-dark):not(.jj-navy-cta) :where(span, svg, [class*="lucide"]),
+:where(button, a, [role="button"])[class*="bg-black"]:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not(.allow-white-bg):not(.jj-cta-dark):not(.jj-navy-cta) :where(span, svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}

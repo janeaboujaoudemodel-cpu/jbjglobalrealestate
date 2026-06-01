@@ -173,9 +173,12 @@ const ContinueSearching = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setLeadCaptureOpen(true)}
-                className="px-4 py-2 rounded-lg bg-[#1A1A1A] border border-[#1A1A1A] text-white text-xs font-semibold tracking-wide hover:bg-[#2a2a2a] transition-all duration-300"
+                data-surface="navy"
+                data-allow-dark-cta
+                className="surface-navy allow-white px-4 h-9 rounded-lg bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 hover:border-[#B89555] text-white text-xs font-semibold tracking-wide transition-all duration-300 shadow-[0_8px_22px_-12px_rgba(16,37,64,0.55)] hover:-translate-y-0.5"
+                style={{ color: "#FFFFFF" }}
               >
-                Register Your Interest
+                <span className="allow-white" style={{ color: "#FFFFFF" }}>Register Your Interest</span>
               </button>
               <Popover open={historyOpen} onOpenChange={setHistoryOpen}>
                 <PopoverTrigger asChild>
