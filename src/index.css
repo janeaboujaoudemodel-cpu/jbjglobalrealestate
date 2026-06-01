@@ -4157,18 +4157,49 @@ button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
 [data-allow-dark-cta] :where(span, svg, [class*="lucide"]),
 [data-icon-tile][data-surface="ink"] :where(svg, [class*="lucide"]),
 [data-icon-tile][data-surface="navy"] :where(svg, [class*="lucide"]),
-.surface-navy :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
-.surface-ink :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
-.surface-dark :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
-[data-surface="navy"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
-[data-surface="ink"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
-[data-surface="dark"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
+.surface-navy :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
+.surface-ink :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
+.surface-dark :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
+[data-surface="navy"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
+[data-surface="ink"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
+[data-surface="dark"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
 [data-hero-consultation-lock] :where(span, svg, [class*="lucide"]),
 [data-photo-copy-lock] :where(span, svg, [class*="lucide"]) {
   color: hsl(var(--jj-on-dark));
   -webkit-text-fill-color: hsl(var(--jj-on-dark));
   stroke: hsl(var(--jj-on-dark));
   opacity: 1;
+}
+
+/* ============================================================
+ * NESTED LIGHT-SURFACE RESCUE — when a champagne/light/cream/raised/gold/page/pearl
+ * surface is nested INSIDE a navy/ink/dark parent (e.g. PortalShowcaseCard's left
+ * aside and metric panel inside the navy portal shell), force its text + icons
+ * back to ink #1A1A1A. Without this rule the parent navy `-webkit-text-fill-color`
+ * lock leaks into nested champagne children and renders them as white-on-white.
+ * ============================================================ */
+:where(.surface-navy, .surface-ink, .surface-dark, [data-surface="navy"], [data-surface="ink"], [data-surface="dark"])
+  :where(.surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-page, .surface-light, .surface-pearl,
+         [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+         [data-surface="page"], [data-surface="light"], [data-surface="pearl"]),
+:where(.surface-navy, .surface-ink, .surface-dark, [data-surface="navy"], [data-surface="ink"], [data-surface="dark"])
+  :where(.surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-page, .surface-light, .surface-pearl,
+         [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+         [data-surface="page"], [data-surface="light"], [data-surface="pearl"])
+  :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, div, button) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+:where(.surface-navy, .surface-ink, .surface-dark, [data-surface="navy"], [data-surface="ink"], [data-surface="dark"])
+  :where(.surface-champagne, .surface-cream, .surface-raised, .surface-gold, .surface-page, .surface-light, .surface-pearl,
+         [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+         [data-surface="page"], [data-surface="light"], [data-surface="pearl"])
+  :where(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold):not(.jj-gold-accent) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
 }
 
 .jj-cta-champagne,
