@@ -724,10 +724,14 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             >
               <ShieldCheck className="w-7 h-7" style={{ color: "#FFFFFF" }} />
             </div>
-            <h3 className="text-lg font-bold mb-2" style={{ color: accent }} data-no-contrast-guard>
+            <h3
+              className="text-xl font-bold mb-2"
+              style={{ color: accent, WebkitTextFillColor: accent }}
+              data-no-contrast-guard
+            >
               Sign in to track your submissions
             </h3>
-            <p className="text-sm mb-5" style={{ color: INK + "B3" }}>
+            <p className="text-sm mb-5" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }} data-no-contrast-guard>
               Create a free account or sign in to view the live approval status of
               your property listings.
             </p>
