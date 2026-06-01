@@ -773,8 +773,6 @@ export default function GlobalVerticalNav() {
 
   // Auto-open is now handled by the route-change effect above
 
-  const navigate = useNavigate();
-
   // Accordion toggle — only one section open at a time (instant open/close, no forced scroll)
   const toggleSection = (section: SectionKey, e?: React.MouseEvent) => {
     e?.stopPropagation();
