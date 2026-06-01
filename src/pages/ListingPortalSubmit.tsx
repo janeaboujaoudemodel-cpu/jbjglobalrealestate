@@ -100,6 +100,7 @@ const ListingPortalSubmit = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user, isOwner } = useAuth();
+  const firstName = useDisplayFirstName("there");
   const creatorRef = useRef<HTMLDivElement>(null);
   
   // Read purpose from URL: ?purpose=sale or ?purpose=rent
