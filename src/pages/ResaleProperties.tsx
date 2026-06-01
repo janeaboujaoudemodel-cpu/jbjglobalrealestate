@@ -533,18 +533,22 @@ const ResaleProperties = () => {
                       </div>
                     )}
                     <div className="mt-3 flex items-center gap-2 flex-wrap">
-                      <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30 text-xs">
+                      <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40 text-xs">
                         {listing.handover_status === 'ready' ? 'Ready' : 'Under Construction'}
                       </Badge>
                       {listing.property_type && (
-                        <Badge variant="outline" className="text-xs border-[#B89555]/20 text-[#1A1A1A]/50">
+                        <Badge variant="outline" className="text-xs border-[#B89555]/40 text-[#1A1A1A]/70">
                           {listing.property_type}
                         </Badge>
                       )}
                     </div>
-                    <Button className="w-full mt-4 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold">
+                    <Button
+                      data-cta="dark"
+                      className="jj-cta-dark w-full mt-4 h-10 font-semibold rounded-xl"
+                    >
                       Register Interest
                     </Button>
+
                   </div>
                 </div>
               ))}
