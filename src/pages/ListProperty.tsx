@@ -724,7 +724,7 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             className="rounded-2xl p-8 text-center"
             data-no-contrast-guard
             style={{
-              backgroundColor: "#FFFFFF",
+              background: ombreSoft(theme),
               border: `1.5px solid ${accent}`,
               boxShadow: `0 20px 40px -20px ${accent}66`,
             }}
