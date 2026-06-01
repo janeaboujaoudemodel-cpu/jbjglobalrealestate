@@ -1525,10 +1525,12 @@ const ListingPortalSubmit = () => {
                 </motion.div>
               )}
             </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </main>
+
   );
 };
 
