@@ -48,7 +48,6 @@ type Mode = "pick" | "manual" | "ai" | "browse";
 type Purpose = "sale" | "rent";
 
 /* ────────────────────────────── theme tokens ────────────────────────────── */
-// Approved navy per brand guard — never substitute another blue
 const BLUE = "#102540";
 const BLUE_HOVER = "#1a3d63";
 const BLUE_DEEP = "#0B1B33";
@@ -59,6 +58,59 @@ const CHAMPAGNE = "#FDFBF7";
 const CHAMPAGNE_SURFACE = "#F7F2EA";
 const CHAMPAGNE_RAISED = "#EFE6D6";
 const INK = "#1A1A1A";
+
+/* per-mode accent system: manual = premium emerald/black ombre,
+   ai = purple/navy, pick/browse = navy */
+type ModeTheme = {
+  name: "navy" | "emerald" | "purple";
+  primary: string;       // solid accent
+  primaryDeep: string;   // deeper variant
+  badgeBorder: string;   // accent border for pills/badges
+  badgeBg: string;       // translucent fill behind accent
+  heroGradient: string;  // hero band background
+  sectionGradient: string; // My Submissions band background
+  ctaText: string;       // CTA text color over solid primary
+  iconAccent: string;    // sparkle / leaf icon color
+};
+const THEME_NAVY: ModeTheme = {
+  name: "navy",
+  primary: BLUE,
+  primaryDeep: BLUE_DEEP,
+  badgeBorder: "#A855F7",
+  badgeBg: "rgba(168,85,247,0.14)",
+  heroGradient: BLUE_GRADIENT,
+  sectionGradient: BLUE_GRADIENT,
+  ctaText: "#FFFFFF",
+  iconAccent: "#A855F7",
+};
+const THEME_EMERALD: ModeTheme = {
+  name: "emerald",
+  primary: "#064E3B",
+  primaryDeep: "#022C22",
+  badgeBorder: "#10B981",
+  badgeBg: "rgba(16,185,129,0.16)",
+  heroGradient:
+    "linear-gradient(135deg, #022C22 0%, #064E3B 45%, #0B0B0B 100%)",
+  sectionGradient:
+    "linear-gradient(135deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)",
+  ctaText: "#FFFFFF",
+  iconAccent: "#10B981",
+};
+const THEME_PURPLE: ModeTheme = {
+  name: "purple",
+  primary: "#5B21B6",
+  primaryDeep: "#2E1065",
+  badgeBorder: "#A855F7",
+  badgeBg: "rgba(168,85,247,0.16)",
+  heroGradient:
+    "linear-gradient(135deg, #2E1065 0%, #4C1D95 50%, #0B0B0B 100%)",
+  sectionGradient:
+    "linear-gradient(135deg, #2E1065 0%, #4C1D95 50%, #0B0B0B 100%)",
+  ctaText: "#FFFFFF",
+  iconAccent: "#C4B5FD",
+};
+const themeForMode = (m: Mode): ModeTheme =>
+  m === "manual" ? THEME_EMERALD : m === "ai" ? THEME_PURPLE : THEME_NAVY;
 
 const ListProperty = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -100,10 +152,15 @@ const ListProperty = () => {
     }
   }, [mode]);
 
+  const theme = themeForMode(mode);
+  const ombreShine =
+    `radial-gradient(circle at 18% 18%, ${theme.iconAccent}33 0%, transparent 60%)`;
+
   return (
     <div
       className="min-h-screen"
       style={{ backgroundColor: CHAMPAGNE, color: INK }}
+      data-listing-mode={theme.name}
     >
       <SEOHead
         title="List Your Property — JBJ Global Real Estate"
@@ -115,23 +172,26 @@ const ListProperty = () => {
         <AnimatedBorderShell tone="navy" bare>
         <div style={{ backgroundColor: CHAMPAGNE }}>
 
-      {/* ───────────────────── Hero (navy gradient) ───────────────────── */}
+      {/* ───────────────────── Hero — mode-aware gradient ───────────────────── */}
       <section
-        className="relative w-full bg-[#102540]"
+        className="relative w-full"
         data-surface="dark"
         data-allow-dark-cta
         data-no-contrast-guard
-        style={{ background: BLUE_GRADIENT }}
+        style={{ background: theme.heroGradient }}
       >
-        {/* subtle purple hairline along the bottom of the hero */}
         <div
           className="absolute inset-x-0 bottom-0 h-px"
           style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(168,85,247,0.65), transparent)",
+            background: `linear-gradient(90deg, transparent, ${theme.badgeBorder}A6, transparent)`,
           }}
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-16 pb-12 md:pb-16">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ background: ombreShine }}
+        />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-16 pb-12 md:pb-16">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -141,13 +201,13 @@ const ListProperty = () => {
             <span
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold"
               style={{
-                backgroundColor: "rgba(168,85,247,0.14)",
+                backgroundColor: theme.badgeBg,
                 color: "#FFFFFF",
-                border: "1px solid #A855F7",
+                border: `1px solid ${theme.badgeBorder}`,
               }}
               data-no-contrast-guard
             >
-              <ShieldCheck className="w-3.5 h-3.5" style={{ color: "#A855F7" }} />
+              <ShieldCheck className="w-3.5 h-3.5" style={{ color: theme.badgeBorder }} />
               JBJ Seller Portal
             </span>
             <h1
@@ -183,6 +243,7 @@ const ListProperty = () => {
                   color: "#FFFFFF",
                   border: "1px solid #15803D",
                   WebkitTextFillColor: "#FFFFFF",
+                  boxShadow: "0 10px 28px -12px rgba(21,128,61,0.55)",
                 }}
               >
                 <ClipboardCheck className="w-4 h-4" style={{ color: "#FFFFFF" }} />
@@ -193,17 +254,18 @@ const ListProperty = () => {
                 onClick={() => setMode("ai")}
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:bg-[#A855F7]/10"
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:brightness-110"
                 style={{
-                  backgroundColor: "transparent",
+                  backgroundColor: "#5B21B6",
                   color: "#FFFFFF",
-                  border: "1.5px solid #A855F7",
+                  border: "1px solid #A855F7",
                   WebkitTextFillColor: "#FFFFFF",
+                  boxShadow: "0 10px 28px -12px rgba(91,33,182,0.55)",
                 }}
               >
-                <Wand2 className="w-4 h-4" style={{ color: "#A855F7" }} />
+                <Wand2 className="w-4 h-4" style={{ color: "#FFFFFF" }} />
                 <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>List with AI</span>
-                <Sparkles className="w-3.5 h-3.5" style={{ color: "#A855F7" }} />
+                <Sparkles className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} />
               </button>
               <a
                 href="#my-submissions"
@@ -218,21 +280,21 @@ const ListProperty = () => {
         </div>
       </section>
 
-      {/* ───────────────── Purpose + Mode selector ───────────────── */}
+      {/* ───────────────── Purpose + Mode selector (mode-aware accent) ───────────────── */}
       <section className="px-4 sm:px-6 md:px-10 mt-8 md:mt-10 pb-8 md:pb-10 relative z-10">
         <div className="max-w-5xl mx-auto">
           <div
             className="rounded-2xl p-4 sm:p-6 md:p-7 shadow-xl"
             style={{
-              backgroundColor: CHAMPAGNE,
-              border: `1px solid ${GOLD}`,
+              backgroundColor: "#FFFFFF",
+              border: `1.5px solid ${theme.primary}`,
+              boxShadow: `0 18px 40px -22px ${theme.primary}66`,
             }}
           >
             <div className="flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
-              {/* Purpose */}
               <div className="flex-1">
                 <div className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-2"
-                  style={{ color: INK + "B3" }}>
+                  style={{ color: theme.primary }}>
                   Purpose
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
@@ -240,6 +302,7 @@ const ListProperty = () => {
                     active={purpose === "sale"}
                     onClick={() => setPurpose("sale")}
                     icon={<Tag className="w-4 h-4" />}
+                    theme={theme}
                   >
                     For Sale
                   </SegmentedPill>
@@ -247,16 +310,16 @@ const ListProperty = () => {
                     active={purpose === "rent"}
                     onClick={() => setPurpose("rent")}
                     icon={<Key className="w-4 h-4" />}
+                    theme={theme}
                   >
                     For Rent
                   </SegmentedPill>
                 </div>
               </div>
 
-              {/* Mode */}
               <div className="flex-1">
                 <div className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-2"
-                  style={{ color: INK + "B3" }}>
+                  style={{ color: theme.primary }}>
                   How would you like to list?
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
@@ -264,6 +327,7 @@ const ListProperty = () => {
                     active={mode === "manual"}
                     onClick={() => setMode("manual")}
                     icon={<ClipboardCheck className="w-4 h-4" />}
+                    theme={THEME_EMERALD}
                   >
                     Manual
                   </SegmentedPill>
@@ -271,16 +335,16 @@ const ListProperty = () => {
                     active={mode === "ai"}
                     onClick={() => setMode("ai")}
                     icon={<Wand2 className="w-4 h-4" />}
+                    theme={THEME_PURPLE}
+                    trailing={<Sparkles className="w-3 h-3" />}
                   >
-                    <span className="flex items-center gap-1.5">
-                      AI-Assisted
-                      <Sparkles className="w-3 h-3" style={{ color: GOLD }} />
-                    </span>
+                    AI-Assisted
                   </SegmentedPill>
                   <SegmentedPill
                     active={mode === "browse"}
                     onClick={() => setMode("browse")}
                     icon={<Eye className="w-4 h-4" />}
+                    theme={THEME_NAVY}
                   >
                     Browse
                   </SegmentedPill>
@@ -314,8 +378,8 @@ const ListProperty = () => {
         )}
       </section>
 
-      {/* ───────────────── My Submissions section ───────────────── */}
-      <MySubmissionsSection />
+      {/* ───────────────── My Submissions section (mode-aware) ───────────────── */}
+      <MySubmissionsSection theme={theme} />
         </div>
         </AnimatedBorderShell>
       </div>
@@ -323,45 +387,52 @@ const ListProperty = () => {
   );
 };
 
-/* ────────────────── Segmented pill control ────────────────── */
+/* ────────────────── Segmented pill control (mode-aware) ────────────────── */
 function SegmentedPill({
   active,
   onClick,
   icon,
   children,
+  theme = THEME_NAVY,
+  trailing,
 }: {
   active: boolean;
   onClick: () => void;
   icon: React.ReactNode;
   children: React.ReactNode;
+  theme?: ModeTheme;
+  trailing?: React.ReactNode;
 }) {
-  const fg = active ? "#FFFFFF" : INK;
+  const fg = active ? "#FFFFFF" : theme.primary;
   return (
     <button
       type="button"
       onClick={onClick}
       data-allow-dark-cta
       data-no-contrast-guard
-      className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-150 ${active ? "bg-[#102540] hover:bg-[#1a3d63]" : ""}`}
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-150 hover:brightness-110"
       style={
         active
           ? {
-              backgroundColor: BLUE,
+              background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.primaryDeep} 100%)`,
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
-              border: `1px solid ${BLUE_DEEP}`,
-              boxShadow: "0 8px 22px -10px rgba(16,37,64,0.45)",
+              border: `1px solid ${theme.primaryDeep}`,
+              boxShadow: `0 10px 24px -12px ${theme.primary}99`,
             }
           : {
-              backgroundColor: CHAMPAGNE,
-              color: INK,
-              WebkitTextFillColor: INK,
-              border: `1px solid ${GOLD}66`,
+              backgroundColor: "#FFFFFF",
+              color: theme.primary,
+              WebkitTextFillColor: theme.primary,
+              border: `1.5px solid ${theme.primary}`,
             }
       }
     >
       <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{icon}</span>
       <span style={{ color: fg, WebkitTextFillColor: fg }}>{children}</span>
+      {trailing && (
+        <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{trailing}</span>
+      )}
     </button>
   );
 }
@@ -502,10 +573,11 @@ function PickerCard({
 
 
 
-/* ───────────────── My Submissions Section ───────────────── */
-function MySubmissionsSection() {
+/* ───────────────── My Submissions Section (mode-aware) ───────────────── */
+function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
   const { user } = useAuth();
   const { listings, isLoading, fetchListings } = useSellerListings();
+  const accent = theme.primary;
 
   useEffect(() => {
     if (user) fetchListings();
@@ -514,12 +586,20 @@ function MySubmissionsSection() {
   return (
     <section
       id="my-submissions"
-      className="scroll-mt-24 px-4 sm:px-6 md:px-10 py-12 md:py-16 relative"
+      className="scroll-mt-24 px-4 sm:px-6 md:px-10 py-12 md:py-16 relative overflow-hidden"
       data-no-contrast-guard
       data-allow-dark-cta
-      style={{ background: BLUE_GRADIENT }}
+      style={{ background: theme.sectionGradient }}
     >
-      <div className="max-w-6xl mx-auto">
+      {/* premium ombre shine */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: `radial-gradient(circle at 85% 12%, ${theme.iconAccent}26 0%, transparent 55%)`,
+        }}
+      />
+      <div className="relative max-w-6xl mx-auto">
         <div className="flex items-end justify-between flex-wrap gap-3 mb-6">
           <div>
             <h2
@@ -546,38 +626,38 @@ function MySubmissionsSection() {
               className="font-semibold border-0 hover:brightness-95"
               style={{
                 backgroundColor: "#FFFFFF",
-                color: BLUE,
-                border: `1px solid ${GOLD}`,
+                color: accent,
+                border: `1px solid ${theme.badgeBorder}`,
               }}
             >
               <Link to="/dashboard/my-listings">
-                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: BLUE }} />
-                <span style={{ color: BLUE, WebkitTextFillColor: BLUE }}>Open full dashboard</span>
+                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent }} />
+                <span style={{ color: accent, WebkitTextFillColor: accent }}>Open full dashboard</span>
               </Link>
             </Button>
           )}
         </div>
 
         {!user ? (
-          /* Anonymous gate */
           <div
             className="rounded-2xl p-8 text-center"
             data-no-contrast-guard
             style={{
               backgroundColor: "#FFFFFF",
-              border: `1.5px solid ${GOLD}`,
+              border: `1.5px solid ${accent}`,
+              boxShadow: `0 20px 40px -20px ${accent}66`,
             }}
           >
             <div
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
-                backgroundColor: BLUE + "10",
-                border: `1px solid ${BLUE}`,
+                background: `linear-gradient(135deg, ${accent} 0%, ${theme.primaryDeep} 100%)`,
+                border: `1px solid ${accent}`,
               }}
             >
-              <ShieldCheck className="w-7 h-7" style={{ color: BLUE }} />
+              <ShieldCheck className="w-7 h-7" style={{ color: "#FFFFFF" }} />
             </div>
-            <h3 className="text-lg font-bold mb-2" style={{ color: BLUE }} data-no-contrast-guard>
+            <h3 className="text-lg font-bold mb-2" style={{ color: accent }} data-no-contrast-guard>
               Sign in to track your submissions
             </h3>
             <p className="text-sm mb-5" style={{ color: INK + "B3" }}>
@@ -589,7 +669,10 @@ function MySubmissionsSection() {
               data-allow-dark-cta
               data-no-contrast-guard
               className="font-semibold border-0"
-              style={{ backgroundColor: BLUE, color: "#FFFFFF" }}
+              style={{
+                background: `linear-gradient(135deg, ${accent} 0%, ${theme.primaryDeep} 100%)`,
+                color: "#FFFFFF",
+              }}
             >
               <Link to="/login?redirect=/list-property%23my-submissions">
                 <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sign in to continue</span>
@@ -616,19 +699,19 @@ function MySubmissionsSection() {
             data-no-contrast-guard
             style={{
               backgroundColor: "#FFFFFF",
-              border: `1.5px dashed ${GOLD}`,
+              border: `1.5px dashed ${accent}`,
             }}
           >
             <div
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
-                backgroundColor: BLUE + "10",
-                border: `1px solid ${BLUE}`,
+                background: `linear-gradient(135deg, ${accent} 0%, ${theme.primaryDeep} 100%)`,
+                border: `1px solid ${accent}`,
               }}
             >
-              <Building2 className="w-7 h-7" style={{ color: BLUE }} />
+              <Building2 className="w-7 h-7" style={{ color: "#FFFFFF" }} />
             </div>
-            <h3 className="text-lg font-bold mb-2" style={{ color: BLUE }} data-no-contrast-guard>
+            <h3 className="text-lg font-bold mb-2" style={{ color: accent }} data-no-contrast-guard>
               No submissions yet
             </h3>
             <p className="text-sm mb-5" style={{ color: INK + "99" }}>
