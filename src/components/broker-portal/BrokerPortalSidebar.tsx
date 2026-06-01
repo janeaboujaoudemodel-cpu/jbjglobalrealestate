@@ -86,7 +86,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
           />
           {!collapsed && (
             <div className="min-w-0">
-              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground truncate font-medium">
+              <div className="text-[9px] uppercase tracking-[0.12em] text-[#1A1A1A]/70 font-semibold whitespace-nowrap leading-none">
                 JBJ GLOBAL REAL ESTATE
               </div>
               <div className="font-display text-[13px] font-semibold text-[#1A1A1A] mt-0.5 truncate tracking-tight">
@@ -159,10 +159,11 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
           type="button"
           onClick={handleSignOut}
           title={collapsed ? "Sign Out" : undefined}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-[#1A1A1A] hover:!text-red-700 hover:bg-red-50 transition-colors"
+          data-signout-action
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#DC2626] bg-[#FDFBF7] border border-[#DC2626]/30 hover:bg-red-50 hover:border-[#DC2626]/50 transition-colors"
         >
-          <LogOut className="h-5 w-5 shrink-0" />
-          {!collapsed && <span className="truncate">Sign Out</span>}
+          <LogOut data-signout-icon className="h-5 w-5 shrink-0 jj-signout-icon" />
+          {!collapsed && <span data-signout-label>Sign Out</span>}
         </button>
 
         {/* Collapse toggle — always at the very bottom, below Sign Out */}
