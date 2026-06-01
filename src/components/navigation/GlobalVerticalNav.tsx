@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle,
   Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin,
@@ -575,11 +575,11 @@ const SECTION_ICONS: Record<SectionKey, any> = {
 export default function GlobalVerticalNav() {
   const location = useLocation();
   const { session } = useAuth();
-  const { role, isBroker, isInvestor, isOwner } = useUserRole();
-  const { isDeveloperMode, isBrokerMode, isInvestorMode, mode } = useUserModeContext();
+  const { isInvestor, isOwner } = useUserRole();
+  const { isDeveloperMode, isBrokerMode, isInvestorMode } = useUserModeContext();
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(() => {
     try {
       const stored = localStorage.getItem('jj_nav_collapsed');
