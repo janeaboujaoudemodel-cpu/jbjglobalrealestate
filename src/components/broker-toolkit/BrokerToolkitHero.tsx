@@ -13,10 +13,10 @@ export function BrokerToolkitHero() {
     <section
       data-hero-dark
       data-no-contrast-guard
-      className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex items-center jj-band"
+      className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex items-center bg-[#1A1A1A]"
     >
       {/* Background video */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 z-0">
         <video
           src={brokerHero}
           poster={brokerHeroPoster}
