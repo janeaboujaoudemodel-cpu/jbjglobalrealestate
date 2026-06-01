@@ -599,6 +599,24 @@ export default function GlobalVerticalNav() {
   const showBrokerSurfaces = isBrokerMode;
   const showInvestorSurfaces = isInvestorMode || isInvestor || isOwner;
 
+  const shouldShowItem = useCallback((item: NavItem, sectionKey?: SectionKey | null) => {
+    if (!showBrokerSurfaces) {
+      if (item.href === "/join") return false;
+      if (sectionKey === "BROKER & ACADEMY") return false;
+      if (item.href.startsWith("/broker") || item.href === "/broker-toolkit" || item.href === "/broker-resources" || item.href === "/ai-broker-workspace" || item.href === "/jbj-academy") return false;
+      if (item.label === "Career Portal") return false;
+    }
+    if (!showInvestorSurfaces && sectionKey === "INVESTOR") return false;
+    return true;
+  }, [showBrokerSurfaces, showInvestorSurfaces]);
+
+  const shouldShowSection = useCallback((sectionKey: SectionKey) => {
+    if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return false;
+    if (sectionKey === 'BROKER & ACADEMY' && !showBrokerSurfaces) return false;
+    if (sectionKey === 'INVESTOR' && !showInvestorSurfaces) return false;
+    return true;
+  }, [isDeveloperMode, isOwner, showBrokerSurfaces, showInvestorSurfaces]);
+
   // Collapsible sections state — accordion: only one open at a time
   const [openSection, setOpenSection] = useState<SectionKey | null>(null);
 
