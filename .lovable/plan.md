@@ -1,83 +1,60 @@
-## Rebuild `/jbj-academy` — premium, 3D book library, certificate fix, owner CMS
+## Root causes
 
-### 1. Page layout & contrast (`src/pages/broker/BrokerLearning.tsx`)
+### 1. Header / sidebar "blinking" — animated shimmer on persistent chrome
+The class `.jbj-shimmer-champagne` runs a 3s linear infinite gold gradient sweep:
 
-- Center the title block: badge, `JBJ Broker Academy` H1, subtitle, and the 3 KPI tiles all centered, max-w-5xl.
-- Replace empty black KPI tiles with proper `<IconTile tone="gold">` icons + tabular-nums values (Library books / Training modules / Your training %).
-- Restyle Training Modules: 2-col grid, each card uses gold `IconTile` instead of empty black square, ink title on champagne, navy "Start" CTA via `.jj-cta-dark`.
-- Quick Reference (NEVER Say / ALWAYS Use): keep 2-col, restyle headers with proper red/emerald icon tiles, ink body text, gold hairline borders.
-- Take inspiration from `/help` page rhythm (centered hero, dense premium cards, generous section spacing). Add subtle framer-motion stagger on section reveal — no flashy chrome.
+```css
+/* src/index.css:741 */
+.jbj-shimmer-champagne {
+  background-image: linear-gradient(110deg, #E6D3A8 0%, #F5E9CC 25%, #D8BE82 50%, #F5E9CC 75%, #E6D3A8 100%) !important;
+  background-size: 200% 100% !important;
+  animation: jbj-champagne-shimmer 3s linear infinite;
+}
+```
 
-### 2. Books section — 3D premium shelf, 4-per-row
+It is applied to **always-visible** chrome that should be perfectly stable:
+- `src/components/navigation/HorizontalUtilityBar.tsx:99` — entire fixed top header bar
+- `src/components/navigation/HorizontalUtilityBar.tsx:158, 167` — the active `sq ft` / `sq m` pill
+- `src/components/navigation/GlobalVerticalNav.tsx:1007` — vertical nav logo tile (expanded)
+- `src/components/navigation/GlobalVerticalNav.tsx:1282` — vertical nav logo tile (collapsed)
 
-- Replace static `<Book3DCard>` (flat cover) with a true 3D book primitive: front cover, visible spine, back cover, page edges, soft floor shadow, hover rotateY tilt + lift.
-- New component `src/components/broker-education/PremiumBook3D.tsx` with:
-  - `perspective: 1600px`, `transform-style: preserve-3d`, idle `rotateY(-18deg)`, hover `rotateY(0)` with 600ms ease.
-  - Spine = 36px wide slab with title rotated 90°, embossed gold rule.
-  - Front cover = champagne or palette color + gold double-rule frame + book number + title + JBJ wordmark.
-  - Back cover = ISBN-style label + JBJ monogram + 1-line description.
-  - Page edges (top/right/bottom) = warm cream stripes.
-- Per-book palette rotation (oxblood, navy, forest, aubergine, cognac, obsidian, bronze, teal, burgundy) — same shape, different color per book_number.
-- Grid: `grid-cols-2 md:grid-cols-3 lg:grid-cols-4` (4-per-row on desktop) for tight library feel.
-- Book number badge: redesigned as a luxury "tag" — gold-foil ribbon pinned to top-right of cover, with subtle shimmer animation (`@keyframes shimmer` sweeping a 30% white gradient across the foil every 4s).
-- Remove "Professional Development" group from the academy page (already moved to toolkit Academy as broker-portal books). Sort order stays Foundations → Buyer/Investor → Seller/Landlord → Market Intelligence → Advanced.
+User-perceived effect: the header pulses gold every 3 s, and because only the **active** unit pill shimmers, the eye reads the highlight as "moving from sq ft to sq m". The vertical sidebar's JBJ tile shimmers in the same rhythm.
 
-### 3. Seed real content into existing books (DB)
+### 2. "Contact us" launcher flickering on anonymous sessions
+`useOverHero` in `src/components/support/SupportLauncher.tsx:99-128`:
 
-- For each book where `broker_education_modules` is empty or thin, insert 4-6 modules with:
-  - `title`, `description`, ~600-900 word `content` paragraph each.
-  - Content sourced from public UAE government references the AI can cite by name (Dubai Land Department, RERA, DLD Open Data Portal, Bayanat Abu Dhabi, UAE Ministry of Economy, Dubai Statistics Center, Federal Tax Authority for VAT on commercial transactions, Dubai REST app). No fabricated stats — every figure either cites the source or is a worked example labeled "Worked example".
-  - Insert via `supabase--insert` (single SQL with on-conflict guard so re-runs are idempotent).
-- Books retain their cover and structure; this only fills empty chapters so they don't look hollow when opened.
+- Defaults `overHero = true` → tag starts invisible (`opacity-0`).
+- A `scroll` listener fires `check()` on every scroll tick and toggles `overHero` whenever the homepage hero video crosses the threshold `r.top <= vh*0.15`.
+- On the homepage that boundary is exactly where the page sits after first paint, so tiny layout shifts (fonts, images, cookie banner mount) flip the flag on/off → 300 ms opacity fade in, fade out, in, out.
+- After sign-in the user lands on a route with no `[data-hero-dark]` video, so `hit` stays `false` and the tag stabilizes. That matches the user's report.
 
-### 4. Public vs broker-only audience (owner CMS feature)
+## Fix plan (frontend only, no business logic)
 
-- DB migration: add `audience text not null default 'brokers' check (audience in ('public','brokers','investors'))` to `broker_education_books`, plus index.
-- Update RLS:
-  - `select` for anon allowed when `audience = 'public' and is_restricted = false and deleted_at is null`.
-  - Authenticated brokers see public + brokers + investors per `min_tier` (existing rule preserved).
-- Update `useBrokerEducation` to pass the user's role/mode and filter accordingly.
-- /jbj-academy page renders two top-level groups inside Books: **Public Library** (audience=public) and **JBJ Broker Library** (audience=brokers/investors), each with its own learning-path subgroups.
+### A. Stop the shimmer on persistent chrome
+1. `src/index.css` — narrow `.jbj-shimmer-champagne` so it is a one-shot reveal only (or move the animation behind `@media (hover: hover)` + `:hover` so it only animates on user interaction). Concretely: drop `animation: ... infinite` from the base class; expose a new `.jbj-shimmer-champagne--hover:hover` variant for places that actually want the sweep on hover.
+2. Replace the four persistent usages with the static champagne gradient already used elsewhere:
+   - `HorizontalUtilityBar.tsx:99` — drop `jbj-shimmer-champagne`, keep existing `bg-gradient-to-r from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA]`.
+   - `HorizontalUtilityBar.tsx:158/167` — for the active unit pill, replace the shimmer with the locked active style (cream `#EFE6D6` + 1 px gold ring + ink text), matching `.jj-pill-active` from the CTA primitive system. This also removes the perceived "movement" between sq ft and sq m.
+   - `GlobalVerticalNav.tsx:1007/1282` — drop `jbj-shimmer-champagne`, keep the existing static `bg-gradient-to-b` champagne fill.
+3. Leave the class itself in place for any opt-in marketing surfaces; just remove the infinite animation from the base rule.
 
-### 5. Owner CMS — already exists, extend it
+### B. Stabilise the support launcher
+In `src/components/support/SupportLauncher.tsx`:
+1. Default `overHero` to `false` on routes that have no `[data-hero-dark]` video element at mount time — compute the initial value synchronously inside `useState(() => …)` so there is no initial fade-out.
+2. Throttle `check()` to once per animation frame (`requestAnimationFrame` guard) and add a 6 px hysteresis around the threshold so micro layout shifts don't flip the flag.
+3. Stop listening to `scroll` on routes with no qualifying hero (early-return when `document.querySelector('[data-hero-dark] video')` is null at mount; re-evaluate on `routechange`).
+4. Replace the 300 ms `transition-opacity` fade with `visibility` toggling once the value is committed, so even if it does flip, there is no animated flash.
 
-Owner CMS lives at **`/owner/books`** (page `src/pages/owner/OwnerBooks.tsx`, already routed). Extend it to support the new workflow you described:
+### C. Verify
+1. `browser--navigate_to_sandbox /` (anonymous) → record 6 s of the header strip and right edge; confirm zero animation on the header bar, sidebar logo tile, and Contact us tag (a single mount fade-in is fine).
+2. Refresh five times: confirm the active unit pill stays put on the value persisted in `localStorage.jj_area_unit` with no swap.
+3. Navigate to `/properties`, `/jbj-academy`, `/contact` → confirm Contact us tag stays visible and steady on every route.
+4. Sign in → confirm parity with anonymous behaviour (no regression).
 
-- Add audience selector (Public / Brokers / Investors) on each book row.
-- Add **Chapters/Pages editor** drawer per book:
-  - List modules ordered by `sort_order` with reorder, rename, edit content (rich textarea), delete (soft — only the chapter; book stays).
-  - "Add chapter" / "Add page" buttons append a new `broker_education_modules` row.
-  - "Replace content" replaces a single module's `content` without deleting the book.
-  - Soft delete uses `deleted_at` on modules so content can be recovered.
-- Surface a link to `/owner/books` from the academy page footer (owner-only, gated by `requireOwnerAuth` UI check).
+## Files touched
+- `src/index.css` — defang `.jbj-shimmer-champagne` (no infinite animation by default; add hover-only variant).
+- `src/components/navigation/HorizontalUtilityBar.tsx` — remove shimmer from header bar + unit pills; use `.jj-pill-active` for active unit.
+- `src/components/navigation/GlobalVerticalNav.tsx` — remove shimmer from both logo tiles.
+- `src/components/support/SupportLauncher.tsx` — sync default for `overHero`, rAF-throttled + hysteresis check, scroll listener only when a hero exists, `visibility` toggle instead of opacity fade.
 
-### 6. Certificate fixes (`src/components/certification/CertificatePreview.tsx`)
-
-- Remove the middle border (`inset-3 rounded-xl border`). Keep only the outer card border + the 4 corner angle flourishes.
-- Remove the "JBJ · CERTIFIED" wordmark inside the `FoilSeal` (keep the badge icon and gold foil).
-- Add shimmer animation: a 12% white diagonal gradient sweeps the whole certificate plate every 6s (`@keyframes cert-shimmer`), respects `prefers-reduced-motion`.
-- Recipient/signature alignment:
-  - Recipient name (the broker being certified) stays centered above "Certified JBJ Broker".
-  - Signature block bottom-right unchanged but ensure name reads **Jeyhun Babayev** (already correct in code — verify against a fresh render; if the displayed "wrong name" is the recipient duplicating the signer, rename the recipient field to `userName` only and add `aria-label`).
-- CTA polish: "Download Certificate" → `.jj-cta-dark` (navy + gold hairline + white text). "Share Achievement" → `.jj-cta-outline` (ink on champagne, gold hairline).
-
-### 7. Validation
-
-After build, run the visual QA loop:
-- `browser--navigate_to_sandbox /jbj-academy`, `browser--screenshot full_page:true`.
-- Inspect: centered title, no empty black squares, 4-per-row books, 3D tilt, gold ribbon shimmer, certificate with single inner frame + corner brackets + shimmer + correct names.
-- Re-crop the certificate region with `image_tools--zoom_image` to confirm only one inner border remains and the "JBJ · CERTIFIED" wordmark is gone.
-- Iterate until clean before delivering.
-
-### Files touched
-
-- `src/pages/broker/BrokerLearning.tsx` — layout, centering, contrast, IconTiles, grouping, 4-col grid, drop Professional Development.
-- `src/components/broker-education/PremiumBook3D.tsx` — new 3D book primitive + shimmer keyframes.
-- `src/components/broker-education/Book3DCard.tsx` — swap inner render to `<PremiumBook3D>` so existing call sites keep working.
-- `src/components/certification/CertificatePreview.tsx` — border cleanup, shimmer, seal wordmark removal, CTA primitives.
-- `src/pages/owner/OwnerBooks.tsx` — audience selector + chapter/page editor drawer.
-- `src/hooks/useBrokerEducation.ts` — read & filter by `audience`.
-- New migration: add `audience` column + RLS + index.
-- New migration / `supabase--insert`: seed real cited content into thin chapters.
-
-No routes, sidebar, or sitemap changes.
+No database, no auth, no routing changes.

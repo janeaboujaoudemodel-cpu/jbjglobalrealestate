@@ -96,7 +96,7 @@ export default function HorizontalUtilityBar() {
   return (
     <>
       <div
-        className="jbj-shimmer-champagne fixed top-0 right-0 h-[88px] [body.jj-vertical-nav-collapsed_&]:h-[48px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7 bg-gradient-to-r from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent after:opacity-70"
+        className="fixed top-0 right-0 h-[88px] [body.jj-vertical-nav-collapsed_&]:h-[48px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7 bg-gradient-to-r from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent after:opacity-70"
       >
 
         {/* ── LEFT: Search only ── */}
@@ -155,7 +155,7 @@ export default function HorizontalUtilityBar() {
               style={{
                 color: areaUnit === 'sqft' ? '#1A1A1A' : 'rgba(26,26,26,0.62)',
               }}
-              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors ${areaUnit === 'sqft' ? 'jbj-shimmer-champagne' : 'bg-transparent'}`}
+              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors ${areaUnit === 'sqft' ? 'bg-[#EFE6D6]' : 'bg-transparent'}`}
               aria-label="Square feet"
             >sq ft</button>
             <button
@@ -164,7 +164,7 @@ export default function HorizontalUtilityBar() {
               style={{
                 color: areaUnit === 'sqm' ? '#1A1A1A' : 'rgba(26,26,26,0.62)',
               }}
-              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors border-l border-[#B89555]/40 ${areaUnit === 'sqm' ? 'jbj-shimmer-champagne' : 'bg-transparent'}`}
+              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors border-l border-[#B89555]/40 ${areaUnit === 'sqm' ? 'bg-[#EFE6D6]' : 'bg-transparent'}`}
               aria-label="Square meters"
             >sq m</button>
 

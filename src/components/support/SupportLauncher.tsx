@@ -96,34 +96,58 @@ function useOverHero() {
   //   /mortgage-calculator, /contact, dashboard tools) are NOT heroes —
   //   so the launcher must stay in its normal navy-blue style there.
   // Default is the safe navy variant.
-  // Default to TRUE so the tag is hidden until we confirm we're not over a
-  // video hero — prevents a flash of the navy tag on initial homepage paint.
-  const [overHero, setOverHero] = useState(true);
+  // Default to FALSE so the navy tag renders immediately on routes without a
+  // qualifying hero (the vast majority). Only initialise to TRUE when a hero
+  // video is already in the DOM at mount, which prevents both:
+  //   (a) the initial flash of the tag before fading out over a homepage hero
+  //   (b) the persistent fade-in/out flicker on anonymous sessions caused by
+  //       tiny layout shifts crossing the threshold during first paint.
+  const [overHero, setOverHero] = useState<boolean>(() => {
+    if (typeof window === "undefined" || typeof document === "undefined") return false;
+    return !!document.querySelector("[data-hero-dark] video");
+  });
   useEffect(() => {
+    // If no hero video exists for this route, skip the listener entirely.
+    if (typeof document === "undefined") return;
+    if (!document.querySelector("[data-hero-dark] video")) {
+      if (overHero) setOverHero(false);
+      return;
+    }
+
+    let raf = 0;
+    const HYSTERESIS = 6; // px buffer to avoid flip-flop on micro layout shifts
     const check = () => {
+      raf = 0;
       const vh = window.innerHeight;
       const heroes = document.querySelectorAll<HTMLElement>("[data-hero-dark]");
       let hit = false;
       heroes.forEach((el) => {
         if (!el.querySelector("video")) return;
         const r = el.getBoundingClientRect();
-        if (r.top <= 0 ? r.bottom >= vh * 0.85 : r.top <= vh * 0.15) hit = true;
+        if (r.top <= 0
+          ? r.bottom >= vh * 0.85 + HYSTERESIS
+          : r.top <= vh * 0.15 - HYSTERESIS) hit = true;
       });
-      setOverHero(hit);
+      setOverHero((prev) => (prev === hit ? prev : hit));
+    };
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(check);
     };
 
-    check();
-    // Re-check shortly after mount in case hero mounts after launcher.
-    const t1 = window.setTimeout(check, 100);
-    const t2 = window.setTimeout(check, 500);
-    window.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check);
+    schedule();
+    const t1 = window.setTimeout(schedule, 100);
+    const t2 = window.setTimeout(schedule, 500);
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
     return () => {
+      if (raf) cancelAnimationFrame(raf);
       window.clearTimeout(t1);
       window.clearTimeout(t2);
-      window.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return overHero;
 }
