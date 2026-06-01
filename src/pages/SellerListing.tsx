@@ -86,6 +86,7 @@ const STEPS = [
 
 const SellerListing = () => {
   const { user } = useAuth();
+  const firstName = useDisplayFirstName("there");
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   // Purpose-aware labelling: ?purpose=rent → Landlord wording, otherwise Seller wording.
