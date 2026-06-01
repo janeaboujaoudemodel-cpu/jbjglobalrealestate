@@ -63,12 +63,12 @@ Deno.serve(async (req) => {
 
     const { data: modules } = await supabase
       .from("broker_education_modules")
-      .select("id, title, summary, content")
+      .select("id, title, description, content")
       .in("id", moduleIds);
 
     const sourceMaterial = (modules ?? [])
       .map((m: any, i: number) =>
-        `### Module ${i + 1}: ${m.title}\n${m.summary ?? ""}\n${(m.content ?? "").slice(0, 2000)}`
+        `### Module ${i + 1}: ${m.title}\n${m.description ?? ""}\n${(m.content ?? "").slice(0, 2000)}`
       )
       .join("\n\n");
 
