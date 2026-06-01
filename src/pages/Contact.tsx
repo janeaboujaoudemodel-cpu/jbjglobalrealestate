@@ -769,114 +769,81 @@ END:VCARD`;
       {/* Support Ticket Section - Above "Prefer to Reach Us Directly" */}
       <SupportTicketBox />
 
-      {/* Direct Contact CTAs - "Prefer to Reach Us Directly" - Cards ARE the 3rd layer (on active champagne) */}
       {/* Direct Contact Section */}
-      <section className="py-12 bg-[#1A1A1A]">
-        {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
-          <h2 className="text-center text-2xl md:text-3xl font-bold mb-3">
-            <span className="text-[#1A1A1A]">Prefer to Reach Us</span>{" "}
-            <span className="text-[#1A1A1A]">Directly?</span>
-          </h2>
-          <p className="text-center text-[#1A1A1A]/70 text-sm mb-6 max-w-2xl mx-auto">
-            For general inquiries, consultations, or non-technical requests, you may contact us through the channels below.
-          </p>
-          {/* Cards are the 3rd layer - champagne pearl styling */}
-          <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-            {/* WhatsApp CTA */}
-            <a 
-              href={getWhatsAppUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
-            >
-              <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-green-500/30">
-                <MessageCircle className="w-6 h-6 text-green-600" />
-              </div>
-              <div>
-                <h3 className="text-[#1A1A1A] font-semibold mb-0.5">
-                  WhatsApp
-                </h3>
-                <p className="text-[#1A1A1A]/80 text-sm font-medium">+971-5659-11000</p>
-              </div>
-            </a>
+      <section className="py-8 md:py-10">
+        <div className="container mx-auto px-4">
+          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)]">
+            <h2 className="text-center text-2xl md:text-3xl font-light tracking-tight text-[#1A1A1A] mb-3">
+              Prefer to reach us directly?
+            </h2>
+            <p className="text-center text-[#1A1A1A]/65 text-sm mb-6 max-w-2xl mx-auto">
+              For general inquiries, consultations or non-technical requests, contact us through the channels below.
+            </p>
+            <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+              <a
+                href={getWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-5 transition-all group hover:border-[#B89555] hover:-translate-y-0.5"
+              >
+                <div className="w-11 h-11 bg-[#FDFBF7] border border-[#B89555]/40 rounded-full flex items-center justify-center group-hover:bg-[#EFE6D6] transition-colors">
+                  <MessageCircle className="w-5 h-5 text-[#1A1A1A]" />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 font-medium mb-0.5">WhatsApp</p>
+                  <p className="text-[#1A1A1A] text-sm font-medium">+971-5659-11000</p>
+                </div>
+              </a>
 
-            {/* Call CTA */}
-            <a 
-              href={getCallUrl()}
-              className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
-            >
-              <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/30">
-                <Phone className="w-6 h-6 text-blue-600" />
-              </div>
-              <div>
-                <h3 className="text-[#1A1A1A] font-semibold mb-0.5">
-                  Call Us
-                </h3>
-                <p className="text-[#1A1A1A]/80 text-sm font-medium">+971-5659-11000</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Important Notice - 3-Layer System */}
-      <section className="py-10 bg-[#1A1A1A]">
-        {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
-          {/* Inner Pearl Layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
-            <div className="max-w-3xl mx-auto">
-              <div className="flex items-center gap-3 mb-4">
-                <IconTile icon={Shield} tone="ink" size="md" />
-
-                <h3 className="text-[#1A1A1A] font-semibold text-lg">
-                  <span className="text-[#1A1A1A]">Important</span> Notice
-                </h3>
-              </div>
-              
-              <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
-                JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling, and renting properties. We do not provide legal, mortgage, or immigration services directly. Where required, we may introduce independent, licensed partners. Any engagement with partner services is contracted directly between the client and the partner under the partner's own licence and terms.
-              </p>
+              <a
+                href={getCallUrl()}
+                className="flex items-center gap-4 bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-5 transition-all group hover:border-[#B89555] hover:-translate-y-0.5"
+              >
+                <div className="w-11 h-11 bg-[#FDFBF7] border border-[#B89555]/40 rounded-full flex items-center justify-center group-hover:bg-[#EFE6D6] transition-colors">
+                  <Phone className="w-5 h-5 text-[#1A1A1A]" />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 font-medium mb-0.5">Call Us</p>
+                  <p className="text-[#1A1A1A] text-sm font-medium">+971-5659-11000</p>
+                </div>
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Appointments Section - 3-Layer System */}
-      <section className="py-10 bg-[#1A1A1A]">
-        {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
-          {/* Inner Pearl Layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
-            <div className="max-w-3xl mx-auto text-center">
-              <IconTile icon={Calendar} tone="ink" size="md" className="mx-auto mb-4" />
-
-              <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">
-                Appointments
-              </h3>
-              <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
-                If an in-person meeting is required, availability is confirmed by appointment only after initial contact or ticket submission.
-              </p>
+      {/* Important Notice */}
+      <section className="py-8 md:py-10">
+        <div className="container mx-auto px-4">
+          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)] max-w-4xl mx-auto">
+            <div className="flex items-center gap-3 mb-3">
+              <IconTile icon={Shield} tone="ink" size="md" />
+              <h3 className="text-[#1A1A1A] font-semibold text-lg">Important Notice</h3>
             </div>
+            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
+              JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling and renting properties. We do not provide legal, mortgage or immigration services directly. Where required, we may introduce independent, licensed partners. Any engagement with partner services is contracted directly between the client and the partner under the partner's own licence and terms.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Closing Statement - 3-Layer System */}
-      <section className="py-10 bg-[#1A1A1A]">
-        {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
-          {/* Inner Pearl Layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
-            <div className="max-w-3xl mx-auto text-center">
-              <p className="text-[#1A1A1A]/70 text-base leading-relaxed">
-                At JBJ Global Real Estate, communication is handled with structure, discretion, and accountability. We look forward to assisting you.
-              </p>
-            </div>
+      {/* Appointments + Closing - combined to reduce vertical gap */}
+      <section className="py-8 md:py-12">
+        <div className="container mx-auto px-4">
+          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)] max-w-4xl mx-auto text-center">
+            <IconTile icon={Calendar} tone="ink" size="md" className="mx-auto mb-4" />
+            <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">Appointments</h3>
+            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-5 max-w-2xl mx-auto">
+              If an in-person meeting is required, availability is confirmed by appointment only after initial contact or ticket submission.
+            </p>
+            <div className="h-px w-24 bg-[#B89555]/40 mx-auto mb-5" />
+            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed max-w-2xl mx-auto">
+              At JBJ Global Real Estate, communication is handled with structure, discretion and accountability. We look forward to assisting you.
+            </p>
           </div>
         </div>
       </section>
+
 
       {/* Phone Actions Dialog */}
       <Dialog open={phoneActionsOpen} onOpenChange={setPhoneActionsOpen}>
