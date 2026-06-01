@@ -620,11 +620,16 @@ const ListingPortalSubmit = () => {
               data-no-contrast-guard
               data-on-dark
               data-allow-dark-cta
-              className="allow-white text-white hover:text-white hover:bg-white/10 mb-4"
+              data-back-to-portal
+              className="allow-white text-white hover:text-white hover:bg-white/10 mb-4 [&_svg]:!text-white"
               style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
             >
-              <ArrowLeft className="w-4 h-4 mr-2" style={{ color: '#FFFFFF' }} /> <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Back to Portal</span>
+              <span className="jj-arrow-anim inline-flex mr-2" style={{ color: '#FFFFFF' }}>
+                <ArrowLeft className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              </span>
+              <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Back to Portal</span>
             </Button>
+
 
             {/* Header */}
             <div className="text-center mb-8">
