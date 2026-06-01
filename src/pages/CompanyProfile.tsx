@@ -33,7 +33,8 @@ import {
   Handshake,
   BarChart3,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  ExternalLink
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
