@@ -657,6 +657,7 @@ const ResaleProperties = () => {
             <div className="flex flex-col sm:flex-row gap-3 shrink-0">
               <Link to="/list-property?purpose=sale&mode=manual">
                 <Button
+                  variant="ghost"
                   data-cta="dark"
                   className="jj-cta-dark font-semibold h-11 px-6 w-full sm:w-auto rounded-xl"
                 >
