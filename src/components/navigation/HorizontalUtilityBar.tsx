@@ -155,7 +155,7 @@ export default function HorizontalUtilityBar() {
               style={{
                 color: areaUnit === 'sqft' ? '#1A1A1A' : 'rgba(26,26,26,0.62)',
               }}
-              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors ${areaUnit === 'sqft' ? 'jbj-shimmer-champagne' : 'bg-transparent'}`}
+              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors ${areaUnit === 'sqft' ? 'bg-[#EFE6D6]' : 'bg-transparent'}`}
               aria-label="Square feet"
             >sq ft</button>
             <button
