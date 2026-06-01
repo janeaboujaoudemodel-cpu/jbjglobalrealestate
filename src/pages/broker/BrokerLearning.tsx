@@ -700,8 +700,8 @@ function ReferenceCard({ title, items, tone, icon }: {
 function LockedTraining({ hasUser }: { hasUser: boolean }) {
   return (
     <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-6 py-12 text-center">
-      <div className="w-14 h-14 mx-auto rounded-2xl bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center mb-4">
-        <Lock className="w-6 h-6 text-[#1A1A1A]" />
+      <div className="mx-auto mb-4 w-fit">
+        <PremiumLockBadge size="lg" title="Training locked" />
       </div>
       <h3 className="text-xl font-bold text-[#1A1A1A] mb-1">Training is for verified brokers</h3>
       <p className="text-[#1A1A1A]/70 mb-5 max-w-md mx-auto">
