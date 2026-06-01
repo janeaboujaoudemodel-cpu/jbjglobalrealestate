@@ -111,7 +111,7 @@ const Awards = lazy(() => import("@/pages/Awards"));
 const CompanyProfile = lazy(() => import("@/pages/CompanyProfile"));
 const News = lazy(() => import("@/pages/News"));
 const NewsDetail = lazy(() => import("@/pages/NewsDetail"));
-const MeetTheTeam = lazy(() => import("@/pages/MeetTheTeam"));
+// MeetTheTeam mounted via TeamRouteGate (toggle-controlled)
 
 const ThankYou = lazy(() => import("@/pages/ThankYou"));
 
