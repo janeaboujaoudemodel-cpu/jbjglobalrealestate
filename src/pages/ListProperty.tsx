@@ -344,6 +344,8 @@ const ListProperty = () => {
 
       {/* ─────────────────── Active form / browser / picker ─────────────────── */}
       <section
+        data-no-contrast-guard
+        style={{ background: ombreSoft(theme) }}
         className={
           mode === "ai"
             ? "w-full pt-4 pb-6"
