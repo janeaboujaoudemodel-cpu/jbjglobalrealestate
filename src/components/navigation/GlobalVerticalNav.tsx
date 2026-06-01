@@ -408,7 +408,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Careers', icon: GraduationCap, href: '/join' },
     { label: 'Career Portal', icon: Briefcase, href: '/career-portal' },
     { label: 'JBJ Email', icon: Mail, href: '/crm/employees' },
-    { label: 'Press Kit', icon: Newspaper, href: '/press-kit' },
+    
     { label: 'Testimonials', icon: Heart, href: '/services/testimonials' },
   ],
   legal: [
