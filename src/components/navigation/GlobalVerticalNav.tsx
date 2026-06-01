@@ -1086,9 +1086,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             })}
 
           {SECTION_KEYS.map((sectionKey, sectionIdx) => {
-            if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
-            if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
-            if (sectionKey === 'INVESTOR' && !isInvestor && !isOwner) return null;
+            if (!shouldShowSection(sectionKey)) return null;
             const items = sectionGroups[sectionKey];
             if (!items || items.length === 0) return null;
             const isOpen = openSection === sectionKey;
