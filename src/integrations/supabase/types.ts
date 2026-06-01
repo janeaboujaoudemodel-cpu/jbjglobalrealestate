@@ -16187,6 +16187,7 @@ export type Database = {
           created_at: string
           deleted_at: string | null
           description: string | null
+          developer_id: string | null
           document_filename: string
           document_size_bytes: number | null
           document_url: string
@@ -16218,6 +16219,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           description?: string | null
+          developer_id?: string | null
           document_filename: string
           document_size_bytes?: number | null
           document_url: string
@@ -16249,6 +16251,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           description?: string | null
+          developer_id?: string | null
           document_filename?: string
           document_size_bytes?: number | null
           document_url?: string
@@ -16273,7 +16276,15 @@ export type Database = {
           template_key?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "esign_envelopes_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       esign_fields: {
         Row: {
@@ -17407,6 +17418,7 @@ export type Database = {
           contract_type: string | null
           counterparties: Json | null
           created_at: string
+          deleted_at: string | null
           developer_id: string | null
           developer_name_raw: string | null
           effective_date: string | null
@@ -17429,6 +17441,7 @@ export type Database = {
           contract_type?: string | null
           counterparties?: Json | null
           created_at?: string
+          deleted_at?: string | null
           developer_id?: string | null
           developer_name_raw?: string | null
           effective_date?: string | null
@@ -17451,6 +17464,7 @@ export type Database = {
           contract_type?: string | null
           counterparties?: Json | null
           created_at?: string
+          deleted_at?: string | null
           developer_id?: string | null
           developer_name_raw?: string | null
           effective_date?: string | null
@@ -37308,6 +37322,8 @@ export type Database = {
         Row: {
           area: string | null
           completed_at: string | null
+          contract_type: string | null
+          developer_id: string | null
           developer_name: string | null
           document_filename: string | null
           document_size_bytes: number | null
