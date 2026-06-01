@@ -1270,7 +1270,7 @@ const ListingPortalSubmit = () => {
 
                         <div className="grid grid-cols-4 gap-3">
                           <div>
-                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Price (AED)</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">{priceLabel}</label>
                             <Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]" />
                           </div>
                           <div>
@@ -1384,7 +1384,7 @@ const ListingPortalSubmit = () => {
                       <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                         <h3 className="text-[#1A1A1A] font-semibold mb-4 flex items-center gap-2">
                           <User className="w-4 h-4 text-[#1A1A1A]" />
-                          Your Role
+                          Your Role as {party}
                         </h3>
                         <RadioGroup value={sellerRole} onValueChange={setSellerRole} className="grid grid-cols-2 gap-3">
                           {sellerRoles.map(role => (
