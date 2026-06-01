@@ -1,95 +1,39 @@
-## What I found so far
+## Goal
 
-### Current winning/conflicting CSS rules
+Make property cards visually aligned across both sections, regardless of whether a card has bedrooms / square footage data, and make the Continue Searching strip look premium (no cheap border around developer name, single-line typography, gold-on-dark hierarchy).
 
-1. **Global price-orange rule is still active**
-   - `src/index.css:248-249` defines `--price-orange` / `--price-orange-glow`.
-   - `src/index.css:2543-2564` forces `.text-price-orange`, `[data-price]`, `[data-price-badge]`, `.price-value`, `.property-price`, `.listing-price`, etc. to orange.
-   - `src/index.css:2590-2614` forces brighter orange on dark surfaces.
-   - `src/index.css:2616-2637` keeps solid orange price pills white-on-orange.
-   - `src/components/ui/card-price-payment-row.tsx:161-166` directly applies `text-[hsl(var(--price-orange))]` to property-card prices.
-   - `src/components/ui/price-pill.tsx` and `src/index.css:3092-3139` still preserve a price-colored value path.
+## A. Handpicked For You + /properties cards (`src/components/ProjectCard.tsx`)
 
-2. **There are more than two contrast systems competing**
-   - `src/index.css:489-553` global data contrast enforcement.
-   - `src/index.css:555-609` mobile readability overrides.
-   - `src/index.css:611-647` hero contrast override/rescue.
-   - `src/index.css:2991-3008` hero readability lock.
-   - `src/index.css:3312-3367` gold/champagne debrand and badge safety rules.
-   - `src/index.css:3369-3400` sidebar active item and dark-CTA exceptions.
-   - `src/index.css:3412-3460` homepage-specific contrast patches.
-   - `src/index.css:3642-3775` global gray/champagne remappers.
-   - `src/index.css:4187-4262` final light-surface lock.
-   - `src/index.css:4270-4310` final dark-surface lock.
+Problem: the bedrooms · size meta row is rendered conditionally, so on cards that don't have it the developer name jumps up and bottom rows misalign.
 
-3. **The dangerous escape hatch is still present**
-   - The final light lock at `src/index.css:4226` and icon lock at `4258` skip anything with `[data-no-contrast-guard]` / `.allow-white`.
-   - Many header/sidebar/homepage elements use `data-no-contrast-guard`, so old white/gold/ink choices can escape the architecture instead of being corrected by a single contract.
+Fix:
+- Always reserve the meta row slot with a fixed `min-h-[1.25rem]`, even when there are no unit types or sizes (render an empty placeholder so spacing is identical across all 6 cards).
+- Keep the developer line locked to `min-h-[1.25rem]` (already done) so the "by Developer" line lands on the same baseline on every card.
+- Keep title at `min-h-[2.75rem]`, location at `min-h-[1.25rem]`, price row pinned via `mt-auto` (already correct).
 
-4. **Header/sidebar files controlling the current chrome**
-   - Horizontal utility bar: `src/components/navigation/HorizontalUtilityBar.tsx:98-100` uses `bg-[#FDFBF7]` with gold divider.
-   - Expanded sidebar root: `src/components/navigation/GlobalVerticalNav.tsx:1421` uses `bg-[#FDFBF7]` and forced gold child text/icons.
-   - Collapsed sidebar root/header/body: `src/components/navigation/GlobalVerticalNav.tsx:1281-1290` uses `bg-[#FDFBF7]`.
-   - Sidebar logo header: `src/components/navigation/GlobalVerticalNav.tsx:1012` uses `bg-[#FDFBF7]`.
-   - Bottom Contact/Support controls: `src/components/navigation/GlobalVerticalNav.tsx:1168-1210` use champagne/gold styling.
+Result: title → location → meta (bedrooms · sqft, even when blank) → developer → hairline → price all align row-for-row across the entire grid.
 
-## Implementation plan
+## B. Continue Searching cards (`src/components/ContinueSearching.tsx`, `RecentCard3D`)
 
-### 1. Do not touch homepage structure or content
-- No homepage component rewrites.
-- No homepage section/layout/background changes.
-- The fix will be CSS architecture plus the property-card price component only.
+Problems:
+- Developer subtitle sits in a bordered black pill (`bg-black/90 … border border-white/30`) — looks cheap.
+- Developer and project name are the same white color, no hierarchy.
+- Both can wrap and break alignment.
 
-### 2. Restore/lock header and sidebar chrome to champagne-gold
-- Keep the vertical sidebar exactly in its current champagne/gold style.
-- Add a scoped chrome lock for `[data-chrome="sidebar"]` and `[data-chrome="utility-bar"]` so broad surface rules cannot repaint them white or invert their icons/text.
-- Do not change the sidebar navigation items, collapse behavior, spacing, or menus.
+Fix inside the bottom content block (lines 496–513):
+- Drop the bordered pill. Render developer as plain text, single line, `truncate`, uppercase micro-eyebrow, in gold `#E8C988` (lighter gold for AA contrast on the black plate) with `tracking-[0.14em]` and `text-[10px] font-semibold`.
+- Strengthen the dark plate slightly (raise the inner solid layer from `bg-black/80` to `bg-black/85`) so gold + white pop cleanly without looking flat.
+- Project name: keep white but force single-line `truncate` (replace `line-clamp-2`) so every card's title sits on exactly one baseline; size stays `text-[15px] md:text-base` extrabold.
+- Keep `min-h-[88px]` plate so all cards have identical footer height even if developer is missing.
 
-### 3. Remove orange from property-card prices everywhere
-- Change `CardPricePaymentRow` so property-card price numbers always render ink/black `#1A1A1A`, not `--price-orange`.
-- Update `PricePill` / `.price-pill-value` if any property card path still uses it.
-- Neutralize the global price-orange enforcement for property-card selectors only, or remove the global orange price lock if it is only serving property-card prices.
-- Update/remove the price color audit/tests that currently enforce orange, so future builds do not reintroduce it.
+Result: every Continue Searching card shows `BY DEVELOPER` (gold, one line) above `Project Name` (white, one line), no border boxes, premium hierarchy.
 
-### 4. Replace scattered contrast patches with one controlled contract
-- Remove or neutralize the overlapping legacy contrast blocks listed above.
-- Keep only two final contrast rules:
-  1. **Light/champagne/gold surfaces:** text/icons are ink `#1A1A1A`.
-  2. **Dark/navy/photo surfaces:** text/icons are champagne/white.
-- Preserve only the required exceptions:
-  - vertical sidebar/current chrome styling
-  - approved dark CTAs with their own navy background
-  - explicit nested opposite surfaces, so light cards inside dark sections and dark CTAs inside light sections stay readable
+## Out of scope
 
-### 5. Make the rendered audit prove the real winner
-- Extend the rendered contrast audit to report:
-  - computed `color`
-  - computed `-webkit-text-fill-color`
-  - nearest surface/chrome ancestor
-  - class list
-  - element text
-  - screenshot coordinate
-- Add checks for:
-  - white text/icons on champagne/gold/light
-  - ink/black text/icons on dark/photo/navy
-  - price values still orange on property cards
+- No changes to homepage layout, hero, header, sidebar, price color (stays ink as previously locked), or any other page.
+- No changes to card image, badges, favorite button, or EOI/handover pills.
 
-### 6. Visual proof before saying fixed
-After implementation, I will capture screenshots and only mark complete if visually clean:
-- `/` homepage: header/sidebar and handpicked/property cards
-- `/properties`: property-card price numbers black, no orange
-- `/company-profile`: title sections contrast
-- `/about`
-- `/contact`
-- `/founder`
-- `/press-kit`
-- `/developers`
-- `/areas`
+## Files
 
-## Acceptance rule
-I will not claim the issue is fixed until screenshots confirm:
-- no white text/icons on champagne/gold/light backgrounds
-- no black/ink text on dark/photo backgrounds
-- no orange property-card price numbers
-- header and vertical sidebar remain champagne/gold and are not made whiter
-- homepage layout/content remains untouched
+- `src/components/ProjectCard.tsx` — meta row slot reservation (~5 lines).
+- `src/components/ContinueSearching.tsx` — `RecentCard3D` footer block restyle (~15 lines).
