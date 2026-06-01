@@ -26,7 +26,9 @@ interface SignedRow {
   signed_at: string;
   primary_recipient_name: string | null;
   primary_recipient_email: string | null;
+  developer_id: string | null;
   developer_name: string | null;
+  contract_type: string | null;
   emirate: string | null;
   area: string | null;
 }
