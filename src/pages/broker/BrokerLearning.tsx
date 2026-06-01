@@ -132,30 +132,32 @@ export default function BrokerLearning() {
     setLessonIndex(0);
   };
 
-  const groupedBooks = useMemo(() => {
-    const byPath = new Map<string, EducationBook[]>();
-    for (const b of books) {
-      const key = b.learning_path || "Other";
-      const arr = byPath.get(key) ?? [];
-      arr.push(b);
-      byPath.set(key, arr);
-    }
-    for (const [k, arr] of byPath.entries()) {
-      arr.sort((a, b) =>
-        (a.sort_order ?? 0) - (b.sort_order ?? 0) || (a.book_number ?? 0) - (b.book_number ?? 0)
+  const sortedBooks = useMemo(() => {
+    return [...books].sort((a, b) => {
+      const ai = getLearningPathRank(a.learning_path || "Other");
+      const bi = getLearningPathRank(b.learning_path || "Other");
+
+      if (ai !== bi) {
+        if (ai === -1) return 1;
+        if (bi === -1) return -1;
+        return ai - bi;
+      }
+
+      return (
+        (a.sort_order ?? 0) - (b.sort_order ?? 0) ||
+        (a.book_number ?? 0) - (b.book_number ?? 0) ||
+        a.title.localeCompare(b.title)
       );
-      byPath.set(k, arr);
-    }
-    const keys = Array.from(byPath.keys()).sort((a, b) => {
-      const ai = getLearningPathRank(a);
-      const bi = getLearningPathRank(b);
-      if (ai === -1 && bi === -1) return a.localeCompare(b);
-      if (ai === -1) return 1;
-      if (bi === -1) return -1;
-      return ai - bi;
     });
-    return keys.map((name) => ({ name, books: byPath.get(name) ?? [] }));
   }, [books]);
+
+  const bookRows = useMemo(() => {
+    const rows: EducationBook[][] = [];
+    for (let i = 0; i < sortedBooks.length; i += 3) {
+      rows.push(sortedBooks.slice(i, i + 3));
+    }
+    return rows;
+  }, [sortedBooks]);
 
   const totalProgress =
     TRAINING.reduce((acc, m) => acc + (moduleProgress[m.id] ?? m.progress ?? 0), 0) /
@@ -234,30 +236,24 @@ export default function BrokerLearning() {
             <div className="py-10 grid place-items-center">
               <div className="w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full animate-spin" />
             </div>
-          ) : groupedBooks.length === 0 ? (
+          ) : sortedBooks.length === 0 ? (
             <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-6 py-10 text-center text-[#1A1A1A]/70">
               Your library is loading or empty. Check back shortly.
             </div>
           ) : (
-            <div className="flex flex-col gap-10">
-              {groupedBooks.map((group) => (
-                <div key={group.name} className="flex flex-col gap-4">
-                  <div className="flex items-baseline gap-2">
-                    <h3 className="text-[#1A1A1A] font-semibold text-lg">{group.name}</h3>
-                    <span className="text-xs text-[#1A1A1A]/55">{group.books.length} {group.books.length === 1 ? "book" : "books"}</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 items-stretch">
-                    {group.books.map((book, i) => (
-                      <Book3DCard
-                        key={book.id}
-                        book={book}
-                        progress={progressMap[book.id]}
-                        onOpen={() => setSelectedBook(book)}
-                        index={i}
-                        isLocked={book.is_restricted}
-                      />
-                    ))}
-                  </div>
+            <div className="flex flex-col gap-6">
+              {bookRows.map((row, rowIndex) => (
+                <div key={`book-row-${rowIndex}`} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+                  {row.map((book, i) => (
+                    <Book3DCard
+                      key={book.id}
+                      book={book}
+                      progress={progressMap[book.id]}
+                      onOpen={() => setSelectedBook(book)}
+                      index={rowIndex * 3 + i}
+                      isLocked={book.is_restricted}
+                    />
+                  ))}
                 </div>
               ))}
             </div>
