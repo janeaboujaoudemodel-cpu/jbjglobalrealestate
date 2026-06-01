@@ -122,9 +122,8 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
         .upload(path, file, { contentType: file.type, upsert: false });
       if (upErr) throw upErr;
 
-      const { data: signed } = await supabase.storage
-        .from("developer-agreements")
-        .createSignedUrl(path, 60 * 60 * 24 * 365);
+      // We no longer store a long-lived signed URL on the row — the file_path is
+      // the source of truth; the UI resolves a short-lived signed URL on click.
 
       // Auto-create developer if needed
       let finalDeveloperId = developerId;
@@ -145,7 +144,11 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
             .insert({ name: devName, slug })
             .select("id")
             .single();
-          if (!createErr && created?.id) {
+          if (createErr) {
+            // Don't silently swallow — owner needs to know they'll have to fix it.
+            console.error("developers.insert failed:", createErr);
+            toast.error(`Could not auto-link "${devName}" — filed for review. Edit the row to assign a developer.`);
+          } else if (created?.id) {
             finalDeveloperId = created.id;
             toast.success(`New developer "${devName}" added to your directory`);
           }
@@ -157,7 +160,7 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
         developer_id: finalDeveloperId,
         developer_name_raw: extracted.developer_name ?? null,
         contract_type: extracted.contract_type ?? null,
-        file_url: signed?.signedUrl ?? "",
+        file_url: "", // legacy column — resolved on click from file_path
         file_path: path,
         file_name: file.name,
         file_size: file.size,
@@ -169,6 +172,7 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
         status: finalDeveloperId ? "filed" : "pending_review",
       });
       if (insErr) throw insErr;
+
 
       toast.success("Agreement filed");
       qc.invalidateQueries({ queryKey: ["external_agreements"] });

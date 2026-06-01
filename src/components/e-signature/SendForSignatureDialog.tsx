@@ -69,6 +69,13 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
   const [lockedAt, setLockedAt] = useState<string | null>(null);
   const [lastTestId, setLastTestId] = useState<string | null>(null);
   const [docusignUrl, setDocusignUrl] = useState("");
+  // Filing metadata — persisted to envelope so Contract Vault filters work.
+  const [developerId, setDeveloperId] = useState<string | null>(null);
+  const [developerNameInput, setDeveloperNameInput] = useState<string>("");
+  const [devOptions, setDevOptions] = useState<Array<{ id: string; name: string }>>([]);
+  const [contractType, setContractType] = useState<string>("");
+  const [emirate, setEmirate] = useState<string>("");
+  const [area, setArea] = useState<string>("");
 
   // Hydrate from envelope + load owner's locked default template if present
   useEffect(() => {
@@ -77,6 +84,13 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
     setCcs(Array.isArray(meta.cc_emails) ? meta.cc_emails : []);
     setBccs(Array.isArray(meta.bcc_emails) ? meta.bcc_emails : []);
     setWhatsapp(primaryRecipient?.phone || "");
+    // Hydrate filing metadata from envelope (so re-opening shows previously-saved values)
+    setDeveloperId((envelope as any).developer_id || meta.developer_id || null);
+    setDeveloperNameInput(meta.developer_name || "");
+    setContractType(meta.contract_type || "");
+    setEmirate(meta.emirate || "");
+    setArea(meta.area || "");
+    setDevOptions([]);
 
     // Priority: envelope-specific > owner locked default > built-in default
     (async () => {
@@ -190,6 +204,13 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
             docusign_url: docusignUrl.trim() || undefined,
             attachment_name: envelope?.document_filename || undefined,
             attachment_url: envelope?.document_url || undefined,
+            // Filing metadata so signed contracts show up under the right
+            // developer / type / location in Contract Vault.
+            developer_id: developerId || undefined,
+            developer_name: developerNameInput?.trim() || undefined,
+            contract_type: contractType?.trim() || undefined,
+            emirate: emirate?.trim() || undefined,
+            area: area?.trim() || undefined,
           }),
         });
         const out = await res.json().catch(() => ({}));
@@ -390,7 +411,91 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
             </div>
           </div>
 
-          {/* Subject */}
+          {/* Filing details — persisted to the envelope so Contract Vault
+              filters this signed contract under the correct developer /
+              type / location automatically. */}
+          <div className="rounded-xl border border-[#B89555]/30 bg-white p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">File this contract under</Label>
+              <span className="text-[10px] text-[#1A1A1A]/50">Saved when you send</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <Label className="text-[11px] text-[#1A1A1A]/70">Developer</Label>
+                <Input
+                  value={developerNameInput}
+                  onChange={async (e) => {
+                    const term = e.target.value;
+                    setDeveloperNameInput(term);
+                    setDeveloperId(null);
+                    if (term.length < 2) { setDevOptions([]); return; }
+                    const { data } = await supabase
+                      .from("developers")
+                      .select("id, name")
+                      .ilike("name", `%${term}%`)
+                      .limit(8);
+                    setDevOptions(data ?? []);
+                  }}
+                  placeholder="Search developer…"
+                  className="mt-1"
+                />
+                {devOptions.length > 0 && (
+                  <div className="border border-[#B89555]/20 rounded-md bg-[#FDFBF7] max-h-40 overflow-auto mt-1">
+                    {devOptions.map((d) => (
+                      <button
+                        key={d.id}
+                        type="button"
+                        onClick={() => { setDeveloperId(d.id); setDeveloperNameInput(d.name); setDevOptions([]); }}
+                        className="block w-full text-left px-3 py-1.5 text-sm text-[#1A1A1A] hover:bg-[#F7F2EA]"
+                      >
+                        {d.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {developerId && (
+                  <p className="text-[10px] text-emerald-700 mt-1">Linked to canonical developer</p>
+                )}
+              </div>
+              <div>
+                <Label className="text-[11px] text-[#1A1A1A]/70">Contract type</Label>
+                <select
+                  value={contractType}
+                  onChange={(e) => setContractType(e.target.value)}
+                  className="w-full mt-1 h-10 rounded-md border border-input bg-background px-3 text-sm text-[#1A1A1A]"
+                >
+                  <option value="">— Select —</option>
+                  <option>Developer Registration</option>
+                  <option>Developer ↔ Agency (A2A)</option>
+                  <option>Client Sales (SPA)</option>
+                  <option>Client Reservation / Booking</option>
+                  <option>Leasing / Ejari</option>
+                  <option>Property Advertising</option>
+                  <option>NDA</option>
+                  <option>Service / Consulting</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div>
+                <Label className="text-[11px] text-[#1A1A1A]/70">Emirate</Label>
+                <select
+                  value={emirate}
+                  onChange={(e) => setEmirate(e.target.value)}
+                  className="w-full mt-1 h-10 rounded-md border border-input bg-background px-3 text-sm text-[#1A1A1A]"
+                >
+                  <option value="">— Select —</option>
+                  {["Dubai","Abu Dhabi","Sharjah","Ajman","Ras Al Khaimah","Umm Al Quwain","Fujairah"].map((e) => (
+                    <option key={e}>{e}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <Label className="text-[11px] text-[#1A1A1A]/70">Area / Community</Label>
+                <Input value={area} onChange={(e) => setArea(e.target.value)} placeholder="e.g. Dubai Marina" className="mt-1" />
+              </div>
+            </div>
+          </div>
+
           <div>
             <div className="flex items-center justify-between">
               <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Subject (editable)</Label>

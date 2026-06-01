@@ -32,7 +32,27 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Unauthorized", 401, origin);
     }
 
-    const { envelope_id, channels, cc_emails: ccOverride, bcc_emails: bccOverride, interpolated_subject, interpolated_body, interpolated_body_html, signature_html, additional_recipients, docusign_url, attachment_name, attachment_url, extra_attachments } = await req.json();
+    const {
+      envelope_id,
+      channels,
+      cc_emails: ccOverride,
+      bcc_emails: bccOverride,
+      interpolated_subject,
+      interpolated_body,
+      interpolated_body_html,
+      signature_html,
+      additional_recipients,
+      docusign_url,
+      attachment_name,
+      attachment_url,
+      extra_attachments,
+      // Filing metadata so signed contracts surface correctly in Contract Vault.
+      developer_id,
+      developer_name,
+      contract_type,
+      emirate,
+      area,
+    } = await req.json();
     const channelList: string[] = Array.isArray(channels) && channels.length
       ? channels
       : ["email"];
@@ -44,6 +64,15 @@ Deno.serve(async (req) => {
     if (!envelope_id) {
       return corsErrorResponse("envelope_id is required", 400, origin);
     }
+
+    // Persist filing metadata (developer / type / location) onto the envelope
+    // so signed_contracts_index can surface canonical filters in Contract Vault.
+    const filingMeta: Record<string, unknown> = {};
+    if (typeof developer_id === "string" && developer_id) filingMeta.developer_id = developer_id;
+    if (typeof developer_name === "string" && developer_name.trim()) filingMeta.developer_name = developer_name.trim();
+    if (typeof contract_type === "string" && contract_type.trim()) filingMeta.contract_type = contract_type.trim();
+    if (typeof emirate === "string" && emirate.trim()) filingMeta.emirate = emirate.trim();
+    if (typeof area === "string" && area.trim()) filingMeta.area = area.trim();
 
     // Fetch envelope with recipients
     const { data: envelope, error: envelopeError } = await supabase
@@ -123,15 +152,18 @@ Deno.serve(async (req) => {
       ...extras.filter(Boolean),
     ];
 
-    // Persist cc/bcc on the envelope metadata once (was per-call from the dialog).
+    // Persist cc/bcc + filing metadata (developer / type / location) on the envelope once.
     const incomingCcsTop: string[] = Array.isArray(ccOverride) ? ccOverride : [];
     const incomingBccsTop: string[] = Array.isArray(bccOverride) ? bccOverride : [];
-    if (incomingCcsTop.length || incomingBccsTop.length) {
-      const meta = { ...((envelope.metadata as any) || {}) };
+    const hasFilingMeta = Object.keys(filingMeta).length > 0;
+    if (incomingCcsTop.length || incomingBccsTop.length || hasFilingMeta) {
+      const meta = { ...((envelope.metadata as any) || {}), ...filingMeta };
       if (incomingCcsTop.length) meta.cc_emails = incomingCcsTop;
       if (incomingBccsTop.length) meta.bcc_emails = incomingBccsTop;
+      const update: Record<string, unknown> = { metadata: meta };
+      if (typeof developer_id === "string" && developer_id) update.developer_id = developer_id;
       // fire-and-forget — failure here must not block the email
-      supabase.from("esign_envelopes").update({ metadata: meta }).eq("id", envelope.id).then(() => {});
+      supabase.from("esign_envelopes").update(update).eq("id", envelope.id).then(() => {});
     }
 
     const failures: Array<{ recipient_id: string; email: string; error: string }> = [];
