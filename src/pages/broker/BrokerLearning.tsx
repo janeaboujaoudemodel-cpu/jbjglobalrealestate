@@ -21,6 +21,7 @@ import { CertificatePreview } from "@/components/certification";
 import BrokerCertificationGate from "@/components/broker-education/BrokerCertificationGate";
 import { PremiumLockBadge } from "@/components/broker-education/PremiumLock";
 import { useEducationProgress } from "@/hooks/useEducationProgress";
+import { useCreateBrokerRequest } from "@/hooks/useBrokerRequests";
 import { BROKER_LESSONS } from "./brokerLessonContent";
 
 
@@ -114,10 +115,10 @@ const getLearningPathRank = (path: string) =>
 export default function BrokerLearning() {
   const { user } = useAuth();
   const { mode } = useUserModeContext();
-  const trainingLocked = !user || mode !== "broker";
 
   const { books, loading, progressMap } = useBrokerEducation();
   const { summary: eduSummary } = useEducationProgress();
+  const createAccessRequest = useCreateBrokerRequest();
 
   const [selectedBook, setSelectedBook] = useState<EducationBook | null>(null);
   const [activeModule, setActiveModule] = useState<TModule | null>(null);
@@ -131,6 +132,22 @@ export default function BrokerLearning() {
   const closeModule = () => {
     setActiveModule(null);
     setLessonIndex(0);
+  };
+
+  const requestAcademyAccess = (item: { id: string; title: string }, itemType: "module" | "book") => {
+    createAccessRequest.mutate({
+      recipientDepartment: "Broker Academy",
+      requestType: "broker_academy_access",
+      subject: `Access request: ${item.title}`,
+      body: `Broker requested access to JBJ Academy ${itemType}: ${item.title}.`,
+      priority: "normal",
+      metadata: {
+        source: "jbj_academy",
+        item_type: itemType,
+        item_id: item.id,
+        user_mode: mode,
+      },
+    });
   };
 
   const sortedBooks = useMemo(() => {
@@ -215,32 +232,19 @@ export default function BrokerLearning() {
         {/* ── Training ─────────────────────────────────────────────── */}
         <section className="flex flex-col gap-6">
           <SectionTitle eyebrow="Market Intelligence" title="Training Modules" />
-          {trainingLocked ? (
-            <LockedTraining hasUser={!!user} />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {TRAINING.map((m, idx) => {
-                const prev = idx === 0 ? null : TRAINING[idx - 1];
-                const prevProgress = prev
-                  ? moduleProgress[prev.id] ?? prev.progress ?? 0
-                  : 100;
-                const locked = idx > 0 && prevProgress < 100;
-                return (
-                  <TrainingCard
-                    key={m.id}
-                    m={{ ...m, progress: moduleProgress[m.id] ?? m.progress }}
-                    onStart={() => openModule(m)}
-                    locked={locked}
-                    lockReason={
-                      locked && prev
-                        ? `Complete "${prev.title}" to unlock`
-                        : undefined
-                    }
-                  />
-                );
-              })}
-            </div>
-          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {TRAINING.map((m) => (
+              <TrainingCard
+                key={m.id}
+                m={{ ...m, progress: moduleProgress[m.id] ?? m.progress }}
+                onStart={() => openModule(m)}
+                locked
+                lockReason="Request academy access to unlock"
+                onRequestAccess={() => requestAcademyAccess(m, "module")}
+                requestAccessDisabled={createAccessRequest.isPending}
+              />
+            ))}
+          </div>
         </section>
 
         {/* ── Library ──────────────────────────────────────────────── */}
@@ -264,8 +268,10 @@ export default function BrokerLearning() {
                       book={book}
                       progress={progressMap[book.id]}
                       onOpen={() => setSelectedBook(book)}
+                      onRequestAccess={() => requestAcademyAccess(book, "book")}
+                      requestAccessDisabled={createAccessRequest.isPending}
                       index={rowIndex * 3 + i}
-                      isLocked={book.is_restricted}
+                      isLocked
                     />
                   ))}
                 </div>
@@ -388,6 +394,7 @@ export default function BrokerLearning() {
           book={selectedBook}
           isOpen={!!selectedBook}
           onClose={() => setSelectedBook(null)}
+          isLocked
         />
 
         <Dialog open={!!activeModule} onOpenChange={(o) => !o && closeModule()}>
