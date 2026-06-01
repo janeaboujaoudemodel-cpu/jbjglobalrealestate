@@ -164,7 +164,7 @@ export default function HorizontalUtilityBar() {
               style={{
                 color: areaUnit === 'sqm' ? '#1A1A1A' : 'rgba(26,26,26,0.62)',
               }}
-              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors border-l border-[#B89555]/40 ${areaUnit === 'sqm' ? 'jbj-shimmer-champagne' : 'bg-transparent'}`}
+              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors border-l border-[#B89555]/40 ${areaUnit === 'sqm' ? 'bg-[#EFE6D6]' : 'bg-transparent'}`}
               aria-label="Square meters"
             >sq m</button>
 
