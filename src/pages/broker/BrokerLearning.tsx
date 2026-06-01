@@ -233,7 +233,10 @@ export default function BrokerLearning() {
               Your library is loading or empty. Check back shortly.
             </div>
           ) : (
-            <div className="jbj-academy-book-grid grid gap-6 items-stretch">
+            <div
+              className="grid gap-6 items-stretch"
+              style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}
+            >
               {sortedBooks.map((book, i) => (
                 <Book3DCard
                   key={book.id}
