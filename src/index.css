@@ -3869,6 +3869,20 @@ hr[data-gold-hairline],
   --tw-ring-color: #B89555 !important;
 }
 
+/* Vertical sidebar expanded children: section titles stay gold, child labels stay ink until hover. */
+[data-sidebar-subitem],
+[data-sidebar-subitem] [data-sidebar-subitem-label] {
+  color: #1A1A1A !important;
+}
+[data-sidebar-subitem]:hover,
+[data-sidebar-subitem]:hover [data-sidebar-subitem-label] {
+  color: #B89555 !important;
+}
+[data-sidebar-subitem] [data-sidebar-subitem-icon] {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+}
+
 /* =========================================================================
    LEGACY DUPLICATE CTA / SURFACE SWEEP — NEUTRALIZED
    The final two-rule contract owns CTA foregrounds and nested icons.
@@ -4726,4 +4740,44 @@ html body :where(
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+}
+
+/* FINAL SIDEBAR LOCK — expanded section titles gold; expanded sub-items ink with gold icons. */
+html body [data-sidebar-section],
+html body [data-sidebar-section] [data-sidebar-section-label],
+html body [data-sidebar-section] [data-sidebar-section-icon] {
+  color: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+  stroke: #B89555 !important;
+}
+html body button[data-sidebar-section].group:hover,
+html body button[data-sidebar-section].group:hover [data-sidebar-section-label],
+html body button[data-sidebar-section].group:hover [data-sidebar-section-icon],
+html body button[data-sidebar-section].group:hover svg {
+  color: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+  stroke: #B89555 !important;
+}
+html body [data-sidebar-subitem],
+html body [data-sidebar-subitem] [data-sidebar-subitem-label] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body a[data-sidebar-subitem].group,
+html body a[data-sidebar-subitem].group [data-sidebar-subitem-label] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-sidebar-subitem]:hover,
+html body [data-sidebar-subitem]:hover [data-sidebar-subitem-label],
+html body a[data-sidebar-subitem].group:hover,
+html body a[data-sidebar-subitem].group:hover [data-sidebar-subitem-label] {
+  color: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+}
+html body [data-sidebar-subitem] [data-sidebar-subitem-icon],
+html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
+  color: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+  stroke: #B89555 !important;
 }

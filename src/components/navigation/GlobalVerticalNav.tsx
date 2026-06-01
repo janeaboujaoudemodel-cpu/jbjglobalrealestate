@@ -1080,14 +1080,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <div id={`nav-section-${sectionKey.replace(/\s+/g, '-').toLowerCase()}`}>
                   <button
                     onClick={(e) => toggleSection(sectionKey, e)}
+                    data-sidebar-section
                     data-no-contrast-guard
                     style={{ color: '#B89555' }}
                     className="w-full flex items-center gap-2 px-2.5 py-[7px] text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group"
                   >
                     <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[#102540]/10 group-hover:border-[#102540]/70'}`}>
-                      <SectionIcon className="w-3 h-3 text-[#B89555] group-hover:text-[#102540] transition-colors" />
+                      <SectionIcon data-sidebar-section-icon className="w-3 h-3 transition-colors" style={{ color: '#B89555', stroke: '#B89555' }} />
                     </div>
                     <span
+                      data-sidebar-section-label
                       data-no-contrast-guard
                       style={{ color: '#B89555' }}
                       className={`flex-1 text-left relative inline-block !text-[#B89555] transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
@@ -1142,12 +1144,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                                 setOpenSection(null);
                               }
                             }}
-                            className={`group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 !text-[#1A1A1A] hover:!text-[#B89555]`}
+                            data-sidebar-subitem
+                            data-no-contrast-guard
+                            className="group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150"
+                            style={{ color: '#1A1A1A' }}
                           >
                             <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
-                              <Icon className="w-3 h-3 !text-[#B89555] transition-colors" />
+                              <Icon data-sidebar-subitem-icon className="w-3 h-3 transition-colors" style={{ color: '#B89555', stroke: '#B89555' }} />
                             </span>
-                            <span className="flex-1 relative transition-colors !text-[#1A1A1A] group-hover:!text-[#B89555]">{item.label}</span>
+                            <span data-sidebar-subitem-label className="flex-1 relative transition-colors" style={{ color: '#1A1A1A' }}>{item.label}</span>
                           </Link>
                         );
                       })}
@@ -1444,7 +1449,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] h-full relative overscroll-contain [&_button:not([data-signout-action])>span]:!text-[#B89555] [&_button:not([data-signout-action])_svg]:!text-[#B89555] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
+        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] h-full relative overscroll-contain after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
           {renderNavContent()}
         </div>
       )}
