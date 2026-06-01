@@ -366,14 +366,12 @@ export default function BrokerLearning() {
           {/* Certificate panel — locked until all training modules complete */}
           <div className="relative">
             {!allModulesComplete && (
-              <span
-                className="pointer-events-none absolute top-3 right-3 z-20 grid place-items-center w-9 h-9 rounded-full bg-[#FDFBF7] border border-[#B89555]/55 shadow-[0_2px_8px_rgba(184,149,85,0.25)]"
-                data-no-contrast-guard
-                aria-label="Certificate locked"
-                title="Complete every training module to unlock your certificate"
-              >
-                <Lock className="w-4 h-4" style={{ color: "#B89555" }} strokeWidth={2.2} />
-              </span>
+              <div className="pointer-events-none absolute top-3 right-3 z-20">
+                <PremiumLockBadge
+                  size="sm"
+                  title="Complete every training module to unlock your certificate"
+                />
+              </div>
             )}
             <CertificatePreview isLocked={!allModulesComplete} />
           </div>
