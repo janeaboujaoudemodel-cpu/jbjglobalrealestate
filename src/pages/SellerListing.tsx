@@ -590,10 +590,10 @@ Requirements:
                   letterSpacing: "-0.02em",
                 }}
               >
-                List Your Property for {actionNoun}
+                Welcome, {firstName} — List Your Property for {actionNoun}
               </h1>
               <p className="text-[#1A1A1A]/80 mb-6">
-                Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
+                {user ? `Glad to have you back, ${firstName}. ` : ""}Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
               </p>
               <FormDraftBar
                 hasDraft={hasDraft}
