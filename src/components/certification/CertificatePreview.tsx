@@ -294,29 +294,30 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {isLocked ? (
-              <Button disabled className="bg-[#EFE6D6]/60 text-[#1A1A1A]/60 cursor-not-allowed border border-[#B89555]/30">
+              <Button
+                disabled
+                data-cta="cert-locked"
+                className="jj-cta-outline opacity-60 cursor-not-allowed"
+              >
                 <Lock className="w-4 h-4 mr-2" />
                 Complete Certification to Download
               </Button>
             ) : (
               <>
-                <Button className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#EFE6D6] border border-[#B89555]/40">
+                <Button data-cta="cert-download" className="jj-cta-dark">
                   <Download className="w-4 h-4 mr-2" />
                   Download Certificate
                 </Button>
-                <Button
-                  variant="outline"
-                  className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-                >
+                <Button data-cta="cert-share" className="jj-cta-outline">
                   <Share2 className="w-4 h-4 mr-2" />
                   Share Achievement
                 </Button>
               </>
             )}
           </div>
+
         </CardContent>
       </Card>
     </motion.div>
