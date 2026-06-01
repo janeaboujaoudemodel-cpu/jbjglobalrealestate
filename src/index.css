@@ -3869,6 +3869,20 @@ hr[data-gold-hairline],
   --tw-ring-color: #B89555 !important;
 }
 
+/* Vertical sidebar expanded children: section titles stay gold, child labels stay ink until hover. */
+[data-sidebar-subitem],
+[data-sidebar-subitem] [data-sidebar-subitem-label] {
+  color: #1A1A1A !important;
+}
+[data-sidebar-subitem]:hover,
+[data-sidebar-subitem]:hover [data-sidebar-subitem-label] {
+  color: #B89555 !important;
+}
+[data-sidebar-subitem] [data-sidebar-subitem-icon] {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+}
+
 /* =========================================================================
    LEGACY DUPLICATE CTA / SURFACE SWEEP — NEUTRALIZED
    The final two-rule contract owns CTA foregrounds and nested icons.

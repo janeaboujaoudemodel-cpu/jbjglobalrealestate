@@ -1142,12 +1142,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                                 setOpenSection(null);
                               }
                             }}
-                            className={`group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 !text-[#1A1A1A] hover:!text-[#B89555]`}
+                            data-sidebar-subitem
+                            data-no-contrast-guard
+                            className="group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150"
+                            style={{ color: '#1A1A1A' }}
                           >
                             <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
-                              <Icon className="w-3 h-3 !text-[#B89555] transition-colors" />
+                              <Icon data-sidebar-subitem-icon className="w-3 h-3 transition-colors" style={{ color: '#B89555', stroke: '#B89555' }} />
                             </span>
-                            <span className="flex-1 relative transition-colors !text-[#1A1A1A] group-hover:!text-[#B89555]">{item.label}</span>
+                            <span data-sidebar-subitem-label className="flex-1 relative transition-colors" style={{ color: '#1A1A1A' }}>{item.label}</span>
                           </Link>
                         );
                       })}
