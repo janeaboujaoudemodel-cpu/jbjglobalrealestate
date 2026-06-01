@@ -1,50 +1,32 @@
-Plan to fix the Broker Toolkit properly:
+## Goal
 
-1. Simplify the Broker Toolkit page
-- Remove the oversized/duplicated “Discover All Free Tools”, category-repeat grids, “Unlock More with Broker Hub”, referral promo, and extra bulky sections that make the page huge.
-- Keep the page focused on brokers: hero, compact stats, one clean tools grid, training/academy summary, CRM/portal CTA, and final join/access CTA.
-- Replace all dark neon/purple/blue/green card layers with the approved champagne/gold/ink design system.
+Make `/broker-toolkit` more premium, vibrant and on-brand by (1) turning the hero into a true full-screen section and (2) replacing the academy course-card grid with the same 3D book shelf model used in the Broker Portal, populated with broker and investor books.
 
-2. Make broker tools match the vertical sidebar exactly
-- Use only the tools currently shown under vertical sidebar “Tools & Workspace”:
-  - AI Home Finder
-  - Property Comparison
-  - Mortgage Calculator
-  - Property Evaluator
-  - Rental Index
-  - Property Measurement
-  - List Property for Sale
-  - List Property for Rent
-- Remove the old broker-toolkit-only tools from the broker page: Design Studio, Video Builder, Video Meet, Documents, Spreadsheet, E-Sign, CRM shortcut, social tools, photo tools, etc.
+## Changes
 
-3. Connect the broker toolkit to backend visibility control
-- Add/confirm visibility rows in `ai_tool_visibility` for the exact sidebar broker tools.
-- Update the broker toolkit tools grid to use `useToolVisibility()` so only tools marked `public` appear.
-- Keep owner control inside the existing owner AI Tools Control Panel only; no visibility toggle will appear on the public broker toolkit page.
-- If the owner hides a tool, it disappears from Broker Toolkit; if set public, it appears.
+### 1. Full-screen hero — `BrokerToolkitHero.tsx`
+- Replace `min-h-[520px] md:min-h-[600px]` with `min-h-[100svh]` so the hero fills the viewport on every device (mobile, tablet, desktop).
+- Keep existing video, scrim, copy and CTAs (no business-logic changes).
+- Tighten vertical padding so the centered block sits balanced inside the full-screen frame.
+- Keep the scroll-down chevron behavior anchored to `#what-you-get` / next section.
 
-4. Fix contrast and alignment everywhere
-- Rebuild broker cards with consistent fixed height, left-aligned text, equal spacing, readable ink text, gold IconTile icons, and non-faded descriptions.
-- Fix section titles, badges, CTAs, and card content so there is no white-on-light, ink-on-dark, faded gold, or raw gray.
-- Use standardized CTA primitives (`jj-cta-dark`, `jj-cta-outline`, `jj-pill-active`) and approved colors only.
+### 2. Academy section — `BrokerToolkitAcademy.tsx`
+Remove the current "Professional development courses" card grid (Digital Marketing Mastery, Quality & Service Excellence, etc.) and the "Why get certified?" benefits block.
 
-5. Clean navigation and section flow
-- Update in-page navigation to only real sections: Tools, Academy, CRM, Growth.
-- Remove links/buttons pointing to deleted/duplicated concepts like Broker Hub.
-- Make Broker Portal CTAs route to `/broker/portal` and JBJ Academy text stay consistent.
+Replace with the **Broker Portal book shelf model**:
+- Reuse the canonical `<BookCard size="md">` (3D engraved covers) from `src/components/books/BookCard.tsx` — same component the broker portal/homepage uses.
+- Data source: combine `BROKER_BOOKS` (Broker Training Manual, Broker Certification Guide, Broker FAQ) + the investor-facing books a broker needs to sell confidently from `INVESTOR_BOOKS` (Investor Education Guide, Market Intelligence, Golden Visa, Buyer/Seller/Landlord/Tenant/Rental Guides + matching FAQs). Both pulled from `src/data/bookCollections.ts` — no duplicated data.
+- Layout: responsive grid (2 cols mobile → 3 → 4 → 5 desktop), generous spacing, champagne band, gold hairline accents, soft section heading "JBJ Academy — Broker & Investor Library".
+- Each book links via its existing `href` (book reader / guide page).
+- Keep the "Open JBJ Academy" CTA at the bottom pointing to `/jbj-academy`.
 
-6. Technical files expected to change
-- `src/components/broker-toolkit/BrokerToolkitTools.tsx` — replace with compact visibility-filtered tool grid.
-- `src/pages/BrokerToolkit.tsx` — remove redundant section list and reorder sections.
-- `src/components/broker-toolkit/BrokerToolkitNavigation.tsx` — reduce navigation to the remaining sections.
-- `src/components/broker-toolkit/BrokerToolkitStats.tsx` — update counts to match the real visible tools.
-- `src/components/broker-toolkit/BrokerToolkitEducation.tsx`, `BrokerToolkitAcademy.tsx`, `BrokerToolkitCRM.tsx`, `BrokerToolkitGrowth.tsx`, `BrokerToolkitCTA.tsx` — clean contrast and spacing or simplify where needed.
-- `src/components/navigation/GlobalVerticalNav.tsx` and/or shared config — prevent future mismatch between sidebar tools and broker toolkit tools.
-- A database migration only if needed to seed/normalize the exact broker tool visibility IDs.
+### 3. Visual polish (presentation only)
+- Apply the existing champagne/gold tokens already in use (`#FDFBF7`, `#B89555`, ink `#1A1A1A`) — no new colors.
+- Subtle motion: stagger the book entries with framer-motion on view (no heavy effects).
+- Headings use the standard tracking-tight Inter weights already used elsewhere on the page.
 
-7. Validation
-- Visual check `/broker-toolkit` desktop and mobile.
-- Confirm only the sidebar Tools & Workspace tools appear on Broker Toolkit.
-- Confirm hidden tools are filtered by backend visibility.
-- Confirm contrast/readability and card alignment across hero, stats, tools, academy, CRM, growth, and final CTA.
-- Check console/network for errors after the changes.
+### Files touched
+- `src/components/broker-toolkit/BrokerToolkitHero.tsx` — full-screen sizing only.
+- `src/components/broker-toolkit/BrokerToolkitAcademy.tsx` — full rewrite of body, same export name.
+
+No route, sidebar, backend, sitemap or SEO changes. No removal of any other section.

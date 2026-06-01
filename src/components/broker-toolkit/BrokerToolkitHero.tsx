@@ -13,7 +13,7 @@ export function BrokerToolkitHero() {
     <section
       data-hero-dark
       data-no-contrast-guard
-      className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex items-center bg-[#1A1A1A]"
+      className="relative overflow-hidden min-h-[100svh] flex items-center bg-[#1A1A1A]"
     >
       {/* Background video */}
       <div className="absolute inset-0 z-0">
