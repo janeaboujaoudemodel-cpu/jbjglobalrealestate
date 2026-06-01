@@ -568,8 +568,10 @@ function TrainingCard({ m, onStart }: { m: TModule; onStart: () => void }) {
       <CardContent className="p-5 md:p-6 flex flex-col h-full">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3 min-w-0">
-            <div className="shrink-0">
-              <IconTile tone={m.category === "compliance" ? "red" : m.category === "advanced" ? "purple" : m.category === "practical" ? "emerald" : "gold"} size="lg" icon={(m.icon as any).type ?? (() => null)} />
+            <div
+              className="shrink-0 w-12 h-12 rounded-xl bg-[#EFE6D6] ring-1 ring-[#B89555]/60 grid place-items-center text-[#1A1A1A] shadow-[0_2px_6px_rgba(184,149,85,0.18)]"
+            >
+              {m.icon}
             </div>
             <div className="min-w-0">
               <h3 className="text-[#1A1A1A] font-bold text-lg leading-tight">{m.title}</h3>
