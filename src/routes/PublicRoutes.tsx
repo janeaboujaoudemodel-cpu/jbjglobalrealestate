@@ -262,7 +262,7 @@ export const PublicRoutes = () => (
     <Route path="/landlord-guide" element={<LandlordGuide />} />
     <Route path="/landlord-portal" element={<Navigate to="/dashboard/my-listings" replace />} />
     <Route path="/investor-education" element={<InvestorEducation />} />
-    <Route path="/broker-education" element={<Navigate to="/broker/learning?tab=library" replace />} />
+    {/* /broker-education retired — merged into /jbj-academy */}
     <Route path="/faq" element={<FAQ />} />
     <Route path="/investor-faq" element={<Navigate to="/faq" replace />} />
     <Route path="/buyer-faq" element={<BuyerFAQ />} />
