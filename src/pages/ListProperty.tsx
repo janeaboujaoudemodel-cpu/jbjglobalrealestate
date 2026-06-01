@@ -599,7 +599,7 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
           background: `radial-gradient(circle at 85% 12%, ${theme.iconAccent}26 0%, transparent 55%)`,
         }}
       />
-      <div className="max-w-6xl mx-auto">
+      <div className="relative max-w-6xl mx-auto">
         <div className="flex items-end justify-between flex-wrap gap-3 mb-6">
           <div>
             <h2
@@ -626,38 +626,38 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               className="font-semibold border-0 hover:brightness-95"
               style={{
                 backgroundColor: "#FFFFFF",
-                color: BLUE,
-                border: `1px solid ${GOLD}`,
+                color: accent,
+                border: `1px solid ${theme.badgeBorder}`,
               }}
             >
               <Link to="/dashboard/my-listings">
-                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: BLUE }} />
-                <span style={{ color: BLUE, WebkitTextFillColor: BLUE }}>Open full dashboard</span>
+                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent }} />
+                <span style={{ color: accent, WebkitTextFillColor: accent }}>Open full dashboard</span>
               </Link>
             </Button>
           )}
         </div>
 
         {!user ? (
-          /* Anonymous gate */
           <div
             className="rounded-2xl p-8 text-center"
             data-no-contrast-guard
             style={{
               backgroundColor: "#FFFFFF",
-              border: `1.5px solid ${GOLD}`,
+              border: `1.5px solid ${accent}`,
+              boxShadow: `0 20px 40px -20px ${accent}66`,
             }}
           >
             <div
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
-                backgroundColor: BLUE + "10",
-                border: `1px solid ${BLUE}`,
+                background: `linear-gradient(135deg, ${accent} 0%, ${theme.primaryDeep} 100%)`,
+                border: `1px solid ${accent}`,
               }}
             >
-              <ShieldCheck className="w-7 h-7" style={{ color: BLUE }} />
+              <ShieldCheck className="w-7 h-7" style={{ color: "#FFFFFF" }} />
             </div>
-            <h3 className="text-lg font-bold mb-2" style={{ color: BLUE }} data-no-contrast-guard>
+            <h3 className="text-lg font-bold mb-2" style={{ color: accent }} data-no-contrast-guard>
               Sign in to track your submissions
             </h3>
             <p className="text-sm mb-5" style={{ color: INK + "B3" }}>
@@ -669,7 +669,10 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               data-allow-dark-cta
               data-no-contrast-guard
               className="font-semibold border-0"
-              style={{ backgroundColor: BLUE, color: "#FFFFFF" }}
+              style={{
+                background: `linear-gradient(135deg, ${accent} 0%, ${theme.primaryDeep} 100%)`,
+                color: "#FFFFFF",
+              }}
             >
               <Link to="/login?redirect=/list-property%23my-submissions">
                 <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sign in to continue</span>
@@ -696,19 +699,19 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             data-no-contrast-guard
             style={{
               backgroundColor: "#FFFFFF",
-              border: `1.5px dashed ${GOLD}`,
+              border: `1.5px dashed ${accent}`,
             }}
           >
             <div
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
-                backgroundColor: BLUE + "10",
-                border: `1px solid ${BLUE}`,
+                background: `linear-gradient(135deg, ${accent} 0%, ${theme.primaryDeep} 100%)`,
+                border: `1px solid ${accent}`,
               }}
             >
-              <Building2 className="w-7 h-7" style={{ color: BLUE }} />
+              <Building2 className="w-7 h-7" style={{ color: "#FFFFFF" }} />
             </div>
-            <h3 className="text-lg font-bold mb-2" style={{ color: BLUE }} data-no-contrast-guard>
+            <h3 className="text-lg font-bold mb-2" style={{ color: accent }} data-no-contrast-guard>
               No submissions yet
             </h3>
             <p className="text-sm mb-5" style={{ color: INK + "99" }}>
