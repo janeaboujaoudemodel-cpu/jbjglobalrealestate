@@ -4342,3 +4342,258 @@ html body [data-photo-copy-lock] :where(h1,h2,h3,h4,h5,h6,p,span):not(.jj-pill-a
   opacity: 1 !important;
 }
 
+
+/* ============================================================
+ * GLOBAL CONTRAST ENGINE — PASS 7 (Universal Light-Surface Lock)
+ * Permanent design-system rule: any element whose own background
+ * is champagne / gold / cream / pearl / beige / white / light
+ * neutral forces its text, numbers, icons, and SVG strokes to
+ * navy/ink (#1A1A1A) at ALL interaction states
+ * (normal, hover, active, focus, disabled).
+ *
+ * Inverse lock (dark → white) lives in earlier passes.
+ *
+ * Opt-outs (use sparingly, only when the element's OWN background
+ * is verifiably navy/ink/dark):
+ *   - [data-no-contrast-guard]
+ *   - .allow-white
+ *   - [data-allow-dark-cta]
+ *   - [data-on-dark]
+ *   - .jj-cta-dark        (locked navy CTA primitive)
+ *   - [data-surface="navy"|"ink"|"dark"]
+ *   - .surface-navy / .surface-ink / .surface-dark
+ * ============================================================ */
+
+/* 1) Match any element whose Tailwind/arbitrary background class is
+ *    a known light token. We enumerate the canonical brand light
+ *    backgrounds plus generic bg-white/bg-neutral-50..200 etc. */
+:where(
+  .bg-white,
+  [class*="bg-white/"],
+  .bg-\[\#FFFFFF\],
+  .bg-\[\#FFF\],
+  .bg-\[\#FDFBF7\],
+  .bg-\[\#FAF5EC\],
+  .bg-\[\#F7F2EA\],
+  .bg-\[\#F5F0E6\],
+  .bg-\[\#F2EADB\],
+  .bg-\[\#EFE6D6\],
+  .bg-\[\#EADFC8\],
+  .bg-\[\#E8DCC4\],
+  .bg-\[\#E5D9BE\],
+  .bg-champagne,
+  [class*="bg-champagne"],
+  .bg-cream,
+  [class*="bg-cream"],
+  .bg-pearl,
+  [class*="bg-pearl"],
+  .bg-beige,
+  [class*="bg-beige"],
+  .bg-ivory,
+  [class*="bg-ivory"],
+  .bg-sand,
+  [class*="bg-sand"],
+  .bg-neutral-50, .bg-neutral-100, .bg-neutral-200,
+  .bg-stone-50,   .bg-stone-100,   .bg-stone-200,
+  .bg-gray-50,    .bg-gray-100,    .bg-gray-200,
+  .bg-slate-50,   .bg-slate-100,
+  .bg-zinc-50,    .bg-zinc-100,
+  .bg-amber-50,   .bg-amber-100,
+  .bg-yellow-50,  .bg-yellow-100,
+  .bg-orange-50,
+  .surface-page,
+  .surface-light,
+  .surface-pearl,
+  .surface-champagne,
+  .surface-cream,
+  .surface-raised,
+  .surface-gold,
+  [data-surface="page"],
+  [data-surface="light"],
+  [data-surface="pearl"],
+  [data-surface="champagne"],
+  [data-surface="cream"],
+  [data-surface="raised"],
+  [data-surface="gold"],
+  .jj-band-page,
+  .jj-band-surface,
+  .jj-band-raised,
+  .jj-card-inner,
+  .jj-layer-2
+):not([data-no-contrast-guard]):not(.allow-white):not([data-allow-dark-cta]):not([data-on-dark]):not(.jj-cta-dark):not([data-surface="navy"]):not([data-surface="ink"]):not([data-surface="dark"]):not(.surface-navy):not(.surface-ink):not(.surface-dark) {
+
+  /* Reset any inherited white fill on this element itself. */
+}
+
+/* 2) Force descendant TEXT to ink on light-surface ancestors. */
+:where(
+  .bg-white, [class*="bg-white/"],
+  .bg-\[\#FFFFFF\], .bg-\[\#FFF\],
+  .bg-\[\#FDFBF7\], .bg-\[\#FAF5EC\], .bg-\[\#F7F2EA\],
+  .bg-\[\#F5F0E6\], .bg-\[\#F2EADB\], .bg-\[\#EFE6D6\],
+  .bg-\[\#EADFC8\], .bg-\[\#E8DCC4\], .bg-\[\#E5D9BE\],
+  .bg-\[\#B89555\],
+  [class*="bg-champagne"], [class*="bg-cream"],
+  [class*="bg-pearl"], [class*="bg-beige"],
+  [class*="bg-ivory"], [class*="bg-sand"],
+  .bg-neutral-50, .bg-neutral-100, .bg-neutral-200,
+  .bg-stone-50, .bg-stone-100, .bg-stone-200,
+  .bg-gray-50, .bg-gray-100, .bg-gray-200,
+  .bg-slate-50, .bg-slate-100,
+  .bg-zinc-50, .bg-zinc-100,
+  .bg-amber-50, .bg-amber-100,
+  .bg-yellow-50, .bg-yellow-100,
+  .bg-orange-50,
+  .surface-page, .surface-light, .surface-pearl,
+  .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  [data-surface="page"], [data-surface="light"], [data-surface="pearl"],
+  [data-surface="champagne"], [data-surface="cream"],
+  [data-surface="raised"], [data-surface="gold"],
+  .jj-band-page, .jj-band-surface, .jj-band-raised,
+  .jj-card-inner, .jj-layer-2
+):not([data-no-contrast-guard]):not([data-on-dark])
+  :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, div):where(
+    .text-white,
+    [class*="text-white/"],
+    .text-\[\#FFFFFF\],
+    .text-\[\#FFF\],
+    .text-\[\#FDFBF7\],
+    .text-\[\#F7F2EA\],
+    .text-\[\#FAF5EC\],
+    .text-\[\#F5F0E6\],
+    .text-\[#fafafa\],
+    .text-neutral-50, .text-neutral-100,
+    .text-stone-50, .text-stone-100,
+    .text-gray-50, .text-gray-100,
+    .text-slate-50, .text-slate-100,
+    .text-zinc-50, .text-zinc-100
+  ):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not(.allow-white):not([data-on-dark]):not([data-on-dark] *):not(.jj-cta-dark):not(.jj-cta-dark *):not([data-surface="navy"] *):not([data-surface="ink"] *):not([data-surface="dark"] *):not(.surface-navy *):not(.surface-ink *):not(.surface-dark *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* 3) Force descendant ICONS (svg / lucide) and their strokes to ink
+ *    on light-surface ancestors — covers white-stroke icon regressions
+ *    on champagne/gold/cream/pearl cards. */
+:where(
+  .bg-white, [class*="bg-white/"],
+  .bg-\[\#FFFFFF\], .bg-\[\#FFF\],
+  .bg-\[\#FDFBF7\], .bg-\[\#FAF5EC\], .bg-\[\#F7F2EA\],
+  .bg-\[\#F5F0E6\], .bg-\[\#F2EADB\], .bg-\[\#EFE6D6\],
+  .bg-\[\#EADFC8\], .bg-\[\#E8DCC4\], .bg-\[\#E5D9BE\],
+  .bg-\[\#B89555\],
+  [class*="bg-champagne"], [class*="bg-cream"],
+  [class*="bg-pearl"], [class*="bg-beige"],
+  [class*="bg-ivory"], [class*="bg-sand"],
+  .bg-neutral-50, .bg-neutral-100, .bg-neutral-200,
+  .bg-stone-50, .bg-stone-100, .bg-stone-200,
+  .bg-gray-50, .bg-gray-100, .bg-gray-200,
+  .bg-slate-50, .bg-slate-100,
+  .bg-zinc-50, .bg-zinc-100,
+  .bg-amber-50, .bg-amber-100,
+  .bg-yellow-50, .bg-yellow-100,
+  .bg-orange-50,
+  .surface-page, .surface-light, .surface-pearl,
+  .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  [data-surface="page"], [data-surface="light"], [data-surface="pearl"],
+  [data-surface="champagne"], [data-surface="cream"],
+  [data-surface="raised"], [data-surface="gold"],
+  .jj-band-page, .jj-band-surface, .jj-band-raised,
+  .jj-card-inner, .jj-layer-2
+):not([data-no-contrast-guard]):not([data-on-dark])
+  :where(svg, [class*="lucide"]):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not(.allow-white):not([data-on-dark]):not([data-on-dark] *):not(.jj-cta-dark *):not([data-surface="navy"] *):not([data-surface="ink"] *):not([data-surface="dark"] *):not(.surface-navy *):not(.surface-ink *):not(.surface-dark *) {
+  color: #1A1A1A !important;
+}
+
+:where(
+  .bg-white, [class*="bg-white/"],
+  .bg-\[\#FFFFFF\], .bg-\[\#FFF\],
+  .bg-\[\#FDFBF7\], .bg-\[\#FAF5EC\], .bg-\[\#F7F2EA\],
+  .bg-\[\#F5F0E6\], .bg-\[\#F2EADB\], .bg-\[\#EFE6D6\],
+  .bg-\[\#EADFC8\], .bg-\[\#E8DCC4\], .bg-\[\#E5D9BE\],
+  .bg-\[\#B89555\],
+  [class*="bg-champagne"], [class*="bg-cream"],
+  [class*="bg-pearl"], [class*="bg-beige"],
+  [class*="bg-ivory"], [class*="bg-sand"],
+  .surface-page, .surface-light, .surface-pearl,
+  .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  [data-surface="page"], [data-surface="light"], [data-surface="pearl"],
+  [data-surface="champagne"], [data-surface="cream"],
+  [data-surface="raised"], [data-surface="gold"],
+  .jj-band-page, .jj-band-surface, .jj-band-raised,
+  .jj-card-inner, .jj-layer-2
+):not([data-no-contrast-guard]):not([data-on-dark])
+  svg:not([data-no-contrast-guard]):not(.allow-white):not([data-on-dark]):not([data-on-dark] *):not(.jj-cta-dark *):not([data-surface="navy"] *):not([data-surface="ink"] *):not([data-surface="dark"] *):not(.surface-navy *):not(.surface-ink *):not(.surface-dark *)
+  :is(path, line, polyline, polygon, rect, circle, ellipse)[stroke="#fff" i],
+:where(
+  .bg-white, [class*="bg-white/"],
+  .bg-\[\#FFFFFF\], .bg-\[\#FFF\],
+  .bg-\[\#FDFBF7\], .bg-\[\#FAF5EC\], .bg-\[\#F7F2EA\],
+  .bg-\[\#F5F0E6\], .bg-\[\#F2EADB\], .bg-\[\#EFE6D6\],
+  .bg-\[\#EADFC8\], .bg-\[\#E8DCC4\], .bg-\[\#E5D9BE\],
+  .bg-\[\#B89555\],
+  [class*="bg-champagne"], [class*="bg-cream"],
+  [class*="bg-pearl"], [class*="bg-beige"],
+  [class*="bg-ivory"], [class*="bg-sand"],
+  .surface-page, .surface-light, .surface-pearl,
+  .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  [data-surface="page"], [data-surface="light"], [data-surface="pearl"],
+  [data-surface="champagne"], [data-surface="cream"],
+  [data-surface="raised"], [data-surface="gold"],
+  .jj-band-page, .jj-band-surface, .jj-band-raised,
+  .jj-card-inner, .jj-layer-2
+):not([data-no-contrast-guard]):not([data-on-dark])
+  svg:not([data-no-contrast-guard]):not(.allow-white):not([data-on-dark]):not([data-on-dark] *):not(.jj-cta-dark *):not([data-surface="navy"] *):not([data-surface="ink"] *):not([data-surface="dark"] *):not(.surface-navy *):not(.surface-ink *):not(.surface-dark *)
+  :is(path, line, polyline, polygon, rect, circle, ellipse)[stroke="#ffffff" i] {
+  stroke: #1A1A1A !important;
+}
+
+/* 4) Hover / focus / active / disabled parity — descendants keep ink
+ *    text and ink icons in every interaction state. */
+:where(
+  .bg-white, [class*="bg-white/"],
+  .bg-\[\#FFFFFF\], .bg-\[\#FFF\],
+  .bg-\[\#FDFBF7\], .bg-\[\#FAF5EC\], .bg-\[\#F7F2EA\],
+  .bg-\[\#F5F0E6\], .bg-\[\#F2EADB\], .bg-\[\#EFE6D6\],
+  .bg-\[\#EADFC8\], .bg-\[\#E8DCC4\], .bg-\[\#E5D9BE\],
+  .bg-\[\#B89555\],
+  [class*="bg-champagne"], [class*="bg-cream"],
+  [class*="bg-pearl"], [class*="bg-beige"],
+  [class*="bg-ivory"], [class*="bg-sand"],
+  .surface-page, .surface-light, .surface-pearl,
+  .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  [data-surface="page"], [data-surface="light"], [data-surface="pearl"],
+  [data-surface="champagne"], [data-surface="cream"],
+  [data-surface="raised"], [data-surface="gold"],
+  .jj-band-page, .jj-band-surface, .jj-band-raised,
+  .jj-card-inner, .jj-layer-2
+):not([data-no-contrast-guard]):not([data-on-dark]):is(:hover, :focus, :focus-within, :active)
+  :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, button, div):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not(.allow-white):not([data-on-dark]):not([data-on-dark] *):not(.jj-cta-dark):not(.jj-cta-dark *):not([data-surface="navy"] *):not([data-surface="ink"] *):not([data-surface="dark"] *):not(.surface-navy *):not(.surface-ink *):not(.surface-dark *):where(
+    .text-white, [class*="text-white/"],
+    .text-\[\#FFFFFF\], .text-\[\#FFF\],
+    .text-\[\#FDFBF7\], .text-\[\#F7F2EA\],
+    .text-\[\#FAF5EC\], .text-\[\#F5F0E6\]
+  ),
+:where(
+  .bg-white, [class*="bg-white/"],
+  .bg-\[\#FFFFFF\], .bg-\[\#FFF\],
+  .bg-\[\#FDFBF7\], .bg-\[\#FAF5EC\], .bg-\[\#F7F2EA\],
+  .bg-\[\#F5F0E6\], .bg-\[\#F2EADB\], .bg-\[\#EFE6D6\],
+  .bg-\[\#EADFC8\], .bg-\[\#E8DCC4\], .bg-\[\#E5D9BE\],
+  .bg-\[\#B89555\],
+  [class*="bg-champagne"], [class*="bg-cream"],
+  [class*="bg-pearl"], [class*="bg-beige"],
+  [class*="bg-ivory"], [class*="bg-sand"],
+  .surface-page, .surface-light, .surface-pearl,
+  .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  [data-surface="page"], [data-surface="light"], [data-surface="pearl"],
+  [data-surface="champagne"], [data-surface="cream"],
+  [data-surface="raised"], [data-surface="gold"],
+  .jj-band-page, .jj-band-surface, .jj-band-raised,
+  .jj-card-inner, .jj-layer-2
+):not([data-no-contrast-guard]):not([data-on-dark]):is(:hover, :focus, :focus-within, :active)
+  :where(svg, [class*="lucide"]):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not(.allow-white):not([data-on-dark]):not([data-on-dark] *):not(.jj-cta-dark *):not([data-surface="navy"] *):not([data-surface="ink"] *):not([data-surface="dark"] *):not(.surface-navy *):not(.surface-ink *):not(.surface-dark *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
