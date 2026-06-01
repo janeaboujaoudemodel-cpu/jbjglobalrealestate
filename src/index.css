@@ -4750,13 +4750,28 @@ html body [data-sidebar-section] [data-sidebar-section-icon] {
   -webkit-text-fill-color: #B89555 !important;
   stroke: #B89555 !important;
 }
+html body button[data-sidebar-section].group:hover,
+html body button[data-sidebar-section].group:hover [data-sidebar-section-label],
+html body button[data-sidebar-section].group:hover [data-sidebar-section-icon],
+html body button[data-sidebar-section].group:hover svg {
+  color: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+  stroke: #B89555 !important;
+}
 html body [data-sidebar-subitem],
 html body [data-sidebar-subitem] [data-sidebar-subitem-label] {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
+html body a[data-sidebar-subitem].group,
+html body a[data-sidebar-subitem].group [data-sidebar-subitem-label] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
 html body [data-sidebar-subitem]:hover,
-html body [data-sidebar-subitem]:hover [data-sidebar-subitem-label] {
+html body [data-sidebar-subitem]:hover [data-sidebar-subitem-label],
+html body a[data-sidebar-subitem].group:hover,
+html body a[data-sidebar-subitem].group:hover [data-sidebar-subitem-label] {
   color: #B89555 !important;
   -webkit-text-fill-color: #B89555 !important;
 }
