@@ -7,7 +7,10 @@ import { Progress } from "@/components/ui/progress";
 import { BookOpen, Clock, Target, Play, CheckCircle, Circle, Sparkles, Lock, ArrowRight } from "lucide-react";
 import type { EducationBook, EducationModule } from "@/hooks/useBrokerEducation";
 import { useBookModules } from "@/hooks/useBrokerEducation";
+import { useModuleCompletion } from "@/hooks/useModuleCompletion";
 import { PremiumBookCover } from "@/components/books/PremiumBookCover";
+import { useMemo } from "react";
+
 
 interface BookDetailModalProps {
   book: EducationBook | null;
