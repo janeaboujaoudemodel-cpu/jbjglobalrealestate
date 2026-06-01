@@ -376,10 +376,6 @@ label[data-required]::after {
   color: var(--t-ink);
   -webkit-text-fill-color: var(--t-ink);
 }
-[data-careers-page] .careers-card-navy .careers-card-strong svg:not(.allow-white) {
-  color: var(--t-careers-navy);
-  stroke: var(--t-careers-navy);
-}
 [data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta,
 [data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta :where(span, svg),
 [data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta:hover,
@@ -714,10 +710,6 @@ label[data-required]::after {
 [data-careers-page] .careers-card-navy .careers-card-strong {
   color: #1A1A1A;
   -webkit-text-fill-color: #1A1A1A;
-}
-[data-careers-page] .careers-card-navy .careers-card-strong svg:not(.allow-white) {
-  color: #102540;
-  stroke: #102540;
 }
 [data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta,
 [data-careers-page] .careers-card-navy .careers-card-strong .careers-navy-cta :where(span, svg),

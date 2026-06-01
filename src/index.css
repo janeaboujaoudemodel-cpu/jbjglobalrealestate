@@ -1014,16 +1014,8 @@ All colors MUST be HSL.
   margin-bottom: clamp(2rem, 4vw, 3.5rem);
 }
 
-/* Marketing pages: any rogue dark `bg-[#1A1A1A]` section wrapper is
-   re-mapped to champagne so the canvas stays continuous. Owner/admin/
-   portal pages are NOT marked `data-marketing-page` and keep their
-   dark surfaces. */
-[data-marketing-page] section[class~="bg-[#1A1A1A]"] {
-  background: #F7F2EA !important;
-}
-/* Foreground descendant repaints removed — they flipped legitimate
-   white text on dark overlay cards (e.g. About market intelligence
-   cards) to ink-on-dark. Components own their own foreground. */
+/* Marketing-page dark-section remap removed. Contrast is owned by explicit
+   surface/CTA primitives, not by broad section background rewrites. */
 
 
 /* Layer 3 - Inner content cards */
@@ -4104,6 +4096,15 @@ button[data-phone-code-trigger]:hover {
 .jj-cta-dark,
 .jj-navy-cta,
 button[data-phone-code-trigger],
+[data-allow-dark-cta],
+[data-icon-tile][data-surface="ink"],
+[data-icon-tile][data-surface="navy"],
+.surface-navy,
+.surface-ink,
+.surface-dark,
+[data-surface="navy"],
+[data-surface="ink"],
+[data-surface="dark"],
 [data-hero-consultation-lock],
 [data-photo-copy-lock] {
   color: hsl(var(--jj-on-dark));
@@ -4113,6 +4114,15 @@ button[data-phone-code-trigger],
 .jj-cta-dark :where(span, svg, [class*="lucide"]),
 .jj-navy-cta :where(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
+[data-allow-dark-cta] > :where(span, svg, [class*="lucide"]),
+[data-icon-tile][data-surface="ink"] :where(svg, [class*="lucide"]),
+[data-icon-tile][data-surface="navy"] :where(svg, [class*="lucide"]),
+.surface-navy > :where(span, svg, [class*="lucide"]),
+.surface-ink > :where(span, svg, [class*="lucide"]),
+.surface-dark > :where(span, svg, [class*="lucide"]),
+[data-surface="navy"] > :where(span, svg, [class*="lucide"]),
+[data-surface="ink"] > :where(span, svg, [class*="lucide"]),
+[data-surface="dark"] > :where(span, svg, [class*="lucide"]),
 [data-hero-consultation-lock] :where(span, svg, [class*="lucide"]),
 [data-photo-copy-lock] :where(span, svg, [class*="lucide"]) {
   color: hsl(var(--jj-on-dark));
