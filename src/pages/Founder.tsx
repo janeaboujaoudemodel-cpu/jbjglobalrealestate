@@ -5,6 +5,16 @@ import { SafeImage } from "@/components/SafeImage";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { IconTile } from "@/components/ui/icon-tile";
+import { FounderPhotoEditOverlay } from "@/components/founder/FounderPhotoEditOverlay";
+import { useFounderPhoto } from "@/hooks/useFounderPhoto";
+
+// Cream divider used between marketing sections — replaces the heavy black bands.
+const CreamDivider = () => (
+  <div aria-hidden className="w-full bg-[#FDFBF7]">
+    <div className="h-px bg-[#EFE6D6]" />
+  </div>
+);
+
 
 // Import founder images
 import founderHero from "@/assets/founder-hero.png";
@@ -70,6 +80,8 @@ const executiveTeam = [
 
 const Founder = () => {
   const { isFounderVisible, isLoading } = useFounderVisibility();
+  const { photoUrl: founderPhotoOverride } = useFounderPhoto();
+
 
   // Redirect to about page if founder visibility is disabled
   if (!isLoading && !isFounderVisible) {
