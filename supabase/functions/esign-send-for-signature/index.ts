@@ -32,7 +32,27 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Unauthorized", 401, origin);
     }
 
-    const { envelope_id, channels, cc_emails: ccOverride, bcc_emails: bccOverride, interpolated_subject, interpolated_body, interpolated_body_html, signature_html, additional_recipients, docusign_url, attachment_name, attachment_url, extra_attachments } = await req.json();
+    const {
+      envelope_id,
+      channels,
+      cc_emails: ccOverride,
+      bcc_emails: bccOverride,
+      interpolated_subject,
+      interpolated_body,
+      interpolated_body_html,
+      signature_html,
+      additional_recipients,
+      docusign_url,
+      attachment_name,
+      attachment_url,
+      extra_attachments,
+      // Filing metadata so signed contracts surface correctly in Contract Vault.
+      developer_id,
+      developer_name,
+      contract_type,
+      emirate,
+      area,
+    } = await req.json();
     const channelList: string[] = Array.isArray(channels) && channels.length
       ? channels
       : ["email"];
@@ -44,6 +64,15 @@ Deno.serve(async (req) => {
     if (!envelope_id) {
       return corsErrorResponse("envelope_id is required", 400, origin);
     }
+
+    // Persist filing metadata (developer / type / location) onto the envelope
+    // so signed_contracts_index can surface canonical filters in Contract Vault.
+    const filingMeta: Record<string, unknown> = {};
+    if (typeof developer_id === "string" && developer_id) filingMeta.developer_id = developer_id;
+    if (typeof developer_name === "string" && developer_name.trim()) filingMeta.developer_name = developer_name.trim();
+    if (typeof contract_type === "string" && contract_type.trim()) filingMeta.contract_type = contract_type.trim();
+    if (typeof emirate === "string" && emirate.trim()) filingMeta.emirate = emirate.trim();
+    if (typeof area === "string" && area.trim()) filingMeta.area = area.trim();
 
     // Fetch envelope with recipients
     const { data: envelope, error: envelopeError } = await supabase
