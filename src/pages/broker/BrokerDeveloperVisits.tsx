@@ -222,10 +222,10 @@ export default function BrokerDeveloperVisits() {
                   className="pl-9 bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] h-12"
                 />
               </div>
-              {open && devQuery.trim().length > 0 && (
+              {open && (
                 <div className="absolute z-30 mt-1 left-0 right-0 max-h-72 overflow-auto rounded-md border border-[#B89555]/40 bg-[#FDFBF7] shadow-lg">
                   {devs.isLoading && (
-                    <div className="px-3 py-2 text-xs text-[#1A1A1A]/60">Searching…</div>
+                    <div className="px-3 py-2 text-xs text-[#1A1A1A]/60">Loading developers…</div>
                   )}
                   {!devs.isLoading && (devs.data?.length ?? 0) === 0 && (
                     <div className="px-3 py-3 text-xs text-[#1A1A1A]/60">No developers match that name.</div>
