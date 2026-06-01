@@ -18,6 +18,7 @@ import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
 import { Book3DCard, BookDetailModal } from "@/components/broker-education";
 import { PremiumBook3DStyles } from "@/components/broker-education/PremiumBook3D";
 import { CertificatePreview } from "@/components/certification";
+import BrokerCertificationGate from "@/components/broker-education/BrokerCertificationGate";
 import { useEducationProgress } from "@/hooks/useEducationProgress";
 import { BROKER_LESSONS } from "./brokerLessonContent";
 
@@ -367,6 +368,12 @@ export default function BrokerLearning() {
             <CertificatePreview isLocked={!allModulesComplete} />
           </div>
         </section>
+
+        {/* Certification gate — broker request + AI quiz + anti-cheat */}
+        <section className="max-w-5xl mx-auto w-full">
+          <BrokerCertificationGate />
+        </section>
+
 
 
         <BookDetailModal

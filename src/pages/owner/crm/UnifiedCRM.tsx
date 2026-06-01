@@ -20,6 +20,7 @@ import { useRef, useCallback } from "react";
 import {
   Users, Crown, Building2, UserCog, Network, Briefcase, BadgeCheck,
   ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight, Database, Plus, UserPlus,
+  GraduationCap,
 } from "lucide-react";
 import { AddBrokerSheet } from "@/pages/owner/crm/BrokersRegistry";
 import CRMLeadModal from "@/components/crm/CRMLeadModal";
@@ -121,10 +122,11 @@ const CRMFloatingInsightsWidget = lazy(() => import("@/components/crm/CRMFloatin
 const CRMAINextActions = lazy(() => import("@/components/crm/CRMAINextActions"));
 // SharedWithBrokersView removed — replaced by per-lead Access dialog in the leads table.
 const JunkReturnsQueue    = lazy(() => import("@/components/owner-crm/JunkReturnsQueue"));
+const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
 
 type Entity =
   | "leads" | "investors" | "developers" | "sales-reps"
-  | "brokers" | "agencies" | "employees" | "databases";
+  | "brokers" | "agencies" | "employees" | "databases" | "academy";
 
 const ENTITIES: { id: Entity; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "leads",       label: "Leads",              icon: Users },
@@ -135,6 +137,7 @@ const ENTITIES: { id: Entity; label: string; icon: React.ComponentType<{ classNa
   { id: "brokers",     label: "Brokers",            icon: UserCog },
   { id: "agencies",    label: "Brokerage Agencies", icon: Network },
   { id: "employees",   label: "Employees",          icon: Briefcase },
+  { id: "academy",     label: "Academy",            icon: GraduationCap },
 ];
 
 type ViewItem = { id: string; label: string; group?: string };
@@ -164,6 +167,7 @@ const VIEWS: Record<Entity, ViewItem[]> = {
   brokers:    [{ id: "directory", label: "Directory" }, { id: "imported", label: "Imported" }],
   agencies:   [{ id: "directory", label: "Directory" }],
   employees:  [{ id: "roster",    label: "Roster" }],
+  academy:    [{ id: "approvals", label: "Certification Approvals" }],
 };
 
 // Migrate legacy ?section=&sub= → ?entity=&view=
@@ -399,6 +403,9 @@ export default function UnifiedCRM() {
     }
     if (entity === "employees") {
       return <EmployeesHub userId={userId} />;
+    }
+    if (entity === "academy") {
+      return <Suspense fallback={<Fallback />}><OwnerAcademyApprovals /></Suspense>;
     }
     return (
       <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-8 text-center text-sm text-[#1A1A1A]/70">

@@ -3301,6 +3301,7 @@ export type Database = {
       broker_education_module_reads: {
         Row: {
           book_id: string
+          completed_at: string | null
           created_at: string
           focus_loss_events: number
           id: string
@@ -3314,6 +3315,7 @@ export type Database = {
         }
         Insert: {
           book_id: string
+          completed_at?: string | null
           created_at?: string
           focus_loss_events?: number
           id?: string
@@ -3327,6 +3329,7 @@ export type Database = {
         }
         Update: {
           book_id?: string
+          completed_at?: string | null
           created_at?: string
           focus_loss_events?: number
           id?: string
