@@ -103,7 +103,7 @@ const InvestorEducation = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Investor Education | Understanding Real Estate Investment in the UAE | JBJ"
         description="Learn how real estate investment works in the UAE. Data-driven education on market cycles, investment types, risk awareness, and informed decision-making."
