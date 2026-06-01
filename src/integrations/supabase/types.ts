@@ -2644,6 +2644,142 @@ export type Database = {
           },
         ]
       }
+      broker_certification_audit: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          ip: string | null
+          payload: Json
+          submission_id: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          ip?: string | null
+          payload?: Json
+          submission_id?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          ip?: string | null
+          payload?: Json
+          submission_id?: string | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_certification_audit_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "broker_certification_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broker_certification_quizzes: {
+        Row: {
+          answers: Json
+          anti_cheat_flags: Json
+          created_at: string
+          id: string
+          passed: boolean | null
+          questions: Json
+          score: number | null
+          started_at: string | null
+          submission_id: string
+          submitted_at: string | null
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          anti_cheat_flags?: Json
+          created_at?: string
+          id?: string
+          passed?: boolean | null
+          questions?: Json
+          score?: number | null
+          started_at?: string | null
+          submission_id: string
+          submitted_at?: string | null
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          anti_cheat_flags?: Json
+          created_at?: string
+          id?: string
+          passed?: boolean | null
+          questions?: Json
+          score?: number | null
+          started_at?: string | null
+          submission_id?: string
+          submitted_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_certification_quizzes_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "broker_certification_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broker_certification_submissions: {
+        Row: {
+          attestation_accepted: boolean
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          id: string
+          reflection_text: string
+          status: string
+          updated_at: string
+          user_id: string
+          validator_passed: boolean
+          validator_report: Json
+        }
+        Insert: {
+          attestation_accepted?: boolean
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_notes?: string | null
+          id?: string
+          reflection_text: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          validator_passed?: boolean
+          validator_report?: Json
+        }
+        Update: {
+          attestation_accepted?: boolean
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_notes?: string | null
+          id?: string
+          reflection_text?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          validator_passed?: boolean
+          validator_report?: Json
+        }
+        Relationships: []
+      }
       broker_chat_logs: {
         Row: {
           contact_number: string | null
@@ -3159,6 +3295,63 @@ export type Database = {
           },
         ]
       }
+      broker_education_module_reads: {
+        Row: {
+          book_id: string
+          created_at: string
+          focus_loss_events: number
+          id: string
+          idle_events: number
+          last_seen_at: string
+          module_id: string
+          scroll_depth_pct: number
+          time_spent_seconds: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          book_id: string
+          created_at?: string
+          focus_loss_events?: number
+          id?: string
+          idle_events?: number
+          last_seen_at?: string
+          module_id: string
+          scroll_depth_pct?: number
+          time_spent_seconds?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          book_id?: string
+          created_at?: string
+          focus_loss_events?: number
+          id?: string
+          idle_events?: number
+          last_seen_at?: string
+          module_id?: string
+          scroll_depth_pct?: number
+          time_spent_seconds?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_education_module_reads_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_books"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_education_module_reads_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_education_modules: {
         Row: {
           ai_summary: string | null
@@ -3599,6 +3792,42 @@ export type Database = {
           owner_user_id?: string | null
           response_notes?: string | null
           status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      broker_internal_modules: {
+        Row: {
+          category: string
+          content: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_published: boolean
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          content?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          content?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          sort_order?: number
+          title?: string
           updated_at?: string
         }
         Relationships: []
