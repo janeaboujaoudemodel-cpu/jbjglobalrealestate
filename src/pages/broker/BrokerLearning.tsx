@@ -19,6 +19,7 @@ import { Book3DCard, BookDetailModal } from "@/components/broker-education";
 import { PremiumBook3DStyles } from "@/components/broker-education/PremiumBook3D";
 import { CertificatePreview } from "@/components/certification";
 import BrokerCertificationGate from "@/components/broker-education/BrokerCertificationGate";
+import { PremiumLockBadge } from "@/components/broker-education/PremiumLock";
 import { useEducationProgress } from "@/hooks/useEducationProgress";
 import { BROKER_LESSONS } from "./brokerLessonContent";
 
@@ -218,13 +219,26 @@ export default function BrokerLearning() {
             <LockedTraining hasUser={!!user} />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {TRAINING.map((m) => (
-                <TrainingCard
-                  key={m.id}
-                  m={{ ...m, progress: moduleProgress[m.id] ?? m.progress }}
-                  onStart={() => openModule(m)}
-                />
-              ))}
+              {TRAINING.map((m, idx) => {
+                const prev = idx === 0 ? null : TRAINING[idx - 1];
+                const prevProgress = prev
+                  ? moduleProgress[prev.id] ?? prev.progress ?? 0
+                  : 100;
+                const locked = idx > 0 && prevProgress < 100;
+                return (
+                  <TrainingCard
+                    key={m.id}
+                    m={{ ...m, progress: moduleProgress[m.id] ?? m.progress }}
+                    onStart={() => openModule(m)}
+                    locked={locked}
+                    lockReason={
+                      locked && prev
+                        ? `Complete "${prev.title}" to unlock`
+                        : undefined
+                    }
+                  />
+                );
+              })}
             </div>
           )}
         </section>
@@ -352,14 +366,12 @@ export default function BrokerLearning() {
           {/* Certificate panel — locked until all training modules complete */}
           <div className="relative">
             {!allModulesComplete && (
-              <span
-                className="pointer-events-none absolute top-3 right-3 z-20 grid place-items-center w-9 h-9 rounded-full bg-[#FDFBF7] border border-[#B89555]/55 shadow-[0_2px_8px_rgba(184,149,85,0.25)]"
-                data-no-contrast-guard
-                aria-label="Certificate locked"
-                title="Complete every training module to unlock your certificate"
-              >
-                <Lock className="w-4 h-4" style={{ color: "#B89555" }} strokeWidth={2.2} />
-              </span>
+              <div className="pointer-events-none absolute top-3 right-3 z-20">
+                <PremiumLockBadge
+                  size="sm"
+                  title="Complete every training module to unlock your certificate"
+                />
+              </div>
             )}
             <CertificatePreview isLocked={!allModulesComplete} />
           </div>
@@ -565,10 +577,20 @@ function KpiCard({
 }
 
 
-function TrainingCard({ m, onStart }: { m: TModule; onStart: () => void }) {
+function TrainingCard({
+  m,
+  onStart,
+  locked = false,
+  lockReason,
+}: {
+  m: TModule;
+  onStart: () => void;
+  locked?: boolean;
+  lockReason?: string;
+}) {
   return (
-    <Card className="bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-[#B89555]/55 hover:border-[#B89555]/80 transition-all min-h-[240px] shadow-[0_4px_14px_rgba(184,149,85,0.10)] hover:shadow-[0_14px_30px_rgba(184,149,85,0.20)]">
-      <CardContent className="p-5 md:p-6 flex flex-col h-full">
+    <Card className={`relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-[#B89555]/55 ${locked ? "" : "hover:border-[#B89555]/80"} transition-all min-h-[240px] shadow-[0_4px_14px_rgba(184,149,85,0.10)] ${locked ? "" : "hover:shadow-[0_14px_30px_rgba(184,149,85,0.20)]"}`}>
+      <CardContent className={`p-5 md:p-6 flex flex-col h-full ${locked ? "opacity-90" : ""}`}>
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3 min-w-0">
             <div
@@ -585,7 +607,11 @@ function TrainingCard({ m, onStart }: { m: TModule; onStart: () => void }) {
               </div>
             </div>
           </div>
-          <ChevronRight className="w-5 h-5 text-[#1A1A1A]/40 shrink-0" />
+          {locked ? (
+            <PremiumLockBadge size="sm" title={lockReason ?? "Locked"} />
+          ) : (
+            <ChevronRight className="w-5 h-5 text-[#1A1A1A]/40 shrink-0" />
+          )}
         </div>
 
         <p className="text-[#1A1A1A]/75 text-sm mt-4 line-clamp-2">{m.description}</p>
@@ -606,22 +632,44 @@ function TrainingCard({ m, onStart }: { m: TModule; onStart: () => void }) {
             ))}
             {m.topics.length > 2 && <span className="text-[11px] text-[#1A1A1A]/55 whitespace-nowrap">+{m.topics.length - 2} more</span>}
           </div>
-          <button
-            type="button"
-            onClick={onStart}
-            className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)] leading-none"
-            data-allow-dark-cta
-            data-no-contrast-guard
-            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-          >
-            <Play className="w-3 h-3 shrink-0" style={{ color: "#FFFFFF" }} />
-            <span className="allow-white whitespace-nowrap" style={{ color: "#FFFFFF" }}>Start</span>
-          </button>
+          {locked ? (
+            <button
+              type="button"
+              disabled
+              title={lockReason ?? "Locked"}
+              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/55 cursor-not-allowed leading-none shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]"
+              data-no-contrast-guard
+            >
+              <Lock className="w-3 h-3 shrink-0" strokeWidth={2.2} />
+              <span className="whitespace-nowrap">Locked</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={onStart}
+              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)] leading-none"
+              data-allow-dark-cta
+              data-no-contrast-guard
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            >
+              <Play className="w-3 h-3 shrink-0" style={{ color: "#FFFFFF" }} />
+              <span className="allow-white whitespace-nowrap" style={{ color: "#FFFFFF" }}>Start</span>
+            </button>
+          )}
         </div>
       </CardContent>
+      {locked && lockReason && (
+        <div
+          data-no-contrast-guard
+          className="absolute bottom-0 inset-x-0 px-4 py-2 text-center text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A]/75 bg-gradient-to-t from-[#F7F2EA] to-transparent border-t border-[#B89555]/30"
+        >
+          {lockReason}
+        </div>
+      )}
     </Card>
   );
 }
+
 
 
 function ReferenceCard({ title, items, tone, icon }: {
@@ -652,8 +700,8 @@ function ReferenceCard({ title, items, tone, icon }: {
 function LockedTraining({ hasUser }: { hasUser: boolean }) {
   return (
     <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 px-6 py-12 text-center">
-      <div className="w-14 h-14 mx-auto rounded-2xl bg-[#EFE6D6] border border-[#B89555]/40 grid place-items-center mb-4">
-        <Lock className="w-6 h-6 text-[#1A1A1A]" />
+      <div className="mx-auto mb-4 w-fit">
+        <PremiumLockBadge size="lg" title="Training locked" />
       </div>
       <h3 className="text-xl font-bold text-[#1A1A1A] mb-1">Training is for verified brokers</h3>
       <p className="text-[#1A1A1A]/70 mb-5 max-w-md mx-auto">
