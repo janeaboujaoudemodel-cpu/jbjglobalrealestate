@@ -383,7 +383,7 @@ export default function InvestorDashboard() {
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-3">Want to become a developer or broker? Switch your role below.</p>
                   <div className="flex gap-3">
-                    <Link to="/broker-portal">
+                    <Link to="/broker/portal">
                       <Button variant="outline" className="border-[hsl(36,40%,70%)]/30 text-[hsl(36,40%,70%)]">Switch to Broker</Button>
                     </Link>
                     <Link to="/developer-portal?tab=register">

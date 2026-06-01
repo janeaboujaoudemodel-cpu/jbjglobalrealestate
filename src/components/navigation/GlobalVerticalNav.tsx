@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle,
   Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin,
@@ -192,7 +192,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Referral Partner", href: "/referral-partner", icon: Handshake },
 
   // ── Broker & Academy ──
-  { label: "Broker Portal", href: "/broker-portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY", megaMenu: 'broker' },
+  { label: "Broker Portal", href: "/broker/portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY", megaMenu: 'broker' },
   { label: "Broker Toolkit", href: "/broker-toolkit", icon: Wrench },
   { label: "Broker Resources", href: "/broker-resources", icon: FolderOpen },
   { label: "Broker Learning", href: "/broker/learning", icon: GraduationCap },
@@ -461,7 +461,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'AI History', icon: Bot, href: '/my-ai-history' },
   ],
   broker: [
-    { label: 'Broker Portal', icon: BriefcaseIcon, href: '/broker-portal' },
+    { label: 'Broker Portal', icon: BriefcaseIcon, href: '/broker/portal' },
     { label: 'Broker Toolkit', icon: Wrench, href: '/broker-toolkit' },
     { label: 'Broker Learning', icon: GraduationCap, href: '/broker/learning' },
     { label: 'JBJ Academy', icon: GraduationCap, href: '/jbj-academy' },
@@ -575,11 +575,11 @@ const SECTION_ICONS: Record<SectionKey, any> = {
 export default function GlobalVerticalNav() {
   const location = useLocation();
   const { session } = useAuth();
-  const { role, isBroker, isInvestor, isOwner } = useUserRole();
-  const { isDeveloperMode, mode } = useUserModeContext();
+  const { isInvestor, isOwner } = useUserRole();
+  const { isDeveloperMode, isBrokerMode, isInvestorMode } = useUserModeContext();
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(() => {
     try {
       const stored = localStorage.getItem('jj_nav_collapsed');
@@ -595,6 +595,27 @@ export default function GlobalVerticalNav() {
     try { return sessionStorage.getItem('jj_sidebar_expand_seen_session') !== '1'; }
     catch { return true; }
   });
+
+  const showBrokerSurfaces = isBrokerMode;
+  const showInvestorSurfaces = isInvestorMode || isInvestor || isOwner;
+
+  const shouldShowItem = useCallback((item: NavItem, sectionKey?: SectionKey | null) => {
+    if (!showBrokerSurfaces) {
+      if (item.href === "/join") return false;
+      if (sectionKey === "BROKER & ACADEMY") return false;
+      if (item.href.startsWith("/broker") || item.href === "/broker-toolkit" || item.href === "/broker-resources" || item.href === "/ai-broker-workspace" || item.href === "/jbj-academy") return false;
+      if (item.label === "Career Portal") return false;
+    }
+    if (!showInvestorSurfaces && sectionKey === "INVESTOR") return false;
+    return true;
+  }, [showBrokerSurfaces, showInvestorSurfaces]);
+
+  const shouldShowSection = useCallback((sectionKey: SectionKey) => {
+    if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return false;
+    if (sectionKey === 'BROKER & ACADEMY' && !showBrokerSurfaces) return false;
+    if (sectionKey === 'INVESTOR' && !showInvestorSurfaces) return false;
+    return true;
+  }, [isDeveloperMode, isOwner, showBrokerSurfaces, showInvestorSurfaces]);
 
   // Collapsible sections state — accordion: only one open at a time
   const [openSection, setOpenSection] = useState<SectionKey | null>(null);
@@ -695,8 +716,6 @@ export default function GlobalVerticalNav() {
     collapseAfterNavigation();
   }, [collapseAfterNavigation]);
 
-  const [shortcutsExpanded, setShortcutsExpanded] = useState(false);
-
   const closeMegaMenu = useCallback(() => setActiveMegaMenu(null), []);
 
   // Close mega menu and auto-expand active section on route change
@@ -732,7 +751,7 @@ export default function GlobalVerticalNav() {
 
     for (const item of NAV_ITEMS) {
       if (item.highlight) {
-        highlights.push(item);
+        if (shouldShowItem(item, null)) highlights.push(item);
         continue;
       }
       if (item.section) {
@@ -742,17 +761,15 @@ export default function GlobalVerticalNav() {
           if (!sections[currentSection]) sections[currentSection] = [];
         }
       }
-      if (currentSection) {
+      if (currentSection && shouldShowItem(item, currentSection)) {
         sections[currentSection].push(item);
       }
     }
     sections["TOOLS & WORKSPACE"] = PUBLIC_TOOLS_WORKSPACE_ITEMS;
     return { highlightItems: highlights, sectionGroups: sections };
-  }, []);
+  }, [shouldShowItem]);
 
   // Auto-open is now handled by the route-change effect above
-
-  const navigate = useNavigate();
 
   // Accordion toggle — only one section open at a time (instant open/close, no forced scroll)
   const toggleSection = (section: SectionKey, e?: React.MouseEvent) => {
@@ -945,7 +962,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
     }
 
     // Default mega menu
-    const links = MEGA_MENU_LINKS[activeMegaMenu] || [];
+    const links = (MEGA_MENU_LINKS[activeMegaMenu] || []).filter((link) => shouldShowItem(link as NavItem, null));
     const isLargeMenu = links.length > 12;
 
     return (
@@ -1065,9 +1082,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             })}
 
           {SECTION_KEYS.map((sectionKey, sectionIdx) => {
-            if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
-            if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
-            if (sectionKey === 'INVESTOR' && !isInvestor && !isOwner) return null;
+            if (!shouldShowSection(sectionKey)) return null;
             const items = sectionGroups[sectionKey];
             if (!items || items.length === 0) return null;
             const isOpen = openSection === sectionKey;
@@ -1288,12 +1303,39 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
           {/* Section icons — solid champagne body, no silver cast */}
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-[#FDFBF7] w-full">
+            {highlightItems.map((item, i) => {
+              const Icon = item.icon;
+              const isActive = isRouteActive(item.href);
+              return (
+                <Tooltip key={item.href + item.label + i}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      to={item.href}
+                      onClick={collapseAfterNavigation}
+                      data-no-contrast-guard
+                      className={`group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
+                        isActive
+                          ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/80 shadow-sm shadow-gold/15'
+                          : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70'
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{item.label}</TooltipContent>
+                </Tooltip>
+              );
+            })}
+
+            {highlightItems.length > 0 && (
+              <div className="h-px w-5 my-1 bg-[#B89555]/35" aria-hidden="true" />
+            )}
+
             {SECTION_KEYS.map((sectionKey) => {
-              if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
-              if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
-              if (sectionKey === 'INVESTOR' && !isInvestor && !isOwner) return null;
+              if (!shouldShowSection(sectionKey)) return null;
               const SectionIcon = SECTION_ICONS[sectionKey];
               const items = sectionGroups[sectionKey];
+              if (!items || items.length === 0) return null;
               const hasActiveChild = items?.some(item => isRouteActive(item.href)) || false;
               const hasMegaActive = sectionHasActiveMega(sectionKey);
               const isActive = hasActiveChild || hasMegaActive;
@@ -1304,10 +1346,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     <button
                       data-no-contrast-guard
                       onClick={() => {
-                        const firstItem = items?.[0];
-                        if (firstItem?.href && firstItem.href !== '#') {
-                          navigate(firstItem.href);
-                        }
+                        setCollapsed(false);
+                        try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
+                        setOpenSection(sectionKey);
+                        setActiveMegaMenu(null);
                       }}
                       className={`group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
                         isActive
