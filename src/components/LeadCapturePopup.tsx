@@ -121,12 +121,15 @@ const LeadCapturePopup = () => {
             data-surface="light"
             className="relative w-full max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border-2 border-[#B89555]/50 shadow-[0_20px_60px_rgba(200,167,102,0.4)] overflow-hidden max-h-[90vh] overflow-y-auto"
           >
-            {/* Close button */}
+            {/* Close button — soft ink bubble on champagne; opt out of guards so it doesn't repaint to navy */}
             <button
               onClick={handleDismiss}
+              aria-label="Close"
+              data-no-contrast-guard
               className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-[#1A1A1A]/10 hover:bg-[#1A1A1A]/20 flex items-center justify-center transition-colors"
+              style={{ backgroundColor: "rgba(26,26,26,0.10)" }}
             >
-              <X className="w-4 h-4 text-[#1A1A1A]/60" />
+              <X className="w-4 h-4" style={{ color: "#1A1A1A" }} />
             </button>
 
             {/* Header - Context-aware */}

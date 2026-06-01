@@ -238,40 +238,48 @@ const ResaleProperties = () => {
             <ArrowLeft className="w-4 h-4" />
             Back to Properties
           </Link>
-          <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40 mb-4 block w-fit mx-auto">Exclusive — JBJ Global Real Estate</Badge>
-          <h1 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "#2563EB" }} data-no-contrast-guard>
-            Exclusive Resale <span style={{ color: "#2563EB" }} data-no-contrast-guard>Properties</span>
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold mb-4 bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50">
+            Exclusive — JBJ Global Real Estate
+          </span>
+          <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]">
+            Exclusive Resale <span className="text-[#102540]">Properties</span>
           </h1>
-          <p className="text-lg max-w-2xl mx-auto font-medium" style={{ color: "#B89555" }} data-no-contrast-guard>
+          <p className="text-lg max-w-2xl mx-auto font-medium text-[#1A1A1A]/80">
             Exclusive investor resale portfolio curated by JBJ Global Real Estate — premium properties from verified investors at competitive prices, available for immediate purchase.
           </p>
         </div>
       </section>
 
-      {/* Filters — Premium FilterShortcutBar style (matches /projects) */}
-      <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 md:py-4 sticky top-0">
+      {/* Premium sticky filter bar — clears 88px fixed header */}
+      <section className="z-30 bg-[#F7F2EA]/95 backdrop-blur-md py-3 md:py-4 sticky top-[88px] border-y border-[#B89555]/25 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
         <div className="container mx-auto px-3 sm:px-4">
-          <div className="bg-[#FDFBF7]/70 border border-[#B89555]/30 rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 shadow-sm backdrop-blur-sm">
-            {/* Row 1: Search pill spans bar */}
-            <div className={cn(filterSearchPillWrapper, "h-10 w-full mb-2.5")}>
-              <Search className="w-4 h-4 mr-2 text-[#1A1A1A]/70 flex-shrink-0" />
-              <input
-                type="text"
-                placeholder="Search by property name, project, area…"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={filterSearchPillInput}
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  className="ml-1 text-[11px] font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
-                >
-                  Clear
-                </button>
-              )}
+          <div className="relative bg-[#EFE6D6] border border-[#B89555]/40 rounded-2xl px-3 py-3 sm:px-4 sm:py-3.5">
+            {/* Navy left accent bar */}
+            <span aria-hidden className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full bg-[#102540]" />
+
+            {/* Row 1: prominent search input */}
+            <div className="flex items-center gap-2 mb-2.5 pl-2">
+              <div className={cn(filterSearchPillWrapper, "h-11 flex-1 bg-[#FDFBF7] border-[#B89555]/40")}>
+                <Search className="w-4 h-4 mr-2 text-[#102540] flex-shrink-0" />
+                <input
+                  type="text"
+                  placeholder="Search by property name, project, area, developer…"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className={cn(filterSearchPillInput, "text-[#1A1A1A] placeholder:text-[#1A1A1A]/55")}
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="ml-1 text-[11px] font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
             </div>
+
 
             {/* Row 2: Filter pills (chips) */}
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
@@ -454,10 +462,11 @@ const ResaleProperties = () => {
         <div className="max-w-6xl mx-auto">
           {/* Results count */}
           <div className="flex items-center justify-between mb-6">
-            <p className="text-sm font-semibold" style={{ color: "#B89555" }} data-no-contrast-guard>
+            <p className="text-sm font-semibold text-[#1A1A1A]">
               {filteredListings.length} {filteredListings.length === 1 ? "property" : "properties"} found
             </p>
           </div>
+
 
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -472,7 +481,7 @@ const ResaleProperties = () => {
                   key={listing.id}
                   className="rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7]/80 backdrop-blur-sm overflow-hidden hover:shadow-xl transition-shadow group"
                 >
-                  <div className="h-48 bg-gradient-to-br from-gold/10 to-gold/5 flex items-center justify-center relative">
+                  <div className="h-48 bg-[#EFE6D6] flex items-center justify-center relative">
                     {listing.images?.[0] ? (
                       <img src={listing.images[0]} alt={listing.title} className="w-full h-full object-cover" />
                     ) : (
@@ -480,11 +489,12 @@ const ResaleProperties = () => {
                     )}
                     {listing.is_premium && (
                       <div className="absolute top-3 right-3">
-                        <Badge className="bg-[#EFE6D6] text-[#1A1A1A] text-xs font-bold">
-                          <Crown className="w-3 h-3 mr-1" />
+                        <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 text-xs font-bold">
+                          <Crown className="w-3 h-3 mr-1 text-[#B89555]" />
                           Premium
                         </Badge>
                       </div>
+
                     )}
                   </div>
                   <div className="p-4">
@@ -523,50 +533,52 @@ const ResaleProperties = () => {
                       </div>
                     )}
                     <div className="mt-3 flex items-center gap-2 flex-wrap">
-                      <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30 text-xs">
+                      <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40 text-xs">
                         {listing.handover_status === 'ready' ? 'Ready' : 'Under Construction'}
                       </Badge>
                       {listing.property_type && (
-                        <Badge variant="outline" className="text-xs border-[#B89555]/20 text-[#1A1A1A]/50">
+                        <Badge variant="outline" className="text-xs border-[#B89555]/40 text-[#1A1A1A]/70">
                           {listing.property_type}
                         </Badge>
                       )}
                     </div>
-                    <Button className="w-full mt-4 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold">
+                    <Button
+                      variant="ghost"
+                      data-cta="dark"
+                      data-allow-dark-cta
+                      style={{ backgroundColor: "#102540", color: "#FFFFFF" }}
+                      className="allow-white jj-cta-dark w-full mt-4 h-10 font-semibold rounded-xl"
+                    >
                       Register Interest
                     </Button>
+
+
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            /* Empty State — Premium champagne design */
-            <div
-              className="max-w-2xl mx-auto text-center py-12 px-6 sm:px-10 md:px-12 rounded-2xl bg-[#FDFBF7]/80 backdrop-blur-sm"
-              style={{ border: "2px solid #2563EB" }}
-            >
-              <div
-                className="w-20 h-20 rounded-2xl bg-[#EFE6D6]/15 flex items-center justify-center mx-auto mb-6"
-                style={{ border: "1px solid #2563EB" }}
-              >
-                <Building2 className="w-10 h-10" style={{ color: "#2563EB" }} />
+            /* Empty State — Premium navy + champagne + gold */
+            <div className="max-w-2xl mx-auto text-center py-12 px-6 sm:px-10 md:px-12 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
+              <div className="w-20 h-20 rounded-2xl bg-[#EFE6D6] flex items-center justify-center mx-auto mb-6 border border-[#B89555]/40">
+                <Building2 className="w-10 h-10 text-[#102540]" />
               </div>
-              <h3 className="text-2xl font-bold mb-3" style={{ color: "#2563EB" }} data-no-contrast-guard>
+              <h3 className="text-2xl font-bold mb-3 text-[#1A1A1A]">
                 Recently Sold Out
               </h3>
-              <p className="mb-2 font-medium" style={{ color: "#2563EB" }} data-no-contrast-guard>
+              <p className="mb-2 font-medium text-[#1A1A1A]/80">
                 The latest resale properties from our investor network have been snapped up.
                 Our verified investors regularly list new opportunities — don't miss the next one.
               </p>
-              <p className="text-sm mb-8 font-semibold" style={{ color: "#B89555" }} data-no-contrast-guard>
+              <p className="text-sm mb-8 font-semibold text-[#1A1A1A]/70">
                 Subscribe below to get notified when new resale properties become available.
               </p>
 
               {/* Subscribe CTA */}
-              <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 backdrop-blur-sm shadow-sm" style={{ border: "1px solid #2563EB" }}>
+              <div className="bg-[#EFE6D6] rounded-2xl p-6 border border-[#B89555]/40">
                 <div className="flex items-center gap-2 justify-center mb-4">
-                  <Bell className="w-5 h-5" style={{ color: "#2563EB" }} />
-                  <h4 className="font-semibold text-lg" style={{ color: "#B89555" }} data-no-contrast-guard>Stay in the Loop</h4>
+                  <Bell className="w-5 h-5 text-[#102540]" />
+                  <h4 className="font-semibold text-lg text-[#1A1A1A]">Stay in the Loop</h4>
                 </div>
                 <p className="text-sm mb-4 text-[#1A1A1A]/70">
                   Get instant alerts when our investors list new resale properties. Be the first to know.
@@ -583,15 +595,15 @@ const ResaleProperties = () => {
                       placeholder="Enter your email"
                       value={subscribeEmail}
                       onChange={(e) => setSubscribeEmail(e.target.value)}
-                      className="flex-1 h-11 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] text-[#1A1A1A]"
-                      style={{ border: "2px solid #2563EB" }}
+                      className="flex-1 h-11 bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40"
                     />
                     <Button
                       onClick={handleSubscribe}
+                      variant="ghost"
+                      data-cta="dark"
                       data-allow-dark-cta
-                      data-no-contrast-guard
-                      className="font-semibold h-11 px-6 border-0"
-                      style={{ backgroundColor: "#2563EB", color: "#FFFFFF" }}
+                      style={{ backgroundColor: "#102540", color: "#FFFFFF" }}
+                      className="allow-white jj-cta-dark font-semibold h-11 px-6 rounded-xl"
                     >
                       Subscribe
                     </Button>
@@ -603,21 +615,27 @@ const ResaleProperties = () => {
               <div className="mt-8 flex items-center justify-center gap-4 flex-wrap">
                 <Link to="/properties">
                   <Button
+                    variant="ghost"
+                    data-cta="dark"
                     data-allow-dark-cta
-                    data-no-contrast-guard
-                    className="font-semibold border-0"
-                    style={{ backgroundColor: "#2563EB", color: "#FFFFFF" }}
+                    style={{ backgroundColor: "#102540", color: "#FFFFFF" }}
+                    className="allow-white jj-cta-dark font-semibold h-11 px-6 rounded-xl"
                   >
                     Browse Off-Plan Properties
                   </Button>
                 </Link>
                 <Link to="/list-property?purpose=sale">
-                  <Button variant="outline" className="text-[#1A1A1A] hover:bg-[#2563EB]/5" style={{ border: "2px solid #2563EB" }}>
+                  <Button
+                    variant="outline"
+                    className="jj-cta-outline font-semibold h-11 px-6 rounded-xl"
+                    data-cta="outline"
+                  >
                     List Your Property
                   </Button>
                 </Link>
               </div>
             </div>
+
           )}
         </div>
       </section>
@@ -625,26 +643,19 @@ const ResaleProperties = () => {
       {/* List Your Resale CTA band — connects /resale-properties → /list-property */}
       <section className="px-4 sm:px-6 md:px-10 py-10 md:py-14 bg-[#F7F2EA]">
         <div className="max-w-5xl mx-auto">
-          <div
-            className="rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5 bg-[#FDFBF7]"
-            style={{ border: "2px solid #2563EB" }}
-          >
+          <div className="rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5 bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
             <div className="flex-1">
               <span
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold mb-3"
-                style={{
-                  backgroundColor: "#2563EB10",
-                  color: "#2563EB",
-                  border: "1px solid #2563EB",
-                }}
+                data-allow-dark-cta
                 data-no-contrast-guard
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold mb-3 bg-[#102540] text-white border border-[#B89555]/40 allow-white"
               >
                 Investor Resale
               </span>
-              <h3 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: "#2563EB" }} data-no-contrast-guard>
+              <h3 className="text-xl sm:text-2xl font-bold mb-2 text-[#1A1A1A]">
                 Have a property to resell?
               </h3>
-              <p className="text-sm sm:text-base" style={{ color: "#1A1A1A" + "B3" }}>
+              <p className="text-sm sm:text-base text-[#1A1A1A]/70">
                 List your property on JBJ's investor network — premium reach,
                 transparent approval, and live status tracking in your dashboard.
               </p>
@@ -652,10 +663,11 @@ const ResaleProperties = () => {
             <div className="flex flex-col sm:flex-row gap-3 shrink-0">
               <Link to="/list-property?purpose=sale&mode=manual">
                 <Button
+                  variant="ghost"
+                  data-cta="dark"
                   data-allow-dark-cta
-                  data-no-contrast-guard
-                  className="font-semibold border-0 h-11 px-6 w-full sm:w-auto"
-                  style={{ backgroundColor: "#2563EB", color: "#FFFFFF" }}
+                  style={{ backgroundColor: "#102540", color: "#FFFFFF" }}
+                  className="allow-white jj-cta-dark font-semibold h-11 px-6 w-full sm:w-auto rounded-xl"
                 >
                   List my property
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -664,8 +676,8 @@ const ResaleProperties = () => {
               <Link to="/list-property?purpose=sale&mode=ai">
                 <Button
                   variant="outline"
-                  className="font-semibold h-11 px-6 w-full sm:w-auto text-[#1A1A1A] hover:bg-[#2563EB]/5"
-                  style={{ border: "2px solid #2563EB" }}
+                  data-cta="outline"
+                  className="jj-cta-outline font-semibold h-11 px-6 w-full sm:w-auto rounded-xl"
                 >
                   List with AI
                 </Button>
@@ -674,6 +686,7 @@ const ResaleProperties = () => {
           </div>
         </div>
       </section>
+
     </>
   );
 };

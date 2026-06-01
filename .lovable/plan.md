@@ -1,86 +1,45 @@
+# Resale Properties — Navy/Champagne/Gold Restyle + Popup Close Fix
 
-## 1. Home — Get Verified + Mode Portal banners (premium pair)
+## 1. /resale-properties full re-skin (`src/pages/ResaleProperties.tsx`)
 
-Goal: two stacked banners with **inverted contrast**, separated from the section above by a clean divider, touching each other with **zero gap**.
+Currently the page uses `#2563EB` (bright royal blue) for headings, borders, badges, CTAs, and empty-state — this is not the approved navy. Replace with the project's locked navy `#102540` (hover `#1a3d63`) + champagne surfaces + 1px gold `#B89555` hairlines + ink `#1A1A1A` body text. White is allowed only inside navy CTAs.
 
-`src/pages/Index.tsx`
-- Replace the two separate `PremiumSectionCard` wrappers (Verification + ModePortal) with **one** full-bleed wrapper that renders, in order:
-  1. `SectionDividerGoldFullBleed` (clean gold hairline between Developer Partners Marquee and the banner pair).
-  2. `<VerificationBanner />` (navy bg, champagne CTA — unchanged contrast).
-  3. `<ModePortalBanner />` (NEW champagne bg, navy text/icon, navy CTA with white text+arrow — inverted).
-  4. No vertical padding between #2 and #3 (`-mt-px` on the portal banner to overlap the hairline so they read as one block).
-- Move/push the Get Verified pair **down** so it sits **immediately above** the Mode Portal banner (currently they're not adjacent because of intervening sections). New order on the homepage will be:
-  - Hero → Marquee → Featured Listings → … (existing flow) → **Gold divider → Get Verified → Mode Portal Banner** → next section.
-- Remove the standalone `<PartnerVerifyHeroCTA />` placement inside the verification card (keep file, just stop rendering it next to the new pair) to avoid a third stacked strip.
+Concrete swaps across the whole file:
 
-## 2. New look for `ModePortalBanner.tsx` (inverted of Get Verified)
+- **Hero band**: keep champagne gradient. H1 + sub-headline → `#1A1A1A` (ink), eyebrow chip → champagne pill with gold hairline + ink text. Drop the `#2563EB` H1 color.
+- **Sticky search/filter bar** (`section` at line 252):
+  - Change `sticky top-0` → `sticky top-[88px]` (clears 88px fixed header per project standard) with `z-30`.
+  - Wrap in `<PremiumSectionCard>`-style chrome: champagne raised surface `#EFE6D6`, 1px gold hairline, `rounded-2xl`, `shadow-[0_8px_24px_rgba(16,37,64,0.06)]`, backdrop blur, add a subtle navy left-accent bar (3px) for premium feel.
+  - Reorganize: Row 1 = large prominent search input (h-12, gold hairline, ink text) with a navy "Search" submit pill on the right. Row 2 = chips. Row 3 (right-aligned): result count + sort. Wider gap, consistent h-9 chips.
+  - Active chip = `.jj-pill-active` (cream + gold hairline + ink) — replace ad-hoc styles where they conflict.
+- **Listings grid cards**: keep champagne card, replace the `bg-gold/10` image fallback (uses non-existent token after restyle) with `bg-[#EFE6D6]`. Premium badge stays cream+ink+gold. "Register Interest" button → navy `.jj-cta-dark` (white text, white arrow).
+- **Empty state card** (lines 542–620): replace every `#2563EB` border/text/bg with `#102540` for borders/CTA bg and `#1A1A1A` for headings/body. Subscribe + "Browse Off-Plan" buttons → `.jj-cta-dark` (navy, white text). "List Your Property" outline → 1px navy border, ink text. The "Stay in the Loop" heading drops faded gold and becomes ink.
+- **List-your-resale CTA band** (lines 625–676): same swap — navy border, navy chip bg with white text (`data-allow-dark-cta`), ink heading, navy primary CTA, navy-outline secondary. Remove `style={{ color: "#B89555" }} data-no-contrast-guard` muddy gold text.
+- Remove every remaining `data-no-contrast-guard` opt-out that was only there to allow bright-blue or faded-gold — those colors are gone after the swap.
 
-`src/components/home/ModePortalBanner.tsx` — full rewrite of presentation only; mode-aware logic kept.
+## 2. Exclusive Access popup X close button (`src/components/LeadCapturePopup.tsx` line 125–130)
 
-- Background: champagne gradient `from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA]` with 1px gold hairline top+bottom.
-- Icon tile: cream `#FDFBF7` with `#B89555` ring; icon stroke `#102540` (navy).
-- Eyebrow + Title text: navy `#102540`; body copy: `#1A1A1A`/80.
-- CTA "Open {Mode} Portal": navy pill (`bg-[#102540]` / hover `#1a3d63`), `text-white`, white `ArrowRight` — **same shape, padding, radius, shadow, hover-lift** as the Get Verified champagne pill (uses `data-cta="dark"` + `data-allow-dark-cta` to satisfy the navy-pill lock).
-- Same width container, same vertical padding as `VerificationBanner` so the two strips line up pixel-for-pixel.
-- Mode-aware routes preserved:
-  - investor → `/investor-dashboard`
-  - broker → `/broker/portal`
-  - developer → `/developers-portal`
+The screenshot shows the X rendering as dark-on-dark inside a navy-blue circle. Cause: the global black-CTA → navy guard repaints `bg-[#1A1A1A]/10` to solid navy, but the inner `<X>` stays `text-[#1A1A1A]/60`, so the icon disappears.
 
-This rule applies to all three modes identically (only icon + label change).
+Fix: make the close button explicitly opt out of the guard and own its colors:
+- Wrapper: `bg-[#1A1A1A]/10 hover:bg-[#1A1A1A]/20` with `data-no-contrast-guard` so it stays a soft ink-tinted bubble on champagne (not navy).
+- Icon: keep `text-[#1A1A1A]` (full strength), no opacity.
+- If we instead want it to be navy: set bg to `#102540`, icon to `#FFFFFF`, add `data-allow-dark-cta` + `data-no-contrast-guard` + `allow-white`.
+- Choosing **option A (soft ink bubble)** — matches the champagne header better and is consistent with other modal closers.
 
-## 3. Kill all raw white page backgrounds (mother-of-pearl globally)
+## 3. Visual verification (mandatory before completion)
 
-- `src/pages/Index.tsx`: change root `bg-[#FDFBF7]` to `bg-[#F7F2EA]` (mother-of-pearl page).
-- `src/index.css`: add a guard that remaps any element using `bg-white` / `bg-[#FFFFFF]` / `bg-[#ffffff]` at the page/layout level to `#F7F2EA`, while preserving white inside dark CTAs, modals, and `[data-allow-white]` opt-outs (cards, popovers, dialogs keep their own bg via existing tokens). Scope guard to `body, main, section, [data-home-page] > div` to avoid touching badge/input fills.
-- Verify with browser screenshot of home + 2 other routes after.
+Using browser tools:
+1. `navigate_to_sandbox` → `/resale-properties` at 1280×900.
+2. Screenshot hero + sticky bar at scroll-top.
+3. Scroll 600px, screenshot — confirm the search bar is pinned at `top:88px` directly under the global header with no overlap, and listings/empty-state are navy-themed.
+4. Screenshot empty state + CTA band; verify no `#2563EB` bright-blue remains anywhere.
+5. Trigger the Exclusive Access popup (scroll triggers `LeadCapturePopup`), screenshot, zoom into top-right corner to confirm the X icon is clearly visible.
+6. If any check fails, iterate and re-screenshot before marking done.
 
-## 4. Fix global header search (broken & cropped popover)
+## Files touched
 
-`src/components/header/MegaMenuSearch.tsx` is the panel that opens from the header search icon. Current issues observed: white card on white page (looks cropped), `absolute right-0 top-full mt-2 w-[min(95vw,900px)]` overflows the L-shaped 88px frame on small/medium viewports, and Enter currently relies on parent `onOpenSearch` which may not be wired.
+- `src/pages/ResaleProperties.tsx` — full color/style migration + sticky offset + reorganized filter bar.
+- `src/components/LeadCapturePopup.tsx` — close button contrast fix.
 
-Fixes:
-- Recompute panel positioning to anchor under the header icon and clamp inside the viewport: switch to a fixed-position dropdown with `right: 16px; top: 96px; max-width: min(95vw, 900px); max-height: calc(100vh - 120px); overflow-y: auto`.
-- Replace white card bg with champagne `#F7F2EA` + gold hairline (matches new no-white rule).
-- Wire the search input to navigate directly: on Enter or "Search" click, `navigate(\`/search?q=\${encodeURIComponent(query)}\`)` using `useNavigate`, and still call `onOpenSearch?.(q)` for parents that override.
-- Confirm `/search` page exists and accepts `?q=`. If it doesn't, route to existing global search (the `GlobalSearch` modal triggered by `jbj:open-global-search` event) by dispatching that event with the query as fallback.
-- Verify by clicking the header search icon in browser after the fix, typing "marina", pressing Enter, confirming results render.
-
-## 5. Wire & upgrade Investor Portal
-
-Currently `/investor-dashboard` exists (`src/pages/InvestorDashboard.tsx`) with two sub-pages (Portfolio Views, Report Access). Keep it as the entry, but add a portal shell similar to `PortalShell.tsx` for developers:
-
-- Create `src/pages/investor/InvestorPortalShell.tsx` mirroring `developers-portal/PortalShell.tsx` (sidebar with: Overview, My Shortlist, Portfolio, Market Reports, Saved Searches, Documents, Concierge, Settings).
-- Register nested routes under `/investor-dashboard/*` in `PublicRoutes.tsx`. Reuse existing `PortfolioViews` and `ReportAccess`; add stubs for Shortlist/Saved Searches/Documents that pull from existing data hooks (`useFavorites`, `useSavedSearches`, `useUserDocuments`) so no new tables are required.
-- `ModePortalBanner` investor CTA already targets `/investor-dashboard` — will land on the new shell.
-
-## 6. Wire & upgrade Developer Portal
-
-`/developers-portal` is the canonical shell (`PortalShell.tsx`). Audit and add the missing sales-rep + admin areas the user requested:
-
-- Add sidebar entries: Overview, Projects, Submissions, Sales Reps (Directory / Availability / Applications), Leads, Marketing Assets, Reports, Admin (role-gated), Settings.
-- Reuse existing pages from `src/pages/developers-portal/reps/*` and `access/AccessRequestQueue.tsx`. Add two new placeholder pages (`SalesRepLeadsBoard.tsx`, `DeveloperPortalAdmin.tsx`) that render existing data via current hooks — no schema changes.
-- Verify role gating: admin section visible only when `useUserRole().isAdmin || isOwner`; sales-rep section visible to owners + portal devs + reps.
-
-## 7. JBJ Academy — Training Module cropping (TrainingCard padding)
-
-In `src/pages/broker/BrokerLearning.tsx`, the `TrainingCard` renders an absolutely-positioned bottom strip `REQUEST ACADEMY ACCESS TO UNLOCK` overlapping the topic pills above it (visible in the screenshot — pills overlap the gold band).
-
-Fix:
-- Add bottom padding to the card content (`pb-12`) when `locked && lockReason` so the topic-pill row never touches the lock strip.
-- Reduce the `lockReason` strip to 28px height (`py-1.5`) and ensure it sits flush at the card bottom with a subtle gold hairline above (no overlap).
-- Change topic pill area to `gap-1.5 mb-2` and wrap with `flex-wrap` allowance.
-- Re-check at 1178px (current viewport) and at mobile in browser after.
-
-## Out of scope
-
-- Broker portal content/features remain as built; only code cleanup along the way (remove unused imports surfaced by edits).
-
-## Verification
-
-After implementation:
-1. Browser-screenshot the home page top→middle: confirm gold divider above the pair, Get Verified directly above Mode Portal with zero gap, mode-aware copy swaps when switching mode in header.
-2. Click header search icon: panel renders inside viewport, search query routes to results.
-3. Switch mode → investor: portal banner CTA opens new Investor Portal shell.
-4. Visit `/developers-portal`: new sidebar entries render, role-gated admin link appears only for owners.
-5. `/jbj-academy`: topic pills no longer touch the gold "REQUEST ACADEMY ACCESS TO UNLOCK" strip.
+No business logic, no schema, no route changes.
