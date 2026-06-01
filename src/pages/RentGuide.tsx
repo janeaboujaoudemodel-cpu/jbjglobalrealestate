@@ -195,8 +195,8 @@ const RentGuide = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-      <SEOHead 
+    <div data-marketing-page className="min-h-screen bg-page">
+      <SEOHead
         title="Renting Guide Dubai | How to Rent Property | JBJ GLOBAL REAL ESTATE"
         description="Complete guide to renting property in Dubai. Learn about the rental process, Ejari registration, payment structures, and how JBJ GLOBAL REAL ESTATE supports tenants and landlords."
       />
@@ -204,40 +204,27 @@ const RentGuide = () => {
       <GuideHero
         badge="Complete Rental Guide"
         badgeIcon={Key}
-        title={
-          <>
-            Your Guide to{" "}
-            <span className="text-[#1A1A1A]">Renting Property in Dubai</span>
-          </>
-        }
+        title={<>Your Guide to Renting Property in Dubai</>}
         description="A clear, educational resource covering everything you need to know about renting in Dubai — from finding the right property to understanding your rights as a tenant."
         backgroundImage={rentGuideHero}
         actions={
           <>
-            <button 
+            <button
+              type="button"
               onClick={() => document.getElementById('rental-process')?.scrollIntoView({ behavior: 'smooth' })}
-              className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
-              style={{
-                border: '2px solid rgba(255,255,255,0.8)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-              }}
+              data-cta="guide-hero-read"
+              className="jj-cta-champagne inline-flex items-center justify-center gap-2 h-12 px-7 rounded-xl text-sm md:text-base font-semibold"
             >
-              <ArrowDown className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-              <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Read the Full Guide</span>
-              <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+              <ArrowDown className="w-4 h-4" />
+              <span>Read the Full Guide</span>
             </button>
-            <Link to="/properties?transaction=rent">
-              <button 
-                className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
-                style={{
-                  border: '2px solid rgba(255,255,255,0.8)',
-                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                }}
-              >
-                <span className="text-white group-hover:text-[#1A1A1A] transition-colors">View Rental Properties</span>
-                <ArrowUpRight className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-              </button>
+            <Link
+              to="/properties?transaction=rent"
+              data-cta="guide-hero-view"
+              className="jj-cta-outline allow-white inline-flex items-center justify-center gap-2 h-12 px-7 rounded-xl text-sm md:text-base font-semibold"
+            >
+              <span>View Rental Properties</span>
+              <ArrowUpRight className="w-4 h-4" />
             </Link>
           </>
         }
