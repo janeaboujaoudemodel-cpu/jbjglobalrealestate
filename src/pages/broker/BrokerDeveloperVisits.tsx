@@ -145,6 +145,8 @@ export default function BrokerDeveloperVisits() {
       setRepPhone("");
       setRepEmail("");
       setRepDetails("");
+      setRepFeedback("");
+      setRepRatings({ Fast: 0, Responsive: 0, Knowledgeable: 0, Helpful: 0, Professional: 0, Kind: 0 });
       setDate(todayIso());
       setTime(nowHm());
       qc.invalidateQueries({ queryKey: ["dv-visits", user?.id] });
