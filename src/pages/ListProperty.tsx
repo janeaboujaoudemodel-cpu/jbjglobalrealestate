@@ -112,6 +112,17 @@ const THEME_PURPLE: ModeTheme = {
 const themeForMode = (m: Mode): ModeTheme =>
   m === "manual" ? THEME_EMERALD : m === "ai" ? THEME_PURPLE : THEME_NAVY;
 
+/* Soft mode-tinted ombre used for "white" surfaces (Purpose card, empty
+   states, "Open full dashboard" pill) so they match the page's accent
+   instead of reading as harsh pure white. */
+const ombreSoft = (t: ModeTheme): string => {
+  if (t.name === "emerald")
+    return "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)";
+  if (t.name === "purple")
+    return "linear-gradient(135deg, #F2EBFF 0%, #FFFFFF 55%, #E5D6FF 100%)";
+  return "linear-gradient(135deg, #E5EAF3 0%, #FFFFFF 50%, #DDE3F0 100%)";
+};
+
 const ListProperty = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const mode = (searchParams.get("mode") as Mode) || "pick";
@@ -291,7 +302,7 @@ const ListProperty = () => {
           <div
             className="rounded-2xl p-4 sm:p-6 md:p-7 shadow-xl"
             style={{
-              backgroundColor: "#FFFFFF",
+              background: ombreSoft(theme),
               border: `1.5px solid ${theme.primary}`,
               boxShadow: `0 18px 40px -22px ${theme.primary}66`,
             }}
@@ -622,17 +633,18 @@ function PickerCard({
           {tag}
         </span>
         <span
-          className="inline-flex items-center gap-1.5 text-sm font-semibold px-4 h-9 rounded-md group-hover:gap-2 transition-all"
+          className="inline-flex items-center gap-1.5 text-sm font-bold px-4 h-9 rounded-md group-hover:gap-2 transition-all"
+          data-no-contrast-guard
           style={{
-            backgroundColor: "#FFFFFF",
+            background: "linear-gradient(135deg, #E5EAF3 0%, #FFFFFF 55%, #DDE3F0 100%)",
             color: NAVY,
             WebkitTextFillColor: NAVY,
             border: `1px solid ${PURPLE}`,
-            boxShadow: `0 6px 18px -8px rgba(255,255,255,0.45)`,
+            boxShadow: `0 6px 18px -8px rgba(168,85,247,0.55)`,
           }}
         >
-          Start
-          <ArrowRight className="w-4 h-4" style={{ color: NAVY }} />
+          <span style={{ color: NAVY, WebkitTextFillColor: NAVY }}>Start</span>
+          <ArrowRight className="w-4 h-4" style={{ color: NAVY, strokeWidth: 2.5 }} />
         </span>
       </div>
     </button>
@@ -691,15 +703,18 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               asChild
               data-allow-dark-cta
               data-no-contrast-guard
-              className="jj-white-ring-square font-semibold hover:brightness-95"
+              className="font-semibold hover:brightness-95"
               style={{
-                backgroundColor: "#FFFFFF",
+                background: ombreSoft(theme),
                 color: accent,
+                border: `1.5px solid ${accent}`,
+                boxShadow: `0 10px 24px -10px ${accent}66`,
               }}
             >
               <Link to="/dashboard/my-listings">
                 <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent }} />
                 <span style={{ color: accent, WebkitTextFillColor: accent, fontWeight: 700 }}>Open full dashboard</span>
+                <ArrowRight className="w-4 h-4 ml-2" style={{ color: accent }} />
               </Link>
             </Button>
           )}
@@ -710,7 +725,7 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             className="rounded-2xl p-8 text-center"
             data-no-contrast-guard
             style={{
-              backgroundColor: "#FFFFFF",
+              background: ombreSoft(theme),
               border: `1.5px solid ${accent}`,
               boxShadow: `0 20px 40px -20px ${accent}66`,
             }}
@@ -769,8 +784,9 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             className="rounded-2xl p-10 text-center"
             data-no-contrast-guard
             style={{
-              backgroundColor: "#FFFFFF",
+              background: ombreSoft(theme),
               border: `1.5px dashed ${accent}`,
+              boxShadow: `0 20px 40px -20px ${accent}55`,
             }}
           >
             <div
