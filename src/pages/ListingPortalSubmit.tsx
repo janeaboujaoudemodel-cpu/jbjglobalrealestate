@@ -540,7 +540,13 @@ const ListingPortalSubmit = () => {
   // ========== SUCCESS PHASE ==========
   if (phase === 'success') {
     return (
-      <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] pt-24 pb-16">
+      <section
+        data-ai-listing-shell
+        data-surface="dark"
+        data-allow-dark-cta
+        data-no-contrast-guard
+        className="min-h-screen bg-gradient-to-br from-[#0b1c36] via-[#102540] to-[#1a3d63] pt-24 pb-16"
+      >
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
