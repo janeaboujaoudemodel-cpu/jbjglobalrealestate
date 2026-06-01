@@ -166,11 +166,11 @@ const Pricing = lazy(() => import("@/pages/Pricing"));
 // ── Broker Pages ──
 const BrokerToolkit = lazy(() => import("@/pages/BrokerToolkit"));
 const BrokerDashboard = lazy(() => import("@/pages/BrokerDashboard"));
-const BrokerResources = lazy(() => import("@/pages/BrokerResources"));
+// BrokerResources merged into /jbj-academy
 const BrokerTraining = lazy(() => import("@/pages/broker/BrokerTraining"));
 const BrokerLearning = lazy(() => import("@/pages/broker/BrokerLearning"));
 const BrokerLearningVoiceAdmin = lazy(() => import("@/pages/owner/BrokerLearningVoiceAdmin"));
-const AIBrokerWorkspace = lazy(() => import("@/pages/AIBrokerWorkspace"));
+// AIBrokerWorkspace public route removed — accessible via /broker/portal/ai
 const AIHub = lazy(() => import("@/pages/AIHub"));
 const InteriorDesignAI = lazy(() => import("@/pages/InteriorDesignAI"));
 const InvestorHub = lazy(() => import("@/pages/InvestorHub"));
