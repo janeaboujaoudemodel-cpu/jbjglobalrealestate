@@ -474,7 +474,7 @@ Requirements:
           title="Listing Submitted | JBJ Global Real Estate"
           description="Your property listing has been submitted successfully."
         />
-        <main className="min-h-screen bg-[#1A1A1A] pt-24 pb-16">
+        <main className="min-h-screen bg-[#FDFBF7] pt-12 pb-16">
           <div className="container mx-auto px-4">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
