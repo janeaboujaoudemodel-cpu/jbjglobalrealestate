@@ -124,7 +124,7 @@ const Disclaimers = () => {
             <div id="s1">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><Building2 className="w-5 h-5 text-[#B89555]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center"><Building2 className="w-5 h-5 text-[#B89555]" /></div>
                   <div><span className="text-xs font-semibold text-[#B89555] tracking-widest uppercase">Section 01</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Licensed Brokerage Scope</h2></div>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -139,7 +139,7 @@ const Disclaimers = () => {
             <div id="s2">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><Scale className="w-5 h-5 text-[#B89555]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center"><Scale className="w-5 h-5 text-[#B89555]" /></div>
                   <div><span className="text-xs font-semibold text-[#B89555] tracking-widest uppercase">Section 02</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Scope Boundaries</h2></div>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -155,7 +155,7 @@ const Disclaimers = () => {
             <div id="s3">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><BarChart3 className="w-5 h-5 text-[#B89555]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center"><BarChart3 className="w-5 h-5 text-[#B89555]" /></div>
                   <div><span className="text-xs font-semibold text-[#B89555] tracking-widest uppercase">Section 03</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Data & Market Information</h2></div>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -170,7 +170,7 @@ const Disclaimers = () => {
             <div id="s4">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><Globe className="w-5 h-5 text-[#B89555]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center"><Globe className="w-5 h-5 text-[#B89555]" /></div>
                   <div><span className="text-xs font-semibold text-[#B89555] tracking-widest uppercase">Section 04</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Residency & Golden Visa Information</h2></div>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -186,7 +186,7 @@ const Disclaimers = () => {
             <div id="s5">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><Cpu className="w-5 h-5 text-[#B89555]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center"><Cpu className="w-5 h-5 text-[#B89555]" /></div>
                   <div><span className="text-xs font-semibold text-[#B89555] tracking-widest uppercase">Section 05</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Digital & AI Advisory Tools</h2></div>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -200,7 +200,7 @@ const Disclaimers = () => {
             <div id="s6">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><ExternalLink className="w-5 h-5 text-[#B89555]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center"><ExternalLink className="w-5 h-5 text-[#B89555]" /></div>
                   <div><span className="text-xs font-semibold text-[#B89555] tracking-widest uppercase">Section 06</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>External Platforms & References</h2></div>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -215,7 +215,7 @@ const Disclaimers = () => {
             <div id="s7">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><ShieldCheck className="w-5 h-5 text-[#B89555]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center"><ShieldCheck className="w-5 h-5 text-[#B89555]" /></div>
                   <div><span className="text-xs font-semibold text-[#B89555] tracking-widest uppercase">Section 07</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Liability Clarification</h2></div>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -229,7 +229,7 @@ const Disclaimers = () => {
             <div id="s8">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><UserCheck className="w-5 h-5 text-[#B89555]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center"><UserCheck className="w-5 h-5 text-[#B89555]" /></div>
                   <div><span className="text-xs font-semibold text-[#B89555] tracking-widest uppercase">Section 08</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Client Responsibility</h2></div>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
@@ -242,7 +242,7 @@ const Disclaimers = () => {
             <div id="s9">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center"><Landmark className="w-5 h-5 text-[#B89555]" /></div>
+                  <div className="w-10 h-10 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center"><Landmark className="w-5 h-5 text-[#B89555]" /></div>
                   <div><span className="text-xs font-semibold text-[#B89555] tracking-widest uppercase">Section 09</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Regulatory Position</h2></div>
                 </div>
                 <div className="text-[#1A1A1A]/70 leading-relaxed text-[15px] space-y-4">
