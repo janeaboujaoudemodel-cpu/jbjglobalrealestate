@@ -658,9 +658,10 @@ function SubmissionCard({ listing }: { listing: any }) {
   return (
     <div
       className="rounded-2xl overflow-hidden flex flex-col transition-all hover:shadow-lg"
+      data-no-contrast-guard
       style={{
-        backgroundColor: CHAMPAGNE,
-        border: `1px solid ${GOLD}50`,
+        backgroundColor: "#FFFFFF",
+        border: `1px solid ${BLUE}33`,
       }}
     >
       <div
@@ -714,8 +715,8 @@ function SubmissionCard({ listing }: { listing: any }) {
             style={{ backgroundColor: BLUE, color: "#FFFFFF" }}
           >
             <Link to={`/dashboard/my-listings?id=${listing.id}`}>
-              View details
-              <ArrowRight className="w-3 h-3 ml-1" />
+              <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>View details</span>
+              <ArrowRight className="w-3 h-3 ml-1" style={{ color: "#FFFFFF" }} />
             </Link>
           </Button>
         </div>
