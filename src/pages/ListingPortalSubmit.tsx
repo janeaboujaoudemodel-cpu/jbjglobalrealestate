@@ -597,63 +597,65 @@ const ListingPortalSubmit = () => {
     );
   }
 
+  const PHASE_ICONS = [Upload, Sparkles, TrendingUp, Eye, CreditCard, Check];
+  const phaseIndex = getPhaseIndex();
+
   return (
-    <section
+    <main
       data-ai-listing-shell
-      className="relative w-full py-8 md:py-10"
+      className="min-h-screen pt-6 pb-12 md:pb-16"
       style={{ background: "linear-gradient(135deg, #F2EBFF 0%, #FFFFFF 55%, #E5D6FF 100%)" }}
     >
-      <div className="relative px-3 sm:px-4 md:px-6">
-        <div
-          ref={creatorRef}
-          className="w-full max-w-6xl mx-auto rounded-3xl overflow-hidden"
-          style={{
-            background: "linear-gradient(135deg, #2E1065 0%, #4C1D95 55%, #0B0B0B 100%)",
-            border: "1.5px solid #A855F7",
-            boxShadow: "0 30px 60px -28px rgba(168,85,247,0.55)",
-          }}
-        >
-        <div className="p-5 md:p-8">
+      {/* Layer 1 — light purple ombre intro */}
+      <div style={{ background: "linear-gradient(135deg, #F2EBFF 0%, #FFFFFF 55%, #E5D6FF 100%)" }}>
+        <div className="container mx-auto px-4 py-10 md:py-12">
+          <div className="max-w-4xl mx-auto">
             <Button
               variant="ghost"
               onClick={() => navigate('/listing-portal')}
               data-no-contrast-guard
-              data-on-dark
-              data-allow-dark-cta
               data-back-to-portal
-              className="allow-white text-white hover:text-white hover:bg-white/10 mb-4 [&_svg]:!text-white"
-              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+              className="mb-4 hover:bg-[#A855F7]/10"
+              style={{ color: '#5B21B6', WebkitTextFillColor: '#5B21B6' }}
             >
-              <span className="jj-arrow-anim inline-flex mr-2" style={{ color: '#FFFFFF' }}>
-                <ArrowLeft className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              <span className="jj-arrow-anim inline-flex mr-2" style={{ color: '#5B21B6' }}>
+                <ArrowLeft className="w-4 h-4" style={{ color: '#5B21B6', stroke: '#5B21B6' }} />
               </span>
-              <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Back to Portal</span>
+              <span style={{ color: '#5B21B6', WebkitTextFillColor: '#5B21B6' }}>Back to Portal</span>
             </Button>
 
-
-            {/* Header */}
-            <div className="text-center mb-8">
-              <Badge
+            <div className="text-center">
+              <span
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
                 data-no-contrast-guard
-                className="mb-3 bg-white text-[#102540] border border-white px-4 py-1.5 hover:bg-white"
-                style={{ backgroundColor: '#FFFFFF', color: '#102540' }}
+                style={{
+                  background: "linear-gradient(135deg, #5B21B6 0%, #4C1D95 100%)",
+                  color: "#FFFFFF",
+                  WebkitTextFillColor: "#FFFFFF",
+                  border: "1px solid #A855F7",
+                  boxShadow: "0 6px 16px -8px rgba(91,33,182,0.55)",
+                }}
               >
-                <Wand2 className="w-3.5 h-3.5 mr-2" style={{ color: '#102540' }} /> AI-Powered
-              </Badge>
-              <h1 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: '#FFFFFF' }}>
+                <Wand2 className="w-3.5 h-3.5" /> AI-Powered
+              </span>
+              <h1
+                className="text-3xl md:text-4xl font-bold mb-3"
+                data-no-contrast-guard
+                style={{
+                  background: "linear-gradient(135deg, #2E1065 0%, #5B21B6 45%, #4C1D95 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  letterSpacing: "-0.02em",
+                }}
+              >
                 Smart Listing Creator
               </h1>
-              <p className="text-sm font-medium" style={{ color: 'rgba(255,255,255,0.85)' }}>
-                Upload your documents and let AI create a professional listing for you
+              <p className="text-[#1A1A1A]/80 mb-6">
+                Upload your documents and let AI create a professional listing for you.
               </p>
-            </div>
 
-            {/* Draft Action Bar + Progress steps — white card on navy shell */}
-            <div
-              className="mb-8 rounded-2xl bg-white border border-white overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.18)]"
-              data-no-contrast-guard
-            >
-              <div className="[&>div]:mb-0 [&>div]:rounded-none [&>div]:border-0 [&>div]:bg-white">
+              <div className="[&>div]:mb-0">
                 <FormDraftBar
                   hasDraft={phase !== 'upload' || uploadedDocs.length > 0}
                   onSaveDraft={() => {
@@ -682,26 +684,83 @@ const ListingPortalSubmit = () => {
                     toast.info("New listing started");
                   }}
                   label="Listing"
-                  theme="blue"
+                  theme="gold"
                 />
               </div>
-
-              {/* Progress indicator — navy on white */}
-              <div className="border-t border-[#102540]/15 px-6 py-4 bg-white">
-                <div className="flex gap-1.5 max-w-3xl mx-auto">
-                  {PHASES.map((step, i) => {
-                    const stepIndex = getPhaseIndex();
-                    return (
-                      <div key={step} className="flex-1">
-                        <div className={`h-1.5 rounded-full transition-all ${i <= stepIndex ? 'bg-[#102540]' : 'bg-[#102540]/15'}`} />
-                        <p className={`text-[9px] mt-1 text-center font-medium ${i <= stepIndex ? 'text-[#102540]' : 'text-[#102540]/50'}`}>{step}</p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
             </div>
+          </div>
+        </div>
+      </div>
 
+      {/* Layer 2 — dark purple band with horizontal step header + centered phase card */}
+      <div
+        className="pb-16 pt-8 relative"
+        style={{ background: "linear-gradient(135deg, #2E1065 0%, #4C1D95 50%, #0B0B0B 100%)" }}
+      >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "radial-gradient(circle at 85% 12%, rgba(168,85,247,0.22) 0%, transparent 55%)" }}
+        />
+        <div className="container mx-auto px-4 relative" ref={creatorRef}>
+          {/* Horizontal step header */}
+          <div className="max-w-5xl mx-auto mb-8" data-no-contrast-guard data-allow-dark-cta>
+            <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
+
+
+              {PHASES.map((step, i) => {
+                const Icon = PHASE_ICONS[i] || Sparkles;
+                const isActive = i === phaseIndex;
+                const isDone = i < phaseIndex;
+                return (
+                  <div
+                    key={step}
+                    data-no-contrast-guard
+                    className="flex flex-col items-center min-w-[88px] transition-all"
+                  >
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 border-2 transition-all ${
+                        isActive
+                          ? 'border-white text-white shadow-lg [&_svg]:!text-white'
+                          : isDone
+                            ? 'border-white/80 text-white [&_svg]:!text-white'
+                            : 'border-white/40 text-white/70 [&_svg]:!text-white/70'
+                      }`}
+                      style={isActive
+                        ? { background: 'linear-gradient(135deg, #A855F7 0%, #5B21B6 100%)' }
+                        : isDone
+                          ? { backgroundColor: 'rgba(255,255,255,0.18)' }
+                          : { backgroundColor: 'rgba(255,255,255,0.08)' }
+                      }
+                    >
+                      {isDone ? <Check className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
+                    </div>
+                    <span
+                      className="text-xs text-center whitespace-nowrap"
+                      style={{
+                        color: isActive ? '#FFFFFF' : 'rgba(255,255,255,0.75)',
+                        WebkitTextFillColor: isActive ? '#FFFFFF' : 'rgba(255,255,255,0.75)',
+                        fontWeight: isActive ? 600 : 400,
+                      }}
+                    >
+                      {step}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Centered light ombre purple card holding the active phase */}
+          <div className="max-w-3xl mx-auto">
+            <div
+              className="rounded-2xl p-6 md:p-8 shadow-xl"
+              style={{
+                background: "linear-gradient(135deg, #EFE4FF 0%, #FFFFFF 50%, #E1CFFF 100%)",
+                border: "1.5px solid #5B21B6",
+                boxShadow: "0 24px 60px -28px rgba(91,33,182,0.45)",
+              }}
+            >
             <AnimatePresence mode="wait">
               {/* ========== UPLOAD PHASE ========== */}
               {phase === 'upload' && (
@@ -1466,10 +1525,12 @@ const ListingPortalSubmit = () => {
                 </motion.div>
               )}
             </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </main>
+
   );
 };
 
