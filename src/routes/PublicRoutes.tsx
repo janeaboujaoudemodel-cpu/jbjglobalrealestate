@@ -410,8 +410,7 @@ export const PublicRoutes = () => (
     <Route path="/interior-design-ai" element={<AuthRequiredRoute><InteriorDesignAI /></AuthRequiredRoute>} />
     <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
     <Route path="/investor-hub" element={<AuthRequiredRoute><ModeRequiredRoute modes={['investor']}><InvestorHub /></ModeRequiredRoute></AuthRequiredRoute>} />
-    {/* /broker-hub fully retired — redirect any visitor to Broker Portal / Owner Command Center */}
-    <Route path="/broker-hub" element={<OwnerAwareBrokerRedirect />} />
+    {/* /broker-hub fully deleted — no route, no redirect. Falls through to NotFound. */}
     <Route path="/jbj-academy" element={<AuthRequiredRoute><JBJAcademy /></AuthRequiredRoute>} />
     {/* /academy/graduates retired — merged into /jbj-academy */}
     <Route path="/broker-portal" element={<OwnerAwareBrokerRedirect />} />
