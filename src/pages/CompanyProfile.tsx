@@ -57,7 +57,7 @@ function SectionShell({
 }) {
   return (
     <section className={`py-8 md:py-10 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] ${className ?? ""}`.trim()}>
-      <div className="jj-layer-2">
+      <div className="jj-layer-2 surface-champagne" data-surface="champagne">
         <div className="w-full px-4 sm:px-6 lg:px-8">{children}</div>
       </div>
     </section>
@@ -490,7 +490,7 @@ const CompanyProfile = () => {
         >
           <div className="text-center mb-8">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Contents</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-4">
               Table of Contents
             </h2>
           </div>
@@ -526,8 +526,8 @@ const CompanyProfile = () => {
                   <span className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/20 flex items-center justify-center text-[#B89555] text-sm font-medium flex-shrink-0">
                     {index + 1}
                   </span>
-                  <span className="text-white/80 text-sm flex-1 group-hover:text-[#B89555] transition-colors">{item.title}</span>
-                  <ChevronRight className="w-4 h-4 text-white/85 group-hover:text-[#B89555] transition-colors flex-shrink-0" />
+                  <span className="text-[#1A1A1A]/80 text-sm flex-1 group-hover:text-[#B89555] transition-colors">{item.title}</span>
+                  <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70 group-hover:text-[#B89555] transition-colors flex-shrink-0" />
                 </a>
               ))}
             </div>
@@ -548,7 +548,7 @@ const CompanyProfile = () => {
         >
           <div className="text-center mb-12">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Overview</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-6">
               Company Overview
             </h2>
           </div>
@@ -573,10 +573,10 @@ const CompanyProfile = () => {
         >
           <div className="text-center mb-12">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Ecosystem</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-4">
               Platform Positioning
             </h2>
-            <p className="text-white/70 max-w-2xl mx-auto">{PROFILE_CONTENT.platformPositioning}</p>
+            <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">{PROFILE_CONTENT.platformPositioning}</p>
           </div>
           <motion.div
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
@@ -609,10 +609,10 @@ const CompanyProfile = () => {
           >
             <div className="text-center mb-10">
               <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Watch</span>
-              <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-4">
                 Company Introduction
               </h2>
-              <p className="text-white/90 max-w-xl mx-auto">
+              <p className="text-[#1A1A1A]/80 max-w-xl mx-auto">
                 Discover our vision, values, and commitment to excellence in Dubai real estate.
               </p>
             </div>
@@ -637,7 +637,7 @@ const CompanyProfile = () => {
         >
           <div className="text-center mb-12">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Our Story</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-6">
               Brand Story
             </h2>
           </div>
@@ -681,7 +681,7 @@ const CompanyProfile = () => {
 
           <div className="text-center mb-12">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Our Foundation</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold">
               Core Values
             </h2>
           </div>
@@ -710,7 +710,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="services" className="text-center mb-12">
           <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">What We Do</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold">
+          <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold">
             Services
           </h2>
         </div>
@@ -746,10 +746,10 @@ const CompanyProfile = () => {
         <div id="ai-tools" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Technology</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-4">
               AI Tools & Creativity
             </h2>
-            <p className="text-white/70 max-w-2xl mx-auto">
+            <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
               JBJ Global Real Estate integrates advanced AI tools and creative capabilities into its platform — enhancing the quality, speed, and impact of property marketing, client communication, and content production.
             </p>
           </div>
@@ -778,10 +778,10 @@ const CompanyProfile = () => {
         <div id="marketplace" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Platform</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-4">
               Real Estate Marketplace
             </h2>
-            <p className="text-white/70 max-w-2xl mx-auto">{PROFILE_CONTENT.marketplace.intro}</p>
+            <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">{PROFILE_CONTENT.marketplace.intro}</p>
           </div>
           <motion.div
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
@@ -810,10 +810,10 @@ const CompanyProfile = () => {
         <div id="dubai-destination" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Location</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-4">
               Dubai — A Global Real Estate Destination
             </h2>
-            <p className="text-white/70 max-w-2xl mx-auto">{PROFILE_CONTENT.dubaiDestination.intro}</p>
+            <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">{PROFILE_CONTENT.dubaiDestination.intro}</p>
           </div>
           <motion.div
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
@@ -839,10 +839,10 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="areas" className="text-center mb-12">
           <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Where We Operate</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-4">
             Prime Areas of Focus
           </h2>
-          <p className="text-white/70 max-w-2xl mx-auto">
+          <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
             JBJ Global Real Estate focuses on Dubai's highest-demand residential communities — selected for their location quality, lifestyle appeal, and long-term investment value.
           </p>
         </div>
@@ -939,7 +939,7 @@ const CompanyProfile = () => {
         <div id="platform-benefits" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Value</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold">
               Platform Benefits
             </h2>
           </div>
@@ -979,10 +979,10 @@ const CompanyProfile = () => {
         <div id="portfolio" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Portfolio</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-4">
               Portfolio Highlights
             </h2>
-            <p className="text-white/70 max-w-2xl mx-auto">
+            <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
               A selection of the property categories and communities represented within the JBJ Global Real Estate portfolio.
             </p>
           </div>
@@ -994,10 +994,10 @@ const CompanyProfile = () => {
         <div id="investor-journey" className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Process</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-4">
               The Investor Journey
             </h2>
-            <p className="text-white/70 max-w-2xl mx-auto">
+            <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
               A structured, advisory-led process designed to guide investors from initial interest through to successful property acquisition.
             </p>
           </div>
@@ -1023,10 +1023,10 @@ const CompanyProfile = () => {
         <div id="partner-network" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Network</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-4">
               Partner Network
             </h2>
-            <p className="text-white/70 max-w-2xl mx-auto">{PROFILE_CONTENT.partnerNetwork.intro}</p>
+            <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">{PROFILE_CONTENT.partnerNetwork.intro}</p>
           </div>
           <motion.div
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
@@ -1052,7 +1052,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="process" className="text-center mb-12">
           <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">How We Work</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold">
+          <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold">
             Our Process
           </h2>
         </div>
@@ -1078,7 +1078,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="differentiators" className="text-center mb-12">
           <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Our Edge</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold">
+          <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold">
             Why JBJ
           </h2>
         </div>
@@ -1094,7 +1094,7 @@ const CompanyProfile = () => {
               <div className="jj-icon-box-active w-10 h-10">
                 <CheckCircle className="w-5 h-5" />
               </div>
-              <span className="text-white/80 text-sm">{item}</span>
+              <span className="text-[#1A1A1A]/80 text-sm">{item}</span>
             </motion.div>
           ))}
         </motion.div>
@@ -1104,7 +1104,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="client-experience" className="text-center mb-12">
           <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Our Commitment</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold">
+          <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold">
             Client Experience Standards
           </h2>
         </div>
@@ -1120,7 +1120,7 @@ const CompanyProfile = () => {
               <div className="jj-icon-box-active w-10 h-10">
                 <CheckCircle className="w-5 h-5" />
               </div>
-              <span className="text-white/80">{item}</span>
+              <span className="text-[#1A1A1A]/80">{item}</span>
             </motion.div>
           ))}
         </motion.div>
@@ -1149,7 +1149,7 @@ const CompanyProfile = () => {
           <div id="founder" className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Leadership</span>
-               <h2 className="text-white text-3xl md:text-4xl font-bold">
+               <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold">
                 Founder & CEO
               </h2>
             </div>
@@ -1199,7 +1199,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="snapshot" className="text-center mb-12">
           <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">At a Glance</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold">
+          <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold">
             Company Snapshot
           </h2>
         </div>
@@ -1224,8 +1224,8 @@ const CompanyProfile = () => {
                   <item.icon className="w-5 h-5" />
                 </div>
                 <div>
-                   <p className="text-white/70 text-xs uppercase">{item.label}</p>
-                  <p className="text-white">{item.value}</p>
+                   <p className="text-[#1A1A1A]/70 text-xs uppercase">{item.label}</p>
+                  <p className="text-[#1A1A1A]">{item.value}</p>
                 </div>
               </div>
             ))}
@@ -1234,8 +1234,8 @@ const CompanyProfile = () => {
                 <Clock className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-white/70 text-xs uppercase">Working Hours</p>
-                <p className="text-white">{PROFILE_CONTENT.companySnapshot.workingHours}</p>
+                <p className="text-[#1A1A1A]/70 text-xs uppercase">Working Hours</p>
+                <p className="text-[#1A1A1A]">{PROFILE_CONTENT.companySnapshot.workingHours}</p>
               </div>
             </div>
           </div>
@@ -1246,7 +1246,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div className="text-center mb-12">
           <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Get Started</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold">
+          <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold">
             Ready to Connect?
           </h2>
         </div>
@@ -1287,10 +1287,10 @@ const CompanyProfile = () => {
         >
           <div className="text-center mb-8">
             <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Download</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-4">
               Get the Full Company Profile
             </h2>
-            <p className="text-white/70">
+            <p className="text-[#1A1A1A]/70">
               18-page Company Profile • Professional Format
             </p>
           </div>
@@ -1299,7 +1299,7 @@ const CompanyProfile = () => {
             <ConsistentBook3D onClick={generatePDF} isGenerating={isGenerating} />
 
             <div className="mt-8 flex flex-col items-center gap-4">
-              <p className="text-white/90 text-sm">
+              <p className="text-[#1A1A1A]/80 text-sm">
                 JBJ_Global_Real_Estate_Company_Profile.pdf
               </p>
               <div className="flex flex-wrap justify-center gap-3">
