@@ -416,8 +416,9 @@ const SupportTicketBox = () => {
   };
 
   return (
-    <section className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-      <div className="jj-layer-2">
+    <section className="py-8 md:py-10">
+      <div className="container mx-auto px-4">
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -502,7 +503,7 @@ const SupportTicketBox = () => {
                     </DialogTrigger>
 
 
-                      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] max-w-2xl max-h-[90vh] z-[10050] flex flex-col overflow-hidden shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)] p-0 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                      <DialogContent className="bg-[#FDFBF7] border border-[#B89555]/40 max-w-2xl max-h-[90vh] z-[10050] flex flex-col overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.25)] p-0">
                       <DialogHeader className="flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] z-10 pb-4 px-6 pt-6 border-b border-[#B89555]/20">
                         <DialogTitle className="text-[#1A1A1A] text-xl font-bold flex items-center gap-2">
                           <PremiumHeadsetIcon size={20} color="#dc2626" />

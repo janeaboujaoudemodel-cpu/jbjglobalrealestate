@@ -287,39 +287,33 @@ END:VCARD`;
   return (
     <>
       <SEOHead {...pagesSEO.contact} />
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <div className="min-h-screen bg-[#F7F2EA]" data-marketing-page>
       {/* Hero Section with Video */}
-      <section className="relative pt-28 pb-20 md:pt-36 md:pb-28" data-surface="dark">
+      <section className="relative pt-28 pb-16 md:pt-36 md:pb-20 overflow-hidden" data-surface="dark" data-hero-dark>
         <div className="absolute inset-0">
           <VideoBackground src={contactHeroVideo} poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/75 to-black/95" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/80" />
         </div>
-        <div className="relative container mx-auto px-4">
-          <p data-no-contrast-guard className="text-sm uppercase tracking-[0.2em] mb-4" style={{ color: '#FDE68A' }}>Real Estate Brokerage</p>
+        <div className="relative container mx-auto px-4 text-center">
+          <p data-no-contrast-guard className="text-xs uppercase tracking-[0.32em] mb-5" style={{ color: '#E8C77A' }}>JBJ Global Real Estate</p>
           <h1
             data-no-contrast-guard
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
+            className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight mb-5 max-w-4xl mx-auto leading-[1.1]"
             style={{ color: '#ffffff' }}
           >
-            Contact JBJ Global Real Estate
+            A direct line to our team.
           </h1>
-          <p data-no-contrast-guard className="text-xl md:text-2xl font-medium max-w-3xl leading-relaxed mb-4" style={{ color: '#ffffff' }}>
-            Professional Support. Clear Communication. Trusted Guidance.
-          </p>
-          <p data-no-contrast-guard className="text-base md:text-lg max-w-3xl leading-relaxed" style={{ color: 'rgba(255,255,255,0.92)' }}>
-            Whether you are an investor, property owner, broker, or partner, our team is here to support you with accurate information, structured guidance, and accountable follow-up. Choose the option below that best fits your request.
+          <p data-no-contrast-guard className="text-base md:text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.88)' }}>
+            Professional support, clear communication, trusted guidance. Whether you are an investor, owner, broker or partner, our team is ready to assist with accurate information and accountable follow up.
           </p>
         </div>
       </section>
 
-      {/* Contact Cards - 3-Layer System with thin black contour */}
-      <section className="py-10 bg-[#1A1A1A]">
-        {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
-          {/* Inner Champagne Layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
-            <div className="mb-6 h-px w-full bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      {/* Contact Cards - clean champagne band, no black gutter */}
+      <section className="py-8 md:py-10">
+        <div className="container mx-auto px-4">
+          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-5 md:p-6 shadow-[0_2px_12px_rgba(184,149,85,0.08)]">
+            <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-[#B89555]/20">
               {contactCards.map((card) => (
                 <div
                   key={card.title}
@@ -328,13 +322,13 @@ END:VCARD`;
                     else if (card.action === "meeting") window.location.assign("/book");
                     else if (card.action && card.clickable) window.location.href = card.action;
                   }}
-                  className={`group bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-xl p-5 transition-all duration-300 hover:border-[#1A1A1A] hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 hover:scale-[1.02] ${card.clickable ? "cursor-pointer" : ""}`}
+                  className={`group flex flex-col items-center text-center px-4 py-3 transition-all duration-300 ${card.clickable ? "cursor-pointer hover:-translate-y-0.5" : ""}`}
                 >
-                  <div className="w-10 h-10 bg-transparent border-2 border-[#B89555]/50 rounded-lg flex items-center justify-center mb-3 transition-all duration-300 group-hover:border-[#1A1A1A] group-hover:bg-[#EFE6D6]/10 group-hover:scale-110">
-                    <card.icon className="w-5 h-5 text-[#1A1A1A] transition-all duration-300 group-hover:text-[#1A1A1A]" />
+                  <div className="w-11 h-11 rounded-full border border-[#B89555]/50 bg-[#F7F2EA] flex items-center justify-center mb-3 transition-all duration-300 group-hover:border-[#B89555] group-hover:bg-[#EFE6D6]">
+                    <card.icon className="w-[18px] h-[18px] text-[#1A1A1A]" />
                   </div>
-                  <h3 className="font-semibold text-sm mb-1 text-[#1A1A1A] transition-colors">{card.title}</h3>
-                  <p className="text-sm font-medium text-[#1A1A1A]/80 transition-colors group-hover:text-[#1A1A1A]">{card.value}</p>
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 mb-1.5 font-medium">{card.title}</p>
+                  <p className="text-sm font-medium text-[#1A1A1A] leading-snug">{card.value}</p>
                 </div>
               ))}
             </div>
@@ -342,11 +336,11 @@ END:VCARD`;
         </div>
       </section>
 
-      {/* Consultation Form Section - Form IS the 3rd layer (directly on active champagne, no extra pearl wrapper) */}
-      <section className="py-16 md:py-20 bg-[#1A1A1A]">
-        {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 md:p-6">
-          {/* Form IS the 3rd layer - champagne pearl styling */}
+
+      {/* Consultation Form Section */}
+      <section className="py-8 md:py-12">
+        <div className="container mx-auto px-4">
+
           <div className="max-w-3xl mx-auto">
             {isSuccess ? (
               /* Success State */
@@ -775,114 +769,81 @@ END:VCARD`;
       {/* Support Ticket Section - Above "Prefer to Reach Us Directly" */}
       <SupportTicketBox />
 
-      {/* Direct Contact CTAs - "Prefer to Reach Us Directly" - Cards ARE the 3rd layer (on active champagne) */}
       {/* Direct Contact Section */}
-      <section className="py-12 bg-[#1A1A1A]">
-        {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
-          <h2 className="text-center text-2xl md:text-3xl font-bold mb-3">
-            <span className="text-[#1A1A1A]">Prefer to Reach Us</span>{" "}
-            <span className="text-[#1A1A1A]">Directly?</span>
-          </h2>
-          <p className="text-center text-[#1A1A1A]/70 text-sm mb-6 max-w-2xl mx-auto">
-            For general inquiries, consultations, or non-technical requests, you may contact us through the channels below.
-          </p>
-          {/* Cards are the 3rd layer - champagne pearl styling */}
-          <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-            {/* WhatsApp CTA */}
-            <a 
-              href={getWhatsAppUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
-            >
-              <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-green-500/30">
-                <MessageCircle className="w-6 h-6 text-green-600" />
-              </div>
-              <div>
-                <h3 className="text-[#1A1A1A] font-semibold mb-0.5">
-                  WhatsApp
-                </h3>
-                <p className="text-[#1A1A1A]/80 text-sm font-medium">+971-5659-11000</p>
-              </div>
-            </a>
+      <section className="py-8 md:py-10">
+        <div className="container mx-auto px-4">
+          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)]">
+            <h2 className="text-center text-2xl md:text-3xl font-light tracking-tight text-[#1A1A1A] mb-3">
+              Prefer to reach us directly?
+            </h2>
+            <p className="text-center text-[#1A1A1A]/65 text-sm mb-6 max-w-2xl mx-auto">
+              For general inquiries, consultations or non-technical requests, contact us through the channels below.
+            </p>
+            <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+              <a
+                href={getWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-5 transition-all group hover:border-[#B89555] hover:-translate-y-0.5"
+              >
+                <div className="w-11 h-11 bg-[#FDFBF7] border border-[#B89555]/40 rounded-full flex items-center justify-center group-hover:bg-[#EFE6D6] transition-colors">
+                  <MessageCircle className="w-5 h-5 text-[#1A1A1A]" />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 font-medium mb-0.5">WhatsApp</p>
+                  <p className="text-[#1A1A1A] text-sm font-medium">+971-5659-11000</p>
+                </div>
+              </a>
 
-            {/* Call CTA */}
-            <a 
-              href={getCallUrl()}
-              className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
-            >
-              <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/30">
-                <Phone className="w-6 h-6 text-blue-600" />
-              </div>
-              <div>
-                <h3 className="text-[#1A1A1A] font-semibold mb-0.5">
-                  Call Us
-                </h3>
-                <p className="text-[#1A1A1A]/80 text-sm font-medium">+971-5659-11000</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Important Notice - 3-Layer System */}
-      <section className="py-10 bg-[#1A1A1A]">
-        {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
-          {/* Inner Pearl Layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
-            <div className="max-w-3xl mx-auto">
-              <div className="flex items-center gap-3 mb-4">
-                <IconTile icon={Shield} tone="ink" size="md" />
-
-                <h3 className="text-[#1A1A1A] font-semibold text-lg">
-                  <span className="text-[#1A1A1A]">Important</span> Notice
-                </h3>
-              </div>
-              
-              <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
-                JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling, and renting properties. We do not provide legal, mortgage, or immigration services directly. Where required, we may introduce independent, licensed partners. Any engagement with partner services is contracted directly between the client and the partner under the partner's own licence and terms.
-              </p>
+              <a
+                href={getCallUrl()}
+                className="flex items-center gap-4 bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-5 transition-all group hover:border-[#B89555] hover:-translate-y-0.5"
+              >
+                <div className="w-11 h-11 bg-[#FDFBF7] border border-[#B89555]/40 rounded-full flex items-center justify-center group-hover:bg-[#EFE6D6] transition-colors">
+                  <Phone className="w-5 h-5 text-[#1A1A1A]" />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 font-medium mb-0.5">Call Us</p>
+                  <p className="text-[#1A1A1A] text-sm font-medium">+971-5659-11000</p>
+                </div>
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Appointments Section - 3-Layer System */}
-      <section className="py-10 bg-[#1A1A1A]">
-        {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
-          {/* Inner Pearl Layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
-            <div className="max-w-3xl mx-auto text-center">
-              <IconTile icon={Calendar} tone="ink" size="md" className="mx-auto mb-4" />
-
-              <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">
-                Appointments
-              </h3>
-              <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
-                If an in-person meeting is required, availability is confirmed by appointment only after initial contact or ticket submission.
-              </p>
+      {/* Important Notice */}
+      <section className="py-8 md:py-10">
+        <div className="container mx-auto px-4">
+          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)] max-w-4xl mx-auto">
+            <div className="flex items-center gap-3 mb-3">
+              <IconTile icon={Shield} tone="ink" size="md" />
+              <h3 className="text-[#1A1A1A] font-semibold text-lg">Important Notice</h3>
             </div>
+            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
+              JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling and renting properties. We do not provide legal, mortgage or immigration services directly. Where required, we may introduce independent, licensed partners. Any engagement with partner services is contracted directly between the client and the partner under the partner's own licence and terms.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Closing Statement - 3-Layer System */}
-      <section className="py-10 bg-[#1A1A1A]">
-        {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
-          {/* Inner Pearl Layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
-            <div className="max-w-3xl mx-auto text-center">
-              <p className="text-[#1A1A1A]/70 text-base leading-relaxed">
-                At JBJ Global Real Estate, communication is handled with structure, discretion, and accountability. We look forward to assisting you.
-              </p>
-            </div>
+      {/* Appointments + Closing - combined to reduce vertical gap */}
+      <section className="py-8 md:py-12">
+        <div className="container mx-auto px-4">
+          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)] max-w-4xl mx-auto text-center">
+            <IconTile icon={Calendar} tone="ink" size="md" className="mx-auto mb-4" />
+            <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">Appointments</h3>
+            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-5 max-w-2xl mx-auto">
+              If an in-person meeting is required, availability is confirmed by appointment only after initial contact or ticket submission.
+            </p>
+            <div className="h-px w-24 bg-[#B89555]/40 mx-auto mb-5" />
+            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed max-w-2xl mx-auto">
+              At JBJ Global Real Estate, communication is handled with structure, discretion and accountability. We look forward to assisting you.
+            </p>
           </div>
         </div>
       </section>
+
 
       {/* Phone Actions Dialog */}
       <Dialog open={phoneActionsOpen} onOpenChange={setPhoneActionsOpen}>
