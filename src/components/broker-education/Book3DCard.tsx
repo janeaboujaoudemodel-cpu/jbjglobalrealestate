@@ -59,7 +59,7 @@ export function Book3DCard({
       className="group h-full"
     >
       <div
-        className="flex h-full cursor-pointer flex-col bg-transparent"
+        className={`flex h-full flex-col bg-transparent ${effectivelyLocked && !canPreviewLocked ? "cursor-default" : "cursor-pointer"}`}
         onClick={() => {
           if (!effectivelyLocked || canPreviewLocked) onOpen(book);
         }}
