@@ -14,6 +14,7 @@
 import { lazy, Suspense, useEffect, useMemo } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useDisplayFirstName } from "@/hooks/useDisplayFirstName";
 import {
   Sparkles,
   Wand2,
