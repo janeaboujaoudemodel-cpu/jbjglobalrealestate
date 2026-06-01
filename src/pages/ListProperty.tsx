@@ -242,57 +242,8 @@ const ListProperty = () => {
               dashboard.
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => setMode("manual")}
-                data-allow-dark-cta
-                data-no-contrast-guard
-                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:brightness-110"
-                style={{
-                  backgroundColor: "#15803D",
-                  color: "#FFFFFF",
-                  border: "1px solid #15803D",
-                  WebkitTextFillColor: "#FFFFFF",
-                  boxShadow: "0 10px 28px -12px rgba(21,128,61,0.55)",
-                }}
-              >
-                <ClipboardCheck className="w-4 h-4" style={{ color: "#FFFFFF" }} />
-                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>List Manually</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setMode("ai")}
-                data-allow-dark-cta
-                data-no-contrast-guard
-                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:brightness-110"
-                style={{
-                  backgroundColor: "#5B21B6",
-                  color: "#FFFFFF",
-                  border: "1px solid #A855F7",
-                  WebkitTextFillColor: "#FFFFFF",
-                  boxShadow: "0 10px 28px -12px rgba(91,33,182,0.55)",
-                }}
-              >
-                <Wand2 className="w-4 h-4" style={{ color: "#FFFFFF" }} />
-                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>List with AI</span>
-                <Sparkles className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} />
-              </button>
-              <a
-                href="#my-submissions"
-                className="jj-white-ring inline-flex items-center gap-2 px-5 h-11 text-sm font-semibold transition-all hover:brightness-110"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.06)",
-                  color: "#FFFFFF",
-                  WebkitTextFillColor: "#FFFFFF",
-                }}
-                data-no-contrast-guard
-                data-allow-dark-cta
-              >
-                View my submissions →
-              </a>
-            </div>
           </motion.div>
+
         </div>
       </section>
 
