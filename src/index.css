@@ -4825,3 +4825,128 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
   60%  { box-shadow: 0 0 0 8px rgba(16,185,129,0.00); }
   100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.00); }
 }
+
+/* ──────────────────────────────────────────────────────────────
+   AI Listing Shell — navy background, white cards, ink text.
+   Scoped to /list-property?mode=ai wizard (ListingPortalSubmit).
+   ────────────────────────────────────────────────────────────── */
+[data-ai-listing-shell] .bg-\[\#FDFBF7\],
+[data-ai-listing-shell] .bg-\[\#FDFBF7\]\/70,
+[data-ai-listing-shell] .bg-\[\#FDFBF7\]\/80,
+[data-ai-listing-shell] .bg-\[\#FDFBF7\]\/60,
+[data-ai-listing-shell] .bg-\[\#FDFBF7\]\/50,
+[data-ai-listing-shell] .bg-\[\#FDFBF7\]\/40,
+[data-ai-listing-shell] .bg-\[\#F7F2EA\],
+[data-ai-listing-shell] .bg-\[\#EFE6D6\]\/10,
+[data-ai-listing-shell] .bg-\[\#EFE6D6\]\/15 {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+/* Soft champagne raised → light navy tint pane (the -m-3 outer panels) */
+[data-ai-listing-shell] .bg-\[\#102540\]\/15 {
+  background-color: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+}
+
+/* Gold hairline borders → navy hairline inside white cards */
+[data-ai-listing-shell] .border-\[\#B89555\]\/15,
+[data-ai-listing-shell] .border-\[\#B89555\]\/20,
+[data-ai-listing-shell] .border-\[\#B89555\]\/30,
+[data-ai-listing-shell] .border-\[\#B89555\]\/40,
+[data-ai-listing-shell] .border-\[\#B89555\]\/50 {
+  border-color: rgba(16,37,64,0.18) !important;
+}
+
+/* Dashed upload zone */
+[data-ai-listing-shell] .border-dashed.border-\[\#B89555\]\/40,
+[data-ai-listing-shell] .border-dashed {
+  border-color: rgba(16,37,64,0.35) !important;
+}
+[data-ai-listing-shell] .border-dashed:hover {
+  border-color: rgba(16,37,64,0.6) !important;
+}
+
+/* Selected listing-type card: navy outline + white bg, ink check */
+[data-ai-listing-shell] button.border-\[\#B89555\]\/50 {
+  border-color: #102540 !important;
+  background-color: #FFFFFF !important;
+}
+[data-ai-listing-shell] button .bg-\[\#EFE6D6\].rounded-full {
+  background-color: #102540 !important;
+}
+[data-ai-listing-shell] button .bg-\[\#EFE6D6\].rounded-full svg {
+  color: #FFFFFF !important;
+}
+
+/* Inputs / textareas inside the wizard cards */
+[data-ai-listing-shell] input.bg-\[\#FDFBF7\],
+[data-ai-listing-shell] textarea.bg-\[\#FDFBF7\] {
+  background-color: #FFFFFF !important;
+  color: #1A1A1A !important;
+  border-color: rgba(16,37,64,0.25) !important;
+}
+
+/* Tag pills (Google Drive / Bayut / etc) inside white cards */
+[data-ai-listing-shell] .bg-\[\#EFE6D6\]\/10.text-\[\#1A1A1A\] {
+  background-color: #FFFFFF !important;
+  border-color: rgba(16,37,64,0.15) !important;
+  color: #1A1A1A !important;
+}
+
+/* Primary champagne CTA buttons → navy on white */
+[data-ai-listing-shell] button.bg-\[\#EFE6D6\] {
+  background-color: #102540 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #102540 !important;
+}
+[data-ai-listing-shell] button.bg-\[\#EFE6D6\]:hover {
+  background-color: #1a3d63 !important;
+}
+[data-ai-listing-shell] button.bg-\[\#EFE6D6\] svg {
+  color: #FFFFFF !important;
+}
+
+/* Gold-bordered secondary buttons (Skip — Fill Manually) → navy outline */
+[data-ai-listing-shell] button.border-\[\#B89555\]\/50.text-\[\#B89555\],
+[data-ai-listing-shell] button.text-\[\#B89555\].border-\[\#B89555\]\/50 {
+  background-color: #FFFFFF !important;
+  color: #102540 !important;
+  border: 1.5px solid #102540 !important;
+}
+[data-ai-listing-shell] button.border-\[\#B89555\]\/50.text-\[\#B89555\]:hover {
+  background-color: rgba(16,37,64,0.05) !important;
+  color: #102540 !important;
+  border-color: #102540 !important;
+}
+[data-ai-listing-shell] button.border-\[\#B89555\]\/50.text-\[\#B89555\] svg {
+  color: #102540 !important;
+}
+
+/* Champagne gradient "Back" button on pricing phase → white + navy */
+[data-ai-listing-shell] button.bg-gradient-to-r.from-\[\#FDFBF7\] {
+  background: #FFFFFF !important;
+  color: #1A1A1A !important;
+  border: 1.5px solid #102540 !important;
+}
+[data-ai-listing-shell] button.bg-gradient-to-r.from-\[\#FDFBF7\]:hover {
+  background: rgba(16,37,64,0.05) !important;
+  color: #1A1A1A !important;
+}
+
+/* KPI / extracted-data mini cards (price predictor summary) */
+[data-ai-listing-shell] .bg-gradient-to-br.from-\[\#FDFBF7\] {
+  background: #FFFFFF !important;
+  border-color: rgba(16,37,64,0.15) !important;
+}
+
+/* Listing-type card placeholder image area */
+[data-ai-listing-shell] .from-\[\#FDFBF7\].to-\[\#F7F2EA\] {
+  background: linear-gradient(135deg, #F4F7FB, #E6ECF4) !important;
+}
+
+/* Hover lift on champagne button stays subtle */
+[data-ai-listing-shell] button.hover\:bg-\[\#1A1A1A\]:hover {
+  background-color: #102540 !important;
+  color: #FFFFFF !important;
+}
