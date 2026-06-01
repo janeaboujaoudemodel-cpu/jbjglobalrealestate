@@ -248,7 +248,11 @@ const ListProperty = () => {
       </section>
 
       {/* ───────────────── Purpose + Mode selector (mode-aware accent) ───────────────── */}
-      <section className="px-4 sm:px-6 md:px-10 mt-8 md:mt-10 pb-8 md:pb-10 relative z-10">
+      <section
+        className="px-4 sm:px-6 md:px-10 pt-8 md:pt-10 pb-8 md:pb-10 relative z-10"
+        style={{ background: ombreSoft(theme) }}
+      >
+
         <div className="max-w-5xl mx-auto">
           <div
             className="rounded-2xl p-4 sm:p-6 md:p-7 shadow-xl"
