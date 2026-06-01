@@ -47,7 +47,7 @@ const LandlordGuide = lazy(() => import("@/pages/LandlordGuide"));
 const LandlordRentalPortal = lazy(() => import("@/pages/LandlordRentalPortal"));
 const EducationHub = lazy(() => import("@/pages/EducationHub"));
 const InvestorEducation = lazy(() => import("@/pages/InvestorEducation"));
-const BrokerEducation = lazy(() => import("@/pages/BrokerEducation"));
+// BrokerEducation removed — content merged into JBJ Academy (/jbj-academy)
 const FAQ = lazy(() => import("@/pages/FAQ"));
 const InvestorFAQ = lazy(() => import("@/pages/InvestorFAQ"));
 const BuyerFAQ = lazy(() => import("@/pages/BuyerFAQ"));
