@@ -44,8 +44,6 @@ const Section = ({
   light?: boolean;
   id?: string;
 }) => {
-  // All sections now use 3-layer system on black background
-  return (
   // Cleaner, tighter section: single champagne band, one thin gold hairline
   return (
     <section
