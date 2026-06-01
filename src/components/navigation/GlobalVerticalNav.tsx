@@ -383,7 +383,6 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   ],
   company: [
     { label: 'About JBJ', icon: Users, href: '/about' },
-    { label: 'Our Team', icon: Users, href: '/team' },
     { label: 'The Founder', icon: User, href: '/founder' },
     { label: 'Contact Us', icon: Phone, href: '/contact' },
     { label: 'Careers', icon: GraduationCap, href: '/join' },
