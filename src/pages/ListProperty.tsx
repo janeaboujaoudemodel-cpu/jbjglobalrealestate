@@ -354,7 +354,7 @@ const ListProperty = () => {
         }
       >
         {mode === "pick" || !ActiveTab ? (
-          <PremiumModePicker onPick={setMode} />
+          <PremiumModePicker onPick={setMode} purpose={purpose} />
         ) : (
           <Suspense
             fallback={
