@@ -3335,11 +3335,14 @@ a[class*="bg-red-"]:hover {
 /* 4. Linear-gradient backgrounds that use gold endpoints. Tailwind emits
  *    `from-[#B89555]` / `to-[#A68444]` as classes; replace the actual
  *    rendered background image so the gradient flattens to cream. */
-[class*="from-[#B89555]"][class*="to-[#A68444]"]:not([data-no-gold-debrand]),
-[class*="from-[#b89555]"][class*="to-[#a68444]"]:not([data-no-gold-debrand]),
-[class*="from-[#A68444]"][class*="to-[#B89555]"]:not([data-no-gold-debrand]),
-[class*="bg-gradient-to-r"][class*="from-gold"]:not([data-no-gold-debrand]),
-[class*="bg-gradient-to-br"][class*="from-gold"]:not([data-no-gold-debrand]) {
+/* IMPORTANT: exclude gradient-text (bg-clip-text / text-transparent) — those
+ * use the gradient as the *text fill*, not a real surface fill, so they
+ * must not be remapped to a champagne block. */
+[class*="from-[#B89555]"][class*="to-[#A68444]"]:not([data-no-gold-debrand]):not([class*="bg-clip-text"]):not([class*="text-transparent"]),
+[class*="from-[#b89555]"][class*="to-[#a68444]"]:not([data-no-gold-debrand]):not([class*="bg-clip-text"]):not([class*="text-transparent"]),
+[class*="from-[#A68444]"][class*="to-[#B89555]"]:not([data-no-gold-debrand]):not([class*="bg-clip-text"]):not([class*="text-transparent"]),
+[class*="bg-gradient-to-r"][class*="from-gold"]:not([data-no-gold-debrand]):not([class*="bg-clip-text"]):not([class*="text-transparent"]),
+[class*="bg-gradient-to-br"][class*="from-gold"]:not([data-no-gold-debrand]):not([class*="bg-clip-text"]):not([class*="text-transparent"]) {
   background-image: none !important;
   background-color: #EFE6D6 !important;
   color: #1A1A1A;
