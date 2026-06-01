@@ -62,8 +62,7 @@ const MortgageCalculator = lazy(chunkImports.MortgageCalculator);
 const BrokerOnboardingBanner = lazy(chunkImports.BrokerOnboardingBanner);
 const JBJPodcastSection = lazy(chunkImports.JBJPodcastSection);
 const ResalePropertiesSection = lazy(chunkImports.ResalePropertiesSection);
-const DeveloperPortalCTA = lazy(() => import("@/components/home/DeveloperPortalCTA"));
-const CareersPortalShowcase = lazy(() => import("@/components/home/CareersPortalShowcase"));
+const ModePortalBanner = lazy(() => import("@/components/home/ModePortalBanner"));
 const CategorySelectorSection = lazy(() => import("@/components/home/CategorySelectorSection"));
 const CTABand = lazy(() => import("@/components/home/CTABand"));
 
@@ -315,23 +314,13 @@ const Index = () => {
       </div>
 
 
-      {/* DEVELOPER / INVESTOR / BROKER PORTAL CTA (mode-gated, one at a time) */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={700}>
-          <Suspense fallback={<SectionLoader />}>
-            <DeveloperPortalCTA />
-          </Suspense>
-        </LazyVisible>
+      {/* MODE-AWARE PORTAL BANNER — thin full-bleed strip, swaps with mode */}
+      <PremiumSectionCard padding="none" width="full" wrapperClassName="">
+        <Suspense fallback={null}>
+          <ModePortalBanner />
+        </Suspense>
       </PremiumSectionCard>
 
-      {/* CAREERS PORTAL — public, visible to all modes */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={700}>
-          <Suspense fallback={<SectionLoader />}>
-            <CareersPortalShowcase />
-          </Suspense>
-        </LazyVisible>
-      </PremiumSectionCard>
 
 
       {/* FEATURED LISTINGS */}
