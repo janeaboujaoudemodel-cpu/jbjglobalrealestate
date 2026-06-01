@@ -99,7 +99,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Meet the Team', href: '/team', icon: Users },
     { label: 'Awards', href: '/awards', icon: Award },
     { label: 'Philanthropy', href: '/philanthropy', icon: Globe },
-    { label: 'Press Kit', href: '/press-kit', icon: Newspaper },
+    
     { label: 'Contact Us', href: '/contact', icon: Phone },
     { label: 'Careers', href: '/join', icon: Briefcase },
     { label: 'Reviews', href: '/reviews', icon: Target },
