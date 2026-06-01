@@ -716,8 +716,6 @@ export default function GlobalVerticalNav() {
     collapseAfterNavigation();
   }, [collapseAfterNavigation]);
 
-  const [shortcutsExpanded, setShortcutsExpanded] = useState(false);
-
   const closeMegaMenu = useCallback(() => setActiveMegaMenu(null), []);
 
   // Close mega menu and auto-expand active section on route change
