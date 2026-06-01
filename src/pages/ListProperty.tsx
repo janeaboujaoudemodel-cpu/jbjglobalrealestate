@@ -269,9 +269,14 @@ const ListProperty = () => {
               </button>
               <a
                 href="#my-submissions"
-                className="text-sm font-medium underline-offset-4 hover:underline"
-                style={{ color: "rgba(255,255,255,0.85)", WebkitTextFillColor: "rgba(255,255,255,0.85)" }}
+                className="jj-white-ring inline-flex items-center gap-2 px-5 h-11 text-sm font-semibold transition-all hover:brightness-110"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.06)",
+                  color: "#FFFFFF",
+                  WebkitTextFillColor: "#FFFFFF",
+                }}
                 data-no-contrast-guard
+                data-allow-dark-cta
               >
                 View my submissions →
               </a>
@@ -439,27 +444,43 @@ function SegmentedPill({
 
 /* ───────────────── Premium two-card mode picker ───────────────── */
 function PremiumModePicker({ onPick }: { onPick: (m: Mode) => void }) {
+  // Pick screen uses the navy hero theme as its accent system, so cards
+  // visually match the band above. Inner Start CTAs are white-fill / navy-ink.
+  const accent = THEME_NAVY.primary;          // #102540
+  const accentDeep = THEME_NAVY.primaryDeep;  // #0B1B33
+  const accentGlow = THEME_NAVY.badgeBorder;  // purple #A855F7
+  const cardGradient =
+    `linear-gradient(135deg, ${accentDeep} 0%, ${accent} 55%, #0B0B0B 100%)`;
+
   return (
     <div className="max-w-5xl mx-auto px-2 sm:px-0">
       <div className="text-center mb-7">
         <span
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold"
           style={{
-            backgroundColor: CHAMPAGNE_RAISED,
-            color: INK,
-            border: `1px solid ${GOLD}`,
+            background: cardGradient,
+            color: "#FFFFFF",
+            WebkitTextFillColor: "#FFFFFF",
+            border: `1px solid ${accentGlow}`,
+            boxShadow: `0 10px 24px -12px ${accent}99`,
           }}
+          data-no-contrast-guard
+          data-allow-dark-cta
         >
-          <ShieldCheck className="w-3.5 h-3.5" style={{ color: INK }} />
+          <ShieldCheck className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} />
           Choose how to list
         </span>
         <h2
           className="mt-4 text-2xl md:text-3xl font-bold tracking-tight"
-          style={{ color: INK }}
+          style={{ color: accent, WebkitTextFillColor: accent }}
+          data-no-contrast-guard
         >
           How would you like to add your property?
         </h2>
-        <p className="mt-2 text-sm md:text-base max-w-2xl mx-auto" style={{ color: INK + "B3" }}>
+        <p
+          className="mt-2 text-sm md:text-base max-w-2xl mx-auto"
+          style={{ color: INK + "B3" }}
+        >
           Both options stay inside JBJ — your draft is auto-saved and you can come
           back to it at any time.
         </p>
@@ -468,7 +489,7 @@ function PremiumModePicker({ onPick }: { onPick: (m: Mode) => void }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <PickerCard
           onClick={() => onPick("manual")}
-          icon={<ClipboardCheck className="w-6 h-6" style={{ color: INK }} />}
+          icon={<ClipboardCheck className="w-6 h-6" style={{ color: "#FFFFFF" }} />}
           eyebrow="Full Control"
           title="List Manually"
           description="Fill in every field yourself — price, location, photos, amenities and contact preferences. Best when you already have the full property details ready."
@@ -476,7 +497,7 @@ function PremiumModePicker({ onPick }: { onPick: (m: Mode) => void }) {
         />
         <PickerCard
           onClick={() => onPick("ai")}
-          icon={<Wand2 className="w-6 h-6" style={{ color: GOLD }} />}
+          icon={<Wand2 className="w-6 h-6" style={{ color: "#FFFFFF" }} />}
           eyebrow="AI-Assisted"
           title="List with AI"
           description="Paste any portal link, brochure or short description. Our AI auto-fills the listing in seconds — you only review and confirm before submitting."
@@ -490,7 +511,7 @@ function PremiumModePicker({ onPick }: { onPick: (m: Mode) => void }) {
           type="button"
           onClick={() => onPick("browse")}
           className="text-sm font-medium underline-offset-4 hover:underline"
-          style={{ color: INK + "B3" }}
+          style={{ color: accent }}
         >
           Or browse existing listings →
         </button>
@@ -516,55 +537,102 @@ function PickerCard({
   tag: string;
   accent?: boolean;
 }) {
+  const NAVY = THEME_NAVY.primary;
+  const NAVY_DEEP = THEME_NAVY.primaryDeep;
+  const PURPLE = THEME_NAVY.badgeBorder; // #A855F7
+  const cardGradient =
+    `linear-gradient(135deg, ${NAVY_DEEP} 0%, ${NAVY} 55%, #0B0B0B 100%)`;
   return (
     <button
       type="button"
       onClick={onClick}
-      className="group relative flex flex-col text-left rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/55 hover:border-[#B89555] p-6 md:p-7 transition-all hover:shadow-[0_14px_30px_rgba(184,149,85,0.22)]"
+      data-no-contrast-guard
+      data-allow-dark-cta
+      className="group relative flex flex-col text-left rounded-2xl p-6 md:p-7 transition-all hover:brightness-110"
+      style={{
+        background: cardGradient,
+        border: `1px solid ${PURPLE}`,
+        boxShadow: `0 18px 40px -18px ${NAVY}AA`,
+      }}
     >
-      <div className="flex items-start justify-between gap-4">
+      {/* shimmer ombre glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-2xl"
+        style={{
+          background: `radial-gradient(circle at 18% 18%, ${PURPLE}33 0%, transparent 60%)`,
+        }}
+      />
+      <div className="relative flex items-start justify-between gap-4">
         <div
-          className="w-12 h-12 rounded-xl grid place-items-center shadow-[0_4px_10px_rgba(184,149,85,0.18)]"
-          style={{ backgroundColor: CHAMPAGNE, border: `1px solid ${GOLD}` }}
+          className="w-12 h-12 rounded-xl grid place-items-center"
+          style={{
+            backgroundColor: "rgba(255,255,255,0.10)",
+            border: `1px solid ${PURPLE}66`,
+          }}
         >
           {icon}
         </div>
         {accent && (
           <span
             className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] font-bold px-2 py-0.5 rounded-full"
-            style={{ backgroundColor: CHAMPAGNE, color: GOLD, border: `1px solid ${GOLD}` }}
+            style={{
+              backgroundColor: "rgba(168,85,247,0.18)",
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+              border: `1px solid ${PURPLE}`,
+            }}
           >
-            <Sparkles className="w-3 h-3" /> Recommended
+            <Sparkles className="w-3 h-3" style={{ color: "#FFFFFF" }} /> Recommended
           </span>
         )}
       </div>
 
-      <div className="mt-5">
-        <div className="text-[10px] uppercase tracking-[0.22em] font-semibold" style={{ color: INK + "8C" }}>
+      <div className="relative mt-5">
+        <div
+          className="text-[10px] uppercase tracking-[0.22em] font-semibold"
+          style={{ color: PURPLE, WebkitTextFillColor: PURPLE }}
+        >
           {eyebrow}
         </div>
-        <h3 className="mt-1 text-xl md:text-2xl font-bold leading-tight" style={{ color: INK }}>
+        <h3
+          className="mt-1 text-xl md:text-2xl font-bold leading-tight"
+          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+        >
           {title}
         </h3>
-        <p className="mt-2 text-sm leading-relaxed" style={{ color: INK + "BF" }}>
+        <p
+          className="mt-2 text-sm leading-relaxed"
+          style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
+        >
           {description}
         </p>
       </div>
 
-      <div className="mt-6 flex items-center justify-between">
+      <div className="relative mt-6 flex items-center justify-between">
         <span
           className="text-[11px] font-semibold rounded-md px-2 py-1"
-          style={{ backgroundColor: CHAMPAGNE, color: INK + "A6", border: `1px solid ${GOLD}66` }}
+          style={{
+            backgroundColor: "rgba(255,255,255,0.10)",
+            color: "rgba(255,255,255,0.88)",
+            WebkitTextFillColor: "rgba(255,255,255,0.88)",
+            border: `1px solid ${PURPLE}55`,
+          }}
         >
           {tag}
         </span>
         <span
-          className="inline-flex items-center gap-1.5 text-sm font-semibold group-hover:gap-2 transition-all"
-          style={{ color: INK }}
-          data-no-contrast-guard
+          className="inline-flex items-center gap-1.5 text-sm font-semibold px-4 h-9 rounded-md group-hover:gap-2 transition-all"
+          style={{
+            backgroundColor: "#FFFFFF",
+            color: NAVY,
+            WebkitTextFillColor: NAVY,
+            border: `1px solid ${PURPLE}`,
+            boxShadow: `0 6px 18px -8px rgba(255,255,255,0.45)`,
+          }}
         >
           Start
-          <ArrowRight className="w-4 h-4" style={{ color: INK }} />
+          <ArrowRight className="w-4 h-4" style={{ color: NAVY }} />
         </span>
       </div>
     </button>
@@ -623,16 +691,15 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               asChild
               data-allow-dark-cta
               data-no-contrast-guard
-              className="font-semibold border-0 hover:brightness-95"
+              className="jj-white-ring-square font-semibold hover:brightness-95"
               style={{
                 backgroundColor: "#FFFFFF",
                 color: accent,
-                border: `1px solid ${theme.badgeBorder}`,
               }}
             >
               <Link to="/dashboard/my-listings">
                 <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent }} />
-                <span style={{ color: accent, WebkitTextFillColor: accent }}>Open full dashboard</span>
+                <span style={{ color: accent, WebkitTextFillColor: accent, fontWeight: 700 }}>Open full dashboard</span>
               </Link>
             </Button>
           )}
@@ -657,10 +724,14 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             >
               <ShieldCheck className="w-7 h-7" style={{ color: "#FFFFFF" }} />
             </div>
-            <h3 className="text-lg font-bold mb-2" style={{ color: accent }} data-no-contrast-guard>
+            <h3
+              className="text-xl font-bold mb-2"
+              style={{ color: accent, WebkitTextFillColor: accent }}
+              data-no-contrast-guard
+            >
               Sign in to track your submissions
             </h3>
-            <p className="text-sm mb-5" style={{ color: INK + "B3" }}>
+            <p className="text-sm mb-5" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }} data-no-contrast-guard>
               Create a free account or sign in to view the live approval status of
               your property listings.
             </p>
@@ -711,10 +782,14 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             >
               <Building2 className="w-7 h-7" style={{ color: "#FFFFFF" }} />
             </div>
-            <h3 className="text-lg font-bold mb-2" style={{ color: accent }} data-no-contrast-guard>
+            <h3
+              className="text-xl font-bold mb-2"
+              style={{ color: accent, WebkitTextFillColor: accent }}
+              data-no-contrast-guard
+            >
               No submissions yet
             </h3>
-            <p className="text-sm mb-5" style={{ color: INK + "99" }}>
+            <p className="text-sm mb-5" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }} data-no-contrast-guard>
               Start your first listing above and it will appear here with full
               status tracking.
             </p>
