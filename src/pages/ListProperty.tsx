@@ -233,7 +233,7 @@ const ListProperty = () => {
               }}
               data-no-contrast-guard
             >
-              List Your Property
+              Welcome, {firstName}
             </h1>
             <p
               className="mt-4 text-base sm:text-lg max-w-2xl mx-auto"
