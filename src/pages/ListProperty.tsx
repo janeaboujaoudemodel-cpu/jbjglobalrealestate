@@ -616,8 +616,11 @@ function PickerCard({
           }}
         >
           <span style={{ color: NAVY, WebkitTextFillColor: NAVY }}>Start</span>
-          <ArrowRight className="w-4 h-4" style={{ color: NAVY, strokeWidth: 2.5 }} />
+          <span className="jj-arrow-anim inline-flex">
+            <ArrowRight className="w-4 h-4" style={{ strokeWidth: 2.5 }} />
+          </span>
         </span>
+
       </div>
     </button>
   );
