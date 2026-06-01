@@ -45,28 +45,37 @@ Deno.serve(async (req) => {
       return corsJsonResponse(req, { error: "No modules specified" }, 400);
     }
 
-    // Pull reading telemetry for this user across required modules
-    const { data: reads, error: readsErr } = await supabase
-      .from("broker_education_module_reads")
-      .select("module_id, time_spent_seconds, scroll_depth_pct, estimated_minutes, idle_events, focus_loss_events")
-      .eq("user_id", userId)
-      .in("module_id", requiredModuleIds);
+    // Pull reading telemetry + module metadata for estimated_minutes
+    const [readsRes, modulesRes] = await Promise.all([
+      supabase
+        .from("broker_education_module_reads")
+        .select("module_id, time_spent_seconds, scroll_depth_pct, idle_events, focus_loss_events")
+        .eq("user_id", userId)
+        .in("module_id", requiredModuleIds),
+      supabase
+        .from("broker_education_modules")
+        .select("id, estimated_minutes")
+        .in("id", requiredModuleIds),
+    ]);
 
-    if (readsErr) {
+    if (readsRes.error || modulesRes.error) {
       return corsJsonResponse(req, { error: "Failed to load telemetry" }, 500);
     }
+    const reads = readsRes.data ?? [];
+    const modules = modulesRes.data ?? [];
 
     const report: Record<string, unknown> = { modules: [], failures: [] };
     let allPassed = true;
 
     for (const mid of requiredModuleIds) {
-      const r = reads?.find((x: any) => x.module_id === mid);
+      const r = reads.find((x: any) => x.module_id === mid);
+      const mod = modules.find((m: any) => m.id === mid);
       if (!r) {
         allPassed = false;
         (report.failures as any[]).push({ moduleId: mid, reason: "no_telemetry" });
         continue;
       }
-      const estMin = Number(r.estimated_minutes ?? 0);
+      const estMin = Number(mod?.estimated_minutes ?? 15);
       const floorSec = Math.max(60, estMin * 60 * READ_TIME_FLOOR_PCT);
       const timeOk = Number(r.time_spent_seconds ?? 0) >= floorSec;
       const scrollOk = Number(r.scroll_depth_pct ?? 0) >= SCROLL_FLOOR_PCT;
