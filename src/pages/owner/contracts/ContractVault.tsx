@@ -396,11 +396,34 @@ export default function ContractVault() {
             <CardContent className="p-0">
               {isLoading && <p className="p-6 text-sm text-[#1A1A1A]/60">Loading…</p>}
               {!isLoading && filtered.length === 0 && filteredAgreements.length === 0 && (
-                <div className="p-12 text-center">
-                  <FileSignature className="h-10 w-10 mx-auto text-[#1A1A1A]/30 mb-2" />
-                  <p className="text-sm text-[#1A1A1A]/70">
-                    No contracts in <strong>{TYPES.find((t) => t.key === activeType)?.label}</strong> yet.
-                  </p>
+                <div className="p-12 text-center space-y-4">
+                  <FileSignature className="h-10 w-10 mx-auto text-[#1A1A1A]/30" />
+                  <div>
+                    <p className="text-sm font-semibold text-[#1A1A1A]">
+                      No contracts in <strong>{TYPES.find((t) => t.key === activeType)?.label}</strong> yet.
+                    </p>
+                    <p className="text-xs text-[#1A1A1A]/60 mt-1">
+                      {activeType === "all"
+                        ? "Upload a developer agreement or send a contract for signature to start filling this vault."
+                        : "Try a different contract type, or upload an agreement classified under this category."}
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-center gap-2 flex-wrap">
+                    <Button variant="gold" size="sm" onClick={() => setUploadOpen(true)}>
+                      <Upload className="h-4 w-4 mr-2" />
+                      Upload Agreement
+                    </Button>
+                    {activeType !== "all" && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-[#B89555]/40 text-[#1A1A1A]"
+                        onClick={() => { setActiveType("all"); setQ(""); setDeveloperName(""); }}
+                      >
+                        Show all contracts
+                      </Button>
+                    )}
+                  </div>
                 </div>
               )}
               {filtered.length > 0 && (
