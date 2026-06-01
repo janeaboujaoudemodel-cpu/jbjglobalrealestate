@@ -354,7 +354,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Market Report', icon: FileText, href: '/market-report' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
-    { label: 'Broker Learning', icon: BookOpen, href: '/broker/learning' },
+    { label: 'JBJ Academy', icon: BookOpen, href: '/jbj-academy' },
   ],
   guides: [
     { label: 'Buyer Guide', icon: FileText, href: '/buyer-guide' },
@@ -363,7 +363,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Tenant Guide", icon: FileText, href: '/tenant-guide' },
     { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
-    { label: 'Broker Learning', icon: BookOpen, href: '/broker/learning' },
+    { label: 'JBJ Academy', icon: BookOpen, href: '/jbj-academy' },
     { label: 'Golden Visa Guide', icon: Award, href: '/guides/golden-visa-uae' },
     { label: 'Books Library', icon: BookMarked, href: '/education-hub' },
   ],
