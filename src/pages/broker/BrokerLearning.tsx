@@ -589,11 +589,15 @@ function TrainingCard({
   onStart,
   locked = false,
   lockReason,
+  onRequestAccess,
+  requestAccessDisabled = false,
 }: {
   m: TModule;
   onStart: () => void;
   locked?: boolean;
   lockReason?: string;
+  onRequestAccess?: () => void;
+  requestAccessDisabled?: boolean;
 }) {
   return (
     <Card className={`relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-[#B89555]/55 ${locked ? "" : "hover:border-[#B89555]/80"} transition-all min-h-[240px] shadow-[0_4px_14px_rgba(184,149,85,0.10)] ${locked ? "" : "hover:shadow-[0_14px_30px_rgba(184,149,85,0.20)]"}`}>
@@ -642,13 +646,14 @@ function TrainingCard({
           {locked ? (
             <button
               type="button"
-              disabled
+              onClick={onRequestAccess}
+              disabled={requestAccessDisabled}
               title={lockReason ?? "Locked"}
-              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/55 cursor-not-allowed leading-none shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]"
+              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/65 disabled:opacity-60 leading-none shadow-[0_6px_16px_rgba(184,149,85,0.16),inset_0_1px_0_rgba(255,255,255,0.8)]"
               data-no-contrast-guard
             >
               <Lock className="w-3 h-3 shrink-0" strokeWidth={2.2} />
-              <span className="whitespace-nowrap">Locked</span>
+              <span className="whitespace-nowrap">Request Access</span>
             </button>
           ) : (
             <button
