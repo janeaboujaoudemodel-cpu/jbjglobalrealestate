@@ -315,6 +315,21 @@ const ListProperty = () => {
                   >
                     Browse
                   </SegmentedPill>
+                  <a
+                    href="#my-submissions"
+                    data-no-contrast-guard
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:brightness-105"
+                    style={{
+                      background: ombreSoft(theme),
+                      color: theme.primary,
+                      WebkitTextFillColor: theme.primary,
+                      border: `1.5px solid ${theme.primary}`,
+                      boxShadow: `0 6px 16px -10px ${theme.primary}66`,
+                    }}
+                  >
+                    View my submissions →
+                  </a>
+
                 </div>
               </div>
             </div>
