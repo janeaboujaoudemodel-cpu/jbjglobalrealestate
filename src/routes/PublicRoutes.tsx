@@ -209,8 +209,7 @@ const OwnerAwareBrokerRedirect = () => {
   const { isOwner, isLoading } = useIsAppOwner();
   if (isLoading) return null;
   if (isOwner) {
-    try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
-    return <Navigate to="/owner" replace />;
+    try { sessionStorage.setItem("jbj_broker_portal_preview", "explicit"); } catch {}
   }
   return <Navigate to="/broker/portal" replace />;
 };
