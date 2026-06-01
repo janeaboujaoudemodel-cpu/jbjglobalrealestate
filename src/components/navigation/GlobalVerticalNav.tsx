@@ -192,7 +192,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Referral Partner", href: "/referral-partner", icon: Handshake },
 
   // ── Broker & Academy ──
-  { label: "Broker Portal", href: "/broker-portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY", megaMenu: 'broker' },
+  { label: "Broker Portal", href: "/broker/portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY", megaMenu: 'broker' },
   { label: "Broker Toolkit", href: "/broker-toolkit", icon: Wrench },
   { label: "Broker Resources", href: "/broker-resources", icon: FolderOpen },
   { label: "Broker Learning", href: "/broker/learning", icon: GraduationCap },
@@ -461,7 +461,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'AI History', icon: Bot, href: '/my-ai-history' },
   ],
   broker: [
-    { label: 'Broker Portal', icon: BriefcaseIcon, href: '/broker-portal' },
+    { label: 'Broker Portal', icon: BriefcaseIcon, href: '/broker/portal' },
     { label: 'Broker Toolkit', icon: Wrench, href: '/broker-toolkit' },
     { label: 'Broker Learning', icon: GraduationCap, href: '/broker/learning' },
     { label: 'JBJ Academy', icon: GraduationCap, href: '/jbj-academy' },
