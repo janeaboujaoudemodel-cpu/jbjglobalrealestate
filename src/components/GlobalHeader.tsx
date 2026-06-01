@@ -1429,10 +1429,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {activeMegaMenu === 'search' && (
                   <div
                     className="w-[620px] max-w-[calc(100vw-32px)] rounded-xl overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] relative"
-                    style={{ background: '#FFFFFF' }}
+                    style={{ background: '#F7F2EA', maxHeight: 'calc(100vh - 140px)' }}
                   >
                     {/* Gold border overlay */}
-                    <div className="absolute inset-0 rounded-xl border border-[#B89555]/30 pointer-events-none z-10" />
+                    <div className="absolute inset-0 rounded-xl border border-[#B89555]/40 pointer-events-none z-10" />
                     <div className="p-4">
                       <GlobalSearchModal
                         isOpen={true}
@@ -1441,10 +1441,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         embedded
                       />
                     </div>
-                    {/* Bottom accent bar */}
-                    <div className="h-[1px] bg-[#EFE6D6]" />
+                    {/* Bottom champagne hairline accent */}
+                    <div className="h-[1px] bg-[#B89555]/40" />
                   </div>
                 )}
+
                 {activeMegaMenu === 'language' && <MegaMenuLanguage onClose={closeMegaMenu} />}
                 {activeMegaMenu === 'notifications' && <ListingNotificationBell panelMode onClose={closeMegaMenu} />}
                 {activeMegaMenu === 'account' && <MegaMenuAccount onClose={closeMegaMenu} />}
