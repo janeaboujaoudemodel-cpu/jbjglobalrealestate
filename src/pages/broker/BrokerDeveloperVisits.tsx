@@ -327,11 +327,64 @@ export default function BrokerDeveloperVisits() {
                 className="pl-9 bg-white border-[#B89555]/40 text-[#1A1A1A] h-10" />
             </div>
           </div>
-          <Textarea
-            value={repDetails} onChange={(e) => setRepDetails(e.target.value)}
-            placeholder="Other details about the rep — role, language, best contact time, personality notes…"
-            className="mt-3 bg-white border-[#B89555]/40 text-[#1A1A1A] min-h-[80px]"
-          />
+
+          {/* Rate the rep */}
+          <div className="mt-4 pt-4 border-t border-[#B89555]/20">
+            <div className="text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 font-semibold mb-3">
+              Rate this sales representative
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5">
+              {RATING_CRITERIA.map((criterion) => {
+                const value = repRatings[criterion];
+                return (
+                  <div key={criterion} className="flex items-center justify-between gap-3">
+                    <span className="text-sm text-[#1A1A1A]">{criterion}</span>
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((n) => {
+                        const filled = n <= value;
+                        return (
+                          <button
+                            key={n}
+                            type="button"
+                            onClick={() =>
+                              setRepRatings((prev) => ({
+                                ...prev,
+                                [criterion]: prev[criterion] === n ? 0 : n,
+                              }))
+                            }
+                            className="p-0.5 rounded hover:scale-110 transition-transform"
+                            aria-label={`${criterion} ${n} of 5`}
+                          >
+                            <Star
+                              className="h-5 w-5"
+                              style={{
+                                color: filled ? "#B89555" : "#1A1A1A33",
+                                fill: filled ? "#B89555" : "transparent",
+                              }}
+                            />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Feedback notes about the rep */}
+          <div className="mt-4">
+            <label className="block text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 font-semibold mb-1.5">
+              Your feedback about this rep
+            </label>
+            <Textarea
+              value={repFeedback}
+              onChange={(e) => setRepFeedback(e.target.value)}
+              placeholder="How was your experience with this sales representative? What stood out, what could be better…"
+              className="bg-white border-[#B89555]/40 text-[#1A1A1A] min-h-[90px]"
+            />
+          </div>
+
         </div>
 
         <div className="mt-5 flex items-center justify-end gap-2">
