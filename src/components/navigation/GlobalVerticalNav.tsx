@@ -247,17 +247,11 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Notifications", href: "/my-dashboard#notifications", icon: Bell },
   { label: "Inbox", href: "/my-dashboard#inbox", icon: Inbox },
   { label: "My Calendar", href: "/ai-calendar", icon: CalendarClock },
-  { label: "Activity Log", href: "/my-dashboard#activity", icon: Eye },
   { label: "Favorites", href: "/favorites", icon: Heart },
   { label: "Shortlisted", href: "/favorites?tab=shortlist", icon: Star },
   { label: "Saved Filters", href: "/favorites?tab=saved-filters", icon: Sparkles },
-  { label: "Compare", href: "/compare", icon: GitCompare },
-  { label: "Books Library", href: "/education-hub", icon: BookMarked },
-  { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
-  { label: "My Profile", href: "/profile", icon: User },
   { label: "Settings", href: "/profile?tab=settings", icon: Settings },
   { label: "My Tickets", href: "/my-tickets", icon: Ticket },
-  { label: "Ticket Hub", href: "/ticket-hub", icon: Ticket },
 
 
   // ── Business Suites ──
