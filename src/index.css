@@ -4825,3 +4825,218 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
   60%  { box-shadow: 0 0 0 8px rgba(16,185,129,0.00); }
   100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.00); }
 }
+
+/* ──────────────────────────────────────────────────────────────
+   AI Listing Shell — navy background, white cards, ink text.
+   Scoped to /list-property?mode=ai wizard (ListingPortalSubmit).
+   ────────────────────────────────────────────────────────────── */
+[data-ai-listing-shell] .bg-\[\#FDFBF7\],
+[data-ai-listing-shell] .bg-\[\#FDFBF7\]\/70,
+[data-ai-listing-shell] .bg-\[\#FDFBF7\]\/80,
+[data-ai-listing-shell] .bg-\[\#FDFBF7\]\/60,
+[data-ai-listing-shell] .bg-\[\#FDFBF7\]\/50,
+[data-ai-listing-shell] .bg-\[\#FDFBF7\]\/40,
+[data-ai-listing-shell] .bg-\[\#F7F2EA\],
+[data-ai-listing-shell] .bg-\[\#EFE6D6\]\/10,
+[data-ai-listing-shell] .bg-\[\#EFE6D6\]\/15 {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+/* Soft champagne raised → light navy tint pane (the -m-3 outer panels) */
+[data-ai-listing-shell] .bg-\[\#102540\]\/15 {
+  background-color: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+}
+
+/* Gold hairline borders → navy hairline inside white cards */
+[data-ai-listing-shell] .border-\[\#B89555\]\/15,
+[data-ai-listing-shell] .border-\[\#B89555\]\/20,
+[data-ai-listing-shell] .border-\[\#B89555\]\/30,
+[data-ai-listing-shell] .border-\[\#B89555\]\/40,
+[data-ai-listing-shell] .border-\[\#B89555\]\/50 {
+  border-color: rgba(16,37,64,0.18) !important;
+}
+
+/* Dashed upload zone */
+[data-ai-listing-shell] .border-dashed.border-\[\#B89555\]\/40,
+[data-ai-listing-shell] .border-dashed {
+  border-color: rgba(16,37,64,0.35) !important;
+}
+[data-ai-listing-shell] .border-dashed:hover {
+  border-color: rgba(16,37,64,0.6) !important;
+}
+
+/* Selected listing-type card: navy outline + white bg, ink check */
+[data-ai-listing-shell] button.border-\[\#B89555\]\/50 {
+  border-color: #102540 !important;
+  background-color: #FFFFFF !important;
+}
+[data-ai-listing-shell] button .bg-\[\#EFE6D6\].rounded-full {
+  background-color: #102540 !important;
+}
+[data-ai-listing-shell] button .bg-\[\#EFE6D6\].rounded-full svg {
+  color: #FFFFFF !important;
+}
+
+/* Inputs / textareas inside the wizard cards */
+[data-ai-listing-shell] input.bg-\[\#FDFBF7\],
+[data-ai-listing-shell] textarea.bg-\[\#FDFBF7\] {
+  background-color: #FFFFFF !important;
+  color: #1A1A1A !important;
+  border-color: rgba(16,37,64,0.25) !important;
+}
+
+/* Tag pills (Google Drive / Bayut / etc) inside white cards */
+[data-ai-listing-shell] .bg-\[\#EFE6D6\]\/10.text-\[\#1A1A1A\] {
+  background-color: #FFFFFF !important;
+  border-color: rgba(16,37,64,0.15) !important;
+  color: #1A1A1A !important;
+}
+
+/* Primary champagne CTA buttons → navy on white */
+[data-ai-listing-shell] button.bg-\[\#EFE6D6\] {
+  background-color: #102540 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #102540 !important;
+}
+[data-ai-listing-shell] button.bg-\[\#EFE6D6\]:hover {
+  background-color: #1a3d63 !important;
+}
+[data-ai-listing-shell] button.bg-\[\#EFE6D6\] svg {
+  color: #FFFFFF !important;
+}
+
+/* Gold-bordered secondary buttons (Skip — Fill Manually) → navy outline */
+[data-ai-listing-shell] button.border-\[\#B89555\]\/50.text-\[\#B89555\],
+[data-ai-listing-shell] button.text-\[\#B89555\].border-\[\#B89555\]\/50 {
+  background-color: #FFFFFF !important;
+  color: #102540 !important;
+  border: 1.5px solid #102540 !important;
+}
+[data-ai-listing-shell] button.border-\[\#B89555\]\/50.text-\[\#B89555\]:hover {
+  background-color: rgba(16,37,64,0.05) !important;
+  color: #102540 !important;
+  border-color: #102540 !important;
+}
+[data-ai-listing-shell] button.border-\[\#B89555\]\/50.text-\[\#B89555\] svg {
+  color: #102540 !important;
+}
+
+/* Champagne gradient "Back" button on pricing phase → white + navy */
+[data-ai-listing-shell] button.bg-gradient-to-r.from-\[\#FDFBF7\] {
+  background: #FFFFFF !important;
+  color: #1A1A1A !important;
+  border: 1.5px solid #102540 !important;
+}
+[data-ai-listing-shell] button.bg-gradient-to-r.from-\[\#FDFBF7\]:hover {
+  background: rgba(16,37,64,0.05) !important;
+  color: #1A1A1A !important;
+}
+
+/* KPI / extracted-data mini cards (price predictor summary) */
+[data-ai-listing-shell] .bg-gradient-to-br.from-\[\#FDFBF7\] {
+  background: #FFFFFF !important;
+  border-color: rgba(16,37,64,0.15) !important;
+}
+
+/* Listing-type card placeholder image area */
+[data-ai-listing-shell] .from-\[\#FDFBF7\].to-\[\#F7F2EA\] {
+  background: linear-gradient(135deg, #F4F7FB, #E6ECF4) !important;
+}
+
+/* Hover lift on champagne button stays subtle */
+[data-ai-listing-shell] button.hover\:bg-\[\#1A1A1A\]:hover {
+  background-color: #102540 !important;
+  color: #FFFFFF !important;
+}
+
+/* AI Listing Shell success-phase: ink labels that sit DIRECTLY on the navy
+   gradient (outside any white card) must become white. We target only the
+   top-level success copy nodes; copy inside white cards stays ink because
+   the cards' bg overrides win. */
+[data-ai-listing-shell] > .container > div > h1.text-\[\#1A1A1A\],
+[data-ai-listing-shell] > .container > div > p.text-\[\#1A1A1A\]\/70 {
+  color: #FFFFFF !important;
+}
+[data-ai-listing-shell] > .container > div > p.text-\[\#1A1A1A\]\/70 {
+  color: rgba(255,255,255,0.85) !important;
+}
+
+/* Lock ink text inside the AI wizard's white cards — beats any inherited
+   on-dark flip from outer contrast layers. */
+[data-ai-listing-shell] .text-\[\#1A1A1A\],
+[data-ai-listing-shell] .text-\[\#1A1A1A\]\/70,
+[data-ai-listing-shell] .text-\[\#1A1A1A\]\/50,
+[data-ai-listing-shell] .text-\[\#1A1A1A\]\/8C {
+  color: #1A1A1A !important;
+}
+[data-ai-listing-shell] .text-\[\#1A1A1A\]\/70 {
+  color: rgba(26,26,26,0.72) !important;
+}
+[data-ai-listing-shell] .text-\[\#1A1A1A\] svg,
+[data-ai-listing-shell] svg.text-\[\#1A1A1A\] {
+  color: #1A1A1A !important;
+}
+
+/* AI Listing Shell — Save Draft button (navy fill, white text) must stay
+   white on navy even though it sits inside a white draft bar. Global
+   PASS-6 white-on-light lock keeps flipping it; this re-locks it. */
+[data-ai-listing-shell] button.bg-\[\#102540\] {
+  background-color: #102540 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+[data-ai-listing-shell] button.bg-\[\#102540\]:hover {
+  background-color: #1a3d63 !important;
+}
+[data-ai-listing-shell] button.bg-\[\#102540\] svg {
+  color: #FFFFFF !important;
+}
+
+/* "Back to Portal" white ghost button on the navy hero — keep readable */
+[data-ai-listing-shell] button.allow-white.text-white,
+[data-ai-listing-shell] button.allow-white.text-white svg {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Extract with AI primary CTA (white bg + navy text, lives inside white card) */
+[data-ai-listing-shell] button.bg-white.text-\[\#102540\] {
+  background-color: #102540 !important;
+  color: #FFFFFF !important;
+  border-color: #102540 !important;
+}
+[data-ai-listing-shell] button.bg-white.text-\[\#102540\]:hover {
+  background-color: #1a3d63 !important;
+}
+[data-ai-listing-shell] button.bg-white.text-\[\#102540\] svg {
+  color: #FFFFFF !important;
+}
+[data-ai-listing-shell] button.bg-white.text-\[\#102540\]:disabled {
+  background-color: #102540 !important;
+  color: #FFFFFF !important;
+  opacity: 0.5;
+}
+
+/* AI Listing Shell — maximum-specificity hard locks for the three contrast
+   regressions on top of PASS-6 / contrast-engine flips. */
+section[data-ai-listing-shell] button.bg-\[\#102540\],
+section[data-ai-listing-shell] button.bg-\[\#102540\] *,
+section[data-ai-listing-shell] button.allow-white.text-white,
+section[data-ai-listing-shell] button.allow-white.text-white * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+section[data-ai-listing-shell] button.allow-white.text-white {
+  background-color: transparent !important;
+}
+section[data-ai-listing-shell] button.allow-white.text-white:hover {
+  background-color: rgba(255,255,255,0.10) !important;
+}
+section[data-ai-listing-shell] button.bg-white.text-\[\#102540\],
+section[data-ai-listing-shell] button.bg-white.text-\[\#102540\]:disabled,
+section[data-ai-listing-shell] button.bg-white.text-\[\#102540\] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}

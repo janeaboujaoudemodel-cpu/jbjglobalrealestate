@@ -540,7 +540,10 @@ const ListingPortalSubmit = () => {
   // ========== SUCCESS PHASE ==========
   if (phase === 'success') {
     return (
-      <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] pt-24 pb-16">
+      <section
+        data-ai-listing-shell
+        className="min-h-screen bg-gradient-to-br from-[#0b1c36] via-[#102540] to-[#1a3d63] pt-24 pb-16"
+      >
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -595,7 +598,10 @@ const ListingPortalSubmit = () => {
   }
 
   return (
-    <section className="relative w-full min-h-screen bg-gradient-to-br from-[#0b1c36] via-[#102540] to-[#1a3d63]">
+    <section
+      data-ai-listing-shell
+      className="relative w-full min-h-screen bg-gradient-to-br from-[#0b1c36] via-[#102540] to-[#1a3d63]"
+    >
       <div className="relative pt-20 pb-12 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div ref={creatorRef} className="w-full max-w-none">
@@ -603,10 +609,12 @@ const ListingPortalSubmit = () => {
               variant="ghost"
               onClick={() => navigate('/listing-portal')}
               data-no-contrast-guard
+              data-on-dark
+              data-allow-dark-cta
               className="allow-white text-white hover:text-white hover:bg-white/10 mb-4"
-              style={{ color: '#FFFFFF' }}
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
             >
-              <ArrowLeft className="w-4 h-4 mr-2" style={{ color: '#FFFFFF' }} /> Back to Portal
+              <ArrowLeft className="w-4 h-4 mr-2" style={{ color: '#FFFFFF' }} /> <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Back to Portal</span>
             </Button>
 
             {/* Header */}
