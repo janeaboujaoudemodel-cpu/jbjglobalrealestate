@@ -5018,3 +5018,25 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
   color: #FFFFFF !important;
   opacity: 0.5;
 }
+
+/* AI Listing Shell — maximum-specificity hard locks for the three contrast
+   regressions on top of PASS-6 / contrast-engine flips. */
+section[data-ai-listing-shell] button.bg-\[\#102540\],
+section[data-ai-listing-shell] button.bg-\[\#102540\] *,
+section[data-ai-listing-shell] button.allow-white.text-white,
+section[data-ai-listing-shell] button.allow-white.text-white * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+section[data-ai-listing-shell] button.allow-white.text-white {
+  background-color: transparent !important;
+}
+section[data-ai-listing-shell] button.allow-white.text-white:hover {
+  background-color: rgba(255,255,255,0.10) !important;
+}
+section[data-ai-listing-shell] button.bg-white.text-\[\#102540\],
+section[data-ai-listing-shell] button.bg-white.text-\[\#102540\]:disabled,
+section[data-ai-listing-shell] button.bg-white.text-\[\#102540\] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
