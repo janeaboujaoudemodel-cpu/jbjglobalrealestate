@@ -65,18 +65,19 @@ export default function BrokerDeveloperVisits() {
     return () => document.removeEventListener("mousedown", onDoc);
   }, []);
 
-  // Developer search
+  // Developer search (shows full list when query is empty)
   const devs = useQuery({
     queryKey: ["dv-devs", devQuery],
-    enabled: devQuery.trim().length > 0 && open,
+    enabled: open,
     queryFn: async () => {
       const q = devQuery.trim();
-      const { data, error } = await supabase
+      let query = supabase
         .from("developers")
         .select("id, name, slug, logo_url")
-        .ilike("name", `%${q}%`)
         .order("name", { ascending: true })
-        .limit(20);
+        .limit(q ? 50 : 500);
+      if (q) query = query.ilike("name", `%${q}%`);
+      const { data, error } = await query;
       if (error) throw error;
       return (data ?? []) as Developer[];
     },
@@ -221,10 +222,10 @@ export default function BrokerDeveloperVisits() {
                   className="pl-9 bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] h-12"
                 />
               </div>
-              {open && devQuery.trim().length > 0 && (
+              {open && (
                 <div className="absolute z-30 mt-1 left-0 right-0 max-h-72 overflow-auto rounded-md border border-[#B89555]/40 bg-[#FDFBF7] shadow-lg">
                   {devs.isLoading && (
-                    <div className="px-3 py-2 text-xs text-[#1A1A1A]/60">Searching…</div>
+                    <div className="px-3 py-2 text-xs text-[#1A1A1A]/60">Loading developers…</div>
                   )}
                   {!devs.isLoading && (devs.data?.length ?? 0) === 0 && (
                     <div className="px-3 py-3 text-xs text-[#1A1A1A]/60">No developers match that name.</div>
