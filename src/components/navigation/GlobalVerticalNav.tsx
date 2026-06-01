@@ -573,17 +573,20 @@ export default function GlobalVerticalNav() {
 
   const showBrokerSurfaces = isBrokerMode;
   const showInvestorSurfaces = isInvestorMode || isInvestor || isOwner;
+  const { isPageVisible: isTeamPageVisible } = useTeamVisibility();
 
   const shouldShowItem = useCallback((item: NavItem, sectionKey?: SectionKey | null) => {
+    // Team page is hidden by default — only shows when owner flips the visibility toggle in Founder Settings.
+    if (item.href === "/team" && !isTeamPageVisible) return false;
     if (!showBrokerSurfaces) {
       if (item.href === "/join") return false;
       if (sectionKey === "BROKER & ACADEMY") return false;
-      if (item.href.startsWith("/broker") || item.href === "/broker-toolkit" || item.href === "/broker-resources" || item.href === "/ai-broker-workspace" || item.href === "/jbj-academy") return false;
+      if (item.href.startsWith("/broker") || item.href === "/broker-toolkit" || item.href === "/jbj-academy") return false;
       if (item.label === "Career Portal") return false;
     }
     if (!showInvestorSurfaces && sectionKey === "INVESTOR") return false;
     return true;
-  }, [showBrokerSurfaces, showInvestorSurfaces]);
+  }, [showBrokerSurfaces, showInvestorSurfaces, isTeamPageVisible]);
 
   const shouldShowSection = useCallback((sectionKey: SectionKey) => {
     if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return false;
