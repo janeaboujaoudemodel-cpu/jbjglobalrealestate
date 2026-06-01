@@ -245,7 +245,7 @@ export default function BrokerLearning() {
                     <h3 className="text-[#1A1A1A] font-semibold text-lg">{group.name}</h3>
                     <span className="text-xs text-[#1A1A1A]/55">{group.books.length} {group.books.length === 1 ? "book" : "books"}</span>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 items-stretch">
                     {group.books.map((book, i) => (
                       <Book3DCard
                         key={book.id}
