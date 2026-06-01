@@ -46,7 +46,7 @@ export const PremiumToolShell = ({
 
   return (
     <div
-      className="min-h-screen w-full pt-24 md:pt-28 pb-12 px-3 sm:px-5"
+      className="min-h-screen w-full pt-6 md:pt-8 pb-12 px-3 sm:px-5"
       style={{ background: theme.pageWash }}
     >
       <style>{`
@@ -70,23 +70,6 @@ export const PremiumToolShell = ({
         }
       `}</style>
 
-      {showBack && (
-        <div className="mx-auto mb-4" style={{ maxWidth }}>
-          <button
-            onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 text-xs font-medium transition-colors"
-            style={{ color: "rgba(26,26,26,0.6)" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = theme.accent)}
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color = "rgba(26,26,26,0.6)")
-            }
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Back
-          </button>
-        </div>
-      )}
-
       <div
         className="relative mx-auto jbj-tool-shell-border"
         style={
@@ -104,10 +87,10 @@ export const PremiumToolShell = ({
               "0 30px 80px -30px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.04)",
           }}
         >
-          {/* Hero — centered, ombré accent → ink */}
+          {/* Hero — centered, ombré accent → ink. Back button lives inside. */}
           <div
             data-allow-dark-cta
-            className="relative overflow-hidden text-center px-5 py-10 md:py-14"
+            className="relative overflow-hidden text-center px-5 pt-6 pb-10 md:pt-7 md:pb-14"
             style={{ background: theme.heroGradient }}
           >
             <div
@@ -118,11 +101,25 @@ export const PremiumToolShell = ({
                   "radial-gradient(ellipse at top, rgba(255,255,255,0.10), transparent 60%)",
               }}
             />
+
+            {showBack && (
+              <button
+                onClick={() => navigate(-1)}
+                data-allow-dark-cta
+                data-no-contrast-guard
+                className="allow-white absolute top-4 left-4 md:top-5 md:left-6 z-20 inline-flex items-center gap-1.5 text-xs md:text-sm font-medium transition-transform group"
+                style={{ color: "#FFFFFF" }}
+              >
+                <ArrowLeft className="w-4 h-4 text-white group-hover:-translate-x-0.5 transition-transform" />
+                <span className="text-white">Back</span>
+              </button>
+            )}
+
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45 }}
-              className="relative z-10 max-w-3xl mx-auto"
+              className="relative z-10 max-w-3xl mx-auto pt-3"
             >
               <div className="flex justify-center mb-5">
                 <span
@@ -208,7 +205,7 @@ export const ToolAnimatedFrame = ({
   className?: string;
 }) => (
   <div
-    className={`min-h-screen w-full pt-24 md:pt-28 pb-12 px-3 sm:px-5 ${className}`}
+    className={`min-h-screen w-full pt-6 md:pt-8 pb-12 px-3 sm:px-5 ${className}`}
     style={{ background: theme.pageWash }}
   >
     <style>{`

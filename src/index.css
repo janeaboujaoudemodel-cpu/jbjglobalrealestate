@@ -4789,3 +4789,39 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
   -webkit-text-fill-color: #B89555 !important;
   stroke: #B89555 !important;
 }
+
+/* === Animated tool shell + guided field pulse =========================== */
+@property --abs-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes absSpin {
+  to { --abs-angle: 360deg; }
+}
+/* Fallback for browsers without @property: rotate the gradient by animating
+   a CSS variable using a 360→0 trick via background-position is unreliable;
+   simply leave the gradient static — the shell still looks premium. */
+
+/* Guided required-field pulse: applied via data-field-pulse="1" */
+@keyframes jjFieldPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(16,37,64,0.55); }
+  60%  { box-shadow: 0 0 0 8px rgba(16,37,64,0.00); }
+  100% { box-shadow: 0 0 0 0 rgba(16,37,64,0.00); }
+}
+[data-field-pulse="1"] {
+  animation: jjFieldPulse 1.4s ease-out;
+  outline: 2px solid #102540 !important;
+  outline-offset: 2px !important;
+  border-radius: 12px;
+}
+[data-field-pulse="1"][data-tone="emerald"],
+[data-tone-scope="emerald"] [data-field-pulse="1"] {
+  outline-color: #10b981 !important;
+  animation-name: jjFieldPulseEmerald;
+}
+@keyframes jjFieldPulseEmerald {
+  0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.55); }
+  60%  { box-shadow: 0 0 0 8px rgba(16,185,129,0.00); }
+  100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.00); }
+}
