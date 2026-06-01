@@ -591,7 +591,7 @@ Requirements:
         </div>
 
         {/* Layer 2 continues for form content */}
-        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 pb-16 pt-8">
+        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] pb-16 pt-8">
           <div className="container mx-auto px-4">
           {/* Progress Steps - Using champagne active color */}
           <div className="max-w-4xl mx-auto mb-8">
