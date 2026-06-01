@@ -65,18 +65,19 @@ export default function BrokerDeveloperVisits() {
     return () => document.removeEventListener("mousedown", onDoc);
   }, []);
 
-  // Developer search
+  // Developer search (shows full list when query is empty)
   const devs = useQuery({
     queryKey: ["dv-devs", devQuery],
-    enabled: devQuery.trim().length > 0 && open,
+    enabled: open,
     queryFn: async () => {
       const q = devQuery.trim();
-      const { data, error } = await supabase
+      let query = supabase
         .from("developers")
         .select("id, name, slug, logo_url")
-        .ilike("name", `%${q}%`)
         .order("name", { ascending: true })
-        .limit(20);
+        .limit(q ? 50 : 500);
+      if (q) query = query.ilike("name", `%${q}%`);
+      const { data, error } = await query;
       if (error) throw error;
       return (data ?? []) as Developer[];
     },
