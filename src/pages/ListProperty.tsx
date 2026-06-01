@@ -240,9 +240,9 @@ const ListProperty = () => {
               style={{ color: "rgba(255,255,255,0.88)" }}
               data-no-contrast-guard
             >
-              Priority listing with JBJ Global Real Estate — premium reach, full
-              AI assistance, transparent approval, and live status in your
-              dashboard.
+              List your property for {purpose === "rent" ? "rent" : "sale"} with
+              JBJ Global Real Estate — premium reach, full AI assistance,
+              transparent approval, and live status in your dashboard.
             </p>
 
           </motion.div>
