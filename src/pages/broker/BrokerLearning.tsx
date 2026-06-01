@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   GraduationCap, BookOpen, Lock, BarChart3, MessageSquare, Shield,
-  CheckCircle, Clock, Play, ChevronRight, ChevronLeft, Award, X, Check, Settings,
+  CheckCircle, Clock, Play, ChevronRight, ChevronLeft, Award, X, Check,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
@@ -647,7 +647,7 @@ function TrainingCard({
             <button
               type="button"
               onClick={onRequestAccess}
-              disabled={requestAccessDisabled}
+              disabled={requestAccessDisabled || !onRequestAccess}
               title={lockReason ?? "Locked"}
               className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/65 disabled:opacity-60 leading-none shadow-[0_6px_16px_rgba(184,149,85,0.16),inset_0_1px_0_rgba(255,255,255,0.8)]"
               data-no-contrast-guard
