@@ -194,7 +194,7 @@ const NAV_ITEMS: NavItem[] = [
   // ── Broker & Academy ──
   { label: "Broker Portal", href: "/broker/portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY", megaMenu: 'broker' },
   { label: "Broker Toolkit", href: "/broker-toolkit", icon: Wrench },
-  { label: "Broker Hub", href: "/broker-hub", icon: Compass },
+  // Broker Hub removed — duplicates Broker Portal.
   // Note: "Broker Dashboard" removed from this section — it's the user's personal dashboard, not a broker-only tool.
   { label: "JBJ Academy", href: "/jbj-academy", icon: GraduationCap },
 
