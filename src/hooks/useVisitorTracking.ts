@@ -66,10 +66,12 @@ export const useVisitorTracking = () => {
   const lastPath = useRef(location.pathname);
   const pagesVisitedCount = useRef(0);
   const hasInitialized = useRef(false);
+  const trackingUnavailable = useRef(false);
 
   // Initialize session
   const initSession = useCallback(async () => {
     if (disabled) return;
+    if (trackingUnavailable.current) return;
     if (hasInitialized.current) return;
     hasInitialized.current = true;
 
@@ -98,15 +100,18 @@ export const useVisitorTracking = () => {
 
       if (error) {
         console.error('Error creating session:', error);
+        trackingUnavailable.current = true;
       }
     } catch (error) {
       console.error('Error initializing session:', error);
+      trackingUnavailable.current = true;
     }
   }, [disabled, location.pathname, user]);
 
   // Track page view
   const trackPageView = useCallback(async () => {
     if (disabled) return;
+    if (trackingUnavailable.current) return;
     const sessionId = getSessionId();
     const path = location.pathname;
 
@@ -134,12 +139,14 @@ export const useVisitorTracking = () => {
 
     } catch (error) {
       console.error('Error tracking page view:', error);
+      trackingUnavailable.current = true;
     }
   }, [disabled, location.pathname]);
 
   // Track general event
   const trackEvent = useCallback(async (eventType: string, eventName: string, eventData: TrackEventData = {}) => {
     if (disabled) return;
+    if (trackingUnavailable.current) return;
     const sessionId = getSessionId();
 
     try {
@@ -155,6 +162,7 @@ export const useVisitorTracking = () => {
       });
     } catch (error) {
       console.error('Error tracking event:', error);
+      trackingUnavailable.current = true;
     }
   }, [disabled, location.pathname]);
 
@@ -226,6 +234,7 @@ export const useVisitorTracking = () => {
   // Update time spent on exit
   const updateTimeSpent = useCallback(async () => {
     if (disabled) return;
+    if (trackingUnavailable.current) return;
     const sessionId = getSessionId();
     const timeSpent = Math.floor((Date.now() - sessionStartTime.current) / 1000);
 
@@ -239,6 +248,7 @@ export const useVisitorTracking = () => {
         .eq('session_id', sessionId);
     } catch (error) {
       console.error('Error updating time spent:', error);
+      trackingUnavailable.current = true;
     }
   }, [disabled]);
 
