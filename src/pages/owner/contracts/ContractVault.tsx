@@ -362,12 +362,16 @@ export default function ContractVault() {
                             </Badge>
                           </td>
                           <td className="px-4 py-3 text-right">
-                            <Button asChild size="sm" variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">
-                              <a href={a.file_url} target="_blank" rel="noreferrer">
+                            <div className="flex items-center justify-end gap-2">
+                              <Button size="sm" variant="outline" onClick={() => handleOpen(a)} className="border-[#B89555]/40 text-[#1A1A1A]">
                                 <Download className="h-3 w-3 mr-1" />
                                 Open
-                              </a>
-                            </Button>
+                              </Button>
+                              <Button size="sm" variant="outline" onClick={() => setEditing(a)} className="border-[#B89555]/40 text-[#1A1A1A]">
+                                <Pencil className="h-3 w-3 mr-1" />
+                                Edit
+                              </Button>
+                            </div>
                           </td>
                         </tr>
                       ))}
