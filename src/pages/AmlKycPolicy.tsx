@@ -168,8 +168,6 @@ const AmlKycPolicy = () => {
                 <Link to="/privacy" className="text-[#B89555] hover:underline">Privacy Policy</Link>
                 <span className="text-[#1A1A1A]/70">|</span>
                 <Link to="/terms" className="text-[#B89555] hover:underline">Terms of Service</Link>
-                <span className="text-[#1A1A1A]/70">|</span>
-                <Link to="/trust-compliance" className="text-[#B89555] hover:underline">Trust & Compliance</Link>
               </div>
             </div>
           </main>
