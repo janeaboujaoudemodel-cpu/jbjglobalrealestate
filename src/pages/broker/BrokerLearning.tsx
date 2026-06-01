@@ -536,14 +536,22 @@ function SectionTitle({ eyebrow, title }: { eyebrow: string; title: string }) {
   );
 }
 
-function KpiCard({ icon, label, value, progress }: {
-  icon: React.ReactNode; label: string; value: React.ReactNode; progress?: number;
+function KpiCard({
+  icon: Icon,
+  label,
+  value,
+  progress,
+  tone = "gold",
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: React.ReactNode;
+  progress?: number;
+  tone?: "gold" | "blue" | "amber" | "emerald" | "red" | "ink" | "purple" | "rose";
 }) {
   return (
     <div className="min-h-[202px] rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/55 p-6 flex flex-col items-center text-center shadow-[0_4px_14px_rgba(184,149,85,0.12)] hover:shadow-[0_14px_30px_rgba(184,149,85,0.22)] transition-all">
-      <span className="w-14 h-14 rounded-2xl bg-[#1A1A1A] border border-[#B89555]/70 grid place-items-center text-[#B89555] shrink-0 shadow-[0_4px_12px_rgba(26,26,26,0.25)]">
-        {icon}
-      </span>
+      <IconTile tone={tone as any} size="lg" icon={Icon} />
       <div className="mt-4 h-4 flex items-center justify-center text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/75 whitespace-nowrap font-semibold">{label}</div>
       <div className="mt-3 h-10 flex items-center justify-center text-4xl font-bold text-[#1A1A1A] leading-none tabular-nums">{value}</div>
       {typeof progress === "number" && (
