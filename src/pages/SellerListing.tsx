@@ -538,22 +538,38 @@ Requirements:
         description="Submit your property for sale with JBJ Global Real Estate. Our guided listing tool helps you provide all necessary details for a successful sale."
       />
       
-      <main data-manual-listing-shell className="min-h-screen bg-[#FDFBF7] pt-6 pb-12 md:pb-16">
-        {/* Layer 2: Active Champagne Hero Section (full-bleed, no black gutters) */}
-        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
+      <main data-manual-listing-shell className="min-h-screen pt-6 pb-12 md:pb-16" style={{ background: "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)" }}>
+        {/* Layer 2: Emerald ombre hero */}
+        <div style={{ background: "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)" }}>
           <div className="container mx-auto px-4 py-12">
             <div className="max-w-4xl mx-auto text-center">
               <span
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] text-sm font-medium mb-4 border border-[#B89555]"
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
                 data-no-contrast-guard
-                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                style={{
+                  background: "linear-gradient(135deg, #0F5132 0%, #064E3B 100%)",
+                  color: "#FFFFFF",
+                  WebkitTextFillColor: "#FFFFFF",
+                  border: "1px solid #0F5132",
+                  boxShadow: "0 6px 16px -8px rgba(15,81,50,0.55)",
+                }}
               >
                 Seller Listing Tool
               </span>
-              <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-3">
-                List Your Property <span className="text-[#1A1A1A]">for Sale</span>
+              <h1
+                className="text-3xl md:text-4xl font-bold mb-3"
+                data-no-contrast-guard
+                style={{
+                  background: "linear-gradient(135deg, #0F5132 0%, #1A1A1A 55%, #0F5132 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                List Your Property <span style={{ WebkitTextFillColor: "transparent" }}>for Sale</span>
               </h1>
-              <p className="text-[#1A1A1A]/70 mb-6">
+              <p className="text-[#1A1A1A]/80 mb-6">
                 Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
               </p>
               <FormDraftBar
@@ -564,31 +580,38 @@ Requirements:
                 label="Seller Listing"
                 theme="gold"
               />
-              
-              {/* Seller Assistant CTA - Premium 3D Primary Button - Scrolls to section */}
+
+              {/* Seller Assistant CTA — emerald ombre primary */}
               <div className="mt-6">
-                <Button
+                <button
                   type="button"
-                  variant="primary"
+                  data-no-contrast-guard
                   onClick={() => {
                     setShowAssistant(true);
-                    // Scroll to the assistant section after a brief delay
                     setTimeout(() => {
-                      document.getElementById('seller-assistant-panel')?.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'center' 
+                      document.getElementById('seller-assistant-panel')?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
                       });
                     }, 100);
                   }}
-                  className="px-8 py-4 text-sm"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-md text-sm font-bold transition-all hover:brightness-110"
+                  style={{
+                    background: "linear-gradient(135deg, #0F5132 0%, #064E3B 100%)",
+                    color: "#FFFFFF",
+                    WebkitTextFillColor: "#FFFFFF",
+                    border: "1.5px solid #0F5132",
+                    boxShadow: "0 10px 28px -12px rgba(15,81,50,0.55)",
+                  }}
                 >
-                  <Wand2 className="w-5 h-5" />
-                  <span>Get Help with JBJ Seller Assistant</span>
-                </Button>
+                  <Wand2 className="w-5 h-5" style={{ color: "#FFFFFF" }} />
+                  <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Get Help with JBJ Seller Assistant</span>
+                </button>
               </div>
             </div>
           </div>
         </div>
+
 
         {/* Layer 2 continues for form content */}
         <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] pb-16 pt-8">
