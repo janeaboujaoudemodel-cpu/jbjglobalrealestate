@@ -5040,3 +5040,57 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#102540\] * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* ──────────────────────────────────────────────────────────────
+   Manual Listing Shell — emerald accent, white surfaces.
+   Scoped to /list-property?mode=manual (SellerListing).
+   ────────────────────────────────────────────────────────────── */
+[data-manual-listing-shell] .bg-\[\#FDFBF7\],
+[data-manual-listing-shell] .bg-\[\#F7F2EA\],
+[data-manual-listing-shell] .bg-\[\#EFE6D6\] {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+/* Soft champagne gradient hero band → emerald wash */
+[data-manual-listing-shell] .bg-gradient-to-br.from-\[\#F7F1E6\] {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 50%, #A7F3D0 100%) !important;
+}
+
+/* Gold hairlines → emerald hairlines */
+[data-manual-listing-shell] .border-\[\#B89555\],
+[data-manual-listing-shell] [class*="border-\[\#B89555\]\/"] {
+  border-color: rgba(21,128,61,0.28) !important;
+}
+
+/* Primary champagne CTAs → emerald fill, white text */
+[data-manual-listing-shell] button.bg-\[\#EFE6D6\],
+[data-manual-listing-shell] button.bg-\[\#1A1A1A\] {
+  background-color: #15803D !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid #15803D !important;
+}
+[data-manual-listing-shell] button.bg-\[\#EFE6D6\]:hover,
+[data-manual-listing-shell] button.bg-\[\#1A1A1A\]:hover {
+  background-color: #166534 !important;
+}
+[data-manual-listing-shell] button.bg-\[\#EFE6D6\] svg,
+[data-manual-listing-shell] button.bg-\[\#1A1A1A\] svg {
+  color: #FFFFFF !important;
+}
+
+/* Selected pill/card outlines → emerald */
+[data-manual-listing-shell] button.border-\[\#B89555\]\/50 {
+  border-color: #15803D !important;
+  background-color: #FFFFFF !important;
+}
+
+/* Inputs/textarea inside cards */
+[data-manual-listing-shell] input.bg-\[\#FDFBF7\],
+[data-manual-listing-shell] textarea.bg-\[\#FDFBF7\] {
+  background-color: #FFFFFF !important;
+  color: #1A1A1A !important;
+  border-color: rgba(21,128,61,0.28) !important;
+}
+
