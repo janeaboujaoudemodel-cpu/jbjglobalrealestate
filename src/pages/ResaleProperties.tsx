@@ -611,6 +611,7 @@ const ResaleProperties = () => {
               <div className="mt-8 flex items-center justify-center gap-4 flex-wrap">
                 <Link to="/properties">
                   <Button
+                    variant="ghost"
                     data-cta="dark"
                     className="jj-cta-dark font-semibold h-11 px-6 rounded-xl"
                   >
