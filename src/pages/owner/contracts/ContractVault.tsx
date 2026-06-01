@@ -450,6 +450,7 @@ export default function ContractVault() {
       </div>
 
       <AgreementUploadDrawer open={uploadOpen} onOpenChange={setUploadOpen} />
+      <AgreementEditDrawer open={!!editing} onOpenChange={(o) => !o && setEditing(null)} agreement={editing} />
     </div>
   );
 }
