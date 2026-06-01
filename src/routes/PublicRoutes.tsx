@@ -336,7 +336,7 @@ export const PublicRoutes = () => (
     <Route path="/about" element={<About />} />
     <Route path="/founder" element={<Founder />} />
     <Route path="/awards" element={<Awards />} />
-    <Route path="/press-kit" element={<PressKit />} />
+    <Route path="/press-kit" element={<Navigate to="/company-profile" replace />} />
     <Route path="/company-profile" element={<CompanyProfile />} />
     <Route path="/philanthropy" element={<Philanthropy />} />
     <Route path="/news" element={<News />} />
