@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   GraduationCap, BookOpen, Lock, BarChart3, MessageSquare, Shield,
-  CheckCircle, Clock, Play, ChevronRight, ChevronLeft, Award, X, Check,
+  CheckCircle, Clock, Play, ChevronRight, ChevronLeft, Award, X, Check, Settings,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
@@ -11,13 +11,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { IconTile } from "@/components/ui/icon-tile";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
 import { Book3DCard, BookDetailModal } from "@/components/broker-education";
+import { PremiumBook3DStyles } from "@/components/broker-education/PremiumBook3D";
 import { CertificatePreview } from "@/components/certification";
 import { useEducationProgress } from "@/hooks/useEducationProgress";
 import { BROKER_LESSONS } from "./brokerLessonContent";
+import { useIsOwner } from "@/hooks/useIsOwner";
 
 
 // ────────────────────────────────────────────────────────────────────────────
