@@ -39,13 +39,22 @@ export function BrokerToolkitHero() {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="text-center max-w-3xl mx-auto"
         >
-          <span className="inline-block text-[11px] tracking-[0.18em] uppercase text-white/70 mb-5 allow-white">
+          <span
+            className="inline-block text-[11px] tracking-[0.18em] uppercase mb-5 allow-white"
+            style={{ color: "rgba(255,255,255,0.75)" }}
+          >
             Broker Toolkit
           </span>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-[1.05] tracking-tight mb-5 allow-white">
+          <h1
+            className="text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.05] tracking-tight mb-5 allow-white"
+            style={{ color: "#ffffff", textShadow: "0 2px 24px rgba(0,0,0,0.55)" }}
+          >
             Your Complete Broker Success System
           </h1>
-          <p className="text-base md:text-lg text-white/75 max-w-xl mx-auto mb-9 allow-white">
+          <p
+            className="text-base md:text-lg max-w-xl mx-auto mb-9 allow-white"
+            style={{ color: "rgba(255,255,255,0.85)", textShadow: "0 1px 12px rgba(0,0,0,0.5)" }}
+          >
             AI tools, training, CRM, leads and rewards — all included, free for JBJ brokers.
           </p>
 
