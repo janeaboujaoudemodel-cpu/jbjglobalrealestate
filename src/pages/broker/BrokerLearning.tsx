@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   GraduationCap, BookOpen, Lock, BarChart3, MessageSquare, Shield,
-  CheckCircle, Clock, Play, ChevronRight, ChevronLeft, Award, X, Check, Settings,
+  CheckCircle, Clock, Play, ChevronRight, ChevronLeft, Award, X, Check,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +21,7 @@ import { CertificatePreview } from "@/components/certification";
 import BrokerCertificationGate from "@/components/broker-education/BrokerCertificationGate";
 import { PremiumLockBadge } from "@/components/broker-education/PremiumLock";
 import { useEducationProgress } from "@/hooks/useEducationProgress";
+import { useCreateBrokerRequest } from "@/hooks/useBrokerRequests";
 import { BROKER_LESSONS } from "./brokerLessonContent";
 
 
@@ -114,10 +115,10 @@ const getLearningPathRank = (path: string) =>
 export default function BrokerLearning() {
   const { user } = useAuth();
   const { mode } = useUserModeContext();
-  const trainingLocked = !user || mode !== "broker";
 
   const { books, loading, progressMap } = useBrokerEducation();
   const { summary: eduSummary } = useEducationProgress();
+  const createAccessRequest = useCreateBrokerRequest();
 
   const [selectedBook, setSelectedBook] = useState<EducationBook | null>(null);
   const [activeModule, setActiveModule] = useState<TModule | null>(null);
@@ -131,6 +132,22 @@ export default function BrokerLearning() {
   const closeModule = () => {
     setActiveModule(null);
     setLessonIndex(0);
+  };
+
+  const requestAcademyAccess = (item: { id: string; title: string }, itemType: "module" | "book") => {
+    createAccessRequest.mutate({
+      recipientDepartment: "Broker Academy",
+      requestType: "broker_academy_access",
+      subject: `Access request: ${item.title}`,
+      body: `Broker requested access to JBJ Academy ${itemType}: ${item.title}.`,
+      priority: "normal",
+      metadata: {
+        source: "jbj_academy",
+        item_type: itemType,
+        item_id: item.id,
+        user_mode: mode,
+      },
+    });
   };
 
   const sortedBooks = useMemo(() => {
@@ -215,32 +232,19 @@ export default function BrokerLearning() {
         {/* ── Training ─────────────────────────────────────────────── */}
         <section className="flex flex-col gap-6">
           <SectionTitle eyebrow="Market Intelligence" title="Training Modules" />
-          {trainingLocked ? (
-            <LockedTraining hasUser={!!user} />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {TRAINING.map((m, idx) => {
-                const prev = idx === 0 ? null : TRAINING[idx - 1];
-                const prevProgress = prev
-                  ? moduleProgress[prev.id] ?? prev.progress ?? 0
-                  : 100;
-                const locked = idx > 0 && prevProgress < 100;
-                return (
-                  <TrainingCard
-                    key={m.id}
-                    m={{ ...m, progress: moduleProgress[m.id] ?? m.progress }}
-                    onStart={() => openModule(m)}
-                    locked={locked}
-                    lockReason={
-                      locked && prev
-                        ? `Complete "${prev.title}" to unlock`
-                        : undefined
-                    }
-                  />
-                );
-              })}
-            </div>
-          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {TRAINING.map((m) => (
+              <TrainingCard
+                key={m.id}
+                m={{ ...m, progress: moduleProgress[m.id] ?? m.progress }}
+                onStart={() => openModule(m)}
+                locked
+                lockReason="Request academy access to unlock"
+                onRequestAccess={() => requestAcademyAccess(m, "module")}
+                requestAccessDisabled={createAccessRequest.isPending}
+              />
+            ))}
+          </div>
         </section>
 
         {/* ── Library ──────────────────────────────────────────────── */}
@@ -264,8 +268,10 @@ export default function BrokerLearning() {
                       book={book}
                       progress={progressMap[book.id]}
                       onOpen={() => setSelectedBook(book)}
+                      onRequestAccess={() => requestAcademyAccess(book, "book")}
+                      requestAccessDisabled={createAccessRequest.isPending}
                       index={rowIndex * 3 + i}
-                      isLocked={book.is_restricted}
+                      isLocked
                     />
                   ))}
                 </div>
@@ -388,6 +394,7 @@ export default function BrokerLearning() {
           book={selectedBook}
           isOpen={!!selectedBook}
           onClose={() => setSelectedBook(null)}
+          isLocked
         />
 
         <Dialog open={!!activeModule} onOpenChange={(o) => !o && closeModule()}>
@@ -582,11 +589,15 @@ function TrainingCard({
   onStart,
   locked = false,
   lockReason,
+  onRequestAccess,
+  requestAccessDisabled = false,
 }: {
   m: TModule;
   onStart: () => void;
   locked?: boolean;
   lockReason?: string;
+  onRequestAccess?: () => void;
+  requestAccessDisabled?: boolean;
 }) {
   return (
     <Card className={`relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-[#B89555]/55 ${locked ? "" : "hover:border-[#B89555]/80"} transition-all min-h-[240px] shadow-[0_4px_14px_rgba(184,149,85,0.10)] ${locked ? "" : "hover:shadow-[0_14px_30px_rgba(184,149,85,0.20)]"}`}>
@@ -635,13 +646,14 @@ function TrainingCard({
           {locked ? (
             <button
               type="button"
-              disabled
+              onClick={onRequestAccess}
+              disabled={requestAccessDisabled || !onRequestAccess}
               title={lockReason ?? "Locked"}
-              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/55 cursor-not-allowed leading-none shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]"
+              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/65 disabled:opacity-60 leading-none shadow-[0_6px_16px_rgba(184,149,85,0.16),inset_0_1px_0_rgba(255,255,255,0.8)]"
               data-no-contrast-guard
             >
               <Lock className="w-3 h-3 shrink-0" strokeWidth={2.2} />
-              <span className="whitespace-nowrap">Locked</span>
+              <span className="whitespace-nowrap">Request Access</span>
             </button>
           ) : (
             <button

@@ -67,6 +67,7 @@ export function useCreateBrokerRequest() {
       subject: string;
       body?: string;
       priority?: "low" | "normal" | "high" | "urgent";
+      metadata?: Record<string, unknown>;
     }) => {
       if (!user?.id) throw new Error("Sign in required");
       const { error } = await supabase.from("broker_requests" as any).insert({
@@ -77,6 +78,7 @@ export function useCreateBrokerRequest() {
         subject: input.subject,
         body: input.body ?? null,
         priority: input.priority ?? "normal",
+        metadata: input.metadata ?? {},
       } as any);
       if (error) throw error;
     },
