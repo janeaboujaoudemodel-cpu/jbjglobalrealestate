@@ -576,7 +576,7 @@ export default function GlobalVerticalNav() {
   const location = useLocation();
   const { session } = useAuth();
   const { role, isBroker, isInvestor, isOwner } = useUserRole();
-  const { isDeveloperMode, mode } = useUserModeContext();
+  const { isDeveloperMode, isBrokerMode, isInvestorMode, mode } = useUserModeContext();
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -595,6 +595,9 @@ export default function GlobalVerticalNav() {
     try { return sessionStorage.getItem('jj_sidebar_expand_seen_session') !== '1'; }
     catch { return true; }
   });
+
+  const showBrokerSurfaces = isBrokerMode;
+  const showInvestorSurfaces = isInvestorMode || isInvestor || isOwner;
 
   // Collapsible sections state — accordion: only one open at a time
   const [openSection, setOpenSection] = useState<SectionKey | null>(null);
