@@ -163,6 +163,8 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
                         src={logo}
                         alt={dev.name}
                         className="w-6 h-6 object-contain"
+                        loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <Building2 className="w-4 h-4 text-muted-foreground" />
