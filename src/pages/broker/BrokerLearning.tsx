@@ -151,6 +151,14 @@ export default function BrokerLearning() {
     });
   }, [books]);
 
+  const bookRows = useMemo(() => {
+    const rows: EducationBook[][] = [];
+    for (let i = 0; i < sortedBooks.length; i += 3) {
+      rows.push(sortedBooks.slice(i, i + 3));
+    }
+    return rows;
+  }, [sortedBooks]);
+
   const totalProgress =
     TRAINING.reduce((acc, m) => acc + (moduleProgress[m.id] ?? m.progress ?? 0), 0) /
     TRAINING.length;
@@ -233,19 +241,20 @@ export default function BrokerLearning() {
               Your library is loading or empty. Check back shortly.
             </div>
           ) : (
-            <div
-              className="grid gap-6 items-stretch"
-              style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}
-            >
-              {sortedBooks.map((book, i) => (
-                <Book3DCard
-                  key={book.id}
-                  book={book}
-                  progress={progressMap[book.id]}
-                  onOpen={() => setSelectedBook(book)}
-                  index={i}
-                  isLocked={book.is_restricted}
-                />
+            <div className="flex flex-col gap-6">
+              {bookRows.map((row, rowIndex) => (
+                <div key={`book-row-${rowIndex}`} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+                  {row.map((book, i) => (
+                    <Book3DCard
+                      key={book.id}
+                      book={book}
+                      progress={progressMap[book.id]}
+                      onOpen={() => setSelectedBook(book)}
+                      index={rowIndex * 3 + i}
+                      isLocked={book.is_restricted}
+                    />
+                  ))}
+                </div>
               ))}
             </div>
           )}
