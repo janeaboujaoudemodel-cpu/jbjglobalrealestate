@@ -246,7 +246,16 @@ export default function ContractVault() {
                 return (
                   <button
                     key={t.key}
-                    onClick={() => setActiveType(t.key)}
+                    onClick={() => {
+                      setActiveType(t.key);
+                      // Clicking "All Contracts" also clears search + developer
+                      // so the user sees a deliberate state reset instead of
+                      // a click that appears to do nothing when already on All.
+                      if (t.key === "all") {
+                        setQ("");
+                        setDeveloperName("");
+                      }
+                    }}
                     className={
                       "flex items-center gap-2 w-full text-left px-3 py-2 rounded-lg text-sm transition-colors border " +
                       (active
