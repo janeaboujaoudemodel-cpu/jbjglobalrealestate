@@ -977,6 +977,7 @@ All colors MUST be HSL.
 .jj-layer-2 {
   width: 100%;
   background: #F7F2EA;       /* champagne surface */
+  color: #1A1A1A;
   padding-block: clamp(2.5rem, 5vw, 4.5rem);
   padding-inline: clamp(1rem, 4vw, 2rem);
   border: 0 !important;
@@ -1022,6 +1023,7 @@ All colors MUST be HSL.
   .jj-card-inner {
     @apply rounded-xl p-6;
     background: #FDFBF7;
+    color: #1A1A1A;
     border: 1px solid rgba(184, 149, 85, 0.30);
     box-shadow: 0 1px 3px rgba(26, 26, 26, 0.04);
     transition: all 0.3s ease;
@@ -1036,6 +1038,7 @@ All colors MUST be HSL.
   .jj-box-active {
     @apply rounded-xl p-6;
     background: #FDFBF7;
+    color: #1A1A1A;
     border: 1px solid rgba(184, 149, 85, 0.30);
     box-shadow: 0 1px 3px rgba(26, 26, 26, 0.04);
     transition: all 0.3s ease;
@@ -2884,6 +2887,19 @@ a      .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-gua
     color: hsl(var(--accent-foreground));
     transform: translateY(-0.5px);
   }
+  .icon-tile[data-surface="navy"]:hover,
+  .icon-tile[data-surface="ink"]:hover,
+  [data-icon-tile][data-surface="navy"]:hover,
+  [data-icon-tile][data-surface="ink"]:hover {
+    background-color: hsl(var(--jj-navy-bg-hover)) !important;
+  }
+  .icon-tile[data-surface="navy"]:hover .lucide,
+  .icon-tile[data-surface="ink"]:hover .lucide,
+  [data-icon-tile][data-surface="navy"]:hover .lucide,
+  [data-icon-tile][data-surface="ink"]:hover .lucide {
+    color: hsl(var(--jj-on-dark)) !important;
+    stroke: hsl(var(--jj-on-dark)) !important;
+  }
 }
 
 /* ACTIVE */
@@ -2896,6 +2912,13 @@ a      .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-gua
   color: hsl(var(--accent-foreground));
   opacity: 1;
 }
+.icon-tile[data-surface="navy"]:active .lucide,
+.icon-tile[data-surface="ink"]:active .lucide,
+[data-icon-tile][data-surface="navy"]:active .lucide,
+[data-icon-tile][data-surface="ink"]:active .lucide {
+  color: hsl(var(--jj-on-dark)) !important;
+  stroke: hsl(var(--jj-on-dark)) !important;
+}
 
 /* KEYBOARD FOCUS */
 .icon-tile:focus-visible {
@@ -2905,6 +2928,13 @@ a      .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-gua
 }
 .icon-tile:focus-visible .lucide {
   color: hsl(var(--foreground));
+}
+.icon-tile[data-surface="navy"]:focus-visible .lucide,
+.icon-tile[data-surface="ink"]:focus-visible .lucide,
+[data-icon-tile][data-surface="navy"]:focus-visible .lucide,
+[data-icon-tile][data-surface="ink"]:focus-visible .lucide {
+  color: hsl(var(--jj-on-dark)) !important;
+  stroke: hsl(var(--jj-on-dark)) !important;
 }
 
 /* DISABLED */
@@ -3997,6 +4027,10 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 .surface-cream,
 .surface-raised,
 .surface-gold,
+.jj-layer-2,
+.jj-card-inner,
+.jj-box-active,
+.jj-icon-box-active,
 .bg-surface,
 .bg-raised,
 [data-surface="champagne"],
@@ -4114,15 +4148,15 @@ button[data-phone-code-trigger],
 .jj-cta-dark :where(span, svg, [class*="lucide"]),
 .jj-navy-cta :where(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
-[data-allow-dark-cta] > :where(span, svg, [class*="lucide"]),
+[data-allow-dark-cta] :where(span, svg, [class*="lucide"]),
 [data-icon-tile][data-surface="ink"] :where(svg, [class*="lucide"]),
 [data-icon-tile][data-surface="navy"] :where(svg, [class*="lucide"]),
-.surface-navy > :where(span, svg, [class*="lucide"]),
-.surface-ink > :where(span, svg, [class*="lucide"]),
-.surface-dark > :where(span, svg, [class*="lucide"]),
-[data-surface="navy"] > :where(span, svg, [class*="lucide"]),
-[data-surface="ink"] > :where(span, svg, [class*="lucide"]),
-[data-surface="dark"] > :where(span, svg, [class*="lucide"]),
+.surface-navy :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
+.surface-ink :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
+.surface-dark :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
+[data-surface="navy"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
+[data-surface="ink"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
+[data-surface="dark"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
 [data-hero-consultation-lock] :where(span, svg, [class*="lucide"]),
 [data-photo-copy-lock] :where(span, svg, [class*="lucide"]) {
   color: hsl(var(--jj-on-dark));
@@ -4145,6 +4179,20 @@ button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
   -webkit-text-fill-color: hsl(var(--jj-on-light));
   stroke: hsl(var(--jj-on-light));
   opacity: 1;
+}
+
+.jj-card-inner :where(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *),
+.jj-box-active :where(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *) {
+  color: hsl(var(--jj-on-light)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
+  opacity: 1 !important;
+}
+
+.jj-card-inner :where(svg, [class*="lucide"]):not([data-no-contrast-guard]):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *),
+.jj-box-active :where(svg, [class*="lucide"]):not([data-no-contrast-guard]):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *) {
+  color: hsl(var(--jj-on-light)) !important;
+  stroke: hsl(var(--jj-on-light)) !important;
+  opacity: 1 !important;
 }
 
 html body [data-photo-copy-lock] :where(h1,h2,h3,h4,h5,h6,p,span):not(.jj-pill-active *) {
