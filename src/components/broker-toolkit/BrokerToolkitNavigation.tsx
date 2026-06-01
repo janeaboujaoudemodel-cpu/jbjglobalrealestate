@@ -1,4 +1,4 @@
-import { Wrench, GraduationCap, Users, Target, TrendingUp } from "lucide-react";
+import { Wrench, GraduationCap, Target, Sparkles } from "lucide-react";
 
 interface BrokerToolkitNavigationProps {
   activeSection: string;
@@ -7,10 +7,9 @@ interface BrokerToolkitNavigationProps {
 
 const SECTIONS = [
   { id: "tools", label: "Tools", icon: Wrench },
-  { id: "education", label: "Education", icon: GraduationCap },
-  { id: "support", label: "Support Team", icon: Users },
-  { id: "crm", label: "CRM & Leads", icon: Target },
-  { id: "growth", label: "Growth & Rewards", icon: TrendingUp },
+  { id: "academy", label: "Academy", icon: GraduationCap },
+  { id: "crm", label: "CRM", icon: Target },
+  { id: "cta", label: "Join", icon: Sparkles },
 ];
 
 export function BrokerToolkitNavigation({
@@ -20,7 +19,7 @@ export function BrokerToolkitNavigation({
   return (
     <section
       id="what-you-get"
-      className="jj-band jj-band--page sticky top-[88px] z-30 py-3 border-b border-[#B89555]/25"
+      className="jj-band jj-band--page sticky top-[88px] z-30 py-3"
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center gap-2 overflow-x-auto scrollbar-hide">

@@ -1,49 +1,23 @@
 import { motion } from "framer-motion";
-import { Wrench, BookOpen, Users, Trophy, Download } from "lucide-react";
+import { Wrench, GraduationCap, Target, Trophy } from "lucide-react";
 import { IconTile } from "@/components/ui/icon-tile";
 
 const STATS = [
-  {
-    value: "11+",
-    label: "AI-Powered Tools",
-    icon: Wrench,
-    description: "Property comparison, CRM, documents & more",
-  },
-  {
-    value: "24",
-    label: "Training Modules",
-    icon: BookOpen,
-    description: "Videos, guides, and playbooks",
-  },
-  {
-    value: "4",
-    label: "Free PDF Books",
-    icon: Download,
-    description: "Objection handling, scripts & more",
-  },
-  {
-    value: "5",
-    label: "Support Team Members",
-    icon: Users,
-    description: "HR, Admin, Coach & Media",
-  },
-  {
-    value: "∞",
-    label: "Growth Potential",
-    icon: Trophy,
-    description: "Points, levels & rewards",
-  },
+  { value: "8", label: "Free Broker Tools", icon: Wrench, description: "All essential tools, controlled & curated" },
+  { value: "6", label: "Certification Courses", icon: GraduationCap, description: "JBJ Academy professional badges" },
+  { value: "1", label: "Built-in CRM", icon: Target, description: "Leads, pipeline, follow-ups in one place" },
+  { value: "100%", label: "Free for JBJ Brokers", icon: Trophy, description: "No subscription. Ever." },
 ];
 
 export function BrokerToolkitStats() {
   return (
     <section className="jj-band jj-band--surface py-12 md:py-16">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-5xl mx-auto">
           {STATS.map((stat, i) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05, duration: 0.4 }}
               viewport={{ once: true }}
