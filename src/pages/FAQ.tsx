@@ -139,7 +139,7 @@ const FAQ = () => {
   const allFaqItems = categories.flatMap(cat => cat.questions);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="FAQ | Frequently Asked Questions | JBJ Global Real Estate"
         description="Find answers to common questions about buying, selling, and renting property in the UAE. Expert guidance on mortgages, legal requirements, costs, and the property transaction process."
