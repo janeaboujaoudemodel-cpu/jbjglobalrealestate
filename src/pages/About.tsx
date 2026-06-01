@@ -13,9 +13,29 @@ import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import luxuryVilla2 from "@/assets/luxury-villa-2.jpeg";
+import aboutHeroVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
+import { FounderPhotoEditOverlay } from "@/components/founder/FounderPhotoEditOverlay";
+import { useFounderPhoto } from "@/hooks/useFounderPhoto";
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+};
+
+
+// Founder portrait that honors the owner-uploaded override
+const FounderAboutPortrait = () => {
+  const { photoUrl } = useFounderPhoto();
+  const src = photoUrl || founderProfessional;
+  return (
+    <img
+      src={src}
+      alt="Founder & CEO of JBJ GLOBAL REAL ESTATE"
+      className="w-full h-full transition-transform duration-300 group-hover:scale-105"
+      style={{ objectFit: 'cover', objectPosition: 'center 5%', transform: 'scale(1.25)' }}
+      loading="lazy"
+      decoding="async"
+    />
+  );
 };
 
 const staggerContainer = {
@@ -41,16 +61,14 @@ const Section = ({
   light?: boolean;
   id?: string;
 }) => {
-  // All sections now use 3-layer system on black background
+  // Cleaner, tighter section: single champagne band, one thin gold hairline
   return (
-    <section 
+    <section
       id={id}
-      className={`py-10 md:py-14 lg:py-[72px] bg-[#1A1A1A] ${className}`}
+      className={`py-8 md:py-10 lg:py-12 bg-[#1A1A1A] ${className}`}
     >
-      {/* Thin black contour + Active Champagne Layer */}
-      <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3 sm:p-4">
-        {/* Inner Pearl Layer */}
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+      <div className="jj-section-gutter">
+        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.18)]">
           <div className="max-w-[1100px] mx-auto">
             {children}
           </div>
@@ -116,85 +134,73 @@ const About = () => {
   return (
     <>
       <SEOHead {...pagesSEO.about} />
-      <div data-marketing-page className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-        
-        {/* SECTION 1: HERO */}
-        <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden" data-surface="dark">
+      <div data-marketing-page className="min-h-screen bg-[#F7F2EA]">
+
+        {/* SECTION 1: HERO — clean cinematic video */}
+        <section
+          className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden"
+          data-surface="dark"
+          data-hero-dark
+        >
           <div className="absolute inset-0">
-            <img 
-              src={luxuryVillaHero} 
-              alt="About JBJ GLOBAL REAL ESTATE" 
+            <video
+              src={aboutHeroVideo}
+              poster={luxuryVillaHero}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
               className="w-full h-full object-cover"
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/55 to-black/85" />
           </div>
-          
-          <motion.div 
-            className="relative z-10 text-center px-6 max-w-[1100px] mx-auto py-24"
+
+          <motion.div
+            className="relative z-10 text-center px-6 max-w-[1000px] mx-auto py-20"
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
           >
-            {/* Badge - Glass style with gold border, engraved look */}
-            <motion.button 
-              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-                backdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(200,167,102,0.6)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
-              }}
+            <motion.span
+              className="inline-block mb-5 text-[#E6CF93] text-[10px] md:text-[11px] uppercase tracking-[0.32em] font-medium"
               variants={fadeInUp}
             >
-              <span className="text-[#B89555] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">About JBJ Global Real Estate</span>
-            </motion.button>
-            <motion.h1 
-              className="text-white text-[36px] md:text-[48px] lg:text-[58px] font-semibold mb-6 leading-tight"
+              JBJ Global Real Estate
+            </motion.span>
+            <motion.h1
+              className="text-white text-[36px] md:text-[52px] lg:text-[62px] font-light tracking-tight mb-5 leading-[1.05]"
               variants={fadeInUp}
             >
-              About JBJ Global Real Estate
+              A licensed brokerage, built on{" "}
+              <span className="italic font-normal text-[#E6CF93]">clarity</span>.
             </motion.h1>
-            <motion.p 
-              className="text-white text-xl md:text-2xl font-medium max-w-3xl mx-auto mb-4"
-              style={{ lineHeight: 1.6 }}
+            <motion.p
+              className="text-white/85 text-base md:text-lg max-w-2xl mx-auto mb-10 font-light"
+              style={{ lineHeight: 1.75 }}
               variants={fadeInUp}
             >
-              A Licensed Brokerage Built on Structure, Clarity, and Accountability
+              A Dubai mainland brokerage operating across the UAE. Structured advisory for buying, selling and renting property, grounded in verified market data and disciplined execution.
             </motion.p>
-            <motion.p 
-              className="text-white/85 text-base md:text-lg max-w-3xl mx-auto mb-10"
-              style={{ lineHeight: 1.7 }}
+            <motion.div
+              className="flex flex-wrap justify-center gap-3"
               variants={fadeInUp}
             >
-              JBJ Global Real Estate is a Dubai-based, mainland licensed real estate brokerage operating across the UAE. Our focus is clear: structured brokerage services for buying, selling, and renting property — supported by data, market intelligence, and disciplined execution. We operate with transparency, regulatory compliance, and long-term client trust at the core of everything we do.
-            </motion.p>
-            <motion.div 
-              className="flex flex-wrap justify-center gap-4"
-              variants={fadeInUp}
-            >
-              {/* Hero CTA Buttons - Transparent bg, white border + white label + white icon on dark hero */}
-              <Link to="/services" className="relative z-20">
-                <button 
-                  className="group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent hover:bg-white/10"
-                  style={{
-                    border: '2px solid rgba(255,255,255,0.8)',
-                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                  }}
-                >
-                  <span className="text-white">Explore Our Services</span>
-                  <ArrowUpRight className="w-4 h-4 text-white" />
-                </button>
+              {/* On dark hero: solid champagne primary + outlined secondary — both fully legible */}
+              <Link
+                to="/services"
+                data-allow-dark-cta
+                data-no-contrast-guard
+                className="allow-white group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555] hover:bg-[#EFE6D6] transition-colors"
+              >
+                <span>Explore Our Services</span>
+                <ArrowUpRight className="w-4 h-4" />
               </Link>
-              <Link 
-                to="/contact" 
-                className="relative z-20 group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent hover:bg-white/10"
-                style={{
-                  border: '2px solid rgba(255,255,255,0.8)',
-                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                }}
+              <Link
+                to="/contact"
+                data-allow-dark-cta
+                data-no-contrast-guard
+                className="allow-white group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full bg-transparent text-white border border-white/70 hover:bg-white/10 transition-colors"
               >
                 <span className="text-white">Contact Our Team</span>
                 <ArrowUpRight className="w-4 h-4 text-white" />
@@ -202,6 +208,7 @@ const About = () => {
             </motion.div>
           </motion.div>
         </section>
+
 
         {/* SECTION 2: FOUNDER WRITTEN BLOCK - WHITE BACKGROUND */}
         <FounderContent>
@@ -221,49 +228,26 @@ const About = () => {
                   <div className="relative">
                     {/* Champagne background card for premium look */}
                     <div className="absolute inset-0 -m-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border border-[#B89555]/30 shadow-lg" />
-                    
-                    {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 5%, lifted up, no cropping */}
-                    {/* KEEP gold border always, add 3D lift on hover */}
-                    <Link to="/founder" className="block group relative z-10">
-                      <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-[#B89555] transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(200,167,102,0.4),0_20px_50px_rgba(0,0,0,0.35)] group-hover:-translate-y-2">
-                        <img 
-                          src={founderProfessional}
-                          alt="Founder & CEO of JBJ GLOBAL REAL ESTATE"
-                          className="w-full h-full transition-transform duration-300 group-hover:scale-110"
-                          style={{ 
-                            objectFit: 'cover',
-                            objectPosition: 'center 5%',
-                            transform: 'scale(1.3)',
-                          }}
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                      {/* Know More About the Founder - REVERSED: secondary on normal, primary on hover */}
-                      <button 
-                        className="group/btn mt-4 relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden w-full bg-transparent border-2 border-[#1A1A1A] hover:border-[#B89555]"
-                        style={{
-                          background: 'transparent',
-                        }}
-                      >
-                        {/* Hover overlay - 3D gold gradient */}
-                        <span 
-                          className="absolute inset-0 rounded-xl opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 pointer-events-none"
-                          style={{
-                            background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
-                            boxShadow: '0 6px 20px rgba(200,167,102,0.3), 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(200,167,102,0.2)',
-                          }}
-                        />
-                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/0 group-hover/btn:from-white/80 to-transparent pointer-events-none transition-all duration-300" />
-                        <span className="relative flex items-center justify-center gap-1">
-                          <span className="text-[#1A1A1A] group-hover/btn:text-[#1A1A1A] transition-colors">Know More About the</span>
-                          <span className="text-[#1A1A1A] group-hover/btn:text-[#1A1A1A] transition-colors">Founder</span>
-                          <span className="text-[#1A1A1A] group-hover/btn:text-[#1A1A1A] transition-colors">↗</span>
-                        </span>
-                      </button>
-                    </Link>
+
+                    <div className="relative z-10">
+                      <Link to="/founder" className="block group">
+                        <div className="relative w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-[#B89555] transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(200,167,102,0.4),0_20px_50px_rgba(0,0,0,0.35)] group-hover:-translate-y-1">
+                          <FounderAboutPortrait />
+                        </div>
+                      </Link>
+                      <FounderPhotoEditOverlay />
+                      <Link to="/founder" className="block mt-4">
+                        <button
+                          className="group/btn relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 w-full bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                        >
+                          <span>Know more about the founder</span>
+                          <span aria-hidden>↗</span>
+                        </button>
+                      </Link>
+                    </div>
                   </div>
                 </motion.div>
+
 
                 {/* RIGHT: Who We Are */}
                 <motion.div variants={fadeInUp} className="mt-8 md:mt-0">
@@ -272,7 +256,7 @@ const About = () => {
                   
                   <ContentText>
                     <p>
-                      JBJ Global Real Estate L.L.C. S.O.C is a licensed real estate brokerage authorized to facilitate property transactions across the UAE. We support local and international clients through every stage of the real estate journey — from market understanding and opportunity evaluation to transaction coordination and completion.
+                      JBJ Global Real Estate L.L.C. S.O.C is a licensed real estate brokerage authorized to facilitate property transactions across the UAE. We support local and international clients through every stage of the real estate journey, from market understanding and opportunity evaluation to transaction coordination and completion.
                     </p>
                     <p>
                       Our role is brokerage and coordination. Where additional services are required, we introduce clients to independent, licensed partners operating under their own regulatory frameworks.
@@ -299,7 +283,7 @@ const About = () => {
                 <SectionHeadline>Our Approach</SectionHeadline>
                 <ContentText>
                   <p>
-                    We believe real estate decisions must be informed, structured, and grounded in verified data — not sales pressure or assumptions.
+                    We believe real estate decisions must be informed, structured, and grounded in verified data, not sales pressure or assumptions.
                   </p>
                   <p>
                     Our approach combines market intelligence, clear process mapping, disciplined transaction management, and defined compliance boundaries. Every engagement is handled with clarity on scope, responsibility, and next steps.
@@ -403,25 +387,26 @@ const About = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl" />
                 
-                {/* Overlay Cards - Market Intelligence Visual - LARGER CONTENT */}
                 <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-4">
-                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <BarChart3 className="w-8 h-8 text-white mb-3" />
-                    <p className="text-white text-base font-semibold">Government Data</p>
-                  </div>
-                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <Building2 className="w-8 h-8 text-white mb-3" />
-                    <p className="text-white text-base font-semibold">Infrastructure</p>
-                  </div>
-                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <TrendingUp className="w-8 h-8 text-white mb-3" />
-                    <p className="text-white text-base font-semibold">Market Cycles</p>
-                  </div>
-                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
-                    <Target className="w-8 h-8 text-white mb-3" />
-                    <p className="text-white text-base font-semibold">Planning Strategy</p>
-                  </div>
+                  {[
+                    { Icon: BarChart3, label: "Government Data" },
+                    { Icon: Building2, label: "Infrastructure" },
+                    { Icon: TrendingUp, label: "Market Cycles" },
+                    { Icon: Target, label: "Planning Strategy" },
+                  ].map(({ Icon, label }) => (
+                    <div
+                      key={label}
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                      className="allow-white rounded-lg p-5 border border-[#B89555]/40"
+                      style={{ background: '#102540' }}
+                    >
+                      <Icon className="w-7 h-7 mb-3" style={{ color: '#FFFFFF' }} />
+                      <p className="text-base font-semibold" style={{ color: '#FFFFFF' }}>{label}</p>
+                    </div>
+                  ))}
                 </div>
+
               </motion.div>
 
               {/* RIGHT: Text Content */}
@@ -430,7 +415,7 @@ const About = () => {
                 <SectionHeadline>Data-Driven, Not Opinion-Driven</SectionHeadline>
                 <ContentText>
                   <p>
-                    Our market insights, reports, and tools are built using aggregated official data and verified market information. These insights are designed to support understanding, comparison, and clarity — not to predict outcomes or guarantee results.
+                    Our market insights, reports, and tools are built using aggregated official data and verified market information. These insights are designed to support understanding, comparison, and clarity. They are not designed to predict outcomes or guarantee results.
                   </p>
                   <p>
                     All data usage is transparent, referenced, and handled in accordance with applicable regulations.
@@ -498,7 +483,7 @@ const About = () => {
               <FeatureCard 
                 icon={Target}
                 title="Licensed Scope"
-                description="All activities remain within licensed scope. Trust is built through discipline — not promises."
+                description="All activities remain within licensed scope. Trust is built through discipline, not promises."
               />
             </div>
 
@@ -506,7 +491,7 @@ const About = () => {
         </Section>
 
         {/* SECTION 8: OUR COMMITMENT */}
-        <Section className="py-8 md:py-12 lg:py-16">
+        <Section className="!py-6 md:!py-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -521,7 +506,7 @@ const About = () => {
                 We are committed to: clear communication, accurate information, structured processes, and long-term client trust.
               </p>
               <p>
-                Real estate is not about speed — it is about precision.
+                Real estate is not about speed. It is about precision.
               </p>
             </ContentText>
             
@@ -541,7 +526,7 @@ const About = () => {
         </Section>
 
         {/* SECTION 9: CTA - 3-Layer System: Black > Active Champagne > Pearl */}
-        <section className="py-16 sm:py-20 bg-[#1A1A1A]">
+        <section className="py-10 md:py-12 bg-[#F7F2EA]">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-[1100px] mx-auto">
               {/* OUTER CARD - Active Champagne Layer */}
@@ -574,7 +559,7 @@ const About = () => {
                     className="text-[#1A1A1A]/70 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
                     variants={fadeInUp}
                   >
-                    Whether you are buying, renting, investing, or simply seeking clarity — our role is to guide you with precision, not pressure.
+                    Whether you are buying, renting, investing, or simply seeking clarity, our role is to guide you with precision, not pressure.
                   </motion.p>
 
                   {/* CTA Buttons */}
