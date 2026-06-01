@@ -15,6 +15,7 @@ import { FounderVisibilityProvider } from "@/contexts/FounderVisibilityContext";
 import { UserModeProvider } from "@/contexts/UserModeContext";
 import { PodcastVisibilityProvider } from "@/contexts/PodcastVisibilityContext";
 import { ConsVisibilityProvider } from "@/contexts/ConsVisibilityContext";
+import { TeamPageVisibilityProvider } from "@/contexts/TeamPageVisibilityContext";
 import { ScrollToTopOnMount } from "@/components/ScrollToTop";
 import RouteResume from "@/components/RouteResume";
 import AdminBypass from "@/components/AdminBypass";
@@ -94,6 +95,7 @@ const App = () => {
               <FounderVisibilityProvider>
                 <PodcastVisibilityProvider>
                 <ConsVisibilityProvider>
+                <TeamPageVisibilityProvider>
                   <ActiveLeadProvider>
                     <PopupCoordinatorProvider>
                     <PrintModeBoundary />
@@ -147,6 +149,7 @@ const App = () => {
             </Routes>
                   </PopupCoordinatorProvider>
                 </ActiveLeadProvider>
+              </TeamPageVisibilityProvider>
               </ConsVisibilityProvider>
               </PodcastVisibilityProvider>
             </FounderVisibilityProvider>

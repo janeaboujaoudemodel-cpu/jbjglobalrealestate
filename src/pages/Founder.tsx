@@ -5,6 +5,16 @@ import { SafeImage } from "@/components/SafeImage";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { IconTile } from "@/components/ui/icon-tile";
+import { FounderPhotoEditOverlay } from "@/components/founder/FounderPhotoEditOverlay";
+import { useFounderPhoto } from "@/hooks/useFounderPhoto";
+
+// Cream divider used between marketing sections — replaces the heavy black bands.
+const CreamDivider = () => (
+  <div aria-hidden className="w-full bg-[#FDFBF7]">
+    <div className="h-px bg-[#EFE6D6]" />
+  </div>
+);
+
 
 // Import founder images
 import founderHero from "@/assets/founder-hero.png";
@@ -70,6 +80,8 @@ const executiveTeam = [
 
 const Founder = () => {
   const { isFounderVisible, isLoading } = useFounderVisibility();
+  const { photoUrl: founderPhotoOverride } = useFounderPhoto();
+
 
   // Redirect to about page if founder visibility is disabled
   if (!isLoading && !isFounderVisible) {
@@ -79,14 +91,14 @@ const Founder = () => {
   // Show loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#1A1A1A] overflow-x-hidden">
+    <div className="min-h-screen bg-[#FDFBF7] overflow-x-hidden">
       {/* SEO Meta Tags */}
       <SEOHead {...pagesSEO.founder} />
       
@@ -165,18 +177,19 @@ const Founder = () => {
         </div>
       </section>
 
-      {/* DIVIDER */}
-      <section className="relative bg-[#1A1A1A] py-10 md:py-12">
+      {/* Thin eyebrow on champagne — replaces the heavy black "Leadership" divider block */}
+      <section className="relative bg-[#FDFBF7] pt-6 pb-2">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center gap-2 text-white/70">
-            <span className="text-xs uppercase tracking-[0.3em]">Leadership</span>
-            <div className="w-px h-12 bg-gradient-to-b from-gold to-transparent" />
+          <div className="flex flex-col items-center gap-1.5 text-[#1A1A1A]/70">
+            <span className="text-[10px] uppercase tracking-[0.3em]">Leadership</span>
+            <div className="w-px h-6 bg-[#B89555]/60" />
           </div>
         </div>
       </section>
+      <CreamDivider />
 
       {/* SECTION 1: FOUNDER - 3-Layer System */}
-      <section id="leadership" className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden">
+      <section id="leadership" className="py-10 md:py-14 bg-[#FDFBF7] relative overflow-hidden">
         <div className="jj-layer-2" data-surface="champagne">
           <div className="jj-layer-active rounded-2xl p-4 sm:p-6 md:p-8" data-surface="champagne">
             <motion.div 
@@ -197,12 +210,13 @@ const Founder = () => {
                   {/* Main photo container */}
                   <div className="relative aspect-[3/4] rounded-3xl overflow-hidden border-[3px] border-[#B89555] shadow-[0_0_60px_rgba(200,167,102,0.25)] bg-[#FDFBF7]">
                     <SafeImage 
-                      src={founderPremium} 
+                      src={founderPhotoOverride || founderPremium} 
                       fallbackSrc={founderProfessional}
                       alt="Jane Bou Jaoude (جاين بو جودة), Founder & CEO of JBJ Global Real Estate" 
                       className="w-full h-full"
                       style={{ objectFit: "cover", objectPosition: "center 15%" }}
                     />
+                    <FounderPhotoEditOverlay />
                   </div>
                   
                   {/* Floating badge */}
@@ -285,7 +299,8 @@ const Founder = () => {
       </section>
 
       {/* SECTION 2: EXECUTIVE LEADERSHIP - 3-Layer System */}
-      <section className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden">
+      <CreamDivider />
+      <section className="py-10 md:py-14 bg-[#FDFBF7] relative overflow-hidden">
         <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg" data-surface="champagne">
             <motion.div
@@ -342,7 +357,8 @@ const Founder = () => {
       </section>
 
       {/* SECTION 3: GOVERNANCE & OVERSIGHT - 3-Layer System */}
-      <section className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden">
+      <CreamDivider />
+      <section className="py-10 md:py-14 bg-[#FDFBF7] relative overflow-hidden">
         <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg" data-surface="champagne">
             <motion.div
@@ -400,7 +416,8 @@ const Founder = () => {
       </section>
 
       {/* SECTION 4: REGULATORY POSITIONING - 3-Layer System */}
-      <section className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden">
+      <CreamDivider />
+      <section className="py-10 md:py-14 bg-[#FDFBF7] relative overflow-hidden">
         <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg" data-surface="champagne">
             <motion.div
@@ -448,7 +465,8 @@ const Founder = () => {
       </section>
 
       {/* SECTION 5: CLOSING STATEMENT & CTA - 3-Layer System */}
-      <section className="py-16 sm:py-20 bg-[#1A1A1A] relative overflow-hidden">
+      <CreamDivider />
+      <section className="py-10 md:py-14 bg-[#FDFBF7] relative overflow-hidden">
         <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
           <div className="max-w-[1100px] mx-auto">
             {/* OUTER CARD - Active Champagne Layer */}

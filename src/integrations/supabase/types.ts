@@ -39092,8 +39092,10 @@ export type Database = {
         Args: { junk: boolean; row_ids: string[] }
         Returns: Json
       }
+      set_founder_photo_url: { Args: { p_url: string }; Returns: Json }
       set_founder_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
       set_podcast_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
+      set_team_page_visibility: { Args: { p_enabled: boolean }; Returns: Json }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
       start_module: {
