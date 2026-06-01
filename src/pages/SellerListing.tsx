@@ -633,11 +633,13 @@ Requirements:
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 border-2 transition-all ${
                     currentStep === step.number 
-                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-[#1A1A1A] text-[#1A1A1A] shadow-lg' 
+                      ? 'border-[#0F5132] text-white shadow-lg [&_svg]:!text-white' 
                       : currentStep > step.number 
-                        ? 'bg-[#FDFBF7] border-[#B89555] text-[#1A1A1A]'
-                        : 'bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]/70'
-                  }`}>
+                        ? 'bg-white border-[#0F5132] text-[#0F5132]'
+                        : 'bg-white/60 border-[#0F5132]/30 text-[#0F5132]/70'
+                  }`}
+                  style={currentStep === step.number ? { background: 'linear-gradient(135deg, #0F5132 0%, #064E3B 100%)' } : undefined}>
+
                     {currentStep > step.number ? (
                       <CheckCircle2 className="w-5 h-5" />
                     ) : (
