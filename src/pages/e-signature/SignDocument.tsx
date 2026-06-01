@@ -135,6 +135,36 @@ export default function SignDocument() {
     }
   };
 
+  const handleAdopt = async (result: {
+    signatureUrl: string;
+    initialsUrl: string;
+    broadcast: boolean;
+    saveDefault: boolean;
+  }) => {
+    if (!token) return;
+    setSigningInBrowser(true);
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-process-signature`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token,
+          signature_data: result.signatureUrl,
+          initials_data: result.initialsUrl,
+          signed_date: new Date().toLocaleDateString("en-GB"),
+        }),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out?.error || "Failed to submit signature");
+      toast.success("Signed! Auto-applied to every field assigned to you.");
+      setCompleted(true);
+    } catch (e: any) {
+      toast.error(e?.message || "Could not submit your signature. Please try again.");
+    } finally {
+      setSigningInBrowser(false);
+    }
+  };
+
   const HomeActions = () => (
     <div className="mt-6 flex flex-col items-center gap-3">
       <Button
