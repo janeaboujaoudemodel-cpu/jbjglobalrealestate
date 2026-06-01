@@ -633,26 +633,19 @@ const ResaleProperties = () => {
       {/* List Your Resale CTA band — connects /resale-properties → /list-property */}
       <section className="px-4 sm:px-6 md:px-10 py-10 md:py-14 bg-[#F7F2EA]">
         <div className="max-w-5xl mx-auto">
-          <div
-            className="rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5 bg-[#FDFBF7]"
-            style={{ border: "2px solid #2563EB" }}
-          >
+          <div className="rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5 bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
             <div className="flex-1">
               <span
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold mb-3"
-                style={{
-                  backgroundColor: "#2563EB10",
-                  color: "#2563EB",
-                  border: "1px solid #2563EB",
-                }}
+                data-allow-dark-cta
                 data-no-contrast-guard
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold mb-3 bg-[#102540] text-white border border-[#B89555]/40 allow-white"
               >
                 Investor Resale
               </span>
-              <h3 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: "#2563EB" }} data-no-contrast-guard>
+              <h3 className="text-xl sm:text-2xl font-bold mb-2 text-[#1A1A1A]">
                 Have a property to resell?
               </h3>
-              <p className="text-sm sm:text-base" style={{ color: "#1A1A1A" + "B3" }}>
+              <p className="text-sm sm:text-base text-[#1A1A1A]/70">
                 List your property on JBJ's investor network — premium reach,
                 transparent approval, and live status tracking in your dashboard.
               </p>
@@ -660,10 +653,8 @@ const ResaleProperties = () => {
             <div className="flex flex-col sm:flex-row gap-3 shrink-0">
               <Link to="/list-property?purpose=sale&mode=manual">
                 <Button
-                  data-allow-dark-cta
-                  data-no-contrast-guard
-                  className="font-semibold border-0 h-11 px-6 w-full sm:w-auto"
-                  style={{ backgroundColor: "#2563EB", color: "#FFFFFF" }}
+                  data-cta="dark"
+                  className="jj-cta-dark font-semibold h-11 px-6 w-full sm:w-auto rounded-xl"
                 >
                   List my property
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -672,8 +663,8 @@ const ResaleProperties = () => {
               <Link to="/list-property?purpose=sale&mode=ai">
                 <Button
                   variant="outline"
-                  className="font-semibold h-11 px-6 w-full sm:w-auto text-[#1A1A1A] hover:bg-[#2563EB]/5"
-                  style={{ border: "2px solid #2563EB" }}
+                  data-cta="outline"
+                  className="jj-cta-outline font-semibold h-11 px-6 w-full sm:w-auto rounded-xl"
                 >
                   List with AI
                 </Button>
@@ -682,6 +673,7 @@ const ResaleProperties = () => {
           </div>
         </div>
       </section>
+
     </>
   );
 };
