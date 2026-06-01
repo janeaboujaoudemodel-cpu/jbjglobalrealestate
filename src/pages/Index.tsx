@@ -297,13 +297,20 @@ const Index = () => {
         <DeveloperPartnersMarquee />
       </Suspense>
 
-      {/* VERIFICATION + MODE-AWARE PORTAL — paired full-bleed banner block.
-          Section above (Developer Partners Marquee) is separated by a clean
-          gold hairline divider. The two banners are flush (no gap) and read
-          as one premium block: Get Verified (navy) → Mode Portal (champagne,
-          inverted contrast). */}
-      <div aria-hidden="true" className="w-full mt-6 h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="">
+      {/* EXPLORE OUR SERVICES — separator section between Partners marquee and the
+          Get Verified / Mode Portal pair, with generous breathing room above and below. */}
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto pt-16 pb-16 md:pt-20 md:pb-20">
+        <LazyVisible minHeight={500}>
+          <Suspense fallback={<SectionLoader />}>
+            <ExploreServicesCard />
+          </Suspense>
+        </LazyVisible>
+      </PremiumSectionCard>
+
+      {/* VERIFICATION + MODE-AWARE PORTAL — paired full-bleed banner block,
+          pushed further down with extra spacing above. */}
+      <div aria-hidden="true" className="w-full mt-4 h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
+      <PremiumSectionCard padding="none" width="full" wrapperClassName="pt-6 md:pt-8">
         <Suspense fallback={null}>
           <VerificationBanner />
         </Suspense>
@@ -317,6 +324,7 @@ const Index = () => {
           <PartnerVerifyHeroCTA />
         </Suspense>
       </PremiumSectionCard>
+
 
       {/* CATEGORY SELECTOR — I'm an Investor / Broker / Developer */}
       <div id="category-selector" className="py-4">
@@ -374,14 +382,10 @@ const Index = () => {
         </LazyVisible>
       </PremiumSectionCard>
 
-      {/* EXPLORE OUR SERVICES */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={500}>
-          <Suspense fallback={<SectionLoader />}>
-            <ExploreServicesCard />
-          </Suspense>
-        </LazyVisible>
-      </PremiumSectionCard>
+      {/* (EXPLORE OUR SERVICES moved up — now sits between Partners marquee
+          and the Get Verified / Mode Portal pair as a visual separator.) */}
+
+
 
       {/* TOOLKIT SHOWCASE CARD */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
