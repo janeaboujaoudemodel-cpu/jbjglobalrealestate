@@ -1,60 +1,83 @@
-## Root causes
+## What's broken on `/rent-guide` (and every other guide that follows the same recipe)
 
-### 1. Header / sidebar "blinking" — animated shimmer on persistent chrome
-The class `.jbj-shimmer-champagne` runs a 3s linear infinite gold gradient sweep:
+Pulled apart `src/pages/RentGuide.tsx`, `src/components/guides/*`, `src/components/books/GuideBookSection.tsx`, `src/components/guides/GuideCTA.tsx`, `src/components/FounderPhilosophySection.tsx`, and the hero CSS in `src/index.css`. The complaints all trace back to a handful of root causes:
 
-```css
-/* src/index.css:741 */
-.jbj-shimmer-champagne {
-  background-image: linear-gradient(110deg, #E6D3A8 0%, #F5E9CC 25%, #D8BE82 50%, #F5E9CC 75%, #E6D3A8 100%) !important;
-  background-size: 200% 100% !important;
-  animation: jbj-champagne-shimmer 3s linear infinite;
-}
-```
+1. **The "book" is just a thumbnail.** `GuideBookSection` renders a static 3D cover plus a TOC that scrolls the page when clicked. There is no actual reader, so clicking "Renting in Dubai: Getting Started" jumps to whatever section happens to share the index (`sectionIds[0]`). The book has 10 chapters but only 5 `tocItems` exist → mismatched anchors → wrong jump (e.g. lands on "How Renting Works").
+2. **Page root is brown.** `RentGuide.tsx:198` wraps everything in `bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]` (dark brown). Every `jj-section-champagne` is wrapped in container padding, so the brown background bleeds through between sections — that is the "two-colour brown" the user circled in screenshots 2, 4, 5. It also kills the floating "scroll-to-top" arrow (same brown on brown).
+3. **CTA band is solid black.** `GuideCTA.tsx:77` uses `bg-[#1A1A1A]`. On a marketing page that violates the champagne-band rule and produces a black strip around the "Ready to Find Your Next Home" card (screenshot 2 top + bottom red bands).
+4. **WhatsApp / Phone buttons render dark-on-navy.** `GuideCTA.tsx:138/146` declares `bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white`. The global "Black-CTA → Navy" guard sees `bg-[#1A1A1A]` + white-ish hover text on an anchor and repaints the button to navy `#102540` + white text — but the **idle** state still has `text-[#1A1A1A]` baked in and the `<svg>` (MessageSquare / Phone) inherits that ink colour. Result: navy pill, white label, black icon.
+5. **Founder CTA is a solid-gold fill.** `FounderPhilosophySection.tsx:80` "Learn More About the Founder" is a gold-filled rectangle — direct breach of the `No Gold Fills` core rule.
+6. **Hero is not full-screen.** `jj-hero-fullscreen.jj-hero-compact` caps at `78vh` / `820px` (`src/index.css:649-674`). The user wants a true full-viewport hero.
+7. **Hero copy is unreadable.** Title splits across `text-white` ("Your Guide to") and a `text-[#1A1A1A]` span that the contrast guard repaints to champagne `#F7F2EA`. Over the bright window photo with only a `from-black/70` gradient overlay, both halves wash out and the description (`text-white/85`) sits over the bright window blowout on the right.
+8. **Read the Full Guide / View Rental Properties buttons are ghostly.** Inline `border: '2px solid rgba(255,255,255,0.8)'` + `bg-transparent` + a hover-only champagne gradient = invisible at rest, half-painted on hover.
+9. **Broker mode wording is wrong.** "Ready to Find Your Next Home?" doesn't apply to a broker — they want "Ready to Close Your Next Deal" with copy + CTA tuned for sellers/brokers.
+10. **Spacing.** Each section uses `py-16 md:py-24` on top of the page-level brown bg, so empty brown stripes appear between champagne content blocks (screenshots 4, 5).
 
-It is applied to **always-visible** chrome that should be perfectly stable:
-- `src/components/navigation/HorizontalUtilityBar.tsx:99` — entire fixed top header bar
-- `src/components/navigation/HorizontalUtilityBar.tsx:158, 167` — the active `sq ft` / `sq m` pill
-- `src/components/navigation/GlobalVerticalNav.tsx:1007` — vertical nav logo tile (expanded)
-- `src/components/navigation/GlobalVerticalNav.tsx:1282` — vertical nav logo tile (collapsed)
+## Fix plan (frontend only — no DB, no routing)
 
-User-perceived effect: the header pulses gold every 3 s, and because only the **active** unit pill shimmers, the eye reads the highlight as "moving from sq ft to sq m". The vertical sidebar's JBJ tile shimmers in the same rhythm.
+### A. Real book reader, not a thumbnail
+Build a new component `src/components/books/GuideBookReader.tsx`:
 
-### 2. "Contact us" launcher flickering on anonymous sessions
-`useOverHero` in `src/components/support/SupportLauncher.tsx:99-128`:
+- Champagne card with the 3D cover on the left and a paginated reader on the right.
+- "Open Book" → expands into a full-bleed `<Dialog>` (champagne page background, gold hairline frame, no gray).
+- Two-page spread on `lg+`, single page on mobile. Visible page numbers, Prev / Next + keyboard arrows.
+- Page content comes straight from `book.tableOfContents[i]` — each chapter's `title`, `summary`, and `bullets` (BookData already has these in `src/data/bookCollections.ts`; nothing fabricated).
+- Closing the dialog returns to the page.
 
-- Defaults `overHero = true` → tag starts invisible (`opacity-0`).
-- A `scroll` listener fires `check()` on every scroll tick and toggles `overHero` whenever the homepage hero video crosses the threshold `r.top <= vh*0.15`.
-- On the homepage that boundary is exactly where the page sits after first paint, so tiny layout shifts (fonts, images, cookie banner mount) flip the flag on/off → 300 ms opacity fade in, fade out, in, out.
-- After sign-in the user lands on a route with no `[data-hero-dark]` video, so `hit` stays `false` and the tag stabilizes. That matches the user's report.
+Wire `GuideBookSection` to render `GuideBookReader` instead of the static cover + TOC scroll-shim. **The TOC chapter list inside the reader controls pagination, NOT page-scroll**, so the "wrong anchor" bug disappears completely.
 
-## Fix plan (frontend only, no business logic)
+### B. Page chrome — kill the brown, restore champagne bands
+- `RentGuide.tsx:198` → replace the brown gradient with `bg-page` (champagne page tone) + `data-marketing-page` on the root so the global band system applies.
+- Wrap every top-level section already using `jj-section-champagne` in the existing `.jj-band` primitives (`page` / `surface` / `raised`) so alternation is tone, not gap.
+- Reduce inter-section gap: drop section padding from `py-16 md:py-24` to `py-12 md:py-16` and remove the bleeding root color entirely.
+- Repeat the same root swap on the sibling guide pages: `BuyerGuide.tsx`, `SellerGuide.tsx`, `LandlordGuide.tsx`, `TenantGuide.tsx`, `BuyerFAQ.tsx`, `SellerFAQ.tsx`, `LandlordFAQ.tsx`, `BrokerFAQ.tsx`, `BrokerResources.tsx`, `EducationHub.tsx` — any page that imports `GuideHero` or `GuideBookSection` (grep already confirms the list).
 
-### A. Stop the shimmer on persistent chrome
-1. `src/index.css` — narrow `.jbj-shimmer-champagne` so it is a one-shot reveal only (or move the animation behind `@media (hover: hover)` + `:hover` so it only animates on user interaction). Concretely: drop `animation: ... infinite` from the base class; expose a new `.jbj-shimmer-champagne--hover:hover` variant for places that actually want the sweep on hover.
-2. Replace the four persistent usages with the static champagne gradient already used elsewhere:
-   - `HorizontalUtilityBar.tsx:99` — drop `jbj-shimmer-champagne`, keep existing `bg-gradient-to-r from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA]`.
-   - `HorizontalUtilityBar.tsx:158/167` — for the active unit pill, replace the shimmer with the locked active style (cream `#EFE6D6` + 1 px gold ring + ink text), matching `.jj-pill-active` from the CTA primitive system. This also removes the perceived "movement" between sq ft and sq m.
-   - `GlobalVerticalNav.tsx:1007/1282` — drop `jbj-shimmer-champagne`, keep the existing static `bg-gradient-to-b` champagne fill.
-3. Leave the class itself in place for any opt-in marketing surfaces; just remove the infinite animation from the base rule.
+### C. `GuideCTA` champagne lift + correct button colors
+- Outer `<section>` → `bg-page` (no more black band).
+- WhatsApp button: use the locked `.jj-cta-dark` primitive + `data-cta="whatsapp"`; icon gets `allow-white` class so the contrast guard doesn't flip the SVG to ink. Hover stays navy.
+- Phone button: same `.jj-cta-dark` primitive + `allow-white` on the icon.
+- Primary "View Rental Properties" → `.jj-cta-champagne` (cream pill, ink text, gold hairline).
+- Broker copy branch: read `useUserModeContext().isBrokerMode` inside `GuideCTA`; when broker, swap defaults:
+  - title → "Ready to Close Your Next Deal?"
+  - description → "Coordinate with a JBJ partner desk to move your client from offer to handover."
+  - primary action label/href → "Open Broker Toolkit" / `/broker-toolkit`
+  - Pass-through props still win — pages can keep custom copy by passing it.
 
-### B. Stabilise the support launcher
-In `src/components/support/SupportLauncher.tsx`:
-1. Default `overHero` to `false` on routes that have no `[data-hero-dark]` video element at mount time — compute the initial value synchronously inside `useState(() => …)` so there is no initial fade-out.
-2. Throttle `check()` to once per animation frame (`requestAnimationFrame` guard) and add a 6 px hysteresis around the threshold so micro layout shifts don't flip the flag.
-3. Stop listening to `scroll` on routes with no qualifying hero (early-return when `document.querySelector('[data-hero-dark] video')` is null at mount; re-evaluate on `routechange`).
-4. Replace the 300 ms `transition-opacity` fade with `visibility` toggling once the value is committed, so even if it does flip, there is no animated flash.
+### D. Hero — full-screen + readable
+- `src/index.css` `.jj-hero-fullscreen.jj-hero-compact` → `min-height: 100dvh` (fallback `100vh`), remove the `max-height: 820px` cap.
+- `GuideHero.tsx` overlay: replace `from-black/70 via-black/70 to-black` with a stronger two-layer scrim — base `bg-black/55` + bottom gradient `bg-gradient-to-b from-black/35 via-black/55 to-black/85` and a subtle right-side fade `bg-gradient-to-l from-black/40 to-transparent` so the bright window doesn't blow out copy.
+- Title: drop the inline `text-[#1A1A1A]` span; render the whole H1 in `text-white` with a unified `text-shadow`. Inside the H1 wrap the keyword phrase in a gold underline (1px hairline accent) — no per-word colour swap, no contrast guard rewrite.
+- Description: switch to `text-white` (full opacity) + `text-shadow: 0 2px 14px rgba(0,0,0,.7)`.
+- Replace the two ghost buttons in `RentGuide.tsx:215-242` with the locked CTA primitives:
+  - Primary → `.jj-cta-champagne` ("Read the Full Guide", `ArrowDown` icon, scrolls to `#rental-process`).
+  - Secondary → `.jj-cta-outline` on dark hero (`data-on-dark`, `allow-white` so the white/gold outline survives the contrast guard).
 
-### C. Verify
-1. `browser--navigate_to_sandbox /` (anonymous) → record 6 s of the header strip and right edge; confirm zero animation on the header bar, sidebar logo tile, and Contact us tag (a single mount fade-in is fine).
-2. Refresh five times: confirm the active unit pill stays put on the value persisted in `localStorage.jj_area_unit` with no swap.
-3. Navigate to `/properties`, `/jbj-academy`, `/contact` → confirm Contact us tag stays visible and steady on every route.
-4. Sign in → confirm parity with anonymous behaviour (no regression).
+### E. Founder Philosophy CTA — kill the gold fill
+- `FounderPhilosophySection.tsx` "Learn More About the Founder" → swap to `.jj-cta-champagne` (cream + ink + 1px gold hairline). Keeps the gold accent on the hairline only, per the `No Gold Fills` core rule.
 
-## Files touched
-- `src/index.css` — defang `.jbj-shimmer-champagne` (no infinite animation by default; add hover-only variant).
-- `src/components/navigation/HorizontalUtilityBar.tsx` — remove shimmer from header bar + unit pills; use `.jj-pill-active` for active unit.
-- `src/components/navigation/GlobalVerticalNav.tsx` — remove shimmer from both logo tiles.
-- `src/components/support/SupportLauncher.tsx` — sync default for `overHero`, rAF-throttled + hysteresis check, scroll listener only when a hero exists, `visibility` toggle instead of opacity fade.
+### F. Float-arrow contrast
+The page-end "scroll to top" arrow was invisible on the brown bg. Once the root becomes champagne (step B) it is automatically readable. Confirm visually after the swap; no extra code unless it still fails contrast.
 
-No database, no auth, no routing changes.
+### G. Validate
+1. `browser--navigate_to_sandbox /rent-guide` at 1280×720 and 375×812.
+2. `browser--screenshot full_page=true` on both viewports.
+3. Visually confirm:
+   - Hero spans 100dvh, title + description fully legible, two CTA buttons solid (champagne and outline, not ghost).
+   - Page is one continuous champagne surface with tone alternation, **zero brown stripes** between sections.
+   - Open the book — first chapter shows as **page 1** of a 2-page spread with title + bullets, Next/Prev works.
+   - CTA card sits inside a champagne band; WhatsApp + Phone show white icons, white label, navy fill at idle and hover.
+   - Switch mode to Broker → CTA card title reads "Ready to Close Your Next Deal?".
+   - "Learn More About the Founder" is cream + ink + 1px gold hairline, not a gold rectangle.
+   - Floating "scroll to top" arrow visible on champagne.
+4. Spot-check `/buyer-guide`, `/seller-guide`, `/landlord-guide`, `/tenant-guide`, `/buyer-faq` to confirm the global guide chrome fix took.
+
+### Files touched
+- `src/pages/RentGuide.tsx` (+ all sibling guide/FAQ pages listed in step B — same root-bg swap only)
+- `src/components/guides/GuideHero.tsx`
+- `src/components/guides/GuideCTA.tsx`
+- `src/components/books/GuideBookSection.tsx`
+- new `src/components/books/GuideBookReader.tsx`
+- `src/components/FounderPhilosophySection.tsx`
+- `src/index.css` (hero min-height + scrim refresh only)
+
+No business logic, no DB, no routing changes.
