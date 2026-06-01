@@ -1,50 +1,50 @@
-# Rebuild Broker Toolkit page
+Plan to fix the Broker Toolkit properly:
 
-The current `/broker-toolkit` has a broken hero (invisible headline on champagne bg, no video, oversized bulky CTAs), faded icon tiles on the 5 stats cards, washed-out navigation pills, and inconsistent section surfaces. I'll rebuild it cleanly using the locked design system (champagne bands, `IconTile`, CTA primitives) — keeping every section intact (No Removal policy).
+1. Simplify the Broker Toolkit page
+- Remove the oversized/duplicated “Discover All Free Tools”, category-repeat grids, “Unlock More with Broker Hub”, referral promo, and extra bulky sections that make the page huge.
+- Keep the page focused on brokers: hero, compact stats, one clean tools grid, training/academy summary, CRM/portal CTA, and final join/access CTA.
+- Replace all dark neon/purple/blue/green card layers with the approved champagne/gold/ink design system.
 
-## Scope
+2. Make broker tools match the vertical sidebar exactly
+- Use only the tools currently shown under vertical sidebar “Tools & Workspace”:
+  - AI Home Finder
+  - Property Comparison
+  - Mortgage Calculator
+  - Property Evaluator
+  - Rental Index
+  - Property Measurement
+  - List Property for Sale
+  - List Property for Rent
+- Remove the old broker-toolkit-only tools from the broker page: Design Studio, Video Builder, Video Meet, Documents, Spreadsheet, E-Sign, CRM shortcut, social tools, photo tools, etc.
 
-Files touched (visual/structure only, no business logic changes):
+3. Connect the broker toolkit to backend visibility control
+- Add/confirm visibility rows in `ai_tool_visibility` for the exact sidebar broker tools.
+- Update the broker toolkit tools grid to use `useToolVisibility()` so only tools marked `public` appear.
+- Keep owner control inside the existing owner AI Tools Control Panel only; no visibility toggle will appear on the public broker toolkit page.
+- If the owner hides a tool, it disappears from Broker Toolkit; if set public, it appears.
 
-- `src/pages/BrokerToolkit.tsx` — wrap sections in `<PremiumSectionCard>` + `.jj-band` alternation; remove the dark gradient page background.
-- `src/components/broker-toolkit/BrokerToolkitHero.tsx` — full rebuild.
-- `src/components/broker-toolkit/BrokerToolkitStats.tsx` — fix icon tiles & layout.
-- `src/components/broker-toolkit/BrokerToolkitNavigation.tsx` — convert pills to locked `.jj-pill-active` primitive.
-- Light pass on section wrappers (`Tools / Education / Academy / Operations / CRM / Support / Growth / Referral / CTA`) only to remove dark fills and align padding — no content/feature removal.
+4. Fix contrast and alignment everywhere
+- Rebuild broker cards with consistent fixed height, left-aligned text, equal spacing, readable ink text, gold IconTile icons, and non-faded descriptions.
+- Fix section titles, badges, CTAs, and card content so there is no white-on-light, ink-on-dark, faded gold, or raw gray.
+- Use standardized CTA primitives (`jj-cta-dark`, `jj-cta-outline`, `jj-pill-active`) and approved colors only.
 
-## Hero rebuild
+5. Clean navigation and section flow
+- Update in-page navigation to only real sections: Tools, Academy, CRM, Growth.
+- Remove links/buttons pointing to deleted/duplicated concepts like Broker Hub.
+- Make Broker Portal CTAs route to `/broker/portal` and JBJ Academy text stay consistent.
 
-- Full-bleed `.jj-band jj-band--page` with a real background video (reuse the home-hero video asset already used by `<HomeHeroSearch />` / hero section) layered behind a soft champagne→ink scrim so the headline is legible.
-- `data-hero-dark` attribute so white-text rule applies inside the hero only.
-- Headline: "Your Complete Broker Success System" (kept), `text-4xl md:text-6xl`, white, tight tracking; subhead one line, `text-white/80`.
-- Two CTAs using locked primitives — compact (`h-11`, `px-5`, `text-sm font-medium`):
-  - Primary: `.jj-cta-dark` → "Open My Dashboard" → `/broker/portal`
-  - Secondary: `.jj-cta-outline` (on dark) → "See What's Included" → scrolls to `#toolkit-overview`
-- Height capped at `min-h-[520px] md:min-h-[600px]` (not full-screen).
+6. Technical files expected to change
+- `src/components/broker-toolkit/BrokerToolkitTools.tsx` — replace with compact visibility-filtered tool grid.
+- `src/pages/BrokerToolkit.tsx` — remove redundant section list and reorder sections.
+- `src/components/broker-toolkit/BrokerToolkitNavigation.tsx` — reduce navigation to the remaining sections.
+- `src/components/broker-toolkit/BrokerToolkitStats.tsx` — update counts to match the real visible tools.
+- `src/components/broker-toolkit/BrokerToolkitEducation.tsx`, `BrokerToolkitAcademy.tsx`, `BrokerToolkitCRM.tsx`, `BrokerToolkitGrowth.tsx`, `BrokerToolkitCTA.tsx` — clean contrast and spacing or simplify where needed.
+- `src/components/navigation/GlobalVerticalNav.tsx` and/or shared config — prevent future mismatch between sidebar tools and broker toolkit tools.
+- A database migration only if needed to seed/normalize the exact broker tool visibility IDs.
 
-## Stats row rebuild
-
-- 5 cards inside `<PremiumSectionCard>` on champagne (`#F7F2EA`), grid `md:grid-cols-5` with `gap-4`.
-- Each card: `<IconTile tone="gold" size="md" icon={…} />` (Wrench, GraduationCap, BookOpen, Users, TrendingUp) — kills the faded black squares.
-- Number `text-3xl font-semibold text-[#1A1A1A]`, label `text-sm text-[#1A1A1A]/70`, sub `text-xs text-[#1A1A1A]/60`. No raw gray.
-
-## Navigation pills
-
-- Replace current bulky pill styles with `.jj-pill-active` (active) and `.jj-cta-outline` (idle) — `h-9 px-4 text-sm`, sticky top under header (`top-[88px]`), champagne raised band.
-
-## Section surfaces
-
-- Every section wrapped in `<PremiumSectionCard>` with full-bleed `.jj-band` alternation: `page → surface → page → raised …`.
-- Remove any `bg-[#1A1A1A]` / dark gradient backgrounds inside sections (they're being remapped anyway on marketing pages).
-- Add `data-marketing-page` on the page root so the global band system applies.
-- No content removed — only chrome cleaned up.
-
-## Out of scope
-
-- No route, sitemap, SEO, or business-logic changes.
-- No new tools, sections, or copy beyond the hero headline tweak.
-- AI features inside Tools section keep their purple theme (AI premium purple standard).
-
-## Verification
-
-After build, I'll navigate the preview to `/broker-toolkit`, screenshot hero + stats + one section, and confirm: video plays, headline legible white-on-dark, CTAs compact, stat icons are gold tiles (not faded squares), pills crisp, no gray surfaces.
+7. Validation
+- Visual check `/broker-toolkit` desktop and mobile.
+- Confirm only the sidebar Tools & Workspace tools appear on Broker Toolkit.
+- Confirm hidden tools are filtered by backend visibility.
+- Confirm contrast/readability and card alignment across hero, stats, tools, academy, CRM, growth, and final CTA.
+- Check console/network for errors after the changes.

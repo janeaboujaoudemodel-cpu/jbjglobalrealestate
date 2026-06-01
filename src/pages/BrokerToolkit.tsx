@@ -5,22 +5,17 @@ import {
   BrokerToolkitStats,
   BrokerToolkitNavigation,
   BrokerToolkitTools,
-  BrokerToolkitEducation,
   BrokerToolkitAcademy,
-  BrokerToolkitOperations,
-  BrokerToolkitSupport,
   BrokerToolkitCRM,
-  BrokerToolkitGrowth,
   BrokerToolkitCTA,
-  BrokerToolkitReferral,
 } from "@/components/broker-toolkit";
 
 const sectionVariants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 16 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, delay: i * 0.06, ease: "easeOut" },
+    transition: { duration: 0.4, delay: i * 0.05, ease: "easeOut" },
   }),
 };
 
@@ -29,13 +24,8 @@ export default function BrokerToolkit() {
 
   const bodySections = [
     <BrokerToolkitTools key="tools" />,
-    <BrokerToolkitSupport key="support" />,
-    <BrokerToolkitEducation key="edu" />,
     <BrokerToolkitAcademy key="academy" />,
-    <BrokerToolkitOperations key="ops" />,
     <BrokerToolkitCRM key="crm" />,
-    <BrokerToolkitGrowth key="growth" />,
-    <BrokerToolkitReferral key="referral" />,
     <BrokerToolkitCTA key="cta" />,
   ];
 
