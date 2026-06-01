@@ -38,6 +38,7 @@ import { Badge } from "@/components/ui/badge";
 import { useSellerListings } from "@/hooks/useSellerListings";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatDisplayDate as formatDate } from "@/utils/formatDate";
+import { AnimatedBorderShell } from "@/components/tools/AnimatedBorderShell";
 
 const ManualWizard = lazy(() => import("@/pages/SellerListing"));
 const AIWizard = lazy(() => import("@/pages/ListingPortalSubmit"));
