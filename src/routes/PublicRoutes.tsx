@@ -10,6 +10,7 @@ import AuthRequiredRoute from "@/components/AuthRequiredRoute";
 import ModeRequiredRoute from "@/components/ModeRequiredRoute";
 import OwnerGuard from "@/components/OwnerGuard";
 import { BrokerPortalRoutes } from "@/routes/BrokerPortalRoutes";
+import TeamRouteGate from "@/routes/TeamRouteGate";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 
 // ── Property & Listing Pages ──
@@ -47,7 +48,7 @@ const LandlordGuide = lazy(() => import("@/pages/LandlordGuide"));
 const LandlordRentalPortal = lazy(() => import("@/pages/LandlordRentalPortal"));
 const EducationHub = lazy(() => import("@/pages/EducationHub"));
 const InvestorEducation = lazy(() => import("@/pages/InvestorEducation"));
-const BrokerEducation = lazy(() => import("@/pages/BrokerEducation"));
+// BrokerEducation removed — content merged into JBJ Academy (/jbj-academy)
 const FAQ = lazy(() => import("@/pages/FAQ"));
 const InvestorFAQ = lazy(() => import("@/pages/InvestorFAQ"));
 const BuyerFAQ = lazy(() => import("@/pages/BuyerFAQ"));
@@ -111,7 +112,7 @@ const Awards = lazy(() => import("@/pages/Awards"));
 const CompanyProfile = lazy(() => import("@/pages/CompanyProfile"));
 const News = lazy(() => import("@/pages/News"));
 const NewsDetail = lazy(() => import("@/pages/NewsDetail"));
-const MeetTheTeam = lazy(() => import("@/pages/MeetTheTeam"));
+// MeetTheTeam mounted via TeamRouteGate (toggle-controlled)
 
 const ThankYou = lazy(() => import("@/pages/ThankYou"));
 
@@ -166,17 +167,17 @@ const Pricing = lazy(() => import("@/pages/Pricing"));
 // ── Broker Pages ──
 const BrokerToolkit = lazy(() => import("@/pages/BrokerToolkit"));
 const BrokerDashboard = lazy(() => import("@/pages/BrokerDashboard"));
-const BrokerResources = lazy(() => import("@/pages/BrokerResources"));
+// BrokerResources merged into /jbj-academy
 const BrokerTraining = lazy(() => import("@/pages/broker/BrokerTraining"));
 const BrokerLearning = lazy(() => import("@/pages/broker/BrokerLearning"));
 const BrokerLearningVoiceAdmin = lazy(() => import("@/pages/owner/BrokerLearningVoiceAdmin"));
-const AIBrokerWorkspace = lazy(() => import("@/pages/AIBrokerWorkspace"));
+// AIBrokerWorkspace public route removed — accessible via /broker/portal/ai
 const AIHub = lazy(() => import("@/pages/AIHub"));
 const InteriorDesignAI = lazy(() => import("@/pages/InteriorDesignAI"));
 const InvestorHub = lazy(() => import("@/pages/InvestorHub"));
 const BrokerHub = lazy(() => import("@/pages/BrokerHub"));
 const JBJAcademy = lazy(() => import("@/pages/JBJAcademy"));
-const AcademyGraduates = lazy(() => import("@/pages/AcademyGraduates"));
+// AcademyGraduates merged into /jbj-academy
 const BrokerPortal = lazy(() => import("@/pages/BrokerPortal"));
 
 
@@ -262,7 +263,7 @@ export const PublicRoutes = () => (
     <Route path="/landlord-guide" element={<LandlordGuide />} />
     <Route path="/landlord-portal" element={<Navigate to="/dashboard/my-listings" replace />} />
     <Route path="/investor-education" element={<InvestorEducation />} />
-    <Route path="/broker-education" element={<Navigate to="/broker/learning?tab=library" replace />} />
+    {/* /broker-education retired — merged into /jbj-academy */}
     <Route path="/faq" element={<FAQ />} />
     <Route path="/investor-faq" element={<Navigate to="/faq" replace />} />
     <Route path="/buyer-faq" element={<BuyerFAQ />} />
@@ -333,8 +334,8 @@ export const PublicRoutes = () => (
     <Route path="/company-profile" element={<CompanyProfile />} />
     <Route path="/news" element={<News />} />
     <Route path="/news/:id" element={<NewsDetail />} />
-    <Route path="/team" element={<MeetTheTeam />} />
-    <Route path="/meet-the-team" element={<RedirectWithSearch to="/team" />} />
+    <Route path="/team" element={<TeamRouteGate />} />
+    {/* /meet-the-team retired — gate via TeamRouteGate */}
     {/* /brokers and /our-brokers retired — no redirect; 404 via NotFound catch-all */}
     {/* /philanthropy, /reviews, /governance/partners, /trust-and-audit-center, /trust-compliance, /accessibility retired — 404 via NotFound */}
 
@@ -401,11 +402,8 @@ export const PublicRoutes = () => (
     <Route path="/broker-toolkit" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerToolkit /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/broker-toolkit/dashboard" element={<OwnerAwareBrokerRedirect />} />
     <Route path="/broker-dashboard" element={<OwnerAwareBrokerRedirect />} />
-    <Route path="/broker-resources" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerResources /></ModeRequiredRoute></AuthRequiredRoute>} />
-    <Route path="/broker/training" element={<Navigate to="/broker/learning?tab=training" replace />} />
-    {/* /broker/learning and /broker/learning/book/:bookId are mounted inside BrokerPortalRoutes so the portal sidebar wraps them */}
+    {/* /broker-resources, /broker/training, /ai-broker-workspace retired — see /jbj-academy and /broker/portal/ai */}
     <Route path="/owner/broker-learning/voice" element={<OwnerGuard><BrokerLearningVoiceAdmin /></OwnerGuard>} />
-    <Route path="/ai-broker-workspace" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><AIBrokerWorkspace /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/ai-hub" element={<AuthRequiredRoute><AIHub /></AuthRequiredRoute>} />
     <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/interior-design-ai" element={<AuthRequiredRoute><InteriorDesignAI /></AuthRequiredRoute>} />
@@ -413,7 +411,7 @@ export const PublicRoutes = () => (
     <Route path="/investor-hub" element={<AuthRequiredRoute><ModeRequiredRoute modes={['investor']}><InvestorHub /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/broker-hub" element={<OwnerAwareBrokerRedirect />} />
     <Route path="/jbj-academy" element={<AuthRequiredRoute><JBJAcademy /></AuthRequiredRoute>} />
-    <Route path="/academy/graduates" element={<AcademyGraduates />} />
+    {/* /academy/graduates retired — merged into /jbj-academy */}
     <Route path="/broker-portal" element={<OwnerAwareBrokerRedirect />} />
 
     {/* ── Canonical Broker Portal (nested /broker/* shell) ── */}

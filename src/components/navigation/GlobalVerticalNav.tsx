@@ -32,6 +32,7 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/comp
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
 import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
+import { useTeamVisibility } from "@/hooks/useTeamVisibility";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
@@ -156,7 +157,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Tenant Guide", href: "/tenant-guide", icon: FileText },
   { label: "Landlord Guide", href: "/landlord-guide", icon: FileText },
   { label: "Investor Education", href: "/investor-education", icon: GraduationCap },
-  { label: "Broker Learning", href: "/broker/learning", icon: GraduationCap },
   { label: "Golden Visa Guide", href: "/guides/golden-visa-uae", icon: Award },
   { label: "Books Library", href: "/education-hub", icon: BookMarked },
   { label: "FAQ Hub", href: "/faq", icon: HelpCircle },
@@ -194,13 +194,9 @@ const NAV_ITEMS: NavItem[] = [
   // ── Broker & Academy ──
   { label: "Broker Portal", href: "/broker/portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY", megaMenu: 'broker' },
   { label: "Broker Toolkit", href: "/broker-toolkit", icon: Wrench },
-  { label: "Broker Resources", href: "/broker-resources", icon: FolderOpen },
-  { label: "Broker Learning", href: "/broker/learning", icon: GraduationCap },
   { label: "Broker Hub", href: "/broker-hub", icon: Compass },
   // Note: "Broker Dashboard" removed from this section — it's the user's personal dashboard, not a broker-only tool.
   { label: "JBJ Academy", href: "/jbj-academy", icon: GraduationCap },
-  { label: "Academy Graduates", href: "/academy/graduates", icon: Award },
-  { label: "AI Broker Workspace", href: "/ai-broker-workspace", icon: Bot },
 
   // ── Investor ──
   { label: "Investor Hub", href: "/investor-hub", icon: TrendingUp, section: "INVESTOR", megaMenu: 'investor' },
@@ -360,7 +356,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Market Report', icon: FileText, href: '/market-report' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
-    { label: 'Broker Learning', icon: BookOpen, href: '/broker/learning' },
+    { label: 'JBJ Academy', icon: BookOpen, href: '/jbj-academy' },
   ],
   guides: [
     { label: 'Buyer Guide', icon: FileText, href: '/buyer-guide' },
@@ -369,7 +365,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Tenant Guide", icon: FileText, href: '/tenant-guide' },
     { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
-    { label: 'Broker Learning', icon: BookOpen, href: '/broker/learning' },
+    { label: 'JBJ Academy', icon: BookOpen, href: '/jbj-academy' },
     { label: 'Golden Visa Guide', icon: Award, href: '/guides/golden-visa-uae' },
     { label: 'Books Library', icon: BookMarked, href: '/education-hub' },
   ],
@@ -389,7 +385,6 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   ],
   company: [
     { label: 'About JBJ', icon: Users, href: '/about' },
-    { label: 'Our Team', icon: Users, href: '/team' },
     { label: 'The Founder', icon: User, href: '/founder' },
     { label: 'Contact Us', icon: Phone, href: '/contact' },
     { label: 'Careers', icon: GraduationCap, href: '/join' },
@@ -447,12 +442,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   broker: [
     { label: 'Broker Portal', icon: BriefcaseIcon, href: '/broker/portal' },
     { label: 'Broker Toolkit', icon: Wrench, href: '/broker-toolkit' },
-    { label: 'Broker Learning', icon: GraduationCap, href: '/broker/learning' },
     { label: 'JBJ Academy', icon: GraduationCap, href: '/jbj-academy' },
-    { label: 'Academy Graduates', icon: Award, href: '/academy/graduates' },
     { label: 'Broker Dashboard', icon: LayoutDashboard, href: '/broker-dashboard' },
-    { label: 'Broker Resources', icon: FolderOpen, href: '/broker-resources' },
-    { label: 'AI Broker Workspace', icon: Bot, href: '/ai-broker-workspace' },
   ],
   investor: [
     { label: 'Investor Hub', icon: TrendingUp, href: '/investor-hub' },
@@ -582,17 +573,20 @@ export default function GlobalVerticalNav() {
 
   const showBrokerSurfaces = isBrokerMode;
   const showInvestorSurfaces = isInvestorMode || isInvestor || isOwner;
+  const { isPageVisible: isTeamPageVisible } = useTeamVisibility();
 
   const shouldShowItem = useCallback((item: NavItem, sectionKey?: SectionKey | null) => {
+    // Team page is hidden by default — only shows when owner flips the visibility toggle in Founder Settings.
+    if (item.href === "/team" && !isTeamPageVisible) return false;
     if (!showBrokerSurfaces) {
       if (item.href === "/join") return false;
       if (sectionKey === "BROKER & ACADEMY") return false;
-      if (item.href.startsWith("/broker") || item.href === "/broker-toolkit" || item.href === "/broker-resources" || item.href === "/ai-broker-workspace" || item.href === "/jbj-academy") return false;
+      if (item.href.startsWith("/broker") || item.href === "/broker-toolkit" || item.href === "/jbj-academy") return false;
       if (item.label === "Career Portal") return false;
     }
     if (!showInvestorSurfaces && sectionKey === "INVESTOR") return false;
     return true;
-  }, [showBrokerSurfaces, showInvestorSurfaces]);
+  }, [showBrokerSurfaces, showInvestorSurfaces, isTeamPageVisible]);
 
   const shouldShowSection = useCallback((sectionKey: SectionKey) => {
     if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return false;
