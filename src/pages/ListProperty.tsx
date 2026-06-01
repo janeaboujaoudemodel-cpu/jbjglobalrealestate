@@ -640,14 +640,14 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
       className="scroll-mt-24 px-4 sm:px-6 md:px-10 py-12 md:py-16 relative overflow-hidden"
       data-no-contrast-guard
       data-allow-dark-cta
-      style={{ background: ombreSoft(theme) }}
+      style={{ background: theme.sectionGradient }}
     >
       {/* premium ombre shine */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(circle at 85% 12%, ${theme.primary}1F 0%, transparent 55%)`,
+          background: `radial-gradient(circle at 85% 12%, ${theme.badgeBorder}33 0%, transparent 55%)`,
         }}
       />
       <div className="relative max-w-6xl mx-auto">
@@ -655,14 +655,14 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
           <div>
             <h2
               className="text-2xl md:text-3xl font-bold tracking-tight"
-              style={{ color: accent, WebkitTextFillColor: accent }}
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               data-no-contrast-guard
             >
               My Listing Submissions
             </h2>
             <p
               className="mt-1 text-sm"
-              style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+              style={{ color: "rgba(255,255,255,0.85)", WebkitTextFillColor: "rgba(255,255,255,0.85)" }}
               data-no-contrast-guard
             >
               Track the status of every property you've listed with JBJ. You'll
@@ -675,12 +675,12 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               asChild
               data-allow-dark-cta
               data-no-contrast-guard
-              className="font-semibold hover:brightness-95"
+              className="font-semibold hover:brightness-105"
               style={{
                 background: ombreSoft(theme),
                 color: accent,
-                border: `1.5px solid ${accent}`,
-                boxShadow: `0 10px 24px -10px ${accent}66`,
+                border: `1.5px solid ${theme.badgeBorder}`,
+                boxShadow: `0 10px 24px -10px ${theme.badgeBorder}99`,
               }}
             >
               <Link to="/dashboard/my-listings">
