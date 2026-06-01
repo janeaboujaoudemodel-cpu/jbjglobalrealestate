@@ -543,7 +543,7 @@ function KpiCard({
   progress,
   tone = "gold",
 }: {
-  icon: React.ComponentType<{ className?: string }>;
+  icon: import("lucide-react").LucideIcon;
   label: string;
   value: React.ReactNode;
   progress?: number;
