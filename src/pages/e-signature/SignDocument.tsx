@@ -42,6 +42,8 @@ export default function SignDocument() {
   const [completed, setCompleted] = useState(false);
   const [declined, setDeclined] = useState(false);
   const [acked, setAcked] = useState(false);
+  const [adoptOpen, setAdoptOpen] = useState(false);
+  const [signingInBrowser, setSigningInBrowser] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
