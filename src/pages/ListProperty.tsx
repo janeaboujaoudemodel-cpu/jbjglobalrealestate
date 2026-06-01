@@ -309,6 +309,9 @@ const ListProperty = () => {
 
       {/* ───────────────── My Submissions section ───────────────── */}
       <MySubmissionsSection />
+        </div>
+        </AnimatedBorderShell>
+      </div>
     </div>
   );
 };
