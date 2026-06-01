@@ -578,10 +578,20 @@ function KpiCard({
 }
 
 
-function TrainingCard({ m, onStart }: { m: TModule; onStart: () => void }) {
+function TrainingCard({
+  m,
+  onStart,
+  locked = false,
+  lockReason,
+}: {
+  m: TModule;
+  onStart: () => void;
+  locked?: boolean;
+  lockReason?: string;
+}) {
   return (
-    <Card className="bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-[#B89555]/55 hover:border-[#B89555]/80 transition-all min-h-[240px] shadow-[0_4px_14px_rgba(184,149,85,0.10)] hover:shadow-[0_14px_30px_rgba(184,149,85,0.20)]">
-      <CardContent className="p-5 md:p-6 flex flex-col h-full">
+    <Card className={`relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-[#B89555]/55 ${locked ? "" : "hover:border-[#B89555]/80"} transition-all min-h-[240px] shadow-[0_4px_14px_rgba(184,149,85,0.10)] ${locked ? "" : "hover:shadow-[0_14px_30px_rgba(184,149,85,0.20)]"}`}>
+      <CardContent className={`p-5 md:p-6 flex flex-col h-full ${locked ? "opacity-90" : ""}`}>
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3 min-w-0">
             <div
@@ -598,7 +608,11 @@ function TrainingCard({ m, onStart }: { m: TModule; onStart: () => void }) {
               </div>
             </div>
           </div>
-          <ChevronRight className="w-5 h-5 text-[#1A1A1A]/40 shrink-0" />
+          {locked ? (
+            <PremiumLockBadge size="sm" title={lockReason ?? "Locked"} />
+          ) : (
+            <ChevronRight className="w-5 h-5 text-[#1A1A1A]/40 shrink-0" />
+          )}
         </div>
 
         <p className="text-[#1A1A1A]/75 text-sm mt-4 line-clamp-2">{m.description}</p>
@@ -619,22 +633,44 @@ function TrainingCard({ m, onStart }: { m: TModule; onStart: () => void }) {
             ))}
             {m.topics.length > 2 && <span className="text-[11px] text-[#1A1A1A]/55 whitespace-nowrap">+{m.topics.length - 2} more</span>}
           </div>
-          <button
-            type="button"
-            onClick={onStart}
-            className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)] leading-none"
-            data-allow-dark-cta
-            data-no-contrast-guard
-            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-          >
-            <Play className="w-3 h-3 shrink-0" style={{ color: "#FFFFFF" }} />
-            <span className="allow-white whitespace-nowrap" style={{ color: "#FFFFFF" }}>Start</span>
-          </button>
+          {locked ? (
+            <button
+              type="button"
+              disabled
+              title={lockReason ?? "Locked"}
+              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/55 cursor-not-allowed leading-none shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]"
+              data-no-contrast-guard
+            >
+              <Lock className="w-3 h-3 shrink-0" strokeWidth={2.2} />
+              <span className="whitespace-nowrap">Locked</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={onStart}
+              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)] leading-none"
+              data-allow-dark-cta
+              data-no-contrast-guard
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            >
+              <Play className="w-3 h-3 shrink-0" style={{ color: "#FFFFFF" }} />
+              <span className="allow-white whitespace-nowrap" style={{ color: "#FFFFFF" }}>Start</span>
+            </button>
+          )}
         </div>
       </CardContent>
+      {locked && lockReason && (
+        <div
+          data-no-contrast-guard
+          className="absolute bottom-0 inset-x-0 px-4 py-2 text-center text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A]/75 bg-gradient-to-t from-[#F7F2EA] to-transparent border-t border-[#B89555]/30"
+        >
+          {lockReason}
+        </div>
+      )}
     </Card>
   );
 }
+
 
 
 function ReferenceCard({ title, items, tone, icon }: {
