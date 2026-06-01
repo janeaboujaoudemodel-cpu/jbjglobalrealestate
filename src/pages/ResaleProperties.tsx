@@ -554,33 +554,27 @@ const ResaleProperties = () => {
               ))}
             </div>
           ) : (
-            /* Empty State — Premium champagne design */
-            <div
-              className="max-w-2xl mx-auto text-center py-12 px-6 sm:px-10 md:px-12 rounded-2xl bg-[#FDFBF7]/80 backdrop-blur-sm"
-              style={{ border: "2px solid #2563EB" }}
-            >
-              <div
-                className="w-20 h-20 rounded-2xl bg-[#EFE6D6]/15 flex items-center justify-center mx-auto mb-6"
-                style={{ border: "1px solid #2563EB" }}
-              >
-                <Building2 className="w-10 h-10" style={{ color: "#2563EB" }} />
+            /* Empty State — Premium navy + champagne + gold */
+            <div className="max-w-2xl mx-auto text-center py-12 px-6 sm:px-10 md:px-12 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
+              <div className="w-20 h-20 rounded-2xl bg-[#EFE6D6] flex items-center justify-center mx-auto mb-6 border border-[#B89555]/40">
+                <Building2 className="w-10 h-10 text-[#102540]" />
               </div>
-              <h3 className="text-2xl font-bold mb-3" style={{ color: "#2563EB" }} data-no-contrast-guard>
+              <h3 className="text-2xl font-bold mb-3 text-[#1A1A1A]">
                 Recently Sold Out
               </h3>
-              <p className="mb-2 font-medium" style={{ color: "#2563EB" }} data-no-contrast-guard>
+              <p className="mb-2 font-medium text-[#1A1A1A]/80">
                 The latest resale properties from our investor network have been snapped up.
                 Our verified investors regularly list new opportunities — don't miss the next one.
               </p>
-              <p className="text-sm mb-8 font-semibold" style={{ color: "#B89555" }} data-no-contrast-guard>
+              <p className="text-sm mb-8 font-semibold text-[#1A1A1A]/70">
                 Subscribe below to get notified when new resale properties become available.
               </p>
 
               {/* Subscribe CTA */}
-              <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 backdrop-blur-sm shadow-sm" style={{ border: "1px solid #2563EB" }}>
+              <div className="bg-[#EFE6D6] rounded-2xl p-6 border border-[#B89555]/40">
                 <div className="flex items-center gap-2 justify-center mb-4">
-                  <Bell className="w-5 h-5" style={{ color: "#2563EB" }} />
-                  <h4 className="font-semibold text-lg" style={{ color: "#B89555" }} data-no-contrast-guard>Stay in the Loop</h4>
+                  <Bell className="w-5 h-5 text-[#102540]" />
+                  <h4 className="font-semibold text-lg text-[#1A1A1A]">Stay in the Loop</h4>
                 </div>
                 <p className="text-sm mb-4 text-[#1A1A1A]/70">
                   Get instant alerts when our investors list new resale properties. Be the first to know.
@@ -597,15 +591,12 @@ const ResaleProperties = () => {
                       placeholder="Enter your email"
                       value={subscribeEmail}
                       onChange={(e) => setSubscribeEmail(e.target.value)}
-                      className="flex-1 h-11 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] text-[#1A1A1A]"
-                      style={{ border: "2px solid #2563EB" }}
+                      className="flex-1 h-11 bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40"
                     />
                     <Button
                       onClick={handleSubscribe}
-                      data-allow-dark-cta
-                      data-no-contrast-guard
-                      className="font-semibold h-11 px-6 border-0"
-                      style={{ backgroundColor: "#2563EB", color: "#FFFFFF" }}
+                      data-cta="dark"
+                      className="jj-cta-dark font-semibold h-11 px-6 rounded-xl"
                     >
                       Subscribe
                     </Button>
@@ -617,21 +608,24 @@ const ResaleProperties = () => {
               <div className="mt-8 flex items-center justify-center gap-4 flex-wrap">
                 <Link to="/properties">
                   <Button
-                    data-allow-dark-cta
-                    data-no-contrast-guard
-                    className="font-semibold border-0"
-                    style={{ backgroundColor: "#2563EB", color: "#FFFFFF" }}
+                    data-cta="dark"
+                    className="jj-cta-dark font-semibold h-11 px-6 rounded-xl"
                   >
                     Browse Off-Plan Properties
                   </Button>
                 </Link>
                 <Link to="/list-property?purpose=sale">
-                  <Button variant="outline" className="text-[#1A1A1A] hover:bg-[#2563EB]/5" style={{ border: "2px solid #2563EB" }}>
+                  <Button
+                    variant="outline"
+                    className="jj-cta-outline font-semibold h-11 px-6 rounded-xl"
+                    data-cta="outline"
+                  >
                     List Your Property
                   </Button>
                 </Link>
               </div>
             </div>
+
           )}
         </div>
       </section>
