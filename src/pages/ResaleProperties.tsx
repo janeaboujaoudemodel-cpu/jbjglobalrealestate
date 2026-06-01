@@ -462,10 +462,11 @@ const ResaleProperties = () => {
         <div className="max-w-6xl mx-auto">
           {/* Results count */}
           <div className="flex items-center justify-between mb-6">
-            <p className="text-sm font-semibold" style={{ color: "#B89555" }} data-no-contrast-guard>
+            <p className="text-sm font-semibold text-[#1A1A1A]">
               {filteredListings.length} {filteredListings.length === 1 ? "property" : "properties"} found
             </p>
           </div>
+
 
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
