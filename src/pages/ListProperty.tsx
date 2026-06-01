@@ -48,7 +48,6 @@ type Mode = "pick" | "manual" | "ai" | "browse";
 type Purpose = "sale" | "rent";
 
 /* ────────────────────────────── theme tokens ────────────────────────────── */
-// Approved navy per brand guard — never substitute another blue
 const BLUE = "#102540";
 const BLUE_HOVER = "#1a3d63";
 const BLUE_DEEP = "#0B1B33";
@@ -59,6 +58,59 @@ const CHAMPAGNE = "#FDFBF7";
 const CHAMPAGNE_SURFACE = "#F7F2EA";
 const CHAMPAGNE_RAISED = "#EFE6D6";
 const INK = "#1A1A1A";
+
+/* per-mode accent system: manual = premium emerald/black ombre,
+   ai = purple/navy, pick/browse = navy */
+type ModeTheme = {
+  name: "navy" | "emerald" | "purple";
+  primary: string;       // solid accent
+  primaryDeep: string;   // deeper variant
+  badgeBorder: string;   // accent border for pills/badges
+  badgeBg: string;       // translucent fill behind accent
+  heroGradient: string;  // hero band background
+  sectionGradient: string; // My Submissions band background
+  ctaText: string;       // CTA text color over solid primary
+  iconAccent: string;    // sparkle / leaf icon color
+};
+const THEME_NAVY: ModeTheme = {
+  name: "navy",
+  primary: BLUE,
+  primaryDeep: BLUE_DEEP,
+  badgeBorder: "#A855F7",
+  badgeBg: "rgba(168,85,247,0.14)",
+  heroGradient: BLUE_GRADIENT,
+  sectionGradient: BLUE_GRADIENT,
+  ctaText: "#FFFFFF",
+  iconAccent: "#A855F7",
+};
+const THEME_EMERALD: ModeTheme = {
+  name: "emerald",
+  primary: "#064E3B",
+  primaryDeep: "#022C22",
+  badgeBorder: "#10B981",
+  badgeBg: "rgba(16,185,129,0.16)",
+  heroGradient:
+    "linear-gradient(135deg, #022C22 0%, #064E3B 45%, #0B0B0B 100%)",
+  sectionGradient:
+    "linear-gradient(135deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)",
+  ctaText: "#FFFFFF",
+  iconAccent: "#10B981",
+};
+const THEME_PURPLE: ModeTheme = {
+  name: "purple",
+  primary: "#5B21B6",
+  primaryDeep: "#2E1065",
+  badgeBorder: "#A855F7",
+  badgeBg: "rgba(168,85,247,0.16)",
+  heroGradient:
+    "linear-gradient(135deg, #2E1065 0%, #4C1D95 50%, #0B0B0B 100%)",
+  sectionGradient:
+    "linear-gradient(135deg, #2E1065 0%, #4C1D95 50%, #0B0B0B 100%)",
+  ctaText: "#FFFFFF",
+  iconAccent: "#C4B5FD",
+};
+const themeForMode = (m: Mode): ModeTheme =>
+  m === "manual" ? THEME_EMERALD : m === "ai" ? THEME_PURPLE : THEME_NAVY;
 
 const ListProperty = () => {
   const [searchParams, setSearchParams] = useSearchParams();
