@@ -431,9 +431,9 @@ export default function ContractVault() {
                                 </a>
                               </Button>
                               <Button asChild size="sm" variant="gold">
-                                <Link to={`/owner/sign/${row.envelope_id}`}>
+                                <Link to={`/e-signature/envelope/${row.envelope_id}`}>
                                   <Stamp className="h-3 w-3 mr-1" />
-                                  Sign again
+                                  Re-send
                                 </Link>
                               </Button>
                             </div>
