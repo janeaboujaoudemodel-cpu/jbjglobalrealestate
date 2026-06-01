@@ -211,49 +211,26 @@ const About = () => {
                   <div className="relative">
                     {/* Champagne background card for premium look */}
                     <div className="absolute inset-0 -m-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border border-[#B89555]/30 shadow-lg" />
-                    
-                    {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 5%, lifted up, no cropping */}
-                    {/* KEEP gold border always, add 3D lift on hover */}
-                    <Link to="/founder" className="block group relative z-10">
-                      <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-[#B89555] transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(200,167,102,0.4),0_20px_50px_rgba(0,0,0,0.35)] group-hover:-translate-y-2">
-                        <img 
-                          src={founderProfessional}
-                          alt="Founder & CEO of JBJ GLOBAL REAL ESTATE"
-                          className="w-full h-full transition-transform duration-300 group-hover:scale-110"
-                          style={{ 
-                            objectFit: 'cover',
-                            objectPosition: 'center 5%',
-                            transform: 'scale(1.3)',
-                          }}
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                      {/* Know More About the Founder - REVERSED: secondary on normal, primary on hover */}
-                      <button 
-                        className="group/btn mt-4 relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden w-full bg-transparent border-2 border-[#1A1A1A] hover:border-[#B89555]"
-                        style={{
-                          background: 'transparent',
-                        }}
-                      >
-                        {/* Hover overlay - 3D gold gradient */}
-                        <span 
-                          className="absolute inset-0 rounded-xl opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 pointer-events-none"
-                          style={{
-                            background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
-                            boxShadow: '0 6px 20px rgba(200,167,102,0.3), 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(200,167,102,0.2)',
-                          }}
-                        />
-                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/0 group-hover/btn:from-white/80 to-transparent pointer-events-none transition-all duration-300" />
-                        <span className="relative flex items-center justify-center gap-1">
-                          <span className="text-[#1A1A1A] group-hover/btn:text-[#1A1A1A] transition-colors">Know More About the</span>
-                          <span className="text-[#1A1A1A] group-hover/btn:text-[#1A1A1A] transition-colors">Founder</span>
-                          <span className="text-[#1A1A1A] group-hover/btn:text-[#1A1A1A] transition-colors">↗</span>
-                        </span>
-                      </button>
-                    </Link>
+
+                    <div className="relative z-10">
+                      <Link to="/founder" className="block group">
+                        <div className="relative w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-[#B89555] transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(200,167,102,0.4),0_20px_50px_rgba(0,0,0,0.35)] group-hover:-translate-y-1">
+                          <FounderAboutPortrait />
+                        </div>
+                      </Link>
+                      <FounderPhotoEditOverlay />
+                      <Link to="/founder" className="block mt-4">
+                        <button
+                          className="group/btn relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 w-full bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                        >
+                          <span>Know more about the founder</span>
+                          <span aria-hidden>↗</span>
+                        </button>
+                      </Link>
+                    </div>
                   </div>
                 </motion.div>
+
 
                 {/* RIGHT: Who We Are */}
                 <motion.div variants={fadeInUp} className="mt-8 md:mt-0">
