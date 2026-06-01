@@ -15,6 +15,7 @@ const CRMRelationships = lazy(() => import("@/pages/CRMRelationships"));
 const SecondaryMarketHub = lazy(() => import("@/pages/SecondaryMarketHub"));
 const UnifiedCRM = lazy(() => import("@/pages/owner/crm/UnifiedCRM"));
 const EmployeeProfile = lazy(() => import("@/pages/owner/EmployeeProfile"));
+const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
 
 const OwnerTemplates = lazy(() => import("@/pages/OwnerTemplates"));
 const OwnerCommSettings = lazy(() => import("@/pages/OwnerCommSettings"));
