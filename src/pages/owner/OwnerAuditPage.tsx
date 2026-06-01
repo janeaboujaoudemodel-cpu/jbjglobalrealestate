@@ -86,7 +86,7 @@ const ROUTE_INVENTORY = [
   { path: '/contact', name: 'Contact Us', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/join', name: 'Careers', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/awards', name: 'Awards', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/press-kit', name: 'Press Kit', access: 'public', dashboard: false, sidebar: false, registry: true },
+  
   { path: '/partners', name: 'Partners Hub', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/partners/mortgage', name: 'Mortgage Partners', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/partners/legal', name: 'Legal Partners', access: 'public', dashboard: false, sidebar: false, registry: true },
