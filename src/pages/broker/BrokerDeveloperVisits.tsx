@@ -54,6 +54,12 @@ export default function BrokerDeveloperVisits() {
   const [repPhone, setRepPhone] = useState("");
   const [repEmail, setRepEmail] = useState("");
   const [repDetails, setRepDetails] = useState("");
+  const [repFeedback, setRepFeedback] = useState("");
+  const RATING_CRITERIA = ["Fast", "Responsive", "Knowledgeable", "Helpful", "Professional", "Kind"] as const;
+  type Criterion = typeof RATING_CRITERIA[number];
+  const [repRatings, setRepRatings] = useState<Record<Criterion, number>>({
+    Fast: 0, Responsive: 0, Knowledgeable: 0, Helpful: 0, Professional: 0, Kind: 0,
+  });
 
   // Click-outside to close dropdown
   useEffect(() => {
