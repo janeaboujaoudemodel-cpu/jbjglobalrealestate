@@ -156,7 +156,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Tenant Guide", href: "/tenant-guide", icon: FileText },
   { label: "Landlord Guide", href: "/landlord-guide", icon: FileText },
   { label: "Investor Education", href: "/investor-education", icon: GraduationCap },
-  { label: "Broker Learning", href: "/broker/learning", icon: GraduationCap },
   { label: "Golden Visa Guide", href: "/guides/golden-visa-uae", icon: Award },
   { label: "Books Library", href: "/education-hub", icon: BookMarked },
   { label: "FAQ Hub", href: "/faq", icon: HelpCircle },
