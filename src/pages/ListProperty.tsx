@@ -633,17 +633,18 @@ function PickerCard({
           {tag}
         </span>
         <span
-          className="inline-flex items-center gap-1.5 text-sm font-semibold px-4 h-9 rounded-md group-hover:gap-2 transition-all"
+          className="inline-flex items-center gap-1.5 text-sm font-bold px-4 h-9 rounded-md group-hover:gap-2 transition-all"
+          data-no-contrast-guard
           style={{
-            backgroundColor: "#FFFFFF",
+            background: "linear-gradient(135deg, #E5EAF3 0%, #FFFFFF 55%, #DDE3F0 100%)",
             color: NAVY,
             WebkitTextFillColor: NAVY,
             border: `1px solid ${PURPLE}`,
-            boxShadow: `0 6px 18px -8px rgba(255,255,255,0.45)`,
+            boxShadow: `0 6px 18px -8px rgba(168,85,247,0.55)`,
           }}
         >
-          Start
-          <ArrowRight className="w-4 h-4" style={{ color: NAVY }} />
+          <span style={{ color: NAVY, WebkitTextFillColor: NAVY }}>Start</span>
+          <ArrowRight className="w-4 h-4" style={{ color: NAVY, strokeWidth: 2.5 }} />
         </span>
       </div>
     </button>
