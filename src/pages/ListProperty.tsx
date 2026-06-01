@@ -515,7 +515,6 @@ function MySubmissionsSection() {
     <section
       id="my-submissions"
       className="scroll-mt-24 px-4 sm:px-6 md:px-10 py-12 md:py-16 relative"
-      data-surface="dark"
       data-no-contrast-guard
       data-allow-dark-cta
       style={{ background: BLUE_GRADIENT }}
