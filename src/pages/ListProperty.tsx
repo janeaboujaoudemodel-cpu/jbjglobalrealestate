@@ -514,20 +514,27 @@ function MySubmissionsSection() {
   return (
     <section
       id="my-submissions"
-      className="scroll-mt-24 px-4 sm:px-6 md:px-10 py-12 md:py-16"
-      style={{ backgroundColor: CHAMPAGNE_RAISED + "40" }}
+      className="scroll-mt-24 px-4 sm:px-6 md:px-10 py-12 md:py-16 relative"
+      data-surface="dark"
+      data-no-contrast-guard
+      data-allow-dark-cta
+      style={{ background: BLUE_GRADIENT }}
     >
       <div className="max-w-6xl mx-auto">
         <div className="flex items-end justify-between flex-wrap gap-3 mb-6">
           <div>
             <h2
               className="text-2xl md:text-3xl font-bold tracking-tight"
-              style={{ color: GOLD }}
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               data-no-contrast-guard
             >
               My Listing Submissions
             </h2>
-            <p className="mt-1 text-sm" style={{ color: INK + "B3" }}>
+            <p
+              className="mt-1 text-sm"
+              style={{ color: "rgba(255,255,255,0.85)" }}
+              data-no-contrast-guard
+            >
               Track the status of every property you've listed with JBJ. You'll
               receive an email update on every status change.
             </p>
@@ -537,12 +544,16 @@ function MySubmissionsSection() {
               asChild
               data-allow-dark-cta
               data-no-contrast-guard
-              className="font-semibold border-0"
-              style={{ backgroundColor: BLUE, color: "#FFFFFF" }}
+              className="font-semibold border-0 hover:brightness-95"
+              style={{
+                backgroundColor: "#FFFFFF",
+                color: BLUE,
+                border: `1px solid ${GOLD}`,
+              }}
             >
               <Link to="/dashboard/my-listings">
-                <LayoutDashboard className="w-4 h-4 mr-2" />
-                Open full dashboard
+                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: BLUE }} />
+                <span style={{ color: BLUE, WebkitTextFillColor: BLUE }}>Open full dashboard</span>
               </Link>
             </Button>
           )}
@@ -552,9 +563,10 @@ function MySubmissionsSection() {
           /* Anonymous gate */
           <div
             className="rounded-2xl p-8 text-center"
+            data-no-contrast-guard
             style={{
-              backgroundColor: CHAMPAGNE,
-              border: `1.5px solid ${BLUE}`,
+              backgroundColor: "#FFFFFF",
+              border: `1.5px solid ${GOLD}`,
             }}
           >
             <div
@@ -581,8 +593,8 @@ function MySubmissionsSection() {
               style={{ backgroundColor: BLUE, color: "#FFFFFF" }}
             >
               <Link to="/login?redirect=/list-property%23my-submissions">
-                Sign in to continue
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sign in to continue</span>
+                <ArrowRight className="w-4 h-4 ml-2" style={{ color: "#FFFFFF" }} />
               </Link>
             </Button>
           </div>
@@ -593,8 +605,8 @@ function MySubmissionsSection() {
                 key={i}
                 className="h-40 rounded-2xl animate-pulse"
                 style={{
-                  backgroundColor: CHAMPAGNE,
-                  border: `1px solid ${GOLD}30`,
+                  backgroundColor: "rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.14)",
                 }}
               />
             ))}
@@ -602,21 +614,22 @@ function MySubmissionsSection() {
         ) : listings.length === 0 ? (
           <div
             className="rounded-2xl p-10 text-center"
+            data-no-contrast-guard
             style={{
-              backgroundColor: CHAMPAGNE,
+              backgroundColor: "#FFFFFF",
               border: `1.5px dashed ${GOLD}`,
             }}
           >
             <div
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
-                backgroundColor: CHAMPAGNE_RAISED,
-                border: `1px solid ${GOLD}`,
+                backgroundColor: BLUE + "10",
+                border: `1px solid ${BLUE}`,
               }}
             >
-              <Building2 className="w-7 h-7" style={{ color: INK }} />
+              <Building2 className="w-7 h-7" style={{ color: BLUE }} />
             </div>
-            <h3 className="text-lg font-bold mb-2" style={{ color: INK }}>
+            <h3 className="text-lg font-bold mb-2" style={{ color: BLUE }} data-no-contrast-guard>
               No submissions yet
             </h3>
             <p className="text-sm mb-5" style={{ color: INK + "99" }}>
