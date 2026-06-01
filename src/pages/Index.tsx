@@ -302,7 +302,7 @@ const Index = () => {
           gold hairline divider. The two banners are flush (no gap) and read
           as one premium block: Get Verified (navy) → Mode Portal (champagne,
           inverted contrast). */}
-      <div aria-hidden="true" className="w-full h-px bg-gradient-to-r from-transparent via-[#B89555]/55 to-transparent" />
+      <div aria-hidden="true" className="w-full mt-6 h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
       <PremiumSectionCard padding="none" width="full" wrapperClassName="">
         <Suspense fallback={null}>
           <VerificationBanner />
