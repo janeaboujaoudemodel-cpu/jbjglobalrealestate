@@ -64,9 +64,13 @@ export function FormDraftBar({
         <button
           type="button"
           onClick={onSaveDraft}
+          data-no-contrast-guard
+          data-on-dark
+          data-allow-dark-cta
           className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-colors ${t.save}`}
+          style={theme === 'blue' || theme === 'purple' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
         >
-          <Save className="w-3.5 h-3.5" /> Save Draft
+          <Save className="w-3.5 h-3.5" style={theme === 'blue' || theme === 'purple' ? { color: '#FFFFFF' } : undefined} /> <span style={theme === 'blue' || theme === 'purple' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}>Save Draft</span>
         </button>
         <button
           type="button"
