@@ -489,11 +489,12 @@ const ResaleProperties = () => {
                     )}
                     {listing.is_premium && (
                       <div className="absolute top-3 right-3">
-                        <Badge className="bg-[#EFE6D6] text-[#1A1A1A] text-xs font-bold">
-                          <Crown className="w-3 h-3 mr-1" />
+                        <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 text-xs font-bold">
+                          <Crown className="w-3 h-3 mr-1 text-[#B89555]" />
                           Premium
                         </Badge>
                       </div>
+
                     )}
                   </div>
                   <div className="p-4">
