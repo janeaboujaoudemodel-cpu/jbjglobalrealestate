@@ -16,6 +16,12 @@ export type BookIconKey =
 export interface BookTOCItem {
   title: string;
   duration?: string;
+  /** Optional intro paragraph rendered at the top of the chapter page. */
+  summary?: string;
+  /** Optional bullet list rendered as the body of the chapter page. */
+  bullets?: string[];
+  /** Optional sourced facts/notes shown in a champagne callout under the bullets. */
+  callout?: { label: string; body: string };
 }
 
 export interface BookData {
