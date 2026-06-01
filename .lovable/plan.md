@@ -1,46 +1,54 @@
-
 ## Goal
 
-Fix the remaining visual + functional issues on `/list-property` for all three modes (Pick = navy/purple, AI = purple, Manual = emerald) and wire the `purpose` toggle (sale/rent) end-to-end.
+Make `/list-property` (pick, manual, AI) feel like one coherent surface where every "white" area becomes a soft mode-tinted ombre (emerald for Manual, purple for AI, navy for Pick) and the hero only carries the structural CTA. Apply to all three flows using the same rule — color follows the active page theme.
 
 ## Changes
 
-### 1. Pick mode (main `/list-property`)
-- **"Open full dashboard" button** in My Submissions: remove gold/champagne fill, repaint to match hero (navy `#0B1B33→#102540` ombre with white ring), white text + white arrow icon.
-- **Arrow icons next to "Start" / "Open full dashboard" / "View my submissions"**: force `stroke: #FFFFFF` (currently invisible).
-- **"Purpose" picker section**: replace harsh white background with a soft navy→white ombre (`linear-gradient(135deg,#EEF1F8 0%,#FFFFFF 60%,#E5E9F4 100%)`) + 1px navy hairline, matching seller-details ombre style.
-- **"Start" buttons inside picker cards**: same soft navy ombre fill + navy text + purple hairline.
-- **"No submissions yet" empty-state card**: soft navy ombre instead of pure white, navy text.
+### 1. `src/pages/ListProperty.tsx` — Hero & Pick section
 
-### 2. AI mode
-- **"Smart Listing Creator" shell**: switch from full-bleed dark navy band to the same **wrapped card layout** used by Manual (centered max-w container, rounded-2xl, purple ombre `linear-gradient(135deg,#F3EEFF 0%,#FFFFFF 55%,#EADCFF 100%)`, 1px purple hairline) so it visually matches List Manually's premium card.
-- **Stepper row** (Upload / AI Extract / Price Predictor / …): ink labels on the new light purple surface.
-- **"What type of listing?" cards**: white cards with purple hairline + purple check.
-- **"Extract with AI ✨" button**: rename to **"Extract with AI"** (drop the `+ ✨` suffix text), keep navy fill + white icon + white text.
-- **Purpose section, Start button, No submissions card, Open full dashboard**: same soft purple ombre treatment as Pick mode but in purple tones.
+- **Remove** the two hero CTAs `List Manually` and `List with AI` (lines ~246–278). The Purpose + "How would you like to list?" picker below is the single entry point.
+- **Move** `View my submissions →` (currently in the hero, line ~281) into the Purpose section, rendered inline next to the `Browse` pill (right side of the "How would you like to list?" row).
+- **Hero title** `List Your Property` (line 224): paint with mode ombre text (`linear-gradient(135deg, theme.primary 0%, #FFFFFF 55%, theme.primary 100%)` via `WebkitBackgroundClip:'text'`) so it reads as white-ombre over the dark hero.
+- **Purpose section wrapper** (section at line 300): apply `ombreSoft(theme)` background + 1.5px theme hairline so the area behind the Purpose card is no longer pure white. The inner Purpose card keeps its existing ombre but gets a slightly stronger inner contrast (raise card to `linear-gradient(135deg,#FFFFFF 0%, ombreSoft mid, #FFFFFF 100%)`) so it still pops against the new tinted backdrop.
+- **No submissions card** + **Open full dashboard** + **My Listing Submissions header**: re-derive backgrounds from `ombreSoft(theme)` (already added) but deepen the stop mix (`theme.primary` at 18–22% alpha at start/end) so the card visibly matches Seller Details ombre instead of reading near-white.
 
-### 3. Manual mode (emerald)
-- **Purpose section, "Next Step" button, "No submissions yet" card, "Open full dashboard" button**: apply the same emerald→white ombre already used by Seller Details (`linear-gradient(135deg,#E8F3EC 0%,#FFFFFF 55%,#D4E9DB 100%)`) + emerald hairline + emerald text. Replace any harsh white or champagne remnants.
+### 2. `src/pages/SellerListing.tsx` — Manual (emerald) surface
 
-### 4. Purpose (Sale / Rent) wiring — functional
-Currently clicking For Sale / For Rent on `/list-property` updates the URL but does **not** propagate into child surfaces. Fix:
-- Read `?purpose=sale|rent` in `ListProperty.tsx` and pass as prop / context to:
-  - Hero title ("List Your Property **for Sale/Rent**")
-  - Sub-copy ("Priority listing… for sale/rent")
-  - `ListingPortalSubmit` (AI wizard): pass `defaultPurpose` so the AI extractor + Pricing & Role step pre-selects sale/rent and labels switch (e.g. "Asking Price" vs "Monthly Rent").
-  - `SellerListing` (manual): drive `listingPurpose` field, swap "Asking Price (AED)" ↔ "Monthly Rent (AED)", swap CTA copy ("List Your Property for Sale/Rent"), swap Pricing step labels.
-- Persist selection in `sessionStorage` so refresh keeps state.
-- Make For Sale / For Rent pills visually reflect active state in all 3 mode themes (already styled, just ensure `aria-pressed` + active gradient triggers re-render).
+- **Page background container** (the highlighted main layer wrapping the seller form): switch from white/beige to emerald ombre `linear-gradient(135deg,#E8F3EC 0%,#FFFFFF 55%,#D4E9DB 100%)`.
+- **`List Your Property for Sale` h1** (line 553): white-emerald ombre text fill (same gradient technique as hero title).
+- **`Seller Listing Tool` eyebrow** (line 546), **`Get Help with JBJ Seller Assistant`** button (line 570), and the **active step icon** for Seller Details (line 621): force `#FFFFFF` glyph + emerald ombre fill with 1.5px emerald hairline so the active state matches the card chrome.
+- **`Next Step` button** (line 1458): repaint with Seller-Details ombre `linear-gradient(135deg,#E8F3EC 0%,#FFFFFF 55%,#D4E9DB 100%)`, emerald border, emerald text/arrow.
+- All field labels / input borders / focus rings continue to use the premium emerald `#0F5132`.
 
-### 5. Contrast QA (mandatory)
-After each change, take browser screenshots at desktop (1366) for:
-- `/list-property` (Pick, default)
-- `/list-property?purpose=rent`
-- `/list-property` → AI mode
-- `/list-property` → Manual mode
-Verify: no faded text, no white-on-white, no invisible arrows, no champagne residue on Open full dashboard, Purpose pills re-render on toggle.
+### 3. AI mode (`ListingPortalSubmit.tsx`) — Purple surface
 
-## Technical notes
-- Edits limited to: `src/pages/ListProperty.tsx`, `src/pages/ListingPortalSubmit.tsx`, `src/pages/SellerListing.tsx`, `src/index.css` (theme tokens + 3 new ombre classes `jj-ombre-navy/-purple/-emerald-soft`).
-- No backend / edge-function changes required — purpose is purely a UI/route concern. (User mentioned "redeploy edge function" but no edge function is involved in this flow; will note in final message.)
-- Keep all existing features (no removal policy).
+Apply the exact same rule with purple tokens:
+- Page background ombre `linear-gradient(135deg,#F2EBFF 0%,#FFFFFF 55%,#E5D6FF 100%)`.
+- Title `Smart Listing Creator` → purple-white ombre text.
+- Active step icon, primary action button (`Extract with AI`, `Next Step`) → purple ombre fill, white icon/text on ombre when active, purple text on the soft variant for secondary actions.
+- 1.5px `#A855F7` hairline on every card.
+
+### 4. Pick / Hero (navy) — same rule
+
+- Backdrop behind Purpose: soft navy ombre (`#E5EAF3 → #FFFFFF → #DDE3F0`).
+- All "white" surfaces (no-submissions, open-dashboard, hero title fill) use the navy variant of the same rule.
+
+### 5. Wiring guarantee
+
+`?purpose=sale|rent` and `mode=manual|ai` already drive `theme` selection — confirm the `ombreSoft(theme)` helper is the single source of truth for soft surfaces in all three files so swapping mode automatically swaps the green/purple/navy tinting everywhere.
+
+### 6. Validation
+
+After implementation, in build mode:
+- Browser screenshots at 1366×900 for: `/list-property`, `/list-property?mode=manual&purpose=sale`, `/list-property?mode=manual&purpose=rent`, `/list-property?mode=ai&purpose=sale`.
+- Zoom-crop each: hero title, Purpose card + backdrop, View my submissions placement, Seller Details active step icon, Next Step button, No submissions card, Open full dashboard.
+- Confirm: no pure-white panels remain inside theme sections, all titles/icons readable, View my submissions sits inline with Browse, hero contains no Manual/AI CTAs.
+
+## Files touched
+
+- `src/pages/ListProperty.tsx`
+- `src/pages/SellerListing.tsx`
+- `src/pages/ListingPortalSubmit.tsx`
+- `src/index.css` (one shared `.jj-ombre-text` utility for white-tinted ombre titles)
+
+No backend, no schema, no edge function changes.

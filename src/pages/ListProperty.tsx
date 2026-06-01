@@ -242,70 +242,26 @@ const ListProperty = () => {
               dashboard.
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => setMode("manual")}
-                data-allow-dark-cta
-                data-no-contrast-guard
-                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:brightness-110"
-                style={{
-                  backgroundColor: "#15803D",
-                  color: "#FFFFFF",
-                  border: "1px solid #15803D",
-                  WebkitTextFillColor: "#FFFFFF",
-                  boxShadow: "0 10px 28px -12px rgba(21,128,61,0.55)",
-                }}
-              >
-                <ClipboardCheck className="w-4 h-4" style={{ color: "#FFFFFF" }} />
-                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>List Manually</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setMode("ai")}
-                data-allow-dark-cta
-                data-no-contrast-guard
-                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:brightness-110"
-                style={{
-                  backgroundColor: "#5B21B6",
-                  color: "#FFFFFF",
-                  border: "1px solid #A855F7",
-                  WebkitTextFillColor: "#FFFFFF",
-                  boxShadow: "0 10px 28px -12px rgba(91,33,182,0.55)",
-                }}
-              >
-                <Wand2 className="w-4 h-4" style={{ color: "#FFFFFF" }} />
-                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>List with AI</span>
-                <Sparkles className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} />
-              </button>
-              <a
-                href="#my-submissions"
-                className="jj-white-ring inline-flex items-center gap-2 px-5 h-11 text-sm font-semibold transition-all hover:brightness-110"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.06)",
-                  color: "#FFFFFF",
-                  WebkitTextFillColor: "#FFFFFF",
-                }}
-                data-no-contrast-guard
-                data-allow-dark-cta
-              >
-                View my submissions →
-              </a>
-            </div>
           </motion.div>
+
         </div>
       </section>
 
       {/* ───────────────── Purpose + Mode selector (mode-aware accent) ───────────────── */}
-      <section className="px-4 sm:px-6 md:px-10 mt-8 md:mt-10 pb-8 md:pb-10 relative z-10">
+      <section
+        className="px-4 sm:px-6 md:px-10 pt-8 md:pt-10 pb-8 md:pb-10 relative z-10"
+        style={{ background: ombreSoft(theme) }}
+      >
+
         <div className="max-w-5xl mx-auto">
           <div
             className="rounded-2xl p-4 sm:p-6 md:p-7 shadow-xl"
             style={{
-              background: ombreSoft(theme),
+              background: `linear-gradient(135deg, #FFFFFF 0%, ${theme.primary}14 55%, #FFFFFF 100%)`,
               border: `1.5px solid ${theme.primary}`,
               boxShadow: `0 18px 40px -22px ${theme.primary}66`,
             }}
+
           >
             <div className="flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
               <div className="flex-1">
@@ -364,6 +320,21 @@ const ListProperty = () => {
                   >
                     Browse
                   </SegmentedPill>
+                  <a
+                    href="#my-submissions"
+                    data-no-contrast-guard
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:brightness-105"
+                    style={{
+                      background: ombreSoft(theme),
+                      color: theme.primary,
+                      WebkitTextFillColor: theme.primary,
+                      border: `1.5px solid ${theme.primary}`,
+                      boxShadow: `0 6px 16px -10px ${theme.primary}66`,
+                    }}
+                  >
+                    View my submissions →
+                  </a>
+
                 </div>
               </div>
             </div>
@@ -669,14 +640,14 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
       className="scroll-mt-24 px-4 sm:px-6 md:px-10 py-12 md:py-16 relative overflow-hidden"
       data-no-contrast-guard
       data-allow-dark-cta
-      style={{ background: theme.sectionGradient }}
+      style={{ background: ombreSoft(theme) }}
     >
       {/* premium ombre shine */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(circle at 85% 12%, ${theme.iconAccent}26 0%, transparent 55%)`,
+          background: `radial-gradient(circle at 85% 12%, ${theme.primary}1F 0%, transparent 55%)`,
         }}
       />
       <div className="relative max-w-6xl mx-auto">
@@ -684,20 +655,21 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
           <div>
             <h2
               className="text-2xl md:text-3xl font-bold tracking-tight"
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              style={{ color: accent, WebkitTextFillColor: accent }}
               data-no-contrast-guard
             >
               My Listing Submissions
             </h2>
             <p
               className="mt-1 text-sm"
-              style={{ color: "rgba(255,255,255,0.85)" }}
+              style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
               data-no-contrast-guard
             >
               Track the status of every property you've listed with JBJ. You'll
               receive an email update on every status change.
             </p>
           </div>
+
           {user && (
             <Button
               asChild
@@ -725,11 +697,12 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             className="rounded-2xl p-8 text-center"
             data-no-contrast-guard
             style={{
-              background: ombreSoft(theme),
+              background: `linear-gradient(135deg, #FFFFFF 0%, ${accent}14 55%, #FFFFFF 100%)`,
               border: `1.5px solid ${accent}`,
               boxShadow: `0 20px 40px -20px ${accent}66`,
             }}
           >
+
             <div
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
@@ -784,11 +757,12 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             className="rounded-2xl p-10 text-center"
             data-no-contrast-guard
             style={{
-              background: ombreSoft(theme),
+              background: `linear-gradient(135deg, #FFFFFF 0%, ${accent}14 55%, #FFFFFF 100%)`,
               border: `1.5px dashed ${accent}`,
               boxShadow: `0 20px 40px -20px ${accent}55`,
             }}
           >
+
             <div
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
