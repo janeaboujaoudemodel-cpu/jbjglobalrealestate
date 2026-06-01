@@ -545,7 +545,9 @@ const ResaleProperties = () => {
                     <Button
                       variant="ghost"
                       data-cta="dark"
-                      className="jj-cta-dark w-full mt-4 h-10 font-semibold rounded-xl"
+                      data-allow-dark-cta
+                      style={{ backgroundColor: "#102540", color: "#FFFFFF" }}
+                      className="allow-white jj-cta-dark w-full mt-4 h-10 font-semibold rounded-xl"
                     >
                       Register Interest
                     </Button>
@@ -599,7 +601,9 @@ const ResaleProperties = () => {
                       onClick={handleSubscribe}
                       variant="ghost"
                       data-cta="dark"
-                      className="jj-cta-dark font-semibold h-11 px-6 rounded-xl"
+                      data-allow-dark-cta
+                      style={{ backgroundColor: "#102540", color: "#FFFFFF" }}
+                      className="allow-white jj-cta-dark font-semibold h-11 px-6 rounded-xl"
                     >
                       Subscribe
                     </Button>
@@ -613,7 +617,9 @@ const ResaleProperties = () => {
                   <Button
                     variant="ghost"
                     data-cta="dark"
-                    className="jj-cta-dark font-semibold h-11 px-6 rounded-xl"
+                    data-allow-dark-cta
+                    style={{ backgroundColor: "#102540", color: "#FFFFFF" }}
+                    className="allow-white jj-cta-dark font-semibold h-11 px-6 rounded-xl"
                   >
                     Browse Off-Plan Properties
                   </Button>
@@ -659,7 +665,9 @@ const ResaleProperties = () => {
                 <Button
                   variant="ghost"
                   data-cta="dark"
-                  className="jj-cta-dark font-semibold h-11 px-6 w-full sm:w-auto rounded-xl"
+                  data-allow-dark-cta
+                  style={{ backgroundColor: "#102540", color: "#FFFFFF" }}
+                  className="allow-white jj-cta-dark font-semibold h-11 px-6 w-full sm:w-auto rounded-xl"
                 >
                   List my property
                   <ArrowRight className="w-4 h-4 ml-2" />
