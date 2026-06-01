@@ -4266,3 +4266,45 @@ html body [data-photo-copy-lock] :where(h1,h2,h3,h4,h5,h6,p,span):not(.jj-pill-a
 }
 
 /* Raw Tailwind bg-* repaint sweeps are intentionally not reintroduced. */
+
+/* ============================================================
+ * FINAL DARK-SURFACE TEXT/ICON LOCK (mirror of light-surface lock)
+ * Any `.text-[#1A1A1A]` / `.text-black` Tailwind utility used inside
+ * a dark/photo/navy/ink surface is repainted to champagne so the
+ * inverse contrast bug (ink-on-dark hero) cannot survive.
+ *
+ * Opt-outs:
+ *   - .jj-cta-champagne / .jj-cta-outline / .jj-pill-active (light CTA primitives)
+ *   - [data-no-contrast-guard] / .allow-white
+ *   - Any nested explicit light surface (data-surface=champagne/cream/raised/gold/page/light/pearl)
+ * ============================================================ */
+:where(
+  .jj-hero-fullscreen,
+  [data-hero-dark],
+  .surface-navy,
+  .surface-ink,
+  .surface-dark,
+  [data-surface="navy"],
+  [data-surface="ink"],
+  [data-surface="dark"]
+) :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, button, div):where(.text-black, [class*="text-[#1A1A1A]"]):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not(.allow-white):not(.jj-cta-champagne):not(.jj-cta-outline):not(.jj-pill-active):not(.jj-cta-champagne *):not(.jj-cta-outline *):not(.jj-pill-active *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *):not(.jj-card-inner *):not(.jj-layer-2 *) {
+  color: #F7F2EA !important;
+  -webkit-text-fill-color: #F7F2EA !important;
+  opacity: 1 !important;
+}
+
+:where(
+  .jj-hero-fullscreen,
+  [data-hero-dark],
+  .surface-navy,
+  .surface-ink,
+  .surface-dark,
+  [data-surface="navy"],
+  [data-surface="ink"],
+  [data-surface="dark"]
+) :where(svg, [class*="lucide"]):where(.text-black, [class*="text-[#1A1A1A]"]):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not(.allow-white):not(.jj-cta-champagne *):not(.jj-cta-outline *):not(.jj-pill-active *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *):not(.jj-card-inner *):not(.jj-layer-2 *) {
+  color: #F7F2EA !important;
+  stroke: #F7F2EA !important;
+  opacity: 1 !important;
+}
+
