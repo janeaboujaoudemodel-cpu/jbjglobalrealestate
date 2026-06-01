@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
 import { Search, Building2, ChevronDown } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useDevelopers } from '@/hooks/useProjects';
+import { supabase } from '@/integrations/supabase/client';
 import { SafeImage } from '@/components/SafeImage';
 
 interface DeveloperSelectDropdownProps {
@@ -12,27 +13,51 @@ interface DeveloperSelectDropdownProps {
   className?: string;
 }
 
+type LightDev = { id: string; name: string; logo_url: string | null };
+
 export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = ({
   value,
   onChange,
   placeholder = 'Select developer...',
   className = '',
 }) => {
-  const { data: developers, isLoading } = useDevelopers(true);
+  // Lightweight query: only the 3 columns this dropdown needs.
+  // Avoids pulling every column from every developer row (which made open
+  // feel laggy when the cache had to deserialize a large payload).
+  const { data: developers, isLoading } = useQuery({
+    queryKey: ['developers-light'],
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('developers')
+        .select('id, name, logo_url, is_hidden, rank')
+        .or('is_hidden.is.null,is_hidden.eq.false')
+        .order('rank', { ascending: true })
+        .order('name', { ascending: true });
+      if (error) throw error;
+      return (data ?? []).map((d: any): LightDev => ({
+        id: d.id,
+        name: d.name,
+        logo_url: d.logo_url ?? null,
+      }));
+    },
+  });
+
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const searchRef = useRef<HTMLInputElement>(null);
 
   // Deduplicate developers by name (case-insensitive)
   const uniqueDevelopers = useMemo(() => {
-    if (!developers) return [];
+    if (!developers) return [] as LightDev[];
     const seen = new Set<string>();
     return developers.filter(d => {
       const key = d.name.toLowerCase().trim();
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
-    }).sort((a, b) => a.name.localeCompare(b.name));
+    });
   }, [developers]);
 
   const filtered = useMemo(() => {
@@ -48,16 +73,17 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
 
   useEffect(() => {
     if (open) {
-      setTimeout(() => searchRef.current?.focus(), 100);
+      // requestAnimationFrame is snappier than setTimeout(100) and still
+      // waits for the popover to mount before grabbing focus.
+      const id = requestAnimationFrame(() => searchRef.current?.focus());
+      return () => cancelAnimationFrame(id);
     } else {
       setSearch('');
     }
   }, [open]);
 
-  const getLogoUrl = (dev: typeof uniqueDevelopers[0]) => {
-    // LOCKED: canonical logo_url is the single source of truth.
-    return dev.logo_url || null;
-  };
+  const getLogoUrl = (dev: LightDev) => dev.logo_url || null;
+
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -137,6 +163,8 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
                         src={logo}
                         alt={dev.name}
                         className="w-6 h-6 object-contain"
+                        loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <Building2 className="w-4 h-4 text-muted-foreground" />
