@@ -112,6 +112,17 @@ const THEME_PURPLE: ModeTheme = {
 const themeForMode = (m: Mode): ModeTheme =>
   m === "manual" ? THEME_EMERALD : m === "ai" ? THEME_PURPLE : THEME_NAVY;
 
+/* Soft mode-tinted ombre used for "white" surfaces (Purpose card, empty
+   states, "Open full dashboard" pill) so they match the page's accent
+   instead of reading as harsh pure white. */
+const ombreSoft = (t: ModeTheme): string => {
+  if (t.name === "emerald")
+    return "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)";
+  if (t.name === "purple")
+    return "linear-gradient(135deg, #F2EBFF 0%, #FFFFFF 55%, #E5D6FF 100%)";
+  return "linear-gradient(135deg, #E5EAF3 0%, #FFFFFF 50%, #DDE3F0 100%)";
+};
+
 const ListProperty = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const mode = (searchParams.get("mode") as Mode) || "pick";
