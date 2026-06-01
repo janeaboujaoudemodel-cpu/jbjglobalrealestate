@@ -699,8 +699,7 @@ const ListingPortalSubmit = () => {
                   className="space-y-6"
                 >
                   <div className="relative">
-                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#102540]/15 border border-[#102540]/30" />
-                    <div className="relative space-y-6 p-3">
+                    <div className="relative space-y-6">
                       {/* Category Selection */}
                       <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                         <h2 className="text-[#1A1A1A] font-semibold mb-4">What type of listing?</h2>
@@ -719,8 +718,17 @@ const ListingPortalSubmit = () => {
                                 }`}
                               >
                                 {isSelected && (
-                                  <div className="absolute top-2 right-2 w-6 h-6 bg-[#EFE6D6] rounded-full flex items-center justify-center">
-                                    <Check className="w-3.5 h-3.5 text-white" />
+                                  <div
+                                    className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center"
+                                    data-no-contrast-guard
+                                    data-allow-dark-cta
+                                    style={{ backgroundColor: '#102540' }}
+                                  >
+                                    <Check
+                                      className="w-3.5 h-3.5"
+                                      data-no-contrast-guard
+                                      style={{ color: '#FFFFFF' }}
+                                    />
                                   </div>
                                 )}
                                 <Icon className={`w-5 h-5 mb-2 ${isSelected ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
@@ -834,13 +842,22 @@ const ListingPortalSubmit = () => {
                           onClick={runAIExtraction}
                           disabled={uploadedDocs.length === 0 && !sourceUrl.trim() && !sourceText.trim()}
                           data-allow-dark-cta
-                          className="flex-1 bg-white hover:bg-[#102540]/5 text-[#102540] border-2 border-[#102540] h-12 text-base font-semibold disabled:opacity-50 [&_svg]:text-[#102540]"
+                          data-no-contrast-guard
+                          className="flex-1 h-12 text-base font-semibold disabled:opacity-50 border-0 hover:brightness-110 transition-all"
+                          style={{
+                            backgroundColor: '#102540',
+                            color: '#FFFFFF',
+                            WebkitTextFillColor: '#FFFFFF',
+                            border: '1px solid rgba(184,149,85,0.5)',
+                          }}
                         >
-                          <Sparkles className="w-5 h-5 mr-2 text-[#102540]" />
-                          Extract with AI
-                          {uploadedDocs.length > 0 && ` (${uploadedDocs.length} file${uploadedDocs.length === 1 ? '' : 's'})`}
-                          {sourceUrl.trim() && ' + URL'}
-                          {sourceText.trim() && ' + Text'}
+                          <Sparkles className="w-5 h-5 mr-2" style={{ color: '#FFFFFF' }} data-no-contrast-guard />
+                          <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+                            Extract with AI
+                            {uploadedDocs.length > 0 && ` (${uploadedDocs.length} file${uploadedDocs.length === 1 ? '' : 's'})`}
+                            {sourceUrl.trim() && ' + URL'}
+                            {sourceText.trim() && ' + Text'}
+                          </span>
                         </Button>
                         <Button
                           onClick={() => setPhase('pricing_ai')}

@@ -123,12 +123,12 @@ const ListProperty = () => {
         data-no-contrast-guard
         style={{ background: BLUE_GRADIENT }}
       >
-        {/* subtle gold hairline along the bottom of the hero */}
+        {/* subtle purple hairline along the bottom of the hero */}
         <div
           className="absolute inset-x-0 bottom-0 h-px"
           style={{
             background:
-              "linear-gradient(90deg, transparent, rgba(184,149,85,0.6), transparent)",
+              "linear-gradient(90deg, transparent, rgba(168,85,247,0.65), transparent)",
           }}
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-16 pb-12 md:pb-16">
@@ -141,13 +141,13 @@ const ListProperty = () => {
             <span
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold"
               style={{
-                backgroundColor: "rgba(184,149,85,0.12)",
-                color: GOLD,
-                border: `1px solid ${GOLD}`,
+                backgroundColor: "rgba(168,85,247,0.14)",
+                color: "#FFFFFF",
+                border: "1px solid #A855F7",
               }}
               data-no-contrast-guard
             >
-              <ShieldCheck className="w-3.5 h-3.5" style={{ color: GOLD }} />
+              <ShieldCheck className="w-3.5 h-3.5" style={{ color: "#A855F7" }} />
               JBJ Seller Portal
             </span>
             <h1
@@ -177,33 +177,33 @@ const ListProperty = () => {
                 onClick={() => setMode("manual")}
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:brightness-[0.97]"
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:brightness-110"
                 style={{
-                  backgroundColor: CHAMPAGNE,
-                  color: INK,
-                  border: `1px solid ${GOLD}`,
-                  WebkitTextFillColor: INK,
+                  backgroundColor: "#15803D",
+                  color: "#FFFFFF",
+                  border: "1px solid #15803D",
+                  WebkitTextFillColor: "#FFFFFF",
                 }}
               >
-                <ClipboardCheck className="w-4 h-4" style={{ color: INK }} />
-                <span style={{ color: INK, WebkitTextFillColor: INK }}>List Manually</span>
+                <ClipboardCheck className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>List Manually</span>
               </button>
               <button
                 type="button"
                 onClick={() => setMode("ai")}
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:bg-white/5"
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md text-sm font-semibold w-full sm:w-auto transition-colors hover:bg-[#A855F7]/10"
                 style={{
                   backgroundColor: "transparent",
                   color: "#FFFFFF",
-                  border: `1.5px solid ${GOLD}`,
+                  border: "1.5px solid #A855F7",
                   WebkitTextFillColor: "#FFFFFF",
                 }}
               >
-                <Wand2 className="w-4 h-4" style={{ color: GOLD }} />
+                <Wand2 className="w-4 h-4" style={{ color: "#A855F7" }} />
                 <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>List with AI</span>
-                <Sparkles className="w-3.5 h-3.5" style={{ color: GOLD }} />
+                <Sparkles className="w-3.5 h-3.5" style={{ color: "#A855F7" }} />
               </button>
               <a
                 href="#my-submissions"
@@ -292,7 +292,13 @@ const ListProperty = () => {
       </section>
 
       {/* ─────────────────── Active form / browser / picker ─────────────────── */}
-      <section className="px-2 sm:px-4 md:px-6 pt-8 pb-12">
+      <section
+        className={
+          mode === "ai"
+            ? "w-full pt-4 pb-6"
+            : "px-2 sm:px-4 md:px-6 pt-8 pb-12"
+        }
+      >
         {mode === "pick" || !ActiveTab ? (
           <PremiumModePicker onPick={setMode} />
         ) : (
@@ -508,20 +514,26 @@ function MySubmissionsSection() {
   return (
     <section
       id="my-submissions"
-      className="scroll-mt-24 px-4 sm:px-6 md:px-10 py-12 md:py-16"
-      style={{ backgroundColor: CHAMPAGNE_RAISED + "40" }}
+      className="scroll-mt-24 px-4 sm:px-6 md:px-10 py-12 md:py-16 relative"
+      data-no-contrast-guard
+      data-allow-dark-cta
+      style={{ background: BLUE_GRADIENT }}
     >
       <div className="max-w-6xl mx-auto">
         <div className="flex items-end justify-between flex-wrap gap-3 mb-6">
           <div>
             <h2
               className="text-2xl md:text-3xl font-bold tracking-tight"
-              style={{ color: GOLD }}
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               data-no-contrast-guard
             >
               My Listing Submissions
             </h2>
-            <p className="mt-1 text-sm" style={{ color: INK + "B3" }}>
+            <p
+              className="mt-1 text-sm"
+              style={{ color: "rgba(255,255,255,0.85)" }}
+              data-no-contrast-guard
+            >
               Track the status of every property you've listed with JBJ. You'll
               receive an email update on every status change.
             </p>
@@ -531,12 +543,16 @@ function MySubmissionsSection() {
               asChild
               data-allow-dark-cta
               data-no-contrast-guard
-              className="font-semibold border-0"
-              style={{ backgroundColor: BLUE, color: "#FFFFFF" }}
+              className="font-semibold border-0 hover:brightness-95"
+              style={{
+                backgroundColor: "#FFFFFF",
+                color: BLUE,
+                border: `1px solid ${GOLD}`,
+              }}
             >
               <Link to="/dashboard/my-listings">
-                <LayoutDashboard className="w-4 h-4 mr-2" />
-                Open full dashboard
+                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: BLUE }} />
+                <span style={{ color: BLUE, WebkitTextFillColor: BLUE }}>Open full dashboard</span>
               </Link>
             </Button>
           )}
@@ -546,9 +562,10 @@ function MySubmissionsSection() {
           /* Anonymous gate */
           <div
             className="rounded-2xl p-8 text-center"
+            data-no-contrast-guard
             style={{
-              backgroundColor: CHAMPAGNE,
-              border: `1.5px solid ${BLUE}`,
+              backgroundColor: "#FFFFFF",
+              border: `1.5px solid ${GOLD}`,
             }}
           >
             <div
@@ -575,8 +592,8 @@ function MySubmissionsSection() {
               style={{ backgroundColor: BLUE, color: "#FFFFFF" }}
             >
               <Link to="/login?redirect=/list-property%23my-submissions">
-                Sign in to continue
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sign in to continue</span>
+                <ArrowRight className="w-4 h-4 ml-2" style={{ color: "#FFFFFF" }} />
               </Link>
             </Button>
           </div>
@@ -587,8 +604,8 @@ function MySubmissionsSection() {
                 key={i}
                 className="h-40 rounded-2xl animate-pulse"
                 style={{
-                  backgroundColor: CHAMPAGNE,
-                  border: `1px solid ${GOLD}30`,
+                  backgroundColor: "rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.14)",
                 }}
               />
             ))}
@@ -596,21 +613,22 @@ function MySubmissionsSection() {
         ) : listings.length === 0 ? (
           <div
             className="rounded-2xl p-10 text-center"
+            data-no-contrast-guard
             style={{
-              backgroundColor: CHAMPAGNE,
+              backgroundColor: "#FFFFFF",
               border: `1.5px dashed ${GOLD}`,
             }}
           >
             <div
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
-                backgroundColor: CHAMPAGNE_RAISED,
-                border: `1px solid ${GOLD}`,
+                backgroundColor: BLUE + "10",
+                border: `1px solid ${BLUE}`,
               }}
             >
-              <Building2 className="w-7 h-7" style={{ color: INK }} />
+              <Building2 className="w-7 h-7" style={{ color: BLUE }} />
             </div>
-            <h3 className="text-lg font-bold mb-2" style={{ color: INK }}>
+            <h3 className="text-lg font-bold mb-2" style={{ color: BLUE }} data-no-contrast-guard>
               No submissions yet
             </h3>
             <p className="text-sm mb-5" style={{ color: INK + "99" }}>
@@ -639,9 +657,10 @@ function SubmissionCard({ listing }: { listing: any }) {
   return (
     <div
       className="rounded-2xl overflow-hidden flex flex-col transition-all hover:shadow-lg"
+      data-no-contrast-guard
       style={{
-        backgroundColor: CHAMPAGNE,
-        border: `1px solid ${GOLD}50`,
+        backgroundColor: "#FFFFFF",
+        border: `1px solid ${BLUE}33`,
       }}
     >
       <div
@@ -695,8 +714,8 @@ function SubmissionCard({ listing }: { listing: any }) {
             style={{ backgroundColor: BLUE, color: "#FFFFFF" }}
           >
             <Link to={`/dashboard/my-listings?id=${listing.id}`}>
-              View details
-              <ArrowRight className="w-3 h-3 ml-1" />
+              <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>View details</span>
+              <ArrowRight className="w-3 h-3 ml-1" style={{ color: "#FFFFFF" }} />
             </Link>
           </Button>
         </div>
