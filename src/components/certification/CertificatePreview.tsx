@@ -79,16 +79,32 @@ function FoilSeal({ size = 130 }: { size?: number }) {
         className="absolute inset-[6px] rounded-full border border-[#8A6A35]/60"
         style={{ boxShadow: "inset 0 0 8px rgba(255,246,224,0.4)" }}
       />
-      <BadgeCheck className="relative" style={{ width: size * 0.42, height: size * 0.42, color: "#1A1A1A" }} strokeWidth={2} />
-      <span
-        className="absolute bottom-[14%] text-[#1A1A1A]/80 font-semibold uppercase"
-        style={{ fontSize: size * 0.075, letterSpacing: "0.2em" }}
-      >
-        JBJ · CERTIFIED
-      </span>
+      <BadgeCheck className="relative" style={{ width: size * 0.5, height: size * 0.5, color: "#1A1A1A" }} strokeWidth={2} />
     </div>
   );
 }
+
+/** Diagonal shimmer sweep across the certificate plate */
+const CERT_SHIMMER_CSS = `
+@keyframes jj-cert-shimmer {
+  0%   { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+  20%  { opacity: .55; }
+  60%  { opacity: .55; }
+  100% { transform: translateX(160%)  skewX(-18deg); opacity: 0; }
+}
+.jj-cert-shimmer {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  border-radius: inherit;
+}
+.jj-cert-shimmer::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 45%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,246,224,.45) 50%, transparent 100%);
+  animation: jj-cert-shimmer 6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jj-cert-shimmer::after { animation: none; opacity: 0; }
+}
+`;
 
 export function CertificatePreview({ isLocked = false }: CertificatePreviewProps) {
   const { user } = useAuth();
@@ -156,15 +172,19 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
               }}
             />
 
-            {/* Double-rule frame */}
-            <div className="absolute inset-3 rounded-xl border border-[#B89555]/45 pointer-events-none" />
-            <div className="absolute inset-5 rounded-lg border border-[#B89555]/25 pointer-events-none" />
+            {/* Single inner gold rule — middle frame removed for cleaner read */}
+            <div className="absolute inset-5 rounded-lg border border-[#B89555]/30 pointer-events-none" />
 
-            {/* Corner flourishes */}
-            <div className="absolute top-5 left-5 w-10 h-10 border-t-[1.5px] border-l-[1.5px] border-[#B89555]/75 rounded-tl-md pointer-events-none" />
-            <div className="absolute top-5 right-5 w-10 h-10 border-t-[1.5px] border-r-[1.5px] border-[#B89555]/75 rounded-tr-md pointer-events-none" />
-            <div className="absolute bottom-5 left-5 w-10 h-10 border-b-[1.5px] border-l-[1.5px] border-[#B89555]/75 rounded-bl-md pointer-events-none" />
-            <div className="absolute bottom-5 right-5 w-10 h-10 border-b-[1.5px] border-r-[1.5px] border-[#B89555]/75 rounded-br-md pointer-events-none" />
+            {/* Corner angle flourishes (kept — they frame the certificate) */}
+            <div className="absolute top-5 left-5 w-12 h-12 border-t-[1.5px] border-l-[1.5px] border-[#B89555]/85 rounded-tl-md pointer-events-none" />
+            <div className="absolute top-5 right-5 w-12 h-12 border-t-[1.5px] border-r-[1.5px] border-[#B89555]/85 rounded-tr-md pointer-events-none" />
+            <div className="absolute bottom-5 left-5 w-12 h-12 border-b-[1.5px] border-l-[1.5px] border-[#B89555]/85 rounded-bl-md pointer-events-none" />
+            <div className="absolute bottom-5 right-5 w-12 h-12 border-b-[1.5px] border-r-[1.5px] border-[#B89555]/85 rounded-br-md pointer-events-none" />
+
+            {/* Animated shimmer sweep (respects reduced-motion) */}
+            <style dangerouslySetInnerHTML={{ __html: CERT_SHIMMER_CSS }} />
+            <div className="jj-cert-shimmer" aria-hidden />
+
 
             {/* Content */}
             <div className="relative z-10 px-8 sm:px-14 py-10 sm:py-14 text-center">
@@ -274,29 +294,30 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {isLocked ? (
-              <Button disabled className="bg-[#EFE6D6]/60 text-[#1A1A1A]/60 cursor-not-allowed border border-[#B89555]/30">
+              <Button
+                disabled
+                data-cta="cert-locked"
+                className="jj-cta-outline opacity-60 cursor-not-allowed"
+              >
                 <Lock className="w-4 h-4 mr-2" />
                 Complete Certification to Download
               </Button>
             ) : (
               <>
-                <Button className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#EFE6D6] border border-[#B89555]/40">
+                <Button data-cta="cert-download" className="jj-cta-dark">
                   <Download className="w-4 h-4 mr-2" />
                   Download Certificate
                 </Button>
-                <Button
-                  variant="outline"
-                  className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-                >
+                <Button data-cta="cert-share" className="jj-cta-outline">
                   <Share2 className="w-4 h-4 mr-2" />
                   Share Achievement
                 </Button>
               </>
             )}
           </div>
+
         </CardContent>
       </Card>
     </motion.div>

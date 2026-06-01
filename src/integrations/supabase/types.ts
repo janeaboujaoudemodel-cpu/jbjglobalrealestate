@@ -3032,6 +3032,7 @@ export type Database = {
         Row: {
           ai_generated_chapter_count: number | null
           ai_generated_summary: string | null
+          audience: string
           book_number: number
           cover_image_url: string | null
           cover_style: Json | null
@@ -3061,6 +3062,7 @@ export type Database = {
         Insert: {
           ai_generated_chapter_count?: number | null
           ai_generated_summary?: string | null
+          audience?: string
           book_number: number
           cover_image_url?: string | null
           cover_style?: Json | null
@@ -3090,6 +3092,7 @@ export type Database = {
         Update: {
           ai_generated_chapter_count?: number | null
           ai_generated_summary?: string | null
+          audience?: string
           book_number?: number
           cover_image_url?: string | null
           cover_style?: Json | null
@@ -3162,6 +3165,7 @@ export type Database = {
           book_id: string
           content: string | null
           created_at: string | null
+          deleted_at: string | null
           description: string | null
           estimated_minutes: number | null
           id: string
@@ -3175,6 +3179,7 @@ export type Database = {
           book_id: string
           content?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           description?: string | null
           estimated_minutes?: number | null
           id?: string
@@ -3188,6 +3193,7 @@ export type Database = {
           book_id?: string
           content?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           description?: string | null
           estimated_minutes?: number | null
           id?: string
