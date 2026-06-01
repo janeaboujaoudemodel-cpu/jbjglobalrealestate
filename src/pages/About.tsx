@@ -526,7 +526,7 @@ const About = () => {
         </Section>
 
         {/* SECTION 9: CTA - 3-Layer System: Black > Active Champagne > Pearl */}
-        <section className="py-16 sm:py-20 bg-[#1A1A1A]">
+        <section className="py-10 md:py-12 bg-[#F7F2EA]">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-[1100px] mx-auto">
               {/* OUTER CARD - Active Champagne Layer */}
