@@ -208,7 +208,7 @@ const hubSections: HubSection[] = [
       { href: "/founder", label: "Founder & Leadership" },
       { href: "/awards", label: "Awards & Recognition" },
       { href: "/company-profile", label: "Company Profile" },
-      { href: "/press-kit", label: "Press Kit" },
+      
       { href: "/philanthropy", label: "Philanthropy" },
     ],
   },
