@@ -174,7 +174,7 @@ const ListProperty = () => {
       data-listing-mode={theme.name}
     >
       <SEOHead
-        title="List Your Property — JBJ Global Real Estate"
+        title={purpose === "rent" ? "List Your Property for Rent — JBJ Global Real Estate" : "List Your Property for Sale — JBJ Global Real Estate"}
         description="List your property for sale or rent with JBJ Global Real Estate. Use AI to auto-generate your listing, or fill in manually. Track approval status from your dashboard."
         canonicalPath="/list-property"
       />
@@ -220,7 +220,7 @@ const ListProperty = () => {
               data-no-contrast-guard
             >
               <ShieldCheck className="w-3.5 h-3.5" style={{ color: theme.badgeBorder }} />
-              JBJ Seller Portal
+              {purpose === "rent" ? "JBJ Landlord Portal" : "JBJ Seller Portal"}
             </span>
             <h1
               className="mt-5 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight"

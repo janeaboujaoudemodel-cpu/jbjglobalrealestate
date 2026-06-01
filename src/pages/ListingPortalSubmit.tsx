@@ -103,8 +103,13 @@ const ListingPortalSubmit = () => {
   
   // Read purpose from URL: ?purpose=sale or ?purpose=rent
   const urlPurpose = searchParams.get('purpose');
-  const initialListingType = urlPurpose === 'rent' ? 'rent' : 'sale';
-  const initialCategory = urlPurpose === 'rent' ? 'rental' : 'secondary_offplan';
+  const isRent = urlPurpose === 'rent';
+  const initialListingType = isRent ? 'rent' : 'sale';
+  const initialCategory = isRent ? 'rental' : 'secondary_offplan';
+  const party = isRent ? 'Landlord' : 'Seller';
+  const actionNoun = isRent ? 'Rent' : 'Sale';
+  const actionVerb = isRent ? 'rental' : 'sale';
+  const priceLabel = isRent ? 'Monthly Rent (AED)' : 'Price (AED)';
 
   // Restore from sessionStorage on mount
   const savedState = (() => {
@@ -636,7 +641,7 @@ const ListingPortalSubmit = () => {
                   boxShadow: "0 6px 16px -8px rgba(91,33,182,0.55)",
                 }}
               >
-                <Wand2 className="w-3.5 h-3.5" /> AI-Powered · {urlPurpose === 'rent' ? 'Landlord' : 'Seller'} Listing Tool
+                <Wand2 className="w-3.5 h-3.5" /> AI-Powered · {party} Listing Tool
               </span>
               <h1
                 className="text-3xl md:text-4xl font-bold mb-3"
@@ -649,10 +654,10 @@ const ListingPortalSubmit = () => {
                   letterSpacing: "-0.02em",
                 }}
               >
-                Smart Listing Creator — {urlPurpose === 'rent' ? 'For Rent' : 'For Sale'}
+                Smart Listing Creator — For {actionNoun}
               </h1>
               <p className="text-[#1A1A1A]/80 mb-6">
-                Upload your documents and let AI create a professional {urlPurpose === 'rent' ? 'rental' : 'sale'} listing for you.
+                Upload your documents and let AI create a professional {actionVerb} listing for you.
               </p>
 
               <div className="[&>div]:mb-0">
@@ -1172,7 +1177,7 @@ const ListingPortalSubmit = () => {
 
                       {/* Main Details Form */}
                       <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6 space-y-4">
-                        <h3 className="text-[#1A1A1A] font-semibold mb-1">Listing Details</h3>
+                        <h3 className="text-[#1A1A1A] font-semibold mb-1">{party} Listing Details — For {actionNoun}</h3>
                         
                         <div>
                           <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Title *</label>
@@ -1265,7 +1270,7 @@ const ListingPortalSubmit = () => {
 
                         <div className="grid grid-cols-4 gap-3">
                           <div>
-                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Price (AED)</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">{priceLabel}</label>
                             <Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]" />
                           </div>
                           <div>
@@ -1379,7 +1384,7 @@ const ListingPortalSubmit = () => {
                       <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                         <h3 className="text-[#1A1A1A] font-semibold mb-4 flex items-center gap-2">
                           <User className="w-4 h-4 text-[#1A1A1A]" />
-                          Your Role
+                          Your Role as {party}
                         </h3>
                         <RadioGroup value={sellerRole} onValueChange={setSellerRole} className="grid grid-cols-2 gap-3">
                           {sellerRoles.map(role => (
