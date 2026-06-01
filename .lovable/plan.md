@@ -1,62 +1,50 @@
-# Consolidate Team, Academy & Broker pages
+# Rebuild Broker Toolkit page
 
-## 1. Team page — fully hidden, owner toggle only
+The current `/broker-toolkit` has a broken hero (invisible headline on champagne bg, no video, oversized bulky CTAs), faded icon tiles on the 5 stats cards, washed-out navigation pills, and inconsistent section surfaces. I'll rebuild it cleanly using the locked design system (champagne bands, `IconTile`, CTA primitives) — keeping every section intact (No Removal policy).
 
-- **Sidebar**: remove the `Team` entry from `GlobalVerticalNav.tsx` (line 214) and from the mega-menu group (line 392). Team never appears in the public sidebar/menus regardless of the toggle.
-- **Routes**: delete `/team` and `/meet-the-team` routes from `src/routes/PublicRoutes.tsx` (lines 336–337) and the `MeetTheTeam` lazy import. Any visit to `/team`, `/meet-the-team`, `/brokers→/team` etc. falls through to `NotFound`.
-- **In-page toggle bar**: remove `TeamVisibilityBar` usage from `MeetTheTeam.tsx` (the on-page toggle the user complained about).
-- **Owner backend toggle**: keep `TeamPageVisibilityToggle` in `OwnerFounderSettings.tsx` and `TeamPageVisibilityContext` intact. When the owner flips it ON, the route and sidebar entry are re-mounted (gated by `useTeamVisibility()` — sidebar item and `<Route path="/team">` only render when `visible === true`). Default = hidden.
-- **Clean references**:
-  - `public/sitemap.xml` — drop `/team` entry.
-  - `scripts/generate-sitemap.ts` — drop `/team` entry (line 58).
-  - `public/llms.txt` — drop the Team line (line 26).
-  - `About.tsx` "Our Team" CTA — relabel to "Contact Us" pointing at `/contact` (no broken link).
-  - `SEOBreadcrumbs`, `MegaMenuMore`, `MegaMenuSearch`, `GlobalSearchModal`, `command-palette`, `Footer`, `Sitemap.tsx`, `OwnerAuditPage` — strip `/team` link entries.
+## Scope
 
-## 2. Merge Academy Graduates into JBJ Academy
+Files touched (visual/structure only, no business logic changes):
 
-- Add a new **"Graduates"** tab/section inside `src/pages/JBJAcademy.tsx` that renders the directory + certificate-lookup UI lifted from `AcademyGraduates.tsx` (same Supabase query on `hr_certificates`).
-- Delete `src/pages/AcademyGraduates.tsx`.
-- `PublicRoutes.tsx`: remove `AcademyGraduates` lazy import + `/academy/graduates` route (lines 179, 416). No redirect — fully gone.
-- `GlobalVerticalNav.tsx`: remove "Academy Graduates" from sidebar (line 202) and from mega-menu (line 452).
-- Sitemap / llms / SEO breadcrumbs / global search index: drop `/academy/graduates`.
+- `src/pages/BrokerToolkit.tsx` — wrap sections in `<PremiumSectionCard>` + `.jj-band` alternation; remove the dark gradient page background.
+- `src/components/broker-toolkit/BrokerToolkitHero.tsx` — full rebuild.
+- `src/components/broker-toolkit/BrokerToolkitStats.tsx` — fix icon tiles & layout.
+- `src/components/broker-toolkit/BrokerToolkitNavigation.tsx` — convert pills to locked `.jj-pill-active` primitive.
+- Light pass on section wrappers (`Tools / Education / Academy / Operations / CRM / Support / Growth / Referral / CTA`) only to remove dark fills and align padding — no content/feature removal.
 
-## 3. Merge Broker Resources into JBJ Academy; remove Broker Learning
+## Hero rebuild
 
-- Add a **"Resources"** tab inside `JBJAcademy.tsx` rendering the content from `BrokerResources.tsx` (resource cards, downloadable materials).
-- Delete `src/pages/BrokerResources.tsx` and `src/pages/BrokerEducation.tsx`.
-- `PublicRoutes.tsx`: remove
-  - `/broker-resources` route (line 404) + import (line 169)
-  - `/broker-education` redirect (line 265) + `BrokerEducation` import (line 50)
-  - `/broker/training` redirect (line 405)
-- `BrokerPortalRoutes.tsx`: remove the `academy` Navigate (line 94) — no more `/broker/learning` references emitted by the portal.
-- `GlobalVerticalNav.tsx`: remove "Broker Learning" (lines 159, 198, 363, 372, 450) and "Broker Resources" (lines 197, 454). Keep "JBJ Academy" as the single entry.
-- Sitemap / llms / breadcrumbs / search index / Footer / MegaMenu* / `useBrokerEducation` callers: strip every `broker-learning`, `broker-resources`, `broker-education`, `broker/training`, `broker/learning` URL/word so nothing redirects there.
-- `BrokerPartnerDashboard`, `BrokerHub`, `BrokerDashboard`, `QuickActions`, `MegaMenuBrokerHub`: any "Broker Learning" / "Broker Resources" links retargeted to `/jbj-academy` (or the new tab anchor `/jbj-academy?tab=resources`).
+- Full-bleed `.jj-band jj-band--page` with a real background video (reuse the home-hero video asset already used by `<HomeHeroSearch />` / hero section) layered behind a soft champagne→ink scrim so the headline is legible.
+- `data-hero-dark` attribute so white-text rule applies inside the hero only.
+- Headline: "Your Complete Broker Success System" (kept), `text-4xl md:text-6xl`, white, tight tracking; subhead one line, `text-white/80`.
+- Two CTAs using locked primitives — compact (`h-11`, `px-5`, `text-sm font-medium`):
+  - Primary: `.jj-cta-dark` → "Open My Dashboard" → `/broker/portal`
+  - Secondary: `.jj-cta-outline` (on dark) → "See What's Included" → scrolls to `#toolkit-overview`
+- Height capped at `min-h-[520px] md:min-h-[600px]` (not full-screen).
 
-## 4. AI Broker Workspace — Portal only
+## Stats row rebuild
 
-- `GlobalVerticalNav.tsx`: remove "AI Broker Workspace" from the BROKER & ACADEMY section (lines 203, 455).
-- `PublicRoutes.tsx`: remove the public `/ai-broker-workspace` route + lazy import (lines 173, 408). The workspace remains mounted inside `BrokerPortalRoutes.tsx` at `/broker/portal/ai` (line 86) — that's the single entry point.
-- Ensure Broker Portal landing (`BrokerPortal.tsx`) surfaces an "AI Workspace" tile/link to `/broker/portal/ai` so it's discoverable.
-- Strip `/ai-broker-workspace` from sitemap, llms.txt, SEO breadcrumbs, search index, mega-menus.
+- 5 cards inside `<PremiumSectionCard>` on champagne (`#F7F2EA`), grid `md:grid-cols-5` with `gap-4`.
+- Each card: `<IconTile tone="gold" size="md" icon={…} />` (Wrench, GraduationCap, BookOpen, Users, TrendingUp) — kills the faded black squares.
+- Number `text-3xl font-semibold text-[#1A1A1A]`, label `text-sm text-[#1A1A1A]/70`, sub `text-xs text-[#1A1A1A]/60`. No raw gray.
 
-## 5. Validation (E2E, visual + technical)
+## Navigation pills
 
-After build:
-1. Hit `/team`, `/meet-the-team`, `/academy/graduates`, `/broker-resources`, `/broker-education`, `/broker/training`, `/broker/learning`, `/ai-broker-workspace` → all must render `NotFound` (no redirect, no flash).
-2. Open vertical sidebar → BROKER & ACADEMY contains only **Broker Portal** + **JBJ Academy** (+ any unrelated existing items). COMPANY section has no **Team** entry.
-3. Owner flips Team toggle ON in `OwnerFounderSettings` → `/team` becomes reachable and sidebar entry re-appears; flip OFF → both disappear again.
-4. `/jbj-academy` shows three tabs/sections: **Courses (existing)**, **Resources (from BrokerResources)**, **Graduates (from AcademyGraduates)** — all functional, certificate lookup works.
-5. `/broker/portal/ai` loads the AI Broker Workspace inside the portal shell.
-6. `rg -n "broker-learning|broker-resources|broker-education|/team\b|academy/graduates|ai-broker-workspace"` returns zero hits outside of the owner toggle context and historical redirects.
-7. `public/sitemap.xml` and `public/llms.txt` contain none of the removed URLs.
+- Replace current bulky pill styles with `.jj-pill-active` (active) and `.jj-cta-outline` (idle) — `h-9 px-4 text-sm`, sticky top under header (`top-[88px]`), champagne raised band.
 
-## Technical notes
+## Section surfaces
 
-- Files deleted: `MeetTheTeam.tsx`*, `AcademyGraduates.tsx`, `BrokerResources.tsx`, `BrokerEducation.tsx`, `TeamVisibilityBar.tsx` usage (component file retained only if reused — otherwise deleted), `useBrokerEducation.ts` if no other consumers.  
-  *`MeetTheTeam.tsx` stays in repo because owner-toggle re-enables it; only routes/sidebar are gated.
-- `TeamPageVisibilityContext` + `useTeamVisibility` stay. Sidebar item and route both consume `useTeamVisibility()`.
-- New JBJ Academy structure: top-level `<Tabs>` with `courses | resources | graduates`, deep-linkable via `?tab=`.
-- No DB migrations needed — `hr_certificates` and broker-resource data already exist.
-- Update `scripts/contrast/no-blue-allowlist.json` and `scripts/a11y/allowlist.json` to drop stale paths so CI stays green.
+- Every section wrapped in `<PremiumSectionCard>` with full-bleed `.jj-band` alternation: `page → surface → page → raised …`.
+- Remove any `bg-[#1A1A1A]` / dark gradient backgrounds inside sections (they're being remapped anyway on marketing pages).
+- Add `data-marketing-page` on the page root so the global band system applies.
+- No content removed — only chrome cleaned up.
+
+## Out of scope
+
+- No route, sitemap, SEO, or business-logic changes.
+- No new tools, sections, or copy beyond the hero headline tweak.
+- AI features inside Tools section keep their purple theme (AI premium purple standard).
+
+## Verification
+
+After build, I'll navigate the preview to `/broker-toolkit`, screenshot hero + stats + one section, and confirm: video plays, headline legible white-on-dark, CTAs compact, stat icons are gold tiles (not faded squares), pills crisp, no gray surfaces.
