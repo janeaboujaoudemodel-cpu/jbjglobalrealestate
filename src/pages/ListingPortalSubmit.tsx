@@ -595,30 +595,43 @@ const ListingPortalSubmit = () => {
   }
 
   return (
-    <section className="relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-      <div className="relative py-12 overflow-hidden">
+    <section className="relative w-full min-h-screen bg-gradient-to-br from-[#0b1c36] via-[#102540] to-[#1a3d63]">
+      <div className="relative pt-20 pb-12 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <div ref={creatorRef} className="max-w-3xl mx-auto">
-            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-4">
-              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
+          <div ref={creatorRef} className="w-full max-w-none">
+            <Button
+              variant="ghost"
+              onClick={() => navigate('/listing-portal')}
+              data-no-contrast-guard
+              className="allow-white text-white hover:text-white hover:bg-white/10 mb-4"
+              style={{ color: '#FFFFFF' }}
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" style={{ color: '#FFFFFF' }} /> Back to Portal
             </Button>
 
             {/* Header */}
             <div className="text-center mb-8">
-              <Badge className="mb-3 bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/40 px-4 py-1.5">
-                <Wand2 className="w-3.5 h-3.5 mr-2" /> AI-Powered
+              <Badge
+                data-no-contrast-guard
+                className="mb-3 bg-white text-[#102540] border border-white px-4 py-1.5 hover:bg-white"
+                style={{ backgroundColor: '#FFFFFF', color: '#102540' }}
+              >
+                <Wand2 className="w-3.5 h-3.5 mr-2" style={{ color: '#102540' }} /> AI-Powered
               </Badge>
-              <h1 className="text-2xl md:text-3xl font-bold text-[#102540] mb-2">
+              <h1 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: '#FFFFFF' }}>
                 Smart Listing Creator
               </h1>
-              <p className="text-[#B89555] text-sm font-medium">
+              <p className="text-sm font-medium" style={{ color: 'rgba(255,255,255,0.85)' }}>
                 Upload your documents and let AI create a professional listing for you
               </p>
             </div>
 
-            {/* Draft Action Bar + Progress steps — connected blue header */}
-            <div className="mb-8 rounded-2xl bg-[#102540]/15 border border-[#102540]/30 overflow-hidden">
-              <div className="[&>div]:mb-0 [&>div]:rounded-none [&>div]:border-0 [&>div]:bg-transparent">
+            {/* Draft Action Bar + Progress steps — white card on navy shell */}
+            <div
+              className="mb-8 rounded-2xl bg-white border border-white overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.18)]"
+              data-no-contrast-guard
+            >
+              <div className="[&>div]:mb-0 [&>div]:rounded-none [&>div]:border-0 [&>div]:bg-white">
                 <FormDraftBar
                   hasDraft={phase !== 'upload' || uploadedDocs.length > 0}
                   onSaveDraft={() => {
@@ -651,9 +664,9 @@ const ListingPortalSubmit = () => {
                 />
               </div>
 
-              {/* Progress indicator — connected to the New Listing card, centered */}
-              <div className="border-t border-[#102540]/15 px-6 py-4">
-                <div className="flex gap-1.5 max-w-2xl mx-auto">
+              {/* Progress indicator — navy on white */}
+              <div className="border-t border-[#102540]/15 px-6 py-4 bg-white">
+                <div className="flex gap-1.5 max-w-3xl mx-auto">
                   {PHASES.map((step, i) => {
                     const stepIndex = getPhaseIndex();
                     return (
