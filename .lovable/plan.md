@@ -1,83 +1,62 @@
-## What's broken on `/rent-guide` (and every other guide that follows the same recipe)
+## Plan — JBJ Academy, Guides Strip, Sidebar, Certification Anti-Cheat
 
-Pulled apart `src/pages/RentGuide.tsx`, `src/components/guides/*`, `src/components/books/GuideBookSection.tsx`, `src/components/guides/GuideCTA.tsx`, `src/components/FounderPhilosophySection.tsx`, and the hero CSS in `src/index.css`. The complaints all trace back to a handful of root causes:
+This is a large, multi-surface change. I'll do it in 4 sequenced phases. Phase 1 finishes the rent-guide work from last turn. Phases 2–4 are the new asks. I'll validate visually at the end of each phase.
 
-1. **The "book" is just a thumbnail.** `GuideBookSection` renders a static 3D cover plus a TOC that scrolls the page when clicked. There is no actual reader, so clicking "Renting in Dubai: Getting Started" jumps to whatever section happens to share the index (`sectionIds[0]`). The book has 10 chapters but only 5 `tocItems` exist → mismatched anchors → wrong jump (e.g. lands on "How Renting Works").
-2. **Page root is brown.** `RentGuide.tsx:198` wraps everything in `bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]` (dark brown). Every `jj-section-champagne` is wrapped in container padding, so the brown background bleeds through between sections — that is the "two-colour brown" the user circled in screenshots 2, 4, 5. It also kills the floating "scroll-to-top" arrow (same brown on brown).
-3. **CTA band is solid black.** `GuideCTA.tsx:77` uses `bg-[#1A1A1A]`. On a marketing page that violates the champagne-band rule and produces a black strip around the "Ready to Find Your Next Home" card (screenshot 2 top + bottom red bands).
-4. **WhatsApp / Phone buttons render dark-on-navy.** `GuideCTA.tsx:138/146` declares `bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white`. The global "Black-CTA → Navy" guard sees `bg-[#1A1A1A]` + white-ish hover text on an anchor and repaints the button to navy `#102540` + white text — but the **idle** state still has `text-[#1A1A1A]` baked in and the `<svg>` (MessageSquare / Phone) inherits that ink colour. Result: navy pill, white label, black icon.
-5. **Founder CTA is a solid-gold fill.** `FounderPhilosophySection.tsx:80` "Learn More About the Founder" is a gold-filled rectangle — direct breach of the `No Gold Fills` core rule.
-6. **Hero is not full-screen.** `jj-hero-fullscreen.jj-hero-compact` caps at `78vh` / `820px` (`src/index.css:649-674`). The user wants a true full-viewport hero.
-7. **Hero copy is unreadable.** Title splits across `text-white` ("Your Guide to") and a `text-[#1A1A1A]` span that the contrast guard repaints to champagne `#F7F2EA`. Over the bright window photo with only a `from-black/70` gradient overlay, both halves wash out and the description (`text-white/85`) sits over the bright window blowout on the right.
-8. **Read the Full Guide / View Rental Properties buttons are ghostly.** Inline `border: '2px solid rgba(255,255,255,0.8)'` + `bg-transparent` + a hover-only champagne gradient = invisible at rest, half-painted on hover.
-9. **Broker mode wording is wrong.** "Ready to Find Your Next Home?" doesn't apply to a broker — they want "Ready to Close Your Next Deal" with copy + CTA tuned for sellers/brokers.
-10. **Spacing.** Each section uses `py-16 md:py-24` on top of the page-level brown bg, so empty brown stripes appear between champagne content blocks (screenshots 4, 5).
+### Phase 1 — Finish rent-guide / guide pages (carryover 1–7)
 
-## Fix plan (frontend only — no DB, no routing)
+1. Wire `GuideBookSection` to open the new `GuideBookReader` modal (real paginated book, not anchor-jump).
+2. Swap brown page root → `bg-page` + `data-marketing-page` on `RentGuide` and sibling guide/FAQ pages (Buyer/Seller/Landlord/Tenant/Investor guides + FAQs).
+3. Rebuild `GuideHero` → full-viewport (`100dvh`), white title with gold underline, readable scrim, two CTA primitives (`.jj-cta-champagne` + `.jj-cta-outline`).
+4. `GuideCTA` → champagne band, WhatsApp/Phone → `.jj-cta-dark` w/ white icons, primary → `.jj-cta-champagne`, broker-mode wording fixed.
+5. `FounderPhilosophySection` CTA → `.jj-cta-champagne` (no gold fill).
+6. Tighten section spacing `py-16 md:py-24` → `py-12 md:py-16`; remove brown stripes.
+7. Repeat across all sibling guide pages.
 
-### A. Real book reader, not a thumbnail
-Build a new component `src/components/books/GuideBookReader.tsx`:
+### Phase 2 — Premium book system unified across the app
 
-- Champagne card with the 3D cover on the left and a paginated reader on the right.
-- "Open Book" → expands into a full-bleed `<Dialog>` (champagne page background, gold hairline frame, no gray).
-- Two-page spread on `lg+`, single page on mobile. Visible page numbers, Prev / Next + keyboard arrows.
-- Page content comes straight from `book.tableOfContents[i]` — each chapter's `title`, `summary`, and `bullets` (BookData already has these in `src/data/bookCollections.ts`; nothing fabricated).
-- Closing the dialog returns to the page.
+8. Promote `PremiumBook3D` to the single source of truth for any book visual. Add hover-only 3D tilt + lift (kept the same everywhere it appears).
+9. **Home "Explore Our Guides & Reports" walking strap** → replace flat covers with `PremiumBook3D`; horizontal scroll enabled (drag + wheel + touch); arrow controls; 3D tilt on hover.
+10. **GuideBookSection (left column on every guide page)** → render `PremiumBook3D` instead of generic `BookCard`, same hover-3D.
+11. **`/jbj-academy` shelf** → use `PremiumBook3D`; enforce **3 books per row** (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`), title centered, scrollable.
+12. **BrokerToolkit Academy section** → same `PremiumBook3D`, 3 per row, and **include internal JBJ-only modules** (company-private playbooks) alongside public books, clearly tagged "JBJ Internal".
 
-Wire `GuideBookSection` to render `GuideBookReader` instead of the static cover + TOC scroll-shim. **The TOC chapter list inside the reader controls pagination, NOT page-scroll**, so the "wrong anchor" bug disappears completely.
+### Phase 3 — BrokerToolkit visual fixes
 
-### B. Page chrome — kill the brown, restore champagne bands
-- `RentGuide.tsx:198` → replace the brown gradient with `bg-page` (champagne page tone) + `data-marketing-page` on the root so the global band system applies.
-- Wrap every top-level section already using `jj-section-champagne` in the existing `.jj-band` primitives (`page` / `surface` / `raised`) so alternation is tone, not gap.
-- Reduce inter-section gap: drop section padding from `py-16 md:py-24` to `py-12 md:py-16` and remove the bleeding root color entirely.
-- Repeat the same root swap on the sibling guide pages: `BuyerGuide.tsx`, `SellerGuide.tsx`, `LandlordGuide.tsx`, `TenantGuide.tsx`, `BuyerFAQ.tsx`, `SellerFAQ.tsx`, `LandlordFAQ.tsx`, `BrokerFAQ.tsx`, `BrokerResources.tsx`, `EducationHub.tsx` — any page that imports `GuideHero` or `GuideBookSection` (grep already confirms the list).
+13. "Manage Leads Like a Pro" section → restore the previous **vibrant dark-orange/brown gradient** styling (revert to pre-restyle look) while keeping current copy.
+14. "Ready to Join the JBJ Broker Circle" CTA band → wider full-bleed, larger padding, richer gradient + gold hairline frame, premium typography, prominent dual CTA.
 
-### C. `GuideCTA` champagne lift + correct button colors
-- Outer `<section>` → `bg-page` (no more black band).
-- WhatsApp button: use the locked `.jj-cta-dark` primitive + `data-cta="whatsapp"`; icon gets `allow-white` class so the contrast guard doesn't flip the SVG to ink. Hover stays navy.
-- Phone button: same `.jj-cta-dark` primitive + `allow-white` on the icon.
-- Primary "View Rental Properties" → `.jj-cta-champagne` (cream pill, ink text, gold hairline).
-- Broker copy branch: read `useUserModeContext().isBrokerMode` inside `GuideCTA`; when broker, swap defaults:
-  - title → "Ready to Close Your Next Deal?"
-  - description → "Coordinate with a JBJ partner desk to move your client from offer to handover."
-  - primary action label/href → "Open Broker Toolkit" / `/broker-toolkit`
-  - Pass-through props still win — pages can keep custom copy by passing it.
+### Phase 4 — Sidebar dividers + Certification anti-cheat
 
-### D. Hero — full-screen + readable
-- `src/index.css` `.jj-hero-fullscreen.jj-hero-compact` → `min-height: 100dvh` (fallback `100vh`), remove the `max-height: 820px` cap.
-- `GuideHero.tsx` overlay: replace `from-black/70 via-black/70 to-black` with a stronger two-layer scrim — base `bg-black/55` + bottom gradient `bg-gradient-to-b from-black/35 via-black/55 to-black/85` and a subtle right-side fade `bg-gradient-to-l from-black/40 to-transparent` so the bright window doesn't blow out copy.
-- Title: drop the inline `text-[#1A1A1A]` span; render the whole H1 in `text-white` with a unified `text-shadow`. Inside the H1 wrap the keyword phrase in a gold underline (1px hairline accent) — no per-word colour swap, no contrast guard rewrite.
-- Description: switch to `text-white` (full opacity) + `text-shadow: 0 2px 14px rgba(0,0,0,.7)`.
-- Replace the two ghost buttons in `RentGuide.tsx:215-242` with the locked CTA primitives:
-  - Primary → `.jj-cta-champagne` ("Read the Full Guide", `ArrowDown` icon, scrolls to `#rental-process`).
-  - Secondary → `.jj-cta-outline` on dark hero (`data-on-dark`, `allow-white` so the white/gold outline survives the contrast guard).
+15. **Vertical sidebar dividers**: add a 1px gold hairline (`rgba(184,149,85,.55)`) directly under the JBJ wordmark — aligned with the horizontal header's bottom hairline. Add a second gold hairline **above the Contact Us icon** when sidebar is collapsed, anchored to bottom so it sits flush with the footer line. Both use `[data-gold-hairline]` scoped to divider primitives (per memory rule).
+16. **Mark Complete ↔ Mark Not Complete toggle** on every module/lesson: a module can be un-completed at any time; progress, book status, and `your_training` % recompute live; certification eligibility recomputes accordingly.
+17. **Certification eligibility pipeline** (replaces direct "Complete Certification → Download"):
+    - Step 1 — Modules: user must complete every module of every required book. Each module records `time_spent_seconds`, `scroll_depth_pct`, `idle_events`. Server-side validator rejects books where avg reading time < a min threshold per content length or scroll depth < 70%.
+    - Step 2 — Submission: "Request Certification" button visible only when all modules show complete AND validator passes. User uploads a short written reflection (proof of study) + checks an honesty attestation.
+    - Step 3 — Owner approval: submission lands in owner dashboard queue; approve → system auto-generates a quiz; reject → user sees "Contact Support" + certificate locked.
+    - Step 4 — Quiz: AI-generated from the books the user actually read; timed; tab-blur, copy/paste, devtools-open, and abnormal answer-speed detection; one attempt per approval; pass ≥ 80%.
+    - Step 5 — Certificate: only issued on quiz pass; otherwise locked with "Contact Support" CTA. All anti-cheat signals stored in `broker_certification_audit`.
 
-### E. Founder Philosophy CTA — kill the gold fill
-- `FounderPhilosophySection.tsx` "Learn More About the Founder" → swap to `.jj-cta-champagne` (cream + ink + 1px gold hairline). Keeps the gold accent on the hairline only, per the `No Gold Fills` core rule.
+### Validation
 
-### F. Float-arrow contrast
-The page-end "scroll to top" arrow was invisible on the brown bg. Once the root becomes champagne (step B) it is automatically readable. Confirm visually after the swap; no extra code unless it still fails contrast.
+After each phase: capture `/`, `/jbj-academy`, `/broker-toolkit`, `/rent-guide`, `/buyer-guide` at 1280×720 and 375×812; verify no brown stripes, books render in 3D and tilt on hover, strap scrolls, sidebar gold hairlines align with header/footer, certification button is gated.
 
-### G. Validate
-1. `browser--navigate_to_sandbox /rent-guide` at 1280×720 and 375×812.
-2. `browser--screenshot full_page=true` on both viewports.
-3. Visually confirm:
-   - Hero spans 100dvh, title + description fully legible, two CTA buttons solid (champagne and outline, not ghost).
-   - Page is one continuous champagne surface with tone alternation, **zero brown stripes** between sections.
-   - Open the book — first chapter shows as **page 1** of a 2-page spread with title + bullets, Next/Prev works.
-   - CTA card sits inside a champagne band; WhatsApp + Phone show white icons, white label, navy fill at idle and hover.
-   - Switch mode to Broker → CTA card title reads "Ready to Close Your Next Deal?".
-   - "Learn More About the Founder" is cream + ink + 1px gold hairline, not a gold rectangle.
-   - Floating "scroll to top" arrow visible on champagne.
-4. Spot-check `/buyer-guide`, `/seller-guide`, `/landlord-guide`, `/tenant-guide`, `/buyer-faq` to confirm the global guide chrome fix took.
+### Files (high-level)
 
-### Files touched
-- `src/pages/RentGuide.tsx` (+ all sibling guide/FAQ pages listed in step B — same root-bg swap only)
-- `src/components/guides/GuideHero.tsx`
-- `src/components/guides/GuideCTA.tsx`
-- `src/components/books/GuideBookSection.tsx`
-- new `src/components/books/GuideBookReader.tsx`
-- `src/components/FounderPhilosophySection.tsx`
-- `src/index.css` (hero min-height + scrim refresh only)
+- `src/components/books/GuideBookSection.tsx`, new wiring to `GuideBookReader`
+- `src/components/books/PremiumBook3D` (promoted from broker-education) + `BookCard` swap on home strap, academy, guide pages, toolkit
+- `src/components/home/*` walking strap → scrollable
+- `src/pages/JbjAcademy.tsx` → 3-col grid + premium books
+- `src/components/broker-toolkit/BrokerToolkitAcademy.tsx` → premium books + internal modules
+- `src/components/broker-toolkit/*ManageLeads*` → restore vibrant theme
+- `src/components/broker-toolkit/BrokerToolkitCTA.tsx` → wider premium band
+- `src/components/navigation/GlobalVerticalNav.tsx` → 2 gold hairlines
+- `src/components/broker-education/*` + new `BrokerCertificationGate.tsx` + new edge function `broker-cert-submit` / `broker-cert-quiz-generate` / `broker-cert-quiz-grade`
+- New DB tables: `broker_education_module_reads`, `broker_certification_submissions`, `broker_certification_quizzes`, `broker_certification_audit` (with GRANTs + RLS)
+- Rent guide / sibling guide pages: hero, CTA, founder, page roots
 
-No business logic, no DB, no routing changes.
+### Open questions before I start
+
+1. **Quiz storage / generation** — OK to use the existing Lovable AI Gateway (no extra key) with `google/gemini-2.5-pro` to generate quizzes from the book content?
+2. **Min reading-time threshold** — should I use ~60% of each module's `estimated_minutes` as the floor, or a flat number you pick?
+3. **Owner approval queue** — drop it into the existing owner dashboard under `/owner/crm?section=academy`, or its own `/owner/academy-approvals` page?
+4. **"Internal JBJ modules"** in BrokerToolkit Academy — do those already exist as DB rows, or should I scaffold a new `broker_internal_modules` table and seed 3–4 placeholders for now?
