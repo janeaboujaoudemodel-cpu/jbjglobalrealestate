@@ -382,14 +382,10 @@ const Index = () => {
         </LazyVisible>
       </PremiumSectionCard>
 
-      {/* EXPLORE OUR SERVICES */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={500}>
-          <Suspense fallback={<SectionLoader />}>
-            <ExploreServicesCard />
-          </Suspense>
-        </LazyVisible>
-      </PremiumSectionCard>
+      {/* (EXPLORE OUR SERVICES moved up — now sits between Partners marquee
+          and the Get Verified / Mode Portal pair as a visual separator.) */}
+
+
 
       {/* TOOLKIT SHOWCASE CARD */}
       <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
