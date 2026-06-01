@@ -19,6 +19,7 @@ import { Book3DCard, BookDetailModal } from "@/components/broker-education";
 import { PremiumBook3DStyles } from "@/components/broker-education/PremiumBook3D";
 import { CertificatePreview } from "@/components/certification";
 import BrokerCertificationGate from "@/components/broker-education/BrokerCertificationGate";
+import { PremiumLockBadge } from "@/components/broker-education/PremiumLock";
 import { useEducationProgress } from "@/hooks/useEducationProgress";
 import { BROKER_LESSONS } from "./brokerLessonContent";
 
