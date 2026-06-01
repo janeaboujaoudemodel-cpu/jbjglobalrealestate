@@ -138,7 +138,7 @@ const DeveloperPartnersMarquee = () => {
     : { display: "flex" };
 
   return (
-    <section className="w-full overflow-hidden bg-[#F7F2EA]">
+    <section className="w-full overflow-hidden bg-[#F7F2EA]" data-partners-marquee>
       <style>{`
         @keyframes jbj-champagne-shimmer {
           0% { background-position: -200% 0; }
