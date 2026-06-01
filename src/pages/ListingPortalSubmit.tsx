@@ -715,7 +715,7 @@ const ListingPortalSubmit = () => {
                   <div className="relative">
                     <div className="relative space-y-6">
                       {/* Category Selection */}
-                      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
+                      <div className="bg-[#FDFBF7]/70 rounded-2xl p-6 jj-purple-anim-border">
                         <h2 className="text-[#1A1A1A] font-semibold mb-4">What type of listing?</h2>
                         <div className="flex flex-wrap justify-center gap-3">
                           {listingCategories.map(cat => {
@@ -727,8 +727,8 @@ const ListingPortalSubmit = () => {
                                 onClick={() => setListingCategory(cat.id)}
                                 className={`relative p-4 rounded-2xl border-2 text-left transition-all w-[calc(33.333%-0.5rem)] min-w-[160px] ${
                                   isSelected
-                                    ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 text-[#1A1A1A] shadow-lg shadow-gold/15'
-                                    : 'bg-[#FDFBF7]/60 border-[#B89555]/15 text-[#1A1A1A]/70 hover:border-[#B89555]/30'
+                                    ? 'bg-[#A855F7]/10 border-[#A855F7] text-[#1A1A1A] shadow-lg'
+                                    : 'bg-[#FDFBF7]/60 border-[#A855F7]/30 text-[#1A1A1A]/80 hover:border-[#A855F7]/70'
                                 }`}
                               >
                                 {isSelected && (
@@ -745,7 +745,7 @@ const ListingPortalSubmit = () => {
                                     />
                                   </div>
                                 )}
-                                <Icon className={`w-5 h-5 mb-2 ${isSelected ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
+                                <Icon className="w-5 h-5 mb-2" style={{color: isSelected ? "#5B21B6" : "#A855F7"}} />
                                 <div className="font-medium text-sm">{cat.label}</div>
                                 <div className="text-xs text-[#1A1A1A]/70">{cat.desc}</div>
                               </button>
@@ -755,7 +755,7 @@ const ListingPortalSubmit = () => {
                       </div>
 
                       {/* Upload Zone */}
-                      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
+                      <div className="bg-[#FDFBF7]/70 rounded-2xl p-6 jj-purple-anim-border">
                         <h2 className="text-[#1A1A1A] font-semibold mb-2">Upload Documents</h2>
                         <p className="text-[#1A1A1A]/70 text-xs mb-4">
                           Upload PDF brochures, floor plans, fact sheets, property photos, reservation forms, agreements — AI will extract everything
@@ -764,10 +764,10 @@ const ListingPortalSubmit = () => {
                         <div
                           onDragOver={(e) => e.preventDefault()}
                           onDrop={handleFileDrop}
-                          className="border-2 border-dashed border-[#B89555]/40 rounded-xl p-8 text-center hover:border-[#B89555]/70 transition-all cursor-pointer bg-[#FDFBF7]/50"
+                          className="border-2 border-dashed border-[#A855F7]/60 rounded-xl p-8 text-center hover:border-[#A855F7] transition-all cursor-pointer bg-[#FDFBF7]/50"
                           onClick={() => document.getElementById('file-input')?.click()}
                         >
-                          <Upload className="w-10 h-10 text-[#1A1A1A] mx-auto mb-3" />
+                          <Upload className="w-10 h-10 mx-auto mb-3" style={{color:"#A855F7"}} />
                           <p className="text-[#1A1A1A] font-medium mb-1">Drop files here or click to browse</p>
                           <p className="text-[#1A1A1A]/70 text-xs">
                             PDF, JPG, PNG, DOCX, XLSX — up to 100MB each
@@ -813,9 +813,9 @@ const ListingPortalSubmit = () => {
                       </div>
 
                       {/* Universal Link Input */}
-                      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
+                      <div className="bg-[#FDFBF7]/70 rounded-2xl p-6 jj-purple-anim-border">
                         <h2 className="text-[#1A1A1A] font-semibold mb-2 flex items-center gap-2">
-                          <Globe className="w-4 h-4 text-[#1A1A1A]" />
+                          <Globe className="w-4 h-4" style={{color:"#A855F7"}} />
                           Paste Any Link
                         </h2>
                         <p className="text-[#1A1A1A]/70 text-xs mb-3">
@@ -825,19 +825,19 @@ const ListingPortalSubmit = () => {
                           value={sourceUrl}
                           onChange={e => setSourceUrl(e.target.value)}
                           placeholder="https://drive.google.com/... or any property listing URL"
-                          className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
+                          className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]"
                         />
                         <div className="flex flex-wrap gap-1.5 mt-2">
                           {['Google Drive', 'Property Finder', 'Bayut', 'Dubizzle', 'Developer Sites', 'Any URL'].map(tag => (
-                            <span key={tag} className="text-[10px] px-2 py-0.5 bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/20 rounded-full">{tag}</span>
+                            <span key={tag} className="text-[10px] px-2 py-0.5 bg-[#A855F7]/10 text-[#5B21B6] border border-[#A855F7]/40 rounded-full">{tag}</span>
                           ))}
                         </div>
                       </div>
 
                       {/* Paste Text Input */}
-                      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
+                      <div className="bg-[#FDFBF7]/70 rounded-2xl p-6 jj-purple-anim-border">
                         <h2 className="text-[#1A1A1A] font-semibold mb-2 flex items-center gap-2">
-                          <FileTextIcon className="w-4 h-4 text-[#1A1A1A]" />
+                          <FileTextIcon className="w-4 h-4" style={{color:"#A855F7"}} />
                           Paste Text / Description (Optional)
                         </h2>
                         <p className="text-[#1A1A1A]/70 text-xs mb-3">
@@ -847,7 +847,7 @@ const ListingPortalSubmit = () => {
                           value={sourceText}
                           onChange={e => setSourceText(e.target.value)}
                           placeholder="Paste property description, features, specs, brochure text..."
-                          className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] min-h-[100px]"
+                          className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A] min-h-[100px]"
                         />
                       </div>
 
@@ -857,13 +857,7 @@ const ListingPortalSubmit = () => {
                           disabled={uploadedDocs.length === 0 && !sourceUrl.trim() && !sourceText.trim()}
                           data-allow-dark-cta
                           data-no-contrast-guard
-                          className="flex-1 h-12 text-base font-semibold disabled:opacity-50 border-0 hover:brightness-110 transition-all"
-                          style={{
-                            backgroundColor: '#102540',
-                            color: '#FFFFFF',
-                            WebkitTextFillColor: '#FFFFFF',
-                            border: '1px solid rgba(184,149,85,0.5)',
-                          }}
+                          className="flex-1 h-12 text-base font-semibold disabled:opacity-50 hover:brightness-110 transition-all jj-purple-ombre"
                         >
                           <Sparkles className="w-5 h-5 mr-2" style={{ color: '#FFFFFF' }} data-no-contrast-guard />
                           <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
@@ -873,7 +867,7 @@ const ListingPortalSubmit = () => {
                         <Button
                           onClick={() => setPhase('pricing_ai')}
                           data-allow-dark-cta
-                          className="bg-transparent border-2 border-[#B89555]/50 text-[#B89555] hover:bg-[#B89555]/10 hover:text-[#B89555] hover:border-[#B89555] h-12 font-semibold transition-all duration-300"
+                          className="jj-purple-ghost h-12 px-6 font-semibold rounded-md transition-all duration-300"
                         >
                           Skip — Fill Manually
                         </Button>
@@ -1127,7 +1121,7 @@ const ListingPortalSubmit = () => {
                             value={form.title}
                             onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
                             placeholder="e.g. Luxury 3BR Villa in Palm Jumeirah"
-                            className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
+                            className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]"
                           />
                         </div>
 
@@ -1137,7 +1131,7 @@ const ListingPortalSubmit = () => {
                             value={form.description}
                             onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                             placeholder="Property description..."
-                            className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] min-h-[100px]"
+                            className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A] min-h-[100px]"
                           />
                         </div>
 
@@ -1145,7 +1139,7 @@ const ListingPortalSubmit = () => {
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Category</label>
                             <Select value={form.listing_category} onValueChange={v => setForm(f => ({ ...f, listing_category: v }))}>
-                              <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+                              <SelectTrigger className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -1156,7 +1150,7 @@ const ListingPortalSubmit = () => {
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Property Type</label>
                             <Select value={form.property_type} onValueChange={v => setForm(f => ({ ...f, property_type: v }))}>
-                              <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+                              <SelectTrigger className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]">
                                 <SelectValue placeholder="Select" />
                               </SelectTrigger>
                               <SelectContent>
@@ -1173,7 +1167,7 @@ const ListingPortalSubmit = () => {
                               value={form.developer_name}
                               onChange={e => setForm(f => ({ ...f, developer_name: e.target.value }))}
                               placeholder="e.g. Emaar"
-                              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
+                              className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]"
                             />
                           </div>
                           <div>
@@ -1182,7 +1176,7 @@ const ListingPortalSubmit = () => {
                               value={form.project_name}
                               onChange={e => setForm(f => ({ ...f, project_name: e.target.value }))}
                               placeholder="e.g. Creek Harbour"
-                              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
+                              className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]"
                             />
                           </div>
                         </div>
@@ -1191,7 +1185,7 @@ const ListingPortalSubmit = () => {
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Emirate</label>
                             <Select value={form.emirate} onValueChange={v => setForm(f => ({ ...f, emirate: v }))}>
-                              <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+                              <SelectTrigger className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -1205,7 +1199,7 @@ const ListingPortalSubmit = () => {
                               value={form.location}
                               onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
                               placeholder="e.g. Dubai Marina"
-                              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
+                              className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]"
                             />
                           </div>
                         </div>
@@ -1213,19 +1207,19 @@ const ListingPortalSubmit = () => {
                         <div className="grid grid-cols-4 gap-3">
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Price (AED)</label>
-                            <Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
+                            <Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]" />
                           </div>
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Bedrooms</label>
-                            <Input type="number" value={form.bedrooms} onChange={e => setForm(f => ({ ...f, bedrooms: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
+                            <Input type="number" value={form.bedrooms} onChange={e => setForm(f => ({ ...f, bedrooms: e.target.value }))} className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]" />
                           </div>
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Bathrooms</label>
-                            <Input type="number" value={form.bathrooms} onChange={e => setForm(f => ({ ...f, bathrooms: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
+                            <Input type="number" value={form.bathrooms} onChange={e => setForm(f => ({ ...f, bathrooms: e.target.value }))} className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]" />
                           </div>
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Area (sqft)</label>
-                            <Input type="number" value={form.area_sqft} onChange={e => setForm(f => ({ ...f, area_sqft: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
+                            <Input type="number" value={form.area_sqft} onChange={e => setForm(f => ({ ...f, area_sqft: e.target.value }))} className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]" />
                           </div>
                         </div>
 
@@ -1233,7 +1227,7 @@ const ListingPortalSubmit = () => {
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Furnishing</label>
                             <Select value={form.furnishing} onValueChange={v => setForm(f => ({ ...f, furnishing: v }))}>
-                              <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+                              <SelectTrigger className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]">
                                 <SelectValue placeholder="Select" />
                               </SelectTrigger>
                               <SelectContent>
@@ -1243,11 +1237,11 @@ const ListingPortalSubmit = () => {
                           </div>
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Handover</label>
-                            <Input value={form.handover_date} onChange={e => setForm(f => ({ ...f, handover_date: e.target.value }))} placeholder="e.g. Q4 2026" className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
+                            <Input value={form.handover_date} onChange={e => setForm(f => ({ ...f, handover_date: e.target.value }))} placeholder="e.g. Q4 2026" className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]" />
                           </div>
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Payment Plan</label>
-                            <Input value={form.payment_plan} onChange={e => setForm(f => ({ ...f, payment_plan: e.target.value }))} placeholder="e.g. 60/40" className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
+                            <Input value={form.payment_plan} onChange={e => setForm(f => ({ ...f, payment_plan: e.target.value }))} placeholder="e.g. 60/40" className="bg-[#FDFBF7] border-2 border-[#A855F7]/50 focus:border-[#A855F7] focus-visible:ring-[#A855F7]/40 text-[#1A1A1A]" />
                           </div>
                         </div>
                       </div>
