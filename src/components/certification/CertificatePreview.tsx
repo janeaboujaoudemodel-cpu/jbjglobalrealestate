@@ -172,15 +172,19 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
               }}
             />
 
-            {/* Double-rule frame */}
-            <div className="absolute inset-3 rounded-xl border border-[#B89555]/45 pointer-events-none" />
-            <div className="absolute inset-5 rounded-lg border border-[#B89555]/25 pointer-events-none" />
+            {/* Single inner gold rule — middle frame removed for cleaner read */}
+            <div className="absolute inset-5 rounded-lg border border-[#B89555]/30 pointer-events-none" />
 
-            {/* Corner flourishes */}
-            <div className="absolute top-5 left-5 w-10 h-10 border-t-[1.5px] border-l-[1.5px] border-[#B89555]/75 rounded-tl-md pointer-events-none" />
-            <div className="absolute top-5 right-5 w-10 h-10 border-t-[1.5px] border-r-[1.5px] border-[#B89555]/75 rounded-tr-md pointer-events-none" />
-            <div className="absolute bottom-5 left-5 w-10 h-10 border-b-[1.5px] border-l-[1.5px] border-[#B89555]/75 rounded-bl-md pointer-events-none" />
-            <div className="absolute bottom-5 right-5 w-10 h-10 border-b-[1.5px] border-r-[1.5px] border-[#B89555]/75 rounded-br-md pointer-events-none" />
+            {/* Corner angle flourishes (kept — they frame the certificate) */}
+            <div className="absolute top-5 left-5 w-12 h-12 border-t-[1.5px] border-l-[1.5px] border-[#B89555]/85 rounded-tl-md pointer-events-none" />
+            <div className="absolute top-5 right-5 w-12 h-12 border-t-[1.5px] border-r-[1.5px] border-[#B89555]/85 rounded-tr-md pointer-events-none" />
+            <div className="absolute bottom-5 left-5 w-12 h-12 border-b-[1.5px] border-l-[1.5px] border-[#B89555]/85 rounded-bl-md pointer-events-none" />
+            <div className="absolute bottom-5 right-5 w-12 h-12 border-b-[1.5px] border-r-[1.5px] border-[#B89555]/85 rounded-br-md pointer-events-none" />
+
+            {/* Animated shimmer sweep (respects reduced-motion) */}
+            <style dangerouslySetInnerHTML={{ __html: CERT_SHIMMER_CSS }} />
+            <div className="jj-cert-shimmer" aria-hidden />
+
 
             {/* Content */}
             <div className="relative z-10 px-8 sm:px-14 py-10 sm:py-14 text-center">
