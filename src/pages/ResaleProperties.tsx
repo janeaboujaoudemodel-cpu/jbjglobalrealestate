@@ -238,40 +238,48 @@ const ResaleProperties = () => {
             <ArrowLeft className="w-4 h-4" />
             Back to Properties
           </Link>
-          <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40 mb-4 block w-fit mx-auto">Exclusive — JBJ Global Real Estate</Badge>
-          <h1 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "#2563EB" }} data-no-contrast-guard>
-            Exclusive Resale <span style={{ color: "#2563EB" }} data-no-contrast-guard>Properties</span>
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold mb-4 bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50">
+            Exclusive — JBJ Global Real Estate
+          </span>
+          <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]">
+            Exclusive Resale <span className="text-[#102540]">Properties</span>
           </h1>
-          <p className="text-lg max-w-2xl mx-auto font-medium" style={{ color: "#B89555" }} data-no-contrast-guard>
+          <p className="text-lg max-w-2xl mx-auto font-medium text-[#1A1A1A]/80">
             Exclusive investor resale portfolio curated by JBJ Global Real Estate — premium properties from verified investors at competitive prices, available for immediate purchase.
           </p>
         </div>
       </section>
 
-      {/* Filters — Premium FilterShortcutBar style (matches /projects) */}
-      <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 md:py-4 sticky top-0">
+      {/* Premium sticky filter bar — clears 88px fixed header */}
+      <section className="z-30 bg-[#F7F2EA]/95 backdrop-blur-md py-3 md:py-4 sticky top-[88px] border-y border-[#B89555]/25 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
         <div className="container mx-auto px-3 sm:px-4">
-          <div className="bg-[#FDFBF7]/70 border border-[#B89555]/30 rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 shadow-sm backdrop-blur-sm">
-            {/* Row 1: Search pill spans bar */}
-            <div className={cn(filterSearchPillWrapper, "h-10 w-full mb-2.5")}>
-              <Search className="w-4 h-4 mr-2 text-[#1A1A1A]/70 flex-shrink-0" />
-              <input
-                type="text"
-                placeholder="Search by property name, project, area…"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={filterSearchPillInput}
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  className="ml-1 text-[11px] font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
-                >
-                  Clear
-                </button>
-              )}
+          <div className="relative bg-[#EFE6D6] border border-[#B89555]/40 rounded-2xl px-3 py-3 sm:px-4 sm:py-3.5">
+            {/* Navy left accent bar */}
+            <span aria-hidden className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full bg-[#102540]" />
+
+            {/* Row 1: prominent search input */}
+            <div className="flex items-center gap-2 mb-2.5 pl-2">
+              <div className={cn(filterSearchPillWrapper, "h-11 flex-1 bg-[#FDFBF7] border-[#B89555]/40")}>
+                <Search className="w-4 h-4 mr-2 text-[#102540] flex-shrink-0" />
+                <input
+                  type="text"
+                  placeholder="Search by property name, project, area, developer…"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className={cn(filterSearchPillInput, "text-[#1A1A1A] placeholder:text-[#1A1A1A]/55")}
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="ml-1 text-[11px] font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
             </div>
+
 
             {/* Row 2: Filter pills (chips) */}
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
