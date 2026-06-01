@@ -263,7 +263,6 @@ const Footer = () => {
     { label: t("footer.meetTheTeam") || "Meet the Team", href: "/team" },
     { label: t("footer.awardsRecognition") || "Awards & Recognition", href: "/awards" },
     { label: t("footer.newsInsights") || "News & Insights", href: "/news" },
-    { label: "Press Kit", href: "/press-kit" },
     { label: "Company Profile", href: "/company-profile" },
     { label: "Philanthropy", href: "/philanthropy" },
     { label: "Reviews", href: "/reviews" },
@@ -428,7 +427,7 @@ const Footer = () => {
     { label: t("footer.newsInsights") || "News & Insights", href: "/news" },
     { label: "Reviews", href: "/reviews" },
     { label: "Careers", href: "/join" },
-    { label: "Press Kit", href: "/press-kit" },
+    
   ];
 
   const colResources = [

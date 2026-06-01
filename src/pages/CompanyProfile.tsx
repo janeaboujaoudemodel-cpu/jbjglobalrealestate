@@ -33,11 +33,12 @@ import {
   Handshake,
   BarChart3,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  ExternalLink
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
+import { COMPANY_STATS, CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { toast } from "sonner";
 import { FounderContent } from "@/components/FounderContent";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
@@ -1273,6 +1274,79 @@ const CompanyProfile = () => {
             </motion.div>
           ))}
         </motion.div>
+      </SectionShell>
+
+      {/* Company Fact Sheet - moved from former Press Kit */}
+      <SectionShell>
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <span className="text-[#1A1A1A]/70 text-xs uppercase tracking-[0.3em] mb-3 block">Quick Reference</span>
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold">
+              Company <span className="text-[#B89555]">Fact Sheet</span>
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Company Information */}
+            <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-7 shadow-[0_2px_12px_rgba(184,149,85,0.08)]">
+              <h4 className="text-[#1A1A1A] text-sm font-semibold uppercase tracking-wider mb-5 flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-[#1A1A1A]" />
+                Company Information
+              </h4>
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between border-b border-[#B89555]/20 pb-2.5">
+                  <span className="text-[#1A1A1A]/70">Company Name</span>
+                  <span className="text-[#1A1A1A] font-medium">JBJ GLOBAL REAL ESTATE</span>
+                </div>
+                <div className="flex justify-between border-b border-[#B89555]/20 pb-2.5">
+                  <span className="text-[#1A1A1A]/70">Founded</span>
+                  <span className="text-[#1A1A1A] font-medium">2025</span>
+                </div>
+                <div className="flex justify-between border-b border-[#B89555]/20 pb-2.5">
+                  <span className="text-[#1A1A1A]/70">Headquarters</span>
+                  <span className="text-[#1A1A1A] font-medium">Downtown Dubai, UAE</span>
+                </div>
+                <div className="flex justify-between border-b border-[#B89555]/20 pb-2.5">
+                  <span className="text-[#1A1A1A]/70">Industry</span>
+                  <span className="text-[#1A1A1A] font-medium">Real Estate Brokerage</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[#1A1A1A]/70">Website</span>
+                  <a href="https://jbj.ae" target="_blank" rel="noopener noreferrer" className="text-[#1A1A1A] font-medium hover:underline flex items-center gap-1">
+                    jbj.ae
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Key Metrics */}
+            <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-7 shadow-[0_2px_12px_rgba(184,149,85,0.08)]">
+              <h4 className="text-[#1A1A1A] text-sm font-semibold uppercase tracking-wider mb-5 flex items-center gap-2">
+                <BarChart3 className="w-4 h-4 text-[#1A1A1A]" />
+                Key Metrics
+              </h4>
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between border-b border-[#B89555]/20 pb-2.5">
+                  <span className="text-[#1A1A1A]/70">Industry Experience</span>
+                  <span className="text-[#1A1A1A] font-semibold">12+ Years</span>
+                </div>
+                <div className="flex justify-between border-b border-[#B89555]/20 pb-2.5">
+                  <span className="text-[#1A1A1A]/70">Brokers Trained</span>
+                  <span className="text-[#1A1A1A] font-semibold">{`${COMPANY_STATS.brokersTrainedBy.end.toLocaleString()}${COMPANY_STATS.brokersTrainedBy.suffix}`}</span>
+                </div>
+                <div className="flex justify-between border-b border-[#B89555]/20 pb-2.5">
+                  <span className="text-[#1A1A1A]/70">Team Members</span>
+                  <span className="text-[#1A1A1A] font-semibold">10+</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[#1A1A1A]/70">Client Satisfaction</span>
+                  <span className="text-[#1A1A1A] font-semibold">98%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </SectionShell>
 
       {/* 14. PDF Download Module with 3D Book Preview */}

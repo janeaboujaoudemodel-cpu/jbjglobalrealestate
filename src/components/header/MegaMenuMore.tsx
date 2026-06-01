@@ -78,7 +78,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     ...(isDeveloperMode
       ? [{ label: 'Careers — Developer Rep', href: '/careers/developer-representative', icon: Building2 }]
       : []),
-    { label: 'Press & Media', href: '/press-kit', icon: FileText },
+    
   ];
 
   const legalLinks = [

@@ -215,7 +215,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Founder", href: "/founder", icon: Crown },
   { label: "Contact", href: "/contact", icon: Phone },
   { label: "Awards", href: "/awards", icon: Award },
-  { label: "Press Kit", href: "/press-kit", icon: Newspaper },
+  
   { label: "Company Profile", href: "/company-profile", icon: Building },
   { label: "Philanthropy", href: "/philanthropy", icon: Heart },
   
@@ -408,7 +408,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Careers', icon: GraduationCap, href: '/join' },
     { label: 'Career Portal', icon: Briefcase, href: '/career-portal' },
     { label: 'JBJ Email', icon: Mail, href: '/crm/employees' },
-    { label: 'Press Kit', icon: Newspaper, href: '/press-kit' },
+    
     { label: 'Testimonials', icon: Heart, href: '/services/testimonials' },
   ],
   legal: [

@@ -465,7 +465,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/contact", label: "Contact Us", icon: Phone },
     { href: "/services/complaint-procedures", label: "Complaint Procedure", icon: ClipboardCheck },
     { href: "/services/testimonials", label: "Testimonials", icon: Users },
-    { href: "/press-kit", label: "Press Kit", icon: FileText },
+    
     { href: "/company-profile", label: "Company Profile", icon: FileText },
     { href: "/philanthropy", label: "Philanthropy", icon: Users },
   ];
