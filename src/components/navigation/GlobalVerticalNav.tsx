@@ -1308,11 +1308,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           {/* Section icons — solid champagne body, no silver cast */}
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-[#FDFBF7] w-full">
             {SECTION_KEYS.map((sectionKey) => {
-              if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
-              if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
-              if (sectionKey === 'INVESTOR' && !isInvestor && !isOwner) return null;
+              if (!shouldShowSection(sectionKey)) return null;
               const SectionIcon = SECTION_ICONS[sectionKey];
               const items = sectionGroups[sectionKey];
+              if (!items || items.length === 0) return null;
               const hasActiveChild = items?.some(item => isRouteActive(item.href)) || false;
               const hasMegaActive = sectionHasActiveMega(sectionKey);
               const isActive = hasActiveChild || hasMegaActive;
@@ -1323,10 +1322,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     <button
                       data-no-contrast-guard
                       onClick={() => {
-                        const firstItem = items?.[0];
-                        if (firstItem?.href && firstItem.href !== '#') {
-                          navigate(firstItem.href);
-                        }
+                        setCollapsed(false);
+                        try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
+                        setOpenSection(sectionKey);
+                        setActiveMegaMenu(null);
                       }}
                       className={`group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
                         isActive
