@@ -63,9 +63,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
           )}
           {effectivelyLocked && (
             <div className="absolute inset-0 grid place-items-center pointer-events-none">
-              <div className="rounded-full bg-[#1A1A1A]/75 backdrop-blur-sm w-12 h-12 grid place-items-center">
-                <Lock className="w-5 h-5 text-white" />
-              </div>
+              <PremiumLockBadge size="md" title="Restricted" />
             </div>
           )}
         </div>
