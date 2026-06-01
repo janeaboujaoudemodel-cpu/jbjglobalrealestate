@@ -597,6 +597,7 @@ const ResaleProperties = () => {
                     />
                     <Button
                       onClick={handleSubscribe}
+                      variant="ghost"
                       data-cta="dark"
                       className="jj-cta-dark font-semibold h-11 px-6 rounded-xl"
                     >
