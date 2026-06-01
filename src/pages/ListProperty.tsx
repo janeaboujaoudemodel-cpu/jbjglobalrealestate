@@ -757,11 +757,12 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             className="rounded-2xl p-10 text-center"
             data-no-contrast-guard
             style={{
-              background: ombreSoft(theme),
+              background: `linear-gradient(135deg, #FFFFFF 0%, ${accent}14 55%, #FFFFFF 100%)`,
               border: `1.5px dashed ${accent}`,
               boxShadow: `0 20px 40px -20px ${accent}55`,
             }}
           >
+
             <div
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
