@@ -8,6 +8,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { CONTACT_INFO } from "@/constants/stats";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
+import { AnimatedBorderShell } from "@/components/tools/AnimatedBorderShell";
+import { AnimatedShineCTA } from "@/components/tools/AnimatedShineCTA";
 
 const advisorBenefits = [
   {
@@ -37,58 +39,83 @@ const MortgageCalculatorPage = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <section className="min-h-screen bg-[#F7F2EA]">
       <SEOHead {...pagesSEO.mortgageCalculator} />
-      {/* Hero Section - Champagne Layer */}
-      <div className="relative py-16 md:py-24 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
-        {/* Background effects */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#EFE6D6]/20 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#EFE6D6]/10 rounded-full blur-[120px] pointer-events-none" />
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <Link to="/" className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-8 transition-colors group">
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back to Home
-          </Link>
-          
-          <div className="max-w-3xl mb-12">
-            <span className="inline-block px-4 py-1.5 bg-[#EFE6D6]/20 border border-[#B89555]/40 rounded-full text-[#1A1A1A] text-sm font-medium mb-6">
-              AI-Powered Financial Planning
-            </span>
-            <h1 
-              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-            >
-              <span className="text-[#1A1A1A]">Mortgage</span>{" "}
-              <span className="text-[#1A1A1A]">Calculator</span>
-            </h1>
-            <p className="text-[#1A1A1A]/70 text-lg md:text-xl leading-relaxed">
-              {t('mortgage.subtitle')}. Plan your property investment with our advanced mortgage calculator. Get accurate estimates for monthly payments, total interest, and find the perfect financing option for your UAE property purchase.
-            </p>
-          </div>
 
-          {/* Calculator — heading hidden since page hero provides it */}
-          <MortgageCalculator compact showHeading={false} showAssistant />
-
-          {/* CTA Button - Centered at bottom of calculator section */}
-          <div className="mt-8 lg:mt-12 flex justify-center">
-            <a 
-              href={CONTACT_INFO.inquiryFormUrl} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="block w-full max-w-md"
+      {/* Tool shell — navy hero + form inside a single animated-border card */}
+      <div className="container mx-auto px-4 pt-6 md:pt-8 pb-12">
+        <AnimatedBorderShell tone="navy" className="overflow-hidden">
+          <div className="bg-[#0b1626]">
+            {/* Navy hero header with back inside, centered title */}
+            <div
+              className="relative px-6 md:px-10 pt-6 pb-12 md:pb-16 text-center"
+              data-allow-dark-cta
+              data-on-dark
+              style={{
+                background:
+                  "radial-gradient(120% 80% at 50% 0%, #14305a 0%, #102540 55%, #0b1c33 100%)",
+              }}
             >
-              <Button 
-                variant="gold" 
-                className="w-full h-14 text-base font-semibold group shadow-lg hover:shadow-[0_14px_45px_rgba(184,149,85,0.4)] hover:-translate-y-1 transition-all duration-300"
-              >
-                Request Mortgage Partner Introduction
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </a>
+              <div className="absolute top-5 left-5 md:left-8">
+                <Link
+                  to="/"
+                  data-no-contrast-guard
+                  data-on-dark
+                  className="inline-flex items-center gap-2 text-white/85 hover:text-white text-sm transition-colors group allow-white"
+                  style={{ color: "#FFFFFF" }}
+                >
+                  <ArrowLeft className="w-4 h-4 text-white group-hover:-translate-x-1 transition-transform" />
+                  <span className="text-white">Back to Home</span>
+                </Link>
+              </div>
+
+              <div className="max-w-3xl mx-auto pt-6">
+                <span
+                  data-no-contrast-guard
+                  data-on-dark
+                  className="allow-white inline-block px-4 py-1.5 bg-white/10 border border-white/30 rounded-full text-white text-xs md:text-sm font-medium mb-5"
+                  style={{ color: "#FFFFFF" }}
+                >
+                  AI-Powered Financial Planning
+                </span>
+                <h1
+                  data-no-contrast-guard
+                  data-on-dark
+                  className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white"
+                  style={{ color: "#FFFFFF" }}
+                >
+                  Mortgage Calculator
+                </h1>
+                <p
+                  data-no-contrast-guard
+                  data-on-dark
+                  className="allow-white text-white/80 text-base md:text-lg leading-relaxed max-w-2xl mx-auto"
+                  style={{ color: "rgba(255,255,255,0.85)" }}
+                >
+                  {t('mortgage.subtitle')}. Plan your property investment with our advanced mortgage calculator. Get accurate estimates for monthly payments, total interest, and find the perfect financing option for your UAE property purchase.
+                </p>
+              </div>
+            </div>
+
+            {/* Calculator body on champagne, wrapped by the navy border */}
+            <div className="bg-[#F7F2EA] px-4 md:px-8 py-8 md:py-10">
+              <MortgageCalculator compact showHeading={false} showAssistant />
+
+              <div className="mt-8 lg:mt-10 flex justify-center">
+                <AnimatedShineCTA
+                  as="a"
+                  href={CONTACT_INFO.inquiryFormUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  tone="navy"
+                  className="w-full max-w-md h-14 text-base"
+                >
+                  Request Mortgage Partner Introduction
+                </AnimatedShineCTA>
+              </div>
+            </div>
           </div>
-        </div>
+        </AnimatedBorderShell>
       </div>
 
       {/* Mortgage Advisors Section - Champagne Layer */}
