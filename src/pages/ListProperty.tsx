@@ -128,6 +128,7 @@ const ListProperty = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const mode = (searchParams.get("mode") as Mode) || "pick";
   const purpose = (searchParams.get("purpose") as Purpose) || "sale";
+  const firstName = useDisplayFirstName("there");
 
   useEffect(() => {
     if (!searchParams.get("purpose")) {
