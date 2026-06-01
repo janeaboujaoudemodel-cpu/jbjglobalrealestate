@@ -738,11 +738,20 @@ All colors MUST be HSL.
   100% { background-position: 200% 50%; }
 }
 
+/* Static champagne fill. The infinite gradient sweep was causing perceived
+   "blinking" on always-visible chrome (header bar, sidebar logo tile, active
+   unit pill). The class is kept for backwards compatibility but no longer
+   animates. Opt into the sweep on hover only via .jbj-shimmer-champagne--hover. */
 .jbj-shimmer-champagne {
   background-image: linear-gradient(110deg, #E6D3A8 0%, #F5E9CC 25%, #D8BE82 50%, #F5E9CC 75%, #E6D3A8 100%) !important;
   background-size: 200% 100% !important;
-  animation: jbj-champagne-shimmer 3s linear infinite;
+  background-position: 0% 50% !important;
   box-shadow: inset 0 0 0 1px rgba(184,149,85,0.35);
+}
+@media (hover: hover) {
+  .jbj-shimmer-champagne--hover:hover {
+    animation: jbj-champagne-shimmer 3s linear infinite;
+  }
 }
 
 
