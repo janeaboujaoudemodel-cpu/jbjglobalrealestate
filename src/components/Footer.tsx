@@ -281,7 +281,7 @@ const Footer = () => {
     { href: "/broker/training", label: "Broker Training" },
     // /broker-hub retired
     { href: "/broker-dashboard", label: "Broker Dashboard" },
-    { href: "/ai-broker-workspace", label: "AI Broker Workspace" },
+    { href: "/broker/ai", label: "AI Sales Assistant" },
   ];
 
   const partnersLinks = [
