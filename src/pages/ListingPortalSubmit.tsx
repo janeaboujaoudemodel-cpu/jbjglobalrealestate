@@ -609,10 +609,12 @@ const ListingPortalSubmit = () => {
               variant="ghost"
               onClick={() => navigate('/listing-portal')}
               data-no-contrast-guard
+              data-on-dark
+              data-allow-dark-cta
               className="allow-white text-white hover:text-white hover:bg-white/10 mb-4"
-              style={{ color: '#FFFFFF' }}
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
             >
-              <ArrowLeft className="w-4 h-4 mr-2" style={{ color: '#FFFFFF' }} /> Back to Portal
+              <ArrowLeft className="w-4 h-4 mr-2" style={{ color: '#FFFFFF' }} /> <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Back to Portal</span>
             </Button>
 
             {/* Header */}
