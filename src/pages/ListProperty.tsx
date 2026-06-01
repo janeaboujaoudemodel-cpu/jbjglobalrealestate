@@ -38,6 +38,7 @@ import { Badge } from "@/components/ui/badge";
 import { useSellerListings } from "@/hooks/useSellerListings";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatDisplayDate as formatDate } from "@/utils/formatDate";
+import { AnimatedBorderShell } from "@/components/tools/AnimatedBorderShell";
 
 const ManualWizard = lazy(() => import("@/pages/SellerListing"));
 const AIWizard = lazy(() => import("@/pages/ListingPortalSubmit"));
@@ -109,6 +110,10 @@ const ListProperty = () => {
         description="List your property for sale or rent with JBJ Global Real Estate. Use AI to auto-generate your listing, or fill in manually. Track approval status from your dashboard."
         canonicalPath="/list-property"
       />
+
+      <div className="px-2 sm:px-4 md:px-6 py-4 md:py-6">
+        <AnimatedBorderShell tone="navy" bare>
+        <div style={{ backgroundColor: CHAMPAGNE }}>
 
       {/* ───────────────────── Hero (navy gradient) ───────────────────── */}
       <section
@@ -305,6 +310,9 @@ const ListProperty = () => {
 
       {/* ───────────────── My Submissions section ───────────────── */}
       <MySubmissionsSection />
+        </div>
+        </AnimatedBorderShell>
+      </div>
     </div>
   );
 };
