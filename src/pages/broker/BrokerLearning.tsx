@@ -175,34 +175,37 @@ export default function BrokerLearning() {
         noIndex
       />
 
+        <PremiumBook3DStyles />
         <div className="w-full px-4 lg:px-8 pt-6 pb-16 flex flex-col gap-14">
-        {/* ── Header ───────────────────────────────────────────────── */}
+        {/* ── Header (centered) ────────────────────────────────────── */}
         <motion.header
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
-          className="flex flex-col gap-4"
+          className="flex flex-col items-center text-center gap-4 max-w-5xl mx-auto w-full"
         >
-          <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 self-start">
+          <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">
             <GraduationCap className="w-3 h-3 mr-1" /> Internal use only · Broker Academy
           </Badge>
           <h1 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight">JBJ Broker Academy</h1>
-          <p className="text-[#1A1A1A]/70 max-w-3xl">
+          <p className="text-[#1A1A1A]/70 max-w-3xl mx-auto">
             One home for everything JBJ brokers learn — the internal book library, market-intelligence training,
             and the compliance reference, with progress tracked across the portal.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 items-stretch">
-            <KpiCard icon={<BookOpen className="w-5 h-5" />} label="Library books" value={books.length || "—"} />
-            <KpiCard icon={<GraduationCap className="w-5 h-5" />} label="Training modules" value={TRAINING.length} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 items-stretch w-full">
+            <KpiCard tone="gold" icon={BookOpen} label="Library books" value={books.length || "—"} />
+            <KpiCard tone="blue" icon={GraduationCap} label="Training modules" value={TRAINING.length} />
             <KpiCard
-              icon={<Award className="w-5 h-5" />}
+              tone="amber"
+              icon={Award}
               label="Your training"
               value={`${Math.round(totalProgress)}%`}
               progress={totalProgress}
             />
           </div>
         </motion.header>
+
 
 
         {/* ── Training ─────────────────────────────────────────────── */}
