@@ -337,11 +337,10 @@ END:VCARD`;
       </section>
 
 
-      {/* Consultation Form Section - Form IS the 3rd layer (directly on active champagne, no extra pearl wrapper) */}
-      <section className="py-16 md:py-20 bg-[#1A1A1A]">
-        {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 md:p-6">
-          {/* Form IS the 3rd layer - champagne pearl styling */}
+      {/* Consultation Form Section */}
+      <section className="py-8 md:py-12">
+        <div className="container mx-auto px-4">
+
           <div className="max-w-3xl mx-auto">
             {isSuccess ? (
               /* Success State */
