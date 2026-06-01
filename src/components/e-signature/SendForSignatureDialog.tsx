@@ -69,6 +69,13 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
   const [lockedAt, setLockedAt] = useState<string | null>(null);
   const [lastTestId, setLastTestId] = useState<string | null>(null);
   const [docusignUrl, setDocusignUrl] = useState("");
+  // Filing metadata — persisted to envelope so Contract Vault filters work.
+  const [developerId, setDeveloperId] = useState<string | null>(null);
+  const [developerNameInput, setDeveloperNameInput] = useState<string>("");
+  const [devOptions, setDevOptions] = useState<Array<{ id: string; name: string }>>([]);
+  const [contractType, setContractType] = useState<string>("");
+  const [emirate, setEmirate] = useState<string>("");
+  const [area, setArea] = useState<string>("");
 
   // Hydrate from envelope + load owner's locked default template if present
   useEffect(() => {
