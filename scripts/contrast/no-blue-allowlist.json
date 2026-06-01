@@ -277,7 +277,7 @@
     "src/pages/BriefingAttendance.tsx",
     "src/pages/BrokerAccount.tsx",
     "src/pages/BrokerAdminAssistant.tsx",
-    "src/pages/BrokerHub.tsx",
+    
     "src/pages/BrokerPartnerDashboard.tsx",
     "src/pages/BusinessCardScanner.tsx",
     "src/pages/CRMLeadDetail.tsx",
