@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
+import { useDisplayFirstName } from "@/hooks/useDisplayFirstName";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -85,6 +86,7 @@ const STEPS = [
 
 const SellerListing = () => {
   const { user } = useAuth();
+  const firstName = useDisplayFirstName("there");
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   // Purpose-aware labelling: ?purpose=rent → Landlord wording, otherwise Seller wording.
@@ -588,10 +590,10 @@ Requirements:
                   letterSpacing: "-0.02em",
                 }}
               >
-                List Your Property for {actionNoun}
+                Welcome, {firstName} — List Your Property for {actionNoun}
               </h1>
               <p className="text-[#1A1A1A]/80 mb-6">
-                Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
+                {user ? `Glad to have you back, ${firstName}. ` : ""}Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
               </p>
               <FormDraftBar
                 hasDraft={hasDraft}

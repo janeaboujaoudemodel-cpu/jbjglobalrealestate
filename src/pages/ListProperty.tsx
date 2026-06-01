@@ -14,6 +14,7 @@
 import { lazy, Suspense, useEffect, useMemo } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useDisplayFirstName } from "@/hooks/useDisplayFirstName";
 import {
   Sparkles,
   Wand2,
@@ -127,6 +128,7 @@ const ListProperty = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const mode = (searchParams.get("mode") as Mode) || "pick";
   const purpose = (searchParams.get("purpose") as Purpose) || "sale";
+  const firstName = useDisplayFirstName("there");
 
   useEffect(() => {
     if (!searchParams.get("purpose")) {
@@ -231,16 +233,16 @@ const ListProperty = () => {
               }}
               data-no-contrast-guard
             >
-              List Your Property
+              Welcome, {firstName}
             </h1>
             <p
               className="mt-4 text-base sm:text-lg max-w-2xl mx-auto"
               style={{ color: "rgba(255,255,255,0.88)" }}
               data-no-contrast-guard
             >
-              Priority listing with JBJ Global Real Estate — premium reach, full
-              AI assistance, transparent approval, and live status in your
-              dashboard.
+              List your property for {purpose === "rent" ? "rent" : "sale"} with
+              JBJ Global Real Estate — premium reach, full AI assistance,
+              transparent approval, and live status in your dashboard.
             </p>
 
           </motion.div>

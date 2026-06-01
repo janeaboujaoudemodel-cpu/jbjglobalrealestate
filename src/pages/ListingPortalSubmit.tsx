@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useDisplayFirstName } from '@/hooks/useDisplayFirstName';
 import { toast } from 'sonner';
 import {
   ArrowLeft, ArrowRight, Check, Upload, Sparkles, Home, Building,
@@ -99,6 +100,7 @@ const ListingPortalSubmit = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user, isOwner } = useAuth();
+  const firstName = useDisplayFirstName("there");
   const creatorRef = useRef<HTMLDivElement>(null);
   
   // Read purpose from URL: ?purpose=sale or ?purpose=rent
@@ -654,10 +656,10 @@ const ListingPortalSubmit = () => {
                   letterSpacing: "-0.02em",
                 }}
               >
-                Smart Listing Creator — For {actionNoun}
+                Welcome, {firstName} — {party} Listing Studio for {actionNoun}
               </h1>
               <p className="text-[#1A1A1A]/80 mb-6">
-                Upload your documents and let AI create a professional {actionVerb} listing for you.
+                {user ? `Glad to have you back, ${firstName}. ` : ""}Upload your documents and let AI create a professional {actionVerb} listing for you.
               </p>
 
               <div className="[&>div]:mb-0">
