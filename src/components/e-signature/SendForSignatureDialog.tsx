@@ -204,6 +204,13 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
             docusign_url: docusignUrl.trim() || undefined,
             attachment_name: envelope?.document_filename || undefined,
             attachment_url: envelope?.document_url || undefined,
+            // Filing metadata so signed contracts show up under the right
+            // developer / type / location in Contract Vault.
+            developer_id: developerId || undefined,
+            developer_name: developerNameInput?.trim() || undefined,
+            contract_type: contractType?.trim() || undefined,
+            emirate: emirate?.trim() || undefined,
+            area: area?.trim() || undefined,
           }),
         });
         const out = await res.json().catch(() => ({}));
