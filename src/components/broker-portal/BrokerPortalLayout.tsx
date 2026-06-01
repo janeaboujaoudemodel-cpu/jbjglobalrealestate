@@ -97,11 +97,8 @@ export default function BrokerPortalLayout() {
                 <Menu className="h-5 w-5" />
               </button>
             )}
-            <div className="min-w-0 leading-tight">
-              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                JBJ GLOBAL REAL ESTATE
-              </div>
-              <h1 className="font-display text-[#1A1A1A] font-semibold text-sm md:text-base tracking-tight truncate">
+            <div className="min-w-0 flex items-center">
+              <h1 className="font-display text-[#1A1A1A] font-semibold text-base md:text-lg tracking-tight truncate">
                 Broker Workspace
               </h1>
             </div>
