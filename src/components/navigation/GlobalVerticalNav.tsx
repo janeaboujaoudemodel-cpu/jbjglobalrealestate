@@ -1004,7 +1004,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
       {/* ━━━ LOGO HEADER (88px) — clean, no collapse control ━━━ */}
-      <div className="h-[88px] shrink-0 flex flex-row items-center px-2.5 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative before:content-[''] before:absolute before:top-3 before:bottom-3 before:right-0 before:w-px before:bg-gradient-to-b before:from-transparent before:via-[#B89555] before:to-transparent before:shadow-[1px_0_0_rgba(184,149,85,0.25)]">
+      <div className="h-[88px] shrink-0 flex flex-row items-center px-2.5 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative before:content-[''] before:absolute before:top-3 before:bottom-3 before:right-0 before:w-px before:bg-gradient-to-b before:from-transparent before:via-[#B89555] before:to-transparent before:shadow-[1px_0_0_rgba(184,149,85,0.25)] after:content-[''] after:absolute after:left-3 after:right-3 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-1">
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0" />
           <div className="flex flex-col mt-1">
@@ -1013,6 +1013,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </Link>
       </div>
+
 
       {/* ━━━ SCROLLABLE NAV ━━━ */}
       <nav
@@ -1279,11 +1280,12 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         <div className="hidden sm:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
           {/* Logo header (88px) — collapsed: just icon */}
           {/* Logo header — MUST match expanded (88px) so the under-monogram divider lines up exactly with the horizontal header hairline */}
-          <div className="h-[48px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative">
+          <div className="h-[48px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
             <Link to="/">
               <img src={jbjMonogramLightBg} alt="JBJ" className="w-7 h-7 object-contain" />
             </Link>
           </div>
+
           {/* Section icons — solid champagne body, no silver cast */}
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
             {highlightItems.map((item, i) => {
@@ -1351,8 +1353,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <div className="flex-1" />
 
             {/* Bottom pinned */}
-            <div className="flex flex-col items-center gap-1 pt-1">
-              <div className="h-1 mb-1" aria-hidden="true" />
+            <div className="flex flex-col items-center gap-1 pt-1 w-full">
+              <div className="h-px w-7 mb-2 bg-gradient-to-r from-transparent via-[#B89555] to-transparent" aria-hidden="true" />
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link

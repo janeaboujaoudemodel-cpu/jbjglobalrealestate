@@ -7,7 +7,10 @@ import { Progress } from "@/components/ui/progress";
 import { BookOpen, Clock, Target, Play, CheckCircle, Circle, Sparkles, Lock, ArrowRight } from "lucide-react";
 import type { EducationBook, EducationModule } from "@/hooks/useBrokerEducation";
 import { useBookModules } from "@/hooks/useBrokerEducation";
+import { useModuleCompletion } from "@/hooks/useModuleCompletion";
 import { PremiumBookCover } from "@/components/books/PremiumBookCover";
+import { useMemo } from "react";
+
 
 interface BookDetailModalProps {
   book: EducationBook | null;
@@ -28,15 +31,20 @@ const DEFAULT_PATH_COLORS = { badge: 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[
 
 export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: BookDetailModalProps) {
   const { modules, loading } = useBookModules(book?.id || null);
-  
+  const moduleIds = useMemo(() => modules.map((m) => m.id), [modules]);
+  const { completedMap, completedCount, toggle, pendingId } = useModuleCompletion(
+    book?.id || null,
+    moduleIds,
+  );
+
   if (!book) return null;
 
   const pathColors = LEARNING_PATH_COLORS[book.learning_path] || DEFAULT_PATH_COLORS;
   const totalMinutes = modules.reduce((sum, m) => sum + m.estimated_minutes, 0);
-  
-  // Mock progress for now (would come from user progress tracking)
-  const completedModules = 0;
+
+  const completedModules = completedCount;
   const progressPercent = modules.length > 0 ? (completedModules / modules.length) * 100 : 0;
+
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -117,13 +125,13 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
           ) : (
             <Accordion type="single" collapsible className="space-y-2">
               {modules.map((module, index) => {
-                // Mock: none completed yet
-                const isCompleted = false;
-                const isCurrentModule = index === 0;
-                
+                const isCompleted = !!completedMap[module.id];
+                const isPending = pendingId === module.id;
+                const isCurrentModule = !isCompleted && index === modules.findIndex((m) => !completedMap[m.id]);
+
                 return (
-                  <AccordionItem 
-                    key={module.id} 
+                  <AccordionItem
+                    key={module.id}
                     value={module.id}
                     className="border-2 border-[#B89555]/30 rounded-lg bg-gradient-to-br from-white/80 via-[#F7F1E6]/50 to-[#ECE2D2]/30 overflow-hidden"
                   >
@@ -133,10 +141,10 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                           isLocked
                             ? 'bg-[#EFE6D6]/10 border border-[#B89555]/30 text-[#1A1A1A]/70'
-                            : isCompleted 
-                              ? 'bg-emerald-500 text-white' 
-                              : isCurrentModule 
-                                ? 'bg-[#EFE6D6]/20 border-2 border-[#B89555] text-[#1A1A1A]' 
+                            : isCompleted
+                              ? 'bg-emerald-500 text-white'
+                              : isCurrentModule
+                                ? 'bg-[#EFE6D6]/20 border-2 border-[#B89555] text-[#1A1A1A]'
                                 : 'bg-muted border border-border text-muted-foreground'
                         }`}>
                           {isLocked ? (
@@ -147,7 +155,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                             <span className="text-sm font-medium">{module.module_number}</span>
                           )}
                         </div>
-                        
+
                         <div className="flex-1 min-w-0">
                           <div className={`font-medium truncate ${isLocked ? 'text-foreground/60' : 'text-foreground'}`}>{module.title}</div>
                           <div className="text-muted-foreground text-xs flex items-center gap-2 mt-0.5">
@@ -158,7 +166,12 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                                 Locked
                               </Badge>
                             )}
-                            {!isLocked && isCurrentModule && !isCompleted && (
+                            {!isLocked && isCompleted && (
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-emerald-500/40 text-emerald-700 bg-emerald-50">
+                                Completed
+                              </Badge>
+                            )}
+                            {!isLocked && isCurrentModule && (
                               <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-[#B89555] text-[#1A1A1A]">
                                 Continue
                               </Badge>
@@ -178,14 +191,46 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                             <span>Join JBJ Broker Circle to access this module</span>
                           </div>
                         ) : (
-                          <Button 
-                            size="sm"
-                            variant="secondary"
-                            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A]"
-                          >
-                            <Play className="w-3 h-3 mr-2" />
-                            {isCompleted ? 'Review Module' : 'Start Module'}
-                          </Button>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/80 text-[#1A1A1A]"
+                              asChild
+                            >
+                              <Link to={`/broker/learning/book/${book.id}?module=${module.id}`} onClick={onClose}>
+                                <Play className="w-3 h-3 mr-2" />
+                                {isCompleted ? 'Review Module' : 'Start Module'}
+                              </Link>
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant={isCompleted ? "outline" : "default"}
+                              disabled={isPending}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                toggle(module.id);
+                              }}
+                              className={
+                                isCompleted
+                                  ? "border-emerald-500/50 text-emerald-700 hover:bg-emerald-50"
+                                  : "bg-emerald-600 hover:bg-emerald-700 text-white"
+                              }
+                            >
+                              {isCompleted ? (
+                                <>
+                                  <Circle className="w-3 h-3 mr-2" />
+                                  Mark Not Complete
+                                </>
+                              ) : (
+                                <>
+                                  <CheckCircle className="w-3 h-3 mr-2" />
+                                  Mark Complete
+                                </>
+                              )}
+                            </Button>
+                          </div>
                         )}
                       </div>
                     </AccordionContent>
@@ -195,6 +240,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
             </Accordion>
           )}
         </div>
+
 
         {/* Locked CTA or Internal Notice */}
         {isLocked ? (
