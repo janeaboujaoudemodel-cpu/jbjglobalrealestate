@@ -215,7 +215,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Founder", href: "/founder", icon: Crown },
   { label: "Contact", href: "/contact", icon: Phone },
   { label: "Awards", href: "/awards", icon: Award },
-  { label: "Press Kit", href: "/press-kit", icon: Newspaper },
+  
   { label: "Company Profile", href: "/company-profile", icon: Building },
   { label: "Philanthropy", href: "/philanthropy", icon: Heart },
   
