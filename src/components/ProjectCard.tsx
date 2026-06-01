@@ -349,24 +349,22 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           </div>
 
-          {/* Detail metadata above developer name — only render when there is
-              actual unit/size content, so cards without it don't reserve a
-              blank slot. Ink text on champagne — never white. */}
-          {(getUnitTypesText() || getSizeText()) && (
-            <div
-              data-no-contrast-guard
-              style={{ color: '#1A1A1A' }}
-              className="flex items-center gap-2 !text-[#1A1A1A] text-xs font-medium whitespace-nowrap overflow-hidden"
-            >
-              {getUnitTypesText() && (
-                <span className="font-semibold truncate !text-[#1A1A1A]">{getUnitTypesText()}</span>
-              )}
-              {getUnitTypesText() && getSizeText() && (
-                <span className="text-[#B89555] flex-shrink-0" aria-hidden="true">|</span>
-              )}
-              {getSizeText() && <span className="truncate !text-[#1A1A1A]">{getSizeText()}</span>}
-            </div>
-          )}
+          {/* Detail metadata above developer name — slot ALWAYS reserved so
+              cards with and without bedrooms/size stay row-aligned across
+              the grid. Empty placeholder when no unit/size data. */}
+          <div
+            data-no-contrast-guard
+            style={{ color: '#1A1A1A' }}
+            className="flex items-center gap-2 !text-[#1A1A1A] text-xs font-medium whitespace-nowrap overflow-hidden min-h-[1.25rem]"
+          >
+            {getUnitTypesText() && (
+              <span className="font-semibold truncate !text-[#1A1A1A]">{getUnitTypesText()}</span>
+            )}
+            {getUnitTypesText() && getSizeText() && (
+              <span className="text-[#B89555] flex-shrink-0" aria-hidden="true">|</span>
+            )}
+            {getSizeText() && <span className="truncate !text-[#1A1A1A]">{getSizeText()}</span>}
+          </div>
 
 
           {/* Developer link — reserved 1-line slot so cards without a
