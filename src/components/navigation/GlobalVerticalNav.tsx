@@ -1353,8 +1353,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <div className="flex-1" />
 
             {/* Bottom pinned */}
-            <div className="flex flex-col items-center gap-1 pt-1">
-              <div className="h-1 mb-1" aria-hidden="true" />
+            <div className="flex flex-col items-center gap-1 pt-1 w-full">
+              <div className="h-px w-7 mb-2 bg-gradient-to-r from-transparent via-[#B89555] to-transparent" aria-hidden="true" />
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
