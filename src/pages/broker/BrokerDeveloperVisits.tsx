@@ -120,7 +120,16 @@ export default function BrokerDeveloperVisits() {
         sales_rep_name: repName.trim() || null,
         sales_rep_phone: repPhone.trim() || null,
         sales_rep_email: repEmail.trim() || null,
-        sales_rep_details: repDetails.trim() || null,
+        sales_rep_details: (() => {
+          const hasRatings = Object.values(repRatings).some((v) => v > 0);
+          const fb = repFeedback.trim();
+          if (!hasRatings && !fb && !repDetails.trim()) return null;
+          return JSON.stringify({
+            feedback: fb || null,
+            ratings: repRatings,
+            ...(repDetails.trim() ? { legacy: repDetails.trim() } : {}),
+          });
+        })(),
       };
       const { error } = await supabase.from("developer_visits").insert(payload);
       if (error) throw error;
