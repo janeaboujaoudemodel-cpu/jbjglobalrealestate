@@ -702,15 +702,18 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               asChild
               data-allow-dark-cta
               data-no-contrast-guard
-              className="jj-white-ring-square font-semibold hover:brightness-95"
+              className="font-semibold hover:brightness-95"
               style={{
-                backgroundColor: "#FFFFFF",
+                background: ombreSoft(theme),
                 color: accent,
+                border: `1.5px solid ${accent}`,
+                boxShadow: `0 10px 24px -10px ${accent}66`,
               }}
             >
               <Link to="/dashboard/my-listings">
                 <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent }} />
                 <span style={{ color: accent, WebkitTextFillColor: accent, fontWeight: 700 }}>Open full dashboard</span>
+                <ArrowRight className="w-4 h-4 ml-2" style={{ color: accent }} />
               </Link>
             </Button>
           )}
