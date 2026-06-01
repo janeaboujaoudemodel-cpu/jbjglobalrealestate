@@ -28,8 +28,8 @@ export function BrokerToolkitHero() {
           className="w-full h-full object-cover"
         />
         {/* Scrim for legibility */}
-        <div className="absolute inset-0 bg-[#0A0A0A]/70" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+        <div className="absolute inset-0 bg-black/55" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/30 to-black/70" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10 py-20 md:py-28">
