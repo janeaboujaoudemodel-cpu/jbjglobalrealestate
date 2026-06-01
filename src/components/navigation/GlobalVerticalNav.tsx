@@ -440,12 +440,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   broker: [
     { label: 'Broker Portal', icon: BriefcaseIcon, href: '/broker/portal' },
     { label: 'Broker Toolkit', icon: Wrench, href: '/broker-toolkit' },
-    { label: 'Broker Learning', icon: GraduationCap, href: '/broker/learning' },
     { label: 'JBJ Academy', icon: GraduationCap, href: '/jbj-academy' },
-    { label: 'Academy Graduates', icon: Award, href: '/academy/graduates' },
     { label: 'Broker Dashboard', icon: LayoutDashboard, href: '/broker-dashboard' },
-    { label: 'Broker Resources', icon: FolderOpen, href: '/broker-resources' },
-    { label: 'AI Broker Workspace', icon: Bot, href: '/ai-broker-workspace' },
   ],
   investor: [
     { label: 'Investor Hub', icon: TrendingUp, href: '/investor-hub' },
