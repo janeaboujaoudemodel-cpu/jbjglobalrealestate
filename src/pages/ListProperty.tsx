@@ -257,10 +257,11 @@ const ListProperty = () => {
           <div
             className="rounded-2xl p-4 sm:p-6 md:p-7 shadow-xl"
             style={{
-              background: ombreSoft(theme),
+              background: `linear-gradient(135deg, #FFFFFF 0%, ${theme.primary}14 55%, #FFFFFF 100%)`,
               border: `1.5px solid ${theme.primary}`,
               boxShadow: `0 18px 40px -22px ${theme.primary}66`,
             }}
+
           >
             <div className="flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
               <div className="flex-1">
