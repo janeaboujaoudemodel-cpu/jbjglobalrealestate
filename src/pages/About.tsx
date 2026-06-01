@@ -46,14 +46,14 @@ const Section = ({
 }) => {
   // All sections now use 3-layer system on black background
   return (
-    <section 
+  // Cleaner, tighter section: single champagne band, one thin gold hairline
+  return (
+    <section
       id={id}
-      className={`py-10 md:py-14 lg:py-[72px] bg-[#1A1A1A] ${className}`}
+      className={`py-8 md:py-10 lg:py-12 bg-[#1A1A1A] ${className}`}
     >
-      {/* Thin black contour + Active Champagne Layer */}
-      <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3 sm:p-4">
-        {/* Inner Pearl Layer */}
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+      <div className="jj-section-gutter">
+        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.18)]">
           <div className="max-w-[1100px] mx-auto">
             {children}
           </div>
