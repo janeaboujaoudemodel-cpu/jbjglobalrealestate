@@ -27,7 +27,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Latest News', href: '/news', icon: Newspaper },
     { label: 'Market Updates', href: '/news?category=market', icon: TrendingUp },
     { label: 'Company News', href: '/news?category=company', icon: Globe },
-    { label: 'Press Releases', href: '/press-kit', icon: FileText },
+    
   ];
 
   // Block 2: Market Intelligence
