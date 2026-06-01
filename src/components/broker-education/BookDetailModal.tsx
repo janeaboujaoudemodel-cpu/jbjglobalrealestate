@@ -31,15 +31,20 @@ const DEFAULT_PATH_COLORS = { badge: 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[
 
 export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: BookDetailModalProps) {
   const { modules, loading } = useBookModules(book?.id || null);
-  
+  const moduleIds = useMemo(() => modules.map((m) => m.id), [modules]);
+  const { completedMap, completedCount, toggle, pendingId } = useModuleCompletion(
+    book?.id || null,
+    moduleIds,
+  );
+
   if (!book) return null;
 
   const pathColors = LEARNING_PATH_COLORS[book.learning_path] || DEFAULT_PATH_COLORS;
   const totalMinutes = modules.reduce((sum, m) => sum + m.estimated_minutes, 0);
-  
-  // Mock progress for now (would come from user progress tracking)
-  const completedModules = 0;
+
+  const completedModules = completedCount;
   const progressPercent = modules.length > 0 ? (completedModules / modules.length) * 100 : 0;
+
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
