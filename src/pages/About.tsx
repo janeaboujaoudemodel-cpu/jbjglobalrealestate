@@ -117,85 +117,73 @@ const About = () => {
   return (
     <>
       <SEOHead {...pagesSEO.about} />
-      <div data-marketing-page className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-        
-        {/* SECTION 1: HERO */}
-        <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden" data-surface="dark">
+      <div data-marketing-page className="min-h-screen bg-[#F7F2EA]">
+
+        {/* SECTION 1: HERO — clean cinematic video */}
+        <section
+          className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden"
+          data-surface="dark"
+          data-hero-dark
+        >
           <div className="absolute inset-0">
-            <img 
-              src={luxuryVillaHero} 
-              alt="About JBJ GLOBAL REAL ESTATE" 
+            <video
+              src={aboutHeroVideo}
+              poster={luxuryVillaHero}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
               className="w-full h-full object-cover"
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/55 to-black/85" />
           </div>
-          
-          <motion.div 
-            className="relative z-10 text-center px-6 max-w-[1100px] mx-auto py-24"
+
+          <motion.div
+            className="relative z-10 text-center px-6 max-w-[1000px] mx-auto py-20"
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
           >
-            {/* Badge - Glass style with gold border, engraved look */}
-            <motion.button 
-              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-                backdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(200,167,102,0.6)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
-              }}
+            <motion.span
+              className="inline-block mb-5 text-[#E6CF93] text-[10px] md:text-[11px] uppercase tracking-[0.32em] font-medium"
               variants={fadeInUp}
             >
-              <span className="text-[#B89555] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">About JBJ Global Real Estate</span>
-            </motion.button>
-            <motion.h1 
-              className="text-white text-[36px] md:text-[48px] lg:text-[58px] font-semibold mb-6 leading-tight"
+              JBJ Global Real Estate
+            </motion.span>
+            <motion.h1
+              className="text-white text-[36px] md:text-[52px] lg:text-[62px] font-light tracking-tight mb-5 leading-[1.05]"
               variants={fadeInUp}
             >
-              About JBJ Global Real Estate
+              A licensed brokerage, built on{" "}
+              <span className="italic font-normal text-[#E6CF93]">clarity</span>.
             </motion.h1>
-            <motion.p 
-              className="text-white text-xl md:text-2xl font-medium max-w-3xl mx-auto mb-4"
-              style={{ lineHeight: 1.6 }}
+            <motion.p
+              className="text-white/85 text-base md:text-lg max-w-2xl mx-auto mb-10 font-light"
+              style={{ lineHeight: 1.75 }}
               variants={fadeInUp}
             >
-              A Licensed Brokerage Built on Structure, Clarity, and Accountability
+              A Dubai mainland brokerage operating across the UAE. Structured advisory for buying, selling and renting property, grounded in verified market data and disciplined execution.
             </motion.p>
-            <motion.p 
-              className="text-white/85 text-base md:text-lg max-w-3xl mx-auto mb-10"
-              style={{ lineHeight: 1.7 }}
+            <motion.div
+              className="flex flex-wrap justify-center gap-3"
               variants={fadeInUp}
             >
-              JBJ Global Real Estate is a Dubai-based, mainland licensed real estate brokerage operating across the UAE. Our focus is clear: structured brokerage services for buying, selling, and renting property — supported by data, market intelligence, and disciplined execution. We operate with transparency, regulatory compliance, and long-term client trust at the core of everything we do.
-            </motion.p>
-            <motion.div 
-              className="flex flex-wrap justify-center gap-4"
-              variants={fadeInUp}
-            >
-              {/* Hero CTA Buttons - Transparent bg, white border + white label + white icon on dark hero */}
-              <Link to="/services" className="relative z-20">
-                <button 
-                  className="group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent hover:bg-white/10"
-                  style={{
-                    border: '2px solid rgba(255,255,255,0.8)',
-                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                  }}
-                >
-                  <span className="text-white">Explore Our Services</span>
-                  <ArrowUpRight className="w-4 h-4 text-white" />
-                </button>
+              {/* On dark hero: solid champagne primary + outlined secondary — both fully legible */}
+              <Link
+                to="/services"
+                data-allow-dark-cta
+                data-no-contrast-guard
+                className="allow-white group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555] hover:bg-[#EFE6D6] transition-colors"
+              >
+                <span>Explore Our Services</span>
+                <ArrowUpRight className="w-4 h-4" />
               </Link>
-              <Link 
-                to="/contact" 
-                className="relative z-20 group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent hover:bg-white/10"
-                style={{
-                  border: '2px solid rgba(255,255,255,0.8)',
-                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                }}
+              <Link
+                to="/contact"
+                data-allow-dark-cta
+                data-no-contrast-guard
+                className="allow-white group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full bg-transparent text-white border border-white/70 hover:bg-white/10 transition-colors"
               >
                 <span className="text-white">Contact Our Team</span>
                 <ArrowUpRight className="w-4 h-4 text-white" />
@@ -203,6 +191,7 @@ const About = () => {
             </motion.div>
           </motion.div>
         </section>
+
 
         {/* SECTION 2: FOUNDER WRITTEN BLOCK - WHITE BACKGROUND */}
         <FounderContent>
