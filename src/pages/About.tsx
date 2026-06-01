@@ -13,6 +13,9 @@ import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import luxuryVilla2 from "@/assets/luxury-villa-2.jpeg";
+import aboutHeroVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
+import { FounderPhotoEditOverlay } from "@/components/founder/FounderPhotoEditOverlay";
+import { useFounderPhoto } from "@/hooks/useFounderPhoto";
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
