@@ -179,9 +179,10 @@ const ListProperty = () => {
         canonicalPath="/list-property"
       />
 
-      <div className="px-2 sm:px-4 md:px-6 py-4 md:py-6">
-        <AnimatedBorderShell tone="navy" bare>
-        <div style={{ backgroundColor: CHAMPAGNE }}>
+      {/* Full-bleed: no outer chrome — every <section> below renders edge-to-edge */}
+      <div className="w-full" style={{ backgroundColor: CHAMPAGNE }}>
+
+
 
       {/* ───────────────────── Hero — mode-aware gradient ───────────────────── */}
       <section
@@ -347,9 +348,9 @@ const ListProperty = () => {
         data-no-contrast-guard
         style={{ background: ombreSoft(theme) }}
         className={
-          mode === "ai"
-            ? "w-full pt-4 pb-6"
-            : "px-2 sm:px-4 md:px-6 pt-8 pb-12"
+          mode === "pick" || !ActiveTab
+            ? "w-full px-4 sm:px-6 md:px-10 pt-8 pb-12"
+            : "w-full pt-0 pb-0"
         }
       >
         {mode === "pick" || !ActiveTab ? (
@@ -369,8 +370,6 @@ const ListProperty = () => {
 
       {/* ───────────────── My Submissions section (mode-aware) ───────────────── */}
       <MySubmissionsSection theme={theme} />
-        </div>
-        </AnimatedBorderShell>
       </div>
     </div>
   );
@@ -699,8 +698,8 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             className="rounded-2xl p-8 text-center"
             data-no-contrast-guard
             style={{
-              background: `linear-gradient(135deg, #FFFFFF 0%, ${accent}14 55%, #FFFFFF 100%)`,
-              border: `1.5px solid ${accent}`,
+              background: `linear-gradient(135deg, ${accent}33 0%, ${theme.primaryDeep}55 55%, ${accent}33 100%)`,
+              border: `1.5px solid ${theme.badgeBorder}`,
               boxShadow: `0 20px 40px -20px ${accent}66`,
             }}
           >
@@ -709,19 +708,32 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
                 background: `linear-gradient(135deg, ${accent} 0%, ${theme.primaryDeep} 100%)`,
-                border: `1px solid ${accent}`,
+                border: `1px solid ${theme.badgeBorder}`,
               }}
             >
               <ShieldCheck className="w-7 h-7" style={{ color: "#FFFFFF" }} />
             </div>
             <h3
-              className="text-xl font-bold mb-2"
-              style={{ color: accent, WebkitTextFillColor: accent }}
+              className="text-xl md:text-2xl font-bold mb-2"
+              style={{
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
+                textShadow: "0 2px 12px rgba(0,0,0,0.35)",
+                letterSpacing: "-0.01em",
+              }}
               data-no-contrast-guard
             >
               Sign in to track your submissions
             </h3>
-            <p className="text-sm mb-5" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }} data-no-contrast-guard>
+            <p
+              className="text-sm mb-5"
+              style={{
+                color: "rgba(255,255,255,0.92)",
+                WebkitTextFillColor: "rgba(255,255,255,0.92)",
+                textShadow: "0 1px 6px rgba(0,0,0,0.25)",
+              }}
+              data-no-contrast-guard
+            >
               Create a free account or sign in to view the live approval status of
               your property listings.
             </p>
@@ -759,8 +771,8 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             className="rounded-2xl p-10 text-center"
             data-no-contrast-guard
             style={{
-              background: `linear-gradient(135deg, #FFFFFF 0%, ${accent}14 55%, #FFFFFF 100%)`,
-              border: `1.5px dashed ${accent}`,
+              background: `linear-gradient(135deg, ${accent}33 0%, ${theme.primaryDeep}55 55%, ${accent}33 100%)`,
+              border: `1.5px dashed ${theme.badgeBorder}`,
               boxShadow: `0 20px 40px -20px ${accent}55`,
             }}
           >
@@ -769,19 +781,32 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
                 background: `linear-gradient(135deg, ${accent} 0%, ${theme.primaryDeep} 100%)`,
-                border: `1px solid ${accent}`,
+                border: `1px solid ${theme.badgeBorder}`,
               }}
             >
               <Building2 className="w-7 h-7" style={{ color: "#FFFFFF" }} />
             </div>
             <h3
-              className="text-xl font-bold mb-2"
-              style={{ color: accent, WebkitTextFillColor: accent }}
+              className="text-xl md:text-2xl font-bold mb-2"
+              style={{
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
+                textShadow: "0 2px 12px rgba(0,0,0,0.35)",
+                letterSpacing: "-0.01em",
+              }}
               data-no-contrast-guard
             >
               No submissions yet
             </h3>
-            <p className="text-sm mb-5" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }} data-no-contrast-guard>
+            <p
+              className="text-sm mb-5"
+              style={{
+                color: "rgba(255,255,255,0.92)",
+                WebkitTextFillColor: "rgba(255,255,255,0.92)",
+                textShadow: "0 1px 6px rgba(0,0,0,0.25)",
+              }}
+              data-no-contrast-guard
+            >
               Start your first listing above and it will appear here with full
               status tracking.
             </p>
