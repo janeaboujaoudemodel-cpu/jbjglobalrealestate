@@ -79,16 +79,32 @@ function FoilSeal({ size = 130 }: { size?: number }) {
         className="absolute inset-[6px] rounded-full border border-[#8A6A35]/60"
         style={{ boxShadow: "inset 0 0 8px rgba(255,246,224,0.4)" }}
       />
-      <BadgeCheck className="relative" style={{ width: size * 0.42, height: size * 0.42, color: "#1A1A1A" }} strokeWidth={2} />
-      <span
-        className="absolute bottom-[14%] text-[#1A1A1A]/80 font-semibold uppercase"
-        style={{ fontSize: size * 0.075, letterSpacing: "0.2em" }}
-      >
-        JBJ · CERTIFIED
-      </span>
+      <BadgeCheck className="relative" style={{ width: size * 0.5, height: size * 0.5, color: "#1A1A1A" }} strokeWidth={2} />
     </div>
   );
 }
+
+/** Diagonal shimmer sweep across the certificate plate */
+const CERT_SHIMMER_CSS = `
+@keyframes jj-cert-shimmer {
+  0%   { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+  20%  { opacity: .55; }
+  60%  { opacity: .55; }
+  100% { transform: translateX(160%)  skewX(-18deg); opacity: 0; }
+}
+.jj-cert-shimmer {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  border-radius: inherit;
+}
+.jj-cert-shimmer::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 45%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,246,224,.45) 50%, transparent 100%);
+  animation: jj-cert-shimmer 6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jj-cert-shimmer::after { animation: none; opacity: 0; }
+}
+`;
 
 export function CertificatePreview({ isLocked = false }: CertificatePreviewProps) {
   const { user } = useAuth();
