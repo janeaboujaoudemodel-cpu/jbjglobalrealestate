@@ -4027,6 +4027,10 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 .surface-cream,
 .surface-raised,
 .surface-gold,
+.jj-layer-2,
+.jj-card-inner,
+.jj-box-active,
+.jj-icon-box-active,
 .bg-surface,
 .bg-raised,
 [data-surface="champagne"],
@@ -4144,15 +4148,15 @@ button[data-phone-code-trigger],
 .jj-cta-dark :where(span, svg, [class*="lucide"]),
 .jj-navy-cta :where(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
-[data-allow-dark-cta] > :where(span, svg, [class*="lucide"]),
+[data-allow-dark-cta] :where(span, svg, [class*="lucide"]),
 [data-icon-tile][data-surface="ink"] :where(svg, [class*="lucide"]),
 [data-icon-tile][data-surface="navy"] :where(svg, [class*="lucide"]),
-.surface-navy > :where(span, svg, [class*="lucide"]),
-.surface-ink > :where(span, svg, [class*="lucide"]),
-.surface-dark > :where(span, svg, [class*="lucide"]),
-[data-surface="navy"] > :where(span, svg, [class*="lucide"]),
-[data-surface="ink"] > :where(span, svg, [class*="lucide"]),
-[data-surface="dark"] > :where(span, svg, [class*="lucide"]),
+.surface-navy :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
+.surface-ink :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
+.surface-dark :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
+[data-surface="navy"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
+[data-surface="ink"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
+[data-surface="dark"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *),
 [data-hero-consultation-lock] :where(span, svg, [class*="lucide"]),
 [data-photo-copy-lock] :where(span, svg, [class*="lucide"]) {
   color: hsl(var(--jj-on-dark));
@@ -4175,6 +4179,20 @@ button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
   -webkit-text-fill-color: hsl(var(--jj-on-light));
   stroke: hsl(var(--jj-on-light));
   opacity: 1;
+}
+
+.jj-card-inner :where(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *),
+.jj-box-active :where(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *) {
+  color: hsl(var(--jj-on-light)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-light)) !important;
+  opacity: 1 !important;
+}
+
+.jj-card-inner :where(svg, [class*="lucide"]):not([data-no-contrast-guard]):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *),
+.jj-box-active :where(svg, [class*="lucide"]):not([data-no-contrast-guard]):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *) {
+  color: hsl(var(--jj-on-light)) !important;
+  stroke: hsl(var(--jj-on-light)) !important;
+  opacity: 1 !important;
 }
 
 html body [data-photo-copy-lock] :where(h1,h2,h3,h4,h5,h6,p,span):not(.jj-pill-active *) {
