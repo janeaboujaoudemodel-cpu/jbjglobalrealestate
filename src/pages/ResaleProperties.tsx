@@ -543,11 +543,13 @@ const ResaleProperties = () => {
                       )}
                     </div>
                     <Button
+                      variant="ghost"
                       data-cta="dark"
                       className="jj-cta-dark w-full mt-4 h-10 font-semibold rounded-xl"
                     >
                       Register Interest
                     </Button>
+
 
                   </div>
                 </div>
