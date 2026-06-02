@@ -1,59 +1,96 @@
-# Fix, Rebuild & Restyle Plan
+# Plan — Unified Ombré Tool Style + Access Gating
 
-Scope is large but every item is concrete. I will validate each with browser screenshots at 1178×891 acting as a broker/investor before claiming done.
+## Scope
 
-## 1. Property Comparison — actually finish it
-- `/compare?mode=units`: confirm UnitCompareShell renders, fix any remaining blank state. Add an always-visible empty state with **Search project → Add unit** CTA so brokers see the table scaffold immediately.
-- Wire **Add Unit** dialog → live `UnitComparisonTable` (verify rows appear instantly, no reload).
-- **Branded PDF Export**: rebuild `exportUnitComparisonPdf.ts` with JBJ letterhead (monogram top-left, gold hairline, navy footer), project header block, full comparison table (all toggleable field groups), payment-plan schedule per unit, broker signature block on last page, gold divider. Button in toolbar, enabled when ≥1 unit added.
-- Same branded export for Project Compare mode.
-- E2E test as broker: pick 2 projects → add units → toggle fields → export PDF → open PDF and visually QA each page.
+**Restyle (apply Property Measurement's exact layout/UX, accent→black ombré, ToolAnimatedFrame, stepper, centered cards):**
+1. Mortgage Calculator (`/mortgage-calculator`) — Navy accent
+2. Rental Index (`/rental-index`) — Burgundy accent
+3. AI Home Finder (`/ai-home-finder` or current route) — Teal accent
+4. Property Evaluator (`/property-evaluator`) — Amber accent
+5. Interior Design AI (`/interior-design-ai`) — Violet→Pink→Tiffany custom accent
+6. Business Card Scanner (`/business-card-scanner`) — Rose accent
+7. Property Comparison (`/compare`) — Emerald accent (already partly themed; align fully)
 
-## 2. Property Measurement Tool — rebuild end-to-end
-- Restyle the page for full readability (ink on champagne, no faded gold text, no white-on-light).
-- Rebuild flow: upload photos OR video → call edge function `measure-property-ai` (Gemini vision) → returns per-room area + total in **sqft and sqm** (user picks unit: sqft / sqm / both).
-- Render visual report: annotated thumbnails, room table, totals.
-- **Download branded PDF** with JBJ letterhead, photo previews, measurement table, signature page.
-- Redeploy edge function, test E2E by uploading sample images.
+Each page gets its own `ToolTheme` entry in `src/components/tools/toolThemes.ts`, wrapped in `<ToolAnimatedFrame theme={…}>`, with the same step header, centered card stack, gradient CTAs, and accent chips that Property Measurement uses. Contrast verified against ink-on-light surfaces and white-on-dark CTAs per the contrast guard.
 
-## 3. Entity-type Badges (apartment/villa/townhouse/office)
-- Remove blue fill site-wide. Replace with **green→black→white ombre gradient pill** matching the existing dark CTA "off-white" text treatment (not pure white). Update icon + title contrast accordingly. Single source: locate badge component(s) and update once.
+**Hard "do not touch" list:** Property Measurement, List Property for Sale, List Property for Rent.
 
-## 4. Header Icons → Gold
-- Search, filter, heart icons + AED currency chevron + mode (developer/broker/investor) chevron → all stroke `#B89555` at idle, ink on hover. Keep contrast guard opt-out so they survive the universal flip.
+## Access Matrix
 
-## 5. Mortgage Calculator — neon restyle
-- Page background stays champagne but card gets **neon fluo-blue → pink gradient border**, soft glow shadow, animated bubble/orb particles in background, subtle pulse on focus.
-- Framer-motion entrance, animated gold-to-neon hairline, premium feel.
-- Fix all input/label contrast (ink on light, no white-on-light).
+| Tool | Owner | JBJ Broker | Other Brokers | Investor / Developer / Logged-out |
+|---|---|---|---|---|
+| Property Comparison | ✅ Full | ✅ Full | 🔒 Request Access | ❌ Hidden (sidebar + route) |
+| Business Card Scanner | ✅ Full | ✅ Full | 🔒 Request Access | ❌ Hidden (sidebar + route) |
+| Mortgage / Rental Index / Home Finder / Evaluator / Interior Design | ✅ | ✅ | ✅ | ✅ Visible & usable |
 
-## 6. News & Insights + Market Intelligence — neon premium restyle
-- News: magazine-grid with neon accent borders on featured cards, animated gradient headlines, hover glow. Keep all existing articles.
-- Market Intelligence: neon dashboard treatment for KPIs (electric-blue/pink accent strokes, glowing number tiles), animated chart entrances, full ink-on-champagne readability inside cards.
-- Validate every section visually.
+Implementation:
+- Extend `useCompareAccess` → generalize into `useGatedToolAccess(toolId)` returning `{ visible, unlocked, isJBJBroker, isOwner }`. JBJ broker detection reuses `useUserRole().isJBJBroker` (already in codebase).
+- Sidebar (`GlobalVerticalNav.tsx`): filter Compare + Business Card Scanner items by `visible`.
+- Route guards: `/compare` and `/business-card-scanner` render existing `CompareAccessGate`-style component when `!visible` (redirect to `/access-denied` or hub).
+- Locked broker view: themed gate card "Request Access" button → posts to existing `broker_access_request_system` (per memory), shows pending state. JBJ broker bypass automatic.
+- Interior Design AI stays under **Tools & Workspace** in the vertical sidebar for all users.
 
-## 7. E2E user-as-broker test pass
-For each tool I will navigate, interact, screenshot, and report:
-- Property Measurement (upload → measure → export)
-- Rental Index (search → results → export if available)
-- Property Evaluator (input → valuation → export)
-- Property Comparison (project + unit modes → export)
-- List Your Property (full submit flow)
+## Technical Details
 
-Bugs found during E2E get fixed in the same pass.
+**New per-tool themes** added to `toolThemes.ts`:
+```
+mortgageNavy   #102540 → #000
+rentalBrick    #8B1E2E → #000
+homeFinderTeal #0E7490 → #000
+evaluatorAmber #B45309 → #000
+interiorBlend  custom: #7C3AED → #EC4899 → #5EEAD4 → #000 (3-stop hero, 2-stop CTA)
+cardScanRose   #BE185D → #000
+compareEmerald #0F7A4D → #000  (already exists, reuse)
+```
 
-## Technical notes
-- PDFs: jsPDF + existing JBJ branding helpers (`src/lib/pdf/jbjBrandedPdf.ts` pattern).
-- Measurement AI: Lovable AI Gateway, `google/gemini-2.5-pro` (vision + reasoning), no API key needed.
-- Badges: search `bg-blue|bg-sky|bg-[#` near "Apartment|Villa|Townhouse|Office" and centralize into one `<EntityTypeBadge />` primitive using the locked dark-CTA gradient tokens.
-- Neon: scoped CSS classes (`.jj-neon-card`, `.jj-neon-orb`) — NOT global, so champagne system stays intact. AI-purple memory doesn't apply (these are tool pages, not AI features).
-- All changes respect: no-gray, no-gold-fills, white-on-light guard, no section dividers, contact gating, no-removal policy.
+**Per-tool page refactor** (each of the 6 files):
+1. Replace current outer wrapper with `<ToolAnimatedFrame theme={toolThemes.xxx}>`.
+2. Keep all existing business logic + edge function calls untouched.
+3. Convert hero section to mirror PropertyMeasurement: chip → title → subtitle → step indicator.
+4. Wrap step content in the dark ombré card (`heroGradient` bg, white text, accent borders).
+5. Primary CTA = `ctaGradient`; secondary = champagne outline.
+6. Run white-on-light + same-tone contrast guard on each.
 
-## Validation checklist (per item)
-1. Browser screenshot at 1178×891 before + after.
-2. Click through as the target user role.
-3. Open exported PDF, screenshot every page, check for clipping/contrast.
-4. Console + network clean.
-5. Report findings honestly — if something doesn't work, say so and fix before moving on.
+**Access plumbing:**
+- `src/hooks/useGatedToolAccess.ts` (new) — wraps `useUserRole` + `useIsAppOwner`.
+- `src/components/access/ToolLockGate.tsx` (new) — themed lock card with "Request Access" CTA, reused by Compare + Card Scanner. Uses tool's own theme accent.
+- Sidebar filter in `GlobalVerticalNav.tsx`: hide Compare/Scanner items when `!visible`.
+- Route-level: wrap `/compare` and `/business-card-scanner` in a `<GatedToolRoute toolId="…">` that returns `ToolLockGate` when locked, full page when unlocked, `<Navigate to="/" />` when hidden.
 
-Approve and I'll build it in this order: 3 + 4 (quick wins) → 1 (Compare + PDF) → 2 (Measurement rebuild) → 5 (Mortgage neon) → 6 (News + Market Intel neon) → 7 (full E2E pass).
+## Validation (per tool)
+
+- Browser screenshot at 1178×891.
+- Verify step indicator + centered card render at viewport.
+- Verify CTA contrast (white text on accent→ink gradient).
+- Verify no white-on-light or same-tone violations.
+- Verify sidebar visibility flips correctly across investor / broker / JBJ broker / owner modes for Compare + Scanner.
+
+## Files
+
+**New**
+- `src/hooks/useGatedToolAccess.ts`
+- `src/components/access/ToolLockGate.tsx`
+- `src/components/access/GatedToolRoute.tsx`
+
+**Edit**
+- `src/components/tools/toolThemes.ts` (add interior + alias names)
+- `src/pages/MortgageCalculator.tsx`
+- `src/pages/RentalIndex.tsx`
+- `src/pages/AIHomeFinder.tsx` (or current home-finder file)
+- `src/pages/PropertyEvaluator.tsx`
+- `src/pages/InteriorDesignAI.tsx`
+- `src/pages/BusinessCardScanner.tsx`
+- `src/pages/Compare.tsx` (theme alignment + route gate)
+- `src/components/navigation/GlobalVerticalNav.tsx` (filter Compare + Scanner)
+- `src/App.tsx` or relevant routes file (wrap `/compare` and `/business-card-scanner`)
+
+**Untouched (locked)**
+- `src/pages/PropertyMeasurement.tsx`
+- List Property for Sale / Rent pages
+
+## Execution Order
+
+1. Add themes + new access hook/components.
+2. Wire sidebar + route gates for Compare and Business Card Scanner.
+3. Restyle the 6 tool pages one at a time, screenshot-verifying each.
+4. Final pass: investor / broker / JBJ broker / owner sidebar + route smoke test.
