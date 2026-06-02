@@ -35,7 +35,7 @@ export default function HomepageBookMarquee() {
       </div>
 
       {/* Canonical book strip — full-bleed, smooth CSS marquee, titles engraved on covers */}
-      <BookCarousel books={allBooks} size="sm" durationSec={38} />
+      <BookCarousel books={allBooks} size="sm" durationSec={38} compact />
 
       {/* Mobile link */}
       <div className="px-4 md:px-6 lg:px-8">

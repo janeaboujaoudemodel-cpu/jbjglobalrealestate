@@ -17,6 +17,8 @@ interface BookCardProps {
   /** Disable hover lift (used inside drag-scroll carousels to avoid jitter). */
   flat?: boolean;
   draggable?: boolean;
+  /** Clean homepage variant — title only, no number/wordmark/subtitle. */
+  compact?: boolean;
 }
 
 const sizeMap: Record<BookCardSize, string> = {
@@ -26,15 +28,8 @@ const sizeMap: Record<BookCardSize, string> = {
   lg: "w-52 h-[19rem] sm:w-60 sm:h-[22rem] md:w-64 md:h-[24rem]",
 };
 
-/**
- * Canonical 3D book card. Single source of truth for every book tile across
- * the homepage carousel, /guides library, guide page hero, broker shelf, etc.
- *
- * Renders <PremiumBookCover> (which engraves the title onto the cover) — never
- * shows a duplicate caption underneath.
- */
 export const BookCard = forwardRef<HTMLElement, BookCardProps>(function BookCard(
-  { book, size = "sm", href, onClick, className, flat = false, draggable = false },
+  { book, size = "sm", href, onClick, className, flat = false, draggable = false, compact = false },
   ref,
 ) {
   const inner = (
@@ -44,7 +39,7 @@ export const BookCard = forwardRef<HTMLElement, BookCardProps>(function BookCard
         sizeMap[size],
       )}
     >
-      <BookCoverFace book={book} bare />
+      <BookCoverFace book={book} bare compact={compact} />
     </div>
   );
 

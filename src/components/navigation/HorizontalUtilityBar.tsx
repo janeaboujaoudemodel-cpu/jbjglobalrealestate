@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal, Heart } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
@@ -106,14 +106,14 @@ export default function HorizontalUtilityBar() {
               <button
                 data-no-contrast-guard
                 onClick={() => setSearchOpen(true)}
-                style={{ color: "hsl(var(--gold))" }}
-                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors focus:outline-none"
+                style={{ color: "#B89555" }}
+                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[#B89555]/10 transition-colors focus:outline-none"
                 aria-label="Search"
               >
                 <Search
                   data-no-contrast-guard
                   className="w-[18px] h-[18px]"
-                  style={{ color: "hsl(var(--gold))", stroke: "hsl(var(--gold))" }}
+                  style={{ color: "#B89555", stroke: "#B89555" }}
                 />
               </button>
             </TooltipTrigger>
@@ -121,7 +121,7 @@ export default function HorizontalUtilityBar() {
           </Tooltip>
         </div>
 
-        {/* ── RIGHT: Filter · Sq ft/m · Currency · Mode · Avatar ── */}
+        {/* ── RIGHT: Filter · Favorites · Sq ft/m · Currency · Mode · Avatar ── */}
         <div className="ml-auto flex items-center gap-2 shrink-0">
           {/* Filter */}
           <Tooltip>
@@ -129,46 +129,77 @@ export default function HorizontalUtilityBar() {
               <button
                 data-no-contrast-guard
                 onClick={() => setFilterOpen(true)}
-                style={{ color: "hsl(var(--gold))" }}
-                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors focus:outline-none"
+                style={{ color: "#B89555" }}
+                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[#B89555]/10 transition-colors focus:outline-none"
                 aria-label="Filter"
               >
                 <SlidersHorizontal
                   data-no-contrast-guard
                   className="w-[18px] h-[18px]"
-                  style={{ color: "hsl(var(--gold))", stroke: "hsl(var(--gold))" }}
+                  style={{ color: "#B89555", stroke: "#B89555" }}
                 />
               </button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-xs">Advanced filters</TooltipContent>
           </Tooltip>
 
-          {/* Sq ft / Sq m */}
+          {/* Favorites */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                to="/favorites"
+                data-no-contrast-guard
+                style={{ color: "#B89555" }}
+                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[#B89555]/10 transition-colors focus:outline-none"
+                aria-label="Favorites"
+              >
+                <Heart
+                  data-no-contrast-guard
+                  className="w-[18px] h-[18px]"
+                  style={{ color: "#B89555", stroke: "#B89555", fill: "none" }}
+                />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs">Favorites</TooltipContent>
+          </Tooltip>
+
+          {/* Sq ft / Sq m — restored metallic animated active state */}
           <div
             data-no-contrast-guard
             data-surface="light"
-            className="hidden sm:inline-flex items-center h-7 rounded-lg border border-[#B89555]/50 overflow-hidden bg-transparent"
+            className="hidden sm:inline-flex items-center h-7 rounded-lg border border-[#B89555]/60 overflow-hidden bg-transparent relative"
           >
             <button
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqft') toggleAreaUnit(); }}
-              style={{
-                color: areaUnit === 'sqft' ? '#1A1A1A' : 'rgba(26,26,26,0.62)',
-              }}
-              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors ${areaUnit === 'sqft' ? 'bg-[#EFE6D6]' : 'bg-transparent'}`}
+              className={`relative px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-all duration-300 overflow-hidden ${areaUnit === 'sqft' ? 'jj-metallic-active' : 'bg-transparent text-[#B89555]/70 hover:text-[#B89555]'}`}
+              style={areaUnit === 'sqft' ? { color: '#3a2a08' } : undefined}
               aria-label="Square feet"
             >sq ft</button>
             <button
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqm') toggleAreaUnit(); }}
-              style={{
-                color: areaUnit === 'sqm' ? '#1A1A1A' : 'rgba(26,26,26,0.62)',
-              }}
-              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors border-l border-[#B89555]/40 ${areaUnit === 'sqm' ? 'bg-[#EFE6D6]' : 'bg-transparent'}`}
+              className={`relative px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-all duration-300 border-l border-[#B89555]/40 overflow-hidden ${areaUnit === 'sqm' ? 'jj-metallic-active' : 'bg-transparent text-[#B89555]/70 hover:text-[#B89555]'}`}
+              style={areaUnit === 'sqm' ? { color: '#3a2a08' } : undefined}
               aria-label="Square meters"
             >sq m</button>
-
           </div>
+
+          {/* Inline metallic keyframes for the active pill */}
+          <style>{`
+            @keyframes jj-metal-sheen {
+              0%   { background-position: 0% 50%; }
+              50%  { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+            .jj-metallic-active {
+              background-image: linear-gradient(120deg, #d8b86a 0%, #f4e3a8 25%, #b89555 50%, #f4e3a8 75%, #d8b86a 100%);
+              background-size: 220% 220%;
+              animation: jj-metal-sheen 4.5s ease-in-out infinite;
+              box-shadow: inset 0 0 0 1px rgba(255,244,210,.45), inset 0 -1px 2px rgba(0,0,0,.18);
+            }
+          `}</style>
+
 
 
           {/* Currency — flag + AED */}

@@ -2,10 +2,12 @@ import { useMemo } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * PremiumBook3D — a true 3D book: spine + front cover + back cover + page
- * edges. Idle tilt ~ -18°, hover rotates flat. Colour palette rotates per
- * book_number so the same component renders an entire shelf of distinct,
- * cohesive volumes without bespoke art per book.
+ * PremiumBook3D — true 3D book: spine + front + back + page edges.
+ * Two presentation modes:
+ *   - `compact` (homepage marquee): clean cover, ONLY the engraved title;
+ *     no wordmark, no underline, no subtitle, no number tag.
+ *   - default (library / detail): adds wordmark, subtitle and a small classic
+ *     foil corner badge (top-right) with the book number.
  */
 
 const PALETTES: Array<{
@@ -15,15 +17,15 @@ const PALETTES: Array<{
   foil: string;
   ink: string;
 }> = [
-  { spine: "#5b1216", cover: "#8a1c22", cover2: "#5b1216", foil: "#e8c878", ink: "#FDFBF7" }, // oxblood
-  { spine: "#0b2545", cover: "#13315c", cover2: "#0b2545", foil: "#e8c878", ink: "#FDFBF7" }, // navy
-  { spine: "#1f3b2c", cover: "#2f5d44", cover2: "#1f3b2c", foil: "#e8c878", ink: "#FDFBF7" }, // forest
-  { spine: "#2a1a3f", cover: "#46295a", cover2: "#2a1a3f", foil: "#e8c878", ink: "#FDFBF7" }, // aubergine
-  { spine: "#3a1f0f", cover: "#5b3320", cover2: "#3a1f0f", foil: "#e8c878", ink: "#FDFBF7" }, // cognac
-  { spine: "#1a1a1a", cover: "#2b2b2b", cover2: "#1a1a1a", foil: "#c9a84c", ink: "#FDFBF7" }, // obsidian
-  { spine: "#5a4528", cover: "#7a5e34", cover2: "#5a4528", foil: "#f0d78c", ink: "#FDFBF7" }, // bronze
-  { spine: "#0e3b3a", cover: "#185856", cover2: "#0e3b3a", foil: "#e8c878", ink: "#FDFBF7" }, // teal
-  { spine: "#6a1e3a", cover: "#8c2a4f", cover2: "#6a1e3a", foil: "#e8c878", ink: "#FDFBF7" }, // burgundy
+  // Refined premium leather palette — deeper, more editorial.
+  { spine: "#3a0d10", cover: "#5e151a", cover2: "#3a0d10", foil: "#d8b86a", ink: "#F4E9CC" }, // oxblood
+  { spine: "#071a33", cover: "#0e2848", cover2: "#071a33", foil: "#d8b86a", ink: "#F4E9CC" }, // midnight navy
+  { spine: "#142a1f", cover: "#1f4030", cover2: "#142a1f", foil: "#d8b86a", ink: "#F4E9CC" }, // forest
+  { spine: "#1c1330", cover: "#2c1d4a", cover2: "#1c1330", foil: "#d8b86a", ink: "#F4E9CC" }, // aubergine
+  { spine: "#2a1408", cover: "#41241500", cover2: "#2a1408", foil: "#d8b86a", ink: "#F4E9CC" }, // cognac
+  { spine: "#0d0d0d", cover: "#1a1a1a", cover2: "#0d0d0d", foil: "#c9a84c", ink: "#F4E9CC" }, // obsidian
+  { spine: "#0a2a2a", cover: "#103f3d", cover2: "#0a2a2a", foil: "#d8b86a", ink: "#F4E9CC" }, // teal
+  { spine: "#481228", cover: "#681c39", cover2: "#481228", foil: "#d8b86a", ink: "#F4E9CC" }, // burgundy
 ];
 
 export function pickPalette(seed: number) {
@@ -36,9 +38,10 @@ interface PremiumBook3DProps {
   bookNumber?: number;
   paletteIndex?: number;
   className?: string;
+  /** When true, render the clean homepage variant (title only). */
+  compact?: boolean;
 }
 
-/** Shared keyframes for the foil-ribbon shimmer + book hover */
 const STYLES = `
 @keyframes jj-book-shimmer {
   0%   { transform: translateX(-120%) skewX(-18deg); }
@@ -61,20 +64,20 @@ const STYLES = `
 .jj-book-pages-top    { position:absolute; top:0; left:30px; right:0; height:8px; transform: rotateX(90deg) translateZ(4px); background: linear-gradient(90deg,#f3e7c8,#fff7e0,#f3e7c8); }
 .jj-book-pages-bottom { position:absolute; bottom:0; left:30px; right:0; height:8px; transform: rotateX(-90deg) translateZ(4px); background: linear-gradient(90deg,#f3e7c8,#fff7e0,#f3e7c8); }
 .jj-book-pages-right  { position:absolute; top:0; bottom:0; right:0; width:8px; transform: rotateY(90deg) translateZ(4px); background: repeating-linear-gradient(0deg,#f3e7c8 0 2px,#e9d9b0 2px 3px); }
-.jj-foil-ribbon { position: relative; overflow: hidden; }
-.jj-foil-ribbon::after {
-  content:""; position:absolute; inset:0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.55) 50%, transparent 100%);
-  animation: jj-book-shimmer 3.6s ease-in-out infinite;
-  pointer-events: none;
-}
 `;
 
 export function PremiumBook3DStyles() {
   return <style dangerouslySetInnerHTML={{ __html: STYLES }} />;
 }
 
-export function PremiumBook3D({ title, subtitle, bookNumber, paletteIndex, className }: PremiumBook3DProps) {
+export function PremiumBook3D({
+  title,
+  subtitle,
+  bookNumber,
+  paletteIndex,
+  className,
+  compact = false,
+}: PremiumBook3DProps) {
   const palette = useMemo(
     () => pickPalette(paletteIndex ?? bookNumber ?? Math.floor(Math.random() * PALETTES.length)),
     [paletteIndex, bookNumber],
@@ -105,7 +108,7 @@ export function PremiumBook3D({ title, subtitle, bookNumber, paletteIndex, class
             className="absolute inset-0 grid place-items-center text-[8px] font-semibold tracking-[0.3em]"
             style={{ color: palette.foil, writingMode: "vertical-rl", transform: "rotate(180deg)" }}
           >
-            JBJ · {title.length > 30 ? `${title.slice(0, 28)}…` : title}
+            {title.length > 30 ? `${title.slice(0, 28)}…` : title}
           </div>
         </div>
 
@@ -120,73 +123,79 @@ export function PremiumBook3D({ title, subtitle, bookNumber, paletteIndex, class
           style={{
             background: `linear-gradient(135deg, ${palette.cover} 0%, ${palette.cover2} 100%)`,
             boxShadow:
-              "inset 0 0 50px rgba(0,0,0,.35), 12px 18px 40px rgba(0,0,0,.35)",
+              "inset 0 0 60px rgba(0,0,0,.45), 14px 22px 50px rgba(0,0,0,.4)",
           }}
         >
-          {/* Inner double-rule frame */}
+          {/* Subtle single inner frame (kept on both variants — defines the book) */}
           <div
-            className="absolute inset-[7%] rounded-[2px] pointer-events-none"
-            style={{ border: `1px solid ${palette.foil}77` }}
-          />
-          <div
-            className="absolute inset-[10%] rounded-[2px] pointer-events-none"
-            style={{ border: `1px solid ${palette.foil}33` }}
+            className="absolute inset-[8%] rounded-[2px] pointer-events-none"
+            style={{ border: `1px solid ${palette.foil}44` }}
           />
 
-          {/* Top wordmark */}
-          <div
-            className="absolute top-[12%] inset-x-0 text-center text-[9px] tracking-[0.28em] font-semibold"
-            style={{ color: palette.foil }}
-          >
-            JBJ · GLOBAL REAL ESTATE
-          </div>
-          <div className="absolute top-[18%] left-1/2 -translate-x-1/2 h-px w-[28%]" style={{ background: palette.foil }} />
-
-          {/* Title */}
-          <div className="absolute inset-x-[12%] top-[30%] bottom-[30%] grid place-items-center">
-            <div
-              className="text-center font-semibold leading-tight"
-              style={{
-                color: palette.ink,
-                fontSize: "clamp(11px, 2vw, 18px)",
-                letterSpacing: "0.02em",
-                textShadow: "0 1px 0 rgba(0,0,0,.4)",
-              }}
-            >
-              {title.toUpperCase()}
-            </div>
-          </div>
-
-          {/* Subtitle */}
-          {subtitle && (
-            <div
-              className="absolute inset-x-[14%] bottom-[18%] text-center text-[9px] italic"
-              style={{ color: `${palette.foil}` }}
-            >
-              {subtitle}
-            </div>
+          {/* Wordmark + underline + subtitle — ONLY non-compact */}
+          {!compact && (
+            <>
+              <div
+                className="absolute top-[12%] inset-x-0 text-center text-[9px] tracking-[0.28em] font-semibold"
+                style={{ color: palette.foil }}
+              >
+                JBJ · GLOBAL REAL ESTATE
+              </div>
+              <div
+                className="absolute top-[18%] left-1/2 -translate-x-1/2 h-px w-[28%]"
+                style={{ background: palette.foil }}
+              />
+              {subtitle && (
+                <div
+                  className="absolute inset-x-[14%] bottom-[18%] text-center text-[9px] italic"
+                  style={{ color: palette.foil }}
+                >
+                  {subtitle}
+                </div>
+              )}
+            </>
           )}
 
-          {/* Foil number tag — vertical, right edge */}
-          {typeof bookNumber === "number" && (
+          {/* Title — slimmer, balanced, premium */}
+          <div
+            className={cn(
+              "absolute inset-x-[14%] grid place-items-center",
+              compact ? "top-[18%] bottom-[18%]" : "top-[32%] bottom-[28%]"
+            )}
+          >
             <div
-              className="absolute right-[4%] top-[14%] bottom-[14%] w-[26px] rounded-[3px] flex items-center justify-center"
+              className="text-center leading-[1.18]"
               style={{
-                background: `linear-gradient(180deg, #f7e6a8 0%, ${palette.foil} 35%, #b8860b 65%, ${palette.foil} 100%)`,
+                color: palette.ink,
+                fontSize: compact ? "clamp(10px, 1.55vw, 14px)" : "clamp(11px, 1.8vw, 16px)",
+                fontWeight: 500,
+                letterSpacing: "0.06em",
+                fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
+                textShadow: "0 1px 0 rgba(0,0,0,.45)",
+              }}
+            >
+              {title}
+            </div>
+          </div>
+
+          {/* Classic foil corner badge — ONLY non-compact */}
+          {!compact && typeof bookNumber === "number" && (
+            <div
+              className="absolute top-[6%] right-[6%] w-[28px] h-[28px] rounded-full flex items-center justify-center"
+              style={{
+                background: `radial-gradient(circle at 35% 30%, #fff2c4 0%, ${palette.foil} 45%, #8a6a25 100%)`,
                 boxShadow:
-                  "inset 0 0 0 1px rgba(255,244,210,.55), 0 2px 6px rgba(0,0,0,.45), 0 0 0 1px rgba(0,0,0,.25)",
+                  "inset 0 0 0 1px rgba(255,244,210,.55), 0 2px 4px rgba(0,0,0,.45)",
               }}
             >
               <span
-                className="text-[10px] font-bold tracking-[0.35em]"
+                className="text-[9px] font-bold tracking-[0.04em]"
                 style={{
-                  color: "#1A1A1A",
-                  writingMode: "vertical-rl",
-                  transform: "rotate(180deg)",
-                  textShadow: "0 1px 0 rgba(255,244,210,.5)",
+                  color: "#3a2a08",
+                  fontFamily: "'Cormorant Garamond', Georgia, serif",
                 }}
               >
-                N°{String(bookNumber).padStart(2, "0")}
+                {String(bookNumber).padStart(2, "0")}
               </span>
             </div>
           )}

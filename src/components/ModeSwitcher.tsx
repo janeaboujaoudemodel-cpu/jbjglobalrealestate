@@ -184,20 +184,18 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               className
             )}
           >
-            {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin shrink-0" style={{ color: '#1A1A1A' }} />
-            ) : (
-              <CurrentIcon className="w-4 h-4 shrink-0" style={{ color: '#1A1A1A' }} />
+            {isLoading && (
+              <Loader2 className="w-4 h-4 animate-spin shrink-0" style={{ color: '#B89555' }} />
             )}
             <span
-              className="text-[10px] font-bold whitespace-nowrap leading-none hidden sm:block"
-              style={{ color: '#1A1A1A' }}
+              className="text-[10px] font-bold whitespace-nowrap leading-none hidden sm:block tracking-wide"
+              style={{ color: '#B89555' }}
             >
               {triggerLabel}
             </span>
             <ChevronDown
               className={cn("w-3.5 h-3.5 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
-              style={{ color: '#1A1A1A' }}
+              style={{ color: '#B89555' }}
             />
           </button>
         </DropdownMenuTrigger>

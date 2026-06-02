@@ -494,17 +494,24 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         )}
         {/* Bottom content — heavy opaque black plate guarantees project-name
             legibility over any image (light, dark, busy, washed out). */}
-        <div className="absolute inset-x-0 bottom-0 h-[55%] z-10 bg-gradient-to-t from-black via-black/95 via-40% to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-[34%] z-10 bg-black/85 pointer-events-none" style={{ mixBlendMode: "normal" }} />
-        <div data-surface="dark" data-photo-copy-lock className="absolute bottom-0 left-0 right-0 p-3 z-20 flex min-h-[88px] flex-col justify-end gap-1" style={{ transform: "translateZ(25px)" }}>
+        <div className="absolute inset-x-0 bottom-0 h-[62%] z-10 bg-gradient-to-t from-black via-black/95 via-40% to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-[38%] z-10 bg-black/85 pointer-events-none" style={{ mixBlendMode: "normal" }} />
+        <div data-surface="dark" data-photo-copy-lock className="absolute bottom-0 left-0 right-0 px-3 pt-3 pb-3 z-20 flex min-h-[96px] flex-col justify-end gap-2" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
             <span
               data-surface="dark"
               data-no-contrast-guard
-              className="allow-white block truncate text-[10px] font-semibold uppercase tracking-[0.14em] leading-none"
-              style={{ color: "#E8C988", WebkitTextFillColor: "#E8C988", textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}
+              className="allow-white block truncate text-[10.5px] font-semibold uppercase tracking-[0.16em] leading-none mb-1"
+              style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}
             >
-              {item.type === "property" ? `by ${item.subtitle}` : item.subtitle}
+              {item.type === "property" ? (
+                <>
+                  <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>by </span>
+                  <span style={{ color: "#B89555", WebkitTextFillColor: "#B89555" }}>{item.subtitle}</span>
+                </>
+              ) : (
+                <span style={{ color: "#B89555", WebkitTextFillColor: "#B89555" }}>{item.subtitle}</span>
+              )}
             </span>
           )}
           <h3

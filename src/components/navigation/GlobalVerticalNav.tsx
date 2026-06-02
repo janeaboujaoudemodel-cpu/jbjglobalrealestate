@@ -1286,7 +1286,23 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           </div>
 
-          {/* Section icons — solid champagne body, no silver cast */}
+          {/* Section icons — unified gold tile, blue on hover */}
+          <style>{`
+            .jj-side-tile {
+              background-color: #FDFBF7 !important;
+              border: 1px solid #B89555 !important;
+              color: #B89555 !important;
+              transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease !important;
+            }
+            .jj-side-tile svg,
+            .jj-side-tile svg * { color: #B89555 !important; stroke: #B89555 !important; transition: color 180ms ease, stroke 180ms ease !important; }
+            .jj-side-tile:hover { background-color: #102540 !important; border-color: #102540 !important; box-shadow: 0 2px 6px rgba(16,37,64,.25) !important; }
+            .jj-side-tile:hover svg,
+            .jj-side-tile:hover svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; }
+            .jj-side-tile.is-active { background-color: #102540 !important; border-color: #102540 !important; }
+            .jj-side-tile.is-active svg,
+            .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; }
+          `}</style>
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
             {highlightItems.map((item, i) => {
               const Icon = item.icon;
@@ -1298,13 +1314,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       to={item.href}
                       onClick={collapseAfterNavigation}
                       data-no-contrast-guard
-                      className={`group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
-                        isActive
-                          ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/80 shadow-sm shadow-gold/15'
-                          : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70'
-                      }`}
+                      className={`jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <Icon className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" />
+                      <Icon className="w-3.5 h-3.5" />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{item.label}</TooltipContent>
@@ -1336,13 +1348,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         setOpenSection(sectionKey);
                         setActiveMegaMenu(null);
                       }}
-                      className={`group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
-                        isActive
-                          ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/80 shadow-sm shadow-gold/15'
-                          : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70'
-                      }`}
+                      className={`jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <SectionIcon className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" />
+                      <SectionIcon className="w-3.5 h-3.5" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
@@ -1362,9 +1370,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] hover:border-[#B89555] bg-[#F7F2EA] hover:bg-[#EFE6D6]"
+                    className="jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center"
                   >
-                    <Headphones className="w-3.5 h-3.5 text-[#B89555] group-hover:text-[#B89555]" strokeWidth={2} />
+                    <Headphones className="w-3.5 h-3.5" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1375,9 +1383,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] hover:border-[#B89555] bg-[#F7F2EA] hover:bg-[#EFE6D6]"
+                    className="jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center"
                   >
-                    <Ticket className="w-3.5 h-3.5 text-[#B89555] group-hover:text-[#B89555]" strokeWidth={2} />
+                    <Ticket className="w-3.5 h-3.5" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
@@ -1424,7 +1432,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-collapse-control group relative w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
+                    className="jbj-sidebar-collapse-control jj-side-tile group relative w-7 h-7 rounded-lg flex items-center justify-center"
                     aria-label="Expand navigation"
                   >
                     {/* Soft teaching pulse only — no extra visible border */}
@@ -1434,7 +1442,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         className="pointer-events-none absolute -inset-[4px] rounded-lg jbj-sidebar-teaching-pulse"
                       />
                     )}
-                    <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5 text-[#B91C1C]" strokeWidth={2} />
+                    <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={10} className="text-xs z-[10100]">
