@@ -10,6 +10,8 @@ interface BookCoverFaceProps {
   className?: string;
   /** When true, no frame/rounding assumptions; parent controls border/overflow. */
   bare?: boolean;
+  /** Homepage marquee variant — clean cover, title only (no number/wordmark/subtitle). */
+  compact?: boolean;
 }
 
 /** Stable deterministic number from title so each book keeps its color + tag. */
@@ -19,12 +21,7 @@ function stableSeed(input: string): number {
   return Math.abs(h);
 }
 
-export function BookCoverFace({ book, className, bare = false }: BookCoverFaceProps) {
-  const subtitle =
-    book.category === "faq" ? "Frequently Asked Questions" :
-    book.category === "report" ? "Market Intelligence" :
-    book.category === "education" ? "Education" : "Guide";
-
+export function BookCoverFace({ book, className, bare = false, compact = false }: BookCoverFaceProps) {
   const seed = stableSeed(book.title);
   const bookNumber = (seed % 99) + 1;
 
@@ -33,9 +30,9 @@ export function BookCoverFace({ book, className, bare = false }: BookCoverFacePr
       <PremiumBook3DStyles />
       <PremiumBook3D
         title={book.title}
-        subtitle={subtitle}
         bookNumber={bookNumber}
         paletteIndex={seed}
+        compact={compact}
       />
     </div>
   );
