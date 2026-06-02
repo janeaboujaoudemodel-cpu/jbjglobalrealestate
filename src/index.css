@@ -5552,7 +5552,12 @@ html[data-tool-fullscreen="true"] [data-tool-shell-root] {
   overflow: auto !important;
   border-radius: 0 !important;
 }
-html[data-tool-fullscreen="true"] [data-tool-shell-root] > div:first-child {
+html[data-tool-fullscreen="true"] [data-tool-frame] {
+  max-width: none !important;
+  width: 100% !important;
+  min-height: 100vh !important;
+}
+html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   border-radius: 0 !important;
   min-height: 100vh;
 }

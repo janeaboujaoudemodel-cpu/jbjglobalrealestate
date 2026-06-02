@@ -30,12 +30,14 @@ const Slider = React.forwardRef<
     >
       <SliderPrimitive.Track
         className="relative h-2 w-full grow overflow-hidden rounded-full cursor-pointer"
-        style={{ background: "#EFE6D6" }}
+        style={{ background: "var(--slider-track-bg, #EFE6D6)" }}
       >
         <SliderPrimitive.Range
           className="absolute h-full rounded-full"
           style={{
-            background: "linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%)",
+            background: "var(--slider-range-bg, linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%))",
+            backgroundSize: "var(--slider-range-bg-size, auto)",
+            animation: "var(--slider-range-animation, none)",
           }}
         />
       </SliderPrimitive.Track>
@@ -51,6 +53,10 @@ const Slider = React.forwardRef<
             "shadow-[0_2px_8px_rgba(184,149,85,0.45),0_0_0_2px_#B89555_inset]",
             "hover:scale-110 active:scale-95"
           )}
+          style={{
+            background: "var(--slider-thumb-bg, #FFFFFF)",
+            boxShadow: "var(--slider-thumb-shadow, 0 2px 8px rgba(184,149,85,0.45), 0 0 0 2px #B89555 inset)",
+          }}
         />
       ))}
     </SliderPrimitive.Root>

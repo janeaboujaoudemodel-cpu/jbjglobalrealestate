@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Shield, CheckCircle, Building2, Users, Calculator, Sparkles, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, Shield, CheckCircle, Building2, Users, Calculator, Sparkles, ArrowUpRight, Landmark } from "lucide-react";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { CONTACT_INFO } from "@/constants/stats";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
@@ -21,6 +20,8 @@ const advisorBenefits = [
   { icon: Building2,   title: "Property Matching",     body: "We help match your budget to high-potential property opportunities." },
   { icon: Users,       title: "End-to-End Service",    body: "From application to disbursement, we guide you every step." },
 ];
+
+const bankPartners = ["Emirates NBD", "Mashreq", "ADCB", "FAB", "HSBC", "Standard Chartered"];
 
 const MortgageCalculatorPage = () => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
@@ -123,7 +124,7 @@ const MortgageCalculatorPage = () => {
         </div>
 
         {/* Calculator body — dark glowing card */}
-        <div className="container mx-auto px-4 pb-16">
+        <div className="container mx-auto px-4 pt-8 md:pt-12 pb-16">
           <div className="max-w-5xl mx-auto">
             <div
               data-allow-dark-cta
@@ -137,33 +138,12 @@ const MortgageCalculatorPage = () => {
               }}
             >
               <div className="px-4 md:px-8 py-8 md:py-10" data-mortgage-dark>
-                <MortgageCalculator compact showHeading={false} showAssistant />
-              </div>
-              <div
-                className="px-4 md:px-8 pb-8 md:pb-10 flex justify-center"
-              >
-                <a
-                  href={CONTACT_INFO.inquiryFormUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-allow-dark-cta
-                  data-no-contrast-guard
-                  className="allow-white inline-flex items-center justify-center gap-2 w-full max-w-md h-14 text-base font-semibold rounded-xl transition-all hover:scale-[1.01]"
-                  style={{
-                    background: `linear-gradient(135deg, ${NAVY_GLOW} 0%, ${NAVY} 60%, ${NAVY_DARK} 100%)`,
-                    border: "1px solid rgba(147,197,253,0.55)",
-                    color: "#FFFFFF",
-                    boxShadow: "0 0 28px rgba(96,165,250,0.45)",
-                  }}
-                >
-                  Request Mortgage Partner Introduction
-                  <ArrowUpRight className="w-5 h-5 allow-white" />
-                </a>
+                <MortgageCalculator compact showHeading={false} showAssistant themeVariant="navy" />
               </div>
             </div>
           </div>
 
-          {/* Advisor benefits — dark glowing tiles */}
+          {/* Advisor benefits and bank partners — dark glowing tiles */}
           <div className="max-w-5xl mx-auto mt-12">
             <div className="text-center mb-8">
               <h2 className="allow-white text-2xl md:text-3xl font-bold" style={{ color: "#FFFFFF" }}>
@@ -202,6 +182,36 @@ const MortgageCalculatorPage = () => {
               ))}
             </div>
 
+            <div
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white mt-8 rounded-2xl p-5 md:p-6"
+              style={{
+                background: "linear-gradient(135deg, #123968 0%, #08152B 55%, #000 100%)",
+                border: "1px solid rgba(96,165,250,0.35)",
+                boxShadow: "inset 0 0 28px rgba(96,165,250,0.10)",
+              }}
+            >
+              <div className="flex flex-col md:flex-row md:items-center gap-5">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "rgba(96,165,250,0.16)", border: "1px solid rgba(147,197,253,0.45)" }}>
+                    <Landmark className="w-6 h-6 allow-white" style={{ color: NAVY_GLOW }} />
+                  </div>
+                  <div>
+                    <h3 className="allow-white font-bold text-lg" style={{ color: "#FFFFFF" }}>Bank Partner Network</h3>
+                    <p className="allow-white text-sm" style={{ color: "rgba(255,255,255,0.68)" }}>Introductions through licensed mortgage partners connected with leading UAE banks.</p>
+                  </div>
+                </div>
+                <div className="flex-1 flex flex-wrap gap-2 md:justify-end">
+                  {bankPartners.map((bank) => (
+                    <span key={bank} className="allow-white rounded-full px-3 py-1.5 text-xs font-semibold" style={{ color: "#DBEAFE", background: "rgba(96,165,250,0.13)", border: "1px solid rgba(147,197,253,0.32)" }}>
+                      {bank}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             <div className="text-center mt-10">
               <button
                 onClick={() => setIsInquiryOpen(true)}
@@ -215,7 +225,7 @@ const MortgageCalculatorPage = () => {
                   boxShadow: "0 0 32px rgba(96,165,250,0.5)",
                 }}
               >
-                {t('mortgage.contactAdvisor')}
+                Request Mortgage Partner Introduction
                 <ArrowUpRight className="w-5 h-5 allow-white" />
               </button>
 

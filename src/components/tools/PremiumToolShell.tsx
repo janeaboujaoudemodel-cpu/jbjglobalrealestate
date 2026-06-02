@@ -52,7 +52,7 @@ export const PremiumToolShell = ({
       className="min-h-screen w-full pt-6 md:pt-8 pb-12 px-3 sm:px-5"
       style={{ background: theme.pageWash }}
     >
-      <FullscreenToolToggle defaultOn />
+      <FullscreenToolToggle />
       <style>{`
         @keyframes jbj-tool-border-spin {
           to { transform: rotate(1turn); }
@@ -75,6 +75,7 @@ export const PremiumToolShell = ({
       `}</style>
 
       <div
+        data-tool-frame
         className="relative mx-auto jbj-tool-shell-border"
         style={
           {
@@ -213,7 +214,7 @@ export const ToolAnimatedFrame = ({
     className={`min-h-screen w-full pt-6 md:pt-8 pb-12 px-3 sm:px-5 ${className}`}
     style={{ background: theme.pageWash }}
   >
-    <FullscreenToolToggle defaultOn />
+    <FullscreenToolToggle />
     <style>{`
       @keyframes jbj-tool-border-spin { to { transform: rotate(1turn); } }
       .jbj-tool-frame-border::before {
@@ -233,6 +234,7 @@ export const ToolAnimatedFrame = ({
       }
     `}</style>
     <div
+      data-tool-frame
       className="relative mx-auto jbj-tool-frame-border"
       style={
         {
