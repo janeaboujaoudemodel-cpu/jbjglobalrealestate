@@ -733,6 +733,21 @@ const Compare = () => {
                   )}
                 </span>
               </button>
+              <button
+                onClick={() => setAiAddOpen(true)}
+                data-cta="champagne"
+                className="jj-cta-champagne inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl"
+              >
+                <Sparkles className="w-5 h-5" /> Add via link / PDF (AI fill)
+              </button>
+              <Link to="/compare-manual">
+                <button
+                  data-cta="outline"
+                  className="jj-cta-outline inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl"
+                >
+                  Compare manually
+                </button>
+              </Link>
               {aiAnalysis && (
                 <>
                   <button
