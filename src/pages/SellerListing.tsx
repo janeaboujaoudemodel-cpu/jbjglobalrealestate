@@ -627,7 +627,14 @@ Requirements:
                     boxShadow: "0 10px 28px -12px rgba(15,81,50,0.55)",
                   }}
                 >
-                  <Wand2 className="w-5 h-5 !text-white" style={{ color: "#FFFFFF" }} />
+                  <Wand2
+                    data-no-contrast-guard
+                    data-on-dark
+                    className="w-5 h-5 shrink-0 allow-white jj-icon-keep !text-white [&_*]:!text-white"
+                    color="#FFFFFF"
+                    stroke="#FFFFFF"
+                    style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
+                  />
                   <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Get Help with JBJ {party} Assistant</span>
                 </button>
               </div>
