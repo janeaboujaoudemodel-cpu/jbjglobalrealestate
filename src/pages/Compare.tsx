@@ -101,8 +101,9 @@ interface AIAnalysis {
 
 const Compare = () => {
   // --- Compare mode router (Projects vs Units) ---------------------------
-  // The Units mode is broker/owner-only. See useCompareAccess +
-  // mem://features/compare/unit-comparison-and-payment-plan-engine.
+  // Hooks must run unconditionally on every render. We do all routing-level
+  // hooks here, then delegate to a child component for each mode so each
+  // child can declare its own full set of hooks without violating Rules of Hooks.
   const [searchParams, setSearchParams] = useSearchParams();
   const compareMode: "projects" | "units" =
     searchParams.get("mode") === "units" ? "units" : "projects";
@@ -120,9 +121,16 @@ const Compare = () => {
   if (compareMode === "units") {
     return <UnitCompareShell onModeChange={setCompareMode} />;
   }
-  // -----------------------------------------------------------------------
+  return <ProjectsCompare onModeChange={setCompareMode} />;
+};
 
+interface ProjectsCompareProps {
+  onModeChange: (m: "projects" | "units") => void;
+}
+
+const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   const { user } = useAuth();
+
   const { isConsVisible } = useConsVisibility();
   const navigate = useNavigate();
   const { activeLead } = useActiveLead();
