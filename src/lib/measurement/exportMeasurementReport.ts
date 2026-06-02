@@ -191,4 +191,5 @@ export function exportMeasurementReport(data: MeasurementReportData) {
 
   const safe = (data.propertyName || "report").replace(/[^a-z0-9-_]+/gi, "-").toLowerCase();
   doc.save(`jbj-measurement-${safe}.pdf`);
+  return doc;
 }
