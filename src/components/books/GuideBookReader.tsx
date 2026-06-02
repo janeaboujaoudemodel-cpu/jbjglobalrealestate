@@ -180,13 +180,12 @@ export function GuideBookReader({
               )}
             </AnimatePresence>
 
-            <AnimatePresence mode="wait" initial={false} custom={dir}>
+            <AnimatePresence mode="wait" initial={false}>
               <motion.article
                 key={page}
-                custom={dir}
-                initial={(d: number) => ({ opacity: 0, rotateY: d > 0 ? 35 : -35, x: d > 0 ? 80 : -80 })}
+                initial={{ opacity: 0, rotateY: dir > 0 ? 35 : -35, x: dir > 0 ? 80 : -80 }}
                 animate={{ opacity: 1, rotateY: 0, x: 0 }}
-                exit={(d: number) => ({ opacity: 0, rotateY: d > 0 ? -25 : 25, x: d > 0 ? -60 : 60 })}
+                exit={{ opacity: 0, rotateY: dir > 0 ? -25 : 25, x: dir > 0 ? -60 : 60 }}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 style={{ transformStyle: "preserve-3d", transformOrigin: dir > 0 ? "left center" : "right center" }}
                 className="h-full overflow-y-auto px-6 sm:px-10 md:px-16 py-8 md:py-12"
