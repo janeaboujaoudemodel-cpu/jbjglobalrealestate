@@ -721,7 +721,7 @@ const UserProfile = () => {
                       <Button
                         variant="outline"
                         onClick={() => openAccountDialog('deactivate')}
-                        className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                        className="h-10 w-[160px] rounded-sm border-destructive/40 text-destructive hover:bg-destructive/10"
                       >
                         <Lock className="h-4 w-4 mr-2" />
                         Deactivate
@@ -736,7 +736,7 @@ const UserProfile = () => {
                       <Button
                         variant="outline"
                         onClick={() => openAccountDialog('delete')}
-                        className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                        className="h-10 w-[160px] rounded-sm border-destructive/40 text-destructive hover:bg-destructive/10"
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
                         Delete Account
@@ -753,7 +753,7 @@ const UserProfile = () => {
                       <Button 
                         variant="outline" 
                         onClick={handleSignOut}
-                        className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                        className="h-10 w-[160px] rounded-sm border-destructive/40 text-destructive hover:bg-destructive/10"
                       >
                         <LogOut className="h-4 w-4 mr-2" />
                         Sign Out
