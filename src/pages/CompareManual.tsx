@@ -458,6 +458,7 @@ const CompareManual = () => {
           </section>
         )}
       </div>
+      <AddProjectDialog open={aiOpen} onOpenChange={setAiOpen} onAdd={handleAiExtracted} />
     </div>
   );
 };
