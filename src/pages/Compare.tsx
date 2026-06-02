@@ -114,9 +114,10 @@ const Compare = () => {
   };
   const access = useCompareAccess();
 
+  if (access.isLoading) return null;
+  if (!access.allowed) return <CompareAccessGate />;
+
   if (compareMode === "units") {
-    if (access.isLoading) return null;
-    if (!access.allowed) return <CompareAccessGate />;
     return <UnitCompareShell onModeChange={setCompareMode} />;
   }
   // -----------------------------------------------------------------------
