@@ -27,6 +27,7 @@ import { useActiveLead } from "@/contexts/ActiveLeadContext";
 import { useConsVisibility } from "@/contexts/ConsVisibilityContext";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
+import AddProjectDialog, { type ExtractedProject } from "@/components/compare/AddProjectDialog";
 
 const INQUIRY_FORM_URL = "https://JBJ.AE/contact";
 const COMPARE_FREE_KEY = "jbj_compare_free_used";
@@ -99,6 +100,12 @@ const Compare = () => {
   const { getBadge } = useShortlistBadges();
   const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [aiAddOpen, setAiAddOpen] = useState(false);
+
+  const handleExtractedToManual = (e: ExtractedProject) => {
+    setAiAddOpen(false);
+    navigate("/compare-manual", { state: { prefill: e } });
+  };
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [showVipModal, setShowVipModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -598,29 +605,47 @@ const Compare = () => {
             </div>
 
             {/* CTA */}
-            <Link to="/properties">
-              <button 
-                className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
-                style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
-                  boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
-                }}
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <Link to="/properties">
+                <button 
+                  className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
+                    boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
+                  }}
+                >
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="relative flex items-center gap-2">
+                    <Building className="w-5 h-5 text-[#1A1A1A]" />
+                    <span className="text-[#1A1A1A]">Browse</span>
+                    <span className="text-[#1A1A1A]">Properties</span>
+                    <ArrowUpRight className="w-5 h-5 text-[#1A1A1A]" />
+                  </span>
+                </button>
+              </Link>
+              <button
+                onClick={() => setAiAddOpen(true)}
+                data-cta="champagne"
+                className="jj-cta-champagne inline-flex items-center justify-center gap-2 px-8 py-6 text-base font-bold rounded-xl"
               >
-                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                <span className="relative flex items-center gap-2">
-                  <Building className="w-5 h-5 text-[#1A1A1A]" />
-                  <span className="text-[#1A1A1A]">Browse</span>
-                  <span className="text-[#1A1A1A]">Properties</span>
-                  <ArrowUpRight className="w-5 h-5 text-[#1A1A1A]" />
-                </span>
+                <Sparkles className="w-5 h-5" /> Add via link / PDF (AI fill)
               </button>
-            </Link>
+              <Link to="/compare-manual">
+                <button
+                  data-cta="outline"
+                  className="jj-cta-outline inline-flex items-center justify-center gap-2 px-8 py-6 text-base font-bold rounded-xl"
+                >
+                  Compare manually
+                </button>
+              </Link>
+            </div>
             
             <p className="text-white/90 text-sm mt-6">
               Need help? Our team is available 24/7 to assist you.
             </p>
           </div>
         </div>
+        <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
       </section>
     );
   }
@@ -708,6 +733,21 @@ const Compare = () => {
                   )}
                 </span>
               </button>
+              <button
+                onClick={() => setAiAddOpen(true)}
+                data-cta="champagne"
+                className="jj-cta-champagne inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl"
+              >
+                <Sparkles className="w-5 h-5" /> Add via link / PDF (AI fill)
+              </button>
+              <Link to="/compare-manual">
+                <button
+                  data-cta="outline"
+                  className="jj-cta-outline inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl"
+                >
+                  Compare manually
+                </button>
+              </Link>
               {aiAnalysis && (
                 <>
                   <button
@@ -1205,6 +1245,7 @@ const Compare = () => {
       
       {/* Active Lead Banner for CRM linking */}
       <ActiveLeadBanner showAddToShortlist={false} />
+      <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
     </section>
     </ToolAnimatedFrame>
   );

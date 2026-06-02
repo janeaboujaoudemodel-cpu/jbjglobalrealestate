@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Plus, Trash2, Upload, Loader2, Sparkles, Download,
@@ -51,6 +51,7 @@ const blank = (): ManualProject => ({
 const CompareManual = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [projects, setProjects] = useState<ManualProject[]>([blank(), blank()]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [analysis, setAnalysis] = useState<any | null>(null);
@@ -87,6 +88,17 @@ const CompareManual = () => {
       return [...prev, filled];
     });
   };
+
+  useEffect(() => {
+    const prefill = (location.state as { prefill?: ExtractedProject } | null)?.prefill;
+    if (prefill) {
+      handleAiExtracted(prefill);
+      // clear state so refresh doesn't re-prefill
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   const update = (id: string, patch: Partial<ManualProject>) =>
     setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p)));
