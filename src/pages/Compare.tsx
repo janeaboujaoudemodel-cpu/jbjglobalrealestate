@@ -904,23 +904,13 @@ const Compare = () => {
               </div>
 
               {/* Market Context */}
-              {(aiAnalysis as any).marketContext && (
-                <MarketContextStrip context={(aiAnalysis as any).marketContext} />
+              {Array.isArray((aiAnalysis as any).marketContext) && (aiAnalysis as any).marketContext.length > 0 && (
+                <MarketContextStrip data={(aiAnalysis as any).marketContext} />
               )}
 
               {/* Risk Scores */}
               {Array.isArray((aiAnalysis as any).riskScores) && (aiAnalysis as any).riskScores.length > 0 && (
-                <div>
-                  <h2 className="text-white text-xl font-semibold mb-4 flex items-center gap-2">
-                    <AlertTriangle className="w-5 h-5 text-[#EC4899]" />
-                    Risk Score
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {(aiAnalysis as any).riskScores.map((r: any, i: number) => (
-                      <RiskScoreGauge key={i} projectName={r.projectName} score={r.score} band={r.band} drivers={r.drivers} />
-                    ))}
-                  </div>
-                </div>
+                <RiskScoreGauge data={(aiAnalysis as any).riskScores} />
               )}
 
               {/* Negotiation Leverage */}
