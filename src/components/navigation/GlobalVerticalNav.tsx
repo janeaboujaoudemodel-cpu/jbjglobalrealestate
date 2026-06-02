@@ -747,7 +747,7 @@ export default function GlobalVerticalNav() {
         sections[currentSection].push(item);
       }
     }
-    sections["TOOLS & WORKSPACE"] = PUBLIC_TOOLS_WORKSPACE_ITEMS;
+    sections["TOOLS & WORKSPACE"] = PUBLIC_TOOLS_WORKSPACE_ITEMS.filter(it => shouldShowItem(it, "TOOLS & WORKSPACE"));
     return { highlightItems: highlights, sectionGroups: sections };
   }, [shouldShowItem]);
 
