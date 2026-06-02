@@ -609,6 +609,7 @@ Requirements:
                 <button
                   type="button"
                   data-no-contrast-guard
+                   data-seller-assistant-cta
                   onClick={() => {
                     setShowAssistant(true);
                     setTimeout(() => {
@@ -628,6 +629,7 @@ Requirements:
                   }}
                 >
                   <Wand2
+                    data-assistant-magic-icon
                     data-no-contrast-guard
                     data-on-dark
                     className="w-5 h-5 shrink-0 allow-white jj-icon-keep !text-white !stroke-white [&_*]:!stroke-white"
