@@ -354,13 +354,22 @@ const CompareManual = () => {
         </div>
 
         <div className="mt-6 flex items-center justify-between flex-wrap gap-3">
-          <Button
-            variant="outline"
-            onClick={addProject}
-            className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"
-          >
-            <Plus className="w-4 h-4 mr-1.5" /> Add another project
-          </Button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Button
+              variant="outline"
+              onClick={addProject}
+              className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            >
+              <Plus className="w-4 h-4 mr-1.5" /> Add another project
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setAiOpen(true)}
+              className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            >
+              <Sparkles className="w-4 h-4 mr-1.5 text-[#B89555]" /> Add via link / PDF (AI fill)
+            </Button>
+          </div>
           <button
             onClick={generate}
             disabled={isGenerating}
