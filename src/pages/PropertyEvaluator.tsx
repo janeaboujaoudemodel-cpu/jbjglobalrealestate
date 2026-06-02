@@ -305,6 +305,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
       theme={toolThemes.amber}
       eyebrowIcon={Sparkles}
       eyebrow="AI-Powered Valuation"
+      darkBody
       title={
         <>
           Property <span style={{ textShadow: `0 0 24px ${toolThemes.amber.accent}` }}>Evaluator</span>
