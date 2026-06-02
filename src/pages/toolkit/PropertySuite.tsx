@@ -24,7 +24,7 @@ const LoadingSpinner = () => (
   </div>
 );
 
-const tabs = [
+const ALL_TABS = [
   { value: "finder", label: "AI Home Finder", shortLabel: "Finder", icon: Home, color: "#8B5CF6" },
   { value: "evaluator", label: "Evaluator", shortLabel: "Eval", icon: Calculator, color: "#3B82F6" },
   { value: "compare", label: "Compare", shortLabel: "Compare", icon: Layers, color: "#DC2626" },
@@ -33,7 +33,10 @@ const tabs = [
 ];
 
 export default function PropertySuite() {
-  const [activeTab, setActiveTab] = useState("finder");
+  // Compare is broker/owner-only — investor & developer modes never see it.
+  const { allowed: canCompare } = useCompareAccess();
+  const tabs = useMemo(() => ALL_TABS.filter(t => t.value !== "compare" || canCompare), [canCompare]);
+  const [activeTab, setActiveTab] = useState(tabs[0]?.value || "finder");
   const activeColor = tabs.find(t => t.value === activeTab)?.color || "#B8943E";
 
   return (
