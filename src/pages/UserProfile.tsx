@@ -505,7 +505,7 @@ const UserProfile = () => {
                       variant="outline" 
                       size="sm" 
                       onClick={handleRemovePhoto}
-                      className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                      className="h-10 rounded-sm border-destructive/40 text-destructive hover:bg-destructive/10"
                     >
                       <Trash2 className="h-4 w-4 mr-2" />
                       Remove Photo
