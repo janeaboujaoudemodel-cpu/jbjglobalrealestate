@@ -172,6 +172,109 @@ const MortgageCalculator = ({
     return isNaN(parsed) ? 0 : parsed;
   };
 
+  const projectLocation = selectedProject?.area_name || selectedProject?.location;
+
+  const projectSelector = isNavy ? (
+    <div className="relative mb-5 md:mb-6" data-allow-dark-cta data-no-contrast-guard>
+      <p className="allow-white text-xs font-semibold uppercase tracking-[0.18em] mb-2" style={{ color: "rgba(255,255,255,0.72)" }}>
+        Check payments by project
+      </p>
+      {selectedProject ? (
+        <div
+          className="allow-white flex items-center gap-3 rounded-2xl px-4 py-3"
+          style={{
+            background: "linear-gradient(135deg, rgba(30,78,140,0.52), rgba(8,21,43,0.92))",
+            border: "1px solid rgba(147,197,253,0.55)",
+            boxShadow: "0 0 24px rgba(96,165,250,0.18)",
+          }}
+        >
+          {selectedProject.developer?.logo_url ? (
+            <img src={selectedProject.developer.logo_url} alt="" className="w-10 h-10 rounded-xl object-contain bg-white/90 p-1" />
+          ) : (
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(96,165,250,0.18)" }}>
+              <Building2 className="w-5 h-5 allow-white" style={{ color: "#BFDBFE" }} />
+            </div>
+          )}
+          <div className="flex-1 min-w-0 text-left">
+            <p className="allow-white font-semibold truncate" style={{ color: "#FFFFFF" }}>{selectedProject.name}</p>
+            <p className="allow-white text-xs truncate" style={{ color: "rgba(255,255,255,0.68)" }}>
+              {selectedProject.developer?.name || selectedProject.developer_name || "Developer"}{projectLocation ? ` · ${projectLocation}` : ""} · {formatCurrencyAbbreviated(Number(selectedProject.price_from || propertyPrice))}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSelectedProject(null)}
+            className="allow-white p-2 rounded-full transition-colors hover:bg-white/10"
+            style={{ color: "#FFFFFF" }}
+            aria-label="Change selected project"
+          >
+            <X className="w-4 h-4 allow-white" />
+          </button>
+        </div>
+      ) : (
+        <>
+          <div
+            className="allow-white flex items-center gap-3 rounded-2xl px-4 py-3"
+            style={{
+              background: "linear-gradient(135deg, rgba(30,78,140,0.45), rgba(8,21,43,0.9))",
+              border: "1px solid rgba(147,197,253,0.45)",
+              boxShadow: "inset 0 0 22px rgba(96,165,250,0.10)",
+            }}
+          >
+            <Search className="w-5 h-5 allow-white" style={{ color: "#BFDBFE" }} />
+            <input
+              value={projectQuery}
+              onChange={(e) => { setProjectQuery(e.target.value); setProjectSearchOpen(true); }}
+              onFocus={() => setProjectSearchOpen(true)}
+              placeholder="Search by project or developer name"
+              data-no-contrast-guard
+              className="allow-white flex-1 bg-transparent outline-none text-sm placeholder:!text-white/65"
+              style={{ color: "#FFFFFF" }}
+            />
+            {projectsLoading && <Loader2 className="w-4 h-4 animate-spin allow-white" style={{ color: "#BFDBFE" }} />}
+          </div>
+          {projectSearchOpen && (
+            <div
+              className="absolute z-30 mt-2 w-full rounded-2xl overflow-hidden"
+              style={{
+                background: "rgba(4,13,28,0.98)",
+                border: "1px solid rgba(147,197,253,0.35)",
+                boxShadow: "0 20px 50px rgba(0,0,0,0.45), 0 0 24px rgba(96,165,250,0.20)",
+              }}
+            >
+              {!projectsLoading && projectResults.length === 0 && (
+                <div className="allow-white p-4 text-sm" style={{ color: "rgba(255,255,255,0.62)" }}>No projects found.</div>
+              )}
+              {projectResults.map((project) => (
+                <button
+                  key={project.id}
+                  type="button"
+                  onClick={() => handleProjectSelect(project)}
+                  className="allow-white w-full flex items-center gap-3 p-3 text-left transition-colors hover:bg-white/10"
+                  data-no-contrast-guard
+                >
+                  {project.developer?.logo_url ? (
+                    <img src={project.developer.logo_url} alt="" className="w-9 h-9 rounded-lg object-contain bg-white/90 p-1" />
+                  ) : (
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "rgba(96,165,250,0.16)" }}>
+                      <Building2 className="w-4 h-4 allow-white" style={{ color: "#BFDBFE" }} />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="allow-white text-sm font-medium truncate" style={{ color: "#FFFFFF" }}>{project.name}</p>
+                    <p className="allow-white text-xs truncate" style={{ color: "rgba(255,255,255,0.62)" }}>
+                      {project.developer?.name || project.developer_name || "Developer"}{project.area_name || project.location ? ` · ${project.area_name || project.location}` : ""} · {formatCurrencyAbbreviated(Number(project.price_from || 0))}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  ) : null;
+
   if (compact) {
     return (
       <div className="max-w-5xl mx-auto">
