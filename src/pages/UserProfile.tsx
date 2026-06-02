@@ -505,7 +505,7 @@ const UserProfile = () => {
                       variant="outline" 
                       size="sm" 
                       onClick={handleRemovePhoto}
-                      className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                      className="h-10 rounded-sm border-destructive/40 text-destructive hover:bg-destructive/10"
                     >
                       <Trash2 className="h-4 w-4 mr-2" />
                       Remove Photo
@@ -571,7 +571,7 @@ const UserProfile = () => {
                           variant="outline" 
                           size="sm"
                           onClick={() => setShowEmailChangeDialog(true)}
-                          className="shrink-0 border-[#B89555]/50 hover:border-[#B89555]"
+                          className="shrink-0 h-10 rounded-sm border-[#B89555]/50 hover:border-[#B89555]"
                         >
                           <Pencil className="h-3 w-3 mr-1" />
                           Change
@@ -596,7 +596,7 @@ const UserProfile = () => {
                   <Separator />
 
                   <div className="flex justify-end">
-                    <Button onClick={handleSaveProfile} disabled={saving} variant="primary">
+                    <Button onClick={handleSaveProfile} disabled={saving} variant="primary" className="h-10 rounded-sm">
                       {saving ? (
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                       ) : (
@@ -655,6 +655,7 @@ const UserProfile = () => {
                       onClick={handleChangePassword} 
                       disabled={changingPassword || !newPassword || !confirmPassword}
                       variant="primary"
+                      className="h-10 rounded-sm"
                     >
                       {changingPassword ? (
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
