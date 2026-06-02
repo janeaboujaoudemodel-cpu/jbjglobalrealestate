@@ -249,7 +249,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
             <p className="text-foreground font-medium mb-1">Content Locked</p>
             <p className="text-muted-foreground text-xs mb-3">Join the JBJ Broker Circle to access all training modules.</p>
             <Button size="sm" variant="secondary" className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]" asChild>
-              <Link to="/join">
+              <Link to="/careers">
                 <ArrowRight className="w-3 h-3 mr-2" />
                 Apply to Join
               </Link>

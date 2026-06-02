@@ -13,7 +13,7 @@ export default function CareersPortalShowcase() {
       title="Build Your Career at JBJ"
       description="Join an AI-powered brokerage ecosystem trusted by elite consultants, institutional developers, and global investors — apply in minutes."
       cta="Discover Features"
-      href="/join"
+      href="/careers"
       helper="Powered by Jessica, your executive assistant — applications reviewed within 48 hours."
       features={[
         { label: "Executive Hiring", icon: Briefcase },

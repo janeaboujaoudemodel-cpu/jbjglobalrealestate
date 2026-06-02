@@ -62,7 +62,7 @@ export function BrokerToolkitReferral() {
                   <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30 mb-3 w-fit">For Job Seekers</Badge>
                   <h3 className="text-[#1A1A1A] text-xl font-bold mb-2">JBJ Employment Hub</h3>
                   <p className="text-[#1A1A1A]/70 mb-4 flex-1">Join our team as a licensed broker. We provide training, tools, leads, and support to help you succeed.</p>
-                  <Link to="/join" className="inline-flex items-center gap-2 text-[#1A1A1A] font-semibold hover:gap-3 transition-all mt-auto">
+                  <Link to="/careers" className="inline-flex items-center gap-2 text-[#1A1A1A] font-semibold hover:gap-3 transition-all mt-auto">
                     Apply Now <ArrowRight className="w-4 h-4" />
                   </Link>
                 </CardContent>

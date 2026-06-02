@@ -206,7 +206,7 @@ const BrokerEducation = () => {
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
                     <Button variant="primary" size="sm" asChild>
-                      <Link to="/join">
+                      <Link to="/careers">
                         <ArrowRight className="w-4 h-4 mr-2" />
                         {user ? 'Apply Now' : 'Register & Apply'}
                       </Link>
@@ -574,7 +574,7 @@ const BrokerEducation = () => {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button variant="primary" size="lg" asChild>
-                <Link to="/join">
+                <Link to="/careers">
                   <ArrowRight className="w-5 h-5 mr-2" />
                   Apply to Join JBJ
                 </Link>
