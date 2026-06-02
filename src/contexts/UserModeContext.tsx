@@ -162,15 +162,19 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
         }
 
         // Auto-register the user as a categorized CRM lead.
-        try {
-          if (assertExplicitWrite('register-mode-lead')) {
-            await supabase.functions.invoke('register-mode-lead', {
-              body: { mode: newMode },
-            });
+        // Skip for 'owner' — it's a front-end perspective toggle, not a lead category.
+        if (newMode !== 'owner') {
+          try {
+            if (assertExplicitWrite('register-mode-lead')) {
+              await supabase.functions.invoke('register-mode-lead', {
+                body: { mode: newMode },
+              });
+            }
+          } catch (err) {
+            console.warn('[UserMode] register-mode-lead failed (non-fatal):', err);
           }
-        } catch (err) {
-          console.warn('[UserMode] register-mode-lead failed (non-fatal):', err);
         }
+
 
         // Source tracking — labels every pick as "Mode Picker (Header)".
         try {
