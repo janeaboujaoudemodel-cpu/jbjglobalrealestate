@@ -2141,6 +2141,64 @@ All colors MUST be HSL.
 
 /* Global form placeholder styling */
 @layer utilities {
+  /* JBJ Neon Frame — animated conic gradient border + floating bubbles.
+     Use on a relatively-positioned container; child should sit above ::before via z-index. */
+  .jbj-neon-frame {
+    position: relative;
+    isolation: isolate;
+    border-radius: 1.25rem;
+  }
+  .jbj-neon-frame::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    padding: 2px;
+    background: conic-gradient(
+      from 0deg,
+      #22D3EE,
+      #A78BFA,
+      #EC4899,
+      #22D3EE,
+      #A78BFA,
+      #EC4899,
+      #22D3EE
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    animation: jbjNeonSpin 8s linear infinite;
+    filter: drop-shadow(0 0 18px rgba(34, 211, 238, 0.35))
+            drop-shadow(0 0 28px rgba(236, 72, 153, 0.25));
+    pointer-events: none;
+    z-index: 0;
+  }
+  .jbj-neon-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image:
+      radial-gradient(8px 8px at 12% 18%, rgba(34,211,238,0.55), transparent 70%),
+      radial-gradient(10px 10px at 88% 26%, rgba(236,72,153,0.45), transparent 70%),
+      radial-gradient(6px 6px at 22% 78%, rgba(167,139,250,0.55), transparent 70%),
+      radial-gradient(12px 12px at 75% 82%, rgba(34,211,238,0.4), transparent 70%),
+      radial-gradient(9px 9px at 50% 50%, rgba(236,72,153,0.3), transparent 70%);
+    animation: jbjNeonBubbles 9s ease-in-out infinite;
+    z-index: 0;
+    opacity: 0.85;
+  }
+  .jbj-neon-frame > * { position: relative; z-index: 1; }
+  @keyframes jbjNeonSpin { to { transform: rotate(360deg); } }
+  @keyframes jbjNeonBubbles {
+    0%, 100% { transform: translate3d(0,0,0); opacity: 0.85; }
+    50%      { transform: translate3d(0,-6px,0); opacity: 1; }
+  }
+
+
   .placeholder-gold::placeholder {
     color: hsl(0 0% 40%);
     opacity: 0.9;

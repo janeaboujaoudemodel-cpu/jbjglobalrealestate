@@ -316,7 +316,12 @@ jbj.ae
 
   return (
     <ToolAnimatedFrame theme={toolThemes.teal}>
-    <section className="relative w-full min-h-screen bg-[#1A1A1A]">
+    <section
+      data-allow-dark-cta
+      data-no-contrast-guard
+      data-on-dark
+      className="allow-white relative w-full min-h-screen bg-[#0A0F0C]"
+    >
       {/* Animated emerald border keyframes (page-local) */}
       <style>{`
         @keyframes jbjEmeraldFlow {
@@ -348,16 +353,16 @@ jbj.ae
               FREE AI Tool
             </span>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            <h1 className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6" style={{ color: "rgba(255,255,255,0.96)" }}>
               Property{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-300 to-emerald-500">
                 Measurement
               </span>
             </h1>
 
-            <p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-8">
+            <p className="allow-white text-lg md:text-xl max-w-2xl mx-auto mb-8" style={{ color: "rgba(255,255,255,0.82)" }}>
               Verify your property size with AI precision. Upload photos room by room — 
-              get accurate measurements in seconds. <span className="text-emerald-300 font-semibold">100% Free.</span>
+              get accurate measurements in seconds. <span className="font-semibold" style={{ color: "#6EE7B7" }}>100% Free.</span>
             </p>
 
             {/* Why Use This Tool */}
@@ -367,10 +372,19 @@ jbj.ae
                 { Icon: AlertCircle,  title: "Check Rental Sizes",      body: "Verify apartment sizes before signing a rental agreement" },
                 { Icon: Sparkles,     title: "Secondary Market Check",  body: "Verify size claims before viewing a resale property" },
               ].map(({ Icon, title, body }) => (
-                <div key={title} className="bg-gradient-to-br from-emerald-950/80 via-black/70 to-emerald-900/60 border border-emerald-500/30 rounded-xl p-4">
-                  <Icon className="w-8 h-8 text-emerald-300 mx-auto mb-2" />
-                  <p className="text-white font-medium">{title}</p>
-                  <p className="text-white/75 text-sm">{body}</p>
+                <div
+                  key={title}
+                  data-allow-dark-cta
+                  data-no-contrast-guard
+                  className="allow-white rounded-xl p-4"
+                  style={{
+                    background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000 100%)",
+                    border: "1px solid rgba(16,185,129,0.32)",
+                  }}
+                >
+                  <Icon className="w-8 h-8 mx-auto mb-2" style={{ color: "#6EE7B7" }} />
+                  <p className="font-medium" style={{ color: "rgba(255,255,255,0.94)" }}>{title}</p>
+                  <p className="text-sm" style={{ color: "rgba(255,255,255,0.75)" }}>{body}</p>
                 </div>
               ))}
             </div>
@@ -407,32 +421,58 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <div className="jbj-emerald-ring rounded-2xl">
-              <Card className="!border-0 rounded-2xl bg-gradient-to-br from-emerald-950 via-black to-emerald-900/70 overflow-hidden">
+            <div className="jbj-emerald-ring rounded-2xl" data-allow-dark-cta data-no-contrast-guard>
+              <Card
+                data-allow-dark-cta
+                data-no-contrast-guard
+                className="allow-white !border-0 rounded-2xl overflow-hidden"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #064E3B 0%, #052e1d 35%, #000000 100%)",
+                }}
+              >
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <Building2 className="w-5 h-5 text-emerald-300" />
-                    Step 1: Property Information
+                  <CardTitle className="flex items-center gap-2" style={{ color: "rgba(255,255,255,0.95)" }}>
+                    <Building2 className="w-5 h-5" style={{ color: "#6EE7B7" }} />
+                    <span style={{ color: "rgba(255,255,255,0.95)" }}>Step 1: Property Information</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <Label className="text-white mb-3 block">Property Type</Label>
+                    <Label className="mb-3 block" style={{ color: "rgba(255,255,255,0.88)" }}>Property Type</Label>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                       {propertyTypes.map((type) => {
                         const active = propertyType === type.id;
                         return (
                           <button
                             key={type.id}
+                            type="button"
+                            data-allow-dark-cta
+                            data-no-contrast-guard
                             onClick={() => setPropertyType(type.id as PropertyType)}
-                            className={`relative p-4 rounded-xl transition-all text-left ${
-                              active
-                                ? "jbj-emerald-edge bg-gradient-to-br from-emerald-900/80 via-black to-emerald-950 text-emerald-200"
-                                : "border border-emerald-500/25 bg-black/40 text-white/80 hover:border-emerald-400/60 hover:bg-emerald-950/40"
-                            }`}
+                            className="allow-white relative p-4 rounded-xl text-left transition-all duration-300"
+                            style={{
+                              background: active
+                                ? "linear-gradient(135deg, #10B981 0%, #047857 45%, #000000 100%)"
+                                : "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)",
+                              border: active
+                                ? "1px solid rgba(110,231,183,0.65)"
+                                : "1px solid rgba(16,185,129,0.28)",
+                              boxShadow: active
+                                ? "0 0 0 1px rgba(110,231,183,0.35), 0 8px 28px rgba(16,185,129,0.28), inset 0 0 24px rgba(16,185,129,0.18)"
+                                : "inset 0 0 0 1px rgba(255,255,255,0.04)",
+                            }}
                           >
-                            <type.icon className={`w-6 h-6 mx-auto mb-2 ${active ? "text-emerald-300" : "text-white/80"}`} />
-                            <p className={`text-sm font-medium text-center ${active ? "text-emerald-200" : "text-white/90"}`}>{type.label}</p>
+                            <type.icon
+                              className="w-6 h-6 mx-auto mb-2"
+                              style={{ color: active ? "#A7F3D0" : "rgba(255,255,255,0.85)" }}
+                            />
+                            <p
+                              className="text-sm font-medium text-center"
+                              style={{ color: active ? "#D1FAE5" : "rgba(255,255,255,0.92)" }}
+                            >
+                              {type.label}
+                            </p>
                           </button>
                         );
                       })}
@@ -440,18 +480,25 @@ jbj.ae
                   </div>
 
                   <div>
-                    <Label htmlFor="propertyName" className="text-white">Property Name (Optional)</Label>
+                    <Label htmlFor="propertyName" style={{ color: "rgba(255,255,255,0.88)" }}>Property Name (Optional)</Label>
                     <Input
                       id="propertyName"
                       value={propertyName}
                       onChange={(e) => setPropertyName(e.target.value)}
                       placeholder="e.g., My Dubai Marina Apartment"
-                      className="bg-black/40 border-emerald-500/30 text-white placeholder:text-white/40 mt-2 focus-visible:ring-emerald-400"
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                      className="allow-white mt-2 focus-visible:ring-emerald-400"
+                      style={{
+                        background: "linear-gradient(135deg, rgba(4,40,28,0.6), rgba(0,0,0,0.6))",
+                        border: "1px solid rgba(16,185,129,0.3)",
+                        color: "rgba(255,255,255,0.95)",
+                      }}
                     />
                   </div>
 
                   <div>
-                    <Label className="text-white mb-3 block">Unit Preference</Label>
+                    <Label className="mb-3 block" style={{ color: "rgba(255,255,255,0.88)" }}>Unit Preference</Label>
                     <div className="flex gap-3 flex-wrap">
                       {[
                         { id: "sqft", label: "Square Feet" },
@@ -462,12 +509,21 @@ jbj.ae
                         return (
                           <button
                             key={unit.id}
+                            type="button"
+                            data-allow-dark-cta
+                            data-no-contrast-guard
                             onClick={() => setUnitPreference(unit.id as UnitType)}
-                            className={`px-4 py-2 rounded-lg transition-all text-sm font-medium ${
-                              active
-                                ? "jbj-emerald-edge bg-gradient-to-r from-emerald-700 via-emerald-800 to-black text-emerald-100"
-                                : "border border-emerald-500/25 bg-black/40 text-white/80 hover:border-emerald-400/60 hover:bg-emerald-950/40"
-                            }`}
+                            className="allow-white px-4 py-2 rounded-lg text-sm font-semibold transition-all"
+                            style={{
+                              background: active
+                                ? "linear-gradient(135deg, #10B981 0%, #047857 55%, #000000 100%)"
+                                : "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)",
+                              border: active
+                                ? "1px solid rgba(110,231,183,0.65)"
+                                : "1px solid rgba(16,185,129,0.28)",
+                              color: active ? "#ECFDF5" : "rgba(255,255,255,0.85)",
+                              boxShadow: active ? "0 0 18px rgba(16,185,129,0.35)" : "none",
+                            }}
                           >
                             {unit.label}
                           </button>
@@ -476,10 +532,19 @@ jbj.ae
                     </div>
                   </div>
 
-                  <Button 
+                  <Button
                     onClick={() => setStep(2)}
                     disabled={!propertyType}
-                    className="w-full bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-700 hover:from-emerald-400 hover:via-emerald-500 hover:to-teal-600 text-white py-6 shadow-[0_0_24px_rgba(16,185,129,0.35)]"
+                    data-allow-dark-cta
+                    data-no-contrast-guard
+                    className="allow-white w-full py-6"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%)",
+                      color: "rgba(255,255,255,0.96)",
+                      boxShadow: "0 0 28px rgba(16,185,129,0.45)",
+                      border: "1px solid rgba(110,231,183,0.45)",
+                    }}
                   >
                     Continue
                     <ArrowRight className="w-4 h-4 ml-2" />

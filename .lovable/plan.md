@@ -1,123 +1,89 @@
-## Plan
 
-### 1) Fix access and sidebar visibility immediately
-- Hide **Property Comparison** everywhere unless the current mode is **Broker** or the real app owner.
-- Apply this to:
-  - Vertical sidebar `TOOLS & WORKSPACE`
-  - Mega-menu tool links
-  - AI Hub / Royal Tools entry if present
-  - Property Suite tab
-- If a developer/investor directly opens `/compare`, show the broker-only gate instead of the comparison UI.
+## Scope
 
-### 2) Stop the Compare Units reload feeling
-- Keep `/compare` mounted and make **Compare Projects / Compare Units** a local section switch.
-- Still update `?mode=units` for shareability, but use `replace` and preserve the page shell so it does not feel like a new page reload.
-- Remove the separate/manual redirect dependency and keep manual entry inside the compare workspace.
+Large multi-area pass. Grouped into 5 workstreams. Will ship as one batch, validate visually in preview, then E2E-test the four tools.
 
-### 3) Upgrade Compare Projects selection
-- Add a real project picker at the top of Compare Projects:
-  - Search website projects by keyword.
-  - Multi-select projects from the portal.
-  - Keep current shortlist support, but do not depend only on favorites/shortlist.
-  - Allow manual entry and AI-filled entry to appear live in the same comparison table.
-- Remove the “Sample data — not your shortlist” label from the preview.
+---
 
-### 4) Upgrade Compare Units into a full card/table workflow
-- Replace the current “only search a project” empty state with a full premium comparison card.
-- Flow:
-  1. Select **one project/developer**.
-  2. Add/select multiple units: 1BR, 2BR, 3BR, etc.
-  3. Show a live table immediately as units are added or edited.
-- Unit table will use the same organized comparison-table language as Compare Projects, but columns are **units**, not project/developer columns.
-- Include unit metrics: bedroom type, unit label/number, size, price, price/sqft, view, floor, payment plan, down payment, monthly installment, handover payment, post-handover total, and notes.
+### 1. Property Measurement — rebuild + readability + green/black/white ombré
 
-### 5) Make tables clearer and better organized
-- Rebuild the visual table structure into grouped sections with distinct styling:
-  - Project identity
-  - Developer profile
-  - Location/views
-  - Price and unit economics
-  - Payment plan
-  - AI analysis/recommendation
-  - Materials link
-- Add the extra project metrics requested:
-  - Location
-  - Views
-  - Project name
-  - Developer name
-  - Developer description
-  - Founded date/year
-  - Founder/CEO
-  - Delivered projects
-  - Years in market
-  - Project/developer summary
-  - AI recommendation and analysis
+**Page:** `/property-measurement` (`src/pages/toolkit/...` — locate exact file).
 
-### 6) Add client/broker/company branded export
-- Add an **Export PDF** button visible in both Compare Projects and Compare Units.
-- Before download, open an export details panel/dialog:
-  - Client name
-  - Client email/phone optional
-  - Greeting/welcome note
-  - Broker/brokerage name
-  - Broker phone/email
-  - Broker logo upload or saved logo
-- Owner export is locked to **JBJ GLOBAL REAL ESTATE** with company logo and official company details.
-- Broker export uses saved broker/brokerage details.
-- Generate a PDF matching the preview colors and table layout, not the old HTML download.
-- Include: company header, broker details, client details, greeting, comparison table, AI verdict, materials links, disclaimer.
+- **Contrast fix:** every section currently renders dark-on-dark (hero subtitle, step indicator labels, "Step 1: Property Information", "Property Type", "Property Name", "Unit Preference"). Force ombré-white (`rgba(255,255,255,0.92)` headings, `rgba(255,255,255,0.72)` body) on the dark hero/form surface. No pure `#FFF`.
+- **Property-type cards** (Apartment / Villa / Office / Land / Retail): kill the navy `#1e3a8a` fill. Replace with the same `emerald → black` ombré used by the active "Both" pill and the "Continue" button (`linear-gradient(135deg,#10B981 0%, #064E3B 55%, #000 100%)`), 1px emerald hairline, ombré-white label + icon. Selected state = brighter emerald ring + inner glow.
+- **Unit Preference** pills (Sq Feet / Sq Meters / Both): same ombré-white text rule; active stays emerald.
+- **Rebuild flow E2E:**
+  1. Step 1 property info
+  2. Step 2 upload photos **or video** (drag-drop, multi-file, preview thumbs)
+  3. Step 3 AI analysis (calls edge function)
+  4. Step 4 per-room measurements table (sq ft + sq m toggle, both option)
+  5. Step 5 downloadable PDF report with photo thumbnails + measurements + totals
+- **Edge function:** `property-measurement-analyze` — accepts image/video URLs, returns `{ rooms: [{name, sqft, sqm, confidence, imageUrl}], totalSqft, totalSqm }`. Redeploy.
+- **Unit selector** (sq ft / sq m / both) drives report rendering.
+- **PDF export:** branded JBJ letterhead via existing `exportUnitComparisonPdf` pattern → new `exportMeasurementReport.ts`.
 
-### 7) Broker paid export gate
-- Owner can export directly.
-- Brokers must pass the paid-download gate before PDF export.
-- The UI will collect broker details, then trigger the existing payment/membership path before allowing final download.
+### 2. Horizontal header — gold icons
 
-### 8) Owner-only promoted AI verdict / focus project
-- Add owner-only controls:
-  - Select “Focus project” or “Top recommendation”.
-  - Highlight that project in the table.
-  - AI verdict prioritizes that selected project while still presenting comparison data.
-- Brokers can generate neutral comparisons only; no manipulation/focus control.
+`src/components/navigation/HorizontalUtilityBar.tsx`:
+- Search icon, Filter icon, Heart icon → `#B89555` stroke.
+- AED chevron + Mode chevron → `#B89555`.
+- Hover stays current (ink/navy).
 
-### 9) Manual + AI fill stays live and editable
-- Bring manual comparison into the same page/card instead of a separate route.
-- Every input update immediately updates the preview table.
-- AI-fill from link/PDF populates editable rows/cards.
-- Allow editing any field before saving/exporting.
+### 3. Mortgage Calculator — neon premium restyle
 
-### 10) Owner-only website enrichment from comparison data
-- Add an owner-only “Enrich published project” workflow:
-  - When a typed/selected project matches an existing website project, show “Project found” preview.
-  - Compare filled fields against published fields.
-  - Show only fields that can be updated from the provided data.
-  - Owner approves field-by-field changes before applying.
-  - Update only provided fields; never delete brochures, floor plans, media, unit details, or unrelated data.
-  - Link to the published project after update.
-- If there is a conflict, ask owner to choose:
-  - Use published value in the comparison, or
-  - Replace published value with the comparison value.
+Locate `MortgageCalculator` page. Add:
+- Animated gradient border (cyan `#22D3EE` → magenta `#EC4899` → violet `#A78BFA` conic, slow rotate).
+- Soft floating bubble particles (CSS keyframes, 6–8 blurred circles).
+- Glow drop-shadow on the main card.
+- Inputs: dark glass surface, ombré-white labels, neon focus ring.
+- Result tiles: neon gradient text for the monthly payment.
+- Fix all contrast (currently same dark-on-dark issue likely).
 
-### 11) Materials link per project/unit
-- For each compared project/unit, allow attaching brochures, floor plans, payment plans, and documents.
-- Generate a materials link shown in the comparison table.
-- The link page allows individual downloads and “download all”.
+### 4. News & Insights + Market Intelligence — neon news-magazine style
 
-### 12) Validation
-- Visual-check `/compare` in Developer mode: comparison hidden from sidebar and gated on direct URL.
-- Visual-check Broker/Owner mode: comparison visible and usable.
-- Test Compare Projects:
-  - Search/select multiple projects.
-  - Manual edit updates table live.
-  - AI fill updates table live.
-  - Export PDF downloads.
-- Test Compare Units:
-  - Select one project.
-  - Add 1BR/2BR/3BR.
-  - Payment plan table updates live.
-  - Export PDF downloads.
-- Test PDF output visually against the preview colors/layout.
+- **News & Insights** (`/news` or similar): magazine grid, neon accent rules between cards, large editorial typography, animated underline on hover, featured story hero with glow.
+- **Market Intelligence** (`/market-intelligence`): neon dashboard — animated chart gridlines, glowing KPI tiles, ombré-white body copy, dark glass cards with cyan/magenta accent.
+- Both: fix all low-contrast text to ombré-white, validate visually.
 
-## Technical notes
-- Main files to update: `GlobalVerticalNav.tsx`, `Compare.tsx`, `UnitCompareShell.tsx`, `UnitComparisonTable.tsx`, project picker components, manual entry components, and PDF export utilities.
-- New shared compare model will normalize selected website projects, manual projects, and AI-filled projects into one editable structure.
-- Owner-only enrichment will use protected backend logic and audit logging; brokers will not be able to update published listings.
+### 5. E2E test pass (browser tools)
+
+Log in as broker and as investor where applicable, then walk through:
+- **Property Measurement** — upload sample photo, run AI, download report.
+- **Rental Index** — search a community, verify chart loads, numbers render.
+- **Property Evaluator** — submit a property, verify AI valuation output.
+- **Property Comparison** (`/compare` units mode) — add 2 units, fill plan, export PDF.
+- **List Your Property** — full submission flow to draft.
+
+For each: capture screenshot, log every broken step, fix root cause, re-test.
+
+---
+
+### Technical notes
+
+- New file: `src/lib/measurement/exportMeasurementReport.ts` (jsPDF + autotable, JBJ branding).
+- New edge function or update existing: `supabase/functions/property-measurement-analyze/index.ts` using `google/gemini-2.5-pro` (vision) via Lovable AI Gateway. No API key needed.
+- New CSS utility class `.jbj-ombre-emerald` in `index.css` for the green/black/white ombré card fill (re-usable).
+- New CSS utility `.jbj-neon-frame` for animated neon border + bubbles.
+- Header icon color via Tailwind `text-[#B89555]` override on the existing lucide icons.
+
+### Files to touch (approx.)
+
+- `src/pages/toolkit/PropertyMeasurement*.tsx` (rebuild)
+- `src/pages/toolkit/MortgageCalculator*.tsx` (restyle)
+- `src/pages/NewsInsights*.tsx`, `src/pages/MarketIntelligence*.tsx`
+- `src/components/navigation/HorizontalUtilityBar.tsx`
+- `src/index.css` (two new utility classes)
+- `supabase/functions/property-measurement-analyze/index.ts`
+- `src/lib/measurement/exportMeasurementReport.ts` (new)
+
+### Out of scope (will NOT touch)
+
+- Compare tool wiring (already shipped last turn).
+- Vertical sidebar (already gold per memory).
+- Mode/role logic.
+
+### Validation
+
+- Browser tool visual check on each page after styling.
+- E2E walkthrough on the 4 named tools with screenshots + bug list per tool.
+- No claim of "done" until all five flows return a usable artifact (report / PDF / valuation / comparison).
