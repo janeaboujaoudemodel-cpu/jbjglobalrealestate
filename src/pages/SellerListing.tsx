@@ -890,7 +890,9 @@ Requirements:
                             <SelectItem value="3">3 BR</SelectItem>
                             <SelectItem value="4">4 BR</SelectItem>
                             <SelectItem value="5">5 BR</SelectItem>
-                            <SelectItem value="6">6+ BR</SelectItem>
+                            <SelectItem value="6">6 BR</SelectItem>
+                            <SelectItem value="7">7+ BR</SelectItem>
+
                           </SelectContent>
                         </Select>
                       </div>
