@@ -82,23 +82,78 @@ export function exportUnitComparisonPdf(opts: ExportOpts): void {
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
 
+  // ===== COVER PAGE =====
+  doc.setFillColor(BRAND.blue);
+  doc.rect(0, 0, pageW, pageH, "F");
+
+  // gold hairline frame
+  doc.setDrawColor(BRAND.gold);
+  doc.setLineWidth(1);
+  doc.rect(40, 40, pageW - 80, pageH - 80);
+
+  // brand wordmark
+  doc.setTextColor("#FFFFFF");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(22);
+  const brandHeader =
+    mode === "broker" && broker?.brokerage ? broker.brokerage : "JBJ GLOBAL REAL ESTATE";
+  doc.text(brandHeader, pageW / 2, 130, { align: "center" });
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(BRAND.gold);
+  doc.text("UNIT COMPARISON REPORT", pageW / 2, 152, { align: "center" });
+
+  // project title
+  doc.setTextColor("#FFFFFF");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(34);
+  doc.text(project.name, pageW / 2, pageH / 2 - 30, { align: "center" });
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  doc.setTextColor(BRAND.gold);
+  const subline = [project.developer?.name, project.location].filter(Boolean).join("  ·  ");
+  if (subline) doc.text(subline, pageW / 2, pageH / 2 - 4, { align: "center" });
+
+  doc.setFontSize(11);
+  doc.setTextColor("#FFFFFF");
+  doc.text(`${units.length} unit${units.length > 1 ? "s" : ""} compared`, pageW / 2, pageH / 2 + 22, {
+    align: "center",
+  });
+
+  // prepared for / by
+  const today = new Date().toLocaleDateString("en-GB", {
+    day: "2-digit", month: "long", year: "numeric",
+  });
+  doc.setFontSize(9);
+  doc.setTextColor("#FFFFFF");
+  if (client?.name) doc.text(`Prepared for: ${client.name}`, pageW / 2, pageH - 130, { align: "center" });
+  if (client?.email) doc.text(client.email, pageW / 2, pageH - 116, { align: "center" });
+
+  const preparedBy =
+    broker?.name || (mode === "owner" ? "JBJ Advisory Team" : null);
+  if (preparedBy) doc.text(`Prepared by: ${preparedBy}`, pageW / 2, pageH - 92, { align: "center" });
+  const contact = [broker?.phone, broker?.email].filter(Boolean).join("  ·  ");
+  if (contact) doc.text(contact, pageW / 2, pageH - 78, { align: "center" });
+
+  doc.setTextColor(BRAND.gold);
+  doc.text(today, pageW / 2, pageH - 56, { align: "center" });
+
+  // ===== TABLE PAGE =====
+  doc.addPage();
+
   // Header band — navy
   doc.setFillColor(BRAND.blue);
   doc.rect(0, 0, pageW, 70, "F");
-  // Gold hairline
   doc.setDrawColor(BRAND.gold);
   doc.setLineWidth(1);
   doc.line(0, 70, pageW, 70);
 
-  // Brand wordmark (locked for owner; broker shows brokerage name first, JBJ note in footer)
   doc.setTextColor("#FFFFFF");
   doc.setFont("helvetica", "bold");
   doc.setFontSize(16);
-  const headLeft =
-    mode === "broker" && broker?.brokerage
-      ? broker.brokerage
-      : "JBJ GLOBAL REAL ESTATE";
-  doc.text(headLeft, 32, 32);
+  doc.text(brandHeader, 32, 32);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10);
@@ -108,15 +163,11 @@ export function exportUnitComparisonPdf(opts: ExportOpts): void {
   // Right side — date + project
   doc.setTextColor("#FFFFFF");
   doc.setFontSize(9);
-  const today = new Date().toLocaleDateString("en-GB", {
-    day: "2-digit", month: "long", year: "numeric",
-  });
   doc.text(today, pageW - 32, 32, { align: "right" });
   doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
   doc.text(project.name, pageW - 32, 52, { align: "right" });
 
-  // Client / broker info card
   let cursorY = 92;
   if (client?.name || client?.email || broker?.name || broker?.phone || broker?.email) {
     doc.setFillColor(BRAND.surface);

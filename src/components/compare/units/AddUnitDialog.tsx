@@ -38,8 +38,10 @@ export default function AddUnitDialog({ open, onOpenChange, onAdd }: Props) {
   });
 
   const submit = () => {
-    if (!d.label.trim()) return;
-    onAdd({ ...d, id: crypto.randomUUID() });
+    const autoLabel = d.bedrooms === "studio" ? "Studio" : `${d.bedrooms} BR`;
+    const label = d.label.trim() || (d.view ? `${autoLabel} – ${d.view}` : autoLabel);
+    if (!d.sizeSqft || !d.priceAED) return;
+    onAdd({ ...d, id: crypto.randomUUID(), label });
     onOpenChange(false);
     setD({ id: crypto.randomUUID(), label: "", bedrooms: "1", sizeSqft: 800, priceAED: 1500000, view: "", floor: "", unitNumber: "" });
   };
