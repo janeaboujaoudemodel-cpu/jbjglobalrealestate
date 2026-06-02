@@ -142,9 +142,10 @@ const ExploreServicesExpander = () => {
               aria-selected={isActive}
               onClick={() => setActiveId(s.id)}
               style={isActive ? { color: "#1A1A1A" } : { color: "#FFFFFF" }}
-              className={`shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-[background-color] ${
+              data-no-contrast-guard
+              className={`shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap rounded-none transition-[background-color] ${
                 isActive
-                  ? `jj-pill-active bg-[#EFE6D6] shadow-[inset_0_-2px_0_#B89555,inset_0_1px_0_rgba(255,255,255,0.7)]`
+                  ? `bg-[#EFE6D6] hover:bg-[#EFE6D6] text-[#1A1A1A] hover:text-[#1A1A1A]`
                   : `text-white hover:bg-[#1a3d63]`
               } ${s.available === false ? "opacity-80" : ""}`}
             >
