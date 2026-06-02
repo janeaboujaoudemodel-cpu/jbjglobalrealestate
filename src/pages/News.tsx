@@ -273,61 +273,73 @@ const News = () => {
     <>
       <SEOHead {...pagesSEO.news} />
       <section className="min-h-screen bg-gradient-to-br from-[hsl(40,30%,96%)] via-[hsl(39,25%,94%)] to-[hsl(38,20%,92%)]">
-      {/* Hero Section - Editorial Premium */}
-      <section className="relative py-20 md:py-28 overflow-hidden bg-gradient-to-b from-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] border-b border-[hsl(43,45%,54%)]/15">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[hsl(43,45%,54%)]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[hsl(43,45%,54%)]/5 rounded-full blur-3xl" />
-        
+      {/* Hero Section — Neon newsroom (dark) */}
+      <section className="jj-neon-hero relative py-20 md:py-28 overflow-hidden" data-surface="dark" data-no-contrast-guard>
         <div className="max-w-[1200px] mx-auto px-6 relative z-10">
-          <Link to="/" className="inline-flex items-center gap-2 text-[hsl(0,0%,45%)] hover:text-[hsl(43,45%,44%)] mb-8 transition-colors group">
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back to Home
+          <Link to="/" className="allow-white inline-flex items-center gap-2 text-white/70 hover:text-[#67E8F9] mb-8 transition-colors group" data-no-contrast-guard>
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform allow-white" />
+            <span className="allow-white">Back to Home</span>
           </Link>
-          
+
           <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 border border-[hsl(43,45%,54%)]/30 bg-[#FDFBF7]/50 backdrop-blur-sm">
-              <Landmark className="w-4 h-4 text-[hsl(43,45%,54%)]" />
-              <span className="text-[hsl(43,45%,44%)] font-semibold text-xs uppercase tracking-[0.2em]">
-                Government &amp; Market Sources
-              </span>
-            </div>
-            
-            <h1 
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-[hsl(0,0%,12%)] mb-6"
+            <span className="jj-neon-chip mb-6" data-tone="violet">
+              <Landmark className="w-3.5 h-3.5" />
+              Government &amp; Market Sources
+            </span>
+
+            <h1
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mt-6 mb-6 leading-[1.05]"
               style={{ fontFamily: "Playfair Display, Georgia, serif" }}
             >
-              News &amp; <span className="text-[hsl(43,45%,54%)]">Insights</span>
+              News &amp; <span className="jj-neon-underline jj-neon-text-cyan">Insights</span>
             </h1>
-            <p className="text-[hsl(0,0%,40%)] text-lg md:text-xl max-w-2xl leading-relaxed">
+            <p className="text-white/85 text-lg md:text-xl max-w-2xl leading-relaxed allow-white" data-no-contrast-guard>
               Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities.
-              <span className="text-[hsl(43,45%,44%)] font-medium"> Curated from official sources daily.</span>
+              <span className="text-[#F0ABFC] font-medium"> Curated from official sources daily.</span>
             </p>
           </div>
         </div>
       </section>
 
-      {/* Category Filter */}
-      <div className="border-b border-[hsl(43,45%,54%)]/15 sticky top-[40px] bg-[hsl(40,30%,96%)]/95 backdrop-blur-md z-20">
+      {/* Neon ticker */}
+      <div className="jj-neon-ticker" data-no-contrast-guard>
+        <div className="jj-neon-ticker-track">
+          {["LIVE · DLD", "RERA REGISTRY", "DXB INTERACT", "DAILY REFRESH", "JBJ INTELLIGENCE", "OFF-PLAN VOLUME", "RENTAL INDEX", "TOP AREAS", "AI INSIGHTS"]
+            .concat(["LIVE · DLD", "RERA REGISTRY", "DXB INTERACT", "DAILY REFRESH", "JBJ INTELLIGENCE", "OFF-PLAN VOLUME", "RENTAL INDEX", "TOP AREAS", "AI INSIGHTS"])
+            .map((w, i) => (
+              <span key={`${w}-${i}`} className="allow-white">{w}</span>
+            ))}
+        </div>
+      </div>
+
+      {/* Category Filter — neon chips on dark glass */}
+      <div className="sticky top-[40px] z-20 bg-[#050B18]/95 backdrop-blur-md border-b border-[rgba(34,211,238,0.18)]" data-surface="dark" data-no-contrast-guard>
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="py-3">
             <div className="flex flex-nowrap gap-2 py-2 overflow-x-auto scrollbar-hide pr-4">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category === "All" ? null : category)}
-                  className={`px-5 py-2.5 text-sm whitespace-nowrap transition-all duration-300 rounded-full font-medium ${
-                    (category === "All" && !selectedCategory) || selectedCategory === category
-                      ? "bg-[hsl(43,45%,54%)] text-white shadow-md"
-                      : "bg-[#FDFBF7]/70 text-[hsl(0,0%,30%)] border border-[hsl(43,45%,54%)]/15 hover:border-[hsl(43,45%,54%)]/40"
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
+              {categories.map((category) => {
+                const isActive = (category === "All" && !selectedCategory) || selectedCategory === category;
+                return (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category === "All" ? null : category)}
+                    data-no-contrast-guard
+                    className={`px-5 py-2.5 text-sm whitespace-nowrap transition-all duration-300 rounded-full font-medium allow-white ${
+                      isActive
+                        ? "jj-neon-chip"
+                        : "bg-white/[0.04] text-white/75 border border-white/15 hover:border-[rgba(34,211,238,0.5)] hover:text-[#67E8F9]"
+                    }`}
+                    style={isActive ? { letterSpacing: "0.04em", textTransform: "none", fontSize: "0.875rem" } : undefined}
+                  >
+                    {category}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
+
 
       {/* Loading State */}
       {isLoading && (
