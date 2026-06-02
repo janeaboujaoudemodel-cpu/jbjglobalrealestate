@@ -34,6 +34,8 @@ import { PoweredByJBJ } from "@/components/tools/PoweredByJBJ";
 import { PremiumToolShell } from "@/components/tools/PremiumToolShell";
 import { ToolSectionDivider } from "@/components/tools/ToolSectionDivider";
 import { toolThemes, TOOL_INK } from "@/components/tools/toolThemes";
+import { AnimatedShineCTA } from "@/components/tools/AnimatedShineCTA";
+import { useGuidedRequiredFields } from "@/hooks/useGuidedRequiredFields";
 
 const theme = toolThemes.emerald;
 
