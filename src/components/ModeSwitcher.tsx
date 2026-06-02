@@ -1,5 +1,6 @@
 import { useState, CSSProperties } from "react";
-import { Briefcase, User, ChevronDown, Check, Loader2, Users, Building2 } from "lucide-react";
+import { Briefcase, User, ChevronDown, Check, Loader2, Users, Building2, Crown } from "lucide-react";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { useUserModeContext, UserMode } from "@/contexts/UserModeContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { cn } from "@/lib/utils";
@@ -90,13 +91,29 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
     onBase: '#FFFFFF',
     surface: 'espresso',
   },
+  owner: {
+    label: 'Mode: Owner',
+    shortLabel: 'O',
+    icon: Crown,
+    description: 'Owner command center — full portal access (visible only to you).',
+    base: '#102540',      // navy ink
+    baseDark: '#0A1830',
+    rowFrom: '#FDFBF7',
+    rowTo: '#F7F2EA',
+    rowHover: '#EFE6D6',
+    dark: '#1A1A1A',
+    onBase: '#FFFFFF',
+    surface: 'ink',
+  },
 };
 
 export const ModeSwitcher = ({ variant = 'header', className, showForUnselected = false, side = 'bottom' }: ModeSwitcherProps) => {
   const { mode, isLoading, setMode, hasMadeInitialSelection } = useUserModeContext();
   const { hasSelectedRole } = useUserRole();
+  const { isOwner: isAppOwner } = useIsAppOwner();
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredMode, setHoveredMode] = useState<UserMode | null>(null);
+
 
   // Hide the badge only when no selection has been made AND the placement
   // hasn't opted in to the unselected/"Select your mode" CTA.
@@ -247,7 +264,9 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
 
           {/* Tight premium stack — uniform row height */}
           <div className="flex flex-col gap-1.5">
-            {(Object.entries(MODE_CONFIG) as [UserMode, ModePalette][]).map(([modeKey, config]) => {
+            {(Object.entries(MODE_CONFIG) as [UserMode, ModePalette][])
+              .filter(([modeKey]) => modeKey !== 'owner' || isAppOwner)
+              .map(([modeKey, config]) => {
               const Icon = config.icon;
               const isActive = mode === modeKey;
               const isHovered = hoveredMode === modeKey;

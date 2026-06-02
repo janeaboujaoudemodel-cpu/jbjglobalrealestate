@@ -13,6 +13,7 @@ const MODE_LABEL: Record<UserMode, string> = {
   investor: 'Investor',
   broker: 'Broker',
   developer: 'Developer',
+  owner: 'Owner',
 };
 
 /**

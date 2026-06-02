@@ -281,19 +281,19 @@ const News = () => {
             <span className="allow-white">Back to Home</span>
           </Link>
 
-          <div className="max-w-4xl">
-            <span className="jj-neon-chip mb-6" data-tone="violet">
+          <div className="max-w-4xl mx-auto text-center">
+            <span className="jj-neon-chip mb-6 mx-auto" data-tone="violet">
               <Landmark className="w-3.5 h-3.5" />
               Government &amp; Market Sources
             </span>
 
             <h1
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mt-6 mb-6 leading-[1.05]"
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mt-6 mb-6 leading-[1.05] mx-auto"
               style={{ fontFamily: "Playfair Display, Georgia, serif" }}
             >
               News &amp; <span className="jj-neon-underline jj-neon-text-cyan">Insights</span>
             </h1>
-            <p className="text-white/85 text-lg md:text-xl max-w-2xl leading-relaxed allow-white" data-no-contrast-guard>
+            <p className="text-white/85 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed allow-white" data-no-contrast-guard>
               Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities.
               <span className="text-[#F0ABFC] font-medium"> Curated from official sources daily.</span>
             </p>

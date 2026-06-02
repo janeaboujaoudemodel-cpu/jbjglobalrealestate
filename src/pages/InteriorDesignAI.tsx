@@ -267,12 +267,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
   ];
 
   const body = (
-    <section className="relative w-full min-h-screen" style={{ background: "#0D0C08" }}>
+    <section className="relative w-full min-h-screen" style={{ background: "#0D0820" }}>
       {/* Hero — suppressed when embedded inside a Suite tab */}
       {!embedded && (
         <div className="relative py-12 md:py-16 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-gold/15 via-[#0D0C08] to-amber-900/10" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(184,148,62,0.12),transparent_50%)]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#7C3AED]/35 via-[#0D0820] to-[#5EEAD4]/20" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(236,72,153,0.22),transparent_55%),radial-gradient(circle_at_75%_60%,rgba(94,234,212,0.18),transparent_55%)]" />
           <div className="container mx-auto px-4 relative z-10">
             <motion.div
               className="text-center max-w-3xl mx-auto"
@@ -280,23 +280,24 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <Badge className="mb-4 bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30 px-4 py-2">
+              <Badge className="mb-4 bg-gradient-to-r from-[#7C3AED]/30 via-[#EC4899]/25 to-[#5EEAD4]/25 text-white border border-[#EC4899]/40 px-4 py-2">
                 <Palette className="w-4 h-4 mr-2" />
                 AI-Powered Design
               </Badge>
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
                 AI Interior{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-amber-400">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C4B5FD] via-[#F0ABFC] to-[#5EEAD4]">
                   Design Studio
                 </span>
               </h1>
-              <p className="text-white/70 text-sm md:text-base max-w-xl mx-auto">
+              <p className="text-white/80 text-sm md:text-base max-w-xl mx-auto">
                 Upload a photo or describe your space. Our AI generates stunning designs instantly.
               </p>
             </motion.div>
           </div>
         </div>
       )}
+
 
       {/* Main Content: Two Panel Layout */}
       <div className="container mx-auto px-4 pb-20">
