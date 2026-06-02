@@ -628,15 +628,28 @@ Requirements:
                     boxShadow: "0 10px 28px -12px rgba(15,81,50,0.55)",
                   }}
                 >
-                  <Wand2
+                  <svg
                     data-assistant-magic-icon
                     data-no-contrast-guard
                     data-on-dark
-                    className="w-5 h-5 shrink-0 allow-white jj-icon-keep !text-white !stroke-white [&_*]:!stroke-white"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    className="w-5 h-5 shrink-0 allow-white jj-icon-keep"
+                    fill="none"
                     color="#FFFFFF"
                     stroke="#FFFFFF"
                     style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
-                  />
+                  >
+                    <path d="M15 4V2" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M15 16v-2" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M8 9h2" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M20 9h2" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M17.8 11.8 19 13" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M15 9h.01" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M17.8 6.2 19 5" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="m3 21 9-9" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M12.2 6.2 11 5" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                   <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Get Help with JBJ {party} Assistant</span>
                 </button>
               </div>
