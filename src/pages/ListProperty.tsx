@@ -410,8 +410,7 @@ function SegmentedPill({
     <button
       type="button"
       onClick={onClick}
-      data-allow-dark-cta
-      data-no-contrast-guard
+      {...(active ? { "data-allow-dark-cta": "", "data-no-contrast-guard": "" } : { "data-no-contrast-guard": "" })}
       className="inline-flex items-center justify-center gap-2 w-full h-10 px-4 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-150 hover:brightness-110"
       style={
         active
@@ -430,10 +429,10 @@ function SegmentedPill({
             }
       }
     >
-      <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{icon}</span>
+      <span style={{ color: fg, WebkitTextFillColor: fg, stroke: fg, display: "inline-flex" }}>{icon}</span>
       <span style={{ color: fg, WebkitTextFillColor: fg }}>{children}</span>
       {trailing && (
-        <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{trailing}</span>
+        <span style={{ color: fg, WebkitTextFillColor: fg, stroke: fg, display: "inline-flex" }}>{trailing}</span>
       )}
     </button>
   );
