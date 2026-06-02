@@ -5572,12 +5572,39 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#102540\] * {
 }
 
 /* ============================================================
-   Tool Fullscreen Mode
-   Toggle via FullscreenToolToggle; sets html[data-tool-fullscreen="true"].
-   Hides app chrome and pins the active tool shell edge-to-edge.
+   AI Tool frame + true native fullscreen mode
+   Normal mode: tool fills the available app canvas with no outer border.
+   Fullscreen mode: browser native fullscreen + app chrome hidden.
    ============================================================ */
+[data-tool-shell-root] {
+  padding: 0 !important;
+}
+[data-tool-frame] {
+  max-width: none !important;
+  width: 100% !important;
+  min-height: 100vh !important;
+}
+[data-tool-frame] > div:first-child {
+  border-radius: 0 !important;
+  min-height: 100vh !important;
+}
+[data-tool-frame].jbj-tool-frame-border::before,
+[data-tool-frame].jbj-tool-shell-border::before {
+  display: none !important;
+}
+input#propertyName.property-measurement-name-input,
+input#propertyName.property-measurement-name-input::placeholder {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
 html[data-tool-fullscreen="true"] [data-global-header],
 html[data-tool-fullscreen="true"] [data-global-vertical-nav],
+html[data-tool-fullscreen="true"] [data-chrome="header"],
+html[data-tool-fullscreen="true"] [data-chrome="sidebar"],
+html[data-tool-fullscreen="true"] [data-chrome="utility-bar"],
+html[data-tool-fullscreen="true"] [data-chrome="footer"],
 html[data-tool-fullscreen="true"] header[role="banner"],
 html[data-tool-fullscreen="true"] aside[data-app-sidebar],
 html[data-tool-fullscreen="true"] .jbj-app-header,
@@ -5601,6 +5628,10 @@ html[data-tool-fullscreen="true"] [data-tool-shell-root] {
   padding: 0 !important;
   overflow: auto !important;
   border-radius: 0 !important;
+}
+html[data-tool-fullscreen="true"] main {
+  padding-left: 0 !important;
+  padding-top: 0 !important;
 }
 html[data-tool-fullscreen="true"] [data-tool-frame] {
   max-width: none !important;

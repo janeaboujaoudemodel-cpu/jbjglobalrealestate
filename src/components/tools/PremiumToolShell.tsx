@@ -37,7 +37,6 @@ export const PremiumToolShell = ({
   subtitle,
   showBack = true,
   children,
-  maxWidth = "1200px",
 }: Props) => {
   const navigate = useNavigate();
 
@@ -49,7 +48,7 @@ export const PremiumToolShell = ({
   return (
     <div
       data-tool-shell-root
-      className="min-h-screen w-full pt-6 md:pt-8 pb-12 px-3 sm:px-5"
+      className="min-h-screen w-full p-0"
       style={{ background: theme.pageWash }}
     >
       <FullscreenToolToggle />
@@ -76,16 +75,16 @@ export const PremiumToolShell = ({
 
       <div
         data-tool-frame
-        className="relative mx-auto jbj-tool-shell-border"
+        className="relative mx-0 w-full jbj-tool-shell-border"
         style={
           {
-            maxWidth,
+            maxWidth: "none",
             "--jbj-tool-border": theme.borderConic,
           } as CSSProperties
         }
       >
         <div
-          className="relative rounded-2xl overflow-hidden"
+          className="relative min-h-screen overflow-hidden"
           style={{
             background: "#FDFBF7",
             boxShadow:
@@ -201,7 +200,6 @@ export const PremiumToolShell = ({
 export const ToolAnimatedFrame = ({
   theme,
   children,
-  maxWidth = "1400px",
   className = "",
 }: {
   theme: ToolTheme;
@@ -211,7 +209,7 @@ export const ToolAnimatedFrame = ({
 }) => (
   <div
     data-tool-shell-root
-    className={`min-h-screen w-full pt-6 md:pt-8 pb-12 px-3 sm:px-5 ${className}`}
+    className={`min-h-screen w-full p-0 ${className}`}
     style={{ background: theme.pageWash }}
   >
     <FullscreenToolToggle />
@@ -235,16 +233,16 @@ export const ToolAnimatedFrame = ({
     `}</style>
     <div
       data-tool-frame
-      className="relative mx-auto jbj-tool-frame-border"
+      className="relative mx-0 w-full jbj-tool-frame-border"
       style={
         {
-          maxWidth,
+          maxWidth: "none",
           "--jbj-tool-border": theme.borderConic,
         } as CSSProperties
       }
     >
       <div
-        className="relative rounded-2xl overflow-hidden"
+        className="relative min-h-screen overflow-hidden"
         style={{
           background: "#FDFBF7",
           boxShadow:
