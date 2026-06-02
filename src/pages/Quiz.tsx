@@ -470,130 +470,147 @@ const Quiz = () => {
 
   const [started, setStarted] = useState(false);
 
-  // Intro screen before starting
+  // Intro screen before starting — teal/cyan dark ombre (matches Property Measurement language)
   if (!started && currentStep === 0 && Object.keys(answers).length === 0 && !showForm) {
     return (
-      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
+      <ToolAnimatedFrame theme={toolThemes.teal}>
+      <section
+        data-allow-dark-cta
+        data-no-contrast-guard
+        data-on-dark
+        className="allow-white min-h-screen flex flex-col"
+        style={{ background: "#04161C" }}
+      >
         {/* Header */}
-        <div className="border-b border-[#B89555]/20 bg-[#FDFBF7]/50 backdrop-blur-sm">
+        <div className="border-b border-[rgba(94,234,212,0.25)] backdrop-blur-sm" style={{ background: "rgba(4,22,28,0.6)" }}>
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
                 onClick={() => navigate(-1)}
-                className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
+                data-no-contrast-guard
+                className="allow-white transition-colors flex items-center gap-2"
+                style={{ color: "rgba(255,255,255,0.85)" }}
               >
-                <ChevronLeft className="w-5 h-5" />
-                Exit
+                <ChevronLeft className="w-5 h-5 allow-white" />
+                <span className="allow-white">Exit</span>
               </button>
-              <div className="flex items-center gap-3 text-[#1A1A1A]/70">
-                <Clock className="w-4 h-4" />
-                <span className="text-sm">~{estimatedTime} seconds</span>
+              <div className="flex items-center gap-3" style={{ color: "rgba(255,255,255,0.75)" }}>
+                <Clock className="w-4 h-4 allow-white" />
+                <span className="text-sm allow-white">~{estimatedTime} seconds</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Intro Content */}
         <div className="flex-1 flex items-center justify-center px-4 py-12">
-          <div className="group relative w-full max-w-2xl rounded-[28px] p-[1.5px] bg-gradient-to-br from-[#B89555] via-[#E8D38A] to-[#A68444] shadow-[0_20px_60px_-20px_rgba(184,149,85,0.45)] transition-all duration-500 hover:shadow-[0_30px_80px_-15px_rgba(184,149,85,0.7)] hover:-translate-y-0.5">
-            {/* Glow halo on hover */}
-            <div className="pointer-events-none absolute -inset-4 rounded-[34px] bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.35),transparent_65%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+          <div
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="allow-white w-full max-w-2xl rounded-2xl px-6 sm:px-10 py-10 text-center"
+            style={{
+              background: "linear-gradient(135deg, #0E7490 0%, #062430 45%, #000000 100%)",
+              border: "1px solid rgba(94,234,212,0.45)",
+              boxShadow: "0 0 0 1px rgba(94,234,212,0.25), 0 24px 60px rgba(14,116,144,0.35), inset 0 0 32px rgba(94,234,212,0.10)",
+            }}
+          >
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-7"
+              style={{
+                background: "rgba(94,234,212,0.18)",
+                border: "1px solid rgba(94,234,212,0.50)",
+                color: "#A7F3D0",
+              }}
+            >
+              <Gift className="w-4 h-4 allow-white" style={{ color: "#5EEAD4" }} />
+              <span className="text-sm font-medium allow-white" style={{ color: "#A7F3D0" }}>Completely Free</span>
+            </div>
 
-            <div className="relative rounded-[26px] bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] px-6 sm:px-10 py-10 text-center overflow-hidden">
-              {/* Subtle inner gold sheen */}
-              <div className="pointer-events-none absolute inset-0 rounded-[26px] ring-1 ring-inset ring-[#B89555]/30" />
-              <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[420px] h-[220px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.18),transparent_70%)]" />
+            <div
+              className="w-20 h-20 rounded-full mx-auto mb-7 flex items-center justify-center"
+              style={{
+                background: "linear-gradient(135deg, #5EEAD4 0%, #0E7490 60%, #000 100%)",
+                border: "1px solid rgba(94,234,212,0.55)",
+                boxShadow: "0 0 28px rgba(94,234,212,0.45)",
+              }}
+            >
+              <Wand2 className="w-10 h-10 allow-white" style={{ color: "#FFFFFF" }} />
+            </div>
 
-              <div className="relative">
-                {/* Free Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#B89555]/20 to-[#B89555]/10 border border-[#B89555]/40 mb-7">
-                  <Gift className="w-4 h-4 text-[#B89555]" />
-                  <span className="text-[#1A1A1A] text-sm font-medium">
-                    Completely Free
-                  </span>
+            <h1 className="allow-white text-4xl md:text-5xl font-bold mb-4 tracking-tight" style={{ color: "#FFFFFF" }}>
+              AI Property Finder
+            </h1>
+
+            <p className="allow-white text-lg mb-7 max-w-lg mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.82)" }}>
+              Find your perfect property match with our AI — it searches across every project on JBJ and matches them to your exact requirements. Completely{" "}
+              <span className="font-semibold" style={{ color: "#5EEAD4" }}>FREE</span>.
+            </p>
+
+            <div className="max-w-sm mx-auto mb-8">
+              <div
+                className="rounded-2xl p-5 text-left"
+                style={{
+                  background: "linear-gradient(135deg, rgba(14,116,144,0.35) 0%, rgba(0,0,0,0.5) 100%)",
+                  border: "1px solid rgba(94,234,212,0.40)",
+                }}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <Gift className="w-5 h-5 allow-white" style={{ color: "#5EEAD4" }} />
+                  <span className="font-semibold allow-white" style={{ color: "#FFFFFF" }}>FREE Access</span>
                 </div>
-
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#B89555] to-[#A68444] mx-auto mb-7 flex items-center justify-center shadow-2xl shadow-[#B89555]/30 ring-1 ring-[#B89555]/50">
-                  <Wand2 className="w-10 h-10 text-[#1A1A1A]" />
-                </div>
-
-                <h1 className="text-[#102540] text-4xl md:text-5xl font-bold mb-4 tracking-tight">
-                  AI Property Finder
-                </h1>
-
-                <p className="text-[#1A1A1A]/75 text-lg mb-7 max-w-lg mx-auto leading-relaxed">
-                  Find your perfect property match with our AI — it searches across every project on JBJ and matches them to your exact requirements. Completely{" "}
-                  <span className="text-[#B89555] font-semibold">FREE</span>.
-                </p>
-
-                {/* Single Free Card */}
-                <div className="max-w-sm mx-auto mb-8">
-                  <div className="rounded-2xl p-5 text-left bg-gradient-to-br from-[#B89555]/15 to-[#B89555]/5 border border-[#B89555]/40 shadow-sm">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Gift className="w-5 h-5 text-[#B89555]" />
-                      <span className="font-semibold text-[#1A1A1A]">FREE Access</span>
-                    </div>
-                    <ul className="space-y-2.5 text-sm">
-                      {[
-                        "Unlimited AI Property Matches",
-                        "AI Comparison Reports",
-                        "Download Excel Report",
-                      ].map((label) => (
-                        <li key={label} className="flex items-center gap-2.5 text-[#1A1A1A]">
-                          <span className="relative w-5 h-5 rounded-full bg-gradient-to-br from-[#B89555] to-[#A68444] flex items-center justify-center shadow-[0_2px_6px_-1px_rgba(184,149,85,0.55)] ring-1 ring-[#B89555]/50 flex-shrink-0">
-                            <Check className="w-3 h-3 text-[#1A1A1A]" strokeWidth={3} />
-                          </span>
-                          <span>{label}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-[#1A1A1A]/70 mb-9">
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-[#B89555]/20 flex items-center justify-center">
-                      <Clock className="w-3 h-3 text-[#B89555]" />
-                    </div>
-                    <span className="text-[#1A1A1A]">~60 seconds</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-[#B89555]/20 flex items-center justify-center">
-                      <Sparkles className="w-3 h-3 text-[#B89555]" />
-                    </div>
-                    <span className="text-[#1A1A1A]">AI-Powered</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-[#B89555]/20 flex items-center justify-center">
-                      <CheckCircle2 className="w-3 h-3 text-[#B89555]" />
-                    </div>
-                    <span className="text-[#1A1A1A]">100% Free</span>
-                  </div>
-                </div>
-
-                <Button
-                  onClick={() => setStarted(true)}
-                  className="font-semibold px-10 py-6 text-lg shadow-lg transition-all hover:shadow-xl bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110 shadow-[#B89555]/30"
-                >
-                  Find My Property
-                  <ArrowUpRight className="w-5 h-5 ml-2 text-[#B89555] drop-shadow-[0_0_4px_rgba(184,149,85,0.7)]" />
-                </Button>
-
-                <p className="text-[#1A1A1A]/70 text-xs mt-6">
-                  Save money by choosing the right property the first time.
-                </p>
-
-                <div className="mt-8">
-                  <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">
-                    Powered by{" "}
-                    <span className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</span>
-                  </p>
-                </div>
+                <ul className="space-y-2.5 text-sm">
+                  {["Unlimited AI Property Matches", "AI Comparison Reports", "Download Excel Report"].map((label) => (
+                    <li key={label} className="flex items-center gap-2.5 allow-white" style={{ color: "rgba(255,255,255,0.88)" }}>
+                      <span
+                        className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                        style={{ background: "linear-gradient(135deg, #5EEAD4, #0E7490)" }}
+                      >
+                        <Check className="w-3 h-3" style={{ color: "#04161C" }} strokeWidth={3} />
+                      </span>
+                      <span className="allow-white">{label}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm mb-9" style={{ color: "rgba(255,255,255,0.75)" }}>
+              {[
+                { Icon: Clock,        label: "~60 seconds" },
+                { Icon: Sparkles,     label: "AI-Powered"  },
+                { Icon: CheckCircle2, label: "100% Free"   },
+              ].map(({ Icon, label }) => (
+                <div key={label} className="flex items-center gap-2 allow-white">
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: "rgba(94,234,212,0.22)" }}>
+                    <Icon className="w-3 h-3 allow-white" style={{ color: "#5EEAD4" }} />
+                  </div>
+                  <span className="allow-white">{label}</span>
+                </div>
+              ))}
+            </div>
+
+            <Button
+              onClick={() => setStarted(true)}
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white font-semibold px-10 py-6 text-lg"
+              style={{
+                background: "linear-gradient(135deg, #5EEAD4 0%, #0E7490 55%, #000 100%)",
+                border: "1px solid rgba(94,234,212,0.55)",
+                color: "#FFFFFF",
+                boxShadow: "0 0 28px rgba(94,234,212,0.45)",
+              }}
+            >
+              Find My Property
+              <ArrowUpRight className="w-5 h-5 ml-2 allow-white" />
+            </Button>
+
+            <p className="allow-white text-xs mt-6" style={{ color: "rgba(255,255,255,0.65)" }}>
+              Save money by choosing the right property the first time.
+            </p>
           </div>
         </div>
       </section>
+      </ToolAnimatedFrame>
     );
   }
 
