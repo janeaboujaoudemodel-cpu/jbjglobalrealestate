@@ -81,16 +81,19 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = fal
           muted
           loop
           playsInline
-          preload="metadata"
-          onCanPlayThrough={handleCanPlay}
+          autoPlay
+          preload={eager ? "auto" : "metadata"}
+          onLoadedData={handleCanPlay}
+          onCanPlay={handleCanPlay}
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             opacity: videoReady ? opacity : 0,
-            transition: "opacity 0.8s ease-in-out",
+            transition: "opacity 0.5s ease-in-out",
           }}
         >
           <source src={src} type="video/mp4" />
         </video>
+
       )}
     </div>
   );
