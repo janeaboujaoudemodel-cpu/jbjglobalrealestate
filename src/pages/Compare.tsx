@@ -518,135 +518,79 @@ const Compare = () => {
 
   if (!projects?.length) {
     return (
-      <section className="min-h-screen bg-gradient-to-br from-[#F7F1E6]/10 via-zinc-950 to-zinc-950">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#EFE6D6]/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#EFE6D6]/3 rounded-full blur-3xl pointer-events-none" />
-        
-        <div className="container mx-auto px-4 py-16 relative z-10">
-          {/* Back link */}
+      <CompareAIShell>
+        <div className="container mx-auto px-4 py-12 md:py-16">
+          {/* Back */}
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 text-white/70 hover:text-[#1A1A1A] transition-colors mb-12"
+            data-no-contrast-guard
+            className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors mb-10"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span>Back to Previous Page</span>
+            <span>Back</span>
           </button>
 
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full mb-8">
-              <BarChart3 className="w-4 h-4 text-[#1A1A1A]" />
-              <span className="text-[#1A1A1A] text-sm font-medium">AI-Powered Comparison</span>
-            </div>
-
-            {/* Welcome Title */}
-            <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Welcome to{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#ECE2D2]">
-                Property Comparison
-              </span>
-            </h1>
-            
-            <p className="text-white/85 text-lg md:text-xl mb-4 max-w-2xl mx-auto">
-              Thank you for exploring our exclusive AI-powered property comparison tool.
-              Get detailed insights, ROI projections, and expert recommendations.
-            </p>
-            <div className="flex items-center justify-center gap-3 mb-10 mt-2">
-              <div className="h-px w-16" style={{ background: "#B89555" }} />
-              <span className="text-[10px] uppercase tracking-[0.22em] font-semibold text-white/60">Powered by</span>
-              <span className="text-xs font-bold tracking-[0.14em] text-white">JBJ GLOBAL REAL ESTATE</span>
-              <div className="h-px w-16" style={{ background: "#B89555" }} />
-            </div>
-
-            {/* Steps Guide */}
-            <div className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/20 rounded-3xl p-8 md:p-10 mb-10">
-              <h2 className="text-white text-2xl font-semibold mb-8 flex items-center justify-center gap-3">
-                <Sparkles className="w-6 h-6 text-[#1A1A1A]" />
-                How to Compare Properties
-              </h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[
-                  { icon: Building, title: "Browse Properties", desc: "Explore our curated collection of premium off-plan properties across Dubai and UAE.", step: 1 },
-                  { icon: Heart, title: "Add to Shortlist", desc: "Click the shortlist button on any property to save 2-5 projects for comparison.", step: 2 },
-                  { icon: Layers, title: "Generate Comparison", desc: "Return here and let our AI analyze all projects with detailed insights and recommendations.", step: 3 },
-                ].map((item) => (
-                  <div key={item.step} className="relative group">
-                    <div className="bg-gradient-to-br from-gold/5 to-zinc-900 border border-[#B89555]/20 rounded-2xl p-6 h-full transition-all duration-300 group-hover:border-[#B89555]/40 group-hover:shadow-lg group-hover:shadow-gold/10">
-                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold/30 to-gold/10 flex items-center justify-center mb-4 mx-auto shadow-lg shadow-gold/20">
-                        <item.icon className="w-7 h-7 text-[#1A1A1A]" />
-                      </div>
-                      <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center text-[#1A1A1A] font-bold text-sm shadow-lg">
-                        {item.step}
-                      </div>
-                      <h3 className="text-white font-semibold text-lg mb-2">{item.title}</h3>
-                      <p className="text-white/70 text-sm">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
+          <div className="max-w-5xl mx-auto">
+            {/* Eyebrow */}
+            <div className="flex justify-center mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
+                style={{
+                  background: "rgba(124,58,237,0.18)",
+                  border: "1px solid rgba(192,132,252,0.45)",
+                }}
+              >
+                <Brain className="w-4 h-4" style={{ color: "#C084FC" }} />
+                <span className="text-[11px] uppercase tracking-[0.2em] font-semibold" style={{ color: "#E9D5FF" }}>
+                  AI Property Intelligence
+                </span>
               </div>
             </div>
 
-            {/* Feature Highlights */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-              {[
-                { icon: BarChart3, label: "Side-by-Side", sub: "Analysis" },
-                { icon: TrendingUp, label: "ROI", sub: "Projections" },
-                { icon: Star, label: "Smart", sub: "Ratings" },
-                { icon: Award, label: "Expert", sub: "Recommendations" },
-              ].map((f) => (
-                <div key={f.label} className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-4 text-center">
-                  <f.icon className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
-                  <p className="text-white text-sm font-medium">{f.label}</p>
-                  <p className="text-white/90 text-xs">{f.sub}</p>
-                </div>
-              ))}
+            {/* Headline */}
+            <h1 className="text-white text-center text-4xl md:text-6xl font-bold leading-[1.05] mb-5">
+              Compare. <GradientText>Decide.</GradientText> Win.
+            </h1>
+            <p className="text-white/70 text-center text-lg max-w-2xl mx-auto mb-12">
+              Drop in any 2–5 Dubai projects. Our AI engine ranks them by yield,
+              risk, developer tier and market context — and tells you which one to buy.
+            </p>
+
+            {/* Step line */}
+            <div className="mb-12">
+              <AnimatedStepLine />
             </div>
 
-            {/* CTA */}
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            {/* Live sample preview */}
+            <div className="mb-10">
+              <SampleComparisonPreview />
+            </div>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
               <Link to="/properties">
-                <button 
-                  className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
-                    boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
-                  }}
-                >
-                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                  <span className="relative flex items-center gap-2">
-                    <Building className="w-5 h-5 text-[#1A1A1A]" />
-                    <span className="text-[#1A1A1A]">Browse</span>
-                    <span className="text-[#1A1A1A]">Properties</span>
-                    <ArrowUpRight className="w-5 h-5 text-[#1A1A1A]" />
-                  </span>
-                </button>
+                <CompareCTA variant="gradient" icon={<Building className="w-4 h-4" style={{ color: "#FFFFFF" }} />}>
+                  Browse properties
+                </CompareCTA>
               </Link>
-              <button
+              <CompareCTA
+                variant="glass"
                 onClick={() => setAiAddOpen(true)}
-                data-cta="champagne"
-                className="jj-cta-champagne inline-flex items-center justify-center gap-2 px-8 py-6 text-base font-bold rounded-xl"
+                icon={<Sparkles className="w-4 h-4" style={{ color: "#C084FC" }} />}
               >
-                <Sparkles className="w-5 h-5" /> Add via link / PDF (AI fill)
-              </button>
+                Add via link / PDF (AI fill)
+              </CompareCTA>
               <Link to="/compare-manual">
-                <button
-                  data-cta="outline"
-                  className="jj-cta-outline inline-flex items-center justify-center gap-2 px-8 py-6 text-base font-bold rounded-xl"
-                >
-                  Compare manually
-                </button>
+                <CompareCTA variant="outline">Compare manually</CompareCTA>
               </Link>
             </div>
-            
-            <p className="text-white/90 text-sm mt-6">
-              Need help? Our team is available 24/7 to assist you.
+
+            <p className="text-white/55 text-sm text-center">
+              Need help? Our team is available 24/7.
             </p>
           </div>
         </div>
         <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
-      </section>
+      </CompareAIShell>
     );
   }
 
