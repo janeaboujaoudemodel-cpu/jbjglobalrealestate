@@ -1,92 +1,126 @@
+## Scope
 
-## Goal
+Five related fixes across Academy, List Property, and Careers. UI/contrast work + one new backend flow (Academy access requests).
 
-Rebuild `/ai-hub` (`src/pages/AIHub.tsx`) into a single, contrast-clean, premium page that matches the locked JBJ design system (champagne + ink + navy CTAs + 1px gold hairline, AI accents in purple). Every issue circled in the four screenshots is addressed; **no features, tools, or sections are removed** (No-Removal policy).
+---
 
-## Issues being fixed
+## 1. JBJ Academy — proper "Request Access" form + admin approval
 
-1. **Hero "JBJ Royal Tools Hub"** — text currently dark-on-dark, badge "FREE FOR ALL USERS" invisible.
-2. **3 hero CTAs** (Go to My Dashboard / Explore Free Tools / View Premium Plans) — oversized, unbalanced, low contrast.
-3. **4 trust cards** (Intelligent Analysis / Instant Results / Data Security / Save Time) — black icon tiles on champagne, broken.
-4. **"Discover All Free AI Tools"** heading — half-rendered, half-blue overlay, illegible.
-5. **Search bar + category pills** (ALL / PROPERTY / CORPORATE / PRODUCTIVITY / DESIGN / MARKETING) — search input black-on-black, pills inconsistent colors.
-6. **"Investment & Property Tools"** band — solid neon purple slab, no breathing room, cards purple-on-purple.
-7. **Broker Portal / Investor Hub** cards — dark slabs with neon purple + neon green gradient CTAs that violate the locked navy-CTA standard.
-8. **"Welcome back" footer band** — navy `Explore Tools Above` CTA renders invisible on champagne; wording generic.
+**Today:** Clicking "Request Access" on a locked module/book fires `useCreateBrokerRequest` silently and toasts "Request submitted". No form, no contact details captured, no clean approval surface.
 
-## Redesign blueprint (top → bottom)
+**New flow:**
+
+1. **New DB table** `academy_access_requests` (via migration):
+   - `id`, `user_id` (nullable for guests), `full_name`, `email`, `phone`, `note`, `requested_item_type` (`module|book`), `requested_item_id`, `requested_item_title`, `status` (`pending|approved|rejected`), `decided_by`, `decided_at`, `created_at`.
+   - RLS: insert allowed to anyone authenticated; select/update restricted to owner role via `has_role`. GRANTs for `authenticated` + `service_role`.
+
+2. **New modal** `src/components/broker-education/AcademyAccessRequestModal.tsx`:
+   - Form fields: Full name, Email, Phone, Note (textarea — "Why do you need access?").
+   - Pre-fills name/email from `useAuth()` profile when available.
+   - On submit → insert into `academy_access_requests` → success state inside modal ("Your request has been received. We'll email you once it's approved."). Replace the silent toast.
+
+3. **Wire into `src/pages/broker/BrokerLearning.tsx`**: replace current `requestAcademyAccess` mutate call with opening this modal, passing the item id/type/title.
+
+4. **Admin approval surface** at `/owner/academy-access` (new page `src/pages/owner/OwnerAcademyAccessQueue.tsx`, owner-gated):
+   - Lists pending requests with name/email/phone/note/requested item.
+   - **Approve** → updates row to `approved`, grants academy access (insert into existing `broker_academy_access` / equivalent grant table — verify exact table during implementation), and invokes new edge function `academy-access-approved-email` which sends a branded email to the registered address with login CTA pointing to `/auth?email=<their email>` + instructions: "Sign in with this email to unlock JBJ Academy."
+   - **Reject** → status `rejected`, optional reason.
+   - Add link from existing owner sidebar.
+
+5. **Email template**: clean branded HTML (champagne + ink + gold hairline + JBJ monogram), single navy CTA "Sign In to Access", body explains the email registered in the form is now the access key.
+
+---
+
+## 2. `/list-property` — contrast + blue-CTA fixes
+
+File: `src/pages/ListProperty.tsx` (+ any child components for the "Purpose / How would you like to list?" card and the "How would you like to add your property?" section).
+
+- **AI Assist pill** ("AI assist‑ed" rendering white-on-white inside the rounded card on hero): repaint to ink `#1A1A1A` on champagne; rename label to **"AI Assistant"** (not "AI Assisted").
+- **Purpose row** (For Sale / For Rent) and **How-to-list row** (Manual / AI Assistant / Browse): all labels + icons in navy `#102540`. Active pill stays `jj-pill-active`.
+- **"How would you like to add your property?"** section cards (List Manually / List with AI):
+  - Card titles + icons → navy `#102540`.
+  - Section heading + "FULL CONTROL" / "AI‑ASSISTED" eyebrows → navy.
+  - "Start" CTA buttons → filled navy (`jj-cta-dark`), white text + white arrow at rest AND hover. No outline-white variant.
+- **"No submission yet"** empty-state block:
+  - Icon + heading → navy.
+  - "Start your first listing above" + "Track the status of every property" + "Or browse existing listings →" — all navy with arrow in navy.
+  - "Open Full Dashboard" CTA → `jj-cta-dark` (navy + white text + white icon).
+
+All edits scoped to `ListProperty.tsx` + its inline cards; uses existing locked primitives (`jj-cta-dark`, `jj-pill-active`, `IconTile` tone="ink"/"gold").
+
+---
+
+## 3. Careers page — `/join` → `/careers` canonical URL
+
+- In `src/routes/PublicRoutes.tsx`: keep `JoinApplication` mounted on `/careers` as the **canonical** route; `/join` becomes a `<Navigate to="/careers" replace />` redirect (preserves any deep links).
+- Update internal links (`Footer`, `GlobalHeader`, nav, sitemap, SEO canonical/og:url, JSON‑LD) from `/join` → `/careers`.
+- Update `public/sitemap.xml` and `public/robots.txt` if `/join` is listed.
+- Update SEO head inside `JoinApplication` (`<title>`, `<meta description>`, canonical, og:url) to use `/careers`.
+
+---
+
+## 4. Careers page — hide from Investor mode
+
+- Wrap `/careers` (and `/careers/apply`) in `<ModeRequiredRoute modes={['broker','developer']} />` so it's blocked when `mode === 'investor'`.
+- Hide the "Careers" entry from header/footer/global nav when current mode is investor (mirror existing mode-aware nav pattern).
+
+---
+
+## 5. Careers page — visual polish
+
+**a) "Open Positions" / "Live Roles" band** (`src/pages/JoinApplication.tsx` — the navy hero band containing the rectangles you circled):
+- `LIVE ROLES` pill, `Open Positions` H2, sub "Tap Apply on any role to auto‑select it in the form below" → all **white** (currently rendering dark on dark).
+- Search input on that band → white placeholder + white icon, transparent fill with white hairline border.
+
+**b) "Meet Jessica" card**:
+- Background stays champagne; **avatar circle ring + bot icon stroke → navy/ink** so the icon is visible against the champagne ring (today the icon is white inside a champagne ring = invisible).
+- "AI INTERVIEW ASSISTANT" pill → ink on champagne with gold hairline.
+
+**c) FAQ accordion** (`src/components/careers/CareersFAQ.tsx`):
+- Active/open FAQ item gets a **navy filled circle icon** on the right (replacing the empty chevron position circled in the screenshot) — clear visual indicator of which question is expanded. Closed items keep the gold chevron.
+- Keep champagne card shell + gold hairline.
+
+---
+
+## Technical changes (file map)
 
 ```text
-┌────────────────────────────────────────────────────────────┐
-│  PREMIUM VIDEO HERO  (full-bleed, ≈ 86vh)                 │
-│  • Looping AI/data-mesh video bg (reuse existing asset)    │
-│  • Composite legibility overlay (top/bottom dark gradient  │
-│    + radial spotlight) — pattern from MarketIntelligenceHero│
-│  • Glass gold-border badge: "FREE FOR ALL USERS"           │
-│  • H1 white, drop-shadow: "JBJ Royal Tools Hub"            │
-│  • Sub: "Your Complete AI Tools Command Center"            │
-│  • Single row of 3 EQUAL CTAs, max-w-[200px] each,         │
-│    h-12, jj-cta-* primitives:                              │
-│      [Go to My Dashboard]  (jj-cta-dark, navy)             │
-│      [Explore Free Tools]  (jj-cta-champagne, ink)         │
-│      [View Premium Plans]  (jj-cta-dark, navy + Sparkles)  │
-└────────────────────────────────────────────────────────────┘
-│  TRUST STRIP — champagne band (jj-band--surface)           │
-│  4 × IconTile cards (gold tone):                           │
-│   Brain · Zap · Shield · Clock  → ink labels, gold hairline│
-├────────────────────────────────────────────────────────────┤
-│  DISCOVER SECTION — page band                              │
-│  • Centered ALL FREE TOOLS chip                            │
-│  • H2 ink: "Discover All Free AI Tools" (single color)     │
-│  • Sub: "All tools in one place…"                          │
-│  • Search input: bg #FDFBF7, ink text, gold hairline       │
-│  • Category pills: jj-pill-active (cream + ink + gold)     │
-├────────────────────────────────────────────────────────────┤
-│  CATEGORY GROUPS (loop, one per category)                  │
-│  Each group is its own PremiumSectionCard on champagne;    │
-│  cards inside use the same tone (champagne, ink, gold      │
-│  hairline, IconTile in mode-purple for AI tools). Replaces │
-│  the neon purple/blue/red slabs.                           │
-├────────────────────────────────────────────────────────────┤
-│  PORTAL ROW — surface band, 2 cards (Broker / Investor)    │
-│  • Champagne cards, ink copy, IconTile (gold)              │
-│  • CTA = jj-cta-dark (navy + white + gold hairline)        │
-│    "Open Broker Portal" / "Open Investor Hub"              │
-├────────────────────────────────────────────────────────────┤
-│  WELCOME-BACK BAND — raised champagne                      │
-│  "Welcome back, {firstName}" + sub + jj-cta-dark           │
-│  "Explore Tools Above" (now visible)                       │
-└────────────────────────────────────────────────────────────┘
+NEW
+  supabase/migrations/<ts>_academy_access_requests.sql   # table + GRANTs + RLS
+  supabase/functions/academy-access-approved-email/index.ts
+  src/components/broker-education/AcademyAccessRequestModal.tsx
+  src/pages/owner/OwnerAcademyAccessQueue.tsx
+
+EDIT
+  src/pages/broker/BrokerLearning.tsx        # open modal instead of silent mutate
+  src/pages/ListProperty.tsx                 # contrast + navy CTAs + "AI Assistant" label
+  src/components/careers/CareersFAQ.tsx      # navy circle on active item
+  src/pages/JoinApplication.tsx              # white text on navy band, Jessica icon fix,
+                                              # SEO canonical → /careers
+  src/components/careers/PremiumCareersHero.tsx  # (if hero owns the white-text band)
+  src/routes/PublicRoutes.tsx                # /join → Navigate to /careers
+                                              # /careers gated to broker|developer modes
+  src/components/Footer.tsx                  # update /join links → /careers, hide for investor
+  src/components/GlobalHeader.tsx            # same
+  src/components/navigation/GlobalVerticalNav.tsx  # same
+  public/sitemap.xml                         # /join → /careers
+  .lovable/plan.md                           # this plan
 ```
-
-## Technical changes
-
-- **File:** rewrite `src/pages/AIHub.tsx` end-to-end. Keep the existing tool registry imports + visibility hook + category list so every currently-listed tool still renders.
-- Replace ad-hoc `bg-purple-900/80 …` / neon shadow classes with the locked primitives:
-  - Bands: `.jj-band jj-band--page` / `jj-band--surface` / `jj-band--raised`
-  - Section shell: `<PremiumSectionCard>`
-  - Buttons: `.jj-cta-dark` (navy), `.jj-cta-champagne` (ink), `.jj-pill-active`
-  - Icons: `<IconTile />` (`tone="gold"` for trust + portal, `tone="purple"` for AI-tagged tools)
-  - Price/dev labels untouched (not used here)
-- Hero video: reuse the existing AI/data-mesh `.mp4` used by Market Intelligence Hero (`MarketIntelligenceHero` pattern); fallback poster image.
-- All text colors come from semantic tokens (`text-[#1A1A1A]`, `text-white` only on verified-dark surfaces). No raw grays, no faded gold.
-- Add `data-marketing-page` on the root so the full-bleed band system applies.
-- Remove every `SectionDivider` line (no-op per memory) — sections separated by band-tone alternation only.
-- Keep route, SEO head, auth check, and all existing tool data. **No tool, link, or section is removed.**
 
 ## Verification
 
-1. Build passes (auto).
-2. Open `/ai-hub` in preview, screenshot full page; visually confirm:
-   - Hero headline + badge legible over video.
-   - 3 CTAs equal width/height, aligned, all readable.
-   - 4 trust cards show gold IconTiles (not black squares).
-   - "Discover" heading single-color, search input readable.
-   - No neon purple/blue slabs; category groups sit on champagne with gold hairline.
-   - Portal CTAs are navy `#102540` with white text.
-   - "Explore Tools Above" CTA visible.
-3. Run contrast guard scripts if they trigger; fix any flag.
+For every change I will:
+1. Build passes (automatic).
+2. Open the affected route in the in-browser preview (`/list-property`, `/broker/learning`, `/careers`, `/owner/academy-access`), take **full-page screenshots**, and visually confirm:
+   - No white-on-white / dark-on-dark text remains in the called-out spots.
+   - Academy "Request Access" opens the new form modal; submitting writes a row (verified via DB read).
+   - Approve flow in owner queue updates status and dispatches the email (edge function log).
+   - `/join` 301-style redirects to `/careers` in the address bar.
+   - Investor mode hides the Careers link and `/careers` redirects away.
+3. Re-screenshot after each fix to confirm pixel-level correctness — no claim of "done" without the visual.
 
-## Out of scope (deferred, as noted last turn)
+## Out of scope
 
-- Deeper Developers Portal expansion (new sidebars, admin/rep sub-pages) — queued as next task per prior message.
+- No removal of any existing Academy book/module data.
+- No change to the existing broker certification flow (separate gate).
+- No reskin of the rest of the JoinApplication page beyond the band + Jessica + FAQ accordion polish above.
