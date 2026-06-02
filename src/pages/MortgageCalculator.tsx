@@ -10,6 +10,8 @@ import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { AnimatedBorderShell } from "@/components/tools/AnimatedBorderShell";
 import { AnimatedShineCTA } from "@/components/tools/AnimatedShineCTA";
+import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
+import { toolThemes } from "@/components/tools/toolThemes";
 
 const advisorBenefits = [
   {
@@ -39,12 +41,14 @@ const MortgageCalculatorPage = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="min-h-screen bg-[#F7F2EA]">
+    <ToolAnimatedFrame theme={toolThemes.navy}>
+    <section className="bg-[#F7F2EA]">
       <SEOHead {...pagesSEO.mortgageCalculator} />
 
       {/* Tool shell — navy hero + form inside a single animated-border card */}
       <div className="container mx-auto px-4 pt-6 md:pt-8 pb-12">
         <div className="jbj-neon-frame">
+
         <AnimatedBorderShell tone="navy" className="overflow-hidden">
           <div className="bg-[#0b1626]">
             {/* Navy hero header with back inside, centered title */}
