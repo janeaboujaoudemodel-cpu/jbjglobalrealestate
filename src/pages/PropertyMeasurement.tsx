@@ -316,7 +316,12 @@ jbj.ae
 
   return (
     <ToolAnimatedFrame theme={toolThemes.teal}>
-    <section className="relative w-full min-h-screen bg-[#1A1A1A]">
+    <section
+      data-allow-dark-cta
+      data-no-contrast-guard
+      data-on-dark
+      className="allow-white relative w-full min-h-screen bg-[#0A0F0C]"
+    >
       {/* Animated emerald border keyframes (page-local) */}
       <style>{`
         @keyframes jbjEmeraldFlow {
