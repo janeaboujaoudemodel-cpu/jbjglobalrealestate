@@ -55,6 +55,38 @@ const CompareManual = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [analysis, setAnalysis] = useState<any | null>(null);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
+  const [aiOpen, setAiOpen] = useState(false);
+
+  const handleAiExtracted = (e: ExtractedProject) => {
+    const filled: ManualProject = {
+      ...blank(),
+      name: e.projectName || "",
+      developer: e.developer || "",
+      location: e.location || "",
+      priceFrom: e.priceFromAed != null ? String(e.priceFromAed) : "",
+      priceTo: e.priceToAed != null ? String(e.priceToAed) : "",
+      bedrooms: e.bedrooms || "",
+      sizeRange:
+        e.sizeFromSqft && e.sizeToSqft
+          ? `${e.sizeFromSqft} - ${e.sizeToSqft}`
+          : e.sizeFromSqft
+          ? String(e.sizeFromSqft)
+          : "",
+      handover: e.handover || "",
+      paymentPlan: e.paymentPlan || "",
+      amenities: (e.amenities || []).join(", "),
+    };
+    setProjects((prev) => {
+      // If first card is empty, replace it; else append
+      const firstEmpty = prev.findIndex((p) => !p.name.trim());
+      if (firstEmpty >= 0) {
+        const next = [...prev];
+        next[firstEmpty] = { ...filled, id: prev[firstEmpty].id };
+        return next;
+      }
+      return [...prev, filled];
+    });
+  };
 
   const update = (id: string, patch: Partial<ManualProject>) =>
     setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p)));
