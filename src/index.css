@@ -4169,8 +4169,8 @@ button[data-phone-code-trigger],
 [data-surface="dark"],
 [data-hero-consultation-lock],
 [data-photo-copy-lock] {
-  color: hsl(var(--jj-on-dark));
-  -webkit-text-fill-color: hsl(var(--jj-on-dark));
+  color: hsl(var(--jj-on-dark)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
 }
 
 .jj-cta-dark :where(span, svg, [class*="lucide"]),
@@ -4187,9 +4187,9 @@ button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
 [data-surface="dark"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
 [data-hero-consultation-lock] :where(span, svg, [class*="lucide"]),
 [data-photo-copy-lock] :where(span, svg, [class*="lucide"]) {
-  color: hsl(var(--jj-on-dark));
-  -webkit-text-fill-color: hsl(var(--jj-on-dark));
-  stroke: hsl(var(--jj-on-dark));
+  color: hsl(var(--jj-on-dark)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
+  stroke: hsl(var(--jj-on-dark)) !important;
   opacity: 1;
 }
 
