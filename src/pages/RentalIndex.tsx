@@ -311,14 +311,14 @@ const RentalIndex = () => {
             </div>
           </div>
 
-          <PrimaryCTA
-            theme={theme}
+          <AnimatedShineCTA
+            tone="emerald"
             onClick={handleAnalyze}
-            disabled={isLoading || !community || !propertyType}
-            icon={isLoading ? Sparkles : TrendingUp}
+            loading={isLoading}
+            fullWidth
           >
             {isLoading ? "Analysing Rental Data…" : "Get Rental Estimate"}
-          </PrimaryCTA>
+          </AnimatedShineCTA>
 
           {/* Results */}
           {analysis && (
