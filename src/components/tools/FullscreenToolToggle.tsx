@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Maximize2, X } from "lucide-react";
+import { Maximize2, Minimize2 } from "lucide-react";
 
 /**
  * App-level fullscreen toggle used by every tool page.
@@ -23,15 +23,34 @@ const FullscreenToolToggle = ({ defaultOn = false }: { defaultOn?: boolean }) =>
     };
   }, [on]);
 
+  useEffect(() => {
+    const syncNativeFullscreen = () => setOn(Boolean(document.fullscreenElement));
+    document.addEventListener("fullscreenchange", syncNativeFullscreen);
+    return () => document.removeEventListener("fullscreenchange", syncNativeFullscreen);
+  }, []);
+
+  const toggleFullscreen = async () => {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+        return;
+      }
+      await document.documentElement.requestFullscreen({ navigationUI: "hide" });
+    } catch {
+      setOn((v) => !v);
+    }
+  };
+
   return (
     <button
       type="button"
-      onClick={() => setOn((v) => !v)}
+      onClick={toggleFullscreen}
+      data-fullscreen-tool-toggle
       data-allow-dark-cta
       data-no-contrast-guard
       aria-label={on ? "Exit full screen" : "Enter full screen"}
       title={on ? "Exit full screen" : "Enter full screen"}
-      className="allow-white fixed z-[10000] top-24 right-4 md:top-28 md:right-6 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-md transition-all hover:scale-[1.03]"
+      className="allow-white fixed z-[10000] top-24 right-4 md:top-28 md:right-6 inline-flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md transition-all hover:scale-[1.03]"
       style={{
         background: "rgba(15,15,22,0.72)",
         border: "1px solid rgba(255,255,255,0.28)",
@@ -39,8 +58,7 @@ const FullscreenToolToggle = ({ defaultOn = false }: { defaultOn?: boolean }) =>
         boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
       }}
     >
-      {on ? <X className="w-3.5 h-3.5 allow-white" /> : <Maximize2 className="w-3.5 h-3.5 allow-white" />}
-      <span className="allow-white">{on ? "Exit" : "Full Screen"}</span>
+      {on ? <Minimize2 className="w-4 h-4 allow-white" /> : <Maximize2 className="w-4 h-4 allow-white" />}
     </button>
   );
 };
