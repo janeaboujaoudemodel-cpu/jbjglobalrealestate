@@ -8,6 +8,8 @@ import OwnerGuard from "@/components/OwnerGuard";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import PageLoader from "@/components/PageLoader";
+import GatedToolRoute from "@/components/access/GatedToolRoute";
+import { toolThemes } from "@/components/tools/toolThemes";
 
 const Admin = lazy(() => import("@/pages/Admin"));
 const AdminLeads = lazy(() => import("@/pages/AdminLeads"));

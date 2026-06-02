@@ -12,6 +12,8 @@ import OwnerGuard from "@/components/OwnerGuard";
 import { BrokerPortalRoutes } from "@/routes/BrokerPortalRoutes";
 import TeamRouteGate from "@/routes/TeamRouteGate";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+import GatedToolRoute from "@/components/access/GatedToolRoute";
+import { toolThemes } from "@/components/tools/toolThemes";
 
 // ── Property & Listing Pages ──
 const Index = lazy(() => import("@/pages/Index"));
