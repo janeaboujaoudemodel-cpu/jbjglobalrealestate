@@ -51,6 +51,7 @@ const blank = (): ManualProject => ({
 const CompareManual = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [projects, setProjects] = useState<ManualProject[]>([blank(), blank()]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [analysis, setAnalysis] = useState<any | null>(null);
