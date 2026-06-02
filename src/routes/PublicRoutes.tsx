@@ -356,7 +356,21 @@ export const PublicRoutes = () => (
     <Route path="/mortgage" element={<Navigate to="/mortgage-calculator" replace />} />
     <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
     <Route path="/favorites" element={<AuthRequiredRoute><Favorites /></AuthRequiredRoute>} />
-    <Route path="/compare" element={<AuthRequiredRoute><Compare /></AuthRequiredRoute>} />
+    <Route
+      path="/compare"
+      element={
+        <AuthRequiredRoute>
+          <GatedToolRoute
+            toolId="compare"
+            toolName="Property Comparison"
+            theme={toolThemes.indigo}
+            tagline="Compare unlimited projects and units side by side, with payment plan and ROI breakdowns. Unlocked for JBJ brokers."
+          >
+            <Compare />
+          </GatedToolRoute>
+        </AuthRequiredRoute>
+      }
+    />
     <Route path="/compare-manual" element={<Navigate to="/compare" replace />} />
     <Route path="/quiz" element={<Quiz />} />
     <Route path="/quiz-results" element={<QuizResults />} />
