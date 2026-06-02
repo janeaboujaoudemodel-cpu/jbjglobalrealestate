@@ -89,6 +89,17 @@ const CompareManual = () => {
     });
   };
 
+  useEffect(() => {
+    const prefill = (location.state as { prefill?: ExtractedProject } | null)?.prefill;
+    if (prefill) {
+      handleAiExtracted(prefill);
+      // clear state so refresh doesn't re-prefill
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
   const update = (id: string, patch: Partial<ManualProject>) =>
     setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p)));
 
