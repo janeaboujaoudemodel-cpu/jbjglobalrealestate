@@ -100,6 +100,27 @@ interface AIAnalysis {
 }
 
 const Compare = () => {
+  // --- Compare mode router (Projects vs Units) ---------------------------
+  // The Units mode is broker/owner-only. See useCompareAccess +
+  // mem://features/compare/unit-comparison-and-payment-plan-engine.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const compareMode: "projects" | "units" =
+    searchParams.get("mode") === "units" ? "units" : "projects";
+  const setCompareMode = (m: "projects" | "units") => {
+    const next = new URLSearchParams(searchParams);
+    if (m === "units") next.set("mode", "units");
+    else next.delete("mode");
+    setSearchParams(next, { replace: true });
+  };
+  const access = useCompareAccess();
+
+  if (compareMode === "units") {
+    if (access.isLoading) return null;
+    if (!access.allowed) return <CompareAccessGate />;
+    return <UnitCompareShell onModeChange={setCompareMode} />;
+  }
+  // -----------------------------------------------------------------------
+
   const { user } = useAuth();
   const { isConsVisible } = useConsVisibility();
   const navigate = useNavigate();
