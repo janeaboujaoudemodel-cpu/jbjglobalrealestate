@@ -60,7 +60,7 @@ export default function SampleComparisonPreview() {
             Live preview · This is what you'll get
           </span>
         </div>
-        <span className="text-xs text-white/55">Sample data — not your shortlist</span>
+        <span className="text-xs text-white/55">Live preview</span>
       </div>
 
       {/* Headline */}
