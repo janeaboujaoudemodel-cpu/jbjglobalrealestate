@@ -37,7 +37,7 @@ import { toolThemes, TOOL_INK } from "@/components/tools/toolThemes";
 import { AnimatedShineCTA } from "@/components/tools/AnimatedShineCTA";
 import { useGuidedRequiredFields } from "@/hooks/useGuidedRequiredFields";
 
-const theme = toolThemes.emerald;
+const theme = toolThemes.burgundy;
 
 const dubaiCommunities = [
   "Downtown Dubai",
