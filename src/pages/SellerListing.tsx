@@ -612,12 +612,6 @@ Requirements:
                    data-seller-assistant-cta
                   onClick={() => {
                     setShowAssistant(true);
-                    setTimeout(() => {
-                      document.getElementById('seller-assistant-panel')?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center',
-                      });
-                    }, 100);
                   }}
                   className="inline-flex items-center gap-2 px-8 py-3.5 rounded-md text-sm font-bold transition-all hover:brightness-110"
                   style={{

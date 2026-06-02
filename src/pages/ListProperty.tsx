@@ -142,14 +142,14 @@ const ListProperty = () => {
     const sp = new URLSearchParams(searchParams);
     sp.set("mode", next);
     if (!sp.get("purpose")) sp.set("purpose", purpose);
-    setSearchParams(sp, { replace: false });
+    setSearchParams(sp, { replace: false, preventScrollReset: true });
   };
 
   const setPurpose = (next: Purpose) => {
     const sp = new URLSearchParams(searchParams);
     sp.set("purpose", next);
     if (!sp.get("mode")) sp.set("mode", mode);
-    setSearchParams(sp, { replace: false });
+    setSearchParams(sp, { replace: false, preventScrollReset: true });
   };
 
   const ActiveTab = useMemo(() => {

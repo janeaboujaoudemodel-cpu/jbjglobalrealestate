@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -101,7 +101,6 @@ const ListingPortalSubmit = () => {
   const [searchParams] = useSearchParams();
   const { user, isOwner } = useAuth();
   const firstName = useDisplayFirstName("there");
-  const creatorRef = useRef<HTMLDivElement>(null);
   
   // Read purpose from URL: ?purpose=sale or ?purpose=rent
   const urlPurpose = searchParams.get('purpose');
@@ -154,21 +153,6 @@ const ListingPortalSubmit = () => {
     const stateToSave = { phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode, sourceUrl, sourceText };
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(stateToSave));
   }, [phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode, sourceUrl, sourceText]);
-
-  // Scroll to creator section on phase changes — skip the initial mount so
-  // simply opening the AI tab does not yank the page down (Manual stays put).
-  const didMountScrollRef = useRef(false);
-  useEffect(() => {
-    if (!didMountScrollRef.current) {
-      didMountScrollRef.current = true;
-      return;
-    }
-    if (creatorRef.current) {
-      const headerOffset = 100;
-      const elementTop = creatorRef.current.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: Math.max(0, elementTop - headerOffset), behavior: 'smooth' });
-    }
-  }, [phase]);
 
   const getPhaseIndex = () => {
     switch (phase) {
@@ -715,7 +699,7 @@ const ListingPortalSubmit = () => {
           className="pointer-events-none absolute inset-0"
           style={{ background: "radial-gradient(circle at 85% 12%, rgba(168,85,247,0.22) 0%, transparent 55%)" }}
         />
-        <div className="container mx-auto px-4 relative" ref={creatorRef}>
+        <div className="container mx-auto px-4 relative">
           {/* Horizontal step header */}
           <div className="max-w-5xl mx-auto mb-8" data-no-contrast-guard data-allow-dark-cta>
             <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
