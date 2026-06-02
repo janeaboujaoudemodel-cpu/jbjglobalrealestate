@@ -630,7 +630,7 @@ Requirements:
                   <Wand2
                     data-no-contrast-guard
                     data-on-dark
-                    className="w-5 h-5 shrink-0 allow-white jj-icon-keep !text-white [&_*]:!text-white"
+                    className="w-5 h-5 shrink-0 allow-white jj-icon-keep !text-white !stroke-white [&_*]:!stroke-white"
                     color="#FFFFFF"
                     stroke="#FFFFFF"
                     style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
