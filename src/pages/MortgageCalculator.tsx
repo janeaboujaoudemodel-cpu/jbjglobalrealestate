@@ -231,6 +231,7 @@ const MortgageCalculatorPage = () => {
       
       <ActiveLeadBanner showAddToShortlist={false} />
     </section>
+    </ToolAnimatedFrame>
   );
 };
 
