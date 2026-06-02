@@ -258,21 +258,23 @@ const ListProperty = () => {
 
         <div className="max-w-5xl mx-auto">
           <div
-            className="rounded-2xl p-4 sm:p-6 md:p-7 shadow-xl"
+            className="rounded-2xl p-5 sm:p-6 md:p-7 shadow-xl"
             style={{
               background: `linear-gradient(135deg, #FFFFFF 0%, ${theme.primary}14 55%, #FFFFFF 100%)`,
               border: `1.5px solid ${theme.primary}`,
               boxShadow: `0 18px 40px -22px ${theme.primary}66`,
             }}
-
           >
-            <div className="flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
-              <div className="flex-1">
-                <div className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-2"
-                  style={{ color: theme.primary }}>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-start">
+              {/* Purpose */}
+              <div className="md:col-span-4">
+                <div
+                  className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-3"
+                  style={{ color: theme.primary }}
+                >
                   Purpose
                 </div>
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="grid grid-cols-2 gap-2">
                   <SegmentedPill
                     active={purpose === "sale"}
                     onClick={() => setPurpose("sale")}
@@ -292,12 +294,15 @@ const ListProperty = () => {
                 </div>
               </div>
 
-              <div className="flex-1">
-                <div className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-2"
-                  style={{ color: theme.primary }}>
+              {/* Mode */}
+              <div className="md:col-span-8">
+                <div
+                  className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-3"
+                  style={{ color: theme.primary }}
+                >
                   How would you like to list?
                 </div>
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="grid grid-cols-3 gap-2">
                   <SegmentedPill
                     active={mode === "manual"}
                     onClick={() => setMode("manual")}
@@ -323,23 +328,29 @@ const ListProperty = () => {
                   >
                     Browse
                   </SegmentedPill>
-                  <a
-                    href="#my-submissions"
-                    data-no-contrast-guard
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:brightness-105"
-                    style={{
-                      background: ombreSoft(theme),
-                      color: theme.primary,
-                      WebkitTextFillColor: theme.primary,
-                      border: `1.5px solid ${theme.primary}`,
-                      boxShadow: `0 6px 16px -10px ${theme.primary}66`,
-                    }}
-                  >
-                    View my submissions →
-                  </a>
-
                 </div>
               </div>
+            </div>
+
+            {/* Submissions link — separated, right-aligned */}
+            <div
+              className="mt-5 pt-4 flex justify-end"
+              style={{ borderTop: `1px solid ${theme.primary}26` }}
+            >
+              <a
+                href="#my-submissions"
+                data-no-contrast-guard
+                className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl text-sm font-semibold transition-all hover:brightness-105"
+                style={{
+                  background: "#FFFFFF",
+                  color: theme.primary,
+                  WebkitTextFillColor: theme.primary,
+                  border: `1.5px solid ${theme.primary}`,
+                  boxShadow: `0 6px 16px -10px ${theme.primary}66`,
+                }}
+              >
+                View my submissions →
+              </a>
             </div>
           </div>
         </div>
