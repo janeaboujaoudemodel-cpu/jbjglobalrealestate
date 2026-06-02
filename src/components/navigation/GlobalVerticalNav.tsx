@@ -1289,16 +1289,19 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           {/* Section icons — unified gold tile, blue on hover */}
           <style>{`
             .jj-side-tile {
-              background: #FDFBF7;
-              border: 1px solid #B89555;
-              color: #B89555;
-              transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+              background-color: #FDFBF7 !important;
+              border: 1px solid #B89555 !important;
+              color: #B89555 !important;
+              transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease !important;
             }
-            .jj-side-tile svg { color: #B89555; stroke: #B89555; transition: color 180ms ease, stroke 180ms ease; }
-            .jj-side-tile:hover { background: #102540; border-color: #102540; box-shadow: 0 2px 6px rgba(16,37,64,.25); }
-            .jj-side-tile:hover svg { color: #FFFFFF; stroke: #FFFFFF; }
-            .jj-side-tile.is-active { background: #102540; border-color: #102540; }
-            .jj-side-tile.is-active svg { color: #FFFFFF; stroke: #FFFFFF; }
+            .jj-side-tile svg,
+            .jj-side-tile svg * { color: #B89555 !important; stroke: #B89555 !important; transition: color 180ms ease, stroke 180ms ease !important; }
+            .jj-side-tile:hover { background-color: #102540 !important; border-color: #102540 !important; box-shadow: 0 2px 6px rgba(16,37,64,.25) !important; }
+            .jj-side-tile:hover svg,
+            .jj-side-tile:hover svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; }
+            .jj-side-tile.is-active { background-color: #102540 !important; border-color: #102540 !important; }
+            .jj-side-tile.is-active svg,
+            .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; }
           `}</style>
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
             {highlightItems.map((item, i) => {
