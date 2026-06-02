@@ -467,6 +467,8 @@ const PropertyMeasurement = () => {
                       value={propertyName}
                       onChange={(e) => setPropertyName(e.target.value)}
                       placeholder="e.g., My Dubai Marina Apartment"
+                      data-surface="dark"
+                      data-jbj-field="dark"
                       data-allow-dark-cta
                       data-no-contrast-guard
                       className="allow-white mt-2 focus-visible:ring-emerald-400 placeholder:!text-white placeholder:!opacity-90 !text-white"
@@ -474,6 +476,8 @@ const PropertyMeasurement = () => {
                         background: "linear-gradient(135deg, rgba(4,40,28,0.6), rgba(0,0,0,0.6))",
                         border: "1px solid rgba(16,185,129,0.3)",
                         color: "#FFFFFF",
+                        WebkitTextFillColor: "#FFFFFF",
+                        caretColor: "#FFFFFF",
                       }}
                     />
                   </div>
