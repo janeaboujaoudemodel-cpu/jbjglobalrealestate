@@ -1,5 +1,9 @@
 import { useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import UnitCompareShell from "@/components/compare/units/UnitCompareShell";
+import CompareModeToggle from "@/components/compare/CompareModeToggle";
+import CompareAccessGate from "@/components/compare/units/CompareAccessGate";
+import { useCompareAccess } from "@/hooks/useCompareAccess";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -96,6 +100,28 @@ interface AIAnalysis {
 }
 
 const Compare = () => {
+  // --- Compare mode router (Projects vs Units) ---------------------------
+  // The Units mode is broker/owner-only. See useCompareAccess +
+  // mem://features/compare/unit-comparison-and-payment-plan-engine.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const compareMode: "projects" | "units" =
+    searchParams.get("mode") === "units" ? "units" : "projects";
+  const setCompareMode = (m: "projects" | "units") => {
+    const next = new URLSearchParams(searchParams);
+    if (m === "units") next.set("mode", "units");
+    else next.delete("mode");
+    setSearchParams(next, { replace: true });
+  };
+  const access = useCompareAccess();
+
+  if (access.isLoading) return null;
+  if (!access.allowed) return <CompareAccessGate />;
+
+  if (compareMode === "units") {
+    return <UnitCompareShell onModeChange={setCompareMode} />;
+  }
+  // -----------------------------------------------------------------------
+
   const { user } = useAuth();
   const { isConsVisible } = useConsVisibility();
   const navigate = useNavigate();
@@ -537,6 +563,11 @@ const Compare = () => {
           </button>
 
           <div className="max-w-5xl mx-auto">
+            {access.allowed && (
+              <div className="flex justify-center mb-6">
+                <CompareModeToggle mode="projects" onChange={setCompareMode} />
+              </div>
+            )}
             {/* Eyebrow */}
             <div className="flex justify-center mb-6">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
