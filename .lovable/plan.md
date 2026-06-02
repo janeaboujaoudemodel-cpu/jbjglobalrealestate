@@ -1,89 +1,100 @@
+# Plan — Measurement E2E → News/Market Intel Neon → Guides Library Book Reader
 
-## Scope
-
-Large multi-area pass. Grouped into 5 workstreams. Will ship as one batch, validate visually in preview, then E2E-test the four tools.
-
----
-
-### 1. Property Measurement — rebuild + readability + green/black/white ombré
-
-**Page:** `/property-measurement` (`src/pages/toolkit/...` — locate exact file).
-
-- **Contrast fix:** every section currently renders dark-on-dark (hero subtitle, step indicator labels, "Step 1: Property Information", "Property Type", "Property Name", "Unit Preference"). Force ombré-white (`rgba(255,255,255,0.92)` headings, `rgba(255,255,255,0.72)` body) on the dark hero/form surface. No pure `#FFF`.
-- **Property-type cards** (Apartment / Villa / Office / Land / Retail): kill the navy `#1e3a8a` fill. Replace with the same `emerald → black` ombré used by the active "Both" pill and the "Continue" button (`linear-gradient(135deg,#10B981 0%, #064E3B 55%, #000 100%)`), 1px emerald hairline, ombré-white label + icon. Selected state = brighter emerald ring + inner glow.
-- **Unit Preference** pills (Sq Feet / Sq Meters / Both): same ombré-white text rule; active stays emerald.
-- **Rebuild flow E2E:**
-  1. Step 1 property info
-  2. Step 2 upload photos **or video** (drag-drop, multi-file, preview thumbs)
-  3. Step 3 AI analysis (calls edge function)
-  4. Step 4 per-room measurements table (sq ft + sq m toggle, both option)
-  5. Step 5 downloadable PDF report with photo thumbnails + measurements + totals
-- **Edge function:** `property-measurement-analyze` — accepts image/video URLs, returns `{ rooms: [{name, sqft, sqm, confidence, imageUrl}], totalSqft, totalSqm }`. Redeploy.
-- **Unit selector** (sq ft / sq m / both) drives report rendering.
-- **PDF export:** branded JBJ letterhead via existing `exportUnitComparisonPdf` pattern → new `exportMeasurementReport.ts`.
-
-### 2. Horizontal header — gold icons
-
-`src/components/navigation/HorizontalUtilityBar.tsx`:
-- Search icon, Filter icon, Heart icon → `#B89555` stroke.
-- AED chevron + Mode chevron → `#B89555`.
-- Hover stays current (ink/navy).
-
-### 3. Mortgage Calculator — neon premium restyle
-
-Locate `MortgageCalculator` page. Add:
-- Animated gradient border (cyan `#22D3EE` → magenta `#EC4899` → violet `#A78BFA` conic, slow rotate).
-- Soft floating bubble particles (CSS keyframes, 6–8 blurred circles).
-- Glow drop-shadow on the main card.
-- Inputs: dark glass surface, ombré-white labels, neon focus ring.
-- Result tiles: neon gradient text for the monthly payment.
-- Fix all contrast (currently same dark-on-dark issue likely).
-
-### 4. News & Insights + Market Intelligence — neon news-magazine style
-
-- **News & Insights** (`/news` or similar): magazine grid, neon accent rules between cards, large editorial typography, animated underline on hover, featured story hero with glow.
-- **Market Intelligence** (`/market-intelligence`): neon dashboard — animated chart gridlines, glowing KPI tiles, ombré-white body copy, dark glass cards with cyan/magenta accent.
-- Both: fix all low-contrast text to ombré-white, validate visually.
-
-### 5. E2E test pass (browser tools)
-
-Log in as broker and as investor where applicable, then walk through:
-- **Property Measurement** — upload sample photo, run AI, download report.
-- **Rental Index** — search a community, verify chart loads, numbers render.
-- **Property Evaluator** — submit a property, verify AI valuation output.
-- **Property Comparison** (`/compare` units mode) — add 2 units, fill plan, export PDF.
-- **List Your Property** — full submission flow to draft.
-
-For each: capture screenshot, log every broken step, fix root cause, re-test.
+Three workstreams, executed strictly in this order. Each ends with a visual E2E pass (screenshots + user-perspective click-through) before moving on.
 
 ---
 
-### Technical notes
+## 1. Property Measurement — Full E2E (FIRST, BLOCKING)
 
-- New file: `src/lib/measurement/exportMeasurementReport.ts` (jsPDF + autotable, JBJ branding).
-- New edge function or update existing: `supabase/functions/property-measurement-analyze/index.ts` using `google/gemini-2.5-pro` (vision) via Lovable AI Gateway. No API key needed.
-- New CSS utility class `.jbj-ombre-emerald` in `index.css` for the green/black/white ombré card fill (re-usable).
-- New CSS utility `.jbj-neon-frame` for animated neon border + bubbles.
-- Header icon color via Tailwind `text-[#B89555]` override on the existing lucide icons.
+Goal: a broker can open `/property-measurement`, run the full flow, get AI results, and download a branded PDF — no broken steps.
 
-### Files to touch (approx.)
-
-- `src/pages/toolkit/PropertyMeasurement*.tsx` (rebuild)
-- `src/pages/toolkit/MortgageCalculator*.tsx` (restyle)
-- `src/pages/NewsInsights*.tsx`, `src/pages/MarketIntelligence*.tsx`
-- `src/components/navigation/HorizontalUtilityBar.tsx`
-- `src/index.css` (two new utility classes)
+### Edge function
 - `supabase/functions/property-measurement-analyze/index.ts`
-- `src/lib/measurement/exportMeasurementReport.ts` (new)
+  - Accepts `{ propertyType, propertyInfo, mediaUrls[] }`.
+  - Calls Lovable AI Gateway `google/gemini-2.5-pro` (vision) with structured tool call → returns `{ rooms:[{name, lengthM, widthM, areaSqm, areaSqft, ceilingM, notes}], totals:{areaSqm, areaSqft}, summary, confidence }`.
+  - CORS + 429/402 handling + zod validation.
+  - Deploy and curl-test with a sample image URL before wiring UI.
 
-### Out of scope (will NOT touch)
+### Storage
+- Bucket `measurement-uploads` (private), RLS: authenticated users can upload/read their own folder.
 
-- Compare tool wiring (already shipped last turn).
-- Vertical sidebar (already gold per memory).
-- Mode/role logic.
+### Frontend flow (`src/pages/PropertyMeasurement.tsx` + new `src/components/measurement/*`)
+- Step 1: property type tiles (emerald→black ombré, already styled) + basic info form.
+- Step 2: drag/drop multi-image + video uploader → uploads to `measurement-uploads`, shows thumbnails + remove.
+- Step 3: "Analyze" CTA → invokes edge function, shows neon progress state.
+- Step 4: results table (sq m / sq ft toggle, per-room rows, totals row, AI summary, confidence chip), all readable (ombré-white on dark surfaces).
+- Step 5: "Download Branded Report" → calls new `src/lib/measurement/exportMeasurementReport.ts` (jsPDF + autotable, JBJ letterhead cover, table page, AI summary page, signature/footer per `mem://documents/signature-and-gold-divider-lock`).
+- "Reset / New Measurement" CTA.
 
-### Validation
+### E2E QA (must pass before moving on)
+- Run as logged-in broker on `/property-measurement`.
+- Upload 2 sample images → Analyze → verify rooms render → toggle units → download PDF → open PDF and confirm cover + table + signature block.
+- Screenshot every step. Capture console + network for errors. Fix root causes, re-run.
 
-- Browser tool visual check on each page after styling.
-- E2E walkthrough on the 4 named tools with screenshots + bug list per tool.
-- No claim of "done" until all five flows return a usable artifact (report / PDF / valuation / comparison).
+---
+
+## 2. News & Insights + Market Intelligence — Neon Premium Restyle
+
+Only after step 1 is verified.
+
+### News & Insights
+- Magazine-style hero (featured story with neon glow underline), 3-column grid below, animated gradient hairlines between rows.
+- Category chips with neon cyan/magenta accent on active.
+- Card hover: glow drop-shadow + 1px gradient border, ombré-white body text on dark glass surface.
+- Reading view: large serif-free title, ombré-white body, neon pull-quotes.
+
+### Market Intelligence
+- Dashboard of glowing KPI tiles (cyan/magenta/violet accents per metric class — price, supply, demand, yield).
+- Dark glass cards (`backdrop-blur` + 1px gradient ring), ombré-white body copy.
+- Charts: Recharts with neon stroke palette, no gray gridlines (use faded gold per memory).
+- Fix all current contrast issues (audit each section, replace any low-opacity white-on-light or dark-on-dark).
+
+### QA
+- Walk both pages as a user, screenshot each section, confirm readability at 1178px and mobile.
+
+---
+
+## 3. Guides Library — Real Book Reader with Neon Themes + Audio
+
+Only after steps 1 & 2 are verified.
+
+### Concept
+Each guide opens as a **real book**: cover → chapter list → paged spread (page 1 / page 2 visible side-by-side on desktop, single page on mobile), with page-turn animation, "Chapter X · Page Y of N" footer, and a voice button that reads the page aloud.
+
+### Per-book theming
+Each book gets its own neon palette + header treatment derived from its topic (e.g. Investment Guide = cyan/violet, Off-Plan Guide = magenta/gold-neon, Mortgage Guide = emerald/cyan, Legal Guide = navy/violet, Brokerage Guide = amber/magenta). Each **page inside a book** rotates accent color across a curated 3–4 color set for that book, so flipping feels alive but on-brand.
+
+### Components (new under `src/components/guides/reader/`)
+- `BookCover.tsx` — neon spine + title + author + "Open Book" CTA.
+- `ChapterIndex.tsx` — table of contents with neon hover, jump to chapter/page.
+- `BookSpread.tsx` — 2-page spread on desktop, 1-page on mobile, framer-motion page-turn (3D rotateY) with paper texture.
+- `PageChrome.tsx` — per-book header band, chapter title, page number footer, neon hairline.
+- `VoiceReaderBar.tsx` — Play / Pause / Stop, voice select, speed, progress; reads current page text.
+- `BookThemeProvider.tsx` — supplies palette + per-page accent rotation.
+
+### Audio (TTS)
+- Edge function `guide-read-aloud` → ElevenLabs TTS (per `elevenlabs-tts` knowledge), streams MP3.
+- Requires `ELEVENLABS_API_KEY` secret. **Will request via `add_secret` at start of step 3** if not already present.
+- Default voice: Sarah (`EXAVITQu4vr4xnSDxMaL`); user can pick from a small curated list.
+- Audio is per-page; pausing/turning page stops current audio.
+
+### Data
+- Guides already exist in DB. Plan adds (if missing) `guide_chapters` and `guide_pages` tables, or splits existing `content` HTML into pages client-side by heading + length heuristic if schema can't change. **Will inspect current schema first** and pick the lighter option; migration only if needed.
+
+### Routes
+- `/guides` — library grid, restyled with neon spines.
+- `/guides/:slug` — book reader (cover → spread).
+
+### QA
+- Open each guide, flip pages, verify per-page accent rotation, click voice → audio plays, pause/stop works, mobile single-page layout works. Screenshots per book.
+
+---
+
+## Out of scope (for this plan)
+- Compare tool / vertical sidebar / mode logic (already handled previously).
+- Any backend changes beyond the 2 new edge functions + (maybe) guide pages table + measurement-uploads bucket.
+
+## Execution rules
+- Strictly sequential. Do NOT start step 2 until step 1's E2E screenshots pass. Do NOT start step 3 until step 2 passes.
+- Every step ends with: real click-through as user, screenshots, console/network check, fix, re-verify.
+- No "it's live" claims without a screenshot proving it.
