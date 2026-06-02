@@ -16,7 +16,9 @@ export type ToolTheme = {
     | "violet"
     | "teal"
     | "rose"
-    | "amber";
+    | "amber"
+    | "indigo";
+
   /** Display label */
   label: string;
   /** Tailwind/CSS values for the hero band gradient */
