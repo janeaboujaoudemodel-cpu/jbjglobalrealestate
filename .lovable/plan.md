@@ -1,113 +1,185 @@
 ## Goal
 
-Rebuild `/compare` (Property Comparison) into a premium AI tool surface — animated Flo-style blue→pink→purple flowing gradient, no gray/silver, no boring step cards, with a live example of the comparison table, fixed button contrast, and a smarter AI engine. Verify everything end-to-end in the browser before delivery.
+Extend `/compare` (Property Comparison) with a second mode — **Unit Comparison** — that lets a broker (or me as owner) compare units inside a single project (e.g. 1BR vs 2BR vs 3BR in "Amara Wellness Resort by City Developer") side-by-side, with a smart payment-plan auto-builder and column/field toggling.
 
-This is scoped as an **AI tool exception** (per the AI Premium Purple memory): the violet/blue/pink theme applies ONLY inside `/compare` and `/compare-manual`. The rest of the site keeps the champagne-gold standard.
+Visibility:
+- Investor mode → tool hidden entirely (no entry in nav, route still works for direct hits but renders an upsell explaining it's a broker tool)
+- Developer mode → tool hidden
+- Broker mode → tool visible (Project Compare + Unit Compare both shown)
+- Owner (real `owner`/`admin` role) → always sees everything
+
+The existing Project Comparison stays exactly as it is — we only add a top-level toggle and the new Unit mode beneath it.
 
 ---
 
-## 1. New visual shell (Flo-style animated gradient)
+## 1. Mode visibility gate
 
-Replace the current burgundy/champagne shell on `/compare` with a dedicated `CompareAIShell`:
+- Wrap `/compare` (and `/compare-manual`) entry points + nav links in a `useUserMode()` + `useIsAppOwner()` check.
+  - Show in nav/sidebar/account dropdown ONLY when `mode === 'broker'` OR `isOwner === true`.
+  - Direct route load while in investor/developer mode → render a small "This tool is for brokers" gate card with a "Switch to Broker mode" CTA (keep the page reachable for owner without mode switch).
+- Update Royal Tools Hub / `PropertySuite.tsx` to hide the Compare tab for investor & developer modes.
 
-- Full-bleed animated background: three soft conic/radial blobs (electric blue `#3B82F6`, hot pink `#EC4899`, deep violet `#7C3AED`) drifting on a slow 18–24s loop using `framer-motion` + CSS keyframes (GPU-accelerated `transform`/`filter: blur(80px)`). Subtle grain overlay, deep navy base `#0B1020`.
-- Glassmorphic content cards: `bg-white/[0.04]` + `backdrop-blur-xl` + 1px gradient border (blue→pink→purple), no gray/silver fills anywhere.
-- Hero headline uses a gradient text wipe (blue→pink) with a single light-sweep animation on mount.
-- Replace `ToolAnimatedFrame theme={toolThemes.burgundy}` with the new shell. Remove all `bg-zinc-*`, `bg-gray-*`, `from-gold/*` references on this page.
+## 2. Top of `/compare` — segmented toggle
 
-## 2. Process: step-line instead of step cards
+Inside the existing `CompareAIShell`, add a glass pill segmented control above the hero:
 
-Kill the 3-card "Browse / Shortlist / Generate" grid (lines ~563–588). Replace with a horizontal **AnimatedStepLine** component:
-
-```text
-①────────②────────③────────④
-Pick     Add via   AI         Get
-listings link/PDF  analyzes   verdict
+```
+[ Compare Projects ]   [ Compare Units ]
 ```
 
-- Animated SVG path with a gradient dot that travels left→right on a loop.
-- Each node: 36px circle with gradient ring, label below, micro-icon above.
-- Mobile: vertical with the same animated path.
+- `Compare Projects` = current page behavior (untouched).
+- `Compare Units` = new flow described below.
+- State is URL-driven (`?mode=units`) so deep-links share cleanly.
 
-## 3. Live example of the comparison table
+## 3. Unit Comparison flow
 
-Directly under the step-line, render a **pre-filled "Try it — sample comparison"** panel with 3 demo projects (Emaar Beachfront / Sobha Hartland / Damac Lagoons) and a real AI-comparison table preview (5–6 rows: Price/sqft, Yield, Handover, Payment plan, Smart rating, Verdict). Static data, not a network call. Includes:
+### 3a. Project picker (single project)
 
-- "This is what you'll get" eyebrow chip
-- Animated stat counters on viewport enter
-- A "Compare your own" CTA below
+- Single combobox: "Select project" → searches `projects` table (existing search infra). Shows cover thumb + developer name.
+- Once a project is chosen, show a slim project header card: cover, name, developer, location, handover.
+- "Change project" link resets the comparison.
 
-This replaces the abstract feature-highlight quad (`Side-by-Side / ROI / Smart / Expert`).
+### 3b. Add units
 
-## 4. CTA + button contrast pass
+Three ways to add a unit to the comparison (max 4 units):
 
-Every button on `/compare` audited and rebuilt against the navy/glass background:
+1. **From DB** — if the project has rows in `project_units` (or similar), list them and let broker tick which to add.
+2. **Manual entry** — "Add unit manually" → dialog with fields:
+   - Label (e.g. "1BR – Sea View")
+   - Bedrooms (studio/1/2/3/4+)
+   - Size (sqft)
+   - Total price (AED)
+   - View (sea / community / pool / skyline / city / garden — free text allowed)
+   - Floor (optional)
+   - Unit number (optional, owner-only field)
+   - Payment plan: pick from saved plans on the project OR "Use shared plan" OR custom inline
+3. **AI fill from PDF/link** — reuse existing `AddProjectDialog` AI extract pipeline, but in unit-mode it returns unit-level fields. Out of scope for this pass if too large — wire the button as "Coming next" placeholder.
 
-| Button | New treatment |
-|---|---|
-| Start Comparing | Solid gradient (blue→pink→purple), white text+icon, 1px white/30 inner ring, lift on hover |
-| Add via link/PDF (AI fill) | Glass white/10 + white text + violet icon + violet 1px border |
-| Compare manually | Outline white/30 + white text, hover fills white/8 |
-| Browse Properties | Same as Start Comparing variant |
-| Download Report / Excel | Glass + violet accent |
-| Share WhatsApp | Keep green but match new radius/height |
-| Share Email | Glass dark + white text (was broken white-on-light) |
+### 3c. Smart Payment Plan engine (the key piece)
 
-All buttons get `data-no-contrast-guard` + `data-allow-dark-cta` so the global champagne-guard doesn't repaint them to ink. Min height 48px, `rounded-xl`, consistent gap/padding.
+A new util `src/lib/payment-plan/buildSchedule.ts` that takes:
 
-## 5. Smarter AI engine (`smart-ai-analysis` edge function)
+```ts
+type PlanRule =
+  | { kind: 'down_payment'; pct: number; offsetDays?: number }       // e.g. 10% at booking
+  | { kind: 'milestone'; pct: number; offsetMonths: number }          // e.g. 10% after 1 month
+  | { kind: 'monthly'; pct: number; startMonth: number; untilHandover: true }  // e.g. 1% monthly till handover
+  | { kind: 'on_handover'; pct: number }
+  | { kind: 'post_handover_monthly'; pct: number; months: number };   // e.g. 1% monthly × 24 post-handover
 
-Upgrade the existing `supabase/functions/smart-ai-analysis`:
+type PlanInput = {
+  totalPriceAED: number;
+  handoverDate: string;       // ISO
+  startDate?: string;         // default today
+  rules: PlanRule[];
+};
+```
 
-- Switch model from current → `openai/gpt-5.5` (state-of-the-art reasoning) with `reasoning.effort = "medium"` for the verdict pass, `google/gemini-3-flash-preview` for the fast extract pass (two-stage pipeline).
-- Add new structured-output sections to `AIAnalysis`:
-  - `marketContext` — micro-market trend, 12-month price delta, supply pipeline (uses existing market intel tables when available)
-  - `riskScore` — 0–100 per project with weighted factors (developer track record, handover risk, oversupply, payment-plan stress)
-  - `bestForPersona` — auto-detect investor / end-user / flipper from shortlist behaviour and tailor the verdict
-  - `negotiationLeverage` — concrete asks the buyer can use (e.g. "ask for DLD waiver + 60/40 payment")
-- Tool-calling (not free-text JSON) for guaranteed schema.
-- Cache analysis by sorted shortlist-IDs hash for 24h in `ai_analysis_cache` to avoid re-billing on refresh.
-- Surface 402/429 errors as toasts with clear copy.
+Output: full month-by-month schedule with date, label, % and AED amount, plus totals validation (sum of % must equal 100; if not, surface a warning).
 
-## 6. UI surfaces for the new AI sections
+UI:
+- "Shared plan" toggle — if ON, the broker defines one plan and the engine auto-applies it to each unit using that unit's own total price + handover date.
+- If OFF, each unit can have its own plan.
+- Plan editor: chip-based rule builder (`+ Down payment`, `+ Milestone`, `+ Monthly till handover`, `+ On handover`, `+ Post-handover`) with inline % and offset inputs.
+- Live preview: a small accordion under each unit showing the generated schedule (first 6 rows + "show all 36 installments").
+- Save reusable plans to `payment_plan_templates` table (broker/owner scoped) so they can be re-used across projects.
 
-Add three new sections after the existing ratings table:
+### 3d. Comparison table
 
-- **Market Context strip** — three KPI tiles per project (price trend ▲/▼, supply heat, demand index)
-- **Risk Score gauge** — circular gauge per project with the weighted breakdown on hover
-- **Negotiation Leverage** — bulleted card with copy-to-clipboard per item
+Sticky-header table, 1 column per unit (up to 4). Rows = metrics. Each row toggleable via a "Columns" / "Fields" dropdown.
 
-All themed in the new blue/pink/purple system.
+Default visible rows (grouped):
 
-## 7. End-to-end visual QA (mandatory, before sign-off)
+**Unit**
+- Label, Bedrooms, Size (sqft), Price, Price / sqft, View, Floor, Unit #
 
-Using the browser tool at viewport 1178×891 then 390×844:
+**Location & Project**
+- Project name, Developer, Location/Area, Community, Handover
 
-1. Navigate to `/compare` logged-out → verify empty-state shell, step-line animation, sample table renders, all CTAs readable.
-2. Add 2 demo projects via "Add via link/PDF (AI fill)" using a public Emaar URL → confirm AddProjectDialog still works on the new shell.
-3. Navigate to `/properties`, shortlist 3 projects, return to `/compare` → verify projects load, table headers don't break on the navy bg, images render.
-4. Click "Start Comparing" while signed in → verify edge function call, loading state, all 4 new analysis sections render with real data, no white-on-white or black-on-black.
-5. Click Download Report → confirm HTML report still generates and the disclaimer is intact.
-6. Click Download Excel + Share WhatsApp + Share Email → verify each fires.
-7. Hover/focus every button → confirm no contrast guard flicker, no text disappearing.
-8. Resize to 390px → confirm step-line goes vertical, table scrolls horizontally, CTAs stack cleanly.
+**Payment Plan**
+- Down payment %, Monthly installment (AED), # of installments, Total during construction, Total post-handover, First payment date, Last payment date
 
-Any visual regression found in QA gets fixed in the same loop before reporting back.
+**Developer (collapsed by default)**
+- Founded year, Founder, Delivered projects count, Active projects, On-time delivery rating
 
----
+**Investor metrics (owner/broker analytical, optional)**
+- Estimated ROI, Estimated rental yield, Service charges (AED/sqft/yr), DLD fee
 
-## Out of scope
+A "Manage fields" popover lets the broker:
+- Check/uncheck any field
+- Reorder groups
+- Save presets (e.g. "Quick investor pitch", "Full broker view") to `compare_field_presets` table
 
-- `/compare-manual` page (will inherit the new shell automatically since it sits inside the same route family — visual parity only, no logic change)
-- Global theme — the blue/pink/purple stays scoped to `/compare*` and the AI tool routes that already use it
-- Existing PDF report HTML (keeps current dark/gold layout — it's a downloadable deliverable, not the on-page UI)
+Best-value highlighting: cheapest price/sqft, lowest monthly, highest yield → soft gold ring on that cell.
 
-## Technical notes (for reference)
+Bottom of table:
+- "Download PDF" (reuse existing report HTML generator, swap content for unit table)
+- "Share WhatsApp" / "Share Email"
+- "Save comparison" → persists to `unit_comparisons` table so the broker can reopen later
 
-- New files: `src/components/compare/CompareAIShell.tsx`, `src/components/compare/AnimatedStepLine.tsx`, `src/components/compare/SampleComparisonPreview.tsx`, `src/components/compare/MarketContextStrip.tsx`, `src/components/compare/RiskScoreGauge.tsx`, `src/components/compare/NegotiationLeverage.tsx`
-- Edits: `src/pages/Compare.tsx` (rewrites hero + empty state + CTA cluster), `supabase/functions/smart-ai-analysis/index.ts` (two-stage pipeline + tool calling + cache)
-- Migration: `ai_analysis_cache` table (shortlist_hash, payload jsonb, created_at) with TTL cleanup trigger
-- Animations: `framer-motion` (already in project), no new deps
-- Memory: add `mem://features/ai-intelligence/compare-tool-rebuild-standard` documenting the AI-tool blue/pink/purple exception scope
+## 4. Backend (Lovable Cloud)
 
-Approve and I'll switch to build mode and execute the whole thing including the browser QA loop.
+New tables (migration):
+
+```text
+payment_plan_templates
+  id uuid pk, owner_user_id uuid, name text, rules jsonb, is_shared bool, created_at
+
+compare_field_presets
+  id uuid pk, owner_user_id uuid, scope text ('project'|'unit'),
+  name text, visible_fields jsonb, field_order jsonb, created_at
+
+unit_comparisons
+  id uuid pk, owner_user_id uuid, project_id uuid, units jsonb,
+  shared_plan jsonb, field_preset jsonb, created_at, updated_at
+```
+
+RLS:
+- All three tables: SELECT/INSERT/UPDATE/DELETE where `owner_user_id = auth.uid()` OR `has_role(auth.uid(), 'owner')` OR `has_role(auth.uid(), 'admin')`.
+- Plus the standard GRANTs (`authenticated`, `service_role`) per the public-schema grants rule.
+
+No edge function needed for the payment-plan math — it's pure client-side TypeScript. The existing `smart-ai-analysis` function gets a new optional `unitsComparison` input shape for the AI verdict pass on units (handled in a follow-up if scope grows).
+
+## 5. Files
+
+New:
+- `src/components/compare/CompareModeToggle.tsx`
+- `src/components/compare/units/UnitCompareShell.tsx`
+- `src/components/compare/units/ProjectPicker.tsx`
+- `src/components/compare/units/UnitCard.tsx`
+- `src/components/compare/units/AddUnitDialog.tsx`
+- `src/components/compare/units/PaymentPlanEditor.tsx`
+- `src/components/compare/units/PaymentScheduleTable.tsx`
+- `src/components/compare/units/UnitComparisonTable.tsx`
+- `src/components/compare/units/FieldManagerPopover.tsx`
+- `src/components/compare/units/CompareAccessGate.tsx`
+- `src/lib/payment-plan/buildSchedule.ts`
+- `src/lib/payment-plan/buildSchedule.test.ts`
+- `src/lib/compare/unitFieldsConfig.ts`
+- `src/hooks/useCompareAccess.ts`
+
+Edits:
+- `src/pages/Compare.tsx` — mount `CompareModeToggle`, swap content based on `?mode=`
+- `src/pages/toolkit/PropertySuite.tsx` — hide Compare tab for investor/developer
+- Nav/header/account-dropdown — hide Compare link for non-broker/non-owner
+- `.lovable/plan.md` — refresh
+
+Memory:
+- New: `mem://features/compare/unit-comparison-and-payment-plan-engine` capturing the role gating, schema, payment-plan rule grammar, and "always allowed for owner" rule.
+
+## 6. End-to-end QA (mandatory before sign-off)
+
+In broker mode at 1178×891 then 390×844:
+1. `/compare` → toggle to "Compare Units" → pick "Amara Wellness Resort" (or any real project) → add 3 manual units (1BR, 2BR, 3BR) with prices.
+2. Enable Shared Plan: 10% down, 10% after 1 month, 1% monthly till handover, 30% on handover → verify schedule auto-builds per unit using each unit's own price; totals = 100%.
+3. Toggle fields off (hide Founder, Founded year) → table updates live; save preset → reload → preset persists.
+4. Switch to investor mode → /compare entry hidden in nav + tool gate renders on direct hit. Switch to developer mode → same. Switch to owner → both modes visible regardless of mode pill.
+5. Download PDF → unit table renders, payment schedules included.
+6. Mobile 390px → cards stack, table horizontally scrolls.
+
+## Out of scope this pass
+- AI-extract from PDF for units (button stubbed, real extractor in follow-up)
+- Editing the existing Project Comparison flow (it stays as-is)
+- Multi-project unit cross-compare (only one project at a time for now)
+
+Approve and I'll build.
