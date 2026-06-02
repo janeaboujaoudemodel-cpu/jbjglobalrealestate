@@ -34,6 +34,7 @@ import { prefetchAITool } from "@/utils/aiToolPrefetch";
 import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
 import { useTeamVisibility } from "@/hooks/useTeamVisibility";
 import { useCompareAccess } from "@/hooks/useCompareAccess";
+import { useGatedToolAccess } from "@/hooks/useGatedToolAccess";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
@@ -576,12 +577,14 @@ export default function GlobalVerticalNav() {
   const showInvestorSurfaces = isInvestorMode || isInvestor || isOwner;
   const { isPageVisible: isTeamPageVisible } = useTeamVisibility();
   const { allowed: canCompare } = useCompareAccess();
+  const { visible: canSeeCardScanner } = useGatedToolAccess("business-card-scanner");
 
   const shouldShowItem = useCallback((item: NavItem, sectionKey?: SectionKey | null) => {
     // Team page is hidden by default — only shows when owner flips the visibility toggle in Founder Settings.
     if (item.href === "/team" && !isTeamPageVisible) return false;
-    // Property Comparison is broker/owner only — never show to investor or developer modes.
+    // Property Comparison + Business Card Scanner are broker/owner only — hidden from investor/developer.
     if (item.href === "/compare" && !canCompare) return false;
+    if (item.href === "/business-card-scanner" && !canSeeCardScanner) return false;
     if (!showBrokerSurfaces && !isOwner) {
       if (item.href === "/join") return false;
       if (sectionKey === "BROKER & ACADEMY") return false;
@@ -590,7 +593,7 @@ export default function GlobalVerticalNav() {
     }
     if (!showInvestorSurfaces && sectionKey === "INVESTOR") return false;
     return true;
-  }, [showBrokerSurfaces, showInvestorSurfaces, isTeamPageVisible, isOwner, canCompare]);
+  }, [showBrokerSurfaces, showInvestorSurfaces, isTeamPageVisible, isOwner, canCompare, canSeeCardScanner]);
 
   const shouldShowSection = useCallback((sectionKey: SectionKey) => {
     if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return false;
