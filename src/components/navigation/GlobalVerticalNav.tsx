@@ -1328,9 +1328,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               );
             })}
 
-            {highlightItems.length > 0 && (
-              <div className="h-px w-5 my-1 bg-[#B89555]/35" aria-hidden="true" />
-            )}
 
             {SECTION_KEYS.map((sectionKey) => {
               if (!shouldShowSection(sectionKey)) return null;
