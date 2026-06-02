@@ -469,11 +469,11 @@ const PropertyMeasurement = () => {
                       placeholder="e.g., My Dubai Marina Apartment"
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="allow-white mt-2 focus-visible:ring-emerald-400"
+                      className="allow-white mt-2 focus-visible:ring-emerald-400 placeholder:!text-white/60 !text-white"
                       style={{
                         background: "linear-gradient(135deg, rgba(4,40,28,0.6), rgba(0,0,0,0.6))",
                         border: "1px solid rgba(16,185,129,0.3)",
-                        color: "rgba(255,255,255,0.95)",
+                        color: "#FFFFFF",
                       }}
                     />
                   </div>

@@ -5520,3 +5520,39 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#102540\] * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* ============================================================
+   Tool Fullscreen Mode
+   Toggle via FullscreenToolToggle; sets html[data-tool-fullscreen="true"].
+   Hides app chrome and pins the active tool shell edge-to-edge.
+   ============================================================ */
+html[data-tool-fullscreen="true"] [data-global-header],
+html[data-tool-fullscreen="true"] [data-global-vertical-nav],
+html[data-tool-fullscreen="true"] header[role="banner"],
+html[data-tool-fullscreen="true"] aside[data-app-sidebar],
+html[data-tool-fullscreen="true"] .jbj-app-header,
+html[data-tool-fullscreen="true"] .jbj-app-sidebar,
+html[data-tool-fullscreen="true"] [data-support-launcher],
+html[data-tool-fullscreen="true"] [data-web-developer-dock] {
+  display: none !important;
+}
+html[data-tool-fullscreen="true"] body {
+  padding-left: 0 !important;
+  padding-top: 0 !important;
+}
+html[data-tool-fullscreen="true"] [data-tool-shell-root] {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9990 !important;
+  max-width: none !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: auto !important;
+  border-radius: 0 !important;
+}
+html[data-tool-fullscreen="true"] [data-tool-shell-root] > div:first-child {
+  border-radius: 0 !important;
+  min-height: 100vh;
+}

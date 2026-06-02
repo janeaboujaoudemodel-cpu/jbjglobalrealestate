@@ -3,6 +3,8 @@ import { ArrowLeft, type LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ToolTheme, TOOL_INK } from "./toolThemes";
+import FullscreenToolToggle from "./FullscreenToolToggle";
+
 
 /**
  * PremiumToolShell — one outer card per tool with an animated ombré border
@@ -46,9 +48,11 @@ export const PremiumToolShell = ({
 
   return (
     <div
+      data-tool-shell-root
       className="min-h-screen w-full pt-6 md:pt-8 pb-12 px-3 sm:px-5"
       style={{ background: theme.pageWash }}
     >
+      <FullscreenToolToggle defaultOn />
       <style>{`
         @keyframes jbj-tool-border-spin {
           to { transform: rotate(1turn); }
@@ -205,9 +209,11 @@ export const ToolAnimatedFrame = ({
   className?: string;
 }) => (
   <div
+    data-tool-shell-root
     className={`min-h-screen w-full pt-6 md:pt-8 pb-12 px-3 sm:px-5 ${className}`}
     style={{ background: theme.pageWash }}
   >
+    <FullscreenToolToggle defaultOn />
     <style>{`
       @keyframes jbj-tool-border-spin { to { transform: rotate(1turn); } }
       .jbj-tool-frame-border::before {

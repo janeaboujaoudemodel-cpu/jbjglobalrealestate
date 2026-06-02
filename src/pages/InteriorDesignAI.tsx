@@ -372,7 +372,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     <Button
                       onClick={() => generateDesign()}
                       disabled={isProcessing}
-                      className="w-full bg-gradient-to-r from-gold to-amber-600 hover:from-amber-600 hover:to-gold text-[#1A1A1A] font-semibold"
+                      className="w-full bg-gradient-to-r from-[#7C3AED] to-[#EC4899] hover:from-[#EC4899] hover:to-[#7C3AED] text-[#1A1A1A] font-semibold"
                     >
                       {isProcessing ? (
                         <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" /> Generating...</>
@@ -422,7 +422,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     <Button
                       onClick={() => generateDesign()}
                       disabled={isProcessing || !designStyle}
-                      className="bg-gradient-to-r from-gold to-amber-600 hover:from-amber-600 hover:to-gold text-[#1A1A1A] font-semibold"
+                      className="bg-gradient-to-r from-[#7C3AED] to-[#EC4899] hover:from-[#EC4899] hover:to-[#7C3AED] text-[#1A1A1A] font-semibold"
                     >
                       <Sparkles className="w-4 h-4 mr-2" />
                       Generate Concept
@@ -435,7 +435,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             {/* Processing indicator */}
             {isProcessing && (
               <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl p-6 text-center">
-                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center">
+                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#EC4899] flex items-center justify-center">
                   <Sparkles className="w-6 h-6 text-white animate-pulse" />
                 </div>
                 <p className="text-white font-medium mb-3">Creating Your Design...</p>
@@ -498,7 +498,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl overflow-hidden">
                 <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left hover:bg-[#1A1A1A]/30 transition-colors">
                   <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded-full bg-gradient-to-r from-gold via-amber-500 to-amber-400" />
+                    <div className="w-4 h-4 rounded-full bg-gradient-to-r from-[#7C3AED] via-[#EC4899] to-[#5EEAD4]" />
                     <span className="text-sm font-semibold text-white">Color Palette</span>
                     {colorPalette && (
                       <Badge className="bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30 text-xs">
@@ -537,7 +537,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl overflow-hidden flex flex-col" style={{ minHeight: '400px' }}>
               {/* Chat Header */}
               <div className="p-3 border-b border-[#1A1A1A] flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#EC4899] flex items-center justify-center">
                   <Bot className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
                 <div>
@@ -551,7 +551,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 {messages.map(msg => (
                   <div key={msg.id} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      msg.role === 'user' ? 'bg-[#EFE6D6]/15' : 'bg-gradient-to-br from-gold to-amber-600'
+                      msg.role === 'user' ? 'bg-[#EFE6D6]/15' : 'bg-gradient-to-br from-[#7C3AED] to-[#EC4899]'
                     }`}>
                       {msg.role === 'user' ? <User className="w-3 h-3 text-[#1A1A1A]" /> : <Bot className="w-3 h-3 text-[#1A1A1A]" />}
                     </div>
@@ -583,7 +583,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     onClick={handleChatSend}
                     disabled={isProcessing || !chatInput.trim()}
                     size="icon"
-                    className="bg-gradient-to-r from-gold to-amber-600 hover:from-amber-600 hover:to-gold text-[#1A1A1A] h-10 w-10"
+                    className="bg-gradient-to-r from-[#7C3AED] to-[#EC4899] hover:from-[#EC4899] hover:to-[#7C3AED] text-[#1A1A1A] h-10 w-10"
                   >
                     {isProcessing ? (
                       <div className="w-4 h-4 border-2 border-[#1A1A1A]/30 border-t-black rounded-full animate-spin" />
@@ -621,7 +621,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
   );
 
   return embedded ? body : (
-    <ToolAnimatedFrame theme={toolThemes.rose}>{body}</ToolAnimatedFrame>
+    <ToolAnimatedFrame theme={toolThemes.violet}>{body}</ToolAnimatedFrame>
   );
 };
 

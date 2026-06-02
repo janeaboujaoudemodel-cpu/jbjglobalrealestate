@@ -371,14 +371,14 @@ const BusinessCardScanner = () => {
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
-        <div className="bg-gradient-to-r from-amber-900/30 via-amber-800/20 to-amber-900/30 border-b border-amber-500/30 -mx-4 px-4 py-8 mb-8">
+        <div className="bg-gradient-to-r from-rose-900/40 via-rose-800/30 to-rose-900/40 border-b border-rose-500/40 -mx-4 px-4 py-8 mb-8">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-500/40 rounded-full px-4 py-1 mb-4">
+            <div className="inline-flex items-center gap-2 bg-rose-500/25 border border-rose-500/50 rounded-full px-4 py-1 mb-4">
               <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
               <span className="text-[#1A1A1A] text-sm font-medium">AI-Powered OCR</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-              AI Business Card <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-400">Scanner</span>
+              AI Business Card <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-pink-300">Scanner</span>
             </h1>
             <p className="text-white/70 max-w-2xl mx-auto">
               Scan business cards with AI-powered OCR. Your data is encrypted end-to-end.
@@ -386,15 +386,15 @@ const BusinessCardScanner = () => {
             
             {/* Security Badges */}
             <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
-              <Badge className="gap-1 bg-amber-500/20 border-amber-500/40 text-amber-300">
+              <Badge className="gap-1 bg-rose-500/25 border-rose-500/50 text-rose-200">
                 <Lock className="h-3 w-3" />
                 End-to-End Encrypted
               </Badge>
-              <Badge className="gap-1 bg-amber-500/20 border-amber-500/40 text-amber-300">
+              <Badge className="gap-1 bg-rose-500/25 border-rose-500/50 text-rose-200">
                 <Shield className="h-3 w-3" />
                 GDPR Compliant
               </Badge>
-              <Badge className="gap-1 bg-amber-500/20 border-amber-500/40 text-amber-300">
+              <Badge className="gap-1 bg-rose-500/25 border-rose-500/50 text-rose-200">
                 <Eye className="h-3 w-3" />
                 Private Processing
               </Badge>
@@ -403,7 +403,7 @@ const BusinessCardScanner = () => {
         </div>
 
         {/* Privacy Alert */}
-        <Alert className="mb-6 border-amber-500/30 bg-amber-900/20">
+        <Alert className="mb-6 border-rose-500/40 bg-rose-900/30">
           <Info className="h-4 w-4 text-[#1A1A1A]" />
           <AlertDescription className="text-sm text-white/85">
             <strong className="text-white">Your privacy matters:</strong> All scanned data is encrypted with a key only you possess. 
@@ -413,7 +413,7 @@ const BusinessCardScanner = () => {
 
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Scanner Section */}
-          <Card className="bg-amber-900/20 border-amber-500/30">
+          <Card className="bg-rose-900/30 border-rose-500/40">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Sparkles className="h-5 w-5 text-[#1A1A1A]" />
@@ -425,12 +425,12 @@ const BusinessCardScanner = () => {
             </CardHeader>
             <CardContent>
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "camera" | "upload")}>
-                <TabsList className="grid w-full grid-cols-2 mb-4 bg-[#F7F2EA] border border-amber-500/30">
-                  <TabsTrigger value="camera" className="gap-2 data-[state=active]:bg-amber-500 data-[state=active]:text-white">
+                <TabsList className="grid w-full grid-cols-2 mb-4 bg-[#F7F2EA] border border-rose-500/40">
+                  <TabsTrigger value="camera" className="gap-2 data-[state=active]:bg-rose-500 data-[state=active]:text-white">
                     <Camera className="h-4 w-4" />
                     Camera
                   </TabsTrigger>
-                  <TabsTrigger value="upload" className="gap-2 data-[state=active]:bg-amber-500 data-[state=active]:text-white">
+                  <TabsTrigger value="upload" className="gap-2 data-[state=active]:bg-rose-500 data-[state=active]:text-white">
                     <Upload className="h-4 w-4" />
                     Upload
                   </TabsTrigger>
@@ -458,7 +458,7 @@ const BusinessCardScanner = () => {
           </Card>
 
           {/* Results Section */}
-          <Card className="bg-amber-900/20 border-amber-500/30">
+          <Card className="bg-rose-900/30 border-rose-500/40">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
@@ -466,7 +466,7 @@ const BusinessCardScanner = () => {
                     <CheckCircle2 className="h-5 w-5 text-[#1A1A1A]" />
                     Scanned Contacts
                     {scannedContacts.length > 0 && (
-                      <Badge className="bg-amber-500/20 text-amber-300">{scannedContacts.length}</Badge>
+                      <Badge className="bg-rose-500/25 text-rose-200">{scannedContacts.length}</Badge>
                     )}
                   </CardTitle>
                   <CardDescription className="text-white/70">
@@ -499,11 +499,11 @@ const BusinessCardScanner = () => {
 
         {/* Actions Bar */}
         {scannedContacts.length > 0 && (
-          <Card className="mt-6 bg-[#FDFBF7]/50 border-blue-500/30">
+          <Card className="mt-6 bg-[#FDFBF7]/50 border-rose-500/40">
             <CardContent className="py-4">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-2 text-sm text-white/70">
-                  <Lock className="h-4 w-4 text-blue-400" />
+                  <Lock className="h-4 w-4 text-rose-300" />
                   <span>All data encrypted with your session key</span>
                 </div>
                 
@@ -517,7 +517,7 @@ const BusinessCardScanner = () => {
                     Export Excel
                   </Button>
                   {user && (
-                    <Button size="sm" className="gap-2 bg-blue-500 hover:bg-blue-600 text-white" onClick={handleSaveAll}>
+                    <Button size="sm" className="gap-2 bg-rose-500 hover:bg-rose-600 text-white" onClick={handleSaveAll}>
                       <UserPlus className="h-4 w-4" />
                       Save All to CRM
                     </Button>
@@ -535,16 +535,16 @@ const BusinessCardScanner = () => {
         {/* Footer Privacy Notice */}
         <div className="mt-8 text-center text-xs text-white/90 space-y-2">
           <p>
-            <Lock className="h-3 w-3 inline mr-1 text-blue-400" />
+            <Lock className="h-3 w-3 inline mr-1 text-rose-300" />
             Your scanned data is encrypted client-side and never transmitted to our servers unencrypted.
           </p>
           <p>
-            <Shield className="h-3 w-3 inline mr-1 text-blue-400" />
+            <Shield className="h-3 w-3 inline mr-1 text-rose-300" />
             Platform analytics track only usage counts, never personal contact data.
           </p>
           <button 
             onClick={() => setShowPrivacyNotice(true)} 
-            className="text-blue-400 hover:underline"
+            className="text-rose-300 hover:underline"
           >
             View Privacy Policy
           </button>
