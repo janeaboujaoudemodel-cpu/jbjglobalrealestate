@@ -15,6 +15,8 @@ import FieldManagerPopover from "./FieldManagerPopover";
 import UnitComparisonTable from "./UnitComparisonTable";
 import { DEFAULT_VISIBLE, type UnitFieldId } from "@/lib/compare/unitFieldsConfig";
 import { DEFAULT_PLAN_RULES, type PlanRule } from "@/lib/payment-plan/buildSchedule";
+import { exportUnitComparisonPdf } from "@/lib/compare/exportUnitComparisonPdf";
+import { useCompareAccess } from "@/hooks/useCompareAccess";
 
 interface Props {
   onModeChange: (m: "projects" | "units") => void;
@@ -23,6 +25,7 @@ interface Props {
 export default function UnitCompareShell({ onModeChange }: Props) {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isOwner } = useCompareAccess();
   const [project, setProject] = useState<PickedProject | null>(null);
   const [units, setUnits] = useState<UnitDraft[]>([]);
   const [addOpen, setAddOpen] = useState(false);
@@ -30,6 +33,12 @@ export default function UnitCompareShell({ onModeChange }: Props) {
   const [sharedPlan, setSharedPlan] = useState<PlanRule[]>(DEFAULT_PLAN_RULES);
   const [unitPlans, setUnitPlans] = useState<Record<string, PlanRule[]>>({});
   const [visible, setVisible] = useState<UnitFieldId[]>(DEFAULT_VISIBLE);
+  const [clientName, setClientName] = useState("");
+  const [clientEmail, setClientEmail] = useState("");
+  const [brokerName, setBrokerName] = useState("");
+  const [brokerage, setBrokerage] = useState("");
+  const [brokerPhone, setBrokerPhone] = useState("");
+  const [brokerEmail, setBrokerEmail] = useState("");
   const tableRef = useRef<HTMLDivElement>(null);
 
   const canAdd = units.length < 4;
@@ -58,9 +67,23 @@ export default function UnitCompareShell({ onModeChange }: Props) {
       toast.error("Pick a project and add at least one unit first.");
       return;
     }
-    // Print the comparison area. Branded full PDF export (with client/broker details)
-    // is on the roadmap; this prints the same preview the user sees.
-    window.print();
+    try {
+      exportUnitComparisonPdf({
+        project,
+        units,
+        visible,
+        sharedPlan: sharedOn ? sharedPlan : null,
+        unitPlans,
+        mode: isOwner ? "owner" : "broker",
+        client: (clientName || clientEmail) ? { name: clientName, email: clientEmail } : undefined,
+        broker: !isOwner && (brokerName || brokerage || brokerPhone || brokerEmail)
+          ? { name: brokerName, brokerage, phone: brokerPhone, email: brokerEmail }
+          : undefined,
+      });
+      toast.success("PDF exported");
+    } catch (e) {
+      toast.error((e as Error).message || "Export failed");
+    }
   };
 
   return (
