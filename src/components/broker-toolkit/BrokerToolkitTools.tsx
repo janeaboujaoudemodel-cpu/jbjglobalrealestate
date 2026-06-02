@@ -12,7 +12,7 @@ import {
   TrendingUp,
   Ruler,
   ClipboardCheck,
-  Key,
+  
   ArrowUpRight,
   Wrench,
   type LucideIcon,
