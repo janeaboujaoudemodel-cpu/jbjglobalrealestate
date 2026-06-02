@@ -394,7 +394,7 @@ const ResaleProperties = () => {
               <EmiratesMultiSelect value={emiratesFilter} onChange={setEmiratesFilter} variant="light" />
 
               {/* Size Range */}
-              <div className={cn(filterPillBase, (sizeMin || sizeMax) ? filterPillActive : filterPillInactiveLight, "h-8 gap-1 px-2.5")}>
+              <div className={cn(filterPillBase, (sizeMin || sizeMax) ? filterPillActive : filterPillInactiveLight, "h-8 gap-1 px-2.5 !bg-transparent")}>
                 <Ruler className="w-3.5 h-3.5 flex-shrink-0" />
                 <input
                   type="number"
