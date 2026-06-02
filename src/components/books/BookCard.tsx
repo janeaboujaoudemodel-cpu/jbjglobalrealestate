@@ -38,42 +38,13 @@ export const BookCard = forwardRef<HTMLElement, BookCardProps>(function BookCard
   ref,
 ) {
   const inner = (
-    <div className="relative" style={{ perspective: "1200px" }}>
-      {/* Soft ground shadow */}
-      <div className="pointer-events-none absolute -bottom-2 left-2 right-2 h-4 rounded-full bg-[#1A1A1A]/25 blur-lg" />
-
-      <div
-        className={cn(
-          "relative mx-auto transition-transform duration-500",
-          !flat && "group-hover:[transform:rotateY(-8deg)_translateY(-4px)]",
-          sizeMap[size],
-        )}
-        style={{ transformStyle: "preserve-3d" }}
-      >
-        {/* Front cover */}
-        <div
-          className="relative h-full w-full overflow-hidden rounded-l-[2px] rounded-r-[6px] ring-1 ring-[#B89555]/40 bg-[#10100f]"
-          style={{
-            transform: "translateZ(1px)",
-            backfaceVisibility: "hidden",
-            boxShadow:
-              "12px 14px 36px rgba(0,0,0,0.32), 4px 6px 14px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(184,149,85,0.35)",
-          }}
-        >
-          {/* Left spine darkening — preserves 3D feel; no white band on top anymore */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-[6%] bg-gradient-to-r from-black/55 via-black/25 to-transparent" />
-          {/* Right page edge hairline */}
-          <div className="pointer-events-none absolute inset-y-[2%] right-0 z-10 w-[2px] bg-gradient-to-r from-transparent via-[#EFE6D6]/45 to-[#B89555]/70" />
-
-          <BookCoverFace book={book} bare />
-        </div>
-
-        {/* 3D spine block */}
-        <div
-          className="pointer-events-none absolute top-0 left-0 h-full w-2 bg-gradient-to-r from-[#1a1a1a] to-[#2a2a2a] origin-left"
-          style={{ transform: "rotateY(-90deg) translateX(-4px)" }}
-        />
-      </div>
+    <div
+      className={cn(
+        "relative mx-auto transition-transform duration-500",
+        sizeMap[size],
+      )}
+    >
+      <BookCoverFace book={book} bare />
     </div>
   );
 
