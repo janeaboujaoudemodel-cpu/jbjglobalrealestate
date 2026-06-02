@@ -252,8 +252,9 @@ const ResaleProperties = () => {
 
       {/* Premium sticky filter bar — clears 88px fixed header */}
       <section className="z-30 bg-[#F7F2EA]/95 backdrop-blur-md py-3 md:py-4 sticky top-[88px] border-y border-[#B89555]/25 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
-        <div className="container mx-auto px-3 sm:px-4">
+        <div className="w-full px-3 sm:px-4">
           <div className="relative bg-[#EFE6D6] border border-[#B89555]/40 rounded-2xl px-3 py-3 sm:px-4 sm:py-3.5">
+
             {/* Navy left accent bar */}
             <span aria-hidden className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full bg-[#102540]" />
 
