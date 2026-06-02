@@ -317,6 +317,8 @@ const PUBLIC_TOOLS_WORKSPACE_ITEMS: NavItem[] = [
   { label: "Property Evaluator", href: "/property-evaluator", icon: BarChart3 },
   { label: "Rental Index", href: "/rental-index", icon: TrendingUp },
   { label: "Property Measurement", href: "/property-measurement", icon: Ruler },
+  { label: "Interior Design AI", href: "/interior-design-ai", icon: Palette },
+  { label: "Business Card Scanner", href: "/business-card-scanner", icon: ScanLine },
   { label: "List Property for Sale", href: "/list-property?purpose=sale&mode=manual", icon: ClipboardCheck },
   { label: "List Property for Rent", href: "/list-property?purpose=rent&mode=manual", icon: Key },
 ];
