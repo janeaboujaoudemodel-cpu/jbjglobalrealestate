@@ -75,6 +75,7 @@ export const PremiumToolShell = ({
       `}</style>
 
       <div
+        data-tool-frame
         className="relative mx-auto jbj-tool-shell-border"
         style={
           {
@@ -233,6 +234,7 @@ export const ToolAnimatedFrame = ({
       }
     `}</style>
     <div
+      data-tool-frame
       className="relative mx-auto jbj-tool-frame-border"
       style={
         {
