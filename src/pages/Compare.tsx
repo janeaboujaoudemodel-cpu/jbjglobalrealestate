@@ -100,6 +100,12 @@ const Compare = () => {
   const { getBadge } = useShortlistBadges();
   const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [aiAddOpen, setAiAddOpen] = useState(false);
+
+  const handleExtractedToManual = (e: ExtractedProject) => {
+    setAiAddOpen(false);
+    navigate("/compare-manual", { state: { prefill: e } });
+  };
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [showVipModal, setShowVipModal] = useState(false);
   const [formData, setFormData] = useState({
