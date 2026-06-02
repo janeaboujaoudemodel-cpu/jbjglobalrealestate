@@ -14,9 +14,6 @@ import {
 } from "@/components/ui/tooltip";
 
 import MortgageAIAssistant from "@/components/mortgage/MortgageAIAssistant";
-import { CONTACT_INFO } from "@/constants/stats";
-
-const INQUIRY_FORM_URL = CONTACT_INFO.inquiryFormUrl;
 
 interface MortgageProject {
   id: string;
