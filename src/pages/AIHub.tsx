@@ -316,35 +316,32 @@ const AIHub = () => {
             />
           </div>
 
-          {/* Cinematic dark composite — guarantees legibility */}
+          {/* Cinematic composite — lighter so neon video shows through */}
           <div
             className="absolute inset-0 z-[2] pointer-events-none"
             style={{
               background:
-                "linear-gradient(180deg, rgba(5,3,16,0.92) 0%, rgba(8,5,24,0.78) 35%, rgba(5,3,16,0.92) 100%)",
+                "linear-gradient(180deg, rgba(7,6,15,0.55) 0%, rgba(7,6,15,0.30) 40%, rgba(7,6,15,0.65) 100%)",
             }}
           />
           <div
             className="absolute inset-0 z-[2] pointer-events-none"
             style={{
               background:
-                "radial-gradient(ellipse 65% 55% at 50% 50%, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 80%)",
+                "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 80%)",
             }}
           />
 
-          {/* Neon ambient orbs */}
+          {/* Neon ambient orbs (subtle, video already provides neon) */}
           <div
             className="absolute top-1/4 left-1/4 w-[520px] h-[520px] rounded-full blur-[140px] z-[1] pointer-events-none"
-            style={{ background: "rgba(124,77,255,0.32)" }}
+            style={{ background: "rgba(124,77,255,0.22)" }}
           />
           <div
             className="absolute bottom-1/4 right-1/4 w-[460px] h-[460px] rounded-full blur-[130px] z-[1] pointer-events-none"
-            style={{ background: "rgba(34,211,238,0.22)" }}
+            style={{ background: "rgba(34,211,238,0.16)" }}
           />
-          <div
-            className="absolute top-1/2 right-1/3 w-[300px] h-[300px] rounded-full blur-[110px] z-[1] pointer-events-none"
-            style={{ background: "rgba(236,72,153,0.18)" }}
-          />
+
 
           {/* Soft transition to page bottom */}
           <div
