@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import VideoBackground from "@/components/VideoBackground";
+import aihubHeroVideo from "@/../public/video/aihub-bg.mp4.asset.json";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -309,7 +310,7 @@ const AIHub = () => {
           {/* Video bg */}
           <div className="absolute inset-0 z-0">
             <VideoBackground
-              src="/video/aihub-bg.mp4"
+              src={aihubHeroVideo.url}
               poster="/video/aihub-bg-poster.jpg"
               opacity={1}
             />
