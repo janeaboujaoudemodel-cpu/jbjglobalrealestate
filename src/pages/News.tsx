@@ -356,7 +356,7 @@ const News = () => {
             <div className="mb-12">
               <div className="py-6 px-4 md:px-6">
                 <article 
-                  className="group relative bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer hover:shadow-lg"
+                  className="jbj-neon-frame group relative bg-[#FDFBF7]/85 rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer hover:shadow-[0_24px_60px_-12px_rgba(167,139,250,0.45)]"
                   onClick={() => navigate(`/news/${filteredNews[0].id}`)}
                 >
                   <div className="grid md:grid-cols-2 gap-0">
