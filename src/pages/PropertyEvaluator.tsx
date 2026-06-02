@@ -831,7 +831,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
             <div className="flex justify-center gap-4 mt-8">
               <Button onClick={() => setActiveTab('modifications')} variant="outline" className="border-amber-500/35">← Back</Button>
-              <Button onClick={evaluateProperty} disabled={isEvaluating} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium px-8">
+              <Button onClick={evaluateProperty} disabled={isEvaluating} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-medium px-8">
                 {isEvaluating ? (
                   <><Sparkles className="w-4 h-4 mr-2 animate-pulse" />Evaluating Property...</>
                 ) : (
@@ -961,7 +961,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
                 {/* Actions */}
                 <div className="flex justify-center gap-4">
-                  <Button onClick={generatePDFReport} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium">
+                  <Button onClick={generatePDFReport} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-medium">
                     <Download className="w-4 h-4 mr-2" />
                     Download Report
                   </Button>
