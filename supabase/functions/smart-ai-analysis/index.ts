@@ -326,6 +326,20 @@ Response Format:
     "investmentAdvice": "string (specific actionable advice)",
     "riskFactors": ["string"]
   },
+  "marketContext": {
+    "trend": "Rising" | "Stable" | "Cooling",
+    "yoyChangePct": number,
+    "demandLevel": "Low" | "Medium" | "High" | "Very High",
+    "supplyOutlook": "string (1 sentence)",
+    "rentalYieldRange": "string (e.g. 6.5%–8.2%)",
+    "note": "string (1 sentence market-context insight)"
+  },
+  "riskScores": [
+    { "projectName": "string", "score": 0-100, "band": "Low" | "Moderate" | "Elevated" | "High", "drivers": ["string"] }
+  ],
+  "negotiationLeverage": [
+    { "projectName": "string", "talkingPoints": ["string (script-ready negotiation lever)"] }
+  ],
   "summary": "string (50-100 words executive summary)"
 }
 
@@ -337,7 +351,9 @@ Important Analysis Guidelines:
 5. Consider rental yield potential (typical Dubai yields: 5-8%)
 6. Factor in handover dates for investment timeline
 7. Evaluate amenities quality (private pool, gym, beach access, etc.)
-8. Consider community maturity and infrastructure`;
+8. Consider community maturity and infrastructure
+9. Risk scores must reflect concrete drivers (handover delay, oversupply, developer track record, payment-plan exposure, location liquidity).
+10. Negotiation leverage must be specific, script-ready lines a broker can deliver verbatim.`;
 
     const userPrompt = `Analyze these ${projects.length} Dubai properties and provide the structured comparison:
 
