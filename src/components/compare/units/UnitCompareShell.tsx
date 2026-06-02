@@ -15,6 +15,8 @@ import FieldManagerPopover from "./FieldManagerPopover";
 import UnitComparisonTable from "./UnitComparisonTable";
 import { DEFAULT_VISIBLE, type UnitFieldId } from "@/lib/compare/unitFieldsConfig";
 import { DEFAULT_PLAN_RULES, type PlanRule } from "@/lib/payment-plan/buildSchedule";
+import { exportUnitComparisonPdf } from "@/lib/compare/exportUnitComparisonPdf";
+import { useCompareAccess } from "@/hooks/useCompareAccess";
 
 interface Props {
   onModeChange: (m: "projects" | "units") => void;
@@ -23,6 +25,7 @@ interface Props {
 export default function UnitCompareShell({ onModeChange }: Props) {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isOwner } = useCompareAccess();
   const [project, setProject] = useState<PickedProject | null>(null);
   const [units, setUnits] = useState<UnitDraft[]>([]);
   const [addOpen, setAddOpen] = useState(false);
@@ -30,6 +33,12 @@ export default function UnitCompareShell({ onModeChange }: Props) {
   const [sharedPlan, setSharedPlan] = useState<PlanRule[]>(DEFAULT_PLAN_RULES);
   const [unitPlans, setUnitPlans] = useState<Record<string, PlanRule[]>>({});
   const [visible, setVisible] = useState<UnitFieldId[]>(DEFAULT_VISIBLE);
+  const [clientName, setClientName] = useState("");
+  const [clientEmail, setClientEmail] = useState("");
+  const [brokerName, setBrokerName] = useState("");
+  const [brokerage, setBrokerage] = useState("");
+  const [brokerPhone, setBrokerPhone] = useState("");
+  const [brokerEmail, setBrokerEmail] = useState("");
   const tableRef = useRef<HTMLDivElement>(null);
 
   const canAdd = units.length < 4;
@@ -58,9 +67,23 @@ export default function UnitCompareShell({ onModeChange }: Props) {
       toast.error("Pick a project and add at least one unit first.");
       return;
     }
-    // Print the comparison area. Branded full PDF export (with client/broker details)
-    // is on the roadmap; this prints the same preview the user sees.
-    window.print();
+    try {
+      exportUnitComparisonPdf({
+        project,
+        units,
+        visible,
+        sharedPlan: sharedOn ? sharedPlan : null,
+        unitPlans,
+        mode: isOwner ? "owner" : "broker",
+        client: (clientName || clientEmail) ? { name: clientName, email: clientEmail } : undefined,
+        broker: !isOwner && (brokerName || brokerage || brokerPhone || brokerEmail)
+          ? { name: brokerName, brokerage, phone: brokerPhone, email: brokerEmail }
+          : undefined,
+      });
+      toast.success("PDF exported");
+    } catch (e) {
+      toast.error((e as Error).message || "Export failed");
+    }
   };
 
   return (
@@ -180,6 +203,70 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                     unit using that unit's own price and the project's handover date.
                   </p>
                   <PaymentPlanEditor rules={sharedPlan} onChange={setSharedPlan} />
+                </div>
+              </div>
+
+              {/* Recipient & sender — feeds the branded PDF */}
+              <div
+                className="mb-6 p-5 rounded-2xl"
+                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)" }}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText className="w-4 h-4" style={{ color: "#C084FC" }} />
+                  <span className="text-white text-sm font-medium">
+                    PDF cover — recipient & sender
+                  </span>
+                  <span className="text-[10px] text-white/45 ml-auto">
+                    {isOwner ? "Locked to JBJ branding" : "Your brokerage details"}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <input
+                    value={clientName}
+                    onChange={(e) => setClientName(e.target.value)}
+                    placeholder="Client name"
+                    data-no-contrast-guard
+                    className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                  />
+                  <input
+                    value={clientEmail}
+                    onChange={(e) => setClientEmail(e.target.value)}
+                    placeholder="Client email"
+                    data-no-contrast-guard
+                    className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                  />
+                  {!isOwner && (
+                    <>
+                      <input
+                        value={brokerName}
+                        onChange={(e) => setBrokerName(e.target.value)}
+                        placeholder="Your name"
+                        data-no-contrast-guard
+                        className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                      />
+                      <input
+                        value={brokerage}
+                        onChange={(e) => setBrokerage(e.target.value)}
+                        placeholder="Brokerage name"
+                        data-no-contrast-guard
+                        className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                      />
+                      <input
+                        value={brokerPhone}
+                        onChange={(e) => setBrokerPhone(e.target.value)}
+                        placeholder="Phone"
+                        data-no-contrast-guard
+                        className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                      />
+                      <input
+                        value={brokerEmail}
+                        onChange={(e) => setBrokerEmail(e.target.value)}
+                        placeholder="Email"
+                        data-no-contrast-guard
+                        className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                      />
+                    </>
+                  )}
                 </div>
               </div>
 
