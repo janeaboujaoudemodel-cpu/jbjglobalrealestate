@@ -326,16 +326,11 @@ Response Format:
     "investmentAdvice": "string (specific actionable advice)",
     "riskFactors": ["string"]
   },
-  "marketContext": {
-    "trend": "Rising" | "Stable" | "Cooling",
-    "yoyChangePct": number,
-    "demandLevel": "Low" | "Medium" | "High" | "Very High",
-    "supplyOutlook": "string (1 sentence)",
-    "rentalYieldRange": "string (e.g. 6.5%–8.2%)",
-    "note": "string (1 sentence market-context insight)"
-  },
+  "marketContext": [
+    { "projectName": "string", "priceTrend12mPct": number, "supplyHeat": "Low" | "Balanced" | "High", "demandIndex": 0-100 }
+  ],
   "riskScores": [
-    { "projectName": "string", "score": 0-100, "band": "Low" | "Moderate" | "Elevated" | "High", "drivers": ["string"] }
+    { "projectName": "string", "riskScore": 0-100, "factors": [ { "label": "string", "weight": 0-100 } ] }
   ],
   "negotiationLeverage": [
     { "projectName": "string", "talkingPoints": ["string (script-ready negotiation lever)"] }
