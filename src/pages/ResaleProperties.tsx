@@ -260,7 +260,7 @@ const ResaleProperties = () => {
 
             {/* Row 1: prominent search input */}
             <div className="flex items-center gap-2 mb-2.5 pl-2">
-              <div className={cn(filterSearchPillWrapper, "h-11 flex-1 bg-[#FDFBF7] border-[#B89555]/40")}>
+              <div className={cn(filterSearchPillWrapper, "h-11 flex-1 !bg-transparent border-[#B89555]/40")}>
                 <Search className="w-4 h-4 mr-2 text-[#102540] flex-shrink-0" />
                 <input
                   type="text"
