@@ -33,6 +33,7 @@ import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
 import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
 import { useTeamVisibility } from "@/hooks/useTeamVisibility";
+import { useCompareAccess } from "@/hooks/useCompareAccess";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
@@ -574,10 +575,13 @@ export default function GlobalVerticalNav() {
   const showBrokerSurfaces = isBrokerMode;
   const showInvestorSurfaces = isInvestorMode || isInvestor || isOwner;
   const { isPageVisible: isTeamPageVisible } = useTeamVisibility();
+  const { allowed: canCompare } = useCompareAccess();
 
   const shouldShowItem = useCallback((item: NavItem, sectionKey?: SectionKey | null) => {
     // Team page is hidden by default — only shows when owner flips the visibility toggle in Founder Settings.
     if (item.href === "/team" && !isTeamPageVisible) return false;
+    // Property Comparison is broker/owner only — never show to investor or developer modes.
+    if (item.href === "/compare" && !canCompare) return false;
     if (!showBrokerSurfaces && !isOwner) {
       if (item.href === "/join") return false;
       if (sectionKey === "BROKER & ACADEMY") return false;
@@ -586,7 +590,7 @@ export default function GlobalVerticalNav() {
     }
     if (!showInvestorSurfaces && sectionKey === "INVESTOR") return false;
     return true;
-  }, [showBrokerSurfaces, showInvestorSurfaces, isTeamPageVisible, isOwner]);
+  }, [showBrokerSurfaces, showInvestorSurfaces, isTeamPageVisible, isOwner, canCompare]);
 
   const shouldShowSection = useCallback((sectionKey: SectionKey) => {
     if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return false;
@@ -743,7 +747,7 @@ export default function GlobalVerticalNav() {
         sections[currentSection].push(item);
       }
     }
-    sections["TOOLS & WORKSPACE"] = PUBLIC_TOOLS_WORKSPACE_ITEMS;
+    sections["TOOLS & WORKSPACE"] = PUBLIC_TOOLS_WORKSPACE_ITEMS.filter(it => shouldShowItem(it, "TOOLS & WORKSPACE"));
     return { highlightItems: highlights, sectionGroups: sections };
   }, [shouldShowItem]);
 
