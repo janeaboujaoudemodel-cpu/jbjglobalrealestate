@@ -378,11 +378,13 @@ Generate a comprehensive analysis with detailed tables, ratings, and recommendat
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "openai/gpt-5.5",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
+        response_format: { type: "json_object" },
+        reasoning: { effort: "medium" },
       }),
     });
 
