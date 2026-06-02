@@ -206,6 +206,70 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                 </div>
               </div>
 
+              {/* Recipient & sender — feeds the branded PDF */}
+              <div
+                className="mb-6 p-5 rounded-2xl"
+                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)" }}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText className="w-4 h-4" style={{ color: "#C084FC" }} />
+                  <span className="text-white text-sm font-medium">
+                    PDF cover — recipient & sender
+                  </span>
+                  <span className="text-[10px] text-white/45 ml-auto">
+                    {isOwner ? "Locked to JBJ branding" : "Your brokerage details"}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <input
+                    value={clientName}
+                    onChange={(e) => setClientName(e.target.value)}
+                    placeholder="Client name"
+                    data-no-contrast-guard
+                    className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                  />
+                  <input
+                    value={clientEmail}
+                    onChange={(e) => setClientEmail(e.target.value)}
+                    placeholder="Client email"
+                    data-no-contrast-guard
+                    className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                  />
+                  {!isOwner && (
+                    <>
+                      <input
+                        value={brokerName}
+                        onChange={(e) => setBrokerName(e.target.value)}
+                        placeholder="Your name"
+                        data-no-contrast-guard
+                        className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                      />
+                      <input
+                        value={brokerage}
+                        onChange={(e) => setBrokerage(e.target.value)}
+                        placeholder="Brokerage name"
+                        data-no-contrast-guard
+                        className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                      />
+                      <input
+                        value={brokerPhone}
+                        onChange={(e) => setBrokerPhone(e.target.value)}
+                        placeholder="Phone"
+                        data-no-contrast-guard
+                        className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                      />
+                      <input
+                        value={brokerEmail}
+                        onChange={(e) => setBrokerEmail(e.target.value)}
+                        placeholder="Email"
+                        data-no-contrast-guard
+                        className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
+
               {/* Step 4 — live table */}
               <div ref={tableRef}>
                 <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
