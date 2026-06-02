@@ -309,7 +309,7 @@ const MortgageCalculator = ({
         {/* Interactive Sliders */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
           {/* Property Price Slider */}
-          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4" style={isNavy ? { background: "linear-gradient(135deg, #123968 0%, #081A33 70%, #020814 100%)", border: "1px solid rgba(147,197,253,0.42)", boxShadow: "inset 0 0 22px rgba(96,165,250,0.10)" } : undefined}>
+          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4" style={isNavy ? navySliderWrapperStyle : undefined}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
@@ -332,7 +332,7 @@ const MortgageCalculator = ({
           </div>
 
           {/* Down Payment Slider */}
-          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4" style={isNavy ? { background: "linear-gradient(135deg, #123968 0%, #081A33 70%, #020814 100%)", border: "1px solid rgba(147,197,253,0.42)", boxShadow: "inset 0 0 22px rgba(96,165,250,0.10)" } : undefined}>
+          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4" style={isNavy ? navySliderWrapperStyle : undefined}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider flex items-center gap-1.5">
                 <Percent className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
@@ -355,7 +355,7 @@ const MortgageCalculator = ({
           </div>
 
           {/* Interest Rate Slider */}
-          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4" style={isNavy ? { background: "linear-gradient(135deg, #123968 0%, #081A33 70%, #020814 100%)", border: "1px solid rgba(147,197,253,0.42)", boxShadow: "inset 0 0 22px rgba(96,165,250,0.10)" } : undefined}>
+          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4" style={isNavy ? navySliderWrapperStyle : undefined}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider flex items-center gap-1.5">
                 <TrendingUp className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
@@ -378,7 +378,7 @@ const MortgageCalculator = ({
           </div>
 
           {/* Loan Term Slider */}
-          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4" style={isNavy ? { background: "linear-gradient(135deg, #123968 0%, #081A33 70%, #020814 100%)", border: "1px solid rgba(147,197,253,0.42)", boxShadow: "inset 0 0 22px rgba(96,165,250,0.10)" } : undefined}>
+          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4" style={isNavy ? navySliderWrapperStyle : undefined}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
