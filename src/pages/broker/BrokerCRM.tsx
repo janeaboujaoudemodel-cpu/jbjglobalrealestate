@@ -411,10 +411,12 @@ export default function BrokerCRM() {
             </Button>
             <Link
               to="/broker/leads"
-              className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-[#102540] text-white text-sm font-medium hover:bg-[#1a3d63] transition-colors"
+              className="jj-cta-dark allow-white inline-flex items-center gap-2 h-10 px-4 rounded-md text-sm font-medium transition-colors"
+              data-surface="navy"
+              data-on-dark
               data-allow-dark-cta
             >
-              <Plus className="h-4 w-4" /> Add lead
+              <Plus className="h-4 w-4 allow-white" /> <span className="allow-white">Add lead</span>
             </Link>
             <Button
               variant="outline"
