@@ -167,17 +167,27 @@ export function PremiumBook3D({ title, subtitle, bookNumber, paletteIndex, class
             </div>
           )}
 
-          {/* Foil number ribbon — top right */}
+          {/* Foil number tag — vertical, right edge */}
           {typeof bookNumber === "number" && (
             <div
-              className="jj-foil-ribbon absolute top-[6%] right-[6%] px-2 py-[3px] rounded-sm text-[10px] font-bold tracking-widest"
+              className="absolute right-[4%] top-[14%] bottom-[14%] w-[26px] rounded-[3px] flex items-center justify-center"
               style={{
-                background: `linear-gradient(135deg, ${palette.foil} 0%, #fff4d2 50%, ${palette.foil} 100%)`,
-                color: "#1A1A1A",
-                boxShadow: "0 1px 3px rgba(0,0,0,.35)",
+                background: `linear-gradient(180deg, #f7e6a8 0%, ${palette.foil} 35%, #b8860b 65%, ${palette.foil} 100%)`,
+                boxShadow:
+                  "inset 0 0 0 1px rgba(255,244,210,.55), 0 2px 6px rgba(0,0,0,.45), 0 0 0 1px rgba(0,0,0,.25)",
               }}
             >
-              N°{String(bookNumber).padStart(2, "0")}
+              <span
+                className="text-[10px] font-bold tracking-[0.35em]"
+                style={{
+                  color: "#1A1A1A",
+                  writingMode: "vertical-rl",
+                  transform: "rotate(180deg)",
+                  textShadow: "0 1px 0 rgba(255,244,210,.5)",
+                }}
+              >
+                N°{String(bookNumber).padStart(2, "0")}
+              </span>
             </div>
           )}
         </div>
