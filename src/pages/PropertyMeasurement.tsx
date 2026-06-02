@@ -353,16 +353,16 @@ jbj.ae
               FREE AI Tool
             </span>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            <h1 className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6" style={{ color: "rgba(255,255,255,0.96)" }}>
               Property{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-300 to-emerald-500">
                 Measurement
               </span>
             </h1>
 
-            <p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-8">
+            <p className="allow-white text-lg md:text-xl max-w-2xl mx-auto mb-8" style={{ color: "rgba(255,255,255,0.82)" }}>
               Verify your property size with AI precision. Upload photos room by room — 
-              get accurate measurements in seconds. <span className="text-emerald-300 font-semibold">100% Free.</span>
+              get accurate measurements in seconds. <span className="font-semibold" style={{ color: "#6EE7B7" }}>100% Free.</span>
             </p>
 
             {/* Why Use This Tool */}
@@ -372,10 +372,19 @@ jbj.ae
                 { Icon: AlertCircle,  title: "Check Rental Sizes",      body: "Verify apartment sizes before signing a rental agreement" },
                 { Icon: Sparkles,     title: "Secondary Market Check",  body: "Verify size claims before viewing a resale property" },
               ].map(({ Icon, title, body }) => (
-                <div key={title} className="bg-gradient-to-br from-emerald-950/80 via-black/70 to-emerald-900/60 border border-emerald-500/30 rounded-xl p-4">
-                  <Icon className="w-8 h-8 text-emerald-300 mx-auto mb-2" />
-                  <p className="text-white font-medium">{title}</p>
-                  <p className="text-white/75 text-sm">{body}</p>
+                <div
+                  key={title}
+                  data-allow-dark-cta
+                  data-no-contrast-guard
+                  className="allow-white rounded-xl p-4"
+                  style={{
+                    background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000 100%)",
+                    border: "1px solid rgba(16,185,129,0.32)",
+                  }}
+                >
+                  <Icon className="w-8 h-8 mx-auto mb-2" style={{ color: "#6EE7B7" }} />
+                  <p className="font-medium" style={{ color: "rgba(255,255,255,0.94)" }}>{title}</p>
+                  <p className="text-sm" style={{ color: "rgba(255,255,255,0.75)" }}>{body}</p>
                 </div>
               ))}
             </div>
