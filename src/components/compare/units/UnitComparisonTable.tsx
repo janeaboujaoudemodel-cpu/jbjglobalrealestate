@@ -102,9 +102,9 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
             const fields = fieldsInGroup(g);
             if (!fields.length) return null;
             return (
-              <>
-                <tr key={`g-${g}`}>
-                  <td colSpan={computed.length + 1} className="px-4 pt-5 pb-2">
+              <React.Fragment key={`g-${g}`}>
+                <tr>
+                  <td colSpan={computed.length + 1} className="px-4 pt-5 pb-2" style={{ background: "rgba(124,58,237,0.08)" }}>
                     <span className="text-[10px] uppercase tracking-wider font-bold" style={{ color: "#C084FC" }}>{g}</span>
                   </td>
                 </tr>
@@ -112,7 +112,7 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
                   <tr key={f.id} className="border-t border-white/5">
                     <td className="px-4 py-2 text-white/70 sticky left-0" style={{ background: "rgba(15,16,32,0.92)" }}>{f.label}</td>
                     {computed.map((c) => (
-                      <td key={c.u.id} className="px-4 py-2">
+                      <td key={c.u.id} className="px-4 py-2 text-white">
                         <span
                           className={highlightId(f.id, c) ? "px-2 py-0.5 rounded" : ""}
                           style={highlightId(f.id, c) ? { background: "rgba(34,197,94,0.18)", border: "1px solid rgba(34,197,94,0.5)", color: "#86efac", fontWeight: 600 } : {}}
@@ -123,7 +123,7 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
                     ))}
                   </tr>
                 ))}
-              </>
+              </React.Fragment>
             );
           })}
         </tbody>
