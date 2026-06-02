@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { exportPremiumXlsx } from "@/utils/exportXlsx";
+import AddProjectDialog, { type ExtractedProject } from "@/components/compare/AddProjectDialog";
 
 interface ManualProject {
   id: string;
@@ -54,6 +55,38 @@ const CompareManual = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [analysis, setAnalysis] = useState<any | null>(null);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
+  const [aiOpen, setAiOpen] = useState(false);
+
+  const handleAiExtracted = (e: ExtractedProject) => {
+    const filled: ManualProject = {
+      ...blank(),
+      name: e.projectName || "",
+      developer: e.developer || "",
+      location: e.location || "",
+      priceFrom: e.priceFromAed != null ? String(e.priceFromAed) : "",
+      priceTo: e.priceToAed != null ? String(e.priceToAed) : "",
+      bedrooms: e.bedrooms || "",
+      sizeRange:
+        e.sizeFromSqft && e.sizeToSqft
+          ? `${e.sizeFromSqft} - ${e.sizeToSqft}`
+          : e.sizeFromSqft
+          ? String(e.sizeFromSqft)
+          : "",
+      handover: e.handover || "",
+      paymentPlan: e.paymentPlan || "",
+      amenities: (e.amenities || []).join(", "),
+    };
+    setProjects((prev) => {
+      // If first card is empty, replace it; else append
+      const firstEmpty = prev.findIndex((p) => !p.name.trim());
+      if (firstEmpty >= 0) {
+        const next = [...prev];
+        next[firstEmpty] = { ...filled, id: prev[firstEmpty].id };
+        return next;
+      }
+      return [...prev, filled];
+    });
+  };
 
   const update = (id: string, patch: Partial<ManualProject>) =>
     setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p)));
@@ -321,13 +354,22 @@ const CompareManual = () => {
         </div>
 
         <div className="mt-6 flex items-center justify-between flex-wrap gap-3">
-          <Button
-            variant="outline"
-            onClick={addProject}
-            className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"
-          >
-            <Plus className="w-4 h-4 mr-1.5" /> Add another project
-          </Button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Button
+              variant="outline"
+              onClick={addProject}
+              className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            >
+              <Plus className="w-4 h-4 mr-1.5" /> Add another project
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setAiOpen(true)}
+              className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            >
+              <Sparkles className="w-4 h-4 mr-1.5 text-[#B89555]" /> Add via link / PDF (AI fill)
+            </Button>
+          </div>
           <button
             onClick={generate}
             disabled={isGenerating}
@@ -416,6 +458,7 @@ const CompareManual = () => {
           </section>
         )}
       </div>
+      <AddProjectDialog open={aiOpen} onOpenChange={setAiOpen} onAdd={handleAiExtracted} />
     </div>
   );
 };
