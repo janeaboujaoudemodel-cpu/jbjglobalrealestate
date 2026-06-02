@@ -37,14 +37,15 @@ export default function UnitCompareShell({ onModeChange }: Props) {
     mutationFn: async () => {
       if (!user?.id) throw new Error("Please sign in.");
       if (!project) throw new Error("Pick a project first.");
-      const { error } = await supabase.from("unit_comparisons").insert({
+      const payload = {
         owner_user_id: user.id,
         project_id: project.id,
         title: `${project.name} — ${units.length} unit(s)`,
-        units: units as unknown as Record<string, unknown>[],
-        shared_plan: sharedOn ? (sharedPlan as unknown as Record<string, unknown>[]) : null,
-        field_preset: { visible } as Record<string, unknown>,
-      });
+        units: JSON.parse(JSON.stringify(units)),
+        shared_plan: sharedOn ? JSON.parse(JSON.stringify(sharedPlan)) : null,
+        field_preset: { visible },
+      };
+      const { error } = await supabase.from("unit_comparisons").insert(payload);
       if (error) throw error;
     },
     onSuccess: () => toast.success("Comparison saved"),
