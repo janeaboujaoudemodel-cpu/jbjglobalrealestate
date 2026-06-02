@@ -1286,7 +1286,20 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           </div>
 
-          {/* Section icons — solid champagne body, no silver cast */}
+          {/* Section icons — unified gold tile, blue on hover */}
+          <style>{`
+            .jj-side-tile {
+              background: #FDFBF7;
+              border: 1px solid #B89555;
+              color: #B89555;
+              transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+            }
+            .jj-side-tile svg { color: #B89555; stroke: #B89555; transition: color 180ms ease, stroke 180ms ease; }
+            .jj-side-tile:hover { background: #102540; border-color: #102540; box-shadow: 0 2px 6px rgba(16,37,64,.25); }
+            .jj-side-tile:hover svg { color: #FFFFFF; stroke: #FFFFFF; }
+            .jj-side-tile.is-active { background: #102540; border-color: #102540; }
+            .jj-side-tile.is-active svg { color: #FFFFFF; stroke: #FFFFFF; }
+          `}</style>
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
             {highlightItems.map((item, i) => {
               const Icon = item.icon;
@@ -1298,13 +1311,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       to={item.href}
                       onClick={collapseAfterNavigation}
                       data-no-contrast-guard
-                      className={`group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
-                        isActive
-                          ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/80 shadow-sm shadow-gold/15'
-                          : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70'
-                      }`}
+                      className={`jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <Icon className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" />
+                      <Icon className="w-3.5 h-3.5" />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{item.label}</TooltipContent>
@@ -1336,13 +1345,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         setOpenSection(sectionKey);
                         setActiveMegaMenu(null);
                       }}
-                      className={`group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
-                        isActive
-                          ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/80 shadow-sm shadow-gold/15'
-                          : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70'
-                      }`}
+                      className={`jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <SectionIcon className="w-3.5 h-3.5 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))]" />
+                      <SectionIcon className="w-3.5 h-3.5" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
