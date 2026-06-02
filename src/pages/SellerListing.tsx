@@ -653,7 +653,7 @@ Requirements:
 
 
         {/* Layer 2 continues for form content */}
-        <div className="pb-16 pt-8 relative" data-no-contrast-guard data-allow-dark-cta style={{ background: "linear-gradient(135deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)" }}>
+        <div className="pb-16 pt-8 relative" style={{ background: "linear-gradient(135deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)" }}>
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
@@ -661,8 +661,9 @@ Requirements:
           />
           <div className="container mx-auto px-4 relative">
           {/* Progress Steps - on solid emerald, white glyphs */}
-          <div className="max-w-4xl mx-auto mb-8">
+          <div className="max-w-4xl mx-auto mb-8" data-no-contrast-guard data-allow-dark-cta>
             <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
+
               {STEPS.map((step, index) => (
                 <div 
                   key={step.number}
@@ -889,7 +890,9 @@ Requirements:
                             <SelectItem value="3">3 BR</SelectItem>
                             <SelectItem value="4">4 BR</SelectItem>
                             <SelectItem value="5">5 BR</SelectItem>
-                            <SelectItem value="6">6+ BR</SelectItem>
+                            <SelectItem value="6">6 BR</SelectItem>
+                            <SelectItem value="7">7+ BR</SelectItem>
+
                           </SelectContent>
                         </Select>
                       </div>
