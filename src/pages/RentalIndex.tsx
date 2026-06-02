@@ -34,6 +34,8 @@ import { PoweredByJBJ } from "@/components/tools/PoweredByJBJ";
 import { PremiumToolShell } from "@/components/tools/PremiumToolShell";
 import { ToolSectionDivider } from "@/components/tools/ToolSectionDivider";
 import { toolThemes, TOOL_INK } from "@/components/tools/toolThemes";
+import { AnimatedShineCTA } from "@/components/tools/AnimatedShineCTA";
+import { useGuidedRequiredFields } from "@/hooks/useGuidedRequiredFields";
 
 const theme = toolThemes.emerald;
 
@@ -170,12 +172,13 @@ const RentalIndex = () => {
   const [furnished, setFurnished] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [analysis, setAnalysis] = useState<RentalAnalysis | null>(null);
+  const guide = useGuidedRequiredFields();
 
   const handleAnalyze = async () => {
-    if (!community || !propertyType) {
-      toast.error("Please select a community and property type");
-      return;
-    }
+    if (!guide.check([
+      { id: "ri-community", label: "Community / Area", value: community },
+      { id: "ri-propertyType", label: "Property Type", value: propertyType },
+    ])) return;
 
     setIsLoading(true);
     setAnalysis(null);
@@ -250,7 +253,7 @@ const RentalIndex = () => {
                 Community / Area
               </FormLabel>
               <Select value={community} onValueChange={setCommunity}>
-                <SelectTrigger className="h-12 rounded-xl bg-white">
+                <SelectTrigger id="ri-community" className="h-12 rounded-xl bg-white">
                   <SelectValue placeholder="Select community" />
                 </SelectTrigger>
                 <SelectContent className="max-h-64">
@@ -268,7 +271,7 @@ const RentalIndex = () => {
                 Property Type
               </FormLabel>
               <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="h-12 rounded-xl bg-white">
+                <SelectTrigger id="ri-propertyType" className="h-12 rounded-xl bg-white">
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -308,14 +311,14 @@ const RentalIndex = () => {
             </div>
           </div>
 
-          <PrimaryCTA
-            theme={theme}
+          <AnimatedShineCTA
+            tone="emerald"
             onClick={handleAnalyze}
-            disabled={isLoading || !community || !propertyType}
-            icon={isLoading ? Sparkles : TrendingUp}
+            loading={isLoading}
+            fullWidth
           >
             {isLoading ? "Analysing Rental Data…" : "Get Rental Estimate"}
-          </PrimaryCTA>
+          </AnimatedShineCTA>
 
           {/* Results */}
           {analysis && (

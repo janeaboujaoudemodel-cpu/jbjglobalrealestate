@@ -818,24 +818,22 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="!border-teal-500/30 !border bg-[#FDFBF7]/50">
-              <CardHeader className="border-b border-[#1A1A1A]">
+            <Card
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white !border-emerald-400/40 !border bg-gradient-to-br from-emerald-700 to-emerald-900 shadow-[0_0_40px_rgba(16,185,129,0.25)]"
+            >
+              <CardHeader className="border-b border-emerald-400/30">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <CheckCircle2 className="w-6 h-6 text-teal-400" />
+                  <CardTitle className="text-white flex items-center gap-2 allow-white">
+                    <CheckCircle2 className="w-6 h-6 text-white allow-white" />
                     Measurement Complete!
                   </CardTitle>
                   <div className="flex gap-2">
-                    <Badge className={`${
-                      result.confidence === 'high' 
-                        ? 'bg-green-500/20 text-green-300 border-green-500/30'
-                        : result.confidence === 'medium'
-                        ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
-                        : 'bg-orange-500/20 text-orange-300 border-orange-500/30'
-                    }`}>
+                    <Badge className="bg-white/15 text-white border-white/30 allow-white">
                       {result.confidence || 'medium'} confidence
                     </Badge>
-                    <Badge className="bg-teal-500/20 text-teal-300 border-teal-500/30">
+                    <Badge className="bg-white/15 text-white border-white/30 allow-white">
                       AI Verified
                     </Badge>
                   </div>
@@ -843,24 +841,32 @@ jbj.ae
               </CardHeader>
               <CardContent className="pt-6 space-y-6">
                 {/* Total Area */}
-                <div className="bg-gradient-to-r from-teal-500/20 to-emerald-500/20 rounded-xl p-6 text-center">
-                  <p className="text-white/70 mb-2">Total Property Area</p>
-                  <p className="text-4xl md:text-5xl font-bold text-white">
-                    {result.totalArea.toLocaleString()} <span className="text-teal-400">sq ft</span>
+                <div
+                  data-allow-dark-cta
+                  data-no-contrast-guard
+                  className="allow-white bg-emerald-600 border border-emerald-300/40 rounded-xl p-6 text-center shadow-[0_0_24px_rgba(16,185,129,0.35)]"
+                >
+                  <p className="text-white/90 mb-2 allow-white">Total Property Area</p>
+                  <p className="text-4xl md:text-5xl font-bold text-white allow-white">
+                    {result.totalArea.toLocaleString()} <span className="text-white allow-white">sq ft</span>
                   </p>
-                  <p className="text-xl text-white/70 mt-2">
+                  <p className="text-xl text-white/90 mt-2 allow-white">
                     ({convertArea(result.totalArea, "sqm").toLocaleString()} sq m)
                   </p>
                 </div>
 
                 {/* AI Notes */}
                 {result.notes && (
-                  <div className="bg-[#F7F2EA]/50 border border-[#1A1A1A] rounded-xl p-4">
+                  <div
+                    data-allow-dark-cta
+                    data-no-contrast-guard
+                    className="allow-white bg-emerald-800/80 border border-emerald-400/30 rounded-xl p-4"
+                  >
                     <div className="flex items-start gap-3">
-                      <Info className="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0" />
+                      <Info className="w-5 h-5 text-white mt-0.5 flex-shrink-0 allow-white" />
                       <div>
-                        <p className="text-white/85 font-medium mb-1">AI Analysis Notes</p>
-                        <p className="text-white/70 text-sm">{result.notes}</p>
+                        <p className="text-white font-medium mb-1 allow-white">AI Analysis Notes</p>
+                        <p className="text-white/85 text-sm allow-white">{result.notes}</p>
                       </div>
                     </div>
                   </div>
@@ -868,21 +874,26 @@ jbj.ae
 
                 {/* Room Breakdown */}
                 <div>
-                  <h3 className="text-white font-semibold mb-4">Room Breakdown</h3>
+                  <h3 className="text-white font-semibold mb-4 allow-white">Room Breakdown</h3>
                   <div className="grid md:grid-cols-2 gap-3">
                     {result.rooms.map((room, i) => (
-                      <div key={i} className="bg-[#F7F2EA]/50 rounded-lg p-4">
+                      <div
+                        key={i}
+                        data-allow-dark-cta
+                        data-no-contrast-guard
+                        className="allow-white bg-emerald-800/70 border border-emerald-400/30 rounded-lg p-4"
+                      >
                         <div className="flex justify-between items-center">
-                          <span className="text-white/85">{room.name}</span>
+                          <span className="text-white allow-white">{room.name}</span>
                           <div className="text-right">
-                            <span className="text-white font-medium">{room.area} sq ft</span>
-                            <span className="text-white/90 text-sm ml-2">
+                            <span className="text-white font-medium allow-white">{room.area} sq ft</span>
+                            <span className="text-white/85 text-sm ml-2 allow-white">
                               ({convertArea(room.area, "sqm")} sqm)
                             </span>
                           </div>
                         </div>
                         {room.dimensions && (
-                          <p className="text-white/90 text-xs mt-1">
+                          <p className="text-white/80 text-xs mt-1 allow-white">
                             Estimated: {room.dimensions}
                           </p>
                         )}
@@ -890,6 +901,7 @@ jbj.ae
                     ))}
                   </div>
                 </div>
+
 
                 {/* Save Project CTA */}
                 {!user && (
