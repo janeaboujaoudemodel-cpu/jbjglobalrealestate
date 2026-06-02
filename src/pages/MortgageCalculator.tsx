@@ -44,6 +44,7 @@ const MortgageCalculatorPage = () => {
 
       {/* Tool shell — navy hero + form inside a single animated-border card */}
       <div className="container mx-auto px-4 pt-6 md:pt-8 pb-12">
+        <div className="jbj-neon-frame">
         <AnimatedBorderShell tone="navy" className="overflow-hidden">
           <div className="bg-[#0b1626]">
             {/* Navy hero header with back inside, centered title */}
