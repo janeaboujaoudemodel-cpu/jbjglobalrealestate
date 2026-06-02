@@ -1,5 +1,9 @@
 import { useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import UnitCompareShell from "@/components/compare/units/UnitCompareShell";
+import CompareModeToggle from "@/components/compare/CompareModeToggle";
+import CompareAccessGate from "@/components/compare/units/CompareAccessGate";
+import { useCompareAccess } from "@/hooks/useCompareAccess";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
