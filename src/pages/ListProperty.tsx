@@ -251,9 +251,12 @@ const ListProperty = () => {
         </div>
       </section>
 
+      {/* Champagne breathing band so the navy hero doesn't visually collide with the purpose card */}
+      <div aria-hidden style={{ background: CHAMPAGNE, height: 24 }} />
+
       {/* ───────────────── Purpose + Mode selector (mode-aware accent) ───────────────── */}
       <section
-        className="px-4 sm:px-6 md:px-10 pt-8 md:pt-10 pb-8 md:pb-10 relative z-10"
+        className="px-4 sm:px-6 md:px-10 pt-4 md:pt-6 pb-8 md:pb-10 relative z-10"
         style={{ background: ombreSoft(theme) }}
       >
 
