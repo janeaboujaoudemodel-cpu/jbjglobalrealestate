@@ -41,6 +41,63 @@ export type Database = {
         }
         Relationships: []
       }
+      academy_access_requests: {
+        Row: {
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_note: string | null
+          email: string
+          full_name: string
+          id: string
+          note: string | null
+          phone: string | null
+          requested_item_id: string | null
+          requested_item_title: string | null
+          requested_item_type: string
+          status: string
+          updated_at: string
+          user_id: string | null
+          user_mode: string | null
+        }
+        Insert: {
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_note?: string | null
+          email: string
+          full_name: string
+          id?: string
+          note?: string | null
+          phone?: string | null
+          requested_item_id?: string | null
+          requested_item_title?: string | null
+          requested_item_type: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+          user_mode?: string | null
+        }
+        Update: {
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_note?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          note?: string | null
+          phone?: string | null
+          requested_item_id?: string | null
+          requested_item_title?: string | null
+          requested_item_type?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+          user_mode?: string | null
+        }
+        Relationships: []
+      }
       activity_points_config: {
         Row: {
           created_at: string

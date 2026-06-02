@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import { ChevronDown, HelpCircle, CircleDot } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const FAQS = [
@@ -71,21 +71,26 @@ export function CareersFAQ() {
                 >
                   <span className={cn("text-base font-semibold leading-snug", open ? "text-[#071B33]" : "text-[#1A1A1A]")}>{f.q}</span>
                   <span
+                    data-allow-dark-cta
+                    data-no-contrast-guard
                     className={cn(
-                      "grid h-9 w-9 shrink-0 place-items-center rounded-full border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
+                      "allow-white grid h-9 w-9 shrink-0 place-items-center rounded-full border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
                       open
-                        ? "border-[#B89555] bg-[#071B33] shadow-[0_12px_22px_-12px_rgba(184,149,85,0.5)]"
+                        ? "border-[#B89555] bg-[#102540] shadow-[0_12px_22px_-12px_rgba(184,149,85,0.55)]"
                         : "border-[#B89555]/55 bg-[#F7F2EA]"
                     )}
+                    style={open ? { backgroundColor: "#102540" } : undefined}
                   >
-                    <ChevronDown
-                      className={cn(
-                        "h-4 w-4 transition-transform",
-                        open ? "rotate-180 text-white" : "text-[#071B33]"
-                      )}
-                      data-allow-dark-cta={open ? "" : undefined}
-                      data-no-contrast-guard={open ? "" : undefined}
-                    />
+                    {open ? (
+                      <CircleDot
+                        className="h-4 w-4 allow-white"
+                        style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
+                        data-allow-dark-cta
+                        data-no-contrast-guard
+                      />
+                    ) : (
+                      <ChevronDown className="h-4 w-4 text-[#102540]" />
+                    )}
                   </span>
                 </button>
                 <div
