@@ -187,8 +187,18 @@ export const PremiumToolShell = ({
 
           {/* Body */}
           <div
+            data-tool-darkbody={darkBody ? "true" : undefined}
             className="px-4 py-8 md:px-8 md:py-10"
-            style={{ color: TOOL_INK }}
+            style={{
+              color: darkBody ? "#FFFFFF" : TOOL_INK,
+              ...(darkBody
+                ? ({
+                    ["--tool-accent" as any]: theme.accent,
+                    ["--tool-accent-soft" as any]: `${theme.accent}33`,
+                    ["--tool-accent-border" as any]: `${theme.accent}66`,
+                  } as CSSProperties)
+                : {}),
+            }}
           >
             {children}
           </div>
