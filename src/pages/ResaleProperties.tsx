@@ -560,7 +560,7 @@ const ResaleProperties = () => {
             </div>
           ) : (
             /* Empty State — Premium navy + champagne + gold */
-            <div className="max-w-2xl mx-auto text-center py-12 px-6 sm:px-10 md:px-12 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
+            <div className="max-w-5xl mx-auto text-center py-14 px-8 sm:px-14 md:px-20 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
               <div className="w-20 h-20 rounded-2xl bg-[#EFE6D6] flex items-center justify-center mx-auto mb-6 border border-[#B89555]/40">
                 <Building2 className="w-10 h-10 text-[#102540]" />
               </div>
