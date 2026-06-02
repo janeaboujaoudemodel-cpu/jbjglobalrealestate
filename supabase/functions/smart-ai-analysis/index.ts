@@ -326,6 +326,15 @@ Response Format:
     "investmentAdvice": "string (specific actionable advice)",
     "riskFactors": ["string"]
   },
+  "marketContext": [
+    { "projectName": "string", "priceTrend12mPct": number, "supplyHeat": "Low" | "Balanced" | "High", "demandIndex": 0-100 }
+  ],
+  "riskScores": [
+    { "projectName": "string", "riskScore": 0-100, "factors": [ { "label": "string", "weight": 0-100 } ] }
+  ],
+  "negotiationLeverage": [
+    { "projectName": "string", "talkingPoints": ["string (script-ready negotiation lever)"] }
+  ],
   "summary": "string (50-100 words executive summary)"
 }
 
@@ -337,7 +346,9 @@ Important Analysis Guidelines:
 5. Consider rental yield potential (typical Dubai yields: 5-8%)
 6. Factor in handover dates for investment timeline
 7. Evaluate amenities quality (private pool, gym, beach access, etc.)
-8. Consider community maturity and infrastructure`;
+8. Consider community maturity and infrastructure
+9. Risk scores must reflect concrete drivers (handover delay, oversupply, developer track record, payment-plan exposure, location liquidity).
+10. Negotiation leverage must be specific, script-ready lines a broker can deliver verbatim.`;
 
     const userPrompt = `Analyze these ${projects.length} Dubai properties and provide the structured comparison:
 
@@ -362,11 +373,13 @@ Generate a comprehensive analysis with detailed tables, ratings, and recommendat
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "openai/gpt-5.5",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
+        response_format: { type: "json_object" },
+        reasoning: { effort: "medium" },
       }),
     });
 

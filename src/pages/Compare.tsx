@@ -32,6 +32,8 @@ import CompareAIShell, { GradientText } from "@/components/compare/CompareAIShel
 import AnimatedStepLine from "@/components/compare/AnimatedStepLine";
 import SampleComparisonPreview from "@/components/compare/SampleComparisonPreview";
 import CompareCTA from "@/components/compare/CompareCTA";
+import MarketContextStrip from "@/components/compare/MarketContextStrip";
+import RiskScoreGauge from "@/components/compare/RiskScoreGauge";
 
 const INQUIRY_FORM_URL = "https://JBJ.AE/contact";
 const COMPARE_FREE_KEY = "jbj_compare_free_used";
@@ -900,6 +902,55 @@ const Compare = () => {
                 </div>
                 <p className="text-white/85 leading-relaxed">{aiAnalysis.summary}</p>
               </div>
+
+              {/* Market Context */}
+              {Array.isArray((aiAnalysis as any).marketContext) && (aiAnalysis as any).marketContext.length > 0 && (
+                <MarketContextStrip data={(aiAnalysis as any).marketContext} />
+              )}
+
+              {/* Risk Scores */}
+              {Array.isArray((aiAnalysis as any).riskScores) && (aiAnalysis as any).riskScores.length > 0 && (
+                <RiskScoreGauge data={(aiAnalysis as any).riskScores} />
+              )}
+
+              {/* Negotiation Leverage */}
+              {Array.isArray((aiAnalysis as any).negotiationLeverage) && (aiAnalysis as any).negotiationLeverage.length > 0 && (
+                <div>
+                  <h2 className="text-white text-xl font-semibold mb-4 flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-[#7C3AED]" />
+                    Negotiation Leverage
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {(aiAnalysis as any).negotiationLeverage.map((n: any, i: number) => (
+                      <div key={i} className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-5">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="text-white font-semibold">{n.projectName}</h4>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              navigator.clipboard.writeText((n.talkingPoints || []).map((t: string, idx: number) => `${idx + 1}. ${t}`).join("\n"));
+                              toast.success("Talking points copied");
+                            }}
+                            className="text-xs px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 text-white border border-white/15"
+                            data-no-contrast-guard
+                            data-allow-dark-cta
+                          >
+                            Copy
+                          </button>
+                        </div>
+                        <ul className="space-y-2">
+                          {(n.talkingPoints || []).map((t: string, ti: number) => (
+                            <li key={ti} className="text-sm text-white/85 leading-relaxed flex gap-2">
+                              <span className="text-[#7C3AED] font-semibold">{ti + 1}.</span>
+                              <span>{t}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Ratings Cards */}
               <div>
