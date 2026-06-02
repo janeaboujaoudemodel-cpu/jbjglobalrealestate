@@ -707,20 +707,19 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
           {user && (
             <Button
               asChild
-              data-allow-dark-cta
               data-no-contrast-guard
               className="font-semibold hover:brightness-105 jj-dashboard-pulse"
               style={{
-                background: ombreSoft(theme),
+                background: "#FFFFFF",
                 color: accent,
-                border: `1.5px solid ${theme.badgeBorder}`,
-                boxShadow: `0 10px 24px -10px ${theme.badgeBorder}99`,
+                border: `1.5px solid ${accent}`,
+                boxShadow: `0 10px 24px -10px ${accent}66`,
               }}
             >
               <Link to="/dashboard/my-listings">
-                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent }} />
+                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent, stroke: accent }} />
                 <span style={{ color: accent, WebkitTextFillColor: accent, fontWeight: 700 }}>Open full dashboard</span>
-                <span className="jj-arrow-anim inline-flex ml-2"><ArrowRight className="w-4 h-4" /></span>
+                <span className="jj-arrow-anim inline-flex ml-2"><ArrowRight className="w-4 h-4" style={{ color: accent, stroke: accent }} /></span>
 
               </Link>
             </Button>
