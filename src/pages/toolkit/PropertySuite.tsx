@@ -2,11 +2,12 @@
  * Property Intelligence Suite — Premium Champagne-Gold with Color-Coded Tabs
  */
 
-import React, { lazy, Suspense, useState } from 'react';
+import React, { lazy, Suspense, useState, useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
 import { Home, Calculator, Layers, BarChart3, DollarSign, ArrowLeft, Loader2, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useCompareAccess } from '@/hooks/useCompareAccess';
 
 const Quiz = lazy(() => import('@/pages/Quiz'));
 const PropertyEvaluator = lazy(() => import('@/pages/PropertyEvaluator'));
