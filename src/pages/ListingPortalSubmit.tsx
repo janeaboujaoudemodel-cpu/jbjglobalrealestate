@@ -155,8 +155,14 @@ const ListingPortalSubmit = () => {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(stateToSave));
   }, [phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode, sourceUrl, sourceText]);
 
-  // Scroll to creator section on phase changes
+  // Scroll to creator section on phase changes — skip the initial mount so
+  // simply opening the AI tab does not yank the page down (Manual stays put).
+  const didMountScrollRef = useRef(false);
   useEffect(() => {
+    if (!didMountScrollRef.current) {
+      didMountScrollRef.current = true;
+      return;
+    }
     if (creatorRef.current) {
       const headerOffset = 100;
       const elementTop = creatorRef.current.getBoundingClientRect().top + window.scrollY;
