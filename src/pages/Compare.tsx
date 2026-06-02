@@ -1245,6 +1245,7 @@ const Compare = () => {
       
       {/* Active Lead Banner for CRM linking */}
       <ActiveLeadBanner showAddToShortlist={false} />
+      <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
     </section>
     </ToolAnimatedFrame>
   );
