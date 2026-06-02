@@ -67,6 +67,15 @@ const PALETTE: Record<
     onBase: "#FFFFFF",
     surface: "espresso",
   },
+  owner: {
+    label: "Mode: Owner",
+    base: "#102540",
+    baseDark: "#0A1830",
+    rowFrom: "#FDFBF7",
+    dark: "#1A1A1A",
+    onBase: "#FFFFFF",
+    surface: "ink",
+  },
 };
 
 // --- Helpers -------------------------------------------------------------
