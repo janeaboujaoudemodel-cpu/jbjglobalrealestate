@@ -142,9 +142,12 @@ const viewOptions = [
 ];
 
 // LOCKED blue theme classes — never use gold hover on evaluator cards
-const blueCard = "hover:border-blue-400/60 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)] hover:scale-[1.01] transition-all duration-300";
-const blueCardPrimary = `bg-blue-900/20 border-blue-500/30 ${blueCard}`;
-const blueCardSecondary = `bg-[#FDFBF7]/50 border-[#1A1A1A] ${blueCard}`;
+// Amber neon card system — mirrors Property Measurement's emerald-on-ink look
+// but tinted to match the orange Property Evaluator hero.
+const blueCard =
+  "transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_0_28px_rgba(245,158,11,0.32)]";
+const blueCardPrimary = `!border-0 !bg-transparent ${blueCard}`;
+const blueCardSecondary = `!border-0 !bg-transparent ${blueCard}`;
 
 const PropertyEvaluator = () => {
   const [property, setProperty] = useState<PropertyDetails>(defaultProperty);
