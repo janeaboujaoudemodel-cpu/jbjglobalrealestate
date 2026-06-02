@@ -1,96 +1,138 @@
-# Plan — Unified Ombré Tool Style + Access Gating
+I checked the current files and your complaint is correct: the previous implementation did not actually restyle AI Property Finder (`/quiz`), Mortgage Calculator, or Interior Design AI. Only partial changes were made around access gating and a few tool pages. I will not mark anything done until it is visually checked.
 
-## Scope
+## Full task list extracted from your message
 
-**Restyle (apply Property Measurement's exact layout/UX, accent→black ombré, ToolAnimatedFrame, stepper, centered cards):**
-1. Mortgage Calculator (`/mortgage-calculator`) — Navy accent
-2. Rental Index (`/rental-index`) — Burgundy accent
-3. AI Home Finder (`/ai-home-finder` or current route) — Teal accent
-4. Property Evaluator (`/property-evaluator`) — Amber accent
-5. Interior Design AI (`/interior-design-ai`) — Violet→Pink→Tiffany custom accent
-6. Business Card Scanner (`/business-card-scanner`) — Rose accent
-7. Property Comparison (`/compare`) — Emerald accent (already partly themed; align fully)
+1. Rebuild the AI tool pages to match the Property Measurement ombre logic:
+   - AI Property Finder (`/quiz`)
+   - Mortgage Calculator (`/mortgage-calculator`)
+   - Interior Design AI (`/interior-design-ai`)
+   - Business Card Scanner (`/business-card-scanner`)
+   - Confirm the already-touched Rental Index / Property Evaluator also match the same standard
 
-Each page gets its own `ToolTheme` entry in `src/components/tools/toolThemes.ts`, wrapped in `<ToolAnimatedFrame theme={…}>`, with the same step header, centered card stack, gradient CTAs, and accent chips that Property Measurement uses. Contrast verified against ink-on-light surfaces and white-on-dark CTAs per the contrast guard.
+2. Use different per-tool color identities while keeping the same layout logic:
+   - AI Property Finder: teal / cyan / black ombre
+   - Mortgage Calculator: navy / blue / black ombre
+   - Interior Design AI: violet / pink / Tiffany cyan / black ombre
+   - Business Card Scanner: rose / magenta / black ombre
+   - Rental Index: brick / dark orange / black ombre
+   - Property Evaluator: amber / bronze / black ombre
+   - Property Comparison: indigo / emerald / black ombre
 
-**Hard "do not touch" list:** Property Measurement, List Property for Sale, List Property for Rent.
+3. Add Owner mode to the mode switcher:
+   - Owner appears only when the logged-in account is verified as owner by backend role/access checks.
+   - Normal users see only Investor, Broker, Developer.
+   - Switching mode changes the front-end/portal perspective only.
+   - Owner backend permissions remain tied to the owner account, even when previewing Developer/Broker/Investor mode.
+   - Owner mode will reveal owner portal surfaces for the owner account.
 
-## Access Matrix
+4. Fix the gated access work honestly:
+   - Property Comparison: owner + JBJ broker unlocked; other brokers see Request Access; investor/developer/logged-out hidden.
+   - Business Card Scanner: same rule.
+   - AI Property Finder, Mortgage, Rental Index, Property Evaluator, Interior Design: visible and usable for everyone.
+   - Ensure Business Card Scanner and Interior Design AI are visible under Tools & Workspace.
 
-| Tool | Owner | JBJ Broker | Other Brokers | Investor / Developer / Logged-out |
-|---|---|---|---|---|
-| Property Comparison | ✅ Full | ✅ Full | 🔒 Request Access | ❌ Hidden (sidebar + route) |
-| Business Card Scanner | ✅ Full | ✅ Full | 🔒 Request Access | ❌ Hidden (sidebar + route) |
-| Mortgage / Rental Index / Home Finder / Evaluator / Interior Design | ✅ | ✅ | ✅ | ✅ Visible & usable |
+5. Restyle News & Insights (`/news`):
+   - Center the hero label, title, and subtitle.
+   - Keep the neon underline language but make it more premium/flashy.
+   - Wrap the news/card sections in one large animated neon border container.
+   - Put smaller cards inside that wrapper with matching ombre/glow treatment.
+   - Apply the same page color logic to news cards, key market statistics, top buyer nationalities, 2025 full-year recap, and top 10 areas.
+   - Move “Top 10 Areas by Transaction” under “Top Buyer Nationalities.”
+   - Fix contrast throughout.
 
-Implementation:
-- Extend `useCompareAccess` → generalize into `useGatedToolAccess(toolId)` returning `{ visible, unlocked, isJBJBroker, isOwner }`. JBJ broker detection reuses `useUserRole().isJBJBroker` (already in codebase).
-- Sidebar (`GlobalVerticalNav.tsx`): filter Compare + Business Card Scanner items by `visible`.
-- Route guards: `/compare` and `/business-card-scanner` render existing `CompareAccessGate`-style component when `!visible` (redirect to `/access-denied` or hub).
-- Locked broker view: themed gate card "Request Access" button → posts to existing `broker_access_request_system` (per memory), shows pending state. JBJ broker bypass automatic.
-- Interior Design AI stays under **Tools & Workspace** in the vertical sidebar for all users.
+6. Restyle Market Intelligence (`/market-intelligence`):
+   - Use the AI Hub neon animated hero logic, adapted to market intelligence.
+   - Keep readable market data hierarchy.
+   - Replace static-feeling hero treatment with always-visible motion layers/glows.
+   - Apply matching neon/ombre card styling through downstream sections where practical without breaking data components.
 
-## Technical Details
+7. Restyle Area Intelligence (`/market-intelligence/areas`):
+   - Same premium neon/ombre logic with a different color balance.
+   - Improve readability and card contrast.
+   - Keep content structure intact.
 
-**New per-tool themes** added to `toolThemes.ts`:
-```
-mortgageNavy   #102540 → #000
-rentalBrick    #8B1E2E → #000
-homeFinderTeal #0E7490 → #000
-evaluatorAmber #B45309 → #000
-interiorBlend  custom: #7C3AED → #EC4899 → #5EEAD4 → #000 (3-stop hero, 2-stop CTA)
-cardScanRose   #BE185D → #000
-compareEmerald #0F7A4D → #000  (already exists, reuse)
-```
+8. Restyle Guides Library / Books / FAQ pages:
+   - Use AI Hub-style animated hero logic, adapted for books/guides.
+   - Remove company wordmark/title from visible book covers/cards where currently shown.
+   - Keep book title centered and the book photo/cover prominent.
+   - Apply the same treatment to guides/books/FAQ entry pages where the current book card system appears.
 
-**Per-tool page refactor** (each of the 6 files):
-1. Replace current outer wrapper with `<ToolAnimatedFrame theme={toolThemes.xxx}>`.
-2. Keep all existing business logic + edge function calls untouched.
-3. Convert hero section to mirror PropertyMeasurement: chip → title → subtitle → step indicator.
-4. Wrap step content in the dark ombré card (`heroGradient` bg, white text, accent borders).
-5. Primary CTA = `ctaGradient`; secondary = champagne outline.
-6. Run white-on-light + same-tone contrast guard on each.
+9. Restore / strengthen AI Hub hero animation:
+   - Ensure animation is visible immediately, not only after a long delay.
+   - Preserve the current premium pink/blue/cyan AI Hub direction.
+   - Apply the reusable animated hero/card language to Insights and Guides pages, except the homepage hero.
 
-**Access plumbing:**
-- `src/hooks/useGatedToolAccess.ts` (new) — wraps `useUserRole` + `useIsAppOwner`.
-- `src/components/access/ToolLockGate.tsx` (new) — themed lock card with "Request Access" CTA, reused by Compare + Card Scanner. Uses tool's own theme accent.
-- Sidebar filter in `GlobalVerticalNav.tsx`: hide Compare/Scanner items when `!visible`.
-- Route-level: wrap `/compare` and `/business-card-scanner` in a `<GatedToolRoute toolId="…">` that returns `ToolLockGate` when locked, full page when unlocked, `<Navigate to="/" />` when hidden.
+10. Validate visually and technically:
+   - Screenshot every changed route after implementation at the current preview size.
+   - Check the main interactive flow as a user/broker where applicable.
+   - Check sidebar visibility for owner, broker, developer/investor views where possible.
+   - Run focused technical checks/tests for affected code.
+   - Only then report what was verified.
 
-## Validation (per tool)
+## Implementation plan
 
-- Browser screenshot at 1178×891.
-- Verify step indicator + centered card render at viewport.
-- Verify CTA contrast (white text on accent→ink gradient).
-- Verify no white-on-light or same-tone violations.
-- Verify sidebar visibility flips correctly across investor / broker / JBJ broker / owner modes for Compare + Scanner.
+### Phase 1 — Shared visual system first
+Create/extend reusable frontend primitives so the work is consistent instead of one-off patches:
+- Neon animated hero background layer based on the AI Hub style.
+- Animated ombre border section wrapper.
+- Ombre card wrapper for content sections.
+- Tool-page shell that mirrors Property Measurement’s step/header/card logic.
+- Keep contrast guard opt-outs only for true dark surfaces.
 
-## Files
+### Phase 2 — Fix modes and access
+- Extend user mode handling to support `owner` only for verified owner accounts.
+- Update ModeSwitcher so Owner is conditionally rendered only for the owner.
+- Make `owner` mode front-end perspective safe: it does not grant owner access by itself.
+- Update gated tool access to rely on verified owner/JBJ broker checks.
+- Confirm sidebar entries for Interior Design AI and Business Card Scanner are in Tools & Workspace.
 
-**New**
-- `src/hooks/useGatedToolAccess.ts`
-- `src/components/access/ToolLockGate.tsx`
-- `src/components/access/GatedToolRoute.tsx`
+### Phase 3 — Rebuild the named AI tool pages
+Work one page at a time and validate before moving on:
+1. AI Property Finder (`/quiz`)
+2. Mortgage Calculator
+3. Interior Design AI
+4. Business Card Scanner
+5. Re-check Rental Index / Property Evaluator / Compare
 
-**Edit**
-- `src/components/tools/toolThemes.ts` (add interior + alias names)
-- `src/pages/MortgageCalculator.tsx`
-- `src/pages/RentalIndex.tsx`
-- `src/pages/AIHomeFinder.tsx` (or current home-finder file)
-- `src/pages/PropertyEvaluator.tsx`
-- `src/pages/InteriorDesignAI.tsx`
-- `src/pages/BusinessCardScanner.tsx`
-- `src/pages/Compare.tsx` (theme alignment + route gate)
-- `src/components/navigation/GlobalVerticalNav.tsx` (filter Compare + Scanner)
-- `src/App.tsx` or relevant routes file (wrap `/compare` and `/business-card-scanner`)
+Each page gets:
+- Matching Property Measurement-style centered intro/step flow.
+- Its own accent-to-black ombre palette.
+- Animated border and inner dark card surfaces.
+- Readable white-on-dark or ink-on-light text only.
+- No champagne/gold misuse as filled CTAs.
 
-**Untouched (locked)**
-- `src/pages/PropertyMeasurement.tsx`
-- List Property for Sale / Rent pages
+### Phase 4 — Restyle News, Market Intelligence, Area Intelligence
+- Center News hero content.
+- Apply AI Hub-style animated background layers and neon underline/border motion.
+- Restyle downstream content wrappers/cards with matching page palette.
+- Reorder News statistics so Top 10 Areas sits under Top Buyer Nationalities.
+- Keep market data readable and not overdecorated.
 
-## Execution Order
+### Phase 5 — Restyle Guides / Books / FAQ
+- Replace plain champagne guide/library sections with animated neon hero + wrapped card/grid treatment.
+- Remove visible company wordmark/title from book presentation where it appears in the UI component layer.
+- Keep book title centered and cover/photo dominant.
+- Apply consistent treatment to FAQ/book library surfaces.
 
-1. Add themes + new access hook/components.
-2. Wire sidebar + route gates for Compare and Business Card Scanner.
-3. Restyle the 6 tool pages one at a time, screenshot-verifying each.
-4. Final pass: investor / broker / JBJ broker / owner sidebar + route smoke test.
+### Phase 6 — Validation before reporting complete
+I will validate these routes after implementation:
+- `/quiz`
+- `/mortgage-calculator`
+- `/interior-design-ai`
+- `/business-card-scanner`
+- `/rental-index`
+- `/property-evaluator`
+- `/compare`
+- `/news`
+- `/market-intelligence`
+- `/market-intelligence/areas`
+- `/guides`
+- `/faq`
+- `/education-hub`
+- `/ai-hub`
+
+Validation output will include:
+- Screenshots for the changed routes.
+- What was clicked/tested.
+- Any remaining limitations or items not possible to verify due to login/role constraints.
+- No “done/live/fixed” claim unless the route was actually checked.
