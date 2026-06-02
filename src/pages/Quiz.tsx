@@ -617,19 +617,19 @@ const Quiz = () => {
   // Form Screen after completing questions
   if (showForm) {
     return (
-      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
+      <section className="min-h-screen bg-gradient-to-b from-[#02110F] via-[#031E18] to-[#020B0A] flex flex-col">
         {/* Header */}
-        <div className="border-b border-[#B89555]/20 bg-[#FDFBF7]/50 backdrop-blur-sm">
+        <div className="border-b border-[#2DD4BF]/20 bg-[#02110F]/60 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setShowForm(false)}
-                className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
+                className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
               >
                 <ChevronLeft className="w-5 h-5" />
                 Back to Questions
               </button>
-              <div className="flex items-center gap-3 text-[#B89555]">
+              <div className="flex items-center gap-3 text-[#5EEAD4]">
                 <CheckCircle2 className="w-4 h-4" />
                 <span className="text-sm">Almost there!</span>
               </div>
@@ -641,50 +641,50 @@ const Quiz = () => {
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div className="w-full max-w-lg">
             <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#B89555] to-[#A68444] mx-auto mb-4 flex items-center justify-center shadow-lg shadow-[#B89555]/30">
-                <Sparkles className="w-8 h-8 text-[#1A1A1A]" />
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#2DD4BF] to-[#06B6D4] mx-auto mb-4 flex items-center justify-center shadow-lg shadow-[#2DD4BF]/30">
+                <Sparkles className="w-8 h-8 text-white" />
               </div>
-              <h2 className="text-[#102540] text-3xl font-bold mb-2">
+              <h2 className="text-[#02110F] text-3xl font-bold mb-2">
                 Get Your AI Analysis
               </h2>
-              <p className="text-[#1A1A1A]/70">
+              <p className="text-white/70">
                 Enter your details to receive your personalized property recommendations
               </p>
             </div>
 
-            <div className="bg-[#FDFBF7]/70 border border-[#B89555]/30 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
+            <div className="bg-[#051C18]/80 border border-[#2DD4BF]/30 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
               <div className="space-y-5">
                 <div>
-                  <Label className="text-[#1A1A1A] mb-2 block">Full Name *</Label>
+                  <Label className="text-white mb-2 block">Full Name *</Label>
                   <Input
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     placeholder="Enter your full name"
-                    className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
+                    className="bg-[#051C18] border-[#2DD4BF]/30 text-white placeholder:text-white/60 focus:border-[#2DD4BF]"
                   />
                 </div>
                 <div>
-                  <Label className="text-[#1A1A1A] mb-2 block">Email Address *</Label>
+                  <Label className="text-white mb-2 block">Email Address *</Label>
                   <Input
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="Enter your email"
-                    className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
+                    className="bg-[#051C18] border-[#2DD4BF]/30 text-white placeholder:text-white/60 focus:border-[#2DD4BF]"
                   />
                 </div>
                 <div>
-                  <Label className="text-[#1A1A1A] mb-2 block">Phone Number *</Label>
+                  <Label className="text-white mb-2 block">Phone Number *</Label>
                   <Input
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="+971 XX XXX XXXX"
-                    className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
+                    className="bg-[#051C18] border-[#2DD4BF]/30 text-white placeholder:text-white/60 focus:border-[#2DD4BF]"
                   />
                 </div>
                 <div>
-                  <Label className="text-[#1A1A1A] mb-2 block">Nationality *</Label>
+                  <Label className="text-white mb-2 block">Nationality *</Label>
                   <SearchableSelect
                     value={formData.nationality}
                     onChange={(value) => setFormData({ ...formData, nationality: value })}
@@ -692,12 +692,12 @@ const Quiz = () => {
                     placeholder="Select your nationality"
                     searchPlaceholder="Search countries..."
                     priorityItem="United Arab Emirates"
-                    triggerClassName="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
-                    className="bg-[#FDFBF7] border-[#B89555]/30"
+                    triggerClassName="bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
+                    className="bg-[#051C18] border-[#2DD4BF]/30"
                   />
                 </div>
                 <div>
-                  <Label className="text-[#1A1A1A] mb-2 block">Preferred Language *</Label>
+                  <Label className="text-white mb-2 block">Preferred Language *</Label>
                   <SearchableSelect
                     value={formData.preferredLanguage}
                     onChange={(value) => setFormData({ ...formData, preferredLanguage: value })}
@@ -705,8 +705,8 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
-                    triggerClassName="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
-                    className="bg-[#FDFBF7] border-[#B89555]/30"
+                    triggerClassName="bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
+                    className="bg-[#051C18] border-[#2DD4BF]/30"
                   />
                 </div>
               </div>
@@ -716,8 +716,8 @@ const Quiz = () => {
                 disabled={!isFormValid() || isSubmitting}
                 className={`w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
                   needsPayment
-                    ? "bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#102540] hover:brightness-110"
-                    : "bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#102540] hover:brightness-110"
+                    ? "bg-gradient-to-r from-[#2DD4BF] to-[#06B6D4] text-[#02110F] hover:brightness-110"
+                    : "bg-gradient-to-r from-[#2DD4BF] to-[#06B6D4] text-[#02110F] hover:brightness-110"
                 }`}
               >
                 {isSubmitting ? (
@@ -739,19 +739,19 @@ const Quiz = () => {
               </Button>
 
               {!needsPayment && (
-                <p className="text-[#B89555] text-base font-semibold text-center mt-4">
+                <p className="text-[#5EEAD4] text-base font-semibold text-center mt-4">
                   Your first AI Property Match & Analysis is FREE!
                 </p>
               )}
 
               {needsPayment && (
-                <p className="text-[#B89555] text-sm font-medium text-center mt-4">
+                <p className="text-[#5EEAD4] text-sm font-medium text-center mt-4">
                   You've used your free trial. Upgrade to VIP for unlimited access.
                 </p>
               )}
 
-              <p className="text-[#1A1A1A]/70 text-xs text-center mt-6 leading-relaxed">
-                Powered by <span className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</span>
+              <p className="text-white/70 text-xs text-center mt-6 leading-relaxed">
+                Powered by <span className="text-white font-semibold">JBJ Global Real Estate</span>
               </p>
             </div>
           </div>
@@ -764,27 +764,27 @@ const Quiz = () => {
 
   // Quiz Questions Screen
   return (
-    <ToolAnimatedFrame theme={toolThemes.violet}>
-    <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
+    <ToolAnimatedFrame theme={toolThemes.teal}>
+    <section className="min-h-screen bg-gradient-to-b from-[#02110F] via-[#031E18] to-[#020B0A] flex flex-col">
       {/* Header */}
-      <div className="border-b border-[#B89555]/20 bg-[#FDFBF7]/50 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
+      <div className="border-b border-[#2DD4BF]/20 bg-[#02110F]/60 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
             <button
               onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-              className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
+              className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
             >
               <ChevronLeft className="w-5 h-5" />
               {currentStep > 0 ? "Back" : "Exit"}
             </button>
-            <div className="text-[#1A1A1A]/70 text-sm">
+            <div className="text-white/70 text-sm">
               Question {currentStep + 1} of {QUIZ_QUESTIONS.length}
             </div>
           </div>
           {/* Gold gradient progress bar */}
-          <div className="h-2 bg-[#B89555]/15 rounded-full overflow-hidden">
+          <div className="h-2 bg-[#2DD4BF]/15 rounded-full overflow-hidden">
             <div 
-              className="h-full rounded-full bg-gradient-to-r from-[#B89555] via-[#D4B85C] to-[#A68444] transition-all duration-500 ease-out"
+              className="h-full rounded-full bg-gradient-to-r from-[#2DD4BF] via-[#5EEAD4] to-[#06B6D4] transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -797,7 +797,7 @@ const Quiz = () => {
           {/* Main Question Area */}
           <div className="flex-1 max-w-2xl mx-auto">
             <h2
-              className="text-[#102540] text-2xl md:text-3xl font-bold mb-8 text-center"
+              className="text-[#02110F] text-2xl md:text-3xl font-bold mb-8 text-center"
             >
               {currentQuestion.question}
             </h2>
@@ -810,7 +810,7 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleSelectAll}
                   disabled={allSelected()}
-                  className="bg-[#FDFBF7] text-[#102540] hover:bg-[#F7F2EA] hover:text-[#102540] border-[#B89555]/40 font-semibold disabled:opacity-50"
+                  className="bg-[#051C18] text-[#02110F] hover:bg-[#062821] hover:text-[#02110F] border-[#2DD4BF]/40 font-semibold disabled:opacity-50"
                 >
                   Select All
                 </Button>
@@ -819,7 +819,7 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleClearAll}
                   disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
-                  className="bg-[#FDFBF7] text-[#102540] hover:bg-[#F7F2EA] hover:text-[#102540] border-[#B89555]/40 font-semibold disabled:opacity-50"
+                  className="bg-[#051C18] text-[#02110F] hover:bg-[#062821] hover:text-[#02110F] border-[#2DD4BF]/40 font-semibold disabled:opacity-50"
                 >
                   Clear All
                 </Button>
@@ -840,19 +840,19 @@ const Quiz = () => {
                     onClick={() => handleAnswer(option.value)}
                     className={`relative p-4 md:p-5 rounded-xl border-2 transition-all text-left group ${
                       isSelected
-                        ? "border-[#B89555] bg-gradient-to-br from-white to-[#FDFBF7] shadow-lg shadow-[#B89555]/20"
-                        : "border-[#B89555]/30 bg-[#FDFBF7] hover:border-[#B89555]/50 hover:shadow-md"
+                        ? "border-[#2DD4BF] bg-gradient-to-br from-[#062821] to-[#051C18] shadow-lg shadow-[#2DD4BF]/20"
+                        : "border-[#2DD4BF]/30 bg-[#051C18] hover:border-[#2DD4BF]/50 hover:shadow-md"
                     }`}
                   >
                     {currentQuestion.type === "multiple" && (
                       <div className={`absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center ${
-                        isSelected ? "border-[#B89555] bg-[#B89555]" : "border-[#B89555]/30"
+                        isSelected ? "border-[#2DD4BF] bg-[#2DD4BF]" : "border-[#2DD4BF]/30"
                       }`}>
-                        {isSelected && <CheckCircle2 className="w-3 h-3 text-[#1A1A1A]" />}
+                        {isSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
                       </div>
                     )}
                     <span className="text-2xl mb-2 block">{option.icon}</span>
-                    <span className={`font-medium text-sm md:text-base ${isSelected ? "text-[#102540]" : "text-[#1A1A1A]"}`}>
+                    <span className={`font-medium text-sm md:text-base ${isSelected ? "text-[#02110F]" : "text-white"}`}>
                       {option.label}
                     </span>
                   </button>
@@ -865,7 +865,7 @@ const Quiz = () => {
               <Button
                 variant="outline"
                 onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-                className="border-[#B89555]/40 text-[#102540] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:text-[#102540] px-8 py-6 text-lg"
+                className="border-[#2DD4BF]/40 text-[#02110F] bg-[#051C18] hover:bg-[#062821] hover:text-[#02110F] px-8 py-6 text-lg"
               >
                 <ChevronLeft className="w-5 h-5 mr-2" />
                 Back
@@ -873,7 +873,7 @@ const Quiz = () => {
               <Button
                 onClick={handleNext}
                 disabled={!isAnswered()}
-                className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#102540] font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#B89555]/20"
+                className="bg-gradient-to-r from-[#2DD4BF] to-[#06B6D4] text-[#02110F] font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#2DD4BF]/20"
               >
                 {currentStep === QUIZ_QUESTIONS.length - 1 ? "Continue" : "Next"}
                 <ChevronRight className="w-5 h-5 ml-2" />
@@ -883,9 +883,9 @@ const Quiz = () => {
 
           {/* Preferences Summary Sidebar (desktop only) */}
           <div className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24 rounded-2xl border border-[#B89555]/30 bg-[#102540] backdrop-blur-sm p-5">
+            <div className="sticky top-24 rounded-2xl border border-[#2DD4BF]/30 bg-[#031E18] backdrop-blur-sm p-5">
               <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#B89555]" />
+                <Sparkles className="w-4 h-4 text-[#5EEAD4]" />
                 Your Preferences
               </h3>
               <div className="space-y-3">
