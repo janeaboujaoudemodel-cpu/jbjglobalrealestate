@@ -91,7 +91,9 @@ export const PremiumToolShell = ({
         <div
           className="relative min-h-screen overflow-hidden"
           style={{
-            background: "#FDFBF7",
+            background: darkBody
+              ? "linear-gradient(180deg, #0A0807 0%, #0E0A05 60%, #060402 100%)"
+              : "#FDFBF7",
             boxShadow:
               "0 30px 80px -30px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.04)",
           }}
