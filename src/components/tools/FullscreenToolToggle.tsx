@@ -48,8 +48,8 @@ const FullscreenToolToggle = ({ defaultOn = false }: { defaultOn?: boolean }) =>
       data-fullscreen-tool-toggle
       data-allow-dark-cta
       data-no-contrast-guard
-      aria-label={on ? "Exit full screen" : "Enter full screen"}
-      title={on ? "Exit full screen" : "Enter full screen"}
+      aria-label={on ? "Minimize tool" : "Maximize tool"}
+      title={on ? "Minimize tool" : "Maximize tool"}
       className="allow-white fixed z-[10000] top-24 right-4 md:top-28 md:right-6 inline-flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md transition-all hover:scale-[1.03]"
       style={{
         background: "rgba(15,15,22,0.72)",
