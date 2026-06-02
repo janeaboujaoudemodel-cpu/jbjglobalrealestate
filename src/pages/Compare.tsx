@@ -32,6 +32,8 @@ import CompareAIShell, { GradientText } from "@/components/compare/CompareAIShel
 import AnimatedStepLine from "@/components/compare/AnimatedStepLine";
 import SampleComparisonPreview from "@/components/compare/SampleComparisonPreview";
 import CompareCTA from "@/components/compare/CompareCTA";
+import MarketContextStrip from "@/components/compare/MarketContextStrip";
+import RiskScoreGauge from "@/components/compare/RiskScoreGauge";
 
 const INQUIRY_FORM_URL = "https://JBJ.AE/contact";
 const COMPARE_FREE_KEY = "jbj_compare_free_used";
