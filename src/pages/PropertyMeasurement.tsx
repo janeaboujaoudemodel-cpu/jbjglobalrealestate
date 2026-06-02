@@ -543,7 +543,12 @@ const PropertyMeasurement = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="!border-teal-500/30 !border bg-[#FDFBF7]/50">
+            <Card
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white !border-0 rounded-2xl overflow-hidden"
+              style={{ background: "linear-gradient(135deg, #064E3B 0%, #052e1d 35%, #000000 100%)", boxShadow: "0 0 0 1px rgba(16,185,129,0.32), 0 18px 40px rgba(16,185,129,0.22)" }}
+            >
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Info className="w-5 h-5 text-teal-400" />
@@ -619,7 +624,12 @@ const PropertyMeasurement = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="!border-teal-500/30 !border bg-[#FDFBF7]/50">
+            <Card
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white !border-0 rounded-2xl overflow-hidden"
+              style={{ background: "linear-gradient(135deg, #064E3B 0%, #052e1d 35%, #000000 100%)", boxShadow: "0 0 0 1px rgba(16,185,129,0.32), 0 18px 40px rgba(16,185,129,0.22)" }}
+            >
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <LayoutGrid className="w-5 h-5 text-teal-400" />
@@ -700,7 +710,12 @@ const PropertyMeasurement = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="!border-teal-500/30 !border bg-[#FDFBF7]/50">
+            <Card
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white !border-0 rounded-2xl overflow-hidden"
+              style={{ background: "linear-gradient(135deg, #064E3B 0%, #052e1d 35%, #000000 100%)", boxShadow: "0 0 0 1px rgba(16,185,129,0.32), 0 18px 40px rgba(16,185,129,0.22)" }}
+            >
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white flex items-center gap-2">

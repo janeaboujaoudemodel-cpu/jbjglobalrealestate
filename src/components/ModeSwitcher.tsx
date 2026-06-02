@@ -194,8 +194,9 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               {triggerLabel}
             </span>
             <ChevronDown
+              data-no-contrast-guard
               className={cn("w-3.5 h-3.5 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
-              style={{ color: '#B89555' }}
+              style={{ color: '#B89555', stroke: '#B89555' }}
             />
           </button>
         </DropdownMenuTrigger>

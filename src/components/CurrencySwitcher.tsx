@@ -91,7 +91,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
           >
             <span className="text-sm leading-none">{currentCurrency.flag}</span>
             <span className="text-[12px] font-semibold text-[#B89555] tracking-wide">{currentCurrency.code}</span>
-            <ChevronDown className="w-3 h-3 text-[#B89555]" strokeWidth={2.25} />
+            <ChevronDown data-no-contrast-guard className="w-3 h-3" style={{ color: '#B89555', stroke: '#B89555' }} strokeWidth={2.25} />
           </button>
         ) : (
           <button className="h-10 px-3 text-[#1A1A1A] hover:text-[#1A1A1A]-light rounded-full border border-[#B89555]/20 hover:border-[#B89555]/50 hover:bg-[#EFE6D6]/10 flex items-center gap-2">
