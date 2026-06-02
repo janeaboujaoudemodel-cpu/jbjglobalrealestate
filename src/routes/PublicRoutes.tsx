@@ -378,9 +378,10 @@ export const PublicRoutes = () => (
     <Route path="/my-tickets" element={<AuthRequiredRoute><MyTickets /></AuthRequiredRoute>} />
     <Route path="/ticket-hub" element={<AuthRequiredRoute><TicketHub /></AuthRequiredRoute>} />
     <Route path="/reopen-ticket" element={<AuthRequiredRoute><ReopenTicket /></AuthRequiredRoute>} />
-    <Route path="/join" element={<JoinApplication />} />
-    <Route path="/careers" element={<JoinApplication />} />
-    <Route path="/careers/apply" element={<JoinApplication />} />
+    <Route path="/join" element={<Navigate to="/careers" replace />} />
+    <Route path="/careers" element={<ModeRequiredRoute modes={['broker','developer']}><JoinApplication /></ModeRequiredRoute>} />
+    <Route path="/careers/apply" element={<ModeRequiredRoute modes={['broker','developer']}><JoinApplication /></ModeRequiredRoute>} />
+
     <Route path="/careers/intake/:token" element={<CareersIntake />} />
     <Route path="/careers/developer-representative" element={<ModeRequiredRoute modes={['developer']}><CareersDeveloperRep /></ModeRequiredRoute>} />
     <Route path="/onboarding" element={<AuthRequiredRoute><Onboarding /></AuthRequiredRoute>} />

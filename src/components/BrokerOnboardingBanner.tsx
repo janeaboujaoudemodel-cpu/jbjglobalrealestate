@@ -207,7 +207,7 @@ const BrokerOnboardingBanner = () => {
 
           {/* CTA */}
           <div className="mt-4 flex items-center justify-center">
-            <Link to="/join">
+            <Link to="/careers">
               <Button variant="primary" className="px-6">
                 Start Onboarding
                 <ArrowUpRight className="w-4 h-4 ml-2" />

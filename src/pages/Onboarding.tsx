@@ -229,7 +229,7 @@ export default function Onboarding() {
                 <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Application Found</h2>
                 <p className="text-[#1A1A1A]/70 mb-6">You haven't submitted an application yet.</p>
                 <Button asChild variant="primary">
-                  <Link to="/join">Apply Now</Link>
+                  <Link to="/careers">Apply Now</Link>
                 </Button>
               </div>
             </div>

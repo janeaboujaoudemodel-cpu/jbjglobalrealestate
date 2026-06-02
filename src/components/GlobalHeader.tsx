@@ -806,7 +806,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
                       <ClipboardCheck className="w-4 h-4 text-[#1A1A1A]/70" />List Your Property
                     </Link>
-                    <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                    <Link to="/careers" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
                       <GraduationCap className="w-4 h-4 text-[#1A1A1A]/70" />Careers
                     </Link>
                     <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
