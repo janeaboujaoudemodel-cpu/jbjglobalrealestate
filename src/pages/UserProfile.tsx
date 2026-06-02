@@ -596,7 +596,7 @@ const UserProfile = () => {
                   <Separator />
 
                   <div className="flex justify-end">
-                    <Button onClick={handleSaveProfile} disabled={saving} variant="primary">
+                    <Button onClick={handleSaveProfile} disabled={saving} variant="primary" className="h-10 rounded-sm">
                       {saving ? (
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                       ) : (
