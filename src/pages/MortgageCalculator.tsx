@@ -117,6 +117,7 @@ const MortgageCalculatorPage = () => {
             </div>
           </div>
         </AnimatedBorderShell>
+        </div>
       </div>
 
       {/* Mortgage Advisors Section - Champagne Layer */}
