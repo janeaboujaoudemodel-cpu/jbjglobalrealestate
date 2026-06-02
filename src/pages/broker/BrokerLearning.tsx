@@ -22,7 +22,9 @@ import BrokerCertificationGate from "@/components/broker-education/BrokerCertifi
 import { PremiumLockBadge } from "@/components/broker-education/PremiumLock";
 import { useEducationProgress } from "@/hooks/useEducationProgress";
 import { useCreateBrokerRequest } from "@/hooks/useBrokerRequests";
+import AcademyAccessRequestModal from "@/components/broker-education/AcademyAccessRequestModal";
 import { BROKER_LESSONS } from "./brokerLessonContent";
+
 
 
 
