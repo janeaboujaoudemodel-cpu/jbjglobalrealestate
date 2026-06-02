@@ -655,6 +655,7 @@ const UserProfile = () => {
                       onClick={handleChangePassword} 
                       disabled={changingPassword || !newPassword || !confirmPassword}
                       variant="primary"
+                      className="h-10 rounded-sm"
                     >
                       {changingPassword ? (
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
