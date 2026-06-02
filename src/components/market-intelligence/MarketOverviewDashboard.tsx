@@ -36,6 +36,13 @@ const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; clas
   </div>
 );
 
+const TONE_BY_ACCENT: Record<string, string> = {
+  "text-emerald-700": "emerald",
+  "text-blue-700": "violet",
+  "text-amber-700": "amber",
+  "text-foreground": "magenta",
+};
+
 const StatCard = ({ 
   title, 
   value, 
@@ -54,10 +61,14 @@ const StatCard = ({
   accentColor?: string;
 }) => {
   const isPositive = change >= 0;
-  
+  const tone = TONE_BY_ACCENT[accentColor] ?? "violet";
+
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="transition-all h-full rounded-none bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)] hover:shadow-[0_16px_38px_hsl(var(--mi-navy)/0.12)]">
+      <Card
+        data-tone={tone}
+        className="jj-neon-kpi transition-all h-full rounded-xl bg-card"
+      >
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
@@ -77,6 +88,7 @@ const StatCard = ({
     </motion.div>
   );
 };
+
 
 export const MarketOverviewDashboard = () => {
   return (
