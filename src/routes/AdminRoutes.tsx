@@ -8,6 +8,8 @@ import OwnerGuard from "@/components/OwnerGuard";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import PageLoader from "@/components/PageLoader";
+import GatedToolRoute from "@/components/access/GatedToolRoute";
+import { toolThemes } from "@/components/tools/toolThemes";
 
 const Admin = lazy(() => import("@/pages/Admin"));
 const AdminLeads = lazy(() => import("@/pages/AdminLeads"));
@@ -175,7 +177,19 @@ export const AdminRoutes = () => (
     <Route path="/executive-assistant" element={<OwnerGuard><ExecutiveAssistant /></OwnerGuard>} />
     <Route path="/call-review" element={<OwnerGuard><CallReview /></OwnerGuard>} />
     <Route path="/video-builder" element={<OwnerGuard><VideoBuilder /></OwnerGuard>} />
-    <Route path="/business-card-scanner" element={<OwnerGuard><BusinessCardScanner /></OwnerGuard>} />
+    <Route
+      path="/business-card-scanner"
+      element={
+        <GatedToolRoute
+          toolId="business-card-scanner"
+          toolName="Business Card Scanner"
+          theme={toolThemes.emerald}
+          tagline="Snap any card, auto-import the contact into your CRM with AI enrichment. Unlocked for JBJ brokers."
+        >
+          <BusinessCardScanner />
+        </GatedToolRoute>
+      }
+    />
     <Route path="/jbj-analytics" element={<OwnerGuard><JBJAnalyticsDashboard /></OwnerGuard>} />
     <Route path="/jbj-design-studio" element={<OwnerGuard><JBJDesignStudio /></OwnerGuard>} />
     <Route path="/design-studio" element={<OwnerGuard><JBJDesignStudio /></OwnerGuard>} />

@@ -16,7 +16,9 @@ export type ToolTheme = {
     | "violet"
     | "teal"
     | "rose"
-    | "amber";
+    | "amber"
+    | "indigo";
+
   /** Display label */
   label: string;
   /** Tailwind/CSS values for the hero band gradient */
@@ -68,6 +70,8 @@ export const toolThemes: Record<ToolTheme["id"], ToolTheme> = {
   teal: make("teal", "Teal", "#0E7490", "#062430"),
   rose: make("rose", "Rose", "#BE185D", "#3A0820"),
   amber: make("amber", "Amber", "#B45309", "#2A1505"),
+  indigo: make("indigo", "Indigo", "#4338CA", "#11103A"),
+
 };
 
 /** Universal champagne page background + ink text */

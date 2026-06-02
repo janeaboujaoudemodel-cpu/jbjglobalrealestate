@@ -299,12 +299,12 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
   return (
     <PremiumToolShell
-      theme={toolThemes.navy}
+      theme={toolThemes.amber}
       eyebrowIcon={Sparkles}
       eyebrow="AI-Powered Valuation"
       title={
         <>
-          Property <span style={{ textShadow: `0 0 24px ${toolThemes.navy.accent}` }}>Evaluator</span>
+          Property <span style={{ textShadow: `0 0 24px ${toolThemes.amber.accent}` }}>Evaluator</span>
         </>
       }
       subtitle="AI-powered valuation built on DLD transaction data, RERA Rental Index and institutional market analysis."
@@ -315,9 +315,9 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
           href="/sell/valuation"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition-colors"
           style={{
-            background: toolThemes.navy.accentSoft,
-            border: `1px solid ${toolThemes.navy.accentBorder}`,
-            color: toolThemes.navy.accent,
+            background: toolThemes.amber.accentSoft,
+            border: `1px solid ${toolThemes.amber.accentBorder}`,
+            color: toolThemes.amber.accent,
           }}
         >
           <Info className="w-3.5 h-3.5" />
