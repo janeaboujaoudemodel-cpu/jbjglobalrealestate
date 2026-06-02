@@ -58,6 +58,26 @@ const MortgageCalculator = ({
   const [selectedProject, setSelectedProject] = useState<MortgageProject | null>(null);
   const isNavy = themeVariant === "navy";
 
+  // Navy slider wrapper style — also injects CSS vars so the gold slider
+  // primitive automatically picks up the matching blue neon glow used by
+  // the Monthly card. CSS custom properties inherit through the DOM and
+  // are resolved by the inline `style="background: var(--slider-range-bg, …)"`
+  // on the Slider Range/Thumb.
+  const navySliderWrapperStyle = {
+    background:
+      "linear-gradient(135deg, #123968 0%, #081A33 70%, #020814 100%)",
+    border: "1px solid rgba(147,197,253,0.42)",
+    boxShadow: "inset 0 0 22px rgba(96,165,250,0.10)",
+    // Slider theme overrides (cascade into <Slider />)
+    ["--slider-track-bg" as any]: "rgba(255,255,255,0.10)",
+    ["--slider-range-bg" as any]:
+      "linear-gradient(90deg, #1E4E8C 0%, #3B82F6 55%, #93C5FD 100%)",
+    ["--slider-thumb-bg" as any]:
+      "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #DBEAFE 45%, #93C5FD 100%)",
+    ["--slider-thumb-shadow" as any]:
+      "0 0 0 2px #3B82F6 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(96,165,250,0.85), 0 4px 14px rgba(30,64,175,0.55)",
+  } as React.CSSProperties;
+
   useEffect(() => {
     if (!projectSearchOpen) return;
 
