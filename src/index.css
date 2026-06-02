@@ -2198,6 +2198,191 @@ All colors MUST be HSL.
     50%      { transform: translate3d(0,-6px,0); opacity: 1; }
   }
 
+  /* ----- JBJ Neon premium accents (News + Market Intelligence) -----
+     Scoped utilities. Use freely on dark surfaces; on champagne use only
+     the `.jj-neon-chip` / `.jj-neon-underline` text-level variants. */
+
+  /* Cyan neon eyebrow / chip */
+  .jj-neon-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #22D3EE;
+    background: rgba(34, 211, 238, 0.08);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    box-shadow:
+      0 0 0 1px rgba(34, 211, 238, 0.15),
+      0 0 18px rgba(34, 211, 238, 0.25),
+      inset 0 0 12px rgba(34, 211, 238, 0.08);
+  }
+  .jj-neon-chip[data-tone="violet"] {
+    color: #C4B5FD;
+    background: rgba(167, 139, 250, 0.08);
+    border-color: rgba(167, 139, 250, 0.5);
+    box-shadow:
+      0 0 0 1px rgba(167, 139, 250, 0.18),
+      0 0 20px rgba(167, 139, 250, 0.28),
+      inset 0 0 12px rgba(167, 139, 250, 0.08);
+  }
+  .jj-neon-chip[data-tone="magenta"] {
+    color: #F0ABFC;
+    background: rgba(236, 72, 153, 0.08);
+    border-color: rgba(236, 72, 153, 0.5);
+    box-shadow:
+      0 0 0 1px rgba(236, 72, 153, 0.18),
+      0 0 20px rgba(236, 72, 153, 0.3),
+      inset 0 0 12px rgba(236, 72, 153, 0.08);
+  }
+  .jj-neon-chip[data-tone="emerald"] {
+    color: #6EE7B7;
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow:
+      0 0 0 1px rgba(16, 185, 129, 0.18),
+      0 0 20px rgba(16, 185, 129, 0.28);
+  }
+  .jj-neon-chip[data-tone="amber"] {
+    color: #FCD34D;
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.5);
+    box-shadow:
+      0 0 0 1px rgba(245, 158, 11, 0.18),
+      0 0 20px rgba(245, 158, 11, 0.28);
+  }
+
+  /* Glowing underline accent for headlines (works on light + dark) */
+  .jj-neon-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .jj-neon-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.18em;
+    height: 3px;
+    background: linear-gradient(90deg, #22D3EE 0%, #A78BFA 50%, #EC4899 100%);
+    border-radius: 9999px;
+    filter: drop-shadow(0 0 8px rgba(34,211,238,0.55))
+            drop-shadow(0 0 14px rgba(236,72,153,0.4));
+  }
+
+  /* Animated marquee ticker bar — dark glass + cyan glow */
+  .jj-neon-ticker {
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(90deg, #050B18 0%, #0A1428 50%, #050B18 100%);
+    border-top: 1px solid rgba(34, 211, 238, 0.35);
+    border-bottom: 1px solid rgba(167, 139, 250, 0.3);
+    box-shadow:
+      inset 0 0 24px rgba(34, 211, 238, 0.12),
+      0 0 28px rgba(167, 139, 250, 0.18);
+  }
+  .jj-neon-ticker .jj-neon-ticker-track {
+    display: inline-flex;
+    gap: 2.5rem;
+    padding: 0.65rem 0;
+    white-space: nowrap;
+    animation: jjNeonTicker 38s linear infinite;
+    color: #E0F2FE;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+  .jj-neon-ticker .jj-neon-ticker-track > span {
+    text-shadow: 0 0 12px rgba(34, 211, 238, 0.55);
+  }
+  @keyframes jjNeonTicker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* KPI tile neon ring — apply tone via data-tone */
+  .jj-neon-kpi {
+    position: relative;
+    transition: box-shadow 220ms ease, transform 220ms ease, border-color 220ms ease;
+    border: 1px solid rgba(34, 211, 238, 0.28) !important;
+    box-shadow:
+      0 0 0 1px rgba(34, 211, 238, 0.10),
+      0 10px 32px -10px rgba(34, 211, 238, 0.25),
+      inset 0 0 18px rgba(34, 211, 238, 0.05);
+  }
+  .jj-neon-kpi[data-tone="violet"] {
+    border-color: rgba(167, 139, 250, 0.32) !important;
+    box-shadow:
+      0 0 0 1px rgba(167, 139, 250, 0.10),
+      0 10px 32px -10px rgba(167, 139, 250, 0.3),
+      inset 0 0 18px rgba(167, 139, 250, 0.06);
+  }
+  .jj-neon-kpi[data-tone="magenta"] {
+    border-color: rgba(236, 72, 153, 0.32) !important;
+    box-shadow:
+      0 0 0 1px rgba(236, 72, 153, 0.10),
+      0 10px 32px -10px rgba(236, 72, 153, 0.3),
+      inset 0 0 18px rgba(236, 72, 153, 0.06);
+  }
+  .jj-neon-kpi[data-tone="emerald"] {
+    border-color: rgba(16, 185, 129, 0.32) !important;
+    box-shadow:
+      0 0 0 1px rgba(16, 185, 129, 0.10),
+      0 10px 32px -10px rgba(16, 185, 129, 0.3),
+      inset 0 0 18px rgba(16, 185, 129, 0.05);
+  }
+  .jj-neon-kpi[data-tone="amber"] {
+    border-color: rgba(245, 158, 11, 0.32) !important;
+    box-shadow:
+      0 0 0 1px rgba(245, 158, 11, 0.10),
+      0 10px 32px -10px rgba(245, 158, 11, 0.3),
+      inset 0 0 18px rgba(245, 158, 11, 0.05);
+  }
+  .jj-neon-kpi:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 0 1px currentColor,
+      0 18px 44px -10px rgba(34, 211, 238, 0.4),
+      inset 0 0 24px rgba(34, 211, 238, 0.08);
+  }
+
+  /* Dark neon hero band — for News and Market Intelligence */
+  .jj-neon-hero {
+    position: relative;
+    background:
+      radial-gradient(ellipse 70% 60% at 20% 20%, rgba(167, 139, 250, 0.22), transparent 60%),
+      radial-gradient(ellipse 60% 55% at 80% 30%, rgba(34, 211, 238, 0.18), transparent 60%),
+      radial-gradient(ellipse 80% 70% at 60% 90%, rgba(236, 72, 153, 0.15), transparent 60%),
+      linear-gradient(180deg, #050B18 0%, #0A1428 60%, #050B18 100%);
+    border-bottom: 1px solid rgba(34, 211, 238, 0.25);
+  }
+  .jj-neon-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(34, 211, 238, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 211, 238, 0.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 0%, transparent 75%);
+    pointer-events: none;
+  }
+
+  /* Neon glow text — for big stat values on dark */
+  .jj-neon-text-cyan    { color: #67E8F9; text-shadow: 0 0 14px rgba(34,211,238,0.55); }
+  .jj-neon-text-violet  { color: #C4B5FD; text-shadow: 0 0 14px rgba(167,139,250,0.55); }
+  .jj-neon-text-magenta { color: #F0ABFC; text-shadow: 0 0 14px rgba(236,72,153,0.55); }
+  .jj-neon-text-emerald { color: #6EE7B7; text-shadow: 0 0 14px rgba(16,185,129,0.55); }
+  .jj-neon-text-amber   { color: #FCD34D; text-shadow: 0 0 14px rgba(245,158,11,0.55); }
+
+
+
 
   .placeholder-gold::placeholder {
     color: hsl(0 0% 40%);
