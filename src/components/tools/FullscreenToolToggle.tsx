@@ -8,7 +8,7 @@ import { Maximize2, X } from "lucide-react";
  *
  * Clicking X exits fullscreen (does NOT navigate away).
  */
-const FullscreenToolToggle = ({ defaultOn = true }: { defaultOn?: boolean }) => {
+const FullscreenToolToggle = ({ defaultOn = false }: { defaultOn?: boolean }) => {
   const [on, setOn] = useState<boolean>(defaultOn);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const FullscreenToolToggle = ({ defaultOn = true }: { defaultOn?: boolean }) => 
       data-no-contrast-guard
       aria-label={on ? "Exit full screen" : "Enter full screen"}
       title={on ? "Exit full screen" : "Enter full screen"}
-      className="allow-white fixed z-[10000] top-3 right-3 md:top-4 md:right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-md transition-all hover:scale-[1.03]"
+      className="allow-white fixed z-[10000] top-24 right-4 md:top-28 md:right-6 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-md transition-all hover:scale-[1.03]"
       style={{
         background: "rgba(15,15,22,0.72)",
         border: "1px solid rgba(255,255,255,0.28)",
