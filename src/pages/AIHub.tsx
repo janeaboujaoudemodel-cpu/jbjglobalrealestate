@@ -1,22 +1,21 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import VideoBackground from "@/components/VideoBackground";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { IconTile } from "@/components/ui/icon-tile";
+import { PremiumSectionCard } from "@/components/ui/premium-section-card";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEOHead } from "@/components/SEOHead";
-import { SectionDivider } from "@/components/ui/section-divider";
 import { useToolVisibility } from "@/hooks/useToolVisibility";
-import { 
-  ArrowUpRight, 
-  Sparkles, 
-  Calculator, 
-  FileText, 
-  Layers, 
-  BarChart3, 
+import {
+  ArrowUpRight,
+  Sparkles,
+  Calculator,
+  FileText,
+  Layers,
+  BarChart3,
   Calendar,
   Palette,
   Brain,
@@ -34,19 +33,15 @@ import {
   Award,
   User,
   Target,
-  Headphones,
   LogIn,
   FolderOpen,
   Home,
   Image,
   Share2,
-  Lock,
   Globe,
   FileSignature,
   Handshake,
-  ArrowRight,
   Ruler,
-  Newspaper,
   TrendingUp,
   MapPin,
   UserCheck,
@@ -61,1049 +56,619 @@ import {
   PenTool,
   Mail,
   Building2,
-  ScanLine,
+  Search,
+  type LucideIcon,
 } from "lucide-react";
 
-
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } }
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } },
 };
 
 const staggerContainer = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.06, delayChildren: 0.1 }
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.05, delayChildren: 0.05 } },
 };
 
-// Category definitions with styles - MATCHING BROKER HUB
-// GLOW RULE: Category glow on normal load → Gold glow on hover
-type ToolCategory = 'property' | 'productivity' | 'marketing' | 'design' | 'corporate';
+type ToolCategory = "property" | "productivity" | "marketing" | "design" | "corporate";
 
-const CATEGORY_META: Record<ToolCategory, {
-  label: string;
-  coloredLabel: string;
-  badgeClass: string;
-  cardClass: string;
-  iconWrapClass: string;
-  iconClass: string;
-  arrowClass: string;
-  glowClass: string;
-}> = {
+interface ToolDef {
+  id: string;
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  link: string;
+  category: ToolCategory;
+}
+
+const CATEGORY_META: Record<ToolCategory, { label: string; description: string }> = {
   property: {
-    label: "Investment &",
-    coloredLabel: "Property Tools",
-    badgeClass: "bg-purple-500/30 text-purple-200 border-purple-400/50",
-    // GLOW ON NORMAL LOAD (purple), WHITE GLOW ON HOVER
-    cardClass: "bg-purple-900/80 border-2 border-purple-500/50 shadow-[0_0_25px_rgba(147,51,234,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
-    iconWrapClass: "bg-purple-500/30 border border-purple-400/40",
-    iconClass: "text-purple-300",
-    arrowClass: "text-purple-300 group-hover:text-white",
-    glowClass: "border-purple-500/50 shadow-[0_0_25px_rgba(147,51,234,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
+    label: "Investment & Property Tools",
+    description: "Powerful AI tools for property analysis, valuation, and investment decisions.",
   },
   productivity: {
-    label: "Productivity",
-    coloredLabel: "Tools",
-    badgeClass: "bg-blue-500/30 text-blue-200 border-blue-400/50",
-    // GLOW ON NORMAL LOAD (blue), WHITE GLOW ON HOVER
-    cardClass: "bg-blue-900/80 border-2 border-blue-500/50 shadow-[0_0_25px_rgba(59,130,246,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
-    iconWrapClass: "bg-blue-500/30 border border-blue-400/40",
-    iconClass: "text-blue-300",
-    arrowClass: "text-blue-300 group-hover:text-white",
-    glowClass: "border-blue-500/50 shadow-[0_0_25px_rgba(59,130,246,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
-  },
-  marketing: {
-    label: "Marketing &",
-    coloredLabel: "Content",
-    badgeClass: "bg-amber-500/30 text-amber-200 border-amber-400/50",
-    // GLOW ON NORMAL LOAD (amber), WHITE GLOW ON HOVER - Distinct from Broker Hub green
-    cardClass: "bg-amber-900/80 border-2 border-amber-500/50 shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
-    iconWrapClass: "bg-amber-500/30 border border-amber-400/40",
-    iconClass: "text-amber-300",
-    arrowClass: "text-amber-300 group-hover:text-white",
-    glowClass: "border-amber-500/50 shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
-  },
-  design: {
-    label: "Design &",
-    coloredLabel: "Media",
-    badgeClass: "bg-pink-500/30 text-pink-200 border-pink-400/50",
-    cardClass: "bg-pink-900/80 border-2 border-pink-500/50 shadow-[0_0_25px_rgba(236,72,153,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
-    iconWrapClass: "bg-pink-500/30 border border-pink-400/40",
-    iconClass: "text-pink-300",
-    arrowClass: "text-pink-300 group-hover:text-white",
-    glowClass: "border-pink-500/50 shadow-[0_0_25px_rgba(236,72,153,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
+    label: "Productivity Tools",
+    description: "Video meetings, documents, calendar, and signing tools to keep your day moving.",
   },
   corporate: {
-    label: "Corporate",
-    coloredLabel: "Suite Tools",
-    badgeClass: "bg-teal-500/30 text-teal-200 border-teal-400/50",
-    cardClass: "bg-teal-900/80 border-2 border-teal-500/50 shadow-[0_0_25px_rgba(20,184,166,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
-    iconWrapClass: "bg-teal-500/30 border border-teal-400/40",
-    iconClass: "text-teal-300",
-    arrowClass: "text-teal-300 group-hover:text-white",
-    glowClass: "border-teal-500/50 shadow-[0_0_25px_rgba(20,184,166,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
+    label: "Corporate Suite Tools",
+    description: "Professional stamps, business cards, logos, CVs, e-signatures and more.",
+  },
+  design: {
+    label: "Design & Media Tools",
+    description: "Creative tools for interior design, video, photo, and visual content.",
+  },
+  marketing: {
+    label: "Marketing & Content Tools",
+    description: "Lead generation, follow-ups, copywriting, and campaign creation.",
   },
 };
 
-// INVESTOR HUB TOOLS - Available to all users with category
-const investorTools = [
-  {
-    id: "ai-home-finder",
-    title: "JBJ AI Home Finder",
-    description: "Match buyers to listings with AI-powered filters.",
-    icon: Home,
-    link: "/quiz",
-    category: "property" as ToolCategory,
-  },
-  {
-    id: "property-evaluator",
-    title: "JBJ Property Evaluator",
-    description: "AI-driven valuation based on live market data.",
-    icon: Calculator,
-    link: "/property-evaluator",
-    category: "property" as ToolCategory,
-  },
-  {
-    id: "property-comparison",
-    title: "JBJ Property Comparison",
-    description: "Compare properties side-by-side with AI insights.",
-    icon: BarChart3,
-    link: "/compare",
-    category: "property" as ToolCategory,
-  },
-  {
-    id: "mortgage-calculator",
-    title: "JBJ Mortgage Calculator",
-    description: "Estimate monthly payments and financing options.",
-    icon: Calculator,
-    link: "/mortgage-calculator",
-    category: "property" as ToolCategory,
-  },
-  {
-    id: "rental-index",
-    title: "JBJ Rental Index Evaluator",
-    description: "AI-powered rental estimates with market trends.",
-    icon: Layers,
-    link: "/rental-index",
-    category: "property" as ToolCategory,
-  },
-  {
-    id: "list-property-sale",
-    title: "List Your Property for Sale",
-    description: "Submit a sale listing for review and publication.",
-    icon: ClipboardList,
-    link: "/listing-portal?type=sale",
-    category: "property" as ToolCategory,
-  },
-  {
-    id: "list-property-rent",
-    title: "List Your Property for Rent",
-    description: "Submit a rental listing for review and publication.",
-    icon: Home,
-    link: "/listing-portal?type=rent",
-    category: "property" as ToolCategory,
-  },
-  {
-    id: "ai-property-analyzer",
-    title: "JBJ AI Property Analyzer",
-    description: "Deep market analysis with price trends and investment metrics.",
-    icon: Brain,
-    link: "/ai-property-analyzer",
-    category: "property" as ToolCategory,
-  },
-  {
-    id: "ai-price-predictor",
-    title: "JBJ AI Price Predictor",
-    description: "AI-powered price predictions with confidence bands and comparables.",
-    icon: TrendingUp,
-    link: "/ai-price-predictor",
-    category: "property" as ToolCategory,
-  },
-  {
-    id: "ai-neighborhood-insights",
-    title: "JBJ AI Neighborhood Insights",
-    description: "Comprehensive area analysis with livability scores and demographics.",
-    icon: MapPin,
-    link: "/ai-neighborhood-insights",
-    category: "property" as ToolCategory,
-  },
-  {
-    id: "ai-lead-qualification",
-    title: "JBJ AI Lead Qualification",
-    description: "Score leads with AI: confidence, objections, and next actions.",
-    icon: UserCheck,
-    link: "/ai-lead-qualification",
-    category: "marketing" as ToolCategory,
-  },
-  {
-    id: "interior-design",
-    title: "JBJ AI Interior Design",
-    description: "Visualize spaces with AI-generated designs.",
-    icon: Image,
-    link: "/interior-design-ai",
-    category: "design" as ToolCategory,
-  },
-  {
-    id: "business-card-scanner",
-    title: "JBJ Business Card Scanner",
-    description: "Scan and save business cards into your CRM.",
-    icon: CreditCard,
-    link: "/business-card-scanner",
-    category: "productivity" as ToolCategory,
-  },
-  {
-    id: "property-measurement",
-    title: "JBJ Property Measurement",
-    description: "Verify property sizes with AI precision.",
-    icon: Ruler,
-    link: "/property-measurement",
-    category: "property" as ToolCategory,
-  },
-  // Removed JBJ News Reporter - it's internal automation, not a user tool
-  {
-    id: "property-coach",
-    title: "JBJ Property Coach",
-    description: "Scripts, objections, roleplay, deal strategy.",
-    icon: Target,
-    link: "/broker-toolkit",
-    category: "marketing" as ToolCategory,
-  },
+// ── DATA (preserved from previous version, plus merged registries) ──
+const investorTools: ToolDef[] = [
+  { id: "ai-home-finder", title: "JBJ AI Home Finder", description: "Match buyers to listings with AI-powered filters.", icon: Home, link: "/quiz", category: "property" },
+  { id: "property-evaluator", title: "JBJ Property Evaluator", description: "AI-driven valuation based on live market data.", icon: Calculator, link: "/property-evaluator", category: "property" },
+  { id: "property-comparison", title: "JBJ Property Comparison", description: "Compare properties side-by-side with AI insights.", icon: BarChart3, link: "/compare", category: "property" },
+  { id: "mortgage-calculator", title: "JBJ Mortgage Calculator", description: "Estimate monthly payments and financing options.", icon: Calculator, link: "/mortgage-calculator", category: "property" },
+  { id: "rental-index", title: "JBJ Rental Index Evaluator", description: "AI-powered rental estimates with market trends.", icon: Layers, link: "/rental-index", category: "property" },
+  { id: "list-property-sale", title: "List Your Property for Sale", description: "Submit a sale listing for review and publication.", icon: ClipboardList, link: "/listing-portal?type=sale", category: "property" },
+  { id: "list-property-rent", title: "List Your Property for Rent", description: "Submit a rental listing for review and publication.", icon: Home, link: "/listing-portal?type=rent", category: "property" },
+  { id: "ai-property-analyzer", title: "JBJ AI Property Analyzer", description: "Deep market analysis with price trends and investment metrics.", icon: Brain, link: "/ai-property-analyzer", category: "property" },
+  { id: "ai-price-predictor", title: "JBJ AI Price Predictor", description: "AI-powered price predictions with confidence bands and comparables.", icon: TrendingUp, link: "/ai-price-predictor", category: "property" },
+  { id: "ai-neighborhood-insights", title: "JBJ AI Neighborhood Insights", description: "Comprehensive area analysis with livability scores and demographics.", icon: MapPin, link: "/ai-neighborhood-insights", category: "property" },
+  { id: "ai-lead-qualification", title: "JBJ AI Lead Qualification", description: "Score leads with AI: confidence, objections, and next actions.", icon: UserCheck, link: "/ai-lead-qualification", category: "marketing" },
+  { id: "interior-design", title: "JBJ AI Interior Design", description: "Visualize spaces with AI-generated designs.", icon: Image, link: "/interior-design-ai", category: "design" },
+  { id: "business-card-scanner", title: "JBJ Business Card Scanner", description: "Scan and save business cards into your CRM.", icon: CreditCard, link: "/business-card-scanner", category: "productivity" },
+  { id: "property-measurement", title: "JBJ Property Measurement", description: "Verify property sizes with AI precision.", icon: Ruler, link: "/property-measurement", category: "property" },
+  { id: "property-coach", title: "JBJ Property Coach", description: "Scripts, objections, roleplay, deal strategy.", icon: Target, link: "/broker-toolkit", category: "marketing" },
 ];
 
-// PRODUCTIVITY TOOLS
-const productivityTools = [
-  {
-    id: "content-tools",
-    title: "JBJ Documents & Spreadsheets",
-    description: "Rich text editor and Excel-like tools.",
-    icon: FileText,
-    link: "/documents",
-    category: "productivity" as ToolCategory,
-  },
-  {
-    id: "video-meeting",
-    title: "JBJ Video Meet",
-    description: "Free unlimited video meetings with recording.",
-    icon: Video,
-    link: "/video-meeting",
-    category: "productivity" as ToolCategory,
-  },
-  {
-    id: "calendar",
-    title: "JBJ Calendar & Notes",
-    description: "Smart scheduling and reminders.",
-    icon: Calendar,
-    link: "/ai-calendar",
-    category: "productivity" as ToolCategory,
-  },
-  // ── Corporate Suite Tools (12 tools) ─────────────────────────────────────
-  {
-    id: "stamp-generator",
-    title: "JBJ Smart Stamp Generator",
-    description: "Generate professional company stamps — bilingual, multiple shapes, full export pack.",
-    icon: Award,
-    link: "/toolkit/stamp-generator",
-    category: "corporate" as ToolCategory,
-  },
-  {
-    id: "business-card",
-    title: "JBJ Business Card Designer",
-    description: "Design stunning business cards with AI extraction and 6 premium templates.",
-    icon: CreditCard,
-    link: "/toolkit/corporate-suite/business-card",
-    category: "corporate" as ToolCategory,
-  },
-  {
-    id: "cv-resume",
-    title: "JBJ CV / Resume Builder",
-    description: "Build a professional CV with AI-generated summary, multiple templates and PDF export.",
-    icon: User,
-    link: "/cv-builder",
-    category: "corporate" as ToolCategory,
-  },
-  {
-    id: "cover-letter",
-    title: "JBJ Cover Letter Generator",
-    description: "Generate tailored cover letters with Gemini AI. 3 layouts, export as PDF.",
-    icon: FileText,
-    link: "/toolkit/corporate-suite/cover-letter",
-    category: "corporate" as ToolCategory,
-  },
-  {
-    id: "logo-creator",
-    title: "JBJ AI Logo Creator",
-    description: "Generate professional logos with AI. Choose style, industry and colors. Export PNG & SVG.",
-    icon: Palette,
-    link: "/toolkit/corporate-suite/logo-creator",
-    category: "corporate" as ToolCategory,
-  },
-  {
-    id: "company-profile",
-    title: "JBJ Company Profile Builder",
-    description: "Build a multi-page company profile PDF with AI-expanded content and 3 premium templates.",
-    icon: Briefcase,
-    link: "/toolkit/corporate-suite/company-profile",
-    category: "corporate" as ToolCategory,
-  },
-  {
-    id: "presentation-tool",
-    title: "JBJ Presentation Builder",
-    description: "Build professional slide decks with Canva-style templates and AI-generated content.",
-    icon: Layers,
-    link: "/presentations",
-    category: "corporate" as ToolCategory,
-  },
-  {
-    id: "landing-page-builder",
-    title: "JBJ Landing Page Builder",
-    description: "Create a one-page business site with custom branding and HTML export.",
-    icon: Globe,
-    link: "/toolkit/corporate-suite/landing-page",
-    category: "corporate" as ToolCategory,
-  },
-  {
-    id: "esign",
-    title: "JBJ E-Sign",
-    description: "DocuSign-style contract signing with multi-signer workflows and audit trails.",
-    icon: Handshake,
-    link: "/e-signature",
-    category: "corporate" as ToolCategory,
-  },
-  {
-    id: "scan-sign",
-    title: "JBJ Scan & Sign",
-    description: "Camera scan, handwritten signature & PDF export.",
-    icon: FileSignature,
-    link: "/toolkit/scan-sign",
-    category: "corporate" as ToolCategory,
-  },
-  {
-    id: "spreadsheet-tool",
-    title: "JBJ Spreadsheet",
-    description: "Create and edit spreadsheets with formula support and Excel/CSV export.",
-    icon: FileText,
-    link: "/spreadsheet",
-    category: "corporate" as ToolCategory,
-  },
-  {
-    id: "documents-tool",
-    title: "JBJ Documents Editor",
-    description: "Rich text document editor with version history and export capabilities.",
-    icon: FolderOpen,
-    link: "/documents",
-    category: "corporate" as ToolCategory,
-  },
+const productivityTools: ToolDef[] = [
+  { id: "content-tools", title: "JBJ Documents & Spreadsheets", description: "Rich text editor and Excel-like tools.", icon: FileText, link: "/documents", category: "productivity" },
+  { id: "video-meeting", title: "JBJ Video Meet", description: "Free unlimited video meetings with recording.", icon: Video, link: "/video-meeting", category: "productivity" },
+  { id: "calendar", title: "JBJ Calendar & Notes", description: "Smart scheduling and reminders.", icon: Calendar, link: "/ai-calendar", category: "productivity" },
+  { id: "stamp-generator", title: "JBJ Smart Stamp Generator", description: "Generate professional company stamps — bilingual, multiple shapes, full export pack.", icon: Award, link: "/toolkit/stamp-generator", category: "corporate" },
+  { id: "business-card", title: "JBJ Business Card Designer", description: "Design stunning business cards with AI extraction and 6 premium templates.", icon: CreditCard, link: "/toolkit/corporate-suite/business-card", category: "corporate" },
+  { id: "cv-resume", title: "JBJ CV / Resume Builder", description: "Build a professional CV with AI summary, multiple templates and PDF export.", icon: User, link: "/cv-builder", category: "corporate" },
+  { id: "cover-letter", title: "JBJ Cover Letter Generator", description: "Generate tailored cover letters with AI. 3 layouts, export as PDF.", icon: FileText, link: "/toolkit/corporate-suite/cover-letter", category: "corporate" },
+  { id: "logo-creator", title: "JBJ AI Logo Creator", description: "Generate professional logos with AI. Export PNG & SVG.", icon: Palette, link: "/toolkit/corporate-suite/logo-creator", category: "corporate" },
+  { id: "company-profile", title: "JBJ Company Profile Builder", description: "Build a multi-page company profile PDF with AI-expanded content.", icon: Briefcase, link: "/toolkit/corporate-suite/company-profile", category: "corporate" },
+  { id: "presentation-tool", title: "JBJ Presentation Builder", description: "Build professional slide decks with Canva-style templates and AI content.", icon: Layers, link: "/presentations", category: "corporate" },
+  { id: "landing-page-builder", title: "JBJ Landing Page Builder", description: "Create a one-page business site with custom branding and HTML export.", icon: Globe, link: "/toolkit/corporate-suite/landing-page", category: "corporate" },
+  { id: "esign", title: "JBJ E-Sign", description: "DocuSign-style contract signing with multi-signer workflows.", icon: Handshake, link: "/e-signature", category: "corporate" },
+  { id: "scan-sign", title: "JBJ Scan & Sign", description: "Camera scan, handwritten signature & PDF export.", icon: FileSignature, link: "/toolkit/scan-sign", category: "corporate" },
+  { id: "spreadsheet-tool", title: "JBJ Spreadsheet", description: "Create and edit spreadsheets with formula support and Excel/CSV export.", icon: FileText, link: "/spreadsheet", category: "corporate" },
+  { id: "documents-tool", title: "JBJ Documents Editor", description: "Rich text document editor with version history and exports.", icon: FolderOpen, link: "/documents", category: "corporate" },
 ];
 
-// ── MERGED FROM ROYAL TOOLS REGISTRY (deduplicated) ──
-const mediaAndCreativeTools = [
-  { id: "ai-video-studio", title: "JBJ Creative Video Suite", description: "Professional video editor with multi-track timeline, AI captions, voiceover, and effects.", icon: Play, link: "/toolkit/video-suite", category: "design" as ToolCategory },
-  { id: "video-resize-pack", title: "JBJ Video Resize + Smart Reframe", description: "Resize videos for any social platform with AI-powered subject tracking.", icon: Video, link: "/toolkit/video-resize-pack", category: "design" as ToolCategory },
-  { id: "voice-studio", title: "JBJ Voice Studio", description: "AI voice generation, text-to-speech with multiple voices and languages.", icon: Mic, link: "/toolkit/voice-studio", category: "design" as ToolCategory },
-  { id: "pdf-from-photos", title: "JBJ Photo → PDF Generator", description: "Convert photos to professional PDFs with custom layouts and title pages.", icon: FileText, link: "/toolkit/pdf-from-photos", category: "design" as ToolCategory },
-  { id: "image-resize", title: "JBJ Image Resizer + Social Sizes", description: "Resize images for Instagram, Facebook, LinkedIn with preset dimensions.", icon: FileImage, link: "/toolkit/image-resize", category: "design" as ToolCategory },
-  { id: "captions-translate", title: "JBJ Captions & Translation", description: "Auto-transcribe video audio and translate captions to 100+ languages.", icon: Languages, link: "/toolkit/captions-translate", category: "design" as ToolCategory },
-  { id: "background-ai", title: "JBJ AI Background Remover", description: "Remove or replace backgrounds from photos instantly using AI.", icon: Wand2, link: "/toolkit/background-ai", category: "design" as ToolCategory },
-  { id: "beauty-filters", title: "JBJ Beauty Filters", description: "Apply professional beauty enhancements and filters to photos.", icon: Sparkles, link: "/toolkit/beauty-filters", category: "design" as ToolCategory },
-  { id: "virtual-staging-ai", title: "JBJ AI Virtual Staging", description: "Virtually stage empty properties with AI-generated furniture.", icon: Building2, link: "/virtual-staging-ai", category: "design" as ToolCategory },
-  { id: "creative-suite", title: "JBJ Creative Suite", description: "Full-featured creative studio for video projects, marketing packs, and property presentations.", icon: Sparkles, link: "/studio", category: "design" as ToolCategory },
+const mediaAndCreativeTools: ToolDef[] = [
+  { id: "ai-video-studio", title: "JBJ Creative Video Suite", description: "Professional video editor with multi-track timeline, AI captions, voiceover, and effects.", icon: Play, link: "/toolkit/video-suite", category: "design" },
+  { id: "video-resize-pack", title: "JBJ Video Resize + Smart Reframe", description: "Resize videos for any social platform with AI-powered subject tracking.", icon: Video, link: "/toolkit/video-resize-pack", category: "design" },
+  { id: "voice-studio", title: "JBJ Voice Studio", description: "AI voice generation, text-to-speech with multiple voices and languages.", icon: Mic, link: "/toolkit/voice-studio", category: "design" },
+  { id: "pdf-from-photos", title: "JBJ Photo → PDF Generator", description: "Convert photos to professional PDFs with custom layouts and title pages.", icon: FileText, link: "/toolkit/pdf-from-photos", category: "design" },
+  { id: "image-resize", title: "JBJ Image Resizer + Social Sizes", description: "Resize images for Instagram, Facebook, LinkedIn with preset dimensions.", icon: FileImage, link: "/toolkit/image-resize", category: "design" },
+  { id: "captions-translate", title: "JBJ Captions & Translation", description: "Auto-transcribe video audio and translate captions to 100+ languages.", icon: Languages, link: "/toolkit/captions-translate", category: "design" },
+  { id: "background-ai", title: "JBJ AI Background Remover", description: "Remove or replace backgrounds from photos instantly using AI.", icon: Wand2, link: "/toolkit/background-ai", category: "design" },
+  { id: "beauty-filters", title: "JBJ Beauty Filters", description: "Apply professional beauty enhancements and filters to photos.", icon: Sparkles, link: "/toolkit/beauty-filters", category: "design" },
+  { id: "virtual-staging-ai", title: "JBJ AI Virtual Staging", description: "Virtually stage empty properties with AI-generated furniture.", icon: Building2, link: "/virtual-staging-ai", category: "design" },
+  { id: "creative-suite", title: "JBJ Creative Suite", description: "Full-featured creative studio for video projects and property presentations.", icon: Sparkles, link: "/studio", category: "design" },
 ];
 
-const aiSalesTools = [
-  { id: "ai-followup-scheduler", title: "JBJ AI Follow-up Scheduler", description: "Smart follow-up scheduling based on lead behavior.", icon: Calendar, link: "/ai-followup-scheduler", category: "marketing" as ToolCategory },
-  { id: "ai-objection-handler", title: "JBJ AI Objection Handler", description: "Get AI-suggested responses to common objections.", icon: MessageSquare, link: "/ai-objection-handler", category: "marketing" as ToolCategory },
-  { id: "ai-client-matcher", title: "JBJ AI Client Matcher", description: "Match clients to properties using AI preferences analysis.", icon: Users, link: "/ai-client-matcher", category: "marketing" as ToolCategory },
+const aiSalesTools: ToolDef[] = [
+  { id: "ai-followup-scheduler", title: "JBJ AI Follow-up Scheduler", description: "Smart follow-up scheduling based on lead behavior.", icon: Calendar, link: "/ai-followup-scheduler", category: "marketing" },
+  { id: "ai-objection-handler", title: "JBJ AI Objection Handler", description: "Get AI-suggested responses to common objections.", icon: MessageSquare, link: "/ai-objection-handler", category: "marketing" },
+  { id: "ai-client-matcher", title: "JBJ AI Client Matcher", description: "Match clients to properties using AI preferences analysis.", icon: Users, link: "/ai-client-matcher", category: "marketing" },
 ];
 
-const aiReportTools = [
-  { id: "ai-market-report", title: "JBJ AI Market Report", description: "Generate comprehensive market reports with AI analysis.", icon: BarChart3, link: "/ai-market-report", category: "property" as ToolCategory },
-  { id: "ai-competitor-analysis", title: "JBJ AI Competitor Analysis", description: "Analyze competitor listings and pricing strategies.", icon: TrendingUp, link: "/ai-competitor-analysis", category: "property" as ToolCategory },
-  { id: "ai-roi-calculator", title: "JBJ AI ROI Calculator", description: "Calculate investment returns with AI market predictions.", icon: Calculator, link: "/ai-roi-calculator", category: "property" as ToolCategory },
-  { id: "ai-investment-report", title: "JBJ AI Investment Report", description: "Generate detailed investment analysis reports.", icon: FileText, link: "/ai-investment-report", category: "property" as ToolCategory },
+const aiReportTools: ToolDef[] = [
+  { id: "ai-market-report", title: "JBJ AI Market Report", description: "Generate comprehensive market reports with AI analysis.", icon: BarChart3, link: "/ai-market-report", category: "property" },
+  { id: "ai-competitor-analysis", title: "JBJ AI Competitor Analysis", description: "Analyze competitor listings and pricing strategies.", icon: TrendingUp, link: "/ai-competitor-analysis", category: "property" },
+  { id: "ai-roi-calculator", title: "JBJ AI ROI Calculator", description: "Calculate investment returns with AI market predictions.", icon: Calculator, link: "/ai-roi-calculator", category: "property" },
+  { id: "ai-investment-report", title: "JBJ AI Investment Report", description: "Generate detailed investment analysis reports.", icon: FileText, link: "/ai-investment-report", category: "property" },
 ];
 
-const aiCommTools = [
-  { id: "ai-meeting-summarizer", title: "JBJ AI Meeting Summarizer", description: "Summarize meetings and extract action items automatically.", icon: ClipboardList, link: "/ai-meeting-summarizer", category: "productivity" as ToolCategory },
-  { id: "ai-translation-hub", title: "JBJ AI Translation Hub", description: "Translate communications to any language instantly.", icon: Globe, link: "/ai-translation-hub", category: "productivity" as ToolCategory },
-  { id: "ai-video-tour-script", title: "JBJ AI Video Tour Script", description: "Generate professional video tour scripts for properties.", icon: Video, link: "/toolkit/video-suite", category: "productivity" as ToolCategory },
-  { id: "ai-email-generator", title: "JBJ AI Email Generator", description: "Generate professional emails for any occasion.", icon: Mail, link: "/ai-email-generator", category: "productivity" as ToolCategory },
+const aiCommTools: ToolDef[] = [
+  { id: "ai-meeting-summarizer", title: "JBJ AI Meeting Summarizer", description: "Summarize meetings and extract action items automatically.", icon: ClipboardList, link: "/ai-meeting-summarizer", category: "productivity" },
+  { id: "ai-translation-hub", title: "JBJ AI Translation Hub", description: "Translate communications to any language instantly.", icon: Globe, link: "/ai-translation-hub", category: "productivity" },
+  { id: "ai-video-tour-script", title: "JBJ AI Video Tour Script", description: "Generate professional video tour scripts for properties.", icon: Video, link: "/toolkit/video-suite", category: "productivity" },
+  { id: "ai-email-generator", title: "JBJ AI Email Generator", description: "Generate professional emails for any occasion.", icon: Mail, link: "/ai-email-generator", category: "productivity" },
 ];
 
-const aiContentTools = [
-  { id: "ai-social-media", title: "JBJ AI Social Media", description: "Generate engaging social media content for properties.", icon: PenTool, link: "/ai-social-media", category: "marketing" as ToolCategory },
-  { id: "ai-description-writer", title: "JBJ AI Description Writer", description: "Write compelling property descriptions automatically.", icon: FileText, link: "/ai-description-writer", category: "marketing" as ToolCategory },
-  { id: "ai-contract-reviewer", title: "JBJ AI Contract Reviewer", description: "Review contracts and highlight important clauses.", icon: Scale, link: "/ai-contract-reviewer", category: "corporate" as ToolCategory },
-  { id: "ai-document-generator", title: "JBJ AI Document Generator", description: "Generate professional documents from templates.", icon: FileSignature, link: "/ai-document-generator", category: "corporate" as ToolCategory },
+const aiContentTools: ToolDef[] = [
+  { id: "ai-social-media", title: "JBJ AI Social Media", description: "Generate engaging social media content for properties.", icon: PenTool, link: "/ai-social-media", category: "marketing" },
+  { id: "ai-description-writer", title: "JBJ AI Description Writer", description: "Write compelling property descriptions automatically.", icon: FileText, link: "/ai-description-writer", category: "marketing" },
+  { id: "ai-contract-reviewer", title: "JBJ AI Contract Reviewer", description: "Review contracts and highlight important clauses.", icon: Scale, link: "/ai-contract-reviewer", category: "corporate" },
+  { id: "ai-document-generator", title: "JBJ AI Document Generator", description: "Generate professional documents from templates.", icon: FileSignature, link: "/ai-document-generator", category: "corporate" },
 ];
 
-
-// These are human support roles, NOT AI tools - moved to Support/Operations section
-const supportOperationsTools = [
-  {
-    id: "listing-admin",
-    title: "Listing Admin (Sarah)",
-    description: "Listing setup, docs, and developer coordination.",
-    icon: FolderOpen,
-    link: "/listing-admin",
-  },
-  {
-    id: "broker-admin-support",
-    title: "Broker Admin Support",
-    description: "Operational support and coordination.",
-    icon: Briefcase,
-    link: "/broker-admin-assistant",
-  },
-  {
-    id: "operations-compliance",
-    title: "Operations & Compliance",
-    description: "RERA compliance and operational support.",
-    icon: Shield,
-    link: "/broker-admin-assistant",
-  },
-  {
-    id: "crm-support",
-    title: "JBJ CRM Support",
-    description: "Lead management and CRM assistance.",
-    icon: Users,
-    link: "/crm",
-  },
+const ALL_TOOLS: ToolDef[] = [
+  ...investorTools,
+  ...productivityTools,
+  ...mediaAndCreativeTools,
+  ...aiSalesTools,
+  ...aiReportTools,
+  ...aiCommTools,
+  ...aiContentTools,
 ];
 
-// BROKER-ONLY AI TOOLS (shown as preview to encourage joining)
-const brokerOnlyTools = [
-  {
-    id: "hr-manager",
-    title: "HR Manager (Jessica)",
-    description: "Hiring pipeline, performance tracking, HR policies.",
-    icon: Users,
-    link: "/hr-hub",
-  },
-  {
-    id: "graphic-designer",
-    title: "JBJ Graphic Designer",
-    description: "Create brochures, ads, and marketing materials.",
-    icon: Palette,
-    link: "/jbj-design-studio",
-  },
-  {
-    id: "video-producer",
-    title: "JBJ Video Producer",
-    description: "Cinematic property tours and marketing videos.",
-    icon: Film,
-    link: "/video-builder",
-  },
-  {
-    id: "photographer",
-    title: "JBJ Photographer",
-    description: "Auto-enhance listing photos with AI filters.",
-    icon: Camera,
-    link: "/jbj-design-studio",
-  },
-  {
-    id: "digital-marketing",
-    title: "JBJ Digital Marketing",
-    description: "Automate ads, campaigns, and analytics.",
-    icon: Megaphone,
-    link: "/broker-toolkit",
-  },
-  {
-    id: "social-workshop",
-    title: "JBJ Social Media Workshop",
-    description: "Tutorials and training to grow your brand.",
-    icon: Share2,
-    link: "/broker-toolkit",
-  },
+// Dedupe by id (some lists can overlap intentionally)
+const dedupe = (tools: ToolDef[]): ToolDef[] => {
+  const seen = new Set<string>();
+  return tools.filter((t) => {
+    if (seen.has(t.id)) return false;
+    seen.add(t.id);
+    return true;
+  });
+};
+
+const SUITE_SHORTCUTS = [
+  { label: "Creative Suite", desc: "Design studio, graphics & media", href: "/studio", icon: Palette },
+  { label: "Broker Intelligence", desc: "Sales tools & market insights", href: "/business-suite/broker", icon: Brain },
+  { label: "Productivity Suite", desc: "Docs, calendar & meetings", href: "/business-suite/productivity", icon: Zap },
+  { label: "All Suites", desc: "Browse all available suites", href: "/business-suite", icon: Layers },
 ];
 
-const quickBenefits = [
+const QUICK_BENEFITS = [
   { icon: Brain, title: "Intelligent Analysis", desc: "AI processes thousands of data points." },
   { icon: Zap, title: "Instant Results", desc: "Get real-time insights instantly." },
   { icon: Shield, title: "Data Security", desc: "Industry-standard encryption." },
   { icon: Clock, title: "Save Time", desc: "Automate tedious tasks." },
 ];
 
-
+// ─────────────────────────────────────────────────────────────────────────────
+// Reusable tool card — single champagne style, ink text, gold hairline, purple
+// IconTile (AI accent). Used in Discover grid and per-category sections.
+// ─────────────────────────────────────────────────────────────────────────────
+function ToolCard({ tool, index }: { tool: ToolDef; index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: Math.min(index, 12) * 0.03, duration: 0.35 }}
+      viewport={{ once: true }}
+    >
+      <Link
+        to={tool.link}
+        className="group h-full flex flex-col bg-[#FDFBF7] border border-[#B89555]/30 hover:border-[#B89555]/70 hover:shadow-[0_10px_28px_-12px_rgba(184,149,85,0.4)] rounded-2xl p-5 transition-all"
+      >
+        <div className="flex items-start justify-between mb-4 gap-3">
+          <IconTile icon={tool.icon} tone="purple" size="md" />
+          <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 text-[10px] uppercase tracking-wider px-2 py-0.5">
+            Free
+          </Badge>
+        </div>
+        <h3 className="text-[15px] font-semibold text-[#1A1A1A] leading-snug mb-1.5">
+          {tool.title}
+        </h3>
+        <p className="text-[13px] text-[#1A1A1A]/70 leading-relaxed line-clamp-2 flex-1">
+          {tool.description}
+        </p>
+        <div className="mt-4 flex items-center justify-between text-[12px] font-semibold text-[#1A1A1A]">
+          <span className="opacity-70 group-hover:opacity-100 transition-opacity">Open tool</span>
+          <ArrowUpRight className="w-4 h-4 text-[#B89555]" />
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
 
 const AIHub = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [toolSearch, setToolSearch] = useState('');
-  const [toolFilter, setToolFilter] = useState<ToolCategory | 'all'>('all');
+  const [toolSearch, setToolSearch] = useState("");
+  const [toolFilter, setToolFilter] = useState<ToolCategory | "all">("all");
 
-  // Visibility filter — hides tools toggled off in the admin AI Tools Control Panel
   const visibility = useToolVisibility();
 
-  // Hard public allowlist: broken/unfinished tools are never rendered here.
-  const allTools = investorTools.slice(0, 7).filter(tool => visibility.isPublic(tool.id));
-
-  // Filter tools by search and category
-  const filteredTools = allTools.filter(tool => {
-    const matchesSearch = !toolSearch || tool.title.toLowerCase().includes(toolSearch.toLowerCase()) || tool.description.toLowerCase().includes(toolSearch.toLowerCase());
-    const matchesCategory = toolFilter === 'all' || tool.category === toolFilter;
-    return matchesSearch && matchesCategory;
-  });
-
-  // Group tools by category (already filtered by visibility)
-  const toolsByCategory = allTools.reduce((acc, tool) => {
-    if (!acc[tool.category]) acc[tool.category] = [];
-    acc[tool.category].push(tool);
-    return acc;
-  }, {} as Record<ToolCategory, typeof allTools>);
-
-  // Render tool card for bulk section (glow/border only)
-  const renderBulkToolCard = (tool: typeof investorTools[0], index: number) => {
-    const meta = CATEGORY_META[tool.category];
-    
-    return (
-      <motion.div 
-        key={tool.id} 
-        variants={fadeInUp}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.03 }}
-        viewport={{ once: true }}
-      >
-        <Link to={tool.link} className="block group h-full">
-          <Card className={`${meta.cardClass} transition-all duration-300 h-full group-hover:scale-[1.02]`}>
-            <CardContent className="p-5">
-              <div className="flex items-start gap-4">
-                <div className={`w-12 h-12 ${meta.iconWrapClass} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
-                  <tool.icon className={`w-6 h-6 ${meta.iconClass}`} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start gap-2 mb-1 flex-wrap">
-                    <h3 className="font-semibold text-sm leading-tight text-white">{tool.title}</h3>
-                    <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
-                      FREE
-                    </Badge>
-                  </div>
-                  <p className="text-white/70 text-sm line-clamp-2">{tool.description}</p>
-                </div>
-                <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                  <ArrowUpRight className={`w-5 h-5 ${meta.arrowClass} opacity-60 group-hover:opacity-100 transition-opacity`} />
-                  <span className={`text-[10px] font-semibold ${meta.arrowClass} opacity-60 group-hover:opacity-100 transition-opacity`}>Open →</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-      </motion.div>
-    );
-  };
-
-  // Render tool card for category sections (FILLED backgrounds - matching Broker Hub)
-  const renderCategoryToolCard = (tool: typeof investorTools[0], index: number) => {
-    const meta = CATEGORY_META[tool.category];
-    
-    return (
-      <motion.div 
-        key={`cat-${tool.id}`} 
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.03 }}
-        viewport={{ once: true }}
-      >
-        <Link to={tool.link} className="block group h-full">
-          <Card className={`${meta.cardClass} transition-all duration-300 h-full group-hover:scale-[1.02]`}>
-            <CardContent className="p-5">
-              <div className="flex items-start gap-4">
-                <div className={`w-12 h-12 ${meta.iconWrapClass} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
-                  <tool.icon className={`w-6 h-6 ${meta.iconClass}`} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start gap-2 mb-1 flex-wrap">
-                    <h3 className="font-semibold text-sm leading-tight text-white">{tool.title}</h3>
-                    <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
-                      FREE
-                    </Badge>
-                  </div>
-                  <p className="text-white/70 text-sm line-clamp-2">{tool.description}</p>
-                </div>
-                <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                  <ArrowUpRight className="w-5 h-5 text-white/90 opacity-60 group-hover:opacity-100 group-hover:text-[#1A1A1A] transition-all" />
-                  <span className="text-[10px] font-semibold text-white/90 opacity-60 group-hover:opacity-100 group-hover:text-[#1A1A1A] transition-all">Open →</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-      </motion.div>
-    );
-  };
-
-  // Render broker-only locked cards (GREEN theme for Broker Hub section)
-  // If user is logged in, they can access these tools directly
-  const renderLockedCard = (tool: typeof brokerOnlyTools[0]) => (
-    <motion.div key={tool.id} variants={fadeInUp}>
-      <div 
-        className="block group h-full cursor-pointer" 
-        onClick={() => navigate(user ? tool.link : "/join")}
-      >
-        <Card className="bg-[#EFE6D6]/10 border-2 border-[#B89555]/50 hover:border-[#B89555] hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(200,167,102,0.2)] h-full relative overflow-hidden transition-all duration-300">
-          <CardContent className="p-5 relative z-10">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-[#EFE6D6]/20 border border-[#B89555]/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <tool.icon className="w-6 h-6 text-[#1A1A1A]" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-start gap-2 mb-1 flex-wrap">
-                  <h3 className="text-white font-semibold text-sm leading-tight">{tool.title}</h3>
-                  {user ? (
-                    <Badge className="bg-[#EFE6D6]/30 text-[#1A1A1A] border-[#B89555]/50 text-[10px] px-1.5 py-0 flex-shrink-0">
-                      FREE
-                    </Badge>
-                  ) : (
-                    <Badge className="bg-[#EFE6D6]/30 text-[#1A1A1A] border-[#B89555]/50 text-[10px] px-1.5 py-0 flex-shrink-0">
-                      <Lock className="w-2.5 h-2.5 mr-1" />
-                      BROKER ONLY
-                    </Badge>
-                  )}
-                </div>
-                <p className="text-[#1A1A1A]/70 text-sm line-clamp-2">{tool.description}</p>
-              </div>
-              <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] opacity-60 group-hover:opacity-100 transition-all" />
-                <span className="text-[10px] font-semibold text-[#1A1A1A] opacity-60 group-hover:opacity-100 transition-all">Open →</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </motion.div>
+  const allTools = useMemo(
+    () => dedupe(ALL_TOOLS).filter((t) => visibility.isPublic(t.id)),
+    [visibility]
   );
+
+  const filteredTools = useMemo(() => {
+    const q = toolSearch.trim().toLowerCase();
+    return allTools.filter((tool) => {
+      const matchesSearch =
+        !q || tool.title.toLowerCase().includes(q) || tool.description.toLowerCase().includes(q);
+      const matchesCategory = toolFilter === "all" || tool.category === toolFilter;
+      return matchesSearch && matchesCategory;
+    });
+  }, [allTools, toolSearch, toolFilter]);
+
+  const toolsByCategory = useMemo(() => {
+    return allTools.reduce((acc, tool) => {
+      if (!acc[tool.category]) acc[tool.category] = [];
+      acc[tool.category].push(tool);
+      return acc;
+    }, {} as Record<ToolCategory, ToolDef[]>);
+  }, [allTools]);
+
+  const dashboardHref = user ? "/my-account" : "/auth?redirect=/ai-hub";
 
   return (
     <>
-      <SEOHead 
+      <SEOHead
         title="JBJ Royal Tools Hub | Free Tools for Investors & Brokers"
         description="Access free tools for property investment, comparison, mortgage calculation, and more. Your complete investor toolkit at JBJ Global Real Estate."
         keywords="JBJ Royal Tools Hub, property tools, investment tools Dubai, property analysis, JBJ Global Real Estate"
         canonicalPath="/ai-hub"
       />
-      
-      <section className="relative w-full min-h-screen bg-[#0D0D0D]">
-        {/* HERO SECTION - With Video Background */}
-        <div className="relative py-10 md:py-14 overflow-hidden">
-          {/* Video Background — Remotion-rendered luxury plate with built-in subtitle safe zone.
-              Source: remotion/src/MainVideo.tsx (re-render via `node remotion/scripts/render.mjs`). */}
+
+      <main data-marketing-page className="bg-[#FDFBF7]">
+        {/* ════════════════════════════════════════════════════════════════
+            HERO — full-bleed premium video, locked dark hero
+        ════════════════════════════════════════════════════════════════ */}
+        <section
+          data-hero-dark
+          className="jj-hero-fullscreen relative flex items-center overflow-hidden min-h-[86vh]"
+        >
+          {/* Video bg */}
           <div className="absolute inset-0 z-0">
-            <VideoBackground 
+            <VideoBackground
               src="/video/aihub-bg.mp4"
               poster="/video/aihub-bg-poster.jpg"
               opacity={1}
             />
-            {/* Lighter scrim — the video already enforces text contrast; this just blends the
-                bottom into the page background and adds a small floor for safety. */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-[#0D0D0D]" />
-          </div>
-          
-          {/* Animated gradient orbs */}
-          <div className="absolute inset-0 overflow-hidden z-[1]">
-            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#EFE6D6]/10 rounded-full blur-[120px]" />
-            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[100px]" />
           </div>
 
-          <div className="container mx-auto px-4 relative z-10 pt-8 md:pt-16">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-              className="text-center max-w-4xl mx-auto"
-            >
-              {/* Premium Label - Glass style with gold border, engraved look */}
-              <motion.div variants={fadeInUp} className="mb-6">
-                <button 
-                  className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full cursor-default"
+          {/* Legibility composite — matches MarketIntelligenceHero pattern */}
+          <div className="absolute inset-0 z-[2] bg-gradient-to-b from-black/85 via-black/65 to-black/95 pointer-events-none" />
+          <div
+            className="absolute inset-0 z-[2] pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 75%)",
+            }}
+          />
+          <div className="absolute inset-x-0 bottom-0 h-1/4 z-[2] bg-gradient-to-b from-transparent to-[#FDFBF7] pointer-events-none" />
+
+          {/* Ambient gold orbs */}
+          <div className="absolute top-1/4 left-1/4 w-[480px] h-[480px] rounded-full blur-[120px] bg-[#B89555]/10 z-[1] pointer-events-none" />
+          <div className="absolute bottom-1/4 right-1/4 w-[420px] h-[420px] rounded-full blur-[110px] bg-purple-500/10 z-[1] pointer-events-none" />
+
+          <motion.div
+            className="relative z-10 w-full py-24 px-4"
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            <div className="max-w-4xl mx-auto text-center">
+              {/* Glass gold badge */}
+              <motion.div variants={fadeInUp} className="mb-6 inline-block">
+                <span
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1.5px solid rgba(200,167,102,0.6)',
-                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
+                    background:
+                      "linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 50%, rgba(184,149,85,0.10) 100%)",
+                    backdropFilter: "blur(20px)",
+                    border: "1.5px solid rgba(184,149,85,0.65)",
+                    boxShadow:
+                      "inset 0 1px 2px rgba(255,255,255,0.10), inset 0 -1px 2px rgba(0,0,0,0.20), 0 4px 20px rgba(0,0,0,0.30)",
                   }}
                 >
-                  <span className="text-[#B89555] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Free for All Users</span>
-                </button>
+                  <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
+                  <span
+                    className="text-[#B89555] font-semibold text-[10px] md:text-xs uppercase tracking-[0.22em]"
+                    style={{ textShadow: "0 1px 3px rgba(0,0,0,0.5)" }}
+                  >
+                    Free for All Users
+                  </span>
+                </span>
               </motion.div>
 
-              {/* Main Title - Premium Black Styling */}
-              <motion.h1 
-                className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
+              <motion.h1
                 variants={fadeInUp}
+                className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-5 leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.55)]"
               >
-                <span className="text-white">JBJ </span>
-                <span className="text-white">Royal Tools Hub</span>
+                JBJ Royal Tools Hub
               </motion.h1>
 
-              {/* Subtitle — text-shadow guarantees AA contrast over any video frame */}
-              <motion.p 
-                className="text-white text-lg md:text-xl max-w-2xl mx-auto mb-4 leading-relaxed font-medium"
-                style={{ textShadow: '0 2px 12px rgba(0,0,0,0.85), 0 0 4px rgba(0,0,0,0.6)' }}
+              <motion.p
                 variants={fadeInUp}
+                className="text-white/95 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto mb-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]"
               >
-                Your Complete Tools Command Center
+                Your Complete AI Tools Command Center
               </motion.p>
 
-              <motion.p 
-                className="text-white/90 text-base max-w-xl mx-auto mb-8"
-                style={{ textShadow: '0 2px 10px rgba(0,0,0,0.85), 0 0 4px rgba(0,0,0,0.6)' }}
+              <motion.p
                 variants={fadeInUp}
+                className="text-white/85 text-sm md:text-base max-w-xl mx-auto mb-8 drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]"
               >
-                Free tools • Property analysis • Investment calculators • Productivity suite
+                Free tools · Property analysis · Investment calculators · Productivity suite
               </motion.p>
 
-              {/* Premium Gold Divider */}
-              <motion.div 
+              <motion.div
                 variants={fadeInUp}
-                className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-8"
+                className="w-24 h-px bg-gradient-to-r from-transparent via-[#B89555] to-transparent mx-auto mb-8"
               />
 
-              {/* Hero CTA Buttons - Transparent bg, white 3D border, white title, gold icon on normal; filled on hover */}
-              <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mb-8">
-                {!user ? (
-                  <button 
-                    onClick={() => navigate("/auth?redirect=/ai-hub")}
-                    className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
-                    style={{
-                      border: '2px solid rgba(255,255,255,0.8)',
-                      boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                    }}
-                  >
-                    <LogIn className="w-5 h-5 text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                    <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Sign In / Create Account</span>
-                    <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                    {/* Hover fill overlay */}
-                    <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-                  </button>
-                ) : (
-                  <button 
-                    onClick={() => navigate("/my-account")}
-                    className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
-                    style={{
-                      border: '2px solid rgba(255,255,255,0.8)',
-                      boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                    }}
-                  >
-                    <User className="w-5 h-5 text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                    <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Go to My Dashboard</span>
-                    <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                    {/* Hover fill overlay */}
-                    <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-                  </button>
-                )}
-                {/* Explore Free Tools Button */}
-                <button 
-                  onClick={() => document.getElementById('investor-tools')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
-                  style={{
-                    border: '2px solid rgba(255,255,255,0.8)',
-                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                  }}
+              {/* THREE EQUAL CTAs */}
+              <motion.div
+                variants={fadeInUp}
+                className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto"
+              >
+                <button
+                  data-cta="dashboard"
+                  onClick={() => navigate(dashboardHref)}
+                  className="jj-cta-dark inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-sm font-semibold w-full"
                 >
-                  <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Explore Free Tools</span>
-                  <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                  {/* Hover fill overlay */}
-                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                  {user ? <User className="w-4 h-4" /> : <LogIn className="w-4 h-4" />}
+                  <span>{user ? "Go to My Dashboard" : "Sign In / Create Account"}</span>
                 </button>
-                {/* View Premium Plans Button - Using primary champagne gradient */}
-                <button 
-                  onClick={() => navigate("/pricing")}
-                  className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
-                    border: '2px solid rgba(200,167,102,0.6)',
-                    boxShadow: '0 4px 15px rgba(200,167,102,0.4), inset 0 1px 2px rgba(255,255,255,0.3)',
-                  }}
+
+                <button
+                  data-cta="explore"
+                  onClick={() =>
+                    document.getElementById("discover-tools")?.scrollIntoView({ behavior: "smooth" })
+                  }
+                  className="jj-cta-champagne inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-sm font-semibold w-full"
                 >
-                  <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
-                  <span className="text-[#1A1A1A] font-bold">View Premium Plans</span>
-                  <ArrowUpRight className="w-5 h-5 text-[#1A1A1A]" />
-                  {/* Hover glow overlay */}
-                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 30px rgba(200,167,102,0.5), inset 0 0 15px rgba(200,167,102,0.1)' }} />
+                  <Sparkles className="w-4 h-4" />
+                  <span>Explore Free Tools</span>
+                </button>
+
+                <button
+                  data-cta="premium"
+                  onClick={() => navigate("/pricing")}
+                  className="jj-cta-dark inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-sm font-semibold w-full"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>View Premium Plans</span>
                 </button>
               </motion.div>
+            </div>
+          </motion.div>
+        </section>
 
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Divider */}
-        <SectionDivider />
-
-        {/* Quick Benefits Strip - Active Champagne Layer */}
-        <section className="py-8 bg-[#1A1A1A]">
-          <div className="container mx-auto px-3 sm:px-4">
-            <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-lg">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                {quickBenefits.map((benefit, idx) => (
-                  <motion.div
-                    key={idx}
-                    className="icon-tile bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-4 text-center shadow-sm"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: idx * 0.1 }}
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center mx-auto mb-3 shadow-lg">
-                      <benefit.icon className="w-6 h-6 text-[#1A1A1A]" />
-                    </div>
-                    <h3 className="text-[#1A1A1A] font-semibold text-sm mb-1">{benefit.title}</h3>
-                    <p className="text-[#1A1A1A]/70 text-xs">{benefit.desc}</p>
-                  </motion.div>
-                ))}
-              </div>
+        {/* ════════════════════════════════════════════════════════════════
+            TRUST STRIP
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="jj-band jj-band--surface py-12 md:py-16">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 max-w-6xl mx-auto">
+              {QUICK_BENEFITS.map((b, idx) => (
+                <motion.div
+                  key={b.title}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.06 }}
+                  className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-5 text-center"
+                >
+                  <div className="flex justify-center mb-3">
+                    <IconTile icon={b.icon} tone="gold" size="md" />
+                  </div>
+                  <h3 className="text-[#1A1A1A] font-semibold text-sm mb-1">{b.title}</h3>
+                  <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b.desc}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Divider */}
-        <SectionDivider />
-
-        {/* ALL TOOLS SECTION - Bulk view with Active Color Layer */}
-        <section className="py-8 md:py-10 bg-[#1A1A1A]">
-          <div className="container mx-auto px-3 sm:px-4">
-            {/* Active Slate/Blue Layer - matching Broker Hub */}
-            <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-lg">
-              <motion.div
-                className="text-center mb-12"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-              >
-                <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 rounded-full shadow-[0_0_15px_rgba(200,167,102,0.25)] mb-4 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
-                  <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                  <span className="text-[#1A1A1A] text-xs uppercase tracking-wider font-medium">All Free Tools</span>
-                </span>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                  Discover All <span className="text-sky-300">Free AI Tools</span>
+        {/* ════════════════════════════════════════════════════════════════
+            DISCOVER — search, filters, full grid
+        ════════════════════════════════════════════════════════════════ */}
+        <section id="discover-tools" className="jj-band jj-band--page py-14 md:py-20">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <PremiumSectionCard padding="lg" tone="page" width="contained">
+              <div className="text-center max-w-3xl mx-auto mb-10">
+                <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 mb-4 px-3 py-1">
+                  <Sparkles className="w-3 h-3 mr-1.5 text-[#B89555]" />
+                  All Free Tools
+                </Badge>
+                <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[#1A1A1A] mb-3">
+                  Discover All Free AI Tools
                 </h2>
-                <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
-                  All tools in one place — each with its unique theme. Scroll down to see them organized by category.
+                <p className="text-[#1A1A1A]/70 text-base">
+                  All tools in one place — each grouped by category, with AI-powered search.
                 </p>
-              </motion.div>
+              </div>
 
-              {/* Search & Filter */}
-              <div className="flex flex-col sm:flex-row gap-3 mb-8">
+              {/* Search + pills */}
+              <div className="flex flex-col lg:flex-row gap-3 mb-8">
                 <div className="flex-1 relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/50" />
                   <input
                     type="text"
                     value={toolSearch}
                     onChange={(e) => setToolSearch(e.target.value)}
-                    placeholder="Search tools..."
-                    className="w-full px-4 py-3 rounded-xl bg-[#1A1A1A]/60 border border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/50 focus:outline-none transition-colors"
+                    placeholder="Search tools…"
+                    className="w-full pl-11 pr-4 h-12 rounded-xl bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 focus:border-[#B89555] focus:outline-none focus:ring-2 focus:ring-[#B89555]/20 transition-all"
                   />
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {(['all', 'property', 'corporate', 'productivity', 'design', 'marketing'] as const).map(cat => {
-                    const pillColors: Record<string, { active: string; inactive: string }> = {
-                      all: { active: 'bg-[#FDFBF7] text-[#1A1A1A] border-white', inactive: 'text-white/70 border-white/20 hover:border-white/50 hover:text-white' },
-                      property: { active: 'bg-purple-500 text-white border-purple-400', inactive: 'text-purple-300 border-purple-500/30 hover:border-purple-400 hover:text-purple-200' },
-                      corporate: { active: 'bg-teal-500 text-white border-teal-400', inactive: 'text-teal-300 border-teal-500/30 hover:border-teal-400 hover:text-teal-200' },
-                      productivity: { active: 'bg-blue-500 text-white border-blue-400', inactive: 'text-blue-300 border-blue-500/30 hover:border-blue-400 hover:text-blue-200' },
-                      design: { active: 'bg-pink-500 text-white border-pink-400', inactive: 'text-pink-300 border-pink-500/30 hover:border-pink-400 hover:text-pink-200' },
-                      marketing: { active: 'bg-amber-500 text-white border-amber-400', inactive: 'text-amber-300 border-amber-500/30 hover:border-amber-400 hover:text-amber-200' },
-                    };
-                    const colors = pillColors[cat] || pillColors.all;
-                    return (
-                      <button
-                        key={cat}
-                        onClick={() => setToolFilter(cat)}
-                        className={`px-4 py-2 rounded-full text-xs font-medium uppercase tracking-wider transition-all border ${
-                          toolFilter === cat ? colors.active : colors.inactive
-                        }`}
-                      >
-                        {cat === 'all' ? 'All' : cat}
-                      </button>
-                    );
-                  })}
+                  {(["all", "property", "corporate", "productivity", "design", "marketing"] as const).map(
+                    (cat) => {
+                      const active = toolFilter === cat;
+                      const label = cat === "all" ? "All" : cat.charAt(0).toUpperCase() + cat.slice(1);
+                      return (
+                        <button
+                          key={cat}
+                          onClick={() => setToolFilter(cat)}
+                          className={
+                            active
+                              ? "jj-pill-active px-4 h-10 rounded-full text-[11px] font-semibold uppercase tracking-wider"
+                              : "px-4 h-10 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-[#FDFBF7] text-[#1A1A1A]/70 border border-[#B89555]/30 hover:border-[#B89555]/60 hover:text-[#1A1A1A] transition-all"
+                          }
+                        >
+                          {label}
+                        </button>
+                      );
+                    }
+                  )}
                 </div>
               </div>
 
-              {/* Suite Shortcut Cards - Prominent */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                {[
-                  { label: 'Creative Suite', desc: 'Design studio, graphics & media', href: '/studio', icon: Palette, border: 'border-pink-500/50', bg: 'bg-gradient-to-br from-pink-900/60 to-pink-950/60', text: 'text-pink-300', glow: 'shadow-[0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_0_30px_rgba(236,72,153,0.5)]' },
-                  { label: 'Broker Intelligence', desc: 'Sales tools & market insights', href: '/business-suite/broker', icon: Brain, border: 'border-teal-500/50', bg: 'bg-gradient-to-br from-teal-900/60 to-teal-950/60', text: 'text-teal-300', glow: 'shadow-[0_0_20px_rgba(20,184,166,0.3)] hover:shadow-[0_0_30px_rgba(20,184,166,0.5)]' },
-                  { label: 'Productivity Suite', desc: 'Docs, calendar & meetings', href: '/business-suite/productivity', icon: Zap, border: 'border-blue-500/50', bg: 'bg-gradient-to-br from-blue-900/60 to-blue-950/60', text: 'text-blue-300', glow: 'shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)]' },
-                  { label: 'All Suites', desc: 'Browse all available suites', href: '/business-suite', icon: Layers, border: 'border-purple-500/50', bg: 'bg-gradient-to-br from-purple-900/60 to-purple-950/60', text: 'text-purple-300', glow: 'shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(147,51,234,0.5)]' },
-                ].map(suite => (
-                  <Link key={suite.label} to={suite.href} className={`flex flex-col gap-2 p-5 rounded-2xl ${suite.bg} border-2 ${suite.border} ${suite.text} ${suite.glow} hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.3)] transition-all duration-300 group`}>
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl bg-[#FDFBF7]/10 border border-white/20 flex items-center justify-center`}>
-                        <suite.icon className="w-5 h-5" />
+              {/* Suite shortcuts */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+                {SUITE_SHORTCUTS.map((s) => (
+                  <Link
+                    key={s.label}
+                    to={s.href}
+                    className="group flex items-center gap-3 p-4 rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 hover:border-[#B89555]/70 hover:shadow-[0_8px_24px_-12px_rgba(184,149,85,0.35)] transition-all"
+                  >
+                    <IconTile icon={s.icon} tone="gold" size="md" />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[14px] font-semibold text-[#1A1A1A] leading-snug">
+                        {s.label}
                       </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-sm text-white">{suite.label}</h4>
-                        <p className="text-xs text-white/90">{suite.desc}</p>
-                      </div>
-                      <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-white" />
+                      <div className="text-[12px] text-[#1A1A1A]/65 truncate">{s.desc}</div>
                     </div>
+                    <ArrowUpRight className="w-4 h-4 text-[#B89555] opacity-70 group-hover:opacity-100 transition-opacity" />
                   </Link>
                 ))}
               </div>
 
-              <motion.div 
-                className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                {filteredTools.map((tool, idx) => renderBulkToolCard(tool, idx))}
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Divider */}
-        <SectionDivider />
-
-        {/* CATEGORY SECTIONS - Active color layer with filled cards */}
-        {(['property', 'productivity', 'corporate', 'design', 'marketing'] as ToolCategory[]).map((category) => {
-          const meta = CATEGORY_META[category];
-          const categoryTools = toolsByCategory[category] || [];
-          if (categoryTools.length === 0) return null;
-
-          // Get category-specific background color for the active layer
-          const categoryBgMap: Record<ToolCategory, string> = {
-            property: 'bg-gradient-to-br from-purple-900/90 via-purple-900/80 to-purple-950/90',
-            productivity: 'bg-gradient-to-br from-blue-900/90 via-blue-900/80 to-blue-950/90',
-            design: 'bg-gradient-to-br from-pink-900/90 via-pink-900/80 to-pink-950/90',
-            marketing: 'bg-gradient-to-br from-amber-900/90 via-amber-900/80 to-amber-950/90',
-            corporate: 'bg-gradient-to-br from-teal-900/90 via-teal-900/80 to-teal-950/90',
-          };
-
-          const borderColorMap: Record<ToolCategory, string> = {
-            property: 'border-purple-500/30',
-            productivity: 'border-blue-500/30',
-            design: 'border-pink-500/30',
-            marketing: 'border-amber-500/30',
-            corporate: 'border-teal-500/30',
-          };
-
-          return (
-            <section key={category} id={category === 'property' ? 'investor-tools' : `${category}-tools`} className="py-8 md:py-10 bg-[#1A1A1A]">
-              <div className="container mx-auto px-3 sm:px-4">
-                {/* Active Color Layer - Category-specific */}
-                <div className={`${categoryBgMap[category]} ${borderColorMap[category]} border rounded-2xl p-4 sm:p-6 shadow-lg`}>
-                  <motion.div
-                    className="text-center mb-8"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                  >
-                    <Badge className={`${meta.badgeClass} mb-4`}>
-                      <Sparkles className="w-3 h-3 mr-1" />
-                      {meta.label} {meta.coloredLabel}
-                    </Badge>
-                    <h2 className="text-2xl md:text-3xl font-bold mb-2">
-                      <span className="text-white">{meta.label} </span>
-                      <span className={meta.iconClass}>{meta.coloredLabel}</span>
-                    </h2>
-                    <p className="text-white/70 max-w-2xl mx-auto">
-                    {category === 'property' && "Powerful AI tools for property analysis, valuation, and investment decisions."}
-                      {category === 'productivity' && "Video meetings, documents, calendar, and signing tools."}
-                      {category === 'corporate' && "Professional stamps, business cards, logos, CVs, e-signatures and more."}
-                      {category === 'design' && "Creative tools for interior design and visual content."}
-                      {category === 'marketing' && "Marketing and content creation tools."}
-                    </p>
-                  </motion.div>
-
-                  <motion.div 
-                    className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    variants={staggerContainer}
-                  >
-                    {categoryTools.map((tool, idx) => renderCategoryToolCard(tool, idx))}
-                  </motion.div>
+              {filteredTools.length === 0 ? (
+                <div className="text-center py-16 text-[#1A1A1A]/60 text-sm">
+                  No tools match your search.
                 </div>
-              </div>
-
-              {/* Divider */}
-              <SectionDivider />
-            </section>
-          );
-        })}
-
-        {/* CTA - Join Broker Hub or Investor Hub */}
-        <section className="py-8 md:py-10 bg-[#1A1A1A]">
-          <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {/* Broker Portal CTA */}
-              <div className="bg-gradient-to-br from-fuchsia-900/30 to-purple-900/30 border border-fuchsia-500/20 rounded-2xl p-8 text-center">
-                <GraduationCap className="w-8 h-8 text-fuchsia-400 mx-auto mb-3" />
-                <h3 className="text-xl font-bold text-white mb-2">JBJ Broker Portal</h3>
-                <p className="text-[#1A1A1A]/70 text-sm mb-4">Training, education, books, certifications, listing portal, and CRM tools for brokers.</p>
-                <button 
-                  onClick={() => navigate('/broker/portal')}
-                  className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white hover:opacity-90 transition-all"
-                >
-                  Go to Broker Portal
-                  <ArrowUpRight className="w-4 h-4" />
-                </button>
-              </div>
-              {/* Investor Hub CTA */}
-              <div className="bg-gradient-to-br from-emerald-900/30 to-teal-900/30 border border-emerald-500/20 rounded-2xl p-8 text-center">
-                <TrendingUp className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
-                <h3 className="text-xl font-bold text-white mb-2">JBJ Investor Hub</h3>
-                <p className="text-[#1A1A1A]/70 text-sm mb-4">Portfolio, market intelligence, guides, books, and investment tools for investors.</p>
-                <button 
-                  onClick={() => navigate('/investor-hub')}
-                  className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:opacity-90 transition-all"
-                >
-                  Go to Investor Hub
-                  <ArrowUpRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+              ) : (
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {filteredTools.map((tool, idx) => (
+                    <ToolCard key={tool.id} tool={tool} index={idx} />
+                  ))}
+                </div>
+              )}
+            </PremiumSectionCard>
           </div>
         </section>
 
-        {/* Divider */}
-        <SectionDivider />
+        {/* ════════════════════════════════════════════════════════════════
+            CATEGORY GROUPS — alternating champagne tones
+        ════════════════════════════════════════════════════════════════ */}
+        {(["property", "productivity", "corporate", "design", "marketing"] as ToolCategory[]).map(
+          (category, idx) => {
+            const tools = toolsByCategory[category] || [];
+            if (tools.length === 0) return null;
+            const meta = CATEGORY_META[category];
+            const bandClass = idx % 2 === 0 ? "jj-band--surface" : "jj-band--raised";
 
-        {/* Simple Bottom CTA */}
-        <section className="py-8 md:py-10 bg-[#1A1A1A]">
-          <div className="container mx-auto px-4">
-            <div className="max-w-[900px] mx-auto text-center">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
-                <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
-                  {user ? (
-                    <>Welcome back, <span className="text-[#1A1A1A]">{user.email?.split('@')[0]}</span>!</>
-                  ) : (
-                    <>Start Using <span className="text-[#1A1A1A]">All Free Tools</span></>
-                  )}
-                </h2>
-                <p className="text-[#1A1A1A]/70 mb-6 max-w-lg mx-auto">
-                  30+ free tools for property analysis, corporate documents, creative design, and productivity.
+            return (
+              <section
+                key={category}
+                id={category === "property" ? "investor-tools" : `${category}-tools`}
+                className={`jj-band ${bandClass} py-14 md:py-20`}
+              >
+                <div className="container mx-auto px-4 max-w-7xl">
+                  <PremiumSectionCard padding="lg" tone="page" width="contained">
+                    <div className="text-center max-w-2xl mx-auto mb-10">
+                      <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 mb-4 px-3 py-1">
+                        <Sparkles className="w-3 h-3 mr-1.5 text-[#B89555]" />
+                        {meta.label}
+                      </Badge>
+                      <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[#1A1A1A] mb-3">
+                        {meta.label}
+                      </h2>
+                      <p className="text-[#1A1A1A]/70 text-base">{meta.description}</p>
+                    </div>
+
+                    <motion.div
+                      className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true }}
+                      variants={staggerContainer}
+                    >
+                      {tools.map((tool, i) => (
+                        <ToolCard key={tool.id} tool={tool} index={i} />
+                      ))}
+                    </motion.div>
+                  </PremiumSectionCard>
+                </div>
+              </section>
+            );
+          }
+        )}
+
+        {/* ════════════════════════════════════════════════════════════════
+            PORTAL ROW — Broker / Investor
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="jj-band jj-band--surface py-14 md:py-20">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="grid md:grid-cols-2 gap-5">
+              {/* Broker Portal */}
+              <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-7 flex flex-col">
+                <IconTile icon={GraduationCap} tone="gold" size="md" />
+                <h3 className="text-xl font-semibold text-[#1A1A1A] mt-4 mb-2">
+                  Your Broker Portal
+                </h3>
+                <p className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-6 flex-1">
+                  Training, education, books, certifications, listing portal, and CRM tools for
+                  brokers.
                 </p>
-                {user ? (
-                  <button 
-                    onClick={() => document.getElementById('investor-tools')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-white border-2 border-[#B89555]/50 hover:bg-[#EFE6D6]/10 transition-all"
-                  >
-                    <Sparkles className="w-5 h-5" />
-                    Explore Tools Above
-                    <ArrowUpRight className="w-5 h-5" />
-                  </button>
-                ) : (
-                  <button 
-                    onClick={() => navigate("/auth?redirect=/ai-hub")}
-                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-white border-2 border-[#B89555]/50 hover:bg-[#EFE6D6]/10 transition-all"
-                  >
-                    <Sparkles className="w-5 h-5" />
-                    Sign In / Create Account
-                    <ArrowUpRight className="w-5 h-5" />
-                  </button>
-                )}
+                <button
+                  data-cta="broker-portal"
+                  onClick={() => navigate("/broker/portal")}
+                  className="jj-cta-dark inline-flex items-center justify-center gap-2 h-12 px-5 rounded-xl text-sm font-semibold self-start"
+                >
+                  <span>Open Broker Portal</span>
+                  <ArrowUpRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Investor Hub */}
+              <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-7 flex flex-col">
+                <IconTile icon={TrendingUp} tone="gold" size="md" />
+                <h3 className="text-xl font-semibold text-[#1A1A1A] mt-4 mb-2">
+                  Your Investor Hub
+                </h3>
+                <p className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-6 flex-1">
+                  Portfolio, market intelligence, guides, books, and investment tools for investors.
+                </p>
+                <button
+                  data-cta="investor-hub"
+                  onClick={() => navigate("/investor-hub")}
+                  className="jj-cta-dark inline-flex items-center justify-center gap-2 h-12 px-5 rounded-xl text-sm font-semibold self-start"
+                >
+                  <span>Open Investor Hub</span>
+                  <ArrowUpRight className="w-4 h-4" />
+                </button>
               </div>
             </div>
           </div>
         </section>
-      </section>
+
+        {/* ════════════════════════════════════════════════════════════════
+            WELCOME-BACK BAND
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="jj-band jj-band--raised py-14 md:py-20">
+          <div className="container mx-auto px-4 max-w-3xl text-center">
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[#1A1A1A] mb-4">
+              {user ? (
+                <>
+                  Welcome back,{" "}
+                  <span className="text-[#1A1A1A]">{user.email?.split("@")[0]}</span>
+                </>
+              ) : (
+                <>
+                  Start Using <span className="text-[#1A1A1A]">All Free Tools</span>
+                </>
+              )}
+            </h2>
+            <p className="text-[#1A1A1A]/70 mb-7 max-w-xl mx-auto">
+              30+ free tools for property analysis, corporate documents, creative design, and
+              productivity.
+            </p>
+            <button
+              data-cta={user ? "explore-above" : "signin-bottom"}
+              onClick={() =>
+                user
+                  ? document
+                      .getElementById("discover-tools")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  : navigate("/auth?redirect=/ai-hub")
+              }
+              className="jj-cta-dark inline-flex items-center justify-center gap-2 h-12 px-7 rounded-xl text-sm font-semibold"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>{user ? "Explore Tools Above" : "Sign In / Create Account"}</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </button>
+          </div>
+        </section>
+      </main>
     </>
   );
 };
