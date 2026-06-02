@@ -5,7 +5,6 @@ import { ArrowLeft, Shield, CheckCircle, Building2, Users, Calculator, Sparkles,
 import MortgageCalculator from "@/components/MortgageCalculator";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { CONTACT_INFO } from "@/constants/stats";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
