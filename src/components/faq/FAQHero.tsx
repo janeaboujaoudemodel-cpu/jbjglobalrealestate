@@ -35,7 +35,9 @@ export const FAQHero = ({
   actions 
 }: FAQHeroProps) => {
   return (
-    <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
+    <section data-hero-dark className="jj-hero-fullscreen jj-hero-compact jj-hero-neon relative flex items-center overflow-hidden">
+      <span aria-hidden className="jj-hero-neon-accent" />
+
       {/* Video Background */}
       {videoUrl && (
         <div className="absolute inset-0 overflow-hidden">
