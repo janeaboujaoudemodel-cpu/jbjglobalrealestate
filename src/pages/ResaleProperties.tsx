@@ -252,14 +252,15 @@ const ResaleProperties = () => {
 
       {/* Premium sticky filter bar — clears 88px fixed header */}
       <section className="z-30 bg-[#F7F2EA]/95 backdrop-blur-md py-3 md:py-4 sticky top-[88px] border-y border-[#B89555]/25 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
-        <div className="container mx-auto px-3 sm:px-4">
+        <div className="w-full px-3 sm:px-4">
           <div className="relative bg-[#EFE6D6] border border-[#B89555]/40 rounded-2xl px-3 py-3 sm:px-4 sm:py-3.5">
+
             {/* Navy left accent bar */}
             <span aria-hidden className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full bg-[#102540]" />
 
             {/* Row 1: prominent search input */}
             <div className="flex items-center gap-2 mb-2.5 pl-2">
-              <div className={cn(filterSearchPillWrapper, "h-11 flex-1 bg-[#FDFBF7] border-[#B89555]/40")}>
+              <div className={cn(filterSearchPillWrapper, "h-11 flex-1 !bg-transparent border-[#B89555]/40")}>
                 <Search className="w-4 h-4 mr-2 text-[#102540] flex-shrink-0" />
                 <input
                   type="text"
@@ -393,7 +394,7 @@ const ResaleProperties = () => {
               <EmiratesMultiSelect value={emiratesFilter} onChange={setEmiratesFilter} variant="light" />
 
               {/* Size Range */}
-              <div className={cn(filterPillBase, (sizeMin || sizeMax) ? filterPillActive : filterPillInactiveLight, "h-8 gap-1 px-2.5")}>
+              <div className={cn(filterPillBase, (sizeMin || sizeMax) ? filterPillActive : cn(filterPillInactiveLight, "!bg-transparent"), "h-8 gap-1 px-2.5")}>
                 <Ruler className="w-3.5 h-3.5 flex-shrink-0" />
                 <input
                   type="number"
@@ -559,7 +560,7 @@ const ResaleProperties = () => {
             </div>
           ) : (
             /* Empty State — Premium navy + champagne + gold */
-            <div className="max-w-2xl mx-auto text-center py-12 px-6 sm:px-10 md:px-12 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
+            <div className="max-w-5xl mx-auto text-center py-14 px-8 sm:px-14 md:px-20 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
               <div className="w-20 h-20 rounded-2xl bg-[#EFE6D6] flex items-center justify-center mx-auto mb-6 border border-[#B89555]/40">
                 <Building2 className="w-10 h-10 text-[#102540]" />
               </div>
