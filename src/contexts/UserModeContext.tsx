@@ -8,7 +8,7 @@ const MODE_SELECTED_KEY = "jj_mode_selected";
 
 // Strictly 3 categories. Legacy 'investor_broker' rows are normalized to 'broker'
 // (broker is the more privileged surface, so existing combined users keep access).
-export type UserMode = 'investor' | 'broker' | 'developer';
+export type UserMode = 'investor' | 'broker' | 'developer' | 'owner';
 
 interface UserModeContextType {
   mode: UserMode;
@@ -26,6 +26,7 @@ const UserModeContext = createContext<UserModeContextType | undefined>(undefined
 
 // Map legacy values: 'client' -> 'investor', 'investor_broker' -> 'broker'.
 const normalizeMode = (value: string | null): UserMode => {
+  if (value === 'owner') return 'owner';
   if (value === 'broker' || value === 'investor_broker') return 'broker';
   if (value === 'developer') return 'developer';
   return 'investor';
@@ -182,7 +183,8 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
         }
 
         // Mirror mode -> role so legacy role-gated views stay consistent.
-        if (newMode !== 'developer') {
+        // Owner mode is a presentation toggle — it does NOT mirror to roles.
+        if (newMode !== 'developer' && newMode !== 'owner') {
           try {
             if (assertExplicitWrite('user_role_selections.upsert')) {
               const roleMirror = newMode === 'broker' ? 'broker_partner' : 'investor';
