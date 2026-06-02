@@ -5552,6 +5552,39 @@ export type Database = {
         }
         Relationships: []
       }
+      compare_field_presets: {
+        Row: {
+          created_at: string
+          field_order: Json
+          id: string
+          name: string
+          owner_user_id: string
+          scope: string
+          updated_at: string
+          visible_fields: Json
+        }
+        Insert: {
+          created_at?: string
+          field_order?: Json
+          id?: string
+          name: string
+          owner_user_id: string
+          scope: string
+          updated_at?: string
+          visible_fields?: Json
+        }
+        Update: {
+          created_at?: string
+          field_order?: Json
+          id?: string
+          name?: string
+          owner_user_id?: string
+          scope?: string
+          updated_at?: string
+          visible_fields?: Json
+        }
+        Relationships: []
+      }
       compliance_audit_logs: {
         Row: {
           audit_type: string
@@ -26147,6 +26180,36 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_plan_templates: {
+        Row: {
+          created_at: string
+          id: string
+          is_shared: boolean
+          name: string
+          owner_user_id: string
+          rules: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_shared?: boolean
+          name: string
+          owner_user_id: string
+          rules?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_shared?: boolean
+          name?: string
+          owner_user_id?: string
+          rules?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payout_audit_logs: {
         Row: {
           action_type: string
@@ -33359,6 +33422,50 @@ export type Database = {
             columns: ["developer_id"]
             isOneToOne: false
             referencedRelation: "uae_dev_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      unit_comparisons: {
+        Row: {
+          created_at: string
+          field_preset: Json | null
+          id: string
+          owner_user_id: string
+          project_id: string | null
+          shared_plan: Json | null
+          title: string | null
+          units: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          field_preset?: Json | null
+          id?: string
+          owner_user_id: string
+          project_id?: string | null
+          shared_plan?: Json | null
+          title?: string | null
+          units?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          field_preset?: Json | null
+          id?: string
+          owner_user_id?: string
+          project_id?: string | null
+          shared_plan?: Json | null
+          title?: string | null
+          units?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "unit_comparisons_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
