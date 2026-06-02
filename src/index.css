@@ -5268,3 +5268,12 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#102540\] * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* Lock highlighted Seller/Landlord Assistant magic icon white at rest + hover. */
+[data-seller-assistant-cta] [data-assistant-magic-icon],
+[data-seller-assistant-cta] [data-assistant-magic-icon] *,
+[data-seller-assistant-cta]:hover [data-assistant-magic-icon],
+[data-seller-assistant-cta]:hover [data-assistant-magic-icon] * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
