@@ -628,26 +628,6 @@ const News = () => {
             </div>
           </div>
 
-          {/* Top Areas Performance Table - 2026 */}
-          <div className="mt-6">
-            <div className="p-3 md:p-4">
-              <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#1A1A1A]/10 flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-[#1A1A1A]" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-[#1A1A1A]">
-                      Top 10 Areas by Transaction Volume
-                    </h3>
-                    <p className="text-xs text-[#1A1A1A]/70">2026 YTD · Dubai Land Department (DLD)</p>
-                  </div>
-                </div>
-                <AreasTable areas={topAreas2026} yearLabel="2026" />
-              </div>
-            </div>
-          </div>
-
           {/* Top Buyer Nationalities */}
           <div className="mt-6">
             <div className="p-3 md:p-4">
@@ -679,6 +659,26 @@ const News = () => {
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Top Areas Performance Table - 2026 */}
+          <div className="mt-6">
+            <div className="p-3 md:p-4">
+              <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#1A1A1A]/10 flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-[#1A1A1A]" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-[#1A1A1A]">
+                      Top 10 Areas by Transaction Volume
+                    </h3>
+                    <p className="text-xs text-[#1A1A1A]/70">2026 YTD · Dubai Land Department (DLD)</p>
+                  </div>
+                </div>
+                <AreasTable areas={topAreas2026} yearLabel="2026" />
               </div>
             </div>
           </div>
