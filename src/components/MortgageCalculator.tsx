@@ -69,15 +69,13 @@ const MortgageCalculator = ({
         .from("projects")
         .select("id,name,slug,location,area_name,price_from,developer_name,developer:developers(id,name,logo_url)")
         .eq("is_published", true)
-        .not("price_from", "is", null)
-        .order("name", { ascending: true })
-        .limit(12);
+        .not("price_from", "is", null);
 
       if (cleanedQuery.length > 0) {
         query = query.or(`name.ilike.%${cleanedQuery}%,developer_name.ilike.%${cleanedQuery}%`);
       }
 
-      const { data, error } = await query;
+      const { data, error } = await query.order("name", { ascending: true }).limit(12);
       if (!cancelled) {
         setProjectResults(error ? [] : ((data || []) as unknown as MortgageProject[]));
         setProjectsLoading(false);
