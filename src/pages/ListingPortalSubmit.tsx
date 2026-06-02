@@ -923,9 +923,16 @@ const ListingPortalSubmit = () => {
                           disabled={uploadedDocs.length === 0 && !sourceUrl.trim() && !sourceText.trim()}
                           data-allow-dark-cta
                           data-no-contrast-guard
-                          className="flex-1 h-12 text-base font-semibold disabled:opacity-50 hover:brightness-110 transition-all jj-purple-ombre"
+                          style={{
+                            background: 'linear-gradient(135deg, #A855F7 0%, #7C3AED 50%, #5B21B6 100%)',
+                            border: '2px solid #FFFFFF',
+                            color: '#FFFFFF',
+                            WebkitTextFillColor: '#FFFFFF',
+                            boxShadow: '0 10px 28px -12px rgba(91,33,182,0.55)',
+                          }}
+                          className="flex-1 h-12 text-base font-semibold rounded-md disabled:opacity-50 hover:brightness-110 transition-all"
                         >
-                          <Sparkles className="w-5 h-5 mr-2" style={{ color: '#FFFFFF' }} data-no-contrast-guard />
+                          <Sparkles className="w-5 h-5 mr-2 !text-white" style={{ color: '#FFFFFF' }} data-no-contrast-guard />
                           <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                             Extract with AI
                           </span>
