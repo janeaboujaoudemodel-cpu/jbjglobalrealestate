@@ -227,6 +227,7 @@ const RentalIndex = () => {
       theme={theme}
       eyebrowIcon={TrendingUp}
       eyebrow="AI Rental Index"
+      darkBody
       title={
         <>
           Dubai <span style={{ color: "#FFFFFF", textShadow: `0 0 24px ${theme.accent}` }}>Rental Index</span> Evaluator
