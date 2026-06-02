@@ -409,13 +409,13 @@
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/beyond</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/damac-properties</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -678,12 +678,6 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/sobha-realty</loc>
-    <lastmod>2026-06-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
     <loc>https://www.jbj.ae/developer/dgroup-holding</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
@@ -692,6 +686,12 @@
   <url>
     <loc>https://www.jbj.ae/developer/laurent-boireau</loc>
     <lastmod>2026-04-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/developer/sobha-realty</loc>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -763,13 +763,13 @@
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/emaar-properties</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/arada-properties</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -811,7 +811,7 @@
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/aldar-properties</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -888,14 +888,14 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/ellington-properties</loc>
-    <lastmod>2026-06-01</lastmod>
+    <loc>https://www.jbj.ae/developer/balix-development</loc>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/balix-development</loc>
-    <lastmod>2026-04-24</lastmod>
+    <loc>https://www.jbj.ae/developer/ellington-properties</loc>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -930,12 +930,6 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/hh-development</loc>
-    <lastmod>2026-06-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
     <loc>https://www.jbj.ae/developer/hz-development</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
@@ -948,8 +942,14 @@
     <priority>0.78</priority>
   </url>
   <url>
+    <loc>https://www.jbj.ae/developer/hh-development</loc>
+    <lastmod>2026-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
     <loc>https://www.jbj.ae/developer/samana-developers</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -1002,20 +1002,20 @@
     <priority>0.78</priority>
   </url>
   <url>
+    <loc>https://www.jbj.ae/developer/mesab-limited</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
     <loc>https://www.jbj.ae/developer/mag-group</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/danube-properties</loc>
-    <lastmod>2026-06-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
-    <loc>https://www.jbj.ae/developer/mesab-limited</loc>
-    <lastmod>2026-04-24</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -1069,7 +1069,7 @@
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/azizi-developments</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -1975,7 +1975,7 @@
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/nshama</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -2838,14 +2838,14 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/omniyat</loc>
-    <lastmod>2026-06-01</lastmod>
+    <loc>https://www.jbj.ae/developer/svarn-development</loc>
+    <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/svarn-development</loc>
-    <lastmod>2026-05-22</lastmod>
+    <loc>https://www.jbj.ae/developer/omniyat</loc>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -3204,14 +3204,14 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/object-1</loc>
-    <lastmod>2026-06-01</lastmod>
+    <loc>https://www.jbj.ae/developer/oro-24</loc>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/oro-24</loc>
-    <lastmod>2026-04-24</lastmod>
+    <loc>https://www.jbj.ae/developer/object-1</loc>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -3265,7 +3265,7 @@
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/tiger-group</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -3775,7 +3775,7 @@
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/reportage-properties</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
