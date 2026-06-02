@@ -471,12 +471,13 @@ const PropertyMeasurement = () => {
                       data-jbj-field="dark"
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="allow-white mt-2 focus-visible:ring-emerald-400 placeholder:!text-white placeholder:!opacity-90 !text-white"
+                      className="property-measurement-name-input allow-white mt-2 focus-visible:ring-emerald-400 placeholder:!text-[#FFFFFF] placeholder:!opacity-100 !text-[#FFFFFF]"
                       style={{
                         background: "linear-gradient(135deg, rgba(4,40,28,0.6), rgba(0,0,0,0.6))",
                         border: "1px solid rgba(16,185,129,0.3)",
                         color: "#FFFFFF",
                         WebkitTextFillColor: "#FFFFFF",
+                        opacity: 1,
                         caretColor: "#FFFFFF",
                       }}
                     />
