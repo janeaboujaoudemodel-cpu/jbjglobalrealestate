@@ -480,7 +480,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                           }}
                           className={`px-3 py-1.5 text-xs rounded-full border transition-all ${
                             property.views.includes(view)
-                              ? 'bg-amber-500 border-blue-500 text-white font-medium'
+                              ? 'bg-amber-500 border-amber-500 text-white font-medium'
                               : 'border-amber-500/35 text-white/70 hover:border-amber-400/60 hover:text-amber-300'
                           }`}
                         >
@@ -651,7 +651,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     className="grid md:grid-cols-2 gap-4"
                   >
                     <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                      property.hasModifications === 'stock' ? 'border-blue-500 bg-amber-500/10' : 'border-amber-500/35 hover:border-blue-400/40'
+                      property.hasModifications === 'stock' ? 'border-amber-500 bg-amber-500/10' : 'border-amber-500/35 hover:border-amber-300/60'
                     }`}>
                       <RadioGroupItem value="stock" className="sr-only" />
                       <div className="flex items-center gap-3 mb-2">
@@ -668,7 +668,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </label>
 
                     <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                      property.hasModifications === 'modified' ? 'border-blue-500 bg-amber-500/10' : 'border-amber-500/35 hover:border-blue-400/40'
+                      property.hasModifications === 'modified' ? 'border-amber-500 bg-amber-500/10' : 'border-amber-500/35 hover:border-amber-300/60'
                     }`}>
                       <RadioGroupItem value="modified" className="sr-only" />
                       <div className="flex items-center gap-3 mb-2">
@@ -722,7 +722,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                               key={type.value}
                               onClick={() => updateProperty('modificationType', type.value)}
                               className={`p-3 rounded-lg border text-left transition-all ${
-                                property.modificationType === type.value ? 'border-blue-500 bg-amber-500/10' : 'border-amber-500/35 hover:border-blue-400/40'
+                                property.modificationType === type.value ? 'border-amber-500 bg-amber-500/10' : 'border-amber-500/35 hover:border-amber-300/60'
                               }`}
                             >
                               <type.icon className={`w-5 h-5 mb-2 ${property.modificationType === type.value ? 'text-amber-300' : 'text-white/70'}`} />
@@ -831,7 +831,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
             <div className="flex justify-center gap-4 mt-8">
               <Button onClick={() => setActiveTab('modifications')} variant="outline" className="border-amber-500/35">← Back</Button>
-              <Button onClick={evaluateProperty} disabled={isEvaluating} className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium px-8">
+              <Button onClick={evaluateProperty} disabled={isEvaluating} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium px-8">
                 {isEvaluating ? (
                   <><Sparkles className="w-4 h-4 mr-2 animate-pulse" />Evaluating Property...</>
                 ) : (
@@ -846,7 +846,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
             {evaluation && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
                 {/* Main Valuation Card */}
-                <Card className={`bg-gradient-to-br from-blue-900/30 to-cyan-900/30 border-amber-500/40 max-w-3xl mx-auto ${blueCard}`}>
+                <Card className={`bg-gradient-to-br from-amber-900/40 to-orange-900/40 border-amber-500/40 max-w-3xl mx-auto ${blueCard}`}>
                   <CardContent className="pt-8 text-center">
                     <p className="text-amber-300 text-sm uppercase tracking-wider mb-2">Estimated Market Value</p>
                     <div className="flex items-center justify-center gap-3 mb-2">
@@ -961,13 +961,13 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
                 {/* Actions */}
                 <div className="flex justify-center gap-4">
-                  <Button onClick={generatePDFReport} className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium">
+                  <Button onClick={generatePDFReport} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium">
                     <Download className="w-4 h-4 mr-2" />
                     Download Report
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="border-blue-500 text-amber-300 hover:bg-amber-500/10"
+                    className="border-amber-500 text-amber-300 hover:bg-amber-500/10"
                     onClick={() => {
                       const shareText = `Property Valuation: ${property.buildingName} - AED ${evaluation.estimatedValue.low.toLocaleString()} to ${evaluation.estimatedValue.high.toLocaleString()}`;
                       window.location.href = `https://wa.me/971547167107?text=${encodeURIComponent(shareText)}`;
