@@ -1,5 +1,6 @@
 import { useState, CSSProperties } from "react";
-import { Briefcase, User, ChevronDown, Check, Loader2, Users, Building2 } from "lucide-react";
+import { Briefcase, User, ChevronDown, Check, Loader2, Users, Building2, Crown } from "lucide-react";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { useUserModeContext, UserMode } from "@/contexts/UserModeContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { cn } from "@/lib/utils";
@@ -89,6 +90,20 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
     dark: '#1A1A1A',
     onBase: '#FFFFFF',
     surface: 'espresso',
+  },
+  owner: {
+    label: 'Mode: Owner',
+    shortLabel: 'O',
+    icon: Crown,
+    description: 'Owner command center — full portal access (visible only to you).',
+    base: '#102540',      // navy ink
+    baseDark: '#0A1830',
+    rowFrom: '#FDFBF7',
+    rowTo: '#F7F2EA',
+    rowHover: '#EFE6D6',
+    dark: '#1A1A1A',
+    onBase: '#FFFFFF',
+    surface: 'ink',
   },
 };
 
