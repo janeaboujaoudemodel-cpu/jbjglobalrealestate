@@ -253,7 +253,7 @@ const RentalIndex = () => {
                 Community / Area
               </FormLabel>
               <Select value={community} onValueChange={setCommunity}>
-                <SelectTrigger className="h-12 rounded-xl bg-white">
+                <SelectTrigger id="ri-community" className="h-12 rounded-xl bg-white">
                   <SelectValue placeholder="Select community" />
                 </SelectTrigger>
                 <SelectContent className="max-h-64">
