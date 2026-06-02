@@ -5642,3 +5642,72 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   border-radius: 0 !important;
   min-height: 100vh;
 }
+
+/* =========================================================================
+   PremiumToolShell dark-body — Property Measurement parity for any tool
+   opting in via <PremiumToolShell darkBody>. Cards/inputs auto-darken
+   and pick up the active theme accent via the inherited --tool-accent.
+   ========================================================================= */
+[data-tool-darkbody="true"] {
+  color: #FFFFFF;
+}
+
+/* Shadcn Cards become dark gradient panels with accent hairline + glow */
+[data-tool-darkbody="true"] [data-slot="card"],
+[data-tool-darkbody="true"] .border.rounded-lg.bg-card,
+[data-tool-darkbody="true"] .rounded-lg.border.bg-card,
+[data-tool-darkbody="true"] [class*="rounded-lg"][class*="border"][class*="bg-card"] {
+  background: linear-gradient(135deg, rgba(20,14,4,0.92) 0%, rgba(8,5,2,0.96) 70%, #000 100%) !important;
+  border: 1px solid var(--tool-accent-border, rgba(245,158,11,0.45)) !important;
+  box-shadow:
+    0 0 0 1px var(--tool-accent-soft, rgba(245,158,11,0.20)),
+    0 18px 48px -22px var(--tool-accent, #F59E0B),
+    inset 0 0 28px rgba(0,0,0,0.35) !important;
+  color: #FFFFFF !important;
+}
+
+/* Card text */
+[data-tool-darkbody="true"] [data-slot="card"] *:not(svg):not(input):not(textarea):not(select):not(button) {
+  color: inherit;
+}
+[data-tool-darkbody="true"] label,
+[data-tool-darkbody="true"] [data-slot="card-title"],
+[data-tool-darkbody="true"] [data-slot="card-description"] {
+  color: rgba(255,255,255,0.92) !important;
+}
+[data-tool-darkbody="true"] [data-slot="card-description"] {
+  color: rgba(255,255,255,0.72) !important;
+}
+
+/* Inputs / textareas / selects on dark body */
+[data-tool-darkbody="true"] input:not([type="checkbox"]):not([type="radio"]),
+[data-tool-darkbody="true"] textarea,
+[data-tool-darkbody="true"] [role="combobox"],
+[data-tool-darkbody="true"] [data-radix-select-trigger] {
+  background: rgba(255,255,255,0.06) !important;
+  border: 1px solid var(--tool-accent-border, rgba(245,158,11,0.45)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+[data-tool-darkbody="true"] input::placeholder,
+[data-tool-darkbody="true"] textarea::placeholder {
+  color: rgba(255,255,255,0.55) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.55) !important;
+  opacity: 1 !important;
+}
+[data-tool-darkbody="true"] input:focus,
+[data-tool-darkbody="true"] textarea:focus,
+[data-tool-darkbody="true"] [role="combobox"]:focus {
+  border-color: var(--tool-accent, #F59E0B) !important;
+  box-shadow: 0 0 0 2px var(--tool-accent-soft, rgba(245,158,11,0.30)) !important;
+  outline: none !important;
+}
+
+/* Tab triggers default to faint white, active picks up accent */
+[data-tool-darkbody="true"] [role="tab"] {
+  color: rgba(255,255,255,0.70) !important;
+}
+[data-tool-darkbody="true"] [role="tab"][data-state="active"] {
+  background: var(--tool-accent, #F59E0B) !important;
+  color: #1A1A1A !important;
+}

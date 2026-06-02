@@ -27,6 +27,10 @@ interface Props {
   children: ReactNode;
   /** Optional max width of the shell */
   maxWidth?: string;
+  /** When true, the body background flips to ink + accent gradient
+   *  (Property Measurement style) and inner shadcn Cards/inputs are
+   *  auto-darkened via [data-tool-darkbody] global CSS. */
+  darkBody?: boolean;
 }
 
 export const PremiumToolShell = ({
@@ -37,6 +41,7 @@ export const PremiumToolShell = ({
   subtitle,
   showBack = true,
   children,
+  darkBody = false,
 }: Props) => {
   const navigate = useNavigate();
 
@@ -86,7 +91,9 @@ export const PremiumToolShell = ({
         <div
           className="relative min-h-screen overflow-hidden"
           style={{
-            background: "#FDFBF7",
+            background: darkBody
+              ? "linear-gradient(180deg, #0A0807 0%, #0E0A05 60%, #060402 100%)"
+              : "#FDFBF7",
             boxShadow:
               "0 30px 80px -30px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.04)",
           }}
@@ -180,8 +187,18 @@ export const PremiumToolShell = ({
 
           {/* Body */}
           <div
+            data-tool-darkbody={darkBody ? "true" : undefined}
             className="px-4 py-8 md:px-8 md:py-10"
-            style={{ color: TOOL_INK }}
+            style={{
+              color: darkBody ? "#FFFFFF" : TOOL_INK,
+              ...(darkBody
+                ? ({
+                    ["--tool-accent" as any]: theme.accent,
+                    ["--tool-accent-soft" as any]: `${theme.accent}33`,
+                    ["--tool-accent-border" as any]: `${theme.accent}66`,
+                  } as CSSProperties)
+                : {}),
+            }}
           >
             {children}
           </div>
