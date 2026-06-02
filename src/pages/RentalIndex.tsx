@@ -172,12 +172,13 @@ const RentalIndex = () => {
   const [furnished, setFurnished] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [analysis, setAnalysis] = useState<RentalAnalysis | null>(null);
+  const guide = useGuidedRequiredFields();
 
   const handleAnalyze = async () => {
-    if (!community || !propertyType) {
-      toast.error("Please select a community and property type");
-      return;
-    }
+    if (!guide.check([
+      { id: "ri-community", label: "Community / Area", value: community },
+      { id: "ri-propertyType", label: "Property Type", value: propertyType },
+    ])) return;
 
     setIsLoading(true);
     setAnalysis(null);
