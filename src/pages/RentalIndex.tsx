@@ -271,7 +271,7 @@ const RentalIndex = () => {
                 Property Type
               </FormLabel>
               <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="h-12 rounded-xl bg-white">
+                <SelectTrigger id="ri-propertyType" className="h-12 rounded-xl bg-white">
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
