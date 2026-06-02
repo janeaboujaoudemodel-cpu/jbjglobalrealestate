@@ -17,16 +17,19 @@ interface VideoBackgroundProps {
   className?: string;
   /** Opacity of the video (e.g. 0.3 for subtle background) */
   opacity?: number;
+  /** When true, skip IntersectionObserver and start loading immediately (use for hero/above-the-fold) */
+  eager?: boolean;
 }
 
-const VideoBackground = ({ src, poster, className = "", opacity = 1 }: VideoBackgroundProps) => {
+const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = false }: VideoBackgroundProps) => {
   const [videoReady, setVideoReady] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(eager);
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Only start loading video when container is in viewport
+  // Only start loading video when container is in viewport (skipped if eager)
   useEffect(() => {
+    if (eager) return;
     const el = containerRef.current;
     if (!el) return;
 
@@ -42,7 +45,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1 }: VideoBack
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [eager]);
 
   // Play video when visible
   useEffect(() => {
@@ -52,6 +55,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1 }: VideoBack
       });
     }
   }, [isVisible]);
+
 
   const handleCanPlay = useCallback(() => {
     setVideoReady(true);
@@ -77,16 +81,19 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1 }: VideoBack
           muted
           loop
           playsInline
-          preload="metadata"
-          onCanPlayThrough={handleCanPlay}
+          autoPlay
+          preload={eager ? "auto" : "metadata"}
+          onLoadedData={handleCanPlay}
+          onCanPlay={handleCanPlay}
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             opacity: videoReady ? opacity : 0,
-            transition: "opacity 0.8s ease-in-out",
+            transition: "opacity 0.5s ease-in-out",
           }}
         >
           <source src={src} type="video/mp4" />
         </video>
+
       )}
     </div>
   );
