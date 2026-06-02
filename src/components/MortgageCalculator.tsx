@@ -277,11 +277,11 @@ const MortgageCalculator = ({
 
   if (compact) {
     return (
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto" data-mortgage-variant={themeVariant}>
         {showHeading && (
         <div className="text-center mb-6 md:mb-8">
           <h3 className="text-[#102540] text-2xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap">
-            Mortgage Calculator
+            Mortgage <span className={isNavy ? "text-transparent bg-clip-text" : ""} style={isNavy ? { backgroundImage: "linear-gradient(135deg, #FFFFFF 0%, #93C5FD 45%, #2563EB 100%)", WebkitBackgroundClip: "text" } : undefined}>Calculator</span>
           </h3>
           <p className="text-[#1A1A1A]/70 mt-2 md:mt-3 max-w-lg mx-auto text-sm md:text-base">
             Estimate your monthly payments and explore financing options.
@@ -289,10 +289,12 @@ const MortgageCalculator = ({
         </div>
         )}
 
+        {projectSelector}
+
         {/* Interactive Sliders */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
           {/* Property Price Slider */}
-          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4">
+          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4" style={isNavy ? { background: "linear-gradient(135deg, #123968 0%, #081A33 70%, #020814 100%)", border: "1px solid rgba(147,197,253,0.42)", boxShadow: "inset 0 0 22px rgba(96,165,250,0.10)" } : undefined}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
@@ -315,7 +317,7 @@ const MortgageCalculator = ({
           </div>
 
           {/* Down Payment Slider */}
-          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4">
+          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4" style={isNavy ? { background: "linear-gradient(135deg, #123968 0%, #081A33 70%, #020814 100%)", border: "1px solid rgba(147,197,253,0.42)", boxShadow: "inset 0 0 22px rgba(96,165,250,0.10)" } : undefined}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider flex items-center gap-1.5">
                 <Percent className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
@@ -338,7 +340,7 @@ const MortgageCalculator = ({
           </div>
 
           {/* Interest Rate Slider */}
-          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4">
+          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4" style={isNavy ? { background: "linear-gradient(135deg, #123968 0%, #081A33 70%, #020814 100%)", border: "1px solid rgba(147,197,253,0.42)", boxShadow: "inset 0 0 22px rgba(96,165,250,0.10)" } : undefined}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider flex items-center gap-1.5">
                 <TrendingUp className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
@@ -361,7 +363,7 @@ const MortgageCalculator = ({
           </div>
 
           {/* Loan Term Slider */}
-          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4">
+          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4" style={isNavy ? { background: "linear-gradient(135deg, #123968 0%, #081A33 70%, #020814 100%)", border: "1px solid rgba(147,197,253,0.42)", boxShadow: "inset 0 0 22px rgba(96,165,250,0.10)" } : undefined}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
@@ -385,23 +387,27 @@ const MortgageCalculator = ({
         </div>
 
         {/* Results — single premium horizontal row at all breakpoints */}
-        <div className="grid grid-cols-4 gap-2 md:gap-4 items-stretch">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 items-stretch max-w-4xl mx-auto">
           {/* Monthly Payment — featured */}
           <div
-            className="rounded-xl p-3 md:p-4 text-center flex flex-col justify-center"
+            className="rounded-xl p-3 md:p-4 text-center flex flex-col justify-center md:scale-[1.03]"
             style={{
-              background: "linear-gradient(135deg, #FDFBF7 0%, #F7F1E6 50%, #ECE2D2 100%)",
-              border: "1px solid rgba(184,149,85,0.55)",
-              boxShadow: "0 6px 20px rgba(184,149,85,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
+              background: isNavy
+                ? "linear-gradient(135deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)"
+                : "linear-gradient(135deg, #FDFBF7 0%, #F7F1E6 50%, #ECE2D2 100%)",
+              border: isNavy ? "1px solid rgba(191,219,254,0.78)" : "1px solid rgba(184,149,85,0.55)",
+              boxShadow: isNavy
+                ? "0 0 0 1px rgba(147,197,253,0.35), 0 12px 36px rgba(96,165,250,0.42), inset 0 1px 0 rgba(255,255,255,0.55)"
+                : "0 6px 20px rgba(184,149,85,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
             }}
           >
-            <p className="text-[9px] md:text-[10px] mb-1 uppercase tracking-[0.14em] text-[#1A1A1A]/60 font-semibold leading-tight">
+            <p className="text-[9px] md:text-[10px] mb-1 uppercase tracking-[0.14em] text-[#1A1A1A]/60 font-semibold leading-tight" style={isNavy ? { color: "rgba(255,255,255,0.82)" } : undefined}>
               Monthly
             </p>
-            <p className="font-bold text-[13px] md:text-xl text-[#1A1A1A] tabular-nums leading-tight break-words">
+            <p className="font-bold text-lg md:text-2xl text-[#1A1A1A] tabular-nums leading-tight break-words" style={isNavy ? { color: "#FFFFFF", textShadow: "0 2px 14px rgba(0,0,0,0.55)" } : undefined}>
               {formatCurrencyAbbreviated(calculations.monthlyPayment)}
             </p>
-            <p className="text-[9px] md:text-[10px] mt-0.5 text-[#1A1A1A]/60">
+            <p className="text-[9px] md:text-[10px] mt-0.5 text-[#1A1A1A]/60" style={isNavy ? { color: "rgba(255,255,255,0.76)" } : undefined}>
               {loanTermYears}y
             </p>
           </div>
