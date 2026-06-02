@@ -571,7 +571,7 @@ const UserProfile = () => {
                           variant="outline" 
                           size="sm"
                           onClick={() => setShowEmailChangeDialog(true)}
-                          className="shrink-0 border-[#B89555]/50 hover:border-[#B89555]"
+                          className="shrink-0 h-10 rounded-sm border-[#B89555]/50 hover:border-[#B89555]"
                         >
                           <Pencil className="h-3 w-3 mr-1" />
                           Change
