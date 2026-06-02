@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Wallet } from "lucide-react";
-import { Calculator, TrendingUp, Calendar, Percent, DollarSign, ArrowRight, Info, Building2 } from "lucide-react";
+import { Calculator, TrendingUp, Calendar, Percent, DollarSign, Info, Building2, Search, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Tooltip,
   TooltipContent,
@@ -17,11 +18,23 @@ import { CONTACT_INFO } from "@/constants/stats";
 
 const INQUIRY_FORM_URL = CONTACT_INFO.inquiryFormUrl;
 
+interface MortgageProject {
+  id: string;
+  name: string;
+  slug: string | null;
+  location: string | null;
+  area_name?: string | null;
+  price_from: number | null;
+  developer_name: string | null;
+  developer?: { id: string; name: string; logo_url: string | null } | null;
+}
+
 interface MortgageCalculatorProps {
   defaultPrice?: number;
   compact?: boolean;
   showAssistant?: boolean;
   showHeading?: boolean;
+  themeVariant?: "default" | "navy";
   context?: {
     projectName?: string;
     location?: string;
