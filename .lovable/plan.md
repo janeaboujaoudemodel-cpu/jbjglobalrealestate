@@ -1,43 +1,33 @@
-Implement the Smart Listing Creator (`List with AI`) so it visually follows the same structure as the Manual Listing page shown in the reference screenshot.
+# Align Get Verified + Portal CTAs
 
-Plan:
+The two stacked banner buttons (Get Verified, Open Developer/Broker/Investor Portal) currently differ in width and visual weight because each uses its own intrinsic text width and slightly different border/shadow treatment. Goal: make them visually identical — same width, same height, same radius, same border, same shadow — only the fill color differs (champagne vs navy).
 
-1. Rebuild the AI page shell to match Manual Listing
-- Keep the top soft purple ombre intro area.
-- Replace the current rounded purple container layout with the Manual page structure:
-  - light ombre intro/header section
-  - full-width dark purple section below
-  - horizontal step header directly on the dark section
-  - centered smaller light ombre card for the active phase
-- Preserve AI purple identity, but apply it using the same Manual layout rules.
+## Files to edit
 
-2. Convert AI progress into Manual-style step header
-- Replace the current thin progress bars inside the white card.
-- Use circular phase icons and labels across the dark purple band, matching Manual Listing spacing and behavior.
-- Active phase: bright purple circle with white icon/text.
-- Completed/inactive phases: muted white outlines/text on dark purple.
+1. `src/components/verification/VerificationBanner.tsx` — Get Verified pill
+2. `src/components/home/ModePortalBanner.tsx` — Open {Mode} Portal pill (covers developer/broker/investor automatically since it's one component driven by mode)
 
-3. Make each AI phase render as one centered “screen” card
-- The upload phase will become the first small card, similar to “Seller Details”.
-- Inside it: listing type, upload documents, paste link, paste text, and the Extract/Skip buttons.
-- Other phases (`AI Extract`, `Price Predictor`, `Review & Edit`, `Pricing & Role`, `Submit`) will remain functionally the same but sit inside the same centered light ombre card layout.
-- Keep next/back transitions using the existing phase state; no long stacked page layout.
+## Shared button spec (applied to both)
 
-4. Preserve existing AI functionality
-- Do not remove upload, link extraction, paste text, AI extraction, price predictor, review/edit, pricing role, approval, or submit logic.
-- Only restructure and restyle the presentation layer.
+- Layout: `inline-flex items-center justify-center gap-2`
+- Size: `h-11 min-w-[220px] px-6` (fixed height, fixed min width → both pills render identical box regardless of label length)
+- Shape: `rounded-md`
+- Border: `border border-[#B89555]/70` (1px gold hairline on both — currently only the navy pill has it)
+- Shadow: unified `shadow-[0_2px_10px_rgba(0,0,0,0.20),inset_0_1px_0_rgba(255,255,255,0.25)]`
+- Motion: keep existing `hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-transform`
+- Text: `text-sm font-semibold tracking-wide whitespace-nowrap`
 
-5. Fix contrast and hover issues in the AI flow
-- Ensure Back to Portal arrow/text stays white on the purple dark band.
-- Ensure Extract with AI remains purple ombre with white text/icons.
-- Ensure Skip — Fill Manually hover becomes filled purple with white text, not black.
-- Remove any remaining gold/champagne borders inside the AI wizard that clash with the purple page.
+Color rules (unchanged from current locked CTA system):
+- Get Verified → champagne fill, ink label/arrow (`jj-cta-champagne`, `data-cta="champagne"`)
+- Open … Portal → navy `#102540` fill (hover `#1a3d63`), white label/arrow (`jj-cta-dark`, `data-cta="dark"`, `data-allow-dark-cta`, `data-no-contrast-guard`, `allow-white` on inner span/icon)
 
-6. Visual validation
-- After implementation, open `/list-property?purpose=rent&mode=ai` and `/list-property?purpose=sale&mode=ai`.
-- Take desktop screenshots and compare against the Manual Listing reference: dark band, horizontal step header, centered phase card, no cropped gaps, readable text/buttons.
-- If screenshots show layout/contrast problems, fix them before reporting completion.
+## Implementation notes
 
-Technical files expected:
-- `src/pages/ListingPortalSubmit.tsx` for the Smart Listing Creator layout and AI phase cards.
-- `src/index.css` only if a small reusable purple step/button utility is needed; otherwise keep changes inside the component.
+- Only change className/style on the two button/Link elements — no logic, no copy, no surrounding layout changes.
+- Do not touch the banner backgrounds, icons, or text columns.
+- `ModePortalBanner` already swaps label per mode via `cfg.cta`, so the single edit covers Developer, Broker, and Investor portals.
+- Respect the locked CTA primitive system (`mem://ui-ux/visual-standards/cta-primitive-system`) — keep `jj-cta-*` classes and `data-cta` attributes; only adjust sizing/border/shadow tokens.
+
+## Verification
+
+After build, visually confirm in preview at desktop width that the two stacked banner pills share identical bounding boxes (same width, height, corner radius, border). Spot-check mode switch (Developer → Broker → Investor) to confirm the portal pill keeps the same box for all three labels.

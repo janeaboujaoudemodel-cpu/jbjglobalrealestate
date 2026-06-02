@@ -58,7 +58,7 @@ const VerificationBanner = () => {
             <button
               type="button"
               onClick={() => setModalOpen(true)}
-              className="jj-cta-champagne group relative flex-shrink-0 inline-flex items-center gap-2 whitespace-nowrap rounded-md px-5 py-2.5 text-sm tracking-wide shadow-[0_2px_10px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.7)] hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-transform duration-300 ease-out overflow-hidden"
+              className="jj-cta-champagne group relative flex-shrink-0 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md h-11 min-w-[220px] px-6 text-sm font-semibold tracking-wide border border-[#B89555]/70 shadow-[0_2px_10px_rgba(0,0,0,0.20),inset_0_1px_0_rgba(255,255,255,0.25)] hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-transform duration-300 ease-out overflow-hidden"
               data-surface="champagne"
               data-cta="champagne"
               aria-label="Open identity verification"
