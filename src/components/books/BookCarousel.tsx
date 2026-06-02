@@ -11,6 +11,8 @@ interface BookCarouselProps {
   className?: string;
   /** Optional click handler — if omitted, the card navigates to book.href. */
   onBookClick?: (book: BookData) => void;
+  /** Pass-through to BookCard: render clean homepage variant (title only). */
+  compact?: boolean;
 }
 
 /**
@@ -24,6 +26,7 @@ export function BookCarousel({
   durationSec = 38,
   className,
   onBookClick,
+  compact = false,
 }: BookCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -107,6 +110,7 @@ export function BookCarousel({
             size={size}
             onClick={handleCardClick(book)}
             flat
+            compact={compact}
           />
         ))}
       </div>
