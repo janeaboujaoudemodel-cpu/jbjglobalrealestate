@@ -5610,8 +5610,7 @@ html[data-tool-fullscreen="true"] aside[data-app-sidebar],
 html[data-tool-fullscreen="true"] .jbj-app-header,
 html[data-tool-fullscreen="true"] .jbj-app-sidebar,
 html[data-tool-fullscreen="true"] [data-support-launcher],
-html[data-tool-fullscreen="true"] [data-web-developer-dock],
-html[data-tool-fullscreen="true"] [data-fullscreen-tool-toggle] {
+html[data-tool-fullscreen="true"] [data-web-developer-dock] {
   display: none !important;
 }
 html[data-tool-fullscreen="true"] body {
