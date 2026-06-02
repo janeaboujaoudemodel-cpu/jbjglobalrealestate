@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { BookData } from "@/types/books";
-import { PremiumBookCover, pickBookTone } from "@/components/books/PremiumBookCover";
+import { PremiumBook3D, PremiumBook3DStyles } from "@/components/broker-education/PremiumBook3D";
 
 type BookCoverFaceSize = "thumb" | "modal" | "hero";
 
@@ -12,19 +12,31 @@ interface BookCoverFaceProps {
   bare?: boolean;
 }
 
-export function BookCoverFace({ book, size = "thumb", className, bare = false }: BookCoverFaceProps) {
+/** Stable deterministic number from title so each book keeps its color + tag. */
+function stableSeed(input: string): number {
+  let h = 0;
+  for (let i = 0; i < input.length; i++) h = (h * 31 + input.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
+export function BookCoverFace({ book, className, bare = false }: BookCoverFaceProps) {
   const subtitle =
     book.category === "faq" ? "Frequently Asked Questions" :
     book.category === "report" ? "Market Intelligence" :
     book.category === "education" ? "Education" : "Guide";
 
+  const seed = stableSeed(book.title);
+  const bookNumber = (seed % 99) + 1;
+
   return (
-    <PremiumBookCover
-      title={book.title}
-      subtitle={subtitle}
-      footer="JBJ GLOBAL REAL ESTATE  |  PREMIUM LIBRARY"
-      tone={pickBookTone(book.title)}
-      className={cn("relative w-full h-full", bare ? "" : "block", className)}
-    />
+    <div className={cn("relative w-full h-full", bare ? "" : "block", className)}>
+      <PremiumBook3DStyles />
+      <PremiumBook3D
+        title={book.title}
+        subtitle={subtitle}
+        bookNumber={bookNumber}
+        paletteIndex={seed}
+      />
+    </div>
   );
 }
