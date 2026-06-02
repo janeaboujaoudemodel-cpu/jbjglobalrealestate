@@ -37,8 +37,7 @@ const BROKER_TOOLS: BrokerTool[] = [
   { id: "property-evaluator", name: "Property Evaluator", description: "AI-driven valuation based on market data.", icon: BarChart3, href: "/property-evaluator" },
   { id: "rental-index", name: "Rental Index", description: "Rental estimates with market benchmarks.", icon: TrendingUp, href: "/rental-index" },
   { id: "property-measurement", name: "Property Measurement", description: "Verify property sizes with AI precision.", icon: Ruler, href: "/property-measurement" },
-  { id: "list-property-sale", name: "List Property for Sale", description: "Submit a sale listing for review and publication.", icon: ClipboardCheck, href: "/list-property?purpose=sale&mode=manual" },
-  { id: "list-property-rent", name: "List Property for Rent", description: "Submit a rental listing for review and publication.", icon: Key, href: "/list-property?purpose=rent&mode=manual" },
+  { id: "list-property-sale", name: "List for Sale / Rent", description: "Submit a sale or rental listing — pick the type on the next step.", icon: ClipboardCheck, href: "/list-property" },
 ];
 
 export function BrokerToolkitTools() {
