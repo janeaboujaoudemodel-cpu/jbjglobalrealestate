@@ -251,9 +251,12 @@ const ListProperty = () => {
         </div>
       </section>
 
+      {/* Champagne breathing band so the navy hero doesn't visually collide with the purpose card */}
+      <div aria-hidden style={{ background: CHAMPAGNE, height: 24 }} />
+
       {/* ───────────────── Purpose + Mode selector (mode-aware accent) ───────────────── */}
       <section
-        className="px-4 sm:px-6 md:px-10 pt-8 md:pt-10 pb-8 md:pb-10 relative z-10"
+        className="px-4 sm:px-6 md:px-10 pt-4 md:pt-6 pb-8 md:pb-10 relative z-10"
         style={{ background: ombreSoft(theme) }}
       >
 
@@ -410,8 +413,7 @@ function SegmentedPill({
     <button
       type="button"
       onClick={onClick}
-      data-allow-dark-cta
-      data-no-contrast-guard
+      {...(active ? { "data-allow-dark-cta": "", "data-no-contrast-guard": "" } : { "data-no-contrast-guard": "" })}
       className="inline-flex items-center justify-center gap-2 w-full h-10 px-4 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-150 hover:brightness-110"
       style={
         active
@@ -430,10 +432,10 @@ function SegmentedPill({
             }
       }
     >
-      <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{icon}</span>
+      <span style={{ color: fg, WebkitTextFillColor: fg, stroke: fg, display: "inline-flex" }}>{icon}</span>
       <span style={{ color: fg, WebkitTextFillColor: fg }}>{children}</span>
       {trailing && (
-        <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{trailing}</span>
+        <span style={{ color: fg, WebkitTextFillColor: fg, stroke: fg, display: "inline-flex" }}>{trailing}</span>
       )}
     </button>
   );
@@ -705,20 +707,19 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
           {user && (
             <Button
               asChild
-              data-allow-dark-cta
               data-no-contrast-guard
               className="font-semibold hover:brightness-105 jj-dashboard-pulse"
               style={{
-                background: ombreSoft(theme),
+                background: "#FFFFFF",
                 color: accent,
-                border: `1.5px solid ${theme.badgeBorder}`,
-                boxShadow: `0 10px 24px -10px ${theme.badgeBorder}99`,
+                border: `1.5px solid ${accent}`,
+                boxShadow: `0 10px 24px -10px ${accent}66`,
               }}
             >
               <Link to="/dashboard/my-listings">
-                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent }} />
+                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent, stroke: accent }} />
                 <span style={{ color: accent, WebkitTextFillColor: accent, fontWeight: 700 }}>Open full dashboard</span>
-                <span className="jj-arrow-anim inline-flex ml-2"><ArrowRight className="w-4 h-4" /></span>
+                <span className="jj-arrow-anim inline-flex ml-2"><ArrowRight className="w-4 h-4" style={{ color: accent, stroke: accent }} /></span>
 
               </Link>
             </Button>
@@ -730,8 +731,8 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             className="rounded-2xl p-8 text-center"
             data-no-contrast-guard
             style={{
-              background: ombreSoft(theme),
-              border: `1.5px solid ${theme.badgeBorder}`,
+              background: "#FFFFFF",
+              border: `1.5px solid ${accent}`,
               boxShadow: `0 20px 40px -20px ${accent}66`,
             }}
           >
@@ -802,8 +803,8 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             className="rounded-2xl p-10 text-center"
             data-no-contrast-guard
             style={{
-              background: ombreSoft(theme),
-              border: `1.5px dashed ${theme.badgeBorder}`,
+              background: "#FFFFFF",
+              border: `1.5px dashed ${accent}`,
               boxShadow: `0 20px 40px -20px ${accent}55`,
             }}
           >
