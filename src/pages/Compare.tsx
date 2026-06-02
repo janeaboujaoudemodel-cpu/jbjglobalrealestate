@@ -28,6 +28,10 @@ import { useConsVisibility } from "@/contexts/ConsVisibilityContext";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
 import AddProjectDialog, { type ExtractedProject } from "@/components/compare/AddProjectDialog";
+import CompareAIShell, { GradientText } from "@/components/compare/CompareAIShell";
+import AnimatedStepLine from "@/components/compare/AnimatedStepLine";
+import SampleComparisonPreview from "@/components/compare/SampleComparisonPreview";
+import CompareCTA from "@/components/compare/CompareCTA";
 
 const INQUIRY_FORM_URL = "https://JBJ.AE/contact";
 const COMPARE_FREE_KEY = "jbj_compare_free_used";
