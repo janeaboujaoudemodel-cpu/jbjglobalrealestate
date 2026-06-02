@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { exportPremiumXlsx } from "@/utils/exportXlsx";
+import AddProjectDialog, { type ExtractedProject } from "@/components/compare/AddProjectDialog";
 
 interface ManualProject {
   id: string;
