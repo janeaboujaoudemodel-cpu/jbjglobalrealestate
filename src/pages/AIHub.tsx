@@ -313,7 +313,9 @@ const AIHub = () => {
               src={aihubHeroVideo.url}
               poster="/video/aihub-bg-poster.jpg"
               opacity={1}
+              eager
             />
+
           </div>
 
           {/* Cinematic composite — lighter so neon video shows through */}
