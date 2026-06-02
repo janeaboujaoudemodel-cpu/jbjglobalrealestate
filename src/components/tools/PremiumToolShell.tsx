@@ -27,6 +27,10 @@ interface Props {
   children: ReactNode;
   /** Optional max width of the shell */
   maxWidth?: string;
+  /** When true, the body background flips to ink + accent gradient
+   *  (Property Measurement style) and inner shadcn Cards/inputs are
+   *  auto-darkened via [data-tool-darkbody] global CSS. */
+  darkBody?: boolean;
 }
 
 export const PremiumToolShell = ({
@@ -37,6 +41,7 @@ export const PremiumToolShell = ({
   subtitle,
   showBack = true,
   children,
+  darkBody = false,
 }: Props) => {
   const navigate = useNavigate();
 
