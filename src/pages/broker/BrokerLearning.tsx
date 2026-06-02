@@ -126,6 +126,7 @@ export default function BrokerLearning() {
   const [activeModule, setActiveModule] = useState<TModule | null>(null);
   const [lessonIndex, setLessonIndex] = useState(0);
   const [moduleProgress, setModuleProgress] = useState<Record<string, number>>({});
+  const [accessRequestItem, setAccessRequestItem] = useState<{ id: string; title: string; type: "module" | "book" } | null>(null);
 
   const openModule = (m: TModule) => {
     setActiveModule(m);
@@ -137,20 +138,9 @@ export default function BrokerLearning() {
   };
 
   const requestAcademyAccess = (item: { id: string; title: string }, itemType: "module" | "book") => {
-    createAccessRequest.mutate({
-      recipientDepartment: "Broker Academy",
-      requestType: "broker_academy_access",
-      subject: `Access request: ${item.title}`,
-      body: `Broker requested access to JBJ Academy ${itemType}: ${item.title}.`,
-      priority: "normal",
-      metadata: {
-        source: "jbj_academy",
-        item_type: itemType,
-        item_id: item.id,
-        user_mode: mode,
-      },
-    });
+    setAccessRequestItem({ id: item.id, title: item.title, type: itemType });
   };
+
 
   const sortedBooks = useMemo(() => {
     return [...books].sort((a, b) => {
