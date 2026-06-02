@@ -37,7 +37,6 @@ export const PremiumToolShell = ({
   subtitle,
   showBack = true,
   children,
-  maxWidth = "1200px",
 }: Props) => {
   const navigate = useNavigate();
 
@@ -201,7 +200,6 @@ export const PremiumToolShell = ({
 export const ToolAnimatedFrame = ({
   theme,
   children,
-  maxWidth = "1400px",
   className = "",
 }: {
   theme: ToolTheme;
