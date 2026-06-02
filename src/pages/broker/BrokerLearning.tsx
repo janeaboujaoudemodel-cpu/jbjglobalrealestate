@@ -531,10 +531,17 @@ export default function BrokerLearning() {
             })()}
           </DialogContent>
         </Dialog>
+
+        <AcademyAccessRequestModal
+          open={!!accessRequestItem}
+          onOpenChange={(v) => { if (!v) setAccessRequestItem(null); }}
+          item={accessRequestItem}
+        />
       </div>
     </div>
   );
 }
+
 
 
 // ────────────────────────────────────────────────────────────────────────────
