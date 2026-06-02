@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { UNIT_FIELDS, type UnitFieldId } from "@/lib/compare/unitFieldsConfig";
 import { buildSchedule, type PlanRule } from "@/lib/payment-plan/buildSchedule";
 import type { UnitDraft } from "./AddUnitDialog";
