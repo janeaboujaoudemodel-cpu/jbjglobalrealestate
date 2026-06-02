@@ -46,6 +46,7 @@ const MortgageCalculator = ({
   compact = false,
   showAssistant = false,
   showHeading = true,
+  themeVariant = "default",
   context,
 }: MortgageCalculatorProps) => {
   const [propertyPrice, setPropertyPrice] = useState(defaultPrice);
@@ -53,6 +54,45 @@ const MortgageCalculator = ({
   const [interestRate, setInterestRate] = useState(4.5);
   const [loanTermYears, setLoanTermYears] = useState(25);
   const [userTouchedPrice, setUserTouchedPrice] = useState(false);
+  const [projectQuery, setProjectQuery] = useState("");
+  const [projectSearchOpen, setProjectSearchOpen] = useState(false);
+  const [projectResults, setProjectResults] = useState<MortgageProject[]>([]);
+  const [projectsLoading, setProjectsLoading] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<MortgageProject | null>(null);
+  const isNavy = themeVariant === "navy";
+
+  useEffect(() => {
+    if (!projectSearchOpen) return;
+
+    let cancelled = false;
+    const loadProjects = async () => {
+      setProjectsLoading(true);
+      const cleanedQuery = projectQuery.trim().replace(/[,%()]/g, " ");
+      let query = supabase
+        .from("projects")
+        .select("id,name,slug,location,area_name,price_from,developer_name,developer:developers(id,name,logo_url)")
+        .eq("is_published", true)
+        .not("price_from", "is", null)
+        .order("name", { ascending: true })
+        .limit(12);
+
+      if (cleanedQuery.length > 0) {
+        query = query.or(`name.ilike.%${cleanedQuery}%,developer_name.ilike.%${cleanedQuery}%`);
+      }
+
+      const { data, error } = await query;
+      if (!cancelled) {
+        setProjectResults(error ? [] : ((data || []) as unknown as MortgageProject[]));
+        setProjectsLoading(false);
+      }
+    };
+
+    const timer = window.setTimeout(loadProjects, 180);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [projectQuery, projectSearchOpen]);
 
   // Sync propertyPrice when defaultPrice becomes available from async prop
   // (e.g., project.price_from loads after the first render). Stops syncing
@@ -67,6 +107,16 @@ const MortgageCalculator = ({
   const handlePriceChange = (value: number) => {
     setUserTouchedPrice(true);
     setPropertyPrice(value);
+  };
+
+  const handleProjectSelect = (project: MortgageProject) => {
+    setSelectedProject(project);
+    setProjectSearchOpen(false);
+    setProjectQuery("");
+    if (project.price_from) {
+      setUserTouchedPrice(false);
+      setPropertyPrice(Number(project.price_from));
+    }
   };
 
   const calculations = useMemo(() => {
