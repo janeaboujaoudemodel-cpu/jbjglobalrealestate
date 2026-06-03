@@ -157,6 +157,18 @@ const AREA_NAME_MAP: Record<string, string[]> = {
   "arabian-ranches": ["arabian ranches"],
 };
 
+// Maps each area chip to its emirate — used as a hard "never cross emirates" guard.
+// Every specific area chip in the quiz is currently in Dubai; "other" is unconstrained.
+const AREA_EMIRATE_MAP: Record<string, string> = {
+  "downtown": "dubai",
+  "marina": "dubai",
+  "palm": "dubai",
+  "business-bay": "dubai",
+  "creek-harbour": "dubai",
+  "hills": "dubai",
+  "arabian-ranches": "dubai",
+};
+
 const LANGUAGES = getLanguageList();
 const NATIONALITIES = getCountryList();
 
