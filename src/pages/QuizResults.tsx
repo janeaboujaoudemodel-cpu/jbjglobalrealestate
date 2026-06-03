@@ -159,21 +159,68 @@ const AIHF_RESULTS_STYLE = `
     stroke: #FF6B8A !important;
     color: #FF6B8A !important;
   }
-  /* Tiffany dropdown menu (Add Badge) */
-  .aihf-results [role="menu"],
-  [data-aihf-menu] {
+  /* Tiffany dropdown menu (Add Badge) — global, NOT scoped to .aihf-results
+     because Radix portals the menu outside the page root. */
+  [data-aihf-menu],
+  [data-aihf-menu][role="menu"] {
     background: linear-gradient(160deg, #04161C 0%, #031E18 100%) !important;
+    background-color: #04161C !important;
     border: 1px solid rgba(94,234,212,0.55) !important;
     box-shadow: 0 20px 50px rgba(34,211,238,0.25) !important;
+    color: #FFFFFF !important;
   }
-  [data-aihf-menu] [role="menuitem"] {
+  [data-aihf-menu] [role="menuitem"],
+  [data-aihf-menu] [role="menuitem"] * {
+    background-color: transparent !important;
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
   }
+  [data-aihf-menu] [role="menuitem"][data-medal="gold"],
+  [data-aihf-menu] [role="menuitem"][data-medal="gold"] * { color: #FFD27A !important; -webkit-text-fill-color: #FFD27A !important; }
+  [data-aihf-menu] [role="menuitem"][data-medal="silver"],
+  [data-aihf-menu] [role="menuitem"][data-medal="silver"] * { color: #E8F0FF !important; -webkit-text-fill-color: #E8F0FF !important; }
+  [data-aihf-menu] [role="menuitem"][data-medal="bronze"],
+  [data-aihf-menu] [role="menuitem"][data-medal="bronze"] * { color: #FFB07A !important; -webkit-text-fill-color: #FFB07A !important; }
+  [data-aihf-menu] [role="menuitem"][data-medal="remove"],
+  [data-aihf-menu] [role="menuitem"][data-medal="remove"] * { color: #FF8FA3 !important; -webkit-text-fill-color: #FF8FA3 !important; }
   [data-aihf-menu] [role="menuitem"]:hover,
-  [data-aihf-menu] [role="menuitem"]:focus {
-    background: rgba(94,234,212,0.15) !important;
+  [data-aihf-menu] [role="menuitem"]:focus,
+  [data-aihf-menu] [role="menuitem"][data-highlighted] {
+    background: rgba(94,234,212,0.18) !important;
+    color: #67E8F9 !important;
+    -webkit-text-fill-color: #67E8F9 !important;
+  }
+  [data-aihf-menu] [role="menuitem"]:hover *,
+  [data-aihf-menu] [role="menuitem"]:focus *,
+  [data-aihf-menu] [role="menuitem"][data-highlighted] * {
+    color: #67E8F9 !important;
+    -webkit-text-fill-color: #67E8F9 !important;
+  }
+
+  /* Share dialog X close — tiffany pill (override shadcn default white-on-accent) */
+  .aihf-results > button[aria-label="Close"],
+  [data-aihf-dialog] > button[aria-label="Close"] {
     color: #5EEAD4 !important;
+    background: rgba(94,234,212,0.12) !important;
+    border: 1px solid rgba(94,234,212,0.55) !important;
+    border-radius: 9999px !important;
+    opacity: 1 !important;
+    width: 32px; height: 32px;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 18px rgba(94,234,212,0.35) !important;
+  }
+  .aihf-results > button[aria-label="Close"]:hover,
+  [data-aihf-dialog] > button[aria-label="Close"]:hover {
+    background: rgba(94,234,212,0.24) !important;
+    color: #67E8F9 !important;
+    box-shadow: 0 0 26px rgba(94,234,212,0.6) !important;
+  }
+  .aihf-results > button[aria-label="Close"] svg,
+  [data-aihf-dialog] > button[aria-label="Close"] svg,
+  .aihf-results > button[aria-label="Close"] svg *,
+  [data-aihf-dialog] > button[aria-label="Close"] svg * {
+    color: #5EEAD4 !important;
+    stroke: #5EEAD4 !important;
     -webkit-text-fill-color: #5EEAD4 !important;
   }
 `;
@@ -388,7 +435,7 @@ const QuizResults = () => {
       doc.setFontSize(8);
       doc.setTextColor(...tiffanyMuted);
       doc.text("Powered by JBJ Global Real Estate — Brokerage | Dubai, UAE", 36, pageH - 32);
-      doc.text("CONTACT@JBJ.AE  ·  www.jbj.ae", 36, pageH - 20);
+      doc.text("CONTACT@JBJ.AE  |  www.jbj.ae", 36, pageH - 20);
       doc.text(`Page ${pageNum} / ${total}`, pageW - 36, pageH - 20, { align: "right" });
     };
 
@@ -448,10 +495,10 @@ const QuizResults = () => {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(10);
       doc.setTextColor(...tiffanyMuted);
-      doc.text("✓ exact match  ·  ≈ close fit  ·  ✗ does not match", 36, 128);
+      doc.text("[OK] exact match   [~] close fit   [X] does not match", 36, 128);
 
       const verdictGlyph = (v: "match" | "close" | "miss") =>
-        v === "match" ? "✓" : v === "close" ? "≈" : "✗";
+        v === "match" ? "[OK]" : v === "close" ? "[~]" : "[X]";
       const verdictFill = (v: "match" | "close" | "miss"): [number, number, number] =>
         v === "match" ? [12, 65, 50] : v === "close" ? [70, 50, 12] : [70, 22, 22];
 
@@ -467,7 +514,7 @@ const QuizResults = () => {
       cBody.push([
         "Match summary",
         ...totals.map((t) =>
-          `✓ ${t.match} matched · ≈ ${t.close} close · ✗ ${t.miss} missed\n${t.match}/${t.total} criteria met`
+          `[OK] ${t.match} matched | [~] ${t.close} close | [X] ${t.miss} missed\n${t.match}/${t.total} criteria met`
         ),
       ]);
 
@@ -479,16 +526,17 @@ const QuizResults = () => {
         body: cBody,
         styles: {
           font: "helvetica",
-          fontSize: 9,
+          fontSize: 10,
           textColor: white,
           fillColor: navy,
           lineColor: tiffany,
           lineWidth: 0.3,
-          cellPadding: 6,
+          cellPadding: 10,
+          minCellHeight: 22,
           overflow: "linebreak",
           valign: "top",
         },
-        headStyles: { fillColor: tiffany, textColor: ink, fontStyle: "bold", fontSize: 10 },
+        headStyles: { fillColor: tiffany, textColor: ink, fontStyle: "bold", fontSize: 11, cellPadding: 10 },
         columnStyles: {
           0: { fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted, cellWidth: 130 },
         },
@@ -536,30 +584,47 @@ const QuizResults = () => {
       body: rows,
       styles: {
         font: "helvetica",
-        fontSize: 9,
+        fontSize: 10,
         textColor: white,
         fillColor: navy,
         lineColor: tiffany,
         lineWidth: 0.3,
-        cellPadding: 6,
+        cellPadding: 10,
+        minCellHeight: 22,
         overflow: "linebreak",
       },
       headStyles: {
         fillColor: tiffany,
         textColor: ink,
         fontStyle: "bold",
-        fontSize: 10,
+        fontSize: 11,
         halign: "left",
+        cellPadding: 10,
       },
-      alternateRowStyles: { fillColor: [6, 40, 34] },
+      alternateRowStyles: { fillColor: [5, 34, 30] },
       columnStyles: {
         0: { fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted, cellWidth: 90 },
       },
+      didParseCell: (data) => {
+        // Style the "Listing" row cells as visibly clickable tiffany links.
+        if (data.section === "body" && data.column.index > 0 && data.row.index === rows.length - 1) {
+          data.cell.styles.textColor = [94, 234, 212];
+          data.cell.styles.fontStyle = "bold";
+        }
+      },
       didDrawCell: (data) => {
-        // Make listing-URL cells clickable
+        // Make listing-URL cells clickable + draw tiffany underline so user sees they are links.
         if (data.section === "body" && data.column.index > 0 && data.row.index === rows.length - 1) {
           const url = `${origin}/project/${top[data.column.index - 1].slug}`;
           doc.link(data.cell.x, data.cell.y, data.cell.width, data.cell.height, { url });
+          doc.setDrawColor(94, 234, 212);
+          doc.setLineWidth(0.6);
+          doc.line(
+            data.cell.x + 6,
+            data.cell.y + data.cell.height - 6,
+            data.cell.x + data.cell.width - 6,
+            data.cell.y + data.cell.height - 6
+          );
         }
       },
     });
@@ -589,14 +654,16 @@ const QuizResults = () => {
         theme: "grid",
         styles: {
           font: "helvetica",
-          fontSize: 10,
+          fontSize: 11,
           textColor: white,
           fillColor: navy,
           lineColor: tiffany,
-          lineWidth: 0.3,
-          cellPadding: 8,
+          lineWidth: 0.4,
+          cellPadding: 12,
+          minCellHeight: 26,
         },
         headStyles: { fillColor: tiffanyDeep, textColor: white, fontStyle: "bold" },
+        alternateRowStyles: { fillColor: [5, 34, 30] },
         body: [
           ["Developer", p.developer?.name || "—"],
           ["Location", `${p.location || ""}${p.emirate ? `, ${p.emirate}` : ""}`.trim() || "—"],
@@ -613,11 +680,25 @@ const QuizResults = () => {
           0: { cellWidth: 130, fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted },
           1: { cellWidth: "auto" },
         },
+        didParseCell: (data) => {
+          if (data.section === "body" && data.column.index === 1 && data.row.index === 9) {
+            data.cell.styles.textColor = [94, 234, 212];
+            data.cell.styles.fontStyle = "bold";
+          }
+        },
         didDrawCell: (data) => {
           if (data.section === "body" && data.column.index === 1 && data.row.index === 9) {
             doc.link(data.cell.x, data.cell.y, data.cell.width, data.cell.height, {
               url: `${origin}/project/${p.slug}`,
             });
+            doc.setDrawColor(94, 234, 212);
+            doc.setLineWidth(0.6);
+            doc.line(
+              data.cell.x + 6,
+              data.cell.y + data.cell.height - 6,
+              data.cell.x + data.cell.width - 6,
+              data.cell.y + data.cell.height - 6
+            );
           }
         },
       });
@@ -685,58 +766,45 @@ const QuizResults = () => {
     setShareModalOpen(true);
   };
 
-  // Helper — Web Share API with file when supported, else fallback URL
-  const shareWithFile = async (opts: {
-    title: string;
-    text: string;
-    fallbackUrl: string;
-    successMsg: string;
-  }) => {
-    let pdf = lastPdf;
-    if (!pdf) pdf = await generateAndCachePdf();
-    if (pdf) {
-      try {
-        const file = new File([pdf.blob], pdf.filename, { type: "application/pdf" });
-        const nav: any = navigator;
-        if (nav.canShare && nav.canShare({ files: [file] })) {
-          await nav.share({ title: opts.title, text: opts.text, files: [file] });
-          toast.success("Shared with PDF attached");
-          return;
-        }
-      } catch {
-        /* user cancelled or unsupported — fall through */
-      }
-      // Ensure file is at least on disk before opening fallback
-      triggerDownload(pdf.blob, pdf.filename);
-    }
-    window.open(opts.fallbackUrl, "_blank", "noopener,noreferrer");
-    toast.success(opts.successMsg);
+
+
+  // Open a link synchronously inside the click gesture so popup blockers don't fire.
+  // PDF generation runs in the BACKGROUND after the link opens.
+  const openLinkSync = (url: string) => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => a.remove(), 0);
   };
 
-  // Channel handlers
-  const handleShareWhatsApp = async () => {
+  const generatePdfInBackground = () => {
+    generateAndCachePdf()
+      .then((built) => {
+        if (built) triggerDownload(built.blob, built.filename);
+      })
+      .catch(() => {
+        /* silent — link already opened */
+      });
+  };
+
+  // Channel handlers — synchronous open, then background PDF download.
+  const handleShareWhatsApp = () => {
     const text = buildShareText();
-    await shareWithFile({
-      title: "JBJ AI Property Recommendations",
-      text,
-      fallbackUrl: `https://wa.me/?text=${encodeURIComponent(
-        `${text}\n\n(PDF report downloaded — attach it from your downloads.)`
-      )}`,
-      successMsg: "Opening WhatsApp — attach the downloaded PDF",
-    });
+    openLinkSync(`https://wa.me/?text=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it from your downloads.)`)}`);
+    generatePdfInBackground();
+    toast.success("Opening WhatsApp — attach the downloaded PDF");
   };
 
-  const handleShareEmail = async () => {
+  const handleShareEmail = () => {
     const subject = "My JBJ AI Property Recommendations";
     const text = buildShareText();
-    await shareWithFile({
-      title: subject,
-      text,
-      fallbackUrl: `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
-        `${text}\n\n(PDF report downloaded — attach it to this email from your downloads.)`
-      )}`,
-      successMsg: "Opening email — attach the downloaded PDF",
-    });
+    openLinkSync(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it to this email from your downloads.)`)}`);
+    generatePdfInBackground();
+    toast.success("Opening email — attach the downloaded PDF");
   };
 
   const handleCopyLink = async () => {
@@ -748,34 +816,20 @@ const QuizResults = () => {
     }
   };
 
-  const handleShareToConsultant = async () => {
+  const handleShareToConsultant = () => {
     if (!projects?.length) return;
     const subject = "AI Property Recommendations — Request Consultation";
-    const body = `Dear JBJ Global Real Estate Team,\n\nI have completed the AI Property Assessment and would like a consultation on the following recommendations:\n\n${buildShareText(
-      false
-    )}\n\nThe branded PDF report has been downloaded to my device and I will attach it to this email.\n\nBest regards`;
-    await shareWithFile({
-      title: subject,
-      text: body,
-      fallbackUrl: `mailto:${JBJ_CONSULTANT_EMAIL}?subject=${encodeURIComponent(
-        subject
-      )}&body=${encodeURIComponent(body)}`,
-      successMsg: "Opening email to JBJ — attach the downloaded PDF",
-    });
+    const body = `Dear JBJ Global Real Estate Team,\n\nI have completed the AI Property Assessment and would like a consultation on the following recommendations:\n\n${buildShareText(false)}\n\nThe branded PDF report has been downloaded to my device and I will attach it to this email.\n\nBest regards`;
+    openLinkSync(`mailto:${JBJ_CONSULTANT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+    generatePdfInBackground();
+    toast.success("Opening email to JBJ — attach the downloaded PDF");
   };
 
-  const handleConsultantWhatsApp = async () => {
-    const text = `Hello JBJ Global Real Estate,\n\nI just completed the AI Property Finder and would like a consultation on these recommendations:\n\n${buildShareText(
-      false
-    )}`;
-    await shareWithFile({
-      title: "AI Property Recommendations",
-      text,
-      fallbackUrl: `https://wa.me/${JBJ_CONSULTANT_WHATSAPP}?text=${encodeURIComponent(
-        `${text}\n\n(PDF report downloaded — attach it from your downloads.)`
-      )}`,
-      successMsg: "Opening WhatsApp to JBJ — attach the downloaded PDF",
-    });
+  const handleConsultantWhatsApp = () => {
+    const text = `Hello JBJ Global Real Estate,\n\nI just completed the AI Property Finder and would like a consultation on these recommendations:\n\n${buildShareText(false)}`;
+    openLinkSync(`https://wa.me/${JBJ_CONSULTANT_WHATSAPP}?text=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it from your downloads.)`)}`);
+    generatePdfInBackground();
+    toast.success("Opening WhatsApp to JBJ — attach the downloaded PDF");
   };
 
 
@@ -950,19 +1004,27 @@ const QuizResults = () => {
                           {badges[projects[0].id] ? 'Change Badge' : 'Add Badge'}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent data-aihf-menu className="border-0">
-
-                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top1')} className="text-[#B89555] hover:bg-[#B89555]/10">
+                      <DropdownMenuContent
+                        data-aihf-menu
+                        className="border-0"
+                        style={{
+                          background: "linear-gradient(160deg, #04161C 0%, #031E18 100%)",
+                          border: "1px solid rgba(94,234,212,0.55)",
+                          boxShadow: "0 20px 50px rgba(34,211,238,0.25)",
+                          color: "#FFFFFF",
+                        }}
+                      >
+                        <DropdownMenuItem data-medal="gold" onClick={() => handleSetBadge(projects[0].id, 'top1')}>
                           Top 1 — Gold
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top2')} className="text-[#888] hover:bg-[#B89555]/10">
+                        <DropdownMenuItem data-medal="silver" onClick={() => handleSetBadge(projects[0].id, 'top2')}>
                           Top 2 — Silver
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top3')} className="text-[#CD7F32] hover:bg-[#B89555]/10">
+                        <DropdownMenuItem data-medal="bronze" onClick={() => handleSetBadge(projects[0].id, 'top3')}>
                           Top 3 — Bronze
                         </DropdownMenuItem>
                         {badges[projects[0].id] && (
-                          <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, null)} className="text-[#1A1A1A]/70 hover:bg-[#B89555]/10">
+                          <DropdownMenuItem data-medal="remove" onClick={() => handleSetBadge(projects[0].id, null)}>
                             <X className="w-4 h-4 mr-2" /> Remove Badge
                           </DropdownMenuItem>
                         )}
@@ -1045,18 +1107,27 @@ const QuizResults = () => {
                             {badge ? 'Change Badge' : 'Add Badge'}
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent data-aihf-menu className="border-0">
-                          <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-[#B89555] hover:bg-[#B89555]/10">
+                        <DropdownMenuContent
+                          data-aihf-menu
+                          className="border-0"
+                          style={{
+                            background: "linear-gradient(160deg, #04161C 0%, #031E18 100%)",
+                            border: "1px solid rgba(94,234,212,0.55)",
+                            boxShadow: "0 20px 50px rgba(34,211,238,0.25)",
+                            color: "#FFFFFF",
+                          }}
+                        >
+                          <DropdownMenuItem data-medal="gold" onClick={() => handleSetBadge(project.id, 'top1')}>
                             Top 1 — Gold
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top2')} className="text-[#888] hover:bg-[#B89555]/10">
+                          <DropdownMenuItem data-medal="silver" onClick={() => handleSetBadge(project.id, 'top2')}>
                             Top 2 — Silver
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top3')} className="text-[#CD7F32] hover:bg-[#B89555]/10">
+                          <DropdownMenuItem data-medal="bronze" onClick={() => handleSetBadge(project.id, 'top3')}>
                             Top 3 — Bronze
                           </DropdownMenuItem>
                           {badge && (
-                            <DropdownMenuItem onClick={() => handleSetBadge(project.id, null)} className="text-[#1A1A1A]/70 hover:bg-[#B89555]/10">
+                            <DropdownMenuItem data-medal="remove" onClick={() => handleSetBadge(project.id, null)}>
                               <X className="w-3 h-3 mr-1" /> Remove
                             </DropdownMenuItem>
                           )}
@@ -1171,6 +1242,7 @@ const QuizResults = () => {
       {/* Share Modal — Tiffany theme matching AI Home Finder */}
       <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
         <DialogContent
+          data-aihf-dialog
           data-allow-dark-cta
           data-no-contrast-guard
           data-on-dark

@@ -1,66 +1,77 @@
-# AI Home Finder — Price Hover + Off-Plan Priority
+# Quiz Results — 4 Fixes
 
-## 1. Price Pill Hover Bug
+## 1. Add Badge dropdown — broken contrast (white on champagne)
 
-Global `src/index.css` (line 3966–3985) defines a card-hover rule that repaints `.price-pill-premium` to a champagne-white background and ink text whenever its parent `.group` is hovered or the pill itself is hovered. Inside the AI Home Finder dark results page that's where the "white faded" flash on hover comes from.
+**File:** `src/pages/QuizResults.tsx`
 
-**Fix:** in the scoped `AIHF_RESULTS_STYLE` block in `src/pages/QuizResults.tsx`, add hover/focus overrides that keep the navy glass treatment intact:
+The `[data-aihf-menu]` CSS scoping fails because the dropdown contents render via Radix portal AND the items use banned faded-gold text classes (`text-[#B89555]`, `text-[#888]`, `text-[#CD7F32]`, `text-[#1A1A1A]/70`) which land on the global champagne popover background.
 
-```
-.aihf-results .group:hover .price-pill-premium,
-.aihf-results .group:focus-within .price-pill-premium,
-.aihf-results .price-pill-premium:hover,
-.aihf-results .price-pill-premium:focus-visible {
-  background: linear-gradient(135deg, rgba(2,17,15,0.95), rgba(3,30,24,0.95)) !important;
-  border-color: rgba(94,234,212,0.85) !important;
-  box-shadow: 0 10px 26px rgba(34,211,238,0.30), inset 0 0 18px rgba(103,232,249,0.12) !important;
+Fixes:
+- Inject the AIHF style block once at the top of the page (via portal-root selector `[data-aihf-menu]` only — already global, no descendant scope). Verify `<style>{AIHF_RESULTS_STYLE}</style>` is rendered on body even when modals open (it is, via the main `<section>` mount).
+- Force the navy/tiffany gradient on `DropdownMenuContent` with inline `style={{ background: '...', border: '1px solid rgba(94,234,212,0.55)', color: '#FFFFFF' }}` so it wins regardless of `bg-popover`.
+- Replace per-item `text-[#B89555]/#888/#CD7F32/#1A1A1A]/70` classes with brand-tiffany medal colors (gold→`#FFD27A`, silver→`#E8F0FF`, bronze→`#FFB07A`, remove→`#FF8FA3`) so they pop on dark gradient AND don't trip the faded-gold guard.
+- Strengthen `[data-aihf-menu] [role="menuitem"]` rule with `background-color: transparent !important` and `color: #FFFFFF !important` at rest; tiffany on hover.
+
+## 2. Share dialog — white X close icon on champagne ring
+
+**File:** `src/pages/QuizResults.tsx` + AIHF style block
+
+The shadcn `DialogContent` ships a default `<X>` close button. Its hover state pulls `bg-accent` (champagne) under a white icon → white-on-light violation visible in screenshot 2.
+
+Fix: in `AIHF_RESULTS_STYLE`, add:
+```css
+.aihf-results [data-radix-dialog-content] > button[aria-label="Close"],
+[data-aihf-menu] ~ button {
+  color: #5EEAD4 !important;
+  background: rgba(94,234,212,0.10) !important;
+  border: 1px solid rgba(94,234,212,0.45) !important;
+  border-radius: 9999px !important;
+  opacity: 1 !important;
 }
-.aihf-results .group:hover .price-pill-premium .price-pill-eyebrow,
-.aihf-results .price-pill-premium:hover .price-pill-eyebrow {
+.aihf-results [data-radix-dialog-content] > button[aria-label="Close"]:hover {
+  background: rgba(94,234,212,0.22) !important;
   color: #67E8F9 !important;
-  -webkit-text-fill-color: #67E8F9 !important;
 }
-.aihf-results .group:hover .price-pill-premium .price-pill-value,
-.aihf-results .price-pill-premium:hover .price-pill-value {
-  color: var(--price-orange) !important;
-  -webkit-text-fill-color: var(--price-orange) !important;
+.aihf-results [data-radix-dialog-content] > button[aria-label="Close"] svg {
+  color: #5EEAD4 !important;
+  stroke: #5EEAD4 !important;
 }
 ```
 
-No change to the shared `PricePill` component or global rule — only a scoped override.
+## 3. WhatsApp / Email blocked when clicking Share
 
-## 2. Filter Sold-Out + Prioritise Off-Plan
+**File:** `src/pages/QuizResults.tsx`
 
-The matchmaker in `src/pages/Quiz.tsx` (`pickProjects`) already drops `is_sold_out` and `sale_status: sold/out_of_stock`. We strengthen this and add an off-plan-first preference:
+`shareWithFile()` awaits `generateAndCachePdf()` (jsPDF render) BEFORE calling `window.open` → loses the synchronous user-gesture trust → popup blocker fires on Safari/Chrome → "blocked" toast/no window.
 
-**a) Stronger sold-out filter** — also reject `sold_out`, `sold out`, `unavailable`, and the existing `construction_status` value when it reads `cancelled`.
+Fixes (zero API keys — all already client-side wa.me/mailto):
+- Rewrite the 4 share handlers (`handleShareWhatsApp`, `handleShareEmail`, `handleShareToConsultant`, `handleConsultantWhatsApp`) to **open the link synchronously inside the click handler** via `openWhatsApp` / `openEmail` from `src/utils/contactActions.ts` (which creates an `<a target="_blank">` and clicks it inside the gesture).
+- Kick off `generateAndCachePdf()` + `triggerDownload()` in the background AFTER opening the link, with a `.then()` chain — no `await` before the open.
+- Drop the `navigator.share({ files })` Web Share path entirely (it's what was actually failing — many browsers reject PDFs in `canShare` and the fallback path runs too late). The user explicitly wants the plain wa.me / mailto links — no API.
+- Confirm `JBJ_CONSULTANT_EMAIL` / `JBJ_CONSULTANT_WHATSAPP` constants stay as plain strings (no edge function call). Grep confirms only `wa.me/` and `mailto:` are used in this page — no email/WhatsApp secret to remove anywhere else for this flow.
 
-**b) Off-plan priority logic** — derive helpers:
+## 4. PDF report broken (tables, glyphs, non-visible links)
 
-```ts
-const isReady = (p) => {
-  const h = (p.handover_date || "").toLowerCase();
-  const cs = (p.construction_status || "").toLowerCase();
-  const ss = (p.sale_status || "").toLowerCase();
-  return h.includes("ready") || cs.includes("ready") || cs.includes("completed") || ss.includes("ready");
-};
-const isOffPlan = (p) => !isReady(p);
-```
+**File:** `src/pages/QuizResults.tsx` (`buildPdf` function, lines ~440–640)
 
-Update `tryTier` to accept an additional `offPlanOnly: boolean` filter, then change the cascading tier loop:
+Root causes:
+- **Unicode glyphs (`✓ ≈ ✗ ·`)** are not in jsPDF's built-in Helvetica → render as black boxes / garbled chars. User sees "completely broken content".
+- **Listing URL cells** are technically `doc.link()`'d but the text is plain white — no underline, no color cue → user can't see they're clickable.
+- **Tables look nothing like the dark UI cards** because alternateRowStyles + verdict fills leave heavy contrast jumps and cell padding is too tight at 6pt with 9pt text → cramped, no hierarchy.
 
-- If `answers.timeline === "ready"` → keep current behaviour (ready preferred via existing `matchesTimeline`).
-- Otherwise (any other timeline OR `flexible`) → run each tier first with `offPlanOnly = true`. Only when that returns `< 3` results, re-run the same tier with `offPlanOnly = false` so ready projects fill the gap.
+Fixes:
+- Replace glyphs: `✓`→`[OK]`, `≈`→`[~]`, `✗`→`[X]`, ` · `→` | `. Keep them in the legend line at top of "How each property matches" page.
+- For every "Listing URL" / "Listing" cell, set `textColor: [94,234,212]` (tiffany) and post-process with `didDrawCell` to draw a 0.5pt tiffany underline rectangle below the text so the link is visibly highlighted and clickable, matching "glowing blue / underlined" request.
+- Increase comparison + detail table `cellPadding: 10`, `fontSize: 10`, `minCellHeight: 22`, and switch `alternateRowStyles.fillColor` to a subtler `[5, 34, 30]` so rows aren't striped harshly. Keep tiffany header bar, ink text.
+- Add a soft tiffany 0.4pt border around each detail-card table for the "premium" feel.
+- Re-render the bottom footer with `[OK] AI-curated · jbj.ae` instead of unicode dots.
 
-This way the user sees off-plan whenever it's available, and ready ones appear only as a fallback — never sold-out.
+No business-logic changes (sold-out filter, off-plan priority, scoring all untouched).
 
-## Files Touched
-
-- `src/pages/QuizResults.tsx` — extend scoped style block (hover overrides only).
-- `src/pages/Quiz.tsx` — add `isReady` / `isOffPlan` helpers, `offPlanOnly` param to `tryTier`, off-plan-first cascade, tighter sold-out check.
+## Files touched
+- `src/pages/QuizResults.tsx` (CSS block, DropdownMenuContent inline style + item classes, 4 share handlers, `buildPdf` table styling + glyph substitution + link rendering)
 
 ## Verification
-
-- Hover any property card on `/quiz/results`: price pill stays navy glass with cyan "From" + orange value — no white flash.
-- Re-run the quiz selecting a future timeline (2026 / 2027+ / Flexible): only off-plan projects appear; if fewer than 3 off-plan match, ready projects are appended at the end.
-- A project flagged `is_sold_out = true` or `sale_status` containing "sold" never appears in the results.
+1. Open `/quiz/results` → click "Add Badge" → dropdown renders navy/tiffany with bright legible item text, hover glows tiffany.
+2. Click "Share" → modal X button shows tiffany circular pill, hover stays tiffany. WhatsApp / Email / WhatsApp JBJ / Email JBJ all open new tab immediately (no popup-block), PDF downloads in background.
+3. Open downloaded PDF → no black-box glyphs; tables breathe; "Listing URL" cells appear in tiffany with underline and click through to `/project/:slug`.
