@@ -155,6 +155,55 @@ const AREA_NAME_MAP: Record<string, string[]> = {
 const LANGUAGES = getLanguageList();
 const NATIONALITIES = getCountryList();
 
+const AIHF_STYLE = `
+  .aihf-root, .aihf-root :is(h1,h2,h3,h4,p,span,label,button,div), .aihf-root svg {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    opacity: 1 !important;
+  }
+  .aihf-root svg, .aihf-root svg * { stroke: #FFFFFF !important; }
+  .aihf-root .aihf-muted { color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important; }
+  .aihf-root .aihf-tiffany { color: #67E8F9 !important; -webkit-text-fill-color: #67E8F9 !important; }
+  .aihf-root .aihf-card {
+    background: linear-gradient(135deg, rgba(8,47,73,0.72), rgba(3,30,24,0.86)) !important;
+    border: 1px solid rgba(45,212,191,0.45) !important;
+    box-shadow: 0 24px 70px rgba(45,212,191,0.16), inset 0 0 34px rgba(103,232,249,0.06) !important;
+  }
+  .aihf-root .aihf-option {
+    background: rgba(5,28,24,0.82) !important;
+    border-color: rgba(45,212,191,0.42) !important;
+  }
+  .aihf-root .aihf-option:hover, .aihf-root .aihf-option[aria-pressed="true"] {
+    background: linear-gradient(135deg, rgba(45,212,191,0.22), rgba(6,182,212,0.13)) !important;
+    border-color: rgba(103,232,249,0.86) !important;
+    box-shadow: 0 14px 38px rgba(45,212,191,0.20) !important;
+  }
+  .aihf-root .aihf-cta, .aihf-root .aihf-cta:hover, .aihf-root .aihf-cta:focus-visible {
+    min-width: 12rem;
+    min-height: 4rem;
+    background: linear-gradient(135deg, #5EEAD4 0%, #22D3EE 100%) !important;
+    border: 1px solid rgba(103,232,249,0.80) !important;
+    box-shadow: 0 18px 42px rgba(34,211,238,0.28) !important;
+  }
+  .aihf-root .aihf-cta, .aihf-root .aihf-cta *, .aihf-root .aihf-cta svg {
+    color: #02110F !important;
+    -webkit-text-fill-color: #02110F !important;
+    stroke: #02110F !important;
+    opacity: 1 !important;
+  }
+  .aihf-root .aihf-input, .aihf-root input, .aihf-root [data-searchable-trigger] {
+    background: rgba(2,17,15,0.82) !important;
+    border: 1px solid rgba(45,212,191,0.52) !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+  }
+  .aihf-root input::placeholder { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .aihf-popover, .aihf-popover * { background-color: #04161C !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+  .aihf-popover { border: 1px solid rgba(45,212,191,0.55) !important; }
+  .aihf-popover svg, .aihf-popover svg * { stroke: #FFFFFF !important; color: #FFFFFF !important; }
+  .aihf-popover .jbj-form-option:hover { background-color: rgba(45,212,191,0.14) !important; }
+`;
+
 const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
