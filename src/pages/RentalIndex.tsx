@@ -237,10 +237,18 @@ const RentalIndex = () => {
     >
       {/* Page-local hard contrast lock — mirrors /property-measurement pattern */}
       <style>{`
-        .ri-root { color: #FBEAEC; }
-        .ri-root label, .ri-root p, .ri-root span, .ri-root h1, .ri-root h2, .ri-root h3, .ri-root h4 { color: #FBEAEC; -webkit-text-fill-color: #FBEAEC; }
+        .ri-root, .ri-root * { color: #FBEAEC; -webkit-text-fill-color: #FBEAEC; }
+        .ri-root label, .ri-root p, .ri-root span, .ri-root h1, .ri-root h2, .ri-root h3, .ri-root h4 { color: #FBEAEC !important; -webkit-text-fill-color: #FBEAEC !important; }
         .ri-root .ri-dim { color: rgba(251,234,236,0.72) !important; -webkit-text-fill-color: rgba(251,234,236,0.72) !important; }
         .ri-root .ri-accent { color: #F2A5AE !important; -webkit-text-fill-color: #F2A5AE !important; }
+        /* Brighten icon tiles + svg icons (they're rendered with dark burgundy inline styles) */
+        .ri-root [class*="rounded-md"][class*="w-6"][class*="h-6"],
+        .ri-root [class*="rounded-xl"][class*="w-11"][class*="h-11"] {
+          background: rgba(242,165,174,0.18) !important;
+          border-color: rgba(242,165,174,0.55) !important;
+        }
+        .ri-root svg { color: #F2A5AE !important; }
+        .ri-root [data-allow-dark-cta] svg, .ri-root .allow-white svg { color: inherit !important; }
         .ri-card {
           background: linear-gradient(135deg, #3a0a14 0%, #1f0509 55%, #08020300 100%), #110204;
           border: 1px solid rgba(139,30,46,0.55) !important;
