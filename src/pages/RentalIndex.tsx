@@ -241,14 +241,14 @@ const RentalIndex = () => {
         .ri-root label, .ri-root p, .ri-root span, .ri-root h1, .ri-root h2, .ri-root h3, .ri-root h4 { color: #FBEAEC !important; -webkit-text-fill-color: #FBEAEC !important; }
         .ri-root .ri-dim { color: rgba(251,234,236,0.72) !important; -webkit-text-fill-color: rgba(251,234,236,0.72) !important; }
         .ri-root .ri-accent { color: #F2A5AE !important; -webkit-text-fill-color: #F2A5AE !important; }
-        /* Brighten icon tiles + svg icons (they're rendered with dark burgundy inline styles) */
+        /* Brighten icon tiles + svg icons (white over burgundy) */
         .ri-root [class*="rounded-md"][class*="w-6"][class*="h-6"],
         .ri-root [class*="rounded-xl"][class*="w-11"][class*="h-11"] {
-          background: rgba(242,165,174,0.18) !important;
-          border-color: rgba(242,165,174,0.55) !important;
+          background: rgba(255,255,255,0.10) !important;
+          border-color: rgba(255,255,255,0.45) !important;
         }
-        .ri-root svg { color: #F2A5AE !important; }
-        .ri-root [data-allow-dark-cta] svg, .ri-root .allow-white svg { color: inherit !important; }
+        .ri-root svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
+        .ri-root .ri-accent { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
         .ri-card {
           background: linear-gradient(135deg, #3a0a14 0%, #1f0509 55%, #08020300 100%), #110204;
           border: 1px solid rgba(139,30,46,0.55) !important;
@@ -261,25 +261,42 @@ const RentalIndex = () => {
         }
         .ri-input, .ri-root [data-radix-select-trigger], .ri-root input, .ri-root [role="combobox"] {
           background: rgba(10,2,4,0.65) !important;
-          border: 1px solid rgba(242,165,174,0.30) !important;
-          color: #FBEAEC !important;
-          -webkit-text-fill-color: #FBEAEC !important;
+          border: 1px solid rgba(255,255,255,0.30) !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
         }
-        .ri-input::placeholder, .ri-root input::placeholder { color: rgba(251,234,236,0.45) !important; -webkit-text-fill-color: rgba(251,234,236,0.45) !important; }
+        .ri-input::placeholder, .ri-root input::placeholder { color: rgba(255,255,255,0.55) !important; -webkit-text-fill-color: rgba(255,255,255,0.55) !important; }
         .ri-input:focus, .ri-root input:focus, .ri-root [data-radix-select-trigger]:focus {
-          border-color: rgba(242,165,174,0.70) !important;
-          box-shadow: 0 0 0 3px rgba(139,30,46,0.35) !important;
+          border-color: rgba(255,255,255,0.70) !important;
+          box-shadow: 0 0 0 3px rgba(139,30,46,0.45) !important;
           outline: none !important;
         }
         .ri-root .ri-tile {
           background: rgba(10,2,4,0.55);
-          border: 1px solid rgba(242,165,174,0.25);
+          border: 1px solid rgba(255,255,255,0.25);
           border-radius: 0.75rem;
         }
         .ri-root .ri-tile-strong {
           background: linear-gradient(135deg, rgba(139,30,46,0.45), rgba(139,30,46,0.15));
-          border: 1px solid rgba(242,165,174,0.55);
+          border: 1px solid rgba(255,255,255,0.55);
           border-radius: 0.75rem;
+        }
+        /* AI Tool Disclaimer — repaint to burgundy ombre regardless of inner markup */
+        .ri-root .ri-disclaimer-wrap > * {
+          background: linear-gradient(135deg, #2a070f 0%, #160305 100%) !important;
+          background-color: #160305 !important;
+          border: 1px solid rgba(139,30,46,0.55) !important;
+          border-radius: 1rem !important;
+        }
+        .ri-root .ri-disclaimer-wrap, .ri-root .ri-disclaimer-wrap * {
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+        }
+        .ri-root .ri-disclaimer-wrap *:not(svg):not(path) {
+          background-color: transparent !important;
+        }
+        .ri-root .ri-disclaimer-wrap > * {
+          background: linear-gradient(135deg, #2a070f 0%, #160305 100%) !important;
         }
       `}</style>
 
