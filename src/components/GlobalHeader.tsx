@@ -603,11 +603,22 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       style={{ '--header-height': 'var(--responsive-header-height)' } as React.CSSProperties}
       data-tour-target="header"
     >
-      {/* Transparent-state top-fade mask — hides hero content from bleeding under the header on scroll */}
+      {/* Transparent-state top-fade mask — desktop keeps the dark scrim for legibility over hero video. */}
       <div
-        className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`}
+        className={`hidden lg:block absolute inset-0 pointer-events-none transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`}
         style={{
           background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 55%, rgba(0,0,0,0) 100%)',
+        }}
+        aria-hidden="true"
+      />
+      {/* Mobile/tablet: frosted "fiberglass" bar — hero feels full-bleed while white logo/text stays legible. */}
+      <div
+        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`}
+        style={{
+          background:
+            'linear-gradient(to bottom, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.06) 60%, rgba(0,0,0,0.12) 100%)',
+          backdropFilter: 'blur(14px) saturate(140%)',
+          WebkitBackdropFilter: 'blur(14px) saturate(140%)',
         }}
         aria-hidden="true"
       />
