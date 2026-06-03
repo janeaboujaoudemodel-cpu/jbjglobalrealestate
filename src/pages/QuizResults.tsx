@@ -28,10 +28,12 @@ import { useMembership } from "@/hooks/useMembership";
 import { useAuth } from "@/contexts/AuthContext";
 import MatchCriteriaTable, { buildCriteriaRowsForExport, computeMatchTotals } from "@/components/matchmaker/MatchCriteriaTable";
 import {
+  type MatchmakerFormData,
   readMatchmakerSession,
   writeMatchmakerSession,
   clearMatchmakerSession,
 } from "@/hooks/useMatchmakerSession";
+import { buildPropertyPresentationParagraphs, findAmenityPhotoUrl } from "@/utils/matchmakerProse";
 
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 const JBJ_CONSULTANT_EMAIL = "CONTACT@JBJ.AE";
@@ -250,11 +252,13 @@ const QuizResults = () => {
   const [shareTrigger, setShareTrigger] = useState<"share" | "post-download">("share");
   const [showVipModal, setShowVipModal] = useState(false);
   const [sessionAnswers, setSessionAnswers] = useState<Record<string, string | string[]>>({});
+  const [matchmakerFormData, setMatchmakerFormData] = useState<MatchmakerFormData | null>(null);
 
   // Hydrate from persisted matchmaker session: restore answers + recover URL slugs after refresh
   useEffect(() => {
     const s = readMatchmakerSession();
     if (s?.answers) setSessionAnswers(s.answers);
+    if (s?.formData) setMatchmakerFormData(s.formData);
     if (!projectSlugs.length && s?.resultSlugs?.length) {
       const params = new URLSearchParams();
       params.set("projects", s.resultSlugs.join(","));
@@ -436,7 +440,29 @@ const QuizResults = () => {
       month: "long",
       year: "numeric",
     });
+    const clientName = (matchmakerFormData?.fullName || "").trim();
+    const preparedLine = clientName ? `Prepared for ${clientName} · ${dateStr}` : `Prepared exclusively · ${dateStr}`;
     const monogram = await loadMonogram();
+
+    const drawOmbreWordmark = (text: string, x: number, y: number) => {
+      const segments = ["JBJ ", "GLOBAL ", "REAL ", "ESTATE"];
+      const colors: [number, number, number][] = [
+        [94, 234, 212],
+        [34, 211, 238],
+        [14, 165, 233],
+        [3, 105, 161],
+      ];
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(13);
+      doc.setFillColor(5, 42, 48);
+      doc.roundedRect(x - 4, y - 13, doc.getTextWidth(text) + 10, 18, 6, 6, "F");
+      let cursor = x;
+      segments.forEach((segment, idx) => {
+        doc.setTextColor(...colors[idx]);
+        doc.text(segment, cursor, y);
+        cursor += doc.getTextWidth(segment);
+      });
+    };
 
     const drawPageBg = () => {
       doc.setFillColor(...ink);
@@ -455,7 +481,7 @@ const QuizResults = () => {
       // Tiffany hairline accent under monogram chip
       doc.setDrawColor(...tiffany);
       doc.setLineWidth(0.6);
-      doc.line(M, HEADER_H - 0.5, pageW - M, HEADER_H - 0.5);
+      doc.line(0, HEADER_H - 0.5, pageW, HEADER_H - 0.5);
 
       // Monogram chip — ink square + tiffany hairline ring
       const chipSize = 54;
@@ -476,23 +502,20 @@ const QuizResults = () => {
 
       // Wordmark + tagline
       const tx = chipX + chipSize + 14;
-      doc.setTextColor(...white);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(13);
-      doc.text("JBJ GLOBAL REAL ESTATE", tx, chipY + 22);
+      drawOmbreWordmark("JBJ GLOBAL REAL ESTATE", tx, chipY + 22);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.setTextColor(...tiffanyLight);
       doc.text("AI Home Finder  |  Personalized Recommendations", tx, chipY + 38);
 
-      // Date right
+      // Prepared-for line, not a confidentiality warning
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.setTextColor(...tiffanyDim);
-      doc.text(dateStr, pageW - M, chipY + 22, { align: "right" });
+      doc.text(preparedLine, pageW - M, chipY + 22, { align: "right" });
       doc.setTextColor(...tiffanyDim);
       doc.setFontSize(7.5);
-      doc.text("Confidential — for the addressee only", pageW - M, chipY + 38, {
+      doc.text("Curated by JBJ GLOBAL REAL ESTATE", pageW - M, chipY + 38, {
         align: "right",
       });
     };
@@ -501,7 +524,7 @@ const QuizResults = () => {
       // Tiffany hairline
       doc.setDrawColor(...tiffany);
       doc.setLineWidth(0.5);
-      doc.line(M, pageH - FOOTER_H, pageW - M, pageH - FOOTER_H);
+      doc.line(0, pageH - FOOTER_H, pageW, pageH - FOOTER_H);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8);
       doc.setTextColor(...tiffanyMuted);
@@ -564,6 +587,35 @@ const QuizResults = () => {
       return w;
     };
 
+    const drawWrappedHyperlink = (
+      label: string,
+      url: string,
+      x: number,
+      y: number,
+      maxW: number,
+      size = 9.5,
+      lineH = 13
+    ) => {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(size);
+      doc.setTextColor(...tiffanyLight);
+      const safeLabel = label
+        .replace(/([/?&=#-])/g, "$1\u200B")
+        .replace(/\u200B\u200B/g, "\u200B");
+      const lines = doc.splitTextToSize(safeLabel, maxW) as string[];
+      lines.forEach((line, idx) => {
+        const text = line.replace(/\u200B/g, "");
+        const yy = y + idx * lineH;
+        doc.text(text, x, yy);
+        const w = Math.min(doc.getTextWidth(text), maxW);
+        doc.setDrawColor(...tiffanyLight);
+        doc.setLineWidth(0.45);
+        doc.line(x, yy + 2, x + w, yy + 2);
+        doc.link(x, yy - size + 1, w, size + 2, { url });
+      });
+      return y + lines.length * lineH;
+    };
+
     // Word-wrap text and return the new y after drawing.
     const drawWrapped = (
       text: string,
@@ -586,23 +638,6 @@ const QuizResults = () => {
       }
       return y;
     };
-
-    // Strip HTML tags from rich descriptions stored in DB.
-    const stripHtml = (s?: string | null) =>
-      (s || "")
-        .replace(/<style[^>]*>.*?<\/style>/gis, "")
-        .replace(/<script[^>]*>.*?<\/script>/gis, "")
-        .replace(/<br\s*\/?>/gi, "\n")
-        .replace(/<\/p>/gi, "\n\n")
-        .replace(/<[^>]+>/g, "")
-        .replace(/&nbsp;/g, " ")
-        .replace(/&amp;/g, "&")
-        .replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">")
-        .replace(/&#39;|&apos;/g, "'")
-        .replace(/&quot;/g, '"')
-        .replace(/\n{3,}/g, "\n\n")
-        .trim();
 
     const top = projects.slice(0, 3);
     const rankLabels = ["#1 Best Match", "#2 Strong Fit", "#3 Good Fit"];
@@ -655,14 +690,19 @@ const QuizResults = () => {
     doc.roundedRect(M, y, chipW, 20, 10, 10, "FD");
     doc.setTextColor(...tiffanyLight);
     doc.text(chipText, M + 11, y + 13.5);
-    y += 38;
+    y += 42;
 
     // Title
     doc.setTextColor(...white);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(26);
     doc.text("Your AI-Selected Properties", M, y);
-    y += 22;
+    y += 20;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.setTextColor(...tiffanyLight);
+    doc.text(preparedLine, M, y);
+    y += 18;
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
     doc.setTextColor(...tiffanyMuted);
@@ -675,12 +715,12 @@ const QuizResults = () => {
       tiffanyMuted,
       11
     );
-    y += 12;
+    y += 14;
 
     // Three rank cards
     const cardGap = 12;
     const cardW = (pageW - 2 * M - 2 * cardGap) / 3;
-    const cardH = 230;
+    const cardH = 278;
     top.forEach((p, i) => {
       const cx = M + i * (cardW + cardGap);
       const cy = y;
@@ -692,7 +732,7 @@ const QuizResults = () => {
       doc.roundedRect(cx, cy, cardW, cardH, 10, 10, "FD");
 
       // Photo area
-      const imgH = 110;
+      const imgH = 128;
       doc.setFillColor(8, 50, 60);
       doc.roundedRect(cx + 8, cy + 8, cardW - 16, imgH, 6, 6, "F");
       const cov = covers[i];
@@ -751,22 +791,40 @@ const QuizResults = () => {
       );
       ty += 14;
 
+      doc.setDrawColor(18, 92, 98);
+      doc.setLineWidth(0.35);
+      doc.line(cx + 12, ty - 6, cx + cardW - 12, ty - 6);
+
       // Price
       doc.setFont("helvetica", "bold");
       doc.setFontSize(9.5);
       doc.setTextColor(...tiffanyLight);
       doc.text(fmtPrice(p), cx + 12, ty);
-      ty += 12;
+      ty += 16;
+
+      doc.setDrawColor(18, 92, 98);
+      doc.setLineWidth(0.35);
+      doc.line(cx + 12, ty - 7, cx + cardW - 12, ty - 7);
 
       // Bedrooms
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.setTextColor(...tiffanyMuted);
       doc.text(fmtBeds(p), cx + 12, ty);
+      ty += 14;
+      const loc = doc.splitTextToSize(`${p.location || "Dubai"}${p.emirate ? `, ${p.emirate}` : ""}`, cardW - 24) as string[];
+      doc.setTextColor(...tiffanyDim);
+      doc.text(loc.slice(0, 2), cx + 12, ty);
     });
-    y += cardH + 18;
+    y += cardH + 20;
 
-    // What's inside this report
+    // What's inside this report — pinned above footer so the cover does not leave a loose blank void.
+    y = Math.max(y, pageH - FOOTER_H - 92);
+    doc.setFillColor(4, 27, 30);
+    doc.setDrawColor(16, 90, 100);
+    doc.setLineWidth(0.4);
+    doc.roundedRect(M, y - 18, pageW - 2 * M, 76, 8, 8, "FD");
+    y -= 2;
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
     doc.setTextColor(...tiffanyLight);
@@ -824,7 +882,7 @@ const QuizResults = () => {
 
       const cHead = [
         "Your Requirement",
-        ...top.map((p, i) => `#${i + 1}  ${p.name}`),
+        ...top.map((p, i) => `      #${i + 1}  ${p.name}`),
       ];
       const cBody = criteriaRows.map((row) => [
         `${row.label}\n${row.userPick}`,
@@ -863,7 +921,8 @@ const QuizResults = () => {
           textColor: ink,
           fontStyle: "bold",
           fontSize: 10.5,
-          cellPadding: 9,
+          cellPadding: 10,
+          minCellHeight: 38,
           halign: "left",
           valign: "middle",
         },
@@ -892,6 +951,21 @@ const QuizResults = () => {
             data.cell.styles.fillColor = [6, 60, 70];
             data.cell.styles.fontStyle = "bold";
             data.cell.styles.textColor = tiffanyLight;
+          }
+        },
+        didDrawCell: (data) => {
+          if (data.section === "head" && data.column.index > 0) {
+            const cov = covers[data.column.index - 1];
+            if (cov) {
+              try {
+                doc.addImage(cov.data, cov.type, data.cell.x + 8, data.cell.y + 7, 24, 24, undefined, "FAST");
+                doc.setDrawColor(...ink);
+                doc.setLineWidth(0.4);
+                doc.roundedRect(data.cell.x + 8, data.cell.y + 7, 24, 24, 4, 4, "S");
+              } catch {
+                /* ignore header thumb */
+              }
+            }
           }
         },
       });
@@ -1006,9 +1080,9 @@ const QuizResults = () => {
         py += cellH + 8;
       }
 
-      // Description
-      const desc = stripHtml(p.description);
-      if (desc) {
+      // Presentation prose — natural sentences, not raw brochure label/value dumps.
+      const paragraphs = buildPropertyPresentationParagraphs(p, 3);
+      if (paragraphs.length) {
         if (py + 60 > CONTENT_BOTTOM) {
           doc.addPage();
           drawPageBg();
@@ -1021,80 +1095,113 @@ const QuizResults = () => {
         doc.setTextColor(...tiffanyLight);
         doc.text("About this property", M, py);
         py += 16;
-        const descLines = doc.splitTextToSize(desc, pageW - 2 * M) as string[];
         doc.setFont("helvetica", "normal");
         doc.setFontSize(10);
         doc.setTextColor(...tiffanyMuted);
-        for (const ln of descLines) {
-          if (py + 14 > CONTENT_BOTTOM) {
-            doc.addPage();
-            drawPageBg();
-            drawHeader();
-            py = CONTENT_TOP;
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.setTextColor(...tiffanyMuted);
+        for (const paragraph of paragraphs) {
+          const descLines = doc.splitTextToSize(paragraph, pageW - 2 * M) as string[];
+          for (const ln of descLines) {
+            if (py + 14 > CONTENT_BOTTOM) {
+              doc.addPage();
+              drawPageBg();
+              drawHeader();
+              py = CONTENT_TOP;
+              doc.setFont("helvetica", "bold");
+              doc.setFontSize(11);
+              doc.setTextColor(...tiffanyLight);
+              doc.text(`Property #${idx + 1} continued`, M, py);
+              py += 18;
+              doc.setFont("helvetica", "normal");
+              doc.setFontSize(10);
+              doc.setTextColor(...tiffanyMuted);
+            }
+            doc.text(ln, M, py);
+            py += 14;
           }
-          doc.text(ln, M, py);
-          py += 14;
+          py += 7;
         }
       }
 
-      // Amenities (if any)
-      const amenities = Array.isArray(p.amenities) ? p.amenities : [];
+      // Amenities with photos where the inventory provides real amenity imagery.
+      const amenities = Array.isArray(p.amenities) ? p.amenities.slice(0, 12) : [];
       if (amenities.length) {
-        if (py + 40 > CONTENT_BOTTOM) {
+        if (py + 98 > CONTENT_BOTTOM) {
           doc.addPage();
           drawPageBg();
           drawHeader();
           py = CONTENT_TOP;
         }
-        py += 8;
+        py += 4;
         doc.setFont("helvetica", "bold");
         doc.setFontSize(11);
         doc.setTextColor(...tiffanyLight);
         doc.text("Amenities & Features", M, py);
-        py += 14;
-        // Render as wrapping pills
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(9);
-        let ax = M;
-        const ay0 = py;
-        let ay = ay0;
-        amenities.slice(0, 24).forEach((a: string) => {
-          const label = String(a || "").trim();
-          if (!label) return;
-          const pw = doc.getTextWidth(label) + 14;
-          if (ax + pw > pageW - M) {
-            ax = M;
-            ay += 22;
+        py += 15;
+        const amenityPhotos = await Promise.all(
+          amenities.map((a: string) =>
+            loadImageAsDataUrl(findAmenityPhotoUrl(a, p.amenity_images as Record<string, string> | null), 2500)
+          )
+        );
+        const cols = 4;
+        const gap = 8;
+        const aw = (pageW - 2 * M - gap * (cols - 1)) / cols;
+        const ah = 66;
+        for (let aIdx = 0; aIdx < amenities.length; aIdx++) {
+          const col = aIdx % cols;
+          if (col === 0 && aIdx > 0) py += ah + 8;
+          if (py + ah > CONTENT_BOTTOM) {
+            doc.addPage();
+            drawPageBg();
+            drawHeader();
+            py = CONTENT_TOP;
           }
-          if (ay + 16 > CONTENT_BOTTOM) return;
-          doc.setFillColor(8, 56, 64);
-          doc.setDrawColor(...tiffanyDeep);
-          doc.setLineWidth(0.4);
-          doc.roundedRect(ax, ay, pw, 18, 9, 9, "FD");
-          doc.setTextColor(...tiffanyLight);
-          doc.text(label, ax + pw / 2, ay + 12, { align: "center" });
-          ax += pw + 6;
-        });
-        py = ay + 22;
+          const ax = M + col * (aw + gap);
+          doc.setFillColor(5, 38, 44);
+          doc.setDrawColor(16, 90, 100);
+          doc.setLineWidth(0.35);
+          doc.roundedRect(ax, py, aw, ah, 6, 6, "FD");
+          const photo = amenityPhotos[aIdx];
+          if (photo) {
+            try {
+              doc.addImage(photo.data, photo.type, ax + 4, py + 4, aw - 8, 36, undefined, "FAST");
+            } catch {
+              /* ignore amenity photo */
+            }
+          } else {
+            doc.setFillColor(8, 56, 64);
+            doc.roundedRect(ax + 4, py + 4, aw - 8, 36, 5, 5, "F");
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(8);
+            doc.setTextColor(...tiffanyLight);
+            doc.text("JBJ", ax + aw / 2, py + 26, { align: "center" });
+          }
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(7.5);
+          doc.setTextColor(...tiffanyMuted);
+          const labelLines = doc.splitTextToSize(String(amenities[aIdx]), aw - 10) as string[];
+          doc.text(labelLines.slice(0, 2), ax + 5, py + 50);
+        }
+        py += ah + 8;
       }
 
-      // Listing CTA at bottom of last per-property page
-      if (py + 40 > CONTENT_BOTTOM) {
+      // Listing CTA with wrapped, visibly underlined URL.
+      if (py + 58 > CONTENT_BOTTOM) {
         doc.addPage();
         drawPageBg();
         drawHeader();
         py = CONTENT_TOP;
       }
-      py += 8;
       doc.setFont("helvetica", "bold");
       doc.setFontSize(10);
       doc.setTextColor(...tiffanyMuted);
       doc.text("Listing:", M, py);
       const url = `${origin}/project/${p.slug}`;
-      drawHyperlink(url, url, M + 42, py, 9.5);
+      py = drawWrappedHyperlink(url, url, M + 42, py, pageW - M - (M + 42), 9.5, 13) + 7;
+
+      doc.setFillColor(8, 56, 64);
+      doc.setDrawColor(...tiffanyLight);
+      doc.roundedRect(M, py, 176, 24, 12, 12, "FD");
+      drawHyperlink("Download this property brochure", url, M + 12, py + 16, 8.5);
     }
 
     // ============= PAGE NUMBERS + FOOTERS (all pages) =============
@@ -1126,6 +1233,109 @@ const QuizResults = () => {
     a.click();
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 4000);
+  };
+
+  const handleDownloadPropertyBrochure = async (project: any, rankIndex: number) => {
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const M = 42;
+    const ink: [number, number, number] = [2, 17, 15];
+    const navy: [number, number, number] = [4, 22, 28];
+    const tiffany: [number, number, number] = [94, 234, 212];
+    const cyan: [number, number, number] = [34, 211, 238];
+    const white: [number, number, number] = [255, 255, 255];
+    const muted: [number, number, number] = [205, 245, 245];
+    const fmtBedsLocal = (p: any) =>
+      p.bedrooms_min != null && p.bedrooms_max != null
+        ? p.bedrooms_min === 0
+          ? `Studio${p.bedrooms_max > 0 ? `-${p.bedrooms_max} BR` : ""}`
+          : `${p.bedrooms_min}-${p.bedrooms_max} BR`
+        : "Type TBC";
+    const fmtPriceLocal = (p: any) => {
+      if (!p.price_from) return "Price on Request";
+      const lo = `AED ${(p.price_from / 1_000_000).toFixed(1)}M`;
+      return p.price_to && p.price_to > p.price_from ? `${lo} - AED ${(p.price_to / 1_000_000).toFixed(1)}M` : `From ${lo}`;
+    };
+    doc.setFillColor(...ink);
+    doc.rect(0, 0, pageW, pageH, "F");
+    doc.setFillColor(...navy);
+    doc.rect(0, 0, pageW, 76, "F");
+    doc.setDrawColor(...cyan);
+    doc.setLineWidth(0.7);
+    doc.line(0, 76, pageW, 76);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.setTextColor(...tiffany);
+    doc.text("JBJ GLOBAL REAL ESTATE", M, 34);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(...muted);
+    doc.text(`Property #${rankIndex + 1} brochure · AI Home Finder`, M, 52);
+    let y = 108;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.setTextColor(...white);
+    doc.text(project.name || "Property brochure", M, y);
+    y += 16;
+    doc.setFontSize(10);
+    doc.setTextColor(...tiffany);
+    doc.text(`by ${project.developer?.name || "JBJ GLOBAL REAL ESTATE"}`, M, y);
+    y += 18;
+    const cover = await loadImageAsDataUrl(project.cover_image_url || project.images?.[0]?.image_url || null, 3500);
+    if (cover) {
+      try { doc.addImage(cover.data, cover.type, M, y, pageW - 2 * M, 210, undefined, "FAST"); } catch { /* ignore */ }
+      doc.setDrawColor(...tiffany);
+      doc.roundedRect(M, y, pageW - 2 * M, 210, 8, 8, "S");
+      y += 232;
+    }
+    const facts = [
+      ["Location", `${project.location || "Dubai"}${project.emirate ? `, ${project.emirate}` : ""}`],
+      ["Price", fmtPriceLocal(project)],
+      ["Bedrooms", fmtBedsLocal(project)],
+      ["Handover", project.handover_date || "TBA"],
+    ];
+    const colW = (pageW - 2 * M - 12) / 2;
+    facts.forEach((f, i) => {
+      const x = M + (i % 2) * (colW + 12);
+      const yy = y + Math.floor(i / 2) * 42;
+      doc.setFillColor(5, 38, 44);
+      doc.setDrawColor(16, 90, 100);
+      doc.roundedRect(x, yy, colW, 34, 6, 6, "FD");
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.setTextColor(...tiffany);
+      doc.text(f[0].toUpperCase(), x + 10, yy + 13);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(...white);
+      doc.text(String(f[1]), x + 10, yy + 27);
+    });
+    y += 96;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(...tiffany);
+    doc.text("Presentation overview", M, y);
+    y += 18;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(...muted);
+    for (const paragraph of buildPropertyPresentationParagraphs(project, 3)) {
+      const lines = doc.splitTextToSize(paragraph, pageW - 2 * M) as string[];
+      lines.slice(0, 5).forEach((line) => { doc.text(line, M, y); y += 13; });
+      y += 5;
+      if (y > pageH - 90) break;
+    }
+    const url = `${window.location.origin}/project/${project.slug}`;
+    doc.setTextColor(...tiffany);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.text("View full listing:", M, pageH - 58);
+    const linkLines = doc.splitTextToSize(url.replace(/([/?&=#-])/g, "$1\u200B"), pageW - 2 * M - 92) as string[];
+    doc.text(linkLines.map((l) => l.replace(/\u200B/g, "")).slice(0, 2), M + 88, pageH - 58);
+    doc.link(M + 88, pageH - 70, pageW - 2 * M - 92, 28, { url });
+    triggerDownload(doc.output("blob"), `JBJ-${project.slug}-Brochure.pdf`);
+    toast.success("Property brochure downloaded");
   };
 
   // Cache the most recent generated PDF (blob + filename) so share handlers can attach it
@@ -1304,25 +1514,6 @@ const QuizResults = () => {
           </div>
         </div>
 
-        {/* Criteria × Properties tick table */}
-        {projects && projects.length > 0 && Object.keys(sessionAnswers).length > 0 && (
-          <>
-            <MatchCriteriaTable answers={sessionAnswers} projects={projects.slice(0, 3)} />
-            <div className="flex justify-center mb-12">
-              <Button
-                data-no-contrast-guard
-                onClick={() => {
-                  document.getElementById("aihf-top-pick")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
-                className="aihf-cta aihf-cta-glow font-bold px-8 py-5 text-base rounded-xl"
-              >
-                View these properties
-                <ChevronDown className="w-5 h-5 ml-2" />
-              </Button>
-            </div>
-          </>
-        )}
-
         {/* Empty state — only shown if DB returned literally nothing */}
         {(!projects || projects.length === 0) && !isLoading && (
           <div className="aihf-panel rounded-2xl p-8 mb-12 text-center max-w-2xl mx-auto">
@@ -1427,12 +1618,22 @@ const QuizResults = () => {
                     </DropdownMenu>
                   </div>
                   
-                  <Link to={`/project/${projects[0].slug}`}>
-                    <Button className="aihf-cta w-full md:w-auto font-semibold hover:-translate-y-0.5 transition-all duration-300">
-                      View Property
-                      <ArrowRight className="w-4 h-4 ml-2" />
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link to={`/project/${projects[0].slug}`}>
+                      <Button className="aihf-cta w-full md:w-auto font-semibold hover:-translate-y-0.5 transition-all duration-300">
+                        View Property
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                    <Button
+                      type="button"
+                      onClick={() => handleDownloadPropertyBrochure(projects[0], 0)}
+                      className="aihf-outline w-full md:w-auto font-semibold"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Download Brochure
                     </Button>
-                  </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1486,12 +1687,20 @@ const QuizResults = () => {
                           <p className="font-semibold">{bedrooms}</p>
                         </div>
                       </div>
-                      <Link to={`/project/${project.slug}`} className="mt-auto">
+                      <Link to={`/project/${project.slug}`} className="mt-auto mb-3">
                         <Button className="aihf-cta w-full font-semibold">
                           View Property
                           <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
                       </Link>
+                      <Button
+                        type="button"
+                        onClick={() => handleDownloadPropertyBrochure(project, index + 1)}
+                        className="aihf-outline w-full font-semibold text-xs"
+                      >
+                        <Download className="w-3 h-3 mr-1" />
+                        Download Brochure
+                      </Button>
                     </div>
                     {/* Badge Assignment */}
                     <div className="px-5 pb-5">
@@ -1534,6 +1743,25 @@ const QuizResults = () => {
               })}
             </div>
           </div>
+        )}
+
+        {/* Criteria × Properties comparison table — restored below the #1/#2/#3 cards */}
+        {projects && projects.length > 0 && Object.keys(sessionAnswers).length > 0 && (
+          <>
+            <MatchCriteriaTable answers={sessionAnswers} projects={projects.slice(0, 3)} />
+            <div className="flex justify-center mb-12">
+              <Button
+                data-no-contrast-guard
+                onClick={() => {
+                  document.getElementById("aihf-top-pick")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="aihf-cta aihf-cta-glow font-bold px-8 py-5 text-base rounded-xl"
+              >
+                Back to property #1
+                <ChevronDown className="w-5 h-5 ml-2 rotate-180" />
+              </Button>
+            </div>
+          </>
         )}
 
         {/* Action Cards */}
