@@ -120,8 +120,9 @@ export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl
 
   return (
     <>
-      {/* Trigger pill — top-right of hero, below 88px sticky header in every state */}
-      <div className="absolute top-[112px] xl:top-[120px] left-4 md:left-8 z-30">
+      {/* Trigger pill — fixed below the 88px header and right of the 88px sidebar
+          so it never slides under the header/sidebar on scroll. */}
+      <div className="fixed top-[100px] left-[104px] z-40">
         <button
           onClick={() => setOpen(true)}
           className="inline-flex items-center gap-1.5 bg-[#F7F2EA]/95 text-[#1A1A1A] px-3 py-1.5 rounded-md text-[11px] font-semibold uppercase tracking-[0.2em] shadow-lg border border-[#B89555]/60 backdrop-blur-sm hover:bg-[#EFE6D6] transition-colors"
