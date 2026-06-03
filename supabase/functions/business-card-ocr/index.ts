@@ -19,9 +19,12 @@ serve(async (req) => {
     if (!image) throw new Error("Missing required field: image");
 
     const prompt = `You are an expert OCR system specialized in business cards.
-Read every visible piece of text on this card carefully and return ONLY valid JSON in this exact shape:
+First decide if the image is actually a business card or a close-up of a printed/digital business-card layout. Selfies, people, rooms, random documents, blank images, screenshots without contact-card details, and normal photos are NOT business cards.
+Read every visible piece of text only when it is a business card and return ONLY valid JSON in this exact shape:
 
 {
+  "is_business_card": true,
+  "reason": "short reason when false, empty string when true",
   "name": "full person name",
   "title": "job title / position",
   "company_name": "primary company name on the card",
@@ -45,7 +48,8 @@ Read every visible piece of text on this card carefully and return ONLY valid JS
 
 Rules:
 - Use empty string "" for any field you cannot find. Do NOT guess or fabricate.
-- Set "confidence" between 0 and 1 based on overall image legibility.
+- If the image is not clearly a business card, set "is_business_card": false, all contact fields to "", "raw_text" to "", and "confidence": 0.
+- Set "confidence" between 0 and 1 based on business-card extraction confidence, not image quality alone.
 - Do not return markdown, do not return prose. Just the JSON object.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -115,6 +119,33 @@ Rules:
       raw_text: str(parsed.raw_text),
     };
 
+    const digits = (...values: string[]) => values.join(" ").replace(/\D/g, "");
+    const hasEmail = /\S+@\S+\.\S+/.test(contact.email);
+    const hasPhone = digits(contact.mobile, contact.whatsapp, contact.landline).length >= 7;
+    const hasWebsite = /^https?:\/\//i.test(contact.website) || /\.[a-z]{2,}$/i.test(contact.website);
+    const hasSocial = Boolean(contact.linkedin || contact.instagram);
+    const hasNameWithOrgOrTitle =
+      contact.name.length >= 2 &&
+      (contact.company_name.length >= 2 || contact.agency_name.length >= 2 || contact.developer_name.length >= 2 || contact.title.length >= 2);
+    const modelSaysFalse = parsed.is_business_card === false;
+    const isBusinessCard = !modelSaysFalse && (hasEmail || hasPhone || hasWebsite || hasSocial || hasNameWithOrgOrTitle);
+
+    if (!isBusinessCard) {
+      return new Response(
+        JSON.stringify({
+          contact: { ...contact, raw_text: "" },
+          is_business_card: false,
+          reason:
+            str(parsed.reason) ||
+            "No business-card contact details were detected. The image was not added to scanned contacts or CRM.",
+          confidence: 0,
+          raw_extraction: parsed,
+          timestamp,
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
     const critical = [contact.name, contact.email, contact.mobile, contact.company_name];
     const filled = critical.filter((f) => f.length > 0).length;
     const confidence =
@@ -122,7 +153,7 @@ Rules:
         ? Math.max(0, Math.min(1, parsed.confidence as number))
         : Math.min(0.99, 0.5 + (filled / critical.length) * 0.5);
 
-    return new Response(JSON.stringify({ contact, confidence, raw_extraction: parsed, timestamp }), {
+    return new Response(JSON.stringify({ contact, is_business_card: true, confidence, raw_extraction: parsed, timestamp }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: unknown) {
