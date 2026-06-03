@@ -760,30 +760,43 @@ const QuizResults = () => {
     toast.success(opts.successMsg);
   };
 
-  // Channel handlers
-  const handleShareWhatsApp = async () => {
-    const text = buildShareText();
-    await shareWithFile({
-      title: "JBJ AI Property Recommendations",
-      text,
-      fallbackUrl: `https://wa.me/?text=${encodeURIComponent(
-        `${text}\n\n(PDF report downloaded — attach it from your downloads.)`
-      )}`,
-      successMsg: "Opening WhatsApp — attach the downloaded PDF",
-    });
+  // Open a link synchronously inside the click gesture so popup blockers don't fire.
+  // PDF generation runs in the BACKGROUND after the link opens.
+  const openLinkSync = (url: string) => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => a.remove(), 0);
   };
 
-  const handleShareEmail = async () => {
+  const generatePdfInBackground = () => {
+    generateAndCachePdf()
+      .then((built) => {
+        if (built) triggerDownload(built.blob, built.filename);
+      })
+      .catch(() => {
+        /* silent — link already opened */
+      });
+  };
+
+  // Channel handlers — synchronous open, then background PDF download.
+  const handleShareWhatsApp = () => {
+    const text = buildShareText();
+    openLinkSync(`https://wa.me/?text=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it from your downloads.)`)}`);
+    generatePdfInBackground();
+    toast.success("Opening WhatsApp — attach the downloaded PDF");
+  };
+
+  const handleShareEmail = () => {
     const subject = "My JBJ AI Property Recommendations";
     const text = buildShareText();
-    await shareWithFile({
-      title: subject,
-      text,
-      fallbackUrl: `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
-        `${text}\n\n(PDF report downloaded — attach it to this email from your downloads.)`
-      )}`,
-      successMsg: "Opening email — attach the downloaded PDF",
-    });
+    openLinkSync(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it to this email from your downloads.)`)}`);
+    generatePdfInBackground();
+    toast.success("Opening email — attach the downloaded PDF");
   };
 
   const handleCopyLink = async () => {
@@ -795,34 +808,20 @@ const QuizResults = () => {
     }
   };
 
-  const handleShareToConsultant = async () => {
+  const handleShareToConsultant = () => {
     if (!projects?.length) return;
     const subject = "AI Property Recommendations — Request Consultation";
-    const body = `Dear JBJ Global Real Estate Team,\n\nI have completed the AI Property Assessment and would like a consultation on the following recommendations:\n\n${buildShareText(
-      false
-    )}\n\nThe branded PDF report has been downloaded to my device and I will attach it to this email.\n\nBest regards`;
-    await shareWithFile({
-      title: subject,
-      text: body,
-      fallbackUrl: `mailto:${JBJ_CONSULTANT_EMAIL}?subject=${encodeURIComponent(
-        subject
-      )}&body=${encodeURIComponent(body)}`,
-      successMsg: "Opening email to JBJ — attach the downloaded PDF",
-    });
+    const body = `Dear JBJ Global Real Estate Team,\n\nI have completed the AI Property Assessment and would like a consultation on the following recommendations:\n\n${buildShareText(false)}\n\nThe branded PDF report has been downloaded to my device and I will attach it to this email.\n\nBest regards`;
+    openLinkSync(`mailto:${JBJ_CONSULTANT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+    generatePdfInBackground();
+    toast.success("Opening email to JBJ — attach the downloaded PDF");
   };
 
-  const handleConsultantWhatsApp = async () => {
-    const text = `Hello JBJ Global Real Estate,\n\nI just completed the AI Property Finder and would like a consultation on these recommendations:\n\n${buildShareText(
-      false
-    )}`;
-    await shareWithFile({
-      title: "AI Property Recommendations",
-      text,
-      fallbackUrl: `https://wa.me/${JBJ_CONSULTANT_WHATSAPP}?text=${encodeURIComponent(
-        `${text}\n\n(PDF report downloaded — attach it from your downloads.)`
-      )}`,
-      successMsg: "Opening WhatsApp to JBJ — attach the downloaded PDF",
-    });
+  const handleConsultantWhatsApp = () => {
+    const text = `Hello JBJ Global Real Estate,\n\nI just completed the AI Property Finder and would like a consultation on these recommendations:\n\n${buildShareText(false)}`;
+    openLinkSync(`https://wa.me/${JBJ_CONSULTANT_WHATSAPP}?text=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it from your downloads.)`)}`);
+    generatePdfInBackground();
+    toast.success("Opening WhatsApp to JBJ — attach the downloaded PDF");
   };
 
 
