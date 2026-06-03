@@ -379,6 +379,21 @@ const QuizResults = () => {
       pillX += w + 10;
     });
 
+    const fmtBeds = (p: any) =>
+      p.bedrooms_min != null && p.bedrooms_max != null
+        ? p.bedrooms_min === 0
+          ? `Studio${p.bedrooms_max > 0 ? `–${p.bedrooms_max} BR` : ""}`
+          : `${p.bedrooms_min}–${p.bedrooms_max} BR`
+        : "Type TBC";
+    const fmtSize = (p: any) =>
+      p.size_min_sqft && p.size_max_sqft
+        ? `${p.size_min_sqft.toLocaleString()}–${p.size_max_sqft.toLocaleString()} sq ft`
+        : p.size_min_sqft
+        ? `${p.size_min_sqft.toLocaleString()} sq ft+`
+        : "—";
+    const fmtPrice = (p: any) =>
+      p.price_from ? `AED ${(p.price_from / 1000000).toFixed(1)}M` : "Price on Request";
+
     // ---------- Criteria match table (page 2) ----------
     const criteriaRows = buildCriteriaRowsForExport(sessionAnswers, top);
     if (criteriaRows.length > 0) {
