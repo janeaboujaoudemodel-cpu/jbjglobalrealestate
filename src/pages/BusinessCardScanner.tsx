@@ -214,6 +214,14 @@ const BusinessCardScanner = () => {
       toast.error("Please sign in to save to CRM");
       return;
     }
+    if (!isContactValid(contact)) {
+      toast.error(
+        "No contact details detected — this card can't be saved to CRM. Edit the fields first or remove it.",
+        { duration: 5000 },
+      );
+      updateContactState(id, { saveStatus: "error" });
+      return;
+    }
     updateContactState(id, { saveStatus: "saving" });
     const { data, error } = await supabase.functions.invoke("crm-save-scanned-card", {
       body: { ...buildPayload(contact), action: "check" },
@@ -237,9 +245,15 @@ const BusinessCardScanner = () => {
       toast.error("No contacts to save");
       return;
     }
+    const saveable = scannedContacts.filter(isContactValid);
+    const skipped = scannedContacts.length - saveable.length;
+    if (saveable.length === 0) {
+      toast.error("None of the scanned items contain enough contact info to save to CRM.");
+      return;
+    }
     let okCount = 0;
     let dupCount = 0;
-    for (const c of scannedContacts) {
+    for (const c of saveable) {
       if (c.saveStatus === "saved") continue;
       updateContactState(c.id, { saveStatus: "saving" });
       const { data } = await supabase.functions.invoke("crm-save-scanned-card", {
@@ -247,7 +261,6 @@ const BusinessCardScanner = () => {
       });
       if (data?.status === "duplicate" && data?.existing) {
         dupCount++;
-        // Default behavior for bulk: merge (enrich) instead of duplicating
         const r = await callSave(c, "merge", data.existing.id);
         if (r) okCount++;
       } else {
@@ -256,7 +269,7 @@ const BusinessCardScanner = () => {
       }
     }
     toast.success(
-      `Saved ${okCount} contact(s) to CRM${dupCount > 0 ? ` (${dupCount} merged into existing)` : ""}`
+      `Saved ${okCount} contact(s) to CRM${dupCount > 0 ? ` (${dupCount} merged into existing)` : ""}${skipped > 0 ? ` — ${skipped} skipped (no contact details)` : ""}`,
     );
   };
 
