@@ -317,27 +317,29 @@ const BusinessCardResults = ({
                     </div>
                   </div>
 
-                  <div className="mt-3 pt-2 border-t flex items-center justify-between text-xs text-muted-foreground gap-2">
-                    <span>Scanned {new Date(contact.scannedAt).toLocaleString()}</span>
+                  <div className="mt-3 pt-2 flex items-center justify-between text-xs gap-2 allow-white" style={{ borderTop: "1px solid rgba(251,113,133,0.35)", color: "rgba(255,255,255,0.72)" }}>
+                    <span className="allow-white">Scanned {new Date(contact.scannedAt).toLocaleString()}</span>
                     <div className="flex items-center gap-2">
                       {onSaveContact && (
                         <Button
                           size="sm"
-                          className="h-7 gap-1"
-                          disabled={saveStatus === "saving" || saveStatus === "saved"}
+                          className="h-7 gap-1 rounded-full border border-rose-500/55 bg-rose-500/12 px-3 text-white hover:bg-rose-500/22 hover:text-white disabled:bg-rose-500/12 disabled:text-white disabled:opacity-100 allow-white"
+                          data-no-contrast-guard
+                          data-allow-dark-cta
+                          disabled={saveStatus === "saving" || saveStatus === "saved" || !saveable}
                           onClick={() => onSaveContact(contact.id)}
                         >
                           {saveStatus === "saving" ? (
-                            <Loader2 className="h-3 w-3 animate-spin" />
+                            <Loader2 className="h-3 w-3 animate-spin allow-white" />
                           ) : saveStatus === "saved" ? (
-                            <CheckCircle2 className="h-3 w-3" />
+                            <CheckCircle2 className="h-3 w-3 allow-white" />
                           ) : (
-                            <UserPlus className="h-3 w-3" />
+                            <UserPlus className="h-3 w-3 allow-white" />
                           )}
-                          {saveStatus === "saved" ? "Saved to CRM" : "Save to CRM"}
+                          {saveStatus === "saved" ? "Saved to CRM" : saveable ? "Save to CRM" : "Not a business card"}
                         </Button>
                       )}
-                      <Lock className="h-3 w-3" />
+                      <Lock className="h-3 w-3 allow-white" style={{ color: "#fb7185" }} />
                     </div>
                   </div>
                 </div>
@@ -373,7 +375,7 @@ const Field = ({
 );
 
 const Row = ({ icon, text }: { icon: React.ReactNode; text: string }) => (
-  <div className="flex items-center gap-2 text-muted-foreground">
+  <div className="flex items-center gap-2 allow-white" style={{ color: "rgba(255,255,255,0.76)" }}>
     {icon}
     <span className="truncate">{text}</span>
   </div>
