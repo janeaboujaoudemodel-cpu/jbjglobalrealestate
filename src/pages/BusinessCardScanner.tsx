@@ -602,9 +602,14 @@ const BusinessCardScanner = () => {
           >
             <CardContent className="py-4">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-2 text-sm text-white/90 allow-white">
-                  <Lock className="h-4 w-4 text-rose-300 allow-white" />
-                  <span>All data encrypted with your session key</span>
+                <div className="flex flex-col gap-1 text-sm text-white/90 allow-white">
+                  <div className="flex items-center gap-2">
+                    <Lock className="h-4 w-4 text-rose-300 allow-white" />
+                    <span>All data encrypted with your session key</span>
+                  </div>
+                  <div className="text-[11px] text-white/65 allow-white">
+                    Delete here only clears the scanner. CRM records remain — manage them on the CRM page.
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
