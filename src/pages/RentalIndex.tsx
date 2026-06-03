@@ -26,9 +26,11 @@ import {
   CheckCircle,
   Info,
   Database,
+  Shield,
+  MessageCircle,
+  Phone,
 } from "lucide-react";
 import { toast } from "sonner";
-import LegalDisclaimer from "@/components/LegalDisclaimer";
 import { PrimaryCTA } from "@/components/tools/PrimaryCTA";
 import { PoweredByJBJ } from "@/components/tools/PoweredByJBJ";
 import { PremiumToolShell } from "@/components/tools/PremiumToolShell";
@@ -36,6 +38,7 @@ import { ToolSectionDivider } from "@/components/tools/ToolSectionDivider";
 import { toolThemes, TOOL_INK } from "@/components/tools/toolThemes";
 import { AnimatedShineCTA } from "@/components/tools/AnimatedShineCTA";
 import { useGuidedRequiredFields } from "@/hooks/useGuidedRequiredFields";
+import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 
 const theme = toolThemes.burgundy;
 
