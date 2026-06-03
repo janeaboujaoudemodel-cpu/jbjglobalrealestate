@@ -87,11 +87,54 @@ const AIHF_RESULTS_STYLE = `
     background: rgba(5,28,24,0.82) !important;
     border: 1px solid rgba(45,212,191,0.55) !important;
   }
-  .aihf-results .price-pill-premium, .aihf-results .price-pill-premium * {
-    color: #1A1A1A !important;
-    -webkit-text-fill-color: #1A1A1A !important;
+  /* Price pill — repaint inside AI Home Finder so it doesn't bleed champagne/gold */
+  .aihf-results .price-pill-premium {
+    background: linear-gradient(135deg, rgba(2,17,15,0.92) 0%, rgba(3,30,24,0.92) 100%) !important;
+    border: 1px solid rgba(94,234,212,0.55) !important;
+    box-shadow: inset 0 0 18px rgba(103,232,249,0.08) !important;
+    max-width: 100% !important;
+    flex-wrap: wrap !important;
+    padding: 6px 10px !important;
   }
-  .aihf-results .price-pill-value { color: var(--price-orange) !important; -webkit-text-fill-color: var(--price-orange) !important; }
+  .aihf-results .price-pill-eyebrow {
+    color: #67E8F9 !important;
+    -webkit-text-fill-color: #67E8F9 !important;
+    background: rgba(94,234,212,0.12) !important;
+    border-color: rgba(94,234,212,0.40) !important;
+  }
+  .aihf-results .price-pill-value {
+    color: var(--price-orange) !important;
+    -webkit-text-fill-color: var(--price-orange) !important;
+  }
+  /* Favorite/Heart + shortlist buttons — Tiffany cyan inside results */
+  .aihf-results [data-favorite-button] svg,
+  .aihf-results [data-shortlist-button] svg {
+    stroke: #5EEAD4 !important;
+    color: #5EEAD4 !important;
+    filter: drop-shadow(0 0 6px rgba(94,234,212,0.45));
+  }
+  .aihf-results [data-favorite-button][data-active="true"] svg,
+  .aihf-results [data-favorite-button].is-active svg {
+    fill: #22D3EE !important;
+    stroke: #22D3EE !important;
+  }
+  /* Tiffany dropdown menu (Add Badge) */
+  .aihf-results [role="menu"],
+  [data-aihf-menu] {
+    background: linear-gradient(160deg, #04161C 0%, #031E18 100%) !important;
+    border: 1px solid rgba(94,234,212,0.55) !important;
+    box-shadow: 0 20px 50px rgba(34,211,238,0.25) !important;
+  }
+  [data-aihf-menu] [role="menuitem"] {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+  }
+  [data-aihf-menu] [role="menuitem"]:hover,
+  [data-aihf-menu] [role="menuitem"]:focus {
+    background: rgba(94,234,212,0.15) !important;
+    color: #5EEAD4 !important;
+    -webkit-text-fill-color: #5EEAD4 !important;
+  }
 `;
 
 
