@@ -473,7 +473,7 @@ const QuizResults = () => {
       triggerDownload(built.blob, built.filename);
       toast.success("Report ready — choose how to share");
     }
-    setShareTrigger("share");
+    setShareTrigger("post-download");
     setShareModalOpen(true);
   };
 
