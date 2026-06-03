@@ -193,24 +193,27 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             </span>
           </div>
 
-          {/* Free Consultation — fiberglass (dark translucent) with WHITE title.
-              NOT navy/blue. Sits on the dark hero so opacity reads through. */}
+          {/* Free Consultation — fiberglass translucent surface with WHITE title. */}
           <div className="relative hidden md:flex flex-shrink-0 group/book">
             <button
               type="button"
               onClick={openBooking}
-              data-surface="ink"
+              data-surface="dark"
               data-no-contrast-guard
               data-allow-dark-cta
               data-hero-consultation-lock
               aria-label="Book your free consultation now"
-              className="allow-white surface-ink bg-[#1A1A1A] hover:bg-[#0F0F0F] flex items-center justify-center self-stretch h-full px-5 lg:px-6
+              className="allow-white surface-dark flex items-center justify-center self-stretch h-full px-5 lg:px-6
                 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] text-white
                 border-l border-[#B89555]/45
-                transition-[background-color] duration-200"
+                transition-[background-color,box-shadow] duration-200"
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
+                background: "linear-gradient(180deg, rgba(16,37,64,0.46) 0%, rgba(16,37,64,0.30) 100%)",
+                backdropFilter: "blur(16px) saturate(145%)",
+                WebkitBackdropFilter: "blur(16px) saturate(145%)",
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.18)",
                 opacity: 1,
               }}
             >
@@ -242,13 +245,16 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             data-surface="dark"
             data-hero-consultation-lock
             aria-label="Book your free consultation now"
-            className="surface-ink allow-white flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
+            className="surface-dark allow-white flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
               text-[13px] font-semibold whitespace-nowrap
-              border border-[#B89555]/70 bg-[#1A1A1A]/70 backdrop-blur-[2px]
-              transition-colors duration-200 hover:bg-[#1A1A1A]/80"
+              border border-[#B89555]/70
+              transition-colors duration-200"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
+              background: "linear-gradient(180deg, rgba(16,37,64,0.48) 0%, rgba(16,37,64,0.30) 100%)",
+              backdropFilter: "blur(16px) saturate(145%)",
+              WebkitBackdropFilter: "blur(16px) saturate(145%)",
               textShadow: "0 2px 8px rgba(0,0,0,0.72)",
               boxShadow: "inset 0 1px 0 rgba(255,238,200,0.15), 0 10px 26px rgba(0,0,0,0.32)",
             }}

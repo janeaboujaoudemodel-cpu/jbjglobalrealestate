@@ -48,14 +48,15 @@ const CATEGORIES: Array<{
 export default function CategorySelectorSection() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { setMode } = useUserModeContext();
+  const { setMode, hasMadeInitialSelection } = useUserModeContext();
   const { data: isRegistered } = useIsRegistered();
 
   // "Mode" = lightweight browse preference (can flip any time from the header).
   // "Registered" = a real category profile (investor_intake / broker_profiles /
   // developer_registrations) with the user's details. Only suppress this
-  // section when the user is *registered* — mode alone is not enough.
-  if (user && isRegistered) {
+  // Do not ask twice: once a category/mode has been selected, suppress the
+  // homepage picker. Registration still continues from /register/:category.
+  if (hasMadeInitialSelection || (user && isRegistered)) {
     return null;
   }
 
