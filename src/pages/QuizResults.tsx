@@ -615,7 +615,8 @@ const QuizResults = () => {
               data-no-contrast-guard
               className="aihf-cta font-semibold shadow-md hover:-translate-y-0.5 transition-all duration-300"
             >
-              <Download className="w-4 h-4 mr-2 text-[#B89555]" />
+              <Download className="w-4 h-4 mr-2" />
+
               Download Report
             </Button>
             <Button
