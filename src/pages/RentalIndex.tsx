@@ -26,16 +26,18 @@ import {
   CheckCircle,
   Info,
   Database,
+  Shield,
+  MessageCircle,
+  Phone,
 } from "lucide-react";
 import { toast } from "sonner";
-import LegalDisclaimer from "@/components/LegalDisclaimer";
 import { PrimaryCTA } from "@/components/tools/PrimaryCTA";
 import { PoweredByJBJ } from "@/components/tools/PoweredByJBJ";
 import { PremiumToolShell } from "@/components/tools/PremiumToolShell";
-import { ToolSectionDivider } from "@/components/tools/ToolSectionDivider";
-import { toolThemes, TOOL_INK } from "@/components/tools/toolThemes";
+import { toolThemes } from "@/components/tools/toolThemes";
 import { AnimatedShineCTA } from "@/components/tools/AnimatedShineCTA";
 import { useGuidedRequiredFields } from "@/hooks/useGuidedRequiredFields";
+import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 
 const theme = toolThemes.burgundy;
 
@@ -98,6 +100,11 @@ interface RentalAnalysis {
   disclaimer: string;
 }
 
+const WHITE_ICON_STYLE: React.CSSProperties = {
+  color: "#FFFFFF",
+  stroke: "#FFFFFF",
+};
+
 const FormLabel = ({
   icon: Icon,
   children,
@@ -109,7 +116,7 @@ const FormLabel = ({
 }) => (
   <Label
     className="flex items-center gap-2 mb-2 text-sm font-semibold"
-    style={{ color: TOOL_INK }}
+    style={{ color: "#FFFFFF" }}
   >
     {Icon && (
       <span
@@ -119,7 +126,7 @@ const FormLabel = ({
           border: `1px solid ${theme.accentBorder}`,
         }}
       >
-        <Icon className="w-3.5 h-3.5" style={{ color: theme.accent }} />
+        <Icon className="w-3.5 h-3.5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
       </span>
     )}
     <span>
@@ -150,14 +157,14 @@ const SectionHeader = ({
         border: `1px solid ${theme.accentBorder}`,
       }}
     >
-      <Icon className="w-5 h-5" style={{ color: theme.accent }} />
+      <Icon className="w-5 h-5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
     </span>
     <div>
-      <h2 className="text-xl font-bold" style={{ color: TOOL_INK }}>
+      <h2 className="text-xl font-bold" style={{ color: "#FFFFFF" }}>
         {title}
       </h2>
       {subtitle && (
-        <p className="text-sm" style={{ color: "rgba(26,26,26,0.65)" }}>
+        <p className="text-sm ri-dim" style={{ color: "rgba(255,255,255,0.82)" }}>
           {subtitle}
         </p>
       )}
@@ -237,18 +244,25 @@ const RentalIndex = () => {
     >
       {/* Page-local hard contrast lock — mirrors /property-measurement pattern */}
       <style>{`
-        .ri-root, .ri-root * { color: #FBEAEC; -webkit-text-fill-color: #FBEAEC; }
-        .ri-root label, .ri-root p, .ri-root span, .ri-root h1, .ri-root h2, .ri-root h3, .ri-root h4 { color: #FBEAEC !important; -webkit-text-fill-color: #FBEAEC !important; }
-        .ri-root .ri-dim { color: rgba(251,234,236,0.72) !important; -webkit-text-fill-color: rgba(251,234,236,0.72) !important; }
-        .ri-root .ri-accent { color: #F2A5AE !important; -webkit-text-fill-color: #F2A5AE !important; }
+        .ri-root, .ri-root * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+        .ri-root label, .ri-root p, .ri-root span, .ri-root h1, .ri-root h2, .ri-root h3, .ri-root h4, .ri-root a, .ri-root button, .ri-root div { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+        .ri-root .ri-dim { color: rgba(255,255,255,0.82) !important; -webkit-text-fill-color: rgba(255,255,255,0.82) !important; }
+        .ri-root .ri-accent, .ri-root .ri-white-lock, .ri-root .ri-white-lock * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
         /* Brighten icon tiles + svg icons (white over burgundy) */
         .ri-root [class*="rounded-md"][class*="w-6"][class*="h-6"],
         .ri-root [class*="rounded-xl"][class*="w-11"][class*="h-11"] {
           background: rgba(255,255,255,0.10) !important;
           border-color: rgba(255,255,255,0.45) !important;
         }
-        .ri-root svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
-        .ri-root .ri-accent { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+        .ri-root svg, .ri-root svg *, .ri-root .lucide, .ri-root [class*="lucide-"] {
+          color: #FFFFFF !important;
+          stroke: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          opacity: 1 !important;
+        }
+        .ri-root svg path, .ri-root svg circle, .ri-root svg line, .ri-root svg polyline, .ri-root svg rect {
+          stroke: #FFFFFF !important;
+        }
         .ri-card {
           background: linear-gradient(135deg, #3a0a14 0%, #1f0509 55%, #08020300 100%), #110204;
           border: 1px solid rgba(139,30,46,0.55) !important;
@@ -281,22 +295,17 @@ const RentalIndex = () => {
           border: 1px solid rgba(255,255,255,0.55);
           border-radius: 0.75rem;
         }
-        /* AI Tool Disclaimer — repaint to burgundy ombre regardless of inner markup */
-        .ri-root .ri-disclaimer-wrap > * {
-          background: linear-gradient(135deg, #2a070f 0%, #160305 100%) !important;
-          background-color: #160305 !important;
-          border: 1px solid rgba(139,30,46,0.55) !important;
-          border-radius: 1rem !important;
-        }
-        .ri-root .ri-disclaimer-wrap, .ri-root .ri-disclaimer-wrap * {
+        .ri-root .ri-disclaimer-wrap, .ri-root .ri-disclaimer-wrap *,
+        .ri-root .ri-disclaimer-wrap :is(h1,h2,h3,h4,p,span,a,button,div) {
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
+          opacity: 1 !important;
         }
-        .ri-root .ri-disclaimer-wrap *:not(svg):not(path) {
-          background-color: transparent !important;
-        }
-        .ri-root .ri-disclaimer-wrap > * {
-          background: linear-gradient(135deg, #2a070f 0%, #160305 100%) !important;
+        .ri-root .ri-disclaimer-wrap svg, .ri-root .ri-disclaimer-wrap svg * {
+          color: #FFFFFF !important;
+          stroke: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          opacity: 1 !important;
         }
       `}</style>
 
@@ -506,8 +515,45 @@ const RentalIndex = () => {
           ))}
         </div>
 
-        <div className="ri-disclaimer-wrap">
-          <LegalDisclaimer variant="ai-tools" />
+        <div className="ri-disclaimer-wrap ri-card-soft p-5 md:p-6">
+          <div className="flex items-start gap-3 mb-4">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg flex-shrink-0 border border-white/45 bg-white/10">
+              <Shield className="w-5 h-5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
+            </span>
+            <div>
+              <p className="text-sm font-semibold mb-1">AI Tool Disclaimer</p>
+              <p className="text-xs leading-relaxed ri-dim">
+                AI outputs support information and comparisons based on available data and inputs.
+                They are not guarantees and do not replace official documents or registration records.
+              </p>
+            </div>
+          </div>
+
+          <div className="border-t border-white/20 pt-4">
+            <p className="text-xs leading-relaxed ri-dim mb-3">
+              For legal, mortgage, or visa guidance, contact our team to connect you with our licensed partners.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href={getWhatsAppUrl("Hello, I used your AI tool and would like expert guidance.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-no-contrast-guard
+                className="allow-white inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors border border-white/45 bg-white/10 hover:bg-white/15"
+              >
+                <MessageCircle className="w-3.5 h-3.5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
+                WhatsApp Us
+              </a>
+              <a
+                href={`tel:${CONTACT_INFO.phone}`}
+                data-no-contrast-guard
+                className="allow-white inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors border border-white/45 bg-white/10 hover:bg-white/15"
+              >
+                <Phone className="w-3.5 h-3.5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
+                {CONTACT_INFO.phone}
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </PremiumToolShell>
