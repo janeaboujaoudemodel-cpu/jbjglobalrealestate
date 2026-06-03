@@ -1,43 +1,51 @@
-## Goal
-Match the Property Measurement standard across the entire Business Card Scanner: compact dark-navy shell, rose neon accents, fully readable text on every surface, and a tighter privacy gate layout.
+Plan to fix the Business Card Scanner properly:
 
-## 1. Rebuild Privacy Gate Layout (`src/components/business-card/BusinessCardPrivacyNotice.tsx`)
-Current card is too tall and visually loose. Rebuild to mirror Property Measurement's intro panel:
+1. Visual + contrast rebuild
+- Fix the privacy checkbox checked state so the checkbox fill stays light/rose and the tick is solid black/ink, never faded.
+- Add a scanner-specific contrast lock so dark navy/rose Business Card Scanner surfaces always keep readable white text and rose/ink icons.
+- Rebuild the main scanner screen spacing so the “JBJ AI Business Card Scanner” panel is not cropped from the top or inside the card.
+- Replace all remaining beige/white/gold camera UI pieces with the scanner’s rose neon theme: camera icon, Open Camera button, guide borders, tips, status bar, captured-card previews, tab controls, and action buttons.
+- Fix white borders that should be rose neon, and fix all broken “Ensure good lighting / Hold steady / Fill the frame” contrast.
 
-- **Max width** `max-w-3xl` (was 2xl, too narrow vertically), `py-6`.
-- **Header**: compact rose icon tile (40×40, not 64×64), title `text-xl`, subtitle `text-sm` on one line where possible.
-- **Privacy points**: switch from 6-stacked rows to a **2-column grid** (`grid-cols-1 md:grid-cols-2 gap-3`), each tile uses 32×32 icon tile + tighter padding `p-3`. Title `text-sm` semibold white, body `text-xs` at 72% white.
-- **Footer row**: checkbox + both buttons collapse into a single sticky-feeling row at the bottom of the card, smaller height (`h-10`).
-- Keep all 6 privacy items, copy, consent text, and `saveAgreement` call unchanged.
-- Keep rose neon palette (`#fb7185` border, soft `rgba(251,113,133,0.14)` fill, navy gradient backdrop) — no color changes, only layout/size compression.
+2. Camera behavior fix
+- Stop the camera from disappearing after permission is granted by stabilizing stream/video state and removing stale closure issues.
+- Always show a visible live video area when the camera is active.
+- Always show Stop Camera, Switch Camera, Capture, and Process controls while active.
+- Stop all camera tracks on Stop, tab switch, unmount, and errors so the laptop camera indicator turns off reliably.
+- Add a clear fallback state when the browser/device blocks camera access, while keeping upload/photo scanning available.
 
-Result: privacy gate fits in one viewport on desktop without scrolling, matches Property Measurement's compact intro look.
+3. OCR, front/back, and QR handling
+- Support one or multiple captures/uploads for front/back scans, then merge extracted fields into one contact when they appear to belong together.
+- Update `business-card-ocr` to extract business-card text plus QR-code content when visible.
+- If QR is a plain URL, store the URL.
+- If QR points to a contact/landing page, fetch and extract only public contact information from that page, then merge it into the contact without fabricating missing data.
+- Keep source metadata as `business_card_scanner` / `business_card_scan` consistently for CRM filtering.
 
-## 2. Fix Contrast on Main Scanner Screen (`src/pages/BusinessCardScanner.tsx`)
-Issue: `text-white/70`, `text-white/85` and `text-[#1A1A1A]` icons disappear on the dark rose/zinc gradient because the global contrast guard or the low opacity makes them unreadable.
+4. Access rules for brokers/developers/owner/investors
+- Update the gated tool access matrix:
+  - Owner/admin: visible and always unlocked.
+  - Approved brokers/developers: visible and unlocked.
+  - Unapproved brokers/developers: visible but locked behind Request Access.
+  - Investors: hidden from hubs/navigation and redirected away from the route.
+- Extend the current gated tool system so developer mode is treated like broker mode for restricted professional tools, but still requires approval.
+- Replace the current request-only CRM lead fallback with a real approval-backed access record so “Request Access” can actually unlock the tool after approval.
 
-Apply on the entire returned tree (post-consent):
-- Wrap the outer `<div className="min-h-screen ...">` with `data-no-contrast-guard` and `data-allow-dark-cta` so the white-on-light global guard stops flipping white text to ink.
-- **Hero (lines 374-403)**: bump body copy from `text-white/70` → `text-white/90`, add `allow-white` class. Badges keep rose-200 text but add `allow-white` + `data-no-contrast-guard`.
-- **Privacy Alert (lines 406-412)**: change `text-white/85` → solid `text-white` with `allow-white`; icon `text-rose-300`.
-- **Scan Business Cards card (416-457)**:
-  - Card bg → opaque dark navy `rgba(7,16,31,0.92)` w/ rose hairline, not translucent `rose-900/30`.
-  - Replace `text-[#1A1A1A]` icon (line 419) with `text-rose-300` + `allow-white`.
-  - `CardDescription` → `text-white/80` + `allow-white`.
-  - Tabs: `TabsList` bg from `#F7F2EA` (cream — illegal on dark shell) → dark `rgba(255,255,255,0.04)` with rose border; inactive tab text white/70 + `allow-white`; active stays rose-500.
-- **Scanned Contacts card (461-…)**: same treatment — opaque dark bg, rose-300 icon, white text, `allow-white` on titles/descriptions/badges/ghost buttons.
-- Every `text-white`, `text-white/##` chip/title/description inside this tree gets `allow-white` so PASS 6/7 guard cannot flip them.
+5. CRM save + scanned-card history
+- Persist each scan into saved scanned-card history for the current user, including original card image(s), extracted fields, category/contact type, source, status, and CRM lead id when saved.
+- Add actions to select one/multiple cards, delete, restore, hide, clear/bulk delete, and keep scanned cards.
+- Add category/contact-type assignment before saving to CRM.
+- Save leads into CRM with source `business_card_scanner` so filters can show exactly which leads came from scanner.
+- Keep duplicate detection and merge/update/append-note actions.
 
-## 3. Validation (screenshots)
-After edits, in build mode I will:
-1. Use `browser--navigate_to_sandbox` then `browser--navigate_to_url /business-card-scanner` (logged-out → consent gate visible).
-2. `browser--screenshot` the privacy gate.
-3. Accept consent in-browser via `browser--act`, then `browser--screenshot` the scanner page.
-4. `image_tools--zoom_image` into the alert + both cards to confirm every line of text is readable.
-5. Save both screenshots to `/mnt/documents/` and surface them as artifacts.
+6. Export combined business card file
+- Add PDF export that groups scanned cards by category/contact type.
+- Each section includes the business-card photo(s) and extracted details.
+- Keep CSV/Excel export, but make PDF the “copy to keep” option requested.
 
-## Files touched
-- `src/components/business-card/BusinessCardPrivacyNotice.tsx` (layout/size only)
-- `src/pages/BusinessCardScanner.tsx` (contrast classes only)
-
-No business logic, no route, no schema changes.
+7. Backend deployment + validation
+- Add required database migration(s) with RLS and grants for scanned-card history and tool access requests/grants.
+- Redeploy the affected backend functions after code changes.
+- Validate technically with targeted checks and function smoke tests.
+- Validate visually using browser screenshots at desktop and mobile/tablet sizes.
+- Validate E2E flow: privacy accept, open camera UI, stop camera, upload/scan image, OCR response, save to CRM, saved history, restore/delete, and export.
+- I will only report complete after I have screenshot proof and the technical validation results.

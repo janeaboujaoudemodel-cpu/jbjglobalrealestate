@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { useState } from "react";
 import {
   Shield,
@@ -8,6 +8,7 @@ import {
   Trash2,
   Server,
   UserCheck,
+  Check,
   CheckCircle2,
   XCircle,
 } from "lucide-react";
@@ -168,12 +169,22 @@ const BusinessCardPrivacyNotice = ({
             className="flex items-center gap-2 cursor-pointer flex-1 allow-white"
             style={{ color: "rgba(255,255,255,0.92)" }}
           >
-            <Checkbox
+            <CheckboxPrimitive.Root
               id="privacy-consent"
               checked={agreed}
               onCheckedChange={(checked) => setAgreed(checked === true)}
-              className="border-rose-400/60 data-[state=checked]:bg-rose-500 data-[state=checked]:border-rose-500"
-            />
+              data-no-contrast-guard
+              data-allow-dark-cta
+              className="peer h-5 w-5 shrink-0 rounded-[5px] flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07101F]"
+              style={{
+                backgroundColor: agreed ? "#FFFFFF" : "rgba(255,255,255,0.06)",
+                border: `1.5px solid ${agreed ? "#FFFFFF" : ACCENT_BORDER}`,
+              }}
+            >
+              <CheckboxPrimitive.Indicator className="flex items-center justify-center">
+                <Check className="h-4 w-4" style={{ color: "#0A0A0A", stroke: "#0A0A0A" }} strokeWidth={3.5} />
+              </CheckboxPrimitive.Indicator>
+            </CheckboxPrimitive.Root>
             <span className="text-sm leading-snug">
               I understand and agree to the privacy terms.
             </span>

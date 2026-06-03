@@ -1,8 +1,23 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Camera, RotateCcw, Loader2, SwitchCamera, Zap, Scan, CheckCircle, AlertCircle, Lightbulb, Focus } from "lucide-react";
-import { ScannedContact, generateContactId } from "@/utils/businessCardEncryption";
+import {
+  Camera,
+  RotateCcw,
+  Loader2,
+  SwitchCamera,
+  Zap,
+  Scan,
+  CheckCircle,
+  AlertCircle,
+  Lightbulb,
+  Focus,
+  X,
+} from "lucide-react";
+import {
+  ScannedContact,
+  generateContactId,
+} from "@/utils/businessCardEncryption";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Progress } from "@/components/ui/progress";
@@ -15,236 +30,187 @@ interface BusinessCardCameraProps {
   encryptionKey: string | null;
 }
 
-type ScanStatus = 'idle' | 'detecting' | 'capturing' | 'processing' | 'success' | 'error';
+type ScanStatus =
+  | "idle"
+  | "detecting"
+  | "capturing"
+  | "processing"
+  | "success"
+  | "error";
 
-const BusinessCardCamera = ({ 
-  onScanComplete, 
-  isProcessing, 
+// Rose neon palette (matches scanner brand)
+const ACCENT = "#fb7185";
+const ACCENT_SOFT = "rgba(251,113,133,0.14)";
+const ACCENT_BORDER = "rgba(251,113,133,0.45)";
+const PANEL_BG =
+  "linear-gradient(180deg, rgba(7,16,31,0.96) 0%, rgba(4,7,13,0.98) 100%)";
+
+const BusinessCardCamera = ({
+  onScanComplete,
+  isProcessing,
   setIsProcessing,
-  encryptionKey 
 }: BusinessCardCameraProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const detectionIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const { user } = useAuth();
-  
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const [isCameraReady, setIsCameraReady] = useState(false);
-  const [facingMode, setFacingMode] = useState<"user" | "environment">("environment");
-  const [capturedImages, setCapturedImages] = useState<string[]>([]);
-  const [scanStatus, setScanStatus] = useState<ScanStatus>('idle');
-  const [progress, setProgress] = useState(0);
-  const [autoDetectEnabled, setAutoDetectEnabled] = useState(true);
-  const [detectedCardCount, setDetectedCardCount] = useState(0);
-  const [statusMessage, setStatusMessage] = useState('');
-  const [cameraError, setCameraError] = useState<string | null>(null);
 
-  // NO auto-start - wait for explicit user click
-  // Clean up on unmount only
+  const [isCameraReady, setIsCameraReady] = useState(false);
+  const [facingMode, setFacingMode] = useState<"user" | "environment">(
+    "environment",
+  );
+  const [capturedImages, setCapturedImages] = useState<string[]>([]);
+  const [scanStatus, setScanStatus] = useState<ScanStatus>("idle");
+  const [progress, setProgress] = useState(0);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const [starting, setStarting] = useState(false);
+
+  // Hard unmount cleanup — uses ref so we never re-trigger on state churn.
   useEffect(() => {
     return () => {
-      // Stop camera and detection on unmount
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
-      if (detectionIntervalRef.current) {
-        clearInterval(detectionIntervalRef.current);
-        detectionIntervalRef.current = null;
+      const s = streamRef.current;
+      if (s) {
+        s.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
       }
     };
-  }, [stream]);
-
-  const startCamera = useCallback(async () => {
-    setCameraError(null);
-    setScanStatus('detecting');
-    setStatusMessage('Requesting camera access...');
-    
-    try {
-      // Stop any existing stream first
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
-
-      // First check if camera is available
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      const videoDevices = devices.filter(device => device.kind === 'videoinput');
-      
-      if (videoDevices.length === 0) {
-        throw new Error('No camera found on this device');
-      }
-
-      // Try multiple constraint sets for maximum compatibility
-      const constraintOptions: MediaStreamConstraints[] = [
-        {
-          video: {
-            facingMode: { exact: facingMode },
-            width: { ideal: 1920, min: 640 },
-            height: { ideal: 1080, min: 480 },
-          }
-        },
-        {
-          video: {
-            facingMode,
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
-          }
-        },
-        {
-          video: { facingMode }
-        },
-        {
-          video: true
-        }
-      ];
-
-      let mediaStream: MediaStream | null = null;
-      
-      for (const constraints of constraintOptions) {
-        try {
-          mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
-          break;
-        } catch (e) {
-          console.log('Constraint failed, trying next:', constraints, e);
-          continue;
-        }
-      }
-
-      if (!mediaStream) {
-        throw new Error('Could not access camera with any settings');
-      }
-      
-      if (videoRef.current) {
-        // Clear any existing source
-        videoRef.current.srcObject = null;
-        videoRef.current.srcObject = mediaStream;
-        
-        // Wait for video to be ready with timeout
-        await new Promise<void>((resolve, reject) => {
-          const timeout = setTimeout(() => reject(new Error('Video load timeout')), 10000);
-          
-          if (videoRef.current) {
-            videoRef.current.onloadedmetadata = () => {
-              clearTimeout(timeout);
-              videoRef.current?.play()
-                .then(() => resolve())
-                .catch(reject);
-            };
-            videoRef.current.onerror = () => {
-              clearTimeout(timeout);
-              reject(new Error('Video failed to load'));
-            };
-          }
-        });
-        
-        setStream(mediaStream);
-        setIsCameraReady(true);
-        setScanStatus('idle');
-        setStatusMessage('Camera ready. Position business cards in frame and tap Capture.');
-        toast.success("Camera active! Position business cards and capture.", { duration: 3000 });
-        
-        // Start auto-detection if enabled
-        if (autoDetectEnabled) {
-          startAutoDetection();
-        }
-      }
-    } catch (error) {
-      console.error("Camera error:", error);
-      setScanStatus('error');
-      
-      let errorMessage = 'Unable to access camera';
-      if (error instanceof Error) {
-        if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-          errorMessage = 'Camera access denied. Please allow camera access in browser settings and refresh.';
-        } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
-          errorMessage = 'No camera found. Please use the Upload tab to scan business cards.';
-        } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
-          errorMessage = 'Camera is in use by another app. Close other apps and try again.';
-        } else if (error.name === 'OverconstrainedError') {
-          errorMessage = 'Camera settings not supported. Trying basic mode...';
-        } else {
-          errorMessage = error.message || 'Unable to access camera';
-        }
-      }
-      
-      setCameraError(errorMessage);
-      setStatusMessage(errorMessage);
-      toast.error(errorMessage, { duration: 5000 });
-    }
-  }, [facingMode, autoDetectEnabled, stream]);
+  }, []);
 
   const stopCamera = useCallback(() => {
-    if (detectionIntervalRef.current) {
-      clearInterval(detectionIntervalRef.current);
-      detectionIntervalRef.current = null;
+    const s = streamRef.current;
+    if (s) {
+      s.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
     }
-    
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop());
-      setStream(null);
+    if (videoRef.current) {
+      try {
+        videoRef.current.pause();
+      } catch {}
+      videoRef.current.srcObject = null;
+    }
+    setIsCameraReady(false);
+    setScanStatus("idle");
+    setStatusMessage("");
+  }, []);
+
+  const startCamera = useCallback(async () => {
+    if (starting) return;
+    setStarting(true);
+    setCameraError(null);
+    setScanStatus("detecting");
+    setStatusMessage("Requesting camera access…");
+
+    // Stop any prior stream
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+
+    const attempts: MediaStreamConstraints[] = [
+      { video: { facingMode: { ideal: facingMode }, width: { ideal: 1920 }, height: { ideal: 1080 } } },
+      { video: { facingMode, width: { ideal: 1280 }, height: { ideal: 720 } } },
+      { video: { facingMode } },
+      { video: true },
+    ];
+
+    let mediaStream: MediaStream | null = null;
+    let lastErr: unknown = null;
+    for (const c of attempts) {
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia(c);
+        if (mediaStream) break;
+      } catch (e) {
+        lastErr = e;
+      }
+    }
+
+    if (!mediaStream) {
+      const err = lastErr as Error | undefined;
+      let msg = "Unable to access camera.";
+      if (err?.name === "NotAllowedError" || err?.name === "PermissionDeniedError") {
+        msg = "Camera access denied. Allow it in your browser, then try again.";
+      } else if (err?.name === "NotFoundError") {
+        msg = "No camera found on this device. Use the Upload tab instead.";
+      } else if (err?.name === "NotReadableError") {
+        msg = "Camera is in use by another app. Close it and try again.";
+      } else if (err?.message) {
+        msg = err.message;
+      }
+      setCameraError(msg);
+      setScanStatus("error");
+      setStatusMessage(msg);
+      setStarting(false);
+      toast.error(msg, { duration: 5000 });
+      return;
+    }
+
+    streamRef.current = mediaStream;
+
+    // Reveal the video element first, THEN attach the stream on the next tick
+    // so videoRef.current is guaranteed to exist.
+    setIsCameraReady(true);
+    setStatusMessage("Starting preview…");
+
+    // wait a tick for React to mount the <video>
+    await new Promise((r) => requestAnimationFrame(() => r(null)));
+
+    const video = videoRef.current;
+    if (!video) {
+      // Defensive: nothing we can do, stop the stream so the camera light goes off
+      mediaStream.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
       setIsCameraReady(false);
-      setScanStatus('idle');
-      setStatusMessage('');
+      setStarting(false);
+      setCameraError("Preview element missing. Please retry.");
+      toast.error("Preview element missing. Please retry.");
+      return;
     }
-  }, [stream]);
+
+    try {
+      video.srcObject = mediaStream;
+      video.muted = true;
+      video.playsInline = true;
+      await video.play();
+      setScanStatus("idle");
+      setStatusMessage(
+        "Camera ready. Position the card in the frame and tap Capture.",
+      );
+      toast.success("Camera ready");
+    } catch (e) {
+      console.error("video.play failed", e);
+      // keep stream so user can tap again, but show fallback
+      setStatusMessage("Tap the preview to start playback.");
+    } finally {
+      setStarting(false);
+    }
+  }, [facingMode, starting]);
 
   const switchCamera = useCallback(() => {
     stopCamera();
-    setFacingMode(prev => prev === "user" ? "environment" : "user");
-    setTimeout(() => startCamera(), 100);
+    setFacingMode((p) => (p === "user" ? "environment" : "user"));
+    // small delay so the previous stream releases the device
+    setTimeout(() => startCamera(), 150);
   }, [stopCamera, startCamera]);
 
-  // Auto-detection simulation (in real app, would use ML for card detection)
-  const startAutoDetection = useCallback(() => {
-    // Guard: don't start if already running or camera not ready
-    if (detectionIntervalRef.current || !isCameraReady) return;
-    
-    detectionIntervalRef.current = setInterval(() => {
-      // Additional guard inside interval
-      if (videoRef.current && isCameraReady && !isProcessing && stream) {
-        // Simulate card detection (in production, use TensorFlow.js or similar)
-        // For now, we'll use visual cues to guide the user
-        setDetectedCardCount(prev => prev >= 0 ? prev : 0);
-      }
-    }, 500);
-  }, [isCameraReady, isProcessing, stream]);
-
-  // Additional cleanup when stream changes
-  useEffect(() => {
-    // If stream becomes null, clear detection interval
-    if (!stream && detectionIntervalRef.current) {
-      clearInterval(detectionIntervalRef.current);
-      detectionIntervalRef.current = null;
-    }
-  }, [stream]);
-
-  // Restart camera when facing mode changes
-  useEffect(() => {
-    if (isCameraReady && facingMode) {
-      // Camera will be restarted via switchCamera
-    }
-  }, [facingMode]);
-
   const captureImage = useCallback(() => {
-    if (!videoRef.current || !canvasRef.current) return;
-    
-    setScanStatus('capturing');
-    setStatusMessage('Capturing image...');
-    
     const video = videoRef.current;
     const canvas = canvasRef.current;
+    if (!video || !canvas || !video.videoWidth) {
+      toast.error("Preview not ready yet");
+      return;
+    }
+    setScanStatus("capturing");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    
     ctx.drawImage(video, 0, 0);
-    const imageData = canvas.toDataURL('image/jpeg', 0.9);
-    setCapturedImages(prev => [...prev, imageData]);
-    
-    setScanStatus('idle');
-    setStatusMessage('Card captured! Capture more or process now.');
-    toast.success("Business card captured! You can capture more or process now.");
+    const imageData = canvas.toDataURL("image/jpeg", 0.92);
+    setCapturedImages((p) => [...p, imageData]);
+    setScanStatus("idle");
+    setStatusMessage("Card captured — capture more or tap Process.");
+    toast.success("Captured");
   }, []);
 
   const processImages = async () => {
@@ -254,42 +220,38 @@ const BusinessCardCamera = ({
     }
 
     setIsProcessing(true);
-    setScanStatus('processing');
+    setScanStatus("processing");
     setProgress(0);
-    
+
     try {
       const contacts: ScannedContact[] = [];
-      const totalImages = capturedImages.length;
-      
-      for (let i = 0; i < capturedImages.length; i++) {
+      const total = capturedImages.length;
+      for (let i = 0; i < total; i++) {
         const imageData = capturedImages[i];
-        setStatusMessage(`Processing card ${i + 1} of ${totalImages}...`);
-        setProgress(((i) / totalImages) * 100);
-        
-        const { data, error } = await supabase.functions.invoke('business-card-ocr', {
-          body: { 
-            image: imageData,
-            timestamp: new Date().toISOString()
-          }
-        });
-        
+        setStatusMessage(`Processing card ${i + 1} of ${total}…`);
+        setProgress((i / total) * 100);
+
+        const { data, error } = await supabase.functions.invoke(
+          "business-card-ocr",
+          { body: { image: imageData, timestamp: new Date().toISOString() } },
+        );
+
         if (error) {
           console.error("OCR error:", error);
           toast.error(`Failed to process card ${i + 1}`);
           continue;
         }
-        
+
         if (data?.contact) {
           const c = data.contact;
           contacts.push({
             ...c,
             id: generateContactId(),
-            // legacy aliases for backwards compatibility
             jobTitle: c.title || c.jobTitle || "",
             company: c.company_name || c.company || "",
             phone: c.mobile || c.phone || "",
             scannedAt: new Date().toISOString(),
-            imagePreview: imageData.substring(0, 100) + '...',
+            imagePreview: imageData.substring(0, 100) + "...",
             imageDataUrl: imageData,
             confidence: data.confidence || 0.85,
             contactType: "client",
@@ -297,350 +259,430 @@ const BusinessCardCamera = ({
             saveStatus: "idle",
           });
         }
-        
-        setProgress(((i + 1) / totalImages) * 100);
+
+        setProgress(((i + 1) / total) * 100);
       }
-      
+
       if (contacts.length > 0) {
-        setScanStatus('success');
-        setStatusMessage(`Successfully extracted ${contacts.length} contact(s)!`);
+        setScanStatus("success");
+        setStatusMessage(`Extracted ${contacts.length} contact(s).`);
         onScanComplete(contacts);
         setCapturedImages([]);
-        toast.success(`${contacts.length} business card(s) processed successfully!`);
-        
-        // Track scanned business cards in visitor_documents
+        toast.success(`${contacts.length} business card(s) processed`);
+
         try {
-          const sessionId = sessionStorage.getItem('visitor_session_id') || `session_${Date.now()}`;
+          const sessionId =
+            sessionStorage.getItem("visitor_session_id") ||
+            `session_${Date.now()}`;
           for (const contact of contacts) {
-            await supabase.from('visitor_documents').insert({
+            await supabase.from("visitor_documents").insert({
               session_id: sessionId,
-              document_type: 'business_card_scan',
-              document_name: `Business Card - ${contact.name || 'Unknown'}`,
-              action: 'scan',
+              document_type: "business_card_scan",
+              document_name: `Business Card - ${contact.name || "Unknown"}`,
+              action: "scan",
               user_id: user?.id || null,
             } as any);
           }
         } catch (e) {
-          console.error('Error tracking scanned cards:', e);
+          console.error("Error tracking scanned cards:", e);
         }
       } else {
-        setScanStatus('error');
-        setStatusMessage('Could not extract contact information. Please try again.');
-        toast.error("Could not extract contact information from the cards");
+        setScanStatus("error");
+        setStatusMessage("Could not extract any contact info. Try again.");
+        toast.error("Could not extract contact info from the cards");
       }
     } catch (error) {
       console.error("Processing error:", error);
-      setScanStatus('error');
-      setStatusMessage('Processing failed. Please try again.');
+      setScanStatus("error");
+      setStatusMessage("Processing failed. Please try again.");
       toast.error("Failed to process business cards");
     } finally {
       setIsProcessing(false);
       setTimeout(() => {
-        if (isCameraReady) {
-          setScanStatus('idle');
-          setStatusMessage('Ready to scan more cards.');
+        if (streamRef.current) {
+          setScanStatus("idle");
+          setStatusMessage("Ready to scan more cards.");
         }
-      }, 3000);
+      }, 2500);
     }
   };
 
   const clearCaptured = () => {
     setCapturedImages([]);
-    setScanStatus('idle');
-    setStatusMessage('Cleared. Ready to capture new cards.');
-    toast.info("Captured images cleared");
+    setStatusMessage("Cleared. Ready to capture.");
   };
 
-  const getStatusIcon = () => {
+  const StatusIcon = () => {
     switch (scanStatus) {
-      case 'detecting':
-        return <Scan className="h-5 w-5 animate-pulse" />;
-      case 'capturing':
-        return <Camera className="h-5 w-5 animate-bounce" />;
-      case 'processing':
-        return <Loader2 className="h-5 w-5 animate-spin" />;
-      case 'success':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'error':
-        return <AlertCircle className="h-5 w-5 text-red-500" />;
+      case "detecting":
+        return <Scan className="h-4 w-4 animate-pulse allow-white" style={{ color: ACCENT }} />;
+      case "capturing":
+        return <Camera className="h-4 w-4 animate-bounce allow-white" style={{ color: ACCENT }} />;
+      case "processing":
+        return <Loader2 className="h-4 w-4 animate-spin allow-white" style={{ color: ACCENT }} />;
+      case "success":
+        return <CheckCircle className="h-4 w-4 allow-white" style={{ color: "#34d399" }} />;
+      case "error":
+        return <AlertCircle className="h-4 w-4 allow-white" style={{ color: "#f87171" }} />;
       default:
-        return <Focus className="h-5 w-5" />;
-    }
-  };
-
-  const getStatusColor = () => {
-    switch (scanStatus) {
-      case 'processing':
-        return 'text-[#1A1A1A]';
-      case 'success':
-        return 'text-green-500';
-      case 'error':
-        return 'text-red-500';
-      default:
-        return 'text-muted-foreground';
+        return <Focus className="h-4 w-4 allow-white" style={{ color: ACCENT }} />;
     }
   };
 
   return (
-    <div className="space-y-4">
-      {/* Status Bar */}
+    <div
+      data-no-contrast-guard
+      data-allow-dark-cta
+      className="space-y-4"
+    >
+      {/* Status bar */}
       <AnimatePresence mode="wait">
         {statusMessage && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className={`flex items-center gap-2 p-3 rounded-lg bg-[#FDFBF7]/50 border border-[#1A1A1A] ${getStatusColor()}`}
+            exit={{ opacity: 0, y: -6 }}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg allow-white"
+            style={{
+              background: "rgba(255,255,255,0.05)",
+              border: `1px solid ${ACCENT_BORDER}`,
+              color: "#FFFFFF",
+            }}
           >
-            {getStatusIcon()}
-            <span className="text-sm font-medium">{statusMessage}</span>
+            <StatusIcon />
+            <span className="text-sm font-medium allow-white" style={{ color: "#FFFFFF" }}>
+              {statusMessage}
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Progress Bar */}
+      {/* Progress */}
       {isProcessing && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="space-y-2"
-        >
-          <Progress value={progress} className="h-2 bg-[#1A1A1A]" />
-          <p className="text-xs text-center text-muted-foreground">
-            {Math.round(progress)}% Complete
+        <div className="space-y-1">
+          <Progress
+            value={progress}
+            className="h-1.5"
+            style={{ background: "rgba(255,255,255,0.08)" }}
+          />
+          <p className="text-xs text-right allow-white" style={{ color: "rgba(255,255,255,0.7)" }}>
+            {Math.round(progress)}%
           </p>
-        </motion.div>
+        </div>
       )}
 
-      {/* Camera Preview - Premium Styling */}
-      <div className="relative aspect-[4/3] rounded-xl overflow-hidden border-2 border-[#B89555]/30 bg-[#FDFBF7] shadow-2xl shadow-gold/10">
-        {!isCameraReady ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-gradient-to-b from-zinc-900 to-black">
-            {/* Premium camera icon */}
+      {/* Preview frame — video element ALWAYS mounted (so videoRef is always live) */}
+      <div
+        className="relative aspect-[4/3] rounded-xl overflow-hidden"
+        style={{
+          background: PANEL_BG,
+          border: `1px solid ${ACCENT_BORDER}`,
+          boxShadow:
+            "0 0 0 1px rgba(251,113,133,0.18), 0 20px 60px -24px rgba(251,113,133,0.45)",
+        }}
+      >
+        {/* Always-mounted video — hidden when not ready */}
+        <video
+          ref={videoRef}
+          className="absolute inset-0 w-full h-full object-cover"
+          playsInline
+          muted
+          autoPlay
+          style={{ visibility: isCameraReady ? "visible" : "hidden" }}
+        />
+
+        {!isCameraReady && (
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center"
+            style={{
+              background:
+                "radial-gradient(800px 400px at 50% 0%, rgba(251,113,133,0.18), transparent 60%), " +
+                PANEL_BG,
+            }}
+          >
+            {/* Camera badge */}
             <div className="relative">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gold to-gold/50 flex items-center justify-center shadow-xl shadow-gold/30">
-                <Camera className="h-12 w-12 text-[#1A1A1A]" />
+              <div
+                className="w-20 h-20 rounded-2xl flex items-center justify-center"
+                style={{
+                  background: ACCENT_SOFT,
+                  border: `1px solid ${ACCENT_BORDER}`,
+                  boxShadow: `0 0 30px ${ACCENT}55`,
+                }}
+              >
+                <Camera className="h-9 w-9 allow-white" style={{ color: ACCENT }} />
               </div>
               <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="absolute inset-0 rounded-full border-2 border-[#B89555]/30"
+                aria-hidden
+                animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.1, 0.4] }}
+                transition={{ duration: 2.2, repeat: Infinity }}
+                className="absolute inset-0 rounded-2xl"
+                style={{ border: `1px solid ${ACCENT}` }}
               />
             </div>
-            
-            <div className="text-center space-y-2">
-              <h3 className="text-lg font-bold text-white">JBJ AI Business Card Scanner</h3>
-              <p className="text-sm text-white/70 max-w-xs">
-                Scan multiple business cards instantly with AI-powered OCR. 
-                Supports batch scanning up to 100 cards at once.
+
+            <div className="space-y-1.5 max-w-sm">
+              <h3 className="text-base font-semibold allow-white" style={{ color: "#FFFFFF" }}>
+                JBJ AI Business Card Scanner
+              </h3>
+              <p className="text-xs allow-white" style={{ color: "rgba(255,255,255,0.7)" }}>
+                Scan front and back, batch up to 100 cards. End-to-end encrypted OCR.
               </p>
             </div>
-            
-            {cameraError ? (
-              <div className="text-center space-y-3">
-                <p className="text-red-400 text-sm max-w-xs">{cameraError}</p>
-                <Button 
-                  onClick={startCamera} 
-                  className="gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
-                >
-                  <Camera className="h-5 w-5" />
-                  Grant Camera Access
-                </Button>
-                <p className="text-xs text-white/90 max-w-xs">
-                  If camera doesn't open, check browser permissions or try the Upload option.
-                </p>
-              </div>
-            ) : (
-              <div className="text-center space-y-4">
-                <Button 
-                  onClick={startCamera} 
-                  className="gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
-                >
-                  <Camera className="h-5 w-5" />
-                  Open Camera
-                </Button>
-                <p className="text-xs text-white/70">Click the button above to start scanning</p>
-              </div>
+
+            {cameraError && (
+              <p
+                className="text-xs max-w-sm allow-white"
+                style={{ color: "#fca5a5" }}
+              >
+                {cameraError}
+              </p>
             )}
-            
-            {/* Tips */}
-            <div className="flex flex-col items-center gap-2 text-xs text-white/90">
-              <div className="flex items-center gap-2">
-                <Lightbulb className="h-4 w-4 text-[#1A1A1A]" />
-                <span>Ensure good lighting for best results</span>
-              </div>
-              <span className="text-[#1A1A1A]">Supports multi-card detection</span>
-            </div>
+
+            <Button
+              onClick={startCamera}
+              disabled={starting}
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white gap-2 px-6 py-5 rounded-xl font-semibold"
+              style={{
+                background: `linear-gradient(135deg, ${ACCENT} 0%, #9f1239 100%)`,
+                color: "#FFFFFF",
+                border: `1px solid ${ACCENT_BORDER}`,
+                boxShadow: `0 14px 36px -14px ${ACCENT}88`,
+              }}
+            >
+              {starting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Camera className="h-4 w-4" />
+              )}
+              {cameraError ? "Try again" : "Open Camera"}
+            </Button>
+
+            <p className="text-[11px] allow-white" style={{ color: "rgba(255,255,255,0.55)" }}>
+              If the camera doesn't open, allow access in your browser or use the Upload tab.
+            </p>
           </div>
-        ) : (
+        )}
+
+        {/* Live overlay (only when ready) */}
+        {isCameraReady && (
           <>
-            <video 
-              ref={videoRef} 
-              className="w-full h-full object-cover"
-              playsInline
-              muted
-              autoPlay
-            />
-            
-            {/* Premium scanning overlay */}
-            <div className="absolute inset-0 pointer-events-none">
-              {/* Corner brackets */}
-              <div className="absolute top-4 left-4 w-12 h-12 border-l-2 border-t-2 border-[#B89555] rounded-tl-lg" />
-              <div className="absolute top-4 right-4 w-12 h-12 border-r-2 border-t-2 border-[#B89555] rounded-tr-lg" />
-              <div className="absolute bottom-4 left-4 w-12 h-12 border-l-2 border-b-2 border-[#B89555] rounded-bl-lg" />
-              <div className="absolute bottom-4 right-4 w-12 h-12 border-r-2 border-b-2 border-[#B89555] rounded-br-lg" />
-              
-              {/* Center guide area */}
-              <div className="absolute inset-8 border-2 border-dashed border-[#B89555]/40 rounded-xl">
-                <div className="absolute top-3 left-3 right-3">
-                  <div className="bg-[#1A1A1A]/60 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
-                    <span className="text-white/90 text-xs font-medium">
-                      📍 Position business card within this frame
-                    </span>
-                  </div>
+            {/* Corner brackets */}
+            <div className="pointer-events-none absolute inset-0">
+              <div
+                className="absolute top-4 left-4 w-10 h-10 rounded-tl-lg"
+                style={{ borderLeft: `2px solid ${ACCENT}`, borderTop: `2px solid ${ACCENT}` }}
+              />
+              <div
+                className="absolute top-4 right-4 w-10 h-10 rounded-tr-lg"
+                style={{ borderRight: `2px solid ${ACCENT}`, borderTop: `2px solid ${ACCENT}` }}
+              />
+              <div
+                className="absolute bottom-4 left-4 w-10 h-10 rounded-bl-lg"
+                style={{ borderLeft: `2px solid ${ACCENT}`, borderBottom: `2px solid ${ACCENT}` }}
+              />
+              <div
+                className="absolute bottom-4 right-4 w-10 h-10 rounded-br-lg"
+                style={{ borderRight: `2px solid ${ACCENT}`, borderBottom: `2px solid ${ACCENT}` }}
+              />
+              <div
+                className="absolute inset-8 rounded-xl"
+                style={{ border: `1px dashed ${ACCENT_BORDER}` }}
+              />
+              <div className="absolute top-3 left-1/2 -translate-x-1/2">
+                <div
+                  className="rounded-full px-3 py-1 text-[11px] font-medium allow-white"
+                  style={{
+                    background: "rgba(7,16,31,0.78)",
+                    border: `1px solid ${ACCENT_BORDER}`,
+                    color: "#FFFFFF",
+                  }}
+                >
+                  Position the card in the frame
                 </div>
               </div>
-              
-              {/* Scanning animation line */}
-              {scanStatus === 'capturing' && (
-                <motion.div
-                  initial={{ top: '10%' }}
-                  animate={{ top: '90%' }}
-                  transition={{ duration: 1, repeat: Infinity, repeatType: 'reverse' }}
-                  className="absolute left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg shadow-gold/50"
-                />
-              )}
             </div>
-            
-            {/* Auto-detect indicator */}
-            <div className="absolute top-4 right-4 flex items-center gap-2 bg-[#1A1A1A]/70 backdrop-blur-sm rounded-full px-3 py-1.5">
-              <div className={`w-2 h-2 rounded-full ${autoDetectEnabled ? 'bg-green-500 animate-pulse' : 'bg-[#B89555]'}`} />
-              <span className="text-xs text-white font-medium">
-                {autoDetectEnabled ? 'Auto-Detect ON' : 'Manual Mode'}
+
+            {/* Live indicator */}
+            <div
+              className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full px-2.5 py-1 allow-white"
+              style={{
+                background: "rgba(7,16,31,0.78)",
+                border: `1px solid ${ACCENT_BORDER}`,
+                color: "#FFFFFF",
+              }}
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full animate-pulse"
+                style={{ background: "#34d399" }}
+              />
+              <span className="text-[10px] font-medium tracking-wide allow-white" style={{ color: "#FFFFFF" }}>
+                LIVE
               </span>
             </div>
           </>
         )}
       </div>
-      
+
       <canvas ref={canvasRef} className="hidden" />
-      
-      {/* Camera Controls - Premium styling */}
+
+      {/* Live controls */}
       {isCameraReady && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-center gap-4"
+          className="flex items-center justify-center gap-3"
         >
-          <Button 
-            variant="outline" 
-            size="icon" 
+          <Button
             onClick={switchCamera}
-            className="h-12 w-12 rounded-full border-[#B89555]/30 hover:border-[#B89555] hover:bg-[#EFE6D6]/10 transition-all"
-            title="Switch Camera"
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="allow-white h-11 w-11 p-0 rounded-full"
+            style={{
+              background: "rgba(255,255,255,0.05)",
+              border: `1px solid ${ACCENT_BORDER}`,
+              color: "#FFFFFF",
+            }}
+            title="Switch camera"
           >
-            <SwitchCamera className="h-5 w-5 text-[#1A1A1A]" />
+            <SwitchCamera className="h-4 w-4 allow-white" />
           </Button>
-          
-          <Button 
-            size="lg" 
-            className="gap-2 px-10 py-6 bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-[#1A1A1A] font-bold text-lg rounded-xl shadow-xl shadow-gold/30 transition-all hover:scale-105"
+
+          <Button
             onClick={captureImage}
             disabled={isProcessing}
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="allow-white gap-2 h-12 px-7 rounded-xl font-semibold"
+            style={{
+              background: `linear-gradient(135deg, ${ACCENT} 0%, #9f1239 100%)`,
+              color: "#FFFFFF",
+              border: `1px solid ${ACCENT_BORDER}`,
+              boxShadow: `0 14px 36px -14px ${ACCENT}88`,
+            }}
           >
-            <Zap className="h-6 w-6" />
+            <Zap className="h-4 w-4" />
             Capture Card
           </Button>
-          
-          <Button 
-            variant="outline" 
-            size="icon" 
+
+          <Button
             onClick={stopCamera}
-            className="h-12 w-12 rounded-full border-red-500/30 hover:border-red-500 hover:bg-red-500/10 text-red-400 transition-all"
-            title="Stop Camera"
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="allow-white h-11 w-11 p-0 rounded-full"
+            style={{
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(248,113,113,0.55)",
+              color: "#fca5a5",
+            }}
+            title="Stop camera"
           >
-            <RotateCcw className="h-5 w-5" />
+            <X className="h-4 w-4 allow-white" style={{ color: "#fca5a5" }} />
           </Button>
         </motion.div>
       )}
-      
-      {/* Captured Images Preview - Premium cards */}
+
+      {/* Captured previews */}
       {capturedImages.length > 0 && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="space-y-4 p-4 bg-[#FDFBF7]/50 rounded-xl border border-[#B89555]/20"
+          className="space-y-3 p-3 rounded-xl"
+          style={{
+            background: "rgba(255,255,255,0.04)",
+            border: `1px solid ${ACCENT_BORDER}`,
+          }}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
-                <CheckCircle className="h-4 w-4 text-[#1A1A1A]" />
+              <div
+                className="w-7 h-7 rounded-full flex items-center justify-center"
+                style={{ background: ACCENT_SOFT, border: `1px solid ${ACCENT_BORDER}` }}
+              >
+                <CheckCircle className="h-3.5 w-3.5 allow-white" style={{ color: ACCENT }} />
               </div>
-              <span className="text-sm font-bold text-white">
+              <span className="text-sm font-semibold allow-white" style={{ color: "#FFFFFF" }}>
                 {capturedImages.length} card(s) captured
               </span>
             </div>
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={clearCaptured}
-              className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white h-8 px-3"
+              style={{ color: "#fca5a5" }}
             >
-              Clear All
+              Clear
             </Button>
           </div>
-          
-          <div className="flex gap-3 overflow-x-auto pb-2">
-            {capturedImages.map((img, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex-shrink-0 w-28 h-20 rounded-lg overflow-hidden border-2 border-[#B89555]/30 shadow-lg shadow-gold/10 relative group"
+
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            {capturedImages.map((img, i) => (
+              <div
+                key={i}
+                className="relative flex-shrink-0 w-24 h-16 rounded-md overflow-hidden"
+                style={{ border: `1px solid ${ACCENT_BORDER}` }}
               >
-                <img src={img} alt={`Card ${index + 1}`} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-[#1A1A1A]/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">Card {index + 1}</span>
-                </div>
-              </motion.div>
+                <img src={img} alt={`Card ${i + 1}`} className="w-full h-full object-cover" />
+              </div>
             ))}
           </div>
-          
-          <Button 
-            className="w-full gap-3 py-6 bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-[#1A1A1A] font-bold text-lg rounded-xl shadow-xl shadow-gold/30 transition-all hover:scale-[1.02]"
+
+          <Button
             onClick={processImages}
             disabled={isProcessing}
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="allow-white w-full gap-2 h-11 rounded-xl font-semibold"
+            style={{
+              background: `linear-gradient(135deg, ${ACCENT} 0%, #9f1239 100%)`,
+              color: "#FFFFFF",
+              border: `1px solid ${ACCENT_BORDER}`,
+              boxShadow: `0 14px 36px -14px ${ACCENT}88`,
+            }}
           >
             {isProcessing ? (
               <>
-                <Loader2 className="h-5 w-5 animate-spin" />
-                Processing with AI...
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Processing…
               </>
             ) : (
               <>
-                <Zap className="h-5 w-5" />
-                Process {capturedImages.length} Card{capturedImages.length > 1 ? 's' : ''} with AI
+                <Zap className="h-4 w-4" />
+                Process {capturedImages.length} card{capturedImages.length > 1 ? "s" : ""}
               </>
             )}
           </Button>
         </motion.div>
       )}
-      
-      {/* Tips section */}
+
+      {/* Tips */}
       {isCameraReady && capturedImages.length === 0 && (
-        <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-white/90">
-          <div className="flex items-center gap-1.5 bg-[#FDFBF7]/50 px-3 py-1.5 rounded-full">
-            <Lightbulb className="h-3 w-3 text-[#1A1A1A]" />
-            <span>Good lighting</span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-[#FDFBF7]/50 px-3 py-1.5 rounded-full">
-            <Focus className="h-3 w-3 text-[#1A1A1A]" />
-            <span>Hold steady</span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-[#FDFBF7]/50 px-3 py-1.5 rounded-full">
-            <Scan className="h-3 w-3 text-[#1A1A1A]" />
-            <span>Fill the frame</span>
-          </div>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {[
+            { icon: Lightbulb, label: "Good lighting" },
+            { icon: Focus, label: "Hold steady" },
+            { icon: Scan, label: "Fill the frame" },
+          ].map(({ icon: Icon, label }) => (
+            <div
+              key={label}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full allow-white"
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                border: `1px solid ${ACCENT_BORDER}`,
+                color: "#FFFFFF",
+              }}
+            >
+              <Icon className="h-3 w-3 allow-white" style={{ color: ACCENT }} />
+              <span className="text-[11px] font-medium allow-white" style={{ color: "#FFFFFF" }}>
+                {label}
+              </span>
+            </div>
+          ))}
         </div>
       )}
     </div>
