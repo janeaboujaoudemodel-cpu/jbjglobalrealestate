@@ -287,23 +287,23 @@ const verdictStyles: Record<
   { bg: string; ring: string; fg: string; Icon: typeof Check; label: string }
 > = {
   match: {
-    bg: "rgba(16,185,129,0.18)",
-    ring: "rgba(16,185,129,0.55)",
-    fg: "#34D399",
+    bg: "rgba(94,234,212,0.20)",
+    ring: "rgba(94,234,212,0.72)",
+    fg: "#5EEAD4",
     Icon: Check,
     label: "Match",
   },
   close: {
-    bg: "rgba(245,158,11,0.18)",
-    ring: "rgba(245,158,11,0.55)",
-    fg: "#FBBF24",
+    bg: "rgba(34,211,238,0.14)",
+    ring: "rgba(34,211,238,0.50)",
+    fg: "#67E8F9",
     Icon: Minus,
     label: "Close",
   },
   miss: {
-    bg: "rgba(239,68,68,0.18)",
-    ring: "rgba(239,68,68,0.55)",
-    fg: "#F87171",
+    bg: "rgba(103,232,249,0.07)",
+    ring: "rgba(103,232,249,0.25)",
+    fg: "#A0D7DC",
     Icon: X,
     label: "Miss",
   },
@@ -345,7 +345,7 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
             How each property matches your requirements
           </h3>
           <p className="aihf-muted text-sm">
-            ✓ exact match · ≈ close fit · ✗ does not match — actual value shown in each cell.
+            Match = exact fit · Close = softened fit · Miss = outside that requirement — actual value shown in each cell.
           </p>
         </div>
         <div className="flex items-center gap-3 text-xs aihf-muted">
@@ -503,25 +503,25 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
                 <div className="flex flex-wrap items-center gap-1.5">
                   <span
                     className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold"
-                    style={{ background: "rgba(16,185,129,0.22)", border: "1px solid rgba(16,185,129,0.55)", color: "#34D399" }}
+                      style={{ background: verdictStyles.match.bg, border: `1px solid ${verdictStyles.match.ring}`, color: verdictStyles.match.fg }}
                   >
-                    <Check className="w-3 h-3" style={{ stroke: "#34D399" }} />
+                    <Check className="w-3 h-3" style={{ stroke: verdictStyles.match.fg }} />
                     {t.match} matched
                   </span>
                   {t.close > 0 && (
                     <span
                       className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold"
-                      style={{ background: "rgba(245,158,11,0.22)", border: "1px solid rgba(245,158,11,0.55)", color: "#FBBF24" }}
+                      style={{ background: verdictStyles.close.bg, border: `1px solid ${verdictStyles.close.ring}`, color: verdictStyles.close.fg }}
                     >
-                      <Minus className="w-3 h-3" style={{ stroke: "#FBBF24" }} />
+                      <Minus className="w-3 h-3" style={{ stroke: verdictStyles.close.fg }} />
                       {t.close} close
                     </span>
                   )}
                   <span
                     className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold"
-                    style={{ background: "rgba(239,68,68,0.18)", border: "1px solid rgba(239,68,68,0.55)", color: "#F87171" }}
+                    style={{ background: verdictStyles.miss.bg, border: `1px solid ${verdictStyles.miss.ring}`, color: verdictStyles.miss.fg }}
                   >
-                    <X className="w-3 h-3" style={{ stroke: "#F87171" }} />
+                    <X className="w-3 h-3" style={{ stroke: verdictStyles.miss.fg }} />
                     {t.miss} missed
                   </span>
                 </div>
