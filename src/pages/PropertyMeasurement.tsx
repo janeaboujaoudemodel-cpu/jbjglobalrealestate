@@ -796,43 +796,41 @@ const PropertyMeasurement = () => {
                 {/* Room Upload Cards */}
                 <div className="space-y-4">
                   {roomUploads.map((room) => (
-                    <div 
+                    <div
                       key={room.id}
-                      className={`p-4 rounded-xl border transition-all ${
-                        room.isComplete 
-                          ? "border-teal-500/50 bg-teal-500/5" 
-                          : "border-[#1A1A1A] bg-[#F7F2EA]/30"
-                      }`}
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                      className={`pm-card p-4 rounded-xl transition-all ${room.isComplete ? "pm-card-active" : ""}`}
                     >
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
                           {room.isComplete ? (
-                            <CheckCircle2 className="w-5 h-5 text-teal-400" />
+                            <CheckCircle2 className="w-5 h-5" style={{ color: "#A7F3D0" }} />
                           ) : (
-                            <Camera className="w-5 h-5 text-white/90" />
+                            <Camera className="w-5 h-5" style={{ color: "#A7F3D0" }} />
                           )}
-                          <h4 className="text-white font-medium">{room.name}</h4>
+                          <h4 className="pm-text-strong font-medium">{room.name}</h4>
                         </div>
-                        
+
                         {/* Media Type Toggle */}
                         <div className="flex gap-2">
                           <button
+                            data-allow-dark-cta
+                            data-no-contrast-guard
                             onClick={() => setRoomMediaType(room.id, "photo")}
                             className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
-                              room.mediaType === "photo"
-                                ? "bg-teal-500 text-white"
-                                : "bg-[#F7F2EA] text-white/70 hover:bg-[#1A1A1A]"
+                              room.mediaType === "photo" ? "pm-card-active" : "pm-card"
                             }`}
                           >
                             <Camera className="w-3 h-3 inline mr-1" />
                             Photos
                           </button>
                           <button
+                            data-allow-dark-cta
+                            data-no-contrast-guard
                             onClick={() => setRoomMediaType(room.id, "video")}
                             className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
-                              room.mediaType === "video"
-                                ? "bg-teal-500 text-white"
-                                : "bg-[#F7F2EA] text-white/70 hover:bg-[#1A1A1A]"
+                              room.mediaType === "video" ? "pm-card-active" : "pm-card"
                             }`}
                           >
                             <Video className="w-3 h-3 inline mr-1" />
@@ -851,21 +849,24 @@ const PropertyMeasurement = () => {
                           className="hidden"
                           id={`upload-${room.id}`}
                         />
-                        
+
                         {room.files.length === 0 ? (
-                          <label 
+                          <label
                             htmlFor={`upload-${room.id}`}
-                            className="block w-full border-2 border-dashed border-[#1A1A1A] hover:border-teal-500/50 rounded-lg p-4 text-center cursor-pointer transition-all hover:bg-[#1A1A1A]/30"
+                            data-allow-dark-cta
+                            data-no-contrast-guard
+                            className="pm-card block w-full rounded-lg p-4 text-center cursor-pointer transition-all hover:opacity-90"
+                            style={{ borderStyle: "dashed" }}
                           >
                             {room.mediaType === "photo" ? (
                               <>
-                                <Camera className="w-8 h-8 text-white/90 mx-auto mb-2" />
-                                <p className="text-white/70 text-sm">Click to upload 2-3 photos of <strong>{room.name}</strong></p>
+                                <Camera className="w-8 h-8 mx-auto mb-2" style={{ color: "#A7F3D0" }} />
+                                <p className="pm-text-dim text-sm">Click to upload 2-3 photos of <strong className="pm-text-strong">{room.name}</strong></p>
                               </>
                             ) : (
                               <>
-                                <Video className="w-8 h-8 text-white/90 mx-auto mb-2" />
-                                <p className="text-white/70 text-sm">Click to upload video walkthrough of <strong>{room.name}</strong></p>
+                                <Video className="w-8 h-8 mx-auto mb-2" style={{ color: "#A7F3D0" }} />
+                                <p className="pm-text-dim text-sm">Click to upload video walkthrough of <strong className="pm-text-strong">{room.name}</strong></p>
                               </>
                             )}
                           </label>
@@ -873,25 +874,30 @@ const PropertyMeasurement = () => {
                           <div className="space-y-2">
                             <div className="flex flex-wrap gap-2">
                               {room.files.map((file, i) => (
-                                <div key={i} className="relative bg-[#F7F2EA] rounded-lg px-3 py-2 flex items-center gap-2">
+                                <div
+                                  key={i}
+                                  data-allow-dark-cta
+                                  data-no-contrast-guard
+                                  className="pm-card relative rounded-lg px-3 py-2 flex items-center gap-2"
+                                >
                                   {file.type.startsWith("image/") ? (
-                                    <Camera className="w-4 h-4 text-teal-400" />
+                                    <Camera className="w-4 h-4" style={{ color: "#A7F3D0" }} />
                                   ) : (
-                                    <Video className="w-4 h-4 text-teal-400" />
+                                    <Video className="w-4 h-4" style={{ color: "#A7F3D0" }} />
                                   )}
-                                  <span className="text-white/85 text-sm truncate max-w-[120px]">{file.name}</span>
+                                  <span className="pm-text-strong text-sm truncate max-w-[120px]">{file.name}</span>
                                   <button
                                     onClick={() => removeFileFromRoom(room.id, i)}
-                                    className="w-4 h-4 bg-red-500/20 rounded-full flex items-center justify-center text-red-400 hover:bg-red-500/40"
+                                    className="w-4 h-4 bg-red-500/20 rounded-full flex items-center justify-center text-red-300 hover:bg-red-500/40"
                                   >
                                     <X className="w-3 h-3" />
                                   </button>
                                 </div>
                               ))}
                             </div>
-                            <label 
+                            <label
                               htmlFor={`upload-${room.id}`}
-                              className="text-teal-400 text-sm cursor-pointer hover:underline"
+                              className="pm-text-accent text-sm cursor-pointer hover:underline"
                             >
                               + Add more
                             </label>
