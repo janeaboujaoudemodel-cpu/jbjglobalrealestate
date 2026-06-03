@@ -1097,9 +1097,9 @@ const QuizResults = () => {
         py += cellH + 8;
       }
 
-      // Description
-      const desc = stripHtml(p.description);
-      if (desc) {
+      // Presentation prose — natural sentences, not raw brochure label/value dumps.
+      const paragraphs = buildPropertyPresentationParagraphs(p, 3);
+      if (paragraphs.length) {
         if (py + 60 > CONTENT_BOTTOM) {
           doc.addPage();
           drawPageBg();
@@ -1112,80 +1112,113 @@ const QuizResults = () => {
         doc.setTextColor(...tiffanyLight);
         doc.text("About this property", M, py);
         py += 16;
-        const descLines = doc.splitTextToSize(desc, pageW - 2 * M) as string[];
         doc.setFont("helvetica", "normal");
         doc.setFontSize(10);
         doc.setTextColor(...tiffanyMuted);
-        for (const ln of descLines) {
-          if (py + 14 > CONTENT_BOTTOM) {
-            doc.addPage();
-            drawPageBg();
-            drawHeader();
-            py = CONTENT_TOP;
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.setTextColor(...tiffanyMuted);
+        for (const paragraph of paragraphs) {
+          const descLines = doc.splitTextToSize(paragraph, pageW - 2 * M) as string[];
+          for (const ln of descLines) {
+            if (py + 14 > CONTENT_BOTTOM) {
+              doc.addPage();
+              drawPageBg();
+              drawHeader();
+              py = CONTENT_TOP;
+              doc.setFont("helvetica", "bold");
+              doc.setFontSize(11);
+              doc.setTextColor(...tiffanyLight);
+              doc.text(`Property #${idx + 1} continued`, M, py);
+              py += 18;
+              doc.setFont("helvetica", "normal");
+              doc.setFontSize(10);
+              doc.setTextColor(...tiffanyMuted);
+            }
+            doc.text(ln, M, py);
+            py += 14;
           }
-          doc.text(ln, M, py);
-          py += 14;
+          py += 7;
         }
       }
 
-      // Amenities (if any)
-      const amenities = Array.isArray(p.amenities) ? p.amenities : [];
+      // Amenities with photos where the inventory provides real amenity imagery.
+      const amenities = Array.isArray(p.amenities) ? p.amenities.slice(0, 12) : [];
       if (amenities.length) {
-        if (py + 40 > CONTENT_BOTTOM) {
+        if (py + 98 > CONTENT_BOTTOM) {
           doc.addPage();
           drawPageBg();
           drawHeader();
           py = CONTENT_TOP;
         }
-        py += 8;
+        py += 4;
         doc.setFont("helvetica", "bold");
         doc.setFontSize(11);
         doc.setTextColor(...tiffanyLight);
         doc.text("Amenities & Features", M, py);
-        py += 14;
-        // Render as wrapping pills
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(9);
-        let ax = M;
-        const ay0 = py;
-        let ay = ay0;
-        amenities.slice(0, 24).forEach((a: string) => {
-          const label = String(a || "").trim();
-          if (!label) return;
-          const pw = doc.getTextWidth(label) + 14;
-          if (ax + pw > pageW - M) {
-            ax = M;
-            ay += 22;
+        py += 15;
+        const amenityPhotos = await Promise.all(
+          amenities.map((a: string) =>
+            loadImageAsDataUrl(findAmenityPhotoUrl(a, p.amenity_images as Record<string, string> | null), 2500)
+          )
+        );
+        const cols = 4;
+        const gap = 8;
+        const aw = (pageW - 2 * M - gap * (cols - 1)) / cols;
+        const ah = 66;
+        for (let aIdx = 0; aIdx < amenities.length; aIdx++) {
+          const col = aIdx % cols;
+          if (col === 0 && aIdx > 0) py += ah + 8;
+          if (py + ah > CONTENT_BOTTOM) {
+            doc.addPage();
+            drawPageBg();
+            drawHeader();
+            py = CONTENT_TOP;
           }
-          if (ay + 16 > CONTENT_BOTTOM) return;
-          doc.setFillColor(8, 56, 64);
-          doc.setDrawColor(...tiffanyDeep);
-          doc.setLineWidth(0.4);
-          doc.roundedRect(ax, ay, pw, 18, 9, 9, "FD");
-          doc.setTextColor(...tiffanyLight);
-          doc.text(label, ax + pw / 2, ay + 12, { align: "center" });
-          ax += pw + 6;
-        });
-        py = ay + 22;
+          const ax = M + col * (aw + gap);
+          doc.setFillColor(5, 38, 44);
+          doc.setDrawColor(16, 90, 100);
+          doc.setLineWidth(0.35);
+          doc.roundedRect(ax, py, aw, ah, 6, 6, "FD");
+          const photo = amenityPhotos[aIdx];
+          if (photo) {
+            try {
+              doc.addImage(photo.data, photo.type, ax + 4, py + 4, aw - 8, 36, undefined, "FAST");
+            } catch {
+              /* ignore amenity photo */
+            }
+          } else {
+            doc.setFillColor(8, 56, 64);
+            doc.roundedRect(ax + 4, py + 4, aw - 8, 36, 5, 5, "F");
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(8);
+            doc.setTextColor(...tiffanyLight);
+            doc.text("JBJ", ax + aw / 2, py + 26, { align: "center" });
+          }
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(7.5);
+          doc.setTextColor(...tiffanyMuted);
+          const labelLines = doc.splitTextToSize(String(amenities[aIdx]), aw - 10) as string[];
+          doc.text(labelLines.slice(0, 2), ax + 5, py + 50);
+        }
+        py += ah + 8;
       }
 
-      // Listing CTA at bottom of last per-property page
-      if (py + 40 > CONTENT_BOTTOM) {
+      // Listing CTA with wrapped, visibly underlined URL.
+      if (py + 58 > CONTENT_BOTTOM) {
         doc.addPage();
         drawPageBg();
         drawHeader();
         py = CONTENT_TOP;
       }
-      py += 8;
       doc.setFont("helvetica", "bold");
       doc.setFontSize(10);
       doc.setTextColor(...tiffanyMuted);
       doc.text("Listing:", M, py);
       const url = `${origin}/project/${p.slug}`;
-      drawHyperlink(url, url, M + 42, py, 9.5);
+      py = drawWrappedHyperlink(url, url, M + 42, py, pageW - M - (M + 42), 9.5, 13) + 7;
+
+      doc.setFillColor(8, 56, 64);
+      doc.setDrawColor(...tiffanyLight);
+      doc.roundedRect(M, py, 176, 24, 12, 12, "FD");
+      drawHyperlink("Download this property brochure", url, M + 12, py + 16, 8.5);
     }
 
     // ============= PAGE NUMBERS + FOOTERS (all pages) =============
