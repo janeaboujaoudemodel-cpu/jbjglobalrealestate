@@ -75,34 +75,35 @@ const FEATURE_LABEL: Record<string, string> = {
 
 function priceVerdict(p: any, budget?: string): RowCell {
   const price = p?.price_from;
-  const display = price ? `AED ${(price / 1_000_000).toFixed(1)}M` : "On request";
+  const priceTo = p?.price_to;
+  const fmt = (n: number) =>
+    n >= 1_000_000 ? `AED ${(n / 1_000_000).toFixed(1)}M` : `AED ${Math.round(n / 1000)}K`;
+  const display = price
+    ? priceTo && priceTo > price
+      ? `From ${fmt(price)} – ${fmt(priceTo)}`
+      : `From ${fmt(price)}`
+    : "On request";
   if (!budget || price == null) return { verdict: "close", value: display };
-  const within = (lo: number, hi: number) => price >= lo && price < hi;
-  let match = false;
-  let close = false;
+
+  // Budget ceiling per bucket. A project matches when its STARTING price is at
+  // or below the ceiling — cheaper starting price means they almost certainly
+  // have units inside the band (larger layouts, higher floors, etc.).
+  let budgetMax = 0;
   switch (budget) {
-    case "under-1m":
-      match = price < 1_000_000;
-      close = price < 1_250_000;
-      break;
-    case "1m-2m":
-      match = within(1_000_000, 2_000_000);
-      close = within(800_000, 2_500_000);
-      break;
-    case "2m-5m":
-      match = within(2_000_000, 5_000_000);
-      close = within(1_700_000, 6_000_000);
-      break;
-    case "5m-10m":
-      match = within(5_000_000, 10_000_000);
-      close = within(4_000_000, 12_000_000);
-      break;
+    case "under-1m": budgetMax = 1_000_000; break;
+    case "1m-2m":   budgetMax = 2_000_000; break;
+    case "2m-5m":   budgetMax = 5_000_000; break;
+    case "5m-10m":  budgetMax = 10_000_000; break;
     case "10m-plus":
-      match = price >= 10_000_000;
-      close = price >= 8_000_000;
-      break;
+      // Open-ended ceiling: match if they likely have 10M+ stock.
+      if (price >= 6_000_000) return { verdict: "match", value: display };
+      if (price >= 4_000_000) return { verdict: "close", value: display };
+      return { verdict: "miss", value: display };
   }
-  return { verdict: match ? "match" : close ? "close" : "miss", value: display };
+
+  if (price <= budgetMax) return { verdict: "match", value: display };
+  if (price <= budgetMax * 1.2) return { verdict: "close", value: display };
+  return { verdict: "miss", value: display };
 }
 
 function bedroomVerdict(p: any, choice?: string): RowCell {
