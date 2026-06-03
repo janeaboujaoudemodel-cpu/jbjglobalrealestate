@@ -588,13 +588,14 @@ const BusinessCardCamera = ({
             data-no-contrast-guard
             className="allow-white h-11 w-11 p-0 rounded-full"
             style={{
-              background: "rgba(255,255,255,0.05)",
+              background: "rgba(7,16,31,0.92)",
               border: `1px solid ${ACCENT_BORDER}`,
               color: "#FFFFFF",
+              boxShadow: `inset 0 0 0 1px rgba(251,113,133,0.18)`,
             }}
             title="Switch camera"
           >
-            <SwitchCamera className="h-4 w-4 allow-white" />
+            <SwitchCamera className="h-4 w-4 allow-white" style={{ color: "#FFFFFF" }} />
           </Button>
 
           <Button
@@ -620,9 +621,10 @@ const BusinessCardCamera = ({
             data-no-contrast-guard
             className="allow-white h-11 w-11 p-0 rounded-full"
             style={{
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(248,113,113,0.55)",
+              background: "rgba(7,16,31,0.92)",
+              border: "1px solid rgba(248,113,113,0.65)",
               color: "#fca5a5",
+              boxShadow: `inset 0 0 0 1px rgba(248,113,113,0.2)`,
             }}
             title="Stop camera"
           >
