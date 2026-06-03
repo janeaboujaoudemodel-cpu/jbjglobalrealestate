@@ -603,7 +603,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       style={{ '--header-height': 'var(--responsive-header-height)' } as React.CSSProperties}
       data-tour-target="header"
     >
-      {/* Transparent-state top-fade mask — desktop keeps the dark scrim for legibility over hero video. */}
+      {/* ─── DESKTOP (lg+) ─────────────────────────────────────────── */}
+      {/* Transparent-state top-fade scrim — desktop keeps the dark gradient over hero video. */}
       <div
         className={`hidden lg:block absolute inset-0 pointer-events-none transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`}
         style={{
@@ -611,24 +612,30 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         }}
         aria-hidden="true"
       />
-      {/* Mobile/tablet: frosted "fiberglass" bar — hero feels full-bleed while white logo/text stays legible. */}
+      {/* Solid champagne bar — desktop only on scroll. */}
       <div
-        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`}
-        style={{
-          background:
-            'linear-gradient(to bottom, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.06) 60%, rgba(0,0,0,0.12) 100%)',
-          backdropFilter: 'blur(14px) saturate(140%)',
-          WebkitBackdropFilter: 'blur(14px) saturate(140%)',
-        }}
+        className={`hidden lg:block absolute inset-0 transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
+        style={{ background: '#FDFBF7' }}
         aria-hidden="true"
       />
 
-      {/* Solid header background — flat page tone, no seam against hero */}
-      <div 
-        className={`absolute inset-0 transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
+      {/* ─── MOBILE / TABLET (< lg) ────────────────────────────────── */}
+      {/* At rest over a dark hero: frosted "fiberglass" bar so the hero feels full-bleed with white logo/text legible. */}
+      <div
+        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(!showSolidBackground && isTransparentRoute) ? "opacity-100" : "opacity-0"}`}
         style={{
-          background: '#FDFBF7',
+          background:
+            'linear-gradient(to bottom, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.06) 60%, rgba(0,0,0,0.18) 100%)',
+          backdropFilter: 'blur(16px) saturate(140%)',
+          WebkitBackdropFilter: 'blur(16px) saturate(140%)',
         }}
+        aria-hidden="true"
+      />
+      {/* On scroll OR non-transparent routes: champagne to match desktop chrome. */}
+      <div
+        className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${(showSolidBackground || !isTransparentRoute) ? "opacity-100" : "opacity-0"}`}
+        style={{ background: '#FDFBF7' }}
+        aria-hidden="true"
       />
       
       {/* Subtle ambient glow at top */}
