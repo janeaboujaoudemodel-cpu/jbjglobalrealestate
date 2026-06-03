@@ -169,12 +169,12 @@ const BusinessCardResults = ({
                     </div>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <Button size="sm" variant="ghost" onClick={cancelEdit}>
-                      <X className="h-4 w-4 mr-1" />
+                    <Button size="sm" variant="ghost" className="text-white hover:bg-rose-500/15 hover:text-white allow-white" data-no-contrast-guard data-allow-dark-cta onClick={cancelEdit}>
+                      <X className="h-4 w-4 mr-1 allow-white" />
                       Cancel
                     </Button>
-                    <Button size="sm" onClick={saveEdit}>
-                      <Check className="h-4 w-4 mr-1" />
+                    <Button size="sm" className="border border-rose-500/55 bg-rose-500/18 text-white hover:bg-rose-500/28 hover:text-white allow-white" data-no-contrast-guard data-allow-dark-cta onClick={saveEdit}>
+                      <Check className="h-4 w-4 mr-1 allow-white" />
                       Save
                     </Button>
                   </div>
@@ -189,8 +189,8 @@ const BusinessCardResults = ({
                       <div>
                         <h4 className="font-semibold">{maskData(contact.name)}</h4>
                         {(contact.jobTitle || contact.title) && (
-                          <p className="text-sm text-muted-foreground flex items-center gap-1">
-                            <Briefcase className="h-3 w-3" />
+                          <p className="text-sm flex items-center gap-1 allow-white" style={{ color: "rgba(255,255,255,0.72)" }}>
+                            <Briefcase className="h-3 w-3 allow-white" />
                             {maskData(contact.jobTitle || contact.title)}
                           </p>
                         )}
@@ -255,8 +255,8 @@ const BusinessCardResults = ({
                       <Row icon={<MapPin className="h-3 w-3" />} text={maskData([contact.city, contact.country].filter(Boolean).join(", "))} />
                     )}
                     {contact.address && (
-                      <div className="flex items-center gap-2 text-muted-foreground col-span-2">
-                        <MapPin className="h-3 w-3 flex-shrink-0" />
+                      <div className="flex items-center gap-2 col-span-2 allow-white" style={{ color: "rgba(255,255,255,0.76)" }}>
+                        <MapPin className="h-3 w-3 flex-shrink-0 allow-white" />
                         <span className="truncate">{maskData(contact.address)}</span>
                       </div>
                     )}
@@ -264,8 +264,8 @@ const BusinessCardResults = ({
                       <Row icon={<FileText className="h-3 w-3" />} text={`Event: ${maskData(contact.event_source)}`} />
                     )}
                     {contact.notes && (
-                      <div className="flex items-center gap-2 text-muted-foreground col-span-2">
-                        <FileText className="h-3 w-3 flex-shrink-0" />
+                      <div className="flex items-center gap-2 col-span-2 allow-white" style={{ color: "rgba(255,255,255,0.76)" }}>
+                        <FileText className="h-3 w-3 flex-shrink-0 allow-white" />
                         <span className="truncate">{maskData(contact.notes)}</span>
                       </div>
                     )}
@@ -364,12 +364,13 @@ const Field = ({
   type?: string;
 }) => (
   <div>
-    <label className="text-xs text-muted-foreground">{label}</label>
+    <label className="text-xs allow-white" style={{ color: "rgba(255,255,255,0.72)" }}>{label}</label>
     <Input
       type={type}
       value={value || ""}
       onChange={(e) => onChange(e.target.value)}
-      className="h-8"
+      className="h-8 border-rose-500/45 bg-rose-500/10 text-white placeholder:text-white/45 allow-white"
+      data-no-contrast-guard
     />
   </div>
 );
