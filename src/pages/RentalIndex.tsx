@@ -506,7 +506,9 @@ const RentalIndex = () => {
           ))}
         </div>
 
-        <LegalDisclaimer variant="ai-tools" />
+        <div className="ri-disclaimer-wrap">
+          <LegalDisclaimer variant="ai-tools" />
+        </div>
       </div>
     </PremiumToolShell>
 
