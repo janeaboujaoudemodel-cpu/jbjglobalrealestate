@@ -426,10 +426,29 @@ const Quiz = () => {
 
     const baseAvailable = allProjects.filter((project) => {
       if (project.is_sold_out) return false;
-      const s = (project.sale_status || "").toLowerCase();
-      if (s.includes("sold") || s.includes("out_of_stock")) return false;
+      const s = (project.sale_status || "").toLowerCase().replace(/[\s-]+/g, "_");
+      if (
+        s.includes("sold") ||
+        s.includes("out_of_stock") ||
+        s === "unavailable" ||
+        s === "cancelled"
+      ) return false;
+      const cs = ((project as any).construction_status || "").toLowerCase();
+      if (cs.includes("cancel")) return false;
       return true;
     });
+
+    const isReady = (p: any) => {
+      const h = (p.handover_date || "").toLowerCase();
+      const cs = (p.construction_status || "").toLowerCase();
+      const ss = (p.sale_status || "").toLowerCase();
+      return (
+        h.includes("ready") ||
+        cs.includes("ready") ||
+        cs.includes("completed") ||
+        ss.includes("ready")
+      );
+    };
 
     const matchesArea = (project: any) => {
       if (!areaKeywords.length) return true;
@@ -465,18 +484,21 @@ const Quiz = () => {
     const matchesTimeline = (project: any, strict = true) => {
       if (!strict) return true;
       if (answers.timeline !== "ready") return true;
-      const h = (project.handover_date || "").toLowerCase();
-      const cs = ((project as any).construction_status || "").toLowerCase();
-      return h.includes("ready") || cs.includes("ready") || cs.includes("completed");
+      return isReady(project);
     };
+
+    // Off-plan is preferred unless the user explicitly asked for Ready to Move.
+    const preferOffPlan = answers.timeline !== "ready";
 
     const tryTier = (
       useArea: boolean,
       useTimeline: boolean,
       bedroomPM: number,
-      budgetTol: number
+      budgetTol: number,
+      offPlanOnly: boolean
     ) => {
       return baseAvailable
+        .filter((p) => (offPlanOnly ? !isReady(p) : true))
         .filter((p) => (useArea && !hasOther ? matchesArea(p) : true))
         .filter((p) => matchesBudget(p, budgetTol))
         .filter((p) => matchesBedrooms(p, bedroomPM))
@@ -485,22 +507,47 @@ const Quiz = () => {
         .sort((a, b) => b.matchScore - a.matchScore);
     };
 
+    // Run each tier off-plan-first; only fall back to including ready when needed.
+    const runTier = (
+      useArea: boolean,
+      useTimeline: boolean,
+      bedroomPM: number,
+      budgetTol: number
+    ) => {
+      if (preferOffPlan) {
+        const offPlan = tryTier(useArea, useTimeline, bedroomPM, budgetTol, true);
+        if (offPlan.length >= 3) return offPlan;
+        const all = tryTier(useArea, useTimeline, bedroomPM, budgetTol, false);
+        // Keep off-plan first, then append any ready ones not already included.
+        const seen = new Set(offPlan.map((p) => p.id));
+        return [...offPlan, ...all.filter((p) => !seen.has(p.id))];
+      }
+      return tryTier(useArea, useTimeline, bedroomPM, budgetTol, false);
+    };
+
     // Tier 1 — Exact
-    let items = tryTier(true, true, 0, 0);
+    let items = runTier(true, true, 0, 0);
     if (items.length >= 3) return { items, tier: "exact" };
 
     // Tier 2 — Close: relax timeline, then bedrooms ±1
-    items = tryTier(true, false, 1, 0.1);
+    items = runTier(true, false, 1, 0.1);
     if (items.length >= 3) return { items, tier: "close" };
 
     // Tier 3 — Nearest: drop area + timeline; widen budget/bedrooms
-    items = tryTier(false, false, 2, 0.5);
+    items = runTier(false, false, 2, 0.5);
     if (items.length >= 3) return { items, tier: "nearest" };
 
-    // Tier 4 — Fallback: any available property, ranked by score
+    // Tier 4 — Fallback: any available property, off-plan first when preferred
     const fallback = baseAvailable
       .map((p) => ({ ...p, matchScore: scoreProject(p) }))
-      .sort((a, b) => b.matchScore - a.matchScore);
+      .sort((a, b) => {
+        if (preferOffPlan) {
+          const ar = isReady(a) ? 1 : 0;
+          const br = isReady(b) ? 1 : 0;
+          if (ar !== br) return ar - br; // off-plan (0) before ready (1)
+        }
+        return b.matchScore - a.matchScore;
+      });
     return { items: fallback, tier: "fallback" };
   };
 
