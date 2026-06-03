@@ -59,6 +59,24 @@ const AIHF_RESULTS_STYLE = `
     -webkit-text-fill-color: #02110F !important;
     stroke: #02110F !important;
   }
+  .aihf-results .aihf-cta-glow {
+    background: linear-gradient(135deg, #5EEAD4 0%, #22D3EE 55%, #0E7490 100%) !important;
+    border: 1px solid rgba(103,232,249,0.95) !important;
+    box-shadow:
+      0 22px 48px rgba(34,211,238,0.45),
+      0 0 32px rgba(94,234,212,0.55),
+      inset 0 1px 0 rgba(255,255,255,0.45),
+      inset 0 -3px 6px rgba(2,17,15,0.18) !important;
+    transform: translateZ(0);
+    transition: transform .25s ease, box-shadow .25s ease !important;
+  }
+  .aihf-results .aihf-cta-glow:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+      0 28px 60px rgba(34,211,238,0.6),
+      0 0 48px rgba(94,234,212,0.75),
+      inset 0 1px 0 rgba(255,255,255,0.55) !important;
+  }
   .aihf-results .aihf-outline {
     background: rgba(5,28,24,0.82) !important;
     border: 1px solid rgba(45,212,191,0.55) !important;
