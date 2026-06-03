@@ -227,7 +227,47 @@ const Quiz = () => {
     nationality: "",
     preferredLanguage: "",
   });
+  const [resumed, setResumed] = useState(false);
   const estimatedTime = 45;
+
+  // Restore in-progress matchmaker session on mount (refresh / re-open safe)
+  const hasHydrated = useRef(false);
+  useEffect(() => {
+    if (hasHydrated.current) return;
+    hasHydrated.current = true;
+    const prev = readMatchmakerSession();
+    if (!prev) return;
+    if (prev.step === "results" && prev.resultSlugs?.length) {
+      // Already finished — jump straight to results
+      navigate(
+        `/quiz-results?projects=${prev.resultSlugs.join(",")}&session=${prev.sessionId}&free=true`,
+        { replace: true }
+      );
+      return;
+    }
+    if (Object.keys(prev.answers || {}).length === 0) return;
+    setAnswers(prev.answers || {});
+    setCurrentStep(Math.min(prev.currentQuestionIndex || 0, QUIZ_QUESTIONS.length - 1));
+    setFormData((fd) => ({ ...fd, ...(prev.formData || {}) }));
+    setShowForm(prev.step === "lead-form");
+    setStarted(true);
+    setResumed(true);
+    toast.success("Resumed your matchmaker session", { duration: 3000 });
+  }, [navigate]);
+
+  // Persist every meaningful change so refresh/close resumes from the same spot
+  useEffect(() => {
+    if (!hasHydrated.current) return;
+    if (Object.keys(answers).length === 0 && !showForm) return;
+    writeMatchmakerSession({
+      step: showForm ? "lead-form" : "quiz",
+      currentQuestionIndex: currentStep,
+      answers,
+      formData,
+    });
+  }, [answers, currentStep, showForm, formData]);
+
+
 
   // Auto-fill form data from logged-in user's profile
   useEffect(() => {
