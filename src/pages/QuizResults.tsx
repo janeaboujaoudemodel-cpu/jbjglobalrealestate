@@ -115,13 +115,19 @@ const QuizResults = () => {
           community:communities(id, name, slug),
           documents:project_documents(id, file_url, file_name, document_type)
         `)
-        .in("slug", projectSlugs)
-        .not("is_sold_out", "eq", true)
-        .not("sale_status", "ilike", "%sold%");
+        .in("slug", projectSlugs);
 
       if (error) throw error;
 
-      const normalized = (data || []).map(p => ({
+      // Filter sold-out client-side so NULL sale_status / is_sold_out rows are kept.
+      const filtered = (data || []).filter((p: any) => {
+        if (p.is_sold_out === true) return false;
+        const status = (p.sale_status || "").toLowerCase();
+        if (status.includes("sold")) return false;
+        return true;
+      });
+
+      const normalized = filtered.map((p: any) => ({
         ...p,
         images: p.images?.length > 0
           ? p.images
