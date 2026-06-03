@@ -373,9 +373,9 @@ const BusinessCardScanner = () => {
         {/* Header */}
         <div className="bg-gradient-to-r from-rose-900/40 via-rose-800/30 to-rose-900/40 border-b border-rose-500/40 -mx-4 px-4 py-8 mb-8">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-rose-500/25 border border-rose-500/50 rounded-full px-4 py-1 mb-4">
-              <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
-              <span className="text-[#1A1A1A] text-sm font-medium">AI-Powered OCR</span>
+            <div className="inline-flex items-center gap-2 bg-rose-500/25 border border-rose-500/50 rounded-full px-4 py-1 mb-4" data-no-contrast-guard>
+              <Sparkles className="w-4 h-4 text-rose-200" />
+              <span className="text-rose-100 text-sm font-medium">AI-Powered OCR</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
               AI Business Card <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-pink-300">Scanner</span>
@@ -403,8 +403,8 @@ const BusinessCardScanner = () => {
         </div>
 
         {/* Privacy Alert */}
-        <Alert className="mb-6 border-rose-500/40 bg-rose-900/30">
-          <Info className="h-4 w-4 text-[#1A1A1A]" />
+        <Alert className="mb-6 border-rose-500/40 bg-rose-900/30" data-no-contrast-guard>
+          <Info className="h-4 w-4 text-rose-200" />
           <AlertDescription className="text-sm text-white/85">
             <strong className="text-white">Your privacy matters:</strong> All scanned data is encrypted with a key only you possess. 
             Data is processed in-memory and never stored on our servers.

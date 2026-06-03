@@ -226,8 +226,18 @@ export const ToolAnimatedFrame = ({
 }) => (
   <div
     data-tool-shell-root
+    data-tool-darkbody="true"
     className={`min-h-screen w-full p-0 ${className}`}
-    style={{ background: theme.pageWash }}
+    style={
+      {
+        background:
+          "radial-gradient(1200px 700px at 50% -10%, " +
+          theme.accent +
+          "26, transparent 60%), linear-gradient(180deg, #050912 0%, #07101F 60%, #04070D 100%)",
+        ["--tool-accent" as string]: theme.accent,
+        ["--tool-accent-border" as string]: theme.accentBorder,
+      } as CSSProperties
+    }
   >
     <FullscreenToolToggle />
     <style>{`
@@ -261,9 +271,11 @@ export const ToolAnimatedFrame = ({
       <div
         className="relative min-h-screen overflow-hidden"
         style={{
-          background: "#FDFBF7",
+          background:
+            "linear-gradient(180deg, rgba(7,16,31,0.92) 0%, rgba(4,7,13,0.96) 100%)",
           boxShadow:
-            "0 30px 80px -30px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.04)",
+            "0 30px 80px -30px rgba(0,0,0,0.55), inset 0 0 0 1px " +
+            theme.accentBorder,
         }}
       >
         {children}
