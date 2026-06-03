@@ -368,34 +368,38 @@ const BusinessCardScanner = () => {
 
   return (
     <ToolAnimatedFrame theme={toolThemes.rose}>
-    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
+    <div
+      data-no-contrast-guard
+      data-allow-dark-cta
+      className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950"
+    >
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="bg-gradient-to-r from-rose-900/40 via-rose-800/30 to-rose-900/40 border-b border-rose-500/40 -mx-4 px-4 py-8 mb-8">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-rose-500/25 border border-rose-500/50 rounded-full px-4 py-1 mb-4" data-no-contrast-guard>
-              <Sparkles className="w-4 h-4 text-rose-200" />
-              <span className="text-rose-100 text-sm font-medium">AI-Powered OCR</span>
+            <div className="inline-flex items-center gap-2 bg-rose-500/25 border border-rose-500/50 rounded-full px-4 py-1 mb-4 allow-white" data-no-contrast-guard>
+              <Sparkles className="w-4 h-4 text-rose-200 allow-white" />
+              <span className="text-rose-100 text-sm font-medium allow-white">AI-Powered OCR</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 allow-white">
               AI Business Card <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-pink-300">Scanner</span>
             </h1>
-            <p className="text-white/70 max-w-2xl mx-auto">
+            <p className="text-white/90 max-w-2xl mx-auto allow-white">
               Scan business cards with AI-powered OCR. Your data is encrypted end-to-end.
             </p>
-            
+
             {/* Security Badges */}
             <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
-              <Badge className="gap-1 bg-rose-500/25 border-rose-500/50 text-rose-200">
-                <Lock className="h-3 w-3" />
+              <Badge className="gap-1 bg-rose-500/25 border-rose-500/50 text-rose-100 allow-white" data-no-contrast-guard>
+                <Lock className="h-3 w-3 allow-white" />
                 End-to-End Encrypted
               </Badge>
-              <Badge className="gap-1 bg-rose-500/25 border-rose-500/50 text-rose-200">
-                <Shield className="h-3 w-3" />
+              <Badge className="gap-1 bg-rose-500/25 border-rose-500/50 text-rose-100 allow-white" data-no-contrast-guard>
+                <Shield className="h-3 w-3 allow-white" />
                 GDPR Compliant
               </Badge>
-              <Badge className="gap-1 bg-rose-500/25 border-rose-500/50 text-rose-200">
-                <Eye className="h-3 w-3" />
+              <Badge className="gap-1 bg-rose-500/25 border-rose-500/50 text-rose-100 allow-white" data-no-contrast-guard>
+                <Eye className="h-3 w-3 allow-white" />
                 Private Processing
               </Badge>
             </div>
@@ -403,50 +407,73 @@ const BusinessCardScanner = () => {
         </div>
 
         {/* Privacy Alert */}
-        <Alert className="mb-6 border-rose-500/40 bg-rose-900/30" data-no-contrast-guard>
-          <Info className="h-4 w-4 text-rose-200" />
-          <AlertDescription className="text-sm text-white/85">
-            <strong className="text-white">Your privacy matters:</strong> All scanned data is encrypted with a key only you possess. 
+        <Alert
+          className="mb-6 border-rose-500/50 allow-white"
+          data-no-contrast-guard
+          style={{ background: "rgba(7,16,31,0.92)" }}
+        >
+          <Info className="h-4 w-4 text-rose-300 allow-white" />
+          <AlertDescription className="text-sm text-white allow-white">
+            <strong className="text-white allow-white">Your privacy matters:</strong> All scanned data is encrypted with a key only you possess.
             Data is processed in-memory and never stored on our servers.
           </AlertDescription>
         </Alert>
 
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Scanner Section */}
-          <Card className="bg-rose-900/30 border-rose-500/40">
+          <Card
+            className="border-rose-500/50 allow-white"
+            data-no-contrast-guard
+            style={{
+              background: "linear-gradient(180deg, rgba(7,16,31,0.94) 0%, rgba(4,7,13,0.97) 100%)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 60px -22px rgba(251,113,133,0.35)",
+            }}
+          >
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-white">
-                <Sparkles className="h-5 w-5 text-[#1A1A1A]" />
+              <CardTitle className="flex items-center gap-2 text-white allow-white">
+                <Sparkles className="h-5 w-5 text-rose-300 allow-white" />
                 Scan Business Cards
               </CardTitle>
-              <CardDescription className="text-white/70">
+              <CardDescription className="text-white/85 allow-white">
                 Use your camera or upload images to extract contact information
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "camera" | "upload")}>
-                <TabsList className="grid w-full grid-cols-2 mb-4 bg-[#F7F2EA] border border-rose-500/40">
-                  <TabsTrigger value="camera" className="gap-2 data-[state=active]:bg-rose-500 data-[state=active]:text-white">
-                    <Camera className="h-4 w-4" />
+                <TabsList
+                  className="grid w-full grid-cols-2 mb-4 border border-rose-500/40 allow-white"
+                  data-no-contrast-guard
+                  style={{ background: "rgba(255,255,255,0.04)" }}
+                >
+                  <TabsTrigger
+                    value="camera"
+                    data-no-contrast-guard
+                    className="gap-2 text-white/80 allow-white data-[state=active]:bg-rose-500 data-[state=active]:text-white"
+                  >
+                    <Camera className="h-4 w-4 allow-white" />
                     Camera
                   </TabsTrigger>
-                  <TabsTrigger value="upload" className="gap-2 data-[state=active]:bg-rose-500 data-[state=active]:text-white">
-                    <Upload className="h-4 w-4" />
+                  <TabsTrigger
+                    value="upload"
+                    data-no-contrast-guard
+                    className="gap-2 text-white/80 allow-white data-[state=active]:bg-rose-500 data-[state=active]:text-white"
+                  >
+                    <Upload className="h-4 w-4 allow-white" />
                     Upload
                   </TabsTrigger>
                 </TabsList>
-                
+
                 <TabsContent value="camera">
-                  <BusinessCardCamera 
+                  <BusinessCardCamera
                     onScanComplete={handleScanComplete}
                     isProcessing={isProcessing}
                     setIsProcessing={setIsProcessing}
                     encryptionKey={encryptionKey}
                   />
                 </TabsContent>
-                
+
                 <TabsContent value="upload">
-                  <BusinessCardUpload 
+                  <BusinessCardUpload
                     onScanComplete={handleScanComplete}
                     isProcessing={isProcessing}
                     setIsProcessing={setIsProcessing}
@@ -458,35 +485,46 @@ const BusinessCardScanner = () => {
           </Card>
 
           {/* Results Section */}
-          <Card className="bg-rose-900/30 border-rose-500/40">
+          <Card
+            className="border-rose-500/50 allow-white"
+            data-no-contrast-guard
+            style={{
+              background: "linear-gradient(180deg, rgba(7,16,31,0.94) 0%, rgba(4,7,13,0.97) 100%)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 60px -22px rgba(251,113,133,0.35)",
+            }}
+          >
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="flex items-center gap-2 text-white">
-                    <CheckCircle2 className="h-5 w-5 text-[#1A1A1A]" />
+                  <CardTitle className="flex items-center gap-2 text-white allow-white">
+                    <CheckCircle2 className="h-5 w-5 text-rose-300 allow-white" />
                     Scanned Contacts
                     {scannedContacts.length > 0 && (
-                      <Badge className="bg-rose-500/25 text-rose-200">{scannedContacts.length}</Badge>
+                      <Badge className="bg-rose-500/25 text-rose-100 allow-white" data-no-contrast-guard>
+                        {scannedContacts.length}
+                      </Badge>
                     )}
                   </CardTitle>
-                  <CardDescription className="text-white/70">
+                  <CardDescription className="text-white/85 allow-white">
                     Review and export your extracted contacts
                   </CardDescription>
                 </div>
                 {scannedContacts.length > 0 && (
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="sm"
-                    className="text-white/70 hover:text-white"
+                    data-no-contrast-guard
+                    data-allow-dark-cta
+                    className="text-white/85 hover:text-white allow-white"
                     onClick={() => setShowEncryptedData(!showEncryptedData)}
                   >
-                    {showEncryptedData ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showEncryptedData ? <EyeOff className="h-4 w-4 allow-white" /> : <Eye className="h-4 w-4 allow-white" />}
                   </Button>
                 )}
               </div>
             </CardHeader>
             <CardContent>
-              <BusinessCardResults 
+              <BusinessCardResults
                 contacts={scannedContacts}
                 onDelete={handleDeleteContact}
                 showEncrypted={showEncryptedData}
