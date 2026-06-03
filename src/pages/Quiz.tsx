@@ -155,6 +155,37 @@ const QUIZ_QUESTIONS = [
   },
 ];
 
+// Area chips per emirate — swapped at runtime so users only see areas inside their chosen emirate.
+const AREAS_BY_EMIRATE: Record<string, Array<{ value: string; label: string; icon: string }>> = {
+  dubai: [
+    { value: "downtown", label: "Downtown Dubai", icon: "" },
+    { value: "marina", label: "Dubai Marina", icon: "" },
+    { value: "palm", label: "Palm Jumeirah", icon: "" },
+    { value: "business-bay", label: "Business Bay", icon: "" },
+    { value: "creek-harbour", label: "Dubai Creek Harbour", icon: "" },
+    { value: "hills", label: "Dubai Hills Estate", icon: "" },
+    { value: "arabian-ranches", label: "Arabian Ranches", icon: "" },
+    { value: "jvc", label: "JVC / JVT", icon: "" },
+    { value: "mbr-city", label: "MBR City", icon: "" },
+    { value: "other", label: "Other Dubai Areas", icon: "" },
+  ],
+  "abu-dhabi": [
+    { value: "saadiyat", label: "Saadiyat Island", icon: "" },
+    { value: "yas", label: "Yas Island", icon: "" },
+    { value: "reem", label: "Al Reem Island", icon: "" },
+    { value: "raha", label: "Al Raha Beach", icon: "" },
+    { value: "maryah", label: "Al Maryah Island", icon: "" },
+    { value: "ghantoot", label: "Ghantoot", icon: "" },
+    { value: "other", label: "Other Abu Dhabi Areas", icon: "" },
+  ],
+  sharjah: [{ value: "other", label: "All Sharjah Areas", icon: "" }],
+  "ras-al-khaimah": [{ value: "other", label: "All Ras Al Khaimah Areas", icon: "" }],
+  ajman: [{ value: "other", label: "All Ajman Areas", icon: "" }],
+  fujairah: [{ value: "other", label: "All Fujairah Areas", icon: "" }],
+  "umm-al-quwain": [{ value: "other", label: "All Umm Al Quwain Areas", icon: "" }],
+  any: [{ value: "other", label: "Open to any area", icon: "" }],
+};
+
 // Area value to database area name mapping for hard filtering
 const AREA_NAME_MAP: Record<string, string[]> = {
   "downtown": ["downtown"],
@@ -164,10 +195,17 @@ const AREA_NAME_MAP: Record<string, string[]> = {
   "creek-harbour": ["creek harbour", "creek", "dubai creek"],
   "hills": ["dubai hills", "hills estate"],
   "arabian-ranches": ["arabian ranches"],
+  "jvc": ["jvc", "jumeirah village"],
+  "mbr-city": ["mbr city", "mohammed bin rashid"],
+  "saadiyat": ["saadiyat"],
+  "yas": ["yas island", "yas"],
+  "reem": ["al reem", "reem island"],
+  "raha": ["al raha", "raha beach"],
+  "maryah": ["al maryah", "maryah"],
+  "ghantoot": ["ghantoot"],
 };
 
-// Maps each area chip to its emirate — used as a hard "never cross emirates" guard.
-// Every specific area chip in the quiz is currently in Dubai; "other" is unconstrained.
+// Map area chip → emirate (used as a hard "never cross emirates" guard).
 const AREA_EMIRATE_MAP: Record<string, string> = {
   "downtown": "dubai",
   "marina": "dubai",
@@ -176,6 +214,35 @@ const AREA_EMIRATE_MAP: Record<string, string> = {
   "creek-harbour": "dubai",
   "hills": "dubai",
   "arabian-ranches": "dubai",
+  "jvc": "dubai",
+  "mbr-city": "dubai",
+  "saadiyat": "abu dhabi",
+  "yas": "abu dhabi",
+  "reem": "abu dhabi",
+  "raha": "abu dhabi",
+  "maryah": "abu dhabi",
+  "ghantoot": "abu dhabi",
+};
+
+// Quiz emirate value → DB emirate string used for hard filter.
+const EMIRATE_VALUE_MAP: Record<string, string> = {
+  "dubai": "dubai",
+  "abu-dhabi": "abu dhabi",
+  "sharjah": "sharjah",
+  "ras-al-khaimah": "ras al khaimah",
+  "ajman": "ajman",
+  "fujairah": "fujairah",
+  "umm-al-quwain": "umm al quwain",
+};
+
+// Property type → keyword set matched against property_type_label / unit_types / name.
+const PROPERTY_TYPE_KEYWORDS: Record<string, string[]> = {
+  apartment: ["apartment", "apartments", "flat", "duplex"],
+  villa: ["villa", "villas", "mansion", "sky villa", "farmhouse"],
+  townhouse: ["townhouse", "townhouses"],
+  penthouse: ["penthouse"],
+  plot: ["plot", "plots", "residential plot", "land"],
+  retail: ["office", "offices", "retail", "commercial", "hotel"],
 };
 
 const LANGUAGES = getLanguageList();
