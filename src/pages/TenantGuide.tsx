@@ -183,7 +183,7 @@ const TenantGuide = () => {
   ];
 
   return (
-    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
+    <div data-neon-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Tenant Guide Dubai | Your Rights, Costs, and Responsibilities | JBJ GLOBAL REAL ESTATE"
         description="This guide is designed for tenants renting residential property in Dubai. It explains the rental process, costs, legal protections, tenant obligations, Ejari registration, renewals, and dispute prevention."

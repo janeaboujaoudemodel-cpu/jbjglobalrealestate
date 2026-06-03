@@ -131,7 +131,7 @@ const NewsDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
+      <div data-neon-page className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <BrandedLoader text="Loading article..." />
       </div>
     );

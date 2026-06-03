@@ -173,7 +173,7 @@ const LandlordGuide = () => {
   ];
 
   return (
-    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
+    <div data-neon-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Landlord Guide Dubai | How to Rent Out Your Property | JBJ GLOBAL REAL ESTATE"
         description="This guide is designed for property owners who want to rent their property in Dubai efficiently, compliantly, and with minimal risk."

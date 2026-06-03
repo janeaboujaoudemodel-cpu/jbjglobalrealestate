@@ -102,7 +102,7 @@ const GoldenVisaGuide = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <div data-neon-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead
         title="UAE Golden Visa — Long-Term Residency Program | JBJ Global Real Estate"
         description="Complete guide to the UAE Golden Visa. Eligibility categories, application process, required documentation, and residency advisory. Official UAE regulations."

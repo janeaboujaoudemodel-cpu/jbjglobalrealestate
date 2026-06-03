@@ -272,7 +272,7 @@ const News = () => {
   return (
     <>
       <SEOHead {...pagesSEO.news} />
-      <section className="min-h-screen bg-gradient-to-br from-[hsl(40,30%,96%)] via-[hsl(39,25%,94%)] to-[hsl(38,20%,92%)]">
+      <section data-neon-page className="min-h-screen">
       {/* Hero Section — Neon newsroom (dark) */}
       <section className="jj-neon-hero relative py-20 md:py-28 overflow-hidden" data-surface="dark" data-no-contrast-guard>
         <div className="max-w-[1200px] mx-auto px-6 relative z-10">

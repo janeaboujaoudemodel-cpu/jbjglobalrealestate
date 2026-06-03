@@ -152,7 +152,7 @@ const BrokerFAQ = () => {
   const allFaqItems = categories.flatMap(cat => cat.questions);
 
   return (
-    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
+    <div data-neon-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Broker FAQ | Professional Questions Answered | JBJ Global Real Estate"
         description="Find clear answers to common broker questions about licensing, ethics, client communication, off-plan representation, and professional conduct in UAE real estate."

@@ -111,7 +111,7 @@ const LandlordFAQ = () => {
   const allFaqItems = categories.flatMap(cat => cat.questions);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div data-neon-page className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       <SEOHead title="Landlord FAQ | Property Leasing Questions | JBJ Global Real Estate" description="Answers for landlords about leasing, tenant management, maintenance, and rental regulations in the UAE." canonicalPath="/landlord-faq" faqItems={allFaqItems} />
       <FAQHero badge="Landlord FAQ" badgeIcon={HelpCircle} title={<>Landlord Questions <span className="text-[#1A1A1A]">Answered</span></>} description="Everything you need to know about leasing your property in the UAE." backgroundImage="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=2000&q=80"
         actions={<>

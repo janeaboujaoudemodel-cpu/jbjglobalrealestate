@@ -5711,3 +5711,214 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   background: var(--tool-accent, #F59E0B) !important;
   color: #1A1A1A !important;
 }
+
+/* ============================================================
+   === Neon Premium Page Shell (News / Market Intel / Guides /
+   === FAQs / Books / Investor Education / Golden Visa)
+   ============================================================
+   Wrap any page root with [data-neon-page] (or use <NeonPageShell />)
+   to instantly transform champagne marketing pages into a deep-navy
+   neon premium surface — cyan / violet / magenta glow accents,
+   ombre-white text, dark glass cards. Scoped so it never bleeds
+   into the global champagne system. */
+
+[data-neon-page] {
+  background:
+    radial-gradient(1200px 600px at 12% -10%, rgba(167,139,250,0.22), transparent 60%),
+    radial-gradient(900px 500px at 100% 8%, rgba(34,211,238,0.20), transparent 65%),
+    radial-gradient(1000px 600px at 50% 110%, rgba(236,72,153,0.18), transparent 60%),
+    linear-gradient(180deg, #04060F 0%, #060A1A 60%, #04060F 100%) !important;
+  color: #E8ECE6 !important;
+  min-height: 100vh;
+}
+
+/* Slow drifting orbs */
+[data-neon-page]::before,
+[data-neon-page]::after {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  width: 520px; height: 520px;
+  border-radius: 9999px;
+  filter: blur(110px);
+  opacity: .55;
+  animation: jjNeonPageOrb 14s ease-in-out infinite;
+}
+[data-neon-page]::before {
+  background: radial-gradient(circle, #22D3EE 0%, transparent 60%);
+  top: 8%; left: -8%;
+}
+[data-neon-page]::after {
+  background: radial-gradient(circle, #EC4899 0%, transparent 60%);
+  bottom: 6%; right: -6%;
+  animation-delay: -7s;
+}
+@keyframes jjNeonPageOrb {
+  0%,100% { transform: translate3d(0,0,0) scale(1); opacity: .5; }
+  50%     { transform: translate3d(30px,-20px,0) scale(1.08); opacity: .8; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-neon-page]::before,
+  [data-neon-page]::after { animation: none; }
+}
+
+/* Neutralize champagne bands inside neon page */
+[data-neon-page] .jj-band,
+[data-neon-page] .jj-band--page,
+[data-neon-page] .jj-band--surface,
+[data-neon-page] .jj-band--raised,
+[data-neon-page] [class*="bg-[#FDFBF7]"],
+[data-neon-page] [class*="bg-[#F7F2EA]"],
+[data-neon-page] [class*="bg-[#EFE6D6]"],
+[data-neon-page] [class*="bg-champagne"],
+[data-neon-page] [class*="bg-cream"] {
+  background: transparent !important;
+}
+
+/* Champagne / ink text in scope → ombre-white */
+[data-neon-page] [class*="text-[#1A1A1A]"],
+[data-neon-page] .text-foreground,
+[data-neon-page] .text-ink,
+[data-neon-page] [class*="text-zinc-9"],
+[data-neon-page] [class*="text-slate-9"],
+[data-neon-page] [class*="text-gray-9"],
+[data-neon-page] [class*="text-neutral-9"] {
+  color: #F6FBF8 !important;
+}
+[data-neon-page] [class*="text-[#1A1A1A]/70"],
+[data-neon-page] [class*="text-muted-foreground"],
+[data-neon-page] [class*="text-zinc-6"],
+[data-neon-page] [class*="text-slate-6"],
+[data-neon-page] [class*="text-gray-6"] {
+  color: rgba(246,251,248,0.72) !important;
+}
+
+/* Gold accents become cyan in neon scope (but keep gold-specific UI like
+   the PricePill alone — those carry data-no-contrast-guard) */
+[data-neon-page] [class*="text-[#B89555]"]:not([data-no-contrast-guard]),
+[data-neon-page] [class*="text-gold"]:not([data-no-contrast-guard]) {
+  color: #22D3EE !important;
+  text-shadow: 0 0 14px rgba(34,211,238,0.4);
+}
+
+/* Convert any champagne / gold border to thin cyan/violet glass border */
+[data-neon-page] [class*="border-[#B89555"],
+[data-neon-page] [class*="border-gold"],
+[data-neon-page] [class*="border-[#EFE6D6"],
+[data-neon-page] [class*="border-[#F7F2EA"] {
+  border-color: rgba(167,139,250,0.35) !important;
+}
+
+/* Dark glass card primitive */
+.jj-neon-card {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(10,16,32,0.92) 0%, rgba(6,10,24,0.96) 100%) !important;
+  border: 1px solid rgba(167,139,250,0.28) !important;
+  border-radius: 1rem;
+  box-shadow:
+    0 0 0 1px rgba(34,211,238,0.08),
+    0 24px 60px -28px rgba(34,211,238,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  color: #F6FBF8;
+  backdrop-filter: blur(8px);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.jj-neon-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(34,211,238,0.55) !important;
+  box-shadow:
+    0 0 0 1px rgba(34,211,238,0.20),
+    0 30px 70px -24px rgba(236,72,153,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* Auto-upgrade common shadcn card surfaces inside a neon page */
+[data-neon-page] .rounded-2xl[class*="border"]:not(.jj-neon-card):not([data-skip-neon]),
+[data-neon-page] .rounded-xl[class*="border"]:not(.jj-neon-card):not([data-skip-neon]) {
+  background: linear-gradient(180deg, rgba(10,16,32,0.86) 0%, rgba(6,10,24,0.94) 100%) !important;
+  border-color: rgba(167,139,250,0.25) !important;
+  color: #F6FBF8 !important;
+}
+
+/* Accordion (FAQ) styling inside neon page */
+[data-neon-page] [data-radix-accordion-item],
+[data-neon-page] [data-state] > [data-radix-accordion-trigger] {
+  border-color: rgba(167,139,250,0.25) !important;
+  color: #F6FBF8 !important;
+}
+[data-neon-page] [data-radix-accordion-trigger] {
+  color: #F6FBF8 !important;
+}
+[data-neon-page] [data-radix-accordion-content] {
+  color: rgba(246,251,248,0.78) !important;
+}
+
+/* Inputs inside neon page */
+[data-neon-page] input:not([type="checkbox"]):not([type="radio"]),
+[data-neon-page] textarea,
+[data-neon-page] [role="combobox"] {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(34,211,238,0.35) !important;
+  color: #F6FBF8 !important;
+}
+[data-neon-page] input::placeholder,
+[data-neon-page] textarea::placeholder {
+  color: rgba(246,251,248,0.5) !important;
+}
+[data-neon-page] input:focus,
+[data-neon-page] textarea:focus {
+  border-color: #22D3EE !important;
+  box-shadow: 0 0 0 3px rgba(34,211,238,0.25) !important;
+  outline: none !important;
+}
+
+/* Make sure the page chrome (header/footer) stays above orbs */
+[data-neon-page] > * { position: relative; z-index: 1; }
+
+/* Headline gradient helper */
+.jj-neon-headline {
+  background: linear-gradient(90deg, #22D3EE 0%, #A78BFA 45%, #EC4899 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 30px rgba(167,139,250,0.35);
+}
+
+/* Section eyebrow bar */
+.jj-neon-section-bar {
+  display: inline-block;
+  height: 3px; width: 56px;
+  background: linear-gradient(90deg, #22D3EE, #A78BFA, #EC4899);
+  border-radius: 9999px;
+  box-shadow: 0 0 14px rgba(34,211,238,0.55);
+}
+
+/* Dark veil over photo hero backgrounds inside neon page (legibility) */
+[data-neon-page] section [style*="background-image"]::before,
+[data-neon-page] [class*="bg-[url"]::before,
+[data-neon-page] [class*="bg-cover"][style*="background-image"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(4,6,15,0.78) 0%, rgba(6,10,26,0.92) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+[data-neon-page] section [style*="background-image"] { position: relative; }
+[data-neon-page] section [style*="background-image"] > * { position: relative; z-index: 1; }
+
+/* Force ombre-white on hero text inside neon page (overrides contrast guard) */
+[data-neon-page] h1,
+[data-neon-page] h2,
+[data-neon-page] section [style*="background-image"] h1,
+[data-neon-page] section [style*="background-image"] h2,
+[data-neon-page] section [style*="background-image"] p,
+[data-neon-page] section [style*="background-image"] span {
+  color: #F6FBF8 !important;
+}
+[data-neon-page] section [style*="background-image"] p {
+  color: rgba(246,251,248,0.85) !important;
+}
