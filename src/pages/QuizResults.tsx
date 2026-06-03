@@ -572,6 +572,13 @@ const QuizResults = () => {
           0: { cellWidth: 130, fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted },
           1: { cellWidth: "auto" },
         },
+        didDrawCell: (data) => {
+          if (data.section === "body" && data.column.index === 1 && data.row.index === 9) {
+            doc.link(data.cell.x, data.cell.y, data.cell.width, data.cell.height, {
+              url: `${origin}/project/${p.slug}`,
+            });
+          }
+        },
       });
     });
 
