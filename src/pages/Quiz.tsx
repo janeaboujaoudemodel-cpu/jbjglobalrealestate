@@ -220,6 +220,7 @@ const Quiz = () => {
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [started, setStarted] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
