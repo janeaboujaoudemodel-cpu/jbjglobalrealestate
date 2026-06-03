@@ -106,17 +106,36 @@ const AIHF_RESULTS_STYLE = `
     color: var(--price-orange) !important;
     -webkit-text-fill-color: var(--price-orange) !important;
   }
-  /* Favorite/Heart + shortlist buttons — Tiffany cyan inside results */
-  .aihf-results [data-favorite-button] svg,
-  .aihf-results [data-shortlist-button] svg {
+  /* Favorite/Heart + shortlist + Add-Badge buttons — Tiffany cyan inside results.
+     FavoriteButton renders .jj-favorite-trigger; ShortlistBadgeButton's trigger
+     is targeted via its lucide-award child icon. */
+  .aihf-results .jj-favorite-trigger,
+  .aihf-results button:has(> svg.lucide-award) {
+    background: linear-gradient(135deg, rgba(2,17,15,0.78) 0%, rgba(3,30,24,0.82) 100%) !important;
+    border: 1px solid rgba(94,234,212,0.55) !important;
+    box-shadow: 0 6px 18px rgba(34,211,238,0.18), inset 0 0 12px rgba(103,232,249,0.08) !important;
+  }
+  .aihf-results .jj-favorite-trigger:hover,
+  .aihf-results button:has(> svg.lucide-award):hover {
+    border-color: rgba(94,234,212,0.95) !important;
+    box-shadow: 0 10px 26px rgba(34,211,238,0.35), inset 0 0 16px rgba(103,232,249,0.14) !important;
+  }
+  .aihf-results .jj-favorite-trigger svg,
+  .aihf-results button:has(> svg.lucide-award) svg {
     stroke: #5EEAD4 !important;
     color: #5EEAD4 !important;
     filter: drop-shadow(0 0 6px rgba(94,234,212,0.45));
   }
-  .aihf-results [data-favorite-button][data-active="true"] svg,
-  .aihf-results [data-favorite-button].is-active svg {
-    fill: #22D3EE !important;
-    stroke: #22D3EE !important;
+  .aihf-results button:has(> svg.lucide-award) span {
+    color: #5EEAD4 !important;
+    -webkit-text-fill-color: #5EEAD4 !important;
+  }
+  /* Favorited heart: keep the saved state legible with a Tiffany-friendly pink */
+  .aihf-results .jj-favorite-trigger svg.fill-red-500,
+  .aihf-results .jj-favorite-trigger svg[fill="currentColor"].text-red-500 {
+    fill: #FF6B8A !important;
+    stroke: #FF6B8A !important;
+    color: #FF6B8A !important;
   }
   /* Tiffany dropdown menu (Add Badge) */
   .aihf-results [role="menu"],
