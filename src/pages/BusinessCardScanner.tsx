@@ -537,31 +537,60 @@ const BusinessCardScanner = () => {
 
         {/* Actions Bar */}
         {scannedContacts.length > 0 && (
-          <Card className="mt-6 bg-[#FDFBF7]/50 border-rose-500/40">
+          <Card
+            className="mt-6 border-rose-500/50 allow-white"
+            data-no-contrast-guard
+            style={{
+              background: "linear-gradient(180deg, rgba(7,16,31,0.94) 0%, rgba(4,7,13,0.97) 100%)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+            }}
+          >
             <CardContent className="py-4">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-2 text-sm text-white/70">
-                  <Lock className="h-4 w-4 text-rose-300" />
+                <div className="flex items-center gap-2 text-sm text-white/90 allow-white">
+                  <Lock className="h-4 w-4 text-rose-300 allow-white" />
                   <span>All data encrypted with your session key</span>
                 </div>
-                
+
                 <div className="flex flex-wrap items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={handleExportCSV} className="gap-2 border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]">
-                    <Download className="h-4 w-4" />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleExportCSV}
+                    data-no-contrast-guard
+                    data-allow-dark-cta
+                    className="gap-2 allow-white"
+                    style={{ background: "transparent", borderColor: "rgba(251,113,133,0.45)", color: "#FFFFFF" }}
+                  >
+                    <Download className="h-4 w-4 allow-white" />
                     Export CSV
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handleExportExcel} className="gap-2 border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]">
-                    <FileSpreadsheet className="h-4 w-4" />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleExportExcel}
+                    data-no-contrast-guard
+                    data-allow-dark-cta
+                    className="gap-2 allow-white"
+                    style={{ background: "transparent", borderColor: "rgba(251,113,133,0.45)", color: "#FFFFFF" }}
+                  >
+                    <FileSpreadsheet className="h-4 w-4 allow-white" />
                     Export Excel
                   </Button>
                   {user && (
-                    <Button size="sm" className="gap-2 bg-rose-500 hover:bg-rose-600 text-white" onClick={handleSaveAll}>
-                      <UserPlus className="h-4 w-4" />
+                    <Button
+                      size="sm"
+                      data-no-contrast-guard
+                      data-allow-dark-cta
+                      className="gap-2 bg-rose-500 hover:bg-rose-600 text-white allow-white"
+                      onClick={handleSaveAll}
+                    >
+                      <UserPlus className="h-4 w-4 allow-white" />
                       Save All to CRM
                     </Button>
                   )}
-                  <Button variant="destructive" size="sm" onClick={handleClearAll} className="gap-2">
-                    <Trash2 className="h-4 w-4" />
+                  <Button variant="destructive" size="sm" onClick={handleClearAll} className="gap-2 allow-white" data-no-contrast-guard data-allow-dark-cta>
+                    <Trash2 className="h-4 w-4 allow-white" />
                     Clear All
                   </Button>
                 </div>
@@ -571,23 +600,24 @@ const BusinessCardScanner = () => {
         )}
 
         {/* Footer Privacy Notice */}
-        <div className="mt-8 text-center text-xs text-white/90 space-y-2">
+        <div className="mt-8 text-center text-xs text-white/90 space-y-2 allow-white" data-no-contrast-guard>
           <p>
-            <Lock className="h-3 w-3 inline mr-1 text-rose-300" />
+            <Lock className="h-3 w-3 inline mr-1 text-rose-300 allow-white" />
             Your scanned data is encrypted client-side and never transmitted to our servers unencrypted.
           </p>
           <p>
-            <Shield className="h-3 w-3 inline mr-1 text-rose-300" />
+            <Shield className="h-3 w-3 inline mr-1 text-rose-300 allow-white" />
             Platform analytics track only usage counts, never personal contact data.
           </p>
-          <button 
-            onClick={() => setShowPrivacyNotice(true)} 
-            className="text-rose-300 hover:underline"
+          <button
+            onClick={() => setShowPrivacyNotice(true)}
+            className="text-rose-300 hover:underline allow-white"
           >
             View Privacy Policy
           </button>
         </div>
       </div>
+
 
       <ReAuthModal
         open={stepUp.modalOpen}
