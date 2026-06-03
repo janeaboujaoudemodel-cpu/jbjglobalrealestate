@@ -126,7 +126,9 @@ const BusinessCardScanner = () => {
 
   const handleDeleteContact = (id: string) => {
     setScannedContacts(prev => prev.filter(c => c.id !== id));
-    toast.success("Contact deleted");
+    toast.success("Removed from scanner. CRM record (if saved) is untouched — delete from the CRM page.", {
+      duration: 5000,
+    });
   };
 
   const handleClearAll = () => {
@@ -135,8 +137,21 @@ const BusinessCardScanner = () => {
     const newKey = generateEncryptionKey();
     sessionStorage.setItem('bcs_encryption_key', newKey);
     setEncryptionKey(newKey);
-    toast.success("All data cleared and encryption key regenerated");
+    toast.success("Scanner cleared. Any CRM-saved contacts remain in the CRM.", {
+      duration: 5000,
+    });
   };
+
+  /** A scan is "saveable" only if it has at least one strong contact signal. */
+  const isContactValid = (c: ScannedContact) =>
+    Boolean(
+      (c.email && c.email.includes("@")) ||
+        c.mobile ||
+        c.phone ||
+        c.whatsapp ||
+        c.landline ||
+        (c.name && (c.company || c.company_name)),
+    );
 
   // Duplicate confirmation dialog state
   const [dupDialog, setDupDialog] = useState<{
