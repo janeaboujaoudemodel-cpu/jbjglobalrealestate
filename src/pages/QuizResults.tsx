@@ -634,9 +634,25 @@ const QuizResults = () => {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Your AI-Selected Properties
           </h1>
-          <p className="aihf-muted text-lg max-w-2xl mx-auto mb-6">
-            Based on your preferences, our AI has selected these properties that best match your criteria
+          <p className="aihf-muted text-lg max-w-2xl mx-auto mb-4">
+            {tierParam === "exact" && "3 perfect matches based on your exact requirements."}
+            {tierParam === "close" && "1 or more filters were softened to find you the closest fits."}
+            {tierParam === "nearest" && "No exact match in inventory — here are the closest 3 to your criteria."}
+            {tierParam === "fallback" && "Top-rated properties available right now, ranked for you."}
           </p>
+          {tierParam !== "exact" && projects && projects.length > 0 && (
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6 text-xs font-semibold"
+              style={{
+                background: "rgba(245,158,11,0.18)",
+                border: "1px solid rgba(245,158,11,0.55)",
+                color: "#FBBF24",
+              }}
+            >
+              <Sparkles className="w-3.5 h-3.5" style={{ color: "#FBBF24", stroke: "#FBBF24" }} />
+              Closest matches — see the table below for what each property ticks
+            </div>
+          )}
 
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-3">
@@ -646,7 +662,6 @@ const QuizResults = () => {
               className="aihf-cta font-semibold shadow-md hover:-translate-y-0.5 transition-all duration-300"
             >
               <Download className="w-4 h-4 mr-2" />
-
               Download Report
             </Button>
             <Button
@@ -657,23 +672,37 @@ const QuizResults = () => {
               <Share2 className="w-4 h-4 mr-2" />
               Share with Consultant
             </Button>
+            <Button
+              onClick={startNewMatch}
+              data-no-contrast-guard
+              className="aihf-outline font-semibold"
+            >
+              <RefreshCcw className="w-4 h-4 mr-2" />
+              Start a new match
+            </Button>
           </div>
         </div>
 
-        {/* Empty state — when no matching properties were returned */}
+        {/* Criteria × Properties tick table */}
+        {projects && projects.length > 0 && Object.keys(sessionAnswers).length > 0 && (
+          <MatchCriteriaTable answers={sessionAnswers} projects={projects.slice(0, 3)} />
+        )}
+
+        {/* Empty state — only shown if DB returned literally nothing */}
         {(!projects || projects.length === 0) && !isLoading && (
           <div className="aihf-panel rounded-2xl p-8 mb-12 text-center max-w-2xl mx-auto">
             <Sparkles className="w-10 h-10 mx-auto mb-3 aihf-tiffany" />
-            <h3 className="text-xl font-semibold mb-2">No matches loaded yet</h3>
+            <h3 className="text-xl font-semibold mb-2">Let's refresh your matches</h3>
             <p className="aihf-muted mb-5">
-              We couldn't load your AI-selected properties. Please retake the quiz to refresh your matches.
+              Your saved selection isn't currently available. Start a new match — it takes under a minute and we'll always return you the closest properties.
             </p>
-            <Button onClick={() => navigate("/quiz")} className="aihf-cta font-semibold">
+            <Button onClick={startNewMatch} className="aihf-cta font-semibold">
               <Brain className="w-4 h-4 mr-2" />
-              Retake the AI quiz
+              Start a new match
             </Button>
           </div>
         )}
+
 
         {/* Top Recommendation */}
         {projects && projects.length > 0 && (
