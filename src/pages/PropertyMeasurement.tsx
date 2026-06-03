@@ -704,44 +704,45 @@ const PropertyMeasurement = () => {
                 {/* Room Grid */}
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {roomUploads.map((room) => (
-                    <div 
+                    <div
                       key={room.id}
-                      className={`relative p-4 rounded-xl border transition-all ${
-                        room.isComplete 
-                          ? "border-teal-500 bg-teal-500/10" 
-                          : "border-[#1A1A1A] bg-[#F7F2EA]/50"
-                      }`}
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                      className={`pm-card relative p-4 rounded-xl transition-all ${room.isComplete ? "pm-card-active" : ""}`}
                     >
                       <button
                         onClick={() => removeRoom(room.id)}
-                        className="absolute top-2 right-2 w-6 h-6 bg-red-500/20 hover:bg-red-500/40 rounded-full flex items-center justify-center text-red-400 transition-colors"
+                        className="absolute top-2 right-2 w-6 h-6 bg-red-500/20 hover:bg-red-500/40 rounded-full flex items-center justify-center text-red-300 transition-colors"
                       >
                         <X className="w-4 h-4" />
                       </button>
-                      
-                      <p className="text-white font-medium mb-3 pr-6">{room.name}</p>
-                      
+
+                      <p className="pm-text-strong font-medium mb-3 pr-6">{room.name}</p>
+
                       {room.isComplete ? (
-                        <div className="flex items-center gap-2 text-teal-300">
+                        <div className="flex items-center gap-2 pm-text-accent">
                           <CheckCircle2 className="w-5 h-5" />
                           <span className="text-sm">{room.files.length} file(s) added</span>
                         </div>
                       ) : (
-                        <p className="text-white/90 text-sm">No media uploaded</p>
+                        <p className="pm-text-dim text-sm">No media uploaded</p>
                       )}
                     </div>
                   ))}
-                  
+
                   {/* Add Custom Room */}
                   <button
+                    data-allow-dark-cta
+                    data-no-contrast-guard
                     onClick={() => {
                       const name = prompt("Enter room/area name:");
                       if (name) addCustomRoom(name);
                     }}
-                    className="p-4 rounded-xl border-2 border-dashed border-[#1A1A1A] hover:border-teal-500/50 bg-[#F7F2EA]/30 hover:bg-[#1A1A1A]/50 transition-all flex flex-col items-center justify-center gap-2 min-h-[100px]"
+                    className="pm-card p-4 rounded-xl border-dashed transition-all flex flex-col items-center justify-center gap-2 min-h-[100px] hover:opacity-90"
+                    style={{ borderStyle: "dashed" }}
                   >
-                    <Plus className="w-6 h-6 text-white/90" />
-                    <span className="text-white/70 text-sm">Add Custom Room</span>
+                    <Plus className="w-6 h-6" style={{ color: "#A7F3D0" }} />
+                    <span className="pm-text-dim text-sm">Add Custom Room</span>
                   </button>
                 </div>
 
