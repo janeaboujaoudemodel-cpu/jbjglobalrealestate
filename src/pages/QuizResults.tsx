@@ -107,7 +107,7 @@ const AIHF_RESULTS_STYLE = `
     -webkit-text-fill-color: var(--price-orange) !important;
   }
   /* Favorite/Heart + shortlist + Add-Badge buttons — Tiffany cyan inside results.
-     FavoriteButton renders `.jj-favorite-trigger`; ShortlistBadgeButton's trigger
+     FavoriteButton renders .jj-favorite-trigger; ShortlistBadgeButton's trigger
      is targeted via its lucide-award child icon. */
   .aihf-results .jj-favorite-trigger,
   .aihf-results button:has(> svg.lucide-award) {
