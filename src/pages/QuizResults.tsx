@@ -7,8 +7,8 @@ import autoTable from "jspdf-autotable";
 import { Sparkles, ArrowRight, Brain, Download, Award, Share2, Users, X, Mail, MessageCircle, Link as LinkIcon, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import ProjectCard from "@/components/ProjectCard";
 import FavoriteButton from "@/components/FavoriteButton";
+import PricePill from "@/components/ui/price-pill";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -30,6 +30,45 @@ import { useAuth } from "@/contexts/AuthContext";
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 const JBJ_CONSULTANT_EMAIL = "CONTACT@JBJ.AE";
 const JBJ_CONSULTANT_WHATSAPP = "971501234567"; // International format, no + or spaces
+
+const AIHF_RESULTS_STYLE = `
+  .aihf-results, .aihf-results :is(h1,h2,h3,h4,p,span,a,button,div), .aihf-results svg {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    opacity: 1 !important;
+  }
+  .aihf-results svg, .aihf-results svg * { stroke: #FFFFFF !important; }
+  .aihf-results .aihf-muted { color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important; }
+  .aihf-results .aihf-tiffany { color: #67E8F9 !important; -webkit-text-fill-color: #67E8F9 !important; }
+  .aihf-results .aihf-panel {
+    background: linear-gradient(135deg, rgba(8,47,73,0.78), rgba(3,30,24,0.90)) !important;
+    border: 1px solid rgba(45,212,191,0.52) !important;
+    box-shadow: 0 28px 80px rgba(34,211,238,0.18), inset 0 0 40px rgba(103,232,249,0.07) !important;
+  }
+  .aihf-results .aihf-tile {
+    background: rgba(2,17,15,0.72) !important;
+    border: 1px solid rgba(45,212,191,0.38) !important;
+  }
+  .aihf-results .aihf-cta, .aihf-results .aihf-cta:hover, .aihf-results .aihf-cta:focus-visible {
+    background: linear-gradient(135deg, #5EEAD4 0%, #22D3EE 100%) !important;
+    border: 1px solid rgba(103,232,249,0.80) !important;
+    box-shadow: 0 18px 42px rgba(34,211,238,0.24) !important;
+  }
+  .aihf-results .aihf-cta, .aihf-results .aihf-cta *, .aihf-results .aihf-cta svg {
+    color: #02110F !important;
+    -webkit-text-fill-color: #02110F !important;
+    stroke: #02110F !important;
+  }
+  .aihf-results .aihf-outline {
+    background: rgba(5,28,24,0.82) !important;
+    border: 1px solid rgba(45,212,191,0.55) !important;
+  }
+  .aihf-results .price-pill-premium, .aihf-results .price-pill-premium * {
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+  }
+  .aihf-results .price-pill-value { color: var(--price-orange) !important; -webkit-text-fill-color: var(--price-orange) !important; }
+`;
 
 
 
