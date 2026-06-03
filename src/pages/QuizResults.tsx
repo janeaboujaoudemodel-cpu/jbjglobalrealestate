@@ -100,13 +100,37 @@ const QuizResults = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { hasActiveMembership } = useMembership();
-  const [searchParams] = useSearchParams();
-  const projectSlugs = searchParams.get("projects")?.split(",") || [];
+  const [searchParams, setSearchParams] = useSearchParams();
+  const projectSlugs = searchParams.get("projects")?.split(",").filter(Boolean) || [];
+  const tierParam = (searchParams.get("tier") || "exact") as
+    | "exact" | "close" | "nearest" | "fallback";
   const isFreeUse = searchParams.get("free") === "true";
   const [badges, setBadges] = useState<Record<string, 'top1' | 'top2' | 'top3' | null>>({});
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [shareTrigger, setShareTrigger] = useState<"share" | "post-download">("share");
   const [showVipModal, setShowVipModal] = useState(false);
+  const [sessionAnswers, setSessionAnswers] = useState<Record<string, string | string[]>>({});
+
+  // Hydrate from persisted matchmaker session: restore answers + recover URL slugs after refresh
+  useEffect(() => {
+    const s = readMatchmakerSession();
+    if (s?.answers) setSessionAnswers(s.answers);
+    if (!projectSlugs.length && s?.resultSlugs?.length) {
+      const params = new URLSearchParams();
+      params.set("projects", s.resultSlugs.join(","));
+      params.set("session", s.sessionId);
+      if (s.resultTiers?.[0]) params.set("tier", s.resultTiers[0]);
+      params.set("free", "true");
+      setSearchParams(params, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const startNewMatch = () => {
+    clearMatchmakerSession();
+    navigate("/quiz");
+  };
+
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ["quiz-results", projectSlugs],
