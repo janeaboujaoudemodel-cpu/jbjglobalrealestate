@@ -700,15 +700,15 @@ const QuizResults = () => {
     doc.text("Your AI-Selected Properties", M, y);
     y += 20;
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(10);
+    doc.setFontSize(12);
     doc.setTextColor(...tiffanyLight);
-    doc.text(preparedLine, M, y);
+    doc.text(greetingLine, M, y);
     y += 18;
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
     doc.setTextColor(...tiffanyMuted);
     y = drawWrapped(
-      "A curated shortlist of the top properties from our inventory, ranked against your exact requirements. Each property is presented in full on the following pages — with photos, key details, and direct listing links.",
+      "Thank you for trusting JBJ Global Real Estate. Please find below a curated shortlist of the top properties from our inventory, ranked against your exact requirements. Each property is presented in full on the following pages — with photos, key details, and direct listing links.",
       M,
       y,
       pageW - 2 * M,
