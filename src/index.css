@@ -5909,3 +5909,16 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 }
 [data-neon-page] section [style*="background-image"] { position: relative; }
 [data-neon-page] section [style*="background-image"] > * { position: relative; z-index: 1; }
+
+/* Force ombre-white on hero text inside neon page (overrides contrast guard) */
+[data-neon-page] h1,
+[data-neon-page] h2,
+[data-neon-page] section [style*="background-image"] h1,
+[data-neon-page] section [style*="background-image"] h2,
+[data-neon-page] section [style*="background-image"] p,
+[data-neon-page] section [style*="background-image"] span {
+  color: #F6FBF8 !important;
+}
+[data-neon-page] section [style*="background-image"] p {
+  color: rgba(246,251,248,0.85) !important;
+}
