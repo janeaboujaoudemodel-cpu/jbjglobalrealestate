@@ -582,28 +582,28 @@ const QuizResults = () => {
         )}
 
         {/* Action Cards */}
-        <div data-allow-dark-cta className="rounded-2xl p-6 bg-[#102540] border border-[#B89555] mb-12">
-          <h3 className="text-white text-lg font-semibold mb-5 flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-[#B89555]" />
+        <div data-allow-dark-cta data-no-contrast-guard className="aihf-panel rounded-2xl p-6 mb-12">
+          <h3 className="text-lg font-semibold mb-5 flex items-center gap-2">
+            <Sparkles className="w-5 h-5" />
             Want More AI Power?
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* AI Comparison Card */}
-            <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 border border-[#B89555]/30 backdrop-blur-sm flex flex-col">
+            <div className="aihf-tile rounded-2xl p-6 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] flex items-center justify-center shadow-md shadow-gold/20">
-                  <Sparkles className="w-6 h-6 text-[#1A1A1A]" />
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#5EEAD4] to-[#22D3EE] flex items-center justify-center shadow-md shadow-cyan-400/20">
+                  <Sparkles className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-[#1A1A1A] font-semibold">AI Comparison</h3>
-                  <p className="text-[#1A1A1A]/70 text-sm">Instant analysis</p>
+                  <h3 className="font-semibold">AI Comparison</h3>
+                  <p className="aihf-muted text-sm">Instant analysis</p>
                 </div>
               </div>
-              <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-1">
+              <p className="aihf-muted text-sm mb-4 flex-1">
                 Generate an AI-powered comparison table with star ratings, price analysis, and recommendations.
               </p>
               <Link to="/compare">
-                <Button className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,82%)] hover:brightness-95 text-foreground font-semibold border-2 border-[#B89555]/30">
+                <Button className="aihf-cta w-full font-semibold">
                   Compare with AI
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
@@ -611,21 +611,21 @@ const QuizResults = () => {
             </div>
 
             {/* Professional Evaluation Card */}
-            <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 border border-[#B89555]/30 backdrop-blur-sm flex flex-col">
+            <div className="aihf-tile rounded-2xl p-6 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] flex items-center justify-center shadow-md shadow-gold/20">
-                  <Users className="w-6 h-6 text-[#1A1A1A]" />
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#5EEAD4] to-[#22D3EE] flex items-center justify-center shadow-md shadow-cyan-400/20">
+                  <Users className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-[#1A1A1A] font-semibold">Property Consultant</h3>
-                  <p className="text-[#1A1A1A]/70 text-sm">Expert consultation</p>
+                  <h3 className="font-semibold">Property Consultant</h3>
+                  <p className="aihf-muted text-sm">Expert consultation</p>
                 </div>
               </div>
-              <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-1">
+              <p className="aihf-muted text-sm mb-4 flex-1">
                 Request a personalized evaluation from our property consultants with detailed market insights.
               </p>
               <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
-                <Button className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,82%)] hover:brightness-95 text-foreground font-semibold border-2 border-[#B89555]/30 flex items-center justify-center gap-2">
+                <Button className="aihf-cta w-full font-semibold flex items-center justify-center gap-2">
                   <Users className="w-5 h-5" />
                   Request Evaluation
                   <ArrowRight className="w-4 h-4" />
@@ -634,22 +634,22 @@ const QuizResults = () => {
             </div>
 
             {/* Regenerate / AI Finder Card */}
-            <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 border border-[#B89555]/30 backdrop-blur-sm flex flex-col">
+            <div className="aihf-tile rounded-2xl p-6 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] flex items-center justify-center shadow-md shadow-gold/20">
-                  <Brain className="w-6 h-6 text-[#1A1A1A]" />
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#5EEAD4] to-[#22D3EE] flex items-center justify-center shadow-md shadow-cyan-400/20">
+                  <Brain className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-[#1A1A1A] font-semibold">AI Home Finder</h3>
-                  <p className="text-[#1A1A1A]/70 text-sm">New search</p>
+                  <h3 className="font-semibold">AI Home Finder</h3>
+                  <p className="aihf-muted text-sm">New search</p>
                 </div>
               </div>
-              <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-1">
+              <p className="aihf-muted text-sm mb-4 flex-1">
                 Not satisfied? Retake the AI quiz with different preferences to discover new matches.
               </p>
               <Button
                 onClick={() => navigate("/quiz")}
-                className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,82%)] hover:brightness-95 text-foreground font-semibold border-2 border-[#B89555]/30"
+                className="aihf-cta w-full font-semibold"
               >
                 <Brain className="w-4 h-4 mr-2" />
                 Regenerate with AI
