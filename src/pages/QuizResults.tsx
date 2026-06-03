@@ -379,23 +379,86 @@ const QuizResults = () => {
       pillX += w + 10;
     });
 
-    // ---------- Comparison table ----------
-    const headerRow = ["Attribute", ...top.map((p, i) => `#${i + 1}  ${p.name}`)];
-    const fmtBeds = (p: any) =>
-      p.bedrooms_min != null && p.bedrooms_max != null
-        ? p.bedrooms_min === 0
-          ? `Studio${p.bedrooms_max > 0 ? `–${p.bedrooms_max} BR` : ""}`
-          : `${p.bedrooms_min}–${p.bedrooms_max} BR`
-        : "Type TBC";
-    const fmtSize = (p: any) =>
-      p.size_min_sqft && p.size_max_sqft
-        ? `${p.size_min_sqft.toLocaleString()}–${p.size_max_sqft.toLocaleString()} sq ft`
-        : p.size_min_sqft
-        ? `${p.size_min_sqft.toLocaleString()} sq ft+`
-        : "—";
-    const fmtPrice = (p: any) =>
-      p.price_from ? `AED ${(p.price_from / 1000000).toFixed(1)}M` : "Price on Request";
+    // ---------- Criteria match table (page 2) ----------
+    const criteriaRows = buildCriteriaRowsForExport(sessionAnswers, top);
+    if (criteriaRows.length > 0) {
+      doc.addPage();
+      drawPageBg();
+      drawHeader();
+      doc.setTextColor(...white);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(18);
+      doc.text("How each property matches your requirements", 36, 110);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.setTextColor(...tiffanyMuted);
+      doc.text("✓ exact match  ·  ≈ close fit  ·  ✗ does not match", 36, 128);
 
+      const verdictGlyph = (v: "match" | "close" | "miss") =>
+        v === "match" ? "✓" : v === "close" ? "≈" : "✗";
+      const verdictFill = (v: "match" | "close" | "miss"): [number, number, number] =>
+        v === "match" ? [12, 65, 50] : v === "close" ? [70, 50, 12] : [70, 22, 22];
+
+      const cHead = [
+        "Requirement",
+        ...top.map((p, i) => `#${i + 1}  ${p.name}`),
+      ];
+      const cBody = criteriaRows.map((row) => [
+        `${row.label}\n${row.userPick}`,
+        ...row.cells.map((c) => `${verdictGlyph(c.verdict)}  ${c.value}`),
+      ]);
+      const totals = top.map((_, i) => computeMatchTotals(criteriaRows, i));
+      cBody.push([
+        "Match summary",
+        ...totals.map((t) =>
+          `✓ ${t.match} matched · ≈ ${t.close} close · ✗ ${t.miss} missed\n${t.match}/${t.total} criteria met`
+        ),
+      ]);
+
+      autoTable(doc, {
+        startY: 142,
+        margin: { left: 36, right: 36 },
+        theme: "grid",
+        head: [cHead],
+        body: cBody,
+        styles: {
+          font: "helvetica",
+          fontSize: 9,
+          textColor: white,
+          fillColor: navy,
+          lineColor: tiffany,
+          lineWidth: 0.3,
+          cellPadding: 6,
+          overflow: "linebreak",
+          valign: "top",
+        },
+        headStyles: { fillColor: tiffany, textColor: ink, fontStyle: "bold", fontSize: 10 },
+        columnStyles: {
+          0: { fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted, cellWidth: 130 },
+        },
+        didParseCell: (data) => {
+          if (data.section === "body" && data.column.index > 0 && data.row.index < criteriaRows.length) {
+            const v = criteriaRows[data.row.index]?.cells[data.column.index - 1]?.verdict;
+            if (v) data.cell.styles.fillColor = verdictFill(v);
+          }
+          if (data.section === "body" && data.row.index === criteriaRows.length) {
+            data.cell.styles.fillColor = [6, 50, 44];
+            data.cell.styles.fontStyle = "bold";
+          }
+        },
+      });
+    }
+
+    // ---------- Comparison table (next page) ----------
+    doc.addPage();
+    drawPageBg();
+    drawHeader();
+    doc.setTextColor(...white);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("Side-by-side comparison", 36, 110);
+
+    const headerRow = ["Attribute", ...top.map((p, i) => `#${i + 1}  ${p.name}`)];
     const rows: string[][] = [
       ["Developer", ...top.map((p) => p.developer?.name || "—")],
       ["Location", ...top.map((p) => `${p.location || ""}${p.emirate ? `, ${p.emirate}` : ""}`.trim() || "—")],
@@ -410,7 +473,7 @@ const QuizResults = () => {
     ];
 
     autoTable(doc, {
-      startY: 188,
+      startY: 130,
       margin: { left: 36, right: 36 },
       theme: "grid",
       head: [headerRow],
@@ -436,9 +499,12 @@ const QuizResults = () => {
       columnStyles: {
         0: { fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted, cellWidth: 90 },
       },
-      didDrawPage: () => {
-        drawPageBg();
-        drawHeader();
+      didDrawCell: (data) => {
+        // Make listing-URL cells clickable
+        if (data.section === "body" && data.column.index > 0 && data.row.index === rows.length - 1) {
+          const url = `${origin}/project/${top[data.column.index - 1].slug}`;
+          doc.link(data.cell.x, data.cell.y, data.cell.width, data.cell.height, { url });
+        }
       },
     });
 
