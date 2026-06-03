@@ -186,12 +186,59 @@ const BusinessCardCamera = ({
     }
   }, [facingMode, starting]);
 
-  const switchCamera = useCallback(() => {
-    stopCamera();
-    setFacingMode((p) => (p === "user" ? "environment" : "user"));
-    // small delay so the previous stream releases the device
-    setTimeout(() => startCamera(), 150);
-  }, [stopCamera, startCamera]);
+  const switchCamera = useCallback(async () => {
+    const next: "user" | "environment" = facingMode === "user" ? "environment" : "user";
+    // Stop current stream first
+    const s = streamRef.current;
+    if (s) {
+      s.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+    if (videoRef.current) {
+      try { videoRef.current.pause(); } catch {}
+      videoRef.current.srcObject = null;
+    }
+    setIsCameraReady(false);
+
+    setFacingMode(next);
+    setStatusMessage(`Switching to ${next === "user" ? "front" : "rear"} camera…`);
+
+    // Try the requested facing mode directly (do not rely on state, which is async)
+    setStarting(true);
+    setCameraError(null);
+    const attempts: MediaStreamConstraints[] = [
+      { video: { facingMode: { exact: next } } },
+      { video: { facingMode: next, width: { ideal: 1280 }, height: { ideal: 720 } } },
+      { video: { facingMode: next } },
+      { video: true },
+    ];
+    let mediaStream: MediaStream | null = null;
+    for (const c of attempts) {
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia(c);
+        if (mediaStream) break;
+      } catch {}
+    }
+    if (!mediaStream) {
+      setCameraError("Could not switch camera. Your device may only have one camera.");
+      setStarting(false);
+      toast.error("Couldn't switch camera — only one camera available?");
+      return;
+    }
+    streamRef.current = mediaStream;
+    setIsCameraReady(true);
+    await new Promise((r) => requestAnimationFrame(() => r(null)));
+    const video = videoRef.current;
+    if (video) {
+      video.srcObject = mediaStream;
+      video.muted = true;
+      video.playsInline = true;
+      try { await video.play(); } catch {}
+    }
+    setStatusMessage(`Camera ready (${next === "user" ? "front" : "rear"}).`);
+    setStarting(false);
+    toast.success(`Switched to ${next === "user" ? "front" : "rear"} camera`);
+  }, [facingMode]);
 
   const captureImage = useCallback(() => {
     const video = videoRef.current;
