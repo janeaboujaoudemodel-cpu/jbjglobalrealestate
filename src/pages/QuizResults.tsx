@@ -26,7 +26,7 @@ import {
 import { PaymentModal } from "@/components/PaymentModal";
 import { useMembership } from "@/hooks/useMembership";
 import { useAuth } from "@/contexts/AuthContext";
-import MatchCriteriaTable from "@/components/matchmaker/MatchCriteriaTable";
+import MatchCriteriaTable, { buildCriteriaRowsForExport, computeMatchTotals } from "@/components/matchmaker/MatchCriteriaTable";
 import {
   readMatchmakerSession,
   writeMatchmakerSession,
