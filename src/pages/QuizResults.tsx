@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { Sparkles, ArrowRight, Brain, Download, Award, Share2, Users, X, Mail, MessageCircle, Link as LinkIcon, Building2 } from "lucide-react";
+import { Sparkles, ArrowRight, Brain, Download, Award, Share2, Users, X, Mail, MessageCircle, Link as LinkIcon, Building2, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import FavoriteButton from "@/components/FavoriteButton";
@@ -26,6 +26,12 @@ import {
 import { PaymentModal } from "@/components/PaymentModal";
 import { useMembership } from "@/hooks/useMembership";
 import { useAuth } from "@/contexts/AuthContext";
+import MatchCriteriaTable from "@/components/matchmaker/MatchCriteriaTable";
+import {
+  readMatchmakerSession,
+  writeMatchmakerSession,
+  clearMatchmakerSession,
+} from "@/hooks/useMatchmakerSession";
 
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 const JBJ_CONSULTANT_EMAIL = "CONTACT@JBJ.AE";
