@@ -835,7 +835,13 @@ const QuizResults = () => {
     });
     y += cardH + 20;
 
-    // What's inside this report
+    // What's inside this report — pinned above footer so the cover does not leave a loose blank void.
+    y = Math.max(y, pageH - FOOTER_H - 92);
+    doc.setFillColor(4, 27, 30);
+    doc.setDrawColor(16, 90, 100);
+    doc.setLineWidth(0.4);
+    doc.roundedRect(M, y - 18, pageW - 2 * M, 76, 8, 8, "FD");
+    y -= 2;
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
     doc.setTextColor(...tiffanyLight);
