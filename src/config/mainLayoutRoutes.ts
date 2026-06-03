@@ -1,5 +1,6 @@
 export const TRANSPARENT_HEADER_ROUTES = new Set<string>([
   "/",
+  "/index",
   "/properties",
   "/quiz",
   "/about",
