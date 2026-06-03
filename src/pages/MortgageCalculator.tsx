@@ -10,9 +10,10 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
 
-const NAVY = "#1E4E8C";
-const NAVY_GLOW = "#60A5FA";
-const NAVY_DARK = "#0A1830";
+// Neon palette — cyan primary, magenta accent, deep navy base
+const NAVY = "#06B6D4";        // cyan-500
+const NAVY_GLOW = "#22D3EE";   // cyan-400
+const NAVY_DARK = "#05060F";   // deep navy
 
 const advisorBenefits = [
   { icon: Shield,      title: "Expert Guidance",       body: "Our mortgage advisors work with all major UAE banks to find you the best rates." },
@@ -32,21 +33,30 @@ const MortgageCalculatorPage = () => {
       <SEOHead {...pagesSEO.mortgageCalculator} />
 
       <section
+        data-neon-page
         data-allow-dark-cta
         data-no-contrast-guard
         data-on-dark
-        className="allow-white relative w-full min-h-screen"
-        style={{ background: "#06101E" }}
+        className="allow-white relative w-full min-h-screen overflow-hidden"
+        style={{ background: "#05060F" }}
       >
+        {/* Extra accent orb (page shell already provides cyan+magenta) */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute bottom-0 left-1/3 w-[460px] h-[460px] rounded-full blur-3xl opacity-30"
+               style={{ background: "radial-gradient(circle, #A78BFA 0%, transparent 70%)", animation: "jjNeonPageOrb 26s ease-in-out infinite" }} />
+        </div>
+
+
         {/* Hero */}
         <div className="relative py-16 md:py-24 overflow-hidden">
           <div
             className="absolute inset-0"
             style={{
-              background: `linear-gradient(135deg, ${NAVY} 0%, ${NAVY_DARK} 55%, #000000 100%)`,
+              background: `linear-gradient(135deg, rgba(6,182,212,0.18) 0%, rgba(5,6,15,0.85) 55%, #000000 100%)`,
             }}
           />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(96,165,250,0.18),transparent_55%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(34,211,238,0.22),transparent_55%)]" />
+
 
           <div className="container mx-auto px-4 relative z-10">
             <Link
