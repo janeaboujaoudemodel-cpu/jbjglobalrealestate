@@ -352,7 +352,7 @@ const Quiz = () => {
         }
       }
 
-      if (!project.cover_image_url) return false;
+      // NOTE: do not filter on cover_image_url — per Search Integrity rule.
 
       // Budget hard filter
       const priceFrom = project.price_from;
