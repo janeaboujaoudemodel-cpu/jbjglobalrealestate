@@ -115,13 +115,19 @@ const QuizResults = () => {
           community:communities(id, name, slug),
           documents:project_documents(id, file_url, file_name, document_type)
         `)
-        .in("slug", projectSlugs)
-        .not("is_sold_out", "eq", true)
-        .not("sale_status", "ilike", "%sold%");
+        .in("slug", projectSlugs);
 
       if (error) throw error;
 
-      const normalized = (data || []).map(p => ({
+      // Filter sold-out client-side so NULL sale_status / is_sold_out rows are kept.
+      const filtered = (data || []).filter((p: any) => {
+        if (p.is_sold_out === true) return false;
+        const status = (p.sale_status || "").toLowerCase();
+        if (status.includes("sold")) return false;
+        return true;
+      });
+
+      const normalized = filtered.map((p: any) => ({
         ...p,
         images: p.images?.length > 0
           ? p.images
@@ -609,7 +615,8 @@ const QuizResults = () => {
               data-no-contrast-guard
               className="aihf-cta font-semibold shadow-md hover:-translate-y-0.5 transition-all duration-300"
             >
-              <Download className="w-4 h-4 mr-2 text-[#B89555]" />
+              <Download className="w-4 h-4 mr-2" />
+
               Download Report
             </Button>
             <Button
@@ -623,9 +630,24 @@ const QuizResults = () => {
           </div>
         </div>
 
+        {/* Empty state — when no matching properties were returned */}
+        {(!projects || projects.length === 0) && !isLoading && (
+          <div className="aihf-panel rounded-2xl p-8 mb-12 text-center max-w-2xl mx-auto">
+            <Sparkles className="w-10 h-10 mx-auto mb-3 aihf-tiffany" />
+            <h3 className="text-xl font-semibold mb-2">No matches loaded yet</h3>
+            <p className="aihf-muted mb-5">
+              We couldn't load your AI-selected properties. Please retake the quiz to refresh your matches.
+            </p>
+            <Button onClick={() => navigate("/quiz")} className="aihf-cta font-semibold">
+              <Brain className="w-4 h-4 mr-2" />
+              Retake the AI quiz
+            </Button>
+          </div>
+        )}
 
         {/* Top Recommendation */}
         {projects && projects.length > 0 && (
+
           <div className="mb-12">
             <div className="aihf-panel relative backdrop-blur-sm rounded-3xl overflow-hidden">
               <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
@@ -900,102 +922,84 @@ const QuizResults = () => {
         </div>
       </div>
 
-      {/* Share Modal — unified channels (WhatsApp / Email / Copy / JBJ Consultant) */}
+      {/* Share Modal — Tiffany theme matching AI Home Finder */}
       <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
-        <DialogContent className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] sm:max-w-md">
+        <DialogContent
+          data-allow-dark-cta
+          data-no-contrast-guard
+          data-on-dark
+          className="aihf-results allow-white sm:max-w-md border-0"
+          style={{
+            background: "linear-gradient(160deg, #04161C 0%, #031E18 55%, #02110F 100%)",
+            border: "1px solid rgba(94,234,212,0.45)",
+            boxShadow:
+              "0 24px 70px rgba(45,212,191,0.25), inset 0 0 34px rgba(103,232,249,0.07)",
+            color: "#FFFFFF",
+          }}
+        >
+          <style>{AIHF_RESULTS_STYLE}</style>
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
-              <Share2 className="w-5 h-5 text-[#B89555]" />
+            <DialogTitle className="flex items-center gap-2" style={{ color: "#FFFFFF" }}>
+              <Share2 className="w-5 h-5 aihf-tiffany" />
               {shareTrigger === "post-download" ? "Share your report" : "Share your recommendations"}
             </DialogTitle>
-            <DialogDescription className="text-[#1A1A1A]/70">
+            <DialogDescription className="aihf-muted">
               {shareTrigger === "post-download"
-                ? "Your PDF has been downloaded. You can also share these properties with anyone, or send them directly to a JBJ Consultant."
+                ? "Your PDF has been downloaded. Share these properties with anyone, or send them to a JBJ Consultant."
                 : "Pick a channel to share the full list of AI recommendations."}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 mt-2">
-            <div className="bg-[#F7F2EA] rounded-lg p-3 border border-[#B89555]/20 max-h-40 overflow-y-auto">
-              <p className="text-[#1A1A1A]/70 text-xs mb-2">Properties included:</p>
-              {projects?.map((p, i) => {
-                const badge = badges[p.id];
-                return (
-                  <div key={p.id} className="flex items-center gap-2 text-sm py-0.5">
-                    <span className="text-[#B89555] font-semibold">#{i + 1}</span>
-                    {badge && (
-                      <span className={badgeLabels[badge].medalColor}>
-                        {badge === "top1" ? "(Gold)" : badge === "top2" ? "(Silver)" : "(Bronze)"}
-                      </span>
-                    )}
-                    <span className="text-[#1A1A1A] truncate">{p.name}</span>
-                  </div>
-                );
-              })}
+            <div className="aihf-tile rounded-lg p-3 max-h-40 overflow-y-auto">
+              <p className="aihf-muted text-xs mb-2">Properties included:</p>
+              {projects?.map((p, i) => (
+                <div key={p.id} className="flex items-center gap-2 text-sm py-0.5">
+                  <span className="aihf-tiffany font-semibold">#{i + 1}</span>
+                  <span className="truncate" style={{ color: "#FFFFFF" }}>{p.name}</span>
+                </div>
+              ))}
             </div>
 
             {/* Channel grid */}
             <div className="grid grid-cols-2 gap-3">
-              <Button
-                onClick={handleShareWhatsApp}
-                variant="outline"
-                className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border-[#B89555]/40 justify-start"
-              >
-                <MessageCircle className="w-4 h-4 mr-2 text-[#B89555]" />
+              <Button onClick={handleShareWhatsApp} className="aihf-cta font-semibold justify-start">
+                <MessageCircle className="w-4 h-4 mr-2" />
                 WhatsApp
               </Button>
-              <Button
-                onClick={handleShareEmail}
-                variant="outline"
-                className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border-[#B89555]/40 justify-start"
-              >
-                <Mail className="w-4 h-4 mr-2 text-[#B89555]" />
+              <Button onClick={handleShareEmail} className="aihf-cta font-semibold justify-start">
+                <Mail className="w-4 h-4 mr-2" />
                 Email
               </Button>
-              <Button
-                onClick={handleCopyLink}
-                variant="outline"
-                className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border-[#B89555]/40 justify-start"
-              >
-                <LinkIcon className="w-4 h-4 mr-2 text-[#B89555]" />
+              <Button onClick={handleCopyLink} className="aihf-outline font-semibold justify-start">
+                <LinkIcon className="w-4 h-4 mr-2" />
                 Copy text
               </Button>
-              <Button
-                onClick={handleDownloadReport}
-                variant="outline"
-                className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border-[#B89555]/40 justify-start"
-              >
-                <Download className="w-4 h-4 mr-2 text-[#B89555]" />
+              <Button onClick={handleDownloadReport} className="aihf-outline font-semibold justify-start">
+                <Download className="w-4 h-4 mr-2" />
                 Download PDF
               </Button>
             </div>
 
-            <div className="pt-2 border-t border-[#B89555]/20 space-y-2">
-              <p className="text-[#1A1A1A] text-xs font-semibold flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-[#B89555]" />
+            <div className="pt-3 space-y-2" style={{ borderTop: "1px solid rgba(94,234,212,0.30)" }}>
+              <p className="text-xs font-semibold flex items-center gap-1.5" style={{ color: "#FFFFFF" }}>
+                <Building2 className="w-3.5 h-3.5 aihf-tiffany" />
                 Send to a JBJ Consultant
               </p>
               <div className="grid grid-cols-2 gap-3">
-                <Button
-                  onClick={handleShareToConsultant}
-                  data-allow-dark-cta
-                  className="bg-[#102540] text-white hover:bg-[#1a3d63] hover:text-white [&_svg]:text-white font-semibold border border-[#B89555]"
-                >
+                <Button onClick={handleShareToConsultant} className="aihf-cta aihf-cta-glow font-semibold">
                   <Mail className="w-4 h-4 mr-2" />
                   Email JBJ
                 </Button>
-                <Button
-                  onClick={handleConsultantWhatsApp}
-                  data-allow-dark-cta
-                  className="bg-[#102540] text-white hover:bg-[#1a3d63] hover:text-white [&_svg]:text-white font-semibold border border-[#B89555]"
-                >
+                <Button onClick={handleConsultantWhatsApp} className="aihf-cta aihf-cta-glow font-semibold">
                   <MessageCircle className="w-4 h-4 mr-2" />
                   WhatsApp JBJ
                 </Button>
               </div>
-              <p className="text-[#1A1A1A]/60 text-[11px] text-center pt-1">
+              <p className="aihf-muted text-[11px] text-center pt-1">
                 Our consultants typically reply within 24 hours.
               </p>
+
             </div>
           </div>
         </DialogContent>
