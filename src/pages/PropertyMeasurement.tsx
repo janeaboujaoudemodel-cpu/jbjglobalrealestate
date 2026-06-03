@@ -301,9 +301,11 @@ const PropertyMeasurement = () => {
       data-allow-dark-cta
       data-no-contrast-guard
       data-on-dark
-      className="allow-white relative w-full min-h-screen bg-[#0A0F0C]"
+      data-surface="dark"
+      className="pm-root allow-white relative w-full min-h-screen bg-[#0A0F0C]"
     >
-      {/* Animated emerald border keyframes (page-local) */}
+      {/* Page-local style: hard-locks readable contrast inside Property Measurement.
+          The site-wide contrast engines must NEVER strip the white text on this dark page. */}
       <style>{`
         @keyframes jbjEmeraldFlow {
           0%, 100% { box-shadow: 0 0 0 1px rgba(16,185,129,0.55), 0 0 28px rgba(16,185,129,0.35), inset 0 0 24px rgba(16,185,129,0.10); }
@@ -315,6 +317,63 @@ const PropertyMeasurement = () => {
           50%      { box-shadow: 0 0 0 2px rgba(52,211,153,0.75), 0 0 22px rgba(16,185,129,0.45); }
         }
         .jbj-emerald-edge { animation: jbjEmeraldEdge 2.6s ease-in-out infinite; }
+
+        /* === HARD CONTRAST LOCK for /property-measurement ===
+           Forces readable ombre-white on every text node so no global contrast
+           engine can flip text to ink on this dark page. */
+        .pm-root h1, .pm-root h2, .pm-root h3,
+        .pm-root .pm-text-strong {
+          color: #F6FBF8 !important;
+          -webkit-text-fill-color: #F6FBF8 !important;
+        }
+        .pm-root p, .pm-root label,
+        .pm-root .pm-text {
+          color: rgba(246,251,248,0.92) !important;
+          -webkit-text-fill-color: rgba(246,251,248,0.92) !important;
+        }
+        .pm-root .pm-text-dim {
+          color: rgba(246,251,248,0.72) !important;
+          -webkit-text-fill-color: rgba(246,251,248,0.72) !important;
+        }
+        .pm-root .pm-text-accent {
+          color: #6EE7B7 !important;
+          -webkit-text-fill-color: #6EE7B7 !important;
+        }
+        /* Gradient headline must stay transparent so the bg-clip-text gradient shows */
+        .pm-root [class*="bg-clip-text"] {
+          color: transparent !important;
+          -webkit-text-fill-color: transparent !important;
+        }
+        /* Ombre card: green → black with soft emerald hairline */
+        .pm-card {
+          background: linear-gradient(135deg, #0C4F38 0%, #06301F 45%, #050B08 100%) !important;
+          border: 1px solid rgba(16,185,129,0.32) !important;
+          color: #F6FBF8 !important;
+          -webkit-text-fill-color: #F6FBF8 !important;
+        }
+        .pm-card-active {
+          background: linear-gradient(135deg, #10B981 0%, #047857 45%, #04140C 100%) !important;
+          border: 1px solid rgba(167,243,208,0.75) !important;
+          box-shadow: 0 0 0 1px rgba(167,243,208,0.45), 0 10px 36px rgba(16,185,129,0.35), inset 0 0 30px rgba(16,185,129,0.22) !important;
+          color: #ECFDF5 !important;
+          -webkit-text-fill-color: #ECFDF5 !important;
+        }
+        .pm-card svg, .pm-card-active svg { color: #A7F3D0 !important; }
+        .pm-input {
+          background: linear-gradient(135deg, rgba(8,40,28,0.7), rgba(2,8,5,0.8)) !important;
+          border: 1px solid rgba(16,185,129,0.4) !important;
+          color: #F6FBF8 !important;
+          -webkit-text-fill-color: #F6FBF8 !important;
+        }
+        .pm-input::placeholder {
+          color: rgba(246,251,248,0.55) !important;
+          -webkit-text-fill-color: rgba(246,251,248,0.55) !important;
+        }
+        .pm-step-inactive {
+          background: rgba(16,185,129,0.10) !important;
+          color: rgba(246,251,248,0.78) !important;
+          border: 1px solid rgba(16,185,129,0.30) !important;
+        }
       `}</style>
 
       {/* Hero Section */}
