@@ -587,6 +587,35 @@ const QuizResults = () => {
       return w;
     };
 
+    const drawWrappedHyperlink = (
+      label: string,
+      url: string,
+      x: number,
+      y: number,
+      maxW: number,
+      size = 9.5,
+      lineH = 13
+    ) => {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(size);
+      doc.setTextColor(...tiffanyLight);
+      const safeLabel = label
+        .replace(/([/?&=#-])/g, "$1\u200B")
+        .replace(/\u200B\u200B/g, "\u200B");
+      const lines = doc.splitTextToSize(safeLabel, maxW) as string[];
+      lines.forEach((line, idx) => {
+        const text = line.replace(/\u200B/g, "");
+        const yy = y + idx * lineH;
+        doc.text(text, x, yy);
+        const w = Math.min(doc.getTextWidth(text), maxW);
+        doc.setDrawColor(...tiffanyLight);
+        doc.setLineWidth(0.45);
+        doc.line(x, yy + 2, x + w, yy + 2);
+        doc.link(x, yy - size + 1, w, size + 2, { url });
+      });
+      return y + lines.length * lineH;
+    };
+
     // Word-wrap text and return the new y after drawing.
     const drawWrapped = (
       text: string,
