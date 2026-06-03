@@ -363,19 +363,20 @@ const QuizResults = () => {
   }
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-12 md:py-20">
+    <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-results min-h-screen py-12 md:py-20" style={{ background: "linear-gradient(180deg, #02110F 0%, #031E18 45%, #020B0A 100%)" }}>
+      <style>{AIHF_RESULTS_STYLE}</style>
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#B89555]/20 to-[#B89555]/10 border border-[#B89555]/40 mb-6">
-            <Sparkles className="w-4 h-4 text-[#B89555]" />
-            <span className="text-[#1A1A1A] text-sm font-medium">#1 AI Property Matchmaker — Exclusive by JBJ Global Real Estate</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6" style={{ background: "rgba(45,212,191,0.14)", borderColor: "rgba(103,232,249,0.52)" }}>
+            <Sparkles className="w-4 h-4" />
+            <span className="text-sm font-medium">#1 AI Property Matchmaker — Exclusive by JBJ Global Real Estate</span>
           </div>
           
-          <h1 className="text-[#102540] text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Your AI-Selected Properties
           </h1>
-          <p className="text-[#1A1A1A]/70 text-lg max-w-2xl mx-auto mb-6">
+          <p className="aihf-muted text-lg max-w-2xl mx-auto mb-6">
             Based on your preferences, our AI has selected these properties that best match your criteria
           </p>
 
@@ -383,15 +384,16 @@ const QuizResults = () => {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button
               onClick={handleDownloadReport}
-              className="bg-[#FDFBF7] text-[#B89555] hover:bg-[#F7F2EA] hover:text-[#B89555] hover:[&_svg]:text-[#B89555] font-semibold shadow-md border border-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+              data-no-contrast-guard
+              className="aihf-cta font-semibold shadow-md hover:-translate-y-0.5 transition-all duration-300"
             >
               <Download className="w-4 h-4 mr-2 text-[#B89555]" />
               Download Report
             </Button>
             <Button
               onClick={handleOpenShare}
-              data-allow-dark-cta
-              className="bg-[#102540] text-white hover:bg-[#1a3d63] hover:text-white [&_svg]:text-white font-semibold border border-[#B89555]"
+              data-no-contrast-guard
+              className="aihf-outline font-semibold"
             >
               <Share2 className="w-4 h-4 mr-2" />
               Share with Consultant
