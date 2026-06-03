@@ -155,6 +155,55 @@ const AREA_NAME_MAP: Record<string, string[]> = {
 const LANGUAGES = getLanguageList();
 const NATIONALITIES = getCountryList();
 
+const AIHF_STYLE = `
+  .aihf-root, .aihf-root :is(h1,h2,h3,h4,p,span,label,button,div), .aihf-root svg {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    opacity: 1 !important;
+  }
+  .aihf-root svg, .aihf-root svg * { stroke: #FFFFFF !important; }
+  .aihf-root .aihf-muted { color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important; }
+  .aihf-root .aihf-tiffany { color: #67E8F9 !important; -webkit-text-fill-color: #67E8F9 !important; }
+  .aihf-root .aihf-card {
+    background: linear-gradient(135deg, rgba(8,47,73,0.72), rgba(3,30,24,0.86)) !important;
+    border: 1px solid rgba(45,212,191,0.45) !important;
+    box-shadow: 0 24px 70px rgba(45,212,191,0.16), inset 0 0 34px rgba(103,232,249,0.06) !important;
+  }
+  .aihf-root .aihf-option {
+    background: rgba(5,28,24,0.82) !important;
+    border-color: rgba(45,212,191,0.42) !important;
+  }
+  .aihf-root .aihf-option:hover, .aihf-root .aihf-option[aria-pressed="true"] {
+    background: linear-gradient(135deg, rgba(45,212,191,0.22), rgba(6,182,212,0.13)) !important;
+    border-color: rgba(103,232,249,0.86) !important;
+    box-shadow: 0 14px 38px rgba(45,212,191,0.20) !important;
+  }
+  .aihf-root .aihf-cta, .aihf-root .aihf-cta:hover, .aihf-root .aihf-cta:focus-visible {
+    min-width: 12rem;
+    min-height: 4rem;
+    background: linear-gradient(135deg, #5EEAD4 0%, #22D3EE 100%) !important;
+    border: 1px solid rgba(103,232,249,0.80) !important;
+    box-shadow: 0 18px 42px rgba(34,211,238,0.28) !important;
+  }
+  .aihf-root .aihf-cta, .aihf-root .aihf-cta *, .aihf-root .aihf-cta svg {
+    color: #02110F !important;
+    -webkit-text-fill-color: #02110F !important;
+    stroke: #02110F !important;
+    opacity: 1 !important;
+  }
+  .aihf-root .aihf-input, .aihf-root input, .aihf-root [data-searchable-trigger] {
+    background: rgba(2,17,15,0.82) !important;
+    border: 1px solid rgba(45,212,191,0.52) !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+  }
+  .aihf-root input::placeholder { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .aihf-popover, .aihf-popover * { background-color: #04161C !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+  .aihf-popover { border: 1px solid rgba(45,212,191,0.55) !important; }
+  .aihf-popover svg, .aihf-popover svg * { stroke: #FFFFFF !important; color: #FFFFFF !important; }
+  .aihf-popover .jbj-form-option:hover { background-color: rgba(45,212,191,0.14) !important; }
+`;
+
 const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -478,9 +527,10 @@ const Quiz = () => {
         data-allow-dark-cta
         data-no-contrast-guard
         data-on-dark
-        className="allow-white min-h-screen flex flex-col"
+        className="aihf-root allow-white min-h-screen flex flex-col"
         style={{ background: "#04161C" }}
       >
+        <style>{AIHF_STYLE}</style>
         {/* Header */}
         <div className="border-b border-[rgba(94,234,212,0.25)] backdrop-blur-sm" style={{ background: "rgba(4,22,28,0.6)" }}>
           <div className="container mx-auto px-4 py-4">
@@ -617,14 +667,16 @@ const Quiz = () => {
   // Form Screen after completing questions
   if (showForm) {
     return (
-      <section className="min-h-screen bg-gradient-to-b from-[#02110F] via-[#031E18] to-[#020B0A] flex flex-col">
+      <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-root min-h-screen bg-gradient-to-b from-[#02110F] via-[#031E18] to-[#020B0A] flex flex-col">
+        <style>{AIHF_STYLE}</style>
         {/* Header */}
         <div className="border-b border-[#2DD4BF]/20 bg-[#02110F]/60 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setShowForm(false)}
-                className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
+                data-no-contrast-guard
+                className="allow-white text-white transition-colors flex items-center gap-2"
               >
                 <ChevronLeft className="w-5 h-5" />
                 Back to Questions
@@ -644,7 +696,7 @@ const Quiz = () => {
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#2DD4BF] to-[#06B6D4] mx-auto mb-4 flex items-center justify-center shadow-lg shadow-[#2DD4BF]/30">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
-              <h2 className="text-[#02110F] text-3xl font-bold mb-2">
+               <h2 className="text-white text-3xl font-bold mb-2">
                 Get Your AI Analysis
               </h2>
               <p className="text-white/70">
@@ -692,8 +744,8 @@ const Quiz = () => {
                     placeholder="Select your nationality"
                     searchPlaceholder="Search countries..."
                     priorityItem="United Arab Emirates"
-                    triggerClassName="bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
-                    className="bg-[#051C18] border-[#2DD4BF]/30"
+                    triggerClassName="aihf-input bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
+                    className="aihf-popover bg-[#051C18] border-[#2DD4BF]/30"
                   />
                 </div>
                 <div>
@@ -705,8 +757,8 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
-                    triggerClassName="bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
-                    className="bg-[#051C18] border-[#2DD4BF]/30"
+                    triggerClassName="aihf-input bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
+                    className="aihf-popover bg-[#051C18] border-[#2DD4BF]/30"
                   />
                 </div>
               </div>
@@ -714,7 +766,7 @@ const Quiz = () => {
               <Button
                 onClick={handleSubmitForm}
                 disabled={!isFormValid() || isSubmitting}
-                className={`w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
+                className={`aihf-cta w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
                   needsPayment
                     ? "bg-gradient-to-r from-[#2DD4BF] to-[#06B6D4] text-[#02110F] hover:brightness-110"
                     : "bg-gradient-to-r from-[#2DD4BF] to-[#06B6D4] text-[#02110F] hover:brightness-110"
@@ -765,14 +817,16 @@ const Quiz = () => {
   // Quiz Questions Screen
   return (
     <ToolAnimatedFrame theme={toolThemes.teal}>
-    <section className="min-h-screen bg-gradient-to-b from-[#02110F] via-[#031E18] to-[#020B0A] flex flex-col">
+    <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-root min-h-screen bg-gradient-to-b from-[#02110F] via-[#031E18] to-[#020B0A] flex flex-col">
+      <style>{AIHF_STYLE}</style>
       {/* Header */}
       <div className="border-b border-[#2DD4BF]/20 bg-[#02110F]/60 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
             <button
               onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-              className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
+              data-no-contrast-guard
+              className="allow-white text-white hover:text-white transition-colors flex items-center gap-2"
             >
               <ChevronLeft className="w-5 h-5" />
               {currentStep > 0 ? "Back" : "Exit"}
@@ -797,7 +851,7 @@ const Quiz = () => {
           {/* Main Question Area */}
           <div className="flex-1 max-w-2xl mx-auto">
             <h2
-              className="text-[#02110F] text-2xl md:text-3xl font-bold mb-8 text-center"
+              className="text-white text-2xl md:text-3xl font-bold mb-8 text-center"
             >
               {currentQuestion.question}
             </h2>
@@ -810,7 +864,8 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleSelectAll}
                   disabled={allSelected()}
-                  className="bg-[#051C18] text-[#02110F] hover:bg-[#062821] hover:text-[#02110F] border-[#2DD4BF]/40 font-semibold disabled:opacity-50"
+                  data-no-contrast-guard
+                  className="aihf-option text-white hover:text-white border-[#2DD4BF]/40 font-semibold disabled:opacity-50"
                 >
                   Select All
                 </Button>
@@ -819,7 +874,8 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleClearAll}
                   disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
-                  className="bg-[#051C18] text-[#02110F] hover:bg-[#062821] hover:text-[#02110F] border-[#2DD4BF]/40 font-semibold disabled:opacity-50"
+                  data-no-contrast-guard
+                  className="aihf-option text-white hover:text-white border-[#2DD4BF]/40 font-semibold disabled:opacity-50"
                 >
                   Clear All
                 </Button>
@@ -838,7 +894,9 @@ const Quiz = () => {
                   <button
                     key={option.value}
                     onClick={() => handleAnswer(option.value)}
-                    className={`relative p-4 md:p-5 rounded-xl border-2 transition-all text-left group ${
+                    aria-pressed={isSelected}
+                    data-no-contrast-guard
+                    className={`aihf-option relative p-4 md:p-5 rounded-xl border-2 transition-all text-left group ${
                       isSelected
                         ? "border-[#2DD4BF] bg-gradient-to-br from-[#062821] to-[#051C18] shadow-lg shadow-[#2DD4BF]/20"
                         : "border-[#2DD4BF]/30 bg-[#051C18] hover:border-[#2DD4BF]/50 hover:shadow-md"
@@ -852,7 +910,7 @@ const Quiz = () => {
                       </div>
                     )}
                     <span className="text-2xl mb-2 block">{option.icon}</span>
-                    <span className={`font-medium text-sm md:text-base ${isSelected ? "text-[#02110F]" : "text-white"}`}>
+                    <span className="font-medium text-sm md:text-base text-white">
                       {option.label}
                     </span>
                   </button>
@@ -865,7 +923,8 @@ const Quiz = () => {
               <Button
                 variant="outline"
                 onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-                className="border-[#2DD4BF]/40 text-[#02110F] bg-[#051C18] hover:bg-[#062821] hover:text-[#02110F] px-8 py-6 text-lg"
+                data-no-contrast-guard
+                className="aihf-cta px-8 py-6 text-lg font-semibold"
               >
                 <ChevronLeft className="w-5 h-5 mr-2" />
                 Back
@@ -873,7 +932,8 @@ const Quiz = () => {
               <Button
                 onClick={handleNext}
                 disabled={!isAnswered()}
-                className="bg-gradient-to-r from-[#2DD4BF] to-[#06B6D4] text-[#02110F] font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#2DD4BF]/20"
+                data-no-contrast-guard
+                className="aihf-cta font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {currentStep === QUIZ_QUESTIONS.length - 1 ? "Continue" : "Next"}
                 <ChevronRight className="w-5 h-5 ml-2" />
