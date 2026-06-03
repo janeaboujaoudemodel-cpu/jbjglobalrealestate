@@ -513,7 +513,7 @@ const QuizResults = () => {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.setTextColor(...tiffanyDim);
-      doc.text(preparedLine, pageW - M, chipY + 22, { align: "right" });
+      doc.text(headerDateLine, pageW - M, chipY + 22, { align: "right" });
       doc.setTextColor(...tiffanyDim);
       doc.setFontSize(7.5);
       doc.text("Curated by JBJ GLOBAL REAL ESTATE", pageW - M, chipY + 38, {
