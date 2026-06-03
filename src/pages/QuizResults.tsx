@@ -452,10 +452,8 @@ const QuizResults = () => {
         [14, 165, 233],
         [3, 105, 161],
       ];
-      doc.setFillColor(94, 234, 212);
-      doc.setGState(new (doc as any).GState({ opacity: 0.16 }));
+      doc.setFillColor(5, 42, 48);
       doc.roundedRect(x - 4, y - 13, doc.getTextWidth(text) + 10, 18, 6, 6, "F");
-      doc.setGState(new (doc as any).GState({ opacity: 1 }));
       doc.setFont("helvetica", "bold");
       doc.setFontSize(13);
       let cursor = x;
