@@ -158,20 +158,21 @@ const BusinessCardUpload = ({
     }
   };
 
+  const ACCENT = "#fb7185";
+  const ACCENT_BORDER = "rgba(251,113,133,0.55)";
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-no-contrast-guard data-allow-dark-cta>
       {/* Drop Zone */}
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`
-          border-2 border-dashed rounded-lg p-8 text-center transition-colors
-          ${isDragging 
-            ? 'border-primary bg-primary/5' 
-            : 'border-border hover:border-primary/50'
-          }
-        `}
+        className={`bcs-drop rounded-xl p-8 text-center transition-colors ${isDragging ? "is-dragging" : ""}`}
+        style={{
+          border: `2px dashed ${ACCENT_BORDER}`,
+          background: isDragging ? "rgba(251,113,133,0.10)" : "rgba(255,255,255,0.03)",
+        }}
       >
         <input
           type="file"
@@ -181,21 +182,39 @@ const BusinessCardUpload = ({
           className="hidden"
           id="business-card-upload"
         />
-        
-        <label 
-          htmlFor="business-card-upload" 
+
+        <label
+          htmlFor="business-card-upload"
           className="cursor-pointer flex flex-col items-center gap-4"
         >
-          <div className="p-4 bg-muted rounded-full">
-            <Upload className="h-8 w-8 text-muted-foreground" />
+          <div
+            className="p-4 rounded-full"
+            style={{
+              background: "rgba(251,113,133,0.14)",
+              border: `1px solid ${ACCENT_BORDER}`,
+              boxShadow: `0 0 24px ${ACCENT}33`,
+            }}
+          >
+            <Upload className="h-8 w-8 allow-white" style={{ color: ACCENT }} />
           </div>
           <div>
-            <p className="font-medium">Drop business cards here</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="font-medium allow-white" style={{ color: "#FFFFFF" }}>Drop business cards here</p>
+            <p className="bcs-drop-sub text-sm allow-white" style={{ color: "rgba(255,255,255,0.72)" }}>
               or click to browse (JPG, PNG, HEIC - max 10MB each)
             </p>
           </div>
-          <Button type="button" variant="outline" className="gap-2">
+          <Button
+            type="button"
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="allow-white gap-2"
+            style={{
+              background: `linear-gradient(135deg, ${ACCENT} 0%, #9f1239 100%)`,
+              color: "#FFFFFF",
+              border: `1px solid ${ACCENT_BORDER}`,
+              boxShadow: `0 12px 30px -14px ${ACCENT}88`,
+            }}
+          >
             <ImageIcon className="h-4 w-4" />
             Select Images
           </Button>
@@ -206,40 +225,61 @@ const BusinessCardUpload = ({
       {previews.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">
+            <span className="text-sm font-medium allow-white" style={{ color: "#FFFFFF" }}>
               {previews.length} image(s) selected
             </span>
-            <Button variant="ghost" size="sm" onClick={clearAll}>
+            <Button
+              size="sm"
+              data-allow-dark-cta
+              data-no-contrast-guard
+              onClick={clearAll}
+              className="allow-white h-8"
+              style={{ background: "transparent", color: "#fca5a5", border: `1px solid ${ACCENT_BORDER}` }}
+            >
               Clear All
             </Button>
           </div>
-          
+
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {previews.map((preview, index) => (
-              <div 
+              <div
                 key={index}
-                className="relative aspect-[3/2] rounded-lg overflow-hidden border group"
+                className="relative aspect-[3/2] rounded-lg overflow-hidden group"
+                style={{ border: `1px solid ${ACCENT_BORDER}` }}
               >
-                <img 
-                  src={preview} 
-                  alt={`Card ${index + 1}`} 
+                <img
+                  src={preview}
+                  alt={`Card ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
                 <button
                   onClick={() => removeFile(index)}
-                  className="absolute top-2 right-2 p-1 bg-destructive text-destructive-foreground rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-2 right-2 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{ background: ACCENT, color: "#FFFFFF" }}
+                  aria-label="Remove image"
                 >
                   <X className="h-3 w-3" />
                 </button>
-                <div className="absolute bottom-0 left-0 right-0 bg-[#1A1A1A]/50 text-white text-xs p-1 text-center">
+                <div
+                  className="absolute bottom-0 left-0 right-0 text-xs p-1 text-center allow-white"
+                  style={{ background: "rgba(7,16,31,0.7)", color: "#FFFFFF" }}
+                >
                   Card {index + 1}
                 </div>
               </div>
             ))}
           </div>
-          
-          <Button 
-            className="w-full gap-2"
+
+          <Button
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="allow-white w-full gap-2 h-11 rounded-xl font-semibold"
+            style={{
+              background: `linear-gradient(135deg, ${ACCENT} 0%, #9f1239 100%)`,
+              color: "#FFFFFF",
+              border: `1px solid ${ACCENT_BORDER}`,
+              boxShadow: `0 14px 36px -14px ${ACCENT}88`,
+            }}
             onClick={processImages}
             disabled={isProcessing}
           >
