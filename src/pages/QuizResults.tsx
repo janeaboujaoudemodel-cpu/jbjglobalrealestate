@@ -1235,6 +1235,7 @@ const QuizResults = () => {
       {/* Share Modal — Tiffany theme matching AI Home Finder */}
       <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
         <DialogContent
+          data-aihf-dialog
           data-allow-dark-cta
           data-no-contrast-guard
           data-on-dark
