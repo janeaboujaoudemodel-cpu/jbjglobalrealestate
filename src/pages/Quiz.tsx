@@ -493,7 +493,7 @@ const Quiz = () => {
       // Fallback: if fewer than 3 results, relax area filter and retry
       if (recommendations.length < 3 && allProjects?.length) {
         const relaxed = allProjects
-          .filter(p => !p.is_sold_out && p.cover_image_url)
+          .filter(p => !p.is_sold_out)
           .slice(0, 3);
         if (relaxed.length > recommendations.length) {
           slugs = relaxed.slice(0, 3).map(p => p.slug).join(",");
