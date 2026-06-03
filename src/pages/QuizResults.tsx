@@ -584,30 +584,47 @@ const QuizResults = () => {
       body: rows,
       styles: {
         font: "helvetica",
-        fontSize: 9,
+        fontSize: 10,
         textColor: white,
         fillColor: navy,
         lineColor: tiffany,
         lineWidth: 0.3,
-        cellPadding: 6,
+        cellPadding: 10,
+        minCellHeight: 22,
         overflow: "linebreak",
       },
       headStyles: {
         fillColor: tiffany,
         textColor: ink,
         fontStyle: "bold",
-        fontSize: 10,
+        fontSize: 11,
         halign: "left",
+        cellPadding: 10,
       },
-      alternateRowStyles: { fillColor: [6, 40, 34] },
+      alternateRowStyles: { fillColor: [5, 34, 30] },
       columnStyles: {
         0: { fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted, cellWidth: 90 },
       },
+      didParseCell: (data) => {
+        // Style the "Listing" row cells as visibly clickable tiffany links.
+        if (data.section === "body" && data.column.index > 0 && data.row.index === rows.length - 1) {
+          data.cell.styles.textColor = [94, 234, 212];
+          data.cell.styles.fontStyle = "bold";
+        }
+      },
       didDrawCell: (data) => {
-        // Make listing-URL cells clickable
+        // Make listing-URL cells clickable + draw tiffany underline so user sees they are links.
         if (data.section === "body" && data.column.index > 0 && data.row.index === rows.length - 1) {
           const url = `${origin}/project/${top[data.column.index - 1].slug}`;
           doc.link(data.cell.x, data.cell.y, data.cell.width, data.cell.height, { url });
+          doc.setDrawColor(94, 234, 212);
+          doc.setLineWidth(0.6);
+          doc.line(
+            data.cell.x + 6,
+            data.cell.y + data.cell.height - 6,
+            data.cell.x + data.cell.width - 6,
+            data.cell.y + data.cell.height - 6
+          );
         }
       },
     });
