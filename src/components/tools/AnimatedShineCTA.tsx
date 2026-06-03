@@ -2,7 +2,7 @@ import React from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type Tone = "navy" | "emerald" | "gold";
+type Tone = "navy" | "emerald" | "gold" | "burgundy";
 
 const TONES: Record<Tone, { from: string; to: string; hoverFrom: string; hoverTo: string; ring: string }> = {
   navy: {
@@ -24,6 +24,13 @@ const TONES: Record<Tone, { from: string; to: string; hoverFrom: string; hoverTo
     to: "#B89555",
     hoverFrom: "#7f6432",
     hoverTo: "#c9a766",
+    ring: "rgba(255,255,255,0.35)",
+  },
+  burgundy: {
+    from: "#5b1320",
+    to: "#8B1E2E",
+    hoverFrom: "#3f0c17",
+    hoverTo: "#a8243a",
     ring: "rgba(255,255,255,0.35)",
   },
 };
