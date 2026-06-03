@@ -28,6 +28,7 @@ import {
   ScannedContact,
   ContactTypeLabel,
 } from "@/utils/businessCardEncryption";
+import { isContactSaveable } from "@/utils/businessCardValidation";
 import {
   Select,
   SelectContent,
@@ -112,10 +113,10 @@ const BusinessCardResults = ({
 
   if (contacts.length === 0) {
     return (
-      <div className="text-center py-12 text-muted-foreground">
-        <Lock className="h-12 w-12 mx-auto mb-4 opacity-20" />
-        <p className="font-medium">No contacts scanned yet</p>
-        <p className="text-sm mt-1">
+      <div className="text-center py-12 allow-white" style={{ color: "rgba(255,255,255,0.78)" }} data-no-contrast-guard>
+        <Lock className="h-12 w-12 mx-auto mb-4 opacity-60 allow-white" style={{ color: "#fb7185" }} />
+        <p className="font-medium allow-white" style={{ color: "#FFFFFF" }}>No contacts scanned yet</p>
+        <p className="text-sm mt-1 allow-white" style={{ color: "rgba(255,255,255,0.72)" }}>
           Scan business cards to see extracted contacts here
         </p>
       </div>
@@ -130,11 +131,14 @@ const BusinessCardResults = ({
           !contact.name ||
           (!contact.email && !contact.mobile && !contact.phone);
         const saveStatus = contact.saveStatus || "idle";
+        const saveable = isContactSaveable(contact);
 
         return (
           <Card
             key={contact.id}
-            className="border-border/50 hover:border-primary/30 transition-colors"
+            className="border-rose-500/45 transition-colors allow-white"
+            data-no-contrast-guard
+            style={{ background: "rgba(4,7,13,0.62)", color: "#FFFFFF" }}
           >
             <CardContent className="p-4">
               {editingId === contact.id ? (
