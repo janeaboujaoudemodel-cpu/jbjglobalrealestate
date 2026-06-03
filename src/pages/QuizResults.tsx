@@ -654,14 +654,16 @@ const QuizResults = () => {
         theme: "grid",
         styles: {
           font: "helvetica",
-          fontSize: 10,
+          fontSize: 11,
           textColor: white,
           fillColor: navy,
           lineColor: tiffany,
-          lineWidth: 0.3,
-          cellPadding: 8,
+          lineWidth: 0.4,
+          cellPadding: 12,
+          minCellHeight: 26,
         },
         headStyles: { fillColor: tiffanyDeep, textColor: white, fontStyle: "bold" },
+        alternateRowStyles: { fillColor: [5, 34, 30] },
         body: [
           ["Developer", p.developer?.name || "—"],
           ["Location", `${p.location || ""}${p.emirate ? `, ${p.emirate}` : ""}`.trim() || "—"],
@@ -678,11 +680,25 @@ const QuizResults = () => {
           0: { cellWidth: 130, fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted },
           1: { cellWidth: "auto" },
         },
+        didParseCell: (data) => {
+          if (data.section === "body" && data.column.index === 1 && data.row.index === 9) {
+            data.cell.styles.textColor = [94, 234, 212];
+            data.cell.styles.fontStyle = "bold";
+          }
+        },
         didDrawCell: (data) => {
           if (data.section === "body" && data.column.index === 1 && data.row.index === 9) {
             doc.link(data.cell.x, data.cell.y, data.cell.width, data.cell.height, {
               url: `${origin}/project/${p.slug}`,
             });
+            doc.setDrawColor(94, 234, 212);
+            doc.setLineWidth(0.6);
+            doc.line(
+              data.cell.x + 6,
+              data.cell.y + data.cell.height - 6,
+              data.cell.x + data.cell.width - 6,
+              data.cell.y + data.cell.height - 6
+            );
           }
         },
       });
