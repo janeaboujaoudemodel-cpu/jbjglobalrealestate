@@ -766,33 +766,7 @@ const QuizResults = () => {
     setShareModalOpen(true);
   };
 
-  // Helper — Web Share API with file when supported, else fallback URL
-  const shareWithFile = async (opts: {
-    title: string;
-    text: string;
-    fallbackUrl: string;
-    successMsg: string;
-  }) => {
-    let pdf = lastPdf;
-    if (!pdf) pdf = await generateAndCachePdf();
-    if (pdf) {
-      try {
-        const file = new File([pdf.blob], pdf.filename, { type: "application/pdf" });
-        const nav: any = navigator;
-        if (nav.canShare && nav.canShare({ files: [file] })) {
-          await nav.share({ title: opts.title, text: opts.text, files: [file] });
-          toast.success("Shared with PDF attached");
-          return;
-        }
-      } catch {
-        /* user cancelled or unsupported — fall through */
-      }
-      // Ensure file is at least on disk before opening fallback
-      triggerDownload(pdf.blob, pdf.filename);
-    }
-    window.open(opts.fallbackUrl, "_blank", "noopener,noreferrer");
-    toast.success(opts.successMsg);
-  };
+
 
   // Open a link synchronously inside the click gesture so popup blockers don't fire.
   // PDF generation runs in the BACKGROUND after the link opens.
