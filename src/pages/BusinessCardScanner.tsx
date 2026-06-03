@@ -452,14 +452,16 @@ const BusinessCardScanner = () => {
             <CardContent>
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "camera" | "upload")}>
                 <TabsList
-                  className="grid w-full grid-cols-2 mb-4 border border-rose-500/40 allow-white"
+                  className="bcs-tabs grid w-full grid-cols-2 mb-4 border border-rose-500/40 allow-white"
                   data-no-contrast-guard
                   style={{ background: "rgba(255,255,255,0.04)" }}
                 >
                   <TabsTrigger
                     value="camera"
                     data-no-contrast-guard
-                    className="gap-2 text-white/80 allow-white data-[state=active]:bg-rose-500 data-[state=active]:text-white"
+                    data-allow-dark-cta
+                    className="bcs-tab gap-2 allow-white data-[state=active]:bg-rose-500 data-[state=active]:text-white"
+                    style={{ color: activeTab === "camera" ? "#FFFFFF" : "rgba(255,255,255,0.78)" }}
                   >
                     <Camera className="h-4 w-4 allow-white" />
                     Camera
@@ -467,7 +469,9 @@ const BusinessCardScanner = () => {
                   <TabsTrigger
                     value="upload"
                     data-no-contrast-guard
-                    className="gap-2 text-white/80 allow-white data-[state=active]:bg-rose-500 data-[state=active]:text-white"
+                    data-allow-dark-cta
+                    className="bcs-tab gap-2 allow-white data-[state=active]:bg-rose-500 data-[state=active]:text-white"
+                    style={{ color: activeTab === "upload" ? "#FFFFFF" : "rgba(255,255,255,0.78)" }}
                   >
                     <Upload className="h-4 w-4 allow-white" />
                     Upload
