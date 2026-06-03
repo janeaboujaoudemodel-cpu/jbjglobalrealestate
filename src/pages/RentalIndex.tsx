@@ -34,8 +34,7 @@ import { toast } from "sonner";
 import { PrimaryCTA } from "@/components/tools/PrimaryCTA";
 import { PoweredByJBJ } from "@/components/tools/PoweredByJBJ";
 import { PremiumToolShell } from "@/components/tools/PremiumToolShell";
-import { ToolSectionDivider } from "@/components/tools/ToolSectionDivider";
-import { toolThemes, TOOL_INK } from "@/components/tools/toolThemes";
+import { toolThemes } from "@/components/tools/toolThemes";
 import { AnimatedShineCTA } from "@/components/tools/AnimatedShineCTA";
 import { useGuidedRequiredFields } from "@/hooks/useGuidedRequiredFields";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
@@ -117,7 +116,7 @@ const FormLabel = ({
 }) => (
   <Label
     className="flex items-center gap-2 mb-2 text-sm font-semibold"
-    style={{ color: TOOL_INK }}
+    style={{ color: "#FFFFFF" }}
   >
     {Icon && (
       <span
@@ -161,11 +160,11 @@ const SectionHeader = ({
       <Icon className="w-5 h-5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
     </span>
     <div>
-      <h2 className="text-xl font-bold" style={{ color: TOOL_INK }}>
+      <h2 className="text-xl font-bold" style={{ color: "#FFFFFF" }}>
         {title}
       </h2>
       {subtitle && (
-        <p className="text-sm" style={{ color: "rgba(26,26,26,0.65)" }}>
+        <p className="text-sm ri-dim" style={{ color: "rgba(255,255,255,0.82)" }}>
           {subtitle}
         </p>
       )}
