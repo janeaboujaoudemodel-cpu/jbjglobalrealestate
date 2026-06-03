@@ -527,7 +527,8 @@ const Quiz = () => {
   const proceedToResults = async () => {
     setIsSubmitting(true);
     try {
-      const recommendations = getRecommendations();
+      const { items: recommendations, tier } = getTieredRecommendations();
+      const top = recommendations.slice(0, 3);
       const sessionId = `quiz-${(crypto as any)?.randomUUID ? (crypto as any).randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`}`;
 
       if (user?.id) {
@@ -544,29 +545,46 @@ const Quiz = () => {
 
       markFreeUsed();
 
-      let slugs = recommendations.slice(0, 3).map((p) => p.slug).join(",");
-      // Fallback: if fewer than 3 results, relax area filter and retry
-      if (recommendations.length < 3 && allProjects?.length) {
-        const relaxed = allProjects
-          .filter(p => !p.is_sold_out)
-          .slice(0, 3);
-        if (relaxed.length > recommendations.length) {
-          slugs = relaxed.slice(0, 3).map(p => p.slug).join(",");
-        }
-      }
-      toast.success("Your AI-selected properties are ready!", { duration: 4000, position: 'bottom-center' });
-      navigate(`/quiz-results?projects=${slugs}&session=${sessionId}&free=true`);
+      const slugs = top.map((p) => p.slug).join(",");
+
+      // Persist completed session so refresh on /quiz-results restores everything
+      writeMatchmakerSession({
+        sessionId,
+        step: "results",
+        answers,
+        formData,
+        resultSlugs: top.map((p) => p.slug),
+        resultTiers: Array(top.length).fill(tier) as any,
+      });
+
+      toast.success(
+        tier === "exact"
+          ? "3 perfect matches found!"
+          : tier === "fallback"
+            ? "Showing our top alternatives for you"
+            : "Your AI-selected properties are ready!",
+        { duration: 4000, position: "bottom-center" }
+      );
+      navigate(
+        `/quiz-results?projects=${slugs}&session=${sessionId}&tier=${tier}&free=true`
+      );
     } catch (error) {
       console.error("Error saving quiz:", error);
-      const recommendations = getRecommendations();
-      const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
+      const { items: recommendations, tier } = getTieredRecommendations();
+      const slugs = recommendations.slice(0, 3).map((p) => p.slug).join(",");
       markFreeUsed();
-      toast.success("✨ Your AI-selected properties are ready!", { duration: 4000, position: 'bottom-center' });
-      navigate(`/quiz-results?projects=${slugs}&free=true`);
+      writeMatchmakerSession({
+        step: "results",
+        resultSlugs: recommendations.slice(0, 3).map((p) => p.slug),
+        resultTiers: Array(Math.min(3, recommendations.length)).fill(tier) as any,
+      });
+      toast.success("Your AI-selected properties are ready!", { duration: 4000, position: "bottom-center" });
+      navigate(`/quiz-results?projects=${slugs}&tier=${tier}&free=true`);
     } finally {
       setIsSubmitting(false);
     }
   };
+
 
   const handlePaymentSuccess = async () => {
     await proceedToResults();
