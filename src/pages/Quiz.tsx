@@ -157,6 +157,18 @@ const AREA_NAME_MAP: Record<string, string[]> = {
   "arabian-ranches": ["arabian ranches"],
 };
 
+// Maps each area chip to its emirate — used as a hard "never cross emirates" guard.
+// Every specific area chip in the quiz is currently in Dubai; "other" is unconstrained.
+const AREA_EMIRATE_MAP: Record<string, string> = {
+  "downtown": "dubai",
+  "marina": "dubai",
+  "palm": "dubai",
+  "business-bay": "dubai",
+  "creek-harbour": "dubai",
+  "hills": "dubai",
+  "arabian-ranches": "dubai",
+};
+
 const LANGUAGES = getLanguageList();
 const NATIONALITIES = getCountryList();
 
@@ -407,8 +419,9 @@ const Quiz = () => {
     return score;
   };
 
-  // Tiered recommendation engine — NEVER returns empty unless DB itself is empty.
-  // Returns { items, tier } where tier ∈ "exact" | "close" | "nearest" | "fallback".
+  // Strict priority recommendation engine.
+  // Priority order: Location (area > emirate) → Budget → Bedrooms → Timeline → Preferences → Off-plan.
+  // Location is a HARD filter: when the user picks specific areas, results NEVER cross emirates.
   const getTieredRecommendations = (): {
     items: any[];
     tier: "exact" | "close" | "nearest" | "fallback";
@@ -423,7 +436,18 @@ const Quiz = () => {
       const mapped = AREA_NAME_MAP[area];
       if (mapped) areaKeywords.push(...mapped);
     });
+    const targetEmirates = Array.from(
+      new Set(
+        specificAreas
+          .map((a) => AREA_EMIRATE_MAP[a])
+          .filter(Boolean)
+          .map((e) => e.toLowerCase())
+      )
+    );
+    // If user picked only "other" / nothing → no emirate guard (cross-emirate allowed).
+    const enforceEmirate = targetEmirates.length > 0 && !hasOther;
 
+    // Sold-out / cancelled exclusion stays.
     const baseAvailable = allProjects.filter((project) => {
       if (project.is_sold_out) return false;
       const s = (project.sale_status || "").toLowerCase().replace(/[\s-]+/g, "_");
@@ -450,106 +474,176 @@ const Quiz = () => {
       );
     };
 
-    const matchesArea = (project: any) => {
-      if (!areaKeywords.length) return true;
-      const blob = `${project.name || ""} ${project.location || ""} ${(project as any).area_name || ""}`.toLowerCase();
+    // ---- #1 LOCATION ----
+    // Compute project's emirate by scanning emirate + location + area_name + name.
+    const projectEmirate = (p: any): string => {
+      const blob = `${p.emirate || ""} ${p.location || ""} ${(p as any).area_name || ""} ${p.name || ""}`.toLowerCase();
+      if (blob.includes("dubai")) return "dubai";
+      if (blob.includes("abu dhabi") || blob.includes("saadiyat") || blob.includes("yas island") || blob.includes("reem") || blob.includes("al maryah") || blob.includes("al raha") || blob.includes("ghantoot")) return "abu dhabi";
+      if (blob.includes("sharjah")) return "sharjah";
+      if (blob.includes("ajman")) return "ajman";
+      if (blob.includes("ras al khaimah") || blob.includes("rak")) return "ras al khaimah";
+      if (blob.includes("fujairah")) return "fujairah";
+      if (blob.includes("umm al quwain") || blob.includes("uaq")) return "umm al quwain";
+      return "";
+    };
+
+    const matchesAreaName = (p: any) => {
+      if (!areaKeywords.length) return false;
+      const blob = `${p.name || ""} ${p.location || ""} ${(p as any).area_name || ""}`.toLowerCase();
       return areaKeywords.some((k) => blob.includes(k));
     };
-    const matchesBudget = (project: any, tolerance = 0) => {
-      const price = project.price_from;
-      if (price == null) return true;
-      const budget = answers.budget;
-      const tol = 1 + tolerance;
-      const div = 1 - tolerance;
-      if (budget === "under-1m") return price < 1_000_000 * tol;
-      if (budget === "1m-2m") return price >= 1_000_000 * div && price < 2_000_000 * tol;
-      if (budget === "2m-5m") return price >= 2_000_000 * div && price < 5_000_000 * tol;
-      if (budget === "5m-10m") return price >= 5_000_000 * div && price < 10_000_000 * tol;
-      if (budget === "10m-plus") return price >= 10_000_000 * div;
-      return true;
-    };
-    const matchesBedrooms = (project: any, plusMinus = 0) => {
-      const min = project.bedrooms_min;
-      if (min == null) return true;
-      const max = project.bedrooms_max ?? min;
-      const bedrooms = answers.bedrooms;
-      const has = (n: number) => min - plusMinus <= n && max + plusMinus >= n;
-      if (bedrooms === "studio") return min <= plusMinus;
-      if (bedrooms === "1br") return has(1);
-      if (bedrooms === "2br") return has(2);
-      if (bedrooms === "3br") return has(3);
-      if (bedrooms === "4br-plus") return max + plusMinus >= 4;
-      return true;
-    };
-    const matchesTimeline = (project: any, strict = true) => {
-      if (!strict) return true;
-      if (answers.timeline !== "ready") return true;
-      return isReady(project);
+
+    // locationTier: 0 = exact area match, 1 = same emirate, 99 = excluded.
+    const locationTier = (p: any): number => {
+      if (!enforceEmirate) {
+        if (matchesAreaName(p)) return 0;
+        return 1; // "Other / Flexible" → any project qualifies, area match still preferred.
+      }
+      if (matchesAreaName(p)) return 0;
+      const em = projectEmirate(p);
+      if (em && targetEmirates.includes(em)) return 1;
+      return 99; // different emirate → HARD EXCLUDE
     };
 
-    // Off-plan is preferred unless the user explicitly asked for Ready to Move.
+    // ---- #2 BUDGET (graded closeness) ----
+    const budgetRange = (() => {
+      switch (answers.budget) {
+        case "under-1m": return [0, 1_000_000];
+        case "1m-2m":   return [1_000_000, 2_000_000];
+        case "2m-5m":   return [2_000_000, 5_000_000];
+        case "5m-10m":  return [5_000_000, 10_000_000];
+        case "10m-plus":return [10_000_000, 50_000_000];
+        default: return null;
+      }
+    })();
+    const budgetDistance = (p: any): number => {
+      if (!budgetRange) return 0;
+      const price = p.price_from;
+      if (price == null) return 1; // unknown price → mid-penalty so they rank below in-range
+      const [lo, hi] = budgetRange;
+      if (price >= lo && price <= hi) return 0;
+      const mid = Math.max((lo + hi) / 2, 1);
+      const gap = price < lo ? lo - price : price - hi;
+      return gap / mid;
+    };
+
+    // ---- #3 BEDROOMS (graded closeness) ----
+    const bedroomTarget = (() => {
+      switch (answers.bedrooms) {
+        case "studio":   return 0;
+        case "1br":      return 1;
+        case "2br":      return 2;
+        case "3br":      return 3;
+        case "4br-plus": return 4;
+        default: return null;
+      }
+    })();
+    const bedroomDistance = (p: any): number => {
+      if (bedroomTarget == null) return 0;
+      const min = p.bedrooms_min;
+      const max = p.bedrooms_max ?? min;
+      if (min == null) return 1;
+      if (bedroomTarget >= min && bedroomTarget <= max) return 0;
+      if (bedroomTarget === 4 && max >= 4) return 0;
+      return Math.min(Math.abs(bedroomTarget - min), Math.abs(bedroomTarget - max));
+    };
+
+    // ---- #4 TIMELINE ----
+    const timelineDistance = (p: any): number => {
+      const t = answers.timeline;
+      if (!t || t === "flexible") return 0;
+      const h = (p.handover_date || "").toLowerCase();
+      if (t === "ready") return isReady(p) ? 0 : 1;
+      if (t === "2025" && h.includes("2025")) return 0;
+      if (t === "2026" && h.includes("2026")) return 0;
+      if (t === "2027-plus" && (h.includes("2027") || h.includes("2028") || h.includes("2029") || h.includes("2030"))) return 0;
+      return 1;
+    };
+
+    // ---- #5 PREFERENCES (views/features/location_type) - bonus only ----
+    const preferenceMatches = (p: any): number => {
+      let n = 0;
+      const projectViews = ((p as any).views as string[]) || [];
+      const projectAmenities = ((p as any).amenities as string[]) || [];
+      const loc = answers.location_type;
+      const locArr = Array.isArray(loc) ? loc : loc ? [loc] : [];
+      locArr.forEach((l: string) => {
+        if (l === "beachfront" && projectViews.some((v) => /sea|beach|water/i.test(v))) n++;
+        if (l === "city-center" && projectViews.some((v) => /city|skyline/i.test(v))) n++;
+        if (l === "golf-community" && projectViews.some((v) => /golf/i.test(v))) n++;
+      });
+      const features = (answers.views_and_features as string[]) || [];
+      features.forEach((f: string) => {
+        if (projectViews.some((v) => v.toLowerCase().includes(f.replace("-view", "")))) n++;
+        if (projectAmenities.some((a) => a.toLowerCase().includes(f.replace("-", " ")))) n++;
+      });
+      return n;
+    };
+
+    // ---- Off-plan preference ----
     const preferOffPlan = answers.timeline !== "ready";
 
-    const tryTier = (
-      useArea: boolean,
-      useTimeline: boolean,
-      bedroomPM: number,
-      budgetTol: number,
-      offPlanOnly: boolean
-    ) => {
-      return baseAvailable
-        .filter((p) => (offPlanOnly ? !isReady(p) : true))
-        .filter((p) => (useArea && !hasOther ? matchesArea(p) : true))
-        .filter((p) => matchesBudget(p, budgetTol))
-        .filter((p) => matchesBedrooms(p, bedroomPM))
-        .filter((p) => matchesTimeline(p, useTimeline))
-        .map((p) => ({ ...p, matchScore: scoreProject(p) + 100 }))
-        .sort((a, b) => b.matchScore - a.matchScore);
-    };
+    // Build candidates (excluding hard-fail location).
+    const ranked = baseAvailable
+      .map((p) => {
+        const lt = locationTier(p);
+        return {
+          p,
+          lt,
+          bd: budgetDistance(p),
+          br: bedroomDistance(p),
+          tl: timelineDistance(p),
+          pref: preferenceMatches(p),
+          ready: isReady(p),
+        };
+      })
+      .filter((x) => x.lt < 99);
 
-    // Run each tier off-plan-first; only fall back to including ready when needed.
-    const runTier = (
-      useArea: boolean,
-      useTimeline: boolean,
-      bedroomPM: number,
-      budgetTol: number
-    ) => {
-      if (preferOffPlan) {
-        const offPlan = tryTier(useArea, useTimeline, bedroomPM, budgetTol, true);
-        if (offPlan.length >= 3) return offPlan;
-        const all = tryTier(useArea, useTimeline, bedroomPM, budgetTol, false);
-        // Keep off-plan first, then append any ready ones not already included.
-        const seen = new Set(offPlan.map((p) => p.id));
-        return [...offPlan, ...all.filter((p) => !seen.has(p.id))];
-      }
-      return tryTier(useArea, useTimeline, bedroomPM, budgetTol, false);
-    };
+    // Off-plan-first within location: only fall back to ready when no off-plan
+    // candidate matches the user's location at all.
+    let pool = ranked;
+    if (preferOffPlan) {
+      const offPlanOnly = ranked.filter((x) => !x.ready);
+      if (offPlanOnly.length > 0) pool = offPlanOnly;
+    }
 
-    // Tier 1 — Exact
-    let items = runTier(true, true, 0, 0);
-    if (items.length >= 3) return { items, tier: "exact" };
+    // Lexicographic sort: closest first.
+    pool.sort((a, b) => {
+      if (a.lt !== b.lt) return a.lt - b.lt;
+      if (a.bd !== b.bd) return a.bd - b.bd;
+      if (a.br !== b.br) return a.br - b.br;
+      if (a.tl !== b.tl) return a.tl - b.tl;
+      if (a.pref !== b.pref) return b.pref - a.pref;
+      if (a.ready !== b.ready) return a.ready ? 1 : -1;
+      return 0;
+    });
 
-    // Tier 2 — Close: relax timeline, then bedrooms ±1
-    items = runTier(true, false, 1, 0.1);
-    if (items.length >= 3) return { items, tier: "close" };
+    const items = pool.map((x, i) => ({
+      ...x.p,
+      matchScore: 1000 - i, // monotone so downstream "highest score = best" still holds
+    }));
 
-    // Tier 3 — Nearest: drop area + timeline; widen budget/bedrooms
-    items = runTier(false, false, 2, 0.5);
-    if (items.length >= 3) return { items, tier: "nearest" };
+    if (items.length === 0) {
+      // Strict mode: user picked specific areas and nothing matches their emirate.
+      // Return empty so the results page shows its "let's refresh your matches" state
+      // instead of cross-emirate recommendations.
+      return { items: [], tier: "fallback" };
+    }
 
-    // Tier 4 — Fallback: any available property, off-plan first when preferred
-    const fallback = baseAvailable
-      .map((p) => ({ ...p, matchScore: scoreProject(p) }))
-      .sort((a, b) => {
-        if (preferOffPlan) {
-          const ar = isReady(a) ? 1 : 0;
-          const br = isReady(b) ? 1 : 0;
-          if (ar !== br) return ar - br; // off-plan (0) before ready (1)
-        }
-        return b.matchScore - a.matchScore;
-      });
-    return { items: fallback, tier: "fallback" };
+    // Classify tier by the top result's closeness (drives the results-page copy).
+    const top = pool[0];
+    const tier: "exact" | "close" | "nearest" =
+      top.lt === 0 && top.bd === 0 && top.br === 0 && top.tl === 0
+        ? "exact"
+        : top.lt <= 1 && top.bd <= 0.25 && top.br <= 1
+        ? "close"
+        : "nearest";
+
+    return { items, tier };
   };
+
+
 
   // Back-compat wrapper kept for any other call sites
   const getRecommendations = () => getTieredRecommendations().items;
