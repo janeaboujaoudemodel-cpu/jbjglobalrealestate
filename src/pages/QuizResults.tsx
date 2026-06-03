@@ -950,7 +950,7 @@ const QuizResults = () => {
                 Not satisfied? Retake the AI quiz with different preferences to discover new matches.
               </p>
               <Button
-                onClick={() => navigate("/quiz")}
+                onClick={startNewMatch}
                 className="aihf-cta w-full font-semibold"
               >
                 <Brain className="w-4 h-4 mr-2" />
