@@ -435,7 +435,10 @@ const BusinessCardCamera = ({
           playsInline
           muted
           autoPlay
-          style={{ visibility: isCameraReady ? "visible" : "hidden" }}
+          style={{
+            visibility: isCameraReady ? "visible" : "hidden",
+            transform: facingMode === "user" ? "scaleX(-1)" : "none",
+          }}
         />
 
         {!isCameraReady && (
