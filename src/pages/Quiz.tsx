@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { 
   ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2,
-  Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine, Gift, Crown, Check
+  Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine, Gift, Crown, Check, RefreshCcw
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,11 @@ import { toolThemes } from "@/components/tools/toolThemes";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import {
+  readMatchmakerSession,
+  writeMatchmakerSession,
+  clearMatchmakerSession,
+} from "@/hooks/useMatchmakerSession";
 // Payment removed — quiz is fully free, no API/credits consumed
 
 
