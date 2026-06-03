@@ -245,18 +245,25 @@ const RentalIndex = () => {
     >
       {/* Page-local hard contrast lock — mirrors /property-measurement pattern */}
       <style>{`
-        .ri-root, .ri-root * { color: #FBEAEC; -webkit-text-fill-color: #FBEAEC; }
-        .ri-root label, .ri-root p, .ri-root span, .ri-root h1, .ri-root h2, .ri-root h3, .ri-root h4 { color: #FBEAEC !important; -webkit-text-fill-color: #FBEAEC !important; }
-        .ri-root .ri-dim { color: rgba(251,234,236,0.72) !important; -webkit-text-fill-color: rgba(251,234,236,0.72) !important; }
-        .ri-root .ri-accent { color: #F2A5AE !important; -webkit-text-fill-color: #F2A5AE !important; }
+        .ri-root, .ri-root * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+        .ri-root label, .ri-root p, .ri-root span, .ri-root h1, .ri-root h2, .ri-root h3, .ri-root h4, .ri-root a, .ri-root button, .ri-root div { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+        .ri-root .ri-dim { color: rgba(255,255,255,0.82) !important; -webkit-text-fill-color: rgba(255,255,255,0.82) !important; }
+        .ri-root .ri-accent, .ri-root .ri-white-lock, .ri-root .ri-white-lock * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
         /* Brighten icon tiles + svg icons (white over burgundy) */
         .ri-root [class*="rounded-md"][class*="w-6"][class*="h-6"],
         .ri-root [class*="rounded-xl"][class*="w-11"][class*="h-11"] {
           background: rgba(255,255,255,0.10) !important;
           border-color: rgba(255,255,255,0.45) !important;
         }
-        .ri-root svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
-        .ri-root .ri-accent { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+        .ri-root svg, .ri-root svg *, .ri-root .lucide, .ri-root [class*="lucide-"] {
+          color: #FFFFFF !important;
+          stroke: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          opacity: 1 !important;
+        }
+        .ri-root svg path, .ri-root svg circle, .ri-root svg line, .ri-root svg polyline, .ri-root svg rect {
+          stroke: #FFFFFF !important;
+        }
         .ri-card {
           background: linear-gradient(135deg, #3a0a14 0%, #1f0509 55%, #08020300 100%), #110204;
           border: 1px solid rgba(139,30,46,0.55) !important;
@@ -289,22 +296,17 @@ const RentalIndex = () => {
           border: 1px solid rgba(255,255,255,0.55);
           border-radius: 0.75rem;
         }
-        /* AI Tool Disclaimer — repaint to burgundy ombre regardless of inner markup */
-        .ri-root .ri-disclaimer-wrap > * {
-          background: linear-gradient(135deg, #2a070f 0%, #160305 100%) !important;
-          background-color: #160305 !important;
-          border: 1px solid rgba(139,30,46,0.55) !important;
-          border-radius: 1rem !important;
-        }
-        .ri-root .ri-disclaimer-wrap, .ri-root .ri-disclaimer-wrap * {
+        .ri-root .ri-disclaimer-wrap, .ri-root .ri-disclaimer-wrap *,
+        .ri-root .ri-disclaimer-wrap :is(h1,h2,h3,h4,p,span,a,button,div) {
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
+          opacity: 1 !important;
         }
-        .ri-root .ri-disclaimer-wrap *:not(svg):not(path) {
-          background-color: transparent !important;
-        }
-        .ri-root .ri-disclaimer-wrap > * {
-          background: linear-gradient(135deg, #2a070f 0%, #160305 100%) !important;
+        .ri-root .ri-disclaimer-wrap svg, .ri-root .ri-disclaimer-wrap svg * {
+          color: #FFFFFF !important;
+          stroke: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          opacity: 1 !important;
         }
       `}</style>
 
