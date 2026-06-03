@@ -381,19 +381,33 @@ const Quiz = () => {
   const { data: allProjects } = useQuery({
     queryKey: ["all-projects-quiz"],
     queryFn: async () => {
+      // Trimmed projection — only fields used by the recommender + result cards.
+      // Drops nested joins (developer/images) which made the prior query fetch megabytes
+      // of unused data and was the root cause of the long "Finding your perfect matches"
+      // loader on this screen.
       const { data, error } = await supabase
         .from("projects")
-        .select(`
-          *,
-          developer:developers(name, slug, description, logo_url),
-          images:project_images(image_url)
-        `);
+        .select(
+          "id, slug, name, emirate, location, area_name, price_from, bedrooms_min, bedrooms_max, handover_date, sale_status, is_sold_out, construction_status, property_type_label, unit_types, views, amenities, cover_image_url"
+        )
+        .eq("is_published", true)
+        .limit(2000);
       if (error) throw error;
       return data;
     },
+    staleTime: 5 * 60 * 1000,
   });
 
-  const currentQuestion = QUIZ_QUESTIONS[currentStep];
+  // Swap the `areas` question's options based on which emirate the user picked.
+  const currentQuestion = (() => {
+    const q = QUIZ_QUESTIONS[currentStep];
+    if (q?.id === "areas") {
+      const em = (answers.emirate as string) || "any";
+      const opts = AREAS_BY_EMIRATE[em] || AREAS_BY_EMIRATE.any;
+      return { ...q, options: opts };
+    }
+    return q;
+  })();
   const progress = (currentStep / QUIZ_QUESTIONS.length) * 100;
 
   const handleSelectAll = () => {
