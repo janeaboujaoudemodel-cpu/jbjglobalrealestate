@@ -78,6 +78,7 @@ const AdoptSignatureStudio = lazy(() => import("@/pages/owner/sign/AdoptSignatur
 const OwnerRelationships = lazy(() => import("@/pages/owner/OwnerRelationships"));
 const OwnerRelationshipsRevenue = lazy(() => import("@/pages/owner/OwnerRelationshipsRevenue"));
 const OwnerMediaIngest = lazy(() => import("@/pages/owner/OwnerMediaIngest"));
+const AIHomeFinderSubmissions = lazy(() => import("@/pages/owner/AIHomeFinderSubmissionsPage"));
 const DocumentsFormsHub = lazy(() => import("@/pages/owner/DocumentsFormsHub"));
 const VoiceAgentControlPanel = lazy(() => import("@/pages/owner/VoiceAgentControlPanel"));
 const OwnerEnvelopeDetail = lazy(() => import("@/pages/e-signature/EnvelopeDetail"));
