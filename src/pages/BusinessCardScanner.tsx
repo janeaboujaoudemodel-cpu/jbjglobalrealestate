@@ -371,11 +371,22 @@ const BusinessCardScanner = () => {
     <div
       data-no-contrast-guard
       data-allow-dark-cta
-      className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950"
+      className="min-h-screen"
+      style={{
+        background:
+          "radial-gradient(1200px 700px at 50% -10%, rgba(251,113,133,0.18), transparent 60%), linear-gradient(180deg, #050912 0%, #07101F 60%, #04070D 100%)",
+      }}
     >
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-rose-900/40 via-rose-800/30 to-rose-900/40 border-b border-rose-500/40 -mx-4 px-4 py-8 mb-8">
+      <div className="container mx-auto px-4 pt-6 pb-8 max-w-6xl">
+        {/* Header (no black strip — sits flush on the rose-navy page) */}
+        <div
+          className="rounded-2xl border border-rose-500/40 px-4 py-8 mb-8"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(159,18,57,0.35) 0%, rgba(7,16,31,0.55) 60%, rgba(159,18,57,0.30) 100%)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+          }}
+        >
           <div className="text-center">
             <div className="inline-flex items-center gap-2 bg-rose-500/25 border border-rose-500/50 rounded-full px-4 py-1 mb-4 allow-white" data-no-contrast-guard>
               <Sparkles className="w-4 h-4 text-rose-200 allow-white" />
