@@ -630,9 +630,24 @@ const QuizResults = () => {
           </div>
         </div>
 
+        {/* Empty state — when no matching properties were returned */}
+        {(!projects || projects.length === 0) && !isLoading && (
+          <div className="aihf-panel rounded-2xl p-8 mb-12 text-center max-w-2xl mx-auto">
+            <Sparkles className="w-10 h-10 mx-auto mb-3 aihf-tiffany" />
+            <h3 className="text-xl font-semibold mb-2">No matches loaded yet</h3>
+            <p className="aihf-muted mb-5">
+              We couldn't load your AI-selected properties. Please retake the quiz to refresh your matches.
+            </p>
+            <Button onClick={() => navigate("/quiz")} className="aihf-cta font-semibold">
+              <Brain className="w-4 h-4 mr-2" />
+              Retake the AI quiz
+            </Button>
+          </div>
+        )}
 
         {/* Top Recommendation */}
         {projects && projects.length > 0 && (
+
           <div className="mb-12">
             <div className="aihf-panel relative backdrop-blur-sm rounded-3xl overflow-hidden">
               <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
