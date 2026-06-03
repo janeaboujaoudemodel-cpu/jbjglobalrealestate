@@ -916,7 +916,7 @@ const QuizResults = () => {
                             {badge ? 'Change Badge' : 'Add Badge'}
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="bg-[#FDFBF7] border-[#B89555]/30">
+                        <DropdownMenuContent data-aihf-menu className="border-0">
                           <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-[#B89555] hover:bg-[#B89555]/10">
                             Top 1 — Gold
                           </DropdownMenuItem>
