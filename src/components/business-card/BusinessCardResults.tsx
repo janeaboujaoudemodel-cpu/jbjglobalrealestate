@@ -198,47 +198,41 @@ const BusinessCardResults = ({
                     </div>
                     <div className="flex items-center gap-1">
                       {needsReview && (
-                        <Badge variant="outline" className="text-[10px] border-amber-500 text-amber-600">
+                          <Badge variant="outline" className="text-[10px] border-rose-400/70 bg-transparent text-rose-100 allow-white" data-no-contrast-guard>
                           Needs Review
                         </Badge>
                       )}
                       {saveStatus === "saved" && (
-                        <Badge className="text-[10px] bg-emerald-600 text-white gap-1">
-                          <CheckCircle2 className="h-3 w-3" /> In CRM
+                        <Badge className="text-[10px] border border-emerald-400/70 bg-emerald-500/20 text-emerald-100 gap-1 allow-white" data-no-contrast-guard>
+                          <CheckCircle2 className="h-3 w-3 allow-white" /> In CRM
                         </Badge>
                       )}
-                      <Badge
-                        variant="outline"
-                        className={`text-xs ${
-                          contact.confidence >= 0.9
-                            ? "border-green-500 text-green-600"
-                            : contact.confidence >= 0.7
-                            ? "border-yellow-500 text-yellow-600"
-                            : "border-red-500 text-red-600"
-                        }`}
-                      >
-                        {Math.round(contact.confidence * 100)}%
-                      </Badge>
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-7 w-7"
+                        className="h-7 w-7 rounded-full border border-rose-500/45 bg-transparent text-white hover:bg-rose-500/15 hover:text-white allow-white"
+                        data-no-contrast-guard
+                        data-allow-dark-cta
+                        aria-label="Edit scanned contact"
                         onClick={() => startEditing(contact)}
                       >
-                        <Edit2 className="h-3 w-3" />
+                        <Edit2 className="h-3 w-3 allow-white" />
                       </Button>
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-7 w-7 text-destructive hover:text-destructive"
+                        className="h-7 w-7 rounded-full border border-red-400/65 bg-red-950/25 text-red-100 hover:bg-red-900/35 hover:text-red-100 allow-white"
+                        data-no-contrast-guard
+                        data-allow-dark-cta
+                        aria-label="Remove scanned contact from scanner"
                         onClick={() => onDelete(contact.id)}
                       >
-                        <Trash2 className="h-3 w-3" />
+                        <Trash2 className="h-3 w-3 allow-white" />
                       </Button>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="grid grid-cols-2 gap-2 text-sm allow-white" style={{ color: "rgba(255,255,255,0.78)" }}>
                     {(contact.company || contact.company_name) && (
                       <Row icon={<Building2 className="h-3 w-3" />} text={maskData(contact.company || contact.company_name)} />
                     )}
@@ -278,14 +272,14 @@ const BusinessCardResults = ({
                   </div>
 
                   {/* Classification & labels */}
-                  <div className="mt-4 pt-3 border-t space-y-3">
+                  <div className="mt-4 pt-3 space-y-3" style={{ borderTop: "1px solid rgba(251,113,133,0.35)" }}>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground w-24">Contact type</span>
+                      <span className="text-xs w-24 allow-white" style={{ color: "rgba(255,255,255,0.78)" }}>Contact type</span>
                       <Select
                         value={contact.contactType || "client"}
                         onValueChange={(v) => onUpdateContact(contact.id, { contactType: v as ContactTypeLabel })}
                       >
-                        <SelectTrigger className="h-8 w-56">
+                        <SelectTrigger className="h-8 w-56 border-rose-500/45 bg-rose-500/10 text-white allow-white" data-no-contrast-guard>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -299,7 +293,7 @@ const BusinessCardResults = ({
                     </div>
 
                     <div className="flex items-start gap-2">
-                      <span className="text-xs text-muted-foreground w-24 mt-1">Labels</span>
+                      <span className="text-xs w-24 mt-1 allow-white" style={{ color: "rgba(255,255,255,0.78)" }}>Labels</span>
                       <div className="flex flex-wrap gap-1">
                         {LABEL_OPTIONS.map((l) => {
                           const active = labels.includes(l);
@@ -310,9 +304,10 @@ const BusinessCardResults = ({
                               onClick={() => toggleLabel(contact.id, l, labels)}
                               className={`text-[11px] px-2 py-0.5 rounded-full border transition ${
                                 active
-                                  ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
-                                  : "bg-transparent text-muted-foreground border-border hover:border-[#B89555]"
+                                  ? "bg-rose-500/22 text-white border-rose-300 allow-white"
+                                  : "bg-transparent text-white/75 border-rose-500/35 hover:border-rose-300 hover:text-white allow-white"
                               }`}
+                              data-no-contrast-guard
                             >
                               {l}
                             </button>
