@@ -997,19 +997,27 @@ const QuizResults = () => {
                           {badges[projects[0].id] ? 'Change Badge' : 'Add Badge'}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent data-aihf-menu className="border-0">
-
-                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top1')} className="text-[#B89555] hover:bg-[#B89555]/10">
+                      <DropdownMenuContent
+                        data-aihf-menu
+                        className="border-0"
+                        style={{
+                          background: "linear-gradient(160deg, #04161C 0%, #031E18 100%)",
+                          border: "1px solid rgba(94,234,212,0.55)",
+                          boxShadow: "0 20px 50px rgba(34,211,238,0.25)",
+                          color: "#FFFFFF",
+                        }}
+                      >
+                        <DropdownMenuItem data-medal="gold" onClick={() => handleSetBadge(projects[0].id, 'top1')}>
                           Top 1 — Gold
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top2')} className="text-[#888] hover:bg-[#B89555]/10">
+                        <DropdownMenuItem data-medal="silver" onClick={() => handleSetBadge(projects[0].id, 'top2')}>
                           Top 2 — Silver
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top3')} className="text-[#CD7F32] hover:bg-[#B89555]/10">
+                        <DropdownMenuItem data-medal="bronze" onClick={() => handleSetBadge(projects[0].id, 'top3')}>
                           Top 3 — Bronze
                         </DropdownMenuItem>
                         {badges[projects[0].id] && (
-                          <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, null)} className="text-[#1A1A1A]/70 hover:bg-[#B89555]/10">
+                          <DropdownMenuItem data-medal="remove" onClick={() => handleSetBadge(projects[0].id, null)}>
                             <X className="w-4 h-4 mr-2" /> Remove Badge
                           </DropdownMenuItem>
                         )}
