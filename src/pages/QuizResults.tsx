@@ -495,17 +495,22 @@ const QuizResults = () => {
         {/* Other Recommendations */}
         {projects && projects.length > 1 && (
           <div className="mb-12">
-            <h3 className="text-[#1A1A1A] text-xl font-semibold mb-6">More Great Options</h3>
+            <h3 className="text-xl font-semibold mb-6">More Great Options</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {projects.slice(1).map((project, index) => {
                 const badge = badges[project.id];
+                const bedrooms = project.bedrooms_min != null && project.bedrooms_max != null
+                  ? project.bedrooms_min === 0
+                    ? `Studio${project.bedrooms_max > 0 ? ` - ${project.bedrooms_max} BR` : ''}`
+                    : `${project.bedrooms_min} - ${project.bedrooms_max} BR`
+                  : "Type TBC";
                 return (
-                  <div key={project.id} className="relative group flex flex-col h-full border-2 border-[#B89555]/40 rounded-2xl overflow-hidden min-h-[420px] bg-[#FDFBF7]/60 backdrop-blur-sm shadow-[0_4px_16px_rgba(200,167,102,0.15)]">
-                    <div className="absolute -top-2 -left-2 z-10 w-8 h-8 bg-[#B89555] rounded-full flex items-center justify-center border-2 border-white shadow-md">
-                      <span className="text-[#1A1A1A] text-sm font-bold">#{index + 2}</span>
+                  <div key={project.id} className="aihf-panel relative group flex flex-col h-full rounded-2xl overflow-hidden min-h-[420px]">
+                    <div className="absolute top-3 left-3 z-10 rounded-full bg-gradient-to-r from-[#5EEAD4] to-[#22D3EE] px-3 py-1 shadow-md">
+                      <span className="text-sm font-bold">#{index + 2}</span>
                     </div>
                     {badge && (
-                      <div className="absolute top-2 left-8 z-10">
+                      <div className="absolute top-3 left-16 z-10">
                         <Badge className={`${badgeLabels[badge].color} ${badgeLabels[badge].textColor} font-semibold px-2 py-0.5 text-xs`}>
                           {badgeLabels[badge].label}
                         </Badge>
@@ -514,14 +519,38 @@ const QuizResults = () => {
                     <div className="absolute top-3 right-3 z-10">
                       <FavoriteButton projectId={project.id} size="sm" showShortlist={true} />
                     </div>
-                    <div className="flex-1">
-                      <ProjectCard project={project} currency="AED" sizeUnit="sqft" />
+                    <img
+                      src={project.cover_image_url || project.images?.[0]?.image_url || "https://placehold.co/800x600/04161C/67E8F9?text=JBJ"}
+                      alt={project.name}
+                      className="aspect-[16/10] w-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="flex flex-1 flex-col p-5">
+                      <p className="aihf-muted text-sm mb-1">{project.developer?.name || "JBJ Global Real Estate"}</p>
+                      <h4 className="text-lg font-bold leading-tight mb-2">{project.name}</h4>
+                      <p className="aihf-muted text-sm mb-4">{project.location || "Dubai"}, {project.emirate || "UAE"}</p>
+                      <div className="grid grid-cols-2 gap-3 mb-4">
+                        <div className="aihf-tile rounded-xl p-3">
+                          <p className="aihf-muted text-xs mb-2">Price</p>
+                          <PricePill price={project.price_from} currency="AED" />
+                        </div>
+                        <div className="aihf-tile rounded-xl p-3">
+                          <p className="aihf-muted text-xs">Bedrooms</p>
+                          <p className="font-semibold">{bedrooms}</p>
+                        </div>
+                      </div>
+                      <Link to={`/project/${project.slug}`} className="mt-auto">
+                        <Button className="aihf-cta w-full font-semibold">
+                          View Property
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </Link>
                     </div>
                     {/* Badge Assignment */}
-                    <div className="mt-2 px-2 pb-2">
+                    <div className="px-5 pb-5">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="w-full border-[#B89555] text-[#1A1A1A] bg-[#B89555]/10 hover:bg-[#B89555]/20 text-xs">
+                          <Button variant="outline" size="sm" className="aihf-outline w-full text-xs">
                             <Award className="w-3 h-3 mr-1" />
                             {badge ? 'Change Badge' : 'Add Badge'}
                           </Button>
