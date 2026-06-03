@@ -59,6 +59,24 @@ const AIHF_RESULTS_STYLE = `
     -webkit-text-fill-color: #02110F !important;
     stroke: #02110F !important;
   }
+  .aihf-results .aihf-cta-glow {
+    background: linear-gradient(135deg, #5EEAD4 0%, #22D3EE 55%, #0E7490 100%) !important;
+    border: 1px solid rgba(103,232,249,0.95) !important;
+    box-shadow:
+      0 22px 48px rgba(34,211,238,0.45),
+      0 0 32px rgba(94,234,212,0.55),
+      inset 0 1px 0 rgba(255,255,255,0.45),
+      inset 0 -3px 6px rgba(2,17,15,0.18) !important;
+    transform: translateZ(0);
+    transition: transform .25s ease, box-shadow .25s ease !important;
+  }
+  .aihf-results .aihf-cta-glow:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+      0 28px 60px rgba(34,211,238,0.6),
+      0 0 48px rgba(94,234,212,0.75),
+      inset 0 1px 0 rgba(255,255,255,0.55) !important;
+  }
   .aihf-results .aihf-outline {
     background: rgba(5,28,24,0.82) !important;
     border: 1px solid rgba(45,212,191,0.55) !important;
@@ -162,161 +180,355 @@ const QuizResults = () => {
   };
 
   // Build a real, branded PDF report via jsPDF
-  const buildPdf = () => {
+  // Load brand monogram as a data URL once per build
+  const loadMonogram = async (): Promise<string | null> => {
+    try {
+      const res = await fetch("/jbj-monogram-light-on-dark.png");
+      if (!res.ok) return null;
+      const blob = await res.blob();
+      return await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(blob);
+      });
+    } catch {
+      return null;
+    }
+  };
+
+  // Build a real, branded PDF report via jsPDF (Tiffany comparison report)
+  const buildPdf = async (): Promise<{ blob: Blob; filename: string } | null> => {
     if (!projects?.length) return null;
+
     const doc = new jsPDF({ unit: "pt", format: "a4" });
     const pageW = doc.internal.pageSize.getWidth();
     const pageH = doc.internal.pageSize.getHeight();
-    const ink: [number, number, number] = [26, 26, 26];
-    const gold: [number, number, number] = [184, 149, 85];
-    const champagne: [number, number, number] = [247, 242, 234];
+
+    // Tiffany palette (matches on-screen tool)
+    const ink: [number, number, number] = [2, 17, 15];
+    const navy: [number, number, number] = [3, 30, 24];
+    const tiffany: [number, number, number] = [34, 211, 238];
+    const tiffanyLight: [number, number, number] = [94, 234, 212];
+    const tiffanyDeep: [number, number, number] = [14, 116, 144];
+    const tiffanyMuted: [number, number, number] = [205, 245, 245];
+    const white: [number, number, number] = [255, 255, 255];
+
     const origin = typeof window !== "undefined" ? window.location.origin : "https://jbj.ae";
+    const monogram = await loadMonogram();
+
+    const drawPageBg = () => {
+      // Deep-navy page (matches results screen)
+      doc.setFillColor(...ink);
+      doc.rect(0, 0, pageW, pageH, "F");
+    };
 
     const drawHeader = () => {
-      // Champagne header bar
-      doc.setFillColor(...champagne);
-      doc.rect(0, 0, pageW, 70, "F");
-      // Gold hairline
-      doc.setDrawColor(...gold);
-      doc.setLineWidth(0.8);
-      doc.line(0, 70, pageW, 70);
-      // Brand
+      // Tiffany gradient band approximated with 3 stacked bars
+      doc.setFillColor(...tiffanyLight);
+      doc.rect(0, 0, pageW, 28, "F");
+      doc.setFillColor(...tiffany);
+      doc.rect(0, 28, pageW, 28, "F");
+      doc.setFillColor(...tiffanyDeep);
+      doc.rect(0, 56, pageW, 22, "F");
+
+      // Monogram (left)
+      if (monogram) {
+        try {
+          doc.addImage(monogram, "PNG", 36, 14, 50, 50);
+        } catch {
+          /* ignore */
+        }
+      }
+
+      // Wordmark
       doc.setTextColor(...ink);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(16);
-      doc.text("JBJ GLOBAL REAL ESTATE", 40, 32);
+      doc.setFontSize(15);
+      doc.text("JBJ GLOBAL REAL ESTATE", monogram ? 100 : 36, 34);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(9);
-      doc.setTextColor(...gold);
-      doc.text("AI Property Recommendations", 40, 50);
+      doc.text("AI Home Finder — Personalized Recommendations", monogram ? 100 : 36, 50);
+
       // Date right
-      doc.setTextColor(120, 120, 120);
+      doc.setTextColor(...ink);
       doc.setFontSize(8);
-      doc.text(new Date().toLocaleDateString(), pageW - 40, 50, { align: "right" });
+      doc.text(
+        new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }),
+        pageW - 36,
+        50,
+        { align: "right" }
+      );
     };
 
     const drawFooter = (pageNum: number, total: number) => {
-      doc.setDrawColor(...gold);
+      doc.setDrawColor(...tiffany);
       doc.setLineWidth(0.6);
-      doc.line(40, pageH - 50, pageW - 40, pageH - 50);
+      doc.line(36, pageH - 50, pageW - 36, pageH - 50);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8);
-      doc.setTextColor(110, 110, 110);
-      doc.text("Powered by JBJ Global Real Estate — Brokerage | Dubai, UAE", 40, pageH - 32);
-      doc.text("CONTACT@JBJ.AE  ·  www.jbj.ae", 40, pageH - 20);
-      doc.text(`Page ${pageNum} / ${total}`, pageW - 40, pageH - 20, { align: "right" });
+      doc.setTextColor(...tiffanyMuted);
+      doc.text("Powered by JBJ Global Real Estate — Brokerage | Dubai, UAE", 36, pageH - 32);
+      doc.text("CONTACT@JBJ.AE  ·  www.jbj.ae", 36, pageH - 20);
+      doc.text(`Page ${pageNum} / ${total}`, pageW - 36, pageH - 20, { align: "right" });
     };
 
+    drawPageBg();
     drawHeader();
 
-    // Title
-    doc.setTextColor(...ink);
+    // Hero title block
+    doc.setTextColor(...white);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
-    doc.text("Your AI-Selected Properties", 40, 110);
+    doc.text("Your AI-Selected Properties", 36, 120);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
-    doc.setTextColor(80, 80, 80);
-    doc.text(
-      "Personalized selection based on your preferences",
-      40,
-      130
-    );
+    doc.setTextColor(...tiffanyMuted);
+    doc.text("Side-by-side comparison of your top matches.", 36, 138);
 
-    // Build one table per project
-    let cursorY = 160;
-    projects.forEach((p, idx) => {
-      const badge = badges[p.id];
-      const badgeStr = badge ? `  [${badgeLabels[badge].label}]` : "";
-      if (cursorY > pageH - 200) {
-        doc.addPage();
-        drawHeader();
-        cursorY = 100;
-      }
-
-      // Project title row
-      doc.setFillColor(...champagne);
-      doc.rect(40, cursorY, pageW - 80, 32, "F");
-      doc.setDrawColor(...gold);
-      doc.setLineWidth(0.5);
-      doc.rect(40, cursorY, pageW - 80, 32);
+    // Top-3 ranking pills
+    const rankLabels = ["#1 Best Match", "#2 Strong Fit", "#3 Good Fit"];
+    const top = projects.slice(0, 3);
+    let pillX = 36;
+    top.forEach((_, i) => {
+      const w = 110;
+      doc.setFillColor(...(i === 0 ? tiffanyLight : i === 1 ? tiffany : tiffanyDeep));
+      doc.roundedRect(pillX, 152, w, 22, 11, 11, "F");
       doc.setTextColor(...ink);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(13);
-      doc.text(`#${idx + 1}  ${p.name}${badgeStr}`, 50, cursorY + 21);
-      cursorY += 32;
+      doc.setFontSize(9);
+      doc.text(rankLabels[i], pillX + w / 2, 167, { align: "center" });
+      pillX += w + 10;
+    });
 
-      const beds =
-        p.bedrooms_min != null && p.bedrooms_max != null
-          ? p.bedrooms_min === 0
-            ? `Studio${p.bedrooms_max > 0 ? ` - ${p.bedrooms_max} BR` : ""}`
-            : `${p.bedrooms_min} - ${p.bedrooms_max} BR`
-          : "Type TBC";
+    // ---------- Comparison table ----------
+    const headerRow = ["Attribute", ...top.map((p, i) => `#${i + 1}  ${p.name}`)];
+    const fmtBeds = (p: any) =>
+      p.bedrooms_min != null && p.bedrooms_max != null
+        ? p.bedrooms_min === 0
+          ? `Studio${p.bedrooms_max > 0 ? `–${p.bedrooms_max} BR` : ""}`
+          : `${p.bedrooms_min}–${p.bedrooms_max} BR`
+        : "Type TBC";
+    const fmtSize = (p: any) =>
+      p.size_min_sqft && p.size_max_sqft
+        ? `${p.size_min_sqft.toLocaleString()}–${p.size_max_sqft.toLocaleString()} sq ft`
+        : p.size_min_sqft
+        ? `${p.size_min_sqft.toLocaleString()} sq ft+`
+        : "—";
+    const fmtPrice = (p: any) =>
+      p.price_from ? `AED ${(p.price_from / 1000000).toFixed(1)}M` : "Price on Request";
+
+    const rows: string[][] = [
+      ["Developer", ...top.map((p) => p.developer?.name || "—")],
+      ["Location", ...top.map((p) => `${p.location || ""}${p.emirate ? `, ${p.emirate}` : ""}`.trim() || "—")],
+      ["Community", ...top.map((p) => p.community?.name || "—")],
+      ["Price From", ...top.map(fmtPrice)],
+      ["Bedrooms", ...top.map(fmtBeds)],
+      ["Size Range", ...top.map(fmtSize)],
+      ["Handover", ...top.map((p) => p.handover_date || "TBA")],
+      ["Payment Plan", ...top.map((p) => p.payment_plan || "Contact Us")],
+      ["Sale Status", ...top.map((p) => p.sale_status || "Available")],
+      ["Listing", ...top.map((p) => `${origin}/project/${p.slug}`)],
+    ];
+
+    autoTable(doc, {
+      startY: 188,
+      margin: { left: 36, right: 36 },
+      theme: "grid",
+      head: [headerRow],
+      body: rows,
+      styles: {
+        font: "helvetica",
+        fontSize: 9,
+        textColor: white,
+        fillColor: navy,
+        lineColor: tiffany,
+        lineWidth: 0.3,
+        cellPadding: 6,
+        overflow: "linebreak",
+      },
+      headStyles: {
+        fillColor: tiffany,
+        textColor: ink,
+        fontStyle: "bold",
+        fontSize: 10,
+        halign: "left",
+      },
+      alternateRowStyles: { fillColor: [6, 40, 34] },
+      columnStyles: {
+        0: { fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted, cellWidth: 90 },
+      },
+      didDrawPage: () => {
+        drawPageBg();
+        drawHeader();
+      },
+    });
+
+    // Per-property detail cards (one per page after comparison table)
+    top.forEach((p, idx) => {
+      doc.addPage();
+      drawPageBg();
+      drawHeader();
+
+      // Card header
+      doc.setFillColor(...tiffany);
+      doc.roundedRect(36, 110, pageW - 72, 36, 6, 6, "F");
+      doc.setTextColor(...ink);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.text(`#${idx + 1}  ${p.name}`, 48, 134);
+
+      doc.setTextColor(...tiffanyMuted);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.text(rankLabels[idx], pageW - 48, 134, { align: "right" });
 
       autoTable(doc, {
-        startY: cursorY,
-        margin: { left: 40, right: 40 },
+        startY: 160,
+        margin: { left: 36, right: 36 },
         theme: "grid",
-        styles: { font: "helvetica", fontSize: 10, textColor: ink, lineColor: [220, 200, 160] },
-        headStyles: { fillColor: champagne, textColor: ink, fontStyle: "bold" },
+        styles: {
+          font: "helvetica",
+          fontSize: 10,
+          textColor: white,
+          fillColor: navy,
+          lineColor: tiffany,
+          lineWidth: 0.3,
+          cellPadding: 8,
+        },
+        headStyles: { fillColor: tiffanyDeep, textColor: white, fontStyle: "bold" },
         body: [
-          ["Developer", p.developer?.name || "N/A"],
-          ["Location", `${p.location || ""}, ${p.emirate || "UAE"}`],
-          [
-            "Price From",
-            p.price_from ? `AED ${(p.price_from / 1000000).toFixed(1)}M` : "Price on Request",
-          ],
-          ["Bedrooms", beds],
+          ["Developer", p.developer?.name || "—"],
+          ["Location", `${p.location || ""}${p.emirate ? `, ${p.emirate}` : ""}`.trim() || "—"],
+          ["Community", p.community?.name || "—"],
+          ["Price From", fmtPrice(p)],
+          ["Bedrooms", fmtBeds(p)],
+          ["Size Range", fmtSize(p)],
           ["Handover", p.handover_date || "TBA"],
           ["Payment Plan", p.payment_plan || "Contact Us"],
-          ["Listing", `${origin}/project/${p.slug}`],
+          ["Sale Status", p.sale_status || "Available"],
+          ["Listing URL", `${origin}/project/${p.slug}`],
         ],
         columnStyles: {
-          0: { cellWidth: 110, fontStyle: "bold", fillColor: [253, 251, 247] },
+          0: { cellWidth: 130, fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted },
           1: { cellWidth: "auto" },
         },
       });
-
-      cursorY = (doc as any).lastAutoTable.finalY + 18;
     });
 
-    // Page numbers
-    const total = doc.getNumberOfPages();
-    for (let i = 1; i <= total; i++) {
+    // Page numbers + footers
+    const totalPages = doc.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
       doc.setPage(i);
-      drawFooter(i, total);
+      drawFooter(i, totalPages);
     }
 
-    return doc;
+    const sessionId =
+      (typeof window !== "undefined" &&
+        new URLSearchParams(window.location.search).get("session")) ||
+      "session";
+    const filename = `JBJ-AI-Recommendations-${sessionId}-${Date.now()}.pdf`;
+    const blob = doc.output("blob");
+    return { blob, filename };
   };
 
-  const handleDownloadReport = () => {
-    const doc = buildPdf();
-    if (!doc) return;
-    doc.save("JBJ-AI-Property-Recommendations.pdf");
+  // Robust download — uses blob + anchor (doc.save() is unreliable inside preview iframes)
+  const triggerDownload = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  };
+
+  // Cache the most recent generated PDF (blob + filename) so share handlers can attach it
+  const [lastPdf, setLastPdf] = useState<{ blob: Blob; filename: string } | null>(null);
+
+  const generateAndCachePdf = async () => {
+    const built = await buildPdf();
+    if (!built) {
+      toast.error("Could not generate the report yet.");
+      return null;
+    }
+    setLastPdf(built);
+    return built;
+  };
+
+  const handleDownloadReport = async () => {
+    const built = await generateAndCachePdf();
+    if (!built) return;
+    triggerDownload(built.blob, built.filename);
     toast.success("Report downloaded!");
-    // Immediately offer sharing options after download
     setShareTrigger("post-download");
     setShareModalOpen(true);
   };
 
-  const handleOpenShare = () => {
-    setShareTrigger("share");
+  // "Share with Consultant" → generate PDF, auto-download, open share modal
+  const handleOpenShare = async () => {
+    const built = await generateAndCachePdf();
+    if (built) {
+      triggerDownload(built.blob, built.filename);
+      toast.success("Report ready — choose how to share");
+    }
+    setShareTrigger("post-download");
     setShareModalOpen(true);
   };
 
-  // Channel handlers
-  const handleShareWhatsApp = () => {
-    const text = encodeURIComponent(buildShareText());
-    window.open(`https://wa.me/?text=${text}`, "_blank", "noopener,noreferrer");
-    toast.success("Opening WhatsApp…");
+  // Helper — Web Share API with file when supported, else fallback URL
+  const shareWithFile = async (opts: {
+    title: string;
+    text: string;
+    fallbackUrl: string;
+    successMsg: string;
+  }) => {
+    let pdf = lastPdf;
+    if (!pdf) pdf = await generateAndCachePdf();
+    if (pdf) {
+      try {
+        const file = new File([pdf.blob], pdf.filename, { type: "application/pdf" });
+        const nav: any = navigator;
+        if (nav.canShare && nav.canShare({ files: [file] })) {
+          await nav.share({ title: opts.title, text: opts.text, files: [file] });
+          toast.success("Shared with PDF attached");
+          return;
+        }
+      } catch {
+        /* user cancelled or unsupported — fall through */
+      }
+      // Ensure file is at least on disk before opening fallback
+      triggerDownload(pdf.blob, pdf.filename);
+    }
+    window.open(opts.fallbackUrl, "_blank", "noopener,noreferrer");
+    toast.success(opts.successMsg);
   };
 
-  const handleShareEmail = () => {
-    const subject = encodeURIComponent("My JBJ AI Property Recommendations");
-    const body = encodeURIComponent(buildShareText());
-    window.location.href = `mailto:?subject=${subject}&body=${body}`;
-    toast.success("Opening email client…");
+  // Channel handlers
+  const handleShareWhatsApp = async () => {
+    const text = buildShareText();
+    await shareWithFile({
+      title: "JBJ AI Property Recommendations",
+      text,
+      fallbackUrl: `https://wa.me/?text=${encodeURIComponent(
+        `${text}\n\n(PDF report downloaded — attach it from your downloads.)`
+      )}`,
+      successMsg: "Opening WhatsApp — attach the downloaded PDF",
+    });
+  };
+
+  const handleShareEmail = async () => {
+    const subject = "My JBJ AI Property Recommendations";
+    const text = buildShareText();
+    await shareWithFile({
+      title: subject,
+      text,
+      fallbackUrl: `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+        `${text}\n\n(PDF report downloaded — attach it to this email from your downloads.)`
+      )}`,
+      successMsg: "Opening email — attach the downloaded PDF",
+    });
   };
 
   const handleCopyLink = async () => {
@@ -328,27 +540,36 @@ const QuizResults = () => {
     }
   };
 
-  const handleShareToConsultant = () => {
+  const handleShareToConsultant = async () => {
     if (!projects?.length) return;
-    const subject = encodeURIComponent("AI Property Recommendations — Request Consultation");
-    const body = encodeURIComponent(
-      `Dear JBJ Global Real Estate Team,\n\nI have completed the AI Property Assessment and would like a consultation on the following recommendations:\n\n${buildShareText(false)}\n\nPlease contact me to discuss further.\n\nBest regards`
-    );
-    window.location.href = `mailto:${JBJ_CONSULTANT_EMAIL}?subject=${subject}&body=${body}`;
-    toast.success("Sending to JBJ Consultant…");
+    const subject = "AI Property Recommendations — Request Consultation";
+    const body = `Dear JBJ Global Real Estate Team,\n\nI have completed the AI Property Assessment and would like a consultation on the following recommendations:\n\n${buildShareText(
+      false
+    )}\n\nThe branded PDF report has been downloaded to my device and I will attach it to this email.\n\nBest regards`;
+    await shareWithFile({
+      title: subject,
+      text: body,
+      fallbackUrl: `mailto:${JBJ_CONSULTANT_EMAIL}?subject=${encodeURIComponent(
+        subject
+      )}&body=${encodeURIComponent(body)}`,
+      successMsg: "Opening email to JBJ — attach the downloaded PDF",
+    });
   };
 
-  const handleConsultantWhatsApp = () => {
-    const text = encodeURIComponent(
-      `Hello JBJ Global Real Estate,\n\nI just completed the AI Property Finder and would like a consultation on these recommendations:\n\n${buildShareText(false)}`
-    );
-    window.open(
-      `https://wa.me/${JBJ_CONSULTANT_WHATSAPP}?text=${text}`,
-      "_blank",
-      "noopener,noreferrer"
-    );
-    toast.success("Opening WhatsApp to JBJ…");
+  const handleConsultantWhatsApp = async () => {
+    const text = `Hello JBJ Global Real Estate,\n\nI just completed the AI Property Finder and would like a consultation on these recommendations:\n\n${buildShareText(
+      false
+    )}`;
+    await shareWithFile({
+      title: "AI Property Recommendations",
+      text,
+      fallbackUrl: `https://wa.me/${JBJ_CONSULTANT_WHATSAPP}?text=${encodeURIComponent(
+        `${text}\n\n(PDF report downloaded — attach it from your downloads.)`
+      )}`,
+      successMsg: "Opening WhatsApp to JBJ — attach the downloaded PDF",
+    });
   };
+
 
 
   if (isLoading) {
@@ -662,9 +883,12 @@ const QuizResults = () => {
         <div className="text-center">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <Link to="/">
-              <Button data-allow-dark-cta className="bg-[#102540] text-white hover:bg-[#1a3d63] hover:text-white [&_svg]:text-white font-semibold px-6 py-3 border border-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+              <Button
+                data-no-contrast-guard
+                className="aihf-cta aihf-cta-glow font-bold px-10 py-6 text-base rounded-xl"
+              >
                 Browse All Properties
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
           </div>
