@@ -101,6 +101,11 @@ interface RentalAnalysis {
   disclaimer: string;
 }
 
+const WHITE_ICON_STYLE: React.CSSProperties = {
+  color: "#FFFFFF",
+  stroke: "#FFFFFF",
+};
+
 const FormLabel = ({
   icon: Icon,
   children,
@@ -122,7 +127,7 @@ const FormLabel = ({
           border: `1px solid ${theme.accentBorder}`,
         }}
       >
-        <Icon className="w-3.5 h-3.5" style={{ color: theme.accent }} />
+        <Icon className="w-3.5 h-3.5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
       </span>
     )}
     <span>
@@ -153,7 +158,7 @@ const SectionHeader = ({
         border: `1px solid ${theme.accentBorder}`,
       }}
     >
-      <Icon className="w-5 h-5" style={{ color: theme.accent }} />
+      <Icon className="w-5 h-5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
     </span>
     <div>
       <h2 className="text-xl font-bold" style={{ color: TOOL_INK }}>
