@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { useState } from "react";
 import {
   Shield,
@@ -8,6 +8,7 @@ import {
   Trash2,
   Server,
   UserCheck,
+  Check,
   CheckCircle2,
   XCircle,
 } from "lucide-react";
