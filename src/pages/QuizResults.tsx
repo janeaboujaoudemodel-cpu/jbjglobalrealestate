@@ -441,7 +441,8 @@ const QuizResults = () => {
       year: "numeric",
     });
     const clientName = (matchmakerFormData?.fullName || "").trim();
-    const preparedLine = clientName ? `Prepared for ${clientName} · ${dateStr}` : `Prepared exclusively · ${dateStr}`;
+    const greetingLine = clientName ? `Dear ${clientName},` : `Dear Valued Client,`;
+    const headerDateLine = dateStr;
     const monogram = await loadMonogram();
 
     const drawOmbreWordmark = (text: string, x: number, y: number) => {
