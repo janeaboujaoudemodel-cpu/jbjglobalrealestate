@@ -124,9 +124,9 @@ const QuizResults = () => {
   };
 
   const badgeLabels = {
-    top1: { label: "Top 1", sublabel: "Gold", color: "bg-gradient-to-r from-[#B89555] via-[#E8D5A3] to-[#B89555] border-2 border-[#B89555] shadow-lg", textColor: "text-[#1A1A1A]", medalColor: "text-[#B89555]" },
-    top2: { label: "Top 2", sublabel: "Silver", color: "bg-gradient-to-r from-[#A0A0A0] via-[#E8E8E8] to-[#A0A0A0] border-2 border-[#B0B0B0] shadow-lg", textColor: "text-[#1A1A1A]", medalColor: "text-[#A0A0A0]" },
-    top3: { label: "Top 3", sublabel: "Bronze", color: "bg-gradient-to-r from-[#CD7F32] via-[#E8A84C] to-[#CD7F32] border-2 border-[#CD7F32] shadow-lg", textColor: "text-white", medalColor: "text-[#CD7F32]" },
+    top1: { label: "Top 1", sublabel: "Best", color: "bg-gradient-to-r from-[#5EEAD4] to-[#22D3EE] border-2 border-[#67E8F9] shadow-lg", textColor: "text-[#02110F]", medalColor: "text-[#67E8F9]" },
+    top2: { label: "Top 2", sublabel: "Strong", color: "bg-gradient-to-r from-[#0E7490] to-[#22D3EE] border-2 border-[#67E8F9] shadow-lg", textColor: "text-white", medalColor: "text-[#5EEAD4]" },
+    top3: { label: "Top 3", sublabel: "Fit", color: "bg-gradient-to-r from-[#031E18] to-[#0E7490] border-2 border-[#5EEAD4] shadow-lg", textColor: "text-white", medalColor: "text-[#22D3EE]" },
   };
 
   // Build a plain-text summary of recommendations (used by share channels)
@@ -353,10 +353,11 @@ const QuizResults = () => {
 
   if (isLoading) {
     return (
-      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center">
+      <section className="aihf-results min-h-screen flex items-center justify-center" style={{ background: "linear-gradient(180deg, #02110F 0%, #031E18 45%, #020B0A 100%)" }}>
+        <style>{AIHF_RESULTS_STYLE}</style>
         <div className="text-center">
-          <Sparkles className="w-12 h-12 text-[#B89555] mx-auto mb-4 animate-pulse" />
-          <p className="text-[#1A1A1A] text-xl font-semibold">Finding your perfect matches...</p>
+          <Sparkles className="w-12 h-12 mx-auto mb-4 animate-pulse" />
+          <p className="text-xl font-semibold">Finding your perfect matches...</p>
         </div>
       </section>
     );
