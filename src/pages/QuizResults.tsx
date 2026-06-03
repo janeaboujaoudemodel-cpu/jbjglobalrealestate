@@ -159,21 +159,68 @@ const AIHF_RESULTS_STYLE = `
     stroke: #FF6B8A !important;
     color: #FF6B8A !important;
   }
-  /* Tiffany dropdown menu (Add Badge) */
-  .aihf-results [role="menu"],
-  [data-aihf-menu] {
+  /* Tiffany dropdown menu (Add Badge) — global, NOT scoped to .aihf-results
+     because Radix portals the menu outside the page root. */
+  [data-aihf-menu],
+  [data-aihf-menu][role="menu"] {
     background: linear-gradient(160deg, #04161C 0%, #031E18 100%) !important;
+    background-color: #04161C !important;
     border: 1px solid rgba(94,234,212,0.55) !important;
     box-shadow: 0 20px 50px rgba(34,211,238,0.25) !important;
+    color: #FFFFFF !important;
   }
-  [data-aihf-menu] [role="menuitem"] {
+  [data-aihf-menu] [role="menuitem"],
+  [data-aihf-menu] [role="menuitem"] * {
+    background-color: transparent !important;
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
   }
+  [data-aihf-menu] [role="menuitem"][data-medal="gold"],
+  [data-aihf-menu] [role="menuitem"][data-medal="gold"] * { color: #FFD27A !important; -webkit-text-fill-color: #FFD27A !important; }
+  [data-aihf-menu] [role="menuitem"][data-medal="silver"],
+  [data-aihf-menu] [role="menuitem"][data-medal="silver"] * { color: #E8F0FF !important; -webkit-text-fill-color: #E8F0FF !important; }
+  [data-aihf-menu] [role="menuitem"][data-medal="bronze"],
+  [data-aihf-menu] [role="menuitem"][data-medal="bronze"] * { color: #FFB07A !important; -webkit-text-fill-color: #FFB07A !important; }
+  [data-aihf-menu] [role="menuitem"][data-medal="remove"],
+  [data-aihf-menu] [role="menuitem"][data-medal="remove"] * { color: #FF8FA3 !important; -webkit-text-fill-color: #FF8FA3 !important; }
   [data-aihf-menu] [role="menuitem"]:hover,
-  [data-aihf-menu] [role="menuitem"]:focus {
-    background: rgba(94,234,212,0.15) !important;
+  [data-aihf-menu] [role="menuitem"]:focus,
+  [data-aihf-menu] [role="menuitem"][data-highlighted] {
+    background: rgba(94,234,212,0.18) !important;
+    color: #67E8F9 !important;
+    -webkit-text-fill-color: #67E8F9 !important;
+  }
+  [data-aihf-menu] [role="menuitem"]:hover *,
+  [data-aihf-menu] [role="menuitem"]:focus *,
+  [data-aihf-menu] [role="menuitem"][data-highlighted] * {
+    color: #67E8F9 !important;
+    -webkit-text-fill-color: #67E8F9 !important;
+  }
+
+  /* Share dialog X close — tiffany pill (override shadcn default white-on-accent) */
+  .aihf-results > button[aria-label="Close"],
+  [data-aihf-dialog] > button[aria-label="Close"] {
     color: #5EEAD4 !important;
+    background: rgba(94,234,212,0.12) !important;
+    border: 1px solid rgba(94,234,212,0.55) !important;
+    border-radius: 9999px !important;
+    opacity: 1 !important;
+    width: 32px; height: 32px;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 18px rgba(94,234,212,0.35) !important;
+  }
+  .aihf-results > button[aria-label="Close"]:hover,
+  [data-aihf-dialog] > button[aria-label="Close"]:hover {
+    background: rgba(94,234,212,0.24) !important;
+    color: #67E8F9 !important;
+    box-shadow: 0 0 26px rgba(94,234,212,0.6) !important;
+  }
+  .aihf-results > button[aria-label="Close"] svg,
+  [data-aihf-dialog] > button[aria-label="Close"] svg,
+  .aihf-results > button[aria-label="Close"] svg *,
+  [data-aihf-dialog] > button[aria-label="Close"] svg * {
+    color: #5EEAD4 !important;
+    stroke: #5EEAD4 !important;
     -webkit-text-fill-color: #5EEAD4 !important;
   }
 `;
