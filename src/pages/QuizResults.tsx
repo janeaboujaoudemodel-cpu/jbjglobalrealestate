@@ -197,31 +197,40 @@ const AIHF_RESULTS_STYLE = `
     -webkit-text-fill-color: #67E8F9 !important;
   }
 
-  /* Share dialog X close — tiffany pill (override shadcn default white-on-accent) */
-  .aihf-results > button[aria-label="Close"],
-  [data-aihf-dialog] > button[aria-label="Close"] {
-    color: #5EEAD4 !important;
-    background: rgba(94,234,212,0.12) !important;
-    border: 1px solid rgba(94,234,212,0.55) !important;
+  /* Share dialog X close — Tiffany glow pill (override shadcn's champagne/gold default).
+     The shadcn DialogContent renders <DialogPrimitive.Close> as a direct <button>
+     child with a sr-only "Close" span — no aria-label. We target it as the
+     absolute-positioned direct button child of our aihf dialog. */
+  [data-aihf-dialog] > button,
+  .aihf-results > button[aria-label="Close"] {
+    background: linear-gradient(135deg, rgba(94,234,212,0.18) 0%, rgba(34,211,238,0.22) 100%) !important;
+    background-image: linear-gradient(135deg, rgba(94,234,212,0.18) 0%, rgba(34,211,238,0.22) 100%) !important;
+    border: 1px solid rgba(94,234,212,0.75) !important;
     border-radius: 9999px !important;
     opacity: 1 !important;
-    width: 32px; height: 32px;
-    display: inline-flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 18px rgba(94,234,212,0.35) !important;
-  }
-  .aihf-results > button[aria-label="Close"]:hover,
-  [data-aihf-dialog] > button[aria-label="Close"]:hover {
-    background: rgba(94,234,212,0.24) !important;
+    box-shadow:
+      0 0 18px rgba(94,234,212,0.55),
+      inset 0 0 10px rgba(103,232,249,0.18) !important;
     color: #67E8F9 !important;
-    box-shadow: 0 0 26px rgba(94,234,212,0.6) !important;
   }
+  [data-aihf-dialog] > button:hover,
+  .aihf-results > button[aria-label="Close"]:hover {
+    background: linear-gradient(135deg, rgba(94,234,212,0.32) 0%, rgba(34,211,238,0.36) 100%) !important;
+    background-image: linear-gradient(135deg, rgba(94,234,212,0.32) 0%, rgba(34,211,238,0.36) 100%) !important;
+    border-color: rgba(103,232,249,0.95) !important;
+    box-shadow:
+      0 0 28px rgba(94,234,212,0.85),
+      inset 0 0 14px rgba(103,232,249,0.28) !important;
+    transform: translateY(-1px);
+  }
+  [data-aihf-dialog] > button svg,
+  [data-aihf-dialog] > button svg *,
   .aihf-results > button[aria-label="Close"] svg,
-  [data-aihf-dialog] > button[aria-label="Close"] svg,
-  .aihf-results > button[aria-label="Close"] svg *,
-  [data-aihf-dialog] > button[aria-label="Close"] svg * {
+  .aihf-results > button[aria-label="Close"] svg * {
     color: #5EEAD4 !important;
     stroke: #5EEAD4 !important;
     -webkit-text-fill-color: #5EEAD4 !important;
+    filter: drop-shadow(0 0 6px rgba(94,234,212,0.7));
   }
 `;
 
@@ -363,7 +372,40 @@ const QuizResults = () => {
     }
   };
 
-  // Build a real, branded PDF report via jsPDF (Tiffany comparison report)
+  // Load any image URL as a data URL (CORS-friendly Supabase/storage images).
+  // Returns null on failure so the PDF still renders.
+  const loadImageAsDataUrl = async (
+    url?: string | null,
+    timeoutMs = 5000
+  ): Promise<{ data: string; w: number; h: number; type: "JPEG" | "PNG" } | null> => {
+    if (!url) return null;
+    try {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), timeoutMs);
+      const res = await fetch(url, { signal: ctrl.signal, mode: "cors" });
+      clearTimeout(t);
+      if (!res.ok) return null;
+      const blob = await res.blob();
+      const dataUrl: string = await new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onloadend = () => resolve(r.result as string);
+        r.onerror = reject;
+        r.readAsDataURL(blob);
+      });
+      const dims = await new Promise<{ w: number; h: number }>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+        img.onerror = reject;
+        img.src = dataUrl;
+      });
+      const type: "JPEG" | "PNG" = /png/i.test(blob.type) ? "PNG" : "JPEG";
+      return { data: dataUrl, w: dims.w, h: dims.h, type };
+    } catch {
+      return null;
+    }
+  };
+
+  // Build a real, branded PDF report via jsPDF (Tiffany presentation report)
   const buildPdf = async (): Promise<{ blob: Blob; filename: string } | null> => {
     if (!projects?.length) return null;
 
@@ -371,340 +413,691 @@ const QuizResults = () => {
     const pageW = doc.internal.pageSize.getWidth();
     const pageH = doc.internal.pageSize.getHeight();
 
-    // Tiffany palette (matches on-screen tool)
+    // Tiffany palette — single family used everywhere
     const ink: [number, number, number] = [2, 17, 15];
+    const inkDeep: [number, number, number] = [4, 22, 28];
     const navy: [number, number, number] = [3, 30, 24];
     const tiffany: [number, number, number] = [34, 211, 238];
     const tiffanyLight: [number, number, number] = [94, 234, 212];
     const tiffanyDeep: [number, number, number] = [14, 116, 144];
     const tiffanyMuted: [number, number, number] = [205, 245, 245];
+    const tiffanyDim: [number, number, number] = [160, 215, 220];
     const white: [number, number, number] = [255, 255, 255];
 
+    const M = 36;
+    const HEADER_H = 78;
+    const FOOTER_H = 46;
+    const CONTENT_TOP = HEADER_H + 26; // first usable y
+    const CONTENT_BOTTOM = pageH - FOOTER_H - 8;
+
     const origin = typeof window !== "undefined" ? window.location.origin : "https://jbj.ae";
+    const dateStr = new Date().toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
     const monogram = await loadMonogram();
 
     const drawPageBg = () => {
-      // Deep-navy page (matches results screen)
       doc.setFillColor(...ink);
       doc.rect(0, 0, pageW, pageH, "F");
+      // Subtle tiffany glow line near top edge
+      doc.setDrawColor(...tiffanyDeep);
+      doc.setLineWidth(0.4);
+      doc.line(0, HEADER_H, pageW, HEADER_H);
     };
 
     const drawHeader = () => {
-      // Tiffany gradient band approximated with 3 stacked bars
-      doc.setFillColor(...tiffanyLight);
-      doc.rect(0, 0, pageW, 28, "F");
-      doc.setFillColor(...tiffany);
-      doc.rect(0, 28, pageW, 28, "F");
-      doc.setFillColor(...tiffanyDeep);
-      doc.rect(0, 56, pageW, 22, "F");
+      // Single clean Tiffany band — no triple-stripe
+      doc.setFillColor(...inkDeep);
+      doc.rect(0, 0, pageW, HEADER_H, "F");
 
-      // Monogram (left)
+      // Tiffany hairline accent under monogram chip
+      doc.setDrawColor(...tiffany);
+      doc.setLineWidth(0.6);
+      doc.line(M, HEADER_H - 0.5, pageW - M, HEADER_H - 0.5);
+
+      // Monogram chip — ink square + tiffany hairline ring
+      const chipSize = 54;
+      const chipX = M;
+      const chipY = (HEADER_H - chipSize) / 2;
+      doc.setFillColor(...ink);
+      doc.roundedRect(chipX, chipY, chipSize, chipSize, 8, 8, "F");
+      doc.setDrawColor(...tiffanyLight);
+      doc.setLineWidth(0.7);
+      doc.roundedRect(chipX, chipY, chipSize, chipSize, 8, 8, "S");
       if (monogram) {
         try {
-          doc.addImage(monogram, "PNG", 36, 14, 50, 50);
+          doc.addImage(monogram, "PNG", chipX + 5, chipY + 5, chipSize - 10, chipSize - 10);
         } catch {
           /* ignore */
         }
       }
 
-      // Wordmark
-      doc.setTextColor(...ink);
+      // Wordmark + tagline
+      const tx = chipX + chipSize + 14;
+      doc.setTextColor(...white);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(15);
-      doc.text("JBJ GLOBAL REAL ESTATE", monogram ? 100 : 36, 34);
+      doc.setFontSize(13);
+      doc.text("JBJ GLOBAL REAL ESTATE", tx, chipY + 22);
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(9);
-      doc.text("AI Home Finder — Personalized Recommendations", monogram ? 100 : 36, 50);
+      doc.setFontSize(8.5);
+      doc.setTextColor(...tiffanyLight);
+      doc.text("AI Home Finder  |  Personalized Recommendations", tx, chipY + 38);
 
       // Date right
-      doc.setTextColor(...ink);
-      doc.setFontSize(8);
-      doc.text(
-        new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }),
-        pageW - 36,
-        50,
-        { align: "right" }
-      );
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(...tiffanyDim);
+      doc.text(dateStr, pageW - M, chipY + 22, { align: "right" });
+      doc.setTextColor(...tiffanyDim);
+      doc.setFontSize(7.5);
+      doc.text("Confidential — for the addressee only", pageW - M, chipY + 38, {
+        align: "right",
+      });
     };
 
     const drawFooter = (pageNum: number, total: number) => {
+      // Tiffany hairline
       doc.setDrawColor(...tiffany);
-      doc.setLineWidth(0.6);
-      doc.line(36, pageH - 50, pageW - 36, pageH - 50);
+      doc.setLineWidth(0.5);
+      doc.line(M, pageH - FOOTER_H, pageW - M, pageH - FOOTER_H);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8);
       doc.setTextColor(...tiffanyMuted);
-      doc.text("Powered by JBJ Global Real Estate — Brokerage | Dubai, UAE", 36, pageH - 32);
-      doc.text("CONTACT@JBJ.AE  |  www.jbj.ae", 36, pageH - 20);
-      doc.text(`Page ${pageNum} / ${total}`, pageW - 36, pageH - 20, { align: "right" });
+      doc.text(
+        "Powered by JBJ GLOBAL REAL ESTATE  —  Brokerage  |  Dubai, UAE",
+        M,
+        pageH - FOOTER_H + 16
+      );
+      // Clickable contact links
+      const emailLabel = "CONTACT@JBJ.AE";
+      const sep = "  |  ";
+      const webLabel = "www.jbj.ae";
+      doc.setTextColor(...tiffanyLight);
+      doc.setFont("helvetica", "bold");
+      doc.text(emailLabel, M, pageH - FOOTER_H + 30);
+      const emailW = doc.getTextWidth(emailLabel);
+      // underline
+      doc.setDrawColor(...tiffanyLight);
+      doc.setLineWidth(0.5);
+      doc.line(M, pageH - FOOTER_H + 32, M + emailW, pageH - FOOTER_H + 32);
+      doc.link(M, pageH - FOOTER_H + 22, emailW, 12, {
+        url: "mailto:contact@jbj.ae",
+      });
+      doc.setTextColor(...tiffanyMuted);
+      doc.setFont("helvetica", "normal");
+      doc.text(sep, M + emailW, pageH - FOOTER_H + 30);
+      const sepW = doc.getTextWidth(sep);
+      doc.setTextColor(...tiffanyLight);
+      doc.setFont("helvetica", "bold");
+      doc.text(webLabel, M + emailW + sepW, pageH - FOOTER_H + 30);
+      const webW = doc.getTextWidth(webLabel);
+      doc.line(
+        M + emailW + sepW,
+        pageH - FOOTER_H + 32,
+        M + emailW + sepW + webW,
+        pageH - FOOTER_H + 32
+      );
+      doc.link(M + emailW + sepW, pageH - FOOTER_H + 22, webW, 12, {
+        url: "https://www.jbj.ae",
+      });
+
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(...tiffanyDim);
+      doc.text(`Page ${pageNum} / ${total}`, pageW - M, pageH - FOOTER_H + 30, {
+        align: "right",
+      });
     };
 
-    drawPageBg();
-    drawHeader();
-
-    // Hero title block
-    doc.setTextColor(...white);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.text("Your AI-Selected Properties", 36, 120);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    doc.setTextColor(...tiffanyMuted);
-    doc.text("Side-by-side comparison of your top matches.", 36, 138);
-
-    // Top-3 ranking pills
-    const rankLabels = ["#1 Best Match", "#2 Strong Fit", "#3 Good Fit"];
-    const top = projects.slice(0, 3);
-    let pillX = 36;
-    top.forEach((_, i) => {
-      const w = 110;
-      doc.setFillColor(...(i === 0 ? tiffanyLight : i === 1 ? tiffany : tiffanyDeep));
-      doc.roundedRect(pillX, 152, w, 22, 11, 11, "F");
-      doc.setTextColor(...ink);
+    // Draw a tiffany-underlined clickable hyperlink at (x,y) and return its width.
+    const drawHyperlink = (label: string, url: string, x: number, y: number, size = 9.5) => {
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(9);
-      doc.text(rankLabels[i], pillX + w / 2, 167, { align: "center" });
-      pillX += w + 10;
-    });
+      doc.setFontSize(size);
+      doc.setTextColor(...tiffanyLight);
+      doc.text(label, x, y);
+      const w = doc.getTextWidth(label);
+      doc.setDrawColor(...tiffanyLight);
+      doc.setLineWidth(0.5);
+      doc.line(x, y + 2, x + w, y + 2);
+      doc.link(x, y - size + 1, w, size + 2, { url });
+      return w;
+    };
+
+    // Word-wrap text and return the new y after drawing.
+    const drawWrapped = (
+      text: string,
+      x: number,
+      y: number,
+      maxW: number,
+      lineH: number,
+      color: [number, number, number] = white,
+      size = 10,
+      weight: "normal" | "bold" = "normal"
+    ): number => {
+      if (!text) return y;
+      doc.setFont("helvetica", weight);
+      doc.setFontSize(size);
+      doc.setTextColor(...color);
+      const lines = doc.splitTextToSize(text, maxW) as string[];
+      for (const ln of lines) {
+        doc.text(ln, x, y);
+        y += lineH;
+      }
+      return y;
+    };
+
+    // Strip HTML tags from rich descriptions stored in DB.
+    const stripHtml = (s?: string | null) =>
+      (s || "")
+        .replace(/<style[^>]*>.*?<\/style>/gis, "")
+        .replace(/<script[^>]*>.*?<\/script>/gis, "")
+        .replace(/<br\s*\/?>/gi, "\n")
+        .replace(/<\/p>/gi, "\n\n")
+        .replace(/<[^>]+>/g, "")
+        .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&#39;|&apos;/g, "'")
+        .replace(/&quot;/g, '"')
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+
+    const top = projects.slice(0, 3);
+    const rankLabels = ["#1 Best Match", "#2 Strong Fit", "#3 Good Fit"];
+    const rankFills: [number, number, number][] = [tiffanyLight, tiffany, tiffanyDeep];
 
     const fmtBeds = (p: any) =>
       p.bedrooms_min != null && p.bedrooms_max != null
         ? p.bedrooms_min === 0
-          ? `Studio${p.bedrooms_max > 0 ? `–${p.bedrooms_max} BR` : ""}`
-          : `${p.bedrooms_min}–${p.bedrooms_max} BR`
+          ? `Studio${p.bedrooms_max > 0 ? `-${p.bedrooms_max} BR` : ""}`
+          : `${p.bedrooms_min}-${p.bedrooms_max} BR`
         : "Type TBC";
     const fmtSize = (p: any) =>
       p.size_min_sqft && p.size_max_sqft
-        ? `${p.size_min_sqft.toLocaleString()}–${p.size_max_sqft.toLocaleString()} sq ft`
+        ? `${p.size_min_sqft.toLocaleString()}-${p.size_max_sqft.toLocaleString()} sq ft`
         : p.size_min_sqft
         ? `${p.size_min_sqft.toLocaleString()} sq ft+`
         : "—";
-    const fmtPrice = (p: any) =>
-      p.price_from ? `AED ${(p.price_from / 1000000).toFixed(1)}M` : "Price on Request";
+    const fmtPrice = (p: any) => {
+      if (!p.price_from) return "Price on Request";
+      const lo = `AED ${(p.price_from / 1_000_000).toFixed(1)}M`;
+      if (p.price_to && p.price_to > p.price_from) {
+        return `${lo} - AED ${(p.price_to / 1_000_000).toFixed(1)}M`;
+      }
+      return `From ${lo}`;
+    };
 
-    // ---------- Criteria match table (page 2) ----------
+    // Pre-load cover images for the top properties (parallel, non-blocking failures).
+    const covers = await Promise.all(
+      top.map((p) =>
+        loadImageAsDataUrl(
+          p.cover_image_url || p.images?.[0]?.image_url || null
+        )
+      )
+    );
+
+    // ============= PAGE 1 — COVER =============
+    drawPageBg();
+    drawHeader();
+
+    let y = CONTENT_TOP;
+
+    // Tiffany "AI Property Matchmaker" eyebrow chip
+    doc.setFillColor(20, 70, 80);
+    doc.setDrawColor(...tiffanyLight);
+    doc.setLineWidth(0.6);
+    const chipText = "AI PROPERTY MATCHMAKER  |  EXCLUSIVE BY JBJ";
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    const chipW = doc.getTextWidth(chipText) + 22;
+    doc.roundedRect(M, y, chipW, 20, 10, 10, "FD");
+    doc.setTextColor(...tiffanyLight);
+    doc.text(chipText, M + 11, y + 13.5);
+    y += 38;
+
+    // Title
+    doc.setTextColor(...white);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(26);
+    doc.text("Your AI-Selected Properties", M, y);
+    y += 22;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    doc.setTextColor(...tiffanyMuted);
+    y = drawWrapped(
+      "A curated shortlist of the top properties from our inventory, ranked against your exact requirements. Each property is presented in full on the following pages — with photos, key details, and direct listing links.",
+      M,
+      y,
+      pageW - 2 * M,
+      15,
+      tiffanyMuted,
+      11
+    );
+    y += 12;
+
+    // Three rank cards
+    const cardGap = 12;
+    const cardW = (pageW - 2 * M - 2 * cardGap) / 3;
+    const cardH = 230;
+    top.forEach((p, i) => {
+      const cx = M + i * (cardW + cardGap);
+      const cy = y;
+
+      // Card bg
+      doc.setFillColor(5, 34, 38);
+      doc.setDrawColor(...tiffanyDeep);
+      doc.setLineWidth(0.7);
+      doc.roundedRect(cx, cy, cardW, cardH, 10, 10, "FD");
+
+      // Photo area
+      const imgH = 110;
+      doc.setFillColor(8, 50, 60);
+      doc.roundedRect(cx + 8, cy + 8, cardW - 16, imgH, 6, 6, "F");
+      const cov = covers[i];
+      if (cov) {
+        try {
+          doc.addImage(
+            cov.data,
+            cov.type,
+            cx + 8,
+            cy + 8,
+            cardW - 16,
+            imgH,
+            undefined,
+            "FAST"
+          );
+        } catch {
+          /* placeholder */
+        }
+      } else {
+        doc.setTextColor(...tiffanyLight);
+        doc.setFontSize(9);
+        doc.setFont("helvetica", "bold");
+        doc.text("JBJ", cx + cardW / 2, cy + 8 + imgH / 2 + 3, { align: "center" });
+      }
+
+      // Rank pill (over photo, top-left)
+      doc.setFillColor(...rankFills[i]);
+      const rankLabel = rankLabels[i];
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(7.5);
+      const rW = doc.getTextWidth(rankLabel) + 14;
+      doc.roundedRect(cx + 14, cy + 14, rW, 16, 8, 8, "F");
+      doc.setTextColor(...ink);
+      doc.text(rankLabel, cx + 14 + rW / 2, cy + 25, { align: "center" });
+
+      // Name
+      let ty = cy + 8 + imgH + 18;
+      doc.setTextColor(...white);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      const nameLines = doc.splitTextToSize(p.name || "—", cardW - 20) as string[];
+      const trimmedName = nameLines.slice(0, 2);
+      trimmedName.forEach((ln) => {
+        doc.text(ln, cx + 12, ty);
+        ty += 13;
+      });
+
+      // Developer
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(...tiffanyDim);
+      doc.text(
+        doc.splitTextToSize(`by ${p.developer?.name || "—"}`, cardW - 20)[0],
+        cx + 12,
+        ty
+      );
+      ty += 14;
+
+      // Price
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9.5);
+      doc.setTextColor(...tiffanyLight);
+      doc.text(fmtPrice(p), cx + 12, ty);
+      ty += 12;
+
+      // Bedrooms
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(...tiffanyMuted);
+      doc.text(fmtBeds(p), cx + 12, ty);
+    });
+    y += cardH + 18;
+
+    // What's inside this report
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(...tiffanyLight);
+    doc.text("What's inside this report", M, y);
+    y += 14;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(...tiffanyMuted);
+    const bullets = [
+      "How each property matches your stated requirements (Page 2).",
+      "Full presentation for each property: photos, key facts, payment plan, listing link.",
+      "Direct contact line to a JBJ Consultant for questions or viewing requests.",
+    ];
+    bullets.forEach((b) => {
+      doc.setTextColor(...tiffanyLight);
+      doc.text("•", M, y);
+      doc.setTextColor(...tiffanyMuted);
+      y = drawWrapped(b, M + 12, y, pageW - 2 * M - 12, 14, tiffanyMuted, 10) + 2;
+    });
+
+    // ============= PAGE 2 — MATCH CRITERIA TABLE =============
     const criteriaRows = buildCriteriaRowsForExport(sessionAnswers, top);
     if (criteriaRows.length > 0) {
       doc.addPage();
       drawPageBg();
       drawHeader();
+
+      let cy = CONTENT_TOP;
       doc.setTextColor(...white);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(18);
-      doc.text("How each property matches your requirements", 36, 110);
+      doc.text("How each property matches your requirements", M, cy);
+      cy += 18;
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
+      doc.setFontSize(9.5);
       doc.setTextColor(...tiffanyMuted);
-      doc.text("[OK] exact match   [~] close fit   [X] does not match", 36, 128);
+      doc.text(
+        "MATCH = exact   |   CLOSE = close fit   |   MISS = does not match.  Actual value shown in each cell.",
+        M,
+        cy
+      );
+      cy += 18;
 
-      const verdictGlyph = (v: "match" | "close" | "miss") =>
-        v === "match" ? "[OK]" : v === "close" ? "[~]" : "[X]";
+      // Tiffany-only verdict palette (no orange/red/green/gold)
+      const verdictLabel = (v: "match" | "close" | "miss") =>
+        v === "match" ? "MATCH" : v === "close" ? "CLOSE" : "MISS";
       const verdictFill = (v: "match" | "close" | "miss"): [number, number, number] =>
-        v === "match" ? [12, 65, 50] : v === "close" ? [70, 50, 12] : [70, 22, 22];
+        v === "match"
+          ? [10, 80, 75]
+          : v === "close"
+          ? [8, 55, 70]
+          : [10, 30, 40];
+      const verdictText = (v: "match" | "close" | "miss"): [number, number, number] =>
+        v === "match" ? tiffanyLight : v === "close" ? tiffanyDim : [140, 175, 180];
 
       const cHead = [
-        "Requirement",
+        "Your Requirement",
         ...top.map((p, i) => `#${i + 1}  ${p.name}`),
       ];
       const cBody = criteriaRows.map((row) => [
         `${row.label}\n${row.userPick}`,
-        ...row.cells.map((c) => `${verdictGlyph(c.verdict)}  ${c.value}`),
+        ...row.cells.map((c) => `${verdictLabel(c.verdict)}\n${c.value}`),
       ]);
       const totals = top.map((_, i) => computeMatchTotals(criteriaRows, i));
       cBody.push([
-        "Match summary",
-        ...totals.map((t) =>
-          `[OK] ${t.match} matched | [~] ${t.close} close | [X] ${t.miss} missed\n${t.match}/${t.total} criteria met`
+        "MATCH SUMMARY\nWhy we ranked them this way",
+        ...totals.map(
+          (t) =>
+            `${t.match} matched  |  ${t.close} close  |  ${t.miss} missed\n${t.match}/${t.total} criteria met`
         ),
       ]);
 
       autoTable(doc, {
-        startY: 142,
-        margin: { left: 36, right: 36 },
+        startY: cy,
+        margin: { left: M, right: M, bottom: FOOTER_H + 12 },
         theme: "grid",
         head: [cHead],
         body: cBody,
         styles: {
           font: "helvetica",
-          fontSize: 10,
+          fontSize: 9.5,
           textColor: white,
-          fillColor: navy,
-          lineColor: tiffany,
+          fillColor: [4, 24, 28],
+          lineColor: [16, 90, 100],
           lineWidth: 0.3,
-          cellPadding: 10,
-          minCellHeight: 22,
+          cellPadding: 9,
+          minCellHeight: 30,
           overflow: "linebreak",
-          valign: "top",
+          valign: "middle",
+          halign: "left",
         },
-        headStyles: { fillColor: tiffany, textColor: ink, fontStyle: "bold", fontSize: 11, cellPadding: 10 },
+        headStyles: {
+          fillColor: tiffany,
+          textColor: ink,
+          fontStyle: "bold",
+          fontSize: 10.5,
+          cellPadding: 9,
+          halign: "left",
+          valign: "middle",
+        },
         columnStyles: {
-          0: { fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted, cellWidth: 130 },
+          0: {
+            fontStyle: "bold",
+            fillColor: [4, 56, 60],
+            textColor: tiffanyMuted,
+            cellWidth: 130,
+          },
         },
         didParseCell: (data) => {
-          if (data.section === "body" && data.column.index > 0 && data.row.index < criteriaRows.length) {
+          if (
+            data.section === "body" &&
+            data.column.index > 0 &&
+            data.row.index < criteriaRows.length
+          ) {
             const v = criteriaRows[data.row.index]?.cells[data.column.index - 1]?.verdict;
-            if (v) data.cell.styles.fillColor = verdictFill(v);
+            if (v) {
+              data.cell.styles.fillColor = verdictFill(v);
+              data.cell.styles.textColor = verdictText(v);
+              data.cell.styles.fontStyle = "bold";
+            }
           }
           if (data.section === "body" && data.row.index === criteriaRows.length) {
-            data.cell.styles.fillColor = [6, 50, 44];
+            data.cell.styles.fillColor = [6, 60, 70];
             data.cell.styles.fontStyle = "bold";
+            data.cell.styles.textColor = tiffanyLight;
           }
         },
       });
     }
 
-    // ---------- Comparison table (next page) ----------
-    doc.addPage();
-    drawPageBg();
-    drawHeader();
-    doc.setTextColor(...white);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    doc.text("Side-by-side comparison", 36, 110);
-
-    const headerRow = ["Attribute", ...top.map((p, i) => `#${i + 1}  ${p.name}`)];
-    const rows: string[][] = [
-      ["Developer", ...top.map((p) => p.developer?.name || "—")],
-      ["Location", ...top.map((p) => `${p.location || ""}${p.emirate ? `, ${p.emirate}` : ""}`.trim() || "—")],
-      ["Community", ...top.map((p) => p.community?.name || "—")],
-      ["Price From", ...top.map(fmtPrice)],
-      ["Bedrooms", ...top.map(fmtBeds)],
-      ["Size Range", ...top.map(fmtSize)],
-      ["Handover", ...top.map((p) => p.handover_date || "TBA")],
-      ["Payment Plan", ...top.map((p) => p.payment_plan || "Contact Us")],
-      ["Sale Status", ...top.map((p) => p.sale_status || "Available")],
-      ["Listing", ...top.map((p) => `${origin}/project/${p.slug}`)],
-    ];
-
-    autoTable(doc, {
-      startY: 130,
-      margin: { left: 36, right: 36 },
-      theme: "grid",
-      head: [headerRow],
-      body: rows,
-      styles: {
-        font: "helvetica",
-        fontSize: 10,
-        textColor: white,
-        fillColor: navy,
-        lineColor: tiffany,
-        lineWidth: 0.3,
-        cellPadding: 10,
-        minCellHeight: 22,
-        overflow: "linebreak",
-      },
-      headStyles: {
-        fillColor: tiffany,
-        textColor: ink,
-        fontStyle: "bold",
-        fontSize: 11,
-        halign: "left",
-        cellPadding: 10,
-      },
-      alternateRowStyles: { fillColor: [5, 34, 30] },
-      columnStyles: {
-        0: { fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted, cellWidth: 90 },
-      },
-      didParseCell: (data) => {
-        // Style the "Listing" row cells as visibly clickable tiffany links.
-        if (data.section === "body" && data.column.index > 0 && data.row.index === rows.length - 1) {
-          data.cell.styles.textColor = [94, 234, 212];
-          data.cell.styles.fontStyle = "bold";
-        }
-      },
-      didDrawCell: (data) => {
-        // Make listing-URL cells clickable + draw tiffany underline so user sees they are links.
-        if (data.section === "body" && data.column.index > 0 && data.row.index === rows.length - 1) {
-          const url = `${origin}/project/${top[data.column.index - 1].slug}`;
-          doc.link(data.cell.x, data.cell.y, data.cell.width, data.cell.height, { url });
-          doc.setDrawColor(94, 234, 212);
-          doc.setLineWidth(0.6);
-          doc.line(
-            data.cell.x + 6,
-            data.cell.y + data.cell.height - 6,
-            data.cell.x + data.cell.width - 6,
-            data.cell.y + data.cell.height - 6
-          );
-        }
-      },
-    });
-
-    // Per-property detail cards (one per page after comparison table)
-    top.forEach((p, idx) => {
+    // ============= PER-PROPERTY PRESENTATION PAGES =============
+    for (let idx = 0; idx < top.length; idx++) {
+      const p = top[idx];
       doc.addPage();
       drawPageBg();
       drawHeader();
 
-      // Card header
-      doc.setFillColor(...tiffany);
-      doc.roundedRect(36, 110, pageW - 72, 36, 6, 6, "F");
-      doc.setTextColor(...ink);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
-      doc.text(`#${idx + 1}  ${p.name}`, 48, 134);
+      let py = CONTENT_TOP;
 
-      doc.setTextColor(...tiffanyMuted);
+      // Rank + name banner
+      doc.setFillColor(8, 56, 64);
+      doc.setDrawColor(...tiffanyLight);
+      doc.setLineWidth(0.7);
+      doc.roundedRect(M, py, pageW - 2 * M, 50, 10, 10, "FD");
+
+      // Rank pill on the left
+      doc.setFillColor(...rankFills[idx]);
+      const rl = rankLabels[idx];
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      const rlW = doc.getTextWidth(rl) + 18;
+      doc.roundedRect(M + 14, py + 14, rlW, 22, 11, 11, "F");
+      doc.setTextColor(...ink);
+      doc.text(rl, M + 14 + rlW / 2, py + 29, { align: "center" });
+
+      // Name + developer
+      doc.setTextColor(...white);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(15);
+      doc.text(p.name || "—", M + 14 + rlW + 14, py + 22);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(10);
-      doc.text(rankLabels[idx], pageW - 48, 134, { align: "right" });
+      doc.setTextColor(...tiffanyLight);
+      doc.text(
+        `by ${p.developer?.name || "—"}`,
+        M + 14 + rlW + 14,
+        py + 38
+      );
 
-      autoTable(doc, {
-        startY: 160,
-        margin: { left: 36, right: 36 },
-        theme: "grid",
-        styles: {
-          font: "helvetica",
-          fontSize: 11,
-          textColor: white,
-          fillColor: navy,
-          lineColor: tiffany,
-          lineWidth: 0.4,
-          cellPadding: 12,
-          minCellHeight: 26,
-        },
-        headStyles: { fillColor: tiffanyDeep, textColor: white, fontStyle: "bold" },
-        alternateRowStyles: { fillColor: [5, 34, 30] },
-        body: [
-          ["Developer", p.developer?.name || "—"],
-          ["Location", `${p.location || ""}${p.emirate ? `, ${p.emirate}` : ""}`.trim() || "—"],
-          ["Community", p.community?.name || "—"],
-          ["Price From", fmtPrice(p)],
-          ["Bedrooms", fmtBeds(p)],
-          ["Size Range", fmtSize(p)],
-          ["Handover", p.handover_date || "TBA"],
-          ["Payment Plan", p.payment_plan || "Contact Us"],
-          ["Sale Status", p.sale_status || "Available"],
-          ["Listing URL", `${origin}/project/${p.slug}`],
-        ],
-        columnStyles: {
-          0: { cellWidth: 130, fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted },
-          1: { cellWidth: "auto" },
-        },
-        didParseCell: (data) => {
-          if (data.section === "body" && data.column.index === 1 && data.row.index === 9) {
-            data.cell.styles.textColor = [94, 234, 212];
-            data.cell.styles.fontStyle = "bold";
-          }
-        },
-        didDrawCell: (data) => {
-          if (data.section === "body" && data.column.index === 1 && data.row.index === 9) {
-            doc.link(data.cell.x, data.cell.y, data.cell.width, data.cell.height, {
-              url: `${origin}/project/${p.slug}`,
-            });
-            doc.setDrawColor(94, 234, 212);
-            doc.setLineWidth(0.6);
-            doc.line(
-              data.cell.x + 6,
-              data.cell.y + data.cell.height - 6,
-              data.cell.x + data.cell.width - 6,
-              data.cell.y + data.cell.height - 6
-            );
-          }
-        },
-      });
-    });
+      // Date right
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(...tiffanyDim);
+      doc.text(dateStr, pageW - M - 14, py + 22, { align: "right" });
 
-    // Page numbers + footers
+      py += 50 + 14;
+
+      // Hero photo (full width) — only if available
+      const cov = covers[idx];
+      if (cov) {
+        const imgW = pageW - 2 * M;
+        const aspect = cov.h / cov.w || 0.6;
+        let imgH = Math.min(220, imgW * aspect);
+        doc.setFillColor(8, 50, 60);
+        doc.roundedRect(M, py, imgW, imgH, 8, 8, "F");
+        try {
+          doc.addImage(cov.data, cov.type, M, py, imgW, imgH, undefined, "FAST");
+        } catch {
+          /* ignore */
+        }
+        // Tiffany hairline frame
+        doc.setDrawColor(...tiffanyLight);
+        doc.setLineWidth(0.6);
+        doc.roundedRect(M, py, imgW, imgH, 8, 8, "S");
+        py += imgH + 14;
+      }
+
+      // Key facts (2-column grid, drawn manually so it never looks like Excel)
+      const facts: Array<[string, string]> = [
+        ["Location", `${p.location || ""}${p.emirate ? `, ${p.emirate}` : ""}`.trim() || "—"],
+        ["Community", p.community?.name || "—"],
+        ["Price", fmtPrice(p)],
+        ["Bedrooms", fmtBeds(p)],
+        ["Size Range", fmtSize(p)],
+        ["Handover", p.handover_date || "TBA"],
+        ["Payment Plan", p.payment_plan || "Contact Us"],
+        ["Sale Status", p.sale_status || "Available"],
+      ];
+      const colW = (pageW - 2 * M - 12) / 2;
+      const cellH = 38;
+      for (let i = 0; i < facts.length; i += 2) {
+        if (py + cellH > CONTENT_BOTTOM) {
+          // Footer placeholder will be drawn later; add a clean page break.
+          doc.addPage();
+          drawPageBg();
+          drawHeader();
+          py = CONTENT_TOP;
+        }
+        for (let c = 0; c < 2; c++) {
+          const f = facts[i + c];
+          if (!f) continue;
+          const fx = M + c * (colW + 12);
+          doc.setFillColor(5, 38, 44);
+          doc.setDrawColor(16, 90, 100);
+          doc.setLineWidth(0.4);
+          doc.roundedRect(fx, py, colW, cellH, 6, 6, "FD");
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(8);
+          doc.setTextColor(...tiffanyDim);
+          doc.text(f[0].toUpperCase(), fx + 10, py + 14);
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(10.5);
+          doc.setTextColor(...white);
+          const valLines = doc.splitTextToSize(f[1], colW - 20) as string[];
+          doc.text(valLines.slice(0, 1)[0] || "—", fx + 10, py + 30);
+        }
+        py += cellH + 8;
+      }
+
+      // Description
+      const desc = stripHtml(p.description);
+      if (desc) {
+        if (py + 60 > CONTENT_BOTTOM) {
+          doc.addPage();
+          drawPageBg();
+          drawHeader();
+          py = CONTENT_TOP;
+        }
+        py += 6;
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(11);
+        doc.setTextColor(...tiffanyLight);
+        doc.text("About this property", M, py);
+        py += 16;
+        const descLines = doc.splitTextToSize(desc, pageW - 2 * M) as string[];
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.setTextColor(...tiffanyMuted);
+        for (const ln of descLines) {
+          if (py + 14 > CONTENT_BOTTOM) {
+            doc.addPage();
+            drawPageBg();
+            drawHeader();
+            py = CONTENT_TOP;
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(10);
+            doc.setTextColor(...tiffanyMuted);
+          }
+          doc.text(ln, M, py);
+          py += 14;
+        }
+      }
+
+      // Amenities (if any)
+      const amenities = Array.isArray(p.amenities) ? p.amenities : [];
+      if (amenities.length) {
+        if (py + 40 > CONTENT_BOTTOM) {
+          doc.addPage();
+          drawPageBg();
+          drawHeader();
+          py = CONTENT_TOP;
+        }
+        py += 8;
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(11);
+        doc.setTextColor(...tiffanyLight);
+        doc.text("Amenities & Features", M, py);
+        py += 14;
+        // Render as wrapping pills
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        let ax = M;
+        const ay0 = py;
+        let ay = ay0;
+        amenities.slice(0, 24).forEach((a: string) => {
+          const label = String(a || "").trim();
+          if (!label) return;
+          const pw = doc.getTextWidth(label) + 14;
+          if (ax + pw > pageW - M) {
+            ax = M;
+            ay += 22;
+          }
+          if (ay + 16 > CONTENT_BOTTOM) return;
+          doc.setFillColor(8, 56, 64);
+          doc.setDrawColor(...tiffanyDeep);
+          doc.setLineWidth(0.4);
+          doc.roundedRect(ax, ay, pw, 18, 9, 9, "FD");
+          doc.setTextColor(...tiffanyLight);
+          doc.text(label, ax + pw / 2, ay + 12, { align: "center" });
+          ax += pw + 6;
+        });
+        py = ay + 22;
+      }
+
+      // Listing CTA at bottom of last per-property page
+      if (py + 40 > CONTENT_BOTTOM) {
+        doc.addPage();
+        drawPageBg();
+        drawHeader();
+        py = CONTENT_TOP;
+      }
+      py += 8;
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(...tiffanyMuted);
+      doc.text("Listing:", M, py);
+      const url = `${origin}/project/${p.slug}`;
+      drawHyperlink(url, url, M + 42, py, 9.5);
+    }
+
+    // ============= PAGE NUMBERS + FOOTERS (all pages) =============
     const totalPages = doc.getNumberOfPages();
     for (let i = 1; i <= totalPages; i++) {
       doc.setPage(i);
@@ -719,6 +1112,8 @@ const QuizResults = () => {
     const blob = doc.output("blob");
     return { blob, filename };
   };
+
+
 
   // Robust download — uses blob + anchor (doc.save() is unreliable inside preview iframes)
   const triggerDownload = (blob: Blob, filename: string) => {
