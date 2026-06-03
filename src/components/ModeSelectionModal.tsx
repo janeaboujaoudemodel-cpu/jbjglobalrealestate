@@ -100,7 +100,8 @@ export const ModeSelectionModal = () => {
     <Dialog open={isVisible} onOpenChange={(open) => { if (!open) dismiss(); }}>
       <DialogContent
         className={cn(
-          'w-[calc(100vw-2rem)] max-w-lg sm:max-w-xl p-0 overflow-hidden border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]',
+          'w-[calc(100vw-1.5rem)] max-w-lg sm:max-w-xl p-0 overflow-hidden border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]',
+          'max-h-[calc(100svh-2rem)] flex flex-col',
           '[&>button]:hidden'
         )}
       >
@@ -112,70 +113,78 @@ export const ModeSelectionModal = () => {
         >
           <X className="w-4 h-4" />
         </button>
-        <DialogHeader className="p-6 pb-4 border-b border-[#B89555]/20">
-          <DialogTitle className="text-xl sm:text-2xl font-bold text-center text-[#1A1A1A]">
-            Welcome to JBJ Global Real Estate
-          </DialogTitle>
-          <p className="text-center text-[#1A1A1A]/70 text-sm mt-2">
-            Tell us who you are so we can tailor the platform — the home page,
-            tools, and recommendations all adapt to your category.
-          </p>
-          <div className="mt-3 flex items-start gap-2 rounded-lg border border-[#B89555]/25 bg-[#FDFBF7]/70 p-3 text-left">
-            <Sparkles className="w-4 h-4 text-[#B89555] mt-0.5 shrink-0" />
-            <p className="text-[12px] leading-relaxed text-[#1A1A1A]/75">
-              Browsing properties is always free — no login required. You can
-              also skip this for now and change your category anytime from the
-              mode picker in the header.
+
+        {/* Scrollable region: header + mode cards */}
+        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
+          <DialogHeader className="p-4 sm:p-6 pb-3 sm:pb-4 border-b border-[#B89555]/20">
+            <DialogTitle className="text-lg sm:text-2xl font-bold text-center text-[#1A1A1A]">
+              Welcome to JBJ Global Real Estate
+            </DialogTitle>
+            <p className="text-center text-[#1A1A1A]/70 text-[13px] sm:text-sm mt-2">
+              Tell us who you are so we can tailor the platform — the home page,
+              tools, and recommendations all adapt to your category.
             </p>
-          </div>
-        </DialogHeader>
+            <div className="mt-3 flex items-start gap-2 rounded-lg border border-[#B89555]/25 bg-[#FDFBF7]/70 p-2.5 sm:p-3 text-left">
+              <Sparkles className="w-4 h-4 text-[#B89555] mt-0.5 shrink-0" />
+              <p className="text-[12px] leading-relaxed text-[#1A1A1A]/75">
+                Browsing properties is always free — no login required. You can
+                also skip this for now and change your category anytime from the
+                mode picker in the header.
+              </p>
+            </div>
+          </DialogHeader>
 
-
-        <div className="p-6 space-y-3">
-          {MODE_OPTIONS.map((option) => {
-            const Icon = option.icon;
-            const isSelected = selectedMode === option.mode;
-            return (
-              <button
-                key={option.mode}
-                onClick={() => setSelectedMode(option.mode)}
-                aria-pressed={isSelected}
-                className={cn(
-                  'w-full p-4 rounded-xl border-2 transition-all duration-300 text-left',
-                  'hover:shadow-lg hover:scale-[1.01]',
-                  isSelected
-                    ? 'bg-[#EFE6D6]/40 border-[#B89555] shadow-md'
-                    : 'bg-[#FDFBF7]/80 backdrop-blur-sm border-[#B89555]/20 hover:border-[#B89555]/50'
-                )}
-              >
-                <div className="flex items-start gap-4">
-                  <div
-                    className={cn(
-                      'w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border',
-                      isSelected
-                        ? 'bg-[#EFE6D6] border-[#B89555]'
-                        : 'bg-[#EFE6D6]/40 border-[#B89555]/20'
-                    )}
-                  >
-                    <Icon className="w-6 h-6 text-[#1A1A1A]" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-base text-[#1A1A1A]">{option.label}</h3>
-                      {isSelected && <CheckCircle2 className="w-5 h-5 text-[#1A1A1A]" />}
+          <div className="p-4 sm:p-6 space-y-2.5 sm:space-y-3">
+            {MODE_OPTIONS.map((option) => {
+              const Icon = option.icon;
+              const isSelected = selectedMode === option.mode;
+              return (
+                <button
+                  key={option.mode}
+                  onClick={() => setSelectedMode(option.mode)}
+                  aria-pressed={isSelected}
+                  className={cn(
+                    'w-full p-3 sm:p-4 rounded-xl border-2 transition-all duration-300 text-left',
+                    'hover:shadow-lg hover:scale-[1.01]',
+                    isSelected
+                      ? 'bg-[#EFE6D6]/40 border-[#B89555] shadow-md'
+                      : 'bg-[#FDFBF7]/80 backdrop-blur-sm border-[#B89555]/20 hover:border-[#B89555]/50'
+                  )}
+                >
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div
+                      className={cn(
+                        'w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0 border',
+                        isSelected
+                          ? 'bg-[#EFE6D6] border-[#B89555]'
+                          : 'bg-[#EFE6D6]/40 border-[#B89555]/20'
+                      )}
+                    >
+                      <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#1A1A1A]" />
                     </div>
-                    <p className="text-sm text-[#1A1A1A]/70 mt-1">{option.description}</p>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold text-[15px] sm:text-base text-[#1A1A1A]">{option.label}</h3>
+                        {isSelected && <CheckCircle2 className="w-5 h-5 text-[#1A1A1A]" />}
+                      </div>
+                      <p className="text-[13px] sm:text-sm text-[#1A1A1A]/70 mt-1">{option.description}</p>
+                    </div>
                   </div>
-                </div>
-              </button>
-            );
-          })}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        <div className="p-6 pt-2 border-t border-[#B89555]/20">
+        {/* Pinned footer — always visible, respects iOS safe area */}
+        <div
+          className="shrink-0 p-4 sm:p-6 pt-2 sm:pt-2 border-t border-[#B89555]/20 bg-[#FDFBF7]/85 backdrop-blur-sm"
+          style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
+        >
           <Button
             onClick={handleSelectMode}
             disabled={!selectedMode || isSubmitting}
+            data-cta="mode-continue"
             className="w-full h-12 bg-[#1A1A1A] hover:bg-[#0A0A0A] text-white font-bold rounded-xl shadow-lg border border-[#B89555]/40 disabled:opacity-50"
           >
             {isSubmitting ? (
@@ -195,7 +204,7 @@ export const ModeSelectionModal = () => {
             Skip for now — just let me explore
           </button>
           {!user && (
-            <p className="text-center text-[#1A1A1A]/60 text-[11px] mt-3">
+            <p className="text-center text-[#1A1A1A]/60 text-[11px] mt-2">
               You can browse properties freely. Sign-in is only needed when you
               save, contact, or use a tool.
             </p>
