@@ -707,14 +707,19 @@ const QuizResults = () => {
     doc.roundedRect(M, y, chipW, 20, 10, 10, "FD");
     doc.setTextColor(...tiffanyLight);
     doc.text(chipText, M + 11, y + 13.5);
-    y += 38;
+    y += 42;
 
     // Title
     doc.setTextColor(...white);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(26);
     doc.text("Your AI-Selected Properties", M, y);
-    y += 22;
+    y += 20;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.setTextColor(...tiffanyLight);
+    doc.text(preparedLine, M, y);
+    y += 18;
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
     doc.setTextColor(...tiffanyMuted);
@@ -727,12 +732,12 @@ const QuizResults = () => {
       tiffanyMuted,
       11
     );
-    y += 12;
+    y += 14;
 
     // Three rank cards
     const cardGap = 12;
     const cardW = (pageW - 2 * M - 2 * cardGap) / 3;
-    const cardH = 230;
+    const cardH = 278;
     top.forEach((p, i) => {
       const cx = M + i * (cardW + cardGap);
       const cy = y;
@@ -744,7 +749,7 @@ const QuizResults = () => {
       doc.roundedRect(cx, cy, cardW, cardH, 10, 10, "FD");
 
       // Photo area
-      const imgH = 110;
+      const imgH = 128;
       doc.setFillColor(8, 50, 60);
       doc.roundedRect(cx + 8, cy + 8, cardW - 16, imgH, 6, 6, "F");
       const cov = covers[i];
@@ -803,20 +808,32 @@ const QuizResults = () => {
       );
       ty += 14;
 
+      doc.setDrawColor(18, 92, 98);
+      doc.setLineWidth(0.35);
+      doc.line(cx + 12, ty - 6, cx + cardW - 12, ty - 6);
+
       // Price
       doc.setFont("helvetica", "bold");
       doc.setFontSize(9.5);
       doc.setTextColor(...tiffanyLight);
       doc.text(fmtPrice(p), cx + 12, ty);
-      ty += 12;
+      ty += 16;
+
+      doc.setDrawColor(18, 92, 98);
+      doc.setLineWidth(0.35);
+      doc.line(cx + 12, ty - 7, cx + cardW - 12, ty - 7);
 
       // Bedrooms
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.setTextColor(...tiffanyMuted);
       doc.text(fmtBeds(p), cx + 12, ty);
+      ty += 14;
+      const loc = doc.splitTextToSize(`${p.location || "Dubai"}${p.emirate ? `, ${p.emirate}` : ""}`, cardW - 24) as string[];
+      doc.setTextColor(...tiffanyDim);
+      doc.text(loc.slice(0, 2), cx + 12, ty);
     });
-    y += cardH + 18;
+    y += cardH + 20;
 
     // What's inside this report
     doc.setFont("helvetica", "bold");
