@@ -405,9 +405,9 @@ const QuizResults = () => {
         {/* Top Recommendation */}
         {projects && projects.length > 0 && (
           <div className="mb-12">
-            <div className="relative bg-[#FDFBF7]/80 backdrop-blur-sm rounded-3xl overflow-hidden border-2 border-[#B89555] shadow-[0_8px_32px_rgba(200,167,102,0.2)]">
+            <div className="aihf-panel relative backdrop-blur-sm rounded-3xl overflow-hidden">
               <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-                <div className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] text-sm font-semibold px-4 py-1.5 rounded-full">
+                <div className="bg-gradient-to-r from-[#5EEAD4] to-[#22D3EE] text-sm font-semibold px-4 py-1.5 rounded-full">
                   #1 Best Match
                 </div>
                 {badges[projects[0].id] && (
@@ -431,22 +431,18 @@ const QuizResults = () => {
                 </div>
                 
                 <div className="p-8 md:p-10 flex flex-col justify-center">
-                  <p className="text-[#1A1A1A]/70 text-sm mb-2">{projects[0].developer?.name}</p>
-                  <h2 className="text-[#1A1A1A] text-3xl font-bold mb-3">{projects[0].name}</h2>
-                  <p className="text-[#1A1A1A]/70 mb-6">{projects[0].location}, {projects[0].emirate}</p>
+                  <p className="aihf-muted text-sm mb-2">{projects[0].developer?.name}</p>
+                  <h2 className="text-3xl font-bold mb-3">{projects[0].name}</h2>
+                  <p className="aihf-muted mb-6">{projects[0].location}, {projects[0].emirate}</p>
                   
                   <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="bg-[#F7F2EA] rounded-xl p-4 border border-[#B89555]/20">
-                      <p className="text-[#1A1A1A]/70 text-sm">Price From</p>
-                      <p className="text-[#1A1A1A] text-xl font-semibold">
-                        {projects[0].price_from
-                          ? `AED ${(projects[0].price_from / 1000000).toFixed(1)}M`
-                          : "Price on Request"}
-                      </p>
+                    <div className="aihf-tile rounded-xl p-4">
+                      <p className="aihf-muted text-sm mb-2">Price From</p>
+                      <PricePill price={projects[0].price_from} currency="AED" />
                     </div>
-                    <div className="bg-[#F7F2EA] rounded-xl p-4 border border-[#B89555]/20">
-                      <p className="text-[#1A1A1A]/70 text-sm">Bedrooms</p>
-                      <p className="text-[#1A1A1A] text-xl font-semibold">
+                    <div className="aihf-tile rounded-xl p-4">
+                      <p className="aihf-muted text-sm">Bedrooms</p>
+                      <p className="text-xl font-semibold">
                         {projects[0].bedrooms_min != null && projects[0].bedrooms_max != null
                           ? projects[0].bedrooms_min === 0
                             ? `Studio${projects[0].bedrooms_max > 0 ? ` - ${projects[0].bedrooms_max} BR` : ''}`
@@ -460,7 +456,7 @@ const QuizResults = () => {
                   <div className="flex items-center gap-3 mb-6">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="border-[#B89555] text-[#1A1A1A] bg-[#B89555]/10 hover:bg-[#B89555]/20">
+                          <Button variant="outline" size="sm" className="aihf-outline">
                           <Award className="w-4 h-4 mr-2" />
                           {badges[projects[0].id] ? 'Change Badge' : 'Add Badge'}
                         </Button>
@@ -485,7 +481,7 @@ const QuizResults = () => {
                   </div>
                   
                   <Link to={`/project/${projects[0].slug}`}>
-                    <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] hover:brightness-95 w-full md:w-auto border-2 border-[#B89555] font-semibold hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+                    <Button className="aihf-cta w-full md:w-auto font-semibold hover:-translate-y-0.5 transition-all duration-300">
                       View Property
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
