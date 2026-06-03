@@ -33,6 +33,7 @@ import BusinessCardUpload from "@/components/business-card/BusinessCardUpload";
 import BusinessCardResults from "@/components/business-card/BusinessCardResults";
 import BusinessCardPrivacyNotice from "@/components/business-card/BusinessCardPrivacyNotice";
 import { ScannedContact, encryptData, decryptData, generateEncryptionKey } from "@/utils/businessCardEncryption";
+import { isContactSaveable } from "@/utils/businessCardValidation";
 import { useStepUpAuth } from "@/hooks/useStepUpAuth";
 import ReAuthModal from "@/components/security/ReAuthModal";
 import { logExportEvent } from "@/utils/dlpExportLogger";
@@ -142,16 +143,8 @@ const BusinessCardScanner = () => {
     });
   };
 
-  /** A scan is "saveable" only if it has at least one strong contact signal. */
-  const isContactValid = (c: ScannedContact) =>
-    Boolean(
-      (c.email && c.email.includes("@")) ||
-        c.mobile ||
-        c.phone ||
-        c.whatsapp ||
-        c.landline ||
-        (c.name && (c.company || c.company_name)),
-    );
+  /** A scan is "saveable" only if it has at least one strong business-card contact signal. */
+  const isContactValid = isContactSaveable;
 
   // Duplicate confirmation dialog state
   const [dupDialog, setDupDialog] = useState<{
@@ -416,6 +409,25 @@ const BusinessCardScanner = () => {
         .bcs-drop:hover, .bcs-drop.is-dragging { border-color: #fb7185 !important; background: rgba(251,113,133,0.08) !important; }
         .bcs-drop * { color: #FFFFFF !important; }
         .bcs-drop .bcs-drop-sub { color: rgba(255,255,255,0.72) !important; }
+        .bcs-action-dark,
+        .bcs-action-dark:disabled,
+        .bcs-action-dark:hover {
+          background: rgba(7,16,31,0.92) !important;
+          border: 1px solid rgba(251,113,133,0.55) !important;
+          color: #FFFFFF !important;
+          opacity: 1 !important;
+        }
+        .bcs-action-dark svg,
+        .bcs-action-dark:disabled svg,
+        .bcs-action-dark:hover svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
+        .bcs-action-danger,
+        .bcs-action-danger:hover {
+          background: rgba(127,29,29,0.28) !important;
+          border: 1px solid rgba(248,113,113,0.65) !important;
+          color: #FECACA !important;
+        }
+        .bcs-action-danger svg,
+        .bcs-action-danger:hover svg { color: #FECACA !important; stroke: #FECACA !important; }
       `}</style>
       <div className="container mx-auto px-4 pt-6 pb-8 max-w-6xl">
         {/* Header (no black strip — sits flush on the rose-navy page) */}
@@ -642,14 +654,14 @@ const BusinessCardScanner = () => {
                       size="sm"
                       data-no-contrast-guard
                       data-allow-dark-cta
-                      className="gap-2 bg-rose-500 hover:bg-rose-600 text-white allow-white"
+                      className="bcs-action-dark gap-2 allow-white"
                       onClick={handleSaveAll}
                     >
                       <UserPlus className="h-4 w-4 allow-white" />
                       Save All to CRM
                     </Button>
                   )}
-                  <Button variant="destructive" size="sm" onClick={handleClearAll} className="gap-2 allow-white" data-no-contrast-guard data-allow-dark-cta>
+                  <Button variant="outline" size="sm" onClick={handleClearAll} className="bcs-action-danger gap-2 allow-white" data-no-contrast-guard data-allow-dark-cta>
                     <Trash2 className="h-4 w-4 allow-white" />
                     Clear All
                   </Button>

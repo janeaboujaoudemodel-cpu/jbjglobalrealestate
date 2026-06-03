@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Upload, Loader2, X, Image as ImageIcon, Zap } from "lucide-react";
 import { ScannedContact, generateContactId } from "@/utils/businessCardEncryption";
+import { invalidBusinessCardMessage, isContactSaveable } from "@/utils/businessCardValidation";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -109,7 +110,7 @@ const BusinessCardUpload = ({
           continue;
         }
         
-        if (data?.contact) {
+        if (data?.contact && data?.is_business_card !== false && isContactSaveable(data.contact)) {
           const c = data.contact;
           contacts.push({
             ...c,
@@ -120,11 +121,13 @@ const BusinessCardUpload = ({
             scannedAt: new Date().toISOString(),
             imagePreview: preview.substring(0, 100) + '...',
             imageDataUrl: preview,
-            confidence: data.confidence || 0.85,
+            confidence: typeof data.confidence === "number" ? data.confidence : 0,
             contactType: "client",
             labels: [],
             saveStatus: "idle",
           });
+        } else if (data?.contact || data?.is_business_card === false) {
+          toast.error(data?.reason || invalidBusinessCardMessage, { duration: 5500 });
         }
       }
       
@@ -148,7 +151,7 @@ const BusinessCardUpload = ({
           console.error('Error tracking uploaded cards:', e);
         }
       } else {
-        toast.error("Could not extract contact information from the cards");
+        toast.error(invalidBusinessCardMessage, { duration: 5500 });
       }
     } catch (error) {
       console.error("Processing error:", error);
