@@ -563,7 +563,6 @@ const Quiz = () => {
     await proceedToResults();
   };
 
-  const [started, setStarted] = useState(false);
 
   // Intro screen before starting — teal/cyan dark ombre (matches Property Measurement language)
   if (!started && currentStep === 0 && Object.keys(answers).length === 0 && !showForm) {
