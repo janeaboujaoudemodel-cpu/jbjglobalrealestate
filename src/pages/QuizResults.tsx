@@ -1428,25 +1428,6 @@ const QuizResults = () => {
           </div>
         </div>
 
-        {/* Criteria × Properties tick table */}
-        {projects && projects.length > 0 && Object.keys(sessionAnswers).length > 0 && (
-          <>
-            <MatchCriteriaTable answers={sessionAnswers} projects={projects.slice(0, 3)} />
-            <div className="flex justify-center mb-12">
-              <Button
-                data-no-contrast-guard
-                onClick={() => {
-                  document.getElementById("aihf-top-pick")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
-                className="aihf-cta aihf-cta-glow font-bold px-8 py-5 text-base rounded-xl"
-              >
-                View these properties
-                <ChevronDown className="w-5 h-5 ml-2" />
-              </Button>
-            </div>
-          </>
-        )}
-
         {/* Empty state — only shown if DB returned literally nothing */}
         {(!projects || projects.length === 0) && !isLoading && (
           <div className="aihf-panel rounded-2xl p-8 mb-12 text-center max-w-2xl mx-auto">
