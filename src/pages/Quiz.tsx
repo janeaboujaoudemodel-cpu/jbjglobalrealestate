@@ -526,18 +526,33 @@ const Quiz = () => {
       const mapped = AREA_NAME_MAP[area];
       if (mapped) areaKeywords.push(...mapped);
     });
+
+    // Emirate hard filter — from the dedicated emirate question, OR derived from area chips.
+    const chosenEmirate = (answers.emirate as string) || "";
+    const emirateFromQuestion = EMIRATE_VALUE_MAP[chosenEmirate] || "";
     const targetEmirates = Array.from(
       new Set(
-        specificAreas
-          .map((a) => AREA_EMIRATE_MAP[a])
+        [
+          emirateFromQuestion,
+          ...specificAreas.map((a) => AREA_EMIRATE_MAP[a]).filter(Boolean),
+        ]
           .filter(Boolean)
           .map((e) => e.toLowerCase())
       )
     );
-    // If user picked only "other" / nothing → no emirate guard (cross-emirate allowed).
-    const enforceEmirate = targetEmirates.length > 0 && !hasOther;
+    // If user picked "any" emirate AND no specific area → no emirate guard.
+    const enforceEmirate = targetEmirates.length > 0 && chosenEmirate !== "any";
 
-    // Sold-out / cancelled exclusion stays.
+    // Hard property-type filter — never recommend a villa when the user asked for retail, etc.
+    const propertyType = (answers.property_type as string) || "";
+    const ptKeywords = PROPERTY_TYPE_KEYWORDS[propertyType] || [];
+    const matchesPropertyType = (p: any): boolean => {
+      if (!ptKeywords.length) return true;
+      const blob = `${p.property_type_label || ""} ${(p.unit_types || []).join(" ")} ${p.name || ""}`.toLowerCase();
+      return ptKeywords.some((k) => blob.includes(k));
+    };
+
+    // Sold-out / cancelled + property-type exclusion.
     const baseAvailable = allProjects.filter((project) => {
       if (project.is_sold_out) return false;
       const s = (project.sale_status || "").toLowerCase().replace(/[\s-]+/g, "_");
@@ -549,6 +564,7 @@ const Quiz = () => {
       ) return false;
       const cs = ((project as any).construction_status || "").toLowerCase();
       if (cs.includes("cancel")) return false;
+      if (!matchesPropertyType(project)) return false;
       return true;
     });
 
