@@ -79,18 +79,27 @@ const QUIZ_QUESTIONS = [
     ],
   },
   {
+    id: "emirate",
+    question: "Which emirate do you want to invest in?",
+    type: "single" as const,
+    options: [
+      { value: "dubai", label: "Dubai", icon: "" },
+      { value: "abu-dhabi", label: "Abu Dhabi", icon: "" },
+      { value: "sharjah", label: "Sharjah", icon: "" },
+      { value: "ras-al-khaimah", label: "Ras Al Khaimah", icon: "" },
+      { value: "ajman", label: "Ajman", icon: "" },
+      { value: "fujairah", label: "Fujairah", icon: "" },
+      { value: "umm-al-quwain", label: "Umm Al Quwain", icon: "" },
+      { value: "any", label: "Open to any emirate", icon: "" },
+    ],
+  },
+  {
     id: "areas",
     question: "Which areas are you interested in?",
     type: "multiple" as const,
     hasSelectAll: true,
+    // Options are swapped at runtime based on answers.emirate (see AREAS_BY_EMIRATE).
     options: [
-      { value: "downtown", label: "Downtown Dubai", icon: "" },
-      { value: "marina", label: "Dubai Marina", icon: "" },
-      { value: "palm", label: "Palm Jumeirah", icon: "" },
-      { value: "business-bay", label: "Business Bay", icon: "" },
-      { value: "creek-harbour", label: "Dubai Creek Harbour", icon: "" },
-      { value: "hills", label: "Dubai Hills Estate", icon: "" },
-      { value: "arabian-ranches", label: "Arabian Ranches", icon: "" },
       { value: "other", label: "Other Areas", icon: "" },
     ],
   },
@@ -146,6 +155,37 @@ const QUIZ_QUESTIONS = [
   },
 ];
 
+// Area chips per emirate — swapped at runtime so users only see areas inside their chosen emirate.
+const AREAS_BY_EMIRATE: Record<string, Array<{ value: string; label: string; icon: string }>> = {
+  dubai: [
+    { value: "downtown", label: "Downtown Dubai", icon: "" },
+    { value: "marina", label: "Dubai Marina", icon: "" },
+    { value: "palm", label: "Palm Jumeirah", icon: "" },
+    { value: "business-bay", label: "Business Bay", icon: "" },
+    { value: "creek-harbour", label: "Dubai Creek Harbour", icon: "" },
+    { value: "hills", label: "Dubai Hills Estate", icon: "" },
+    { value: "arabian-ranches", label: "Arabian Ranches", icon: "" },
+    { value: "jvc", label: "JVC / JVT", icon: "" },
+    { value: "mbr-city", label: "MBR City", icon: "" },
+    { value: "other", label: "Other Dubai Areas", icon: "" },
+  ],
+  "abu-dhabi": [
+    { value: "saadiyat", label: "Saadiyat Island", icon: "" },
+    { value: "yas", label: "Yas Island", icon: "" },
+    { value: "reem", label: "Al Reem Island", icon: "" },
+    { value: "raha", label: "Al Raha Beach", icon: "" },
+    { value: "maryah", label: "Al Maryah Island", icon: "" },
+    { value: "ghantoot", label: "Ghantoot", icon: "" },
+    { value: "other", label: "Other Abu Dhabi Areas", icon: "" },
+  ],
+  sharjah: [{ value: "other", label: "All Sharjah Areas", icon: "" }],
+  "ras-al-khaimah": [{ value: "other", label: "All Ras Al Khaimah Areas", icon: "" }],
+  ajman: [{ value: "other", label: "All Ajman Areas", icon: "" }],
+  fujairah: [{ value: "other", label: "All Fujairah Areas", icon: "" }],
+  "umm-al-quwain": [{ value: "other", label: "All Umm Al Quwain Areas", icon: "" }],
+  any: [{ value: "other", label: "Open to any area", icon: "" }],
+};
+
 // Area value to database area name mapping for hard filtering
 const AREA_NAME_MAP: Record<string, string[]> = {
   "downtown": ["downtown"],
@@ -155,10 +195,17 @@ const AREA_NAME_MAP: Record<string, string[]> = {
   "creek-harbour": ["creek harbour", "creek", "dubai creek"],
   "hills": ["dubai hills", "hills estate"],
   "arabian-ranches": ["arabian ranches"],
+  "jvc": ["jvc", "jumeirah village"],
+  "mbr-city": ["mbr city", "mohammed bin rashid"],
+  "saadiyat": ["saadiyat"],
+  "yas": ["yas island", "yas"],
+  "reem": ["al reem", "reem island"],
+  "raha": ["al raha", "raha beach"],
+  "maryah": ["al maryah", "maryah"],
+  "ghantoot": ["ghantoot"],
 };
 
-// Maps each area chip to its emirate — used as a hard "never cross emirates" guard.
-// Every specific area chip in the quiz is currently in Dubai; "other" is unconstrained.
+// Map area chip → emirate (used as a hard "never cross emirates" guard).
 const AREA_EMIRATE_MAP: Record<string, string> = {
   "downtown": "dubai",
   "marina": "dubai",
@@ -167,6 +214,35 @@ const AREA_EMIRATE_MAP: Record<string, string> = {
   "creek-harbour": "dubai",
   "hills": "dubai",
   "arabian-ranches": "dubai",
+  "jvc": "dubai",
+  "mbr-city": "dubai",
+  "saadiyat": "abu dhabi",
+  "yas": "abu dhabi",
+  "reem": "abu dhabi",
+  "raha": "abu dhabi",
+  "maryah": "abu dhabi",
+  "ghantoot": "abu dhabi",
+};
+
+// Quiz emirate value → DB emirate string used for hard filter.
+const EMIRATE_VALUE_MAP: Record<string, string> = {
+  "dubai": "dubai",
+  "abu-dhabi": "abu dhabi",
+  "sharjah": "sharjah",
+  "ras-al-khaimah": "ras al khaimah",
+  "ajman": "ajman",
+  "fujairah": "fujairah",
+  "umm-al-quwain": "umm al quwain",
+};
+
+// Property type → keyword set matched against property_type_label / unit_types / name.
+const PROPERTY_TYPE_KEYWORDS: Record<string, string[]> = {
+  apartment: ["apartment", "apartments", "flat", "duplex"],
+  villa: ["villa", "villas", "mansion", "sky villa", "farmhouse"],
+  townhouse: ["townhouse", "townhouses"],
+  penthouse: ["penthouse"],
+  plot: ["plot", "plots", "residential plot", "land"],
+  retail: ["office", "offices", "retail", "commercial", "hotel"],
 };
 
 const LANGUAGES = getLanguageList();
@@ -305,19 +381,33 @@ const Quiz = () => {
   const { data: allProjects } = useQuery({
     queryKey: ["all-projects-quiz"],
     queryFn: async () => {
+      // Trimmed projection — only fields used by the recommender + result cards.
+      // Drops nested joins (developer/images) which made the prior query fetch megabytes
+      // of unused data and was the root cause of the long "Finding your perfect matches"
+      // loader on this screen.
       const { data, error } = await supabase
         .from("projects")
-        .select(`
-          *,
-          developer:developers(name, slug, description, logo_url),
-          images:project_images(image_url)
-        `);
+        .select(
+          "id, slug, name, emirate, location, area_name, price_from, bedrooms_min, bedrooms_max, handover_date, sale_status, is_sold_out, construction_status, property_type_label, unit_types, views, amenities, cover_image_url"
+        )
+        .eq("is_published", true)
+        .limit(2000);
       if (error) throw error;
       return data;
     },
+    staleTime: 5 * 60 * 1000,
   });
 
-  const currentQuestion = QUIZ_QUESTIONS[currentStep];
+  // Swap the `areas` question's options based on which emirate the user picked.
+  const currentQuestion = (() => {
+    const q = QUIZ_QUESTIONS[currentStep];
+    if (q?.id === "areas") {
+      const em = (answers.emirate as string) || "any";
+      const opts = AREAS_BY_EMIRATE[em] || AREAS_BY_EMIRATE.any;
+      return { ...q, options: opts };
+    }
+    return q;
+  })();
   const progress = (currentStep / QUIZ_QUESTIONS.length) * 100;
 
   const handleSelectAll = () => {
@@ -436,18 +526,33 @@ const Quiz = () => {
       const mapped = AREA_NAME_MAP[area];
       if (mapped) areaKeywords.push(...mapped);
     });
+
+    // Emirate hard filter — from the dedicated emirate question, OR derived from area chips.
+    const chosenEmirate = (answers.emirate as string) || "";
+    const emirateFromQuestion = EMIRATE_VALUE_MAP[chosenEmirate] || "";
     const targetEmirates = Array.from(
       new Set(
-        specificAreas
-          .map((a) => AREA_EMIRATE_MAP[a])
+        [
+          emirateFromQuestion,
+          ...specificAreas.map((a) => AREA_EMIRATE_MAP[a]).filter(Boolean),
+        ]
           .filter(Boolean)
           .map((e) => e.toLowerCase())
       )
     );
-    // If user picked only "other" / nothing → no emirate guard (cross-emirate allowed).
-    const enforceEmirate = targetEmirates.length > 0 && !hasOther;
+    // If user picked "any" emirate AND no specific area → no emirate guard.
+    const enforceEmirate = targetEmirates.length > 0 && chosenEmirate !== "any";
 
-    // Sold-out / cancelled exclusion stays.
+    // Hard property-type filter — never recommend a villa when the user asked for retail, etc.
+    const propertyType = (answers.property_type as string) || "";
+    const ptKeywords = PROPERTY_TYPE_KEYWORDS[propertyType] || [];
+    const matchesPropertyType = (p: any): boolean => {
+      if (!ptKeywords.length) return true;
+      const blob = `${p.property_type_label || ""} ${(p.unit_types || []).join(" ")} ${p.name || ""}`.toLowerCase();
+      return ptKeywords.some((k) => blob.includes(k));
+    };
+
+    // Sold-out / cancelled + property-type exclusion.
     const baseAvailable = allProjects.filter((project) => {
       if (project.is_sold_out) return false;
       const s = (project.sale_status || "").toLowerCase().replace(/[\s-]+/g, "_");
@@ -459,6 +564,7 @@ const Quiz = () => {
       ) return false;
       const cs = ((project as any).construction_status || "").toLowerCase();
       if (cs.includes("cancel")) return false;
+      if (!matchesPropertyType(project)) return false;
       return true;
     });
 
@@ -737,6 +843,8 @@ const Quiz = () => {
       markFreeUsed();
       writeMatchmakerSession({
         step: "results",
+        answers,
+        formData,
         resultSlugs: recommendations.slice(0, 3).map((p) => p.slug),
         resultTiers: Array(Math.min(3, recommendations.length)).fill(tier) as any,
       });
