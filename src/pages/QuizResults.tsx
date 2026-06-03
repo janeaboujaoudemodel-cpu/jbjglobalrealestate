@@ -495,10 +495,10 @@ const QuizResults = () => {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(10);
       doc.setTextColor(...tiffanyMuted);
-      doc.text("✓ exact match  ·  ≈ close fit  ·  ✗ does not match", 36, 128);
+      doc.text("[OK] exact match   [~] close fit   [X] does not match", 36, 128);
 
       const verdictGlyph = (v: "match" | "close" | "miss") =>
-        v === "match" ? "✓" : v === "close" ? "≈" : "✗";
+        v === "match" ? "[OK]" : v === "close" ? "[~]" : "[X]";
       const verdictFill = (v: "match" | "close" | "miss"): [number, number, number] =>
         v === "match" ? [12, 65, 50] : v === "close" ? [70, 50, 12] : [70, 22, 22];
 
@@ -514,7 +514,7 @@ const QuizResults = () => {
       cBody.push([
         "Match summary",
         ...totals.map((t) =>
-          `✓ ${t.match} matched · ≈ ${t.close} close · ✗ ${t.miss} missed\n${t.match}/${t.total} criteria met`
+          `[OK] ${t.match} matched | [~] ${t.close} close | [X] ${t.miss} missed\n${t.match}/${t.total} criteria met`
         ),
       ]);
 
@@ -526,16 +526,17 @@ const QuizResults = () => {
         body: cBody,
         styles: {
           font: "helvetica",
-          fontSize: 9,
+          fontSize: 10,
           textColor: white,
           fillColor: navy,
           lineColor: tiffany,
           lineWidth: 0.3,
-          cellPadding: 6,
+          cellPadding: 10,
+          minCellHeight: 22,
           overflow: "linebreak",
           valign: "top",
         },
-        headStyles: { fillColor: tiffany, textColor: ink, fontStyle: "bold", fontSize: 10 },
+        headStyles: { fillColor: tiffany, textColor: ink, fontStyle: "bold", fontSize: 11, cellPadding: 10 },
         columnStyles: {
           0: { fontStyle: "bold", fillColor: [4, 56, 50], textColor: tiffanyMuted, cellWidth: 130 },
         },
