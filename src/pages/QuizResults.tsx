@@ -28,10 +28,12 @@ import { useMembership } from "@/hooks/useMembership";
 import { useAuth } from "@/contexts/AuthContext";
 import MatchCriteriaTable, { buildCriteriaRowsForExport, computeMatchTotals } from "@/components/matchmaker/MatchCriteriaTable";
 import {
+  type MatchmakerFormData,
   readMatchmakerSession,
   writeMatchmakerSession,
   clearMatchmakerSession,
 } from "@/hooks/useMatchmakerSession";
+import { buildPropertyPresentationParagraphs, findAmenityPhotoUrl } from "@/utils/matchmakerProse";
 
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 const JBJ_CONSULTANT_EMAIL = "CONTACT@JBJ.AE";
@@ -250,11 +252,13 @@ const QuizResults = () => {
   const [shareTrigger, setShareTrigger] = useState<"share" | "post-download">("share");
   const [showVipModal, setShowVipModal] = useState(false);
   const [sessionAnswers, setSessionAnswers] = useState<Record<string, string | string[]>>({});
+  const [matchmakerFormData, setMatchmakerFormData] = useState<MatchmakerFormData | null>(null);
 
   // Hydrate from persisted matchmaker session: restore answers + recover URL slugs after refresh
   useEffect(() => {
     const s = readMatchmakerSession();
     if (s?.answers) setSessionAnswers(s.answers);
+    if (s?.formData) setMatchmakerFormData(s.formData);
     if (!projectSlugs.length && s?.resultSlugs?.length) {
       const params = new URLSearchParams();
       params.set("projects", s.resultSlugs.join(","));
