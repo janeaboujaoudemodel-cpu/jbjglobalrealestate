@@ -141,7 +141,7 @@ export function PremiumBook3D({
                 className="absolute top-[10%] left-[14%] right-[22%] text-left text-[6.5px] tracking-[0.22em] font-semibold whitespace-nowrap overflow-hidden"
                 style={{ color: palette.foil }}
               >
-                JBJ GLOBAL REAL ESTATE
+                JBJ GLOBAL
               </div>
               <div
                 className="absolute top-[16%] left-[14%] h-px w-[22%]"
