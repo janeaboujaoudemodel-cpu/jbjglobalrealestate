@@ -106,6 +106,28 @@ const AIHF_RESULTS_STYLE = `
     color: var(--price-orange) !important;
     -webkit-text-fill-color: var(--price-orange) !important;
   }
+  /* Kill the global champagne-white hover flash on price pills inside results */
+  .aihf-results .group:hover .price-pill-premium,
+  .aihf-results .group:focus-within .price-pill-premium,
+  .aihf-results .price-pill-premium:hover,
+  .aihf-results .price-pill-premium:focus-visible {
+    background: linear-gradient(135deg, rgba(2,17,15,0.95) 0%, rgba(3,30,24,0.95) 100%) !important;
+    border-color: rgba(94,234,212,0.85) !important;
+    box-shadow: 0 10px 26px rgba(34,211,238,0.30), inset 0 0 18px rgba(103,232,249,0.12) !important;
+  }
+  .aihf-results .group:hover .price-pill-premium .price-pill-eyebrow,
+  .aihf-results .group:focus-within .price-pill-premium .price-pill-eyebrow,
+  .aihf-results .price-pill-premium:hover .price-pill-eyebrow {
+    color: #67E8F9 !important;
+    -webkit-text-fill-color: #67E8F9 !important;
+    opacity: 1 !important;
+  }
+  .aihf-results .group:hover .price-pill-premium .price-pill-value,
+  .aihf-results .group:focus-within .price-pill-premium .price-pill-value,
+  .aihf-results .price-pill-premium:hover .price-pill-value {
+    color: var(--price-orange) !important;
+    -webkit-text-fill-color: var(--price-orange) !important;
+  }
   /* Favorite/Heart + shortlist + Add-Badge buttons — Tiffany cyan inside results.
      FavoriteButton renders .jj-favorite-trigger; ShortlistBadgeButton's trigger
      is targeted via its lucide-award child icon. */
