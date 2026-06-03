@@ -843,6 +843,8 @@ const Quiz = () => {
       markFreeUsed();
       writeMatchmakerSession({
         step: "results",
+        answers,
+        formData,
         resultSlugs: recommendations.slice(0, 3).map((p) => p.slug),
         resultTiers: Array(Math.min(3, recommendations.length)).fill(tier) as any,
       });
