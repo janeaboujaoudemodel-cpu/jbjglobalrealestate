@@ -169,7 +169,7 @@ const BuyerFAQ = () => {
   const allFaqItems = categories.flatMap(cat => cat.questions);
 
   return (
-    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
+    <div data-neon-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Buyer FAQ | Property Buying Questions | JBJ Global Real Estate"
         description="Answers to common questions about buying property in the UAE — costs, mortgages, process, and post-purchase support."

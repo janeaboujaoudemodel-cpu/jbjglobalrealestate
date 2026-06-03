@@ -68,7 +68,7 @@ const MonthlyMarketBrief = () => {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
+      <div data-neon-page className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">Report Not Found</h1>
           <Link to="/market-intelligence/reports" className="text-[#1A1A1A] hover:underline">

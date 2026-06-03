@@ -158,7 +158,7 @@ const AreaGuides = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
+    <div data-neon-page className="min-h-screen bg-[hsl(var(--premium-bg))]">
       <SEOHead
         title="Areas in Dubai & UAE | JBJ Global Real Estate"
         description="Explore real estate areas across Dubai and the UAE. Browse properties by neighborhood with verified data."

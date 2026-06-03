@@ -155,7 +155,7 @@ const InvestorFAQ = () => {
   const allFaqItems = categories.flatMap(cat => cat.questions);
 
   return (
-    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
+    <div data-neon-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Investor FAQ | Investment Questions Answered | JBJ Global Real Estate"
         description="Find answers to common investor questions about UAE real estate investment, returns, off-plan properties, rental performance, and working with JBJ Global Real Estate."

@@ -310,7 +310,7 @@ const BuyerGuide = () => {
   ];
 
   return (
-    <div data-marketing-page className="min-h-screen bg-[#FDFBF7]">
+    <div data-neon-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead {...pagesSEO.buyerGuide} />
 
       {/* Premium Hero */}
