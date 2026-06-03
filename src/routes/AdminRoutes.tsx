@@ -183,7 +183,7 @@ export const AdminRoutes = () => (
         <GatedToolRoute
           toolId="business-card-scanner"
           toolName="Business Card Scanner"
-          theme={toolThemes.emerald}
+          theme={toolThemes.rose}
           tagline="Snap any card, auto-import the contact into your CRM with AI enrichment. Unlocked for JBJ brokers."
         >
           <BusinessCardScanner />
