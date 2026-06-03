@@ -371,133 +371,142 @@ const Quiz = () => {
     }
   };
 
-  const getRecommendations = () => {
-    if (!allProjects?.length) return [];
+  // ---- Universal scorer (used for every tier) ----
+  const scoreProject = (project: any) => {
+    let score = 0;
+    if (project.price_from) score += 10;
+    if (project.bedrooms_min != null) score += 5;
+    if (project.cover_image_url || project.images?.[0]?.image_url) score += 5;
 
-    // Build hard area filter from selected areas
+    const location = answers.location_type;
+    const projectViews = project.views || [];
+    const locationArr = Array.isArray(location) ? location : (location ? [location] : []);
+    locationArr.forEach((loc: string) => {
+      if (loc === "beachfront" && projectViews.some((v: string) => v.toLowerCase().includes("sea") || v.toLowerCase().includes("beach"))) score += 20;
+      if (loc === "city-center" && projectViews.some((v: string) => v.toLowerCase().includes("city") || v.toLowerCase().includes("skyline"))) score += 20;
+      if (loc === "golf-community" && projectViews.some((v: string) => v.toLowerCase().includes("golf"))) score += 20;
+      if (loc === "suburban" && projectViews.some((v: string) => v.toLowerCase().includes("garden"))) score += 20;
+      if (loc === "flexible") score += 10;
+    });
+
+    const timeline = answers.timeline;
+    const handover = project.handover_date?.toLowerCase() || "";
+    if (timeline === "ready" && handover.includes("ready")) score += 15;
+    if (timeline === "2025" && handover.includes("2025")) score += 15;
+    if (timeline === "2026" && handover.includes("2026")) score += 15;
+    if (timeline === "2027-plus" && (handover.includes("2027") || handover.includes("2028") || handover.includes("2029"))) score += 15;
+    if (timeline === "flexible") score += 10;
+
+    const preferredFeatures = (answers.views_and_features as string[]) || [];
+    preferredFeatures.forEach((pf) => {
+      if (pf.includes("view") && projectViews.some((v: string) => v.toLowerCase().includes(pf.replace("-view", "")))) score += 5;
+      const projectAmenities = project.amenities || [];
+      if (projectAmenities.some((a: string) => a.toLowerCase().includes(pf.replace("-", " ")))) score += 3;
+    });
+
+    return score;
+  };
+
+  // Tiered recommendation engine — NEVER returns empty unless DB itself is empty.
+  // Returns { items, tier } where tier ∈ "exact" | "close" | "nearest" | "fallback".
+  const getTieredRecommendations = (): {
+    items: any[];
+    tier: "exact" | "close" | "nearest" | "fallback";
+  } => {
+    if (!allProjects?.length) return { items: [], tier: "fallback" };
+
     const preferredAreas = (answers.areas as string[]) || [];
     const hasOther = preferredAreas.includes("other");
-    const specificAreas = preferredAreas.filter(a => a !== "other");
+    const specificAreas = preferredAreas.filter((a) => a !== "other");
     const areaKeywords: string[] = [];
-    specificAreas.forEach(area => {
+    specificAreas.forEach((area) => {
       const mapped = AREA_NAME_MAP[area];
       if (mapped) areaKeywords.push(...mapped);
     });
-    const useHardAreaFilter = areaKeywords.length > 0 && !hasOther;
 
-    const filteredProjects = allProjects.filter((project) => {
+    const baseAvailable = allProjects.filter((project) => {
       if (project.is_sold_out) return false;
-      const saleStatusLower = (project.sale_status || "").toLowerCase();
-      if (saleStatusLower.includes("sold") || saleStatusLower.includes("out_of_stock")) return false;
-
-      if (project.handover_date) {
-        const hLower = project.handover_date.toLowerCase();
-        if (!hLower.includes("ready")) {
-          const yearMatch = project.handover_date.match(/\b(20\d{2})\b/);
-          if (yearMatch && parseInt(yearMatch[1]) < 2026) return false;
-        }
-      }
-
-      // NOTE: do not filter on cover_image_url — per Search Integrity rule.
-
-      // Budget hard filter
-      const priceFrom = project.price_from;
-      const budget = answers.budget;
-      if (priceFrom != null) {
-        if (budget === "under-1m" && priceFrom >= 1000000) return false;
-        if (budget === "1m-2m" && (priceFrom < 1000000 || priceFrom >= 2000000)) return false;
-        if (budget === "2m-5m" && (priceFrom < 2000000 || priceFrom >= 5000000)) return false;
-        if (budget === "5m-10m" && (priceFrom < 5000000 || priceFrom >= 10000000)) return false;
-        if (budget === "10m-plus" && priceFrom < 10000000) return false;
-      }
-
-      // Bedroom hard filter
-      const bedrooms = answers.bedrooms;
-      const minBr = project.bedrooms_min;
-      const maxBr = project.bedrooms_max ?? minBr;
-      if (minBr != null) {
-        const minBrNum = minBr ?? 0;
-        const maxBrNum = maxBr ?? minBrNum;
-        if (bedrooms === "studio" && minBrNum > 0) return false;
-        if (bedrooms === "1br" && (minBrNum > 1 || maxBrNum < 1)) return false;
-        if (bedrooms === "2br" && (minBrNum > 2 || maxBrNum < 2)) return false;
-        if (bedrooms === "3br" && (minBrNum > 3 || maxBrNum < 3)) return false;
-        if (bedrooms === "4br-plus" && maxBrNum < 4) return false;
-      }
-
-      // HARD AREA FILTER: Only show projects in selected areas
-      if (useHardAreaFilter) {
-        const projectName = (project.name || "").toLowerCase();
-        const projectLocation = (project.location || "").toLowerCase();
-        const projectAreaName = ((project as any).area_name || "").toLowerCase();
-        const matchesArea = areaKeywords.some(keyword =>
-          projectName.includes(keyword) ||
-          projectLocation.includes(keyword) ||
-          projectAreaName.includes(keyword)
-        );
-        if (!matchesArea) return false;
-      }
-
-      // Timeline hard filter for "ready"
-      const timeline = answers.timeline;
-      if (timeline === "ready") {
-        const handover = (project.handover_date || "").toLowerCase();
-        const constructionStatus = ((project as any).construction_status || "").toLowerCase();
-        if (!handover.includes("ready") && !constructionStatus.includes("ready") && !constructionStatus.includes("completed")) {
-          return false;
-        }
-      }
-
+      const s = (project.sale_status || "").toLowerCase();
+      if (s.includes("sold") || s.includes("out_of_stock")) return false;
       return true;
     });
 
-    return filteredProjects
-      .map((project) => {
-        let score = 100;
+    const matchesArea = (project: any) => {
+      if (!areaKeywords.length) return true;
+      const blob = `${project.name || ""} ${project.location || ""} ${(project as any).area_name || ""}`.toLowerCase();
+      return areaKeywords.some((k) => blob.includes(k));
+    };
+    const matchesBudget = (project: any, tolerance = 0) => {
+      const price = project.price_from;
+      if (price == null) return true;
+      const budget = answers.budget;
+      const tol = 1 + tolerance;
+      const div = 1 - tolerance;
+      if (budget === "under-1m") return price < 1_000_000 * tol;
+      if (budget === "1m-2m") return price >= 1_000_000 * div && price < 2_000_000 * tol;
+      if (budget === "2m-5m") return price >= 2_000_000 * div && price < 5_000_000 * tol;
+      if (budget === "5m-10m") return price >= 5_000_000 * div && price < 10_000_000 * tol;
+      if (budget === "10m-plus") return price >= 10_000_000 * div;
+      return true;
+    };
+    const matchesBedrooms = (project: any, plusMinus = 0) => {
+      const min = project.bedrooms_min;
+      if (min == null) return true;
+      const max = project.bedrooms_max ?? min;
+      const bedrooms = answers.bedrooms;
+      const has = (n: number) => min - plusMinus <= n && max + plusMinus >= n;
+      if (bedrooms === "studio") return min <= plusMinus;
+      if (bedrooms === "1br") return has(1);
+      if (bedrooms === "2br") return has(2);
+      if (bedrooms === "3br") return has(3);
+      if (bedrooms === "4br-plus") return max + plusMinus >= 4;
+      return true;
+    };
+    const matchesTimeline = (project: any, strict = true) => {
+      if (!strict) return true;
+      if (answers.timeline !== "ready") return true;
+      const h = (project.handover_date || "").toLowerCase();
+      const cs = ((project as any).construction_status || "").toLowerCase();
+      return h.includes("ready") || cs.includes("ready") || cs.includes("completed");
+    };
 
-        if (project.price_from) score += 10;
-        if (project.bedrooms_min != null) score += 5;
-        if (project.cover_image_url || project.images?.[0]?.image_url) score += 5;
+    const tryTier = (
+      useArea: boolean,
+      useTimeline: boolean,
+      bedroomPM: number,
+      budgetTol: number
+    ) => {
+      return baseAvailable
+        .filter((p) => (useArea && !hasOther ? matchesArea(p) : true))
+        .filter((p) => matchesBudget(p, budgetTol))
+        .filter((p) => matchesBedrooms(p, bedroomPM))
+        .filter((p) => matchesTimeline(p, useTimeline))
+        .map((p) => ({ ...p, matchScore: scoreProject(p) + 100 }))
+        .sort((a, b) => b.matchScore - a.matchScore);
+    };
 
-        const location = answers.location_type;
-        const projectViews = project.views || [];
-        const locationArr = Array.isArray(location) ? location : (location ? [location] : []);
-        locationArr.forEach((loc: string) => {
-          if (loc === "beachfront" && projectViews.some((v: string) => v.toLowerCase().includes("sea") || v.toLowerCase().includes("beach"))) score += 20;
-          if (loc === "city-center" && projectViews.some((v: string) => v.toLowerCase().includes("city") || v.toLowerCase().includes("skyline"))) score += 20;
-          if (loc === "golf-community" && projectViews.some((v: string) => v.toLowerCase().includes("golf"))) score += 20;
-          if (loc === "suburban" && projectViews.some((v: string) => v.toLowerCase().includes("garden"))) score += 20;
-          if (loc === "flexible") score += 10;
-        });
+    // Tier 1 — Exact
+    let items = tryTier(true, true, 0, 0);
+    if (items.length >= 3) return { items, tier: "exact" };
 
-        const timeline = answers.timeline;
-        const handover = project.handover_date?.toLowerCase() || "";
-        if (timeline === "ready" && handover.includes("ready")) score += 15;
-        if (timeline === "2025" && handover.includes("2025")) score += 15;
-        if (timeline === "2026" && handover.includes("2026")) score += 15;
-        if (timeline === "2027-plus" && (handover.includes("2027") || handover.includes("2028") || handover.includes("2029"))) score += 15;
-        if (timeline === "flexible") score += 10;
+    // Tier 2 — Close: relax timeline, then bedrooms ±1
+    items = tryTier(true, false, 1, 0.1);
+    if (items.length >= 3) return { items, tier: "close" };
 
-        const preferredFeatures = answers.views_and_features as string[] || [];
-        preferredFeatures.forEach((pf) => {
-          if (pf.includes("view") && projectViews.some((v: string) => v.toLowerCase().includes(pf.replace("-view", "")))) score += 5;
-          const projectAmenities = project.amenities || [];
-          if (projectAmenities.some((a: string) => a.toLowerCase().includes(pf.replace("-", " ")))) score += 3;
-        });
+    // Tier 3 — Nearest: drop area + timeline; widen budget/bedrooms
+    items = tryTier(false, false, 2, 0.5);
+    if (items.length >= 3) return { items, tier: "nearest" };
 
-        // Area scoring boost (soft score for when "other" is selected alongside specific areas)
-        if (hasOther && areaKeywords.length > 0) {
-          const projectName = (project.name || "").toLowerCase();
-          const projectLocation = (project.location || "").toLowerCase();
-          areaKeywords.forEach(keyword => {
-            if (projectName.includes(keyword) || projectLocation.includes(keyword)) score += 10;
-          });
-        }
-
-        return { ...project, matchScore: score };
-      })
+    // Tier 4 — Fallback: any available property, ranked by score
+    const fallback = baseAvailable
+      .map((p) => ({ ...p, matchScore: scoreProject(p) }))
       .sort((a, b) => b.matchScore - a.matchScore);
+    return { items: fallback, tier: "fallback" };
   };
+
+  // Back-compat wrapper kept for any other call sites
+  const getRecommendations = () => getTieredRecommendations().items;
+
 
   // All features are now FREE - no payment required
   const needsPayment = false;
