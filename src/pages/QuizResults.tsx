@@ -1641,6 +1641,25 @@ const QuizResults = () => {
           </div>
         )}
 
+        {/* Criteria × Properties comparison table — restored below the #1/#2/#3 cards */}
+        {projects && projects.length > 0 && Object.keys(sessionAnswers).length > 0 && (
+          <>
+            <MatchCriteriaTable answers={sessionAnswers} projects={projects.slice(0, 3)} />
+            <div className="flex justify-center mb-12">
+              <Button
+                data-no-contrast-guard
+                onClick={() => {
+                  document.getElementById("aihf-top-pick")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="aihf-cta aihf-cta-glow font-bold px-8 py-5 text-base rounded-xl"
+              >
+                Back to property #1
+                <ChevronDown className="w-5 h-5 ml-2 rotate-180" />
+              </Button>
+            </div>
+          </>
+        )}
+
         {/* Action Cards */}
         <div data-allow-dark-cta data-no-contrast-guard className="aihf-panel rounded-2xl p-6 mb-12">
           <h3 className="text-lg font-semibold mb-5 flex items-center gap-2">
