@@ -223,6 +223,8 @@ export const OwnerRoutes = () => (
     <Route path="relationships" element={<OwnerRelationships />} />
     <Route path="relationships/revenue" element={<OwnerRelationshipsRevenue />} />
     <Route path="media-ingest" element={<OwnerMediaIngest />} />
+    <Route path="applications" element={<Navigate to="/owner/applications/ai-home-finder" replace />} />
+    <Route path="applications/ai-home-finder" element={<AIHomeFinderSubmissions />} />
     <Route path="news" element={<OwnerNewsHub />} />
     <Route path="market-intel" element={<OwnerMarketIntel />} />
     <Route path="books" element={<OwnerBooks />} />
