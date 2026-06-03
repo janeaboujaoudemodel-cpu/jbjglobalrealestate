@@ -1635,12 +1635,22 @@ const QuizResults = () => {
                     </DropdownMenu>
                   </div>
                   
-                  <Link to={`/project/${projects[0].slug}`}>
-                    <Button className="aihf-cta w-full md:w-auto font-semibold hover:-translate-y-0.5 transition-all duration-300">
-                      View Property
-                      <ArrowRight className="w-4 h-4 ml-2" />
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link to={`/project/${projects[0].slug}`}>
+                      <Button className="aihf-cta w-full md:w-auto font-semibold hover:-translate-y-0.5 transition-all duration-300">
+                        View Property
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                    <Button
+                      type="button"
+                      onClick={() => handleDownloadPropertyBrochure(projects[0], 0)}
+                      className="aihf-outline w-full md:w-auto font-semibold"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Download Brochure
                     </Button>
-                  </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1694,12 +1704,20 @@ const QuizResults = () => {
                           <p className="font-semibold">{bedrooms}</p>
                         </div>
                       </div>
-                      <Link to={`/project/${project.slug}`} className="mt-auto">
+                      <Link to={`/project/${project.slug}`} className="mt-auto mb-3">
                         <Button className="aihf-cta w-full font-semibold">
                           View Property
                           <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
                       </Link>
+                      <Button
+                        type="button"
+                        onClick={() => handleDownloadPropertyBrochure(project, index + 1)}
+                        className="aihf-outline w-full font-semibold text-xs"
+                      >
+                        <Download className="w-3 h-3 mr-1" />
+                        Download Brochure
+                      </Button>
                     </div>
                     {/* Badge Assignment */}
                     <div className="px-5 pb-5">
