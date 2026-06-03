@@ -132,18 +132,20 @@ export function PremiumBook3D({
             style={{ border: `1px solid ${palette.foil}44` }}
           />
 
-          {/* Wordmark + underline + subtitle — ONLY non-compact */}
+          {/* Wordmark + underline + subtitle — ONLY non-compact.
+              Wordmark is kept clear of the foil corner badge (top-right) by
+              insetting left/right and shrinking type. */}
           {!compact && (
             <>
               <div
-                className="absolute top-[12%] inset-x-0 text-center text-[9px] tracking-[0.28em] font-semibold"
+                className="absolute top-[10%] left-[14%] right-[22%] text-left text-[6.5px] tracking-[0.22em] font-semibold whitespace-nowrap overflow-hidden"
                 style={{ color: palette.foil }}
               >
-                JBJ · GLOBAL REAL ESTATE
+                JBJ GLOBAL REAL ESTATE
               </div>
               <div
-                className="absolute top-[18%] left-1/2 -translate-x-1/2 h-px w-[28%]"
-                style={{ background: palette.foil }}
+                className="absolute top-[16%] left-[14%] h-px w-[22%]"
+                style={{ background: `${palette.foil}` }}
               />
               {subtitle && (
                 <div
