@@ -1,116 +1,97 @@
-# AI Home Finder — Never-Empty Matchmaker + Persistence
+# AI Home Finder — Results polish, PDF rebuild & Applications hub
 
-## Goals
+Scope = the AI Home Finder ("Matchmaker") flow only. Champagne/gold theme everywhere else is untouched; this surface stays Tiffany cyan / deep navy.
 
-1. Never show "We couldn't load…" — always return 3 properties: exact matches first, then nearest matches with a transparent label.
-2. Add a **Criteria × Properties** comparison table: user requirements as rows, top 3 properties as columns, with ✓ / ✗ / "≈" cells.
-3. Persist the entire matchmaker session (answers, lead form, results) so refresh/close/reopen resumes from the last reached step (quiz → lead form → results), and offer a "Start a new match" action.
-4. Rename UX from "Quiz" to **Matchmaker** in visible copy (route stays `/quiz-results` for compatibility).
-5. Validate flow A→E in browser with screenshots.
+## 1. Results page UI (`src/pages/QuizResults.tsx`, `MatchCriteriaTable.tsx`)
 
-## 1. Nearest-match fallback (Quiz.tsx → proceedToResults + QuizResults.tsx)
+**a. "View Properties" anchor button** under the criteria table:
+- Renders only when `projects.length > 0`.
+- Tiffany 3D glow CTA (`aihf-cta-glow`) with `ChevronDown` icon, label "View these properties".
+- Smooth-scrolls to a new `#aihf-top-pick` anchor placed on the #1 card.
 
-Tiered scoring instead of binary filter:
+**b. #1 card + "More Great Options" cards** — already have `<Link to="/project/:slug">` View Property. Verify the link, harden the CTA copy ("Explore Property →"), and add a small **"Back to my AI matches"** floating CTA on `/project/:slug` only when the visitor arrived from `/quiz-results` (detect via `document.referrer` or `sessionStorage.matchmaker-return`). The floating CTA returns to `/quiz-results` with the persisted session.
 
-- **Tier 1 — Exact**: passes all hard filters (budget, bedrooms, area, timeline).
-- **Tier 2 — Close**: relax ONE filter at a time, in priority order: area → timeline → bedrooms ±1 → budget ±25%.
-- **Tier 3 — Nearest**: drop area + timeline, keep budget±50% & bedrooms±2.
-- **Tier 4 — Top-rated fallback**: any non-sold-out project, ordered by score.
+**c. Theme the heart / shortlist / Add Badge buttons** to match Tiffany:
+- `FavoriteButton` inside `.aihf-results` already inherits white via CSS — extend `AIHF_RESULTS_STYLE` to repaint heart fill + shortlist icon to `#5EEAD4` / `#22D3EE` on hover + active, with a soft cyan glow.
+- `Add Badge` dropdown trigger: swap `text-[#B89555]` / `bg-[#FDFBF7]` to Tiffany tokens (`bg-[#031E18]`, `border-[#5EEAD4]/40`, `text-[#67E8F9]`); medal labels stay color-coded but on dark surface.
 
-Always return 3 slugs. Pass per-slug match metadata via URL-safe state:
+**d. Price pill fix on cards** (issue circled in screenshot):
+- The "FROM AED 2.8M" pill overflows + uses champagne/grey. Scope a local override inside `.aihf-results .price-pill-premium` so the pill background is a translucent ink tile with a Tiffany hairline (`rgba(94,234,212,0.55)`), `From` chip stays light cyan, value uses `--price-orange`, and the pill auto-wraps (`flex-wrap`, `max-w-full`). Reduce internal padding so it never clips the parent tile.
 
-- New URL params: `tiers=exact,close,nearest` (one per slug) and `relaxed=area|timeline|none`.
-- Or persist full match payload in `sessionStorage` keyed by `session=<id>` (also restored on reload — see §3).
+**e. Criteria table redesign** (`MatchCriteriaTable.tsx`):
+- Lighter cell surface: `rgba(8,47,73,0.55)` / `rgba(14,116,144,0.32)` alternation instead of near-black, with a soft inner cyan glow on the whole panel.
+- Bigger property column headers showing rank pill (#1/#2/#3 in Tiffany gradient) + project name + a thumbnail (40×40 rounded) loaded from `project.cover_image_url`.
+- New **summary footer row** under the body: per property, render two stat chips — `✓ N matched` (emerald) and `✗ M missed` + `≈ K close` (amber). Computed from existing `rows[].cells[i].verdict` counts. The #1 column gets a "Best fit — N/total criteria" callout to justify the ranking.
+- Verdict pills become more readable: 24px circle with brighter foreground (`#34D399`, `#FBBF24`, `#F87171`), bold label, monospace value line.
+- Sticky first column on horizontal scroll for mobile.
 
-Results page banner copy adapts:
-- All exact → "3 perfect matches".
-- Mixed → "1 exact match + 2 closest alternatives".
-- All nearest → "No exact matches in inventory — here are the closest 3 to your criteria".
+## 2. PDF rebuild (`buildPdf` in `QuizResults.tsx`)
 
-Empty state from §current code is removed; replaced by a guaranteed Tier-4 fallback (only if DB truly returns zero published projects, show a single retry CTA — extremely rare).
+Current PDF only ships project detail pages; user wants the criteria table inside the PDF and clickable listing links.
 
-## 2. Criteria × Properties comparison table (new section in QuizResults.tsx)
+- **Page 1 — Cover/Hero**: Tiffany gradient band, monogram, client name + date, "Top 3 AI-Selected Properties for {Full Name}".
+- **Page 2 — Criteria match table**: rebuild with `jspdf-autotable`, columns = `Requirement | #1 | #2 | #3`, each property cell renders verdict glyph (✓ ≈ ✗) + value, color-coded fills (emerald / amber / red @ 18% alpha) — generated from `buildCriteriaRowsForExport(answers, projects)` so the screen + PDF render the **same verdicts**. Footer row = match totals per property.
+- **Page 3 — Side-by-side comparison** (existing attribute table, tightened cell padding so no blank gutters between rows; remove the legacy second `drawPageBg` call that left blank trailing pages).
+- **Pages 4-6 — Per-property detail cards**: keep current layout but add `doc.link()` rectangle over the "Listing URL" row pointing to `https://jbj.ae/project/{slug}` (jsPDF native annotation, so it's clickable in any PDF viewer). Also render the cover image at top of each detail page.
+- Fix the empty-page bug: `didDrawPage: drawPageBg + drawHeader` runs on the autoTable's auto-created next page; we'll guard so we don't `addPage()` before the next section if the table already advanced.
+- Filename: `JBJ-AI-Matchmaker-{LastName}-{YYYYMMDD}.pdf`.
 
-New `<MatchCriteriaTable />` component rendered above the Top-3 cards.
+QA: render the PDF via `pdf-qa` script (existing `scripts/pdf-qa/`) for at least pages 1/2/3 and visually verify no blank gaps, links present.
 
-Columns: Your requirement · Property #1 · Property #2 · Property #3.
+## 3. Backend — save every submission (`supabase` migration + Quiz.tsx)
 
-Rows generated from answers:
+Today `quiz_responses` only saves when `user?.id` exists (anon visitors lost). Also no contact-detail columns.
 
-| Criterion | Your pick | P1 | P2 | P3 |
-|---|---|---|---|---|
-| Budget | AED 2–5M | ✓ 3.4M | ≈ 5.6M | ✓ 4.1M |
-| Bedrooms | 2 BR | ✓ | ✓ | ✗ Studio–1BR |
-| Area | Dubai Marina | ✓ | ≈ JLT (nearby) | ✗ Business Bay |
-| Timeline | Ready by 2026 | ✓ Q4 2025 | ✓ 2026 | ≈ 2027 |
-| Location type | Beachfront | ✓ Sea view | ✗ City | ✓ Marina |
-| Features | Pool, Gym | ✓ ✓ | ✓ ✗ | ✓ ✓ |
+New table:
 
-Cell rendering:
-- `✓` emerald (`#10B981`) on tiffany-tinted panel — match.
-- `≈` amber (`#F59E0B`) — close/partial match (e.g., adjacent area, ±10% budget).
-- `✗` red (`#EF4444`) — does not match.
-
-Each cell also shows the actual value for transparency. The same table is included in the PDF report (`buildPdf`) — adds one new branded autoTable above existing comparison.
-
-## 3. Session persistence (refresh/close-safe)
-
-New `useMatchmakerSession` hook (read/write to `localStorage` under `jbj.matchmaker.session.v1`):
-
+```sql
+CREATE TABLE public.matchmaker_submissions (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  session_id text UNIQUE NOT NULL,
+  user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL,
+  full_name text NOT NULL,
+  email text NOT NULL,
+  phone text NOT NULL,
+  nationality text,
+  preferred_language text,
+  answers jsonb NOT NULL,
+  recommended_slugs text[] NOT NULL,
+  recommended_project_ids uuid[],
+  result_tier text NOT NULL CHECK (result_tier IN ('exact','close','nearest','fallback')),
+  pdf_filename text,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+GRANT SELECT, INSERT ON public.matchmaker_submissions TO anon, authenticated;
+GRANT ALL ON public.matchmaker_submissions TO service_role;
+ALTER TABLE public.matchmaker_submissions ENABLE ROW LEVEL SECURITY;
+-- Anyone can insert (anon allowed = lead capture)
+CREATE POLICY "anyone_can_submit" ON public.matchmaker_submissions FOR INSERT TO anon, authenticated WITH CHECK (true);
+-- Owner/admin only can read
+CREATE POLICY "owner_admin_can_read" ON public.matchmaker_submissions FOR SELECT TO authenticated
+  USING (public.has_role(auth.uid(),'admin') OR public.has_role(auth.uid(),'owner'));
 ```
-{
-  sessionId,
-  step: "quiz" | "lead-form" | "results",
-  answers,
-  currentQuestionIndex,
-  formData,
-  resultSlugs,
-  resultTiers,
-  createdAt,
-  updatedAt
-}
-```
 
-Behavior:
+Quiz.tsx `proceedToResults`: always insert into `matchmaker_submissions` (anon allowed via new policy), in addition to the existing `quiz_responses` write for logged-in users.
 
-- **Quiz.tsx**: on every `setAnswers` / `setCurrentStep` / `setShowForm` → write to storage. On mount, if a session exists and `step !== "completed-discarded"`, restore state silently and show a small dismissable chip: *"Resuming your matchmaker — [Start over]"*.
-- **After `proceedToResults`**: write `step: "results"` + `resultSlugs` before navigating.
-- **QuizResults.tsx**: on mount, if URL has no `projects=` param but session has `resultSlugs`, reconstruct URL via `navigate(..., { replace: true })`. If URL has slugs, just hydrate criteria from session for the comparison table.
-- **"Start a new match" button** on results page: clears storage, routes to `/quiz`. Replaces today's auto-empty fallback to retake.
-- A "Would you like to refine your match?" prompt only appears when user manually returns to `/quiz` while a session exists.
+## 4. Owner hub — "Applications → AI Home Finder"
 
-## 4. Copy rename (Quiz → Matchmaker)
+- Add route `/owner/applications/ai-home-finder` (under the existing owner shell), surfaced from the owner sidebar under a new **Applications** group (also stub `/owner/applications` index listing all app sources).
+- Page shows a list of `matchmaker_submissions` rows: avatar, name, email, phone (with country flag from nationality), submitted at, top-3 project names, tier badge.
+- Row click opens a drawer that renders the **same** report layout the client sees: hero, criteria table, top-3 cards (read-only), contact card with click-to-email / click-to-WhatsApp, and a **"Download PDF"** button reusing `buildPdf` with the stored answers + slugs.
+- Privacy: this route is wrapped in `OwnerGuard`; emails are never shown in any non-owner UI per existing memory.
 
-Visible labels only — files: `Quiz.tsx`, `QuizResults.tsx`, share modal, PDF header.
+## 5. Files
 
-- "Retake the AI quiz" → "Start a new match"
-- "Your AI-Selected Properties" stays.
-- Hero/intro pill: "#1 AI Property Matchmaker" (already correct).
-- Loading/toasts: "Finding your matches…" instead of "Saving quiz…".
-- Routes, query keys, table names untouched.
+- Edit: `src/pages/QuizResults.tsx`, `src/components/matchmaker/MatchCriteriaTable.tsx`, `src/pages/Quiz.tsx`, owner sidebar config.
+- New: `src/pages/owner/AIHomeFinderSubmissionsPage.tsx`, `src/components/matchmaker/SubmissionDetailDrawer.tsx`, migration `add_matchmaker_submissions.sql`.
+- No changes to champagne/gold global theme, no changes outside the AI Home Finder surface.
 
-## 5. Validation (flow A→E with browser tool)
+## 6. Validation
 
-After build:
+A. New anon match end-to-end → submission row appears in DB and `/owner/applications/ai-home-finder`.
+B. Owner opens drawer → same report renders, Download PDF works, email/phone are visible.
+C. Click "View these properties" → page scrolls to #1 card; clicking View Property → project page → "Back to my AI matches" returns to `/quiz-results` with persisted answers.
+D. Download PDF → 1 cover + 1 criteria table page + 1 comparison page + 3 detail pages with clickable listing links, no blank gaps.
+E. Mobile (375px) check: criteria table scrolls horizontally with sticky first column; price pill no longer clips.
 
-- **A**: `/quiz` fresh — answer all questions → see Lead Form → submit → land on `/quiz-results` with 3 cards + new comparison table. Screenshot.
-- **B**: Pick deliberately impossible combo (budget under-1m + Palm Jumeirah + Ready). Confirm Tier-3/4 fallback returns 3 properties with the "closest alternatives" banner and the table shows ≈/✗ cells. Screenshot.
-- **C**: Mid-quiz refresh → resume on same question with answers intact. Screenshot.
-- **D**: Refresh on results page → still shows the same 3 properties + table. Screenshot.
-- **E**: Click "Download Report" → PDF includes branded header, criteria table, top-3 comparison. Click "Share with Consultant" → modal is tiffany-themed. Screenshot.
-
-Console + network checked for errors at each step.
-
-## Technical files touched
-
-- `src/pages/Quiz.tsx` — tiered recommendation engine, persistence writes, copy.
-- `src/pages/QuizResults.tsx` — remove hard empty state, add `<MatchCriteriaTable />`, banner copy by tier, resume from session, PDF additions.
-- `src/components/matchmaker/MatchCriteriaTable.tsx` — new.
-- `src/hooks/useMatchmakerSession.ts` — new.
-- No DB schema changes; existing `quiz_responses` insert kept.
-
-## Out of scope
-
-- Renaming routes/tables.
-- Re-theming unrelated pages.
-- Changing scoring weights beyond the tiered relaxation logic above.
+Awaiting approval before any code changes.

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { Sparkles, ArrowRight, Brain, Download, Award, Share2, Users, X, Mail, MessageCircle, Link as LinkIcon, Building2, RefreshCcw } from "lucide-react";
+import { Sparkles, ArrowRight, Brain, Download, Award, Share2, Users, X, Mail, MessageCircle, Link as LinkIcon, Building2, RefreshCcw, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import FavoriteButton from "@/components/FavoriteButton";
@@ -87,11 +87,54 @@ const AIHF_RESULTS_STYLE = `
     background: rgba(5,28,24,0.82) !important;
     border: 1px solid rgba(45,212,191,0.55) !important;
   }
-  .aihf-results .price-pill-premium, .aihf-results .price-pill-premium * {
-    color: #1A1A1A !important;
-    -webkit-text-fill-color: #1A1A1A !important;
+  /* Price pill — repaint inside AI Home Finder so it doesn't bleed champagne/gold */
+  .aihf-results .price-pill-premium {
+    background: linear-gradient(135deg, rgba(2,17,15,0.92) 0%, rgba(3,30,24,0.92) 100%) !important;
+    border: 1px solid rgba(94,234,212,0.55) !important;
+    box-shadow: inset 0 0 18px rgba(103,232,249,0.08) !important;
+    max-width: 100% !important;
+    flex-wrap: wrap !important;
+    padding: 6px 10px !important;
   }
-  .aihf-results .price-pill-value { color: var(--price-orange) !important; -webkit-text-fill-color: var(--price-orange) !important; }
+  .aihf-results .price-pill-eyebrow {
+    color: #67E8F9 !important;
+    -webkit-text-fill-color: #67E8F9 !important;
+    background: rgba(94,234,212,0.12) !important;
+    border-color: rgba(94,234,212,0.40) !important;
+  }
+  .aihf-results .price-pill-value {
+    color: var(--price-orange) !important;
+    -webkit-text-fill-color: var(--price-orange) !important;
+  }
+  /* Favorite/Heart + shortlist buttons — Tiffany cyan inside results */
+  .aihf-results [data-favorite-button] svg,
+  .aihf-results [data-shortlist-button] svg {
+    stroke: #5EEAD4 !important;
+    color: #5EEAD4 !important;
+    filter: drop-shadow(0 0 6px rgba(94,234,212,0.45));
+  }
+  .aihf-results [data-favorite-button][data-active="true"] svg,
+  .aihf-results [data-favorite-button].is-active svg {
+    fill: #22D3EE !important;
+    stroke: #22D3EE !important;
+  }
+  /* Tiffany dropdown menu (Add Badge) */
+  .aihf-results [role="menu"],
+  [data-aihf-menu] {
+    background: linear-gradient(160deg, #04161C 0%, #031E18 100%) !important;
+    border: 1px solid rgba(94,234,212,0.55) !important;
+    box-shadow: 0 20px 50px rgba(34,211,238,0.25) !important;
+  }
+  [data-aihf-menu] [role="menuitem"] {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+  }
+  [data-aihf-menu] [role="menuitem"]:hover,
+  [data-aihf-menu] [role="menuitem"]:focus {
+    background: rgba(94,234,212,0.15) !important;
+    color: #5EEAD4 !important;
+    -webkit-text-fill-color: #5EEAD4 !important;
+  }
 `;
 
 
@@ -685,7 +728,21 @@ const QuizResults = () => {
 
         {/* Criteria × Properties tick table */}
         {projects && projects.length > 0 && Object.keys(sessionAnswers).length > 0 && (
-          <MatchCriteriaTable answers={sessionAnswers} projects={projects.slice(0, 3)} />
+          <>
+            <MatchCriteriaTable answers={sessionAnswers} projects={projects.slice(0, 3)} />
+            <div className="flex justify-center mb-12">
+              <Button
+                data-no-contrast-guard
+                onClick={() => {
+                  document.getElementById("aihf-top-pick")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="aihf-cta aihf-cta-glow font-bold px-8 py-5 text-base rounded-xl"
+              >
+                View these properties
+                <ChevronDown className="w-5 h-5 ml-2" />
+              </Button>
+            </div>
+          </>
         )}
 
         {/* Empty state — only shown if DB returned literally nothing */}
@@ -708,7 +765,7 @@ const QuizResults = () => {
         {projects && projects.length > 0 && (
 
           <div className="mb-12">
-            <div className="aihf-panel relative backdrop-blur-sm rounded-3xl overflow-hidden">
+            <div id="aihf-top-pick" className="aihf-panel relative backdrop-blur-sm rounded-3xl overflow-hidden scroll-mt-24">
               <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
                 <div className="bg-gradient-to-r from-[#5EEAD4] to-[#22D3EE] text-sm font-semibold px-4 py-1.5 rounded-full">
                   #1 Best Match
@@ -764,7 +821,8 @@ const QuizResults = () => {
                           {badges[projects[0].id] ? 'Change Badge' : 'Add Badge'}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="bg-[#FDFBF7] border-[#B89555]/30">
+                      <DropdownMenuContent data-aihf-menu className="border-0">
+
                         <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top1')} className="text-[#B89555] hover:bg-[#B89555]/10">
                           Top 1 — Gold
                         </DropdownMenuItem>
@@ -858,7 +916,7 @@ const QuizResults = () => {
                             {badge ? 'Change Badge' : 'Add Badge'}
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="bg-[#FDFBF7] border-[#B89555]/30">
+                        <DropdownMenuContent data-aihf-menu className="border-0">
                           <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-[#B89555] hover:bg-[#B89555]/10">
                             Top 1 — Gold
                           </DropdownMenuItem>

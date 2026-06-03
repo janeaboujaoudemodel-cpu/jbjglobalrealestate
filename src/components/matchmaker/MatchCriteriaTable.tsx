@@ -308,16 +308,37 @@ const verdictStyles: Record<
   },
 };
 
+export function computeMatchTotals(rows: CriterionRow[], projectIndex: number) {
+  let match = 0, close = 0, miss = 0;
+  for (const r of rows) {
+    const c = r.cells[projectIndex];
+    if (!c) continue;
+    if (c.verdict === "match") match++;
+    else if (c.verdict === "close") close++;
+    else miss++;
+  }
+  return { match, close, miss, total: rows.length };
+}
+
 export default function MatchCriteriaTable({ answers, projects }: Props) {
   const rows = buildRows(answers, projects);
   if (!rows.length || !projects.length) return null;
 
+  const totals = projects.map((_, i) => computeMatchTotals(rows, i));
+
   return (
     <div
       data-no-contrast-guard
-      className="aihf-panel rounded-2xl p-5 md:p-7 mb-10 overflow-x-auto"
+      className="aihf-panel rounded-2xl p-5 md:p-7 mb-8 overflow-x-auto"
+      style={{
+        background:
+          "linear-gradient(160deg, rgba(8,47,73,0.55) 0%, rgba(3,30,24,0.85) 100%)",
+        border: "1px solid rgba(94,234,212,0.55)",
+        boxShadow:
+          "0 30px 80px rgba(34,211,238,0.18), inset 0 0 40px rgba(103,232,249,0.08)",
+      }}
     >
-      <div className="flex items-center justify-between gap-4 mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
         <div>
           <h3 className="text-lg md:text-xl font-semibold mb-1">
             How each property matches your requirements
@@ -326,7 +347,7 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
             ✓ exact match · ≈ close fit · ✗ does not match — actual value shown in each cell.
           </p>
         </div>
-        <div className="hidden md:flex items-center gap-3 text-xs aihf-muted">
+        <div className="flex items-center gap-3 text-xs aihf-muted">
           <Legend verdict="match" />
           <Legend verdict="close" />
           <Legend verdict="miss" />
@@ -337,30 +358,73 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
         <thead>
           <tr>
             <th
-              className="text-left text-xs font-semibold uppercase tracking-wide p-3"
-              style={{ color: "#67E8F9" }}
+              className="text-left text-xs font-semibold uppercase tracking-wide p-3 sticky left-0"
+              style={{
+                color: "#67E8F9",
+                background: "rgba(3,30,24,0.95)",
+                minWidth: 170,
+              }}
             >
               Your requirement
             </th>
-            {projects.map((p, i) => (
-              <th
-                key={p.id || i}
-                className="text-left text-xs font-semibold uppercase tracking-wide p-3"
-                style={{ color: "#67E8F9" }}
-              >
-                #{i + 1} · {p.name}
-              </th>
-            ))}
+            {projects.map((p, i) => {
+              const rankBg =
+                i === 0
+                  ? "linear-gradient(135deg, #5EEAD4 0%, #22D3EE 100%)"
+                  : i === 1
+                  ? "linear-gradient(135deg, #22D3EE 0%, #0E7490 100%)"
+                  : "linear-gradient(135deg, #0E7490 0%, #031E18 100%)";
+              return (
+                <th
+                  key={p.id || i}
+                  className="text-left text-xs font-semibold uppercase tracking-wide p-3 align-bottom"
+                  style={{ color: "#67E8F9", minWidth: 220 }}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    {p.cover_image_url ? (
+                      <img
+                        src={p.cover_image_url}
+                        alt=""
+                        className="w-10 h-10 rounded-lg object-cover"
+                        style={{ border: "1px solid rgba(94,234,212,0.45)" }}
+                      />
+                    ) : null}
+                    <div className="flex flex-col gap-1">
+                      <span
+                        className="inline-flex items-center justify-center rounded-full px-2 py-0.5 text-[10px] font-bold"
+                        style={{
+                          background: rankBg,
+                          color: "#02110F",
+                          letterSpacing: "0.04em",
+                        }}
+                      >
+                        #{i + 1}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    className="text-sm font-bold normal-case tracking-normal leading-tight"
+                    style={{ color: "#FFFFFF" }}
+                  >
+                    {p.name}
+                  </div>
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>
           {rows.map((row, ri) => (
             <tr key={row.label}>
               <td
-                className="align-top p-3 text-sm"
+                className="align-top p-3 text-sm sticky left-0"
                 style={{
-                  background: ri % 2 ? "rgba(2,17,15,0.55)" : "rgba(4,56,50,0.40)",
-                  borderTop: "1px solid rgba(45,212,191,0.25)",
+                  background:
+                    ri % 2
+                      ? "rgba(8,47,73,0.55)"
+                      : "rgba(14,116,144,0.32)",
+                  borderTop: "1px solid rgba(94,234,212,0.28)",
+                  minWidth: 170,
                 }}
               >
                 <div className="font-semibold mb-0.5">{row.label}</div>
@@ -374,8 +438,11 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
                     key={ci}
                     className="align-top p-3 text-sm"
                     style={{
-                      background: ri % 2 ? "rgba(2,17,15,0.55)" : "rgba(3,30,24,0.55)",
-                      borderTop: "1px solid rgba(45,212,191,0.25)",
+                      background:
+                        ri % 2
+                          ? "rgba(8,47,73,0.45)"
+                          : "rgba(14,116,144,0.22)",
+                      borderTop: "1px solid rgba(94,234,212,0.22)",
                     }}
                   >
                     <div className="flex items-start gap-2">
@@ -393,7 +460,9 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
                         <div className="text-xs font-semibold" style={{ color: s.fg }}>
                           {s.label}
                         </div>
-                        <div className="text-sm leading-snug">{cell.value}</div>
+                        <div className="text-sm leading-snug" style={{ color: "#FFFFFF" }}>
+                          {cell.value}
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -401,6 +470,71 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
               })}
             </tr>
           ))}
+
+          {/* Summary footer row */}
+          <tr>
+            <td
+              className="align-top p-3 sticky left-0"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(94,234,212,0.18) 0%, rgba(34,211,238,0.10) 100%)",
+                borderTop: "2px solid rgba(94,234,212,0.55)",
+                minWidth: 170,
+              }}
+            >
+              <div className="text-xs font-bold uppercase tracking-wide" style={{ color: "#67E8F9" }}>
+                Match summary
+              </div>
+              <div className="aihf-muted text-[11px] mt-0.5">
+                Why we ranked them this way
+              </div>
+            </td>
+            {totals.map((t, i) => (
+              <td
+                key={i}
+                className="align-top p-3"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(94,234,212,0.10) 0%, rgba(3,30,24,0.55) 100%)",
+                  borderTop: "2px solid rgba(94,234,212,0.55)",
+                }}
+              >
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span
+                    className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold"
+                    style={{ background: "rgba(16,185,129,0.22)", border: "1px solid rgba(16,185,129,0.55)", color: "#34D399" }}
+                  >
+                    <Check className="w-3 h-3" style={{ stroke: "#34D399" }} />
+                    {t.match} matched
+                  </span>
+                  {t.close > 0 && (
+                    <span
+                      className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold"
+                      style={{ background: "rgba(245,158,11,0.22)", border: "1px solid rgba(245,158,11,0.55)", color: "#FBBF24" }}
+                    >
+                      <Minus className="w-3 h-3" style={{ stroke: "#FBBF24" }} />
+                      {t.close} close
+                    </span>
+                  )}
+                  <span
+                    className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold"
+                    style={{ background: "rgba(239,68,68,0.18)", border: "1px solid rgba(239,68,68,0.55)", color: "#F87171" }}
+                  >
+                    <X className="w-3 h-3" style={{ stroke: "#F87171" }} />
+                    {t.miss} missed
+                  </span>
+                </div>
+                <div
+                  className="mt-1.5 text-[11px] font-semibold"
+                  style={{ color: i === 0 ? "#5EEAD4" : "#67E8F9" }}
+                >
+                  {i === 0
+                    ? `Best fit — ${t.match}/${t.total} criteria`
+                    : `${t.match}/${t.total} criteria met`}
+                </div>
+              </td>
+            ))}
+          </tr>
         </tbody>
       </table>
     </div>
@@ -430,3 +564,5 @@ export function buildCriteriaRowsForExport(
 ): CriterionRow[] {
   return buildRows(answers, projects);
 }
+
+export type { CriterionRow, RowCell, Verdict };

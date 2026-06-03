@@ -23578,6 +23578,63 @@ export type Database = {
         }
         Relationships: []
       }
+      matchmaker_submissions: {
+        Row: {
+          answers: Json
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          nationality: string | null
+          pdf_filename: string | null
+          phone: string
+          preferred_language: string | null
+          recommended_project_ids: string[] | null
+          recommended_slugs: string[]
+          referrer: string | null
+          result_tier: string
+          session_id: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          answers: Json
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          nationality?: string | null
+          pdf_filename?: string | null
+          phone: string
+          preferred_language?: string | null
+          recommended_project_ids?: string[] | null
+          recommended_slugs?: string[]
+          referrer?: string | null
+          result_tier?: string
+          session_id: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          nationality?: string | null
+          pdf_filename?: string | null
+          phone?: string
+          preferred_language?: string | null
+          recommended_project_ids?: string[] | null
+          recommended_slugs?: string[]
+          referrer?: string | null
+          result_tier?: string
+          session_id?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       material_ingestion_jobs: {
         Row: {
           ai_summary: string | null
