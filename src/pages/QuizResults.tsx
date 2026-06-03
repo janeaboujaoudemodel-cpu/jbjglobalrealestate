@@ -765,7 +765,7 @@ const QuizResults = () => {
         {projects && projects.length > 0 && (
 
           <div className="mb-12">
-            <div className="aihf-panel relative backdrop-blur-sm rounded-3xl overflow-hidden">
+            <div id="aihf-top-pick" className="aihf-panel relative backdrop-blur-sm rounded-3xl overflow-hidden scroll-mt-24">
               <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
                 <div className="bg-gradient-to-r from-[#5EEAD4] to-[#22D3EE] text-sm font-semibold px-4 py-1.5 rounded-full">
                   #1 Best Match
