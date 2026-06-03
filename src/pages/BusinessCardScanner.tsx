@@ -405,6 +405,18 @@ const BusinessCardScanner = () => {
           "radial-gradient(1200px 700px at 50% -10%, rgba(251,113,133,0.18), transparent 60%), linear-gradient(180deg, #050912 0%, #07101F 60%, #04070D 100%)",
       }}
     >
+      {/* Scoped scanner contrast lock */}
+      <style>{`
+        .bcs-tab[data-state="inactive"]:hover { background: rgba(251,113,133,0.16) !important; color: #FFFFFF !important; }
+        .bcs-tab[data-state="inactive"]:hover svg { color: #FFFFFF !important; }
+        .bcs-tab[data-state="active"] { background: #f43f5e !important; color: #FFFFFF !important; }
+        .bcs-tab[data-state="active"] svg { color: #FFFFFF !important; }
+        .bcs-consent-box:hover { box-shadow: 0 0 0 4px rgba(251,113,133,0.18); }
+        .bcs-drop { border: 2px dashed rgba(251,113,133,0.55) !important; background: rgba(255,255,255,0.03) !important; }
+        .bcs-drop:hover, .bcs-drop.is-dragging { border-color: #fb7185 !important; background: rgba(251,113,133,0.08) !important; }
+        .bcs-drop * { color: #FFFFFF !important; }
+        .bcs-drop .bcs-drop-sub { color: rgba(255,255,255,0.72) !important; }
+      `}</style>
       <div className="container mx-auto px-4 pt-6 pb-8 max-w-6xl">
         {/* Header (no black strip — sits flush on the rose-navy page) */}
         <div
