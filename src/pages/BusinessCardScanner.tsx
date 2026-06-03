@@ -403,8 +403,8 @@ const BusinessCardScanner = () => {
         </div>
 
         {/* Privacy Alert */}
-        <Alert className="mb-6 border-rose-500/40 bg-rose-900/30">
-          <Info className="h-4 w-4 text-[#1A1A1A]" />
+        <Alert className="mb-6 border-rose-500/40 bg-rose-900/30" data-no-contrast-guard>
+          <Info className="h-4 w-4 text-rose-200" />
           <AlertDescription className="text-sm text-white/85">
             <strong className="text-white">Your privacy matters:</strong> All scanned data is encrypted with a key only you possess. 
             Data is processed in-memory and never stored on our servers.
