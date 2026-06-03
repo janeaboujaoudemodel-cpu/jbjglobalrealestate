@@ -899,7 +899,7 @@ const QuizResults = () => {
 
       const cHead = [
         "Your Requirement",
-        ...top.map((p, i) => `#${i + 1}  ${p.name}`),
+        ...top.map((p, i) => `      #${i + 1}  ${p.name}`),
       ];
       const cBody = criteriaRows.map((row) => [
         `${row.label}\n${row.userPick}`,
@@ -938,7 +938,8 @@ const QuizResults = () => {
           textColor: ink,
           fontStyle: "bold",
           fontSize: 10.5,
-          cellPadding: 9,
+          cellPadding: 10,
+          minCellHeight: 38,
           halign: "left",
           valign: "middle",
         },
@@ -967,6 +968,21 @@ const QuizResults = () => {
             data.cell.styles.fillColor = [6, 60, 70];
             data.cell.styles.fontStyle = "bold";
             data.cell.styles.textColor = tiffanyLight;
+          }
+        },
+        didDrawCell: (data) => {
+          if (data.section === "head" && data.column.index > 0) {
+            const cov = covers[data.column.index - 1];
+            if (cov) {
+              try {
+                doc.addImage(cov.data, cov.type, data.cell.x + 8, data.cell.y + 7, 24, 24, undefined, "FAST");
+                doc.setDrawColor(...ink);
+                doc.setLineWidth(0.4);
+                doc.roundedRect(data.cell.x + 8, data.cell.y + 7, 24, 24, 4, 4, "S");
+              } catch {
+                /* ignore header thumb */
+              }
+            }
           }
         },
       });
