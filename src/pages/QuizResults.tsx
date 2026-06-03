@@ -197,31 +197,40 @@ const AIHF_RESULTS_STYLE = `
     -webkit-text-fill-color: #67E8F9 !important;
   }
 
-  /* Share dialog X close — tiffany pill (override shadcn default white-on-accent) */
-  .aihf-results > button[aria-label="Close"],
-  [data-aihf-dialog] > button[aria-label="Close"] {
-    color: #5EEAD4 !important;
-    background: rgba(94,234,212,0.12) !important;
-    border: 1px solid rgba(94,234,212,0.55) !important;
+  /* Share dialog X close — Tiffany glow pill (override shadcn's champagne/gold default).
+     The shadcn DialogContent renders <DialogPrimitive.Close> as a direct <button>
+     child with a sr-only "Close" span — no aria-label. We target it as the
+     absolute-positioned direct button child of our aihf dialog. */
+  [data-aihf-dialog] > button,
+  .aihf-results > button[aria-label="Close"] {
+    background: linear-gradient(135deg, rgba(94,234,212,0.18) 0%, rgba(34,211,238,0.22) 100%) !important;
+    background-image: linear-gradient(135deg, rgba(94,234,212,0.18) 0%, rgba(34,211,238,0.22) 100%) !important;
+    border: 1px solid rgba(94,234,212,0.75) !important;
     border-radius: 9999px !important;
     opacity: 1 !important;
-    width: 32px; height: 32px;
-    display: inline-flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 18px rgba(94,234,212,0.35) !important;
-  }
-  .aihf-results > button[aria-label="Close"]:hover,
-  [data-aihf-dialog] > button[aria-label="Close"]:hover {
-    background: rgba(94,234,212,0.24) !important;
+    box-shadow:
+      0 0 18px rgba(94,234,212,0.55),
+      inset 0 0 10px rgba(103,232,249,0.18) !important;
     color: #67E8F9 !important;
-    box-shadow: 0 0 26px rgba(94,234,212,0.6) !important;
   }
+  [data-aihf-dialog] > button:hover,
+  .aihf-results > button[aria-label="Close"]:hover {
+    background: linear-gradient(135deg, rgba(94,234,212,0.32) 0%, rgba(34,211,238,0.36) 100%) !important;
+    background-image: linear-gradient(135deg, rgba(94,234,212,0.32) 0%, rgba(34,211,238,0.36) 100%) !important;
+    border-color: rgba(103,232,249,0.95) !important;
+    box-shadow:
+      0 0 28px rgba(94,234,212,0.85),
+      inset 0 0 14px rgba(103,232,249,0.28) !important;
+    transform: translateY(-1px);
+  }
+  [data-aihf-dialog] > button svg,
+  [data-aihf-dialog] > button svg *,
   .aihf-results > button[aria-label="Close"] svg,
-  [data-aihf-dialog] > button[aria-label="Close"] svg,
-  .aihf-results > button[aria-label="Close"] svg *,
-  [data-aihf-dialog] > button[aria-label="Close"] svg * {
+  .aihf-results > button[aria-label="Close"] svg * {
     color: #5EEAD4 !important;
     stroke: #5EEAD4 !important;
     -webkit-text-fill-color: #5EEAD4 !important;
+    filter: drop-shadow(0 0 6px rgba(94,234,212,0.7));
   }
 `;
 
