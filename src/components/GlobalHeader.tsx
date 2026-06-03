@@ -603,21 +603,39 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       style={{ '--header-height': 'var(--responsive-header-height)' } as React.CSSProperties}
       data-tour-target="header"
     >
-      {/* Transparent-state top-fade mask — hides hero content from bleeding under the header on scroll */}
+      {/* ─── DESKTOP (lg+) ─────────────────────────────────────────── */}
+      {/* Transparent-state top-fade scrim — desktop keeps the dark gradient over hero video. */}
       <div
-        className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`}
+        className={`hidden lg:block absolute inset-0 pointer-events-none transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`}
         style={{
           background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 55%, rgba(0,0,0,0) 100%)',
         }}
         aria-hidden="true"
       />
+      {/* Solid champagne bar — desktop only on scroll. */}
+      <div
+        className={`hidden lg:block absolute inset-0 transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
+        style={{ background: '#FDFBF7' }}
+        aria-hidden="true"
+      />
 
-      {/* Solid header background — flat page tone, no seam against hero */}
-      <div 
-        className={`absolute inset-0 transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
+      {/* ─── MOBILE / TABLET (< lg) ────────────────────────────────── */}
+      {/* At rest over a dark hero: frosted "fiberglass" bar so the hero feels full-bleed with white logo/text legible. */}
+      <div
+        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(!showSolidBackground && isTransparentRoute) ? "opacity-100" : "opacity-0"}`}
         style={{
-          background: '#FDFBF7',
+          background:
+            'linear-gradient(to bottom, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.06) 60%, rgba(0,0,0,0.18) 100%)',
+          backdropFilter: 'blur(16px) saturate(140%)',
+          WebkitBackdropFilter: 'blur(16px) saturate(140%)',
         }}
+        aria-hidden="true"
+      />
+      {/* On scroll OR non-transparent routes: champagne to match desktop chrome. */}
+      <div
+        className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${(showSolidBackground || !isTransparentRoute) ? "opacity-100" : "opacity-0"}`}
+        style={{ background: '#FDFBF7' }}
+        aria-hidden="true"
       />
       
       {/* Subtle ambient glow at top */}
