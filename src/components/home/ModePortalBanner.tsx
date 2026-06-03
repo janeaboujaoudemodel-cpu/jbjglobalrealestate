@@ -44,8 +44,9 @@ const MODE_CONFIG = {
 
 export default function ModePortalBanner() {
   const { mode } = useUserModeContext();
-  const cfg = MODE_CONFIG[mode];
+  const cfg = MODE_CONFIG[mode as keyof typeof MODE_CONFIG] ?? MODE_CONFIG.investor;
   const Icon = cfg.icon;
+
 
   return (
     <motion.div
