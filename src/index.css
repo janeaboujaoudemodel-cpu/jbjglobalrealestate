@@ -5894,3 +5894,18 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   border-radius: 9999px;
   box-shadow: 0 0 14px rgba(34,211,238,0.55);
 }
+
+/* Dark veil over photo hero backgrounds inside neon page (legibility) */
+[data-neon-page] section [style*="background-image"]::before,
+[data-neon-page] [class*="bg-[url"]::before,
+[data-neon-page] [class*="bg-cover"][style*="background-image"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(4,6,15,0.78) 0%, rgba(6,10,26,0.92) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+[data-neon-page] section [style*="background-image"] { position: relative; }
+[data-neon-page] section [style*="background-image"] > * { position: relative; z-index: 1; }
