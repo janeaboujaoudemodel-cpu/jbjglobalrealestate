@@ -92,7 +92,8 @@ export const FAQHero = ({
           
           {/* Title */}
           <motion.h1 
-            className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight allow-white"
+            className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight allow-white"
+            style={{ color: "#F6FBF8" }}
             data-no-contrast-guard
             variants={fadeInUp}
           >
@@ -101,7 +102,8 @@ export const FAQHero = ({
           
           {/* Description */}
           <motion.p 
-            className="text-lg md:text-xl text-white/85 font-light leading-relaxed max-w-3xl mx-auto mb-10 allow-white"
+            className="text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto mb-10 allow-white"
+            style={{ color: "rgba(246,251,248,0.85)" }}
             data-no-contrast-guard
             variants={fadeInUp}
           >

@@ -154,7 +154,7 @@ const FAQ = () => {
         badgeIcon={HelpCircle}
         title={
           <>
-            Your Questions <span className="text-[#1A1A1A]">Answered</span>
+            Your Questions <span className="bg-gradient-to-r from-cyan-300 via-violet-300 to-pink-300 bg-clip-text text-transparent">Answered</span>
           </>
         }
         description="Find clear answers to the most common questions about buying, selling, and owning property in the UAE."
