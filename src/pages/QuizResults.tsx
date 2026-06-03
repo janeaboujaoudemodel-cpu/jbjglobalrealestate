@@ -639,23 +639,6 @@ const QuizResults = () => {
       return y;
     };
 
-    // Strip HTML tags from rich descriptions stored in DB.
-    const stripHtml = (s?: string | null) =>
-      (s || "")
-        .replace(/<style[^>]*>.*?<\/style>/gis, "")
-        .replace(/<script[^>]*>.*?<\/script>/gis, "")
-        .replace(/<br\s*\/?>/gi, "\n")
-        .replace(/<\/p>/gi, "\n\n")
-        .replace(/<[^>]+>/g, "")
-        .replace(/&nbsp;/g, " ")
-        .replace(/&amp;/g, "&")
-        .replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">")
-        .replace(/&#39;|&apos;/g, "'")
-        .replace(/&quot;/g, '"')
-        .replace(/\n{3,}/g, "\n\n")
-        .trim();
-
     const top = projects.slice(0, 3);
     const rankLabels = ["#1 Best Match", "#2 Strong Fit", "#3 Good Fit"];
     const rankFills: [number, number, number][] = [tiffanyLight, tiffany, tiffanyDeep];
