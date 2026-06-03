@@ -452,10 +452,10 @@ const QuizResults = () => {
         [14, 165, 233],
         [3, 105, 161],
       ];
-      doc.setFillColor(5, 42, 48);
-      doc.roundedRect(x - 4, y - 13, doc.getTextWidth(text) + 10, 18, 6, 6, "F");
       doc.setFont("helvetica", "bold");
       doc.setFontSize(13);
+      doc.setFillColor(5, 42, 48);
+      doc.roundedRect(x - 4, y - 13, doc.getTextWidth(text) + 10, 18, 6, 6, "F");
       let cursor = x;
       segments.forEach((segment, idx) => {
         doc.setTextColor(...colors[idx]);
