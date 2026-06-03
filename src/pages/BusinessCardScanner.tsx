@@ -51,8 +51,6 @@ const BusinessCardScanner = () => {
   const [activeTab, setActiveTab] = useState<"camera" | "upload">("camera");
   const [scannedContacts, setScannedContacts] = useState<ScannedContact[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [showPrivacyNotice, setShowPrivacyNotice] = useState(true);
-  const [consentGiven, setConsentGiven] = useState(false);
   const [encryptionKey, setEncryptionKey] = useState<string | null>(null);
   const [showEncryptedData, setShowEncryptedData] = useState(false);
   const stepUp = useStepUpAuth();
@@ -373,19 +371,6 @@ const BusinessCardScanner = () => {
     stepUp.requireStepUp("Export Business Cards (Excel)", "normal", doExportExcel);
   };
 
-  if (showPrivacyNotice && !consentGiven) {
-    return (
-      <BusinessCardPrivacyNotice 
-        onAccept={() => {
-          setConsentGiven(true);
-          setShowPrivacyNotice(false);
-        }}
-        onDecline={() => {
-          toast.info("You must accept the privacy terms to use this tool");
-        }}
-      />
-    );
-  }
 
   return (
     <ToolAnimatedFrame theme={toolThemes.rose}>
@@ -530,7 +515,7 @@ const BusinessCardScanner = () => {
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="camera">
+                <TabsContent value="camera" className="min-h-[560px]">
                   <BusinessCardCamera
                     onScanComplete={handleScanComplete}
                     isProcessing={isProcessing}
@@ -539,7 +524,7 @@ const BusinessCardScanner = () => {
                   />
                 </TabsContent>
 
-                <TabsContent value="upload">
+                <TabsContent value="upload" className="min-h-[560px]">
                   <BusinessCardUpload
                     onScanComplete={handleScanComplete}
                     isProcessing={isProcessing}
@@ -681,12 +666,6 @@ const BusinessCardScanner = () => {
             <Shield className="h-3 w-3 inline mr-1 text-rose-300 allow-white" />
             Platform analytics track only usage counts, never personal contact data.
           </p>
-          <button
-            onClick={() => setShowPrivacyNotice(true)}
-            className="text-rose-300 hover:underline allow-white"
-          >
-            View Privacy Policy
-          </button>
         </div>
       </div>
 

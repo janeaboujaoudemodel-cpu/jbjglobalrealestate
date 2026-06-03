@@ -171,7 +171,7 @@ const BusinessCardUpload = ({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`bcs-drop rounded-xl p-8 text-center transition-colors ${isDragging ? "is-dragging" : ""}`}
+        className={`bcs-drop rounded-xl p-8 text-center transition-colors flex items-center justify-center min-h-[460px] ${isDragging ? "is-dragging" : ""}`}
         style={{
           border: `2px dashed ${ACCENT_BORDER}`,
           background: isDragging ? "rgba(251,113,133,0.10)" : "rgba(255,255,255,0.03)",
