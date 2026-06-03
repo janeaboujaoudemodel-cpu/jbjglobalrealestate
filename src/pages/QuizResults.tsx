@@ -440,7 +440,31 @@ const QuizResults = () => {
       month: "long",
       year: "numeric",
     });
+    const clientName = (matchmakerFormData?.fullName || "").trim();
+    const preparedLine = clientName ? `Prepared for ${clientName} · ${dateStr}` : `Prepared exclusively · ${dateStr}`;
     const monogram = await loadMonogram();
+
+    const drawOmbreWordmark = (text: string, x: number, y: number) => {
+      const segments = ["JBJ ", "GLOBAL ", "REAL ", "ESTATE"];
+      const colors: [number, number, number][] = [
+        [94, 234, 212],
+        [34, 211, 238],
+        [14, 165, 233],
+        [3, 105, 161],
+      ];
+      doc.setFillColor(94, 234, 212);
+      doc.setGState(new (doc as any).GState({ opacity: 0.16 }));
+      doc.roundedRect(x - 4, y - 13, doc.getTextWidth(text) + 10, 18, 6, 6, "F");
+      doc.setGState(new (doc as any).GState({ opacity: 1 }));
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(13);
+      let cursor = x;
+      segments.forEach((segment, idx) => {
+        doc.setTextColor(...colors[idx]);
+        doc.text(segment, cursor, y);
+        cursor += doc.getTextWidth(segment);
+      });
+    };
 
     const drawPageBg = () => {
       doc.setFillColor(...ink);
@@ -459,7 +483,7 @@ const QuizResults = () => {
       // Tiffany hairline accent under monogram chip
       doc.setDrawColor(...tiffany);
       doc.setLineWidth(0.6);
-      doc.line(M, HEADER_H - 0.5, pageW - M, HEADER_H - 0.5);
+      doc.line(0, HEADER_H - 0.5, pageW, HEADER_H - 0.5);
 
       // Monogram chip — ink square + tiffany hairline ring
       const chipSize = 54;
@@ -480,23 +504,20 @@ const QuizResults = () => {
 
       // Wordmark + tagline
       const tx = chipX + chipSize + 14;
-      doc.setTextColor(...white);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(13);
-      doc.text("JBJ GLOBAL REAL ESTATE", tx, chipY + 22);
+      drawOmbreWordmark("JBJ GLOBAL REAL ESTATE", tx, chipY + 22);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.setTextColor(...tiffanyLight);
       doc.text("AI Home Finder  |  Personalized Recommendations", tx, chipY + 38);
 
-      // Date right
+      // Prepared-for line, not a confidentiality warning
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.setTextColor(...tiffanyDim);
-      doc.text(dateStr, pageW - M, chipY + 22, { align: "right" });
+      doc.text(preparedLine, pageW - M, chipY + 22, { align: "right" });
       doc.setTextColor(...tiffanyDim);
       doc.setFontSize(7.5);
-      doc.text("Confidential — for the addressee only", pageW - M, chipY + 38, {
+      doc.text("Curated by JBJ GLOBAL REAL ESTATE", pageW - M, chipY + 38, {
         align: "right",
       });
     };
@@ -505,7 +526,7 @@ const QuizResults = () => {
       // Tiffany hairline
       doc.setDrawColor(...tiffany);
       doc.setLineWidth(0.5);
-      doc.line(M, pageH - FOOTER_H, pageW - M, pageH - FOOTER_H);
+      doc.line(0, pageH - FOOTER_H, pageW, pageH - FOOTER_H);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8);
       doc.setTextColor(...tiffanyMuted);
