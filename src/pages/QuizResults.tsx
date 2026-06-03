@@ -1252,6 +1252,109 @@ const QuizResults = () => {
     setTimeout(() => URL.revokeObjectURL(url), 4000);
   };
 
+  const handleDownloadPropertyBrochure = async (project: any, rankIndex: number) => {
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const M = 42;
+    const ink: [number, number, number] = [2, 17, 15];
+    const navy: [number, number, number] = [4, 22, 28];
+    const tiffany: [number, number, number] = [94, 234, 212];
+    const cyan: [number, number, number] = [34, 211, 238];
+    const white: [number, number, number] = [255, 255, 255];
+    const muted: [number, number, number] = [205, 245, 245];
+    const fmtBedsLocal = (p: any) =>
+      p.bedrooms_min != null && p.bedrooms_max != null
+        ? p.bedrooms_min === 0
+          ? `Studio${p.bedrooms_max > 0 ? `-${p.bedrooms_max} BR` : ""}`
+          : `${p.bedrooms_min}-${p.bedrooms_max} BR`
+        : "Type TBC";
+    const fmtPriceLocal = (p: any) => {
+      if (!p.price_from) return "Price on Request";
+      const lo = `AED ${(p.price_from / 1_000_000).toFixed(1)}M`;
+      return p.price_to && p.price_to > p.price_from ? `${lo} - AED ${(p.price_to / 1_000_000).toFixed(1)}M` : `From ${lo}`;
+    };
+    doc.setFillColor(...ink);
+    doc.rect(0, 0, pageW, pageH, "F");
+    doc.setFillColor(...navy);
+    doc.rect(0, 0, pageW, 76, "F");
+    doc.setDrawColor(...cyan);
+    doc.setLineWidth(0.7);
+    doc.line(0, 76, pageW, 76);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.setTextColor(...tiffany);
+    doc.text("JBJ GLOBAL REAL ESTATE", M, 34);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(...muted);
+    doc.text(`Property #${rankIndex + 1} brochure · AI Home Finder`, M, 52);
+    let y = 108;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.setTextColor(...white);
+    doc.text(project.name || "Property brochure", M, y);
+    y += 16;
+    doc.setFontSize(10);
+    doc.setTextColor(...tiffany);
+    doc.text(`by ${project.developer?.name || "JBJ GLOBAL REAL ESTATE"}`, M, y);
+    y += 18;
+    const cover = await loadImageAsDataUrl(project.cover_image_url || project.images?.[0]?.image_url || null, 3500);
+    if (cover) {
+      try { doc.addImage(cover.data, cover.type, M, y, pageW - 2 * M, 210, undefined, "FAST"); } catch { /* ignore */ }
+      doc.setDrawColor(...tiffany);
+      doc.roundedRect(M, y, pageW - 2 * M, 210, 8, 8, "S");
+      y += 232;
+    }
+    const facts = [
+      ["Location", `${project.location || "Dubai"}${project.emirate ? `, ${project.emirate}` : ""}`],
+      ["Price", fmtPriceLocal(project)],
+      ["Bedrooms", fmtBedsLocal(project)],
+      ["Handover", project.handover_date || "TBA"],
+    ];
+    const colW = (pageW - 2 * M - 12) / 2;
+    facts.forEach((f, i) => {
+      const x = M + (i % 2) * (colW + 12);
+      const yy = y + Math.floor(i / 2) * 42;
+      doc.setFillColor(5, 38, 44);
+      doc.setDrawColor(16, 90, 100);
+      doc.roundedRect(x, yy, colW, 34, 6, 6, "FD");
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.setTextColor(...tiffany);
+      doc.text(f[0].toUpperCase(), x + 10, yy + 13);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(...white);
+      doc.text(String(f[1]), x + 10, yy + 27);
+    });
+    y += 96;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(...tiffany);
+    doc.text("Presentation overview", M, y);
+    y += 18;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(...muted);
+    for (const paragraph of buildPropertyPresentationParagraphs(project, 3)) {
+      const lines = doc.splitTextToSize(paragraph, pageW - 2 * M) as string[];
+      lines.slice(0, 5).forEach((line) => { doc.text(line, M, y); y += 13; });
+      y += 5;
+      if (y > pageH - 90) break;
+    }
+    const url = `${window.location.origin}/project/${project.slug}`;
+    doc.setTextColor(...tiffany);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.text("View full listing:", M, pageH - 58);
+    const linkLines = doc.splitTextToSize(url.replace(/([/?&=#-])/g, "$1\u200B"), pageW - 2 * M - 92) as string[];
+    doc.text(linkLines.map((l) => l.replace(/\u200B/g, "")).slice(0, 2), M + 88, pageH - 58);
+    doc.link(M + 88, pageH - 70, pageW - 2 * M - 92, 28, { url });
+    triggerDownload(doc.output("blob"), `JBJ-${project.slug}-Brochure.pdf`);
+    toast.success("Property brochure downloaded");
+  };
+
   // Cache the most recent generated PDF (blob + filename) so share handlers can attach it
   const [lastPdf, setLastPdf] = useState<{ blob: Blob; filename: string } | null>(null);
 
