@@ -435,7 +435,7 @@ const QuizResults = () => {
       doc.setFontSize(8);
       doc.setTextColor(...tiffanyMuted);
       doc.text("Powered by JBJ Global Real Estate — Brokerage | Dubai, UAE", 36, pageH - 32);
-      doc.text("CONTACT@JBJ.AE  ·  www.jbj.ae", 36, pageH - 20);
+      doc.text("CONTACT@JBJ.AE  |  www.jbj.ae", 36, pageH - 20);
       doc.text(`Page ${pageNum} / ${total}`, pageW - 36, pageH - 20, { align: "right" });
     };
 
