@@ -40,15 +40,12 @@ const MortgageCalculatorPage = () => {
         className="allow-white relative w-full min-h-screen overflow-hidden"
         style={{ background: "#05060F" }}
       >
-        {/* Neon orbs */}
+        {/* Extra accent orb (page shell already provides cyan+magenta) */}
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full blur-3xl opacity-40"
-               style={{ background: "radial-gradient(circle, #06B6D4 0%, transparent 70%)", animation: "neonDrift 18s ease-in-out infinite" }} />
-          <div className="absolute top-1/3 -right-40 w-[600px] h-[600px] rounded-full blur-3xl opacity-30"
-               style={{ background: "radial-gradient(circle, #FF3DCB 0%, transparent 70%)", animation: "neonDrift 22s ease-in-out infinite reverse" }} />
-          <div className="absolute bottom-0 left-1/3 w-[460px] h-[460px] rounded-full blur-3xl opacity-25"
-               style={{ background: "radial-gradient(circle, #A78BFA 0%, transparent 70%)", animation: "neonDrift 26s ease-in-out infinite" }} />
+          <div className="absolute bottom-0 left-1/3 w-[460px] h-[460px] rounded-full blur-3xl opacity-30"
+               style={{ background: "radial-gradient(circle, #A78BFA 0%, transparent 70%)", animation: "jjNeonPageOrb 26s ease-in-out infinite" }} />
         </div>
+
 
         {/* Hero */}
         <div className="relative py-16 md:py-24 overflow-hidden">
