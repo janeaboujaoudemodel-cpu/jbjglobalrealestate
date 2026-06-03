@@ -515,7 +515,7 @@ const BusinessCardScanner = () => {
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="camera">
+                <TabsContent value="camera" className="min-h-[560px]">
                   <BusinessCardCamera
                     onScanComplete={handleScanComplete}
                     isProcessing={isProcessing}
@@ -524,7 +524,7 @@ const BusinessCardScanner = () => {
                   />
                 </TabsContent>
 
-                <TabsContent value="upload">
+                <TabsContent value="upload" className="min-h-[560px]">
                   <BusinessCardUpload
                     onScanComplete={handleScanComplete}
                     isProcessing={isProcessing}
