@@ -527,9 +527,10 @@ const Quiz = () => {
         data-allow-dark-cta
         data-no-contrast-guard
         data-on-dark
-        className="allow-white min-h-screen flex flex-col"
+        className="aihf-root allow-white min-h-screen flex flex-col"
         style={{ background: "#04161C" }}
       >
+        <style>{AIHF_STYLE}</style>
         {/* Header */}
         <div className="border-b border-[rgba(94,234,212,0.25)] backdrop-blur-sm" style={{ background: "rgba(4,22,28,0.6)" }}>
           <div className="container mx-auto px-4 py-4">
@@ -666,14 +667,16 @@ const Quiz = () => {
   // Form Screen after completing questions
   if (showForm) {
     return (
-      <section className="min-h-screen bg-gradient-to-b from-[#02110F] via-[#031E18] to-[#020B0A] flex flex-col">
+      <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-root min-h-screen bg-gradient-to-b from-[#02110F] via-[#031E18] to-[#020B0A] flex flex-col">
+        <style>{AIHF_STYLE}</style>
         {/* Header */}
         <div className="border-b border-[#2DD4BF]/20 bg-[#02110F]/60 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setShowForm(false)}
-                className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
+                data-no-contrast-guard
+                className="allow-white text-white transition-colors flex items-center gap-2"
               >
                 <ChevronLeft className="w-5 h-5" />
                 Back to Questions
@@ -693,7 +696,7 @@ const Quiz = () => {
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#2DD4BF] to-[#06B6D4] mx-auto mb-4 flex items-center justify-center shadow-lg shadow-[#2DD4BF]/30">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
-              <h2 className="text-[#02110F] text-3xl font-bold mb-2">
+               <h2 className="text-white text-3xl font-bold mb-2">
                 Get Your AI Analysis
               </h2>
               <p className="text-white/70">
@@ -741,8 +744,8 @@ const Quiz = () => {
                     placeholder="Select your nationality"
                     searchPlaceholder="Search countries..."
                     priorityItem="United Arab Emirates"
-                    triggerClassName="bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
-                    className="bg-[#051C18] border-[#2DD4BF]/30"
+                    triggerClassName="aihf-input bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
+                    className="aihf-popover bg-[#051C18] border-[#2DD4BF]/30"
                   />
                 </div>
                 <div>
@@ -754,8 +757,8 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
-                    triggerClassName="bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
-                    className="bg-[#051C18] border-[#2DD4BF]/30"
+                    triggerClassName="aihf-input bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
+                    className="aihf-popover bg-[#051C18] border-[#2DD4BF]/30"
                   />
                 </div>
               </div>
@@ -763,7 +766,7 @@ const Quiz = () => {
               <Button
                 onClick={handleSubmitForm}
                 disabled={!isFormValid() || isSubmitting}
-                className={`w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
+                className={`aihf-cta w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
                   needsPayment
                     ? "bg-gradient-to-r from-[#2DD4BF] to-[#06B6D4] text-[#02110F] hover:brightness-110"
                     : "bg-gradient-to-r from-[#2DD4BF] to-[#06B6D4] text-[#02110F] hover:brightness-110"
@@ -814,7 +817,8 @@ const Quiz = () => {
   // Quiz Questions Screen
   return (
     <ToolAnimatedFrame theme={toolThemes.teal}>
-    <section className="min-h-screen bg-gradient-to-b from-[#02110F] via-[#031E18] to-[#020B0A] flex flex-col">
+    <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-root min-h-screen bg-gradient-to-b from-[#02110F] via-[#031E18] to-[#020B0A] flex flex-col">
+      <style>{AIHF_STYLE}</style>
       {/* Header */}
       <div className="border-b border-[#2DD4BF]/20 bg-[#02110F]/60 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
         <div className="container mx-auto px-4 py-4">
