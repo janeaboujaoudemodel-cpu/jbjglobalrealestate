@@ -883,9 +883,12 @@ const QuizResults = () => {
         <div className="text-center">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <Link to="/">
-              <Button data-allow-dark-cta className="bg-[#102540] text-white hover:bg-[#1a3d63] hover:text-white [&_svg]:text-white font-semibold px-6 py-3 border border-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+              <Button
+                data-no-contrast-guard
+                className="aihf-cta aihf-cta-glow font-bold px-10 py-6 text-base rounded-xl"
+              >
                 Browse All Properties
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
           </div>
