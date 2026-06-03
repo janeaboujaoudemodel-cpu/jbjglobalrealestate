@@ -1,51 +1,47 @@
-Plan to fix the Business Card Scanner properly:
+I will fix the Business Card Scanner in one focused pass:
 
-1. Visual + contrast rebuild
-- Fix the privacy checkbox checked state so the checkbox fill stays light/rose and the tick is solid black/ink, never faded.
-- Add a scanner-specific contrast lock so dark navy/rose Business Card Scanner surfaces always keep readable white text and rose/ink icons.
-- Rebuild the main scanner screen spacing so the “JBJ AI Business Card Scanner” panel is not cropped from the top or inside the card.
-- Replace all remaining beige/white/gold camera UI pieces with the scanner’s rose neon theme: camera icon, Open Camera button, guide borders, tips, status bar, captured-card previews, tab controls, and action buttons.
-- Fix white borders that should be rose neon, and fix all broken “Ensure good lighting / Hold steady / Fill the frame” contrast.
+1. Privacy checkbox tick
+- Replace the privacy consent checkbox styling with a locked inline SVG/check state so the checked tick is always solid black on a white/rose control.
+- Add a local scanner-only CSS lock so global button/checkbox contrast rules cannot repaint it white again.
 
-2. Camera behavior fix
-- Stop the camera from disappearing after permission is granted by stabilizing stream/video state and removing stale closure issues.
-- Always show a visible live video area when the camera is active.
-- Always show Stop Camera, Switch Camera, Capture, and Process controls while active.
-- Stop all camera tracks on Stop, tab switch, unmount, and errors so the laptop camera indicator turns off reliably.
-- Add a clear fallback state when the browser/device blocks camera access, while keeping upload/photo scanning available.
+2. Remove the black block above the scanner header
+- Rework the page wrapper/header spacing so the area above “AI Business Card Scanner” uses the same rose/navy scanner background instead of a separate black strip.
+- Keep the whole tool inside one continuous rose-neon/dark navy surface.
 
-3. OCR, front/back, and QR handling
-- Support one or multiple captures/uploads for front/back scans, then merge extracted fields into one contact when they appear to belong together.
-- Update `business-card-ocr` to extract business-card text plus QR-code content when visible.
-- If QR is a plain URL, store the URL.
-- If QR points to a contact/landing page, fetch and extract only public contact information from that page, then merge it into the contact without fabricating missing data.
-- Keep source metadata as `business_card_scanner` / `business_card_scan` consistently for CRM filtering.
+3. Camera controls and camera flip
+- Change the switch-camera and X/stop buttons from champagne/white to rose-neon dark controls with readable white/rose icons.
+- Fix the reverse/switch camera logic so it toggles the facing mode first, fully releases the old stream, then starts the new stream using the next facing mode.
+- Keep the live video preview stable and avoid mirrored/reversed capture issues by applying the correct preview/canvas transform for front camera.
 
-4. Access rules for brokers/developers/owner/investors
-- Update the gated tool access matrix:
-  - Owner/admin: visible and always unlocked.
-  - Approved brokers/developers: visible and unlocked.
-  - Unapproved brokers/developers: visible but locked behind Request Access.
-  - Investors: hidden from hubs/navigation and redirected away from the route.
-- Extend the current gated tool system so developer mode is treated like broker mode for restricted professional tools, but still requires approval.
-- Replace the current request-only CRM lead fallback with a real approval-backed access record so “Request Access” can actually unlock the tool after approval.
+4. Upload tab contrast
+- Rebuild the upload drop zone, dashed border, upload icon, Select Images CTA, previews, remove buttons, and process button in the same rose-neon scanner palette.
+- Fix hover states for inactive Camera/Upload tabs so they never turn champagne/white-on-white.
 
-5. CRM save + scanned-card history
-- Persist each scan into saved scanned-card history for the current user, including original card image(s), extracted fields, category/contact type, source, status, and CRM lead id when saved.
-- Add actions to select one/multiple cards, delete, restore, hide, clear/bulk delete, and keep scanned cards.
-- Add category/contact-type assignment before saving to CRM.
-- Save leads into CRM with source `business_card_scanner` so filters can show exactly which leads came from scanner.
-- Keep duplicate detection and merge/update/append-note actions.
+5. Do not add invalid photos as scanned contacts
+- Add a validation helper that requires real business-card/contact evidence before adding an OCR result to Scanned Contacts.
+- If the image has no name/company/email/phone/website/social/contact text, show a “not a business card” message and do not add it to the scanned list or CRM-ready list.
+- Disable per-contact CRM save when contact details are missing or still need review.
 
-6. Export combined business card file
-- Add PDF export that groups scanned cards by category/contact type.
-- Each section includes the business-card photo(s) and extracted details.
-- Keep CSV/Excel export, but make PDF the “copy to keep” option requested.
+6. CRM wiring inside this tool
+- Convert the right-side section from only “Scanned Contacts” to a scanner-themed CRM review panel showing:
+  - extracted scanner contacts,
+  - CRM save status,
+  - source label `business_card_scanner`,
+  - clear invalid/not-ready state,
+  - CRM-ready actions only when data exists.
+- Keep CRM page colors unchanged elsewhere; only this embedded CRM panel gets the scanner rose-neon palette.
+- Rename/save actions so they only appear when the contact can actually be saved.
 
-7. Backend deployment + validation
-- Add required database migration(s) with RLS and grants for scanned-card history and tool access requests/grants.
-- Redeploy the affected backend functions after code changes.
-- Validate technically with targeted checks and function smoke tests.
-- Validate visually using browser screenshots at desktop and mobile/tablet sizes.
-- Validate E2E flow: privacy accept, open camera UI, stop camera, upload/scan image, OCR response, save to CRM, saved history, restore/delete, and export.
-- I will only report complete after I have screenshot proof and the technical validation results.
+7. Delete behavior safety
+- Keep delete/clear inside Business Card Scanner local-only: deleting a scanned card removes it from the scanner/session list only.
+- It will not delete the matching CRM lead. CRM deletion remains restricted to the CRM page/filter workflow.
+- Update the UI copy/status so this rule is clear and not misleading.
+
+8. Validation
+- After implementation, validate technically with targeted checks for the touched scanner code.
+- Validate visually with fresh screenshots of:
+  - privacy screen checked state,
+  - main scanner page,
+  - camera active controls,
+  - upload tab.
+- I will report the visual/technical validation results after the changes are implemented.

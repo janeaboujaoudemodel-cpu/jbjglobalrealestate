@@ -186,12 +186,59 @@ const BusinessCardCamera = ({
     }
   }, [facingMode, starting]);
 
-  const switchCamera = useCallback(() => {
-    stopCamera();
-    setFacingMode((p) => (p === "user" ? "environment" : "user"));
-    // small delay so the previous stream releases the device
-    setTimeout(() => startCamera(), 150);
-  }, [stopCamera, startCamera]);
+  const switchCamera = useCallback(async () => {
+    const next: "user" | "environment" = facingMode === "user" ? "environment" : "user";
+    // Stop current stream first
+    const s = streamRef.current;
+    if (s) {
+      s.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+    if (videoRef.current) {
+      try { videoRef.current.pause(); } catch {}
+      videoRef.current.srcObject = null;
+    }
+    setIsCameraReady(false);
+
+    setFacingMode(next);
+    setStatusMessage(`Switching to ${next === "user" ? "front" : "rear"} camera…`);
+
+    // Try the requested facing mode directly (do not rely on state, which is async)
+    setStarting(true);
+    setCameraError(null);
+    const attempts: MediaStreamConstraints[] = [
+      { video: { facingMode: { exact: next } } },
+      { video: { facingMode: next, width: { ideal: 1280 }, height: { ideal: 720 } } },
+      { video: { facingMode: next } },
+      { video: true },
+    ];
+    let mediaStream: MediaStream | null = null;
+    for (const c of attempts) {
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia(c);
+        if (mediaStream) break;
+      } catch {}
+    }
+    if (!mediaStream) {
+      setCameraError("Could not switch camera. Your device may only have one camera.");
+      setStarting(false);
+      toast.error("Couldn't switch camera — only one camera available?");
+      return;
+    }
+    streamRef.current = mediaStream;
+    setIsCameraReady(true);
+    await new Promise((r) => requestAnimationFrame(() => r(null)));
+    const video = videoRef.current;
+    if (video) {
+      video.srcObject = mediaStream;
+      video.muted = true;
+      video.playsInline = true;
+      try { await video.play(); } catch {}
+    }
+    setStatusMessage(`Camera ready (${next === "user" ? "front" : "rear"}).`);
+    setStarting(false);
+    toast.success(`Switched to ${next === "user" ? "front" : "rear"} camera`);
+  }, [facingMode]);
 
   const captureImage = useCallback(() => {
     const video = videoRef.current;
@@ -388,7 +435,10 @@ const BusinessCardCamera = ({
           playsInline
           muted
           autoPlay
-          style={{ visibility: isCameraReady ? "visible" : "hidden" }}
+          style={{
+            visibility: isCameraReady ? "visible" : "hidden",
+            transform: facingMode === "user" ? "scaleX(-1)" : "none",
+          }}
         />
 
         {!isCameraReady && (
@@ -541,13 +591,14 @@ const BusinessCardCamera = ({
             data-no-contrast-guard
             className="allow-white h-11 w-11 p-0 rounded-full"
             style={{
-              background: "rgba(255,255,255,0.05)",
+              background: "rgba(7,16,31,0.92)",
               border: `1px solid ${ACCENT_BORDER}`,
               color: "#FFFFFF",
+              boxShadow: `inset 0 0 0 1px rgba(251,113,133,0.18)`,
             }}
             title="Switch camera"
           >
-            <SwitchCamera className="h-4 w-4 allow-white" />
+            <SwitchCamera className="h-4 w-4 allow-white" style={{ color: "#FFFFFF" }} />
           </Button>
 
           <Button
@@ -573,9 +624,10 @@ const BusinessCardCamera = ({
             data-no-contrast-guard
             className="allow-white h-11 w-11 p-0 rounded-full"
             style={{
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(248,113,113,0.55)",
+              background: "rgba(7,16,31,0.92)",
+              border: "1px solid rgba(248,113,113,0.65)",
               color: "#fca5a5",
+              boxShadow: `inset 0 0 0 1px rgba(248,113,113,0.2)`,
             }}
             title="Stop camera"
           >

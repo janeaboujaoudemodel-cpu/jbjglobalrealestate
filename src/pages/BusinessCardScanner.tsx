@@ -126,7 +126,9 @@ const BusinessCardScanner = () => {
 
   const handleDeleteContact = (id: string) => {
     setScannedContacts(prev => prev.filter(c => c.id !== id));
-    toast.success("Contact deleted");
+    toast.success("Removed from scanner. CRM record (if saved) is untouched — delete from the CRM page.", {
+      duration: 5000,
+    });
   };
 
   const handleClearAll = () => {
@@ -135,8 +137,21 @@ const BusinessCardScanner = () => {
     const newKey = generateEncryptionKey();
     sessionStorage.setItem('bcs_encryption_key', newKey);
     setEncryptionKey(newKey);
-    toast.success("All data cleared and encryption key regenerated");
+    toast.success("Scanner cleared. Any CRM-saved contacts remain in the CRM.", {
+      duration: 5000,
+    });
   };
+
+  /** A scan is "saveable" only if it has at least one strong contact signal. */
+  const isContactValid = (c: ScannedContact) =>
+    Boolean(
+      (c.email && c.email.includes("@")) ||
+        c.mobile ||
+        c.phone ||
+        c.whatsapp ||
+        c.landline ||
+        (c.name && (c.company || c.company_name)),
+    );
 
   // Duplicate confirmation dialog state
   const [dupDialog, setDupDialog] = useState<{
@@ -199,6 +214,14 @@ const BusinessCardScanner = () => {
       toast.error("Please sign in to save to CRM");
       return;
     }
+    if (!isContactValid(contact)) {
+      toast.error(
+        "No contact details detected — this card can't be saved to CRM. Edit the fields first or remove it.",
+        { duration: 5000 },
+      );
+      updateContactState(id, { saveStatus: "error" });
+      return;
+    }
     updateContactState(id, { saveStatus: "saving" });
     const { data, error } = await supabase.functions.invoke("crm-save-scanned-card", {
       body: { ...buildPayload(contact), action: "check" },
@@ -222,9 +245,15 @@ const BusinessCardScanner = () => {
       toast.error("No contacts to save");
       return;
     }
+    const saveable = scannedContacts.filter(isContactValid);
+    const skipped = scannedContacts.length - saveable.length;
+    if (saveable.length === 0) {
+      toast.error("None of the scanned items contain enough contact info to save to CRM.");
+      return;
+    }
     let okCount = 0;
     let dupCount = 0;
-    for (const c of scannedContacts) {
+    for (const c of saveable) {
       if (c.saveStatus === "saved") continue;
       updateContactState(c.id, { saveStatus: "saving" });
       const { data } = await supabase.functions.invoke("crm-save-scanned-card", {
@@ -232,7 +261,6 @@ const BusinessCardScanner = () => {
       });
       if (data?.status === "duplicate" && data?.existing) {
         dupCount++;
-        // Default behavior for bulk: merge (enrich) instead of duplicating
         const r = await callSave(c, "merge", data.existing.id);
         if (r) okCount++;
       } else {
@@ -241,7 +269,7 @@ const BusinessCardScanner = () => {
       }
     }
     toast.success(
-      `Saved ${okCount} contact(s) to CRM${dupCount > 0 ? ` (${dupCount} merged into existing)` : ""}`
+      `Saved ${okCount} contact(s) to CRM${dupCount > 0 ? ` (${dupCount} merged into existing)` : ""}${skipped > 0 ? ` — ${skipped} skipped (no contact details)` : ""}`,
     );
   };
 
@@ -371,11 +399,34 @@ const BusinessCardScanner = () => {
     <div
       data-no-contrast-guard
       data-allow-dark-cta
-      className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950"
+      className="min-h-screen"
+      style={{
+        background:
+          "radial-gradient(1200px 700px at 50% -10%, rgba(251,113,133,0.18), transparent 60%), linear-gradient(180deg, #050912 0%, #07101F 60%, #04070D 100%)",
+      }}
     >
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-rose-900/40 via-rose-800/30 to-rose-900/40 border-b border-rose-500/40 -mx-4 px-4 py-8 mb-8">
+      {/* Scoped scanner contrast lock */}
+      <style>{`
+        .bcs-tab[data-state="inactive"]:hover { background: rgba(251,113,133,0.16) !important; color: #FFFFFF !important; }
+        .bcs-tab[data-state="inactive"]:hover svg { color: #FFFFFF !important; }
+        .bcs-tab[data-state="active"] { background: #f43f5e !important; color: #FFFFFF !important; }
+        .bcs-tab[data-state="active"] svg { color: #FFFFFF !important; }
+        .bcs-consent-box:hover { box-shadow: 0 0 0 4px rgba(251,113,133,0.18); }
+        .bcs-drop { border: 2px dashed rgba(251,113,133,0.55) !important; background: rgba(255,255,255,0.03) !important; }
+        .bcs-drop:hover, .bcs-drop.is-dragging { border-color: #fb7185 !important; background: rgba(251,113,133,0.08) !important; }
+        .bcs-drop * { color: #FFFFFF !important; }
+        .bcs-drop .bcs-drop-sub { color: rgba(255,255,255,0.72) !important; }
+      `}</style>
+      <div className="container mx-auto px-4 pt-6 pb-8 max-w-6xl">
+        {/* Header (no black strip — sits flush on the rose-navy page) */}
+        <div
+          className="rounded-2xl border border-rose-500/40 px-4 py-8 mb-8"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(159,18,57,0.35) 0%, rgba(7,16,31,0.55) 60%, rgba(159,18,57,0.30) 100%)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+          }}
+        >
           <div className="text-center">
             <div className="inline-flex items-center gap-2 bg-rose-500/25 border border-rose-500/50 rounded-full px-4 py-1 mb-4 allow-white" data-no-contrast-guard>
               <Sparkles className="w-4 h-4 text-rose-200 allow-white" />
@@ -441,14 +492,16 @@ const BusinessCardScanner = () => {
             <CardContent>
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "camera" | "upload")}>
                 <TabsList
-                  className="grid w-full grid-cols-2 mb-4 border border-rose-500/40 allow-white"
+                  className="bcs-tabs grid w-full grid-cols-2 mb-4 border border-rose-500/40 allow-white"
                   data-no-contrast-guard
                   style={{ background: "rgba(255,255,255,0.04)" }}
                 >
                   <TabsTrigger
                     value="camera"
                     data-no-contrast-guard
-                    className="gap-2 text-white/80 allow-white data-[state=active]:bg-rose-500 data-[state=active]:text-white"
+                    data-allow-dark-cta
+                    className="bcs-tab gap-2 allow-white data-[state=active]:bg-rose-500 data-[state=active]:text-white"
+                    style={{ color: activeTab === "camera" ? "#FFFFFF" : "rgba(255,255,255,0.78)" }}
                   >
                     <Camera className="h-4 w-4 allow-white" />
                     Camera
@@ -456,7 +509,9 @@ const BusinessCardScanner = () => {
                   <TabsTrigger
                     value="upload"
                     data-no-contrast-guard
-                    className="gap-2 text-white/80 allow-white data-[state=active]:bg-rose-500 data-[state=active]:text-white"
+                    data-allow-dark-cta
+                    className="bcs-tab gap-2 allow-white data-[state=active]:bg-rose-500 data-[state=active]:text-white"
+                    style={{ color: activeTab === "upload" ? "#FFFFFF" : "rgba(255,255,255,0.78)" }}
                   >
                     <Upload className="h-4 w-4 allow-white" />
                     Upload
@@ -547,9 +602,14 @@ const BusinessCardScanner = () => {
           >
             <CardContent className="py-4">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-2 text-sm text-white/90 allow-white">
-                  <Lock className="h-4 w-4 text-rose-300 allow-white" />
-                  <span>All data encrypted with your session key</span>
+                <div className="flex flex-col gap-1 text-sm text-white/90 allow-white">
+                  <div className="flex items-center gap-2">
+                    <Lock className="h-4 w-4 text-rose-300 allow-white" />
+                    <span>All data encrypted with your session key</span>
+                  </div>
+                  <div className="text-[11px] text-white/65 allow-white">
+                    Delete here only clears the scanner. CRM records remain — manage them on the CRM page.
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">

@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { useState } from "react";
 import {
   Shield,
@@ -8,7 +7,6 @@ import {
   Trash2,
   Server,
   UserCheck,
-  Check,
   CheckCircle2,
   XCircle,
 } from "lucide-react";
@@ -169,22 +167,41 @@ const BusinessCardPrivacyNotice = ({
             className="flex items-center gap-2 cursor-pointer flex-1 allow-white"
             style={{ color: "rgba(255,255,255,0.92)" }}
           >
-            <CheckboxPrimitive.Root
+            <button
+              type="button"
+              role="checkbox"
               id="privacy-consent"
-              checked={agreed}
-              onCheckedChange={(checked) => setAgreed(checked === true)}
+              aria-checked={agreed}
+              onClick={(e) => {
+                e.preventDefault();
+                setAgreed((v) => !v);
+              }}
               data-no-contrast-guard
               data-allow-dark-cta
-              className="peer h-5 w-5 shrink-0 rounded-[5px] flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07101F]"
+              className="bcs-consent-box peer h-5 w-5 shrink-0 rounded-[5px] flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07101F]"
               style={{
                 backgroundColor: agreed ? "#FFFFFF" : "rgba(255,255,255,0.06)",
                 border: `1.5px solid ${agreed ? "#FFFFFF" : ACCENT_BORDER}`,
+                padding: 0,
               }}
             >
-              <CheckboxPrimitive.Indicator className="flex items-center justify-center">
-                <Check className="h-4 w-4" style={{ color: "#0A0A0A", stroke: "#0A0A0A" }} strokeWidth={3.5} />
-              </CheckboxPrimitive.Indicator>
-            </CheckboxPrimitive.Root>
+              {agreed && (
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#000000"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ color: "#000000", display: "block" }}
+                  aria-hidden="true"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              )}
+            </button>
             <span className="text-sm leading-snug">
               I understand and agree to the privacy terms.
             </span>
