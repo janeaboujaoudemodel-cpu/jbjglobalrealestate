@@ -274,9 +274,23 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     shouldUseMobileHeader &&
     isHomeHeroPath &&
     typeof window !== "undefined" &&
-    window.scrollY <= 120;
+    window.scrollY <= window.innerHeight * 0.45;
   const showMobileFiberglass = isTransparentRoute && (isFullyTransparent || mobileHeroAtRest);
   const showMobileChampagne = !showMobileFiberglass && (showSolidBackground || !isTransparentRoute);
+  const mobileFiberglassBackground =
+    'linear-gradient(180deg, hsl(211 60% 16% / 0.78) 0%, hsl(211 60% 16% / 0.64) 56%, hsl(211 60% 16% / 0.48) 100%), linear-gradient(90deg, hsl(0 0% 100% / 0.12), hsl(0 0% 100% / 0.03) 42%, hsl(40 35% 53% / 0.10))';
+  const headerShellStyle: React.CSSProperties = {
+    '--header-height': 'var(--responsive-header-height)',
+    ...(showMobileFiberglass
+      ? {
+          background: mobileFiberglassBackground,
+          backdropFilter: 'blur(22px) saturate(170%)',
+          WebkitBackdropFilter: 'blur(22px) saturate(170%)',
+        }
+      : showMobileChampagne && shouldUseMobileHeader
+        ? { background: '#FDFBF7' }
+        : {}),
+  } as React.CSSProperties;
 
 
   const mobileHeaderIconButtonClassName =
@@ -609,7 +623,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         "fixed top-0 left-0 right-0 z-[9999] h-24 sm:h-28 lg:h-32 overflow-visible transition-all duration-300",
         filterBarActive && "-translate-y-full opacity-0 pointer-events-none"
       )}
-      style={{ '--header-height': 'var(--responsive-header-height)' } as React.CSSProperties}
+      style={headerShellStyle}
       data-tour-target="header"
     >
       {/* ─── DESKTOP (lg+) ─────────────────────────────────────────── */}
@@ -633,8 +647,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       <div
         className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${showMobileFiberglass ? "opacity-100" : "opacity-0"}`}
         style={{
-          background:
-            'linear-gradient(180deg, hsl(211 60% 16% / 0.78) 0%, hsl(211 60% 16% / 0.64) 56%, hsl(211 60% 16% / 0.48) 100%), linear-gradient(90deg, hsl(0 0% 100% / 0.12), hsl(0 0% 100% / 0.03) 42%, hsl(40 35% 53% / 0.10))',
+          background: mobileFiberglassBackground,
           backdropFilter: 'blur(22px) saturate(170%)',
           WebkitBackdropFilter: 'blur(22px) saturate(170%)',
           boxShadow: 'inset 0 1px 0 hsl(0 0% 100% / 0.24), inset 0 -1px 0 hsl(40 35% 53% / 0.48), 0 10px 34px hsl(0 0% 0% / 0.22)',
