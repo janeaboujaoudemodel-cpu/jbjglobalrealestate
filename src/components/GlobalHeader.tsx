@@ -269,7 +269,6 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // CSS in index.css keys off body[data-home-hero-state] so we never rely
   // on React-state propagation to win against other style sources.
   useEffect(() => {
-    console.log("[JBJ_HEADER_DEBUG] useEffect ran, pathname=", location.pathname);
     const isHome = location.pathname === "/" || location.pathname === "/index";
     if (!isHome) {
       document.body.removeAttribute("data-home-hero-state");
@@ -278,7 +277,6 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     const apply = () => {
       const state = window.scrollY > 80 ? "scrolled" : "atrest";
       document.body.setAttribute("data-home-hero-state", state);
-      console.log("[JBJ_HEADER_DEBUG] set body attr to", state);
     };
     apply();
     window.addEventListener("scroll", apply, { passive: true });
@@ -289,6 +287,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       document.body.removeAttribute("data-home-hero-state");
     };
   }, [location.pathname]);
+
 
 
 
