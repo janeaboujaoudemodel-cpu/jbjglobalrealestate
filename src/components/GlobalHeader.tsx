@@ -309,7 +309,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     'linear-gradient(180deg, rgba(16,37,64,0.48) 0%, rgba(16,37,64,0.30) 100%)';
   // Deterministic: on the homepage at mobile widths, always render the fiberglass
   // header at rest (state-independent), so a slow first paint never flashes white.
-  const homeMobileFiberglassActive = isHomeHeroPath && !showSolidBackground;
+  const homeMobileFiberglassActive = shouldUseMobileHeader && isHomeHeroPath && !showSolidBackground;
   const headerShellStyle: React.CSSProperties = {
     ['--header-height' as string]: 'var(--responsive-header-height)',
     ...(homeMobileFiberglassActive
@@ -655,6 +655,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       ref={headerViewportRef}
       className={cn(
         "fixed top-0 left-0 right-0 z-[9999] h-24 sm:h-28 lg:h-32 overflow-visible transition-all duration-300",
+        homeMobileFiberglassActive && "jj-mobile-home-fiberglass",
         filterBarActive && "-translate-y-full opacity-0 pointer-events-none"
       )}
       style={headerShellStyle}
