@@ -268,6 +268,29 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // Header is transparent on initial load across all viewports; turns solid on scroll.
   const showSolidBackground = isSolid;
   const isFullyTransparent = isTransparentRoute && !showSolidBackground;
+  const isHomeHeroPath = location.pathname === "/" || location.pathname === "/index";
+  const mobileHeroAtRest =
+    isTransparentRoute &&
+    shouldUseMobileHeader &&
+    isHomeHeroPath &&
+    typeof window !== "undefined" &&
+    window.scrollY <= window.innerHeight * 0.45;
+  const showMobileFiberglass = isTransparentRoute && (isFullyTransparent || mobileHeroAtRest);
+  const showMobileChampagne = !showMobileFiberglass && (showSolidBackground || !isTransparentRoute);
+  const mobileFiberglassBackground =
+    'linear-gradient(180deg, hsl(211 60% 16% / 0.78) 0%, hsl(211 60% 16% / 0.64) 56%, hsl(211 60% 16% / 0.48) 100%), linear-gradient(90deg, hsl(0 0% 100% / 0.12), hsl(0 0% 100% / 0.03) 42%, hsl(40 35% 53% / 0.10))';
+  const headerShellStyle: React.CSSProperties = {
+    ['--header-height' as string]: 'var(--responsive-header-height)',
+    ...(showMobileFiberglass
+      ? {
+          background: mobileFiberglassBackground,
+          backdropFilter: 'blur(22px) saturate(170%)',
+          WebkitBackdropFilter: 'blur(22px) saturate(170%)',
+        }
+      : showMobileChampagne && shouldUseMobileHeader
+        ? { background: '#FDFBF7' }
+        : {}),
+  } as React.CSSProperties;
 
 
   const mobileHeaderIconButtonClassName =
@@ -600,7 +623,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         "fixed top-0 left-0 right-0 z-[9999] h-24 sm:h-28 lg:h-32 overflow-visible transition-all duration-300",
         filterBarActive && "-translate-y-full opacity-0 pointer-events-none"
       )}
-      style={{ '--header-height': 'var(--responsive-header-height)' } as React.CSSProperties}
+      style={headerShellStyle}
       data-tour-target="header"
     >
       {/* ─── DESKTOP (lg+) ─────────────────────────────────────────── */}
@@ -622,19 +645,18 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       {/* ─── MOBILE / TABLET (< lg) ────────────────────────────────── */}
       {/* At rest over a dark hero: frosted "fiberglass" bar so the hero feels full-bleed with white logo/text legible. */}
       <div
-        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(!showSolidBackground && isTransparentRoute) ? "opacity-100" : "opacity-0"}`}
+        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${showMobileFiberglass ? "opacity-100" : "opacity-0"}`}
         style={{
-          background:
-            'linear-gradient(180deg, rgba(16,37,64,0.46) 0%, rgba(16,37,64,0.30) 58%, rgba(16,37,64,0.12) 100%)',
-          backdropFilter: 'blur(18px) saturate(150%)',
-          WebkitBackdropFilter: 'blur(18px) saturate(150%)',
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(184,149,85,0.35)',
+          background: mobileFiberglassBackground,
+          backdropFilter: 'blur(22px) saturate(170%)',
+          WebkitBackdropFilter: 'blur(22px) saturate(170%)',
+          boxShadow: 'inset 0 1px 0 hsl(0 0% 100% / 0.24), inset 0 -1px 0 hsl(40 35% 53% / 0.48), 0 10px 34px hsl(0 0% 0% / 0.22)',
         }}
         aria-hidden="true"
       />
       {/* On scroll OR non-transparent routes: champagne to match desktop chrome. */}
       <div
-        className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${(showSolidBackground || !isTransparentRoute) ? "opacity-100" : "opacity-0"}`}
+        className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${showMobileChampagne ? "opacity-100" : "opacity-0"}`}
         style={{ background: '#FDFBF7' }}
         aria-hidden="true"
       />
