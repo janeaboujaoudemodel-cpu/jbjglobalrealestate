@@ -68,7 +68,12 @@ body {
   text-shadow: 0 2px 10px hsl(0 0% 0% / 0.85), 0 1px 2px hsl(0 0% 0% / 0.7) !important;
 }
 
+/* Mobile (<sm) global header: champagne page chrome by default; switch to
+   frosted "fiberglass" navy whenever the header sits over a dark hero. The
+   transparent state is keyed off [data-mobile-fiberglass="true"] which the
+   GlobalHeader component sets while at-rest on hero routes. */
 @media (max-width: 767px) {
+  [data-chrome="header"] > header[data-mobile-fiberglass="true"],
   [data-chrome="header"] > header[data-home-mobile-header="true"] {
     background:
       linear-gradient(180deg, hsl(211 60% 16% / 0.86) 0%, hsl(211 60% 16% / 0.74) 58%, hsl(211 60% 16% / 0.62) 100%),
@@ -76,7 +81,13 @@ body {
     -webkit-backdrop-filter: blur(22px) saturate(170%) !important;
     backdrop-filter: blur(22px) saturate(170%) !important;
   }
+  /* On the homepage at rest, neutralise any inline white/champagne overlay
+     div the GlobalHeader renders, so the fiberglass shell is always visible. */
+  [data-chrome="header"] > header[data-home-mobile-header="true"] > div[style*="#FDFBF7"] {
+    opacity: 0 !important;
+  }
 }
+
 
 /* Premium glassmorphic gold-hairline hero action pills.
    Editorial luxury: dark ink glass + ultra-thin gold hairline,
