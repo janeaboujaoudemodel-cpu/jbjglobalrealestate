@@ -625,10 +625,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(!showSolidBackground && isTransparentRoute) ? "opacity-100" : "opacity-0"}`}
         style={{
           background:
-            'linear-gradient(180deg, rgba(16,37,64,0.46) 0%, rgba(16,37,64,0.30) 58%, rgba(16,37,64,0.12) 100%)',
-          backdropFilter: 'blur(18px) saturate(150%)',
-          WebkitBackdropFilter: 'blur(18px) saturate(150%)',
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(184,149,85,0.35)',
+            'linear-gradient(180deg, hsl(211 60% 16% / 0.78) 0%, hsl(211 60% 16% / 0.64) 56%, hsl(211 60% 16% / 0.48) 100%), linear-gradient(90deg, hsl(0 0% 100% / 0.12), hsl(0 0% 100% / 0.03) 42%, hsl(40 35% 53% / 0.10))',
+          backdropFilter: 'blur(22px) saturate(170%)',
+          WebkitBackdropFilter: 'blur(22px) saturate(170%)',
+          boxShadow: 'inset 0 1px 0 hsl(0 0% 100% / 0.24), inset 0 -1px 0 hsl(40 35% 53% / 0.48), 0 10px 34px hsl(0 0% 0% / 0.22)',
         }}
         aria-hidden="true"
       />
