@@ -73,25 +73,22 @@ body {
    Body-attribute keyed so it wins regardless of React-state timing. */
 @media (max-width: 767px) {
   body[data-home-hero-state="atrest"] [data-chrome="header"] header {
-    background:
-      linear-gradient(180deg, hsl(211 60% 16% / 0.86) 0%, hsl(211 60% 16% / 0.74) 58%, hsl(211 60% 16% / 0.62) 100%),
-      linear-gradient(90deg, hsl(0 0% 100% / 0.16), hsl(0 0% 100% / 0.05) 44%, hsl(40 35% 53% / 0.14)) !important;
-    -webkit-backdrop-filter: blur(22px) saturate(170%) !important;
-    backdrop-filter: blur(22px) saturate(170%) !important;
+    background: linear-gradient(180deg, rgba(16,37,64,0.48) 0%, rgba(16,37,64,0.30) 100%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
+    backdrop-filter: blur(16px) saturate(145%) !important;
+    box-shadow: inset 0 1px 0 rgba(255,238,200,0.15), 0 10px 26px rgba(0,0,0,0.32) !important;
   }
-  /* Neutralise any inline white/champagne overlay divs inside the header so
-     the fiberglass shell is always visible at rest on the homepage. */
   body[data-home-hero-state="atrest"] [data-chrome="header"] header div[style*="#FDFBF7"],
   body[data-home-hero-state="atrest"] [data-chrome="header"] header div[style*="rgb(253, 251, 247)"] {
     opacity: 0 !important;
   }
-  /* Scrolled state: champagne chrome. */
   body[data-home-hero-state="scrolled"] [data-chrome="header"] header {
     background: #FDFBF7 !important;
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }
 }
+
 
 
 
