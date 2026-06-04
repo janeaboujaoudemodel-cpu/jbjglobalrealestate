@@ -268,6 +268,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // Header is transparent on initial load across all viewports; turns solid on scroll.
   const showSolidBackground = isSolid;
   const isFullyTransparent = isTransparentRoute && !showSolidBackground;
+  const isHomeHeroPath = location.pathname === "/" || location.pathname === "/index";
+  const mobileHeroAtRest =
+    isTransparentRoute &&
+    shouldUseMobileHeader &&
+    isHomeHeroPath &&
+    typeof window !== "undefined" &&
+    window.scrollY <= 120;
+  const showMobileFiberglass = isTransparentRoute && (isFullyTransparent || mobileHeroAtRest);
+  const showMobileChampagne = !showMobileFiberglass && (showSolidBackground || !isTransparentRoute);
 
 
   const mobileHeaderIconButtonClassName =
@@ -622,7 +631,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       {/* ─── MOBILE / TABLET (< lg) ────────────────────────────────── */}
       {/* At rest over a dark hero: frosted "fiberglass" bar so the hero feels full-bleed with white logo/text legible. */}
       <div
-        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(!showSolidBackground && isTransparentRoute) ? "opacity-100" : "opacity-0"}`}
+        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${showMobileFiberglass ? "opacity-100" : "opacity-0"}`}
         style={{
           background:
             'linear-gradient(180deg, hsl(211 60% 16% / 0.78) 0%, hsl(211 60% 16% / 0.64) 56%, hsl(211 60% 16% / 0.48) 100%), linear-gradient(90deg, hsl(0 0% 100% / 0.12), hsl(0 0% 100% / 0.03) 42%, hsl(40 35% 53% / 0.10))',
@@ -634,7 +643,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       />
       {/* On scroll OR non-transparent routes: champagne to match desktop chrome. */}
       <div
-        className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${(showSolidBackground || !isTransparentRoute) ? "opacity-100" : "opacity-0"}`}
+        className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${showMobileChampagne ? "opacity-100" : "opacity-0"}`}
         style={{ background: '#FDFBF7' }}
         aria-hidden="true"
       />
