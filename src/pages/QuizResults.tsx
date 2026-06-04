@@ -1669,8 +1669,8 @@ const QuizResults = () => {
                     <div className="absolute top-3 right-3 z-10">
                       <FavoriteButton projectId={project.id} size="sm" showShortlist={true} />
                     </div>
-                    <img
-                      src={project.cover_image_url || project.images?.[0]?.image_url || "https://placehold.co/800x600/04161C/67E8F9?text=JBJ"}
+                    <SafeImage
+                      src={project.cover_image_url || project.images?.[0]?.image_url || undefined}
                       alt={project.name}
                       className="aspect-[16/10] w-full object-cover"
                       loading="lazy"
