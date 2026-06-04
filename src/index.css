@@ -68,6 +68,16 @@ body {
   text-shadow: 0 2px 10px hsl(0 0% 0% / 0.85), 0 1px 2px hsl(0 0% 0% / 0.7) !important;
 }
 
+@media (max-width: 767px) {
+  [data-chrome="header"] > header[data-home-mobile-header="true"] {
+    background:
+      linear-gradient(180deg, hsl(211 60% 16% / 0.86) 0%, hsl(211 60% 16% / 0.74) 58%, hsl(211 60% 16% / 0.62) 100%),
+      linear-gradient(90deg, hsl(0 0% 100% / 0.16), hsl(0 0% 100% / 0.05) 44%, hsl(40 35% 53% / 0.14)) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(170%) !important;
+    backdrop-filter: blur(22px) saturate(170%) !important;
+  }
+}
+
 /* Premium glassmorphic gold-hairline hero action pills.
    Editorial luxury: dark ink glass + ultra-thin gold hairline,
    refined Inter uppercase label, soft inner highlight + ambient shadow. */
