@@ -306,7 +306,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const showMobileFiberglass = isTransparentRoute && (isFullyTransparent || mobileHeroAtRest || forceHomeMobileFiberglass);
   const showMobileChampagne = !showMobileFiberglass && (showSolidBackground || !isTransparentRoute);
   const mobileFiberglassBackground =
-    'linear-gradient(180deg, hsl(211 60% 16% / 0.86) 0%, hsl(211 60% 16% / 0.74) 58%, hsl(211 60% 16% / 0.62) 100%), linear-gradient(90deg, hsl(0 0% 100% / 0.16), hsl(0 0% 100% / 0.05) 44%, hsl(40 35% 53% / 0.14))';
+    'linear-gradient(180deg, rgba(16,37,64,0.48) 0%, rgba(16,37,64,0.30) 100%)';
   // Deterministic: on the homepage at mobile widths, always render the fiberglass
   // header at rest (state-independent), so a slow first paint never flashes white.
   const homeMobileFiberglassActive = isHomeHeroPath && !showSolidBackground;
@@ -315,13 +315,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     ...(homeMobileFiberglassActive
       ? {
           background: mobileFiberglassBackground,
-          backdropFilter: 'blur(22px) saturate(170%)',
-          WebkitBackdropFilter: 'blur(22px) saturate(170%)',
+          backdropFilter: 'blur(16px) saturate(145%)',
+          WebkitBackdropFilter: 'blur(16px) saturate(145%)',
+          boxShadow: 'inset 0 1px 0 rgba(255,238,200,0.15), 0 10px 26px rgba(0,0,0,0.32)',
         }
       : showMobileChampagne && shouldUseMobileHeader
         ? { background: '#FDFBF7' }
         : {}),
   } as React.CSSProperties;
+
 
 
 
@@ -683,12 +685,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(showMobileFiberglass || homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
         style={{
           background: mobileFiberglassBackground,
-          backdropFilter: 'blur(22px) saturate(170%)',
-          WebkitBackdropFilter: 'blur(22px) saturate(170%)',
-          boxShadow: 'inset 0 1px 0 hsl(0 0% 100% / 0.24), inset 0 -1px 0 hsl(40 35% 53% / 0.48), 0 10px 34px hsl(0 0% 0% / 0.22)',
+          backdropFilter: 'blur(16px) saturate(145%)',
+          WebkitBackdropFilter: 'blur(16px) saturate(145%)',
+          boxShadow: 'inset 0 1px 0 rgba(255,238,200,0.15), 0 10px 26px rgba(0,0,0,0.32)',
         }}
         aria-hidden="true"
       />
+
       {/* On scroll OR non-transparent routes: champagne to match desktop chrome. */}
       <div
         className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${(showMobileChampagne && !homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
