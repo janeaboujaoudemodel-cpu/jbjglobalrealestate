@@ -1554,8 +1554,8 @@ const QuizResults = () => {
               
               <div className="grid md:grid-cols-2">
                 <div className="aspect-[4/3] md:aspect-auto">
-                  <img
-                    src={projects[0].cover_image_url || projects[0].images?.[0]?.image_url || "https://placehold.co/800x600/F5F0E6/C9A84C?text=JBJ+Global"}
+                  <SafeImage
+                    src={projects[0].cover_image_url || projects[0].images?.[0]?.image_url || undefined}
                     alt={projects[0].name}
                     className="w-full h-full object-cover"
                   />
