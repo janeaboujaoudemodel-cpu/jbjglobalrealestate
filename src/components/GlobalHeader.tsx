@@ -239,10 +239,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     // Default to transparent on initial render
     return false;
   });
+  const [isAtPageTop, setIsAtPageTop] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.scrollY <= 80;
+  });
 
   useEffect(() => {
     if (forceSolid) {
       setIsSolid(true);
+      setIsAtPageTop(false);
       return;
     }
     
@@ -250,14 +255,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     const onScroll = () => {
       const shouldBeSolid = window.scrollY > 80;
       setIsSolid(shouldBeSolid);
+      setIsAtPageTop(!shouldBeSolid);
     };
     
     // Check initial scroll position after a brief delay to ensure proper hydration
     // This handles cases where user refreshes mid-page
     requestAnimationFrame(() => {
-      if (window.scrollY > 80) {
-        setIsSolid(true);
-      }
+      const shouldBeSolid = window.scrollY > 80;
+      setIsSolid(shouldBeSolid);
+      setIsAtPageTop(!shouldBeSolid);
     });
     
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -309,7 +315,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     'linear-gradient(180deg, rgba(16,37,64,0.48) 0%, rgba(16,37,64,0.30) 100%)';
   // Deterministic: on the homepage at mobile widths, always render the fiberglass
   // header at rest (state-independent), so a slow first paint never flashes white.
-  const homeMobileFiberglassActive = shouldUseMobileHeader && isHomeHeroPath && !showSolidBackground;
+  const homeMobileFiberglassActive = isHomeHeroPath && isAtPageTop && !forceSolid;
+  const useLightHeaderIdentity = isFullyTransparent || homeMobileFiberglassActive;
   const headerShellStyle: React.CSSProperties = {
     ['--header-height' as string]: 'var(--responsive-header-height)',
     ...(homeMobileFiberglassActive
