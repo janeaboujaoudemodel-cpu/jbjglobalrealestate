@@ -280,9 +280,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const showMobileChampagne = !showMobileFiberglass && (showSolidBackground || !isTransparentRoute);
   const mobileFiberglassBackground =
     'linear-gradient(180deg, hsl(211 60% 16% / 0.86) 0%, hsl(211 60% 16% / 0.74) 58%, hsl(211 60% 16% / 0.62) 100%), linear-gradient(90deg, hsl(0 0% 100% / 0.16), hsl(0 0% 100% / 0.05) 44%, hsl(40 35% 53% / 0.14))';
+  // Deterministic: on the homepage at mobile widths, always render the fiberglass
+  // header at rest (state-independent), so a slow first paint never flashes white.
+  const homeMobileFiberglassActive = isHomeHeroPath && !showSolidBackground;
   const headerShellStyle: React.CSSProperties = {
     ['--header-height' as string]: 'var(--responsive-header-height)',
-    ...(showMobileFiberglass
+    ...(homeMobileFiberglassActive
       ? {
           background: mobileFiberglassBackground,
           backdropFilter: 'blur(22px) saturate(170%)',
@@ -292,6 +295,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         ? { background: '#FDFBF7' }
         : {}),
   } as React.CSSProperties;
+
 
 
   const mobileHeaderIconButtonClassName =
@@ -625,9 +629,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         filterBarActive && "-translate-y-full opacity-0 pointer-events-none"
       )}
       style={headerShellStyle}
-      data-home-mobile-header={forceHomeMobileFiberglass ? "true" : undefined}
-      data-mobile-fiberglass={showMobileFiberglass ? "true" : undefined}
+      data-home-mobile-header={homeMobileFiberglassActive ? "true" : undefined}
+      data-mobile-fiberglass={(showMobileFiberglass || homeMobileFiberglassActive) ? "true" : undefined}
       data-tour-target="header"
+
     >
       {/* ─── DESKTOP (lg+) ─────────────────────────────────────────── */}
       {/* Transparent-state top-fade scrim — desktop keeps the dark gradient over hero video. */}
@@ -648,7 +653,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       {/* ─── MOBILE / TABLET (< lg) ────────────────────────────────── */}
       {/* At rest over a dark hero: frosted "fiberglass" bar so the hero feels full-bleed with white logo/text legible. */}
       <div
-        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${showMobileFiberglass ? "opacity-100" : "opacity-0"}`}
+        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(showMobileFiberglass || homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
         style={{
           background: mobileFiberglassBackground,
           backdropFilter: 'blur(22px) saturate(170%)',
@@ -659,7 +664,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       />
       {/* On scroll OR non-transparent routes: champagne to match desktop chrome. */}
       <div
-        className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${showMobileChampagne ? "opacity-100" : "opacity-0"}`}
+        className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${(showMobileChampagne && !homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
         style={{ background: '#FDFBF7' }}
         aria-hidden="true"
       />
