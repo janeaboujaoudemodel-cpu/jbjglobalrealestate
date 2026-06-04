@@ -68,11 +68,11 @@ body {
   text-shadow: 0 2px 10px hsl(0 0% 0% / 0.85), 0 1px 2px hsl(0 0% 0% / 0.7) !important;
 }
 
-/* Mobile (<sm) global header: champagne page chrome by default; switch to
-   frosted "fiberglass" navy whenever the header sits over a dark hero. The
-   transparent state is keyed off [data-mobile-fiberglass="true"] which the
-   GlobalHeader component sets while at-rest on hero routes. */
+/* Mobile (<sm) global header on the homepage: frosted "fiberglass" navy
+   while at-rest over the dark hero; switches to champagne once scrolled.
+   Body-attribute keyed so it wins regardless of React-state timing. */
 @media (max-width: 767px) {
+  body[data-home-hero-state="atrest"] [data-chrome="header"] > header,
   [data-chrome="header"] > header[data-mobile-fiberglass="true"],
   [data-chrome="header"] > header[data-home-mobile-header="true"] {
     background:
@@ -81,12 +81,20 @@ body {
     -webkit-backdrop-filter: blur(22px) saturate(170%) !important;
     backdrop-filter: blur(22px) saturate(170%) !important;
   }
-  /* On the homepage at rest, neutralise any inline white/champagne overlay
-     div the GlobalHeader renders, so the fiberglass shell is always visible. */
-  [data-chrome="header"] > header[data-home-mobile-header="true"] > div[style*="#FDFBF7"] {
+  /* Neutralise any inline white/champagne overlay div inside the header so
+     the fiberglass shell is always visible at rest on the homepage. */
+  body[data-home-hero-state="atrest"] [data-chrome="header"] > header > div[style*="#FDFBF7"],
+  body[data-home-hero-state="atrest"] [data-chrome="header"] > header > div[style*="rgb(253, 251, 247)"] {
     opacity: 0 !important;
   }
+  /* Scrolled state: champagne chrome (let inline white overlay paint). */
+  body[data-home-hero-state="scrolled"] [data-chrome="header"] > header {
+    background: #FDFBF7 !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
 }
+
 
 
 /* Premium glassmorphic gold-hairline hero action pills.
