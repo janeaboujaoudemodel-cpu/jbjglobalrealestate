@@ -30,6 +30,9 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+
 
 type ChangeRequest = {
   id: string;
@@ -64,11 +67,12 @@ function buildSelector(el: Element): string {
 export default function WebDevDock() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { isOwner: authIsOwner, ownerLoading } = useAuth();
+  const { isOwner: roleIsOwner, isLoading: roleLoading } = useIsAppOwner();
   const [open, setOpen] = useState(false);
   const [instruction, setInstruction] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [requests, setRequests] = useState<ChangeRequest[]>([]);
-  const [allowed, setAllowed] = useState(false);
   const [screenshot, setScreenshot] = useState<string | null>(null);
   const [picking, setPicking] = useState(false);
   const [targetSelector, setTargetSelector] = useState<string | null>(null);
@@ -78,21 +82,12 @@ export default function WebDevDock() {
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
 
-  // Gate: only owner/admin
-  useEffect(() => {
-    (async () => {
-      const { data: u } = await supabase.auth.getUser();
-      if (!u.user) return;
-      const { data: roles } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", u.user.id);
-      const ok = (roles ?? []).some(
-        (r: { role: string }) => r.role === "owner" || r.role === "admin",
-      );
-      setAllowed(ok);
-    })();
-  }, []);
+  // Strict owner-only gate. Fails closed: anonymous visitors and
+  // non-owners never see the dock. We require BOTH the server-verified
+  // owner flag AND the user_roles owner/admin row.
+  const allowed = authIsOwner && roleIsOwner;
+  const gateLoading = ownerLoading || roleLoading;
+
 
   const loadRequests = async () => {
     const { data } = await supabase
@@ -378,7 +373,7 @@ export default function WebDevDock() {
     }
   };
 
-  if (!allowed) return null;
+  if (gateLoading || !allowed) return null;
 
   const openDock = () => {
     try {
