@@ -752,15 +752,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 }}
               />
               <img 
-                src={isFullyTransparent ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
+                src={useLightHeaderIdentity ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
                 alt="JBJ" 
                 className={`w-14 h-14 sm:w-20 sm:h-20 md:w-28 md:h-28 xl:w-[160px] xl:h-[160px] object-contain relative z-10 transition-transform duration-300 ${
-                  isFullyTransparent
+                  useLightHeaderIdentity
                     ? "scale-100 md:scale-[1.3] xl:scale-[1.35]"
                     : "scale-100"
                 }`}
                 style={{
-                  filter: isFullyTransparent 
+                  filter: useLightHeaderIdentity 
                     ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.6))' 
                     : 'drop-shadow(0 2px 6px rgba(0,0,0,0.2))'
                 }}
@@ -771,7 +771,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <span
                 className={cn(
                   "font-bold text-sm sm:text-base xl:text-2xl 2xl:text-[28px] tracking-[0.12em] uppercase leading-tight transition-colors duration-300",
-                  isFullyTransparent ? "jj-transparent-header-wordmark" : "text-[#111111]"
+                  useLightHeaderIdentity ? "jj-transparent-header-wordmark" : "text-[#111111]"
                 )}
               >
                 JBJ Global Real Estate L.L.C S.O.C.
@@ -779,7 +779,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <span
                 className={cn(
                   "hidden sm:block text-[10px] sm:text-[11px] xl:text-[13px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300 truncate",
-                  isFullyTransparent ? "jj-transparent-header-wordmark" : "text-[#1A1A1A]/70"
+                  useLightHeaderIdentity ? "jj-transparent-header-wordmark" : "text-[#1A1A1A]/70"
                 )}
               >
                 Excellence in Real Estate
