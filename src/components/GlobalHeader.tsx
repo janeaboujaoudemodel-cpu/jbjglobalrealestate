@@ -280,7 +280,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const mobileFiberglassBackground =
     'linear-gradient(180deg, hsl(211 60% 16% / 0.78) 0%, hsl(211 60% 16% / 0.64) 56%, hsl(211 60% 16% / 0.48) 100%), linear-gradient(90deg, hsl(0 0% 100% / 0.12), hsl(0 0% 100% / 0.03) 42%, hsl(40 35% 53% / 0.10))';
   const headerShellStyle: React.CSSProperties = {
-    '--header-height': 'var(--responsive-header-height)',
+    ['--header-height' as string]: 'var(--responsive-header-height)',
     ...(showMobileFiberglass
       ? {
           background: mobileFiberglassBackground,
