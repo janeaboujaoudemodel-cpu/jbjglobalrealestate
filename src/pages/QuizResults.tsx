@@ -8,6 +8,7 @@ import { Sparkles, ArrowRight, Brain, Download, Award, Share2, Users, X, Mail, M
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import FavoriteButton from "@/components/FavoriteButton";
+import { SafeImage } from "@/components/SafeImage";
 import PricePill from "@/components/ui/price-pill";
 import { toast } from "sonner";
 import {
@@ -1553,8 +1554,8 @@ const QuizResults = () => {
               
               <div className="grid md:grid-cols-2">
                 <div className="aspect-[4/3] md:aspect-auto">
-                  <img
-                    src={projects[0].cover_image_url || projects[0].images?.[0]?.image_url || "https://placehold.co/800x600/F5F0E6/C9A84C?text=JBJ+Global"}
+                  <SafeImage
+                    src={projects[0].cover_image_url || projects[0].images?.[0]?.image_url || undefined}
                     alt={projects[0].name}
                     className="w-full h-full object-cover"
                   />
@@ -1668,8 +1669,8 @@ const QuizResults = () => {
                     <div className="absolute top-3 right-3 z-10">
                       <FavoriteButton projectId={project.id} size="sm" showShortlist={true} />
                     </div>
-                    <img
-                      src={project.cover_image_url || project.images?.[0]?.image_url || "https://placehold.co/800x600/04161C/67E8F9?text=JBJ"}
+                    <SafeImage
+                      src={project.cover_image_url || project.images?.[0]?.image_url || undefined}
                       alt={project.name}
                       className="aspect-[16/10] w-full object-cover"
                       loading="lazy"
