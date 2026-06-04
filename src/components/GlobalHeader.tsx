@@ -239,10 +239,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     // Default to transparent on initial render
     return false;
   });
+  const [isAtPageTop, setIsAtPageTop] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.scrollY <= 80;
+  });
 
   useEffect(() => {
     if (forceSolid) {
       setIsSolid(true);
+      setIsAtPageTop(false);
       return;
     }
     
@@ -250,14 +255,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     const onScroll = () => {
       const shouldBeSolid = window.scrollY > 80;
       setIsSolid(shouldBeSolid);
+      setIsAtPageTop(!shouldBeSolid);
     };
     
     // Check initial scroll position after a brief delay to ensure proper hydration
     // This handles cases where user refreshes mid-page
     requestAnimationFrame(() => {
-      if (window.scrollY > 80) {
-        setIsSolid(true);
-      }
+      const shouldBeSolid = window.scrollY > 80;
+      setIsSolid(shouldBeSolid);
+      setIsAtPageTop(!shouldBeSolid);
     });
     
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -309,7 +315,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     'linear-gradient(180deg, rgba(16,37,64,0.48) 0%, rgba(16,37,64,0.30) 100%)';
   // Deterministic: on the homepage at mobile widths, always render the fiberglass
   // header at rest (state-independent), so a slow first paint never flashes white.
-  const homeMobileFiberglassActive = isHomeHeroPath && !showSolidBackground;
+  const homeMobileFiberglassActive = isHomeHeroPath && isAtPageTop && !forceSolid;
+  const useLightHeaderIdentity = isFullyTransparent || homeMobileFiberglassActive;
   const headerShellStyle: React.CSSProperties = {
     ['--header-height' as string]: 'var(--responsive-header-height)',
     ...(homeMobileFiberglassActive
@@ -655,6 +662,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       ref={headerViewportRef}
       className={cn(
         "fixed top-0 left-0 right-0 z-[9999] h-24 sm:h-28 lg:h-32 overflow-visible transition-all duration-300",
+        homeMobileFiberglassActive && "jj-mobile-home-fiberglass",
         filterBarActive && "-translate-y-full opacity-0 pointer-events-none"
       )}
       style={headerShellStyle}
@@ -744,15 +752,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 }}
               />
               <img 
-                src={isFullyTransparent ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
+                src={useLightHeaderIdentity ? jbjMonogramLightTransparent : jbjMonogramNobuffer}
                 alt="JBJ" 
                 className={`w-14 h-14 sm:w-20 sm:h-20 md:w-28 md:h-28 xl:w-[160px] xl:h-[160px] object-contain relative z-10 transition-transform duration-300 ${
-                  isFullyTransparent
+                  useLightHeaderIdentity
                     ? "scale-100 md:scale-[1.3] xl:scale-[1.35]"
                     : "scale-100"
                 }`}
                 style={{
-                  filter: isFullyTransparent 
+                  filter: useLightHeaderIdentity 
                     ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.6))' 
                     : 'drop-shadow(0 2px 6px rgba(0,0,0,0.2))'
                 }}
@@ -763,7 +771,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <span
                 className={cn(
                   "font-bold text-sm sm:text-base xl:text-2xl 2xl:text-[28px] tracking-[0.12em] uppercase leading-tight transition-colors duration-300",
-                  isFullyTransparent ? "jj-transparent-header-wordmark" : "text-[#111111]"
+                  useLightHeaderIdentity ? "jj-transparent-header-wordmark" : "text-[#111111]"
                 )}
               >
                 JBJ Global Real Estate L.L.C S.O.C.
@@ -771,7 +779,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <span
                 className={cn(
                   "hidden sm:block text-[10px] sm:text-[11px] xl:text-[13px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300 truncate",
-                  isFullyTransparent ? "jj-transparent-header-wordmark" : "text-[#1A1A1A]/70"
+                  useLightHeaderIdentity ? "jj-transparent-header-wordmark" : "text-[#1A1A1A]/70"
                 )}
               >
                 Excellence in Real Estate
