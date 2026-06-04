@@ -629,9 +629,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         filterBarActive && "-translate-y-full opacity-0 pointer-events-none"
       )}
       style={headerShellStyle}
-      data-home-mobile-header={forceHomeMobileFiberglass ? "true" : undefined}
-      data-mobile-fiberglass={showMobileFiberglass ? "true" : undefined}
+      data-home-mobile-header={homeMobileFiberglassActive ? "true" : undefined}
+      data-mobile-fiberglass={(showMobileFiberglass || homeMobileFiberglassActive) ? "true" : undefined}
       data-tour-target="header"
+
     >
       {/* ─── DESKTOP (lg+) ─────────────────────────────────────────── */}
       {/* Transparent-state top-fade scrim — desktop keeps the dark gradient over hero video. */}
