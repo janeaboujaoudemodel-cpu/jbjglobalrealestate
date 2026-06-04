@@ -8,6 +8,7 @@ import { Sparkles, ArrowRight, Brain, Download, Award, Share2, Users, X, Mail, M
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import FavoriteButton from "@/components/FavoriteButton";
+import { SafeImage } from "@/components/SafeImage";
 import PricePill from "@/components/ui/price-pill";
 import { toast } from "sonner";
 import {
