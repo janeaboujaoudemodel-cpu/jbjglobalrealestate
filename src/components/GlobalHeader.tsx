@@ -280,9 +280,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const showMobileChampagne = !showMobileFiberglass && (showSolidBackground || !isTransparentRoute);
   const mobileFiberglassBackground =
     'linear-gradient(180deg, hsl(211 60% 16% / 0.86) 0%, hsl(211 60% 16% / 0.74) 58%, hsl(211 60% 16% / 0.62) 100%), linear-gradient(90deg, hsl(0 0% 100% / 0.16), hsl(0 0% 100% / 0.05) 44%, hsl(40 35% 53% / 0.14))';
+  // Deterministic: on the homepage at mobile widths, always render the fiberglass
+  // header at rest (state-independent), so a slow first paint never flashes white.
+  const homeMobileFiberglassActive = isHomeHeroPath && !showSolidBackground;
   const headerShellStyle: React.CSSProperties = {
     ['--header-height' as string]: 'var(--responsive-header-height)',
-    ...(showMobileFiberglass
+    ...(homeMobileFiberglassActive
       ? {
           background: mobileFiberglassBackground,
           backdropFilter: 'blur(22px) saturate(170%)',
@@ -292,6 +295,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         ? { background: '#FDFBF7' }
         : {}),
   } as React.CSSProperties;
+
 
 
   const mobileHeaderIconButtonClassName =
