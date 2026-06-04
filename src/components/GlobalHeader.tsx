@@ -653,7 +653,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       {/* ─── MOBILE / TABLET (< lg) ────────────────────────────────── */}
       {/* At rest over a dark hero: frosted "fiberglass" bar so the hero feels full-bleed with white logo/text legible. */}
       <div
-        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${showMobileFiberglass ? "opacity-100" : "opacity-0"}`}
+        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(showMobileFiberglass || homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
         style={{
           background: mobileFiberglassBackground,
           backdropFilter: 'blur(22px) saturate(170%)',
@@ -664,7 +664,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       />
       {/* On scroll OR non-transparent routes: champagne to match desktop chrome. */}
       <div
-        className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${showMobileChampagne ? "opacity-100" : "opacity-0"}`}
+        className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${(showMobileChampagne && !homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
         style={{ background: '#FDFBF7' }}
         aria-hidden="true"
       />
