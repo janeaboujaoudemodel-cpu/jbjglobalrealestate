@@ -275,10 +275,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     isHomeHeroPath &&
     typeof window !== "undefined" &&
     window.scrollY <= window.innerHeight * 0.45;
-  const showMobileFiberglass = isTransparentRoute && (isFullyTransparent || mobileHeroAtRest);
+  const forceHomeMobileFiberglass = shouldUseMobileHeader && isHomeHeroPath && !showSolidBackground;
+  const showMobileFiberglass = isTransparentRoute && (isFullyTransparent || mobileHeroAtRest || forceHomeMobileFiberglass);
   const showMobileChampagne = !showMobileFiberglass && (showSolidBackground || !isTransparentRoute);
   const mobileFiberglassBackground =
-    'linear-gradient(180deg, hsl(211 60% 16% / 0.78) 0%, hsl(211 60% 16% / 0.64) 56%, hsl(211 60% 16% / 0.48) 100%), linear-gradient(90deg, hsl(0 0% 100% / 0.12), hsl(0 0% 100% / 0.03) 42%, hsl(40 35% 53% / 0.10))';
+    'linear-gradient(180deg, hsl(211 60% 16% / 0.86) 0%, hsl(211 60% 16% / 0.74) 58%, hsl(211 60% 16% / 0.62) 100%), linear-gradient(90deg, hsl(0 0% 100% / 0.16), hsl(0 0% 100% / 0.05) 44%, hsl(40 35% 53% / 0.14))';
   const headerShellStyle: React.CSSProperties = {
     ['--header-height' as string]: 'var(--responsive-header-height)',
     ...(showMobileFiberglass
@@ -624,6 +625,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         filterBarActive && "-translate-y-full opacity-0 pointer-events-none"
       )}
       style={headerShellStyle}
+      data-home-mobile-header={forceHomeMobileFiberglass ? "true" : undefined}
+      data-mobile-fiberglass={showMobileFiberglass ? "true" : undefined}
       data-tour-target="header"
     >
       {/* ─── DESKTOP (lg+) ─────────────────────────────────────────── */}
