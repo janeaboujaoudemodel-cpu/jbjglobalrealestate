@@ -264,6 +264,31 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [forceSolid]);
 
+  // Deterministic body-attribute toggle: on the homepage, paint the mobile
+  // header fiberglass while at-rest, switch to champagne once scrolled.
+  // CSS in index.css keys off body[data-home-hero-state] so we never rely
+  // on React-state propagation to win against other style sources.
+  useEffect(() => {
+    const isHome = location.pathname === "/" || location.pathname === "/index";
+    if (!isHome) {
+      document.body.removeAttribute("data-home-hero-state");
+      return;
+    }
+    const apply = () => {
+      const state = window.scrollY > 80 ? "scrolled" : "atrest";
+      document.body.setAttribute("data-home-hero-state", state);
+    };
+    apply();
+    window.addEventListener("scroll", apply, { passive: true });
+    window.addEventListener("resize", apply);
+    return () => {
+      window.removeEventListener("scroll", apply);
+      window.removeEventListener("resize", apply);
+      document.body.removeAttribute("data-home-hero-state");
+    };
+  }, [location.pathname]);
+
+
   // When transparent (hero visible), use minimal styling - no fills on nav/icons.
   // Header is transparent on initial load across all viewports; turns solid on scroll.
   const showSolidBackground = isSolid;
