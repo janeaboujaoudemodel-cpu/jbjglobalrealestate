@@ -32,6 +32,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+import { isOwnerEmail } from "@/config/ownerEmails";
 
 
 type ChangeRequest = {
@@ -67,8 +68,12 @@ function buildSelector(el: Element): string {
 export default function WebDevDock() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { isOwner: authIsOwner, ownerLoading } = useAuth();
+  const { user, isOwner: authIsOwner, ownerLoading, loading: authLoading } = useAuth();
   const { isOwner: roleIsOwner, isLoading: roleLoading } = useIsAppOwner();
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(min-width: 768px)").matches;
+  });
   const [open, setOpen] = useState(false);
   const [instruction, setInstruction] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -82,11 +87,18 @@ export default function WebDevDock() {
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
 
-  // Strict owner-only gate. Fails closed: anonymous visitors and
-  // non-owners never see the dock. We require BOTH the server-verified
-  // owner flag AND the user_roles owner/admin row.
-  const allowed = authIsOwner && roleIsOwner;
-  const gateLoading = ownerLoading || roleLoading;
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)");
+    const update = () => setIsDesktop(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  // Strict desktop-only owner gate. Fails closed: phones, anonymous visitors,
+  // public users, and non-owner/admin legacy roles never see the star.
+  const allowed = isDesktop && !!user && isOwnerEmail(user.email) && authIsOwner && roleIsOwner;
+  const gateLoading = authLoading || ownerLoading || roleLoading;
 
 
   const loadRequests = async () => {
