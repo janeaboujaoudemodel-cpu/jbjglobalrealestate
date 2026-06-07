@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Plus, Sparkles, Share2, Download, FileText, Building2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
@@ -29,6 +29,7 @@ export default function UnitCompareShell({ onModeChange }: Props) {
   const [project, setProject] = useState<PickedProject | null>(null);
   const [units, setUnits] = useState<UnitDraft[]>([]);
   const [addOpen, setAddOpen] = useState(false);
+  const [editingUnit, setEditingUnit] = useState<UnitDraft | null>(null);
   const [sharedOn, setSharedOn] = useState(true);
   const [sharedPlan, setSharedPlan] = useState<PlanRule[]>(DEFAULT_PLAN_RULES);
   const [unitPlans, setUnitPlans] = useState<Record<string, PlanRule[]>>({});
@@ -41,6 +42,17 @@ export default function UnitCompareShell({ onModeChange }: Props) {
   const [brokerEmail, setBrokerEmail] = useState("");
   const tableRef = useRef<HTMLDivElement>(null);
 
+  const previewUnits = useMemo<UnitDraft[]>(() => {
+    if (!project || units.length > 0) return [];
+    const base = project.price_from || 1450000;
+    return [
+      { id: "preview-studio", label: "Studio", bedrooms: "studio", sizeSqft: 480, priceAED: Math.round(base * 0.72), view: "Community", floor: "Mid", unitNumber: "Preview" },
+      { id: "preview-1br", label: "1 BR", bedrooms: "1", sizeSqft: 780, priceAED: base, view: "Boulevard", floor: "High", unitNumber: "Preview" },
+      { id: "preview-2br", label: "2 BR", bedrooms: "2", sizeSqft: 1180, priceAED: Math.round(base * 1.58), view: "Best view", floor: "High", unitNumber: "Preview" },
+    ];
+  }, [project, units.length]);
+  const tableUnits = units.length > 0 ? units : previewUnits;
+  const isPreviewTable = units.length === 0 && previewUnits.length > 0;
   const canAdd = units.length < 4;
 
   const saveComparison = useMutation({
@@ -51,7 +63,7 @@ export default function UnitCompareShell({ onModeChange }: Props) {
         owner_user_id: user.id,
         project_id: project.id,
         title: `${project.name} — ${units.length} unit(s)`,
-        units: JSON.parse(JSON.stringify(units)),
+        units: JSON.parse(JSON.stringify(tableUnits)),
         shared_plan: sharedOn ? JSON.parse(JSON.stringify(sharedPlan)) : null,
         field_preset: { visible },
       };
@@ -63,14 +75,14 @@ export default function UnitCompareShell({ onModeChange }: Props) {
   });
 
   const exportPdf = () => {
-    if (!project || units.length < 1) {
-      toast.error("Pick a project and add at least one unit first.");
+    if (!project || tableUnits.length < 1) {
+      toast.error("Pick a project first.");
       return;
     }
     try {
       exportUnitComparisonPdf({
         project,
-        units,
+        units: tableUnits,
         visible,
         sharedPlan: sharedOn ? sharedPlan : null,
         unitPlans,
@@ -80,7 +92,7 @@ export default function UnitCompareShell({ onModeChange }: Props) {
           ? { name: brokerName, brokerage, phone: brokerPhone, email: brokerEmail }
           : undefined,
       });
-      toast.success("PDF exported");
+      toast.success(isPreviewTable ? "Preview PDF exported" : "PDF exported");
     } catch (e) {
       toast.error((e as Error).message || "Export failed");
     }
@@ -124,7 +136,7 @@ export default function UnitCompareShell({ onModeChange }: Props) {
               <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold" style={{ background: "rgba(192,132,252,0.2)", color: "#E9D5FF" }}>1</span>
               <h3 className="text-white font-semibold">Pick the project & developer</h3>
             </div>
-            <ProjectPicker value={project} onChange={(p) => { setProject(p); setUnits([]); }} />
+            <ProjectPicker value={project} onChange={(p) => { setProject(p); setUnits([]); setEditingUnit(null); }} />
           </div>
 
           {project && (
@@ -149,28 +161,42 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                       <div className="text-white font-semibold mt-1 truncate">{u.label || "(no label)"}</div>
                       <div className="text-white/80 text-sm mt-1">AED {u.priceAED.toLocaleString()}</div>
                       {u.view && <div className="text-white/50 text-xs mt-1">{u.view}</div>}
-                      <button
-                        onClick={() => setUnits(units.filter((x) => x.id !== u.id))}
-                        data-no-contrast-guard
-                        className="text-xs text-white/50 hover:text-white mt-2"
-                      >
-                        Remove
-                      </button>
+                      <div className="flex gap-3 mt-2">
+                        <button
+                          onClick={() => { setEditingUnit(u); setAddOpen(true); }}
+                          data-no-contrast-guard
+                          className="text-xs text-white/70 hover:text-white"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => setUnits(units.filter((x) => x.id !== u.id))}
+                          data-no-contrast-guard
+                          className="text-xs text-white/50 hover:text-white"
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </div>
                   ))}
                   {canAdd && (
                     <button
-                      onClick={() => setAddOpen(true)}
+                      onClick={() => { setEditingUnit(null); setAddOpen(true); }}
                       data-no-contrast-guard
                       className="p-4 rounded-2xl flex flex-col items-center justify-center min-h-[140px] text-white/70 hover:text-white"
                       style={{ background: "rgba(255,255,255,0.03)", border: "1px dashed rgba(192,132,252,0.5)" }}
                     >
                       <Plus className="w-6 h-6 mb-1" />
                       <span className="text-sm font-medium">Add unit</span>
-                      <span className="text-[10px] text-white/45 mt-0.5">Manual · live in table</span>
+                      <span className="text-[10px] text-white/45 mt-0.5">Manual · editable table</span>
                     </button>
                   )}
                 </div>
+                {isPreviewTable && (
+                  <p className="text-xs text-white/55 mt-3">
+                    A Studio, 1 BR and 2 BR preview is already live below; edit any column or add real units to replace it.
+                  </p>
+                )}
               </div>
 
               {/* Step 3 — shared plan */}
@@ -282,7 +308,7 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                     <button
                       data-no-contrast-guard data-allow-dark-cta
                       onClick={exportPdf}
-                      disabled={units.length < 1}
+                      disabled={tableUnits.length < 1}
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white disabled:opacity-50"
                       style={{ background: "linear-gradient(135deg, #3B82F6, #7C3AED, #EC4899)" }}
                     >
@@ -291,7 +317,7 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                     <button
                       data-no-contrast-guard data-allow-dark-cta
                       onClick={() => saveComparison.mutate()}
-                      disabled={saveComparison.isPending || units.length < 1}
+                      disabled={saveComparison.isPending || tableUnits.length < 1}
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white disabled:opacity-50"
                       style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)" }}
                     >
@@ -311,25 +337,15 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                   </div>
                 </div>
 
-                {units.length >= 1 ? (
-                  <UnitComparisonTable
-                    project={project}
-                    units={units}
-                    visible={visible}
-                    sharedPlan={sharedOn ? sharedPlan : null}
-                    unitPlans={unitPlans}
-                  />
-                ) : (
-                  <div
-                    className="rounded-2xl p-10 text-center"
-                    style={{ background: "rgba(255,255,255,0.03)", border: "1px dashed rgba(255,255,255,0.18)" }}
-                  >
-                    <Building2 className="w-8 h-8 mx-auto mb-3 text-white/40" />
-                    <p className="text-white/70 text-sm">
-                      Add at least one unit above and the comparison table will appear live here.
-                    </p>
-                  </div>
-                )}
+                <UnitComparisonTable
+                  project={project}
+                  units={tableUnits}
+                  visible={visible}
+                  sharedPlan={sharedOn ? sharedPlan : null}
+                  unitPlans={unitPlans}
+                  isPreview={isPreviewTable}
+                  onEditUnit={(unit) => { setEditingUnit(unit); setAddOpen(true); }}
+                />
               </div>
             </>
           )}
@@ -338,10 +354,19 @@ export default function UnitCompareShell({ onModeChange }: Props) {
 
       <AddUnitDialog
         open={addOpen}
-        onOpenChange={setAddOpen}
+        onOpenChange={(open) => { setAddOpen(open); if (!open) setEditingUnit(null); }}
+        initialUnit={editingUnit}
         onAdd={(u) => {
           setUnits((arr) => [...arr, u]);
           setUnitPlans((m) => ({ ...m, [u.id]: DEFAULT_PLAN_RULES }));
+        }}
+        onSave={(u) => {
+          setUnits((arr) => {
+            const exists = arr.some((x) => x.id === u.id);
+            if (exists) return arr.map((x) => (x.id === u.id ? u : x));
+            return [...arr, { ...u, id: crypto.randomUUID() }];
+          });
+          setUnitPlans((m) => ({ ...m, [u.id]: m[u.id] || DEFAULT_PLAN_RULES }));
         }}
       />
     </CompareAIShell>
