@@ -826,13 +826,13 @@ const ListingPortalSubmit = () => {
                           <Upload className="w-10 h-10 mx-auto mb-3" style={{color:"#A855F7"}} />
                           <p className="text-[#1A1A1A] font-medium mb-1">Drop files here or click to browse</p>
                           <p className="text-[#1A1A1A]/70 text-xs">
-                            PDF, JPG, PNG, DOCX, XLSX — up to 100MB each
+                            Any file — PDF, images, Word, Excel, PowerPoint, CSV, TXT, ZIP… up to 100MB each
                           </p>
                           <input
                             id="file-input"
                             type="file"
                             multiple
-                            accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt"
+                            accept="*/*"
                             onChange={handleFileSelect}
                             className="hidden"
                           />
