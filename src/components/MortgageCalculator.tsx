@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { Wallet } from "lucide-react";
 import { Calculator, TrendingUp, Calendar, Percent, DollarSign, Info, Building2, Search, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Tooltip,
@@ -37,6 +36,53 @@ interface MortgageCalculatorProps {
     location?: string;
   };
 }
+
+const getRangePercent = (value: number, min: number, max: number) => {
+  if (max <= min) return 0;
+  return Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
+};
+
+interface MortgageRangeProps {
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  ariaLabel: string;
+  isNavy: boolean;
+  onChange: (value: number) => void;
+}
+
+const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: MortgageRangeProps) => {
+  const progress = getRangePercent(value, min, max);
+  const fill = isNavy
+    ? "linear-gradient(90deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)"
+    : "linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%)";
+  const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
+
+  return (
+    <input
+      type="range"
+      min={min}
+      max={max}
+      step={step}
+      value={value}
+      aria-label={ariaLabel}
+      onChange={(event) => onChange(Number(event.currentTarget.value))}
+      className="mortgage-range-input w-full"
+      style={
+        {
+          background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
+          ["--mortgage-range-thumb" as any]: isNavy
+            ? "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #DBEAFE 45%, #93C5FD 100%)"
+            : "#FFFFFF",
+          ["--mortgage-range-thumb-shadow" as any]: isNavy
+            ? "0 0 0 2px #3B82F6 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(96,165,250,0.85), 0 4px 14px rgba(30,64,175,0.55)"
+            : "0 2px 8px rgba(184,149,85,0.45), 0 0 0 2px #B89555 inset",
+        } as CSSProperties
+      }
+    />
+  );
+};
 
 const MortgageCalculator = ({
   defaultPrice = 2000000,
@@ -76,7 +122,7 @@ const MortgageCalculator = ({
       "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #DBEAFE 45%, #93C5FD 100%)",
     ["--slider-thumb-shadow" as any]:
       "0 0 0 2px #3B82F6 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(96,165,250,0.85), 0 4px 14px rgba(30,64,175,0.55)",
-  } as React.CSSProperties;
+  } as CSSProperties;
 
   useEffect(() => {
     if (!projectSearchOpen) return;
