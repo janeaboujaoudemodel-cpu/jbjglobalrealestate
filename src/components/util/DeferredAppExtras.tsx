@@ -1,20 +1,12 @@
 /**
  * Lazy-loads non-critical and owner-only app-shell components AFTER first
- * paint. These never block FCP/LCP and never ship code to anonymous visitors
- * until the browser is idle.
- *
- * Components included:
- *  - GlobalVisitorTracking (analytics — post-paint)
- *  - OwnerVisitorToggle    (owner UI — post-paint)
- *  - SeoHighlightOverlay   (owner SEO dev tool — post-paint)
- *  - OwnerOverrideLoader   (owner overrides — post-paint)
- *  - WebDevDock            (owner-only floating tool)
- *  - WebDevChangeHighlight (owner-only highlight)
- *
- * Each is dynamic-imported so the code lands in its own chunk and is only
- * fetched when this wrapper actually mounts the component.
+ * paint. Owner-only chunks (WebDev dock + highlight) are now gated by a
+ * SYNCHRONOUS email check BEFORE they are imported, so anonymous visitors
+ * never request the JS at all.
  */
 import { lazy, Suspense, useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { isOwnerEmail } from "@/config/ownerEmails";
 
 const GlobalVisitorTracking = lazy(() => import("@/components/GlobalVisitorTracking"));
 const OwnerVisitorToggle = lazy(() => import("@/components/project-detail/OwnerVisitorToggle"));
@@ -25,6 +17,8 @@ const WebDevChangeHighlight = lazy(() => import("@/components/owner-webdev/WebDe
 
 export default function DeferredAppExtras() {
   const [ready, setReady] = useState(false);
+  const { user } = useAuth();
+  const ownerGate = !!user && isOwnerEmail(user.email);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -57,9 +51,14 @@ export default function DeferredAppExtras() {
       <GlobalVisitorTracking />
       <OwnerVisitorToggle />
       <SeoHighlightOverlay />
-      <OwnerOverrideLoader />
-      <WebDevDock />
-      <WebDevChangeHighlight />
+      {/* Owner-only chunks: not even imported for non-owners */}
+      {ownerGate && (
+        <>
+          <OwnerOverrideLoader />
+          <WebDevDock />
+          <WebDevChangeHighlight />
+        </>
+      )}
     </Suspense>
   );
 }
