@@ -5990,3 +5990,42 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   stroke: var(--jj-pill-fg, currentColor) !important;
   opacity: 1 !important;
 }
+
+/* Mortgage calculator — native controlled range for reliable live recalculation */
+.mortgage-range-input {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 44px;
+  border-radius: 9999px;
+  cursor: pointer;
+  outline: none;
+}
+.mortgage-range-input::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 9999px;
+  background: transparent;
+}
+.mortgage-range-input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  margin-top: -8px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--mortgage-range-thumb, #FFFFFF);
+  box-shadow: var(--mortgage-range-thumb-shadow, 0 2px 8px rgba(184,149,85,0.45), 0 0 0 2px #B89555 inset);
+}
+.mortgage-range-input::-moz-range-track {
+  height: 8px;
+  border-radius: 9999px;
+  background: transparent;
+}
+.mortgage-range-input::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--mortgage-range-thumb, #FFFFFF);
+  box-shadow: var(--mortgage-range-thumb-shadow, 0 2px 8px rgba(184,149,85,0.45), 0 0 0 2px #B89555 inset);
+}

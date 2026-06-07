@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { Wallet } from "lucide-react";
 import { Calculator, TrendingUp, Calendar, Percent, DollarSign, Info, Building2, Search, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Tooltip,
@@ -37,6 +36,59 @@ interface MortgageCalculatorProps {
     location?: string;
   };
 }
+
+const getRangePercent = (value: number, min: number, max: number) => {
+  if (max <= min) return 0;
+  return Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
+};
+
+interface MortgageRangeProps {
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  ariaLabel: string;
+  isNavy: boolean;
+  onChange: (value: number) => void;
+}
+
+const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: MortgageRangeProps) => {
+  const progress = getRangePercent(value, min, max);
+  const syncValue = (target: EventTarget & HTMLInputElement) => onChange(Number(target.value));
+  const fill = isNavy
+    ? "linear-gradient(90deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)"
+    : "linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%)";
+  const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
+
+  return (
+    <input
+      type="range"
+      min={min}
+      max={max}
+      step={step}
+      value={value}
+      aria-label={ariaLabel}
+      onInput={(event) => syncValue(event.currentTarget)}
+      onChange={(event) => syncValue(event.currentTarget)}
+      onPointerUp={(event) => syncValue(event.currentTarget)}
+      onMouseUp={(event) => syncValue(event.currentTarget)}
+      onTouchEnd={(event) => syncValue(event.currentTarget)}
+      onKeyUp={(event) => syncValue(event.currentTarget)}
+      className="mortgage-range-input w-full"
+      style={
+        {
+          background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
+          ["--mortgage-range-thumb" as any]: isNavy
+            ? "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #DBEAFE 45%, #93C5FD 100%)"
+            : "#FFFFFF",
+          ["--mortgage-range-thumb-shadow" as any]: isNavy
+            ? "0 0 0 2px #3B82F6 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(96,165,250,0.85), 0 4px 14px rgba(30,64,175,0.55)"
+            : "0 2px 8px rgba(184,149,85,0.45), 0 0 0 2px #B89555 inset",
+        } as CSSProperties
+      }
+    />
+  );
+};
 
 const MortgageCalculator = ({
   defaultPrice = 2000000,
@@ -76,7 +128,7 @@ const MortgageCalculator = ({
       "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #DBEAFE 45%, #93C5FD 100%)",
     ["--slider-thumb-shadow" as any]:
       "0 0 0 2px #3B82F6 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(96,165,250,0.85), 0 4px 14px rgba(30,64,175,0.55)",
-  } as React.CSSProperties;
+  } as CSSProperties;
 
   useEffect(() => {
     if (!projectSearchOpen) return;
@@ -317,14 +369,7 @@ const MortgageCalculator = ({
               </span>
               <span className="text-[#1A1A1A] font-bold text-sm">{formatCurrencyAbbreviated(propertyPrice)}</span>
             </div>
-            <Slider
-              value={[propertyPrice]}
-              onValueChange={([value]) => handlePriceChange(value)}
-              min={500000}
-              max={50000000}
-              step={100000}
-              className="w-full"
-            />
+            <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={500000} max={50000000} step={100000} ariaLabel="Property Price" isNavy={isNavy} />
             <div className="flex justify-between text-[10px] text-[#1A1A1A]/70 mt-1">
               <span>AED 500K</span>
               <span>AED 50M</span>
@@ -340,14 +385,7 @@ const MortgageCalculator = ({
               </span>
               <span className="text-[#1A1A1A] font-bold text-sm">{downPaymentPercent}% — {formatCurrencyAbbreviated(calculations.downPayment)}</span>
             </div>
-            <Slider
-              value={[downPaymentPercent]}
-              onValueChange={([value]) => setDownPaymentPercent(value)}
-              min={5}
-              max={80}
-              step={5}
-              className="w-full"
-            />
+            <MortgageRange value={downPaymentPercent} onChange={setDownPaymentPercent} min={5} max={80} step={5} ariaLabel="Down Payment" isNavy={isNavy} />
             <div className="flex justify-between text-[10px] text-[#1A1A1A]/70 mt-1">
               <span>5%</span>
               <span>80%</span>
@@ -363,14 +401,7 @@ const MortgageCalculator = ({
               </span>
               <span className="text-[#1A1A1A] font-bold text-sm">{interestRate}%</span>
             </div>
-            <Slider
-              value={[interestRate]}
-              onValueChange={([value]) => setInterestRate(value)}
-              min={2}
-              max={10}
-              step={0.25}
-              className="w-full"
-            />
+            <MortgageRange value={interestRate} onChange={setInterestRate} min={2} max={10} step={0.25} ariaLabel="Interest Rate" isNavy={isNavy} />
             <div className="flex justify-between text-[10px] text-[#1A1A1A]/70 mt-1">
               <span>2%</span>
               <span>10%</span>
@@ -386,14 +417,7 @@ const MortgageCalculator = ({
               </span>
               <span className="text-[#1A1A1A] font-bold text-sm">{loanTermYears} Years</span>
             </div>
-            <Slider
-              value={[loanTermYears]}
-              onValueChange={([value]) => setLoanTermYears(value)}
-              min={5}
-              max={30}
-              step={5}
-              className="w-full"
-            />
+            <MortgageRange value={loanTermYears} onChange={setLoanTermYears} min={5} max={30} step={5} ariaLabel="Loan Term" isNavy={isNavy} />
             <div className="flex justify-between text-[10px] text-[#1A1A1A]/70 mt-1">
               <span>5 Years</span>
               <span>30 Years</span>
@@ -489,14 +513,7 @@ const MortgageCalculator = ({
                 className="bg-background border-border text-foreground focus:border-[#B89555]"
               />
               <div className="py-4">
-                <Slider
-                  value={[propertyPrice]}
-                  onValueChange={([value]) => handlePriceChange(value)}
-                  min={500000}
-                  max={50000000}
-                  step={100000}
-                  className="w-full"
-                />
+                <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={500000} max={50000000} step={100000} ariaLabel="Property Price" isNavy={isNavy} />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>AED 500K</span>
@@ -524,14 +541,7 @@ const MortgageCalculator = ({
                 <span className="text-[#1A1A1A] font-semibold">{downPaymentPercent}%</span>
               </div>
               <div className="py-4">
-                <Slider
-                  value={[downPaymentPercent]}
-                  onValueChange={([value]) => setDownPaymentPercent(value)}
-                  min={5}
-                  max={80}
-                  step={5}
-                  className="w-full"
-                />
+                <MortgageRange value={downPaymentPercent} onChange={setDownPaymentPercent} min={5} max={80} step={5} ariaLabel="Down Payment" isNavy={isNavy} />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>5%</span>
@@ -550,14 +560,7 @@ const MortgageCalculator = ({
                 <span className="text-[#1A1A1A] font-semibold">{interestRate}%</span>
               </div>
               <div className="py-4">
-                <Slider
-                  value={[interestRate]}
-                  onValueChange={([value]) => setInterestRate(value)}
-                  min={2}
-                  max={10}
-                  step={0.25}
-                  className="w-full"
-                />
+                <MortgageRange value={interestRate} onChange={setInterestRate} min={2} max={10} step={0.25} ariaLabel="Interest Rate" isNavy={isNavy} />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>2%</span>
@@ -575,14 +578,7 @@ const MortgageCalculator = ({
                 <span className="text-[#1A1A1A] font-semibold">{loanTermYears} Years</span>
               </div>
               <div className="py-4">
-                <Slider
-                  value={[loanTermYears]}
-                  onValueChange={([value]) => setLoanTermYears(value)}
-                  min={5}
-                  max={30}
-                  step={5}
-                  className="w-full"
-                />
+                <MortgageRange value={loanTermYears} onChange={setLoanTermYears} min={5} max={30} step={5} ariaLabel="Loan Term" isNavy={isNavy} />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>5 Years</span>
