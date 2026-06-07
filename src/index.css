@@ -5651,34 +5651,53 @@ html[data-tool-fullscreen="true"] [data-support-launcher],
 html[data-tool-fullscreen="true"] [data-web-developer-dock] {
   display: none !important;
 }
+html[data-tool-fullscreen="true"],
 html[data-tool-fullscreen="true"] body {
   padding-left: 0 !important;
   padding-top: 0 !important;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
 }
 html[data-tool-fullscreen="true"] [data-tool-shell-root] {
   position: fixed !important;
   inset: 0 !important;
   z-index: 9990 !important;
-  max-width: none !important;
-  width: 100vw !important;
+  max-width: 100% !important;
+  width: 100% !important;
   height: 100vh !important;
   margin: 0 !important;
   padding: 0 !important;
-  overflow: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
   border-radius: 0 !important;
 }
 html[data-tool-fullscreen="true"] main {
   padding-left: 0 !important;
   padding-top: 0 !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
 }
 html[data-tool-fullscreen="true"] [data-tool-frame] {
-  max-width: none !important;
+  max-width: 100% !important;
   width: 100% !important;
   min-height: 100vh !important;
+  overflow-x: hidden !important;
 }
 html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   border-radius: 0 !important;
   min-height: 100vh;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+/* Tool shell itself should never produce horizontal scroll, even when
+   inside MainLayout (non-fullscreen). Inner sections that genuinely need
+   horizontal scroll can opt-in with [data-allow-x-scroll]. */
+[data-tool-shell-root] {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+[data-tool-shell-root] [data-allow-x-scroll] {
+  overflow-x: auto !important;
 }
 
 /* =========================================================================
