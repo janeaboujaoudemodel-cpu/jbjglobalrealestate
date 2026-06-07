@@ -413,28 +413,29 @@ function SegmentedPill({
       onClick={onClick}
       data-allow-dark-cta
       data-no-contrast-guard
-      className="inline-flex items-center justify-center gap-2 w-full h-10 px-4 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-150 hover:brightness-110"
+      data-listing-pill={active ? "active" : "inactive"}
+      className="jj-listing-pill inline-flex items-center justify-center gap-2 w-full h-10 px-4 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-150 hover:brightness-110"
       style={
         active
           ? {
               background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.primaryDeep} 100%)`,
               color: "#FFFFFF",
-              WebkitTextFillColor: "#FFFFFF",
+              ["--jj-pill-fg" as any]: "#FFFFFF",
               border: `1px solid ${theme.primaryDeep}`,
               boxShadow: `0 10px 24px -12px ${theme.primary}99`,
             }
           : {
               backgroundColor: "#FFFFFF",
               color: inactiveFg,
-              WebkitTextFillColor: inactiveFg,
+              ["--jj-pill-fg" as any]: inactiveFg,
               border: `2px solid ${inactiveFg}`,
             }
       }
     >
-      <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }} data-no-contrast-guard>{icon}</span>
-      <span style={{ color: fg, WebkitTextFillColor: fg }} data-no-contrast-guard>{children}</span>
+      <span className="jj-listing-pill-ico inline-flex">{icon}</span>
+      <span className="jj-listing-pill-lbl">{children}</span>
       {trailing && (
-        <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }} data-no-contrast-guard>{trailing}</span>
+        <span className="jj-listing-pill-ico inline-flex">{trailing}</span>
       )}
     </button>
   );
