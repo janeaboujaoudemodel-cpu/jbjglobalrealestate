@@ -834,8 +834,9 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             <p
               className="text-sm mb-5"
               style={{
-                color: theme.primary,
-                WebkitTextFillColor: theme.primary,
+                color: "#1A1A1A",
+                WebkitTextFillColor: "#1A1A1A",
+                opacity: 0.78,
               }}
               data-no-contrast-guard
             >
