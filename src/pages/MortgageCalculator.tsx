@@ -214,7 +214,17 @@ const MortgageCalculatorPage = () => {
                 </div>
                 <div className="flex-1 flex flex-wrap gap-2 md:justify-end">
                   {bankPartners.map((bank) => (
-                    <span key={bank} className="allow-white rounded-full px-3 py-1.5 text-xs font-semibold" style={{ color: "#DBEAFE", background: "rgba(96,165,250,0.13)", border: "1px solid rgba(147,197,253,0.32)" }}>
+                    <span
+                      key={bank}
+                      className="allow-white rounded-full px-3 py-1.5 text-xs font-semibold"
+                      style={{
+                        color: "#FFFFFF",
+                        background: "linear-gradient(135deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)",
+                        border: "1px solid rgba(191,219,254,0.78)",
+                        boxShadow: "0 0 0 1px rgba(147,197,253,0.25), 0 8px 22px rgba(96,165,250,0.24), inset 0 1px 0 rgba(255,255,255,0.55)",
+                        textShadow: "0 2px 12px rgba(0,0,0,0.65)",
+                      }}
+                    >
                       {bank}
                     </span>
                   ))}
@@ -229,10 +239,11 @@ const MortgageCalculatorPage = () => {
                 data-no-contrast-guard
                 className="allow-white inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold rounded-xl transition-all hover:scale-[1.02]"
                 style={{
-                  background: `linear-gradient(135deg, ${NAVY_GLOW} 0%, ${NAVY} 55%, ${NAVY_DARK} 100%)`,
-                  border: "1px solid rgba(147,197,253,0.6)",
+                  background: "linear-gradient(135deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)",
+                  border: "1px solid rgba(191,219,254,0.78)",
                   color: "#FFFFFF",
-                  boxShadow: "0 0 32px rgba(96,165,250,0.5)",
+                  boxShadow: "0 0 0 1px rgba(147,197,253,0.35), 0 12px 36px rgba(96,165,250,0.42), inset 0 1px 0 rgba(255,255,255,0.55)",
+                  textShadow: "0 2px 14px rgba(0,0,0,0.65)",
                 }}
               >
                 Request Mortgage Partner Introduction
