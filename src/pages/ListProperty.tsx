@@ -405,14 +405,15 @@ function SegmentedPill({
   theme?: ModeTheme;
   trailing?: React.ReactNode;
 }) {
-  const fg = active ? "#FFFFFF" : theme.primary;
+  const inactiveFg = theme.primaryDeep || theme.primary;
+  const fg = active ? "#FFFFFF" : inactiveFg;
   return (
     <button
       type="button"
       onClick={onClick}
       data-allow-dark-cta
       data-no-contrast-guard
-      className="inline-flex items-center justify-center gap-2 w-full h-10 px-4 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-150 hover:brightness-110"
+      className="inline-flex items-center justify-center gap-2 w-full h-10 px-4 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-150 hover:brightness-110"
       style={
         active
           ? {
@@ -424,16 +425,16 @@ function SegmentedPill({
             }
           : {
               backgroundColor: "#FFFFFF",
-              color: theme.primary,
-              WebkitTextFillColor: theme.primary,
-              border: `1.5px solid ${theme.primary}`,
+              color: inactiveFg,
+              WebkitTextFillColor: inactiveFg,
+              border: `2px solid ${inactiveFg}`,
             }
       }
     >
-      <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{icon}</span>
-      <span style={{ color: fg, WebkitTextFillColor: fg }}>{children}</span>
+      <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }} data-no-contrast-guard>{icon}</span>
+      <span style={{ color: fg, WebkitTextFillColor: fg }} data-no-contrast-guard>{children}</span>
       {trailing && (
-        <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{trailing}</span>
+        <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }} data-no-contrast-guard>{trailing}</span>
       )}
     </button>
   );
