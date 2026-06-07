@@ -317,7 +317,7 @@ const RequestSchema = z.object({
   images: z.array(z.string().max(5000000)).min(1, "At least 1 image is required").max(10, "Maximum 10 images allowed"),
   propertyType: z.string().max(100).trim().optional(),
   propertyName: z.string().max(200).trim().optional(),
-  unitPreference: z.enum(['metric', 'imperial', 'both']).optional(),
+  unitPreference: z.enum(['sqft', 'sqm', 'metric', 'imperial', 'both']).optional(),
   roomLabels: z.array(z.string().max(100)).max(20).optional(),
   roomList: z.string().max(500).trim().optional(),
 });
