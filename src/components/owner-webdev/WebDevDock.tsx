@@ -24,7 +24,10 @@ import {
   Trash2,
   Mic,
   Square,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
+import WebDevVersionHistory from "./WebDevVersionHistory";
 import html2canvas from "html2canvas";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -86,6 +89,7 @@ export default function WebDevDock() {
   const panelRef = useRef<HTMLDivElement>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+  const [expandedHistoryId, setExpandedHistoryId] = useState<string | null>(null);
 
   useEffect(() => {
     const media = window.matchMedia("(min-width: 768px)");
@@ -612,6 +616,31 @@ export default function WebDevDock() {
                       >
                         <Trash2 className="w-3 h-3 mr-1" /> Cancel
                       </Button>
+                    </div>
+                  )}
+                  {cr.override_id && (
+                    <div className="mt-2 pt-2 border-t border-[#B89555]/15">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedHistoryId((prev) =>
+                            prev === cr.id ? null : cr.id,
+                          )
+                        }
+                        className="inline-flex items-center gap-1 text-[10px] text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+                      >
+                        {expandedHistoryId === cr.id ? (
+                          <ChevronUp className="w-3 h-3" />
+                        ) : (
+                          <ChevronDown className="w-3 h-3" />
+                        )}
+                        History
+                      </button>
+                      {expandedHistoryId === cr.id && (
+                        <div className="mt-1.5">
+                          <WebDevVersionHistory overrideId={cr.override_id} />
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

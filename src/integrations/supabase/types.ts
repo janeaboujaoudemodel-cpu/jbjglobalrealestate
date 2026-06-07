@@ -26026,6 +26026,63 @@ export type Database = {
         }
         Relationships: []
       }
+      owner_ui_override_versions: {
+        Row: {
+          created_at: string
+          created_by: string
+          css: Json
+          id: string
+          label: string | null
+          override_id: string
+          restored_from_version_id: string | null
+          route_pattern: string
+          selector: string
+          status: string
+          version_number: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          css?: Json
+          id?: string
+          label?: string | null
+          override_id: string
+          restored_from_version_id?: string | null
+          route_pattern: string
+          selector: string
+          status?: string
+          version_number: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          css?: Json
+          id?: string
+          label?: string | null
+          override_id?: string
+          restored_from_version_id?: string | null
+          route_pattern?: string
+          selector?: string
+          status?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "owner_ui_override_versions_override_id_fkey"
+            columns: ["override_id"]
+            isOneToOne: false
+            referencedRelation: "owner_ui_overrides"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "owner_ui_override_versions_restored_from_version_id_fkey"
+            columns: ["restored_from_version_id"]
+            isOneToOne: false
+            referencedRelation: "owner_ui_override_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       owner_ui_overrides: {
         Row: {
           created_at: string
