@@ -4488,6 +4488,7 @@ button[data-phone-code-trigger]:hover {
 /* PRIMITIVE CONTRAST LOCKS — no broad descendant repaint sweeps. */
 .jj-cta-dark,
 .jj-navy-cta,
+[data-cta="dark"],
 button[data-phone-code-trigger],
 [data-allow-dark-cta],
 [data-icon-tile][data-surface="ink"],
@@ -4506,6 +4507,7 @@ button[data-phone-code-trigger],
 
 .jj-cta-dark :where(span, svg, [class*="lucide"]),
 .jj-navy-cta :where(span, svg, [class*="lucide"]),
+[data-cta="dark"] :where(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger] :where(span, svg, [class*="lucide"]),
 [data-allow-dark-cta] :where(span, svg, [class*="lucide"]),
 [data-icon-tile][data-surface="ink"] :where(svg, [class*="lucide"]),

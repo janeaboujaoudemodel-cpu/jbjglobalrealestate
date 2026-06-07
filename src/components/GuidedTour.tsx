@@ -424,7 +424,8 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 <Button
                   type="button"
                   onClick={next}
-                  className="h-9 px-4 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#FDFBF7] border border-[#B89555]/40"
+                  data-cta="dark"
+                  className="jj-cta-dark h-9 px-4"
                 >
                   {stepIdx + 1 === SPOTLIGHT_STEPS.length ? "Finish" : "Next"}
                   <ArrowRight className="w-4 h-4 ml-1" />
