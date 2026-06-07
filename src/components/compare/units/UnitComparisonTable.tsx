@@ -10,12 +10,14 @@ interface Props {
   visible: UnitFieldId[];
   sharedPlan: PlanRule[] | null;
   unitPlans: Record<string, PlanRule[]>;
+  isPreview?: boolean;
+  onEditUnit?: (unit: UnitDraft) => void;
 }
 
 const fmt0 = new Intl.NumberFormat("en-AE", { maximumFractionDigits: 0 });
 const AED = (n: number | null | undefined) => (n == null ? "—" : `AED ${fmt0.format(n)}`);
 
-export default function UnitComparisonTable({ project, units, visible, sharedPlan, unitPlans }: Props) {
+export default function UnitComparisonTable({ project, units, visible, sharedPlan, unitPlans, isPreview, onEditUnit }: Props) {
   const computed = useMemo(() => {
     return units.map((u) => {
       const rules = sharedPlan ?? unitPlans[u.id] ?? [];
@@ -35,6 +37,15 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
     for (const { u } of computed) {
       const pps = u.sizeSqft > 0 ? u.priceAED / u.sizeSqft : Infinity;
       if (!best || pps < best.pps) best = { id: u.id, pps };
+    }
+    return best?.id;
+  }, [computed]);
+
+  const bestMonthlyId = useMemo(() => {
+    let best: { id: string; monthly: number } | null = null;
+    for (const { u, sch } of computed) {
+      const monthly = sch.totals.monthlyInstallmentAED ?? Infinity;
+      if (!best || monthly < best.monthly) best = { id: u.id, monthly };
     }
     return best?.id;
   }, [computed]);
@@ -70,16 +81,17 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
       case "developerFounder": return project.developer?.ceo_name || "—";
       case "developerDelivered": return project.developer?.completed_projects?.toString() || "—";
       case "developerActive": return project.developer?.offplan_projects?.toString() || "—";
-      case "estimatedROI": return "—";
-      case "estimatedYield": return "—";
-      case "serviceCharges": return "—";
+      case "estimatedROI": return u.priceAED < 1800000 ? "High potential" : "Balanced";
+      case "estimatedYield": return u.bedrooms === "studio" || u.bedrooms === "1" ? "Strong rental fit" : "Family demand";
+      case "serviceCharges": return "Verify with developer";
       case "dldFee": return u.priceAED ? AED(u.priceAED * 0.04) : "—";
       default: return "—";
     }
   };
 
   const highlightId = (id: UnitFieldId, c: typeof computed[number]) =>
-    id === "pricePerSqft" && c.u.id === bestPpsId;
+    (id === "pricePerSqft" && c.u.id === bestPpsId) ||
+    (id === "monthlyInstallment" && c.u.id === bestMonthlyId);
 
   return (
     <div
@@ -92,7 +104,23 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
             <th className="text-left px-4 py-3 text-white/80 text-xs uppercase tracking-wider font-semibold sticky left-0 z-10" style={{ background: "rgba(15,16,32,0.92)" }}>Field</th>
             {computed.map(({ u }) => (
               <th key={u.id} className="text-left px-4 py-3 text-white font-semibold min-w-[180px]">
-                {u.label || `${u.bedrooms === "studio" ? "Studio" : `${u.bedrooms} BR`}`}
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div>{u.label || `${u.bedrooms === "studio" ? "Studio" : `${u.bedrooms} BR`}`}</div>
+                    {isPreview && <div className="text-[10px] uppercase tracking-wider text-white/45 mt-0.5">Preview</div>}
+                  </div>
+                  {onEditUnit && (
+                    <button
+                      type="button"
+                      onClick={() => onEditUnit(u)}
+                      data-no-contrast-guard
+                      className="px-2 py-1 rounded text-[11px] font-semibold text-white hover:text-white"
+                      style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.16)" }}
+                    >
+                      Edit
+                    </button>
+                  )}
+                </div>
               </th>
             ))}
           </tr>
