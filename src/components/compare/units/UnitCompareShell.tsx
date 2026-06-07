@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, Sparkles, Share2, Download, FileText, Building2 } from "lucide-react";
+import { ArrowLeft, Plus, Sparkles, Share2, Download, FileText } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -361,12 +361,13 @@ export default function UnitCompareShell({ onModeChange }: Props) {
           setUnitPlans((m) => ({ ...m, [u.id]: DEFAULT_PLAN_RULES }));
         }}
         onSave={(u) => {
+          const savedUnit = u.id.startsWith("preview-") ? { ...u, id: crypto.randomUUID() } : u;
           setUnits((arr) => {
-            const exists = arr.some((x) => x.id === u.id);
-            if (exists) return arr.map((x) => (x.id === u.id ? u : x));
-            return [...arr, { ...u, id: crypto.randomUUID() }];
+            const exists = arr.some((x) => x.id === savedUnit.id);
+            if (exists) return arr.map((x) => (x.id === savedUnit.id ? savedUnit : x));
+            return [...arr, savedUnit];
           });
-          setUnitPlans((m) => ({ ...m, [u.id]: m[u.id] || DEFAULT_PLAN_RULES }));
+          setUnitPlans((m) => ({ ...m, [savedUnit.id]: m[u.id] || DEFAULT_PLAN_RULES }));
         }}
       />
     </CompareAIShell>
