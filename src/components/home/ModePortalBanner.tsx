@@ -44,8 +44,10 @@ const MODE_CONFIG = {
 
 export default function ModePortalBanner() {
   const { mode } = useUserModeContext();
-  const cfg = MODE_CONFIG[mode as keyof typeof MODE_CONFIG] ?? MODE_CONFIG.investor;
-  const Icon = cfg.icon;
+  const cfg =
+    (mode && MODE_CONFIG[mode as keyof typeof MODE_CONFIG]) || MODE_CONFIG.investor;
+  const Icon = cfg?.icon ?? Briefcase;
+  if (!cfg) return null;
 
 
   return (
