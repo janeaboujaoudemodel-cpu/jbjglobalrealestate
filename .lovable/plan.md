@@ -1,60 +1,80 @@
-Plan to complete the pending work
+## Goal
 
-1. Fix Compare Units so it is usable immediately
-- Keep the current dark AI comparison theme and colors.
-- Show a live editable comparison table as soon as one project is selected, even before units are added.
-- Add default sample rows/columns for Studio, 1 BR, and 2 BR so the page is never visually empty.
-- Make each unit column editable directly from the table or via an Edit action.
-- Keep the selected project and developer locked as shared context for every unit.
-- Add clear actions above the table: Add Unit, Manage Fields, Export PDF, Save, Share.
-- Ensure Export PDF is available for the live preview/default table and for user-added units.
+Fix four concrete problems you flagged, no scope creep, no feature removal.
 
-2. Upgrade the unit comparison table structure
-- Columns: Studio / 1 BR / 2 BR / 3 BR or custom unit labels.
-- Shared project rows: Project name, Developer, Location, Handover, Payment plan.
-- Unit rows: Bedrooms, unit number, floor, view, size, price, price/sqft.
-- Investment rows: DLD fee, down payment, monthly installment, construction total, post-handover total, installment count, estimated yield/ROI placeholders where data is unavailable.
-- Highlight best value by lowest price/sqft and strongest payment-plan affordability.
+---
 
-3. Fix Add Unit dialog usability
-- Improve the low-contrast labels/buttons in the modal while preserving the existing dark/purple theme.
-- Add Edit Unit support so users can correct unit details after adding them.
-- Keep manual entry simple: label, bedroom type, size, price, view, floor, unit number.
+## 1. Interior Design AI — restyle body to match the header
 
-4. Fix Compare Projects metrics/table
-- Keep the existing preview table style but make the real comparison table match the same metric-first layout.
-- Add missing metric rows: price/sqft, estimated rental yield, handover, payment plan, AI smart rating, risk score, developer tier, location strength, service charge, DLD fee, and best-for investor profile.
-- Make the preview/export actions available consistently where a table is visible.
-- Fix any contrast problems in the real compare-projects table caused by white text on champagne backgrounds.
+Keep the purple→indigo→teal header gradient (the part you said "looks perfect") and reuse it as the page's visual identity:
 
-5. Complete pending Property Measurement fixes from the prior prompt
-- Confirm photo upload, video upload, and Download Report are visible in the user flow.
-- Fix the backend/frontend mismatch where videos are accepted in the UI but only images are sent to the AI. If video files are uploaded, extract/send supported frames or clearly handle them so the flow does not fail.
-- Keep the existing green/black UI and only preserve the property-name contrast fix already requested.
+- **Subtitle "Upload a photo or describe your space…"** → solid white (`#FFFFFF`) at 90% opacity for contrast against the gradient.
+- **All inner cards** (Project Name input, Concept/Redesign/Staging tabs, Upload Photo card, Design Style, Color Palette, Design Assistant) → switch from current near-black panels to the same purple-violet gradient family as the header, with a 1px violet hairline border and matching glow shadow.
+- **Section headers** ("Design Style", "Color Palette", "Design Assistant") → white text, violet icon tile (same as the AI-Powered Design chip in the hero).
+- **Style chips** (Modern, Classic, Luxury…) → unify as violet outline pills; active = filled violet gradient + white text.
+- **"Generate Concept" CTA** → keep purple→pink gradient but make sure idle + hover both render white label + white sparkle.
+- **Layout fix** — content currently slides under the fixed app header. Add `pt-[88px]` to the tool shell body when not in fullscreen so the hero starts below the 88px chrome.
 
-6. Visual and technical validation proof
-- Navigate as a user through /compare?mode=units.
-- Screenshot proof at these stages:
-  1. project selected and editable preview table visible
-  2. add/edit unit dialog
-  3. table populated with Studio/1BR/2BR-style unit columns
-  4. export action available
-  5. compare-projects metric table view
-- Technically validate:
-  - no console errors
-  - project search works
-  - add/edit unit updates the table
-  - export PDF triggers from preview and populated table
-  - measurement tool still accepts photos/videos and report download is reachable
+## 2. Fullscreen toggle — invert the logic globally
 
-Files expected to change
-- src/components/compare/units/UnitCompareShell.tsx
-- src/components/compare/units/UnitComparisonTable.tsx
-- src/components/compare/units/AddUnitDialog.tsx
-- src/lib/compare/unitFieldsConfig.ts
-- src/lib/compare/exportUnitComparisonPdf.ts
-- src/pages/Compare.tsx
-- src/pages/PropertyMeasurement.tsx
-- supabase/functions/property-measurement/index.ts, only if required for video handling
+Right now the maximize button shows on tool pages that are already in normal mode, which is confusing.
 
-No changes to branding, colors, routing, access rules, or unrelated UI.
+- Rename the control from ambiguous icon → `Maximize` / `Exit fullscreen` with a clear label tooltip.
+- **Default state = normal (sidebar + header visible).** Tool opens inside the L-shaped frame just like every other page.
+- Clicking **Maximize** → hides global header + vertical sidebar + utility bar (this is the real fullscreen), button swaps to **Exit fullscreen**.
+- Clicking **Exit fullscreen** → restores chrome, button swaps back to Maximize.
+- Apply to every tool that uses `PremiumToolShell` or `ToolAnimatedFrame` (no per-tool wiring needed — it's a single component).
+- The recent `data-tool-fullscreen` CSS in `index.css` already does the hide work; only the toggle component needs the label + state-sync fix.
+
+## 3. List Property — fix Purpose card contrast (`/list-property` top section)
+
+Inactive segmented pills (`For Sale` ↔ `For Rent`, `Manual` ↔ `AI-Assisted` ↔ `Browse`) currently render as **empty white pills** because the inner icon/label color is being overwritten.
+
+- Lock inactive pill: white background, **mode-color** text + icon (emerald for Manual, violet for AI, navy for Browse), 1.5px mode-color border. No global guard can override (apply `!important` via inline `color` + `WebkitTextFillColor` + `data-no-contrast-guard`).
+- Lock active pill: mode-gradient background, white label + icon at idle and hover.
+- "View my submissions →" button kept as-is but verified contrast.
+
+## 4. List Property AI-Assisted page (`Seller Assistant`)
+
+- **"Extract with AI"** purple CTA — verify white label + white sparkle at idle/hover.
+- **"Skip — Fill Manually"** outline button — make the label visible (currently lavender-on-lavender). Lock to violet text on white pill, violet border.
+- **"Open Dashboard →"** button on the "My Listing Submissions" band — currently invisible (white text on light gradient). Lock to navy fill + white label + white arrow.
+- **"No submissions yet"** subtitle — switch to ink `#1A1A1A` at 75% on the cream card (currently lavender-on-lavender).
+
+## 5. List Property main mode picker (`Seller Listing Tool` / `Seller Assistant (AI)` cards)
+
+- **"Start →"** CTA on both cards is currently invisible because the white label sits on a light pill inside a dark card. Lock to: white fill, dark navy ink label, navy arrow — same pattern used on the navy CTA system across the site.
+- Card body text colors verified: eyebrow, title, description all render white on the dark card; meta chip (`≈ 4–6 minutes` / `≈ 60 seconds`) renders white-on-white-translucent and stays readable.
+
+## 6. List Property manual page (`Seller Listing Studio`)
+
+- Same Purpose pill fix as section 3 (component is shared, so this is one fix).
+- Verify "Back to Portal" stays ink-on-cream.
+
+---
+
+## Validation
+
+Before delivering: take screenshots of `/interior-design-ai`, `/list-property` (top), `/list-property?mode=ai`, `/list-property?mode=manual` and confirm:
+1. Every button label and icon is visible at idle.
+2. Hover does not flip white-on-white.
+3. No content sits under the 88px header.
+4. Maximize button shows correct label for its current state.
+
+## Out of scope (will not touch)
+
+- Backend / edge functions.
+- Lead-capture form fields, validation, or submission logic.
+- Other tool pages (Mortgage, Rental Index, Business Card Scanner) — earlier turns covered the global scroll fix; further reskin of those is a separate request.
+- Removing any existing feature, card, or section.
+
+## Files touched
+
+```text
+src/components/tools/FullscreenToolToggle.tsx     (label + state sync)
+src/pages/InteriorDesignAI.tsx                    (body reskin + subtitle contrast + 88px offset)
+src/pages/ListProperty.tsx                        (SegmentedPill lock + Start CTA fix)
+src/pages/SellerListing.tsx                       (Extract / Skip / Open Dashboard / No submissions contrast)
+```
+
+Approve and I'll execute the four fixes in one pass, with screenshot verification at the end.
