@@ -5979,3 +5979,14 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 [data-neon-page] section [style*="background-image"] p {
   color: rgba(246,251,248,0.85) !important;
 }
+
+/* Listing purpose/mode segmented pills — force inner icon+label to inherit pill color */
+.jj-listing-pill .jj-listing-pill-lbl,
+.jj-listing-pill .jj-listing-pill-ico,
+.jj-listing-pill .jj-listing-pill-ico svg,
+.jj-listing-pill .jj-listing-pill-lbl * {
+  color: var(--jj-pill-fg, currentColor) !important;
+  -webkit-text-fill-color: var(--jj-pill-fg, currentColor) !important;
+  stroke: var(--jj-pill-fg, currentColor) !important;
+  opacity: 1 !important;
+}
