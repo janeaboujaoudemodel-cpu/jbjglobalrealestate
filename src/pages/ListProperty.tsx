@@ -710,16 +710,17 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               data-no-contrast-guard
               className="font-semibold hover:brightness-105 jj-dashboard-pulse"
               style={{
-                background: ombreSoft(theme),
-                color: accent,
+                background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.primaryDeep} 100%)`,
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
                 border: `1.5px solid ${theme.badgeBorder}`,
-                boxShadow: `0 10px 24px -10px ${theme.badgeBorder}99`,
+                boxShadow: `0 10px 24px -10px ${theme.primaryDeep}`,
               }}
             >
               <Link to="/dashboard/my-listings">
-                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent }} />
-                <span style={{ color: accent, WebkitTextFillColor: accent, fontWeight: 700 }}>Open full dashboard</span>
-                <span className="jj-arrow-anim inline-flex ml-2"><ArrowRight className="w-4 h-4" /></span>
+                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: "#FFFFFF" }} />
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", fontWeight: 700 }}>Open full dashboard</span>
+                <span className="jj-arrow-anim inline-flex ml-2" style={{ color: "#FFFFFF" }}><ArrowRight className="w-4 h-4" style={{ color: "#FFFFFF" }} /></span>
 
               </Link>
             </Button>
