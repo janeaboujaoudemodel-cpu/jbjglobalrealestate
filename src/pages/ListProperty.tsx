@@ -405,35 +405,37 @@ function SegmentedPill({
   theme?: ModeTheme;
   trailing?: React.ReactNode;
 }) {
-  const fg = active ? "#FFFFFF" : theme.primary;
+  const inactiveFg = theme.primaryDeep || theme.primary;
+  const fg = active ? "#FFFFFF" : inactiveFg;
   return (
     <button
       type="button"
       onClick={onClick}
       data-allow-dark-cta
       data-no-contrast-guard
-      className="inline-flex items-center justify-center gap-2 w-full h-10 px-4 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-150 hover:brightness-110"
+      data-listing-pill={active ? "active" : "inactive"}
+      className="jj-listing-pill inline-flex items-center justify-center gap-2 w-full h-10 px-4 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-150 hover:brightness-110"
       style={
         active
           ? {
               background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.primaryDeep} 100%)`,
               color: "#FFFFFF",
-              WebkitTextFillColor: "#FFFFFF",
+              ["--jj-pill-fg" as any]: "#FFFFFF",
               border: `1px solid ${theme.primaryDeep}`,
               boxShadow: `0 10px 24px -12px ${theme.primary}99`,
             }
           : {
               backgroundColor: "#FFFFFF",
-              color: theme.primary,
-              WebkitTextFillColor: theme.primary,
-              border: `1.5px solid ${theme.primary}`,
+              color: inactiveFg,
+              ["--jj-pill-fg" as any]: inactiveFg,
+              border: `2px solid ${inactiveFg}`,
             }
       }
     >
-      <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{icon}</span>
-      <span style={{ color: fg, WebkitTextFillColor: fg }}>{children}</span>
+      <span className="jj-listing-pill-ico inline-flex">{icon}</span>
+      <span className="jj-listing-pill-lbl">{children}</span>
       {trailing && (
-        <span style={{ color: fg, WebkitTextFillColor: fg, display: "inline-flex" }}>{trailing}</span>
+        <span className="jj-listing-pill-ico inline-flex">{trailing}</span>
       )}
     </button>
   );
@@ -636,16 +638,16 @@ function PickerCard({
           className="inline-flex items-center gap-1.5 text-sm font-bold px-4 h-9 rounded-md group-hover:gap-2 transition-all"
           data-no-contrast-guard
           style={{
-            background: "linear-gradient(135deg, #E5EAF3 0%, #FFFFFF 55%, #DDE3F0 100%)",
-            color: NAVY,
-            WebkitTextFillColor: NAVY,
-            border: `1px solid ${PURPLE}`,
+            background: "#FFFFFF",
+            color: NAVY_DEEP,
+            WebkitTextFillColor: NAVY_DEEP,
+            border: `1.5px solid ${NAVY_DEEP}`,
             boxShadow: `0 6px 18px -8px rgba(168,85,247,0.55)`,
           }}
         >
-          <span style={{ color: NAVY, WebkitTextFillColor: NAVY }}>Start</span>
-          <span className="jj-arrow-anim inline-flex">
-            <ArrowRight className="w-4 h-4" style={{ strokeWidth: 2.5 }} />
+          <span style={{ color: NAVY_DEEP, WebkitTextFillColor: NAVY_DEEP, fontWeight: 800 }}>Start</span>
+          <span className="jj-arrow-anim inline-flex" style={{ color: NAVY_DEEP }}>
+            <ArrowRight className="w-4 h-4" style={{ strokeWidth: 2.5, color: NAVY_DEEP }} />
           </span>
         </span>
 
@@ -709,16 +711,17 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               data-no-contrast-guard
               className="font-semibold hover:brightness-105 jj-dashboard-pulse"
               style={{
-                background: ombreSoft(theme),
-                color: accent,
+                background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.primaryDeep} 100%)`,
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
                 border: `1.5px solid ${theme.badgeBorder}`,
-                boxShadow: `0 10px 24px -10px ${theme.badgeBorder}99`,
+                boxShadow: `0 10px 24px -10px ${theme.primaryDeep}`,
               }}
             >
               <Link to="/dashboard/my-listings">
-                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: accent }} />
-                <span style={{ color: accent, WebkitTextFillColor: accent, fontWeight: 700 }}>Open full dashboard</span>
-                <span className="jj-arrow-anim inline-flex ml-2"><ArrowRight className="w-4 h-4" /></span>
+                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: "#FFFFFF" }} />
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", fontWeight: 700 }}>Open full dashboard</span>
+                <span className="jj-arrow-anim inline-flex ml-2" style={{ color: "#FFFFFF" }}><ArrowRight className="w-4 h-4" style={{ color: "#FFFFFF" }} /></span>
 
               </Link>
             </Button>
@@ -759,8 +762,9 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             <p
               className="text-sm mb-5"
               style={{
-                color: theme.primary,
-                WebkitTextFillColor: theme.primary,
+                color: "#1A1A1A",
+                WebkitTextFillColor: "#1A1A1A",
+                opacity: 0.78,
               }}
               data-no-contrast-guard
             >
@@ -831,8 +835,9 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
             <p
               className="text-sm mb-5"
               style={{
-                color: theme.primary,
-                WebkitTextFillColor: theme.primary,
+                color: "#1A1A1A",
+                WebkitTextFillColor: "#1A1A1A",
+                opacity: 0.78,
               }}
               data-no-contrast-guard
             >
