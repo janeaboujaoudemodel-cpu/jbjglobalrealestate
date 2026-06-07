@@ -507,14 +507,7 @@ const MortgageCalculator = ({
                 className="bg-background border-border text-foreground focus:border-[#B89555]"
               />
               <div className="py-4">
-                <Slider
-                  value={[propertyPrice]}
-                  onValueChange={([value]) => handlePriceChange(value)}
-                  min={500000}
-                  max={50000000}
-                  step={100000}
-                  className="w-full"
-                />
+                <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={500000} max={50000000} step={100000} ariaLabel="Property Price" isNavy={isNavy} />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>AED 500K</span>
@@ -542,14 +535,7 @@ const MortgageCalculator = ({
                 <span className="text-[#1A1A1A] font-semibold">{downPaymentPercent}%</span>
               </div>
               <div className="py-4">
-                <Slider
-                  value={[downPaymentPercent]}
-                  onValueChange={([value]) => setDownPaymentPercent(value)}
-                  min={5}
-                  max={80}
-                  step={5}
-                  className="w-full"
-                />
+                <MortgageRange value={downPaymentPercent} onChange={setDownPaymentPercent} min={5} max={80} step={5} ariaLabel="Down Payment" isNavy={isNavy} />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>5%</span>
@@ -568,14 +554,7 @@ const MortgageCalculator = ({
                 <span className="text-[#1A1A1A] font-semibold">{interestRate}%</span>
               </div>
               <div className="py-4">
-                <Slider
-                  value={[interestRate]}
-                  onValueChange={([value]) => setInterestRate(value)}
-                  min={2}
-                  max={10}
-                  step={0.25}
-                  className="w-full"
-                />
+                <MortgageRange value={interestRate} onChange={setInterestRate} min={2} max={10} step={0.25} ariaLabel="Interest Rate" isNavy={isNavy} />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>2%</span>
@@ -593,14 +572,7 @@ const MortgageCalculator = ({
                 <span className="text-[#1A1A1A] font-semibold">{loanTermYears} Years</span>
               </div>
               <div className="py-4">
-                <Slider
-                  value={[loanTermYears]}
-                  onValueChange={([value]) => setLoanTermYears(value)}
-                  min={5}
-                  max={30}
-                  step={5}
-                  className="w-full"
-                />
+                <MortgageRange value={loanTermYears} onChange={setLoanTermYears} min={5} max={30} step={5} ariaLabel="Loan Term" isNavy={isNavy} />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>5 Years</span>
