@@ -637,16 +637,16 @@ function PickerCard({
           className="inline-flex items-center gap-1.5 text-sm font-bold px-4 h-9 rounded-md group-hover:gap-2 transition-all"
           data-no-contrast-guard
           style={{
-            background: "linear-gradient(135deg, #E5EAF3 0%, #FFFFFF 55%, #DDE3F0 100%)",
-            color: NAVY,
-            WebkitTextFillColor: NAVY,
-            border: `1px solid ${PURPLE}`,
+            background: "#FFFFFF",
+            color: NAVY_DEEP,
+            WebkitTextFillColor: NAVY_DEEP,
+            border: `1.5px solid ${NAVY_DEEP}`,
             boxShadow: `0 6px 18px -8px rgba(168,85,247,0.55)`,
           }}
         >
-          <span style={{ color: NAVY, WebkitTextFillColor: NAVY }}>Start</span>
-          <span className="jj-arrow-anim inline-flex">
-            <ArrowRight className="w-4 h-4" style={{ strokeWidth: 2.5 }} />
+          <span style={{ color: NAVY_DEEP, WebkitTextFillColor: NAVY_DEEP, fontWeight: 800 }}>Start</span>
+          <span className="jj-arrow-anim inline-flex" style={{ color: NAVY_DEEP }}>
+            <ArrowRight className="w-4 h-4" style={{ strokeWidth: 2.5, color: NAVY_DEEP }} />
           </span>
         </span>
 
