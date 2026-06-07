@@ -5576,19 +5576,19 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#102540\] * {
 
 /* Purple ghost button that flips to filled-purple-with-white-text on hover */
 .jj-purple-ghost {
-  background: transparent !important;
-  border: 1.5px solid #A855F7 !important;
-  color: #A855F7 !important;
-  -webkit-text-fill-color: #A855F7 !important;
+  background: rgba(255,255,255,0.06) !important;
+  border: 2px solid #FFFFFF !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   transition: background-color .25s ease, color .25s ease, border-color .25s ease;
 }
-.jj-purple-ghost svg { color: #A855F7 !important; }
+.jj-purple-ghost svg { color: #FFFFFF !important; }
 .jj-purple-ghost:hover,
 .jj-purple-ghost:focus-visible {
   background: linear-gradient(135deg, #5B21B6 0%, #A855F7 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  border-color: #A855F7 !important;
+  border-color: #FFFFFF !important;
 }
 .jj-purple-ghost:hover svg,
 .jj-purple-ghost:focus-visible svg { color: #FFFFFF !important; }
