@@ -67,6 +67,7 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
       step={step}
       value={value}
       aria-label={ariaLabel}
+      onInput={(event) => onChange(Number(event.currentTarget.value))}
       onChange={(event) => onChange(Number(event.currentTarget.value))}
       className="mortgage-range-input w-full"
       style={
