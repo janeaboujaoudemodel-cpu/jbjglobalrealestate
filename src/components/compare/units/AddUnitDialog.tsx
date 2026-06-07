@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
@@ -16,41 +16,56 @@ export interface UnitDraft {
 interface Props {
   open: boolean;
   onOpenChange: (o: boolean) => void;
-  onAdd: (u: UnitDraft) => void;
+  onAdd?: (u: UnitDraft) => void;
+  onSave?: (u: UnitDraft) => void;
+  initialUnit?: UnitDraft | null;
 }
 
 const fld: React.CSSProperties = {
-  background: "rgba(255,255,255,0.06)",
-  border: "1px solid rgba(255,255,255,0.18)",
+  background: "rgba(255,255,255,0.09)",
+  border: "1px solid rgba(255,255,255,0.28)",
   color: "#FFFFFF",
+  WebkitTextFillColor: "#FFFFFF",
+  caretColor: "#C084FC",
 };
 
-export default function AddUnitDialog({ open, onOpenChange, onAdd }: Props) {
+const emptyUnit = (): UnitDraft => ({
+  id: crypto.randomUUID(),
+  label: "",
+  bedrooms: "1",
+  sizeSqft: 800,
+  priceAED: 1500000,
+  view: "",
+  floor: "",
+  unitNumber: "",
+});
+
+export default function AddUnitDialog({ open, onOpenChange, onAdd, onSave, initialUnit }: Props) {
   const [d, setD] = useState<UnitDraft>({
-    id: crypto.randomUUID(),
-    label: "",
-    bedrooms: "1",
-    sizeSqft: 800,
-    priceAED: 1500000,
-    view: "",
-    floor: "",
-    unitNumber: "",
+    ...emptyUnit(),
   });
+
+  useEffect(() => {
+    if (!open) return;
+    setD(initialUnit ? { ...initialUnit } : emptyUnit());
+  }, [initialUnit, open]);
 
   const submit = () => {
     const autoLabel = d.bedrooms === "studio" ? "Studio" : `${d.bedrooms} BR`;
     const label = d.label.trim() || (d.view ? `${autoLabel} – ${d.view}` : autoLabel);
     if (!d.sizeSqft || !d.priceAED) return;
-    onAdd({ ...d, id: crypto.randomUUID(), label });
+    const next = { ...d, id: initialUnit?.id || crypto.randomUUID(), label };
+    if (initialUnit) onSave?.(next);
+    else onAdd?.(next);
     onOpenChange(false);
-    setD({ id: crypto.randomUUID(), label: "", bedrooms: "1", sizeSqft: 800, priceAED: 1500000, view: "", floor: "", unitNumber: "" });
+    setD(emptyUnit());
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg" style={{ background: "#0F1020", border: "1px solid rgba(255,255,255,0.15)", color: "#FFFFFF" }}>
+      <DialogContent className="max-w-lg" style={{ background: "#0F1020", border: "1px solid rgba(192,132,252,0.42)", color: "#FFFFFF" }}>
         <DialogHeader>
-          <DialogTitle className="text-white">Add a unit</DialogTitle>
+          <DialogTitle className="text-white">{initialUnit ? "Edit unit" : "Add a unit"}</DialogTitle>
         </DialogHeader>
 
         <div className="grid grid-cols-2 gap-3">
@@ -80,14 +95,14 @@ export default function AddUnitDialog({ open, onOpenChange, onAdd }: Props) {
         </div>
 
         <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button variant="ghost" onClick={() => onOpenChange(false)} className="text-white hover:text-white border border-white/20">Cancel</Button>
           <button
             onClick={submit}
             data-no-contrast-guard data-allow-dark-cta
             className="px-4 py-2 rounded-lg font-semibold text-white"
             style={{ background: "linear-gradient(135deg, #3B82F6, #7C3AED, #EC4899)" }}
           >
-            Add unit
+            {initialUnit ? "Save unit" : "Add unit"}
           </button>
         </DialogFooter>
       </DialogContent>
@@ -98,7 +113,7 @@ export default function AddUnitDialog({ open, onOpenChange, onAdd }: Props) {
 function Field({ label, children, full }: { label: string; children: React.ReactNode; full?: boolean }) {
   return (
     <label className={`flex flex-col gap-1 ${full ? "col-span-2" : ""}`}>
-      <span className="text-xs text-white/70">{label}</span>
+      <span className="text-xs font-medium" style={{ color: "rgba(255,255,255,0.84)" }}>{label}</span>
       {children}
     </label>
   );
