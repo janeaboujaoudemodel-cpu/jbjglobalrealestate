@@ -23,11 +23,8 @@ import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 import AppErrorBoundary from "@/components/AppErrorBoundary";
 import GlobalSEO from "@/components/GlobalSEO";
 import SEOServiceArea from "@/components/SEOServiceArea";
-import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
-import OwnerVisitorToggle from "@/components/project-detail/OwnerVisitorToggle";
 import SEOBreadcrumbs from "@/components/SEOBreadcrumbs";
 import CanonicalAndHreflang from "@/components/CanonicalAndHreflang";
-import SeoHighlightOverlay from "@/components/SeoHighlightOverlay";
 import PageLoader from "@/components/PageLoader";
 import { InlinePageLoader } from "@/components/PageLoader";
 import PrintModeBoundary from "@/components/PrintModeBoundary";
@@ -45,9 +42,10 @@ import { AdminRoutes } from "@/routes/AdminRoutes";
 import { ToolkitRoutes } from "@/routes/ToolkitRoutes";
 import { DeveloperHubRoutes } from "@/routes/DeveloperHubRoutes";
 import { DevelopersPortalRoutes } from "@/routes/DevelopersPortalRoutes";
-import OwnerOverrideLoader from "@/components/owner-overrides/OwnerOverrideLoader";
-import WebDevDock from "@/components/owner-webdev/WebDevDock";
-import WebDevChangeHighlight from "@/components/owner-webdev/WebDevChangeHighlight";
+
+// Owner-only + post-paint extras (lazy, idle-mounted — never blocks FCP)
+import DeferredAppExtras from "@/components/util/DeferredAppExtras";
+
 
 // ── QueryClient ──
 const queryClient = new QueryClient({
@@ -102,14 +100,11 @@ const App = () => {
                     <PrintBlockerGuard />
                     <ScrollToTopOnMount />
                   <RouteResume />
-                  <GlobalVisitorTracking />
-                  <OwnerVisitorToggle />
                   <SEOBreadcrumbs />
                   <CanonicalAndHreflang />
-                   <SeoHighlightOverlay />
-                   <OwnerOverrideLoader />
-                   <WebDevDock />
-                   <WebDevChangeHighlight />
+                  {/* Owner-only + analytics extras — lazy, idle-mounted */}
+                  <DeferredAppExtras />
+
                    
             {/* BrandIntroSplash disabled until further notice */}
             <Routes>

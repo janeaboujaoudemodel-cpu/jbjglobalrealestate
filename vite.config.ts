@@ -43,7 +43,9 @@ export default defineConfig(({ mode }) => {
           assetFileNames: "assets/[name]-[hash][extname]",
           manualChunks: {
             'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-            'ui-vendor': ['framer-motion', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-popover'],
+            'icons-vendor': ['lucide-react'],
+            'motion-vendor': ['framer-motion'],
+            'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-popover'],
             'data-vendor': ['@tanstack/react-query', '@supabase/supabase-js'],
             'charts-vendor': ['recharts'],
             'maps-vendor': ['leaflet', 'react-leaflet', '@react-leaflet/core'],
