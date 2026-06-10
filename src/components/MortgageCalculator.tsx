@@ -112,6 +112,7 @@ const MortgageCalculator = ({
   const [projectsLoading, setProjectsLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState<MortgageProject | null>(null);
   const isNavy = themeVariant === "navy";
+  console.log("[mortgage-render]", { propertyPrice, downPaymentPercent, interestRate, loanTermYears, userTouchedPrice, defaultPrice });
 
   // Navy slider wrapper style — also injects CSS vars so the gold slider
   // primitive automatically picks up the matching blue neon glow used by
