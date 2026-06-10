@@ -54,7 +54,10 @@ interface MortgageRangeProps {
 
 const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: MortgageRangeProps) => {
   const progress = getRangePercent(value, min, max);
-  const syncValue = (target: EventTarget & HTMLInputElement) => onChange(Number(target.value));
+  const syncValue = (target: EventTarget & HTMLInputElement) => {
+    console.log("[mortgage-debug]", ariaLabel, "->", target.value);
+    onChange(Number(target.value));
+  };
   const fill = isNavy
     ? "linear-gradient(90deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)"
     : "linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%)";
