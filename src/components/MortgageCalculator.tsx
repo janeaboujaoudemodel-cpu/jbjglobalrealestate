@@ -54,7 +54,6 @@ interface MortgageRangeProps {
 
 const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: MortgageRangeProps) => {
   const progress = getRangePercent(value, min, max);
-  const syncValue = (target: EventTarget & HTMLInputElement) => onChange(Number(target.value));
   const fill = isNavy
     ? "linear-gradient(90deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)"
     : "linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%)";
@@ -68,12 +67,7 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
       step={step}
       value={value}
       aria-label={ariaLabel}
-      onInput={(event) => syncValue(event.currentTarget)}
-      onChange={(event) => syncValue(event.currentTarget)}
-      onPointerUp={(event) => syncValue(event.currentTarget)}
-      onMouseUp={(event) => syncValue(event.currentTarget)}
-      onTouchEnd={(event) => syncValue(event.currentTarget)}
-      onKeyUp={(event) => syncValue(event.currentTarget)}
+      onChange={(event) => onChange(Number(event.currentTarget.value))}
       className="mortgage-range-input w-full"
       style={
         {
