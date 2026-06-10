@@ -393,10 +393,10 @@ const MortgageCalculator = ({
               </span>
               <span className="text-[#1A1A1A] font-bold text-sm">{formatCurrencyAbbreviated(propertyPrice)}</span>
             </div>
-            <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={500000} max={50000000} step={100000} ariaLabel="Property Price" isNavy={isNavy} />
+            <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={PROPERTY_PRICE_MIN} max={PROPERTY_PRICE_MAX} step={PROPERTY_PRICE_STEP} ariaLabel="Property Price" isNavy={isNavy} />
             <div className="flex justify-between text-[10px] text-[#1A1A1A]/70 mt-1">
               <span>AED 500K</span>
-              <span>AED 50M</span>
+              <span>AED 500M</span>
             </div>
           </div>
 
@@ -537,11 +537,11 @@ const MortgageCalculator = ({
                 className="bg-background border-border text-foreground focus:border-[#B89555]"
               />
               <div className="py-4">
-                <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={500000} max={50000000} step={100000} ariaLabel="Property Price" isNavy={isNavy} />
+                <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={PROPERTY_PRICE_MIN} max={PROPERTY_PRICE_MAX} step={PROPERTY_PRICE_STEP} ariaLabel="Property Price" isNavy={isNavy} />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>AED 500K</span>
-                <span>AED 50M</span>
+                <span>AED 500M</span>
               </div>
             </div>
 
