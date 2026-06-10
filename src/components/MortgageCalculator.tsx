@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Wallet } from "lucide-react";
 import { Calculator, TrendingUp, Calendar, Percent, DollarSign, Info, Building2, Search, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -42,6 +42,20 @@ const getRangePercent = (value: number, min: number, max: number) => {
   return Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
 };
 
+const PROPERTY_PRICE_MIN = 500_000;
+const PROPERTY_PRICE_MAX = 500_000_000;
+const PROPERTY_PRICE_STEP = 500_000;
+
+const clampNumber = (value: number, min: number, max: number) => {
+  if (!Number.isFinite(value)) return min;
+  return Math.min(max, Math.max(min, value));
+};
+
+const clampPropertyPrice = (value: number) => {
+  const stepped = Math.round(value / PROPERTY_PRICE_STEP) * PROPERTY_PRICE_STEP;
+  return clampNumber(stepped, PROPERTY_PRICE_MIN, PROPERTY_PRICE_MAX);
+};
+
 interface MortgageRangeProps {
   value: number;
   min: number;
@@ -54,20 +68,35 @@ interface MortgageRangeProps {
 
 const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: MortgageRangeProps) => {
   const progress = getRangePercent(value, min, max);
+  const lastEmittedValueRef = useRef(value);
   const fill = isNavy
     ? "linear-gradient(90deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)"
     : "linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%)";
   const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
 
+  useEffect(() => {
+    lastEmittedValueRef.current = value;
+  }, [value]);
+
+  const emitValue = useCallback((nextValue: number) => {
+    const next = clampNumber(nextValue, min, max);
+    if (next === lastEmittedValueRef.current) return;
+    lastEmittedValueRef.current = next;
+    onChange(next);
+  }, [max, min, onChange]);
+
   return (
     <input
       type="range"
+      data-mortgage-slider={ariaLabel}
       min={min}
       max={max}
       step={step}
       value={value}
       aria-label={ariaLabel}
-      onChange={(event) => onChange(Number(event.currentTarget.value))}
+      aria-valuetext={`${value}`}
+      onInput={(event) => emitValue(event.currentTarget.valueAsNumber)}
+      onChange={(event) => emitValue(event.currentTarget.valueAsNumber)}
       className="mortgage-range-input w-full"
       style={
         {
@@ -92,7 +121,7 @@ const MortgageCalculator = ({
   themeVariant = "default",
   context,
 }: MortgageCalculatorProps) => {
-  const [propertyPrice, setPropertyPrice] = useState(defaultPrice);
+  const [propertyPrice, setPropertyPrice] = useState(() => clampPropertyPrice(defaultPrice));
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [interestRate, setInterestRate] = useState(4.5);
   const [loanTermYears, setLoanTermYears] = useState(25);
@@ -159,15 +188,16 @@ const MortgageCalculator = ({
   // (e.g., project.price_from loads after the first render). Stops syncing
   // once the user has touched the slider so we never overwrite their input.
   useEffect(() => {
-    if (!userTouchedPrice && defaultPrice && defaultPrice !== propertyPrice) {
-      setPropertyPrice(defaultPrice);
+    const nextDefaultPrice = clampPropertyPrice(defaultPrice);
+    if (!userTouchedPrice && defaultPrice && nextDefaultPrice !== propertyPrice) {
+      setPropertyPrice(nextDefaultPrice);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultPrice]);
 
   const handlePriceChange = (value: number) => {
     setUserTouchedPrice(true);
-    setPropertyPrice(value);
+    setPropertyPrice(clampPropertyPrice(value));
   };
 
   const handleProjectSelect = (project: MortgageProject) => {
@@ -176,7 +206,7 @@ const MortgageCalculator = ({
     setProjectQuery("");
     if (project.price_from) {
       setUserTouchedPrice(false);
-      setPropertyPrice(Number(project.price_from));
+      setPropertyPrice(clampPropertyPrice(Number(project.price_from)));
     }
   };
 
@@ -363,10 +393,10 @@ const MortgageCalculator = ({
               </span>
               <span className="text-[#1A1A1A] font-bold text-sm">{formatCurrencyAbbreviated(propertyPrice)}</span>
             </div>
-            <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={500000} max={50000000} step={100000} ariaLabel="Property Price" isNavy={isNavy} />
+            <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={PROPERTY_PRICE_MIN} max={PROPERTY_PRICE_MAX} step={PROPERTY_PRICE_STEP} ariaLabel="Property Price" isNavy={isNavy} />
             <div className="flex justify-between text-[10px] text-[#1A1A1A]/70 mt-1">
               <span>AED 500K</span>
-              <span>AED 50M</span>
+              <span>AED 500M</span>
             </div>
           </div>
 
@@ -507,11 +537,11 @@ const MortgageCalculator = ({
                 className="bg-background border-border text-foreground focus:border-[#B89555]"
               />
               <div className="py-4">
-                <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={500000} max={50000000} step={100000} ariaLabel="Property Price" isNavy={isNavy} />
+                <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={PROPERTY_PRICE_MIN} max={PROPERTY_PRICE_MAX} step={PROPERTY_PRICE_STEP} ariaLabel="Property Price" isNavy={isNavy} />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground -mt-1">
                 <span>AED 500K</span>
-                <span>AED 50M</span>
+                <span>AED 500M</span>
               </div>
             </div>
 
