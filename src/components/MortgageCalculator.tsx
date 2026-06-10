@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Wallet } from "lucide-react";
 import { Calculator, TrendingUp, Calendar, Percent, DollarSign, Info, Building2, Search, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -42,6 +42,20 @@ const getRangePercent = (value: number, min: number, max: number) => {
   return Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
 };
 
+const PROPERTY_PRICE_MIN = 500_000;
+const PROPERTY_PRICE_MAX = 500_000_000;
+const PROPERTY_PRICE_STEP = 500_000;
+
+const clampNumber = (value: number, min: number, max: number) => {
+  if (!Number.isFinite(value)) return min;
+  return Math.min(max, Math.max(min, value));
+};
+
+const clampPropertyPrice = (value: number) => {
+  const stepped = Math.round(value / PROPERTY_PRICE_STEP) * PROPERTY_PRICE_STEP;
+  return clampNumber(stepped, PROPERTY_PRICE_MIN, PROPERTY_PRICE_MAX);
+};
+
 interface MortgageRangeProps {
   value: number;
   min: number;
@@ -54,20 +68,35 @@ interface MortgageRangeProps {
 
 const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: MortgageRangeProps) => {
   const progress = getRangePercent(value, min, max);
+  const lastEmittedValueRef = useRef(value);
   const fill = isNavy
     ? "linear-gradient(90deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)"
     : "linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%)";
   const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
 
+  useEffect(() => {
+    lastEmittedValueRef.current = value;
+  }, [value]);
+
+  const emitValue = useCallback((nextValue: number) => {
+    const next = clampNumber(nextValue, min, max);
+    if (next === lastEmittedValueRef.current) return;
+    lastEmittedValueRef.current = next;
+    onChange(next);
+  }, [max, min, onChange]);
+
   return (
     <input
       type="range"
+      data-mortgage-slider={ariaLabel}
       min={min}
       max={max}
       step={step}
       value={value}
       aria-label={ariaLabel}
-      onChange={(event) => onChange(Number(event.currentTarget.value))}
+      aria-valuetext={`${value}`}
+      onInput={(event) => emitValue(event.currentTarget.valueAsNumber)}
+      onChange={(event) => emitValue(event.currentTarget.valueAsNumber)}
       className="mortgage-range-input w-full"
       style={
         {
