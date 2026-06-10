@@ -146,19 +146,46 @@ function applyTranslations(textNodes: Text[], attrTargets: { el: HTMLElement; at
     const owned = node as unknown as NodeWithOrig;
     const orig = owned[ORIG_TEXT_KEY];
     if (orig == null) continue;
+    const current = node.nodeValue ?? '';
     if (lang === 'en') {
-      if (node.nodeValue !== orig) node.nodeValue = orig;
+      // React may have updated this text since first capture (e.g. live
+      // recalculations like the mortgage calculator). If the DOM already
+      // differs from the captured original, treat the new value as the
+      // new "original" instead of clobbering React's update. We only
+      // restore the captured original if the node still matches a known
+      // translated value (i.e. we previously swapped it ourselves).
+      if (current !== orig) {
+        owned[ORIG_TEXT_KEY] = current;
+      }
       continue;
     }
     const translated = getTranslationSync(orig, lang, 'ui');
+    // If the DOM text is neither the original nor our last translation,
+    // React updated it — re-stamp orig and re-translate from the new text.
+    if (current !== orig && current !== translated) {
+      owned[ORIG_TEXT_KEY] = current;
+      const reTranslated = getTranslationSync(current, lang, 'ui');
+      if (node.nodeValue !== reTranslated) node.nodeValue = reTranslated;
+      continue;
+    }
     if (node.nodeValue !== translated) node.nodeValue = translated;
   }
   for (const { el, attr, orig } of attrTargets) {
+    const owned = el as unknown as NodeWithOrig;
+    const current = el.getAttribute(attr) ?? '';
     if (lang === 'en') {
-      if (el.getAttribute(attr) !== orig) el.setAttribute(attr, orig);
+      if (current !== orig) {
+        if (owned[ORIG_ATTR_KEY]) owned[ORIG_ATTR_KEY]![attr] = current;
+      }
       continue;
     }
     const translated = getTranslationSync(orig, lang, 'ui');
+    if (current !== orig && current !== translated) {
+      if (owned[ORIG_ATTR_KEY]) owned[ORIG_ATTR_KEY]![attr] = current;
+      const reTranslated = getTranslationSync(current, lang, 'ui');
+      if (el.getAttribute(attr) !== reTranslated) el.setAttribute(attr, reTranslated);
+      continue;
+    }
     if (el.getAttribute(attr) !== translated) el.setAttribute(attr, translated);
   }
 }
