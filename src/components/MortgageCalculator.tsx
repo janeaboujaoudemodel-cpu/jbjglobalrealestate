@@ -121,7 +121,7 @@ const MortgageCalculator = ({
   themeVariant = "default",
   context,
 }: MortgageCalculatorProps) => {
-  const [propertyPrice, setPropertyPrice] = useState(defaultPrice);
+  const [propertyPrice, setPropertyPrice] = useState(() => clampPropertyPrice(defaultPrice));
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [interestRate, setInterestRate] = useState(4.5);
   const [loanTermYears, setLoanTermYears] = useState(25);
@@ -188,15 +188,16 @@ const MortgageCalculator = ({
   // (e.g., project.price_from loads after the first render). Stops syncing
   // once the user has touched the slider so we never overwrite their input.
   useEffect(() => {
-    if (!userTouchedPrice && defaultPrice && defaultPrice !== propertyPrice) {
-      setPropertyPrice(defaultPrice);
+    const nextDefaultPrice = clampPropertyPrice(defaultPrice);
+    if (!userTouchedPrice && defaultPrice && nextDefaultPrice !== propertyPrice) {
+      setPropertyPrice(nextDefaultPrice);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultPrice]);
 
   const handlePriceChange = (value: number) => {
     setUserTouchedPrice(true);
-    setPropertyPrice(value);
+    setPropertyPrice(clampPropertyPrice(value));
   };
 
   const handleProjectSelect = (project: MortgageProject) => {
@@ -205,7 +206,7 @@ const MortgageCalculator = ({
     setProjectQuery("");
     if (project.price_from) {
       setUserTouchedPrice(false);
-      setPropertyPrice(Number(project.price_from));
+      setPropertyPrice(clampPropertyPrice(Number(project.price_from)));
     }
   };
 
