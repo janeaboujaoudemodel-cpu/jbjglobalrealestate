@@ -317,6 +317,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // header at rest (state-independent), so a slow first paint never flashes white.
   const homeMobileFiberglassActive = isHomeHeroPath && isAtPageTop && !forceSolid;
   const useLightHeaderIdentity = isFullyTransparent || homeMobileFiberglassActive;
+  const champagneFiberglassBackground =
+    'linear-gradient(180deg, rgba(247,242,234,0.78) 0%, rgba(239,230,214,0.72) 100%)';
   const headerShellStyle: React.CSSProperties = {
     ['--header-height' as string]: 'var(--responsive-header-height)',
     ...(homeMobileFiberglassActive
@@ -327,9 +329,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           boxShadow: 'inset 0 1px 0 rgba(255,238,200,0.15), 0 10px 26px rgba(0,0,0,0.32)',
         }
       : showMobileChampagne && shouldUseMobileHeader
-        ? { background: '#FDFBF7' }
+        ? {
+            background: champagneFiberglassBackground,
+            backdropFilter: 'blur(18px) saturate(160%)',
+            WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+            boxShadow: 'inset 0 -1px 0 rgba(184,149,85,0.28), 0 6px 18px rgba(26,26,26,0.06)',
+          }
         : {}),
   } as React.CSSProperties;
+
 
 
 
