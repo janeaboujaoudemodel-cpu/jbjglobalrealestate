@@ -5739,7 +5739,7 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 }
 
 /* Inputs / textareas / selects on dark body */
-[data-tool-darkbody="true"] input:not([type="checkbox"]):not([type="radio"]):not([data-no-contrast-guard]),
+[data-tool-darkbody="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([data-no-contrast-guard]),
 [data-tool-darkbody="true"] textarea:not([data-no-contrast-guard]),
 [data-tool-darkbody="true"] [role="combobox"]:not([data-no-contrast-guard]),
 [data-tool-darkbody="true"] [data-radix-select-trigger]:not([data-no-contrast-guard]) {
