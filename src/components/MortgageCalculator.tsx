@@ -70,7 +70,7 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
   const progress = getRangePercent(value, min, max);
   const lastEmittedValueRef = useRef(value);
   const fill = isNavy
-    ? "linear-gradient(90deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)"
+    ? "linear-gradient(90deg, #1E4E8C 0%, #3B82F6 55%, #93C5FD 100%)"
     : "linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%)";
   const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
 
