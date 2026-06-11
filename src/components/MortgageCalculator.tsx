@@ -89,6 +89,7 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
     <input
       type="range"
       data-mortgage-slider={ariaLabel}
+      data-no-contrast-guard
       min={min}
       max={max}
       step={step}
