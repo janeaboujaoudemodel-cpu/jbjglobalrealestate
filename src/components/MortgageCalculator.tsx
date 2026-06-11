@@ -318,8 +318,9 @@ const MortgageCalculator = ({
               placeholder="Search by project or developer name"
               data-no-contrast-guard
               className="allow-white flex-1 bg-transparent outline-none text-sm placeholder:!text-white/65"
-              style={{ color: "#FFFFFF" }}
+              style={{ color: "#FFFFFF", border: 0, boxShadow: "none", outline: "none", background: "transparent" }}
             />
+
             {projectsLoading && <Loader2 className="w-4 h-4 animate-spin allow-white" style={{ color: "#BFDBFE" }} />}
           </div>
           {projectSearchOpen && (
