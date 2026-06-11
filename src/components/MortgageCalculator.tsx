@@ -308,8 +308,6 @@ const MortgageCalculator = ({
             className="allow-white flex items-center gap-3 rounded-2xl px-4 py-3"
             style={{
               background: "linear-gradient(135deg, rgba(30,78,140,0.45), rgba(8,21,43,0.9))",
-              border: "1px solid rgba(147,197,253,0.45)",
-              boxShadow: "inset 0 0 22px rgba(96,165,250,0.10)",
             }}
           >
             <Search className="w-5 h-5 allow-white" style={{ color: "#BFDBFE" }} />
