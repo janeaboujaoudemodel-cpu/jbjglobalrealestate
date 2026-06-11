@@ -527,7 +527,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.linkedinCompany}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#B89555]"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#EFE6D6]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaLinkedinIn className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -536,7 +536,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.instagramCompany}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#B89555]"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#EFE6D6]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaInstagram className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -545,7 +545,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.tiktokCompany}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#B89555]"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#EFE6D6]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaTiktok className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -554,7 +554,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.facebookCompany}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#B89555]"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#EFE6D6]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaFacebookF className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -576,7 +576,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.linkedinPersonal}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#B89555]"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#EFE6D6]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaLinkedinIn className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -585,7 +585,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.instagramPersonal}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#B89555]"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#EFE6D6]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaInstagram className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -594,7 +594,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.facebookPersonal}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#B89555]"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#EFE6D6]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaFacebookF className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -603,7 +603,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.tiktokPersonal}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#B89555]"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#EFE6D6] hover:bg-[#EFE6D6]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaTiktok className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
