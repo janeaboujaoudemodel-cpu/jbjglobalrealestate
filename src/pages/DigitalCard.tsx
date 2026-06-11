@@ -448,56 +448,6 @@ const DigitalCard = () => {
               </div>
             </div>
 
-            {/* PERSONAL CONTACT SECTION */}
-            <div 
-              className="mb-6 pb-6 flex flex-col items-center"
-              style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
-            >
-              <h3 className="text-xs font-semibold text-[#1A1A1A]/50 mb-3 uppercase tracking-wider text-center">
-                Personal Line
-              </h3>
-              
-              {/* Personal Phone Display */}
-              <div className="text-center mb-4">
-                <p className="text-lg font-bold text-[#1A1A1A]">{CONTACT_INFO.phonePersonal}</p>
-              </div>
-
-              {/* Personal Action Buttons - All 3 on one line on desktop */}
-              <div className="flex flex-wrap sm:flex-nowrap gap-2 justify-center mb-3">
-                {/* Call Personal */}
-                <a
-                  href={`tel:${CONTACT_INFO.phonePersonalClean}`}
-                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-[#FDFBF7] text-[#1A1A1A] font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
-                  style={{ border: `2px solid ${GOLD.primary}50` }}
-                >
-                  <Phone className="w-4 h-4" style={{ color: GOLD.primary }} />
-                  <span className="text-sm">Call</span>
-                </a>
-
-                {/* WhatsApp Personal */}
-                <button
-                  onClick={() => openWhatsApp(CONTACT_INFO.whatsappPersonal)}
-                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-[#FDFBF7] text-[#1A1A1A] font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
-                  style={{ border: `2px solid #25D36650` }}
-                >
-                  <MessageCircle className="w-4 h-4 text-[#25D366]" />
-                  <span className="text-sm">WhatsApp</span>
-                </button>
-
-                {/* Save Personal Contact */}
-                <button
-                  onClick={downloadPersonalVCard}
-                  className="flex items-center gap-2 py-3 px-5 rounded-xl text-[#1A1A1A] font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
-                  style={{ 
-                    background: 'linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)',
-                    border: `2px solid ${GOLD.primary}50`,
-                  }}
-                >
-                  <Download className="w-4 h-4" />
-                  <span className="text-sm">Save Contact</span>
-                </button>
-              </div>
-            </div>
 
             {/* Action Cards Row: Send Email | Share Card | Website */}
             <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-3">
