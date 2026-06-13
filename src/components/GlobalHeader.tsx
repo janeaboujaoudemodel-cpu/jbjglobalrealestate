@@ -698,9 +698,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       />
 
       {/* ─── MOBILE / TABLET (< lg) ────────────────────────────────── */}
-      {/* At rest over a dark hero: frosted "fiberglass" bar so the hero feels full-bleed with white logo/text legible. */}
+      {/* At rest over the home dark hero: fully transparent so the Burj
+          video shows through. Champagne/fiberglass only on other routes. */}
       <div
-        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(showMobileFiberglass || homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
+        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(showMobileFiberglass && !homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
         style={{
           background: mobileFiberglassBackground,
           backdropFilter: 'blur(16px) saturate(145%)',
@@ -716,6 +717,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         style={{ background: '#FDFBF7' }}
         aria-hidden="true"
       />
+
       
       {/* Subtle ambient glow at top */}
       <div 
