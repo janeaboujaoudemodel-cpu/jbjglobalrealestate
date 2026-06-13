@@ -68,39 +68,42 @@ body {
   text-shadow: 0 2px 10px hsl(0 0% 0% / 0.85), 0 1px 2px hsl(0 0% 0% / 0.7) !important;
 }
 
-/* Mobile (<sm) global header on the homepage: frosted "fiberglass" navy
-   while at-rest over the dark hero; switches to champagne once scrolled.
+/* Mobile (<sm) global header on the homepage: fully TRANSPARENT at rest so
+   the dark Burj hero shows through; switches to champagne once scrolled.
    Body-attribute keyed so it wins regardless of React-state timing. */
 @media (max-width: 767px) {
+  /* Home page mobile header — ALWAYS transparent at rest so the dark Burj
+     hero shows through. Override every other background source. */
+  body[data-home-hero-state="atrest"] [data-chrome="header"],
+  body[data-home-hero-state="atrest"] [data-chrome="header"] > header,
+  body[data-home-hero-state="atrest"] [data-chrome="header"] > header > div {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+  }
   [data-chrome="header"] > header.jj-mobile-home-fiberglass,
-  [data-chrome="header"] > header[data-home-mobile-header="true"] {
-    background: linear-gradient(180deg, rgba(16,37,64,0.48) 0%, rgba(16,37,64,0.30) 100%) !important;
-    -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
-    backdrop-filter: blur(16px) saturate(145%) !important;
-    box-shadow: inset 0 1px 0 rgba(255,238,200,0.15), 0 10px 26px rgba(0,0,0,0.32) !important;
+  [data-chrome="header"] > header[data-home-mobile-header="true"],
+  [data-chrome="header"] > header.jj-mobile-home-fiberglass > div,
+  [data-chrome="header"] > header[data-home-mobile-header="true"] > div {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
   }
-  [data-chrome="header"] > header.jj-mobile-home-fiberglass > div[style*="#FDFBF7"],
-  [data-chrome="header"] > header.jj-mobile-home-fiberglass > div[style*="rgb(253, 251, 247)"],
-  [data-chrome="header"] > header[data-home-mobile-header="true"] > div[style*="#FDFBF7"],
-  [data-chrome="header"] > header[data-home-mobile-header="true"] > div[style*="rgb(253, 251, 247)"] {
-    opacity: 0 !important;
-  }
-  body[data-home-hero-state="atrest"] [data-chrome="header"] header {
-    background: linear-gradient(180deg, rgba(16,37,64,0.48) 0%, rgba(16,37,64,0.30) 100%) !important;
-    -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
-    backdrop-filter: blur(16px) saturate(145%) !important;
-    box-shadow: inset 0 1px 0 rgba(255,238,200,0.15), 0 10px 26px rgba(0,0,0,0.32) !important;
-  }
-  body[data-home-hero-state="atrest"] [data-chrome="header"] header div[style*="#FDFBF7"],
-  body[data-home-hero-state="atrest"] [data-chrome="header"] header div[style*="rgb(253, 251, 247)"] {
-    opacity: 0 !important;
-  }
-  body[data-home-hero-state="scrolled"] [data-chrome="header"] header {
+  body[data-home-hero-state="scrolled"] [data-chrome="header"] > header {
     background: #FDFBF7 !important;
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }
 }
+
+
 
 
 

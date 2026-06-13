@@ -323,10 +323,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     ['--header-height' as string]: 'var(--responsive-header-height)',
     ...(homeMobileFiberglassActive
       ? {
-          background: mobileFiberglassBackground,
-          backdropFilter: 'blur(16px) saturate(145%)',
-          WebkitBackdropFilter: 'blur(16px) saturate(145%)',
-          boxShadow: 'inset 0 1px 0 rgba(255,238,200,0.15), 0 10px 26px rgba(0,0,0,0.32)',
+          background: 'transparent',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          boxShadow: 'none',
+          borderBottomColor: 'transparent',
         }
       : showMobileChampagne && shouldUseMobileHeader
         ? {
@@ -337,6 +338,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           }
         : {}),
   } as React.CSSProperties;
+
 
 
 
@@ -696,9 +698,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       />
 
       {/* ─── MOBILE / TABLET (< lg) ────────────────────────────────── */}
-      {/* At rest over a dark hero: frosted "fiberglass" bar so the hero feels full-bleed with white logo/text legible. */}
+      {/* At rest over the home dark hero: fully transparent so the Burj
+          video shows through. Champagne/fiberglass only on other routes. */}
       <div
-        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(showMobileFiberglass || homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
+        className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(showMobileFiberglass && !homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
         style={{
           background: mobileFiberglassBackground,
           backdropFilter: 'blur(16px) saturate(145%)',
@@ -714,6 +717,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         style={{ background: '#FDFBF7' }}
         aria-hidden="true"
       />
+
       
       {/* Subtle ambient glow at top */}
       <div 

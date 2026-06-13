@@ -1,96 +1,53 @@
-# Plan
+Three mobile/tablet-portrait fixes on the home hero, plus the global support launcher on mobile.
 
-Three workstreams. Each is verified on mobile + desktop with before/after screenshots.
+## 1. Mobile/tablet-portrait header: transparent on initial load
 
-## 1) Mobile header + tour + welcome contrast
+File: `src/components/GlobalHeader.tsx` (lines ~302–339)
 
-**Mobile header missing on reload (`src/components/GlobalHeader.tsx`)**
-- `shouldUseMobileHeader = isTouchLayout || !isDesktopWidth` depends on `isTouchLayout` which is computed after mount → first paint can render the *desktop* header inside a phone-width viewport, then unmount on hydration leaving a blank.
-- Fix: SSR-safe initial state — read `window.matchMedia('(pointer:coarse)')` and `window.innerWidth` synchronously in the `useState` initializer (already partially done for width — add the same for `isTouchLayout`), and also force a `useLayoutEffect` re-render before paint.
-- Guarantee at least one of `MobileHeader` / `DesktopHeader` is rendered for every value of `shouldUseMobileHeader` (no `null` window between states).
+The current logic forces a champagne fiberglass tint on the homepage mobile header at rest (`homeMobileFiberglassActive` → `showMobileChampagne`). On `/` and `/index` at mobile + tablet-portrait widths and `scrollY <= 80`, the shell must be fully transparent (no background, no backdrop-filter, no inset hairline shadow) so the dark Burj hero shows through.
 
-**Guided Tour cropped on phone (`src/components/GuidedTour.tsx`)**
-- Replace fixed‑width tooltip card with `max-w-[calc(100vw-2rem)]` + `max-h-[calc(100dvh-6rem)] overflow-auto` and clamp the spotlight rect to viewport.
-- Stop the tour from horizontally overflowing by anchoring to viewport center on screens < 640px instead of element‑relative.
+- When `isHomeHeroPath && isAtPageTop && shouldUseMobileHeader && !forceSolid`: render header shell with `background: transparent`, no `backdropFilter`, no `boxShadow`.
+- Keep current champagne fiberglass behavior on non-home routes and after scroll (`isSolid`).
+- Force the JBJ wordmark + monogram logo to render in WHITE with a soft text-shadow only while in this transparent-home state, so they stay legible over the dark hero (mirrors the existing `useLightHeaderIdentity` branch used at desktop). Apply `text-shadow: 0 2px 12px rgba(0,0,0,0.55)` and `color:#FFFFFF` on the wordmark; ensure the monogram uses its light/white variant.
+- Hamburger icon: white stroke in this state (same shadow).
 
-**Navy buttons missing white text/icons in Tour + Welcome**
-- Audit all CTAs inside `GuidedTour`, `MobileMenuWalkthrough`, and `WelcomeRoleGreeter` / welcome card.
-- Apply the locked `.jj-cta-dark` primitive (`data-cta="dark"`) instead of raw `bg-[#102540]` so the global contrast guard cannot flip them; add `allow-white` + inline `WebkitTextFillColor:#FFFFFF` on the icon spans (same pattern already proven in `WebDevDock` Send button).
-- Add a single global rule in `src/index.css` under the existing PASS‑6 block:
-  ```css
-  [data-cta="dark"], [data-cta="dark"] * { color:#fff !important; -webkit-text-fill-color:#fff !important; }
-  [data-cta="dark"] svg { color:#fff !important; stroke:#fff !important; }
-  ```
+## 2. Mobile "Free Consultation" CTA: champagne fiberglass
 
-**Light contrast audit (deep, automated)**
-- Run `scripts/contrast/` (already in repo) against `/`, `/welcome`, `/take-the-tour`, mobile menu, list‑property steps, mortgage tool, and AI assistant pages. Capture failing pairs into `contrast-audit.json`.
-- Fix only the regressions surfaced by the audit, in this order: navy CTAs → champagne pills → tour spotlight overlay text.
+File: `src/components/home/HomeHeroSearch.tsx` (lines 240–267, mobile-only stacked CTA block)
 
-## 2) Hide WebDev dock for non-owners (verify + harden)
+Replace the navy gradient with a champagne mother-of-pearl fiberglass:
+- `background: linear-gradient(180deg, rgba(247,242,234,0.78) 0%, rgba(239,230,214,0.72) 100%)`
+- `backdropFilter / WebkitBackdropFilter: blur(16px) saturate(150%)`
+- `border: 1px solid rgba(184,149,85,0.55)` (gold hairline)
+- `boxShadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 8px 22px rgba(26,26,26,0.18)`
+- Text + calendar icon → ink `#1A1A1A`; remove `allow-white`, `data-no-contrast-guard` tweaks and the white `textShadow`. Keep `data-hero-consultation-lock`.
 
-The dock at `src/components/owner-webdev/WebDevDock.tsx` is already gated by `isDesktop && !!user && isOwnerEmail(user.email) && authIsOwner && roleIsOwner`. The current leak (user sees it logged out) is almost certainly the `Sparkles` floating button cached by the SW.
+Do not touch the desktop variant (lines 196–235), which is the inline pill segment.
 
-- Add an **explicit deny** at the very top of `DeferredAppExtras.tsx`: do NOT mount `WebDevDock` or `WebDevChangeHighlight` unless `isOwnerEmail(user?.email)` is true synchronously. This prevents the lazy chunk from even being requested by anonymous browsers.
-- Bump the chunk's import cache key and add `<meta name="x-webdev" content="owner-only">` so we can verify via DOM that the chunk never appears for guests.
-- Add an `e2e/webdev-hidden.spec.ts` Playwright check that loads `/` as anonymous and asserts no `[data-owner-webdev-dock]` node and no `/owner-webdev/` network chunk.
+## 3. Mobile support launcher: "Contact us" tag, not a black orb
 
-## 3) Upgrade WebDev dock to a Lovable‑style mini IDE
+File: `src/components/support/SupportLauncher.tsx` (lines 178–242, mobile branch)
 
-Wire the existing dock end‑to‑end so the owner can iterate visually like in Lovable.
+Replace the floating `bg-[#1A1A1A]` circular button with a small horizontal "Contact us" pill that visually matches the desktop edge tag (navy `#102540` background, gold `#B89555` hairline, white text + white Sparkles icon, emerald pulse dot), pinned to `fixed bottom-5 right-4 z-[60]`.
 
-Capabilities to add (all on top of existing `owner_change_requests` + `owner_ui_overrides`):
+- Pill layout: `inline-flex items-center gap-1.5 h-9 px-3 rounded-full`, `bg-[#102540] hover:bg-[#1a3d63]`, `border border-[#B89555]/70`, white text `text-[11px] font-semibold uppercase tracking-[0.22em]`, content `Sparkles` icon + `Contact us` + emerald dot.
+- Keep `data-no-contrast-guard`, `data-allow-dark-cta`, `allow-white` so the global guards don't flip it to ink.
+- Tap still toggles the existing `open` state and renders the same channel-orbs panel above the pill (`absolute bottom-12 right-0`). The scrim and channel list stay as-is. Open-state icon switches to `X` inside the same pill (label hides to keep pill compact).
+- Remove the now-unused emerald notification dot on the old circular button.
 
-1. **Screenshot markup**
-   - After `captureScreenshot`, open an inline canvas with brush + rectangle + arrow + text tools (use `react-konva`, already in lockfile). Markup is flattened into the JPEG before submit.
+## 4. Visual proof
 
-2. **Versioning**
-   - New column `owner_ui_overrides.version` (int, default 1).
-   - Each new instruction targeting the same selector inserts a new row instead of mutating. Dock shows a vertical timeline `v1 · v2 · v3` with click‑to‑preview.
+After changes, browser-test at iPhone 12 viewport (390×844):
+- Load `/` — screenshot showing transparent header + white wordmark over Burj hero.
+- Screenshot of champagne Free Consultation button.
+- Screenshot of bottom-right "Contact us" navy pill (closed) and one tap-open showing the channel orbs panel.
 
-3. **Before / After preview**
-   - For each `ready` change, the dock renders two thumbnails: the pre‑override screenshot (already stored) and a fresh post‑override screenshot generated client‑side via `html2canvas` against the previewed DOM.
+Then iPad portrait (820×1180):
+- Confirm header is transparent at rest and wordmark remains legible.
 
-4. **Take me there (already exists) — enhance**
-   - When navigating cross‑route, after highlight, scroll the target into view and pulse a 2px gold ring for 1.2s.
-   - Add a small "Reviewing v3 of 5" pill above the highlight with `← prev / next →` to step through versions in place.
+Report screenshots inline.
 
-5. **Save / Don't save / Restore**
-   - `Save` → set status `approved` (existing).
-   - `Don't save` → soft‑delete (set `status='rejected'`, keep row for 30 days).
-   - New `Restore` button on rejected rows; new `Recently rejected` tab in the dock.
+## Out of scope
 
-6. **Cross‑page change feed**
-   - New top‑level tab `Inbox` in the dock listing every `ready` change site‑wide with route, thumbnail, and the same Take‑me‑there / Save / Don't‑save actions, so the owner doesn't have to navigate to find pending edits.
-
-7. **Chat thread per change**
-   - Each row gains a comment thread (`owner_change_messages` table) so the owner can iterate with the AI on the same change without spawning new rows. Submitting a follow‑up message reuses the override row and bumps `version`.
-
-## Verification
-
-After each workstream:
-- `browser--view_preview` at 390×844 and 1440×900.
-- `browser--screenshot` of: home (reload), `/take-the-tour` step 1 and 3, welcome card, list‑property step 2 CTA, mortgage calculator, mobile menu.
-- Anonymous incognito visit confirms `WebDevDock` chunk is not requested.
-- Post fixes, save before/after pairs to `/mnt/documents/contrast-audit/` and present them.
-
-## Technical notes
-
-- All button/text colour locks go through `.jj-cta-dark` and the universal guards already in `src/index.css` — no raw Tailwind colour classes on CTAs.
-- New DB columns and tables ship in one migration with GRANTs:
-  ```sql
-  alter table public.owner_ui_overrides add column if not exists version int not null default 1;
-  create table public.owner_change_messages (
-    id uuid primary key default gen_random_uuid(),
-    request_id uuid references public.owner_change_requests(id) on delete cascade,
-    author text not null,           -- 'owner' | 'ai'
-    body text not null,
-    created_at timestamptz not null default now()
-  );
-  grant select, insert, update, delete on public.owner_change_messages to authenticated;
-  grant all on public.owner_change_messages to service_role;
-  alter table public.owner_change_messages enable row level security;
-  create policy "owner manages own change messages" on public.owner_change_messages
-    for all to authenticated using (public.has_role(auth.uid(), 'owner')) with check (public.has_role(auth.uid(), 'owner'));
-  ```
-- Edge function `owner-webdev-propose` extended to accept `parent_request_id` and to write into `owner_change_messages`.
-- No new external services; uses existing Lovable AI Gateway + Resend for owner notifications.
+- Desktop header, desktop support tag, desktop hero pill — all unchanged.
+- No business-logic / route changes.

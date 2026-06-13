@@ -237,34 +237,30 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         </div>
 
 
-        {/* Mobile-only stacked CTAs — fiberglass style (no fill), white text on dark hero */}
+        {/* Mobile-only stacked CTAs — champagne mother-of-pearl fiberglass */}
         <div className="mt-3 flex sm:hidden gap-2">
           <button
             type="button"
             onClick={openBooking}
-            data-surface="dark"
             data-hero-consultation-lock
             aria-label="Book your free consultation now"
-            className="surface-dark allow-white flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
-              text-[13px] font-semibold whitespace-nowrap
-              border border-[#B89555]/70
+            className="flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
+              text-[13px] font-semibold whitespace-nowrap text-[#1A1A1A]
+              border border-[#B89555]/55
               transition-colors duration-200"
             style={{
-              color: "#FFFFFF",
-              WebkitTextFillColor: "#FFFFFF",
-              background: "linear-gradient(180deg, rgba(16,37,64,0.48) 0%, rgba(16,37,64,0.30) 100%)",
-              backdropFilter: "blur(16px) saturate(145%)",
-              WebkitBackdropFilter: "blur(16px) saturate(145%)",
-              textShadow: "0 2px 8px rgba(0,0,0,0.72)",
-              boxShadow: "inset 0 1px 0 rgba(255,238,200,0.15), 0 10px 26px rgba(0,0,0,0.32)",
+              color: "#1A1A1A",
+              background: "linear-gradient(180deg, rgba(247,242,234,0.82) 0%, rgba(239,230,214,0.74) 100%)",
+              backdropFilter: "blur(16px) saturate(150%)",
+              WebkitBackdropFilter: "blur(16px) saturate(150%)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.35), 0 8px 22px rgba(26,26,26,0.18)",
             }}
           >
-            <CalendarCheck className="allow-white w-4 h-4" strokeWidth={2.2} style={{ color: "#FFFFFF" }} />
-            <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-              Free Consultation
-            </span>
+            <CalendarCheck className="w-4 h-4" strokeWidth={2.2} style={{ color: "#1A1A1A" }} />
+            <span style={{ color: "#1A1A1A" }}>Free Consultation</span>
           </button>
         </div>
+
 
       </motion.div>
     </>
