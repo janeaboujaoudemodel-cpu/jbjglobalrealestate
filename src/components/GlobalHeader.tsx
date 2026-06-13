@@ -323,10 +323,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     ['--header-height' as string]: 'var(--responsive-header-height)',
     ...(homeMobileFiberglassActive
       ? {
-          background: mobileFiberglassBackground,
-          backdropFilter: 'blur(16px) saturate(145%)',
-          WebkitBackdropFilter: 'blur(16px) saturate(145%)',
-          boxShadow: 'inset 0 1px 0 rgba(255,238,200,0.15), 0 10px 26px rgba(0,0,0,0.32)',
+          background: 'transparent',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          boxShadow: 'none',
+          borderBottomColor: 'transparent',
         }
       : showMobileChampagne && shouldUseMobileHeader
         ? {
@@ -337,6 +338,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           }
         : {}),
   } as React.CSSProperties;
+
 
 
 

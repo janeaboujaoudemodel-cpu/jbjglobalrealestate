@@ -177,8 +177,8 @@ export default function SupportLauncher() {
 
   return (
     <>
-      {/* ============== MOBILE: floating star (bottom-right) ============== */}
-      <div className="md:hidden fixed bottom-5 right-5 z-[60]" data-no-contrast-guard>
+      {/* ============== MOBILE: horizontal "Contact us" pill (bottom-right) ============== */}
+      <div className="md:hidden fixed bottom-5 right-4 z-[60]" data-no-contrast-guard>
         <AnimatePresence>
           {open && (
             <>
@@ -192,14 +192,14 @@ export default function SupportLauncher() {
               />
               <motion.div
                 key="orbs"
-                className="absolute bottom-16 right-0 flex max-h-[calc(100dvh-7rem)] w-[260px] flex-col gap-2 overflow-y-auto rounded-2xl p-2"
+                className="absolute bottom-12 right-0 flex max-h-[calc(100dvh-7rem)] w-[260px] flex-col gap-2 overflow-y-auto rounded-2xl p-2"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
               >
                 <div className="flex items-center justify-between px-1 mb-1">
                   <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
-                    border border-[#D4B896]/45 bg-[#1A1A1A]/70 text-[#FDFBF7]">
+                    border border-[#D4B896]/45 bg-[#1A1A1A]/70 text-[#FDFBF7] allow-white">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     Free agent call
                   </span>
@@ -227,19 +227,32 @@ export default function SupportLauncher() {
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-label="Talk to JBJ support"
+          data-surface="dark"
+          data-allow-dark-cta
           data-no-contrast-guard
-          whileTap={{ scale: 0.94 }}
-          className="relative h-14 w-14 rounded-full inline-flex items-center justify-center
-            border border-[#D4B896]/70 bg-[#1A1A1A] text-[#E2C9A0]
-            shadow-[0_10px_28px_rgba(0,0,0,0.35),0_0_0_4px_rgba(226,201,160,0.12)]
-            hover:bg-[#222] transition-colors"
+          whileTap={{ scale: 0.96 }}
+          className="allow-white inline-flex items-center gap-1.5 h-9 px-3 rounded-full
+            bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70
+            text-[11px] font-semibold uppercase tracking-[0.22em] text-white
+            shadow-[0_10px_28px_rgba(0,0,0,0.35),0_0_0_1px_rgba(184,149,85,0.24)]
+            transition-colors"
+          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
-          {open ? <X className="h-5 w-5" /> : <Sparkles className="h-5 w-5" />}
-          {!open && (
-            <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-emerald-400 border-2 border-[#1A1A1A] animate-pulse" />
+          {open ? (
+            <>
+              <X className="h-3.5 w-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Close</span>
+            </>
+          ) : (
+            <>
+              <Sparkles className="h-3.5 w-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact us</span>
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            </>
           )}
         </motion.button>
       </div>
+
 
       {/* ============== DESKTOP: vertical edge tag (right) ============== */}
       <div className="hidden md:block fixed inset-0 z-[60] pointer-events-none" data-no-contrast-guard>
