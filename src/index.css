@@ -71,7 +71,7 @@ body {
 /* Mobile (<sm) global header on the homepage: fully TRANSPARENT at rest so
    the dark Burj hero shows through; switches to champagne once scrolled.
    Body-attribute keyed so it wins regardless of React-state timing. */
-@media (max-width: 767px) {
+@media (max-width: 1024px) {
   /* Home page mobile header — ALWAYS transparent at rest so the dark Burj
      hero shows through. Override every other background source. */
   body[data-home-hero-state="atrest"] [data-chrome="header"],
