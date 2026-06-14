@@ -730,10 +730,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       {/* Mobile-only clean gold hairline under header */}
       <div
         aria-hidden="true"
-        className="lg:hidden absolute left-0 right-0 bottom-0 h-px pointer-events-none"
+        className="jj-header-mobile-divider lg:hidden absolute left-0 right-0 bottom-0 h-px pointer-events-none"
         style={{
-          background:
-            'linear-gradient(90deg, rgba(184,149,85,0) 0%, rgba(184,149,85,0.85) 18%, rgba(184,149,85,0.95) 50%, rgba(184,149,85,0.85) 82%, rgba(184,149,85,0) 100%)',
+          background: '#B89555',
+          opacity: 0.55,
         }}
       />
 
