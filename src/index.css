@@ -96,6 +96,12 @@ body {
     backdrop-filter: none !important;
     box-shadow: none !important;
   }
+  /* Exempt the mobile header divider from the transparent-background reset
+     so the gold hairline stays visible even over the dark hero. */
+  body[data-home-hero-state="atrest"] [data-chrome="header"] > header > div.jj-header-mobile-divider {
+    background: #B89555 !important;
+    opacity: 0.55 !important;
+  }
   body[data-home-hero-state="scrolled"] [data-chrome="header"] > header {
     background: #FDFBF7 !important;
     -webkit-backdrop-filter: none !important;
