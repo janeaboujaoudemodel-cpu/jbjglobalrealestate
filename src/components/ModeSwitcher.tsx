@@ -312,6 +312,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                       the global white-icon contrast guard since the badge is dark. */}
                   <div
                     data-no-contrast-guard
+                    data-on-dark={config.surface === 'gold' ? undefined : 'true'}
                     data-mode-icon-tile={config.surface}
                     className="mode-switcher-icon-tile w-10 h-10 rounded-xl flex items-center justify-center shrink-0 allow-white"
                     style={{
@@ -324,6 +325,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   >
                     <Icon
                       data-no-contrast-guard
+                      data-on-dark={config.surface === 'gold' ? undefined : 'true'}
                       className="mode-switcher-icon w-[18px] h-[18px] allow-white"
                       style={{ color: config.onBase, stroke: config.onBase }}
                       strokeWidth={2}
