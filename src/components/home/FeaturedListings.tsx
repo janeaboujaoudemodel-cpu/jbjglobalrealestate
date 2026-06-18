@@ -30,8 +30,9 @@ const FeaturedListings = () => {
             data-on-dark
             data-no-contrast-guard
             data-allow-dark-cta
-            className="allow-white inline-flex items-center gap-2 px-4 py-2 bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/50 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4 transition-colors"
-            style={{ color: "#FFFFFF" }}
+            data-cta="dark"
+            className="allow-white inline-flex items-center gap-2 px-4 py-2 border rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4 transition-colors"
+            style={{ backgroundColor: "#102540", borderColor: "rgba(184,149,85,0.5)", color: "#FFFFFF" }}
           >
             <Home className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             <span className="allow-white" style={{ color: "#FFFFFF" }}>{t("featured.title", "Featured Properties")}</span>
