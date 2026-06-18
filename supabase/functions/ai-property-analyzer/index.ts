@@ -131,9 +131,21 @@ CRITICAL: Keep every section SHORT. Max 2-3 bullet points. One line per bullet. 
       });
     } catch (aiError) {
       console.error("AI error:", aiError);
+      const msg = aiError instanceof Error ? aiError.message : "AI processing failed";
+      const isCredits = /temporarily unavailable|credits|402/i.test(msg);
+      const isRate = /rate limit|429/i.test(msg);
       return new Response(
-        JSON.stringify({ success: false, error: "AI processing failed" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({
+          success: false,
+          fallback: true,
+          error: isCredits
+            ? "AI credits exhausted on this workspace. Please add credits in Settings → Workspace → Usage to resume AI analysis."
+            : isRate
+              ? "AI rate limit reached. Please try again in a moment."
+              : msg,
+          code: isCredits ? "AI_CREDITS_EXHAUSTED" : isRate ? "AI_RATE_LIMITED" : "AI_PROCESSING_FAILED",
+        }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
