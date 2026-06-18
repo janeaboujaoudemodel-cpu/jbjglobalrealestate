@@ -5062,6 +5062,22 @@ html body :where(
   opacity: 1 !important;
 }
 
+/* Mode switcher icon contrast lock — these icon tiles intentionally use
+   dark own-backgrounds inside a champagne dropdown, so they must beat the
+   global light-surface guard and keep their white/gold foregrounds visible. */
+[data-mode-switcher-panel] [data-mode-icon-tile] {
+  color: var(--mode-on-base) !important;
+  -webkit-text-fill-color: var(--mode-on-base) !important;
+  opacity: 1 !important;
+}
+[data-mode-switcher-panel] [data-mode-icon-tile] :where(svg, [class*="lucide"]),
+[data-mode-switcher-panel] [data-mode-icon-tile] :where(path, line, polyline, polygon, rect, circle, ellipse) {
+  color: var(--mode-on-base) !important;
+  stroke: var(--mode-on-base) !important;
+  -webkit-text-fill-color: var(--mode-on-base) !important;
+  opacity: 1 !important;
+}
+
 /* ============================================================
  * BLACK-CTA → NAVY GLOBAL REPAINT (locked, see memory)
  * Any raw bg-[#1A1A1A] / bg-black button or anchor with white-ish
