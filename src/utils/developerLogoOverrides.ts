@@ -35,7 +35,12 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   magdevelopment: { invert: true },
   magdevelopments: { invert: true },
   maggroup: { invert: true },
-};
+  // Kingdom By MAG — branded as a white "Kingdom" wordmark on a dark grey
+  // square. Invert so we get a clean black wordmark on white, no grey box.
+  kingdombymag: { invert: true },
+  kingdom: { invert: true },
+  kingdomdevelopment: { invert: true },
+  kingdomdevelopments: { invert: true },
 
 export function getDeveloperLogoOverride(
   name?: string | null,
