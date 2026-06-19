@@ -134,6 +134,11 @@ export function useSmartPopupStrategy(): SmartPopupState & {
     // Only stop showing if user has submitted the form
     if (hasSubmitted() || hasExceededMaxShows() || isInCooldown() || wasShownThisSession()) return;
 
+    // HARD SUPPRESS on project detail pages — those pages have their own
+    // project-specific brochure / inquiry / callback flows. The generic
+    // "Unlock Premium Features" popup must NEVER hijack those CTAs.
+    if (location.pathname.startsWith("/project/")) return;
+
     const currentContext = detectContext(location.pathname);
     const sessionPages = getStoredNumber(STORAGE_KEYS.sessionPages);
 
@@ -157,24 +162,6 @@ export function useSmartPopupStrategy(): SmartPopupState & {
     if (currentContext === "properties" && sessionPages >= PROPERTY_PAGE_THRESHOLD) {
       setShouldShow(true);
       return;
-    }
-
-    // Rule 4: Scroll-based trigger on project detail pages
-    if (location.pathname.startsWith("/project/") || location.pathname.startsWith("/properties/")) {
-      const handleScroll = () => {
-        const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-        if (scrollPercent >= SCROLL_THRESHOLD && !wasShownThisSession()) {
-          setShouldShow(true);
-          if (scrollListenerRef.current) {
-            window.removeEventListener("scroll", scrollListenerRef.current);
-          }
-        }
-      };
-      scrollListenerRef.current = handleScroll;
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-      };
     }
   }, [location.pathname, hasSubmitted]);
 
