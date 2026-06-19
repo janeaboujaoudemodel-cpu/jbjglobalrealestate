@@ -66,3 +66,12 @@ Technical notes / root cause:
 - The previous “form fix” only changed some token classes, but multiple later CSS blocks still overrode the phone picker back to black (`button[data-phone-code-trigger]`) and some form-specific rules still forced black borders.
 - The metallic CTA class currently has the gradient at rest, but the moving shine is only triggered on hover, which is why it does not match the always-moving sqft/sqm active treatment.
 - `HandoverPill` and legacy `.handover-orange` are still explicitly hardcoded to orange, so recommended/project cards can still show orange even after individual card edits.
+---
+
+UPDATE (batch progress):
+- [x] (1-3) Phone trigger + dropdown surface forced champagne globally (PhoneInput default variant flipped to 'light'; `.jbj-form-popover` rewired to soft-gold; new global popper-content lock in index.css).
+- [x] Metallic CTA palette now matches sqft active pill (`.jbj-shimmer-champagne`) with continuous `jbj-champagne-shimmer` + `metallicSweep` at rest.
+- [x] (4) Gallery dedup hardened — every gallery URL upgraded via `getHighResImageUrl` after dedup so hi-res twin always wins.
+- [x] (5) Owner toggle default flipped — `usePreviewAsVisitor()` defaults true; edit controls never auto-open on landing; choice persists explicitly.
+- [x] (6) Location/Nearby files audited — no blue refs remain.
+- [x] Memory locked: ui-ux/visual-standards/global-dropdown-and-cta-lock.md
