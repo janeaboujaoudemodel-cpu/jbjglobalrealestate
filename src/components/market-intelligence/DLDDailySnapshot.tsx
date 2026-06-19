@@ -58,16 +58,16 @@ const fadeIn = {
 const GOLD = "#B89555";
 const INK = "#0A0A0A";
 
-// Reusable premium black card (#0A0A0A + 1px gold hairline + white text).
+// Reusable champagne card with gold hairline.
 const BlackCard: React.FC<React.PropsWithChildren<{ className?: string }>> = ({ children, className = "" }) => (
   <div
-    data-no-contrast-guard
-    className={`allow-white relative overflow-hidden rounded-2xl ${className}`}
+    data-surface="light"
+    className={`surface-light relative overflow-hidden rounded-2xl ${className}`}
     style={{
-      backgroundColor: INK,
+      backgroundColor: "#FDFBF7",
       border: `1px solid ${GOLD}`,
-      boxShadow: "0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(184,149,85,0.15)",
-      color: "#FFFFFF",
+      boxShadow: "0 8px 28px rgba(26,26,26,0.07), inset 0 1px 0 rgba(255,255,255,0.85)",
+      color: "#1A1A1A",
     }}
   >
     {children}
@@ -148,16 +148,16 @@ export const DLDDailySnapshot = () => {
               <div className="flex items-start justify-between gap-2">
                 <div
                   data-no-contrast-guard
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#B89555]/55 bg-white/[0.06]"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#B89555]/45 bg-[#EFE6D6]"
                 >
-                  <Icon className="allow-white h-4 w-4 text-white" />
+                  <Icon className="h-4 w-4 text-[#1A1A1A]" />
                 </div>
-                <TrendingUp className="allow-white h-3.5 w-3.5 text-[#B89555]" />
+                <TrendingUp className="h-3.5 w-3.5 text-[#B89555]" />
               </div>
-              <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
+              <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/70">
                 {label}
               </p>
-              <p className="mt-1 text-2xl font-bold tabular-nums text-white md:text-3xl">{value}</p>
+              <p className="mt-1 text-2xl font-bold tabular-nums text-[#1A1A1A] md:text-3xl">{value}</p>
             </BlackCard>
           ))}
         </motion.div>
@@ -166,17 +166,17 @@ export const DLDDailySnapshot = () => {
         <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
           {/* Cash vs Mortgage — black filled bar = cash, gold hairline bar = mortgage */}
           <BlackCard className="p-6">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/70">
               Cash vs Mortgage
             </p>
-            <h3 className="mt-1 text-xl font-bold text-white">Buyer financing mix</h3>
+            <h3 className="mt-1 text-xl font-bold text-[#1A1A1A]">Buyer financing mix</h3>
 
             <div className="mt-6 space-y-5">
               {/* CASH */}
               <div>
                 <div className="mb-2 flex items-center justify-between text-sm">
-                  <span className="font-semibold text-white">Cash buyers</span>
-                  <span className="tabular-nums text-white">
+                  <span className="font-semibold text-[#1A1A1A]">Cash buyers</span>
+                  <span className="tabular-nums text-[#1A1A1A]">
                     {data.cash_count.toLocaleString("en-AE")} · {aed(data.cash_volume_aed)}
                   </span>
                 </div>
@@ -186,7 +186,7 @@ export const DLDDailySnapshot = () => {
                 >
                   <motion.div
                     className="absolute inset-y-0 left-0 rounded-full"
-                    style={{ backgroundColor: "#FFFFFF", transformOrigin: "left center" }}
+                    style={{ backgroundColor: INK, transformOrigin: "left center" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${cashShare / 100})` }}
                     viewport={{ once: true }}
@@ -195,14 +195,14 @@ export const DLDDailySnapshot = () => {
                     <div className="h-full w-full" />
                   </motion.div>
                 </div>
-                <p className="mt-1 text-[11px] tabular-nums text-white/70">{cashShare}% of all transactions</p>
+                <p className="mt-1 text-[11px] tabular-nums text-[#1A1A1A]/70">{cashShare}% of all transactions</p>
               </div>
 
               {/* MORTGAGE */}
               <div>
                 <div className="mb-2 flex items-center justify-between text-sm">
                   <span className="font-semibold text-[#B89555]">Mortgage buyers</span>
-                  <span className="tabular-nums text-white">
+                  <span className="tabular-nums text-[#1A1A1A]">
                     {data.mortgage_count.toLocaleString("en-AE")} · {aed(data.mortgage_volume_aed)}
                   </span>
                 </div>
@@ -221,11 +221,11 @@ export const DLDDailySnapshot = () => {
                     <div className="h-full w-full" />
                   </motion.div>
                 </div>
-                <p className="mt-1 text-[11px] tabular-nums text-white/70">{mortgageShare}% of all transactions</p>
+                <p className="mt-1 text-[11px] tabular-nums text-[#1A1A1A]/70">{mortgageShare}% of all transactions</p>
               </div>
             </div>
 
-            <p className="mt-6 text-[11px] leading-relaxed text-white/60">
+            <p className="mt-6 text-[11px] leading-relaxed text-[#1A1A1A]/60">
               Source: Dubai Land Department · aggregated for the snapshot day. Cash includes outright purchases;
               mortgage includes bank-financed completions.
             </p>
@@ -233,17 +233,17 @@ export const DLDDailySnapshot = () => {
 
           {/* Top-10 Areas — scaleX bars */}
           <BlackCard className="p-6">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/70">
               Top 10 Areas by Transactions
             </p>
-            <h3 className="mt-1 text-xl font-bold text-white">Where Dubai is buying</h3>
+            <h3 className="mt-1 text-xl font-bold text-[#1A1A1A]">Where Dubai is buying</h3>
 
             <div className="mt-5 space-y-3">
               {top.map((row, i) => {
                 const pct = max > 0 ? row.count / max : 0;
                 return (
                   <div key={`${row.area}-${i}`} className="grid grid-cols-[140px_1fr_auto] items-center gap-3">
-                    <span className="truncate text-sm font-semibold text-white">
+                    <span className="truncate text-sm font-semibold text-[#1A1A1A]">
                       <span className="mr-1.5 text-[#B89555]">{String(i + 1).padStart(2, "0")}</span>
                       {row.area}
                     </span>
@@ -260,12 +260,12 @@ export const DLDDailySnapshot = () => {
                         transition={{ duration: 0.7, ease: "easeOut", delay: i * 0.03 }}
                       />
                     </div>
-                    <span className="text-xs tabular-nums text-white">{row.count}</span>
+                    <span className="text-xs tabular-nums text-[#1A1A1A]">{row.count}</span>
                   </div>
                 );
               })}
               {top.length === 0 && (
-                <p className="text-sm text-white/60">No area data available for this snapshot.</p>
+                <p className="text-sm text-[#1A1A1A]/60">No area data available for this snapshot.</p>
               )}
             </div>
           </BlackCard>
@@ -277,20 +277,20 @@ export const DLDDailySnapshot = () => {
             <div className="flex items-start gap-4">
               <div
                 data-no-contrast-guard
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#B89555]/55 bg-white/[0.06]"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#B89555]/45 bg-[#EFE6D6]"
               >
-                <Flag className="allow-white h-5 w-5 text-white" />
+                <Flag className="h-5 w-5 text-[#1A1A1A]" />
               </div>
               <div className="flex-1">
-                <h4 className="text-base font-bold text-white md:text-lg">Notice something incorrect?</h4>
-                <p className="mt-1 text-sm leading-relaxed text-white/70">
+                <h4 className="text-base font-bold text-[#1A1A1A] md:text-lg">Notice something incorrect?</h4>
+                <p className="mt-1 text-sm leading-relaxed text-[#1A1A1A]/70">
                   Spotted a number that doesn't match your records or an area we're missing? Send us a quick
                   note — every report is reviewed by our market desk within 24 hours.
                 </p>
                 <Link
                   to="/contact?topic=market-intelligence-correction"
                   data-no-contrast-guard
-                  className="allow-white mt-4 inline-flex items-center gap-1.5 rounded-full border border-[#B89555] bg-white/[0.04] px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:bg-white/[0.10]"
+                  className="jj-cta-champagne mt-4 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition-colors"
                 >
                   <MailOpen className="h-3.5 w-3.5" />
                   Report an issue
@@ -303,20 +303,20 @@ export const DLDDailySnapshot = () => {
             <div className="flex items-start gap-4">
               <div
                 data-no-contrast-guard
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#B89555]/55 bg-white/[0.06]"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#B89555]/45 bg-[#EFE6D6]"
               >
-                <PhoneCall className="allow-white h-5 w-5 text-white" />
+                <PhoneCall className="h-5 w-5 text-[#1A1A1A]" />
               </div>
               <div className="flex-1">
-                <h4 className="text-base font-bold text-white md:text-lg">Expert Consultation</h4>
-                <p className="mt-1 text-sm leading-relaxed text-white/70">
+                <h4 className="text-base font-bold text-[#1A1A1A] md:text-lg">Expert Consultation</h4>
+                <p className="mt-1 text-sm leading-relaxed text-[#1A1A1A]/70">
                   Want this data interpreted for your portfolio? Book a 30-minute call with Jane Bou Jaoude
                   — founder-led, no automated bots, free of charge.
                 </p>
                 <Link
                   to="/book"
                   data-no-contrast-guard
-                  className="allow-white mt-4 inline-flex items-center gap-1.5 rounded-full border border-[#B89555] bg-[#B89555] px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#0A0A0A] transition-colors hover:bg-[#C9A368]"
+                  className="jj-cta-champagne mt-4 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition-colors"
                 >
                   <CalendarCheck className="h-3.5 w-3.5" />
                   Book consultation

@@ -84,11 +84,9 @@ const quarterlyArchive = [
 
 // Reusable Section Wrapper Component - 3 Layer System
 const SectionWrapper = ({ id, children }: { id: string; children: React.ReactNode }) => (
-  <section id={id} className="scroll-mt-24">
-    {/* Layer 2: Active Champagne with thin black contour */}
-    <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-2xl p-3 shadow-lg">
-      {/* Layer 3: Champagne Card with gold border */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl p-8 border-2 border-[#B89555]/40">
+  <section id={id} className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+    <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
+      <div className="jj-card-inner p-6 md:p-7">
         {children}
       </div>
     </div>
@@ -102,9 +100,9 @@ const MarketReportsPage = () => {
   const getTypeBadge = (type: string) => {
     switch (type) {
       case 'monthly':
-        return <Badge className="bg-blue-500/20 text-blue-500 border-blue-500/30 font-medium">Monthly</Badge>;
+        return <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40 font-medium">Monthly</Badge>;
       case 'quarterly':
-        return <Badge className="bg-purple-500/20 text-purple-500 border-purple-500/30 font-medium">Quarterly</Badge>;
+        return <Badge className="bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 font-medium">Quarterly</Badge>;
       case 'annual':
         return <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 font-medium">Annual</Badge>;
       default:
@@ -138,9 +136,6 @@ const MarketReportsPage = () => {
         videoPoster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
       />
 
-      {/* Gold Glow Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
       {/* Main Content with TOC Sidebar */}
       <div className="pt-8 pb-10 bg-[#FDFBF7]">
         {/* Fixed TOC Sidebar */}
@@ -157,7 +152,7 @@ const MarketReportsPage = () => {
         </div>
 
         {/* Layer 2 wrapper with gutters */}
-        <div className="mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 space-y-8">
+        <div className="space-y-0">
 
               {/* Introduction Section */}
               <SectionWrapper id="introduction">
@@ -360,7 +355,7 @@ const MarketReportsPage = () => {
                         <CardContent className="p-6 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-4">
                             {getTypeBadge(report.type)}
-                            <span className="text-white/90 text-xs bg-[#1A1A1A]/5 px-2 py-1 rounded">{report.pages} pages</span>
+                            <span className="text-[#1A1A1A]/70 text-xs bg-[#EFE6D6] border border-[#B89555]/25 px-2 py-1 rounded">{report.pages} pages</span>
                           </div>
 
                           <h3 
@@ -514,16 +509,13 @@ const MarketReportsPage = () => {
               </SectionWrapper>
 
               {/* Custom Report CTA */}
-              <section id="custom-report" className="scroll-mt-24">
-                <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-2xl p-3 shadow-lg">
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 overflow-hidden">
+              <section id="custom-report" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+                <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
+                  <Card className="jj-card-inner overflow-hidden">
                     <CardContent className="p-8 md:p-10 text-center relative">
-                      <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-gold/20 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2" />
-                      <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-gold/15 to-transparent rounded-full translate-x-1/2 translate-y-1/2" />
-                      
                       <div className="relative z-10">
-                        <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center mx-auto mb-5">
-                          <FileText className="w-7 h-7 text-[#1A1A1A]" />
+                        <div className="jj-icon-box-active w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5">
+                          <FileText className="w-7 h-7" />
                         </div>
                         <h3 
                           className="text-2xl md:text-3xl font-bold mb-4"
@@ -553,12 +545,9 @@ const MarketReportsPage = () => {
         </div>
       </div>
 
-      {/* Gold Glow Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
       {/* Market Intelligence Navigation */}
-      <section id="navigation" className="py-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] scroll-mt-24 mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl">
-        <div className="container mx-auto px-4">
+      <section id="navigation" className="py-6 jj-section-champagne scroll-mt-24">
+        <div className="container mx-auto px-4 lg:pr-72 xl:pr-72">
           <MarketIntelligenceNavigation current="/market-intelligence/reports" />
           
           {/* Disclaimer Box */}

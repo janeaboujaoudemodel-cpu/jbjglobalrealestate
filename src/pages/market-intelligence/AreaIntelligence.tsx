@@ -62,9 +62,6 @@ const AreaIntelligence = () => {
         videoPoster="https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80"
       />
 
-      {/* Gold Glow Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
       {/* Main Content - Black background with 3-layer system */}
       <div className="bg-[#FDFBF7] pt-8 pb-10">
         {/* Fixed TOC Sidebar */}
@@ -379,9 +376,9 @@ const AreaIntelligence = () => {
                         All explanations are grounded in registered data and official benchmarks.
                       </p>
                     </div>
-                    <div className="mt-6 p-4 bg-[#1A1A1A] rounded-xl">
+                    <div className="mt-6 p-4 bg-[#EFE6D6] rounded-xl border border-[#B89555]/30">
                       <p className="text-[#1A1A1A]/70 text-sm">
-                        Area Intelligence feeds directly into <Link to="/market-intelligence/reports" className="text-[#1A1A1A] hover:underline">Market Reports</Link>, where trends are summarized at a broader market level using the same official datasets.
+                        Area Intelligence feeds directly into <Link to="/market-intelligence/reports" className="text-[#1A1A1A] font-semibold hover:underline">Market Reports</Link>, where trends are summarized at a broader market level using the same official datasets.
                       </p>
                     </div>
                   </div>
@@ -389,9 +386,6 @@ const AreaIntelligence = () => {
               </div>
             </section>
 
-            {/* Gold Divider */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)] rounded-full" />
-            
           {/* Areas Grid - 3-layer system */}
           <section id="area-grid" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
             <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
@@ -463,7 +457,7 @@ const AreaIntelligence = () => {
                                     <p className="text-[#1A1A1A]/70 text-xs">Supply</p>
                                     <div className="w-full bg-[#1A1A1A]/10 rounded-full h-1.5 mt-1">
                                       <div 
-                                        className="bg-[#EFE6D6] h-1.5 rounded-full" 
+                                        className="bg-[#B89555] h-1.5 rounded-full" 
                                         style={{ width: `${area.supplyScore}%` }}
                                       />
                                     </div>
@@ -498,12 +492,9 @@ const AreaIntelligence = () => {
         </div>
       </div>
 
-      {/* Gold Glow Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
       {/* Market Intelligence Navigation - 3-layer system */}
-      <section id="navigation" className="py-12 jj-section-champagne scroll-mt-24">
-        <div className="container mx-auto px-4">
+      <section id="navigation" className="py-6 jj-section-champagne scroll-mt-24">
+        <div className="container mx-auto px-4 lg:pr-72 xl:pr-72">
           <MarketIntelligenceNavigation current="/market-intelligence/areas" />
           
           {/* Disclaimer Box */}

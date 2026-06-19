@@ -55,14 +55,11 @@ const Methodology = () => {
         backgroundImage="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
       />
 
-      {/* Gold Glow Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
       {/* Main Content with TOC Sidebar - Active Champagne Layer */}
       <section className="jj-section-champagne pt-8 pb-10">
         <div className="relative">
           {/* Full-bleed content area that stretches behind TOC */}
-          <div className="space-y-10">
+          <div className="space-y-3 px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
           
               {/* SECTION 1 — Introduction */}
               <motion.section
@@ -71,7 +68,7 @@ const Methodology = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="scroll-mt-32 py-12 jj-card-inner rounded-xl px-8"
+                className="scroll-mt-32 py-6 jj-card-inner rounded-xl px-6"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
@@ -100,7 +97,7 @@ const Methodology = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
+                className="scroll-mt-24 py-6 jj-card-inner rounded-xl px-6"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
@@ -147,7 +144,7 @@ const Methodology = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
+                className="scroll-mt-24 py-6 jj-card-inner rounded-xl px-6"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
@@ -244,7 +241,7 @@ const Methodology = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
+                className="scroll-mt-24 py-6 jj-card-inner rounded-xl px-6"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
@@ -291,11 +288,11 @@ const Methodology = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
+                className="scroll-mt-24 py-6 jj-card-inner rounded-xl px-6"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
-                    <AlertTriangle className="w-5 h-5 text-red-600" />
+                  <div className="jj-icon-box-active w-10 h-10 rounded-lg">
+                    <AlertTriangle className="w-5 h-5" />
                   </div>
                   <h2 className="text-2xl font-bold">
                     <span className="text-[#1A1A1A]">Presentation</span>{" "}
@@ -303,7 +300,7 @@ const Methodology = () => {
                   </h2>
                 </div>
                 
-                <div className="bg-red-50 border-2 border-red-300 rounded-lg p-6">
+                <div className="bg-[#EFE6D6] border border-[#B89555]/40 rounded-lg p-6">
                   <p className="text-[#1A1A1A] leading-relaxed mb-4">
                     Market intelligence content follows these fixed rules:
                   </p>
@@ -325,7 +322,7 @@ const Methodology = () => {
                       <span>No guaranteed outcomes or implied returns</span>
                     </li>
                   </ul>
-                  <p className="text-[#1A1A1A]/70 leading-relaxed mt-4 pt-4 border-t border-red-200">
+                  <p className="text-[#1A1A1A]/70 leading-relaxed mt-4 pt-4 border-t border-[#B89555]/30">
                     Charts, summaries, and explanations reflect recorded activity, not future expectations.
                   </p>
                 </div>
@@ -338,7 +335,7 @@ const Methodology = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
+                className="scroll-mt-24 py-6 jj-card-inner rounded-xl px-6"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
@@ -396,7 +393,7 @@ const Methodology = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
+                className="scroll-mt-24 py-6 jj-card-inner rounded-xl px-6"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
@@ -438,12 +435,9 @@ const Methodology = () => {
         </div>
       </section>
 
-      {/* Gold Glow Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
       {/* Market Intelligence Navigation - Active Champagne Layer */}
-      <section id="navigation" className="py-12 jj-section-champagne scroll-mt-24">
-        <div className="container mx-auto px-4">
+      <section id="navigation" className="py-6 jj-section-champagne scroll-mt-24">
+        <div className="container mx-auto px-4 lg:pr-72 xl:pr-72">
           <MarketIntelligenceNavigation current="/market-intelligence/methodology" />
         </div>
       </section>

@@ -25,23 +25,22 @@ const fadeInUp = {
 /* Data-viz semantic palette for cadence (kept as Tailwind utilities, not inline hex). */
 const frequencyClasses: Record<string, string> = {
   daily: 'bg-emerald-100 text-emerald-800 border-emerald-300',
-  weekly: 'bg-blue-100 text-blue-800 border-blue-300',
+  weekly: 'bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35',
   monthly: 'bg-amber-100 text-amber-800 border-amber-300',
   quarterly: 'bg-violet-100 text-violet-800 border-violet-300',
 };
 
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    data-no-contrast-guard
-    className={`w-12 h-12 rounded-none flex items-center justify-center transition-all duration-300 bg-[hsl(var(--mi-navy))] border border-[hsl(var(--mi-gold)/0.45)] shadow-sm allow-white ${className}`}
+    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#EFE6D6] border border-[#B89555]/40 shadow-sm ${className}`}
   >
-    <Icon className="w-6 h-6 text-white allow-white" />
+    <Icon className="w-6 h-6 text-[#1A1A1A]" />
   </div>
 );
 
 export const DataSourcesPanel = () => {
   return (
-    <section className="surface-light py-16 bg-background" data-surface="light">
+    <section className="surface-light py-10 bg-[#FDFBF7]" data-surface="light">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -70,7 +69,7 @@ export const DataSourcesPanel = () => {
               const fc = frequencyClasses[source.updateFrequency] || frequencyClasses.monthly;
               return (
                 <motion.div key={source.id} variants={fadeInUp}>
-                  <Card className="h-full rounded-none transition-all hover:shadow-[0_16px_38px_hsl(var(--mi-navy)/0.12)] bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)]">
+                  <Card className="jj-card-inner h-full rounded-xl transition-all hover:shadow-[0_16px_38px_rgba(26,26,26,0.08)]">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <IconBox icon={Database} />

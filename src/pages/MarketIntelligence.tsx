@@ -21,7 +21,7 @@ import { MARKET_DISCLAIMER } from "@/config/open-data-config";
 import VideoBackground from "@/components/VideoBackground";
 import marketIntelligenceHero from "@/assets/market-intelligence-hero.jpg";
 import marketIntelligenceVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
-import jbjLogoLight from "@/assets/jbj-fulllogo-light.png";
+import jbjLogoDark from "@/assets/jbj-fulllogo-dark.png";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -33,7 +33,7 @@ const heroKeywords = ["DLD", "RERA", "DXB", "TRANSACTIONS", "RENTAL INDEX", "ARE
 const sourceBadges = ["DLD", "RERA", "DXB Interact", "Dubai Statistics", "JBJ Intelligence"];
 
 const heroCtaClass =
-  "allow-white group inline-flex items-center justify-center gap-2 rounded-none border border-white/45 bg-white/[0.07] px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition-colors hover:border-[hsl(var(--mi-gold))] hover:bg-white/[0.12] md:px-8 md:py-4 md:text-base";
+  "jj-cta-champagne group inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-colors md:px-8 md:py-4 md:text-base";
 
 // Organization schema for main Market Intelligence page
 const organizationSchema = {
@@ -129,14 +129,14 @@ const MarketIntelligence = () => {
       />
 
       {/* Hero — premium video intelligence background */}
-      <section data-surface="dark" className="jj-hero-fullscreen relative flex min-h-[680px] w-full items-center overflow-hidden bg-[hsl(var(--mi-navy))] py-24 md:min-h-[760px]">
+      <section data-surface="light" className="surface-light relative flex min-h-[540px] w-full items-center overflow-hidden bg-[#FDFBF7] py-20 md:min-h-[620px]">
         <VideoBackground
           src={marketIntelligenceVideo}
           poster={marketIntelligenceHero}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.88)_0%,rgba(5,15,27,0.74)_44%,rgba(0,0,0,0.48)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_30%,hsl(var(--mi-gold)/0.18),transparent_34%),radial-gradient(circle_at_82%_18%,rgba(255,255,255,0.10),transparent_30%)]" />
-        <div className="pointer-events-none absolute inset-x-0 top-24 hidden overflow-hidden text-[10px] font-semibold uppercase tracking-[0.42em] text-white/[0.08] md:block">
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(253,251,247,0.96)_0%,rgba(253,251,247,0.84)_46%,rgba(253,251,247,0.50)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(253,251,247,0.20)_0%,rgba(253,251,247,0.90)_100%)]" />
+        <div className="pointer-events-none absolute inset-x-0 top-24 hidden overflow-hidden text-[10px] font-semibold uppercase tracking-[0.42em] text-[#1A1A1A]/20 md:block">
           <div className="flex min-w-max animate-[marquee_38s_linear_infinite] gap-10 whitespace-nowrap">
             {[...heroKeywords, ...heroKeywords, ...heroKeywords].map((word, index) => (
               <span key={`${word}-${index}`}>{word}</span>
@@ -151,20 +151,20 @@ const MarketIntelligence = () => {
           variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
         >
           <motion.div className="mb-8 flex flex-wrap items-center gap-3" variants={fadeInUp}>
-            <img src={jbjLogoLight} alt="JBJ GLOBAL REAL ESTATE" className="h-10 w-auto object-contain md:h-12" />
-            <span className="h-8 w-px bg-white/25" aria-hidden="true" />
+            <img src={jbjLogoDark} alt="JBJ GLOBAL REAL ESTATE" className="h-10 w-auto object-contain md:h-12" />
+            <span className="h-8 w-px bg-[#B89555]/45" aria-hidden="true" />
             <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[hsl(var(--mi-gold))]">Daily Market Desk</span>
           </motion.div>
 
           <motion.h1 
-            className="max-w-4xl text-left text-5xl font-bold leading-[0.92] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.75)] md:text-7xl lg:text-8xl"
+            className="max-w-4xl text-left text-5xl font-bold leading-[0.92] text-[#1A1A1A] md:text-7xl lg:text-8xl"
             variants={fadeInUp}
           >
             Market Intelligence
           </motion.h1>
 
           <motion.p 
-            className="mt-6 max-w-2xl text-left text-lg leading-relaxed text-white/88 md:text-xl"
+            className="mt-6 max-w-2xl text-left text-lg leading-relaxed text-[#1A1A1A]/80 md:text-xl"
             variants={fadeInUp}
           >
             Daily refreshed Dubai real estate intelligence powered by official government sources, licensed market data partners, and JBJ editorial review.
@@ -176,19 +176,17 @@ const MarketIntelligence = () => {
           >
             <a
               href="#overview"
-              data-no-contrast-guard
               className={heroCtaClass}
             >
-              <span className="allow-white">Explore Market Dashboard</span>
-              <ArrowUpRight className="w-5 h-5 allow-white" />
+              <span>Explore Market Dashboard</span>
+              <ArrowUpRight className="w-5 h-5" />
             </a>
             <Link
               to="/market-report"
-              data-no-contrast-guard
               className={heroCtaClass}
             >
-              <span className="allow-white">View Daily Reports</span>
-              <ArrowUpRight className="w-5 h-5 allow-white" />
+              <span>View Daily Reports</span>
+              <ArrowUpRight className="w-5 h-5" />
             </Link>
           </motion.div>
 
@@ -197,33 +195,33 @@ const MarketIntelligence = () => {
             variants={fadeInUp}
           >
             {sourceBadges.map((label) => (
-              <div key={label} className="border border-white/18 bg-black/24 px-3 py-2 text-center backdrop-blur-md">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/82">{label}</span>
+              <div key={label} className="border border-[#B89555]/35 bg-[#FDFBF7]/75 px-3 py-2 text-center backdrop-blur-md">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]">{label}</span>
               </div>
             ))}
           </motion.div>
 
-          <motion.div className="mt-10 max-w-3xl border border-white/18 bg-black/62 p-5 shadow-[0_18px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl md:p-6" variants={fadeInUp}>
+          <motion.div className="mt-10 max-w-3xl border border-[#B89555]/40 bg-[#FDFBF7]/86 p-5 shadow-[0_18px_60px_rgba(26,26,26,0.12)] backdrop-blur-xl md:p-6" variants={fadeInUp}>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-start gap-3">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-[hsl(var(--mi-gold)/0.55)] bg-white/8" data-no-contrast-guard>
-                  <Info className="h-5 w-5 text-white allow-white" />
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-[hsl(var(--mi-gold)/0.55)] bg-[#EFE6D6]">
+                  <Info className="h-5 w-5 text-[#1A1A1A]" />
                 </div>
                 <div>
-                  <p className="text-base font-semibold text-white md:text-lg">Founder Market Intelligence</p>
-                  <p className="mt-1 text-sm leading-relaxed text-white/72">Founder-led interpretation by Jane Bou Jaoude, supported by verified source tracking and daily freshness checks.</p>
+                  <p className="text-base font-semibold text-[#1A1A1A] md:text-lg">Founder Market Intelligence</p>
+                  <p className="mt-1 text-sm leading-relaxed text-[#1A1A1A]/70">Founder-led interpretation by Jane Bou Jaoude, supported by verified source tracking and daily freshness checks.</p>
                 </div>
               </div>
-              <Link to="/founder" className="inline-flex items-center gap-2 text-sm font-semibold text-white underline decoration-[hsl(var(--mi-gold))] underline-offset-4" data-no-contrast-guard>
+              <Link to="/founder" className="inline-flex items-center gap-2 text-sm font-semibold text-[#1A1A1A] underline decoration-[hsl(var(--mi-gold))] underline-offset-4">
                 <span>Founder Profile</span>
-                <ArrowUpRight className="h-4 w-4 text-white allow-white" />
+                <ArrowUpRight className="h-4 w-4 text-[#1A1A1A]" />
               </Link>
             </div>
           </motion.div>
         </motion.div>
       </section>
 
-      <section className="w-full bg-[hsl(var(--mi-navy))] py-6" data-surface="dark">
+      <section className="w-full bg-[#F7F2EA] py-6" data-surface="light">
         <div className="container mx-auto px-4">
           <div className="grid gap-3 md:grid-cols-3">
             {[
@@ -231,14 +229,14 @@ const MarketIntelligence = () => {
               { Icon: RefreshCw, title: "Daily Freshness", text: "Market pages show a current daily freshness check." },
               { Icon: Shield, title: "No Forecast Claims", text: "Analytics and education only, with source attribution." },
             ].map(({ Icon, title, text }) => (
-              <div key={title} className="border border-white/15 bg-white/[0.06] p-4 backdrop-blur-md">
+              <div key={title} className="border border-[#B89555]/35 bg-[#FDFBF7] p-4 shadow-sm">
                 <div className="mb-3 flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center border border-[hsl(var(--mi-gold)/0.5)]" data-no-contrast-guard>
-                    <Icon className="h-4 w-4 text-white allow-white" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[hsl(var(--mi-gold)/0.5)] bg-[#EFE6D6]">
+                    <Icon className="h-4 w-4 text-[#1A1A1A]" />
                   </div>
-                  <p className="text-sm font-semibold text-white">{title}</p>
+                  <p className="text-sm font-semibold text-[#1A1A1A]">{title}</p>
                 </div>
-                <p className="text-xs leading-relaxed text-white/68">{text}</p>
+                <p className="text-xs leading-relaxed text-[#1A1A1A]/70">{text}</p>
               </div>
             ))}
           </div>

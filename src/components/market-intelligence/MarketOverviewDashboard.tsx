@@ -26,19 +26,18 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
-/* ICON BOX — approved navy with white icon (global standard) */
+/* Icon box — champagne/gold standard */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    data-no-contrast-guard
-    className={`w-12 h-12 rounded-none flex items-center justify-center transition-all duration-300 bg-[hsl(var(--mi-navy))] border border-[hsl(var(--mi-gold)/0.45)] shadow-sm allow-white ${className}`}
+    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#EFE6D6] border border-[#B89555]/40 shadow-sm ${className}`}
   >
-    <Icon className="w-6 h-6 text-white allow-white" />
+    <Icon className="w-6 h-6 text-[#1A1A1A]" />
   </div>
 );
 
 const TONE_BY_ACCENT: Record<string, string> = {
   "text-emerald-700": "emerald",
-  "text-blue-700": "violet",
+  "text-[#1A1A1A]": "gold",
   "text-amber-700": "amber",
   "text-foreground": "magenta",
 };
@@ -67,7 +66,7 @@ const StatCard = ({
     <motion.div variants={fadeInUp}>
       <Card
         data-tone={tone}
-        className="jj-neon-kpi transition-all h-full rounded-xl bg-card"
+        className="jj-card-inner transition-all h-full rounded-xl"
       >
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
@@ -92,7 +91,7 @@ const StatCard = ({
 
 export const MarketOverviewDashboard = () => {
   return (
-    <section className="surface-light py-16 bg-background" data-surface="light">
+    <section className="surface-light py-10 bg-[#FDFBF7]" data-surface="light">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -130,7 +129,7 @@ export const MarketOverviewDashboard = () => {
               change={MARKET_OVERVIEW_STATS.avgPriceChange}
               icon={DollarSign}
               prefix="AED "
-              accentColor="text-blue-700"
+              accentColor="text-[#1A1A1A]"
             />
             <StatCard
               title="Avg. Rental Yield"
@@ -154,7 +153,7 @@ export const MarketOverviewDashboard = () => {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full rounded-none bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)] transition-all">
+              <Card className="h-full rounded-xl jj-card-inner transition-all">
                 <CardHeader>
                   <CardTitle className="text-[hsl(var(--mi-navy))] flex items-center gap-3">
                     <IconBox icon={BarChart3} className="w-10 h-10" />
@@ -166,14 +165,14 @@ export const MarketOverviewDashboard = () => {
                     {QUARTERLY_TRENDS.map((quarter, idx) => {
                       const qBars = [
                         'bg-gradient-to-r from-emerald-500 to-emerald-400',
-                        'bg-gradient-to-r from-blue-500 to-blue-400',
+                        'bg-[#B89555]',
                         'bg-gradient-to-r from-amber-500 to-amber-400',
-                        'bg-gradient-to-r from-violet-500 to-violet-400',
+                        'bg-[#1A1A1A]',
                       ];
                       return (
                         <div key={quarter.quarter} className="flex items-center gap-4">
                           <span className="text-sm font-semibold leading-none w-20 text-foreground">{quarter.quarter}</span>
-                          <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner bg-muted">
+                          <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner bg-[#EFE6D6]">
                             <motion.div
                               className={`h-full ${qBars[idx % qBars.length]}`}
                               initial={{ width: 0 }}
@@ -198,7 +197,7 @@ export const MarketOverviewDashboard = () => {
 
             {/* Property Type Breakdown */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full rounded-none bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)] transition-all">
+              <Card className="h-full rounded-xl jj-card-inner transition-all">
                 <CardHeader>
                   <CardTitle className="text-[hsl(var(--mi-navy))] flex items-center gap-3">
                     <IconBox icon={Building2} className="w-10 h-10" />
