@@ -128,10 +128,10 @@ export const MarketIntelligenceTableOfContents = ({
                   >
                     <span
                       className={cn(
-                        "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-semibold flex-shrink-0",
+                        "h-5 min-w-5 rounded-md border flex items-center justify-center px-1 text-[10px] font-semibold flex-shrink-0",
                         activeId === item.id
                           ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
-                          : "bg-[#EFE6D6] text-[#1A1A1A]"
+                          : "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/25"
                       )}
                     >
                       {index + 1}
