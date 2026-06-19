@@ -4482,16 +4482,16 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   position: relative !important;
   isolation: isolate;
   color: #1A1A1A !important;
-  background:
-    linear-gradient(
-      135deg,
-      #F7EFDC 0%,
-      #E9D9B2 25%,
-      #D7BE7E 50%,
-      #E9D9B2 75%,
-      #F7EFDC 100%
-    ) !important;
-  background-size: 220% 220% !important;
+  /* Palette MATCHES .jbj-shimmer-champagne (active sqft/sqm pill). */
+  background-image: linear-gradient(
+    110deg,
+    #E6D3A8 0%,
+    #F5E9CC 25%,
+    #D8BE82 50%,
+    #F5E9CC 75%,
+    #E6D3A8 100%
+  ) !important;
+  background-size: 200% 100% !important;
   background-position: 0% 50% !important;
   border: 1px solid rgba(184, 149, 85, 0.65) !important;
   border-radius: 0.75rem !important;
@@ -4501,13 +4501,8 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
     inset 0 -1px 0 rgba(184, 149, 85, 0.35) !important;
   transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease !important;
   overflow: hidden;
-  /* CONTINUOUS metallic shimmer at rest — matches active sqft/sqm treatment. */
-  animation: jj-cta-gold-shimmer 4.5s ease-in-out infinite !important;
-}
-@keyframes jj-cta-gold-shimmer {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  /* Continuous champagne gradient drift — IDENTICAL keyframes to sqft pill. */
+  animation: jbj-champagne-shimmer 3s linear infinite !important;
 }
 .jj-cta-gold-metallic:hover:not(:disabled) {
   transform: translateY(-1px);
@@ -4516,33 +4511,31 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
     0 12px 30px -10px rgba(184, 149, 85, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.7),
     inset 0 -1px 0 rgba(184, 149, 85, 0.5) !important;
-  animation-duration: 2.2s !important;
+  animation-duration: 1.6s !important;
 }
 .jj-cta-gold-metallic:disabled {
   opacity: 0.55;
   cursor: not-allowed;
   animation: none !important;
 }
-/* Continuous sweeping sheen — runs at rest, faster on hover. */
+/* Diagonal metallic sweep — matches @keyframes metallicSweep on active pills. */
 .jj-cta-gold-metallic::before {
   content: "";
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 60%;
   pointer-events: none;
   background: linear-gradient(
     110deg,
-    transparent 35%,
+    transparent 0%,
     rgba(255, 255, 255, 0.55) 50%,
-    transparent 65%
+    transparent 100%
   );
-  transform: translateX(-120%);
+  transform: translateX(-120%) skewX(-18deg);
   z-index: 0;
-  animation: jj-cta-gold-sheen 3.8s ease-in-out infinite !important;
-}
-@keyframes jj-cta-gold-sheen {
-  0%   { transform: translateX(-120%); }
-  55%  { transform: translateX(120%); }
-  100% { transform: translateX(120%); }
+  animation: metallicSweep 3.2s ease-in-out infinite !important;
 }
 .jj-cta-gold-metallic:hover::before {
   animation-duration: 1.6s !important;
@@ -4558,6 +4551,53 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 @media (prefers-reduced-motion: reduce) {
   .jj-cta-gold-metallic,
   .jj-cta-gold-metallic::before { animation: none !important; }
+}
+
+/* --------------------------------------------------------------------------
+ * GLOBAL POPOVER / SELECT / COMBOBOX SURFACE LOCK
+ * Every Radix popper-rendered floating surface (SelectContent, PopoverContent,
+ * Combobox, country picker, nationality, language picker, etc.) must render
+ * champagne-on-soft-gold — NEVER white-on-black. Inline opt-outs:
+ * [data-no-contrast-guard], [data-on-dark], or .allow-white on the content.
+ * ------------------------------------------------------------------------ */
+[data-radix-popper-content-wrapper] > [role="listbox"],
+[data-radix-popper-content-wrapper] > [role="dialog"],
+[data-radix-popper-content-wrapper] > [role="menu"],
+[data-radix-popper-content-wrapper] > [data-radix-select-content],
+[data-radix-popper-content-wrapper] > [data-radix-popover-content],
+[data-radix-popper-content-wrapper] > [data-radix-dropdown-menu-content],
+[data-radix-popper-content-wrapper] > [data-radix-combobox-content],
+[data-radix-popper-content-wrapper] > .jbj-form-popover {
+  background-color: #F7F2EA !important;
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%) !important;
+  border: 1px solid rgba(184, 149, 85, 0.55) !important;
+  color: #1A1A1A !important;
+  box-shadow: 0 12px 32px -12px rgba(26, 26, 26, 0.18), 0 4px 12px -4px rgba(184, 149, 85, 0.25) !important;
+}
+[data-radix-popper-content-wrapper] [role="option"],
+[data-radix-popper-content-wrapper] [role="menuitem"],
+[data-radix-popper-content-wrapper] [cmdk-item] {
+  color: #1A1A1A !important;
+}
+[data-radix-popper-content-wrapper] [role="option"]:hover,
+[data-radix-popper-content-wrapper] [role="option"][data-highlighted],
+[data-radix-popper-content-wrapper] [role="option"][data-state="checked"],
+[data-radix-popper-content-wrapper] [role="menuitem"]:hover,
+[data-radix-popper-content-wrapper] [role="menuitem"][data-highlighted],
+[data-radix-popper-content-wrapper] [cmdk-item][data-selected="true"],
+[data-radix-popper-content-wrapper] [cmdk-item]:hover {
+  background-color: rgba(184, 149, 85, 0.12) !important;
+  color: #1A1A1A !important;
+}
+/* Dark opt-out — explicit dark popovers (e.g., owner toolbars) keep dark. */
+[data-radix-popper-content-wrapper] > [data-no-contrast-guard],
+[data-radix-popper-content-wrapper] > [data-on-dark],
+[data-radix-popper-content-wrapper] > .allow-white {
+  background-color: revert !important;
+  background-image: revert !important;
+  border: revert !important;
+  color: revert !important;
+  box-shadow: revert !important;
 }
 
 /* Duplicate phone-code lock — keep champagne (no black). */

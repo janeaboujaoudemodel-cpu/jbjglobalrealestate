@@ -200,8 +200,10 @@ label[data-required]::after {
 }
 
 .jbj-form-popover {
-  background-color: var(--t-page) !important;
-  border: 2px solid var(--t-form-blue) !important;
+  background-color: var(--t-surface) !important;
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%) !important;
+  border: 1px solid rgba(184, 149, 85, 0.55) !important;
+  box-shadow: 0 12px 32px -12px rgba(26, 26, 26, 0.18), 0 4px 12px -4px rgba(184, 149, 85, 0.25) !important;
 }
 
 .jbj-form-option {
