@@ -544,7 +544,7 @@ export const ConsultationRequestForm = ({
                   <Textarea
                     placeholder="Additional details (optional)"
                     {...field}
-                    className="min-h-[80px] bg-[#FDFBF7] border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] text-[#1A1A1A] resize-none rounded-lg"
+                    className="min-h-[80px] bg-transparent text-[#1A1A1A] resize-none rounded-lg"
                   />
                 </FormControl>
                 <FormMessage />
