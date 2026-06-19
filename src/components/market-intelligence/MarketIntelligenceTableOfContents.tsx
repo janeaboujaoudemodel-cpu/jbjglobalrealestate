@@ -84,11 +84,11 @@ export const MarketIntelligenceTableOfContents = ({
     isScrollingRef.current = true;
     setActiveId(id);
 
-    scrollToId(id, { extraOffset: 20 });
+    scrollToId(id, { extraOffset: 8, behavior: "auto" });
 
     setTimeout(() => {
       isScrollingRef.current = false;
-    }, 900);
+    }, 120);
   };
 
   const handleDismissTooltip = () => {
@@ -110,7 +110,7 @@ export const MarketIntelligenceTableOfContents = ({
             <div className="rounded-xl p-4 shadow-xl border bg-[#FDFBF7] border-[#B89555]/40">
               <div className="flex items-start gap-3 mb-3">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-[#1A1A1A]">
-                  <HelpCircle className="w-4 h-4 text-white" />
+                  <HelpCircle className="w-4 h-4 text-white allow-white" />
                 </div>
                 <div>
                   <h4 className={`${MI_H4} mb-1 text-[#1A1A1A]`}>Quick Navigation</h4>
@@ -137,7 +137,7 @@ export const MarketIntelligenceTableOfContents = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-xl overflow-hidden shadow-lg max-h-[55vh] border bg-[#FDFBF7] border-[#B89555]/30 flex flex-col"
+        className="rounded-xl overflow-hidden shadow-lg max-h-[50vh] border bg-[#FDFBF7] border-[#B89555]/30 flex flex-col"
       >
         <div className="flex items-center justify-between px-3 py-2.5 border-b border-[#B89555]/25 bg-[#F7F2EA] flex-shrink-0">
           <div className="flex items-center gap-2">
@@ -174,8 +174,8 @@ export const MarketIntelligenceTableOfContents = ({
                     onClick={() => scrollToSection(item.id)}
                     className={cn(
                       "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md text-left transition-all border text-[13px]",
-                      activeId === item.id
-                        ? "font-semibold shadow-sm bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                        activeId === item.id
+                          ? "font-semibold shadow-sm bg-[#1A1A1A] text-white border-[#1A1A1A]"
                         : "border-transparent text-[#1A1A1A] bg-transparent hover:bg-[#EFE6D6]"
                     )}
                   >
@@ -183,7 +183,7 @@ export const MarketIntelligenceTableOfContents = ({
                       className={cn(
                         "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-semibold flex-shrink-0",
                         activeId === item.id
-                          ? "bg-white text-[#1A1A1A]"
+                          ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
                           : "bg-[#EFE6D6] text-[#1A1A1A]"
                       )}
                     >
