@@ -40,7 +40,7 @@ const AreaIntelligence = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Dubai Area Intelligence | Rent Trends & Property Prices by Neighborhood | JBJ GLOBAL REAL ESTATE"
         description="Deep dive into Dubai neighborhoods. Historical price trends, rent analysis, demand vs supply indicators, and market insights for BUY · SELL · RENT decisions."
@@ -66,7 +66,7 @@ const AreaIntelligence = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Main Content - Black background with 3-layer system */}
-      <div className="bg-[#1A1A1A] pt-16 pb-16">
+      <div className="bg-[#FDFBF7] pt-16 pb-16">
         {/* Fixed TOC Sidebar */}
         <div className="hidden lg:block">
           <MarketIntelligenceTableOfContents 

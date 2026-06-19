@@ -68,7 +68,7 @@ const MonthlyMarketBrief = () => {
 
   if (!data) {
     return (
-      <div data-neon-page className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">Report Not Found</h1>
           <Link to="/market-intelligence/reports" className="text-[#1A1A1A] hover:underline">
@@ -94,7 +94,7 @@ const MonthlyMarketBrief = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div className="min-h-screen bg-[#FDFBF7]">
       <SEOHead
         title={`${data.period} Market Brief | Dubai Real Estate | JBJ GLOBAL REAL ESTATE`}
         description={`Monthly market brief for ${data.period} covering Dubai real estate across BUY · SELL · RENT. Official report by JBJ GLOBAL REAL ESTATE.`}
