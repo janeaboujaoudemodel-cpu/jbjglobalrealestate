@@ -399,15 +399,15 @@ const QuizResults = () => {
     const pageW = doc.internal.pageSize.getWidth();
     const pageH = doc.internal.pageSize.getHeight();
 
-    // Tiffany palette — single family used everywhere
-    const ink: [number, number, number] = [2, 17, 15];
-    const inkDeep: [number, number, number] = [4, 22, 28];
-    const navy: [number, number, number] = [3, 30, 24];
-    const tiffany: [number, number, number] = [34, 211, 238];
-    const tiffanyLight: [number, number, number] = [94, 234, 212];
-    const tiffanyDeep: [number, number, number] = [14, 116, 144];
-    const tiffanyMuted: [number, number, number] = [205, 245, 245];
-    const tiffanyDim: [number, number, number] = [160, 215, 220];
+    // JBJ champagne+gold+black palette — used everywhere in the PDF
+    const ink: [number, number, number] = [26, 26, 26];
+    const inkDeep: [number, number, number] = [10, 10, 10];
+    const navy: [number, number, number] = [10, 10, 10];
+    const tiffany: [number, number, number] = [184, 149, 85];
+    const tiffanyLight: [number, number, number] = [239, 230, 214];
+    const tiffanyDeep: [number, number, number] = [138, 106, 58];
+    const tiffanyMuted: [number, number, number] = [247, 242, 234];
+    const tiffanyDim: [number, number, number] = [253, 251, 247];
     const white: [number, number, number] = [255, 255, 255];
 
     const M = 36;
