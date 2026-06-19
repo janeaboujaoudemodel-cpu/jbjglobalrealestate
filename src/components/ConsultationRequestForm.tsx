@@ -122,6 +122,8 @@ export const ConsultationRequestForm = ({
       email: "",
       phone: "",
       serviceNeeded: "",
+      bedrooms: "",
+      sizeBucket: "any",
       nationality: "",
       preferredLanguage: "",
       preferredTime: "",
