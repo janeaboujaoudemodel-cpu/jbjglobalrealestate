@@ -103,26 +103,32 @@ function ProviderPanel({
 }: {
   provider: OAuthProvider;
   title: string;
-  existing?: { id: string; client_id: string; client_secret: string; label: string | null };
+  existing?: { id: string; client_id: string; label: string | null };
   onSave: (v: { provider: OAuthProvider; client_id: string; client_secret: string; label?: string }) => void;
   onDelete: (id: string) => void;
   steps: React.ReactNode[];
   saving: boolean;
 }) {
   const [clientId, setClientId] = useState(existing?.client_id ?? "");
-  const [clientSecret, setClientSecret] = useState(existing?.client_secret ?? "");
+  // SECURITY: client_secret is write-only — it is never returned by the API.
+  // The field stays empty on edit; supplying a value rewrites the stored secret.
+  const [clientSecret, setClientSecret] = useState("");
   const [label, setLabel] = useState(existing?.label ?? "");
 
   useEffect(() => {
     setClientId(existing?.client_id ?? "");
-    setClientSecret(existing?.client_secret ?? "");
+    setClientSecret("");
     setLabel(existing?.label ?? "");
-  }, [existing?.client_id, existing?.client_secret, existing?.label]);
+  }, [existing?.client_id, existing?.label]);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!clientId.trim() || !clientSecret.trim()) {
-      toast.error("Client ID and Client Secret are required");
+    if (!clientId.trim()) {
+      toast.error("Client ID is required");
+      return;
+    }
+    if (!existing && !clientSecret.trim()) {
+      toast.error("Client Secret is required");
       return;
     }
     onSave({ provider, client_id: clientId, client_secret: clientSecret, label });
@@ -152,8 +158,8 @@ function ProviderPanel({
           <Input id={`${provider}-client-id`} value={clientId} onChange={(e) => setClientId(e.target.value)} placeholder={provider === "gmail" ? "xxxx.apps.googleusercontent.com" : "Application (client) ID"} className="bg-white" />
         </div>
         <div className="grid gap-1.5">
-          <Label htmlFor={`${provider}-client-secret`}>Client Secret</Label>
-          <Input id={`${provider}-client-secret`} type="password" value={clientSecret} onChange={(e) => setClientSecret(e.target.value)} placeholder="••••••••••••" className="bg-white" />
+          <Label htmlFor={`${provider}-client-secret`}>Client Secret {existing ? <span className="text-[11px] text-[#1A1A1A]/55">(leave blank to keep current)</span> : null}</Label>
+          <Input id={`${provider}-client-secret`} type="password" autoComplete="new-password" value={clientSecret} onChange={(e) => setClientSecret(e.target.value)} placeholder={existing ? "•••••••• (stored — hidden for security)" : "••••••••••••"} className="bg-white" />
         </div>
         <div className="grid gap-1.5">
           <Label htmlFor={`${provider}-label`}>Label (optional)</Label>

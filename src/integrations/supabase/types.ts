@@ -21323,7 +21323,6 @@ export type Database = {
           provisioned_by: string | null
           software_licenses: Json | null
           status: string
-          temporary_password: string | null
           tools_access: Json | null
           updated_at: string
           user_id: string | null
@@ -21344,7 +21343,6 @@ export type Database = {
           provisioned_by?: string | null
           software_licenses?: Json | null
           status?: string
-          temporary_password?: string | null
           tools_access?: Json | null
           updated_at?: string
           user_id?: string | null
@@ -21365,7 +21363,6 @@ export type Database = {
           provisioned_by?: string | null
           software_licenses?: Json | null
           status?: string
-          temporary_password?: string | null
           tools_access?: Json | null
           updated_at?: string
           user_id?: string | null

@@ -151,13 +151,12 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
         })
         .eq('id', selectedApp.id);
 
-      // 3. Provisioning record
+      // 3. Provisioning record (temporary_password is NEVER persisted — delivered via welcome email only)
       await supabase
         .from('it_provisioning_records')
         .insert({
           application_id: selectedApp.id,
           employee_email: generatedEmail,
-          temporary_password: '***SECURED***',
           email_signature_html: emailSignature,
           crm_access_granted: grantCRM,
           welcome_email_sent: sendWelcomeEmail,
