@@ -94,7 +94,7 @@ import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { getProjectStatus } from "@/utils/projectStatus";
 import OwnerVisitorToggle from "@/components/project-detail/OwnerVisitorToggle";
-import BrokerBrandedMaterialsCard from "@/components/project-detail/BrokerBrandedMaterialsCard";
+// BrokerBrandedMaterialsCard removed — replaced by inline branded-presentation download
 import { useUserMode } from "@/hooks/useUserMode";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -772,28 +772,55 @@ export default function ProjectDetailLayout({
             </Button>
           </div>
 
-          {/* Broker-only: branded materials shortcut */}
+          {/* Broker-only: one-click branded presentation download (no editor, no navigation) */}
           {isBrokerMode && (
-            <div className="mt-2">
-              <BrokerBrandedMaterialsCard
-                projectId={project.id}
-                projectName={project.name}
-                hasBrochure={Boolean(brochurePrimary?.url)}
-                hasBrand={brokerHasBrand}
-                onDownloadBrochure={() => {
-                  if (brochurePrimary?.url) {
-                    handleDocumentDownload("brochure", brochurePrimary.url);
-                  } else {
-                    setCaptureDocType("brochure");
-                    setCaptureDocUrl(undefined);
-                    setLeadCaptureOpen(true);
-                  }
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={async () => {
+                  const { generateBrandedProjectDeck } = await import("@/utils/generateBrandedProjectDeck");
+                  const { data: brokerRow } = await supabase
+                    .from("crm_brokers")
+                    .select("full_name, personal_email, personal_phone, phone_e164, logo_url, headshot_url, current_company")
+                    .eq("user_id", user?.id || "")
+                    .maybeSingle();
+                  await generateBrandedProjectDeck({
+                    projectName: project.name,
+                    developerName: project.developer?.name || null,
+                    location: project.location || null,
+                    priceFrom: project.price_from ?? null,
+                    bedroomsText: bedroomsText || null,
+                    sizeText: sizeText || null,
+                    handoverText: getProjectStatus(project).label,
+                    description: project.description || null,
+                    heroImageUrl: heroImage?.url || null,
+                    broker: brokerRow
+                      ? {
+                          fullName: (brokerRow as any).full_name,
+                          email: (brokerRow as any).personal_email,
+                          phone: (brokerRow as any).personal_phone || (brokerRow as any).phone_e164,
+                          logoUrl: (brokerRow as any).logo_url,
+                          headshotUrl: (brokerRow as any).headshot_url,
+                          agencyName: (brokerRow as any).current_company,
+                        }
+                      : null,
+                  });
                 }}
-                onGeneratePresentation={() => {
-                  // Route to the presentation engine pre-filled with this project
-                  window.location.href = `/presentations?projectId=${encodeURIComponent(project.id)}&projectName=${encodeURIComponent(project.name)}`;
-                }}
-              />
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white text-sm font-semibold border border-[#B89555]/40 shadow-sm transition-colors"
+                data-allow-dark-cta
+                title="Download a JBJ-branded presentation for this project"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download branded presentation</span>
+              </button>
+              {!brokerHasBrand && (
+                <Link
+                  to="/broker/brand"
+                  className="text-xs text-[#1A1A1A]/70 underline decoration-[#B89555]/60 underline-offset-2 hover:text-[#1A1A1A]"
+                >
+                  Add your logo & photo for full co-branding →
+                </Link>
+              )}
             </div>
           )}
 
