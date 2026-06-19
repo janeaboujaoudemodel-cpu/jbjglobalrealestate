@@ -37,6 +37,7 @@ type BrandRow = {
 
 export default function BrokerBrandProfile() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [row, setRow] = useState<BrandRow>({});
