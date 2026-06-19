@@ -256,6 +256,27 @@ export default function ProjectDetailLayout({
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const { isOwner } = useIsAppOwner();
   const [paymentEnrichOpen, setPaymentEnrichOpen] = useState(false);
+  const { isBrokerMode } = useUserMode();
+  const { user } = useAuth();
+  const [brokerHasBrand, setBrokerHasBrand] = useState(false);
+  useEffect(() => {
+    if (!isBrokerMode || !user?.id) {
+      setBrokerHasBrand(false);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("crm_brokers")
+        .select("logo_url, headshot_url, full_name")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (!cancelled) {
+        setBrokerHasBrand(Boolean(data?.logo_url || data?.headshot_url));
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isBrokerMode, user?.id]);
   
   
   const inquiryRef = useRef<HTMLDivElement>(null);
