@@ -251,9 +251,28 @@ export default function BrokerBrandProfile() {
         </section>
 
         <div className="flex justify-end gap-3">
-          <Button onClick={handleSave} disabled={saving} className="jj-cta-dark" data-cta="dark">
-            {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-            Save brand profile
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => (window.history.length > 1 ? navigate(-1) : navigate("/broker-dashboard"))}
+            className="jj-cta-outline"
+            data-cta="outline"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSave}
+            disabled={saving}
+            className="jj-cta-dark !bg-[#0A0A0A] hover:!bg-[#1F1F1F] !text-white border border-[#B89555]/60"
+            data-cta="dark"
+            data-allow-dark-cta
+          >
+            {saving ? (
+              <Loader2 className="w-4 h-4 mr-2 animate-spin !text-white" />
+            ) : (
+              <Save className="w-4 h-4 mr-2 !text-white" />
+            )}
+            <span className="!text-white">Save brand profile</span>
           </Button>
         </div>
       </div>
