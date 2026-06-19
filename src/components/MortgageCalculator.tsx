@@ -165,6 +165,7 @@ const MortgageCalculator = ({
         .from("projects")
         .select("id,name,slug,location,area_name,price_from,developer_name,developer:developers(id,name,logo_url)")
         .eq("is_published", true)
+        .or("listing_kind.is.null,listing_kind.neq.leasing")
         .not("price_from", "is", null);
 
       if (cleanedQuery.length > 0) {

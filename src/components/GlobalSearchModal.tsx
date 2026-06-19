@@ -156,6 +156,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
         .from('projects')
         .select('id, name, slug, cover_image_url, developer_name')
         .or(`name.ilike.%${debouncedQuery}%,developer_name.ilike.%${debouncedQuery}%`)
+        .or('listing_kind.is.null,listing_kind.neq.leasing')
         .eq('status', 'active')
         .limit(5);
       return (data || []).map(p => ({ id: p.id, name: p.name, slug: p.slug, image: p.cover_image_url }));

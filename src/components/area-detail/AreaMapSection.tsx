@@ -113,6 +113,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
         .from("projects")
         .select("id, name, slug, latitude, longitude, developer_name, cover_image_url, price_from, handover_date, developer:developers(logo_url)")
         .ilike("area_name", `%${areaName}%`)
+        .or("listing_kind.is.null,listing_kind.neq.leasing")
         .not("latitude", "is", null)
         .not("longitude", "is", null)
         .limit(50);

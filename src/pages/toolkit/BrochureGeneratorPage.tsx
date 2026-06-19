@@ -211,6 +211,7 @@ export default function BrochureGeneratorPage() {
           .from('projects')
           .select('id,name,area_name,emirate,price_from,bedrooms_min,bedrooms_max,description,amenities,developer_name')
           .eq('is_published', true)
+          .or('listing_kind.is.null,listing_kind.neq.leasing')
           .order('name')
           .limit(200);
         if (data) setProjects(data);

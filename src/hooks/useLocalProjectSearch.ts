@@ -12,6 +12,7 @@ export function useLocalProjectSearch(search: string | undefined) {
         .from('projects')
         .select('*')
         .ilike('name', `%${search}%`)
+        .or('listing_kind.is.null,listing_kind.neq.leasing')
         .limit(20);
       if (error) throw error;
       return (data || []).map(mapDbProjectToReellyProject);

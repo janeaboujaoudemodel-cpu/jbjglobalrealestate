@@ -1,48 +1,58 @@
-# Pass 8 — Kill Tiffany Cyan/Teal + Dark-Navy Hero on Public Pages
+# Fix: Rental price shown on purchase surfaces
 
-The earlier navy→black flip (#102540) didn't catch a second dark theme: a deep teal/navy background (`#031E18` / `#0F1C18` / `#022C22`) paired with Tiffany cyan accents (`#5EEAD4`, `#22D3EE`, `#67E8F9`, `#0E7490`). The `/quiz-results` screenshot is one example. This pass removes that theme from public marketing pages and folds it into the locked palette.
+## Root cause
 
-## Files in scope (public only, 9 files)
+`projects.listing_kind = 'leasing'` rows (e.g. Al Tajer 2 @ AED 190K = annual rent) are leaking into purchase surfaces. Two specific holes:
 
-| File | What's wrong |
-|---|---|
-| `src/pages/QuizResults.tsx` | Full dark-teal hero, cyan gradient cards/badges/buttons, cyan medal pills, PDF report uses navy+cyan |
-| `src/pages/Quiz.tsx` | Same cyan/teal accents on the quiz flow |
-| `src/pages/MortgageCalculator.tsx` | Cyan accents |
-| `src/pages/News.tsx` | Cyan accents |
-| `src/pages/InteriorDesignAI.tsx` | Cyan accents (public AI tool) |
-| `src/components/matchmaker/MatchCriteriaTable.tsx` | Cyan match table (used inside QuizResults) |
-| `src/index.css` | Any leftover cyan/teal token rules |
-| `src/components/tools/toolThemes.ts` | Cyan tool theme preset (only public tool entries) |
-| `src/pages/owner/AIHomeFinderSubmissionsPage.tsx` | Owner page — **leave unchanged** (out of scope: owner dashboard) |
+1. `src/pages/QuizResults.tsx` hydrates by `slug` only — no `is_published` and no `listing_kind` filter, so a stale matchmaker session can rehydrate a leasing row.
+2. Public project queries (Quiz, Featured, Continue Searching, Recommendations, Area grids, Global Search, Compare, Properties grid, Mortgage Calculator, Brochure Generator, etc.) never exclude `listing_kind = 'leasing'`, so any leasing row that is `is_published = true` flows into "buy" UIs.
 
-## Replacement map (locked palette)
+Confirmed in DB: `Al Tajer 2` → `listing_kind = leasing`, `price_from = 190000` AED (annual).
 
-| Current | Replace with |
-|---|---|
-| `#031E18` / `#0F1C18` / `#022C22` / `#04161C` (dark teal bg) | `#FDFBF7` page or `#F7F2EA` champagne band |
-| `from-[#5EEAD4] to-[#22D3EE]` (cyan gradient pill/CTA) | Solid black `#0A0A0A` + white text + 1px gold `#B89555` hairline (`.jj-cta-dark` primitive) |
-| Cyan border / ring (`#67E8F9`, `#5EEAD4`) | Gold hairline `rgba(184,149,85,.55)` |
-| Cyan text on dark | Ink `#1A1A1A` on champagne |
-| `shadow-cyan-400/20` glows | Removed (no neon glows in palette) |
-| Top1/Top2/Top3 medal pills | Champagne pill `#EFE6D6` + ink text + gold hairline; "#1 Best Match" pill becomes `.jj-pill-active` |
-| PDF report navy+cyan letterhead | Black `#0A0A0A` + gold `#B89555` (already standard for JBJ exports) |
+## Changes
 
-## Passes
+### 1. Centralize the rule
+- New helper `src/lib/projects/excludeLeasing.ts`: `applyPurchaseOnly(query)` that appends `.or('listing_kind.is.null,listing_kind.neq.leasing')`. Single source of truth.
 
-1. **QuizResults.tsx** — replace hero band, 3 medal tiers, "#1 Best Match" badge, circular icon tiles (3×), download/share/restart CTAs, and the jsPDF `navy`/`cyan` tuples → black `[10,10,10]` + gold `[184,149,85]`.
-2. **Quiz.tsx, MortgageCalculator.tsx, News.tsx, InteriorDesignAI.tsx, MatchCriteriaTable.tsx** — same cyan→gold-hairline / dark-teal→champagne swap. No layout/copy changes.
-3. **toolThemes.ts** — only `cyan` preset entries used by public tool pages get re-pointed to the gold/champagne preset. Owner-internal entries untouched.
-4. **index.css** — remove any cyan/teal rule blocks introduced for this theme; no new tokens needed.
-5. **CI guard** — extend `scripts/contrast/check-no-blue.mjs` (or add `check-no-cyan.mjs`) to fail on raw `#5EEAD4|#22D3EE|#67E8F9|#0E7490|#031E18|#0F1C18|#022C22` in `src/pages/**` and `src/components/**` excluding the owner dashboard / CRM / portal trees.
-6. **Visual validation** — desktop (1440) screenshots of `/quiz-results` (with the same query string), `/quiz`, `/mortgage-calculator`, `/news`, `/interior-design-ai` after the swap.
+### 2. Apply on every purchase-flow query
+Add `applyPurchaseOnly(...)` to these queries (do NOT touch owner/admin/CRM/editor or rental-dedicated screens):
+- `src/pages/Quiz.tsx` (`all-projects-quiz`)
+- `src/pages/QuizResults.tsx` (slug-hydration) + also enforce `.eq('is_published', true)`
+- `src/components/ContinueSearching.tsx` (both queries)
+- `src/components/PropertyRecommendationPopup.tsx` (both queries)
+- `src/components/home/FeaturedListings.tsx` and `ResalePropertiesSection.tsx` (purchase grid only)
+- `src/components/GlobalSearchModal.tsx`
+- `src/components/ComparisonBar.tsx`
+- `src/components/MortgageCalculator.tsx`
+- `src/components/area-detail/AreaProjectsGrid.tsx`, `AreaMapSection.tsx`, `AreaAIAnalyzer.tsx`
+- `src/components/broker/BrokerPDFGenerator.tsx`, `BrokerAITools.tsx`
+- `src/components/filters/AdvancedFilterPanel.tsx`
+- `src/hooks/useLocalProjectSearch.ts`
+- `src/hooks/useProjects.ts` (public-read paths only)
+- `src/components/toolkit/BrochureGeneratorPage.tsx`
+- `src/components/video-meet/MeetingAIAssistant.tsx`
+
+Out of scope (must keep showing leasing): owner dashboard, listing admin, developer/broker portals, e-signature, secondary-market/rentals hubs, market intelligence backend, scrapers.
+
+### 3. Rental-aware PricePill
+- `src/components/ui/price-pill.tsx`: accept optional `listingKind?: string | null`. When `listingKind === 'leasing'`, render `From AED 190K /yr` (orange value + "/yr" suffix in ink). Prevents any surviving leasing row from being mistaken for a sale price.
+- No callsite migration required (prop is optional); selectively pass it from rental hubs that legitimately render leasing.
+
+### 4. Self-heal stale matchmaker session
+In `QuizResults.tsx`, after the filtered fetch, if any requested slug is missing from the result (filtered out as leasing/unpublished/sold), call `clearMatchmakerSession()` for that slug list and show the existing "Saved selection isn't available — start a new match" empty state instead of partial cards.
+
+### 5. CI guard
+- Extend `scripts/lint/check-brand-hex.mjs` neighbours OR add `scripts/contrast/check-leasing-leak.mjs`: fail if any file under `src/pages` / `src/components` (excluding allowlist of owner/admin/rentals paths) calls `.from('projects')` without `applyPurchaseOnly` or an explicit `// leasing-ok` comment. Wired into pre-commit.
+
+### 6. Memory
+Add `mem://constraints/no-leasing-on-purchase-surfaces.md` and one Core line in `mem://index.md`:
+> Purchase Surfaces: `listing_kind='leasing'` rows are BANNED from every buy/quiz/recommendation/compare/area/featured/search grid. Always wrap public project queries with `applyPurchaseOnly()`. PricePill must render `/yr` when listingKind=leasing.
 
 ## Out of scope
-- Owner dashboard, CRM, broker/developer portal, admin pages (memory: public-only sweep).
-- Data-viz semantic colors (Emerald/Red/Blue/Amber on charts/KPIs).
-- AI premium purple on owner-only AI tools.
-- Content, copy, business logic, backend, database.
+No schema/DB changes. No styling changes. No copy changes beyond the `/yr` suffix on leasing PricePill.
 
-## Memory updates
-- Extend `mem://constraints/no-bright-yellow-gold` sibling: add `mem://constraints/no-tiffany-cyan-public` banning `#5EEAD4|#22D3EE|#67E8F9|#0E7490` and dark-teal backgrounds on public pages.
-- Add a one-liner to `mem://index.md` Core: "No Tiffany cyan/teal on public pages. Cyan accents → gold hairline; dark-teal bg → champagne."
+## Verification
+1. Reload `/quiz-results?projects=al-tajer-2-...` → empty-state "Start a new match" (Al Tajer 2 filtered as leasing).
+2. Quiz run → Al Tajer 2 never returned.
+3. Global Search "Al Tajer" → 0 results on public; still visible inside owner/admin.
+4. Any leasing row passed to `<PricePill listingKind="leasing" price={190000} />` renders `From AED 190K /yr`.

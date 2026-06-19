@@ -35,6 +35,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
           project_images(image_url, alt_text, display_order)
         `)
         .ilike("area_name", `%${areaName}%`)
+        .or("listing_kind.is.null,listing_kind.neq.leasing")
         .order("created_at", { ascending: false })
         .limit(12);
       if (error) throw error;

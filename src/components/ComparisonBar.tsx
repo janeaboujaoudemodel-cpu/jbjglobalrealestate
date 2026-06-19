@@ -54,7 +54,8 @@ const ComparisonBar = () => {
           developer:developers(name, slug, logo_url),
           images:project_images(image_url, alt_text, display_order)
         `)
-        .in("id", shortlistIds);
+        .in("id", shortlistIds)
+        .or("listing_kind.is.null,listing_kind.neq.leasing");
 
       if (error) throw error;
       return data;
