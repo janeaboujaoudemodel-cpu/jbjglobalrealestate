@@ -37,7 +37,7 @@ const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; clas
 
 const TONE_BY_ACCENT: Record<string, string> = {
   "text-emerald-700": "emerald",
-  "text-blue-700": "violet",
+  "text-[#1A1A1A]": "gold",
   "text-amber-700": "amber",
   "text-foreground": "magenta",
 };
@@ -129,7 +129,7 @@ export const MarketOverviewDashboard = () => {
               change={MARKET_OVERVIEW_STATS.avgPriceChange}
               icon={DollarSign}
               prefix="AED "
-              accentColor="text-blue-700"
+              accentColor="text-[#1A1A1A]"
             />
             <StatCard
               title="Avg. Rental Yield"
@@ -167,7 +167,7 @@ export const MarketOverviewDashboard = () => {
                         'bg-gradient-to-r from-emerald-500 to-emerald-400',
                         'bg-[#B89555]',
                         'bg-gradient-to-r from-amber-500 to-amber-400',
-                        'bg-gradient-to-r from-violet-500 to-violet-400',
+                        'bg-[#1A1A1A]',
                       ];
                       return (
                         <div key={quarter.quarter} className="flex items-center gap-4">
