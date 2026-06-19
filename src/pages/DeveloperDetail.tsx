@@ -264,9 +264,8 @@ const DeveloperDetail = () => {
         <div className="flex flex-col md:flex-row md:items-start gap-6">
           {/* Logo plate - Full-fit, no white corners */}
           <div 
-            className="w-32 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
+            className="jj-metallic-active w-32 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
             style={{
-              background: '#FFFFFF',
               border: '3px solid hsl(42 45% 59%)',
               boxShadow: '0 4px 16px rgba(200,167,102,0.3)'
             }}
