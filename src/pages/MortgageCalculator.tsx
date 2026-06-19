@@ -10,10 +10,10 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
 
-// Neon palette — cyan primary, magenta accent, deep navy base
-const NAVY = "#06B6D4";        // cyan-500
-const NAVY_GLOW = "#22D3EE";   // cyan-400
-const NAVY_DARK = "#05060F";   // deep navy
+// JBJ champagne+gold+ink palette
+const NAVY = "#0A0A0A";        // clean black
+const NAVY_GLOW = "#B89555";   // gold hairline
+const NAVY_DARK = "#0A0A0A";   // black
 
 const advisorBenefits = [
   { icon: Shield,      title: "Expert Guidance",       body: "Our mortgage advisors work with all major UAE banks to find you the best rates." },
