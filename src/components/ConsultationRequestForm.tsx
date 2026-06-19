@@ -190,9 +190,11 @@ export const ConsultationRequestForm = ({
     }
   };
 
-  const selectTriggerClass = "h-12 bg-[#FDFBF7] border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] rounded-lg";
-  const selectContentClass = "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50";
-  const inputClass = "h-12 bg-[#FDFBF7] border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] text-[#1A1A1A] rounded-lg";
+  // Clean field recipe — no boxed background, no thick frame.
+  // The global gold-hairline lock in src/index.css paints rest/hover/focus borders.
+  const selectTriggerClass = "h-12 bg-transparent rounded-lg text-[#1A1A1A]";
+  const selectContentClass = "";
+  const inputClass = "h-12 bg-transparent rounded-lg text-[#1A1A1A]";
 
   if (isSuccess) {
     return (
