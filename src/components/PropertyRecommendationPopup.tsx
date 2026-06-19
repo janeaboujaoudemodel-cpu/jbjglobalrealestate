@@ -162,6 +162,20 @@ const PropertyRecommendationPopup = () => {
       }
     }
 
+    // Final freshness backfill if still under 3.
+    if (results.length < 3) {
+      const need = 3 - results.length;
+      const existing = results.map((r) => r.id);
+      let q = baseFilter(supabase.from("projects").select(baseSelect))
+        .order("created_at", { ascending: false })
+        .limit(need + 3);
+      if (existing.length) q = q.not("id", "in", `(${existing.join(",")})`);
+      const { data: freshData } = await q;
+      if (freshData) {
+        results = [...results, ...(freshData as RecommendedProject[]).slice(0, need)];
+      }
+    }
+
     if (results && results.length > 0) {
       const missingIds = results.filter(p => !p.cover_image_url).map(p => p.id);
       if (missingIds.length > 0) {
