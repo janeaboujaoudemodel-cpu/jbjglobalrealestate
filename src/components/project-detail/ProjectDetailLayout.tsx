@@ -405,7 +405,12 @@ export default function ProjectDetailLayout({
   // Filter and normalize images (remove broken/placeholder URLs)
   const images = useMemo(() => {
     const raw = project.images?.filter((i) => i.url) || [];
-    return filterValidImages(raw);
+    // Dedup + validate, then upgrade every URL to its highest-res variant
+    // so the gallery never renders a low-res thumbnail next to its hi-res twin.
+    return filterValidImages(raw).map((img) => ({
+      ...img,
+      url: getHighResImageUrl(img.url!),
+    }));
   }, [project.images]);
   // Fallback chain: project_images → cover_image_url → placeholder
   const heroImage = useMemo(() => {
