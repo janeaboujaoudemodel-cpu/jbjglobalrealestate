@@ -64,14 +64,14 @@ export const FeaturedProjectAd = ({
               </p>
               
               {/* Title */}
-              <h3 
-                className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3"
+              <h3
+                className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]"
               >
                 {title}
               </h3>
-              
+
               {/* Description */}
-              <p className="text-white/80 text-sm md:text-base max-w-2xl mb-5 line-clamp-2">
+              <p className="text-white/90 text-sm md:text-base max-w-2xl mb-5 line-clamp-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
                 {description}
               </p>
               
