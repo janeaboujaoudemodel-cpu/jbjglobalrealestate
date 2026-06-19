@@ -111,7 +111,7 @@ function bedroomVerdict(p: any, choice?: string): RowCell {
   const max = p?.bedrooms_max ?? min;
   const display =
     min == null
-      ? "Type TBC"
+      ? "Bedroom mix on request"
       : min === 0
         ? `Studio${max > 0 ? `–${max} BR` : ""}`
         : `${min}–${max} BR`;
