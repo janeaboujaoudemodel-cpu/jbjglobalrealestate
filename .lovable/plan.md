@@ -1,122 +1,74 @@
-This is intentionally split into 12 numbered fixes, grouped by surface, so you can approve all or carve out. I will deliver each with a real browser screenshot before claiming done. No work begins until you approve.
+## What's actually broken in the screenshots
 
-## A. Project Detail Page
+`/market-intelligence/overview` (and every sibling under `/market-intelligence/*`) is still rendering on a **neon dark shell** with **cyan badge**, **navy KPI cards**, **empty espresso bands between champagne cards**, **broken padding under the L-frame header/sidebar**, and a **blue "Explore More" pre-footer**. Root causes I confirmed:
 
-**1. Duplicate first photo in gallery (low-res + high-res of the same image)**
-- Files: `src/components/project-detail/ProjectDetailLayout.tsx`, image pipeline `src/utils/getHighResImageUrl` / `developerLogo` helpers, `src/hooks/useProjects.ts`.
-- Add a dedupe pass before the gallery renders: normalize each URL (strip CDN size suffixes like `/x/350x/`, query params, trailing `?v=`), group by normalized key, keep the variant with the highest resolution score (largest declared width, or the `getHighResImageUrl` upgrade). Drop the rest.
-- Apply same dedupe to: cover, card, gallery, hero picker — so it can never re-appear on another project.
-- Verify: load 3 known-affected projects in browser, screenshot the strip and the lightbox count.
+- `MarketOverview.tsx` (and all sibling pages) wrap their root in `data-neon-page` + a custom dark gradient — should never apply to Market Intelligence.
+- `MarketIntelligenceHero.tsx` uses `jj-hero-neon` with a cyan-tinted accent + cyan-looking badge text shadow stack; the title's contrast is also degraded.
+- `jj-card-inner` and `jj-section-champagne` classes are **referenced everywhere but never defined in `index.css`** — so `<Card className="jj-card-inner">` falls back to default shadcn Card on a neon page = the black/navy KPI tiles in your screenshot.
+- Section pattern `bg-[#1A1A1A]` parent wrapping `jj-section-champagne` children with `mb-8` produces the ugly espresso bands between cards.
+- `PreFooterSeparator` "Explore More Market Intelligence" still ships the legacy electric-blue buttons.
+- The five "Market Brief / Quarterly / Annual" pages render empty card shells — no government source content filled in.
 
-**2. "+14" thumbnail must open full lightbox at index 0**
-- File: the gallery grid in `ProjectDetailLayout.tsx` (the overlay tile with `+N`).
-- Currently the overlay opens one image. Wire its onClick to the same lightbox `openAt(0)` that the visible tiles use, with `total = gallery.length` so all 20 (post-dedupe) are swipeable. Add keyboard `←/→/Esc`, swipe on touch, counter `i/total`.
+## Scope (rebuild, not patch)
 
-**3. Project map → also show nearby projects**
-- Files: `src/components/project-detail/ProjectNearbyPropertiesMap.tsx`, query layer.
-- Add a `nearby_projects` query: same map bounds (e.g. 5 km radius from this project's lat/lng), exclude current id, only `is_published=true`, cap at 50.
-- Render: current project = red pin (existing), others = blue pins. Click blue pin → small champagne popover with logo + name + price pill + "Open" link → `/project/:slug`.
-- Verify: navigate to a Downtown project, screenshot showing red center + multiple blue pins.
+### 1. Kill the neon shell across all 8 Market Intelligence pages
 
-## B. Brochure & Documents
+Pages touched (all under `src/pages/market-intelligence/`):
+`MarketOverview.tsx`, `AreaIntelligence.tsx`, `AreaDetail.tsx`, `MarketReports.tsx`, `Methodology.tsx`, `MonthlyMarketBrief.tsx`, `QuarterlyMarketReview.tsx`, `AnnualMarketSummary.tsx`.
 
-**4. Brochure cover: company wordmark + project name unreadable**
-- File: `src/components/project-detail/PremiumBrochureCard.tsx` (and any brochure generator template).
-- Re-stack with a 60% black scrim over the bottom 40% of the cover, raise wordmark and title to white with `drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]`, increase title to 22px semibold, wordmark to 14px tracking-wide.
-- Verify visually.
+For each page:
+- Remove `data-neon-page` + custom dark gradient root → `<div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]" data-marketing-page>`.
+- Remove inner `bg-[#1A1A1A]` content wrapper that produced espresso bands.
+- Replace ad-hoc `jj-section-champagne` + `jj-card-inner` markup with the locked primitives: `<PremiumSectionCard>` for each top-level section, `<Surface tone="raised">` (or plain `.jj-band-raised`) for nested cards.
+- Add the standard `pt-[88px]` header offset and remove the `xl:pr-80` global right-pad that was colliding with the right-rail TOC (the TOC will be repositioned, see §4).
 
-**5. Brochure label in Project Documents section unreadable**
-- File: `src/components/project-detail/BookStyleDocuments.tsx`.
-- Same scrim + ink-on-champagne or white-on-scrim treatment for the doc-card title strip; bump to `text-[#1A1A1A]` on champagne, never gold-on-gold.
+### 2. Repaint `MarketIntelligenceHero`
 
-## C. Mortgage Calculator (UI/colors unchanged)
+`src/components/market-intelligence/MarketIntelligenceHero.tsx`:
+- Drop `jj-hero-neon` + cyan accent span.
+- Badge: swap to the champagne+gold pill primitive (`bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/60`) on dark hero — no cyan glow, no text-shadow halo.
+- Strengthen the legibility stack so the title is readable on any video frame: replace the three composite overlays with one `bg-black/72` + a clean `linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.95))`.
+- Title stays white-on-dark with `data-hero-dark` + `allow-white` (compliant with the black-CTA / white-on-light guards).
 
-**6. Match PropertyFinder feature parity, keep our look**
-- File: `src/components/MortgageCalculator.tsx`.
-- Add inputs (matching PropertyFinder's calculator): **Residency** toggle `UAE Resident / Non-Resident`; auto-set max LTV (80% resident, 50% non-resident for properties ≥ AED 5M cap rules); **Property Type** new/secondary; **Down Payment** field linked to LTV slider; **Loan Term** 5–25y; **Interest Rate** with default 4.25% editable; **Bank Fees** (1% arrangement default), **Valuation Fee** AED 3,000, **DLD Fee** 4%, **Agency Fee** 2%; **Pre-Approval CTA** at the bottom routing to consultation form prefilled.
-- Recalc output: monthly EMI, total interest, total cost, upfront cash needed (down + DLD + agency + bank + valuation), affordability badge.
-- No color/layout change beyond adding the new rows in the existing card.
+### 3. Rebuild the KPI / quarterly / property-type cards in champagne
 
-## D. Dubai Market Intelligence
+In `MarketOverview.tsx`:
+- "Key Market Statistics" 4 tiles → `<Surface tone="raised">` cards (`#EFE6D6` bg, 1px `#B89555/30` hairline, ink heading, `<PricePill />` style for the value where it's a monetary figure, emerald/red trend chip).
+- "Quarterly Transaction Trends" 4 tiles → same champagne raised card, ink numerals, slim gold progress bar already in place.
+- "Performance by Property Type" rows → champagne raised rows (already mostly correct, just need the parent espresso band removed).
 
-**7. Data freshness + headline KPIs**
-- File: `src/pages/MarketIntelligence.tsx`, scraper edge function.
-- Daily cron (already have `pg_cron`) hitting `dld-daily-ingest` edge function at 06:00 GST; write to `market_intel_daily` table.
-- Add KPI strip at top: **Today's Transactions**, **AED Volume Today**, **YTD Volume**, **vs. Yesterday %**, **Last Updated**.
+`src/components/market-intelligence/DLDDailySnapshot.tsx` gets the same treatment so its KPI strip / Cash-vs-Mortgage / Top-10 panels stop rendering on the dark gradient.
 
-**8. Visual upgrade — premium repaint**
-- Cash vs Mortgage chart: switch palette to **Black `#0A0A0A` + Gold `#B89555`** (cash = black, mortgage = gold hairline outline on champagne).
-- Drop the green/brown duo.
-- Top-10 Areas + Top-10 Buyers bars: the broken right-to-left white highlight is from a CSS `linear-gradient` clip-path. Replace with a single champagne base + animated gold fill that grows left-to-right via `transform: scaleX()` with `transform-origin: left`.
+### 4. Fix layout & padding under the L-frame
 
-**9. "Notice something incorrect?" + "Expert Consultation" cards**
-- Both are too dark/flat right now. Convert to premium black cards (`#0A0A0A` bg, gold hairline border, white headline, champagne body) with a single gold-metallic CTA button. Same primitive used for hero black CTAs.
+- Add `pt-[88px]` to every Market Intelligence page root (matches the locked header offset rule).
+- Move `MarketIntelligenceTableOfContents` from a fixed right rail (which collided with the sidebar at <1280px and forced `xl:pr-80` on every section) to an in-flow sticky column inside a `lg:grid-cols-[1fr_280px]` container. Removes all the broken edge-padding.
+- Container width: `max-w-[1200px] mx-auto px-6 lg:px-10` (no more edge-touching cards).
 
-## E. Developer Page (e.g. /developer/emaar)
+### 5. PreFooterSeparator palette fix
 
-**10. "More Projects by this Developer" expandable grid above Market Intelligence**
-- File: `src/pages/DeveloperDetail.tsx`.
-- Render 2 rows × 3 cards (desktop) = 6 visible. "View more" expands in-place (no navigation) to all projects in batches of 6, smooth height transition.
-- Add filter bar above the grid: **Area** (multi-select), **Price range**, **Bedrooms**, **Handover year**, **Status**. Wired to `projects` query with developer_id constraint.
-- All existing sections below (Consultation / Register Interest / Callback / Recommended) stay intact.
+`src/components/PreFooterSeparator.tsx`:
+- Replace the residual electric-blue primary/secondary button styling with `.jj-cta-dark` (clean black + gold hairline + white text) and `.jj-cta-champagne` (champagne + ink + gold hairline) primitives — already locked in the memory standard. No more blue anywhere on the Market Intelligence pages.
 
-## F. Recommendations Engine
+### 6. Fill the four empty "books" (Market Briefs)
 
-**11. Behavior-based recommended projects**
-- Files: `src/components/PropertyRecommendationPopup.tsx`, `src/components/RecommendedFor*`, tracking events `jbj:browsing-tracked`.
-- Scoring: weight last 10 viewed projects → infer dominant signal: `developer_id` (if ≥40% of views share one), else `area` (if ≥40% share area), else `price_band` (±20% of mean viewed price). Query top 8 matching that signal, exclude already-viewed.
-- Popup repaint: kill the broken rectangular box that overlaps the hero. Use the existing minimized champagne chip (memory: `Recommended Popup` rule) — sits bottom-right, never covers hero, expands on click. Fix faded titles → `text-[#1A1A1A]` semibold.
-- Remove "Add Application" CTA from the popup (we already have Download Brochure + Register Interest).
+`MonthlyMarketBrief.tsx`, `QuarterlyMarketReview.tsx`, `AnnualMarketSummary.tsx`, plus the "Market Reports" index — currently render header + empty shell. Fill each with real **government-source** content (no fabrication, every figure cited to DLD / RERA / DXB Interact / Dubai Statistics):
 
-## G. Presentation Tool
+- **Monthly Brief**: latest month total registered transactions, value AED, off-plan vs secondary split, cash vs mortgage split, top 5 areas by volume, top 5 areas by avg AED/sqft, RERA rent-index change for the month, service-charge approvals. Source line + DLD/RERA portal links on every block.
+- **Quarterly Review**: rolling 4-quarter trend (transactions, value, avg AED/sqft), property-type performance, area heatmap top 10, supply pipeline (DLD project registrations + handovers), rental-yield band by area. Pull from existing `dld_daily_snapshot` aggregates already wired in the prior phase.
+- **Annual Summary**: full-year totals (transactions, value, off-plan share, mortgage share), top 20 areas table, top 10 developers by transaction volume, RERA service-charge index summary, D33 economic context block.
+- **Market Reports index**: card grid linking the three above + a "Daily DLD Snapshot" card, every card on champagne raised tone, ink title, gold hairline, `Last updated <date>` footer pulled from `dld_market_data.updated_at`.
 
-**12. Generate Branded Presentation is broken — two-part fix**
-- (a) **Delete the broken "Untitled Presentation" tool entirely**:
-  - `/presentations` route already redirects to `/document-studio`. Remove the route, the redirect, and every link/entry that points there:
-    - `src/routes/PublicRoutes.tsx` (route 417)
-    - `src/pages/AIHub.tsx` (entry id `presentation-tool`)
-    - `src/pages/DocumentStudio.tsx` (path entry)
-    - `src/pages/Sitemap.tsx`
-    - `src/pages/toolkit/CorporateSuite.tsx`
-    - `src/pages/owner/AIToolsControlPanel.tsx`
-    - `src/components/Footer.tsx`
-    - `src/components/design-studio/CrossToolIntegration.tsx`
-    - `src/components/navigation/GlobalVerticalNav.tsx` (two entries)
-    - `src/components/ui/command-palette.tsx`
-- (b) **Rebuild "Generate Branded Presentation" as a one-click silent export** (Reelly-style):
-  - Single button on project page → calls `generate-branded-presentation` edge function → returns a finished branded PDF/PPTX styled with **locked** JBJ palette (champagne + gold + ink). No editor, no theme picker, no "Untitled" landing screen.
-  - Pulls cover, gallery (post-dedupe), key facts, payment plan, developer profile, location.
-  - Returns blob → triggers download. Logs to `admin_edit_log`.
+All data pulled live via the existing `useDLDMarketData` hook + the `dld_daily_snapshot` table — no new tables, no ingestion changes.
 
----
+### 7. Verification
 
-## Validation discipline (applies to every item)
+- Pure UI/data work — no DB migrations, no edge-function changes (DLD ingest cron from the prior phase stays).
+- Visual check via `browser--view_preview` on `/market-intelligence`, `/market-intelligence/overview`, `/market-intelligence/areas`, `/market-intelligence/reports`, `/market-intelligence/reports/monthly`, `/market-intelligence/reports/quarterly`, `/market-intelligence/reports/annual`, `/market-intelligence/methodology` at 1440 + 1024 widths.
+- Confirm: no cyan, no navy KPI tiles, no blue CTAs, hero title legible, no espresso strips between sections, content reaches edge of the L-frame inset (not under the sidebar), Market Briefs show real government-cited numbers.
 
-For each numbered item, before I tell you it's done I will:
-1. `code--view` the new file(s) and confirm the change.
-2. `browser--view_preview` the exact route and `browser--screenshot` the section.
-3. Paste the screenshot URL + a one-line "checked: X visible, Y count, Z color = #hex".
+### Out of scope (already shipped, will not be re-touched)
 
-If a fix doesn't visually match the spec, I roll it back in the same turn instead of shipping it.
-
----
-
-## Order of execution (proposed)
-
-Phase 1 (project page, highest user pain): #1, #2, #4, #5, #11, #12a (delete broken tool)
-Phase 2 (map + brochure depth): #3, #12b (rebuild generator)
-Phase 3 (mortgage + developer page): #6, #10
-Phase 4 (market intelligence): #7, #8, #9
-
-Approve all or pick which phases.
-
----
-
-## Technical notes
-
-- Dedupe key for gallery: `url.replace(/\/x\/\d+x\d*\//,'/').replace(/\?.*$/,'').toLowerCase()`.
-- Resolution score: parse `1650x` / `2400x` from URL, fallback to natural width on first paint via cached `Image()`.
-- Nearby projects radius: PostGIS `ST_DWithin(geog, geog, 5000)` if available, else lat/lng bounding box with Haversine fallback in JS.
-- Daily ingest: `cron.schedule('dld-daily','0 2 * * *', net.http_post(...))` UTC = 06:00 GST.
-- Recommendation signal stored in `browsing_history` (already exists per memory).
-- Branded presentation edge function uses `@react-pdf/renderer` deno-compatible build or `pptxgenjs`, palette locked in `_shared/jbjPaletteLock.ts`.
+- DLD daily ingest edge function + 03:15 UTC cron — kept as-is.
+- Behavioral recommendation popup, nearby projects map, mortgage calculator parity, presentations retirement — all confirmed from prior phases.
+- Developer Detail 6-by-6 grid expansion — confirmed from prior phase.
