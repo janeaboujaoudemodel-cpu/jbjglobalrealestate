@@ -184,8 +184,14 @@ const PremiumBrochureCard = ({
 
           {/* Content Layout */}
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
-            {/* Top: Brand mark — refined monogram + wordmark, no rectangular plate */}
-            <div className="absolute top-5 left-10 flex items-center gap-2.5">
+            {/* Top: Brand mark — refined monogram + wordmark with strong scrim panel for guaranteed legibility */}
+            <div
+              className="absolute top-4 left-8 flex items-center gap-2.5 pr-3 py-1.5 rounded-md"
+              style={{
+                background: "linear-gradient(90deg, rgba(8,12,20,0.78) 0%, rgba(8,12,20,0.55) 75%, rgba(8,12,20,0) 100%)",
+                paddingLeft: 6,
+              }}
+            >
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden shrink-0"
                 style={{
@@ -203,36 +209,40 @@ const PremiumBrochureCard = ({
                 />
               </div>
               <p
-                className="text-white text-[11px] font-semibold uppercase tracking-[0.22em] leading-none whitespace-nowrap"
-                style={{ textShadow: "0 1px 3px rgba(0,0,0,0.85), 0 0 18px rgba(0,0,0,0.6)" }}
+                className="text-white text-[12px] font-bold uppercase tracking-[0.22em] leading-none whitespace-nowrap"
+                style={{ textShadow: "0 1px 3px rgba(0,0,0,0.95), 0 0 18px rgba(0,0,0,0.7)" }}
               >
-                <span style={{ color: "#F0D78C" }} className="font-bold">JBJ</span>{" "}
-                <span className="font-light tracking-[0.26em]">Global Real Estate</span>
+                <span style={{ color: "#F3D98A" }} className="font-extrabold">JBJ</span>{" "}
+                <span className="font-medium tracking-[0.24em]">Global Real Estate</span>
               </p>
             </div>
 
-            {/* Bottom: Brochure info — on a deep navy readability panel */}
+            {/* Bottom: Brochure info — solid near-black panel for guaranteed contrast on any photo */}
             <div
               className="mt-auto -mx-2 px-4 py-4 rounded-lg"
               style={{
-                background: "linear-gradient(180deg, rgba(8,18,40,0) 0%, rgba(8,18,40,0.55) 35%, rgba(8,18,40,0.85) 100%)",
-                backdropFilter: "blur(3px)",
+                background: "linear-gradient(180deg, rgba(8,12,20,0) 0%, rgba(8,12,20,0.75) 30%, rgba(8,12,20,0.94) 100%)",
+                backdropFilter: "blur(4px)",
               }}
             >
-              <p className="text-[#E8C77A] text-[10px] uppercase tracking-[0.32em] font-bold mb-2">
+              <p className="text-[#F3D98A] text-[11px] uppercase tracking-[0.32em] font-extrabold mb-2"
+                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.85)" }}>
                 Project Brochure
               </p>
 
-              <h3 className="text-white text-2xl font-semibold mb-3 line-clamp-2 leading-tight">
+              <h3 className="text-white text-2xl font-bold mb-3 line-clamp-2 leading-tight"
+                  style={{ textShadow: "0 2px 6px rgba(0,0,0,0.85), 0 0 14px rgba(0,0,0,0.5)" }}>
                 {projectName}
               </h3>
 
               <div className="w-20 h-[2px] bg-gradient-to-r from-[#B89555] to-[#B89555]/20 mb-3" />
 
-              <p className="text-white/95 text-[11px] uppercase tracking-[0.2em] font-medium">
+              <p className="text-white text-[11px] uppercase tracking-[0.2em] font-semibold"
+                 style={{ textShadow: "0 1px 3px rgba(0,0,0,0.85)" }}>
                 {location || 'Dubai • UAE'}
               </p>
             </div>
+
 
             {/* Premium 3D gold lock indicator */}
             {isLocked && (
