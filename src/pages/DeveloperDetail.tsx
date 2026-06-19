@@ -337,10 +337,12 @@ const DeveloperDetail = () => {
 
             {/* Identity actions — View all projects + (broker-only) request rep access */}
             <div className="mt-5 flex flex-wrap items-center gap-3">
-              <Link to={`/properties?developer=${encodeURIComponent(developer.slug || developer.id)}`}>
-                <Button variant="primary" size="sm">
-                  View all projects by {developer.name}
-                </Button>
+              <Link
+                to={`/properties?developer=${encodeURIComponent(developer.slug || developer.id)}`}
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold tracking-[0.02em] px-4 py-2 text-[#1A1A1A] jj-metallic-active"
+                style={{ border: '3px solid hsl(42 45% 59%)' }}
+              >
+                View all projects by {developer.name}
               </Link>
               <BrokerRequestAccessButton
                 developerId={developer.id}
