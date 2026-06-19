@@ -117,6 +117,7 @@ const PropertyRecommendationPopup = () => {
       .from("projects")
       .select("id, name, area_name, developer_name, price_from, cover_image_url, slug")
       .eq("is_published", true)
+      .or("listing_kind.is.null,listing_kind.neq.leasing")
       .not("sale_status", "ilike", "%sold%")
       .limit(3);
 
@@ -135,6 +136,7 @@ const PropertyRecommendationPopup = () => {
         .from("projects")
         .select("id, name, area_name, developer_name, price_from, cover_image_url, slug")
         .eq("is_published", true)
+        .or("listing_kind.is.null,listing_kind.neq.leasing")
         .not("sale_status", "ilike", "%sold%")
         .order("created_at", { ascending: false })
         .limit(needed + 5);

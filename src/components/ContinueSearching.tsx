@@ -97,6 +97,7 @@ const ContinueSearching = ({
       .from("projects")
       .select("id, name, slug, cover_image_url, developer_name, location, emirate")
       .eq("is_published", true)
+      .or("listing_kind.is.null,listing_kind.neq.leasing")
       .not("cover_image_url", "is", null)
       .order("is_featured", { ascending: false })
       .order("created_at", { ascending: false })

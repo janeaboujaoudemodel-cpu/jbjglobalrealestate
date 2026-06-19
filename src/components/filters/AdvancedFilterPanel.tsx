@@ -124,7 +124,8 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
         let query = supabase
           .from('projects')
           .select('*', { count: 'exact', head: true })
-          .eq('is_published', true);
+          .eq('is_published', true)
+          .or('listing_kind.is.null,listing_kind.neq.leasing');
 
         if (localFilters.searchQuery?.trim()) {
           query = query.or(`name.ilike.%${localFilters.searchQuery.trim()}%,developer_name.ilike.%${localFilters.searchQuery.trim()}%,area_name.ilike.%${localFilters.searchQuery.trim()}%`);

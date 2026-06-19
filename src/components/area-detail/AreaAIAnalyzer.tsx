@@ -374,7 +374,8 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
       const { data, error } = await supabase
         .from("projects")
         .select("price_from, price_to, size_min, size_max, developer_name, construction_status")
-        .ilike("area_name", `%${areaName}%`);
+        .ilike("area_name", `%${areaName}%`)
+        .or("listing_kind.is.null,listing_kind.neq.leasing");
       if (error) throw error;
 
       const prices = (data || []).filter(p => p.price_from).map(p => Number(p.price_from));
