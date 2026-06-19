@@ -385,6 +385,7 @@ export default function ProjectNearbyPropertiesMap({
           </Marker>
         ))}
       </MapContainer>
+      </div>
     </div>
   );
 }
