@@ -74,13 +74,12 @@ const REPORT_TYPES: MarketReportType[] = [
   },
 ];
 
-/* ICON BOX - approved navy with white icon */
+/* Icon box - champagne/gold standard */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    data-no-contrast-guard
-    className={`w-12 h-12 rounded-none flex items-center justify-center transition-all duration-300 bg-[hsl(var(--mi-navy))] border border-[hsl(var(--mi-gold)/0.45)] shadow-md allow-white ${className}`}
+    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#EFE6D6] border border-[#B89555]/40 shadow-sm ${className}`}
   >
-    <Icon className="w-6 h-6 text-white allow-white" />
+    <Icon className="w-6 h-6 text-[#1A1A1A]" />
   </div>
 );
 
@@ -123,7 +122,7 @@ export const MarketReports = () => {
   };
 
   return (
-    <section className="surface-light py-16 bg-muted" data-surface="light">
+    <section className="surface-light py-10 bg-[#FDFBF7]" data-surface="light">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -151,13 +150,13 @@ export const MarketReports = () => {
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {REPORT_TYPES.map((report) => (
               <motion.div key={report.id} variants={fadeInUp} className="h-full">
-                <Card className="transition-all h-full flex flex-col rounded-none hover:shadow-[0_16px_38px_hsl(var(--mi-navy)/0.12)] bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)]">
+                <Card className="jj-card-inner transition-all h-full flex flex-col rounded-xl hover:shadow-[0_16px_38px_rgba(26,26,26,0.08)]">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <IconBox icon={report.icon} />
                       <Badge
                         variant="outline"
-                          className="whitespace-nowrap rounded-none bg-muted text-foreground border-[hsl(var(--mi-navy)/0.28)]"
+                          className="whitespace-nowrap rounded-lg bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/35"
                       >
                         <Clock className="w-3 h-3 mr-1" />
                         {report.frequency}
@@ -189,7 +188,7 @@ export const MarketReports = () => {
                       variant="primary"
                       onClick={() => generateReport(report)}
                       disabled={generatingId === report.id}
-                      className="w-full mt-auto rounded-none bg-[hsl(var(--mi-navy))] text-white border border-[hsl(var(--mi-gold))] hover:bg-[hsl(var(--mi-navy-soft))]"
+                      className="w-full mt-auto rounded-lg"
                       data-no-contrast-guard
                     >
                       {generatingId === report.id ? (
@@ -213,7 +212,7 @@ export const MarketReports = () => {
 
           {/* Report Disclaimer */}
           <motion.div
-            className="mt-10 p-6 max-w-3xl mx-auto text-center rounded-none bg-card border border-[hsl(var(--mi-navy)/0.42)]"
+            className="mt-8 p-6 max-w-3xl mx-auto text-center rounded-xl bg-[#FDFBF7] border border-[#B89555]/35"
             variants={fadeInUp}
           >
             <div className="flex justify-center mb-4">
