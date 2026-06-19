@@ -58,16 +58,15 @@ const fadeIn = {
 const GOLD = "#B89555";
 const INK = "#0A0A0A";
 
-// Reusable premium black card (#0A0A0A + 1px gold hairline + white text).
+// Reusable champagne card with gold hairline.
 const BlackCard: React.FC<React.PropsWithChildren<{ className?: string }>> = ({ children, className = "" }) => (
   <div
-    data-no-contrast-guard
-    className={`allow-white relative overflow-hidden rounded-2xl ${className}`}
+    className={`relative overflow-hidden rounded-2xl ${className}`}
     style={{
-      backgroundColor: INK,
+      backgroundColor: "#FDFBF7",
       border: `1px solid ${GOLD}`,
-      boxShadow: "0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(184,149,85,0.15)",
-      color: "#FFFFFF",
+      boxShadow: "0 8px 28px rgba(26,26,26,0.07), inset 0 1px 0 rgba(255,255,255,0.85)",
+      color: "#1A1A1A",
     }}
   >
     {children}
