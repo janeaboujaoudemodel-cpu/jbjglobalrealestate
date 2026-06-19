@@ -104,12 +104,14 @@ export default function ProjectNearbyPropertiesMap({
   const hasOwnCoords =
     typeof latitude === "number" && typeof longitude === "number" && !isNaN(latitude) && !isNaN(longitude);
 
+  const [filterMode, setFilterMode] = useState<FilterMode>("all");
+
   const { data: nearbyProjects } = useQuery({
-    queryKey: ["nearby-projects-map", currentProjectId, areaName, latitude, longitude],
-    enabled: hasOwnCoords || !!areaName,
+    queryKey: ["nearby-projects-map", currentProjectId, areaName, latitude, longitude, currentDeveloperId],
+    enabled: hasOwnCoords || !!areaName || !!currentDeveloperId,
     queryFn: async (): Promise<NearbyRow[]> => {
       const select =
-        "id, name, slug, latitude, longitude, price_from, cover_image_url, developer:developers(name, slug)";
+        "id, name, slug, latitude, longitude, price_from, cover_image_url, area_name, developer_id, developer:developers(name, slug)";
 
       const shape = (rows: any[]): NearbyRow[] =>
         (rows || [])
@@ -121,8 +123,10 @@ export default function ProjectNearbyPropertiesMap({
             longitude: p.longitude,
             price_from: p.price_from,
             cover_image_url: p.cover_image_url,
+            developer_id: p.developer_id ?? null,
             developer_name: p.developer?.name ?? null,
             developer_slug: p.developer?.slug ?? null,
+            area_name: p.area_name ?? null,
           }))
           .filter(
             (p) =>
@@ -133,27 +137,46 @@ export default function ProjectNearbyPropertiesMap({
               !(p.latitude === 0 && p.longitude === 0),
           );
 
-      // 1) Try matching by area name (works whether or not the current project has coords)
+      const merged = new Map<string, NearbyRow>();
+
+      // 1) Area peers
       if (areaName) {
         const { data: byArea } = await supabase
           .from("projects")
           .select(select)
           .neq("id", currentProjectId)
+          .eq("is_published", true)
           .or(`area_name.ilike.%${areaName}%,location.ilike.%${areaName}%`)
           .not("latitude", "is", null)
           .not("longitude", "is", null)
           .limit(40);
-        const valid = shape(byArea as any[]);
-        if (valid.length > 0) return valid;
+        shape(byArea as any[]).forEach((r) => merged.set(r.id, r));
       }
 
-      // 2) Fallback: lat/lng bounding box (~11 km radius) — only when we have own coords
-      if (hasOwnCoords) {
+      // 2) Same developer peers
+      if (currentDeveloperId) {
+        const { data: byDev } = await supabase
+          .from("projects")
+          .select(select)
+          .neq("id", currentProjectId)
+          .eq("developer_id", currentDeveloperId)
+          .eq("is_published", true)
+          .not("latitude", "is", null)
+          .not("longitude", "is", null)
+          .limit(40);
+        shape(byDev as any[]).forEach((r) => {
+          if (!merged.has(r.id)) merged.set(r.id, r);
+        });
+      }
+
+      // 3) Bounding-box fallback
+      if (merged.size === 0 && hasOwnCoords) {
         const delta = 0.1;
         const { data } = await supabase
           .from("projects")
           .select(select)
           .neq("id", currentProjectId)
+          .eq("is_published", true)
           .gte("latitude", (latitude as number) - delta)
           .lte("latitude", (latitude as number) + delta)
           .gte("longitude", (longitude as number) - delta)
@@ -161,10 +184,10 @@ export default function ProjectNearbyPropertiesMap({
           .not("latitude", "is", null)
           .not("longitude", "is", null)
           .limit(40);
-        return shape(data as any[]);
+        shape(data as any[]).forEach((r) => merged.set(r.id, r));
       }
 
-      return [];
+      return Array.from(merged.values());
     },
     staleTime: 5 * 60 * 1000,
   });
