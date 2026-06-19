@@ -94,7 +94,7 @@ import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { getProjectStatus } from "@/utils/projectStatus";
 import OwnerVisitorToggle from "@/components/project-detail/OwnerVisitorToggle";
-import BrokerBrandedMaterialsCard from "@/components/project-detail/BrokerBrandedMaterialsCard";
+// BrokerBrandedMaterialsCard removed — replaced by inline branded-presentation download
 import { useUserMode } from "@/hooks/useUserMode";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
