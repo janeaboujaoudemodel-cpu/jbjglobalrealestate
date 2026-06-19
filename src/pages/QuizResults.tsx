@@ -430,14 +430,14 @@ const QuizResults = () => {
     const drawOmbreWordmark = (text: string, x: number, y: number) => {
       const segments = ["JBJ ", "GLOBAL ", "REAL ", "ESTATE"];
       const colors: [number, number, number][] = [
-        [94, 234, 212],
-        [34, 211, 238],
-        [14, 165, 233],
-        [3, 105, 161],
+        [184, 149, 85],
+        [184, 149, 85],
+        [184, 149, 85],
+        [184, 149, 85],
       ];
       doc.setFont("helvetica", "bold");
       doc.setFontSize(13);
-      doc.setFillColor(5, 42, 48);
+      doc.setFillColor(10, 10, 10);
       doc.roundedRect(x - 4, y - 13, doc.getTextWidth(text) + 10, 18, 6, 6, "F");
       let cursor = x;
       segments.forEach((segment, idx) => {
