@@ -4642,7 +4642,6 @@ button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]) {
 .jj-cta-dark,
 .jj-navy-cta,
 [data-cta="dark"],
-button[data-phone-code-trigger],
 [data-allow-dark-cta],
 [data-icon-tile][data-surface="ink"],
 [data-icon-tile][data-surface="navy"],
