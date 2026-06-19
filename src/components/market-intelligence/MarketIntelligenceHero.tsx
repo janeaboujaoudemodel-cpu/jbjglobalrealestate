@@ -37,8 +37,7 @@ export const MarketIntelligenceHero = ({
   actions 
 }: MarketIntelligenceHeroProps) => {
   return (
-    <section data-hero-dark className="jj-hero-fullscreen jj-hero-compact jj-hero-neon relative flex items-center overflow-hidden">
-      <span aria-hidden className="jj-hero-neon-accent" />
+    <section data-hero-dark className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden bg-[#0A0A0A]">
 
       {/* Video or Image Background */}
       <div className="absolute inset-0 z-0">
