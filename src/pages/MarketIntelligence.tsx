@@ -116,7 +116,11 @@ const MarketIntelligence = () => {
   }, []);
 
   return (
-    <div data-neon-page className="min-h-screen bg-background [--mi-gold:40_35%_53%] [--mi-navy:210_60%_16%] [--mi-navy-soft:210_49%_24%]">
+    // Remapped: --mi-navy → ink, --mi-navy-soft → soft-ink. Neon shell removed so
+    // the entire Market Intelligence tree matches the global champagne+gold+ink palette.
+    <div className="min-h-screen bg-background [--mi-gold:40_35%_53%] [--mi-navy:0_0%_4%] [--mi-navy-soft:0_0%_12%]">
+
+
       <SEOHead 
         title="Market Intelligence | Dubai Real Estate Insights | BUY · SELL · RENT | JBJ GLOBAL REAL ESTATE"
         description="Data-driven Dubai real estate insights powered by official government sources. Explore market trends, area analysis, and AI-generated reports. No predictions, just trusted insights."
