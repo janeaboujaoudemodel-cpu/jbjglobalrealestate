@@ -37,7 +37,7 @@ export const MarketIntelligenceHero = ({
   actions 
 }: MarketIntelligenceHeroProps) => {
   return (
-    <section data-hero-dark className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden bg-[#0A0A0A]">
+    <section data-hero-dark data-surface="dark" className="relative flex min-h-[460px] items-center overflow-hidden bg-[#0A0A0A] md:min-h-[540px]">
 
       {/* Video or Image Background */}
       <div className="absolute inset-0 z-0">
@@ -60,23 +60,11 @@ export const MarketIntelligenceHero = ({
         ) : null}
       </div>
 
-      {/* Decorative gold ambience — sits BEHIND the darkening overlays so it never lifts contrast under the headline */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/8 via-transparent to-transparent z-[1] pointer-events-none" />
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#EFE6D6]/5 rounded-full blur-3xl z-[1] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#EFE6D6]/3 rounded-full blur-3xl z-[1] pointer-events-none" />
-
-      {/* Legibility overlays — single deep stack so the title always reads, regardless of which side page bg is */}
-      <div className="absolute inset-0 z-[2] bg-[linear-gradient(180deg,rgba(0,0,0,0.92)_0%,rgba(0,0,0,0.78)_45%,rgba(0,0,0,0.92)_100%)] pointer-events-none" />
-      <div
-        className="absolute inset-0 z-[2] pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 75%)',
-        }}
-      />
+      {/* Legibility overlay — dark enough for white copy, without the washed/faded hero look */}
+      <div className="absolute inset-0 z-[2] bg-[linear-gradient(180deg,rgba(0,0,0,0.66)_0%,rgba(0,0,0,0.58)_48%,rgba(0,0,0,0.72)_100%)] pointer-events-none" />
 
       <motion.div 
-        className="relative z-10 w-full py-24"
+        className="relative z-10 w-full py-20 md:py-24"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
@@ -105,6 +93,7 @@ export const MarketIntelligenceHero = ({
           <motion.h1
             data-no-contrast-guard
             className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold !text-white mb-6 leading-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             variants={fadeInUp}
           >
             {title}
@@ -114,6 +103,7 @@ export const MarketIntelligenceHero = ({
           <motion.p
             data-no-contrast-guard
             className="allow-white text-lg md:text-xl !text-white/95 font-light leading-relaxed max-w-3xl mx-auto mb-10 drop-shadow-[0_1px_6px_rgba(0,0,0,0.75)]"
+            style={{ color: "rgba(255,255,255,0.96)", WebkitTextFillColor: "rgba(255,255,255,0.96)" }}
             variants={fadeInUp}
           >
             {description}
