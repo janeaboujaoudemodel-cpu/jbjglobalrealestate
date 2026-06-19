@@ -154,31 +154,35 @@ export default function BrokerBrandProfile() {
             {/* Logo */}
             <div>
               <Label className="text-sm font-medium" style={{ color: "#1A1A1A" }}>Company logo</Label>
-              <div className="mt-2 rounded-xl p-4 flex flex-col items-center justify-center min-h-[140px]" style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}>
-                {row.logo_url ? (
-                  <img src={row.logo_url} alt="Logo preview" className="max-h-24 object-contain mb-3" />
-                ) : (
-                  <div className="text-xs mb-3" style={{ color: "rgba(26,26,26,0.55)" }}>No logo yet</div>
-                )}
+              <div className="mt-2 rounded-xl p-3 flex flex-col items-center justify-center" style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}>
+                <div className="w-full aspect-[4/3] flex items-center justify-center overflow-hidden rounded-lg" style={{ background: "#FFFFFF" }}>
+                  {row.logo_url ? (
+                    <img src={row.logo_url} alt="Logo preview" className="w-full h-full object-contain" />
+                  ) : (
+                    <div className="text-xs" style={{ color: "rgba(26,26,26,0.55)" }}>No logo yet</div>
+                  )}
+                </div>
                 <input ref={logoInput} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleUpload("logo", f); }} />
-                <Button type="button" size="sm" variant="outline" onClick={() => logoInput.current?.click()} disabled={uploading === "logo"} className="jj-cta-outline" data-cta="outline">
+                <Button type="button" size="sm" variant="outline" onClick={() => logoInput.current?.click()} disabled={uploading === "logo"} className="jj-cta-outline mt-3" data-cta="outline">
                   {uploading === "logo" ? <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" /> : <Upload className="w-3.5 h-3.5 mr-2" />}
                   {row.logo_url ? "Replace logo" : "Upload logo"}
                 </Button>
               </div>
             </div>
 
-            {/* Headshot */}
+            {/* Headshot — same box size as logo, full-fit */}
             <div>
               <Label className="text-sm font-medium" style={{ color: "#1A1A1A" }}>Headshot</Label>
-              <div className="mt-2 rounded-xl p-4 flex flex-col items-center justify-center min-h-[140px]" style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}>
-                {row.headshot_url ? (
-                  <img src={row.headshot_url} alt="Headshot preview" className="w-24 h-24 object-cover rounded-full mb-3" />
-                ) : (
-                  <div className="text-xs mb-3" style={{ color: "rgba(26,26,26,0.55)" }}>No headshot yet</div>
-                )}
+              <div className="mt-2 rounded-xl p-3 flex flex-col items-center justify-center" style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}>
+                <div className="w-full aspect-[4/3] flex items-center justify-center overflow-hidden rounded-lg" style={{ background: "#FFFFFF" }}>
+                  {row.headshot_url ? (
+                    <img src={row.headshot_url} alt="Headshot preview" className="w-full h-full object-contain" />
+                  ) : (
+                    <div className="text-xs" style={{ color: "rgba(26,26,26,0.55)" }}>No headshot yet</div>
+                  )}
+                </div>
                 <input ref={headshotInput} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleUpload("headshot", f); }} />
-                <Button type="button" size="sm" variant="outline" onClick={() => headshotInput.current?.click()} disabled={uploading === "headshot"} className="jj-cta-outline" data-cta="outline">
+                <Button type="button" size="sm" variant="outline" onClick={() => headshotInput.current?.click()} disabled={uploading === "headshot"} className="jj-cta-outline mt-3" data-cta="outline">
                   {uploading === "headshot" ? <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" /> : <Upload className="w-3.5 h-3.5 mr-2" />}
                   {row.headshot_url ? "Replace headshot" : "Upload headshot"}
                 </Button>
