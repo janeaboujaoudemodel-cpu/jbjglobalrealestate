@@ -123,8 +123,12 @@ function ProviderPanel({
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!clientId.trim() || !clientSecret.trim()) {
-      toast.error("Client ID and Client Secret are required");
+    if (!clientId.trim()) {
+      toast.error("Client ID is required");
+      return;
+    }
+    if (!existing && !clientSecret.trim()) {
+      toast.error("Client Secret is required");
       return;
     }
     onSave({ provider, client_id: clientId, client_secret: clientSecret, label });
