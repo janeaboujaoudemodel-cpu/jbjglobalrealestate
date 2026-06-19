@@ -59,13 +59,13 @@ const ContentSection = ({
   const restWords = words.slice(1).join(' ');
 
   return (
-    <section id={id} className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-      <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+    <section id={id} className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+      <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="jj-card-inner p-8"
+          className="jj-card-inner p-6"
         >
           <div className="flex items-start gap-4 mb-6">
             <div className="jj-icon-box-active w-12 h-12 rounded-xl flex-shrink-0">
@@ -174,11 +174,11 @@ const MarketOverview = () => {
       />
 
       {/* Main Content - Full width edge-to-edge with 3-layer system */}
-      <div className="pt-16 pb-16 bg-[#FDFBF7]">
+      <div className="pt-8 pb-10 bg-[#FDFBF7]">
         {/* Introduction Section */}
-        <section id="introduction" className="scroll-mt-32 jj-section-champagne py-12 mb-8">
-          <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
-            <div className="jj-card-inner p-8">
+        <section id="introduction" className="scroll-mt-32 jj-section-champagne py-6 mb-3">
+          <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
+            <div className="jj-card-inner p-6">
               <div className="flex items-start gap-4 mb-6">
                 <div className="jj-icon-box-active w-12 h-12 rounded-xl flex-shrink-0">
                   <FileText className="w-6 h-6" />
@@ -198,9 +198,9 @@ const MarketOverview = () => {
         </section>
 
         {/* Market Structure & Regulation Section */}
-        <section id="market-structure" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-          <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
-            <div className="jj-card-inner p-8">
+        <section id="market-structure" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+          <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
+            <div className="jj-card-inner p-6">
               <div className="flex items-start gap-4 mb-6">
                 <div className="jj-icon-box-active w-12 h-12 rounded-xl flex-shrink-0">
                   <Landmark className="w-6 h-6" />
@@ -325,8 +325,8 @@ const MarketOverview = () => {
         </ContentSection>
 
         {/* Key Stats Grid - 3-layer system: black bg > active champagne section > champagne cards */}
-        <section id="key-stats" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-          <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+        <section id="key-stats" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+          <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
             <SectionTitle title="Key Market Statistics" />
             
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -371,8 +371,8 @@ const MarketOverview = () => {
         </section>
 
         {/* Transaction Trends - 3-layer system */}
-        <section id="quarterly-trends" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-          <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+        <section id="quarterly-trends" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+          <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
             <SectionTitle title="Quarterly Transaction Trends" />
             
             <div className="grid md:grid-cols-4 gap-4 max-w-4xl mx-auto">
@@ -404,8 +404,8 @@ const MarketOverview = () => {
         </section>
 
         {/* Property Type Performance - 3-layer system */}
-        <section id="property-performance" className="scroll-mt-32 jj-section-champagne py-12 mb-8">
-          <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+        <section id="property-performance" className="scroll-mt-32 jj-section-champagne py-6 mb-3">
+          <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
             <SectionTitle title="Performance by Property Type" />
 
             <div className="max-w-3xl mx-auto space-y-4">
@@ -440,7 +440,7 @@ const MarketOverview = () => {
 
         {/* Market Intelligence Navigation - 3-layer system */}
         <section id="navigation" className="jj-section-champagne py-16 scroll-mt-24">
-          <div className="container mx-auto px-4 xl:pr-80">
+          <div className="container mx-auto px-4 lg:pr-72 xl:pr-72">
             <MarketIntelligenceNavigation current="/market-intelligence/overview" showStartHere={false} />
             
             {/* Disclaimer Box */}

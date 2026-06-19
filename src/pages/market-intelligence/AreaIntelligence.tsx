@@ -66,7 +66,7 @@ const AreaIntelligence = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Main Content - Black background with 3-layer system */}
-      <div className="bg-[#FDFBF7] pt-16 pb-16">
+      <div className="bg-[#FDFBF7] pt-8 pb-10">
         {/* Fixed TOC Sidebar */}
         <div className="hidden lg:block">
           <MarketIntelligenceTableOfContents 
@@ -83,15 +83,15 @@ const AreaIntelligence = () => {
         <div className="space-y-0">
             
           {/* Introduction Section - 3-layer system */}
-          <section id="introduction" className="scroll-mt-32 jj-section-champagne py-12 mb-8">
-            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+          <section id="introduction" className="scroll-mt-32 jj-section-champagne py-6 mb-3">
+            <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
               >
-                  <div className="jj-card-inner p-8">
+                  <div className="jj-card-inner p-6">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                         <AlertTriangle className="w-6 h-6" />
@@ -109,15 +109,15 @@ const AreaIntelligence = () => {
             </section>
 
           {/* What Area Intelligence Means - 3-layer system */}
-          <section id="what-area-intelligence-means" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+          <section id="what-area-intelligence-means" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+            <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
               >
-                  <div className="jj-card-inner p-8">
+                  <div className="jj-card-inner p-6">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                         <MapPin className="w-6 h-6" />
@@ -155,15 +155,15 @@ const AreaIntelligence = () => {
             </section>
 
           {/* Official Data Sources - 3-layer system */}
-          <section id="official-data-sources" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+          <section id="official-data-sources" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+            <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
               >
-                  <div className="jj-card-inner p-8">
+                  <div className="jj-card-inner p-6">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                         <Database className="w-6 h-6" />
@@ -205,15 +205,15 @@ const AreaIntelligence = () => {
             </section>
 
           {/* How an Area Is Evaluated - 3-layer system */}
-          <section id="how-area-evaluated" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+          <section id="how-area-evaluated" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+            <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
               >
-                  <div className="jj-card-inner p-8">
+                  <div className="jj-card-inner p-6">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                         <BarChart3 className="w-6 h-6" />
@@ -250,15 +250,15 @@ const AreaIntelligence = () => {
             </section>
 
           {/* What Area Intelligence Does Not Do - 3-layer system */}
-          <section id="what-it-does-not-do" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+          <section id="what-it-does-not-do" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+            <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
               >
-                  <div className="jj-card-inner p-8">
+                  <div className="jj-card-inner p-6">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                         <Shield className="w-6 h-6" />
@@ -296,15 +296,15 @@ const AreaIntelligence = () => {
             </section>
 
           {/* Why Area-Level Analysis Matters - 3-layer system */}
-          <section id="why-it-matters" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+          <section id="why-it-matters" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+            <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
               >
-                <div className="jj-card-inner p-8">
+                <div className="jj-card-inner p-6">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                       <Building2 className="w-6 h-6" />
@@ -341,15 +341,15 @@ const AreaIntelligence = () => {
             </section>
 
           {/* How JBJ Uses Area Intelligence - 3-layer system */}
-          <section id="how-jbj-uses" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+          <section id="how-jbj-uses" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+            <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
               >
-                  <div className="jj-card-inner p-8">
+                  <div className="jj-card-inner p-6">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                         <FileText className="w-6 h-6" />
@@ -393,15 +393,15 @@ const AreaIntelligence = () => {
             <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)] rounded-full" />
             
           {/* Areas Grid - 3-layer system */}
-          <section id="area-grid" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
-            <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
+          <section id="area-grid" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+            <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
               >
-                  <div className="jj-card-inner p-8">
+                  <div className="jj-card-inner p-6">
                     <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
                       <span className="text-[#1A1A1A]">Dubai</span>{" "}
                       <span className="text-[#1A1A1A]">Neighborhood Analysis</span>
