@@ -35,13 +35,12 @@ interface InsightCard {
   category: 'trend' | 'demand' | 'supply' | 'opportunity';
 }
 
-/* ICON BOX - approved navy with white icon */
+/* Icon box - champagne/gold standard */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    data-no-contrast-guard
-    className={`w-10 h-10 rounded-none flex items-center justify-center transition-all duration-300 bg-[hsl(var(--mi-navy))] border border-[hsl(var(--mi-gold)/0.45)] shadow-md allow-white ${className}`}
+    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#EFE6D6] border border-[#B89555]/40 shadow-sm ${className}`}
   >
-    <Icon className="w-5 h-5 text-white allow-white" />
+    <Icon className="w-5 h-5 text-[#1A1A1A]" />
   </div>
 );
 
@@ -134,7 +133,7 @@ export const AIMarketInsights = () => {
   };
 
   return (
-    <section className="surface-light py-16 bg-background" data-surface="light">
+    <section className="surface-light py-10 bg-[#FDFBF7]" data-surface="light">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -162,7 +161,7 @@ export const AIMarketInsights = () => {
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {PRESET_INSIGHTS.map((insight) => (
               <motion.div key={insight.id} variants={fadeInUp}>
-                <Card className="h-full rounded-none transition-all hover:shadow-[0_16px_38px_hsl(var(--mi-navy)/0.12)] bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)]">
+                <Card className="jj-card-inner h-full rounded-xl transition-all hover:shadow-[0_16px_38px_rgba(26,26,26,0.08)]">
                   <CardHeader className="pb-3">
                     <div className="flex items-start gap-3">
                       <IconBox icon={insight.icon} className="shrink-0" />
@@ -184,7 +183,7 @@ export const AIMarketInsights = () => {
 
           {/* AI Narrative Generator */}
           <motion.div variants={fadeInUp}>
-            <Card className="rounded-none shadow-lg bg-card border border-[hsl(var(--mi-navy)/0.42)]">
+            <Card className="rounded-xl shadow-lg bg-[#FDFBF7] border border-[#B89555]/35">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-start gap-6 mb-6">
                   <IconBox icon={Brain} className="w-12 h-12 shrink-0" />
@@ -200,12 +199,12 @@ export const AIMarketInsights = () => {
                 </div>
 
                 <Tabs value={activeNarrativeType} onValueChange={(v) => setActiveNarrativeType(v as NarrativeType)}>
-                  <TabsList className="mb-6 rounded-none bg-muted border border-[hsl(var(--mi-navy)/0.28)]">
+                  <TabsList className="mb-6 rounded-lg bg-[#EFE6D6] border border-[#B89555]/35">
                     {narrativeOptions.map((opt) => (
                       <TabsTrigger
                         key={opt.id}
                         value={opt.id}
-                        className="flex items-center gap-2 data-[state=active]:bg-foreground data-[state=active]:text-background"
+                        className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7] data-[state=active]:text-[#1A1A1A]"
                       >
                         <opt.icon className="w-4 h-4" />
                         <span className="hidden sm:inline">{opt.label}</span>
@@ -220,8 +219,7 @@ export const AIMarketInsights = () => {
                           variant="primary"
                           onClick={() => generatePublicNarrative(opt.id)}
                           disabled={isGenerating}
-                          className="rounded-none bg-[hsl(var(--mi-navy))] text-white border border-[hsl(var(--mi-gold))] hover:bg-[hsl(var(--mi-navy-soft))]"
-                          data-no-contrast-guard
+                          className="rounded-lg"
                         >
                           {isGenerating && activeNarrativeType === opt.id ? (
                             <>
@@ -238,7 +236,7 @@ export const AIMarketInsights = () => {
                         </Button>
 
                         {generatedNarratives[opt.id] && (
-                           <div className="p-6 rounded-none bg-muted border border-[hsl(var(--mi-navy)/0.28)]">
+                           <div className="p-6 rounded-lg bg-[#EFE6D6] border border-[#B89555]/30">
                             <div className={`${MI_H4} flex items-center gap-2 mb-3`}>
                               <MessageSquare className="w-4 h-4" />
                               AI Market Analysis
@@ -258,7 +256,7 @@ export const AIMarketInsights = () => {
 
           {/* Disclaimer */}
           <motion.div
-            className="mt-8 flex items-start gap-3 p-4 max-w-3xl mx-auto rounded-none bg-muted border border-[hsl(var(--mi-navy)/0.28)]"
+            className="mt-8 flex items-start gap-3 p-4 max-w-3xl mx-auto rounded-xl bg-[#EFE6D6] border border-[#B89555]/30"
             variants={fadeInUp}
           >
             <Info className="w-5 h-5 shrink-0 mt-0.5 text-foreground" />
