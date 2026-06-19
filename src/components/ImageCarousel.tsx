@@ -358,12 +358,15 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                     key={image.id}
                     onClick={() => {
                       if (isOverflowTile) {
-                        // Open fullscreen at the first hidden photo (index 5)
-                        openFullscreen(5);
+                        // Open the full gallery from the very first photo so the
+                        // user immediately sees the complete filmstrip of ALL
+                        // photos (not just the hidden remainder).
+                        openFullscreen(0);
                       } else {
                         setPageIndex(index);
                       }
                     }}
+
                     className={`aspect-[4/3] rounded overflow-hidden border-2 transition-colors relative ${
                       index === pageIndex && !isOverflowTile ? "border-primary" : "border-transparent hover:border-border"
                     }`}
