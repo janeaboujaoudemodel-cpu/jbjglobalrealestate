@@ -1302,22 +1302,25 @@ export default function ProjectDetailLayout({
               )}
 
 
-              {/* More from the same developer */}
-              <MoreFromDeveloperStrip
-                currentProjectId={project.id}
-                developerId={project.developer?.id ?? null}
-                developerName={project.developer?.name ?? null}
-                developerSlug={project.developer?.slug ?? null}
-              />
-
-
-
               {/* Nearby Points of Interest - Below Map */}
               {project.location_distances && project.location_distances.length > 0 && (
                 <div className="mt-6">
                   <PointsOfInterest points={project.location_distances} />
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* More from the same developer — rendered unconditionally so it
+              shows even when the project has no coords/area_name */}
+          <div className="mb-14 -mt-4">
+            <div className="jj-card-inner">
+              <MoreFromDeveloperStrip
+                currentProjectId={project.id}
+                developerId={project.developer?.id ?? (project as any).developer_id ?? null}
+                developerName={project.developer?.name ?? (project as any).developer_name ?? null}
+                developerSlug={project.developer?.slug ?? null}
+              />
             </div>
           </div>
 
