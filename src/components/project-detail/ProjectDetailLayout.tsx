@@ -1572,15 +1572,26 @@ export default function ProjectDetailLayout({
              />
            </div>
 
-          {/* INQUIRY FORM - Full Width with premium styling - Uses Contact Page Form */}
-          <div ref={inquiryRef} className="scroll-mt-32 mb-6">
-              <ConsultationRequestForm
-                title={`Register Interest in ${project.name}`}
-                subtitle={`Get expert guidance on ${project.name}${project.location ? ` at ${project.location}` : ''}. Our specialists are ready to assist you.`}
-                projectId={project.id}
-                projectName={project.name}
-              />
-          </div>
+          {/* INQUIRY FORM - Full-bleed champagne band so the form sits on a dedicated section */}
+        </div>
+      </section>
+      <div
+        ref={inquiryRef}
+        className="scroll-mt-32 jj-band jj-band--surface"
+        data-section="register-interest"
+      >
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-16">
+          <ConsultationRequestForm
+            title={`Register Interest in ${project.name}`}
+            subtitle={`Get expert guidance on ${project.name}${project.location ? ` at ${project.location}` : ''}. Our specialists are ready to assist you.`}
+            projectId={project.id}
+            projectName={project.name}
+          />
+        </div>
+      </div>
+      <section className="hidden">
+        <div>
+
 
 
 
