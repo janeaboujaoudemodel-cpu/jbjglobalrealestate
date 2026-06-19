@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Building, ArrowRight, Sparkles } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
+import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 
 interface RecommendedDevelopersProps {
   currentDeveloperSlug: string;
