@@ -1302,16 +1302,6 @@ export default function ProjectDetailLayout({
               )}
 
 
-              {/* More from the same developer */}
-              <MoreFromDeveloperStrip
-                currentProjectId={project.id}
-                developerId={project.developer?.id ?? null}
-                developerName={project.developer?.name ?? null}
-                developerSlug={project.developer?.slug ?? null}
-              />
-
-
-
               {/* Nearby Points of Interest - Below Map */}
               {project.location_distances && project.location_distances.length > 0 && (
                 <div className="mt-6">
@@ -1320,6 +1310,16 @@ export default function ProjectDetailLayout({
               )}
             </div>
           </div>
+
+          {/* More from the same developer — rendered unconditionally so it
+              shows even when the project has no coords/area_name. The strip
+              returns null on its own when there is no sibling inventory. */}
+          <MoreFromDeveloperStrip
+            currentProjectId={project.id}
+            developerId={project.developer?.id ?? (project as any).developer_id ?? null}
+            developerName={project.developer?.name ?? (project as any).developer_name ?? null}
+            developerSlug={project.developer?.slug ?? null}
+          />
 
           {/* MASTER PLAN SECTION (Reelly-style) */}
           {(project.master_plan_image_url || (project.community_highlights?.length ?? 0) > 0) && (

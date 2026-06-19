@@ -53,19 +53,37 @@ export default function MoreFromDeveloperStrip({
   const [fType, setFType] = useState<string>("all");
 
   const { data } = useQuery({
-    enabled: !!developerId,
-    queryKey: ["more-from-developer", developerId, currentProjectId],
+    enabled: !!(developerId || developerName),
+    queryKey: ["more-from-developer", developerId, developerName, currentProjectId],
     queryFn: async () => {
-      const { data } = await supabase
-        .from("projects")
-        .select(
-          "id, name, slug, location, emirate, price_from, cover_image_url, handover_date, expected_completion, construction_status, payment_plan, payment_breakdown, status_label, description, property_type, sale_status"
-        )
-        .eq("developer_id", developerId!)
-        .neq("id", currentProjectId)
-        .eq("is_published", true)
-        .limit(120);
-      return data ?? [];
+      const select =
+        "id, name, slug, location, area_name, emirate, price_from, cover_image_url, handover_date, expected_completion, construction_status, payment_plan, payment_breakdown, status_label, description, property_type, sale_status, developer_id, developer_name";
+
+      // Primary lookup by developer_id
+      let rows: any[] = [];
+      if (developerId) {
+        const { data } = await supabase
+          .from("projects")
+          .select(select)
+          .eq("developer_id", developerId)
+          .neq("id", currentProjectId)
+          .eq("is_published", true)
+          .limit(120);
+        rows = data ?? [];
+      }
+
+      // Fallback by exact developer_name (covers projects where developer_id is null)
+      if (rows.length === 0 && developerName) {
+        const { data } = await supabase
+          .from("projects")
+          .select(select)
+          .eq("developer_name", developerName)
+          .neq("id", currentProjectId)
+          .eq("is_published", true)
+          .limit(120);
+        rows = data ?? [];
+      }
+      return rows;
     },
     staleTime: 5 * 60 * 1000,
   });
@@ -112,7 +130,7 @@ export default function MoreFromDeveloperStrip({
     });
   }, [all, fArea, fStatus, fType, fHandover, fPrice]);
 
-  if (!developerId || all.length === 0) return null;
+  if ((!developerId && !developerName) || all.length === 0) return null;
 
   const visible = expanded ? filtered : filtered.slice(0, INITIAL_VISIBLE);
   const anyFilter =

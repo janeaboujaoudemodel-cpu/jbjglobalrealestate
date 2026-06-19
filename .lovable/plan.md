@@ -1,83 +1,130 @@
-# Plan: Gallery, Map, Brochure, Mortgage, Market Intel & Developer Section Upgrade
+## Ordered task list recovered from the earlier prompt
 
-## 1. Gallery — De-duplicate & Fix "+N" Lightbox
+1. **Project gallery duplicate photos**
+   - Remove duplicate project photos globally on project pages.
+   - If the same image exists as low-quality/zoomed/cropped and high-quality/full version, keep only the high-quality/full version.
+   - Ensure this works for every project, not only the currently viewed one.
 
-**Problem:** Two near-identical photos (one low-res, one high-res) appear back-to-back. Clicking "+14" opens only one image instead of the full gallery.
+2. **`+14` / `+N` gallery experience**
+   - Clicking `+N` must open a single full-screen gallery, not a small cropped black dialog.
+   - Gallery must show photos fully with `object-contain`, not cropped.
+   - The background project carousel must not change when opening or navigating the full-screen gallery.
+   - Only the front/full-screen image changes.
+   - Controls must have correct contrast at rest and hover.
+   - Mobile/tablet friendly: large tap targets, swipe left/right, keyboard arrows, and two-finger/trackpad scroll advances faster through photos.
 
-- Add perceptual de-duplication in `ProjectMediaSection.tsx` image loader:
-  - Normalize URLs (strip CDN size suffixes like `_thumb`, `?w=`, `/w_400/`) and group by base key.
-  - When duplicates exist, keep the largest-resolution variant (use `getHighResImageUrl` + natural-size check on load).
-  - Hash-fallback: load first 8KB and dedupe by SHA1 prefix for cases where URLs differ but bytes match.
-- Apply globally on every project — not just Distrikt — so this never recurs.
-- "+N" tile click: open the full-screen lightbox at index `visibleCount` with all photos paginated and arrow/keyboard navigation. Currently it only opens the single tile underneath.
+3. **Developer “More projects” section**
+   - Verify why it is not visible in preview.
+   - Fix rendering/wiring/query conditions so it appears when the project has same-developer inventory.
+   - Keep inline expansion on the same page.
+   - Include filters: Area, Price, Handover, Status, Property type.
+   - Do not navigate away when pressing “View more”; it expands inline.
 
-## 2. Project Map — Show Nearby Projects
+4. **Nearby projects map**
+   - Verify map shows the selected project plus surrounding/related projects.
+   - Current project = red pin.
+   - Other projects = clearly distinct pins.
+   - Include filters: All / Same developer / Same area.
+   - Validate marker popup and click-through behavior.
 
-In the project's Location/Map section, render a single Mapbox/Google map containing:
-- **Red pin** = current project.
-- **Blue pins** = up to ~30 other projects within a radius (e.g. 5 km) queried from `projects` table by lat/lng bounding box, excluding leasing.
-- Hover/click a blue pin → mini-card with cover image, name, developer, price-from, "View" link.
-- Toggle filter chips (All / Same developer / Same area) above the map.
+5. **Brochure and document readability**
+   - Re-check the project brochure wordmark/project name and document labels visually.
+   - Fix any remaining low-contrast text or unreadable labels.
 
-## 3. Brochure Readability Fixes
+6. **Mortgage calculator parity**
+   - Verify the new advanced mortgage panel is actually visible in the project page mortgage section.
+   - Confirm residency/LTV, affordability/DBR, fees, bank comparison, and amortization work.
+   - Fix any broken contrast or mobile layout problems.
 
-On the brochure cover thumbnail in **Project Brochure** card and the **Project Documents** library card:
-- The "JBJ GLOBAL REAL ESTATE" wordmark + project name + "Brochure" label sit on a dark photo with no scrim → unreadable.
-- Add a fixed gradient scrim (`linear-gradient(180deg, rgba(0,0,0,.1) 0%, rgba(0,0,0,.75) 100%)`) behind the title block.
-- Increase title contrast: white text + subtle gold underline, project name in 22–24px semibold, wordmark in 11px tracked uppercase.
-- Same treatment applied to the small "Brochure" badge chip on Project Documents tile (champagne pill, ink text, gold hairline — not faded translucent black).
+7. **Dubai Market Intelligence upgrade**
+   - Upgrade the existing `DLDMarketWidget` premium styling:
+     - Cash vs Mortgage in black/gold without unreadable gold fills.
+     - Fix broken-looking row highlight bars in Top 10 Areas / Top 10 Buyers.
+     - Improve “Notice something incorrect?” and Expert Consultation areas if present on the page/component.
+     - Make yearly volume and daily transaction data more visible.
+   - Check whether the daily-update pipeline already exists; if it does not, plan the backend update separately with proper database grants/RLS.
 
-## 4. Mortgage Calculator — Property Finder Parity ✅
+8. **Behavior-driven recommendations**
+   - Unify recommendation logic so recommendations follow user behavior:
+     - Developer searches/views → same developer projects.
+     - Area searches/views → same area projects.
+     - Price searches → nearby price band.
+   - Apply the same ranking to recommended projects, homepage handpicked projects, and the recommendation popup where applicable.
+   - Keep popup behavior from memory: minimize to chip, hide for session, re-open from header.
 
-Added `MortgageParityPanel` (rendered under both compact and full views) covering:
-- Residency toggle (UAE National 85% / Expat 80% / Non-Resident 50%) with live LTV-vs-cap check.
-- Affordability check: monthly income input, 50% DBR cap, ratio, pass/fail badge.
-- One-time fees breakdown: DLD 4%, agency 2%, mortgage reg 0.25%+290, bank arrangement 1%, valuation, trustee, NOC + total upfront in price-orange.
-- Side-by-side bank rate comparison with monthly delta.
-- Collapsible yearly amortization schedule (principal/interest/balance).
-- Preserves champagne+gold UI on default theme; auto-flips to navy glass when `themeVariant="navy"`.
+## Implementation plan
 
-## 5. Dubai Market Intelligence Upgrade
+### Phase 1 — Fix the currently broken gallery first
+- Update `src/components/ImageCarousel.tsx` so it uses separate state for:
+  - page carousel image index
+  - full-screen gallery image index
+- Rebuild the fullscreen dialog as a true viewport overlay:
+  - `100dvw × 100dvh`
+  - no small centered modal sizing
+  - image `object-contain`
+  - fixed top control bar and bottom thumbnail filmstrip
+  - no background carousel updates while fullscreen is open
+- Add proper controls:
+  - close
+  - previous/next
+  - counter
+  - download current image
+  - swipe gestures
+  - arrow keys
+  - wheel/trackpad acceleration
+- Strengthen gallery de-duplication:
+  - normalize CDN transforms/query strings
+  - prefer original/highest-resolution URLs
+  - remove small/thumb/preview variants
+  - add fallback fingerprinting by normalized filename/path tokens so zoomed low-res duplicates collapse even when URLs differ slightly
 
-- **Daily refresh:** schedule cron edge function `refresh-dld-market` to pull latest DLD transactions daily; surface "Updated DD MMM YYYY" timestamp.
-- **Headline KPIs:** Yearly transaction volume + Daily transactions, large premium tiles (ink + gold hairline + price-orange value).
-- **Cash vs Mortgage donut:** swap green/brown for **black (#0A0A0A) + gold (#B89555)** primary, champagne secondary.
-- **Top 10 Areas / Top 10 Buyers:** the right→left white sweep highlight is glitchy. Replace with a static champagne row hover + gold left-border accent; rank number in gold hairline circle.
-- **"Notice something incorrect?" section:** lift from near-black slab to champagne raised band with ink text + gold hairline frame.
-- **"Expert Consultation" section:** upgrade to a premium card — ink background, gold hairline, JBJ monogram, Amanda portrait, single dark CTA, supporting trust line.
+### Phase 2 — Fix developer “More projects” visibility
+- Audit the query and project data passed from `ProjectDetailLayout`.
+- Make the section resilient when `developer.id` is missing but `developer_name` exists.
+- Query by `developer_id` first, then fallback to `developer_name`.
+- Keep inline expansion and filters visible when enough results exist.
+- Add an empty/debug-safe state only for owner/admin if needed; public users should see a clean section or no section.
 
-## 6. Developer Section — More Projects + Inline Expansion
+### Phase 3 — Validate and repair claimed prior work
+- Nearby map: verify render, data results, filters, pins, popups, and mobile height.
+- Mortgage panel: verify it appears in both compact/full usage and remains readable.
+- Brochure/document labels: visually inspect and patch remaining contrast issues.
 
-Above Dubai Market Intelligence on the project page, when developer = e.g. Ammar:
-- Show "More projects by {Developer}" — grid of 3–4 per row × 2 rows (6–8 cards).
-- **View more** button expands inline (no route change) into a paginated/lazy-loaded panel staying on the same project page.
-- Add filter row inside the expanded panel: Area, Price range, Bedrooms, Handover, Status, Property type — same global filter chips used on /properties.
+### Phase 4 — Complete remaining old tasks
+- Upgrade `DLDMarketWidget` UI where it exists now.
+- Create or adjust the daily-update backend only after confirming existing tables/functions; any new public table migration will include required `GRANT`s and RLS policies.
+- Consolidate recommendation ranking into a shared helper/hook so homepage, project recommendations, and popup use the same behavior signals.
 
-## 7. Behavior-Driven Recommendations
+## Validation gates and proof I will provide
 
-Continue the page with the existing sections (Request Consultation, Register Interest, Request Callback) and a new **Recommended for You** rail that adapts to user behavior:
-- Track searches/filters used (developer, area, price, bedrooms) in `browsing_history` (already exists).
-- Recommendation rules (priority):
-  1. If last search was developer-led → recommend same developer.
-  2. If area-led → same area.
-  3. If price-led → ±15% price band.
-  4. Fallback → trending.
-- Same engine powers the existing recommendations pop-up so behavior follows the user across pages.
+After each phase, I will validate before saying it is complete:
 
-## 8. Validation
+1. **Gallery proof**
+   - Desktop screenshot of full-screen gallery after clicking `+N`.
+   - Mobile screenshot of full-screen gallery.
+   - Screenshot or extracted count showing duplicate low-quality photo removed.
+   - Confirm background image does not change while navigating fullscreen.
 
-- Browser-test the project page as a normal user at desktop (1920) and mobile (390):
-  - Confirm no duplicate gallery photos, +14 opens full lightbox.
-  - Map shows red + blue pins with mini-cards.
-  - Brochure titles legible at all states.
-  - Mortgage calculator shows new residency + fees + amortization.
-  - Market Intel: daily timestamp, black/gold donut, clean Top 10 hover, premium consultation card.
-  - Developer "View more" expands inline with filters.
-- Screenshot proof of each before/after for chat.
+2. **Developer section proof**
+   - Desktop screenshot showing “More projects by {Developer}”.
+   - Screenshot after clicking “View more” showing inline expansion and filters.
+   - Mobile screenshot showing the section remains usable.
 
-## Technical Notes
+3. **Map proof**
+   - Screenshot showing red current-project pin and other project pins.
+   - Screenshot with Same developer / Same area filter selected.
 
-- Files likely touched: `ProjectMediaSection.tsx`, `ProjectMapSection.tsx` (new nearby query), `PremiumBrochureCard.tsx`, `ProjectDocumentsGrid` brochure card, `MortgageCalculator.tsx`, `OwnerMarketIntel.tsx` + public Market Intelligence page, `DeveloperMoreProjectsSection.tsx` (new), `RecommendedForYouRail.tsx` + `PropertyRecommendationPopup` reranker.
-- New edge function: `refresh-dld-market` (cron daily).
-- New DB read: `projects_near(lat, lng, radius_m)` RPC for map nearby pins.
-- Honors champagne/gold theme, no white-on-light, no gold fills (hairline only), price uses `<PricePill />`, dev names via `<DeveloperLink />`.
+4. **Mortgage proof**
+   - Screenshot of advanced mortgage panel on desktop.
+   - Mobile screenshot showing controls and values fit.
+
+5. **Market Intelligence proof**
+   - Screenshot of upgraded cash/mortgage and Top 10 areas/buyers sections.
+   - Confirmation whether daily update is already wired or needs backend migration.
+
+6. **Recommendations proof**
+   - Demonstrate area/developer/price behavior by navigating/searching and showing the resulting recommended projects/popup.
+
+## Important working rule
+
+I will not write “shipped”, “fixed”, or “complete” for any item until it has been visually validated in the preview with screenshots on desktop and mobile/tablet where relevant.
