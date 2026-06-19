@@ -1223,12 +1223,12 @@ const QuizResults = () => {
     const pageW = doc.internal.pageSize.getWidth();
     const pageH = doc.internal.pageSize.getHeight();
     const M = 42;
-    const ink: [number, number, number] = [2, 17, 15];
-    const navy: [number, number, number] = [4, 22, 28];
-    const tiffany: [number, number, number] = [94, 234, 212];
-    const cyan: [number, number, number] = [34, 211, 238];
+    const ink: [number, number, number] = [253, 251, 247];
+    const navy: [number, number, number] = [10, 10, 10];
+    const tiffany: [number, number, number] = [184, 149, 85];
+    const cyan: [number, number, number] = [184, 149, 85];
     const white: [number, number, number] = [255, 255, 255];
-    const muted: [number, number, number] = [205, 245, 245];
+    const muted: [number, number, number] = [247, 242, 234];
     const fmtBedsLocal = (p: any) =>
       p.bedrooms_min != null && p.bedrooms_max != null
         ? p.bedrooms_min === 0
