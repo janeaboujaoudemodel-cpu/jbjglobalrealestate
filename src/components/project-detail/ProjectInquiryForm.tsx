@@ -304,16 +304,19 @@ export function ProjectInquiryForm({
 
   return (
     <div>
-      <div className="text-center mb-8">
-        <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
-          Register Your Interest
-        </h3>
-        <p className="text-muted-foreground text-base max-w-md mx-auto">
-          Get exclusive access to project details, pricing, and personalized consultation.
-        </p>
-      </div>
+      {!compact && (
+        <div className="text-center mb-8">
+          <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+            Register Your Interest
+          </h3>
+          <p className="text-muted-foreground text-base max-w-md mx-auto">
+            Get exclusive access to project details, pricing, and personalized consultation.
+          </p>
+        </div>
+      )}
 
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
+      <form onSubmit={handleSubmit} className={cn("space-y-4", compact ? "w-full" : "max-w-md mx-auto")}>
+
         {/* Name */}
         <div className="space-y-2">
           <Label htmlFor="name" className="text-foreground text-sm font-medium">Full Name *</Label>
