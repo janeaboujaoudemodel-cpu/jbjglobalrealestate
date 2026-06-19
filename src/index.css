@@ -4462,6 +4462,84 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   border-radius: 0.75rem;
 }
 
+/* --------------------------------------------------------------------------
+ * Metallic Gold CTA primitive (.jj-cta-gold-metallic)
+ * Used for inside-page primary CTAs (Register Interest, Request Consultation,
+ * Request a Call Back, Submit Report, Download/Request brochure). Matches the
+ * animated metallic feel of active sqft/sqm and active section-tab treatment.
+ * Idle: champagne→gold→champagne ombre with 1px gold hairline + ink text.
+ * Hover: brighter sweep, slight lift, soft gold glow.
+ * Never apply to hero CTAs.
+ * ------------------------------------------------------------------------ */
+.jj-cta-gold-metallic {
+  position: relative !important;
+  isolation: isolate;
+  color: #1A1A1A !important;
+  background:
+    linear-gradient(
+      135deg,
+      #F7EFDC 0%,
+      #E9D9B2 30%,
+      #D7BE7E 55%,
+      #E9D9B2 80%,
+      #F7EFDC 100%
+    ) !important;
+  background-size: 220% 220% !important;
+  background-position: 0% 50% !important;
+  border: 1px solid rgba(184, 149, 85, 0.65) !important;
+  border-radius: 0.75rem !important;
+  box-shadow:
+    0 6px 18px -8px rgba(184, 149, 85, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(184, 149, 85, 0.35) !important;
+  transition:
+    background-position 700ms ease,
+    transform 250ms ease,
+    box-shadow 250ms ease,
+    border-color 250ms ease !important;
+  overflow: hidden;
+}
+.jj-cta-gold-metallic:hover:not(:disabled) {
+  background-position: 100% 50% !important;
+  transform: translateY(-1px);
+  border-color: rgba(184, 149, 85, 0.95) !important;
+  box-shadow:
+    0 12px 30px -10px rgba(184, 149, 85, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(184, 149, 85, 0.5) !important;
+}
+.jj-cta-gold-metallic:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+/* Slow ambient sheen */
+.jj-cta-gold-metallic::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%);
+  transition: transform 1100ms ease;
+  z-index: 0;
+}
+.jj-cta-gold-metallic:hover::before {
+  transform: translateX(120%);
+}
+.jj-cta-gold-metallic > * {
+  position: relative;
+  z-index: 1;
+  color: #1A1A1A !important;
+}
+.jj-cta-gold-metallic :where(svg, [class*="lucide"]) {
+  color: #1A1A1A !important;
+}
+
 button[data-phone-code-trigger],
 button[data-phone-code-trigger]:hover,
 button[data-phone-code-trigger]:focus,

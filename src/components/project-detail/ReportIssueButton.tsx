@@ -94,20 +94,23 @@ export default function ReportIssueButton({
 
   return (
     <>
-      {/* Yellow Banner */}
-      <div data-no-backdrop-blur className={`rounded-2xl border-2 border-red-500/50 bg-gradient-to-br from-red-950 via-red-900 to-red-950 p-5 flex items-center justify-between gap-4 flex-wrap shadow-[0_6px_30px_rgba(220,38,38,0.25),inset_0_1px_0_rgba(255,255,255,0.05)] ${className}`}>
+      {/* Premium champagne issue-report panel (replaces dark-red banner) */}
+      <div
+        data-no-backdrop-blur
+        className={`rounded-2xl border border-[#B89555]/45 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-5 flex items-center justify-between gap-4 flex-wrap shadow-[0_6px_24px_rgba(184,149,85,0.18),inset_0_1px_0_rgba(255,255,255,0.6)] ${className}`}
+      >
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 ring-2 ring-red-400/40 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
-            <AlertTriangle className="w-6 h-6 text-red-400 drop-shadow-[0_0_6px_rgba(239,68,68,0.5)]" />
+          <div className="w-11 h-11 rounded-full bg-[#F7F2EA] flex items-center justify-center flex-shrink-0 ring-1 ring-[#B89555]/55">
+            <AlertTriangle className="w-5 h-5 text-[#B89555]" />
           </div>
           <div>
-            <p className="text-sm font-bold text-white tracking-wide">Noticed something incorrect?</p>
-            <p className="text-xs text-red-300/90 mt-0.5">Help us keep this project up-to-date</p>
+            <p className="text-sm font-semibold text-[#1A1A1A] tracking-wide">Noticed something incorrect?</p>
+            <p className="text-xs text-[#1A1A1A]/65 mt-0.5">Help us keep this project up-to-date</p>
           </div>
         </div>
         <button
           onClick={() => setOpen(true)}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-red-400/70 bg-red-600 text-white text-sm font-bold hover:bg-red-500 hover:border-red-300 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)] transition-all duration-300 whitespace-nowrap shadow-[0_4px_15px_rgba(220,38,38,0.4)]"
+          className="jj-cta-gold-metallic inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold whitespace-nowrap"
         >
           <AlertCircle className="w-4 h-4" />
           Report an issue
@@ -116,22 +119,22 @@ export default function ReportIssueButton({
 
       {/* Report Modal */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/55">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-amber-500" />
+            <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
+              <AlertTriangle className="w-5 h-5 text-[#B89555]" />
               Report an Issue
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-[#1A1A1A]/70">
               Noticed something incorrect? Help us keep <strong>{projectName}</strong> up-to-date.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 mt-2">
             <div>
-              <label className="text-sm font-medium text-foreground mb-1.5 block">Issue Type</label>
+              <label className="text-sm font-medium text-[#1A1A1A] mb-1.5 block">Issue Type</label>
               <Select value={issueType} onValueChange={setIssueType}>
-                <SelectTrigger>
+                <SelectTrigger className="h-11 border-[#B89555]/55 hover:border-[#B89555] focus:border-[#B89555]">
                   <SelectValue placeholder="Select issue type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -143,22 +146,23 @@ export default function ReportIssueButton({
             </div>
 
             <div>
-              <label className="text-sm font-medium text-foreground mb-1.5 block">Tell us what seems wrong</label>
+              <label className="text-sm font-medium text-[#1A1A1A] mb-1.5 block">Tell us what seems wrong</label>
               <Textarea
                 placeholder="Please describe the issue in detail..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
+                className="border-[#B89555]/55 hover:border-[#B89555] focus:border-[#B89555]"
               />
             </div>
 
-            <Button
+            <button
               onClick={handleSubmit}
               disabled={submitting || !issueType}
-              className="w-full bg-amber-500 hover:bg-amber-600 text-white"
+              className="jj-cta-gold-metallic w-full h-11 text-sm font-semibold inline-flex items-center justify-center gap-2"
             >
               {submitting ? "Submitting..." : "Submit Report"}
-            </Button>
+            </button>
           </div>
         </DialogContent>
       </Dialog>
