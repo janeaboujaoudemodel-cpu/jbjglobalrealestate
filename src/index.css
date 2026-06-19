@@ -4543,16 +4543,32 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 [data-radix-popper-content-wrapper] > [data-radix-dropdown-menu-content],
 [data-radix-popper-content-wrapper] > [data-radix-combobox-content],
 [data-radix-popper-content-wrapper] > .jbj-form-popover {
-  background-color: #F7F2EA !important;
-  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%) !important;
+  background-color: #FDFBF7 !important;
+  background-image: none !important;
   border: 1px solid rgba(184, 149, 85, 0.55) !important;
   color: #1A1A1A !important;
   box-shadow: 0 12px 32px -12px rgba(26, 26, 26, 0.18), 0 4px 12px -4px rgba(184, 149, 85, 0.25) !important;
+  padding: 6px !important;
 }
+/* Premium row sizing for option items inside any popper surface — flags and
+   labels render at a comfortable size to match the country picker dropdown. */
 [data-radix-popper-content-wrapper] [role="option"],
 [data-radix-popper-content-wrapper] [role="menuitem"],
 [data-radix-popper-content-wrapper] [cmdk-item] {
   color: #1A1A1A !important;
+  min-height: 40px;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+[data-radix-popper-content-wrapper] [role="option"] :where(.text-lg, [class*="text-sm"]),
+[data-radix-popper-content-wrapper] [role="menuitem"] :where(.text-lg, [class*="text-sm"]) {
+  font-size: 18px !important;
+  line-height: 1 !important;
 }
 [data-radix-popper-content-wrapper] [role="option"]:hover,
 [data-radix-popper-content-wrapper] [role="option"][data-highlighted],
@@ -4561,7 +4577,7 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 [data-radix-popper-content-wrapper] [role="menuitem"][data-highlighted],
 [data-radix-popper-content-wrapper] [cmdk-item][data-selected="true"],
 [data-radix-popper-content-wrapper] [cmdk-item]:hover {
-  background-color: rgba(184, 149, 85, 0.12) !important;
+  background-color: rgba(184, 149, 85, 0.14) !important;
   color: #1A1A1A !important;
 }
 /* Explicit dark popovers — owner toolbars etc. opt in with [data-on-dark]. */
