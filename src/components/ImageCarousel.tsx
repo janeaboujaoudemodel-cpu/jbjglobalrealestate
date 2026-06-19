@@ -357,18 +357,18 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
             role="dialog"
             aria-modal="true"
             aria-label={`Image gallery — ${projectName}`}
-            className="fixed inset-0 z-[9999] bg-black flex flex-col select-none"
+            className="fixed inset-0 z-[9999] bg-[#F7F2EA] flex flex-col select-none"
             style={{ width: "100dvw", height: "100dvh" }}
             onWheel={onWheel}
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
             data-no-contrast-guard
           >
-            {/* Top bar */}
-            <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-black/70 backdrop-blur-sm border-b border-white/10">
-              <div className="text-white text-sm md:text-base font-semibold truncate">
+            {/* Top bar — champagne with gold hairline */}
+            <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-[#FDFBF7]/95 backdrop-blur-sm border-b border-[#B89555]/40">
+              <div className="text-[#1A1A1A] text-sm md:text-base font-semibold truncate">
                 {projectName}
-                <span className="ml-3 text-white/60 font-normal tabular-nums">
+                <span className="ml-3 text-[#1A1A1A]/60 font-normal tabular-nums">
                   {fsIndex + 1} / {total}
                 </span>
               </div>
@@ -376,31 +376,31 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                 <button
                   type="button"
                   onClick={() => handleDownload(images[fsIndex].image_url, fsIndex)}
-                  className="h-10 w-10 md:h-11 md:w-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-colors"
+                  className="h-10 w-10 md:h-11 md:w-11 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555]/70 flex items-center justify-center transition-colors shadow-sm"
                   aria-label="Download image"
                   title="Download"
                 >
-                  <Download className="w-5 h-5 text-white" />
+                  <Download className="w-5 h-5 text-[#1A1A1A]" />
                 </button>
                 <button
                   type="button"
                   onClick={closeFullscreen}
-                  className="h-10 w-10 md:h-11 md:w-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-colors"
+                  className="h-10 w-10 md:h-11 md:w-11 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555]/70 flex items-center justify-center transition-colors shadow-sm"
                   aria-label="Close gallery"
                   title="Close"
                 >
-                  <X className="w-5 h-5 text-white" />
+                  <X className="w-5 h-5 text-[#1A1A1A]" />
                 </button>
               </div>
             </div>
 
-            {/* Stage */}
-            <div className="relative flex-1 flex items-center justify-center overflow-hidden">
+            {/* Stage — image fills available space */}
+            <div className="relative flex-1 flex items-center justify-center overflow-hidden bg-[#F7F2EA] p-2 md:p-4">
               <img
                 key={images[fsIndex].id}
                 src={getHighResImageUrl(images[fsIndex].image_url)}
                 alt={images[fsIndex].alt_text || `Photo ${fsIndex + 1}`}
-                className="max-w-full max-h-full object-contain"
+                className="w-full h-full object-contain"
                 draggable={false}
               />
 
@@ -409,26 +409,26 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                   <button
                     type="button"
                     onClick={fsPrev}
-                    className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 h-12 w-12 md:h-14 md:w-14 rounded-full bg-white/10 hover:bg-white/25 border border-white/30 backdrop-blur-sm flex items-center justify-center transition-colors"
+                    className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 h-12 w-12 md:h-14 md:w-14 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555]/70 backdrop-blur-sm flex items-center justify-center transition-colors shadow-md"
                     aria-label="Previous photo"
                   >
-                    <ArrowLeft className="w-6 h-6 md:w-7 md:h-7 text-white" />
+                    <ArrowLeft className="w-6 h-6 md:w-7 md:h-7 text-[#1A1A1A]" />
                   </button>
                   <button
                     type="button"
                     onClick={fsNext}
-                    className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 h-12 w-12 md:h-14 md:w-14 rounded-full bg-white/10 hover:bg-white/25 border border-white/30 backdrop-blur-sm flex items-center justify-center transition-colors"
+                    className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 h-12 w-12 md:h-14 md:w-14 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555]/70 backdrop-blur-sm flex items-center justify-center transition-colors shadow-md"
                     aria-label="Next photo"
                   >
-                    <ArrowRight className="w-6 h-6 md:w-7 md:h-7 text-white" />
+                    <ArrowRight className="w-6 h-6 md:w-7 md:h-7 text-[#1A1A1A]" />
                   </button>
                 </>
               )}
             </div>
 
-            {/* Thumbnail filmstrip */}
+            {/* Thumbnail filmstrip — champagne tone */}
             {hasMultiple && (
-              <div className="bg-black/80 backdrop-blur-sm border-t border-white/10 px-3 md:px-6 py-3 overflow-x-auto">
+              <div className="bg-[#FDFBF7]/95 backdrop-blur-sm border-t border-[#B89555]/40 px-3 md:px-6 py-3 overflow-x-auto">
                 <div className="flex gap-2 min-w-min">
                   {images.map((img, i) => (
                     <button
@@ -436,7 +436,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                       type="button"
                       onClick={() => setFsIndex(i)}
                       className={`relative h-14 md:h-16 aspect-[4/3] rounded overflow-hidden border-2 flex-shrink-0 transition-all ${
-                        i === fsIndex ? "border-white scale-105" : "border-transparent opacity-60 hover:opacity-100"
+                        i === fsIndex ? "border-[#B89555] scale-105" : "border-transparent opacity-70 hover:opacity-100"
                       }`}
                       aria-label={`Go to photo ${i + 1}`}
                     >
