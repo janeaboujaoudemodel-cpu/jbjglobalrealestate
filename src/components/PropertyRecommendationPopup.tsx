@@ -126,44 +126,39 @@ const PropertyRecommendationPopup = () => {
     }
 
     const primaryArea = history.areas[history.areas.length - 1] || "";
+    const primaryDeveloper = history.developers[history.developers.length - 1] || "";
     setTopArea(primaryArea);
 
-    let query = supabase
-      .from("projects")
-      .select("id, name, area_name, developer_name, price_from, cover_image_url, slug")
-      .eq("is_published", true)
-      .or("listing_kind.is.null,listing_kind.neq.leasing")
-      .not("sale_status", "ilike", "%sold%")
-      .limit(3);
-
-    if (primaryArea) {
-      query = query.ilike("area_name", `%${primaryArea}%`);
-    }
-
-    const { data } = await query;
-    let results = (data as RecommendedProject[] | null) || [];
-
-    // Backfill to always get 3 results
-    if (results.length < 3) {
-      const existingIds = results.map(r => r.id);
-      const needed = 3 - results.length;
-      let backfillQuery = supabase
-        .from("projects")
-        .select("id, name, area_name, developer_name, price_from, cover_image_url, slug")
+    const baseSelect = "id, name, area_name, developer_name, price_from, cover_image_url, slug";
+    const baseFilter = (q: any) =>
+      q
         .eq("is_published", true)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
-        .not("sale_status", "ilike", "%sold%")
+        .not("sale_status", "ilike", "%sold%");
+
+    // 40% developer-weighted: pull up to 2 from last viewed developer first.
+    let results: RecommendedProject[] = [];
+    if (primaryDeveloper) {
+      const { data: devData } = await baseFilter(
+        supabase.from("projects").select(baseSelect),
+      )
+        .ilike("developer_name", `%${primaryDeveloper}%`)
         .order("created_at", { ascending: false })
-        .limit(needed + 5);
+        .limit(2);
+      if (devData) results = devData as RecommendedProject[];
+    }
 
-      if (existingIds.length > 0) {
-        backfillQuery = backfillQuery.not("id", "in", `(${existingIds.join(",")})`);
-      }
-
-      const { data: fallback } = await backfillQuery;
-      if (fallback) {
-        const extras = (fallback as RecommendedProject[]).slice(0, needed);
-        results = [...results, ...extras];
+    // 40% area-weighted: fill remainder from last viewed area.
+    if (results.length < 3 && primaryArea) {
+      const need = 3 - results.length;
+      const existing = results.map((r) => r.id);
+      let q = baseFilter(supabase.from("projects").select(baseSelect))
+        .ilike("area_name", `%${primaryArea}%`)
+        .limit(need + 3);
+      if (existing.length) q = q.not("id", "in", `(${existing.join(",")})`);
+      const { data: areaData } = await q;
+      if (areaData) {
+        results = [...results, ...(areaData as RecommendedProject[]).slice(0, need)];
       }
     }
 
