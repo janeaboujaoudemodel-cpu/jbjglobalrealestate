@@ -6351,70 +6351,14 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 
 
 /* =========================================================================
- * GLOBAL FORM DROPDOWN GOLD LOCK
- * All form dropdown triggers (Select, Combobox, Popover triggers inside a
- * <form> or [data-jbj-form]) render with the same metallic champagne-gold
- * gradient as [data-phone-code-trigger]. Active option inside popper gets
- * a faded gold-gradient highlight (matches "United Arab Emirates" reference).
- * Opt-outs: [data-no-gold-trigger], [data-cta], dark/owner surfaces.
+ * FORM DROPDOWN GOLD LOCK — REMOVED
+ * Per spec: only the phone country trigger ([data-phone-code-trigger]) and
+ * primary CTAs (Request Callback / Submit) wear the metallic gold gradient.
+ * All other form selects (Select language, Select time slot, Service Needed,
+ * Timeline, Bedrooms, etc.) render with the default champagne/ink field
+ * styling — NOT gold. Do not re-add a global gold rule for form triggers.
  * ========================================================================= */
-:where(form, [data-jbj-form])
-  :is(
-    [role="combobox"],
-    button[data-radix-select-trigger],
-    button[role="combobox"],
-    [data-radix-popover-trigger][data-form-trigger]
-  ):not([data-no-gold-trigger]):not([data-cta]):not([data-allow-dark-cta]):not([data-on-dark]):not(.jj-cta-dark):not(.jj-cta-champagne):not(.jj-cta-outline):not([data-phone-code-trigger]),
-:where(form, [data-jbj-form])
-  :is(
-    [role="combobox"],
-    button[data-radix-select-trigger],
-    button[role="combobox"]
-  ):not([data-no-gold-trigger]):not([data-cta]):not([data-allow-dark-cta]):not([data-on-dark]):hover {
-  background-color: transparent !important;
-  background-image: linear-gradient(
-    135deg,
-    #d8b86a 0%,
-    #f4e3a8 25%,
-    #b89555 50%,
-    #f4e3a8 75%,
-    #d8b86a 100%
-  ) !important;
-  background-size: 220% 220% !important;
-  background-position: 0% 50%;
-  border: 1px solid rgba(184, 149, 85, 0.85) !important;
-  border-radius: 0.5rem !important;
-  color: #3a2a08 !important;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 244, 210, 0.45),
-    inset 0 -1px 2px rgba(0, 0, 0, 0.18),
-    0 6px 18px -10px rgba(184, 149, 85, 0.55) !important;
-  transition: background-position 400ms ease, border-color 200ms ease !important;
-}
-:where(form, [data-jbj-form])
-  :is([role="combobox"], button[data-radix-select-trigger], button[role="combobox"]):not([data-no-gold-trigger]):not([data-cta]):hover {
-  background-position: 100% 50% !important;
-  border-color: rgba(184, 149, 85, 1) !important;
-}
-:where(form, [data-jbj-form])
-  :is([role="combobox"], button[data-radix-select-trigger], button[role="combobox"]):not([data-no-gold-trigger]):not([data-cta])
-  :is(span, svg, [class*="lucide"]) {
-  color: #3a2a08 !important;
-  stroke: #3a2a08 !important;
-  -webkit-text-fill-color: #3a2a08 !important;
-  opacity: 1 !important;
-}
 
-/* Placeholder text inside gold triggers stays readable ink */
-:where(form, [data-jbj-form])
-  :is([role="combobox"], button[data-radix-select-trigger], button[role="combobox"]):not([data-no-gold-trigger]):not([data-cta])
-  [data-placeholder],
-:where(form, [data-jbj-form])
-  :is([role="combobox"], button[data-radix-select-trigger], button[role="combobox"]):not([data-no-gold-trigger]):not([data-cta])
-  > span:first-child {
-  color: #3a2a08 !important;
-  opacity: 0.85 !important;
-}
 
 /* Active / selected option inside any popper — faded gold gradient pill */
 [data-radix-popper-content-wrapper] [data-radix-select-item][data-state="checked"],
