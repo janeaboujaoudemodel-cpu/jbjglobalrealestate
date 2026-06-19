@@ -1287,6 +1287,8 @@ export default function ProjectDetailLayout({
                     currentProjectId={project.id}
                     currentProjectName={project.name}
                     currentProjectSlug={project.slug ?? null}
+                    currentDeveloperId={project.developer?.id ?? (project as any).developer_id ?? null}
+                    currentDeveloperName={project.developer?.name ?? null}
                     latitude={typeof project.latitude === 'number' ? project.latitude : null}
                     longitude={typeof project.longitude === 'number' ? project.longitude : null}
                     areaName={project.area_name}
