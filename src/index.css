@@ -4255,21 +4255,10 @@ hr[data-gold-hairline],
      (bg-popover token is near-white); we force transparent so the
      parent champagne surface shows through.
    ============================================================ */
-button[data-phone-code-trigger],
-button[data-phone-code-trigger]:hover,
-button[data-phone-code-trigger]:focus,
-button[data-phone-code-trigger]:focus-visible {
-  background-color: #F7F2EA !important;
-  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%) !important;
-  border: 1px solid rgba(184, 149, 85, 0.55) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-button[data-phone-code-trigger]:hover {
-  background-color: #EFE6D6 !important;
-  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 100%) !important;
-  border-color: #B89555 !important;
-}
+/* Phone trigger metallic surface is defined LATER in this file, near the
+   global popper-content lock. The metallic rules there win because they
+   come later in cascade order. This block intentionally left as a no-op
+   placeholder so future edits land in one place. */
 button[data-phone-code-trigger] :is(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger]:hover :is(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]),
