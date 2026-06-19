@@ -89,7 +89,7 @@ const CurrencyExchange = lazy(() => import("@/pages/services/CurrencyExchange"))
 const Concierge = lazy(() => import("@/pages/services/Concierge"));
 const CompanySetup = lazy(() => import("@/pages/services/CompanySetup"));
 const SignatureCollection = lazy(() => import("@/pages/services/SignatureCollection"));
-const AITools = lazy(() => import("@/pages/services/AITools"));
+
 const BrokerCertification = lazy(() => import("@/pages/services/BrokerCertification"));
 const ComplaintProcedures = lazy(() => import("@/pages/services/ComplaintProcedures"));
 const CustomerHappinessCenter = lazy(() => import("@/pages/services/CustomerHappinessCenter"));
