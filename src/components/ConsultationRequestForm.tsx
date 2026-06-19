@@ -329,67 +329,98 @@ export const ConsultationRequestForm = ({
             />
           </div>
 
-          {/* Bedrooms — full width, professional segmented pills */}
+          {/* Bedrooms — multi-select segmented pills */}
           <FormField
             control={form.control}
             name="bedrooms"
-            render={({ field }) => (
-              <FormItem>
-                <p className="text-[#1A1A1A] text-sm font-medium mb-2">Bedrooms</p>
-                <div className="flex flex-wrap gap-2">
-                  {BEDROOM_OPTIONS.map((b) => {
-                    const active = field.value === b.value;
-                    return (
-                      <button
-                        key={b.value}
-                        type="button"
-                        onClick={() => field.onChange(active ? "" : b.value)}
-                        data-cta={active ? "champagne-active" : undefined}
-                        className={
-                          active
-                            ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
-                            : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
-                        }
-                      >
-                        {b.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const selected = (field.value || "")
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean);
+              const toggle = (v: string) => {
+                const next = selected.includes(v)
+                  ? selected.filter((x) => x !== v)
+                  : [...selected, v];
+                field.onChange(next.join(","));
+              };
+              return (
+                <FormItem>
+                  <p className="text-[#1A1A1A] text-sm font-medium mb-2">Bedrooms <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
+                  <div className="flex flex-wrap gap-2">
+                    {BEDROOM_OPTIONS.map((b) => {
+                      const active = selected.includes(b.value);
+                      return (
+                        <button
+                          key={b.value}
+                          type="button"
+                          onClick={() => toggle(b.value)}
+                          data-cta={active ? "champagne-active" : undefined}
+                          className={
+                            active
+                              ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
+                              : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
+                          }
+                        >
+                          {b.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </FormItem>
+              );
+            }}
           />
 
-          {/* Preferred Size — full width, market-bucket pills (no broken min/max inputs) */}
+          {/* Preferred Size — multi-select bucket pills */}
           <FormField
             control={form.control}
             name="sizeBucket"
-            render={({ field }) => (
-              <FormItem>
-                <p className="text-[#1A1A1A] text-sm font-medium mb-2">Preferred Size</p>
-                <div className="flex flex-wrap gap-2">
-                  {SIZE_BUCKETS.map((b) => {
-                    const active = (field.value || "any") === b.value;
-                    return (
-                      <button
-                        key={b.value}
-                        type="button"
-                        onClick={() => field.onChange(b.value)}
-                        data-cta={active ? "champagne-active" : undefined}
-                        className={
-                          active
-                            ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
-                            : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
-                        }
-                      >
-                        {b.label}
-                      </button>
-                    );
-                  })}
-                </div>
-                <p className="text-[#1A1A1A]/60 text-xs mt-2">Optional — helps us match you to the right unit mix.</p>
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const selected = (field.value || "")
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean);
+              const toggle = (v: string) => {
+                if (v === "any") {
+                  field.onChange("any");
+                  return;
+                }
+                const without = selected.filter((x) => x !== "any");
+                const next = without.includes(v)
+                  ? without.filter((x) => x !== v)
+                  : [...without, v];
+                field.onChange(next.length ? next.join(",") : "any");
+              };
+              return (
+                <FormItem>
+                  <p className="text-[#1A1A1A] text-sm font-medium mb-2">Preferred Size <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
+                  <div className="flex flex-wrap gap-2">
+                    {SIZE_BUCKETS.map((b) => {
+                      const active =
+                        (b.value === "any" && (!selected.length || selected.includes("any"))) ||
+                        selected.includes(b.value);
+                      return (
+                        <button
+                          key={b.value}
+                          type="button"
+                          onClick={() => toggle(b.value)}
+                          data-cta={active ? "champagne-active" : undefined}
+                          className={
+                            active
+                              ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
+                              : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
+                          }
+                        >
+                          {b.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="text-[#1A1A1A]/60 text-xs mt-2">Optional — helps us match you to the right unit mix.</p>
+                </FormItem>
+              );
+            }}
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
