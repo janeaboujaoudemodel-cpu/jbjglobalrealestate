@@ -287,23 +287,23 @@ const verdictStyles: Record<
   { bg: string; ring: string; fg: string; Icon: typeof Check; label: string }
 > = {
   match: {
-    bg: "rgba(94,234,212,0.20)",
-    ring: "rgba(94,234,212,0.72)",
-    fg: "#5EEAD4",
+    bg: "rgba(16,185,129,0.12)",
+    ring: "rgba(16,185,129,0.55)",
+    fg: "#047857",
     Icon: Check,
     label: "Match",
   },
   close: {
-    bg: "rgba(34,211,238,0.14)",
-    ring: "rgba(34,211,238,0.50)",
-    fg: "#67E8F9",
+    bg: "rgba(217,119,6,0.12)",
+    ring: "rgba(217,119,6,0.55)",
+    fg: "#B45309",
     Icon: Minus,
     label: "Close",
   },
   miss: {
-    bg: "rgba(103,232,249,0.07)",
-    ring: "rgba(103,232,249,0.25)",
-    fg: "#A0D7DC",
+    bg: "rgba(178,58,72,0.10)",
+    ring: "rgba(178,58,72,0.45)",
+    fg: "#B23A48",
     Icon: X,
     label: "Miss",
   },
