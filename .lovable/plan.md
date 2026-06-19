@@ -27,15 +27,15 @@ On the brochure cover thumbnail in **Project Brochure** card and the **Project D
 - Increase title contrast: white text + subtle gold underline, project name in 22–24px semibold, wordmark in 11px tracked uppercase.
 - Same treatment applied to the small "Brochure" badge chip on Project Documents tile (champagne pill, ink text, gold hairline — not faded translucent black).
 
-## 4. Mortgage Calculator — Property Finder Parity
+## 4. Mortgage Calculator — Property Finder Parity ✅
 
-Match Property Finder's calculator feature set while keeping current JBJ champagne/gold UI, layout, and typography:
-- **Residency toggle:** Resident (UAE National / Expat) vs Non-Resident with different max LTV (80% / 75% / 50%).
-- **Inputs:** Property price, down payment (% + AED, linked), loan term (years 5–25), interest rate, type (fixed/variable).
-- **Fees breakdown:** DLD 4%, agency 2%, mortgage registration 0.25%, valuation, bank arrangement 1%, NOC.
-- **Outputs:** Monthly installment, total interest, total payable, amortization schedule (collapsible table), affordability check (monthly income → DBR 50% cap).
-- **Comparison:** side-by-side 2 banks/rates.
-- No color/layout changes beyond adding the new fields into the existing card grid.
+Added `MortgageParityPanel` (rendered under both compact and full views) covering:
+- Residency toggle (UAE National 85% / Expat 80% / Non-Resident 50%) with live LTV-vs-cap check.
+- Affordability check: monthly income input, 50% DBR cap, ratio, pass/fail badge.
+- One-time fees breakdown: DLD 4%, agency 2%, mortgage reg 0.25%+290, bank arrangement 1%, valuation, trustee, NOC + total upfront in price-orange.
+- Side-by-side bank rate comparison with monthly delta.
+- Collapsible yearly amortization schedule (principal/interest/balance).
+- Preserves champagne+gold UI on default theme; auto-flips to navy glass when `themeVariant="navy"`.
 
 ## 5. Dubai Market Intelligence Upgrade
 
