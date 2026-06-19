@@ -381,7 +381,7 @@ export function ProjectInquiryForm({
               <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
                 <SelectValue placeholder="Select bedrooms" />
               </SelectTrigger>
-              <SelectContent className="bg-background border-border z-[9999]">
+              <SelectContent className="bg-background border-border">
                 {BEDROOM_OPTIONS.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
@@ -453,7 +453,7 @@ export function ProjectInquiryForm({
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-full p-0 z-[9999] bg-background border-border" align="start">
+              <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-background border-border" align="start">
                 <Command>
                   <CommandInput 
                     placeholder="Search developers..." 
@@ -503,7 +503,7 @@ export function ProjectInquiryForm({
             <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
               <SelectValue placeholder="Select emirate..." />
             </SelectTrigger>
-            <SelectContent className="bg-background border-border z-[9999]">
+            <SelectContent className="bg-background border-border">
               {UAE_EMIRATES.map(emirate => (
                 <SelectItem key={emirate.value} value={emirate.value}>
                   {emirate.label}
@@ -552,7 +552,7 @@ export function ProjectInquiryForm({
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-full p-0 z-[9999] bg-background border-border" align="start">
+              <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-background border-border" align="start">
                 <Command>
                   <CommandInput 
                     placeholder="Search locations..." 
@@ -600,7 +600,7 @@ export function ProjectInquiryForm({
               <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
                 <SelectValue placeholder="Select timeline" />
               </SelectTrigger>
-              <SelectContent className="bg-background border-border z-[9999]">
+              <SelectContent className="bg-background border-border">
                 {TIMELINE_OPTIONS.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
@@ -619,7 +619,7 @@ export function ProjectInquiryForm({
               <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
                 <SelectValue placeholder="Select time" />
               </SelectTrigger>
-              <SelectContent className="bg-background border-border z-[9999]">
+              <SelectContent className="bg-background border-border">
                 {CONTACT_TIME_OPTIONS.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
