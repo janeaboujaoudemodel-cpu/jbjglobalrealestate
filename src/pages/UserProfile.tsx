@@ -59,6 +59,7 @@ const UserProfile = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user, signOut } = useAuth();
+  const { isBrokerMode } = useUserMode();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
