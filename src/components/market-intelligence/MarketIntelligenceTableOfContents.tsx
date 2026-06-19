@@ -172,6 +172,8 @@ export const MarketIntelligenceTableOfContents = ({
                   <button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
+                    data-surface={activeId === item.id ? "ink" : "light"}
+                    data-no-contrast-guard={activeId === item.id ? "" : undefined}
                     className={cn(
                       "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md text-left transition-all border text-[13px]",
                         activeId === item.id
