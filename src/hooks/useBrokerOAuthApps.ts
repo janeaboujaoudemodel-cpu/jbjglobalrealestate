@@ -42,19 +42,21 @@ export function useSaveBrokerOAuthApp() {
   return useMutation({
     mutationFn: async (v: { provider: OAuthProvider; client_id: string; client_secret: string; label?: string }) => {
       if (!user?.id) throw new Error("Not signed in");
+      const base: Record<string, unknown> = {
+        user_id: user.id,
+        provider: v.provider,
+        client_id: v.client_id.trim(),
+        label: v.label?.trim() || null,
+        is_active: true,
+      };
+      // SECURITY: only write client_secret when the user typed a new one.
+      // The stored secret is never returned to the client, so blank means "keep current".
+      if (v.client_secret && v.client_secret.trim()) {
+        base.client_secret = v.client_secret.trim();
+      }
       const { error } = await supabase
         .from("broker_email_oauth_apps")
-        .upsert(
-          {
-            user_id: user.id,
-            provider: v.provider,
-            client_id: v.client_id.trim(),
-            client_secret: v.client_secret.trim(),
-            label: v.label?.trim() || null,
-            is_active: true,
-          },
-          { onConflict: "user_id,provider" },
-        );
+        .upsert(base as any, { onConflict: "user_id,provider" });
       if (error) throw error;
     },
     onSuccess: () => {
