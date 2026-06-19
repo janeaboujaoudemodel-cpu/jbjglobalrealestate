@@ -1,14 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { LucideIcon, List, ChevronDown, ChevronUp, HelpCircle, ArrowUpRight } from "lucide-react";
+import { LucideIcon, List, ChevronDown, ChevronUp, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { scrollToId } from "@/lib/scroll";
-import {
-  MI_H4,
-  MI_CAPTION,
-} from "./MarketIntelligenceTypography";
 
 interface TOCItem {
   id: string;
@@ -29,8 +25,6 @@ interface MarketIntelligenceTableOfContentsProps {
   ctaAction?: CTAAction;
 }
 
-const TOOLTIP_DISMISSED_KEY = "jbj_market_intel_nav_tooltip_dismissed";
-
 export const MarketIntelligenceTableOfContents = ({
   items,
   title = "In This Section",
@@ -39,16 +33,7 @@ export const MarketIntelligenceTableOfContents = ({
 }: MarketIntelligenceTableOfContentsProps) => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
   const isScrollingRef = useRef(false);
-
-  useEffect(() => {
-    const dismissed = localStorage.getItem(TOOLTIP_DISMISSED_KEY);
-    if (!dismissed) {
-      const timer = setTimeout(() => setShowTooltip(true), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -91,48 +76,8 @@ export const MarketIntelligenceTableOfContents = ({
     }, 120);
   };
 
-  const handleDismissTooltip = () => {
-    setShowTooltip(false);
-    localStorage.setItem(TOOLTIP_DISMISSED_KEY, "true");
-  };
-
   return (
     <div className="surface-light fixed right-4 lg:right-6 top-28 z-40 w-60 lg:w-64" data-surface="light">
-      {/* Tooltip */}
-      <AnimatePresence>
-        {showTooltip && !isMinimized && (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="absolute right-full mr-4 top-0 w-64 z-50"
-          >
-            <div className="rounded-xl p-4 shadow-xl border bg-[#FDFBF7] border-[#B89555]/40">
-              <div className="flex items-start gap-3 mb-3">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-[#1A1A1A]">
-                  <HelpCircle className="w-4 h-4 text-white allow-white" />
-                </div>
-                <div>
-                  <h4 className={`${MI_H4} mb-1 text-[#1A1A1A]`}>Quick Navigation</h4>
-                  <p className={`${MI_CAPTION} text-[#1A1A1A]/70`}>
-                    Click any section button to jump directly to that part of the page. The active section is highlighted.
-                  </p>
-                </div>
-              </div>
-              <Button
-                onClick={handleDismissTooltip}
-                size="sm"
-                variant="primary"
-                className="w-full text-xs"
-              >
-                I Understand
-              </Button>
-            </div>
-            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-[#FDFBF7]" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Main TOC Container — capped to half viewport, internal scroll, sticky CTA footer */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
