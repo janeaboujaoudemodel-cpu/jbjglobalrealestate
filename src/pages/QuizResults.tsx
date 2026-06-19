@@ -1454,19 +1454,37 @@ const QuizResults = () => {
     if (brokerBrand) {
       // Two-column co-branded footer
       const fy = footerTop + 16;
+      let leftX = M;
+      // Broker logo (max 36x36) on the left, if present
+      if (brokerBrand.logoUrl) {
+        try {
+          const lg = await loadImageAsDataUrl(brokerBrand.logoUrl, 600);
+          if (lg) {
+            doc.addImage(lg.data, lg.type, M, footerTop + 8, 36, 36, undefined, "FAST");
+            leftX = M + 44;
+          }
+        } catch { /* ignore */ }
+      }
       // Left: agent + company
       doc.setFont("helvetica", "bold");
       doc.setFontSize(10.5);
       doc.setTextColor(...ink);
-      doc.text(brokerBrand.agentName || "Your Agent", M, fy);
+      doc.text(brokerBrand.agentName || "Your Agent", leftX, fy);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(9);
       doc.setTextColor(90, 90, 90);
-      if (brokerBrand.title) doc.text(brokerBrand.title, M, fy + 12);
+      if (brokerBrand.title) doc.text(brokerBrand.title, leftX, fy + 12);
       if (brokerBrand.company) {
         doc.setFont("helvetica", "bold");
         doc.setTextColor(...gold);
-        doc.text(brokerBrand.company, M, fy + 24);
+        doc.text(brokerBrand.company, leftX, fy + 24);
+      }
+      if (brokerBrand.tagline) {
+        doc.setFont("helvetica", "italic");
+        doc.setFontSize(8);
+        doc.setTextColor(120, 120, 120);
+        const tg = doc.splitTextToSize(brokerBrand.tagline, pageW * 0.55) as string[];
+        doc.text(tg[0] || "", leftX, fy + 36);
       }
       // Right: phone / email / whatsapp
       const rx = pageW - M;
