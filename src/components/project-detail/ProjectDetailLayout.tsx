@@ -805,27 +805,6 @@ export default function ProjectDetailLayout({
                         }
                       : null,
                   });
-                  await generateBrandedProjectDeck({
-                    projectName: project.name,
-                    developerName: project.developer?.name || null,
-                    location: project.location || null,
-                    priceFrom: project.price_from ?? null,
-                    bedroomsText: bedroomsText || null,
-                    sizeText: sizeText || null,
-                    handoverText: getProjectStatus(project).label,
-                    description: project.description || null,
-                    heroImageUrl: heroImage?.url || null,
-                    broker: brokerRow
-                      ? {
-                          fullName: (brokerRow as any).full_name,
-                          email: (brokerRow as any).email,
-                          phone: (brokerRow as any).phone,
-                          logoUrl: (brokerRow as any).logo_url,
-                          headshotUrl: (brokerRow as any).headshot_url,
-                          agencyName: (brokerRow as any).agency_name,
-                        }
-                      : null,
-                  });
                 }}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white text-sm font-semibold border border-[#B89555]/40 shadow-sm transition-colors"
                 data-allow-dark-cta
