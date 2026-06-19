@@ -1,36 +1,83 @@
-## Goal
-Fix the project page so the broker tools no longer cover or cheapen the hero, remove the broken presentation editor experience entirely, and make “Generate branded presentation” a direct automatic download flow instead of sending users to `/presentations`.
+# Plan: Gallery, Map, Brochure, Mortgage, Market Intel & Developer Section Upgrade
 
-## Plan
-1. **Remove the broken presentation editor route**
-   - Remove the public `/presentations` route from the app.
-   - Remove the lazy import for `Presentations` in public routes.
-   - Any direct visit to `/presentations` will no longer open the broken editor; I will redirect it to a safe existing page or remove the route so the broken screen is inaccessible.
+## 1. Gallery — De-duplicate & Fix "+N" Lightbox
 
-2. **Remove the large rectangular broker tools card from the hero**
-   - Delete the current `<BrokerBrandedMaterialsCard />` placement under the hero CTAs because it hides the hero and creates the faded-title issue shown in your screenshot.
-   - Keep the existing hero actions only: **Download Brochure** and **Register Interest**.
-   - Do not add “Add Application”.
+**Problem:** Two near-identical photos (one low-res, one high-res) appear back-to-back. Clicking "+14" opens only one image instead of the full gallery.
 
-3. **Replace broker presentation generation with a direct download action**
-   - Add a compact broker-only action near the existing brochure/register buttons, not as a large card.
-   - Clicking **Generate branded presentation** will not navigate anywhere.
-   - It will trigger an automatic export/download flow with fixed JBJ standard colors and branding; users cannot change colors/templates/fonts.
-   - If broker logo/photo is missing, show a small premium inline notice or toast pointing to **Edit my brand**, without covering the hero.
+- Add perceptual de-duplication in `ProjectMediaSection.tsx` image loader:
+  - Normalize URLs (strip CDN size suffixes like `_thumb`, `?w=`, `/w_400/`) and group by base key.
+  - When duplicates exist, keep the largest-resolution variant (use `getHighResImageUrl` + natural-size check on load).
+  - Hash-fallback: load first 8KB and dedupe by SHA1 prefix for cases where URLs differ but bytes match.
+- Apply globally on every project — not just Distrikt — so this never recurs.
+- "+N" tile click: open the full-screen lightbox at index `visibleCount` with all photos paginated and arrow/keyboard navigation. Currently it only opens the single tile underneath.
 
-4. **Clean broken presentation entry points**
-   - Remove or redirect visible links to the old presentation editor from places like AI Hub, footer, command palette, and owner AI tools where they point to `/presentations`.
-   - Keep other document/presentation export logic elsewhere only if it does not open the broken editor.
+## 2. Project Map — Show Nearby Projects
 
-5. **Visual and technical validation**
-   - Re-open the project page in broker mode.
-   - Confirm the hero is not hidden by a rectangle.
-   - Confirm titles/buttons are high-contrast and not faded.
-   - Confirm only intended actions appear: Download Brochure, Register Interest, and the compact direct branded presentation download if broker mode applies.
-   - Confirm `/presentations` no longer opens the broken “Untitled Presentation” editor.
+In the project's Location/Map section, render a single Mapbox/Google map containing:
+- **Red pin** = current project.
+- **Blue pins** = up to ~30 other projects within a radius (e.g. 5 km) queried from `projects` table by lat/lng bounding box, excluding leasing.
+- Hover/click a blue pin → mini-card with cover image, name, developer, price-from, "View" link.
+- Toggle filter chips (All / Same developer / Same area) above the map.
 
-## Files expected to change
-- `src/components/project-detail/ProjectDetailLayout.tsx`
-- `src/components/project-detail/BrokerBrandedMaterialsCard.tsx` or remove its usage
-- `src/routes/PublicRoutes.tsx`
-- Any visible navigation/tool entries that link to `/presentations`
+## 3. Brochure Readability Fixes
+
+On the brochure cover thumbnail in **Project Brochure** card and the **Project Documents** library card:
+- The "JBJ GLOBAL REAL ESTATE" wordmark + project name + "Brochure" label sit on a dark photo with no scrim → unreadable.
+- Add a fixed gradient scrim (`linear-gradient(180deg, rgba(0,0,0,.1) 0%, rgba(0,0,0,.75) 100%)`) behind the title block.
+- Increase title contrast: white text + subtle gold underline, project name in 22–24px semibold, wordmark in 11px tracked uppercase.
+- Same treatment applied to the small "Brochure" badge chip on Project Documents tile (champagne pill, ink text, gold hairline — not faded translucent black).
+
+## 4. Mortgage Calculator — Property Finder Parity
+
+Match Property Finder's calculator feature set while keeping current JBJ champagne/gold UI, layout, and typography:
+- **Residency toggle:** Resident (UAE National / Expat) vs Non-Resident with different max LTV (80% / 75% / 50%).
+- **Inputs:** Property price, down payment (% + AED, linked), loan term (years 5–25), interest rate, type (fixed/variable).
+- **Fees breakdown:** DLD 4%, agency 2%, mortgage registration 0.25%, valuation, bank arrangement 1%, NOC.
+- **Outputs:** Monthly installment, total interest, total payable, amortization schedule (collapsible table), affordability check (monthly income → DBR 50% cap).
+- **Comparison:** side-by-side 2 banks/rates.
+- No color/layout changes beyond adding the new fields into the existing card grid.
+
+## 5. Dubai Market Intelligence Upgrade
+
+- **Daily refresh:** schedule cron edge function `refresh-dld-market` to pull latest DLD transactions daily; surface "Updated DD MMM YYYY" timestamp.
+- **Headline KPIs:** Yearly transaction volume + Daily transactions, large premium tiles (ink + gold hairline + price-orange value).
+- **Cash vs Mortgage donut:** swap green/brown for **black (#0A0A0A) + gold (#B89555)** primary, champagne secondary.
+- **Top 10 Areas / Top 10 Buyers:** the right→left white sweep highlight is glitchy. Replace with a static champagne row hover + gold left-border accent; rank number in gold hairline circle.
+- **"Notice something incorrect?" section:** lift from near-black slab to champagne raised band with ink text + gold hairline frame.
+- **"Expert Consultation" section:** upgrade to a premium card — ink background, gold hairline, JBJ monogram, Amanda portrait, single dark CTA, supporting trust line.
+
+## 6. Developer Section — More Projects + Inline Expansion
+
+Above Dubai Market Intelligence on the project page, when developer = e.g. Ammar:
+- Show "More projects by {Developer}" — grid of 3–4 per row × 2 rows (6–8 cards).
+- **View more** button expands inline (no route change) into a paginated/lazy-loaded panel staying on the same project page.
+- Add filter row inside the expanded panel: Area, Price range, Bedrooms, Handover, Status, Property type — same global filter chips used on /properties.
+
+## 7. Behavior-Driven Recommendations
+
+Continue the page with the existing sections (Request Consultation, Register Interest, Request Callback) and a new **Recommended for You** rail that adapts to user behavior:
+- Track searches/filters used (developer, area, price, bedrooms) in `browsing_history` (already exists).
+- Recommendation rules (priority):
+  1. If last search was developer-led → recommend same developer.
+  2. If area-led → same area.
+  3. If price-led → ±15% price band.
+  4. Fallback → trending.
+- Same engine powers the existing recommendations pop-up so behavior follows the user across pages.
+
+## 8. Validation
+
+- Browser-test the project page as a normal user at desktop (1920) and mobile (390):
+  - Confirm no duplicate gallery photos, +14 opens full lightbox.
+  - Map shows red + blue pins with mini-cards.
+  - Brochure titles legible at all states.
+  - Mortgage calculator shows new residency + fees + amortization.
+  - Market Intel: daily timestamp, black/gold donut, clean Top 10 hover, premium consultation card.
+  - Developer "View more" expands inline with filters.
+- Screenshot proof of each before/after for chat.
+
+## Technical Notes
+
+- Files likely touched: `ProjectMediaSection.tsx`, `ProjectMapSection.tsx` (new nearby query), `PremiumBrochureCard.tsx`, `ProjectDocumentsGrid` brochure card, `MortgageCalculator.tsx`, `OwnerMarketIntel.tsx` + public Market Intelligence page, `DeveloperMoreProjectsSection.tsx` (new), `RecommendedForYouRail.tsx` + `PropertyRecommendationPopup` reranker.
+- New edge function: `refresh-dld-market` (cron daily).
+- New DB read: `projects_near(lat, lng, radius_m)` RPC for map nearby pins.
+- Honors champagne/gold theme, no white-on-light, no gold fills (hairline only), price uses `<PricePill />`, dev names via `<DeveloperLink />`.

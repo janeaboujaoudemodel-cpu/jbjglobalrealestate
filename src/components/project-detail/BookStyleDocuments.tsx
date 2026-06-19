@@ -154,10 +154,10 @@ export default function BookStyleDocuments({
               <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-r from-[#0A0A0A] via-[#1A1A1A]/40 to-transparent z-10" />
               <div className="absolute left-[7px] top-3 bottom-3 w-px bg-[#B89555]/40 z-10" />
 
-              {/* Top-right type chip */}
-              <div className="absolute top-3 right-3 z-20 inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-[#1A1A1A]/85 backdrop-blur-sm ring-1 ring-[#B89555]/50">
+              {/* Top-right type chip — solid champagne pill for guaranteed legibility */}
+              <div className="absolute top-3 right-3 z-20 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F7F2EA] ring-1 ring-[#B89555]/70 shadow-sm">
                 <span className="text-[#B89555]">{icon}</span>
-                <span className="text-[10px] uppercase tracking-[0.14em] font-semibold text-[#F7F2EA] allow-white">{typeLabel}</span>
+                <span className="text-[10px] uppercase tracking-[0.16em] font-semibold text-[#1A1A1A]">{typeLabel}</span>
               </div>
 
               {/* Bottom label panel — solid champagne for guaranteed legibility */}

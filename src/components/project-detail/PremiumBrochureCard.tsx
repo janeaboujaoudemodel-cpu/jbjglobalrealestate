@@ -144,8 +144,9 @@ const PremiumBrochureCard = ({
             style={{ backgroundImage: `url(${projectImageUrl || BROCHURE_BG_URL})` }}
           />
           
-          {/* Lighter overlays — keep photo visible; readability comes from text panels */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
+          {/* Layered scrims — top + bottom — guarantee wordmark and title legibility on any photo */}
+          <div className="absolute inset-x-0 top-0 h-[42%] bg-gradient-to-b from-black/75 via-black/35 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
 
           {/* Premium Gold Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-tr from-gold/10 via-transparent to-gold/5" />
@@ -182,9 +183,9 @@ const PremiumBrochureCard = ({
               </div>
               <p
                 className="text-white text-[11px] font-semibold uppercase tracking-[0.22em] leading-none whitespace-nowrap"
-                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.55), 0 0 14px rgba(0,0,0,0.35)" }}
+                style={{ textShadow: "0 1px 3px rgba(0,0,0,0.85), 0 0 18px rgba(0,0,0,0.6)" }}
               >
-                <span style={{ color: "#E8C77A" }} className="font-bold">JBJ</span>{" "}
+                <span style={{ color: "#F0D78C" }} className="font-bold">JBJ</span>{" "}
                 <span className="font-light tracking-[0.26em]">Global Real Estate</span>
               </p>
             </div>
