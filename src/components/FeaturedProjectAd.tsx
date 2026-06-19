@@ -35,8 +35,10 @@ export const FeaturedProjectAd = ({
         to={`/project/${projectSlug}`}
         className="block group"
       >
-        <div 
-          className="relative overflow-hidden rounded-2xl border-2 border-[#B89555]/40 shadow-[0_8px_30px_rgba(200,167,102,0.25)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.35)] transition-all duration-500"
+        <div
+          data-on-dark
+          data-no-contrast-guard
+          className="allow-white relative overflow-hidden rounded-2xl border-2 border-[#B89555]/40 shadow-[0_8px_30px_rgba(200,167,102,0.25)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.35)] transition-all duration-500"
           style={{
             background: 'linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)'
           }}
