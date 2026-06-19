@@ -764,9 +764,141 @@ const AIHub = () => {
             </button>
           </div>
         </section>
+
+        {/* HOW IT WORKS */}
+        <section className="jj-band jj-band--surface py-16 md:py-20">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-10 tracking-tight">
+              How It Works
+            </h2>
+            <ol className="space-y-4">
+              {[
+                { n: 1, t: "Input your scenario", d: "Enter the verified figures you want to model." },
+                { n: 2, t: "Review structured outputs", d: "Tables and summaries reflect only the inputs you provide." },
+                { n: 3, t: "Save results to your dashboard", d: "Where the dashboard supports it, signed-in results are retained." },
+                { n: 4, t: "Share a formatted snapshot", d: "Brokers and teams can export a clean client-ready summary where available." },
+              ].map((s) => (
+                <li key={s.n} className="flex items-start gap-5 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 p-5">
+                  <span className="shrink-0 w-10 h-10 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 flex items-center justify-center text-[#1A1A1A] font-bold">
+                    {s.n}
+                  </span>
+                  <div>
+                    <div className="font-semibold text-[#1A1A1A]">{s.t}</div>
+                    <div className="text-sm text-[#1A1A1A]/70 mt-1">{s.d}</div>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* TRANSPARENCY & RESPONSIBLE USE — UAE-aligned */}
+        <section className="jj-band jj-band--raised py-16 md:py-20">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8 tracking-tight">
+              Transparency & Responsible Use
+            </h2>
+            <div className="rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 p-6 md:p-8">
+              <div className="flex items-start gap-4">
+                <Shield className="w-7 h-7 text-[#1A1A1A] shrink-0 mt-1" />
+                <div className="space-y-3 text-[#1A1A1A]/80 leading-relaxed">
+                  <p>
+                    Outputs are generated from the inputs you provide and structured logic. They are <strong>informational only</strong> and do not constitute investment, legal, tax, valuation, or regulated brokerage advice under UAE law.
+                  </p>
+                  <p>
+                    Official property valuations in the UAE must be issued by a <strong>RERA-certified valuer</strong> registered with the Dubai Land Department (DLD), or the equivalent authority in the relevant Emirate. Regulated brokerage activity in Dubai is governed by Law No. (6) of 2019 and Bylaw No. (85) of 2006.
+                  </p>
+                  <p>
+                    Personal data submitted to these tools is processed in line with UAE Federal Decree-Law No. 45 of 2021 on the Protection of Personal Data (PDPL). Where official datasets are referenced inside report modules, sources are shown alongside the figures.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ — UAE-aligned */}
+        <section id="ai-hub-faq" className="jj-band jj-band--surface py-16 md:py-20">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-10 tracking-tight">
+              Frequently Asked Questions
+            </h2>
+            <AIHubFaqSection />
+          </div>
+        </section>
       </main>
     </>
   );
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UAE-aligned FAQ (with JSON-LD)
+// ─────────────────────────────────────────────────────────────────────────────
+const AI_HUB_FAQS = [
+  {
+    question: "Do these tools guarantee returns?",
+    answer:
+      "No. All outputs are illustrative scenarios for informational purposes only. They are not investment advice under UAE Securities and Commodities Authority (SCA) rules and do not guarantee any financial outcome.",
+  },
+  {
+    question: "Can I use tool outputs as an official valuation?",
+    answer:
+      "No. Official property valuations in the UAE must be issued by a RERA-certified valuer registered with the Dubai Land Department (DLD), or the equivalent authority in the relevant Emirate. Tool outputs are indicative only.",
+  },
+  {
+    question: "Why do inputs matter so much?",
+    answer:
+      "Scenario accuracy depends entirely on the assumptions you enter. Inputs should reflect verified figures (DLD transaction records, signed agreements, official service charges). Inaccurate inputs produce non-representative outputs.",
+  },
+  {
+    question: "Can I save my results?",
+    answer:
+      "Yes, when logged in. Saved data is stored in line with UAE Federal Decree-Law No. 45 of 2021 on the Protection of Personal Data (PDPL); you may request export or deletion at any time.",
+  },
+  {
+    question: "Can I compare multiple projects?",
+    answer:
+      "Yes. Comparisons use publicly available project information and DLD-published data where applicable. Final terms must always be confirmed against the developer's official SPA and the RERA project trust (escrow) account details.",
+  },
+  {
+    question: "Do the tools work for all Emirates?",
+    answer:
+      "Tools are designed to be Emirate-agnostic. Regulatory references default to Dubai (RERA/DLD); Abu Dhabi (DMT/ADREC), Sharjah (SRERD) and other authorities have their own rules — always verify locally.",
+  },
+  {
+    question: "Can a broker generate a client PDF?",
+    answer:
+      "Yes, where the feature is available. Brokers must hold a valid RERA broker card and comply with Law No. (6) of 2019 and Bylaw No. (85) of 2006 regulating real estate brokers in Dubai. Generated PDFs must not be presented as regulated advice.",
+  },
+  {
+    question: "Can I request a custom tool?",
+    answer:
+      "Yes — submit a request via Concierge or Support. Custom tools that touch payments, escrow, or AML-regulated activity will be reviewed for UAE Central Bank and Ministry of Economy AML/CFT compliance before release.",
+  },
+];
+
+function AIHubFaqSection() {
+  return (
+    <>
+      <SEOFaqSchema faqs={AI_HUB_FAQS} />
+      <Accordion type="single" collapsible className="space-y-3">
+        {AI_HUB_FAQS.map((faq, i) => (
+          <AccordionItem
+            key={i}
+            value={`ai-hub-faq-${i}`}
+            className="rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 px-5"
+          >
+            <AccordionTrigger className="text-left text-[#1A1A1A] hover:no-underline py-4">
+              <span className="font-semibold">{faq.question}</span>
+            </AccordionTrigger>
+            <AccordionContent className="text-[#1A1A1A]/75 leading-relaxed pb-5">
+              {faq.answer}
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </>
+  );
+}
 
 export default AIHub;
