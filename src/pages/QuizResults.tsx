@@ -373,7 +373,7 @@ const QuizResults = () => {
           ? p.bedrooms_min === 0
             ? `Studio${p.bedrooms_max > 0 ? ` - ${p.bedrooms_max} BR` : ""}`
             : `${p.bedrooms_min} - ${p.bedrooms_max} BR`
-          : "Type TBC";
+          : "Bedroom mix on request";
       return [
         `#${i + 1} ${p.name}${badgeStr}`,
         `Developer: ${p.developer?.name || "N/A"}`,
@@ -680,7 +680,7 @@ const QuizResults = () => {
         ? p.bedrooms_min === 0
           ? `Studio${p.bedrooms_max > 0 ? `-${p.bedrooms_max} BR` : ""}`
           : `${p.bedrooms_min}-${p.bedrooms_max} BR`
-        : "Type TBC";
+        : "Bedroom mix on request";
     const fmtSize = (p: any) =>
       p.size_min_sqft && p.size_max_sqft
         ? `${p.size_min_sqft.toLocaleString()}-${p.size_max_sqft.toLocaleString()} sq ft`
@@ -1739,7 +1739,7 @@ const QuizResults = () => {
                           ? projects[0].bedrooms_min === 0
                             ? `Studio${projects[0].bedrooms_max > 0 ? ` - ${projects[0].bedrooms_max} BR` : ''}`
                             : `${projects[0].bedrooms_min} - ${projects[0].bedrooms_max} BR`
-                          : "Type TBC"}
+                          : "Bedroom mix on request"}
                       </p>
                     </div>
                   </div>
@@ -1814,7 +1814,7 @@ const QuizResults = () => {
                   ? project.bedrooms_min === 0
                     ? `Studio${project.bedrooms_max > 0 ? ` - ${project.bedrooms_max} BR` : ''}`
                     : `${project.bedrooms_min} - ${project.bedrooms_max} BR`
-                  : "Type TBC";
+                  : "Bedroom mix on request";
                 return (
                   <div key={project.id} className="aihf-panel relative group flex flex-col h-full rounded-2xl overflow-hidden min-h-[420px]">
                     <div className="absolute top-3 left-3 z-10 rounded-full jj-pill-active px-3 py-1">
