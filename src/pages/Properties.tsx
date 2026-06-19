@@ -1437,51 +1437,43 @@ const Properties = () => {
       )}
 
       {/* CONSOLIDATED: Unified "Confused About Where to Buy" Section with Consultation Form */}
-      <section className="py-16 sm:py-20 bg-[#F7F2EA]">
+      <section className="jj-band jj-band--surface py-16 sm:py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="jj-layer-2 p-6 sm:p-8 md:p-10 rounded-2xl">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                {/* Left: Content */}
-                <div className="text-center md:text-left">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full text-xs uppercase tracking-wider text-[#1A1A1A] mb-4">
-                    <HelpCircle className="w-3 h-3" />
-                    Get Expert Guidance
-                  </div>
-                  <h2 
-                    className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1A1A1A] mb-4"
-                  >
-                    Confused About Where to <span className="text-[#1A1A1A]">Buy or Invest</span> in Dubai?
-                  </h2>
-                  <p className="text-[#1A1A1A]/70 mb-6">
-                    Our experienced advisors help you navigate Dubai's dynamic real estate market. 
-                    Get personalized recommendations based on your goals, budget, and timeline.
-                  </p>
-                  <ul className="space-y-2 text-sm text-[#1A1A1A]/70 mb-6">
-                    <li className="flex items-center gap-2 justify-center md:justify-start">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]" />
-                      Flexible payment plans tailored to your investment timeline
-                    </li>
-                    <li className="flex items-center gap-2 justify-center md:justify-start">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]" />
-                      Trusted developers: Emaar, Damac, Sobha, Nakheel & more
-                    </li>
-                    <li className="flex items-center gap-2 justify-center md:justify-start">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]" />
-                      ROI projections and market insights included
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Right: Consultation Form */}
-                <div>
-                  <ConsultationRequestForm
-                    title="Request a Consultation"
-                    subtitle="Connect with our expert team for personalized guidance."
-                  />
-                </div>
-              </div>
+          {/* Top: centered content */}
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 border border-[#B89555]/40 rounded-full text-xs uppercase tracking-wider text-[#1A1A1A] mb-5">
+              <HelpCircle className="w-3 h-3" />
+              Get Expert Guidance
             </div>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1A1A1A] mb-4">
+              Confused About Where to <span className="text-[#1A1A1A]">Buy or Invest</span> in Dubai?
+            </h2>
+            <p className="text-[#1A1A1A]/70 mb-8 max-w-2xl mx-auto">
+              Our experienced advisors help you navigate Dubai's dynamic real estate market.
+              Get personalized recommendations based on your goals, budget, and timeline.
+            </p>
+            <ul className="grid sm:grid-cols-3 gap-4 text-sm text-[#1A1A1A]/80 mb-10 text-left sm:text-center">
+              <li className="flex items-start sm:items-center sm:flex-col gap-2 sm:gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] mt-1.5 sm:mt-0 shrink-0" />
+                Flexible payment plans tailored to your investment timeline
+              </li>
+              <li className="flex items-start sm:items-center sm:flex-col gap-2 sm:gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] mt-1.5 sm:mt-0 shrink-0" />
+                Trusted developers: Emaar, Damac, Sobha, Nakheel &amp; more
+              </li>
+              <li className="flex items-start sm:items-center sm:flex-col gap-2 sm:gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] mt-1.5 sm:mt-0 shrink-0" />
+                ROI projections and market insights included
+              </li>
+            </ul>
+          </div>
+
+          {/* Bottom: centered consultation form */}
+          <div className="max-w-2xl mx-auto">
+            <ConsultationRequestForm
+              title="Request a Consultation"
+              subtitle="Connect with our expert team for personalized guidance."
+            />
           </div>
         </div>
       </section>
