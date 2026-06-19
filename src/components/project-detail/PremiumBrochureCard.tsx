@@ -186,9 +186,11 @@ const PremiumBrochureCard = ({
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
             {/* Top: Brand mark — refined monogram + wordmark with strong scrim panel for guaranteed legibility */}
             <div
-              className="absolute top-4 left-8 flex items-center gap-2.5 pr-3 py-1.5 rounded-md"
+              data-no-contrast-guard
+              data-on-dark
+              className="absolute top-4 left-8 flex items-center gap-2.5 pr-3 py-1.5 rounded-md allow-white"
               style={{
-                background: "linear-gradient(90deg, rgba(8,12,20,0.78) 0%, rgba(8,12,20,0.55) 75%, rgba(8,12,20,0) 100%)",
+                background: "linear-gradient(90deg, rgba(8,12,20,0.88) 0%, rgba(8,12,20,0.65) 75%, rgba(8,12,20,0) 100%)",
                 paddingLeft: 6,
               }}
             >
@@ -209,13 +211,16 @@ const PremiumBrochureCard = ({
                 />
               </div>
               <p
-                className="text-white text-[12px] font-bold uppercase tracking-[0.22em] leading-none whitespace-nowrap"
-                style={{ textShadow: "0 1px 3px rgba(0,0,0,0.95), 0 0 18px rgba(0,0,0,0.7)" }}
+                data-no-contrast-guard
+                className="text-[12px] font-bold uppercase tracking-[0.22em] leading-none whitespace-nowrap allow-white"
+                style={{ color: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.95), 0 0 18px rgba(0,0,0,0.7)" }}
               >
                 <span style={{ color: "#F3D98A" }} className="font-extrabold">JBJ</span>{" "}
-                <span className="font-medium tracking-[0.24em]">Global Real Estate</span>
+                <span className="font-medium tracking-[0.24em]" style={{ color: "#FFFFFF" }}>Global Real Estate</span>
               </p>
             </div>
+
+
 
             {/* Bottom: Brochure info — solid near-black panel for guaranteed contrast on any photo */}
             <div
