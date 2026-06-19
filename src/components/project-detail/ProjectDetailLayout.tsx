@@ -781,9 +781,30 @@ export default function ProjectDetailLayout({
                   const { generateBrandedProjectDeck } = await import("@/utils/generateBrandedProjectDeck");
                   const { data: brokerRow } = await supabase
                     .from("crm_brokers")
-                    .select("full_name, email, phone, logo_url, headshot_url, agency_name")
+                    .select("full_name, personal_email, personal_phone, phone_e164, logo_url, headshot_url, current_company")
                     .eq("user_id", user?.id || "")
                     .maybeSingle();
+                  await generateBrandedProjectDeck({
+                    projectName: project.name,
+                    developerName: project.developer?.name || null,
+                    location: project.location || null,
+                    priceFrom: project.price_from ?? null,
+                    bedroomsText: bedroomsText || null,
+                    sizeText: sizeText || null,
+                    handoverText: getProjectStatus(project).label,
+                    description: project.description || null,
+                    heroImageUrl: heroImage?.url || null,
+                    broker: brokerRow
+                      ? {
+                          fullName: (brokerRow as any).full_name,
+                          email: (brokerRow as any).personal_email,
+                          phone: (brokerRow as any).personal_phone || (brokerRow as any).phone_e164,
+                          logoUrl: (brokerRow as any).logo_url,
+                          headshotUrl: (brokerRow as any).headshot_url,
+                          agencyName: (brokerRow as any).current_company,
+                        }
+                      : null,
+                  });
                   await generateBrandedProjectDeck({
                     projectName: project.name,
                     developerName: project.developer?.name || null,
