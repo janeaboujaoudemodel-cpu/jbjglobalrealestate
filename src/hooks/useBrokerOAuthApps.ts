@@ -10,7 +10,6 @@ export interface BrokerOAuthApp {
   id: string;
   provider: OAuthProvider;
   client_id: string;
-  client_secret: string;
   label: string | null;
   is_active: boolean;
   created_at: string;
@@ -23,15 +22,19 @@ export function useBrokerOAuthApps() {
     queryKey: ["broker-oauth-apps", user?.id],
     enabled: !!user?.id,
     queryFn: async () => {
+      // SECURITY: client_secret is intentionally NOT selected. It is write-only at
+      // the API layer and only readable inside server-side SECURITY DEFINER
+      // functions (e.g. public.get_broker_oauth_app) during the OAuth flow.
       const { data, error } = await supabase
         .from("broker_email_oauth_apps")
-        .select("*")
+        .select("id, provider, client_id, label, is_active, created_at, updated_at")
         .order("provider");
       if (error) throw error;
       return (data ?? []) as BrokerOAuthApp[];
     },
   });
 }
+
 
 export function useSaveBrokerOAuthApp() {
   const { user } = useAuth();
