@@ -224,6 +224,7 @@ const AIHF_RESULTS_STYLE = `
 const QuizResults = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isBrokerMode } = useUserMode();
   const { hasActiveMembership } = useMembership();
   const [searchParams, setSearchParams] = useSearchParams();
   const projectSlugs = searchParams.get("projects")?.split(",").filter(Boolean) || [];
