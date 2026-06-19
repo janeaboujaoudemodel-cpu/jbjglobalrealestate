@@ -12,6 +12,7 @@ import {
   MarketReports,
   DataSourcesPanel,
 } from "@/components/market-intelligence";
+import DLDDailySnapshot from "@/components/market-intelligence/DLDDailySnapshot";
 import {
   MI_CARD_TITLE,
   MI_BODY_MUTED,
@@ -244,6 +245,10 @@ const MarketIntelligence = () => {
       <div id="overview">
         <MarketOverviewDashboard />
       </div>
+
+      {/* DLD Daily Snapshot — KPI strip, Cash vs Mortgage, Top-10, Notice + Consultation */}
+      <DLDDailySnapshot />
+
 
       {/* Area Intelligence Grid - Edge to Edge */}
       <AreaIntelligenceGrid />
