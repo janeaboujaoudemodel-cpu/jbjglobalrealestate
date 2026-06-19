@@ -35,8 +35,10 @@ export const FeaturedProjectAd = ({
         to={`/project/${projectSlug}`}
         className="block group"
       >
-        <div 
-          className="relative overflow-hidden rounded-2xl border-2 border-[#B89555]/40 shadow-[0_8px_30px_rgba(200,167,102,0.25)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.35)] transition-all duration-500"
+        <div
+          data-on-dark
+          data-no-contrast-guard
+          className="allow-white relative overflow-hidden rounded-2xl border-2 border-[#B89555]/40 shadow-[0_8px_30px_rgba(200,167,102,0.25)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.35)] transition-all duration-500"
           style={{
             background: 'linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)'
           }}
@@ -54,24 +56,24 @@ export const FeaturedProjectAd = ({
             {/* Fallback gradient behind image */}
             <div className="absolute inset-0 bg-gradient-to-br from-gold/20 via-black to-black -z-10" />
             {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/20" />
             
             {/* Content overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-              {/* Subtitle / Tagline */}
-              <p className="text-[#1A1A1A] text-sm md:text-base font-medium tracking-wide mb-2 uppercase">
+              {/* Subtitle / Tagline — gold on dark for hierarchy */}
+              <p className="text-[#E8D5A3] text-sm md:text-base font-semibold tracking-[0.15em] mb-2 uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                 {subtitle}
               </p>
               
               {/* Title */}
-              <h3 
-                className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3"
+              <h3
+                className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]"
               >
                 {title}
               </h3>
-              
+
               {/* Description */}
-              <p className="text-white/80 text-sm md:text-base max-w-2xl mb-5 line-clamp-2">
+              <p className="text-white/90 text-sm md:text-base max-w-2xl mb-5 line-clamp-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
                 {description}
               </p>
               
@@ -98,7 +100,7 @@ export const FEATURED_ADS = [
     title: 'Inaura Hotels & Residences',
     subtitle: 'Luxury Living in Downtown Dubai',
     description: 'A landmark branded living destination rising in Downtown Dubai, defined by architectural movement and wellness integration.',
-    imageUrl: 'https://d3h330vgpwpjr8.cloudfront.net/x/1128x/Inaura_Hotels_Residences_5_0dcce21497.webp',
+    imageUrl: 'https://d3h330vgpwpjr8.cloudfront.net/x/1650x/Banner_389cbe13ae.webp',
     projectSlug: 'inaura-hotels-and-residences-arada-properties-downtown-dubai',
     ctaText: 'Explore Now'
   },
