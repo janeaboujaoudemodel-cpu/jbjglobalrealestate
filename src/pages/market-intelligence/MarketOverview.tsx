@@ -4,7 +4,7 @@ import PreFooterSeparator from "@/components/PreFooterSeparator";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MARKET_OVERVIEW_STATS, QUARTERLY_TRENDS, PROPERTY_TYPE_TRENDS, MARKET_DISCLAIMER } from "@/config/open-data-config";
+import { MARKET_OVERVIEW_STATS, QUARTERLY_TRENDS, MARKET_DISCLAIMER } from "@/config/open-data-config";
 import { MarketIntelligenceHero, MarketIntelligenceNavigation, MarketIntelligenceTableOfContents } from "@/components/market-intelligence";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -20,7 +20,6 @@ const tocItems = [
   { id: "how-jbj-uses-data", title: "How JBJ Uses Data" },
   { id: "key-stats", title: "Key Statistics" },
   { id: "quarterly-trends", title: "Quarterly Trends" },
-  { id: "property-performance", title: "Property Performance" },
   { id: "navigation", title: "Explore More" },
 ];
 
@@ -132,7 +131,7 @@ const MarketOverview = () => {
   const getTrendIcon = (change: number) => {
     if (change > 0) return <TrendingUp className="w-4 h-4 text-emerald-400" />;
     if (change < 0) return <TrendingDown className="w-4 h-4 text-red-400" />;
-    return <Minus className="w-4 h-4 text-white/70" />;
+    return <Minus className="w-4 h-4 text-[#1A1A1A]/60" />;
   };
 
   return (
@@ -158,9 +157,6 @@ const MarketOverview = () => {
         videoSrc="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4"
         videoPoster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
       />
-
-      {/* Gold Glow Divider with White Glow */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent" style={{ boxShadow: '0 0 20px rgba(200,167,102,0.5), 0 0 40px rgba(255,255,255,0.3)' }} />
 
       {/* Fixed TOC Sidebar */}
       <MarketIntelligenceTableOfContents 
@@ -346,7 +342,7 @@ const MarketOverview = () => {
                       <p className="text-[#1A1A1A] text-3xl font-bold mb-2">{stat.value}</p>
                       <div className="flex items-center justify-center gap-2">
                         {getTrendIcon(stat.change)}
-                        <span className={`text-sm ${stat.change > 0 ? 'text-emerald-500' : stat.change < 0 ? 'text-red-500' : 'text-white/70'}`}>
+                        <span className={`text-sm ${stat.change > 0 ? 'text-emerald-600' : stat.change < 0 ? 'text-red-600' : 'text-[#1A1A1A]/60'}`}>
                           {stat.change > 0 ? '+' : ''}{stat.change}% {stat.period}
                         </span>
                       </div>
@@ -403,43 +399,8 @@ const MarketOverview = () => {
           </div>
         </section>
 
-        {/* Property Type Performance - 3-layer system */}
-        <section id="property-performance" className="scroll-mt-32 jj-section-champagne py-6 mb-3">
-          <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
-            <SectionTitle title="Performance by Property Type" />
-
-            <div className="max-w-3xl mx-auto space-y-4">
-              {PROPERTY_TYPE_TRENDS.map((type) => (
-                <motion.div 
-                  key={type.type} 
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  className="jj-card-inner p-5 flex items-center justify-between"
-                >
-                  <div>
-                    <p className="text-2xl font-bold mb-1 text-[#1A1A1A]">
-                      {type.type}
-                    </p>
-                    <p className="text-[#1A1A1A] text-sm">{type.volume.toLocaleString()} transactions</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-[#1A1A1A] font-bold text-lg">AED {type.avgPrice}/sqft</p>
-                    <div className="flex items-center gap-1 justify-end">
-                      {getTrendIcon(type.change)}
-                      <span className={`text-sm font-medium ${type.change > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-                        {type.change > 0 ? '+' : ''}{type.change}%
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Market Intelligence Navigation - 3-layer system */}
-        <section id="navigation" className="jj-section-champagne py-16 scroll-mt-24">
+        <section id="navigation" className="jj-section-champagne py-6 scroll-mt-24">
           <div className="container mx-auto px-4 lg:pr-72 xl:pr-72">
             <MarketIntelligenceNavigation current="/market-intelligence/overview" showStartHere={false} />
             
