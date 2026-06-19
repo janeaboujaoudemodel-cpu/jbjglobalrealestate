@@ -41,6 +41,8 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   kingdom: { invert: true },
   kingdomdevelopment: { invert: true },
   kingdomdevelopments: { invert: true },
+};
+
 
 export function getDeveloperLogoOverride(
   name?: string | null,
