@@ -296,6 +296,11 @@ const PremiumBrochureCard = ({
             <Lock className="w-5 h-5 text-foreground group-hover:text-[#1A1A1A] group-hover:scale-110 transition-all" />
             <span className="group-hover:text-[#1A1A1A] transition-colors">Unlock Brochure</span>
           </>
+        ) : isFetching ? (
+          <>
+            <Loader2 className="w-5 h-5 text-foreground animate-spin" />
+            <span>Fetching Brochure…</span>
+          </>
         ) : isDownloading ? (
           <>
             <Loader2 className="w-5 h-5 text-foreground animate-spin" />
