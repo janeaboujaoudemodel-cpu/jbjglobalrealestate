@@ -15,7 +15,7 @@ import { ToolHero } from '@/components/tools/ToolHero';
 import { toolThemes, TOOL_GOLD, TOOL_PAGE_BG } from '@/components/tools/toolThemes';
 
 /* ── Navy palette tokens (matches PropertyEvaluator) ── */
-const NAVY = '#102540';
+const NAVY = '#0A0A0A';
 const NAVY_DEEP = '#0A1830';
 const NAVY_BORDER = 'rgba(16,37,64,0.45)';
 

@@ -138,7 +138,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
               onNavigate?.();
             }}
             title={collapsed ? "Back to JBJ Owner" : undefined}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-[#102540] text-white hover:bg-[#1a3d63]"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-[#0A0A0A] text-white hover:bg-[#1F1F1F]"
             data-allow-dark-cta
           >
             <ArrowLeft className="h-5 w-5 shrink-0" />

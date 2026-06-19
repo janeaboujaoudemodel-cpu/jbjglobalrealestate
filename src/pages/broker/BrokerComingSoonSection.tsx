@@ -34,7 +34,7 @@ export default function BrokerComingSoonSection({ title, description, cta }: Pro
           cta && (
             <Link
               to={cta.to}
-              className="inline-flex items-center gap-2 h-9 px-4 rounded-md bg-[#102540] text-white text-xs font-medium hover:bg-[#1a3d63] transition-colors"
+              className="inline-flex items-center gap-2 h-9 px-4 rounded-md bg-[#0A0A0A] text-white text-xs font-medium hover:bg-[#1F1F1F] transition-colors"
               data-allow-dark-cta
             >
               {cta.label}

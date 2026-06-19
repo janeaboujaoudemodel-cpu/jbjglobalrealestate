@@ -399,7 +399,7 @@ const About = () => {
                       data-allow-dark-cta
                       data-no-contrast-guard
                       className="allow-white rounded-lg p-5 border border-[#B89555]/40"
-                      style={{ background: '#102540' }}
+                      style={{ background: '#0A0A0A' }}
                     >
                       <Icon className="w-7 h-7 mb-3" style={{ color: '#FFFFFF' }} />
                       <p className="text-base font-semibold" style={{ color: '#FFFFFF' }}>{label}</p>

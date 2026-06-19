@@ -288,8 +288,8 @@ All colors MUST be HSL.
     --gold-foreground: 0 0% 10%;
 
     /* Approved navy CTA surface — the only non-dark-hero button surface allowed to carry white text/icons. */
-    --navy-cta: 211 60% 16%;       /* #102540 */
-    --navy-cta-hover: 211 58% 25%; /* #1a3d63 */
+    --navy-cta: 211 60% 16%;       /* #0A0A0A */
+    --navy-cta-hover: 211 58% 25%; /* #1F1F1F */
 
     /* Premium Orange — property prices (unchanged) */
     --price-orange: 24 95% 53%;
@@ -3736,7 +3736,7 @@ nav button[data-allow-dark-cta][aria-pressed="true"],
 nav button[data-hr-pill][data-active="true"],
 [data-allow-dark-cta][aria-current="page"],
 [data-allow-dark-cta][aria-pressed="true"] {
-  background-color: #102540 !important;
+  background-color: #0A0A0A !important;
   color: #ffffff;
   border: 1px solid #B89555 !important;
   border-left: 1px solid #B89555 !important;
@@ -4255,13 +4255,13 @@ button[data-phone-code-trigger],
 button[data-phone-code-trigger]:hover,
 button[data-phone-code-trigger]:focus,
 button[data-phone-code-trigger]:focus-visible {
-  background-color: #102540 !important;
+  background-color: #0A0A0A !important;
   background-image: none !important;
   border: 1px solid rgba(184, 149, 85, 0.55) !important;
   color: #FFFFFF;
 }
 button[data-phone-code-trigger]:hover {
-  background-color: #1a3d63 !important;
+  background-color: #1F1F1F !important;
 }
 button[data-phone-code-trigger] :is(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger]:hover :is(span, svg, [class*="lucide"]),
@@ -5081,7 +5081,7 @@ html body :where(
 /* ============================================================
  * BLACK-CTA → NAVY GLOBAL REPAINT (locked, see memory)
  * Any raw bg-[#1A1A1A] / bg-black button or anchor with white-ish
- * text is repainted to the approved navy #102540 (hover #1a3d63),
+ * text is repainted to the approved navy #0A0A0A (hover #1F1F1F),
  * 1px gold hairline, white text + icons. Matches the "View Search
  * History" / "Get Verified" CTA identity site-wide.
  *
@@ -5090,7 +5090,7 @@ html body :where(
  * ============================================================ */
 :where(button, a, [role="button"])[class*="bg-[#1A1A1A]"]:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not(.allow-white-bg):not(.jj-cta-dark):not(.jj-navy-cta),
 :where(button, a, [role="button"])[class*="bg-black"]:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not(.allow-white-bg):not(.jj-cta-dark):not(.jj-navy-cta) {
-  background-color: #102540 !important;
+  background-color: #0A0A0A !important;
   background-image: none !important;
   border-color: rgba(184, 149, 85, 0.55) !important;
   color: #FFFFFF !important;
@@ -5098,7 +5098,7 @@ html body :where(
 }
 :where(button, a, [role="button"])[class*="bg-[#1A1A1A]"]:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not(.allow-white-bg):not(.jj-cta-dark):not(.jj-navy-cta):hover,
 :where(button, a, [role="button"])[class*="bg-black"]:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not(.allow-white-bg):not(.jj-cta-dark):not(.jj-navy-cta):hover {
-  background-color: #1a3d63 !important;
+  background-color: #1F1F1F !important;
   border-color: #B89555 !important;
 }
 :where(button, a, [role="button"])[class*="bg-[#1A1A1A]"]:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not([data-on-dark]):not(.allow-white-bg):not(.jj-cta-dark):not(.jj-navy-cta) :where(span, svg, [class*="lucide"]),
@@ -5169,7 +5169,7 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 }
 [data-field-pulse="1"] {
   animation: jjFieldPulse 1.4s ease-out;
-  outline: 2px solid #102540 !important;
+  outline: 2px solid #0A0A0A !important;
   outline-offset: 2px !important;
   border-radius: 12px;
 }
@@ -5202,7 +5202,7 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 }
 
 /* Soft champagne raised → light navy tint pane (the -m-3 outer panels) */
-[data-ai-listing-shell] .bg-\[\#102540\]\/15 {
+[data-ai-listing-shell] .bg-\[\#0A0A0A\]\/15 {
   background-color: rgba(255,255,255,0.04) !important;
   border-color: rgba(255,255,255,0.18) !important;
 }
@@ -5227,11 +5227,11 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 
 /* Selected listing-type card: navy outline + white bg, ink check */
 [data-ai-listing-shell] button.border-\[\#B89555\]\/50 {
-  border-color: #102540 !important;
+  border-color: #0A0A0A !important;
   background-color: #FFFFFF !important;
 }
 [data-ai-listing-shell] button .bg-\[\#EFE6D6\].rounded-full {
-  background-color: #102540 !important;
+  background-color: #0A0A0A !important;
 }
 [data-ai-listing-shell] button .bg-\[\#EFE6D6\].rounded-full svg {
   color: #FFFFFF !important;
@@ -5254,12 +5254,12 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 
 /* Primary champagne CTA buttons → navy on white */
 [data-ai-listing-shell] button.bg-\[\#EFE6D6\] {
-  background-color: #102540 !important;
+  background-color: #0A0A0A !important;
   color: #FFFFFF !important;
-  border: 1px solid #102540 !important;
+  border: 1px solid #0A0A0A !important;
 }
 [data-ai-listing-shell] button.bg-\[\#EFE6D6\]:hover {
-  background-color: #1a3d63 !important;
+  background-color: #1F1F1F !important;
 }
 [data-ai-listing-shell] button.bg-\[\#EFE6D6\] svg {
   color: #FFFFFF !important;
@@ -5269,23 +5269,23 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 [data-ai-listing-shell] button.border-\[\#B89555\]\/50.text-\[\#B89555\],
 [data-ai-listing-shell] button.text-\[\#B89555\].border-\[\#B89555\]\/50 {
   background-color: #FFFFFF !important;
-  color: #102540 !important;
-  border: 1.5px solid #102540 !important;
+  color: #0A0A0A !important;
+  border: 1.5px solid #0A0A0A !important;
 }
 [data-ai-listing-shell] button.border-\[\#B89555\]\/50.text-\[\#B89555\]:hover {
   background-color: rgba(16,37,64,0.05) !important;
-  color: #102540 !important;
-  border-color: #102540 !important;
+  color: #0A0A0A !important;
+  border-color: #0A0A0A !important;
 }
 [data-ai-listing-shell] button.border-\[\#B89555\]\/50.text-\[\#B89555\] svg {
-  color: #102540 !important;
+  color: #0A0A0A !important;
 }
 
 /* Champagne gradient "Back" button on pricing phase → white + navy */
 [data-ai-listing-shell] button.bg-gradient-to-r.from-\[\#FDFBF7\] {
   background: #FFFFFF !important;
   color: #1A1A1A !important;
-  border: 1.5px solid #102540 !important;
+  border: 1.5px solid #0A0A0A !important;
 }
 [data-ai-listing-shell] button.bg-gradient-to-r.from-\[\#FDFBF7\]:hover {
   background: rgba(16,37,64,0.05) !important;
@@ -5305,7 +5305,7 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 
 /* Hover lift on champagne button stays subtle */
 [data-ai-listing-shell] button.hover\:bg-\[\#1A1A1A\]:hover {
-  background-color: #102540 !important;
+  background-color: #0A0A0A !important;
   color: #FFFFFF !important;
 }
 
@@ -5340,15 +5340,15 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 /* AI Listing Shell — Save Draft button (navy fill, white text) must stay
    white on navy even though it sits inside a white draft bar. Global
    PASS-6 white-on-light lock keeps flipping it; this re-locks it. */
-[data-ai-listing-shell] button.bg-\[\#102540\] {
-  background-color: #102540 !important;
+[data-ai-listing-shell] button.bg-\[\#0A0A0A\] {
+  background-color: #0A0A0A !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-[data-ai-listing-shell] button.bg-\[\#102540\]:hover {
-  background-color: #1a3d63 !important;
+[data-ai-listing-shell] button.bg-\[\#0A0A0A\]:hover {
+  background-color: #1F1F1F !important;
 }
-[data-ai-listing-shell] button.bg-\[\#102540\] svg {
+[data-ai-listing-shell] button.bg-\[\#0A0A0A\] svg {
   color: #FFFFFF !important;
 }
 
@@ -5360,27 +5360,27 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 }
 
 /* Extract with AI primary CTA (white bg + navy text, lives inside white card) */
-[data-ai-listing-shell] button.bg-white.text-\[\#102540\] {
-  background-color: #102540 !important;
+[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\] {
+  background-color: #0A0A0A !important;
   color: #FFFFFF !important;
-  border-color: #102540 !important;
+  border-color: #0A0A0A !important;
 }
-[data-ai-listing-shell] button.bg-white.text-\[\#102540\]:hover {
-  background-color: #1a3d63 !important;
+[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\]:hover {
+  background-color: #1F1F1F !important;
 }
-[data-ai-listing-shell] button.bg-white.text-\[\#102540\] svg {
+[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\] svg {
   color: #FFFFFF !important;
 }
-[data-ai-listing-shell] button.bg-white.text-\[\#102540\]:disabled {
-  background-color: #102540 !important;
+[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\]:disabled {
+  background-color: #0A0A0A !important;
   color: #FFFFFF !important;
   opacity: 0.5;
 }
 
 /* AI Listing Shell — maximum-specificity hard locks for the three contrast
    regressions on top of PASS-6 / contrast-engine flips. */
-section[data-ai-listing-shell] button.bg-\[\#102540\],
-section[data-ai-listing-shell] button.bg-\[\#102540\] *,
+section[data-ai-listing-shell] button.bg-\[\#0A0A0A\],
+section[data-ai-listing-shell] button.bg-\[\#0A0A0A\] *,
 section[data-ai-listing-shell] button.allow-white.text-white,
 section[data-ai-listing-shell] button.allow-white.text-white * {
   color: #FFFFFF !important;
@@ -5392,9 +5392,9 @@ section[data-ai-listing-shell] button.allow-white.text-white {
 section[data-ai-listing-shell] button.allow-white.text-white:hover {
   background-color: rgba(255,255,255,0.10) !important;
 }
-section[data-ai-listing-shell] button.bg-white.text-\[\#102540\],
-section[data-ai-listing-shell] button.bg-white.text-\[\#102540\]:disabled,
-section[data-ai-listing-shell] button.bg-white.text-\[\#102540\] * {
+section[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\],
+section[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\]:disabled,
+section[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\] * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }

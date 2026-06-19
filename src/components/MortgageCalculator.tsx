@@ -369,7 +369,7 @@ const MortgageCalculator = ({
       <div className="max-w-5xl mx-auto" data-mortgage-variant={themeVariant}>
         {showHeading && (
         <div className="text-center mb-6 md:mb-8">
-          <h3 className="text-[#102540] text-2xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap">
+          <h3 className="text-[#0A0A0A] text-2xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap">
             Mortgage <span className={isNavy ? "text-transparent bg-clip-text" : ""} style={isNavy ? { backgroundImage: "linear-gradient(135deg, #FFFFFF 0%, #93C5FD 45%, #2563EB 100%)", WebkitBackgroundClip: "text" } : undefined}>Calculator</span>
           </h3>
           <p className="text-[#1A1A1A]/70 mt-2 md:mt-3 max-w-lg mx-auto text-sm md:text-base">

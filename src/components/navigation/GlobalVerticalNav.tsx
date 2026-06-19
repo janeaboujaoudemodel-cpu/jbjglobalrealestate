@@ -805,7 +805,7 @@ export default function GlobalVerticalNav() {
     }
     return shouldHighlight
       ? "text-[#B89555] font-bold"
-      : (sectionKey ? "text-[#102540] font-medium" : "text-[#B89555]");
+      : (sectionKey ? "text-[#0A0A0A] font-medium" : "text-[#B89555]");
   };
 
   // Saturated colored rows where the row background is a vivid fill (not champagne).
@@ -827,8 +827,8 @@ export default function GlobalVerticalNav() {
     return 'text-[hsl(var(--gold))]';
   };
 
-  const navHoverUnderline = "group-hover:!text-[#102540] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full after:bg-[#102540]";
-  const subNavHoverUnderline = "group-hover:!text-[#102540] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-[50%] after:bg-[#102540]";
+  const navHoverUnderline = "group-hover:!text-[#0A0A0A] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full after:bg-[#0A0A0A]";
+  const subNavHoverUnderline = "group-hover:!text-[#0A0A0A] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-[50%] after:bg-[#0A0A0A]";
 
   // Premium gold-bordered icon tile shared across nav rows.
   const getIconTileClass = (item: NavItem) => {
@@ -1058,8 +1058,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   style={{ color: '#B89555' }}
                     className={`group flex items-center gap-2 px-2.5 py-[7px] text-[12px] font-semibold transition-all duration-200 !text-[#B89555] ${getItemStyle(item)}`}
                 >
-                  <span className="w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[#102540]/10 group-hover:border-[#102540]/70">
-                    <Icon className="w-3 h-3 text-[#B89555] group-hover:text-[#102540] transition-colors" />
+                  <span className="w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[#0A0A0A]/10 group-hover:border-[#0A0A0A]/70">
+                    <Icon className="w-3 h-3 text-[#B89555] group-hover:text-[#0A0A0A] transition-colors" />
                   </span>
                   <span data-no-contrast-guard className={`flex-1 text-left relative inline-block !text-[#B89555] transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}>{item.label}</span>
                   {hasMega && (
@@ -1089,7 +1089,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     style={{ color: '#B89555' }}
                     className="w-full flex items-center gap-2 px-2.5 py-[7px] text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group"
                   >
-                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[#102540]/10 group-hover:border-[#102540]/70'}`}>
+                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[#0A0A0A]/10 group-hover:border-[#0A0A0A]/70'}`}>
                       <SectionIcon data-sidebar-section-icon className="w-3 h-3 transition-colors" style={{ color: '#B89555', stroke: '#B89555' }} />
                     </div>
                     <span
@@ -1305,10 +1305,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             }
             .jj-side-tile svg,
             .jj-side-tile svg * { color: #B89555 !important; stroke: #B89555 !important; transition: color 180ms ease, stroke 180ms ease !important; }
-            .jj-side-tile:hover { background-color: #102540 !important; border-color: #102540 !important; box-shadow: 0 2px 6px rgba(16,37,64,.25) !important; }
+            .jj-side-tile:hover { background-color: #0A0A0A !important; border-color: #0A0A0A !important; box-shadow: 0 2px 6px rgba(16,37,64,.25) !important; }
             .jj-side-tile:hover svg,
             .jj-side-tile:hover svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; }
-            .jj-side-tile.is-active { background-color: #102540 !important; border-color: #102540 !important; }
+            .jj-side-tile.is-active { background-color: #0A0A0A !important; border-color: #0A0A0A !important; }
             .jj-side-tile.is-active svg,
             .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; }
           `}</style>

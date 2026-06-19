@@ -38,7 +38,7 @@ export function CareersWhyJBJ() {
     <section data-surface="page" className="surface-page relative py-16 px-4 sm:px-6 lg:px-8 bg-[#FDFBF7]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555] bg-[#F7F2EA] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#102540]">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555] bg-[#F7F2EA] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0A0A0A]">
             Why JBJ
           </div>
           <h2 className="mt-4 text-3xl md:text-5xl font-semibold text-[#1A1A1A] tracking-tight">
@@ -62,7 +62,7 @@ export function CareersWhyJBJ() {
 
                 <div className="relative">
                   <div className="grid h-14 w-14 place-items-center rounded-2xl border-2 border-[#B89555] bg-[#FDFBF7]">
-                    <Icon className="h-7 w-7 text-[#102540]" strokeWidth={2} />
+                    <Icon className="h-7 w-7 text-[#0A0A0A]" strokeWidth={2} />
                   </div>
                   <h3 className="mt-4 text-xl font-bold text-[#1A1A1A] leading-snug">{b.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{b.description}</p>

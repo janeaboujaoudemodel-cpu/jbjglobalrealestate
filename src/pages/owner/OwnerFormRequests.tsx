@@ -248,7 +248,7 @@ function ReviewDialog({ request, onClose }: { request: BrokerFormRequest; onClos
                         href={f.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#102540] hover:underline shrink-0"
+                        className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#0A0A0A] hover:underline shrink-0"
                       >
                         <Download className="w-3.5 h-3.5" /> Open
                       </a>
@@ -294,7 +294,7 @@ function ReviewDialog({ request, onClose }: { request: BrokerFormRequest; onClos
           <Button variant="outline" onClick={() => act("approved")} className="border-[#B89555]/40 text-[#1A1A1A]">
             Mark approved
           </Button>
-          <Button onClick={() => act("delivered")} className="bg-[#102540] text-white hover:bg-[#1a3d63]" data-allow-dark-cta>
+          <Button onClick={() => act("delivered")} className="bg-[#0A0A0A] text-white hover:bg-[#1F1F1F]" data-allow-dark-cta>
             Send to broker
           </Button>
         </DialogFooter>

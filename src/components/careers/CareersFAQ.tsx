@@ -36,7 +36,7 @@ export function CareersFAQ() {
     <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F7F2EA] via-[#FDFBF7] to-[#EFE6D6]">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 bg-[#FDFBF7] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#102540]">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 bg-[#FDFBF7] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#0A0A0A]">
             <HelpCircle className="h-3 w-3 text-[#B89555]" /> Frequently Asked
           </div>
           <h2 className="mt-5 text-3xl md:text-4xl font-semibold text-[#1A1A1A] tracking-tight">
@@ -76,10 +76,10 @@ export function CareersFAQ() {
                     className={cn(
                       "allow-white grid h-9 w-9 shrink-0 place-items-center rounded-full border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
                       open
-                        ? "border-[#B89555] bg-[#102540] shadow-[0_12px_22px_-12px_rgba(184,149,85,0.55)]"
+                        ? "border-[#B89555] bg-[#0A0A0A] shadow-[0_12px_22px_-12px_rgba(184,149,85,0.55)]"
                         : "border-[#B89555]/55 bg-[#F7F2EA]"
                     )}
-                    style={open ? { backgroundColor: "#102540" } : undefined}
+                    style={open ? { backgroundColor: "#0A0A0A" } : undefined}
                   >
                     {open ? (
                       <CircleDot
@@ -89,7 +89,7 @@ export function CareersFAQ() {
                         data-no-contrast-guard
                       />
                     ) : (
-                      <ChevronDown className="h-4 w-4 text-[#102540]" />
+                      <ChevronDown className="h-4 w-4 text-[#0A0A0A]" />
                     )}
                   </span>
                 </button>

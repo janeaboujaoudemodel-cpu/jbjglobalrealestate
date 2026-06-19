@@ -15,7 +15,7 @@ type PremiumBookCoverProps = {
 const toneMap: Record<BookTone, string> = {
   black:    "from-[#10100f] via-[#171817] to-[#070706]",
   emerald:  "from-[#0c1914] via-[#13241d] to-[#070d0b]",
-  navy:     "from-[#0b1420] via-[#102540] to-[#05090f]",
+  navy:     "from-[#0b1420] via-[#0A0A0A] to-[#05090f]",
   espresso: "from-[#1a120c] via-[#25190f] to-[#090604]",
   burgundy: "from-[#1c0e12] via-[#28131a] to-[#090406]",
   forest:   "from-[#0a1a14] via-[#14302a] to-[#05100c]",

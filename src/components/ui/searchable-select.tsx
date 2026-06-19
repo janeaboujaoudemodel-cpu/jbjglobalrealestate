@@ -116,7 +116,7 @@ export function SearchableSelect({
           data-searchable-trigger
           className={cn(
             "jbj-form-field w-full h-12 rounded-lg min-w-0 inline-flex items-center justify-between gap-3 px-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
-            !value && "text-[#102540]/70",
+            !value && "text-[#0A0A0A]/70",
             triggerClassName
           )}
         >
@@ -139,7 +139,7 @@ export function SearchableSelect({
         collisionPadding={12}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
-        <div className="p-2 border-b border-[#102540]/15">
+        <div className="p-2 border-b border-[#0A0A0A]/15">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#B89555]" />
             <Input
@@ -154,7 +154,7 @@ export function SearchableSelect({
 
         <div className="max-h-[280px] overflow-y-auto py-1 overscroll-contain">
           {filteredOptions.length === 0 ? (
-            <div className="py-6 text-center text-sm text-[#102540]/70">No results found</div>
+            <div className="py-6 text-center text-sm text-[#0A0A0A]/70">No results found</div>
           ) : (
             filteredOptions.map((option) => {
               const flag = getFlag(option);
@@ -168,12 +168,12 @@ export function SearchableSelect({
                     setOpen(false);
                   }}
                   className={cn(
-                    "jbj-form-option w-full flex items-center gap-3 px-3 py-3 text-left min-h-[46px] transition-colors text-[#102540] hover:bg-[#102540]/5",
+                    "jbj-form-option w-full flex items-center gap-3 px-3 py-3 text-left min-h-[46px] transition-colors text-[#0A0A0A] hover:bg-[#0A0A0A]/5",
                     isSelected && "font-semibold"
                   )}
                 >
                   {flag && <span className="text-xl leading-none shrink-0">{flag}</span>}
-                  <span className="truncate text-sm sm:text-base flex-1 min-w-0 text-[#102540]">{option}</span>
+                  <span className="truncate text-sm sm:text-base flex-1 min-w-0 text-[#0A0A0A]">{option}</span>
                   {isSelected && <Check className="h-4 w-4 shrink-0 text-[#B89555]" strokeWidth={2.8} />}
                 </button>
               );

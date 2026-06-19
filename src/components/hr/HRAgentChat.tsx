@@ -401,7 +401,7 @@ export default function HRAgentChat() {
             </p>
           </div>
           {mode === 'owner' ? (
-            <Badge className="bg-[#102540] text-white flex items-center gap-1 border border-[#B89555]/40">
+            <Badge className="bg-[#0A0A0A] text-white flex items-center gap-1 border border-[#B89555]/40">
               <Sparkles className="w-3 h-3" /> Owner mode
             </Badge>
           ) : (
@@ -478,7 +478,7 @@ export default function HRAgentChat() {
                 {chatIntent === 'undecided' ? (
                   <>
                     <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A]/70">
-                      <MessageCircle className="w-3.5 h-3.5 text-[#102540]" /> What would you like to do?
+                      <MessageCircle className="w-3.5 h-3.5 text-[#0A0A0A]" /> What would you like to do?
                     </div>
                     <div className="grid gap-2 sm:grid-cols-2">
                       <Button type="button" onClick={startApplicationInChat} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border border-[#B89555]/50">
@@ -493,14 +493,14 @@ export default function HRAgentChat() {
                   <>
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A]/70">
-                        <Briefcase className="w-3.5 h-3.5 text-[#102540]" /> Apply for a position
+                        <Briefcase className="w-3.5 h-3.5 text-[#0A0A0A]" /> Apply for a position
                       </div>
                       <span className="text-xs font-semibold text-[#1A1A1A]">Step {applicationStep + 1} of 5</span>
                     </div>
 
                     <div className="grid grid-cols-5 gap-1" aria-hidden="true">
                       {[0, 1, 2, 3, 4].map((step) => (
-                        <span key={step} className={`h-1.5 rounded-full ${step <= applicationStep ? 'bg-[#102540]' : 'bg-[#EFE6D6]'}`} />
+                        <span key={step} className={`h-1.5 rounded-full ${step <= applicationStep ? 'bg-[#0A0A0A]' : 'bg-[#EFE6D6]'}`} />
                       ))}
                     </div>
 

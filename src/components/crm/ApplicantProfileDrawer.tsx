@@ -412,12 +412,12 @@ export default function ApplicantProfileDrawer({
           </div>
 
           {/* === HR PIPELINE STRIP === */}
-          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-[#102540]/15 bg-[#FDFBF7] px-3 py-2">
-            <span className="text-[10px] uppercase tracking-[0.18em] text-[#102540] font-semibold">
+          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-[#0A0A0A]/15 bg-[#FDFBF7] px-3 py-2">
+            <span className="text-[10px] uppercase tracking-[0.18em] text-[#0A0A0A] font-semibold">
               HR Pipeline
             </span>
             {candidateRow?.status && (
-              <Badge variant="outline" className="bg-white border-[#102540]/30 text-[#102540] font-normal">
+              <Badge variant="outline" className="bg-white border-[#0A0A0A]/30 text-[#0A0A0A] font-normal">
                 {candidateRow.status.replace(/_/g, " ")}
               </Badge>
             )}
@@ -426,7 +426,7 @@ export default function ApplicantProfileDrawer({
                 size="sm"
                 onClick={handleApproveAndRequestDocs}
                 disabled={!candidateRow || pipelineBusy !== null || !!candidateRow?.intake_submitted_at}
-                className="bg-[#102540] hover:bg-[#1a3d63] text-white"
+                className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white"
                 data-allow-dark-cta
                 title={candidateRow?.intake_submitted_at ? "Documents already submitted" : "Approve & email intake link"}
               >
@@ -442,7 +442,7 @@ export default function ApplicantProfileDrawer({
                 variant="outline"
                 onClick={handleSendOfferForSignature}
                 disabled={!candidateRow || pipelineBusy !== null || !candidateRow?.intake_submitted_at}
-                className="border-[#102540]/40 text-[#102540] hover:bg-[#EFE6D6]"
+                className="border-[#0A0A0A]/40 text-[#0A0A0A] hover:bg-[#EFE6D6]"
                 title={
                   !candidateRow?.intake_submitted_at
                     ? "Available after candidate submits documents"

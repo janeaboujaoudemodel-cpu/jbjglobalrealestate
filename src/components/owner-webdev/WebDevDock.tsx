@@ -419,7 +419,7 @@ export default function WebDevDock() {
             className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/30 bg-[#F7F2EA] shrink-0"
           >
             <div className="flex items-center gap-2 min-w-0">
-              <div className="w-8 h-8 rounded-full bg-[#102540] flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-full bg-[#0A0A0A] flex items-center justify-center shrink-0">
                 <Sparkles className="w-4 h-4 text-[#EFE6D6] allow-white" data-no-contrast-guard />
               </div>
               <div className="min-w-0">
@@ -544,9 +544,9 @@ export default function WebDevDock() {
                 className="allow-white inline-flex items-center justify-center h-8 px-4 shrink-0 rounded-md font-semibold text-[13px] border border-[#B89555]/40 disabled:opacity-60 transition-colors"
                 data-no-contrast-guard
                 data-allow-dark-cta
-                style={{ backgroundColor: "#102540", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#1a3d63")}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#102540")}
+                style={{ backgroundColor: "#0A0A0A", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#1F1F1F")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#0A0A0A")}
               >
                 {submitting ? (
                   <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" style={{ color: "#FFFFFF" }} />
@@ -654,7 +654,7 @@ export default function WebDevDock() {
           onClick={openDock}
           aria-label="Open Web Developer (owner)"
           title="Web Developer"
-          className="pointer-events-auto inline-flex items-center justify-center h-11 w-11 rounded-full bg-[#102540] shadow-lg border border-[#B89555]/40 allow-white hover:bg-[#1a3d63] transition-colors"
+          className="pointer-events-auto inline-flex items-center justify-center h-11 w-11 rounded-full bg-[#0A0A0A] shadow-lg border border-[#B89555]/40 allow-white hover:bg-[#1F1F1F] transition-colors"
           data-owner-webdev-dock
           data-no-contrast-guard
           data-allow-dark-cta

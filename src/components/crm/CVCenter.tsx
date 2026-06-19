@@ -1148,7 +1148,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 onClick={() => handleViewCV(cv)}
                                 data-allow-dark-cta
                                 data-no-contrast-guard
-                                className="h-9 rounded-lg bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555] font-semibold shadow-sm px-3"
+                                className="h-9 rounded-lg bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white border border-[#B89555] font-semibold shadow-sm px-3"
                               >
                                 <Eye className="h-4 w-4 mr-1.5 text-white allow-white" /> View CV
                               </Button>

@@ -32,12 +32,12 @@ const FeaturedListings = () => {
             data-allow-dark-cta
             data-cta="dark"
             className="allow-white inline-flex items-center gap-2 px-4 py-2 border rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4 transition-colors"
-            style={{ backgroundColor: "#102540", borderColor: "rgba(184,149,85,0.5)", color: "#FFFFFF" }}
+            style={{ backgroundColor: "#0A0A0A", borderColor: "rgba(184,149,85,0.5)", color: "#FFFFFF" }}
           >
             <Home className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             <span className="allow-white" style={{ color: "#FFFFFF" }}>{t("featured.title", "Featured Properties")}</span>
           </span>
-          <h2 className="text-2xl md:text-3xl font-bold text-[#102540]">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A]">
             {t("featured.heading", "Handpicked For You")}
           </h2>
         </div>
@@ -96,7 +96,7 @@ const FeaturedListings = () => {
             data-on-dark
             data-no-contrast-guard
             data-allow-dark-cta
-            className="allow-white inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 text-white text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)]"
+            className="allow-white inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/55 text-white text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)]"
             style={{ color: "#FFFFFF" }}
           >
             <span className="allow-white" style={{ color: "#FFFFFF" }}>

@@ -117,7 +117,7 @@ export default function BrokerPortalLayout() {
                   try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
                   navigate("/owner");
                 }}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md bg-[#102540] text-white hover:bg-[#1a3d63] transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md bg-[#0A0A0A] text-white hover:bg-[#1F1F1F] transition-colors"
                 data-allow-dark-cta
               >
                 <ArrowLeft className="h-3.5 w-3.5" /> JBJ Owner

@@ -539,7 +539,7 @@ const ListingPortalSubmit = () => {
     return (
       <section
         data-ai-listing-shell
-        className="min-h-screen bg-gradient-to-br from-[#0b1c36] via-[#102540] to-[#1a3d63] pt-24 pb-16"
+        className="min-h-screen bg-gradient-to-br from-[#0b1c36] via-[#0A0A0A] to-[#1F1F1F] pt-24 pb-16"
       >
         <div className="container mx-auto px-4">
           <motion.div
@@ -792,7 +792,7 @@ const ListingPortalSubmit = () => {
                                     className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center"
                                     data-no-contrast-guard
                                     data-allow-dark-cta
-                                    style={{ backgroundColor: '#102540' }}
+                                    style={{ backgroundColor: '#0A0A0A' }}
                                   >
                                     <Check
                                       className="w-3.5 h-3.5"

@@ -37,12 +37,12 @@ const VerificationBanner = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1.0, ease: "easeInOut" }}
         data-surface="navy"
-        className="surface-navy relative overflow-hidden bg-[#102540]"
+        className="surface-navy relative overflow-hidden bg-[#0A0A0A]"
       >
         <div className="max-w-[1600px] mx-auto px-4 py-4 sm:py-5 relative z-10">
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
             {/* Shield icon */}
-            <div data-surface="navy" className="surface-navy flex-shrink-0 w-10 h-10 rounded-lg bg-[#1a3d63] border border-white/20 flex items-center justify-center">
+            <div data-surface="navy" className="surface-navy flex-shrink-0 w-10 h-10 rounded-lg bg-[#1F1F1F] border border-white/20 flex items-center justify-center">
               <ShieldCheck className="w-5 h-5 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </div>
 

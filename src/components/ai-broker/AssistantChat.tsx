@@ -90,7 +90,7 @@ export default function AssistantChat({ turns, loading, onSend, leadName, leadPh
           <div key={t.id} className={`flex ${t.role === "user" ? "justify-end" : "justify-start"}`}>
             <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm ${
               t.role === "user"
-                ? "bg-[#102540] text-white allow-white"
+                ? "bg-[#0A0A0A] text-white allow-white"
                 : "bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/25"
             }`}>
               <div className="whitespace-pre-wrap leading-relaxed">{t.content}</div>
@@ -150,7 +150,7 @@ export default function AssistantChat({ turns, loading, onSend, leadName, leadPh
             data-cta="dark"
             data-allow-dark-cta
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-            className="jj-cta-dark allow-white h-10 px-4 rounded-lg bg-[#102540] text-white text-sm font-semibold hover:bg-[#1a3d63] disabled:opacity-50 inline-flex items-center gap-1.5"
+            className="jj-cta-dark allow-white h-10 px-4 rounded-lg bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#1F1F1F] disabled:opacity-50 inline-flex items-center gap-1.5"
           >
             <Send className="h-4 w-4 allow-white" style={{ color: "#FFFFFF" }} />
             <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Send</span>

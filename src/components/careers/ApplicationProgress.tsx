@@ -38,7 +38,7 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
     <div className="rounded-2xl border border-[#B89555]/60 bg-[linear-gradient(180deg,rgba(253,251,247,0.98),rgba(247,242,234,0.96))] p-5 shadow-[0_18px_42px_-30px_rgba(16,37,64,0.32)]">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#102540]/82">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#0A0A0A]/82">
             Application Progress
           </p>
           <p
@@ -58,14 +58,14 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
           </p>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-bold text-[#102540] leading-none">{pct}%</p>
+          <p className="text-2xl font-bold text-[#0A0A0A] leading-none">{pct}%</p>
         </div>
       </div>
 
       {/* Progress bar */}
-      <div className="relative h-2.5 w-full overflow-hidden rounded-full border border-[#B89555]/30 bg-[#102540]/8 mb-4 shadow-inner">
+      <div className="relative h-2.5 w-full overflow-hidden rounded-full border border-[#B89555]/30 bg-[#0A0A0A]/8 mb-4 shadow-inner">
         <div
-          className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-[#102540] via-[#1a3d63] to-[#102540] shadow-[0_6px_16px_-8px_rgba(16,37,64,0.65)] transition-all duration-500"
+          className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-[#0A0A0A] via-[#1F1F1F] to-[#0A0A0A] shadow-[0_6px_16px_-8px_rgba(16,37,64,0.65)] transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -94,7 +94,7 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
               data-no-contrast-guard={isActive ? "" : undefined}
             >
               {s.done && !isActive ? (
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#102540]" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#0A0A0A]" />
               ) : (
                 <span className="grid h-4.5 w-4.5 place-items-center text-[#1A1A1A]" style={isActive ? { color: "#FFFFFF" } : undefined}>{s.icon}</span>
               )}

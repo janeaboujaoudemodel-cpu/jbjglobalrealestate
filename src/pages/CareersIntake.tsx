@@ -12,7 +12,7 @@ type Passport = { country: string; number: string; file_url?: string };
 
 const SECTION = "rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7] p-6 md:p-7";
 const TITLE = "text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 font-semibold mb-4 flex items-center gap-2";
-const FIELD = "border-2 border-[#102540] bg-white text-[#1A1A1A] focus-visible:ring-[#102540]/20";
+const FIELD = "border-2 border-[#0A0A0A] bg-white text-[#1A1A1A] focus-visible:ring-[#0A0A0A]/20";
 const GOLD_FIELD = "border-2 border-[#B89555] bg-white text-[#1A1A1A] focus-visible:ring-[#B89555]/30";
 
 async function uploadFile(userId: string, candidateId: string, file: File, label: string): Promise<string | null> {
@@ -48,7 +48,7 @@ function FileBox({
     <label className="block">
       <span className="text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/60 font-medium">{label}</span>
       <div className="mt-1 flex items-center gap-3 rounded-lg border border-dashed border-[#B89555]/50 bg-white px-3 py-2.5 hover:border-[#B89555] transition">
-        <Upload className="h-4 w-4 text-[#102540] shrink-0" />
+        <Upload className="h-4 w-4 text-[#0A0A0A] shrink-0" />
         <span className="text-sm text-[#1A1A1A] truncate flex-1">
           {value?.name || <span className="text-[#1A1A1A]/45">Choose file…</span>}
         </span>
@@ -58,7 +58,7 @@ function FileBox({
           className="sr-only"
           onChange={(e) => onPick(e.target.files?.[0] || null)}
         />
-        <span className="text-xs text-[#102540] underline underline-offset-2">Browse</span>
+        <span className="text-xs text-[#0A0A0A] underline underline-offset-2">Browse</span>
       </div>
     </label>
   );
@@ -202,7 +202,7 @@ export default function CareersIntake() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-[#102540]" />
+        <Loader2 className="h-6 w-6 animate-spin text-[#0A0A0A]" />
       </div>
     );
   }
@@ -213,7 +213,7 @@ export default function CareersIntake() {
         <div className="max-w-md text-center">
           <h1 className="text-2xl font-semibold text-[#1A1A1A]">Intake unavailable</h1>
           <p className="mt-3 text-[#1A1A1A]/70">{error}</p>
-          <Link to="/careers" className="mt-6 inline-block text-[#102540] underline">
+          <Link to="/careers" className="mt-6 inline-block text-[#0A0A0A] underline">
             Back to Careers
           </Link>
         </div>
@@ -231,7 +231,7 @@ export default function CareersIntake() {
             Thank you, {fullName.split(" ")[0]}. Our HR team will review your submission and send your formal job
             offer shortly.
           </p>
-          <Link to="/" className="mt-6 inline-block text-[#102540] underline">
+          <Link to="/" className="mt-6 inline-block text-[#0A0A0A] underline">
             Return to JBJ
           </Link>
         </div>
@@ -243,7 +243,7 @@ export default function CareersIntake() {
     <div className="min-h-screen bg-[#F7F2EA] py-10 md:py-14">
       <div className="max-w-3xl mx-auto px-5 md:px-8">
         <header className="mb-8">
-          <p className="text-[11px] uppercase tracking-[0.22em] text-[#102540] font-semibold">
+          <p className="text-[11px] uppercase tracking-[0.22em] text-[#0A0A0A] font-semibold">
             JBJ Global Real Estate · Applicant Intake
           </p>
           <h1 className="mt-2 text-3xl md:text-4xl font-semibold text-[#1A1A1A]">
@@ -268,7 +268,7 @@ export default function CareersIntake() {
         <form onSubmit={onSubmit} className="space-y-5">
           <section className={SECTION}>
             <h3 className={TITLE}>
-              <ShieldCheck className="h-3.5 w-3.5 text-[#102540]" /> Personal details
+              <ShieldCheck className="h-3.5 w-3.5 text-[#0A0A0A]" /> Personal details
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -321,7 +321,7 @@ export default function CareersIntake() {
 
           <section className={SECTION}>
             <h3 className={TITLE}>
-              <FileText className="h-3.5 w-3.5 text-[#102540]" /> Photo & Emirates ID
+              <FileText className="h-3.5 w-3.5 text-[#0A0A0A]" /> Photo & Emirates ID
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FileBox label="Professional photo" value={photo} onPick={setPhoto} accept="image/*" />
@@ -342,7 +342,7 @@ export default function CareersIntake() {
           <section className={SECTION}>
             <div className="flex items-center justify-between mb-4">
               <h3 className={`${TITLE} mb-0`}>
-                <FileText className="h-3.5 w-3.5 text-[#102540]" /> Passport(s)
+                <FileText className="h-3.5 w-3.5 text-[#0A0A0A]" /> Passport(s)
               </h3>
               <Button
                 type="button"
@@ -408,7 +408,7 @@ export default function CareersIntake() {
 
           <section className={SECTION}>
             <h3 className={TITLE}>
-              <FileText className="h-3.5 w-3.5 text-[#102540]" /> Real estate experience
+              <FileText className="h-3.5 w-3.5 text-[#0A0A0A]" /> Real estate experience
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -445,7 +445,7 @@ export default function CareersIntake() {
             <Button
               type="submit"
               disabled={busy || !authed}
-              className="bg-[#102540] hover:bg-[#1a3d63] text-white px-7 h-11"
+              className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white px-7 h-11"
               data-allow-dark-cta
             >
               {busy ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-2" />}

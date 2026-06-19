@@ -273,7 +273,7 @@ export default function BookReader() {
                 currentIsDone
                   ? "bg-emerald-600 hover:bg-emerald-600 text-white border border-emerald-700"
                   : isLastBodyOfModule
-                    ? "bg-[#102540] hover:bg-[#1a3d63] text-white border border-[#B89555]/50"
+                    ? "bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white border border-[#B89555]/50"
                     : "bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50"
               }
             >

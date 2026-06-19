@@ -6,8 +6,8 @@ type Tone = "navy" | "emerald" | "gold" | "burgundy";
 
 const TONES: Record<Tone, { from: string; to: string; hoverFrom: string; hoverTo: string; ring: string }> = {
   navy: {
-    from: "#102540",
-    to: "#1a3d63",
+    from: "#0A0A0A",
+    to: "#1F1F1F",
     hoverFrom: "#0c1d34",
     hoverTo: "#234f7d",
     ring: "rgba(255,255,255,0.35)",

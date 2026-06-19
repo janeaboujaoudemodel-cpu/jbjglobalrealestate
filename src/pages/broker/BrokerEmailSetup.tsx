@@ -166,7 +166,7 @@ function ProviderPanel({
           <Input id={`${provider}-label`} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="My work Google project" className="bg-white" />
         </div>
         <div className="flex gap-2 pt-1">
-          <Button type="submit" disabled={saving} className="bg-[#102540] hover:bg-[#1a3d63] text-white" data-allow-dark-cta>
+          <Button type="submit" disabled={saving} className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white" data-allow-dark-cta>
             {existing ? "Update" : "Save credentials"}
           </Button>
           {existing && (

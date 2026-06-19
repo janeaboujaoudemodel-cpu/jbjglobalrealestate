@@ -295,7 +295,7 @@ export default function OwnerBooks() {
             <Button
               onClick={() => fileRef.current?.click()}
               disabled={busy}
-              className="bg-[#102540] hover:bg-[#1a3d63] text-white allow-white"
+              className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white allow-white"
               data-no-contrast-guard
             >
               {busy ? (

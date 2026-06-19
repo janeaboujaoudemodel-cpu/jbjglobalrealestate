@@ -195,7 +195,7 @@ export function ApprovalWorkflowPanel() {
             value="pending"
             data-allow-dark-cta
             data-no-contrast-guard
-            className="rounded-full px-3 py-1.5 text-[13px] font-semibold text-[#1A1A1A] data-[state=active]:bg-[#102540] data-[state=active]:text-white data-[state=active]:border-[#B89555] border border-transparent hover:bg-[#EFE6D6] data-[state=active]:hover:bg-[#1a3d63]"
+            className="rounded-full px-3 py-1.5 text-[13px] font-semibold text-[#1A1A1A] data-[state=active]:bg-[#0A0A0A] data-[state=active]:text-white data-[state=active]:border-[#B89555] border border-transparent hover:bg-[#EFE6D6] data-[state=active]:hover:bg-[#1F1F1F]"
           >
             <Clock className="h-4 w-4 mr-2" />
             Pending ({pendingApprovals.length})
@@ -204,7 +204,7 @@ export function ApprovalWorkflowPanel() {
             value="approved"
             data-allow-dark-cta
             data-no-contrast-guard
-            className="rounded-full px-3 py-1.5 text-[13px] font-semibold text-[#1A1A1A] data-[state=active]:bg-[#102540] data-[state=active]:text-white data-[state=active]:border-[#B89555] border border-transparent hover:bg-[#EFE6D6] data-[state=active]:hover:bg-[#1a3d63]"
+            className="rounded-full px-3 py-1.5 text-[13px] font-semibold text-[#1A1A1A] data-[state=active]:bg-[#0A0A0A] data-[state=active]:text-white data-[state=active]:border-[#B89555] border border-transparent hover:bg-[#EFE6D6] data-[state=active]:hover:bg-[#1F1F1F]"
           >
             <CheckCircle className="h-4 w-4 mr-2" />
             Approved ({approvedRequests.length})
@@ -213,7 +213,7 @@ export function ApprovalWorkflowPanel() {
             value="rejected"
             data-allow-dark-cta
             data-no-contrast-guard
-            className="rounded-full px-3 py-1.5 text-[13px] font-semibold text-[#1A1A1A] data-[state=active]:bg-[#102540] data-[state=active]:text-white data-[state=active]:border-[#B89555] border border-transparent hover:bg-[#EFE6D6] data-[state=active]:hover:bg-[#1a3d63]"
+            className="rounded-full px-3 py-1.5 text-[13px] font-semibold text-[#1A1A1A] data-[state=active]:bg-[#0A0A0A] data-[state=active]:text-white data-[state=active]:border-[#B89555] border border-transparent hover:bg-[#EFE6D6] data-[state=active]:hover:bg-[#1F1F1F]"
           >
             <XCircle className="h-4 w-4 mr-2" />
             Rejected ({rejectedRequests.length})

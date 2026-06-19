@@ -71,7 +71,7 @@ export function CareersEcosystem() {
     <section data-surface="champagne" className="surface-champagne relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F7F2EA] via-[#FDFBF7] to-[#EFE6D6]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 bg-[#FDFBF7] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#102540]">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 bg-[#FDFBF7] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#0A0A0A]">
             <Sparkles className="h-3 w-3 text-[#B89555]" /> Broker Growth Ecosystem
           </div>
           <h2 className="mt-5 text-3xl md:text-5xl font-semibold text-[#1A1A1A] tracking-tight">
@@ -95,7 +95,7 @@ export function CareersEcosystem() {
               className="surface-champagne careers-card-strong group relative overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1"
               >
                 {/* Decorative glow */}
-                <div className="pointer-events-none absolute -top-16 -left-16 h-32 w-32 rounded-full bg-[#102540]/[0.04] blur-3xl group-hover:bg-[#102540]/[0.09] transition" />
+                <div className="pointer-events-none absolute -top-16 -left-16 h-32 w-32 rounded-full bg-[#0A0A0A]/[0.04] blur-3xl group-hover:bg-[#0A0A0A]/[0.09] transition" />
 
                 <div className="relative">
                   <div className="grid h-12 w-12 place-items-center rounded-xl border border-[#BFA46A] bg-gradient-to-br from-[#FFFDF8] to-[#EADCC6] shadow-[0_12px_26px_-18px_rgba(7,27,51,0.34)]">
@@ -116,7 +116,7 @@ export function CareersEcosystem() {
           })}
         </div>
 
-        <p className="mt-12 text-center text-sm font-semibold text-[#102540]/80">
+        <p className="mt-12 text-center text-sm font-semibold text-[#0A0A0A]/80">
           Every section above reflects current JBJ Global Real Estate operations — not a roadmap.
         </p>
       </div>

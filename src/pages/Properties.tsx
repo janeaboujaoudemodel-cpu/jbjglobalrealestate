@@ -730,7 +730,7 @@ const Properties = () => {
                       </span>
                       {activeFilterCount > 0 && (
                         <span
-                          className="allow-white inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold bg-[#102540] text-white ring-1 ring-[#B89555]/60"
+                          className="allow-white inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold bg-[#0A0A0A] text-white ring-1 ring-[#B89555]/60"
                           style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                           data-no-contrast-guard
                         >

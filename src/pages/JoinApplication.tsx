@@ -749,7 +749,7 @@ export default function JoinApplication() {
         required
         aria-required="true"
         {...invalidProps(k)}
-        className={`bg-[#FDFBF7] border-2 border-[#102540] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base ${
+        className={`bg-[#FDFBF7] border-2 border-[#0A0A0A] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base ${
           fieldErr(k) ? "is-invalid" : ""
         }`}
       />
@@ -773,11 +773,11 @@ export default function JoinApplication() {
           {!user && (
             <Card className="relative overflow-hidden border border-[#B89555]/55 bg-[linear-gradient(135deg,rgba(253,251,247,0.95),rgba(247,242,234,0.85))] backdrop-blur-md rounded-2xl shadow-[0_18px_44px_-32px_rgba(16,37,64,0.35)] mb-6">
               <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
-              <div className="pointer-events-none absolute -top-16 -right-10 h-40 w-40 rounded-full bg-[#102540]/10 blur-3xl" />
+              <div className="pointer-events-none absolute -top-16 -right-10 h-40 w-40 rounded-full bg-[#0A0A0A]/10 blur-3xl" />
               <CardContent className="pt-6 sm:pt-7 pb-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#102540]/80 mb-1">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#0A0A0A]/80 mb-1">
                       Sign in optional now
                     </p>
                     <p className="text-[#1A1A1A] font-semibold text-base sm:text-lg leading-snug">
@@ -828,7 +828,7 @@ export default function JoinApplication() {
                   </Badge>
                 </div>
                 <div className="relative mt-5">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#102540] z-10 pointer-events-none" strokeWidth={2.5} />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#0A0A0A] z-10 pointer-events-none" strokeWidth={2.5} />
                   <Input
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
@@ -907,7 +907,7 @@ export default function JoinApplication() {
           <Card className="bg-[#FDFBF7] border-2 careers-blue-border shadow-[0_22px_60px_-40px_rgba(16,37,64,0.45)] overflow-hidden">
             <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
             <CardHeader className="text-center pt-10 pb-6">
-              <span className="inline-flex items-center justify-center gap-1.5 mx-auto rounded-full border border-[#B89555]/60 bg-[#FDFBF7] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#102540] mb-3 w-fit">
+              <span className="inline-flex items-center justify-center gap-1.5 mx-auto rounded-full border border-[#B89555]/60 bg-[#FDFBF7] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0A0A] mb-3 w-fit">
                 <Sparkles className="w-3 h-3" /> Five quick steps · ~3 min
               </span>
               <CardTitle className="text-4xl md:text-5xl font-semibold careers-navy tracking-tight">Application Form</CardTitle>
@@ -1129,7 +1129,7 @@ export default function JoinApplication() {
                 {/* Empty state — when no role picked yet and positions come from DB */}
                 {!selectedPosition && openPositions.length > 0 && (
                   <div className="rounded-xl border-2 border-dashed border-[#B89555]/60 bg-[#F7F2EA]/50 px-5 py-6 text-center">
-                    <p className="text-[#102540] font-semibold text-base">
+                    <p className="text-[#0A0A0A] font-semibold text-base">
                       Select a role from <span className="underline">Open Positions</span> above to load the qualification questions for that position.
                     </p>
                     <p className="text-[#1A1A1A]/70 text-sm mt-2">
@@ -1168,8 +1168,8 @@ export default function JoinApplication() {
 
                 {/* Role-aware Qualification */}
                 {qualKind === "sales" && (
-                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#102540] bg-[#F7F2EA]/40">
-                    <h3 className="text-lg font-semibold text-[#102540] flex items-center gap-2">
+                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#0A0A0A] bg-[#F7F2EA]/40">
+                    <h3 className="text-lg font-semibold text-[#0A0A0A] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Sales Qualification
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1180,12 +1180,12 @@ export default function JoinApplication() {
                     <QField k="developerWorkedWith" label="Which developers have you worked with?" placeholder="e.g. DAMAC, Emaar, Meraas" />
                     <QField k="reasonForLeaving" label="Why are you leaving your current position?" placeholder="Reason for seeking new opportunity" />
 
-                    <h3 className="text-lg font-semibold text-[#102540] mt-2 flex items-center gap-2">
+                    <h3 className="text-lg font-semibold text-[#0A0A0A] mt-2 flex items-center gap-2">
                       <User className="h-5 w-5" /> Professional References (2 required)
                     </h3>
                     <p className="text-sm text-[#1A1A1A]/70">Provide references from your previous employer so we can verify your experience.</p>
                     {[1, 2].map((n) => (
-                      <div key={n} className="space-y-3 p-3 rounded-lg border-2 border-[#102540] bg-[#FDFBF7]">
+                      <div key={n} className="space-y-3 p-3 rounded-lg border-2 border-[#0A0A0A] bg-[#FDFBF7]">
                         <p className="jbj-form-label text-sm font-semibold">Reference {n}</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <QField k={`reference${n}Name`} label="Full name" placeholder="Full name (e.g. Director / HR Manager)" />
@@ -1199,8 +1199,8 @@ export default function JoinApplication() {
                 )}
 
                 {qualKind === "marketing" && (
-                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#102540] bg-[#F7F2EA]/40">
-                    <h3 className="text-lg font-semibold text-[#102540] flex items-center gap-2">
+                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#0A0A0A] bg-[#F7F2EA]/40">
+                    <h3 className="text-lg font-semibold text-[#0A0A0A] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Marketing Qualification
                     </h3>
                     <QField k="marketingCampaigns" label="Notable campaigns you have led" placeholder="e.g. Off-plan launch — 5M reach, 8% CTR" />
@@ -1213,8 +1213,8 @@ export default function JoinApplication() {
                 )}
 
                 {qualKind === "hr_ops" && (
-                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#102540] bg-[#F7F2EA]/40">
-                    <h3 className="text-lg font-semibold text-[#102540] flex items-center gap-2">
+                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#0A0A0A] bg-[#F7F2EA]/40">
+                    <h3 className="text-lg font-semibold text-[#0A0A0A] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Role Qualification
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1226,8 +1226,8 @@ export default function JoinApplication() {
                 )}
 
                 {qualKind === "tech" && (
-                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#102540] bg-[#F7F2EA]/40">
-                    <h3 className="text-lg font-semibold text-[#102540] flex items-center gap-2">
+                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#0A0A0A] bg-[#F7F2EA]/40">
+                    <h3 className="text-lg font-semibold text-[#0A0A0A] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Technical Qualification
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1239,8 +1239,8 @@ export default function JoinApplication() {
                 )}
 
                 {qualKind === "general" && selectedPosition && (
-                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#102540] bg-[#F7F2EA]/40">
-                    <h3 className="text-lg font-semibold text-[#102540] flex items-center gap-2">
+                  <div className="space-y-4 p-5 rounded-xl border-2 border-[#0A0A0A] bg-[#F7F2EA]/40">
+                    <h3 className="text-lg font-semibold text-[#0A0A0A] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> About You
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1389,7 +1389,7 @@ export default function JoinApplication() {
                         onClick={handleBack}
                         disabled={loading}
                         aria-label="Previous step"
-                        className="h-[52px] !w-[52px] rounded-2xl border-2 border-[#102540] bg-[#FDFBF7] text-[#102540] p-0"
+                        className="h-[52px] !w-[52px] rounded-2xl border-2 border-[#0A0A0A] bg-[#FDFBF7] text-[#0A0A0A] p-0"
                       >
                         <ArrowLeft className="w-5 h-5" />
                       </Button>

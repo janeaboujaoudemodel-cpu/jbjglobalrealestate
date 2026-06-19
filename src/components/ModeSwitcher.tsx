@@ -96,7 +96,7 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
     shortLabel: 'O',
     icon: Crown,
     description: 'Owner command center — full portal access (visible only to you).',
-    base: '#102540',      // navy ink
+    base: '#0A0A0A',      // navy ink
     baseDark: '#0A1830',
     rowFrom: '#FDFBF7',
     rowTo: '#F7F2EA',

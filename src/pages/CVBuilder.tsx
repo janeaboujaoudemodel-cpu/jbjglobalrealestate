@@ -417,7 +417,7 @@ export default function CVBuilder() {
 
             <Field label="Accent colour">
               <div className="flex items-center gap-2 mt-1">
-                {["#1A1A1A", "#102540", "#1f6f5c", "#7c2d12", "#5b21b6", "#B89555"].map((c) => (
+                {["#1A1A1A", "#0A0A0A", "#1f6f5c", "#7c2d12", "#5b21b6", "#B89555"].map((c) => (
                   <button
                     key={c}
                     onClick={() => patch("accent", c)}

@@ -16,7 +16,7 @@ export const MI_EYEBROW =
 
 // Section H2 — navy blue accent
 export const MI_H2 =
-  "text-3xl md:text-4xl font-bold leading-tight tracking-tight text-[#102540]";
+  "text-3xl md:text-4xl font-bold leading-tight tracking-tight text-[#0A0A0A]";
 
 // Section lead paragraph (under H2) — gold
 export const MI_LEAD =
@@ -24,10 +24,10 @@ export const MI_LEAD =
 
 // Card title / H3 / shadcn CardTitle — navy blue
 export const MI_CARD_TITLE =
-  "text-lg font-semibold leading-snug text-[#102540]";
+  "text-lg font-semibold leading-snug text-[#0A0A0A]";
 
 // Sub-heading / H4
-export const MI_H4 = "text-sm font-semibold leading-snug text-[#102540]";
+export const MI_H4 = "text-sm font-semibold leading-snug text-[#0A0A0A]";
 
 // Body
 export const MI_BODY =

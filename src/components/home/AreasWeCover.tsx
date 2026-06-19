@@ -50,7 +50,7 @@ const AreasWeCover = () => {
           <div className="relative text-center mb-8 md:mb-10">
             <span
               data-allow-dark-cta data-no-contrast-guard
-              className="allow-white inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 bg-[#102540] text-white shadow-sm border border-[#B89555]/60"
+              className="allow-white inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 bg-[#0A0A0A] text-white shadow-sm border border-[#B89555]/60"
               style={{ color: "#FFFFFF" }}
             >
               <MapPin className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />

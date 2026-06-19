@@ -33,7 +33,7 @@ const TONE: Record<IconTileTone, { tile: string; icon: string }> = {
   amber:   { tile: "bg-amber-500/10 ring-1 ring-amber-500/30",     icon: "text-amber-600" },
   purple:  { tile: "bg-purple-500/10 ring-1 ring-purple-500/30",   icon: "text-purple-600" },
   rose:    { tile: "bg-rose-500/10 ring-1 ring-rose-500/30",       icon: "text-rose-600" },
-  navy:    { tile: "surface-navy bg-[#102540] ring-1 ring-[#B89555]", icon: "text-white" },
+  navy:    { tile: "surface-navy bg-[#0A0A0A] ring-1 ring-[#B89555]", icon: "text-white" },
   ink:     { tile: "surface-ink bg-[#1A1A1A] ring-1 ring-[#1A1A1A]", icon: "text-white" },
 };
 

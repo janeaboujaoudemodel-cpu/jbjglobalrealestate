@@ -47,7 +47,7 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
       <div className="jj-layer-2">
         <div className="flex items-center gap-3 mb-6">
           <Users className="w-6 h-6 text-[#1A1A1A]" />
-          <h2 className="text-xl md:text-2xl font-bold text-[#102540]">
+          <h2 className="text-xl md:text-2xl font-bold text-[#0A0A0A]">
             Developers in {areaName}
           </h2>
           <span className="text-[#1A1A1A]/70 text-sm">({developers.length})</span>

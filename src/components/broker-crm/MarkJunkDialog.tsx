@@ -56,7 +56,7 @@ export default function MarkJunkDialog({ open, onOpenChange, leadId, leadName }:
           <Button
             onClick={submit}
             disabled={!leadId || mark.isPending}
-            className="bg-[#102540] hover:bg-[#1a3d63] text-white allow-white"
+            className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white allow-white"
             data-allow-dark-cta
           >
             {mark.isPending ? "Returning…" : "Return to owner"}

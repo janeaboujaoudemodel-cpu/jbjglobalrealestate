@@ -40,7 +40,7 @@ export default function HRAnnouncementsHub() {
           </div>
           <Button
             onClick={() => setOpen(true)}
-            className="bg-[#102540] hover:bg-[#1a3d63] text-white"
+            className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white"
             data-allow-dark-cta
           >
             <Plus className="h-4 w-4 mr-1.5" /> New announcement
@@ -84,7 +84,7 @@ export default function HRAnnouncementsHub() {
                     size="sm"
                     onClick={() => publish.mutate(a.id)}
                     disabled={publish.isPending}
-                    className="bg-[#102540] hover:bg-[#1a3d63] text-white"
+                    className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white"
                     data-allow-dark-cta
                   >
                     <Send className="h-3.5 w-3.5 mr-1.5" /> Publish
@@ -155,7 +155,7 @@ export default function HRAnnouncementsHub() {
             </Button>
             <Button
               onClick={() => { setDraft({ ...draft, status: "published" }); submit(); }}
-              className="bg-[#102540] hover:bg-[#1a3d63] text-white"
+              className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white"
               data-allow-dark-cta
               disabled={upsert.isPending}
             >

@@ -275,7 +275,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     type="button"
                     data-surface="navy"
                     data-allow-dark-cta
-                    className="allow-white surface-navy w-full h-12 rounded-xl group inline-flex items-center justify-center gap-2 px-4 bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/60 text-white font-semibold transition-all"
+                    className="allow-white surface-navy w-full h-12 rounded-xl group inline-flex items-center justify-center gap-2 px-4 bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/60 text-white font-semibold transition-all"
                     style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                   >
                     <Compass className="w-4 h-4 mr-2 text-white allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />

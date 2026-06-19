@@ -62,12 +62,12 @@ export default function JBJContactBlock({
                    shadow-[0_30px_70px_-40px_rgba(16,37,64,0.45)]
                    backdrop-blur-xl px-6 sm:px-10 py-10"
       >
-        <div className="pointer-events-none absolute -top-20 -right-16 h-56 w-56 rounded-full bg-[#102540]/15 blur-3xl" />
+        <div className="pointer-events-none absolute -top-20 -right-16 h-56 w-56 rounded-full bg-[#0A0A0A]/15 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-[#B89555]/20 blur-3xl" />
 
         <div className="relative">
           <div className="flex items-center gap-2 mb-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7]/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#102540]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7]/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0A0A]">
               <Sparkles className="w-3 h-3" /> {eyebrow}
             </span>
           </div>
@@ -96,12 +96,12 @@ export default function JBJContactBlock({
                   <div
                     data-allow-dark-cta
                     data-no-contrast-guard
-                    className="grid place-items-center h-10 w-10 rounded-xl bg-[#102540] border border-[#B89555]/60 shadow-[0_6px_14px_-8px_rgba(16,37,64,0.55)] transition-transform duration-300 group-hover:scale-105"
+                    className="grid place-items-center h-10 w-10 rounded-xl bg-[#0A0A0A] border border-[#B89555]/60 shadow-[0_6px_14px_-8px_rgba(16,37,64,0.55)] transition-transform duration-300 group-hover:scale-105"
                   >
                     <Icon className="h-5 w-5 text-white" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#102540]/70">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#0A0A0A]/70">
                       {label}
                     </p>
                     <p className="text-sm sm:text-base font-semibold text-[#1A1A1A] truncate">

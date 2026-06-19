@@ -175,7 +175,7 @@ const ContinueSearching = ({
                 onClick={() => setLeadCaptureOpen(true)}
                 data-surface="navy"
                 data-allow-dark-cta
-                className="surface-navy allow-white px-4 h-9 rounded-lg bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 hover:border-[#B89555] text-white text-xs font-semibold tracking-wide transition-all duration-300 shadow-[0_8px_22px_-12px_rgba(16,37,64,0.55)] hover:-translate-y-0.5"
+                className="surface-navy allow-white px-4 h-9 rounded-lg bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/55 hover:border-[#B89555] text-white text-xs font-semibold tracking-wide transition-all duration-300 shadow-[0_8px_22px_-12px_rgba(16,37,64,0.55)] hover:-translate-y-0.5"
                 style={{ color: "#FFFFFF" }}
               >
                 <span className="allow-white" style={{ color: "#FFFFFF" }}>Register Your Interest</span>
@@ -186,7 +186,7 @@ const ContinueSearching = ({
                     aria-label="View search history"
                     data-surface="navy"
                     data-allow-dark-cta
-                    className="surface-navy allow-white px-3 h-9 rounded-lg bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 hover:border-[#B89555] text-white text-xs font-semibold tracking-wide flex items-center gap-1.5 transition-all duration-300 shadow-[0_8px_22px_-12px_rgba(16,37,64,0.55)] hover:-translate-y-0.5"
+                    className="surface-navy allow-white px-3 h-9 rounded-lg bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/55 hover:border-[#B89555] text-white text-xs font-semibold tracking-wide flex items-center gap-1.5 transition-all duration-300 shadow-[0_8px_22px_-12px_rgba(16,37,64,0.55)] hover:-translate-y-0.5"
                   >
                     <Clock className="w-3.5 h-3.5 text-white allow-white" />
                     View Search History

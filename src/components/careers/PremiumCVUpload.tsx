@@ -41,7 +41,7 @@ export function PremiumCVUpload({
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <label className="jbj-form-label text-sm font-semibold">CV / Resume</label>
-        <span className="flex items-center gap-1.5 text-[11px] font-semibold text-[#102540]/80">
+        <span className="flex items-center gap-1.5 text-[11px] font-semibold text-[#0A0A0A]/80">
           <ShieldCheck className="h-3.5 w-3.5" /> Encrypted upload
         </span>
       </div>
@@ -63,7 +63,7 @@ export function PremiumCVUpload({
               <div className="mt-1 flex items-center gap-3 text-xs text-[#1A1A1A]/70">
                 <span>{formatSize(file.size)}</span>
                 <span className="h-1 w-1 rounded-full bg-[#1A1A1A]/40" />
-                <span className="flex items-center gap-1 font-semibold text-[#102540]">
+                <span className="flex items-center gap-1 font-semibold text-[#0A0A0A]">
                   <Sparkles className="h-3 w-3" /> Ready for Jessica AI review
                 </span>
               </div>
@@ -72,7 +72,7 @@ export function PremiumCVUpload({
               type="button"
               onClick={() => onFileChange(null)}
               disabled={disabled}
-              className="grid h-9 w-9 place-items-center rounded-full border border-[#B89555]/55 text-[#102540] hover:bg-[#102540] hover:text-[#FDFBF7] hover:border-[#B89555] transition disabled:opacity-50"
+              className="grid h-9 w-9 place-items-center rounded-full border border-[#B89555]/55 text-[#0A0A0A] hover:bg-[#0A0A0A] hover:text-[#FDFBF7] hover:border-[#B89555] transition disabled:opacity-50"
               aria-label="Remove CV"
             >
               <X className="h-4 w-4" />
@@ -80,9 +80,9 @@ export function PremiumCVUpload({
           </div>
 
           {uploadProgress > 0 && uploadProgress < 100 && (
-            <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-[#102540]/10">
+            <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-[#0A0A0A]/10">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#102540] via-[#1a3d63] to-[#102540] transition-all duration-300"
+                className="h-full rounded-full bg-gradient-to-r from-[#0A0A0A] via-[#1F1F1F] to-[#0A0A0A] transition-all duration-300"
                 style={{ width: `${uploadProgress}%` }}
               />
             </div>
@@ -106,25 +106,25 @@ export function PremiumCVUpload({
         >
           {/* Decorative glow */}
           <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="absolute -top-12 left-1/2 h-32 w-32 -translate-x-1/2 rounded-full bg-[#102540]/8 blur-3xl" />
+            <div className="absolute -top-12 left-1/2 h-32 w-32 -translate-x-1/2 rounded-full bg-[#0A0A0A]/8 blur-3xl" />
           </div>
 
           <div className="relative flex flex-col items-center gap-3">
             <div className="relative">
-              <div className="absolute inset-0 rounded-2xl bg-[#102540]/10 blur-lg group-hover:bg-[#102540]/20 transition" />
+              <div className="absolute inset-0 rounded-2xl bg-[#0A0A0A]/10 blur-lg group-hover:bg-[#0A0A0A]/20 transition" />
               <div className="relative grid h-16 w-16 place-items-center rounded-2xl border-2 border-[#B89555] bg-[#FDFBF7]">
-                <Upload className="h-7 w-7 text-[#102540]" />
+                <Upload className="h-7 w-7 text-[#0A0A0A]" />
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-base font-bold text-[#102540]">
+              <p className="text-base font-bold text-[#0A0A0A]">
                 {dragOver ? "Drop your CV here" : "Click to upload or drag & drop"}
               </p>
-              <p className="text-xs font-semibold text-[#102540]/75">
+              <p className="text-xs font-semibold text-[#0A0A0A]/75">
                 PDF · Word · JPG / PNG / HEIC — max 10 MB
               </p>
             </div>
-            <div className="mt-1 flex flex-wrap items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-[#102540]/70">
+            <div className="mt-1 flex flex-wrap items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-[#0A0A0A]/70">
               <span className="rounded-full border border-[#B89555]/45 bg-[#FDFBF7] px-2.5 py-0.5">
                 AI-parsed
               </span>

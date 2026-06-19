@@ -5,7 +5,7 @@ type Tone = "navy" | "emerald" | "gold";
 
 const TONES: Record<Tone, { base: string; glow: string; ring: string }> = {
   navy: {
-    base: "#102540",
+    base: "#0A0A0A",
     glow: "rgba(16,37,64,0.55)",
     ring: "rgba(16,37,64,0.35)",
   },

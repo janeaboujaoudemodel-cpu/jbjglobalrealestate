@@ -526,7 +526,7 @@ export default function BrokerCRM() {
                   <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
                     <Link
                       to="/broker/leads"
-                      className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#102540] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1a3d63] shadow-sm transition-colors"
+                      className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1F1F1F] shadow-sm transition-colors"
                       data-allow-dark-cta
                       data-no-contrast-guard
                     >
@@ -605,7 +605,7 @@ export default function BrokerCRM() {
                 <button
                   type="button"
                   onClick={() => setUploadOpen(true)}
-                  className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#102540] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1a3d63] shadow-sm transition-colors"
+                  className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1F1F1F] shadow-sm transition-colors"
                   data-allow-dark-cta
                   data-no-contrast-guard
                 >
@@ -687,7 +687,7 @@ export default function BrokerCRM() {
                     <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
                       <Link
                         to="/broker/leads"
-                        className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#102540] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1a3d63] shadow-sm transition-colors"
+                        className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1F1F1F] shadow-sm transition-colors"
                         data-allow-dark-cta
                         data-no-contrast-guard
                       >
@@ -1006,7 +1006,7 @@ export default function BrokerCRM() {
             </ul>
             <Link
               to="/broker/ai"
-              className="mt-4 inline-flex items-center gap-2 h-9 px-3 rounded-md bg-[#102540] text-white text-xs font-medium hover:bg-[#1a3d63]"
+              className="mt-4 inline-flex items-center gap-2 h-9 px-3 rounded-md bg-[#0A0A0A] text-white text-xs font-medium hover:bg-[#1F1F1F]"
               data-allow-dark-cta
             >
               <Sparkles className="h-3.5 w-3.5" /> Open AI sales assistant

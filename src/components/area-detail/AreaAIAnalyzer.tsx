@@ -49,7 +49,7 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <BarChart3 className="w-5 h-5 text-[#B89555]" />
-          <h3 className="font-bold text-[#102540] text-lg">Price Per Sqft</h3>
+          <h3 className="font-bold text-[#0A0A0A] text-lg">Price Per Sqft</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
           isPositive ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'
@@ -108,7 +108,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Shield className="w-5 h-5 text-[#B89555]" />
-          <h3 className="font-bold text-[#102540] text-lg">Investment Metrics</h3>
+          <h3 className="font-bold text-[#0A0A0A] text-lg">Investment Metrics</h3>
         </div>
         {occupancy && (
           <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">
@@ -243,7 +243,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-[#B89555]" />
-          <h3 className="font-bold text-[#102540] text-lg">Supply vs Demand</h3>
+          <h3 className="font-bold text-[#0A0A0A] text-lg">Supply vs Demand</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
           ratio > 0.9 ? 'bg-emerald-50 text-emerald-700' : ratio > 0.7 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'
@@ -324,9 +324,9 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Building2 className="w-5 h-5 text-[#B89555]" />
-          <h3 className="font-bold text-[#102540] text-lg">Developer Landscape</h3>
+          <h3 className="font-bold text-[#0A0A0A] text-lg">Developer Landscape</h3>
         </div>
-        <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-[#EFE6D6] text-[#102540] border border-[#B89555]/40">
+        <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-[#EFE6D6] text-[#0A0A0A] border border-[#B89555]/40">
           {totalDevs} Developers
         </div>
       </div>
@@ -334,11 +334,11 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
       <div className="space-y-3">
         {devEntries.map((dev, i) => (
           <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/10 hover:border-[#B89555]/30 transition-colors">
-            <div className="w-8 h-8 rounded-lg bg-[#102540] border border-[#B89555]/40 flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-[#0A0A0A] border border-[#B89555]/40 flex items-center justify-center flex-shrink-0">
               <span className="text-[#B89555] font-bold text-xs">{dev.name.charAt(0)}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[#102540] font-semibold text-sm truncate">{dev.name}</p>
+              <p className="text-[#0A0A0A] font-semibold text-sm truncate">{dev.name}</p>
               {dev.projects && (
                 <p className="text-[#1A1A1A]/70 text-xs mt-0.5 truncate">{dev.projects}</p>
               )}
@@ -474,7 +474,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
           <Brain className="w-6 h-6 text-[#B89555]" />
-          <h2 className="text-2xl md:text-3xl font-bold text-[#102540]">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A]">
             JBJ AI Area Intelligence
           </h2>
         </div>
@@ -483,11 +483,11 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
         {hasStats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
-              <div className="text-2xl font-bold text-[#102540]">{stats.totalProjects}</div>
+              <div className="text-2xl font-bold text-[#0A0A0A]">{stats.totalProjects}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Active Projects</div>
             </div>
             <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
-              <div className="text-2xl font-bold text-[#102540]">{stats.developers.length}</div>
+              <div className="text-2xl font-bold text-[#0A0A0A]">{stats.developers.length}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Developers</div>
             </div>
             {stats.avgPrice && (
@@ -544,7 +544,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                         <Building2 className="w-5 h-5 text-[#B89555]" />
                       </div>
                       <div>
-                        <h3 className="font-bold text-[#102540] text-lg">Area Overview</h3>
+                        <h3 className="font-bold text-[#0A0A0A] text-lg">Area Overview</h3>
                         <span className="text-[#1A1A1A]/70 text-xs">{areaName} Community Profile</span>
                       </div>
                     </div>
@@ -555,14 +555,14 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                       {hasStats && stats.totalProjects > 0 && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
                           <Home className="w-4 h-4 text-[#B89555] mx-auto mb-1" />
-                          <div className="text-lg font-bold text-[#102540]">{stats.totalProjects}</div>
+                          <div className="text-lg font-bold text-[#0A0A0A]">{stats.totalProjects}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Projects</div>
                         </div>
                       )}
                       {hasStats && stats.developers?.length > 0 && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
                           <Landmark className="w-4 h-4 text-[#B89555] mx-auto mb-1" />
-                          <div className="text-lg font-bold text-[#102540]">{stats.developers.length}</div>
+                          <div className="text-lg font-bold text-[#0A0A0A]">{stats.developers.length}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Developers</div>
                         </div>
                       )}
@@ -606,7 +606,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
               
               {/* Rating Card - Premium navy + gold champagne */}
               {ratingScore !== null && (
-                <div className="bg-gradient-to-br from-[#102540] via-[#0c1c30] to-[#102540] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden border border-[#B89555]/40">
+                <div className="bg-gradient-to-br from-[#0A0A0A] via-[#0c1c30] to-[#0A0A0A] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden border border-[#B89555]/40">
                   {/* Ambient gold glow */}
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#B89555]/20 rounded-full blur-[60px] pointer-events-none" />
                   
@@ -686,7 +686,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                 <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
                     <ThumbsUp className="w-5 h-5 text-[#B89555]" />
-                    <h3 className="font-bold text-[#102540] text-lg">Pros</h3>
+                    <h3 className="font-bold text-[#0A0A0A] text-lg">Pros</h3>
                   </div>
                   <div className="text-[#1A1A1A] text-sm leading-relaxed whitespace-pre-line">
                     {cleanMarkdown(sections.pros)}

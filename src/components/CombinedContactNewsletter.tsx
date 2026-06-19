@@ -54,7 +54,7 @@ const CombinedContactNewsletter = ({
           <div className="relative text-center mb-8">
             <span
               data-allow-dark-cta data-no-contrast-guard
-              className="allow-white inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 bg-[#102540] text-white shadow-sm border border-[#B89555]/60"
+              className="allow-white inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 bg-[#0A0A0A] text-white shadow-sm border border-[#B89555]/60"
               style={{ color: "#FFFFFF" }}
             >
               <span className="allow-white" style={{ color: "#FFFFFF" }}>Get in touch</span>
@@ -83,11 +83,11 @@ const CombinedContactNewsletter = ({
                 className="group flex flex-row sm:flex-col items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white hover:bg-[#FDFBF7] transition-all duration-300"
               >
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#FDFBF7] flex items-center justify-center flex-shrink-0">
-                  <card.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#102540]" />
+                  <card.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#0A0A0A]" />
                 </div>
                 <div className="text-left sm:text-center">
-                  <p className="text-xs uppercase tracking-wider text-[#102540]/70 font-medium mb-0.5">{card.label}</p>
-                  <p className="text-sm font-semibold text-[#102540]">{card.value}</p>
+                  <p className="text-xs uppercase tracking-wider text-[#0A0A0A]/70 font-medium mb-0.5">{card.label}</p>
+                  <p className="text-sm font-semibold text-[#0A0A0A]">{card.value}</p>
                 </div>
               </a>
             ))}
