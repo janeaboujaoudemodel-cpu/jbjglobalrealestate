@@ -38,32 +38,47 @@ const MINIMIZED_KEY = "jbj_rec_minimized";
 const MIN_PAGES_BEFORE_SHOW = 3;
 const COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24h between auto-shows (NOT applied to manual re-open)
 
-function getBrowsingHistory(): { areas: string[]; types: string[] } {
+function getBrowsingHistory(): { areas: string[]; types: string[]; developers: string[] } {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { areas: [], types: [] };
-    return JSON.parse(raw);
+    if (!raw) return { areas: [], types: [], developers: [] };
+    const parsed = JSON.parse(raw);
+    return {
+      areas: Array.isArray(parsed.areas) ? parsed.areas : [],
+      types: Array.isArray(parsed.types) ? parsed.types : [],
+      developers: Array.isArray(parsed.developers) ? parsed.developers : [],
+    };
   } catch {
-    return { areas: [], types: [] };
+    return { areas: [], types: [], developers: [] };
   }
 }
 
-function trackBrowsing(area?: string, type?: string) {
+function trackBrowsing(area?: string, type?: string, developer?: string) {
   const history = getBrowsingHistory();
   let changed = false;
   if (area && !history.areas.includes(area)) {
     history.areas.push(area);
+    if (history.areas.length > 10) history.areas = history.areas.slice(-10);
     changed = true;
   }
   if (type && !history.types.includes(type)) {
     history.types.push(type);
     changed = true;
   }
+  if (developer && !history.developers.includes(developer)) {
+    history.developers.push(developer);
+    if (history.developers.length > 10) history.developers = history.developers.slice(-10);
+    changed = true;
+  }
   if (changed) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-    // Notify recommendation engine to refetch live.
     window.dispatchEvent(new Event("jbj:browsing-tracked"));
   }
+}
+
+// Expose so project detail pages can record developer interest.
+if (typeof window !== "undefined") {
+  (window as any).__jbjTrackBrowsing = trackBrowsing;
 }
 
 const PropertyRecommendationPopup = () => {
