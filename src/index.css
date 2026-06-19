@@ -4473,10 +4473,16 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
  * No white diagonal sweep — sqft does not have one and the user requires
  * identical hue/intensity.
  * ------------------------------------------------------------------------ */
+/* Keyframe IDENTICAL to .jj-metallic-active in HorizontalUtilityBar (sqft pill). */
+@keyframes jj-metal-sheen {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 .jj-cta-gold-metallic {
   position: relative !important;
   isolation: isolate;
-  color: #1A1A1A !important;
+  color: #3a2a08 !important;
   background-image: linear-gradient(
     120deg,
     #d8b86a 0%,
@@ -4495,7 +4501,7 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
     0 6px 18px -8px rgba(184, 149, 85, 0.55) !important;
   transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease !important;
   overflow: hidden;
-  animation: jbj-champagne-shimmer 4.5s ease-in-out infinite !important;
+  animation: jj-metal-sheen 4.5s ease-in-out infinite !important;
 }
 .jj-cta-gold-metallic:hover:not(:disabled) {
   transform: translateY(-1px);
@@ -4513,10 +4519,10 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 .jj-cta-gold-metallic > * {
   position: relative;
   z-index: 1;
-  color: #1A1A1A !important;
+  color: #3a2a08 !important;
 }
 .jj-cta-gold-metallic :where(svg, [class*="lucide"]) {
-  color: #1A1A1A !important;
+  color: #3a2a08 !important;
 }
 @media (prefers-reduced-motion: reduce) {
   .jj-cta-gold-metallic { animation: none !important; }
