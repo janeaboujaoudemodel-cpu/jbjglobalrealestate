@@ -132,7 +132,7 @@ const DeveloperDetail = () => {
   }, [isFilterFixed, bottomReached]);
 
   // Reset showAll when filters or developer changes
-  useEffect(() => { setShowAllProjects(false); }, [slug, selectedEmirate, filters]);
+  useEffect(() => { setShowAllProjects(false); setVisibleCount(6); }, [slug, selectedEmirate, filters]);
 
   // Apply emirate filter first, then apply other filters
   const projectsInEmirate = useMemo(() => {
