@@ -37,3 +37,21 @@ export function maybeProxyStorageUrl(url: string, options?: string | ProxyOption
     return url;
   }
 }
+
+/**
+ * Force-proxy ANY URL (own storage OR third-party CDN like provident.ae,
+ * propertyfinder.ae, emaar.com etc.) through the backend download-file
+ * edge function. The function validates the host against ALLOWED_DOMAINS
+ * server-side and streams the file back with Content-Disposition:
+ * attachment, so Chrome's cross-origin "download blocked" page never fires.
+ * Use this for brochures, floor plans and any external PDF download.
+ */
+export function proxyAnyDownloadUrl(url: string, options?: string | ProxyOptions) {
+  if (!url) return url;
+  try {
+    new URL(url);
+    return buildDownloadProxyUrl(url, options);
+  } catch {
+    return url;
+  }
+}
