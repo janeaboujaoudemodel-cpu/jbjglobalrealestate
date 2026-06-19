@@ -103,21 +103,23 @@ function ProviderPanel({
 }: {
   provider: OAuthProvider;
   title: string;
-  existing?: { id: string; client_id: string; client_secret: string; label: string | null };
+  existing?: { id: string; client_id: string; label: string | null };
   onSave: (v: { provider: OAuthProvider; client_id: string; client_secret: string; label?: string }) => void;
   onDelete: (id: string) => void;
   steps: React.ReactNode[];
   saving: boolean;
 }) {
   const [clientId, setClientId] = useState(existing?.client_id ?? "");
-  const [clientSecret, setClientSecret] = useState(existing?.client_secret ?? "");
+  // SECURITY: client_secret is write-only — it is never returned by the API.
+  // The field stays empty on edit; supplying a value rewrites the stored secret.
+  const [clientSecret, setClientSecret] = useState("");
   const [label, setLabel] = useState(existing?.label ?? "");
 
   useEffect(() => {
     setClientId(existing?.client_id ?? "");
-    setClientSecret(existing?.client_secret ?? "");
+    setClientSecret("");
     setLabel(existing?.label ?? "");
-  }, [existing?.client_id, existing?.client_secret, existing?.label]);
+  }, [existing?.client_id, existing?.label]);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
