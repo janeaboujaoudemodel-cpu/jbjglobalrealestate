@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/tooltip";
 
 import MortgageAIAssistant from "@/components/mortgage/MortgageAIAssistant";
+import MortgageParityPanel from "@/components/mortgage/MortgageParityPanel";
 
 interface MortgageProject {
   id: string;
