@@ -191,14 +191,13 @@ export default function RecommendedProjects({
                     ) : null}
                   </div>
 
-                  {/* Sale Status — BOTTOM-RIGHT (moved down from where Handover used to be) */}
+                  {/* Sale Status — BOTTOM-RIGHT — champagne+gold treatment (no orange/red/emerald fills) */}
                   <div className="absolute bottom-3 right-3 z-20">
                     <span
-                      data-no-contrast-guard
-                      className={`inline-flex items-center rounded-md px-2 py-1 text-[11px] font-bold shadow-sm allow-white ${
+                      className={`inline-flex items-center rounded-md px-2 py-1 text-[11px] font-semibold shadow-sm border ${
                         saleStatus.toLowerCase().includes("sold")
-                          ? "bg-red-500 text-white"
-                          : "bg-emerald-500 text-white"
+                          ? "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/70"
+                          : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/70"
                       }`}
                     >
                       {saleStatus}
