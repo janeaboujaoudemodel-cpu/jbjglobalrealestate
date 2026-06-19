@@ -107,7 +107,11 @@ export default function RecommendedDevelopers({
                 >
                   {/* Logo — full-fit, real logo only; name fallback when missing */}
                   <div className="h-28 flex items-center justify-center p-4 bg-white text-[#1A1A1A]">
-                    {dev.logo_url ? (
+                    {getDeveloperLogoOverride(dev.name).forceNameplate ? (
+                      <span className="text-[#1A1A1A] font-bold text-lg tracking-tight text-center px-2">
+                        {dev.name}
+                      </span>
+                    ) : dev.logo_url ? (
                       <img
                         src={dev.logo_url}
                         alt={`${dev.name} logo`}
