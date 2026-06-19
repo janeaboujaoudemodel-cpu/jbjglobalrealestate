@@ -312,12 +312,10 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     )}
                   />
 
-                  <Button 
-                    type="submit" 
-                    size="lg"
-                    variant="primary"
-                    className="w-full"
+                  <button
+                    type="submit"
                     disabled={isSubmitting}
+                    className="jj-cta-gold-metallic w-full h-12 inline-flex items-center justify-center gap-2 text-base font-semibold"
                   >
                     {isSubmitting ? (
                       <>
@@ -330,7 +328,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                         Request a Call Back Now
                       </>
                     )}
-                  </Button>
+                  </button>
                 </form>
               </Form>
             )}

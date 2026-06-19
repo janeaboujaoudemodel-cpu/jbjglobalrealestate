@@ -3493,13 +3493,11 @@ a[class*="bg-red-"]:hover {
 }
 
 
-/* Handover — site-wide ORANGE pill. Single source of truth for
-   every project/listing card's handover date or "Ready" label.
-   Matches <HandoverPill /> component visually so legacy spans
-   using this class look identical to the new component. */
+/* Handover pill — METALLIC CHAMPAGNE-GOLD (orange retired site-wide). */
 .handover-orange,
 .handover-orange * {
-  color: #FFFFFF;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 .handover-orange {
   display: inline-flex !important;
@@ -3507,15 +3505,21 @@ a[class*="bg-red-"]:hover {
   gap: 6px !important;
   padding: 4px 10px !important;
   border-radius: 6px !important;
-  background: #F97316 !important; /* orange-500 */
-  border: 1px solid #EA580C !important; /* orange-600 hairline */
+  background:
+    linear-gradient(135deg, #F7EFDC 0%, #E9D9B2 30%, #D7BE7E 55%, #E9D9B2 80%, #F7EFDC 100%) !important;
+  background-size: 220% 220% !important;
+  border: 1px solid rgba(184, 149, 85, 0.65) !important;
   font-weight: 700 !important;
   letter-spacing: 0.01em !important;
   font-size: 11px !important;
   line-height: 1.2 !important;
   white-space: nowrap !important;
   width: fit-content;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 6px 18px -8px rgba(184, 149, 85, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(184, 149, 85, 0.35) !important;
+  animation: jj-cta-gold-shimmer 4.5s ease-in-out infinite !important;
 }
 @media (min-width: 768px) {
   .handover-orange {
@@ -3524,7 +3528,7 @@ a[class*="bg-red-"]:hover {
   }
 }
 .handover-orange .handover-label {
-  color: #FFFFFF;
+  color: #1A1A1A !important;
   font-weight: 800 !important;
   text-transform: uppercase;
   font-size: 10px;
@@ -4255,21 +4259,24 @@ button[data-phone-code-trigger],
 button[data-phone-code-trigger]:hover,
 button[data-phone-code-trigger]:focus,
 button[data-phone-code-trigger]:focus-visible {
-  background-color: #0A0A0A !important;
-  background-image: none !important;
+  background-color: #F7F2EA !important;
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%) !important;
   border: 1px solid rgba(184, 149, 85, 0.55) !important;
-  color: #FFFFFF;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 button[data-phone-code-trigger]:hover {
-  background-color: #1F1F1F !important;
+  background-color: #EFE6D6 !important;
+  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 100%) !important;
+  border-color: #B89555 !important;
 }
 button[data-phone-code-trigger] :is(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger]:hover :is(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger]:focus-visible :is(span, svg, [class*="lucide"]) {
-  color: #FFFFFF;
-  stroke: #FFFFFF;
-  -webkit-text-fill-color: #FFFFFF;
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
   opacity: 1 !important;
 }
 
@@ -4479,9 +4486,9 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
     linear-gradient(
       135deg,
       #F7EFDC 0%,
-      #E9D9B2 30%,
-      #D7BE7E 55%,
-      #E9D9B2 80%,
+      #E9D9B2 25%,
+      #D7BE7E 50%,
+      #E9D9B2 75%,
       #F7EFDC 100%
     ) !important;
   background-size: 220% 220% !important;
@@ -4492,27 +4499,31 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
     0 6px 18px -8px rgba(184, 149, 85, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.6),
     inset 0 -1px 0 rgba(184, 149, 85, 0.35) !important;
-  transition:
-    background-position 700ms ease,
-    transform 250ms ease,
-    box-shadow 250ms ease,
-    border-color 250ms ease !important;
+  transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease !important;
   overflow: hidden;
+  /* CONTINUOUS metallic shimmer at rest — matches active sqft/sqm treatment. */
+  animation: jj-cta-gold-shimmer 4.5s ease-in-out infinite !important;
+}
+@keyframes jj-cta-gold-shimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 .jj-cta-gold-metallic:hover:not(:disabled) {
-  background-position: 100% 50% !important;
   transform: translateY(-1px);
   border-color: rgba(184, 149, 85, 0.95) !important;
   box-shadow:
     0 12px 30px -10px rgba(184, 149, 85, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.7),
     inset 0 -1px 0 rgba(184, 149, 85, 0.5) !important;
+  animation-duration: 2.2s !important;
 }
 .jj-cta-gold-metallic:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+  animation: none !important;
 }
-/* Slow ambient sheen */
+/* Continuous sweeping sheen — runs at rest, faster on hover. */
 .jj-cta-gold-metallic::before {
   content: "";
   position: absolute;
@@ -4525,11 +4536,16 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
     transparent 65%
   );
   transform: translateX(-120%);
-  transition: transform 1100ms ease;
   z-index: 0;
+  animation: jj-cta-gold-sheen 3.8s ease-in-out infinite !important;
+}
+@keyframes jj-cta-gold-sheen {
+  0%   { transform: translateX(-120%); }
+  55%  { transform: translateX(120%); }
+  100% { transform: translateX(120%); }
 }
 .jj-cta-gold-metallic:hover::before {
-  transform: translateX(120%);
+  animation-duration: 1.6s !important;
 }
 .jj-cta-gold-metallic > * {
   position: relative;
@@ -4539,17 +4555,22 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 .jj-cta-gold-metallic :where(svg, [class*="lucide"]) {
   color: #1A1A1A !important;
 }
+@media (prefers-reduced-motion: reduce) {
+  .jj-cta-gold-metallic,
+  .jj-cta-gold-metallic::before { animation: none !important; }
+}
 
+/* Duplicate phone-code lock — keep champagne (no black). */
 button[data-phone-code-trigger],
 button[data-phone-code-trigger]:hover,
 button[data-phone-code-trigger]:focus,
 button[data-phone-code-trigger]:focus-visible {
-  background-color: hsl(var(--jj-navy-bg)) !important;
-  background-image: none !important;
-  border: 1px solid hsl(var(--jj-gold-border) / 0.55) !important;
+  background-color: #F7F2EA !important;
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%) !important;
+  border: 1px solid rgba(184, 149, 85, 0.55) !important;
 }
 button[data-phone-code-trigger]:hover {
-  background-color: hsl(var(--jj-navy-bg-hover)) !important;
+  background-color: #EFE6D6 !important;
 }
 
 .jj-gold-accent,
