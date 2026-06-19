@@ -304,9 +304,9 @@ const QuizResults = () => {
   };
 
   const badgeLabels = {
-    top1: { label: "Top 1", sublabel: "Best", color: "bg-gradient-to-r from-[#5EEAD4] to-[#22D3EE] border-2 border-[#67E8F9] shadow-lg", textColor: "text-[#02110F]", medalColor: "text-[#67E8F9]" },
-    top2: { label: "Top 2", sublabel: "Strong", color: "bg-gradient-to-r from-[#0E7490] to-[#22D3EE] border-2 border-[#67E8F9] shadow-lg", textColor: "text-white", medalColor: "text-[#5EEAD4]" },
-    top3: { label: "Top 3", sublabel: "Fit", color: "bg-gradient-to-r from-[#031E18] to-[#0E7490] border-2 border-[#5EEAD4] shadow-lg", textColor: "text-white", medalColor: "text-[#22D3EE]" },
+    top1: { label: "Top 1", sublabel: "Best", color: "bg-[#EFE6D6] border border-[#B89555]/60", textColor: "text-[#1A1A1A]", medalColor: "text-[#B89555]" },
+    top2: { label: "Top 2", sublabel: "Strong", color: "bg-[#F7F2EA] border border-[#B89555]/55", textColor: "text-[#1A1A1A]", medalColor: "text-[#B89555]" },
+    top3: { label: "Top 3", sublabel: "Fit", color: "bg-[#FDFBF7] border border-[#B89555]/45", textColor: "text-[#1A1A1A]", medalColor: "text-[#B89555]" },
   };
 
   // Build a plain-text summary of recommendations (used by share channels)
@@ -1424,7 +1424,7 @@ const QuizResults = () => {
 
   if (isLoading) {
     return (
-      <section className="aihf-results min-h-screen flex items-center justify-center" style={{ background: "linear-gradient(180deg, #02110F 0%, #031E18 45%, #020B0A 100%)" }}>
+      <section className="aihf-results min-h-screen flex items-center justify-center" style={{ background: "#FDFBF7" }}>
         <style>{AIHF_RESULTS_STYLE}</style>
         <div className="text-center">
           <Sparkles className="w-12 h-12 mx-auto mb-4 animate-pulse" />
@@ -1435,7 +1435,7 @@ const QuizResults = () => {
   }
 
   return (
-    <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-results min-h-screen py-12 md:py-20" style={{ background: "linear-gradient(180deg, #02110F 0%, #031E18 45%, #020B0A 100%)" }}>
+    <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-results min-h-screen py-12 md:py-20" style={{ background: "#FDFBF7" }}>
       <style>{AIHF_RESULTS_STYLE}</style>
       <div className="container mx-auto px-4">
         {/* Header */}
@@ -1519,7 +1519,7 @@ const QuizResults = () => {
           <div className="mb-12">
             <div id="aihf-top-pick" className="aihf-panel relative backdrop-blur-sm rounded-3xl overflow-hidden scroll-mt-24">
               <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-                <div className="bg-gradient-to-r from-[#5EEAD4] to-[#22D3EE] text-sm font-semibold px-4 py-1.5 rounded-full">
+                <div className="jj-pill-active text-sm font-semibold px-4 py-1.5 rounded-full">
                   #1 Best Match
                 </div>
                 {badges[projects[0].id] && (
@@ -1577,7 +1577,7 @@ const QuizResults = () => {
                         data-aihf-menu
                         className="border-0"
                         style={{
-                          background: "linear-gradient(160deg, #04161C 0%, #031E18 100%)",
+                          background: "#F7F2EA",
                           border: "1px solid rgba(94,234,212,0.55)",
                           boxShadow: "0 20px 50px rgba(34,211,238,0.25)",
                           color: "#FFFFFF",
@@ -1637,7 +1637,7 @@ const QuizResults = () => {
                   : "Type TBC";
                 return (
                   <div key={project.id} className="aihf-panel relative group flex flex-col h-full rounded-2xl overflow-hidden min-h-[420px]">
-                    <div className="absolute top-3 left-3 z-10 rounded-full bg-gradient-to-r from-[#5EEAD4] to-[#22D3EE] px-3 py-1 shadow-md">
+                    <div className="absolute top-3 left-3 z-10 rounded-full jj-pill-active px-3 py-1">
                       <span className="text-sm font-bold">#{index + 2}</span>
                     </div>
                     {badge && (
@@ -1698,7 +1698,7 @@ const QuizResults = () => {
                           data-aihf-menu
                           className="border-0"
                           style={{
-                            background: "linear-gradient(160deg, #04161C 0%, #031E18 100%)",
+                            background: "#F7F2EA",
                             border: "1px solid rgba(94,234,212,0.55)",
                             boxShadow: "0 20px 50px rgba(34,211,238,0.25)",
                             color: "#FFFFFF",
@@ -1757,7 +1757,7 @@ const QuizResults = () => {
             {/* AI Comparison Card */}
             <div className="aihf-tile rounded-2xl p-6 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#5EEAD4] to-[#22D3EE] flex items-center justify-center shadow-md shadow-cyan-400/20">
+                <div className="w-12 h-12 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 flex items-center justify-center">
                   <Sparkles className="w-6 h-6" />
                 </div>
                 <div>
@@ -1779,7 +1779,7 @@ const QuizResults = () => {
             {/* Professional Evaluation Card */}
             <div className="aihf-tile rounded-2xl p-6 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#5EEAD4] to-[#22D3EE] flex items-center justify-center shadow-md shadow-cyan-400/20">
+                <div className="w-12 h-12 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 flex items-center justify-center">
                   <Users className="w-6 h-6" />
                 </div>
                 <div>
@@ -1802,7 +1802,7 @@ const QuizResults = () => {
             {/* Regenerate / AI Finder Card */}
             <div className="aihf-tile rounded-2xl p-6 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#5EEAD4] to-[#22D3EE] flex items-center justify-center shadow-md shadow-cyan-400/20">
+                <div className="w-12 h-12 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 flex items-center justify-center">
                   <Brain className="w-6 h-6" />
                 </div>
                 <div>
@@ -1854,7 +1854,7 @@ const QuizResults = () => {
           data-on-dark
           className="aihf-results allow-white sm:max-w-md border-0"
           style={{
-            background: "linear-gradient(160deg, #04161C 0%, #031E18 55%, #02110F 100%)",
+            background: "#F7F2EA",
             border: "1px solid rgba(94,234,212,0.45)",
             boxShadow:
               "0 24px 70px rgba(45,212,191,0.25), inset 0 0 34px rgba(103,232,249,0.07)",
