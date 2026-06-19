@@ -8,11 +8,15 @@ const KEY = "jbj_preview_as_visitor";
 const EVT = "jbj:preview-as-visitor-change";
 
 export function getPreviewAsVisitor(): boolean {
-  if (typeof window === "undefined") return false;
+  if (typeof window === "undefined") return true;
   try {
-    return sessionStorage.getItem(KEY) === "1";
+    const v = sessionStorage.getItem(KEY);
+    // Default to USER (visitor) view — owners must opt-in to Owner Mode so
+    // edit controls never appear by accident on first landing.
+    if (v === null) return true;
+    return v === "1";
   } catch {
-    return false;
+    return true;
   }
 }
 
