@@ -97,6 +97,7 @@ import OwnerVisitorToggle from "@/components/project-detail/OwnerVisitorToggle";
 import BrokerBrandedMaterialsCard from "@/components/project-detail/BrokerBrandedMaterialsCard";
 import { useUserMode } from "@/hooks/useUserMode";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import {
