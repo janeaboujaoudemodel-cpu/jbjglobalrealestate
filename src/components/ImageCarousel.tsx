@@ -105,6 +105,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
       if (url.includes("google.com/maps")) return false;
       return true;
     });
+    // Pass 1: collapse by CDN-aware path fingerprint
     const best = new Map<string, typeof filtered[number]>();
     for (const img of filtered) {
       const key = dedupeKey(img.image_url);
@@ -113,8 +114,21 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
         best.set(key, img);
       }
     }
-    return Array.from(best.values());
+    // Pass 2: aggressive same-basename fallback so a duplicate uploaded to
+    // two CDNs (Supabase + developer site) collapses to the higher-res copy.
+    const byBase = new Map<string, typeof filtered[number]>();
+    const noBaseKey: typeof filtered = [];
+    for (const img of best.values()) {
+      const bk = basenameKey(img.image_url);
+      if (!bk) { noBaseKey.push(img); continue; }
+      const existing = byBase.get(bk);
+      if (!existing || sizeScore(img.image_url) > sizeScore(existing.image_url)) {
+        byBase.set(bk, img);
+      }
+    }
+    return [...byBase.values(), ...noBaseKey];
   }, [rawImages]);
+
 
   const total = images.length;
   const hasMultiple = total > 1;
