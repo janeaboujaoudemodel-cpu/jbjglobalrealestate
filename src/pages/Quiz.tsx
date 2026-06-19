@@ -386,13 +386,15 @@ const Quiz = () => {
       // Drops nested joins (developer/images) which made the prior query fetch megabytes
       // of unused data and was the root cause of the long "Finding your perfect matches"
       // loader on this screen.
-      const { data, error } = await supabase
+      const { applyPurchaseOnly } = await import("@/lib/projects/excludeLeasing");
+      const baseQuery = supabase
         .from("projects")
         .select(
-          "id, slug, name, emirate, location, area_name, price_from, bedrooms_min, bedrooms_max, handover_date, sale_status, is_sold_out, construction_status, property_type_label, unit_types, views, amenities, cover_image_url"
+          "id, slug, name, emirate, location, area_name, price_from, bedrooms_min, bedrooms_max, handover_date, sale_status, is_sold_out, construction_status, property_type_label, unit_types, views, amenities, cover_image_url, listing_kind"
         )
         .eq("is_published", true)
         .limit(2000);
+      const { data, error } = await applyPurchaseOnly(baseQuery);
       if (error) throw error;
       return data;
     },
