@@ -28,14 +28,6 @@ export interface ServiceSeoSource {
  */
 export const SERVICE_SEO_CATALOG: ServiceSeoSource[] = [
   {
-    slug: "ai-tools",
-    file: "AITools.tsx",
-    title: "AI Tools & Calculators | JBJ Global Real Estate",
-    description:
-      "Clarity-first tools that support decision-making through structured inputs, transparent outputs, and consistent formatting.",
-    canonicalPath: "/ai-hub",
-  },
-  {
     slug: "architecture",
     file: "Architecture.tsx",
     title:

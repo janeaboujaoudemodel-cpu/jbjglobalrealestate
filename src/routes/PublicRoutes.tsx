@@ -312,7 +312,7 @@ export const PublicRoutes = () => (
     <Route path="/services/concierge" element={<Concierge />} />
     <Route path="/services/company-setup" element={<CompanySetup />} />
     <Route path="/services/signature-collection" element={<SignatureCollection />} />
-    <Route path="/services/ai-tools" element={<Navigate to="/ai-hub" replace />} />
+    
     <Route path="/services/broker-certification" element={<BrokerCertification />} />
     <Route path="/services/complaint-procedures" element={<ComplaintProcedures />} />
     <Route path="/services/customer-happiness-center" element={<CustomerHappinessCenter />} />
