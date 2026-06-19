@@ -29,6 +29,8 @@ const consultationSchema = z.object({
       message: getPhoneValidation(val).message
     })),
   serviceNeeded: z.string().min(1, "Please select a service"),
+  bedrooms: z.string().optional(),
+  sizeBucket: z.string().optional(),
   nationality: z.string().optional(),
   preferredLanguage: z.string().optional(),
   preferredTime: z.string().optional(),
@@ -40,6 +42,26 @@ const consultationSchema = z.object({
     message: "You must agree to the Terms of Service and Privacy Policy",
   }),
 });
+
+const BEDROOM_OPTIONS = [
+  { value: "studio", label: "Studio" },
+  { value: "1", label: "1 BR" },
+  { value: "2", label: "2 BR" },
+  { value: "3", label: "3 BR" },
+  { value: "4", label: "4 BR" },
+  { value: "5", label: "5 BR" },
+  { value: "6", label: "6 BR" },
+  { value: "7+", label: "7+ BR" },
+];
+
+const SIZE_BUCKETS = [
+  { value: "any", label: "Any" },
+  { value: "lt-800", label: "< 800 sqft" },
+  { value: "800-1200", label: "800 – 1,200 sqft" },
+  { value: "1200-1800", label: "1,200 – 1,800 sqft" },
+  { value: "1800-2500", label: "1,800 – 2,500 sqft" },
+  { value: "2500-plus", label: "2,500+ sqft" },
+];
 
 type ConsultationFormData = z.infer<typeof consultationSchema>;
 
@@ -100,6 +122,8 @@ export const ConsultationRequestForm = ({
       email: "",
       phone: "",
       serviceNeeded: "",
+      bedrooms: "",
+      sizeBucket: "any",
       nationality: "",
       preferredLanguage: "",
       preferredTime: "",
@@ -305,8 +329,72 @@ export const ConsultationRequestForm = ({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          {/* Bedrooms — full width, professional segmented pills */}
+          <FormField
+            control={form.control}
+            name="bedrooms"
+            render={({ field }) => (
+              <FormItem>
+                <p className="text-[#1A1A1A] text-sm font-medium mb-2">Bedrooms</p>
+                <div className="flex flex-wrap gap-2">
+                  {BEDROOM_OPTIONS.map((b) => {
+                    const active = field.value === b.value;
+                    return (
+                      <button
+                        key={b.value}
+                        type="button"
+                        onClick={() => field.onChange(active ? "" : b.value)}
+                        data-cta={active ? "champagne-active" : undefined}
+                        className={
+                          active
+                            ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
+                            : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
+                        }
+                      >
+                        {b.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* Preferred Size — full width, market-bucket pills (no broken min/max inputs) */}
+          <FormField
+            control={form.control}
+            name="sizeBucket"
+            render={({ field }) => (
+              <FormItem>
+                <p className="text-[#1A1A1A] text-sm font-medium mb-2">Preferred Size</p>
+                <div className="flex flex-wrap gap-2">
+                  {SIZE_BUCKETS.map((b) => {
+                    const active = (field.value || "any") === b.value;
+                    return (
+                      <button
+                        key={b.value}
+                        type="button"
+                        onClick={() => field.onChange(b.value)}
+                        data-cta={active ? "champagne-active" : undefined}
+                        className={
+                          active
+                            ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
+                            : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
+                        }
+                      >
+                        {b.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-[#1A1A1A]/60 text-xs mt-2">Optional — helps us match you to the right unit mix.</p>
+              </FormItem>
+            )}
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <FormField
+
               control={form.control}
               name="nationality"
               render={({ field }) => (

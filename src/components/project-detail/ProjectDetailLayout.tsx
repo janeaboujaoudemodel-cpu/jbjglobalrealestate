@@ -517,29 +517,52 @@ export default function ProjectDetailLayout({
     if (targetRef) scrollToRef(targetRef);
   };
 
-  const handleDocumentDownload = (
+  const handleDocumentDownload = async (
     type: "brochure" | "floor_plan" | "payment_plan" | "images",
     url?: string,
     filename?: string,
   ) => {
+    const niceName =
+      filename ||
+      `${project.name.replace(/\s+/g, "-")}-${type.replace(/_/g, "-")}.${type === "images" ? "jpg" : "pdf"}`;
+
+    // Force ANY external/CDN/storage doc through our backend download-file
+    // proxy so Chrome never shows the cross-origin "download blocked" page.
+    // (Images keep their direct CDN URL for fast inline use.)
+    const { proxyAnyDownloadUrl } = await import("@/utils/downloadProxy");
     const resolvedUrl = url
       ? type === "images"
         ? url
-        : maybeProxyStorageUrl(
-            url,
-            filename || `${project.name.replace(/\s+/g, "-")}-${type.replace(/_/g, "-")}.pdf`,
-          )
+        : proxyAnyDownloadUrl(url, { filename: niceName, disposition: "attachment" })
       : undefined;
 
     if (isLeadCaptured && resolvedUrl) {
-      // Force download via hidden <a> tag instead of opening in new tab
-      const link = document.createElement("a");
-      link.href = resolvedUrl;
-      link.download = filename || "";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      return;
+      // Stream as blob → same-tab anchor click. This is the ONLY pattern that
+      // works for all browsers without triggering the popup blocker.
+      try {
+        const res = await fetch(resolvedUrl);
+        if (!res.ok) throw new Error(String(res.status));
+        const blob = await res.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = niceName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => window.URL.revokeObjectURL(blobUrl), 4000);
+        return;
+      } catch (err) {
+        console.warn("Blob download failed, falling back to anchor:", err);
+        const link = document.createElement("a");
+        link.href = resolvedUrl;
+        link.download = niceName;
+        link.rel = "noopener";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return;
+      }
     }
 
     setCaptureDocType(type);
