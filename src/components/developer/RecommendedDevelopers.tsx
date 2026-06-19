@@ -113,6 +113,11 @@ export default function RecommendedDevelopers({
                         alt={`${dev.name} logo`}
                         loading="lazy"
                         className="block max-h-full max-w-full w-auto h-auto object-contain"
+                        style={{
+                          filter: getDeveloperLogoOverride(dev.name).invert
+                            ? "invert(1) brightness(1)"
+                            : "contrast(1.08) saturate(1.1)",
+                        }}
                       />
                     ) : (
                       <span className="text-[#1A1A1A] font-bold text-base text-center px-2">
