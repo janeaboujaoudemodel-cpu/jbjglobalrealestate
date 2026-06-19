@@ -238,7 +238,7 @@ const DeveloperDetail = () => {
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-premium-bg via-premium-bg/60 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-premium-bg/70 via-transparent to-transparent" />
         {/* Hero Title Overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white text-center mb-4 drop-shadow-lg">
