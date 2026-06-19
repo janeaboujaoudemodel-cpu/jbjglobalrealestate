@@ -313,7 +313,7 @@ const Footer = () => {
     { href: "/documents", label: "Document Designer" },
     { href: "/qr-generator", label: "QR Generator" },
     { href: "/video-meeting", label: "Video Meeting" },
-    { href: "/presentations", label: "Presentations" },
+    // { href: "/presentations", label: "Presentations" }, // REMOVED — broken tool retired
     { href: "/e-signature", label: "E-Signature" },
     { href: "/meeting-center", label: "Meeting Center" },
     { href: "/contract-forms", label: "Contract Forms" },

@@ -273,7 +273,7 @@ const hubSections: HubSection[] = [
       { href: "/documents", label: "Documents & Spreadsheets" },
       { href: "/video-meeting", label: "Video Meet" },
       { href: "/ai-calendar", label: "Calendar & Notes" },
-      { href: "/presentations", label: "Presentations" },
+      // { href: "/presentations", label: "Presentations" }, // REMOVED — broken tool retired
       { href: "/resale-properties", label: "Resale Properties" },
     ],
   },

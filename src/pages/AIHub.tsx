@@ -115,7 +115,7 @@ const ALL_TOOLS: ToolDef[] = [
   { id: "cover-letter", title: "JBJ Cover Letter Generator", description: "Generate tailored cover letters with AI. Export as PDF.", icon: FileText, link: "/toolkit/corporate-suite/cover-letter", category: "corporate" },
   { id: "logo-creator", title: "JBJ AI Logo Creator", description: "Generate professional logos with AI. Export PNG & SVG.", icon: Palette, link: "/toolkit/corporate-suite/logo-creator", category: "corporate" },
   { id: "company-profile", title: "JBJ Company Profile Builder", description: "Build a multi-page company profile PDF with AI content.", icon: Briefcase, link: "/toolkit/corporate-suite/company-profile", category: "corporate" },
-  { id: "presentation-tool", title: "JBJ Presentation Builder", description: "Build professional slide decks with AI content.", icon: Layers, link: "/presentations", category: "corporate" },
+  // { id: "presentation-tool", ... } REMOVED — broken slide builder retired per owner directive (June 2026)
   { id: "landing-page-builder", title: "JBJ Landing Page Builder", description: "Create a one-page business site with HTML export.", icon: Globe, link: "/toolkit/corporate-suite/landing-page", category: "corporate" },
   { id: "esign", title: "JBJ E-Sign", description: "Contract signing with multi-signer workflows.", icon: Handshake, link: "/e-signature", category: "corporate" },
   { id: "scan-sign", title: "JBJ Scan & Sign", description: "Camera scan, handwritten signature & PDF export.", icon: FileSignature, link: "/toolkit/scan-sign", category: "corporate" },

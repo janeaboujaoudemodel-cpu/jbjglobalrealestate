@@ -232,7 +232,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "QR Generator", href: "/qr-generator", icon: QrCode },
   { label: "Contract Forms", href: "/contract-forms", icon: FileSignature },
   { label: "Video Meeting", href: "/video-meeting", icon: Video },
-  { label: "Presentations", href: "/presentations", icon: Presentation },
+  // { label: "Presentations", href: "/presentations", icon: Presentation }, // REMOVED — broken tool retired per owner directive
   { label: "Sitemap", href: "/sitemap", icon: MapPin },
   { label: "Pricing", href: "/pricing", icon: DollarSign },
   { label: "Onboarding", href: "/onboarding", icon: UserPlus },
@@ -462,7 +462,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'QR Generator', icon: QrCode, href: '/qr-generator' },
     { label: 'Contract Forms', icon: FileSignature, href: '/contract-forms' },
     { label: 'Video Meeting', icon: Video, href: '/video-meeting' },
-    { label: 'Presentations', icon: Presentation, href: '/presentations' },
+    // { label: 'Presentations', icon: Presentation, href: '/presentations' }, // REMOVED — broken tool retired
     { label: 'Meeting Center', icon: Users, href: '/meeting-center' },
     { label: 'Client Portal', icon: Users, href: '/client-portal' },
   ],

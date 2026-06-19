@@ -40,16 +40,9 @@ const CONNECTED_TOOLS = [
     color: 'from-purple-500 to-indigo-500',
     capabilities: ['Property Tours', 'Reels', 'Testimonials'],
   },
+  // Presentations entry REMOVED — broken slide builder retired per owner directive (June 2026).
   {
-    id: 'presentations',
-    name: 'Presentations',
-    description: 'Create pitch decks and proposals',
-    icon: Presentation,
-    path: '/presentations',
-    color: 'from-blue-500 to-cyan-500',
-    capabilities: ['Pitch Decks', 'Rate Cards', 'Proposals'],
-  },
-  {
+
     id: 'documents',
     name: 'Documents',
     description: 'Generate contracts and agreements',

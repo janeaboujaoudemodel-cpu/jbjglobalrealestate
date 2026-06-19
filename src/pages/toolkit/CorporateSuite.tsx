@@ -68,17 +68,9 @@ const tools = [
     badge: "AI",
     accentColor: "#14B8A6",
   },
+  // Presentation tile REMOVED — broken slide builder retired per owner directive (June 2026)
   {
-    id: "presentation",
-    title: "Presentation",
-    subtitle: "Slide deck creator",
-    description: "Build professional slide decks with Canva-style templates, AI-generated content and slide-by-slide editing. Export to PDF.",
-    icon: Presentation,
-    href: "/presentations",
-    badge: "Pro",
-    accentColor: "#F43F5E",
-  },
-  {
+
     id: "landing-page",
     title: "Landing Page",
     subtitle: "One-page site builder",

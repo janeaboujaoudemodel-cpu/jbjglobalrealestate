@@ -157,24 +157,25 @@ export default function BookStyleDocuments({
               {/* Top-right type chip — solid champagne pill for guaranteed legibility */}
               <div className="absolute top-3 right-3 z-20 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F7F2EA] ring-1 ring-[#B89555]/70 shadow-sm">
                 <span className="text-[#B89555]">{icon}</span>
-                <span className="text-[10px] uppercase tracking-[0.16em] font-semibold text-[#1A1A1A]">{typeLabel}</span>
+                <span className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#1A1A1A]">{typeLabel}</span>
               </div>
 
               {/* Bottom label panel — solid champagne for guaranteed legibility */}
-              <div className="absolute inset-x-0 bottom-0 h-[38%] bg-[#F7F2EA] border-t border-[#B89555]/50 px-3.5 py-3 flex flex-col justify-between">
+              <div className="absolute inset-x-0 bottom-0 h-[40%] bg-[#F7F2EA] border-t border-[#B89555]/60 px-3.5 py-3 flex flex-col justify-between">
                 <div>
-                  <p className="text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 font-semibold mb-1">
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/75 font-bold mb-1.5 line-clamp-1">
                     {projectName}
                   </p>
-                  <p className="text-[#1A1A1A] font-semibold text-[13px] leading-tight line-clamp-2">
+                  <p className="text-[#1A1A1A] font-bold text-[14px] leading-tight line-clamp-2">
                     {title}
                   </p>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#B89555] font-semibold">View</span>
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A] font-bold">View</span>
                   <Eye className="w-3.5 h-3.5 text-[#1A1A1A] transition-colors" />
                 </div>
               </div>
+
 
               {/* Page edges effect — right side, simulates paper stack */}
               <div className="absolute right-0 top-0 bottom-0 w-[3px] z-10">
