@@ -388,6 +388,14 @@ export default function ProjectDetailLayout({
       area_name: project.area_name ?? null,
       cover_image_url: project.cover_image_url ?? null,
     });
+    // Feed the recommendation engine: developer + area weighting (item #11).
+    try {
+      (window as any).__jbjTrackBrowsing?.(
+        project.area_name ?? undefined,
+        "offplan",
+        project.developer?.name ?? undefined,
+      );
+    } catch { /* noop */ }
   }, [project.id, project.slug, project.name]);
 
   // "Return to previous project" chip — only when arrived from another project's nearby map
