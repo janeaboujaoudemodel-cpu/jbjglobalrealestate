@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { FileText } from "lucide-react";
-import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { proxyAnyDownloadUrl } from "@/utils/downloadProxy";
 import { ProjectInquiryForm } from "@/components/project-detail/ProjectInquiryForm";
 
 interface LeadCaptureModalProps {
@@ -45,7 +45,12 @@ const LeadCaptureModal = ({
   const title = isInterestOnly
     ? "Register Your Interest"
     : `Download ${DOCUMENT_LABELS[documentType] ?? "Document"}`;
-  const safeDocumentUrl = documentUrl ? maybeProxyStorageUrl(documentUrl) : undefined;
+  const safeDocumentUrl = documentUrl
+    ? proxyAnyDownloadUrl(documentUrl, {
+        filename: `${projectName.replace(/\s+/g, "-")}-${documentType}.pdf`,
+        disposition: "attachment",
+      })
+    : undefined;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
