@@ -17,7 +17,30 @@ interface ProjectInquiryFormProps {
   projectName: string;
   projectLocation?: string;
   developerName?: string;
+  /** Called after a successful submission. Receives the document URL to download, if any. */
+  onSuccess?: (documentUrl?: string) => void;
+  /** Optional document URL the user will receive after submitting (e.g. brochure). */
+  documentUrl?: string;
+  /** Optional context label for the submitted lead, e.g. "Download Brochure". */
+  intent?: string;
+  /** Compact mode (used inside a modal). Hides the big heading/subtitle. */
+  compact?: boolean;
 }
+
+const TIMELINE_OPTIONS = [
+  { value: "1_month", label: "Within 1 month" },
+  { value: "1_3_months", label: "1 – 3 months" },
+  { value: "3_6_months", label: "3 – 6 months" },
+  { value: "6_12_months", label: "6 – 12 months" },
+  { value: "exploring", label: "Just exploring" },
+];
+
+const CONTACT_TIME_OPTIONS = [
+  { value: "morning", label: "Morning (9am – 12pm)" },
+  { value: "afternoon", label: "Afternoon (12pm – 5pm)" },
+  { value: "evening", label: "Evening (5pm – 9pm)" },
+  { value: "anytime", label: "Anytime" },
+];
 
 // UAE Emirates list
 const UAE_EMIRATES = [
@@ -46,7 +69,11 @@ export function ProjectInquiryForm({
   projectId, 
   projectName, 
   projectLocation,
-  developerName 
+  developerName,
+  onSuccess,
+  documentUrl,
+  intent,
+  compact = false,
 }: ProjectInquiryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -58,6 +85,9 @@ export function ProjectInquiryForm({
     preferredDeveloper: developerName || "",
     selectedEmirate: "",
     location: projectLocation || "",
+    timeline: "",
+    contactTime: "",
+    whatsappPreferred: false,
     message: ""
   });
 
