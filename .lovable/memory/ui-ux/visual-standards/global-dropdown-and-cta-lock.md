@@ -1,11 +1,33 @@
 ---
 name: Global Dropdown + Metallic CTA Lock
-description: All Radix Select/Popover/Combobox content renders champagne+soft-gold (never white-on-black). Metallic CTA palette/animation MUST match the sqft/sqm active pill (`.jbj-shimmer-champagne`).
+description: Dropdown surfaces match the form (#FDFBF7 + gold hairline + premium row sizing). Metallic CTA uses the EXACT sqft pill animation (jj-metal-sheen). Phone country trigger is STATIC champagne (no animation).
 type: constraint
 ---
 
-- Every floating surface rendered via `[data-radix-popper-content-wrapper]` MUST use champagne fill (`#F7F2EA` → linear-gradient to `#FDFBF7`) and a 1px soft-gold hairline `rgba(184,149,85,.55)`. Opt-out only via `data-no-contrast-guard`, `data-on-dark`, or `.allow-white` on the content node.
-- `<PhoneInput />` default `variant` is `'light'`. The dark variant must never be the implicit default.
-- `.jbj-form-popover` MUST use `--t-surface` + soft-gold border. Never `--t-form-blue` border.
-- `.jj-cta-gold-metallic` palette MUST be identical to `.jbj-shimmer-champagne` (`#E6D3A8 / #F5E9CC / #D8BE82`). Both the gradient drift (`jbj-champagne-shimmer 3s linear infinite`) AND the diagonal sweep (`metallicSweep 3.2s ease-in-out infinite`) MUST run continuously at rest; hover only speeds them up.
-- `usePreviewAsVisitor()` defaults to `true` for owners so edit controls never open on first landing; choice persists explicitly (`"0"`/`"1"`).
+# Locked rules — `src/index.css`
+
+## Metallic CTA (`.jj-cta-gold-metallic`)
+- Palette + size + animation MUST be byte-identical to `.jj-metallic-active` (sqft pill in `HorizontalUtilityBar.tsx`).
+- Keyframe: `jj-metal-sheen` ping-pong (`0%→100%→0%` background-position), `4.5s ease-in-out infinite`.
+- Used ONLY for primary CTAs (Request Callback, Request Consultation, Register Interest, Submit Report, Download/Request Brochure).
+- Text + icons locked to `#3a2a08` for ink-on-gold contrast.
+
+## Phone country trigger (`button[data-phone-code-trigger]`)
+- STATIC. No metallic, no animation, no shimmer.
+- Surface = `#FDFBF7` (form cream); border `1px solid rgba(184,149,85,0.55)`; hover `#F7F2EA`.
+- Removed from dark-CTA contrast list — text/icons stay ink `#1A1A1A`.
+
+## Floating surfaces (Radix popper)
+- All `[data-radix-popper-content-wrapper] > [data-radix-{select,popover,dropdown-menu,combobox}-content]`, listbox/menu/dialog and `.jbj-form-popover` MUST render:
+  - `background-color: #FDFBF7` (no gradient — flat to match form fields)
+  - `border: 1px solid rgba(184,149,85,0.55)`
+  - `padding: 6px` (shell) + per-row `min-height: 40px`, `padding: 8px 12px`, `font-size: 14px`, `gap: 10px`, `border-radius: 8px`
+  - Flag/leading emoji rendered via `.text-lg` is forced to `font-size: 18px` for premium readability.
+  - Hover/highlight tint: `rgba(184,149,85,0.14)`.
+- Dark popovers opt-in via `[data-on-dark]`.
+
+## Default phone variant
+- `<PhoneInput />` default `variant` is `'light'`. Dark variant must never be the implicit default.
+
+## Owner mode
+- `usePreviewAsVisitor()` defaults to `true` so owners land in User View on first paint.
