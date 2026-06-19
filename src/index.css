@@ -4371,7 +4371,7 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 :root {
   --jj-on-dark: 0 0% 100%;
   --jj-on-light: 0 0% 10%;
-  --jj-navy-bg: 0 0% 4%;        /* #0A0A0A — clean black (Navy→Black flip) */>
+  --jj-navy-bg: 0 0% 4%;        /* #0A0A0A — clean black (Navy→Black flip) */
   --jj-navy-bg-hover: 0 0% 12%; /* #1F1F1F */
   --jj-light-bg: 36 38% 88%;
   --jj-light-bg-hover: 36 35% 83%;
