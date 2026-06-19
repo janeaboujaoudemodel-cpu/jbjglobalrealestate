@@ -54,11 +54,15 @@
   --t-gold-soft:      var(--brand-gold-soft);
   --t-gold-faint:     var(--brand-gold-faint);
   --t-gold-ring:      var(--brand-gold-ring);
+  /* `--t-form-blue` kept as ink for label/field TEXT contrast.
+     Borders now use --t-form-stroke (soft champagne-gold) globally. */
   --t-form-blue:      var(--brand-blue);
   --t-form-blue-soft: var(--brand-blue-soft);
-  --t-form-blue-muted: var(--brand-blue-muted);
-  --t-form-blue-ring: var(--brand-blue-ring);
-  --t-form-blue-tint: var(--brand-blue-tint);
+  --t-form-blue-muted: rgba(26, 26, 26, 0.55);
+  --t-form-blue-ring: rgba(184, 149, 85, 0.28);
+  --t-form-blue-tint: rgba(184, 149, 85, 0.10);
+  --t-form-stroke:    rgba(184, 149, 85, 0.55);
+  --t-form-stroke-hover: #B89555;
 
   --t-careers-navy: #071B33;
   --t-careers-navy-hover: #0E2848;
@@ -136,11 +140,15 @@ label[data-required]::after {
 .jbj-form-field:focus,
 .jbj-form-field:focus-visible {
   background-color: transparent !important;
-  border: 2px solid var(--t-form-blue) !important;
+  border: 1.5px solid var(--t-form-stroke) !important;
   border-radius: 0.5rem !important;
   box-shadow: none !important;
   color: var(--t-form-blue);
   -webkit-text-fill-color: var(--t-form-blue);
+}
+
+.jbj-form-field:hover {
+  border-color: var(--t-form-stroke-hover) !important;
 }
 
 .jbj-form-field::placeholder {
@@ -171,7 +179,7 @@ label[data-required]::after {
 
 .jbj-form-field:focus,
 .jbj-form-field:focus-visible {
-  border-color: var(--t-form-blue) !important;
+  border-color: var(--t-form-stroke-hover) !important;
   box-shadow: 0 0 0 3px var(--t-form-blue-ring) !important;
 }
 
@@ -877,24 +885,24 @@ input.jbj-blue-field,
 textarea.jbj-blue-field,
 button[role="combobox"].jbj-blue-field {
   background-color: #FDFBF7 !important;
-  border: 2px solid #0A0A0A !important;
+  border: 1.5px solid rgba(184, 149, 85, 0.55) !important;
   border-radius: 0.625rem !important;
   color: #1A1A1A;
   -webkit-text-fill-color: #1A1A1A;
   box-shadow:
-    0 1px 2px rgba(10,10,10,0.06),
+    0 1px 2px rgba(184, 149, 85, 0.10),
     inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
   transition: border-color 200ms ease, box-shadow 200ms ease,
               background-color 200ms ease, transform 200ms ease !important;
 }
-.jbj-blue-field:hover { border-color: #1F1F1F !important; }
+.jbj-blue-field:hover { border-color: #B89555 !important; }
 .jbj-blue-field:focus,
 .jbj-blue-field:focus-visible {
   outline: none !important;
-  border-color: #0A0A0A !important;
+  border-color: #B89555 !important;
   box-shadow:
-    0 0 0 3px rgba(10,10,10,0.18),
-    0 8px 24px -16px rgba(10,10,10,0.35) !important;
+    0 0 0 3px rgba(184, 149, 85, 0.28),
+    0 8px 24px -16px rgba(184, 149, 85, 0.40) !important;
 }
 
 .jbj-gold-field,

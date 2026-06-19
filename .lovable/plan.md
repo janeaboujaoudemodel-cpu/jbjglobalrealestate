@@ -1,46 +1,83 @@
-You are right to call this out. The problem happened because the previous change was applied to `ProjectInquiryForm`, but the visible page still uses two different components: `ConsultationRequestForm` for “Register Interest in Distrikt…” and `CallToActionSection` for “Request a Call Back Now”. I also did not verify the exact clicked UI before claiming the brochure proxy was fixed. That was wrong.
+Root cause: the visible problems are not one component. Some previous fixes changed the wrong or lower-level components, while global CSS, phone input styling, owner-only edit controls, recommendation filters, gallery URL de-duping, and backend enrichment still override the intended design/behavior.
 
-Plan to fix it now:
+I will implement this in the exact order below and validate each step before moving to the next.
 
-1. Replace the visible “Register Interest in Distrikt…” form
-   - Update `ConsultationRequestForm` because this is the actual visible form on the project page.
-   - Add the professional real-estate fields there, including a single full-width “Preferred Size” selector with market buckets instead of broken min/max/from/to inputs.
-   - Remove redundant wording and keep labels professional: minimum/maximum only where range language is needed, not “to/to” or cramped two-line placeholders.
-   - Fix borders, surfaces, placeholders, buttons, select triggers, and phone input styling to the champagne/ink/gold system.
-   - Make the form responsive on phone/tablet: no two-column controls where text wraps or clips.
+1. Global form borders and field styling
+   - Replace black form borders across the app with soft gold/champagne field styling through the shared form/input/select/textarea/phone-input system.
+   - Keep hero-section CTAs untouched.
+   - Ensure focus, hover, disabled, validation, dropdowns, textarea, and country-code controls never render black borders on champagne forms.
 
-2. Fix “Request a Call Back Now”
-   - Update `CallToActionSection`, which is the visible callback form.
-   - Apply the same field styling system and mobile-safe layout.
-   - Ensure buttons use locked CTA primitives or explicit dark CTA styling with correct white-on-black contrast only when the button background is truly black.
+2. Metallic gold CTA system for inside-page CTAs
+   - Add one reusable metallic champagne-gold CTA class matching the active sq ft/sq m and active section-tab treatment.
+   - Apply it to inside-page primary CTAs: Register Interest, Request Consultation, Request a Call Back, Submit, Report, Download/Request document CTAs where they sit inside page sections/forms.
+   - Do not change hero CTAs.
 
-3. Stop the wrong generic popup from hijacking project brochure flows
-   - The “Unlock Premium Features / Buying” modal in the screenshot is `LeadCapturePopup`, not the brochure form.
-   - Suppress that generic smart popup on `/project/:slug` pages so project CTAs open only the project-specific lead capture modal.
-   - Keep browsing free and do not force a generic access form over project pages.
+3. Register Interest and Request Callback forms
+   - Make bedrooms multi-select.
+   - Make preferred size multi-select.
+   - Clean the phone/country-code control so it no longer appears as a black block inside light forms.
+   - Put the forms on a deliberate champagne surface band/card so they do not look dropped directly under Report Issue.
+   - Apply the same form UX to Request a Call Back.
 
-4. Fix brochure download correctly
-   - Update `ProjectDetailLayout.handleDocumentDownload` to use `proxyAnyDownloadUrl` for every document URL, not only storage URLs.
-   - This fixes external brochure PDFs that currently bypass the proxy and trigger Chrome’s blocked/download warning.
-   - Update document success download behavior so it fetches the proxied URL as a blob and starts a same-tab download instead of relying on cross-origin anchor behavior.
-   - Keep the fallback as “Request Brochure” only when no valid brochure URL exists.
+4. Gallery duplicate/quality fix
+   - Strengthen image de-duplication to collapse low/high versions of the same photo.
+   - Keep the highest-resolution URL only.
+   - Ensure the +14/fullscreen gallery shows one full-screen experience, object-contain photos, no changing background image, no broken contrast buttons.
 
-5. Harden the backend download proxy and source rules
-   - Update `download-file` edge function allowed domains to remove forbidden secondary portals from document proxying.
-   - Reuse the shared source allowlist logic where appropriate so brochure/document fetching rejects secondary portals with `secondary_source_blocked`.
-   - Keep developer-direct and Provident partner sources allowed.
-   - Fix CORS headers on the shared rejection response so frontend receives a clean 403 instead of an opaque failure.
+5. Owner view vs public/user view
+   - Make the owner/user toggle prominent and usable on project pages.
+   - Default owner preview can switch cleanly to public user mode without edit controls automatically opening.
+   - Ensure owner upload/edit sections hide when user/public mode is selected.
 
-6. Lock the rule in memory and code comments
-   - Ensure the no-secondary-source scraping rule remains in project memory and in the shared edge allowlist.
-   - Add a short code-level warning on the proxy/fetch path so future scraper/download changes do not re-add Bayut/Dubizzle/Property Finder/etc.
+6. Project location and nearby projects
+   - Remove blue styling from project location/map-related controls and replace with champagne/gold/ink styling.
+   - Fix “Other projects in this area” so area matches work even when coordinates or exact area strings are incomplete.
+   - Show nearby same-area/off-plan projects as user-friendly cards/map pins when available.
 
-7. Visual and functional validation before claiming done
-   - Desktop: project hero Download Brochure click.
-   - Desktop: brochure section Unlock/Download click.
-   - Desktop: visible Register Interest form.
-   - Desktop: Request a Call Back Now form.
-   - Tablet viewport.
-   - Phone viewport.
-   - Network check: confirm brochure downloads call `/api/download-file` or the backend function, not a raw external PDF URL.
-   - Screenshot each validated state and report exactly what was tested.
+7. Payment plan section and enrichment path
+   - Replace “to be decided”/weak fallback presentation with a professional pending-state layout.
+   - Improve frontend rendering of available structured payment data.
+   - Update the backend enrichment path to prioritize developer-direct/partner source payment plans only, and never secondary portals.
+   - Redeploy the relevant edge function after code changes.
+
+8. Brochure card readability
+   - Rework brochure cover overlays so JBJ wordmark and project name are readable on any image.
+   - Keep it premium champagne/gold/ink, not unreadable dark/navy overlays.
+   - Keep all brochure downloads routed through the backend proxy.
+
+9. More from same developer
+   - Fix the section so it appears when the same developer has other live inventory.
+   - Add clearer empty/fallback behavior only for owner/admin if there truly are no sibling projects.
+
+10. Mortgage calculator
+   - Replace black borders on property price and lower cards with soft gold/champagne styling.
+   - Redesign the calculator layout closer to a professional real estate portal calculator while preserving JBJ colors.
+   - Keep sliders, inputs, residency/cards, and summary sections readable on desktop/tablet/phone.
+
+11. JBJ AI Project Intelligence speed
+   - Stop blocking the visible section on a slow AI call.
+   - Render a fast cached/placeholder intelligence shell first, then progressively load refreshed analysis.
+   - Add clearer loading/retry state without making the page feel stuck.
+
+12. Dubai Market Intelligence Live Data
+   - Refresh the layout away from the current stale card/list look.
+   - Replace old color usage with approved champagne plus semantic data tones.
+   - Fix the top-10 area and nationality rows so bars/progress read left-to-right professionally.
+   - Ensure live/fallback timestamps are clear and no fake freshness is shown.
+
+13. Report Issue section
+   - Replace the dark red warning banner with a premium champagne/gold issue-report panel.
+   - Keep semantic caution visible, but remove the aggressive red block.
+   - Style the report modal with the global form rules.
+
+14. Recommended Projects
+   - Stop promoting ready properties by default.
+   - Prefer off-plan projects unless the user explicitly searches/filters for ready properties.
+   - Replace orange Ready badges with the metallic champagne-gold status treatment.
+   - Lock this off-plan recommendation rule in project memory.
+
+15. Technical validation and screenshots
+   - Validate desktop, tablet, and phone.
+   - Navigate as public user and owner/user-preview mode.
+   - Test gallery fullscreen, forms, brochure download flow, map/nearby section, mortgage calculator, AI section, market widget, report issue modal, and recommended projects.
+   - Capture screenshots after each completed milestone before moving to the next one.
