@@ -217,6 +217,19 @@ export function ProjectInquiryForm({
       const finalDeveloper = isOtherDeveloper ? otherDeveloperName : formData.preferredDeveloper;
       const finalLocation = isOtherLocation ? otherLocationName : formData.location;
 
+      // Build extended note with timeline + preferred contact time so nothing is lost
+      const timelineLabel = TIMELINE_OPTIONS.find(o => o.value === formData.timeline)?.label;
+      const contactTimeLabel = CONTACT_TIME_OPTIONS.find(o => o.value === formData.contactTime)?.label;
+      const extras: string[] = [];
+      if (timelineLabel) extras.push(`Purchase timeline: ${timelineLabel}`);
+      if (contactTimeLabel) extras.push(`Preferred contact time: ${contactTimeLabel}`);
+      if (formData.whatsappPreferred) extras.push(`Prefers WhatsApp`);
+      if (intent) extras.push(`Intent: ${intent}`);
+      const meta = `[Source: ${window.location.pathname} | Project: ${projectName} | Developer: ${developerName || 'N/A'}]`;
+      const composedNotes = [formData.message, extras.join(" · "), meta]
+        .filter(Boolean)
+        .join("\n\n");
+
       // Insert into CRM leads table
       const { error } = await supabase.from("crm_leads").insert({
         full_name: formData.name,
@@ -229,7 +242,7 @@ export function ProjectInquiryForm({
         preferred_size_sqft: formData.size ? parseInt(formData.size) : null,
         preferred_developer: finalDeveloper || null,
         preferred_location: finalLocation || null,
-        notes: formData.message ? `${formData.message}\n\n[Source: ${window.location.pathname} | Project: ${projectName} | Developer: ${developerName || 'N/A'}]` : `[Source: ${window.location.pathname} | Project: ${projectName} | Developer: ${developerName || 'N/A'}]`,
+        notes: composedNotes,
         status: "new",
         lead_score: 80 // High intent lead from project page
       });
@@ -254,12 +267,32 @@ export function ProjectInquiryForm({
         preferredDeveloper: developerName || "",
         selectedEmirate: "",
         location: projectLocation || "",
+        timeline: "",
+        contactTime: "",
+        whatsappPreferred: false,
         message: ""
       });
       setIsOtherDeveloper(false);
       setOtherDeveloperName("");
       setIsOtherLocation(false);
       setOtherLocationName("");
+
+      // Trigger optional document download via same-tab anchor click (avoids Chrome popup blocker)
+      if (documentUrl && typeof window !== "undefined") {
+        try {
+          const link = document.createElement("a");
+          link.href = documentUrl;
+          link.rel = "noopener";
+          link.download = "";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } catch (downloadErr) {
+          console.warn("Document download fallback failed:", downloadErr);
+        }
+      }
+
+      onSuccess?.(documentUrl);
 
     } catch (error) {
       console.error("Error submitting inquiry:", error);
