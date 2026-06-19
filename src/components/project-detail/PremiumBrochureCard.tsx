@@ -30,22 +30,26 @@ const PremiumBrochureCard = ({
 }: PremiumBrochureCardProps) => {
   const [isDownloading, setIsDownloading] = React.useState(false);
 
-  // Fetch and download as blob to bypass ad-blocker blocking Supabase URLs
+  // Fetch and download as blob to bypass ad-blocker blocking Supabase URLs.
+  // IMPORTANT: never use window.open() as a fallback — Chrome blocks it as a
+  // popup when called from an async context, producing the "blocked by Chrome"
+  // page. Instead, fall back to a same-tab anchor click on the proxied URL.
   const handleBlobDownload = async () => {
     if (!brochureUrl) {
       onDownloadClick();
       return;
     }
-    
+
+    const safeUrl = maybeProxyStorageUrl(
+      brochureUrl,
+      `${projectName.replace(/\s+/g, "-")}-Brochure.pdf`,
+    );
+
     setIsDownloading(true);
     try {
-      const safeUrl = maybeProxyStorageUrl(
-        brochureUrl,
-        `${projectName.replace(/\s+/g, "-")}-Brochure.pdf`,
-      );
       const response = await fetch(safeUrl);
       if (!response.ok) throw new Error('Download failed');
-      
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -56,9 +60,19 @@ const PremiumBrochureCard = ({
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.warn('Blob download failed, trying direct open:', error);
-      // Fallback to window.open
-      window.open(maybeProxyStorageUrl(brochureUrl), '_blank');
+      console.warn('Blob download failed, falling back to anchor click:', error);
+      // Same-tab anchor click avoids Chrome's popup blocker entirely.
+      try {
+        const link = document.createElement('a');
+        link.href = safeUrl;
+        link.download = `${projectName.replace(/\s+/g, '-')}-Brochure.pdf`;
+        link.rel = 'noopener';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (fallbackErr) {
+        console.error('Anchor-click download failed:', fallbackErr);
+      }
     } finally {
       setIsDownloading(false);
     }

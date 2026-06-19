@@ -17,7 +17,30 @@ interface ProjectInquiryFormProps {
   projectName: string;
   projectLocation?: string;
   developerName?: string;
+  /** Called after a successful submission. Receives the document URL to download, if any. */
+  onSuccess?: (documentUrl?: string) => void;
+  /** Optional document URL the user will receive after submitting (e.g. brochure). */
+  documentUrl?: string;
+  /** Optional context label for the submitted lead, e.g. "Download Brochure". */
+  intent?: string;
+  /** Compact mode (used inside a modal). Hides the big heading/subtitle. */
+  compact?: boolean;
 }
+
+const TIMELINE_OPTIONS = [
+  { value: "1_month", label: "Within 1 month" },
+  { value: "1_3_months", label: "1 – 3 months" },
+  { value: "3_6_months", label: "3 – 6 months" },
+  { value: "6_12_months", label: "6 – 12 months" },
+  { value: "exploring", label: "Just exploring" },
+];
+
+const CONTACT_TIME_OPTIONS = [
+  { value: "morning", label: "Morning (9am – 12pm)" },
+  { value: "afternoon", label: "Afternoon (12pm – 5pm)" },
+  { value: "evening", label: "Evening (5pm – 9pm)" },
+  { value: "anytime", label: "Anytime" },
+];
 
 // UAE Emirates list
 const UAE_EMIRATES = [
@@ -46,7 +69,11 @@ export function ProjectInquiryForm({
   projectId, 
   projectName, 
   projectLocation,
-  developerName 
+  developerName,
+  onSuccess,
+  documentUrl,
+  intent,
+  compact = false,
 }: ProjectInquiryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -58,6 +85,9 @@ export function ProjectInquiryForm({
     preferredDeveloper: developerName || "",
     selectedEmirate: "",
     location: projectLocation || "",
+    timeline: "",
+    contactTime: "",
+    whatsappPreferred: false,
     message: ""
   });
 
@@ -187,6 +217,19 @@ export function ProjectInquiryForm({
       const finalDeveloper = isOtherDeveloper ? otherDeveloperName : formData.preferredDeveloper;
       const finalLocation = isOtherLocation ? otherLocationName : formData.location;
 
+      // Build extended note with timeline + preferred contact time so nothing is lost
+      const timelineLabel = TIMELINE_OPTIONS.find(o => o.value === formData.timeline)?.label;
+      const contactTimeLabel = CONTACT_TIME_OPTIONS.find(o => o.value === formData.contactTime)?.label;
+      const extras: string[] = [];
+      if (timelineLabel) extras.push(`Purchase timeline: ${timelineLabel}`);
+      if (contactTimeLabel) extras.push(`Preferred contact time: ${contactTimeLabel}`);
+      if (formData.whatsappPreferred) extras.push(`Prefers WhatsApp`);
+      if (intent) extras.push(`Intent: ${intent}`);
+      const meta = `[Source: ${window.location.pathname} | Project: ${projectName} | Developer: ${developerName || 'N/A'}]`;
+      const composedNotes = [formData.message, extras.join(" · "), meta]
+        .filter(Boolean)
+        .join("\n\n");
+
       // Insert into CRM leads table
       const { error } = await supabase.from("crm_leads").insert({
         full_name: formData.name,
@@ -199,7 +242,7 @@ export function ProjectInquiryForm({
         preferred_size_sqft: formData.size ? parseInt(formData.size) : null,
         preferred_developer: finalDeveloper || null,
         preferred_location: finalLocation || null,
-        notes: formData.message ? `${formData.message}\n\n[Source: ${window.location.pathname} | Project: ${projectName} | Developer: ${developerName || 'N/A'}]` : `[Source: ${window.location.pathname} | Project: ${projectName} | Developer: ${developerName || 'N/A'}]`,
+        notes: composedNotes,
         status: "new",
         lead_score: 80 // High intent lead from project page
       });
@@ -224,12 +267,32 @@ export function ProjectInquiryForm({
         preferredDeveloper: developerName || "",
         selectedEmirate: "",
         location: projectLocation || "",
+        timeline: "",
+        contactTime: "",
+        whatsappPreferred: false,
         message: ""
       });
       setIsOtherDeveloper(false);
       setOtherDeveloperName("");
       setIsOtherLocation(false);
       setOtherLocationName("");
+
+      // Trigger optional document download via same-tab anchor click (avoids Chrome popup blocker)
+      if (documentUrl && typeof window !== "undefined") {
+        try {
+          const link = document.createElement("a");
+          link.href = documentUrl;
+          link.rel = "noopener";
+          link.download = "";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } catch (downloadErr) {
+          console.warn("Document download fallback failed:", downloadErr);
+        }
+      }
+
+      onSuccess?.(documentUrl);
 
     } catch (error) {
       console.error("Error submitting inquiry:", error);
@@ -241,16 +304,19 @@ export function ProjectInquiryForm({
 
   return (
     <div>
-      <div className="text-center mb-8">
-        <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
-          Register Your Interest
-        </h3>
-        <p className="text-muted-foreground text-base max-w-md mx-auto">
-          Get exclusive access to project details, pricing, and personalized consultation.
-        </p>
-      </div>
+      {!compact && (
+        <div className="text-center mb-8">
+          <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+            Register Your Interest
+          </h3>
+          <p className="text-muted-foreground text-base max-w-md mx-auto">
+            Get exclusive access to project details, pricing, and personalized consultation.
+          </p>
+        </div>
+      )}
 
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
+      <form onSubmit={handleSubmit} className={cn("space-y-4", compact ? "w-full" : "max-w-md mx-auto")}>
+
         {/* Name */}
         <div className="space-y-2">
           <Label htmlFor="name" className="text-foreground text-sm font-medium">Full Name *</Label>
@@ -501,6 +567,57 @@ export function ProjectInquiryForm({
             </Popover>
           )}
         </div>
+
+        {/* Timeline + Preferred contact time */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="timeline" className="text-foreground text-sm font-medium">When are you looking to buy?</Label>
+            <Select
+              value={formData.timeline}
+              onValueChange={(value) => setFormData({ ...formData, timeline: value })}
+            >
+              <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
+                <SelectValue placeholder="Select timeline" />
+              </SelectTrigger>
+              <SelectContent className="bg-background border-border z-[9999]">
+                {TIMELINE_OPTIONS.map(option => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="contactTime" className="text-foreground text-sm font-medium">Preferred contact time</Label>
+            <Select
+              value={formData.contactTime}
+              onValueChange={(value) => setFormData({ ...formData, contactTime: value })}
+            >
+              <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
+                <SelectValue placeholder="Select time" />
+              </SelectTrigger>
+              <SelectContent className="bg-background border-border z-[9999]">
+                {CONTACT_TIME_OPTIONS.map(option => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <label className="flex items-center gap-2 text-sm text-foreground/80 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={formData.whatsappPreferred}
+            onChange={(e) => setFormData({ ...formData, whatsappPreferred: e.target.checked })}
+            className="w-4 h-4 rounded border-2 border-[#B89555]/60 accent-[#B89555]"
+          />
+          I prefer to be contacted on WhatsApp
+        </label>
 
         {/* Message (Optional) */}
         <div className="space-y-2">

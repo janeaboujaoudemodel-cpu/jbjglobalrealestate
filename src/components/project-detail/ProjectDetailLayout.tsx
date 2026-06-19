@@ -94,6 +94,10 @@ import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { getProjectStatus } from "@/utils/projectStatus";
 import OwnerVisitorToggle from "@/components/project-detail/OwnerVisitorToggle";
+import BrokerBrandedMaterialsCard from "@/components/project-detail/BrokerBrandedMaterialsCard";
+import { useUserMode } from "@/hooks/useUserMode";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import {
@@ -252,6 +256,27 @@ export default function ProjectDetailLayout({
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const { isOwner } = useIsAppOwner();
   const [paymentEnrichOpen, setPaymentEnrichOpen] = useState(false);
+  const { isBrokerMode } = useUserMode();
+  const { user } = useAuth();
+  const [brokerHasBrand, setBrokerHasBrand] = useState(false);
+  useEffect(() => {
+    if (!isBrokerMode || !user?.id) {
+      setBrokerHasBrand(false);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("crm_brokers")
+        .select("logo_url, headshot_url, full_name")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (!cancelled) {
+        setBrokerHasBrand(Boolean(data?.logo_url || data?.headshot_url));
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isBrokerMode, user?.id]);
   
   
   const inquiryRef = useRef<HTMLDivElement>(null);
@@ -746,6 +771,31 @@ export default function ProjectDetailLayout({
               <span style={{ color: '#ffffff' }}>Register Interest</span>
             </Button>
           </div>
+
+          {/* Broker-only: branded materials shortcut */}
+          {isBrokerMode && (
+            <div className="mt-2">
+              <BrokerBrandedMaterialsCard
+                projectId={project.id}
+                projectName={project.name}
+                hasBrochure={Boolean(brochurePrimary?.url)}
+                hasBrand={brokerHasBrand}
+                onDownloadBrochure={() => {
+                  if (brochurePrimary?.url) {
+                    handleDocumentDownload("brochure", brochurePrimary.url);
+                  } else {
+                    setCaptureDocType("brochure");
+                    setCaptureDocUrl(undefined);
+                    setLeadCaptureOpen(true);
+                  }
+                }}
+                onGeneratePresentation={() => {
+                  // Route to the presentation engine pre-filled with this project
+                  window.location.href = `/presentations?projectId=${encodeURIComponent(project.id)}&projectName=${encodeURIComponent(project.name)}`;
+                }}
+              />
+            </div>
+          )}
 
           {/* Breadcrumb Navigation */}
           <ProjectBreadcrumb projectName={project.name} location={project.location} surface="dark" />
@@ -1507,6 +1557,8 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
         onOpenChange={setLeadCaptureOpen}
         projectId={project.id}
         projectName={project.name}
+        projectLocation={project.location}
+        developerName={project.developer?.name}
         documentType={captureDocType}
         documentUrl={captureDocUrl}
       />

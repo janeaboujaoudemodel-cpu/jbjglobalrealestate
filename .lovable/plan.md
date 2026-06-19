@@ -1,79 +1,62 @@
-## 1. Rebuild the property brochure (champagne / gold / ink, elegant)
+## Goals
 
-File: `src/pages/QuizResults.tsx → handleDownloadPropertyBrochure` (and shared helper extracted to `src/lib/pdf/propertyBrochurePdf.ts`).
+1. **Register Interest everywhere = the detailed form**, not the 3-field quick modal.
+2. **Download Brochure stops being blocked by Chrome** ("popup blocked" page).
+3. **Brokers can reach Presentation generator + brand upload directly from the project page** (Vindera etc.), not only via a hidden URL.
 
-Problems today:
-- Header colors hard-coded to dark navy + an unused `cyan`/teal swatch carried over from the old palette.
-- Fact tiles fill RGB `(5, 38, 44)` (dark teal) on a champagne page — clashes, no logo, no footer hairline, no developer logo, no broker block.
-- "by JBJ GLOBAL REAL ESTATE" rendered on a black header in gold = unreadable; champagne body text on white-cream tiles fails contrast.
+---
 
-Redesign (one source of truth, used everywhere we export a brochure):
-- Page bg `#FDFBF7`, ink `#1A1A1A`, gold `#B89555` (1px hairline only — never as a fill).
-- Top chrome: 92px clean white letterhead, 56×56 JBJ monogram (PNG from `/brand/jbj-monogram.png`), wordmark "JBJ GLOBAL REAL ESTATE" right-aligned in ink, 1px gold hairline beneath.
-- Hero: project name (Inter Bold 22pt, ink), developer line ("by {dev}" — "by" ink/70, name gold), cover image with 1px gold hairline, no rounded teal stroke.
-- Fact tiles: champagne `#F7F2EA` fill, ink text, gold hairline border. Replace teal fills.
-- Presentation overview: ink body, justified, proper paragraph spacing.
-- Footer: 1px gold hairline + 3 ink lines (View listing URL + contact block — see §2).
-- Multi-page safe: if content overflows, push to page 2 with same letterhead.
+## 1. Unify "Register Your Interest" modal
 
-Same refactor applied to `src/pages/toolkit/BrochureGeneratorPage.tsx` and any "Compare" / "AI Home Finder" PDF export that currently uses the navy/teal block.
+Today every Register Interest / Brochure CTA on `/project/:slug` opens `LeadCaptureModal` (Name, Email, Phone only). We already have the richer `ProjectInquiryForm` (developer combobox, location, bedrooms, size, message). The user wants ONE detailed form everywhere — including **Timeline ("when do you want to buy")** and **Preferred contact time** which neither currently has.
 
-## 2. Broker-personalised brochures & presentations
+Changes:
+- Extend `ProjectInquiryForm` with two new required fields:
+  - **Purchase timeline** — Select: Within 1 month / 1–3 months / 3–6 months / 6–12 months / Just exploring.
+  - **Preferred contact time** — Select: Morning (9–12) / Afternoon (12–5) / Evening (5–9) / Anytime. Plus optional WhatsApp preferred checkbox.
+- Keep existing bedroom / size / developer / location / message fields.
+- Refactor `LeadCaptureModal.tsx` so the dialog body renders `<ProjectInquiryForm />` instead of the 3-field form. Header keeps "Register Your Interest" or "Download {documentType}" + project name. On success it still triggers the same `documentUrl` download flow and the same `captureLead` hook (the form's submit handler will write the extended fields into `lead_metadata` / `crm_leads.notes` so nothing is lost).
+- Single source of truth: delete the inline form JSX inside `LeadCaptureModal`. All other call-sites of the modal (ProjectDetailLayout hero CTA, brochure tab, floor plan, payment plan, gallery, PremiumBrochureCard, ProjectDetailTabs) automatically inherit the detailed form.
 
-Goal: when `userMode === 'broker'` and broker is signed in, every PDF the platform generates (property brochure, compare, AI Home Finder presentation, company profile) is auto-branded with that broker's identity.
+## 2. Fix "Download Brochure" being blocked by Chrome
 
-Data model — extend `crm_brokers` (already canonical broker table) with whatever is missing:
-- `company_name`, `agent_display_name`, `agent_title`, `phone_e164`, `email`, `whatsapp`, `logo_url`, `headshot_url`, `tagline`, `brand_primary_hex` (optional accent).
-
-UI:
-- New route `src/pages/broker/BrokerBrandProfile.tsx` ("My Brand") under broker portal: form to upload company logo + headshot (Supabase Storage bucket `broker-brand`, RLS = owner can read/write), text fields above, live PDF preview.
-- Link from broker sidebar + "Edit my brand" CTA shown in any "Download brochure" toast for brokers.
-
-PDF integration:
-- New helper `src/lib/pdf/brokerBrand.ts → loadActiveBrokerBrand(userId)` returns `{ companyName, agentName, phone, email, logoDataUrl, headshotDataUrl, ... }` or `null`.
-- `propertyBrochurePdf` and every other generator accept an optional `brokerBrand` param.
-- When provided, the brochure renders a **co-branded footer**: left = broker logo (32px high) + company name; right = agent name, phone, email, WhatsApp. JBJ monogram stays in the top letterhead — never replaced.
-- Investor / developer / signed-out modes: render plain JBJ-only footer (current behaviour).
-
-## 3. Restore "3 perfect matches" on `/quiz-results`
-
-File: `src/pages/QuizResults.tsx`.
-
-Root causes when only 1 card shows:
-- After applying `applyPurchaseOnly` (leasing filter), some saved slugs drop out and we render only the survivors with no top-up.
-- Slug list saved in URL/session is whatever the quiz returned, so if 2 of 3 were leasing → only 1 left.
+Root cause: `LeadCaptureModal` and `PremiumBrochureCard` both call `window.open(url, "_blank")` from inside an async `setTimeout`/`.then()`. Chrome treats that as a popup (not a user-gesture) and blocks it on the new tab → the "blocked by Chrome" page the user is seeing.
 
 Fix:
-1. After the slug-hydration query, if `projects.length < 3`, run a second `applyPurchaseOnly` query that pulls top candidates matching the saved quiz preferences (budget, bedrooms, area, type) ordered by the existing match-score logic, excluding slugs already shown, and pad up to exactly 3.
-2. Update copy: header always reads "3 perfect matches" only when we actually have 3; otherwise "Top {n} matches" — but the padding above should make 3 the normal case.
-3. Persist the padded slug list back to the session so refresh stays consistent.
+- In `LeadCaptureModal` success path, replace `window.open(...)` with a programmatic anchor click (`<a href download target="_self">`) using `maybeProxyStorageUrl`. Same-tab download avoids the popup blocker entirely.
+- In `PremiumBrochureCard` `handleDownload`, drop the `window.open` fallback; if `fetch` → blob fails, fall back to anchor-click on the proxied URL (still a same-tab navigation, no popup).
+- Use `src/lib/buildSafeDownloadUrl.ts` to always pass through the download proxy and force `Content-Disposition: attachment` so the browser downloads instead of navigating.
+- Confirm fix in the browser: open `/project/vindera-emaar-properties-the-valley`, click Download Brochure, complete the form, and verify the PDF downloads in-place without the Chrome block screen. Capture a screenshot for proof.
 
-## 4. Back-fill missing bedroom data ("To be decided" / "TBC")
+## 3. Broker Presentation + Brand entry on the project page
 
-Today `fmtBedsLocal` falls back to "Type TBC" when `bedrooms_min`/`bedrooms_max` are null. The user wants this never to appear publicly.
+Today brokers can only reach `/broker/brand` (logo upload) via the broker portal sidebar. From a project page there is no visible affordance to (a) generate a co-branded presentation/brochure for *this* project, or (b) upload their photo/logo.
 
-Two-pronged fix:
+Changes scoped to **broker mode only** (`useUserMode().isBrokerMode`):
+- New small card under the hero CTAs on `ProjectDetailLayout`, titled **"Your branded materials"**, visible only when `isBrokerMode`:
+  - Button **"Generate co-branded presentation"** → opens a new lightweight modal that calls the existing AI presentation engine pre-filled with the current project (`projectId`, cover image, dev logo, broker brand from `crm_brokers`). Output PDF uses the same co-branded footer added in the last batch.
+  - Button **"Download co-branded brochure"** → same `handleDocumentDownload("brochure", ...)` but skips the lead modal for the broker themselves (they're logged in) and stamps their logo/headshot in the footer.
+  - Link **"Edit my brand (logo, photo, contact)"** → `/broker/brand`.
+- If the broker hasn't completed `/broker/brand` yet, show an inline notice: *"Upload your logo and photo to enable co-branded exports"* with a CTA to `/broker/brand`.
 
-(a) **Display guard** — `src/components/ui/BedroomLabel.tsx`: if min/max null, render nothing in card chips and substitute "Bedroom mix on request" in brochures (never "TBC"/"To be decided"). Replace all current "TBC"/"To be decided" string literals across listings, brochures, compare, AI Home Finder.
+## 4. Verification (mandatory before reporting done)
 
-(b) **Data backfill pipeline** — new edge function `enrich-project-bedrooms`:
-- Input: `project_id`.
-- Source order: Provident (`provident-estate.com`), then Property Finder, Bayut, Driven, Reelly cache — using existing `Universal Link Extractor` standard + Firecrawl (already wired) for HTML scrape + GPT-5 JSON extraction (`openai/gpt-5` via Lovable AI gateway).
-- Writes `bedrooms_min`, `bedrooms_max`, `bedroom_types` (jsonb array like `["Studio","1BR","2BR"]`), `source_url`, and an `admin_edit_log` row (per Owner-Provenance standard) — never overwrites a non-null value already in DB.
-- Owner-only invoke (`requireOwnerAuth`).
-- Cron: nightly worker iterates `projects` where `bedrooms_min IS NULL AND is_published = true`, batches 25/run, respects competitor-source-exclusion rules (strip competitor names from any user-visible copy; raw data only used internally to fill numeric fields).
-
-Owner Admin UI: add "Enrich bedroom data" button on `OwnerProvenanceCard` to run on-demand for the current project, with Before/After preview before commit (matches existing `ai-enrich-project` UX).
-
-## 5. Verification
-
-- Reload `/quiz-results?...` → exactly 3 cards.
-- Click "Download Brochure" on each → champagne/gold/ink PDF, JBJ monogram top, broker footer when in broker mode.
-- Open `/broker/brand` → upload logo + fill fields → re-download brochure → broker footer reflects new data.
-- Open any project page that previously said "To be decided" → either real bedroom range or "Bedroom mix on request"; admin can click Enrich to fetch real data.
-- Run `scripts/contrast/check-white-on-light.mjs` + `check-faded-gold.mjs` → pass.
+Will use `browser--view_preview` + `browser--act` to:
+1. Navigate to `/project/vindera-emaar-properties-the-valley`.
+2. Click **Register Your Interest** → confirm the detailed form (bedrooms, size, developer, location, timeline, preferred time, message) renders, fill it, submit, confirm success toast + lead row in `crm_leads`.
+3. Click **Download Brochure** → confirm the same detailed form opens, submit → PDF downloads in-place (no Chrome block screen). Screenshot the downloaded state.
+4. Switch to broker mode → confirm the new "Your branded materials" card appears under the hero CTAs and the three actions work.
+5. Send screenshots + console/network log summary as proof.
 
 ## Out of scope
-- No changes to quiz scoring algorithm itself.
-- No DB schema changes beyond `crm_brokers` additive columns and `projects.bedroom_types` jsonb.
-- No styling changes outside the brochure PDF + new BrokerBrand page.
+- No changes to the AI presentation engine itself (only a new entry point).
+- No DB schema changes beyond storing the two new optional inquiry fields inside the existing `lead_metadata` JSON column.
+- No restyle of the project page beyond inserting the broker card.
+
+## Files expected to change
+- `src/components/project-detail/ProjectInquiryForm.tsx` — add timeline + preferred-time fields.
+- `src/components/project-detail/LeadCaptureModal.tsx` — render `ProjectInquiryForm`, replace `window.open` with anchor-click download.
+- `src/components/project-detail/PremiumBrochureCard.tsx` — drop `window.open` fallback, use safe download URL.
+- `src/components/project-detail/ProjectDetailLayout.tsx` — insert `<BrokerBrandedMaterialsCard />` under hero CTAs (broker-only).
+- New: `src/components/project-detail/BrokerBrandedMaterialsCard.tsx`.
+- `src/hooks/useLeadCapture.ts` — accept optional extended metadata (timeline, preferred_contact_time) into `lead_metadata`.
