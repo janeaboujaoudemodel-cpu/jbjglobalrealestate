@@ -225,7 +225,8 @@ export function useProjectsCount() {
       const { count, error } = await supabase
         .from("projects")
         .select("id", { count: "exact", head: true })
-        .eq("is_published", true);
+        .eq("is_published", true)
+        .or("listing_kind.is.null,listing_kind.neq.leasing");
       if (error) throw error;
       return count ?? 0;
     },
@@ -405,6 +406,7 @@ export function useProjectsListing() {
           .from("projects")
           .select(LISTING_COLUMNS)
           .eq("is_published", true)
+          .or("listing_kind.is.null,listing_kind.neq.leasing")
           .not("cover_image_url", "is", null)
           .neq("cover_image_url", "")
           .order("created_at", { ascending: false })
@@ -437,6 +439,7 @@ export function useProjectsByCommunity(communitySlug: string) {
         `)
         .eq("community.slug", communitySlug)
         .eq("is_published", true)
+        .or("listing_kind.is.null,listing_kind.neq.leasing")
         .not("cover_image_url", "is", null)
         .neq("cover_image_url", "")
         .order("created_at", { ascending: false });
@@ -463,6 +466,7 @@ export function useProjectsByDeveloper(developerSlug: string) {
         `)
         .eq("developer.slug", developerSlug)
         .eq("is_published", true)
+        .or("listing_kind.is.null,listing_kind.neq.leasing")
         .not("cover_image_url", "is", null)
         .neq("cover_image_url", "")
         .order("created_at", { ascending: false });
