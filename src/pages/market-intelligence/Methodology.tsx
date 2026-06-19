@@ -393,7 +393,7 @@ const Methodology = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
+                className="scroll-mt-24 py-6 jj-card-inner rounded-xl px-6"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
@@ -435,12 +435,9 @@ const Methodology = () => {
         </div>
       </section>
 
-      {/* Gold Glow Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
       {/* Market Intelligence Navigation - Active Champagne Layer */}
-      <section id="navigation" className="py-12 jj-section-champagne scroll-mt-24">
-        <div className="container mx-auto px-4">
+      <section id="navigation" className="py-6 jj-section-champagne scroll-mt-24">
+        <div className="container mx-auto px-4 lg:pr-72 xl:pr-72">
           <MarketIntelligenceNavigation current="/market-intelligence/methodology" />
         </div>
       </section>
