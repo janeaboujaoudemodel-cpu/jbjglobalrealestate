@@ -287,9 +287,9 @@ All colors MUST be HSL.
     --gold-muted: 33 30% 55%;
     --gold-foreground: 0 0% 10%;
 
-    /* Approved navy CTA surface — the only non-dark-hero button surface allowed to carry white text/icons. */
-    --navy-cta: 211 60% 16%;       /* #0A0A0A */
-    --navy-cta-hover: 211 58% 25%; /* #1F1F1F */
+    /* Approved BLACK CTA surface — the only non-dark-hero button surface allowed to carry white text/icons. (Navy retired; replaced by clean black per Navy→Black global flip.) */
+    --navy-cta: 0 0% 4%;       /* #0A0A0A */
+    --navy-cta-hover: 0 0% 12%; /* #1F1F1F */
 
     /* Premium Orange — property prices (unchanged) */
     --price-orange: 24 95% 53%;
