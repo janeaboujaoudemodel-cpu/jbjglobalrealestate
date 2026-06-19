@@ -710,6 +710,18 @@ const MortgageCalculator = ({
               </div>
             </div>
 
+            <MortgageParityPanel
+              propertyPrice={propertyPrice}
+              loanAmount={calculations.loanAmount}
+              monthlyPayment={calculations.monthlyPayment}
+              downPaymentPercent={downPaymentPercent}
+              interestRate={interestRate}
+              loanTermYears={loanTermYears}
+              isNavy={isNavy}
+            />
+
+
+
             <p className="text-muted-foreground text-xs text-center pt-2">
               *Estimates are for illustrative purposes only. Actual rates may vary based on bank policies and eligibility.
             </p>
