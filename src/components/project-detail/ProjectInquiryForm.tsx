@@ -35,6 +35,13 @@ const TIMELINE_OPTIONS = [
   { value: "exploring", label: "Just exploring" },
 ];
 
+const CONTACT_METHOD_OPTIONS = [
+  { value: "whatsapp", label: "WhatsApp" },
+  { value: "phone", label: "Phone call" },
+  { value: "email", label: "Email" },
+  { value: "any", label: "Any of the above" },
+];
+
 const CONTACT_TIME_OPTIONS = [
   { value: "morning", label: "Morning (9am – 12pm)" },
   { value: "afternoon", label: "Afternoon (12pm – 5pm)" },
@@ -81,13 +88,14 @@ export function ProjectInquiryForm({
     email: "",
     phone: "",
     bedrooms: "",
-    size: "",
+    sizeMin: "",
+    sizeMax: "",
     preferredDeveloper: developerName || "",
     selectedEmirate: "",
     location: projectLocation || "",
     timeline: "",
     contactTime: "",
-    whatsappPreferred: false,
+    contactMethod: "",
     message: ""
   });
 
@@ -220,10 +228,13 @@ export function ProjectInquiryForm({
       // Build extended note with timeline + preferred contact time so nothing is lost
       const timelineLabel = TIMELINE_OPTIONS.find(o => o.value === formData.timeline)?.label;
       const contactTimeLabel = CONTACT_TIME_OPTIONS.find(o => o.value === formData.contactTime)?.label;
+      const contactMethodLabel = CONTACT_METHOD_OPTIONS.find(o => o.value === formData.contactMethod)?.label;
+      const sizeRange = [formData.sizeMin, formData.sizeMax].filter(Boolean).join(" – ");
       const extras: string[] = [];
       if (timelineLabel) extras.push(`Purchase timeline: ${timelineLabel}`);
       if (contactTimeLabel) extras.push(`Preferred contact time: ${contactTimeLabel}`);
-      if (formData.whatsappPreferred) extras.push(`Prefers WhatsApp`);
+      if (contactMethodLabel) extras.push(`Preferred contact method: ${contactMethodLabel}`);
+      if (sizeRange) extras.push(`Size range: ${sizeRange} sqft`);
       if (intent) extras.push(`Intent: ${intent}`);
       const meta = `[Source: ${window.location.pathname} | Project: ${projectName} | Developer: ${developerName || 'N/A'}]`;
       const composedNotes = [formData.message, extras.join(" · "), meta]
@@ -239,7 +250,7 @@ export function ProjectInquiryForm({
         source_details: projectName,
         source_page: window.location.pathname,
         preferred_bedrooms: formData.bedrooms || null,
-        preferred_size_sqft: formData.size ? parseInt(formData.size) : null,
+        preferred_size_sqft: formData.sizeMin ? parseInt(formData.sizeMin) : null,
         preferred_developer: finalDeveloper || null,
         preferred_location: finalLocation || null,
         notes: composedNotes,
@@ -263,13 +274,14 @@ export function ProjectInquiryForm({
         email: "",
         phone: "",
         bedrooms: "",
-        size: "",
+        sizeMin: "",
+        sizeMax: "",
         preferredDeveloper: developerName || "",
         selectedEmirate: "",
         location: projectLocation || "",
         timeline: "",
         contactTime: "",
-        whatsappPreferred: false,
+        contactMethod: "",
         message: ""
       });
       setIsOtherDeveloper(false);
@@ -369,7 +381,7 @@ export function ProjectInquiryForm({
               <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
                 <SelectValue placeholder="Select bedrooms" />
               </SelectTrigger>
-              <SelectContent className="bg-background border-border z-[9999]">
+              <SelectContent className="bg-background border-border">
                 {BEDROOM_OPTIONS.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
@@ -379,17 +391,26 @@ export function ProjectInquiryForm({
             </Select>
           </div>
 
-          {/* Size (Optional) */}
+          {/* Size range (Optional) */}
           <div className="space-y-2">
-            <Label htmlFor="size" className="text-foreground text-sm font-medium">Size (sqft)</Label>
-            <Input
-              id="size"
-              type="number"
-              value={formData.size}
-              onChange={(e) => setFormData({ ...formData, size: e.target.value })}
-              placeholder="e.g., 1500"
-              className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]"
-            />
+            <Label className="text-foreground text-sm font-medium">Size (sqft) — optional</Label>
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                value={formData.sizeMin}
+                onChange={(e) => setFormData({ ...formData, sizeMin: e.target.value })}
+                placeholder="From"
+                className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]"
+              />
+              <span className="text-foreground/60 text-sm">to</span>
+              <Input
+                type="number"
+                value={formData.sizeMax}
+                onChange={(e) => setFormData({ ...formData, sizeMax: e.target.value })}
+                placeholder="To"
+                className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]"
+              />
+            </div>
           </div>
         </div>
 
@@ -432,7 +453,7 @@ export function ProjectInquiryForm({
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-full p-0 z-[9999] bg-background border-border" align="start">
+              <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-background border-border" align="start">
                 <Command>
                   <CommandInput 
                     placeholder="Search developers..." 
@@ -482,7 +503,7 @@ export function ProjectInquiryForm({
             <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
               <SelectValue placeholder="Select emirate..." />
             </SelectTrigger>
-            <SelectContent className="bg-background border-border z-[9999]">
+            <SelectContent className="bg-background border-border">
               {UAE_EMIRATES.map(emirate => (
                 <SelectItem key={emirate.value} value={emirate.value}>
                   {emirate.label}
@@ -531,7 +552,7 @@ export function ProjectInquiryForm({
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-full p-0 z-[9999] bg-background border-border" align="start">
+              <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-background border-border" align="start">
                 <Command>
                   <CommandInput 
                     placeholder="Search locations..." 
@@ -579,7 +600,7 @@ export function ProjectInquiryForm({
               <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
                 <SelectValue placeholder="Select timeline" />
               </SelectTrigger>
-              <SelectContent className="bg-background border-border z-[9999]">
+              <SelectContent className="bg-background border-border">
                 {TIMELINE_OPTIONS.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
@@ -598,7 +619,7 @@ export function ProjectInquiryForm({
               <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
                 <SelectValue placeholder="Select time" />
               </SelectTrigger>
-              <SelectContent className="bg-background border-border z-[9999]">
+              <SelectContent className="bg-background border-border">
                 {CONTACT_TIME_OPTIONS.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
@@ -609,15 +630,25 @@ export function ProjectInquiryForm({
           </div>
         </div>
 
-        <label className="flex items-center gap-2 text-sm text-foreground/80 cursor-pointer select-none">
-          <input
-            type="checkbox"
-            checked={formData.whatsappPreferred}
-            onChange={(e) => setFormData({ ...formData, whatsappPreferred: e.target.checked })}
-            className="w-4 h-4 rounded border-2 border-[#B89555]/60 accent-[#B89555]"
-          />
-          I prefer to be contacted on WhatsApp
-        </label>
+        {/* Preferred contact method — dropdown, not a checkbox */}
+        <div className="space-y-2">
+          <Label htmlFor="contactMethod" className="text-foreground text-sm font-medium">Preferred contact method</Label>
+          <Select
+            value={formData.contactMethod}
+            onValueChange={(value) => setFormData({ ...formData, contactMethod: value })}
+          >
+            <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
+              <SelectValue placeholder="How should we reach out?" />
+            </SelectTrigger>
+            <SelectContent className="bg-background border-border">
+              {CONTACT_METHOD_OPTIONS.map(option => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         {/* Message (Optional) */}
         <div className="space-y-2">

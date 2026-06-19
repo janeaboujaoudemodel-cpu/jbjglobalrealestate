@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import jbjFullLogoDarkBg from "@/assets/jbj-fulllogo-dark-bg.jpg";
 
 const BROCHURE_BG_URL = "https://imgengine.khaleejtimes.com/khaleejtimes-english/2026-02-04/lvnx1x0g/Dubai.jpg?width=1200&height=800&format=auto";
-import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { maybeProxyStorageUrl, proxyAnyDownloadUrl } from "@/utils/downloadProxy";
 interface PremiumBrochureCardProps {
   projectName: string;
   brochureUrl?: string;
@@ -40,10 +40,12 @@ const PremiumBrochureCard = ({
       return;
     }
 
-    const safeUrl = maybeProxyStorageUrl(
-      brochureUrl,
-      `${projectName.replace(/\s+/g, "-")}-Brochure.pdf`,
-    );
+    const filename = `${projectName.replace(/\s+/g, "-")}-Brochure.pdf`;
+    // ALWAYS route through the backend download-file edge function — even for
+    // third-party CDNs (provident.ae, propertyfinder.ae, emaar.com, etc.).
+    // The function streams the file back with Content-Disposition: attachment,
+    // which bypasses Chrome's cross-origin "download blocked" page.
+    const safeUrl = proxyAnyDownloadUrl(brochureUrl, { filename, disposition: "attachment" });
 
     setIsDownloading(true);
     try {
