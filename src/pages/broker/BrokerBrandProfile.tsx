@@ -203,11 +203,15 @@ export default function BrokerBrandProfile() {
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <Label className="text-sm">Full name</Label>
+              <Label className="text-sm">
+                Full name <span className="text-[#1A1A1A]/55 font-normal">(optional)</span>
+              </Label>
               <Input value={row.full_name || ""} onChange={(e) => update("full_name", e.target.value)} placeholder="Jane Doe" className="mt-1" />
             </div>
             <div>
-              <Label className="text-sm">Display name (shown on PDFs)</Label>
+              <Label className="text-sm">
+                Display name <span className="text-[#1A1A1A]/55 font-normal">(optional — shown on PDFs)</span>
+              </Label>
               <Input value={row.agent_display_name || ""} onChange={(e) => update("agent_display_name", e.target.value)} placeholder="Jane D." className="mt-1" />
             </div>
             <div>
