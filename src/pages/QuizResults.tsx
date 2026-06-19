@@ -305,8 +305,44 @@ const QuizResults = () => {
         try { clearMatchmakerSession(); } catch {}
       }
 
-      return normalized
+      const ordered = normalized
         .sort((a, b) => projectSlugs.indexOf(a.slug) - projectSlugs.indexOf(b.slug));
+
+      // Pad up to 3 matches: if leasing/sold filter removed picks, top up with
+      // closest published purchase listings so users always see 3 cards.
+      if (ordered.length < 3) {
+        const excludeSlugs = ordered.map((p: any) => p.slug);
+        const padQuery = supabase
+          .from("projects")
+          .select(`
+            *,
+            developer:developers(id, name, slug, description, logo_url),
+            images:project_images(id, image_url, alt_text, display_order),
+            community:communities(id, name, slug),
+            documents:project_documents(id, file_url, file_name, document_type)
+          `)
+          .eq("is_published", true)
+          .neq("is_sold_out", true)
+          .not("slug", "in", `(${excludeSlugs.length ? excludeSlugs.map(s => `"${s}"`).join(",") : '""'})`)
+          .order("created_at", { ascending: false })
+          .limit(8);
+        const { data: padData } = await applyPurchaseOnly(padQuery);
+        const padNorm = (padData || [])
+          .filter((p: any) => isPurchaseListing(p))
+          .map((p: any) => ({
+            ...p,
+            images: p.images?.length > 0
+              ? p.images
+              : p.cover_image_url
+                ? [{ id: "cover", image_url: p.cover_image_url, alt_text: p.name, display_order: 0 }]
+                : [],
+          }));
+        for (const p of padNorm) {
+          if (ordered.length >= 3) break;
+          if (!ordered.find((x: any) => x.slug === p.slug)) ordered.push(p);
+        }
+      }
+      return ordered.slice(0, 3);
     },
     enabled: projectSlugs.length > 0,
   });
