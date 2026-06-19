@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, BarChart3, Inbox, ClipboardList, StickyNote, Bell,
-  Heart, SlidersHorizontal, Settings, LogOut, ChevronRight, User,
+  Heart, SlidersHorizontal, Settings, LogOut, ChevronRight, User, Palette,
 } from "lucide-react";
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
@@ -217,7 +217,11 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         {/* Dashboard — direct link to user's role/mode-aware dashboard */}
         <Row to={dashboardHref} icon={LayoutDashboard} label="Dashboard" badge={activityCount} />
         <Row to="/profile" icon={User} label="My Profile" />
+        {(mode === "broker" || isOwner) && (
+          <Row to="/broker/brand" icon={Palette} label="Brand Profile" />
+        )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
+
 
 
         <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />

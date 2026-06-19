@@ -5,6 +5,7 @@
  * (1-year) on `crm_brokers.logo_url` / `headshot_url` so PDF generators can embed without auth.
  */
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,7 @@ type BrandRow = {
 
 export default function BrokerBrandProfile() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [row, setRow] = useState<BrandRow>({});
@@ -111,6 +113,11 @@ export default function BrokerBrandProfile() {
         if (data?.id) setRow((r) => ({ ...r, id: data.id }));
       }
       toast.success("Brand profile saved — your next brochure will be co-branded");
+      // Return to the previous page after a successful save
+      setTimeout(() => {
+        if (window.history.length > 1) navigate(-1);
+        else navigate("/broker-dashboard");
+      }, 350);
     } catch (e: any) {
       toast.error(e?.message || "Save failed");
     } finally {
@@ -147,31 +154,35 @@ export default function BrokerBrandProfile() {
             {/* Logo */}
             <div>
               <Label className="text-sm font-medium" style={{ color: "#1A1A1A" }}>Company logo</Label>
-              <div className="mt-2 rounded-xl p-4 flex flex-col items-center justify-center min-h-[140px]" style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}>
-                {row.logo_url ? (
-                  <img src={row.logo_url} alt="Logo preview" className="max-h-24 object-contain mb-3" />
-                ) : (
-                  <div className="text-xs mb-3" style={{ color: "rgba(26,26,26,0.55)" }}>No logo yet</div>
-                )}
+              <div className="mt-2 rounded-xl p-3 flex flex-col items-center justify-center" style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}>
+                <div className="w-full aspect-[4/3] flex items-center justify-center overflow-hidden rounded-lg" style={{ background: "#FFFFFF" }}>
+                  {row.logo_url ? (
+                    <img src={row.logo_url} alt="Logo preview" className="w-full h-full object-contain" />
+                  ) : (
+                    <div className="text-xs" style={{ color: "rgba(26,26,26,0.55)" }}>No logo yet</div>
+                  )}
+                </div>
                 <input ref={logoInput} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleUpload("logo", f); }} />
-                <Button type="button" size="sm" variant="outline" onClick={() => logoInput.current?.click()} disabled={uploading === "logo"} className="jj-cta-outline" data-cta="outline">
+                <Button type="button" size="sm" variant="outline" onClick={() => logoInput.current?.click()} disabled={uploading === "logo"} className="jj-cta-outline mt-3" data-cta="outline">
                   {uploading === "logo" ? <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" /> : <Upload className="w-3.5 h-3.5 mr-2" />}
                   {row.logo_url ? "Replace logo" : "Upload logo"}
                 </Button>
               </div>
             </div>
 
-            {/* Headshot */}
+            {/* Headshot — same box size as logo, full-fit */}
             <div>
               <Label className="text-sm font-medium" style={{ color: "#1A1A1A" }}>Headshot</Label>
-              <div className="mt-2 rounded-xl p-4 flex flex-col items-center justify-center min-h-[140px]" style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}>
-                {row.headshot_url ? (
-                  <img src={row.headshot_url} alt="Headshot preview" className="w-24 h-24 object-cover rounded-full mb-3" />
-                ) : (
-                  <div className="text-xs mb-3" style={{ color: "rgba(26,26,26,0.55)" }}>No headshot yet</div>
-                )}
+              <div className="mt-2 rounded-xl p-3 flex flex-col items-center justify-center" style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.4)" }}>
+                <div className="w-full aspect-[4/3] flex items-center justify-center overflow-hidden rounded-lg" style={{ background: "#FFFFFF" }}>
+                  {row.headshot_url ? (
+                    <img src={row.headshot_url} alt="Headshot preview" className="w-full h-full object-contain" />
+                  ) : (
+                    <div className="text-xs" style={{ color: "rgba(26,26,26,0.55)" }}>No headshot yet</div>
+                  )}
+                </div>
                 <input ref={headshotInput} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleUpload("headshot", f); }} />
-                <Button type="button" size="sm" variant="outline" onClick={() => headshotInput.current?.click()} disabled={uploading === "headshot"} className="jj-cta-outline" data-cta="outline">
+                <Button type="button" size="sm" variant="outline" onClick={() => headshotInput.current?.click()} disabled={uploading === "headshot"} className="jj-cta-outline mt-3" data-cta="outline">
                   {uploading === "headshot" ? <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" /> : <Upload className="w-3.5 h-3.5 mr-2" />}
                   {row.headshot_url ? "Replace headshot" : "Upload headshot"}
                 </Button>
@@ -192,11 +203,15 @@ export default function BrokerBrandProfile() {
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <Label className="text-sm">Full name</Label>
+              <Label className="text-sm">
+                Full name <span className="text-[#1A1A1A]/55 font-normal">(optional)</span>
+              </Label>
               <Input value={row.full_name || ""} onChange={(e) => update("full_name", e.target.value)} placeholder="Jane Doe" className="mt-1" />
             </div>
             <div>
-              <Label className="text-sm">Display name (shown on PDFs)</Label>
+              <Label className="text-sm">
+                Display name <span className="text-[#1A1A1A]/55 font-normal">(optional — shown on PDFs)</span>
+              </Label>
               <Input value={row.agent_display_name || ""} onChange={(e) => update("agent_display_name", e.target.value)} placeholder="Jane D." className="mt-1" />
             </div>
             <div>
@@ -236,9 +251,28 @@ export default function BrokerBrandProfile() {
         </section>
 
         <div className="flex justify-end gap-3">
-          <Button onClick={handleSave} disabled={saving} className="jj-cta-dark" data-cta="dark">
-            {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-            Save brand profile
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => (window.history.length > 1 ? navigate(-1) : navigate("/broker-dashboard"))}
+            className="jj-cta-outline"
+            data-cta="outline"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSave}
+            disabled={saving}
+            className="jj-cta-dark !bg-[#0A0A0A] hover:!bg-[#1F1F1F] !text-white border border-[#B89555]/60"
+            data-cta="dark"
+            data-allow-dark-cta
+          >
+            {saving ? (
+              <Loader2 className="w-4 h-4 mr-2 animate-spin !text-white" />
+            ) : (
+              <Save className="w-4 h-4 mr-2 !text-white" />
+            )}
+            <span className="!text-white">Save brand profile</span>
           </Button>
         </div>
       </div>
