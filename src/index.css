@@ -5079,11 +5079,10 @@ html body :where(
 }
 
 /* ============================================================
- * BLACK-CTA → NAVY GLOBAL REPAINT (locked, see memory)
- * Any raw bg-[#1A1A1A] / bg-black button or anchor with white-ish
- * text is repainted to the approved navy #0A0A0A (hover #1F1F1F),
- * 1px gold hairline, white text + icons. Matches the "View Search
- * History" / "Get Verified" CTA identity site-wide.
+ * BLACK-CTA GLOBAL LOCK (Navy→Black flip — supersedes Black→Navy)
+ * Any raw bg-[#1A1A1A] / bg-black button or anchor renders as
+ * clean black #0A0A0A (hover #1F1F1F) with 1px gold hairline
+ * + white text + white icons. Replaces the retired navy CTA.
  *
  * Opt-out via data-allow-dark-cta, data-on-dark, .allow-white-bg,
  * or data-no-contrast-guard (AI purple, intentional ink chips).
