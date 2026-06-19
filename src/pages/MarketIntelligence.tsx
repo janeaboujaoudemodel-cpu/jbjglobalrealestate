@@ -221,7 +221,7 @@ const MarketIntelligence = () => {
         </motion.div>
       </section>
 
-      <section className="w-full bg-[hsl(var(--mi-navy))] py-6" data-surface="dark">
+      <section className="w-full bg-[#F7F2EA] py-6" data-surface="light">
         <div className="container mx-auto px-4">
           <div className="grid gap-3 md:grid-cols-3">
             {[
@@ -229,14 +229,14 @@ const MarketIntelligence = () => {
               { Icon: RefreshCw, title: "Daily Freshness", text: "Market pages show a current daily freshness check." },
               { Icon: Shield, title: "No Forecast Claims", text: "Analytics and education only, with source attribution." },
             ].map(({ Icon, title, text }) => (
-              <div key={title} className="border border-white/15 bg-white/[0.06] p-4 backdrop-blur-md">
+              <div key={title} className="border border-[#B89555]/35 bg-[#FDFBF7] p-4 shadow-sm">
                 <div className="mb-3 flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center border border-[hsl(var(--mi-gold)/0.5)]" data-no-contrast-guard>
-                    <Icon className="h-4 w-4 text-white allow-white" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[hsl(var(--mi-gold)/0.5)] bg-[#EFE6D6]">
+                    <Icon className="h-4 w-4 text-[#1A1A1A]" />
                   </div>
-                  <p className="text-sm font-semibold text-white">{title}</p>
+                  <p className="text-sm font-semibold text-[#1A1A1A]">{title}</p>
                 </div>
-                <p className="text-xs leading-relaxed text-white/68">{text}</p>
+                <p className="text-xs leading-relaxed text-[#1A1A1A]/70">{text}</p>
               </div>
             ))}
           </div>
