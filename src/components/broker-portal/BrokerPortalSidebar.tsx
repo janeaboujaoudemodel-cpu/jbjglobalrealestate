@@ -3,7 +3,7 @@ import {
   LayoutDashboard, Users, Briefcase, Database, ListChecks, Calendar, ListTodo,
   Handshake, FileSignature, GraduationCap, Sparkles, Building2, Inbox, MessagesSquare,
   Brain, Bell, Settings, ChevronLeft, ChevronRight, ArrowLeft, Crown, Home, LogOut,
-  KeyRound,
+  KeyRound, Palette,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -35,6 +35,7 @@ const ITEMS: Item[] = [
   { to: "/broker-toolkit",           label: "Marketing Toolkit",  icon: Sparkles },
   { to: "/broker/ai",                label: "AI Sales Assistant", icon: Brain },
   { to: "/broker/notifications",     label: "Notifications",      icon: Bell },
+  { to: "/broker/brand",             label: "Brand Profile",      icon: Palette },
   { to: "/broker/settings",          label: "Settings",           icon: Settings },
 ];
 
