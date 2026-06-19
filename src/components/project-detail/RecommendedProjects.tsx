@@ -42,13 +42,16 @@ export default function RecommendedProjects({
       if (browsingContext.recentProjectIds.includes(p.id)) return false;
       const status = ((p as any).sale_status || "").toLowerCase();
       if (status.includes("sold")) return false;
-      const hd = p.handover_date;
+      // Prefer off-plan: exclude Ready/Completed by default.
+      // (Memory: off-plan recommendation rule.)
+      const hd = (p.handover_date || "").toString();
+      const hLower = hd.toLowerCase();
+      if (hLower.includes("ready") || hLower.includes("completed") || hLower.includes("handed over")) {
+        return false;
+      }
       if (hd) {
-        const hLower = hd.toLowerCase();
-        if (!hLower.includes("ready")) {
-          const yearMatch = hd.match(/\b(20\d{2})\b/);
-          if (yearMatch && parseInt(yearMatch[1]) < 2026) return false;
-        }
+        const yearMatch = hd.match(/\b(20\d{2})\b/);
+        if (yearMatch && parseInt(yearMatch[1]) < 2026) return false;
       }
       return true;
     });
