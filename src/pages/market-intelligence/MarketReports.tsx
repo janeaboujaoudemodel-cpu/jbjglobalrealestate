@@ -142,7 +142,7 @@ const MarketReportsPage = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Main Content with TOC Sidebar */}
-      <div className="pt-16 pb-16 bg-[#FDFBF7]">
+      <div className="pt-8 pb-10 bg-[#FDFBF7]">
         {/* Fixed TOC Sidebar */}
         <div className="hidden lg:block">
           <MarketIntelligenceTableOfContents 
