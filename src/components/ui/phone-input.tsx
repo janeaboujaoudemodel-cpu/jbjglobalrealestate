@@ -472,7 +472,7 @@ export interface PhoneInputProps {
 }
 
 const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
-  ({ value, onChange, placeholder, className, disabled = false, showValidation = true, variant = 'dark' }, ref) => {
+  ({ value, onChange, placeholder, className, disabled = false, showValidation = true, variant = 'light' }, ref) => {
     const [codeOpen, setCodeOpen] = useState(false);
     const [hasInitialized, setHasInitialized] = useState(false);
     
