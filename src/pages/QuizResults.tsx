@@ -262,7 +262,8 @@ const QuizResults = () => {
     queryKey: ["quiz-results", projectSlugs],
     queryFn: async () => {
       if (!projectSlugs.length) return [];
-      const { data, error } = await supabase
+      const { applyPurchaseOnly, isPurchaseListing } = await import("@/lib/projects/excludeLeasing");
+      const baseQuery = supabase
         .from("projects")
         .select(`
           *,
@@ -271,15 +272,18 @@ const QuizResults = () => {
           community:communities(id, name, slug),
           documents:project_documents(id, file_url, file_name, document_type)
         `)
-        .in("slug", projectSlugs);
+        .in("slug", projectSlugs)
+        .eq("is_published", true);
+      const { data, error } = await applyPurchaseOnly(baseQuery);
 
       if (error) throw error;
 
-      // Filter sold-out client-side so NULL sale_status / is_sold_out rows are kept.
+      // Filter sold-out + any leasing leak client-side; keep NULL sale_status rows.
       const filtered = (data || []).filter((p: any) => {
         if (p.is_sold_out === true) return false;
         const status = (p.sale_status || "").toLowerCase();
         if (status.includes("sold")) return false;
+        if (!isPurchaseListing(p)) return false;
         return true;
       });
 
@@ -291,6 +295,13 @@ const QuizResults = () => {
             ? [{ id: "cover", image_url: p.cover_image_url, alt_text: p.name, display_order: 0 }]
             : [],
       }));
+
+      // If everything was filtered out (stale matchmaker session pointing at
+      // leasing / unpublished / sold rows), clear the session so the UI shows
+      // the "Saved selection isn't available — start a new match" empty state.
+      if (normalized.length === 0 && projectSlugs.length > 0) {
+        try { clearMatchmakerSession(); } catch {}
+      }
 
       return normalized
         .sort((a, b) => projectSlugs.indexOf(a.slug) - projectSlugs.indexOf(b.slug));
