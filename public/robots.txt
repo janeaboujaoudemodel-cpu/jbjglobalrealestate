@@ -114,11 +114,10 @@ Disallow: /sql/
 Disallow: /db/
 
 # Allow developer public routes
-Allow: /developer-center
-Allow: /developer-portal
-Allow: /developer-registration
+Allow: /developer-hub
+Allow: /developers-portal
 Allow: /submit-project
-Allow: /submit-event
+
 
 # Allow important resources
 Allow: /og-image.jpg
